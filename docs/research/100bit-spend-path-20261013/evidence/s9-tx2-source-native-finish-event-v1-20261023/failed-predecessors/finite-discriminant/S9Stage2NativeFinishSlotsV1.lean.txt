@@ -1,0 +1,136 @@
+import Stage2FinishControl
+import S9ResumeFinishNativePairBindingV1
+import S9FinishActualConstructorSlotV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9Stage2NativeFinishSlotsV1
+abbrev SW := AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+abbrev SQ := AspisR1Stage2.aspis_core.field.QM31
+abbrev SP := AspisR1Stage2.aspis_core.circle.SecureCirclePoint
+abbrev NW := AspisR1S9ProductionPairCutV1.aspis_core.field.wide_exact.WideExact
+abbrev Weights := AspisR1S9ProductionPairCutV1.weights.Weights
+abbrev stageVariant := AspisR1S9ResumeFinishNativePairBindingV1.stageVariant
+abbrev stageQM := AspisR1S9ResumeFinishNativePairBindingV1.stageQM
+abbrev stagePoint := AspisR1S9ResumeFinishNativePairBindingV1.stagePoint
+abbrev mapArray := @AspisR1S9CandidateFoldMapPrimitivesV1.mapArray
+variable [allocation : AspisR1S9AllocationInterfaceV1.Allocation]
+
+def currentErrorToStage : AspisR1FinishRelationCurrent.verifier.Error → AspisR1Stage2.verifier.Error
+  | .Parse => .Parse | .Semantic => .Semantic | .Transcript => .Transcript
+  | .Relation => .Relation | .Merkle => .Merkle | .Query => .Query
+  | .Checkpoint => .Checkpoint | .Allocation => .Allocation
+
+def nativeErrorToStage : AspisR1S9ProductionPairCutV1.verifier.Error → AspisR1Stage2.verifier.Error
+  | .Parse => .Parse | .Semantic => .Semantic | .Transcript => .Transcript
+  | .Relation => .Relation | .Merkle => .Merkle | .Query => .Query
+  | .Checkpoint => .Checkpoint | .Allocation => .Allocation
+
+def sourceToNative (x : SW) : NW :=
+  AspisR1S9FinishActualPairSlotV1.toNative (AspisR1S9ResumeFinishNativePairBindingV1.stageWide x)
+def nativeToSource (x : NW) : SW :=
+  ⟨⟨⟨x.c0.c0.a,x.c0.c0.b⟩,⟨x.c0.c1.a,x.c0.c1.b⟩⟩,
+   ⟨⟨x.c1.c0.a,x.c1.c0.b⟩,⟨x.c1.c1.a,x.c1.c1.b⟩⟩⟩
+def sourceSliceToNative (a : Slice SW) : Slice NW :=
+  ⟨a.val.map sourceToNative,by simpa using a.property⟩
+
+/-- Concrete native constructor, only nominal field/error transport. No Current
+View or independent Current finish acceptance is an input to this slot. -/
+def sourceNewWeights (variant : AspisR1Stage2.transport.Variant)
+    (alpha : Array SQ 10#usize) (z : Array SP 2#usize) :
+    Result (core.result.Result Weights AspisR1Stage2.verifier.Error) := do
+  let r ← AspisR1S9FinishActualConstructorSlotV1.actualNewWeightsSlot
+    (stageVariant variant) (mapArray stageQM alpha) (mapArray stagePoint z)
+  ok (match r with | .Ok w => .Ok w | .Err e => .Err (currentErrorToStage e))
+
+/-- The SAME actual source final-message slice is passed without a View map. -/
+def sourcePair (self : Weights) (alpha : Slice SW) (f : Slice U8) (kappa : SW) :
+    Result (core.result.Result SW AspisR1Stage2.verifier.Error) := do
+  let r ← AspisR1S9ProductionPairCutV1.weights.Weights.pair self (sourceSliceToNative alpha) f (sourceToNative kappa)
+  ok (match r with | .Ok out => .Ok (nativeToSource out) | .Err e => .Err (nativeErrorToStage e))
+
+/-- Remaining source arithmetic/round/dot/observer slots are retained explicitly.
+The concrete variant fold implementation is the existing finite source function. -/
+def installNative (ops : AspisR1Stage2.Stage2Finish.FinishOps Weights) :
+    AspisR1Stage2.Stage2Finish.FinishOps Weights :=
+  {ops with
+    folds:=fun v => AspisR1FinishRelationCurrent.transport.Variant.folds (stageVariant v)
+    newWeights:=sourceNewWeights
+    pair:=sourcePair}
+
+theorem source_new_success (variant : AspisR1Stage2.transport.Variant)
+    (alpha : Array SQ 10#usize) (z : Array SP 2#usize) (self : Weights)
+    (h : sourceNewWeights variant alpha z=.ok (.Ok self)) :
+    AspisR1S9FinishActualConstructorSlotV1.actualNewWeightsSlot
+      (stageVariant variant) (mapArray stageQM alpha) (mapArray stagePoint z)=.ok (.Ok self) := by
+  unfold sourceNewWeights at h
+  cases hr : AspisR1S9FinishActualConstructorSlotV1.actualNewWeightsSlot
+      (stageVariant variant) (mapArray stageQM alpha) (mapArray stagePoint z) with
+  | fail e => simp only [hr,bind_tc_fail] at h; cases h
+  | div => simp only [hr,bind_tc_div] at h; cases h
+  | ok r =>
+    simp only [hr,bind_tc_ok] at h
+    cases r with
+    | Err e => cases h
+    | Ok w =>
+      have he : w=self := core.result.Result.Ok.inj (Result.ok.inj h)
+      subst w
+      rfl
+
+theorem source_pair_success (self : Weights) (alpha : Slice SW) (f : Slice U8)
+    (kappa out : SW) (h : sourcePair self alpha f kappa=.ok (.Ok out)) :
+    ∃ nativeOut,
+      AspisR1S9ProductionPairCutV1.weights.Weights.pair self (sourceSliceToNative alpha) f
+        (sourceToNative kappa)=.ok (.Ok nativeOut) ∧ out=nativeToSource nativeOut := by
+  unfold sourcePair at h
+  cases hr : AspisR1S9ProductionPairCutV1.weights.Weights.pair self
+      (sourceSliceToNative alpha) f (sourceToNative kappa) with
+  | fail e => simp only [hr,bind_tc_fail] at h; cases h
+  | div => simp only [hr,bind_tc_div] at h; cases h
+  | ok r =>
+    simp only [hr,bind_tc_ok] at h
+    cases r with
+    | Err e => cases h
+    | Ok value =>
+      exact ⟨value,rfl,(core.result.Result.Ok.inj (Result.ok.inj h)).symm⟩
+
+/-- SAME accepted Stage2 source finish, SAME source View/Prepared/Accumulator.
+Real source calls supply native receiver and Pair. No independent Current View,
+Current hfinish, child-success, input-canonicality or desired-meaning premise. -/
+theorem source_finish_s2_success_native_calls
+    (ops : AspisR1Stage2.Stage2Finish.FinishOps Weights)
+    (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared)
+    (a : AspisR1Stage2.verifier.Accumulator)
+    (obs : Option (AspisR1Stage2.verifier.Phase → Result Unit))
+    (hs2 : p.variant=AspisR1Stage2.transport.Variant.S2)
+    (h : AspisR1Stage2.Stage2Finish.verifier.finishRelationWithOps (installNative ops) v p a obs=.ok (.Ok ())) :
+    ∃ (self : Weights) (selected : Slice SW) (nativeOut : NW),
+      AspisR1S9FinishActualConstructorSlotV1.actualNewWeightsSlot
+        (stageVariant p.variant) (mapArray stageQM p.semantic_alpha) (mapArray stagePoint p.z)=.ok (.Ok self) ∧
+      self.variant=AspisR1S9ProductionPairCutV1.transport.Variant.S2 ∧
+      core.array.Array.index (core.ops.index.IndexSlice
+        (core.slice.index.SliceIndexRangeToUsizeSlice SW)) p.alpha {«end»:=2#usize}=.ok selected ∧
+      AspisR1S9ProductionPairCutV1.weights.Weights.pair self (sourceSliceToNative selected)
+        v.final_message (sourceToNative p.kappa)=.ok (.Ok nativeOut) := by
+  have htwo : (installNative ops).folds p.variant=.ok (2#usize) := by
+    rw [hs2]
+    simp only [installNative, stageVariant,
+      AspisR1S9ResumeFinishNativePairBindingV1.stageVariant,
+      AspisR1FinishRelationCurrent.transport.Variant.folds,
+      AspisR1FinishRelationCurrent.transport.Variant.Insts.CoreCmpPartialEqVariant.eq,
+      read_discriminant, AspisR1FinishRelationCurrent.transport.Variant.read_discriminant,
+      bind_tc_ok]
+    rfl
+  obtain ⟨alpha0,claim0,alpha1,claim1,self,selected,pairValue,actual,
+      ha0,hr0,ha1,hr1,hnew,hselected,hpair,hrest⟩ :=
+    AspisR1Stage2.Stage2Finish.finish_success (installNative ops) v p a obs htwo h
+  have hcnew := source_new_success p.variant p.semantic_alpha p.z self hnew
+  have hv := AspisR1S9FinishActualConstructorSlotV1.actualNewWeightsSlot_success_variant
+    (stageVariant p.variant) (mapArray stageQM p.semantic_alpha) (mapArray stagePoint p.z) self hcnew
+  rw [hs2] at hv
+  obtain ⟨nativeOut,hnative,hvalue⟩ := source_pair_success self selected v.final_message p.kappa pairValue hpair
+  exact ⟨self,selected,nativeOut,hcnew,hv,hselected,hnative⟩
+
+#print axioms source_new_success
+#print axioms source_pair_success
+#print axioms source_finish_s2_success_native_calls
+end AspisR1S9Stage2NativeFinishSlotsV1

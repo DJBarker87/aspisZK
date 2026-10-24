@@ -1,0 +1,43 @@
+import S9Stage2WideComparatorV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9Stage2DerivedEqBodyV1
+open AspisR1S9Stage2WideComparatorV1
+abbrev M := AspisR1Stage2.aspis_core.field.M31
+abbrev C := AspisR1Stage2.aspis_core.field.CM31
+abbrev Q := AspisR1Stage2.aspis_core.field.QM31
+/-- Owned nominal transcription of the four emitted derived-Eq bodies in
+CurrentWideEqSemanticV7; source pinning must connect that retained extraction
+to the frozen external Eq operation. No canonicality normalization is added. -/
+def mEq (x y : M) : Result Bool := .ok (x=y)
+def cEq (x y : C) : Result Bool := do
+  let b ← mEq x.a y.a
+  if b then mEq x.b y.b else .ok false
+def qEq (x y : Q) : Result Bool := do
+  let b ← cEq x.c0 y.c0
+  if b then cEq x.c1 y.c1 else .ok false
+def wideEq (x y : SW) : Result Bool := do
+  let b ← qEq x.c0 y.c0
+  if b then qEq x.c1 y.c1 else .ok false
+/-- Exact complete Result correspondence: failures and Boolean false results
+are retained, not merely equality of successful true cases. -/
+theorem derived_eq_maps_current (x y : SW) :
+    wideEq x y=
+      AspisR1CurrentWide.field.wide_exact.WideExact.Insts.CoreCmpPartialEqWideExact.eq
+        (toCurrent x) (toCurrent y) := by rfl
+
+def derivedInstance : core.cmp.PartialEq SW SW := {eq:=wideEq,ne:=sourceNe}
+/-- The actual emitted Stage2 ne call uses this standard-library default.
+Given this concrete Eq body its complete Result is exactly the checked
+comparator installed in Stage2Finish. -/
+theorem default_ne_full_result (x y : SW) :
+    core.cmp.PartialEq.ne.trait_default derivedInstance x y=sourceNe x y := by rfl
+
+theorem default_ne_false_eq (x y : SW)
+    (h : core.cmp.PartialEq.ne.trait_default derivedInstance x y=.ok false) : x=y := by
+  rw [default_ne_full_result] at h
+  exact source_ne_false_eq x y h
+#print axioms derived_eq_maps_current
+#print axioms default_ne_full_result
+#print axioms default_ne_false_eq
+end AspisR1S9Stage2DerivedEqBodyV1

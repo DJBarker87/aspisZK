@@ -1,0 +1,106 @@
+'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.S2W_NativeSchedule.accepted_run : ∀ {E : Type} (ops : AdapterRw.Ops)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+  S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (program : S2W_ExtractionBoundary.Program) (accounts1 accounts2 : S2W_ExtractionBoundary.Accounts)
+      (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot) (saved : alloc.vec.Vec U8),
+      native1 program accounts1 data1 = ok (core.result.Result.Ok saved) →
+        native2 program accounts2 data2 slot = ok (core.result.Result.Ok ()) →
+          ∀ (port : ChildConeJoin E ops),
+            FirstMarks port →
+              SecondMarks port →
+                ∃ outer pre middle fs ss,
+                  run ops (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                      ok (core.result.Result.Ok saved, outer) ∧
+                    runExpanded ops (children port)
+                          (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                        ok (core.result.Result.Ok saved, full (children port) outer) ∧
+                      tags outer = [false, true] ∧
+                        projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                          (∀ (a b : S2LeadInterface.Site),
+                              a.rank < b.rank →
+                                S2W_SiteSchedule.Event.site b ∈ projected port outer →
+                                  S2W_SiteSchedule.Event.site a ∈ projected port outer) ∧
+                            (∀ (a b : S2LeadInterface.Site),
+                                a.rank < b.rank →
+                                  S2W_SiteSchedule.Event.site a ∈ projected port outer →
+                                    S2W_SiteSchedule.Event.site b ∈ projected port outer →
+                                      S2W_SiteSchedule.clock pre middle fs ss a <
+                                        S2W_SiteSchedule.clock pre middle fs ss b) ∧
+                              ∀ (a : S2LeadInterface.Site),
+                                projected port outer =
+                                  S2W_SiteSchedule.before pre middle fs ss a ++ [S2W_SiteSchedule.Event.site a] ++
+                                    S2W_SiteSchedule.after middle fs ss a :=
+fun {E} ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot saved accepted1 accepted2 port
+    firstMarks secondMarks =>
+  let boundary := S2W_DigestExtraction.sourceBoundary ops native1 native2 hashv extraction;
+  let ⟨firstLog, h✝⟩ :=
+    S2W_ExtractionBoundary.accepted_native_observation ops native1 native2 hashv boundary program accounts1 accounts2
+      data1 data2 slot saved accepted1 accepted2
+  let ⟨outer, h✝¹⟩ := h✝
+  let ⟨w✝, h✝²⟩ := h✝¹
+  let ⟨firstRun, right✝⟩ := h✝²
+  let ⟨secondRun, right✝¹⟩ := right✝
+  let ⟨execution, right✝²⟩ := right✝¹
+  let ⟨left✝, right✝³⟩ := right✝²
+  have secondOwned := Eq.trans (Eq.symm (boundary.stage2 program accounts2 data2 slot)) accepted2;
+  let ⟨secondLog, secondEmpty⟩ :=
+    S2W_TraceFacts.success_exists ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot)
+      [] (core.result.Result.Ok ())
+      (Eq.trans (S2W_OuterErasure.stage2_erasure ops program accounts2 data2 slot) secondOwned)
+  have shifted :=
+    run_shift ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) firstLog [];
+  have joined :=
+    congrArg Prod.snd
+      (ok.inj
+        (Eq.trans (Eq.symm secondRun)
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) firstLog =
+                  thenResult _a fun answer => ok (answer.1, firstLog ++ answer.2))
+              secondEmpty)
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) _a =
+                    thenResult
+                      (run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program accounts2 data2 slot) [])
+                      fun answer => ok (answer.1, firstLog ++ answer.2))
+                (List.append_nil firstLog))
+              shifted))));
+  have shape :=
+    Eq.mpr (id (congrArg (fun _a => tags _a = [false, true]) joined))
+      (id
+        (Eq.mpr (id (congrArg (fun _a => _a = [false, true]) List.filterMap_append))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a ++ tags secondLog = [false, true])
+                  (S2W_FirstOccurrence.first_occurrence ops program accounts1 data1 saved firstLog firstRun)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => [false] ++ _a = [false, true])
+                    (second_occurrence ops program accounts2 data2 slot secondLog secondEmpty)))
+                (Eq.refl ([false] ++ [true])))))));
+  let ⟨pre, h✝³⟩ := expanded_schedule port firstMarks secondMarks outer shape
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, layout⟩ := h✝⁵
+  Exists.intro outer
+    (Exists.intro pre
+      (Exists.intro middle
+        (Exists.intro fs
+          (Exists.intro ss
+            ⟨execution,
+              ⟨execution_flatMap ops (children port)
+                  (S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] outer
+                  (core.result.Result.Ok saved) execution,
+                ⟨shape,
+                  ⟨layout,
+                    ⟨fun a b a_1 a_2 =>
+                      Eq.mpr (id (congrArg (fun _a => S2W_SiteSchedule.Event.site a ∈ _a) layout))
+                        (S2W_SiteSchedule.reached pre middle fs ss a),
+                      ⟨fun a b order a_1 a_2 => S2W_SiteSchedule.ordered pre middle fs ss a b order, fun a =>
+                        Eq.trans layout (S2W_SiteSchedule.located pre middle fs ss a)⟩⟩⟩⟩⟩⟩))))

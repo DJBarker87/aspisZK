@@ -1,0 +1,47 @@
+/private/tmp/a3-s9-constructor-v3-carry-body-semantics-v1-check-20261023/sources/S9ConstructorV3CarryBodySemanticsV1.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode cell
+in the target expression
+  decode cell = decode bit + decode carry - (decode bit * decode carry + decode bit * decode carry)
+
+z successor successorOut : AspisR1S9ConstructorV3SuccessorCarryBodyCanonicalV1.Vector
+iter iterNext : ReverseRange
+carry : Q
+hz : VectorCanonical z
+hc : Can carry
+coordinate : Usize
+bit product sum twice cell : Q
+hnext :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter =
+    ok (some coordinate, iterNext)
+hbit : Array.index_usize z coordinate = ok bit
+hm : AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.mul bit carry = ok product
+ha : AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.add bit carry = ok sum
+ht : AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.add product product = ok twice
+hs : AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.sub sum twice = ok cell
+hu : Array.update successor coordinate cell = ok successorOut
+hb : Can bit
+hpc : AspisR1S9ConstructorV3QMMulSemanticsV1.Can product
+hpm :
+  AspisR1S9ConstructorV3QMMulSemanticsV1.decode product =
+    AspisR1S9ConstructorV3QMMulSemanticsV1.decode bit * AspisR1S9ConstructorV3QMMulSemanticsV1.decode carry
+hsc : AspisR1S9ConstructorV3QMAddSubSemanticsV1.Can sum
+hsm :
+  AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode sum =
+    AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode bit + AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode carry
+htc : AspisR1S9ConstructorV3QMAddSubSemanticsV1.Can twice
+htm :
+  AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode twice =
+    AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode product + AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode product
+hcc : AspisR1S9ConstructorV3QMAddSubSemanticsV1.Can cell
+hcm :
+  AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode cell =
+    AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode sum - AspisR1S9ConstructorV3QMAddSubSemanticsV1.decode twice
+hbody :
+  AspisR1S9ActualWeightsNewBoxNewV3.state_only_prefix.state_only_statement_points_loop.body z iter successor carry =
+    ok (cont (iterNext, successorOut, product))
+⊢ decode cell = decode bit + decode carry - (decode bit * decode carry + decode bit * decode carry)
+'AspisR1S9ConstructorV3CarryBodySemanticsV1.carry_body_success_exact' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

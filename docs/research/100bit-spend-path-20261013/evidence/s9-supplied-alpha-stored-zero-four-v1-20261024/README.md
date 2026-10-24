@@ -1,0 +1,5 @@
+# Paired stored0/4 meanings use ONE supplied actual alpha pair
+
+SAME self/shared/alpha/f/parts and both already-derived stored-row outputs now imply both raw-fold meanings using ONE supplied successful actual alpha0/alpha1 read pair. Result.ok.inj identifies each internally-derived read witness with the supplied pair. Actual extra0/1 read witnesses remain outputs. The concrete commonInput uses exactly SharedHighConstructorModel.rowValue._proof_1. There is no independent stream/vector/seed or desired-value premise. Canonical alpha is the previously derived source-reader guard; the uncompiled source adapter would derive it internally.
+
+First focused NUC check: exit0,4.714s,4,126,376KiB RSS,zero swap,M4400/j1,H3GiB/Max4GiB,standard axioms. The exact opaque auxiliary proof is deliberately source-pinned; its linter warning is retained, no option is disabled. No production change or complete release/coherent security replay is claimed. Complete100-bit soundness remains open. USER STOP received; no further proof or compiler work was started afterward.

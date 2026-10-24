@@ -1,0 +1,3 @@
+Proved: a canonical constructor factor table with its exact table meaning supplies the native tensor high-product formula for the same successful tensor call. Generic canonical-factor and table-meaning premises remain in this bridge; the concrete constructor packet discharges them. Successful indexed output reads are covered; output length, full pairing semantics, runtime and artifacts remain separate.
+
+Focused Lean check: 18.887 seconds; peak aggregate RSS 3208495104 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

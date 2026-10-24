@@ -1,0 +1,1 @@
+Static header-only preflight found only old S3ZeroSeedMeaningV1 missing; no Lean compiler or dependency build ran. Exact3zero declarations/proofs were textually reused in a thin namespace/import adapter instead of loading unrelated whole-helper composition.

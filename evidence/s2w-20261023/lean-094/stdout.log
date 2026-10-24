@@ -1,0 +1,119 @@
+S2W_D189Interpretation.lean:21:56: error: unexpected token '('; expected '}'
+S2W_D189Interpretation.lean:34:83: error: unsolved goals
+W F : Type
+L : Library W F
+sdk : S2TrustedSdkBorrow L
+encode : UInt8 → AspisV8R19.DuplexFrames.Byte
+metadata : F → ℕ → S2LeadInterface.Account
+n : ℕ
+w : W
+s : Heap F
+related : L.related w s
+valid : Valid s
+a : ℕ
+cell : L.accountData w a = (s.accounts a).1
+payload : L.cellPayload w (s.accounts a).1 = s.payload (s.accounts a).1
+⊢ (if a < n then
+      { key := (metadata s.ambient a).key, owner := (metadata s.ambient a).owner,
+        lamports := (metadata s.ambient a).lamports, data := sorry, signer := (metadata s.ambient a).signer,
+        writable := (metadata s.ambient a).writable, executable := (metadata s.ambient a).executable,
+        rentEpoch := (metadata s.ambient a).rentEpoch }
+    else sorry) =
+    if a < n then
+      { key := (metadata s.ambient a).key, owner := (metadata s.ambient a).owner,
+        lamports := (metadata s.ambient a).lamports,
+        data := payloadBytes encode (s.payload (s.accounts a).1) (s.payload (s.accounts a).1).descriptor.length,
+        signer := (metadata s.ambient a).signer, writable := (metadata s.ambient a).writable,
+        executable := (metadata s.ambient a).executable, rentEpoch := (metadata s.ambient a).rentEpoch }
+    else metadata s.ambient a
+S2W_D189Interpretation.lean:38:35: warning: This simp argument is unused:
+  cell
+
+Hint: Omit it from the simp argument list.
+  simp only [nativeObserve, ̲observe,c̵e̵l̵l̵,̵ ̲payload]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_D189Interpretation.lean:38:40: warning: This simp argument is unused:
+  payload
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵a̵t̵i̵v̵e̵O̵b̵s̵e̵r̵v̵e̵,̵o̵b̵s̵e̵r̵v̵e̵,̵c̵e̵l̵l̵,̵p̵a̵y̵l̵o̵a̵d̵]̵[̲n̲a̲t̲i̲v̲e̲O̲b̲s̲e̲r̲v̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲c̲e̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_D189Interpretation.lean:38:13: warning: declaration uses `sorry`
+S2W_D189Interpretation.lean:72:35: error: Ambiguous term
+  run
+Possible interpretations:
+  S2W_Trace.run : AdapterRw.Ops → {A : Type} → Code A → Log → Result (A × Log)
+  
+  S2Trust.run : Heap ?m.119 → Op → Heap ?m.119 × Reply
+S2W_D189Interpretation.lean:72:14: error: Type mismatch: After simplification, term
+  ih b (log ++ [Event.returned call b])
+ has type
+  runOwned ops (k b) (log ++ [Event.returned call b]) s =
+    match S2W_Trace.run ops (k b) (log ++ [Event.returned call b]) with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+but is expected to have type
+  runOwned ops (k b) (log ++ [Event.returned call b]) s =
+    match S2W_Trace.run ops (Code.call call k) log with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+S2W_D189Interpretation.lean:73:36: error: Ambiguous term
+  run
+Possible interpretations:
+  S2W_Trace.run : AdapterRw.Ops → {A : Type} → Code A → Log → Result (A × Log)
+  
+  S2Trust.run : Heap ?m.148 → Op → Heap ?m.148 × Reply
+S2W_D189Interpretation.lean:73:13: error: unsolved goals
+case call.fail
+F A : Type
+ops : AdapterRw.Ops
+s : Heap F
+B✝ : Type
+call : Call B✝
+k : B✝ → Code A
+ih :
+  ∀ (a : B✝) (log : Log),
+    runOwned ops (k a) log s = thenResult (S2W_Trace.run ops (k a) log) fun answer => ok (answer.1, answer.2, s)
+log : Log
+e : Error
+invoked : invoke ops call = fail e
+⊢ fail e =
+    match S2W_Trace.run ops (Code.call call k) log with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+S2W_D189Interpretation.lean:74:33: error: Ambiguous term
+  run
+Possible interpretations:
+  S2W_Trace.run : AdapterRw.Ops → {A : Type} → Code A → Log → Result (A × Log)
+  
+  S2Trust.run : Heap ?m.159 → Op → Heap ?m.159 × Reply
+S2W_D189Interpretation.lean:74:10: error: unsolved goals
+case call.div
+F A : Type
+ops : AdapterRw.Ops
+s : Heap F
+B✝ : Type
+call : Call B✝
+k : B✝ → Code A
+ih :
+  ∀ (a : B✝) (log : Log),
+    runOwned ops (k a) log s = thenResult (S2W_Trace.run ops (k a) log) fun answer => ok (answer.1, answer.2, s)
+log : Log
+invoked : invoke ops call = div
+⊢ div =
+    match S2W_Trace.run ops (Code.call call k) log with
+    | ok a => ok (a.1, a.2, s)
+    | fail e => fail e
+    | div => div
+'AspisR1.S2W_D189Interpretation.native_observation' depends on axioms: [sorryAx, Quot.sound]
+'AspisR1.S2W_D189Interpretation.native_counter' does not depend on any axioms
+'AspisR1.S2W_D189Interpretation.owned_account_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Interpretation.accepted_owned_frame' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

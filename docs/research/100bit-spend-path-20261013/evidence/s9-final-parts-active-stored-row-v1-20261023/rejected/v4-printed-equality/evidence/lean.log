@@ -1,0 +1,280 @@
+/private/tmp/a3-s9-final-parts-active-row-v4-equality-diagnostic-check-20261023/sources/S9FinalPartsActiveRowV1.lean:56:8: warning: automatically included section variable(s) unused in theorem `_private.S9FinalPartsActiveRowV1.0.AspisR1S9FinalPartsActiveRowV1.bind_success`:
+  allocation
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit allocation in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+active4 shared phase: entered
+active4 phase: trace destructed; powers
+active4 phase: powers/self ready; dispatch
+active4 phase: dispatch ready; helper unfold
+active4 phase: helper unfolded; producer witness
+active4 phase: producer witness ready; regular frame
+active4 phase: incoming zero ready; canonical carry
+active4 phase: carry ready; variant
+active4 phase: helper branch ready; original source value
+active4 phase: original value ready; zero rewrite
+active4 phase: zero rewrite ready; final output tuple
+active4 pack: predicate unfolded
+active4 pack: witnesses fixed
+active4 pack: alpha0 fixed
+active4 pack: powers0 fixed
+active4 pack: alpha1 fixed
+active4 pack: powers1 fixed
+active4 pack: low fixed
+active4 pack: inactive fixed
+active4 pack: write0 fixed
+active4 pack: private helper fixed
+active4 pack: active run fixed
+active4 pack: incoming zero fixed
+active4 pack: extra0 fixed
+active4 pack: extra1 fixed
+active4 pack: final cell4 read fixed
+active4 pack: canonical final4 fixed
+/private/tmp/a3-s9-final-parts-active-row-v4-equality-diagnostic-check-20261023/sources/S9FinalPartsActiveRowV1.lean:63:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+kappa out : W
+partsFinal : Parts
+k : Std.Array W 7#usize
+hs2 : self.variant = transport.Variant.S2
+halpha : ∀ (i : Usize) (x : W), alpha.index_usize i = ok x → Can x
+hextra :
+  ∀ (i : Usize) (q : aspis_core.field.QM31),
+    self.extra.index_usize i = ok q → AspisR1S9ActualPairQMHelperTransportV1.Canonical q
+hspan : f.len = Usize.wrapping_mul 64#usize 32#usize
+left✝² : alpha.len = 2#usize
+left✝¹ : weights.shared_two_point_guard self 2#usize = ok true
+left✝ : self.pair alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular partsShared : Parts
+common : Std.Array aspis_core.field.QM31 16#usize
+partials : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : Parts
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hpartials : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hlow :
+  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hpartsInactive : Array.update partsShared 0#usize inactive = ok partsInactive
+hactive : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+hp0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hp1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hcommon :
+  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+      (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+    ok (self, common)
+hhigh : weights.shared_high partials self ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hinactive : weights.grouped_inactive_pair self f low = ok inactive
+hhelper :
+  (have coefficients := Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO;
+    do
+    let coefficients1 ← weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f coefficients
+    weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low coefficients1
+        aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok inactive
+coefficients : Std.Array aspis_core.field.wide_exact.WideExact 12#usize
+hcoeff :
+  weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok coefficients
+houter :
+  weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low coefficients
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok inactive
+hreg : cell4 partsRegular = aspis_core.field.wide_exact.WideExact.ZERO
+hhigh4 : cell4 partsShared = cell4 partsRegular
+hwrite4 : cell4 partsInactive = cell4 partsShared
+hzero : cell4 partsInactive = aspis_core.field.wide_exact.WideExact.ZERO
+ccarry : Can (cell4 partsInactive)
+hv huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2 = ok true
+hlibra : weights.factored_s2_libra_weights ap0 ap1 self.extra = ok libra
+q0 q1 : Q
+hq0 : self.extra.index_usize 0#usize = ok q0
+hq1 : self.extra.index_usize 1#usize = ok q1
+cfinal : Can (cell4 partsFinal)
+hvalue :
+  decode (cell4 partsFinal) =
+    ∑ j,
+      AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients ⋯ hcoeff ↑j *
+        AspisR1.S2LibraFactoredIdentity.original
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap1))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+⊢ decode (cell4 partsFinal) =
+    ∑ j,
+      AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients ⋯ hcoeff ↑j *
+        AspisR1.S2LibraFactoredIdentity.original
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap1))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+active4 unshared phase: entered
+active4 phase: trace destructed; powers
+active4 phase: powers/self ready; dispatch
+active4 phase: dispatch ready; helper unfold
+active4 phase: helper unfolded; producer witness
+active4 phase: producer witness ready; regular frame
+active4 phase: incoming zero ready; canonical carry
+active4 phase: carry ready; variant
+active4 phase: helper branch ready; original source value
+active4 phase: original value ready; zero rewrite
+active4 phase: zero rewrite ready; final output tuple
+active4 pack: predicate unfolded
+active4 pack: witnesses fixed
+active4 pack: alpha0 fixed
+active4 pack: powers0 fixed
+active4 pack: alpha1 fixed
+active4 pack: powers1 fixed
+active4 pack: low fixed
+active4 pack: inactive fixed
+active4 pack: write0 fixed
+active4 pack: private helper fixed
+active4 pack: active run fixed
+active4 pack: incoming zero fixed
+active4 pack: extra0 fixed
+active4 pack: extra1 fixed
+active4 pack: final cell4 read fixed
+active4 pack: canonical final4 fixed
+/private/tmp/a3-s9-final-parts-active-row-v4-equality-diagnostic-check-20261023/sources/S9FinalPartsActiveRowV1.lean:150:0: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+kappa out : W
+partsFinal : Parts
+k : Std.Array W 7#usize
+hs2 : self.variant = transport.Variant.S2
+halpha : ∀ (i : Usize) (x : W), alpha.index_usize i = ok x → Can x
+hextra :
+  ∀ (i : Usize) (q : aspis_core.field.QM31),
+    self.extra.index_usize i = ok q → AspisR1S9ActualPairQMHelperTransportV1.Canonical q
+hspan : f.len = Usize.wrapping_mul 64#usize 32#usize
+left✝² : alpha.len = 2#usize
+left✝¹ : weights.shared_two_point_guard self 2#usize = ok false
+left✝ : self.pair alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular : Parts
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : Parts
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds self false alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hlow :
+  weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair self f low = ok inactive
+hpartsInactive : Array.update partsRegular 0#usize inactive = ok partsInactive
+hactive : weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+hp0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hp1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hhelper :
+  (have coefficients := Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO;
+    do
+    let coefficients1 ← weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f coefficients
+    weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low coefficients1
+        aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok inactive
+coefficients : Std.Array aspis_core.field.wide_exact.WideExact 12#usize
+hcoeff :
+  weights.s2_grouped_inactive_pair_loop0 { start := 0#usize, «end» := 64#usize } f
+      (Array.repeat 12#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok coefficients
+houter :
+  weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low coefficients
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok inactive
+hreg : cell4 partsRegular = aspis_core.field.wide_exact.WideExact.ZERO
+hwrite4 : cell4 partsInactive = cell4 partsRegular
+hzero : cell4 partsInactive = aspis_core.field.wide_exact.WideExact.ZERO
+ccarry : Can (cell4 partsInactive)
+hv huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2 = ok true
+hlibra : weights.factored_s2_libra_weights ap0 ap1 self.extra = ok libra
+hactive8 : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+q0 q1 : Q
+hq0 : self.extra.index_usize 0#usize = ok q0
+hq1 : self.extra.index_usize 1#usize = ok q1
+cfinal : Can (cell4 partsFinal)
+hvalue :
+  decode (cell4 partsFinal) =
+    ∑ j,
+      AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients ⋯ hcoeff ↑j *
+        AspisR1.S2LibraFactoredIdentity.original
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap1))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+⊢ decode (cell4 partsFinal) =
+    ∑ j,
+      AspisR1S9NativeS3ZeroPrefixV1.successfulInput f coefficients ⋯ hcoeff ↑j *
+        AspisR1.S2LibraFactoredIdentity.original
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase (mapArray toHelperW ap1))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+          (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+'AspisR1S9FinalPartsActiveRowV1.shared_trace_stored_active_row' does not depend on any axioms
+'AspisR1S9FinalPartsActiveRowV1.unshared_trace_stored_active_row' does not depend on any axioms

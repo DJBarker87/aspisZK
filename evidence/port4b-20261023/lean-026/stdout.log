@@ -1,0 +1,145 @@
+Port4B_LeafStep.lean:67:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  0 ≤ e ≤ 14
+where
+ e := ↑(↑s.n - 1)
+ f := ↑?m.279
+ g := ↑(List.length ?m.278)
+Port4B_LeafStep.lean:65:102: error: unsolved goals
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+getI : (↑s.idx)[↑s.n - 1]! = (↑s.idx)[↑s.n - 1]
+⊢ (match s.idx[s.n.wrapping_sub 1#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑s.idx)[↑s.n - 1]
+Port4B_LeafStep.lean:70:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  0 ≤ e ≤ 14
+where
+ e := ↑(↑s.n - 1)
+ f := ↑?m.360
+ g := ↑(List.length ?m.359)
+Port4B_LeafStep.lean:68:102: error: unsolved goals
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+readI : s.idx.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.idx)[↑s.n - 1]!
+getV : (↑s.val)[↑s.n - 1]! = (↑s.val)[↑s.n - 1]
+⊢ (match s.val[s.n.wrapping_sub 1#usize]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑s.val)[↑s.n - 1]
+Port4B_LeafStep.lean:64:2: error: unsolved goals
+case pos
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+readI : s.idx.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.idx)[↑s.n - 1]!
+readV : s.val.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.val)[↑s.n - 1]!
+⊢ (do
+      let prev ← lift (s.n.wrapping_sub 1#usize)
+      let x ← s.idx.index_usize prev
+      if x = index then do
+          let prev ← lift (s.n.wrapping_sub 1#usize)
+          let x ← s.val.index_usize prev
+          if decide (x = leaf) = true then ok (cont (s.idx, s.val, s.n, pos))
+            else ok (done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let d1 ← lift (UScalar.ofNat (↑s.n + 1) ⋯)
+          ok (cont (s.idx.set s.n index, s.val.set s.n leaf, d1, pos))) =
+    ok
+      (match
+        if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]! = leaf then some s else none
+        else
+          some
+            { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯,
+              «at» := s.at } with
+      | none => done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle))
+      | some t => cont (t.idx, t.val, t.n, pos))
+Port4B_LeafStep.lean:73:2: error: unsolved goals
+case neg
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : ¬0 < ↑s.n
+⊢ (do
+      let d1 ← lift (UScalar.ofNat (↑s.n + 1) ⋯)
+      ok (cont (s.idx.set s.n index, s.val.set s.n leaf, d1, pos))) =
+    ok (cont (s.idx.set s.n index, s.val.set s.n leaf, UScalar.ofNat (↑s.n + 1) ⋯, pos))
+Port4B_LeafStep.lean:67:35: warning: This simp argument is unused:
+  prev
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize,p̵r̵e̵v̵,̵ ̲getI, ̲List.getElem?_eq_getElem (by omega)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_LeafStep.lean:70:35: warning: This simp argument is unused:
+  prev
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize,p̵r̵e̵v̵,̵ ̲getV, ̲List.getElem?_eq_getElem (by omega)]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_LeafStep.lean:72:39: warning: This simp argument is unused:
+  readI
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵o̵s̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵L̵e̵a̵f̵C̵o̵n̵t̵e̵n̵t̵.̵n̵e̵x̵t̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵I̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵L̵e̵a̵f̵,̵p̵o̵s̵i̵t̵i̵v̵e̵,̵r̵e̵a̵d̵I̵,̵r̵e̵a̵d̵V̵,̵w̵r̵i̵t̵e̵I̵,̵w̵r̵i̵t̵e̵V̵,̵i̵n̵c̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲p̲o̲s̲t̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲L̲e̲a̲f̲C̲o̲n̲t̲e̲n̲t̲.̲n̲e̲x̲t̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲I̲n̲d̲e̲x̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲o̲s̲i̲t̲i̲v̲e̲,̲ ̲r̲e̲a̲d̲V̲,̲ ̲w̲r̲i̲t̲e̲I̲,̲ ̲w̲r̲i̲t̲e̲V̲,̲ ̲i̲n̲c̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_LeafStep.lean:72:45: warning: This simp argument is unused:
+  readV
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵o̵s̵t̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵L̵e̵a̵f̵C̵o̵n̵t̵e̵n̵t̵.̵n̵e̵x̵t̵,̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵I̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵s̵a̵m̵e̵L̵e̵a̵f̵,̵p̵o̵s̵i̵t̵i̵v̵e̵,̵r̵e̵a̵d̵I̵,̵r̵e̵a̵d̵V̵,̵w̵r̵i̵t̵e̵I̵,̵w̵r̵i̵t̵e̵V̵,̵i̵n̵c̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲p̲o̲s̲t̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲L̲e̲a̲f̲C̲o̲n̲t̲e̲n̲t̲.̲n̲e̲x̲t̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲I̲n̲d̲e̲x̲,̲ ̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲s̲a̲m̲e̲L̲e̲a̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲o̲s̲i̲t̲i̲v̲e̲,̲ ̲r̲e̲a̲d̲I̲,̲ ̲w̲r̲i̲t̲e̲I̲,̲ ̲w̲r̲i̲t̲e̲V̲,̲ ̲i̲n̲c̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

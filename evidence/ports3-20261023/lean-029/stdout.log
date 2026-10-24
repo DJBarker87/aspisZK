@@ -1,0 +1,227 @@
+Port3_RowsInstall.lean:55:96: error: don't know how to synthesize placeholder for argument `basis`
+context:
+base : AspisR1Stage2.AccumulateOps
+p : AspisR1Stage2.verifier.Prepared
+a out : AspisR1Stage2.verifier.Accumulator
+node : AspisR1Stage2.Stage2M
+value : AspisR1Stage2.Stage2E
+pending after : BW
+weights : (↑a.weights).length = 64
+size : (↑pending.raw).length = 64
+success✝⁴ :
+  (have width := a.weights.len;
+    do
+    let m ← (arithmetic base).zero
+    have basis : Std.Array AspisR1Stage2.Stage2M 256#usize := Array.repeat 256#usize m
+    let m1 ← (arithmetic base).one
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← (arithmetic base).basisLoop m1 node width basis1 1#usize
+    let weights1 ←
+      (arithmetic base).weightLoop { start := 0#usize, «end» := width } a.weights a.power a.next pending width basis2
+    let i ← weights1.terms + 1#usize
+    let we ← (arithmetic base).mulE value a.power
+    let we1 ← (arithmetic base).addE a.rhs we
+    (arithmetic base).trace 11#u16 a.next we1
+    let q ← (arithmetic base).mulK a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+frame : out.weights = a.weights
+x✝² : AspisR1Stage2.Stage2M
+left✝³ : (arithmetic base).zero = ok x✝²
+success✝³ :
+  (have basis := Array.repeat 256#usize x✝²;
+    do
+    let m1 ← (arithmetic base).one
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← (arithmetic base).basisLoop m1 node a.weights.len basis1 1#usize
+    let weights1 ←
+      (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+          a.weights.len basis2
+    let i ← weights1.terms + 1#usize
+    let we ← (arithmetic base).mulE value a.power
+    let we1 ← (arithmetic base).addE a.rhs we
+    (arithmetic base).trace 11#u16 a.next we1
+    let q ← (arithmetic base).mulK a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x✝¹ : AspisR1Stage2.Stage2M
+left✝² : (arithmetic base).one = ok x✝¹
+success✝² :
+  (do
+      let basis1 ← (Array.repeat 256#usize x✝²).update 0#usize x✝¹
+      let basis2 ← (arithmetic base).basisLoop x✝¹ node a.weights.len basis1 1#usize
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x✝ : Std.Array AspisR1Stage2.Stage2M 256#usize
+left✝¹ : (Array.repeat 256#usize x✝²).update 0#usize x✝¹ = ok x✝
+success✝¹ :
+  (do
+      let basis2 ← (arithmetic base).basisLoop x✝¹ node a.weights.len x✝ 1#usize
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x : Std.Array AspisR1Stage2.Stage2M 256#usize
+left✝ : (arithmetic base).basisLoop x✝¹ node a.weights.len x✝ 1#usize = ok x
+success✝ :
+  (do
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len x
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+mid : AspisR1Stage2.verifier.BatchedWeights
+hrows :
+  (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+      a.weights.len x =
+    ok mid
+success :
+  (do
+      let i ← mid.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := mid.raw, terms := i })) =
+    ok (out, after)
+width : a.weights.len = 64#usize
+⊢ Std.Array U32 256#usize
+Port3_RowsInstall.lean:47:55: error: unsolved goals
+base : AspisR1Stage2.AccumulateOps
+p : AspisR1Stage2.verifier.Prepared
+a out : AspisR1Stage2.verifier.Accumulator
+node : AspisR1Stage2.Stage2M
+value : AspisR1Stage2.Stage2E
+pending after : BW
+weights : (↑a.weights).length = 64
+size : (↑pending.raw).length = 64
+success✝⁴ :
+  (have width := a.weights.len;
+    do
+    let m ← (arithmetic base).zero
+    have basis : Std.Array AspisR1Stage2.Stage2M 256#usize := Array.repeat 256#usize m
+    let m1 ← (arithmetic base).one
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← (arithmetic base).basisLoop m1 node width basis1 1#usize
+    let weights1 ←
+      (arithmetic base).weightLoop { start := 0#usize, «end» := width } a.weights a.power a.next pending width basis2
+    let i ← weights1.terms + 1#usize
+    let we ← (arithmetic base).mulE value a.power
+    let we1 ← (arithmetic base).addE a.rhs we
+    (arithmetic base).trace 11#u16 a.next we1
+    let q ← (arithmetic base).mulK a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+frame : out.weights = a.weights
+x✝² : AspisR1Stage2.Stage2M
+left✝³ : (arithmetic base).zero = ok x✝²
+success✝³ :
+  (have basis := Array.repeat 256#usize x✝²;
+    do
+    let m1 ← (arithmetic base).one
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← (arithmetic base).basisLoop m1 node a.weights.len basis1 1#usize
+    let weights1 ←
+      (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+          a.weights.len basis2
+    let i ← weights1.terms + 1#usize
+    let we ← (arithmetic base).mulE value a.power
+    let we1 ← (arithmetic base).addE a.rhs we
+    (arithmetic base).trace 11#u16 a.next we1
+    let q ← (arithmetic base).mulK a.power p.rho
+    let i1 ← a.next + 1#usize
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x✝¹ : AspisR1Stage2.Stage2M
+left✝² : (arithmetic base).one = ok x✝¹
+success✝² :
+  (do
+      let basis1 ← (Array.repeat 256#usize x✝²).update 0#usize x✝¹
+      let basis2 ← (arithmetic base).basisLoop x✝¹ node a.weights.len basis1 1#usize
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x✝ : Std.Array AspisR1Stage2.Stage2M 256#usize
+left✝¹ : (Array.repeat 256#usize x✝²).update 0#usize x✝¹ = ok x✝
+success✝¹ :
+  (do
+      let basis2 ← (arithmetic base).basisLoop x✝¹ node a.weights.len x✝ 1#usize
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len basis2
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x : Std.Array AspisR1Stage2.Stage2M 256#usize
+left✝ : (arithmetic base).basisLoop x✝¹ node a.weights.len x✝ 1#usize = ok x
+success✝ :
+  (do
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len x
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+mid : AspisR1Stage2.verifier.BatchedWeights
+hrows :
+  (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+      a.weights.len x =
+    ok mid
+success :
+  (do
+      let i ← mid.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := mid.raw, terms := i })) =
+    ok (out, after)
+width : a.weights.len = 64#usize
+⊢ out.weights = a.weights ∧ (↑after.raw).length = 64
+'AspisR1.Port3_RowsInstall.accepted_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_RowsInstall.accumulate_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

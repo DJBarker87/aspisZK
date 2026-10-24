@@ -1,0 +1,70 @@
+{"attempt": "lean-038", "exit_status": 1, "wall_seconds": 2.6193222909932956, "peak_rss_kib": "4405064", "swaps": "0", "print_axioms": ["'_private.Port4C_RowLoop.0.AspisR1.Port4C_RowLoop.basis_read' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]", "'_private.Port4C_RowLoop.0.AspisR1.Port4C_RowLoop.owned_step' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]", "'AspisR1.Port4C_RowLoop.from_iterate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_RowLoop.lean:14:55: error: unsolved goals
+basis : Std.Array U32 256#usize
+j : Usize
+hj : ↑j < 64
+bound : ↑j < (↑basis).length
+⊢ (match basis[j]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (S7JoinBasisBlock.cell basis ↑j)
+Port4C_RowLoop.lean:16:36: warning: This simp argument is unused:
+  List.getElem?_eq_getElem bound
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵c̵e̵l̵l̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵b̵o̵u̵n̵d̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵[̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲c̲e̲l̲l̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option
+...
+kend.trace 13#u16 i2 we1
+      ok ((toWeights v, toBW b).1, b1)) =
+    ok pair
+x✝¹ : UScalar UScalarTy.Usize
+left✝² : x✝⁶ + j = ok x✝¹
+h✝¹ :
+  (do
+      let we1 ← S7JoinRowsTrace.backend.from_m31 (cell basis ↑j)
+      S7JoinRowsTrace.backend.trace 13#u16 x✝¹ we1
+      ok ((toWeights v, toBW b).1, b1)) =
+    ok pair
+x✝ : S7Kani2AccumulatorLoop.E
+left✝¹ : S7JoinRowsTrace.backend.from_m31 (cell basis ↑j) = ok x✝
+h✝ :
+  (do
+      S7JoinRowsTrace.backend.trace 13#u16 x✝¹ x✝
+      ok ((toWeights v, toBW b).1, b1)) =
+    ok pair
+x : Unit
+left✝ : S7JoinRowsTrace.backend.trace 13#u16 x✝¹ x✝ = ok x
+h : ok ((toWeights v, toBW b).1, b1) = ok pair
+same : ((toWeights v, toBW b).1, b1) = pair
+⊢ (do
+      let out ← S7Kani2OwnedPush.push_owned (toBW b) j (toK power) (cell basis ↑j)
+      ok (fromBW out)) =
+    ok (fromBW b1)
+Port4C_RowLoop.lean:60:4: error: No goals to be solved
+Port4C_RowLoop.lean:58:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_RowLoop.lean:84:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵s̵t̵e̵p̵]̵[̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'_private.Port4C_RowLoop.0.AspisR1.Port4C_RowLoop.basis_read' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.Port4C_RowLoop.0.AspisR1.Port4C_RowLoop.owned_step' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Port4C_RowLoop.from_iterate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9dee2dafcfa74a53afb9a999fc466648.scope; invocation ID: 921d0aa11c4b49eca767ea7e7158b045

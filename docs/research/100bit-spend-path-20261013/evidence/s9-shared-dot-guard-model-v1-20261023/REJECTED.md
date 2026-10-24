@@ -1,0 +1,1 @@
+The first focused source check failed only on the row-index literal alias after the guard rewrite. Its source, failed receipt and log are retained under rejected/. The accepted v2 adds reflexivity after the rewrite; no theorem statement, source model or premise changed. The failed sorryAx output is not accepted evidence.

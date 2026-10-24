@@ -1,0 +1,154 @@
+/private/tmp/a3-s9-partial-dot-ordered-trace-v1-check-20261023/sources/S9PartialDotOrderedTraceV1.lean:144:112: error: unsolved goals
+f : Slice U8
+common : Common
+s : Usize
+hs : ↑s < 4
+out : W
+hdiv : f.len / 32#usize = ok 64#usize
+step : State → Result (ControlFlow State Outcome) := fun p => weights.partial_dot_loop.body f common s p.1 p.2
+fuel : ℕ
+ih :
+  ∀ (it : Iter) (dot : Dot),
+    ↑it.end = 16 →
+      ↑it.start ≤ 16 →
+        weights.partial_dot_loop it f common s dot = ok (core.result.Result.Ok out) →
+          loop step (it, dot) = ok (core.result.Result.Ok out) →
+            16 - ↑it.start = fuel →
+              ∃ js xs final,
+                AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1EbyKPushDecodedProductUpdate.QRaw (toSourceState dot) xs
+                    (toSourceState final) ∧
+                  fast_pairing.EbyKDot.finish final = ok out ∧
+                    (∀ p ∈ xs, AspisR1EbyKPowerValueCanonicalToPush.pushCanonical p.1) ∧
+                      List.Forall₂
+                          (fun j p =>
+                            ∃ w q,
+                              weights.field f (index s j) = ok w ∧
+                                Array.index_usize common j = ok q ∧ p = (toSourceWide w, toSourceQ q))
+                          js xs ∧
+                        js.length = fuel ∧ List.map (fun j => ↑j) js = List.range' (↑it.start) fuel
+it : Iter
+dot : Dot
+hend : ↑it.end = 16
+hstart : ↑it.start ≤ 16
+hrun : weights.partial_dot_loop it f common s dot = ok (core.result.Result.Ok out)
+hloop : loop step (it, dot) = ok (core.result.Result.Ok out)
+hfuel : 16 - ↑it.start = fuel + 1
+hd : step (it, dot) = ok (done (core.result.Result.Ok out))
+it1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (none, it1)
+hf : fast_pairing.EbyKDot.finish dot = ok out
+hstop : ↑it.end ≤ ↑it.start
+hz : 16 - ↑it.start = 0
+⊢ [] = List.range' (↑it.start) (fuel + 1)
+/private/tmp/a3-s9-partial-dot-ordered-trace-v1-check-20261023/sources/S9PartialDotOrderedTraceV1.lean:179:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  16 - ↑it.start
+in the target expression
+  ↑it.start :: List.range' (↑it1.start) fuel = List.range' (↑it.start) (fuel + 1)
+
+case succ.inr.refine_3
+f : Slice U8
+common : Common
+s : Usize
+hs : ↑s < 4
+out : W
+hdiv : f.len / 32#usize = ok 64#usize
+step : State → Result (ControlFlow State Outcome) := fun p => weights.partial_dot_loop.body f common s p.1 p.2
+fuel : ℕ
+ih :
+  ∀ (it : Iter) (dot : Dot),
+    ↑it.end = 16 →
+      ↑it.start ≤ 16 →
+        weights.partial_dot_loop it f common s dot = ok (core.result.Result.Ok out) →
+          loop step (it, dot) = ok (core.result.Result.Ok out) →
+            16 - ↑it.start = fuel →
+              ∃ js xs final,
+                AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1EbyKPushDecodedProductUpdate.QRaw (toSourceState dot) xs
+                    (toSourceState final) ∧
+                  fast_pairing.EbyKDot.finish final = ok out ∧
+                    (∀ p ∈ xs, AspisR1EbyKPowerValueCanonicalToPush.pushCanonical p.1) ∧
+                      List.Forall₂
+                          (fun j p =>
+                            ∃ w q,
+                              weights.field f (index s j) = ok w ∧
+                                Array.index_usize common j = ok q ∧ p = (toSourceWide w, toSourceQ q))
+                          js xs ∧
+                        js.length = fuel ∧ List.map (fun j => ↑j) js = List.range' (↑it.start) fuel
+it : Iter
+dot : Dot
+hend : ↑it.end = 16
+hstart : ↑it.start ≤ 16
+hrun : weights.partial_dot_loop it f common s dot = ok (core.result.Result.Ok out)
+hloop : loop step (it, dot) = ok (core.result.Result.Ok out)
+hfuel : 16 - ↑it.start = fuel + 1
+it1 : Iter
+dot1 : Dot
+hc : step (it, dot) = ok (cont (it1, dot1))
+ht : loop step (it1, dot1) = ok (core.result.Result.Ok out)
+j : UScalar UScalarTy.Usize
+w : aspis_core.field.wide_exact.WideExact
+q : Q
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it = ok (some j, it1)
+hw : weights.field f (index s j) = ok w
+hq : Array.index_usize common j = ok q
+hp : fast_pairing.EbyKDot.push dot w q = ok (core.result.Result.Ok (), dot1)
+hj : j = it.start
+hlt : ↑j < ↑it.end
+hstep : ↑it1.start = ↑it.start + 1
+he : it1.end = it.end
+hend1 : ↑it1.end = 16
+hstart1 : ↑it1.start ≤ 16
+hfuel1 : 16 - ↑it1.start = fuel
+hrun1 : weights.partial_dot_loop it1 f common s dot1 = ok (core.result.Result.Ok out)
+js : List Usize
+xs : Inputs
+final : Dot
+htrace :
+  AspisR1DotCountBoundV1.AcceptedPushTrace AspisR1EbyKPushDecodedProductUpdate.QRaw (toSourceState dot1) xs
+    (toSourceState final)
+hfinish : fast_pairing.EbyKDot.finish final = ok out
+hcanonical : ∀ p ∈ xs, AspisR1EbyKPowerValueCanonicalToPush.pushCanonical p.1
+hcorr :
+  List.Forall₂
+    (fun j p =>
+      ∃ w q, weights.field f (index s j) = ok w ∧ Array.index_usize common j = ok q ∧ p = (toSourceWide w, toSourceQ q))
+    js xs
+hlen : js.length = fuel
+horder : List.map (fun j => ↑j) js = List.range' (↑it1.start) fuel
+hj16 : ↑j < 16
+hm :
+  AspisR1S9OwnedFromLimbsMapV1.mapResult toS5 (ok w) =
+    AspisR1S5PairCutTransparentReaderV1.readerBody AspisR1S5PairCutTransparentReaderV1.actualPairDecoder f (index s j)
+hr :
+  AspisR1S5PairCutFieldCallbackV1.checkedFieldCallback f (index s j) =
+    AspisR1S9OwnedFromLimbsMapV1.mapResult toS5 (ok w)
+hcan : AspisR1EbyKPowerValueCanonicalToPush.pushCanonical (toSourceWide w)
+hpush :
+  AspisR1EbyKPushDotBackend.pushWithDotBackend AspisR1EbyKPushDecodedProductUpdate.QRaw (toSourceState dot)
+      (toSourceWide w) (toSourceQ q) =
+    ok (core.result.Result.Ok (), toSourceState dot1)
+hv : ↑j = ↑it.start
+hstartEq : ↑it1.start = ↑it.start + 1
+hremaining : 16 - ↑it.start = 16 - ↑it1.start + 1
+⊢ ↑it.start :: List.range' (↑it1.start) fuel = List.range' (↑it.start) (fuel + 1)
+/private/tmp/a3-s9-partial-dot-ordered-trace-v1-check-20261023/sources/S9PartialDotOrderedTraceV1.lean:146:32: warning: This simp argument is unused:
+  hz
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_nil,h̵z̵,̵ ̲List.range'_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-partial-dot-ordered-trace-v1-check-20261023/sources/S9PartialDotOrderedTraceV1.lean:146:35: warning: This simp argument is unused:
+  List.range'_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵h̵z̵,̵L̵i̵s̵t̵.̵r̵a̵n̵g̵e̵'̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲h̲z̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9PartialDotOrderedTraceV1.actual_partial_loop_source_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9PartialDotOrderedTraceV1.actual_partial_source_product_sum' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

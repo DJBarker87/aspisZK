@@ -1,0 +1,40 @@
+{"attempt": "lean-004", "exit_status": 0, "wall_seconds": 2.1947923439875012, "peak_rss_kib": "4378464", "swaps": "0", "print_axioms": ["'AspisR1.ChildJoin_CheckpointObstruction.reader_none' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ChildJoin_CheckpointObstruction.writer_none' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ChildJoin_Geometry.batches_from_facts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ChildJoin_Geometry.scan_short' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ChildJoin_Geometry.scan_unique' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.ChildJoin_CheckpointObstruction.reader_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_CheckpointObstruction.writer_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.batches_from_facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.scan_short' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ChildJoin_Geometry.scan_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin (ops : AdapterRw.Ops)
+  (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+  (H : AspisV8R19.Dup
+...
+wOracle H input)) →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+      (∀ (b k : ℕ),
+          b < 2 →
+            k < 3 →
+              AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                AspisR1.OraclePortCompactDraft.slice p.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                  (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+        (∀ (s : MultiproofConeRef.reference.Scratch),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s)).2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 0 s) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)) ∧
+          ∀ (s : MultiproofConeRef.reference.Scratch),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s)).2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeFrozen2Stage.sourceBatch p q nodes 1 s) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1) :=
+fun {X} D hash H law p q nodes views =>
+  ⟨fun s accepted =>
+    AspisR1.MultiproofConeFrozen2Stage.accepted_batch D hash H law p q nodes 0 s
+      (fun k hk => views 0 k (of_decide_eq_true (id (Eq.refl true))) hk) accepted,
+    fun s accepted =>
+    AspisR1.MultiproofConeFrozen2Stage.accepted_batch D hash H law p q nodes 1 s
+      (fun k hk => views 1 k (of_decide_eq_true (id (Eq.refl true))) hk) accepted⟩
+
+Running as unit: run-r704eeee2a56f4f749d1ec427191ebdce.scope; invocation ID: b58c483849484ee78ddbf3377fa0f0a7

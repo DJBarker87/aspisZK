@@ -1,0 +1,59 @@
+Port5Q1_Geometry.lean:35:83: error: Type mismatch
+  leaves
+has type
+  Port5Q1_GeometryCanonical.SessionAPrimitives ops
+but is expected to have type
+  Port5Q1_GeometryCanonical.SessionAPrimitives installed
+Port5Q1_Geometry.lean:37:4: error: Function expected at
+  Port5Q1_GeometryCanonical.traversal installed installedLeaves start { slice := selected, i := 0 }
+    (alloc.vec.Vec.new U32) (alloc.vec.Vec.new U32) out (↑selected).length ?m.151 ?m.152 ?m.153
+but this term has type
+  ∃ zsFinal flatFinal terminal,
+    (∀ x ∈ ↑flatFinal, Port5Q1_GeometryCanonical.Canonical x) ∧
+      verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install installed) start terminal zsFinal
+            flatFinal =
+          ok (ControlFlow.done (core.result.Result.Ok out)) ∧
+        terminal.i = (↑terminal.slice).length ∧
+          (↑zsFinal).length = (↑(alloc.vec.Vec.new U32)).length + (↑selected).length ∧
+            (↑flatFinal).length = (↑(alloc.vec.Vec.new U32)).length + 5 * (↑selected).length
+
+Note: Expected a function because this term is being applied to the argument
+  run
+Port5Q1_Geometry.lean:39:47: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+leaves : Port5Q1_GeometryCanonical.SessionAPrimitives ops
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+queries : Std.Array U32 22#usize
+start end1 : Usize
+out : verifier.QueryGeometry
+nonempty : ↑start < ↑end1
+accepted :
+  Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install ops) queries start end1 =
+    ok (core.result.Result.Ok out)
+installed : Ops CoreError := Port5Q1_GeometryTerminal.install ops
+selected : Slice U32
+order : ↑start ≤ ↑end1
+bound : ↑end1 ≤ 22
+selection : Port4C_GeometryRange.selected queries start end1 = ok selected
+run :
+  verifier.QueryGeometry.for_range_loop0 installed { slice := selected, i := 0 } start
+      (alloc.vec.Vec.new Port4C_GeometryRange.M) (alloc.vec.Vec.new Port4C_GeometryRange.M) =
+    ok (core.result.Result.Ok out)
+selectedFields :
+  ↑selected = List.take (↑end1 - ↑start) (List.drop ↑start ↑queries) ∧ (↑selected).length = ↑end1 - ↑start
+installedLeaves : Port5Q1_GeometryCanonical.SessionAPrimitives installed
+⊢ verifier.QueryGeometry.for_range_loop0 (Port4C_GeometryStd.install installed) { slice := selected, i := 0 } start
+      ⟨[], alloc.vec.Vec.new._proof_1⟩ ⟨[], alloc.vec.Vec.new._proof_1⟩ =
+    ok (core.result.Result.Ok out)
+Port5Q1_Geometry.lean:36:9: error: Tactic `rcases` failed: `x✝ : ?m.155` is not an inductive datatype
+Port5Q1_Geometry.lean:39:26: warning: This simp argument is unused:
+  alloc.vec.Vec.new
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵n̵e̵w̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q1_Geometry.for_range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

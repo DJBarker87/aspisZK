@@ -1,0 +1,38 @@
+/private/tmp/a3-s9-shared-dot-guard-model-v1c-check-20261023/sources/S9SharedDotGuardModelV1.lean:45:46: error: unsolved goals
+w : Ctor
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtor w)
+selfOut : weights.Weights
+initial common : Common
+hloop : weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (fromCtor w) initial = ok (selfOut, common)
+folds : Usize
+hguard : weights.shared_two_point_guard (fromCtor w) folds = ok true
+row : Row
+coeffs : Coeffs
+hr : (fromCtor w).factors.index_usize 2#usize = ok row
+hcell : Array.index_usize row 4#usize = ok coeffs
+f : Slice U8
+partials : Partials
+out : NativeW
+hdiv : f.len / 32#usize = ok 64#usize
+hproducer : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hrun : weights.high_dot partials coeffs = ok (core.result.Result.Ok out)
+hv :
+  decodeNative out =
+    ∑ i,
+      fieldValue f (finIndex ⋯ i) *
+        embedQ (model 0 2 (↑i % 4) * model 0 3 (↑i / 4 % 4) * model (↑2#usize) 4 (↑i / 16 % 4))
+hg :
+  ∀ (i : ℕ),
+    AspisR1S9ConstructorTableNativeTensorV1.highProduct (model 2) i =
+      model 0 2 (i % 4) * model 0 3 (i / 4 % 4) * model 2 4 (i / 16 % 4)
+i : Fin 64
+x✝ : i ∈ Finset.univ
+⊢ fieldValue f (finIndex ⋯ i) *
+      embedQ (model 0 2 (↑i % 4) * model 0 3 (↑i / 4 % 4) * model (↑2#usize) 4 (↑i / 16 % 4)) =
+    fieldValue f (finIndex ⋯ i) * embedQ (model 0 2 (↑i % 4) * model 0 3 (↑i / 4 % 4) * model 2 4 (↑i / 16 % 4))
+'AspisR1S9SharedDotGuardModelV1.actual_shared_row_two_dot_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

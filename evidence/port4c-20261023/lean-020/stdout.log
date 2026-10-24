@@ -1,0 +1,87 @@
+Port4C_GeometryStd.lean:76:16: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (next, s) := (some x, it1)
+    match next with
+    | none => ok (done (false, s))
+    | some value =>
+      let (stop, f) := (P value, ())
+      if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+  | ok r =>
+    match r with
+    | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  if false = true then ok (true, it1)
+  else loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) (it1, ())
+
+case false
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+it it1 : core.slice.iter.Iter T
+x : T
+nextRun : core.slice.iter.IteratorSliceIter.next it = ok (some x, it1)
+⊢ (match
+      let (next, s) := (some x, it1)
+      match next with
+      | none => ok (done (false, s))
+      | some value =>
+        let (stop, f) := (P value, ())
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    if false = true then ok (true, it1)
+    else loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) (it1, ())
+Port4C_GeometryStd.lean:76:16: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (next, s) := (some x, it1)
+    match next with
+    | none => ok (done (false, s))
+    | some value =>
+      let (stop, f) := (P value, ())
+      if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+  | ok r =>
+    match r with
+    | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  if true = true then ok (true, it1)
+  else loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) (it1, ())
+
+case true
+T : Type
+P : T → Bool
+pred : core.ops.function.FnMut Unit T Bool
+callback : ∀ (x : T), pred.call_mut () x = ok (P x, ())
+it it1 : core.slice.iter.Iter T
+x : T
+nextRun : core.slice.iter.IteratorSliceIter.next it = ok (some x, it1)
+⊢ (match
+      let (next, s) := (some x, it1)
+      match next with
+      | none => ok (done (false, s))
+      | some value =>
+        let (stop, f) := (P value, ())
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    if true = true then ok (true, it1)
+    else loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) (it1, ())
+'AspisR1.Port4C_GeometryStd.zero_closure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.clone_m31' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.extend_fields' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port4C_GeometryStd.any_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryStd.zero_test_false' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

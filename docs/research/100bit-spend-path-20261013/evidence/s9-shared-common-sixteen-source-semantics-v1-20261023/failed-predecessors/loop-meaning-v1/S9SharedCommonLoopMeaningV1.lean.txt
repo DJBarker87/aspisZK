@@ -1,0 +1,90 @@
+import S9SharedCommonBodyMeaningV1
+import S9FactorArrayEntryV1
+import S9StatementSourceLoopFactsV1
+import S9LoopInvariantPropertyV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9SharedCommonLoopMeaningV1
+open AspisR1S9SharedCommonBodyTraceV1
+open AspisR1S9SharedCommonBodyMeaningV1
+open AspisR1S9ActualTensorArithmeticV1
+open AspisR1S9FactorArrayEntryV1
+open AspisR1S9StatementSourceLoopFactsV1
+
+def Prefix (self : weights.Weights) (upto : Nat) (common : Common) : Prop :=
+  ∀ (i : Usize) (hi : i.val<16), i.val<upto →
+    Can (atN common i hi) ∧ decode (atN common i hi)=expectedBits self i
+
+theorem prefix_write (self : weights.Weights) (common commonNext : Common)
+    (j : Usize) (product : Q) (hj : j.val<16)
+    (hprefix : Prefix self j.val common) (hproduct : Can product)
+    (hvalue : decode product=expectedBits self j)
+    (hwrite : Array.update common j product=.ok commonNext) :
+    Prefix self (j.val+1) commonNext := by
+  have he := accepted_update_eq_set common j hj product commonNext hwrite
+  subst commonNext
+  intro i hi hlt
+  rw [atN_set common j i product hj hi]
+  by_cases hij : i.val=j.val
+  · rw [if_pos hij]
+    have hiU : i=j := UScalar.eq_of_val_eq hij
+    subst i
+    exact ⟨hproduct,hvalue⟩
+  · rw [if_neg hij]
+    exact hprefix i hi (by omega)
+
+/-- Complete successful source loop: arbitrary initial common array is
+entirely overwritten. No initial common meaning or canonicality is assumed. -/
+theorem actual_common_loop_success (self selfOut : weights.Weights) (iter : R)
+    (common commonOut : Common) (hcan : FactorsCanonical self)
+    (hstart : iter.start.val=0) (hend : iter.end.val=16)
+    (hloop : weights.Weights.pair_loop1 iter self common=.ok (selfOut,commonOut)) :
+    selfOut=self ∧ Prefix self 16 commonOut := by
+  let step : State → Result (ControlFlow State Output) :=
+    fun s => weights.Weights.pair_loop1.body self s.1 s.2
+  let measure : State → Nat := fun s => s.1.end.val-s.1.start.val
+  let inv : State → Prop := fun s => s.1.end.val=16 ∧ s.1.start.val≤16 ∧
+    Prefix self s.1.start.val s.2
+  let post : Output → Prop := fun out => out.1=self ∧ Prefix self 16 out.2
+  have hd : ∀ s out, inv s → step s=.ok (.done out) → post out := by
+    rintro ⟨it,a⟩ out hi hb
+    change it.end.val=16 ∧ it.start.val≤16 ∧ Prefix self it.start.val a at hi
+    obtain ⟨he,itNext,hn⟩ := actual_body_done self it a out hb
+    have hstop := next_none_stop it itNext hn
+    have hfull : it.start.val=16 := by omega
+    subst out
+    exact ⟨rfl,hfull ▸ hi.2.2⟩
+  have hc : ∀ s s', inv s → step s=.ok (.cont s') → inv s' := by
+    rintro ⟨it,a⟩ ⟨itNext,aNext⟩ hi hb
+    change it.end.val=16 ∧ it.start.val≤16 ∧ Prefix self it.start.val a at hi
+    obtain ⟨j,product,hn,hu,hp,hv⟩ := actual_body_cont_meaning self it itNext a aNext hcan hb
+    obtain ⟨hlt,hj,hs,he⟩ := next_some_progress it itNext j hn
+    have hjval : j.val=it.start.val := congrArg UScalar.val hj
+    have hbound : j.val<16 := by omega
+    have hprefix : Prefix self j.val a := hjval.symm ▸ hi.2.2
+    have hpref := prefix_write self a aNext j product hbound hprefix hp hv hu
+    change itNext.end.val=16 ∧ itNext.start.val≤16 ∧ Prefix self itNext.start.val aNext
+    refine ⟨?_,by omega,?_⟩
+    · rw [he]; exact hi.1
+    · have hsucc : itNext.start.val=j.val+1 := by omega
+      exact hsucc.symm ▸ hpref
+  have hdec : ∀ s s', step s=.ok (.cont s') → measure s'<measure s := by
+    rintro ⟨it,a⟩ ⟨itNext,aNext⟩ hb
+    obtain ⟨j,product,hn,hu,hp,hv⟩ := actual_body_cont_meaning self it itNext a aNext hcan hb
+    obtain ⟨hlt,hj,hs,he⟩ := next_some_progress it itNext j hn
+    dsimp only [measure]
+    have hev : itNext.end.val=it.end.val := congrArg UScalar.val he
+    omega
+  have hinit : inv (iter,common) := by
+    change iter.end.val=16 ∧ iter.start.val≤16 ∧ Prefix self iter.start.val common
+    refine ⟨hend,by omega,?_⟩
+    intro i hi hlt
+    omega
+  have hrun : Aeneas.Std.loop step (iter,common)=.ok (selfOut,commonOut) := hloop
+  exact AspisR1S9LoopInvariantPropertyV1.loop_invariant_property step measure inv post
+    hd hc hdec (iter,common) (selfOut,commonOut) hinit hrun
+
+#print axioms prefix_write
+#print axioms actual_common_loop_success
+end AspisR1S9SharedCommonLoopMeaningV1

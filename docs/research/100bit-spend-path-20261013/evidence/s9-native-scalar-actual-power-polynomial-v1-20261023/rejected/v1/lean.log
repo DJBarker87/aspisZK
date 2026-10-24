@@ -1,0 +1,43 @@
+/private/tmp/a3-s9-scalar-actual-power-polynomial-v1-check-20261023/sources/S9ScalarActualPowerPolynomialV1.lean:36:10: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  hpow i value hr
+has type
+  AspisR1S9ActualIndexedPowersArithmeticV1.decode value = AspisR1S9ActualIndexedPowersArithmeticV1.decode x ^ ↑i
+which has no fields.
+/private/tmp/a3-s9-scalar-actual-power-polynomial-v1-check-20261023/sources/S9ScalarActualPowerPolynomialV1.lean:39:13: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  hpow 0#usize p0 hp0
+has type
+  AspisR1S9ActualIndexedPowersArithmeticV1.decode p0 = AspisR1S9ActualIndexedPowersArithmeticV1.decode x ^ ↑0#usize
+which has no fields.
+/private/tmp/a3-s9-scalar-actual-power-polynomial-v1-check-20261023/sources/S9ScalarActualPowerPolynomialV1.lean:31:70: error: unsolved goals
+f : Factors
+x : NativeW
+p : Powers
+out : NativeW
+hx : Can x
+hf : QCan f
+hpowers : weights.powers 4#usize x = ok p
+hscalar : weights.Weights.scalar_factor f p = ok out
+hpow : AspisR1S9ActualIndexedPowersSemanticsV1.Output x p
+hp : AspisR1S9ActualPairScalarCallbackV1.GoodArray p
+hout : AspisR1S9ActualPairScalarCallbackV1.Canonical out
+p0 p1 p2 p3 : AspisR1S9ActualPairScalarCallbackV1.W
+q0 q1 q2 q3 : AspisR1S9ActualPairScalarCallbackV1.Q
+hp0 : Array.index_usize p 0#usize = ok p0
+hq0 : Array.index_usize f 0#usize = ok q0
+hp1 : Array.index_usize p 3#usize = ok p1
+hq1 : Array.index_usize f 1#usize = ok q1
+hp2 : Array.index_usize p 2#usize = ok p2
+hq2 : Array.index_usize f 2#usize = ok q2
+hp3 : Array.index_usize p 1#usize = ok p3
+hq3 : Array.index_usize f 3#usize = ok q3
+hvalue :
+  AspisR1S9ActualScalarFourTermMeaningV1.decodeNative out =
+    (0 + AspisR1S9ActualScalarNativeReadsV1.nativeTerm p0 q0 + AspisR1S9ActualScalarNativeReadsV1.nativeTerm p1 q1 +
+          AspisR1S9ActualScalarNativeReadsV1.nativeTerm p2 q2 +
+        AspisR1S9ActualScalarNativeReadsV1.nativeTerm p3 q3) *
+      AspisR1CurrentWide.Proof.wideScalarEmbedding weights.QUARTER
+⊢ Can out ∧ decodeNative out = scalarPolynomial (decodeNative x) f
+'AspisR1S9ScalarActualPowerPolynomialV1.actual_scalar_same_power_polynomial' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

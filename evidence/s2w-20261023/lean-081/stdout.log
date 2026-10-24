@@ -1,0 +1,341 @@
+S2W_OuterOccurrences.lean:16:30: error(lean.unknownIdentifier): Unknown constant `r1_pool_adapter.owned.require_distinct_accounts`
+S2W_OuterOccurrences.lean:21:24: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_OuterOccurrences.lean:24:24: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_OuterOccurrences.lean:28:27: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_OuterOccurrences.lean:32:33: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_OuterOccurrences.lean:32:49: error(lean.unknownIdentifier): Unknown identifier `solana_pubkey.Pubkey`
+S2W_OuterOccurrences.lean:36:51: error: unsolved goals
+case h_1
+ops : sorry
+program : sorry
+accounts : Slice Cuts.Account
+data : Slice U8
+log : Log
+a✝³ : U64
+h✝ : ¬(accounts.len != 7#usize) = true
+r✝² : Result (Option (Slice U8))
+a✝² : Option (Slice U8)
+heq✝² :
+  monadLift (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize }) = ok a✝²
+r✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  monadLift
+      (core.array.Array.index
+        (core.ops.index.IndexSlice
+          (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice sorry U8))
+        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()) =
+    ok a✝¹
+r✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  monadLift
+      (core.cmp.PartialEq.ne.trait_default
+        (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption sorry
+          (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+        a✝² (some a✝¹)) =
+    ok a✝
+execution :
+  run sorry
+      ((fun b =>
+          S2W_Trace.bind (Code.done b) fun b =>
+            if b = true then
+              pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else do
+              let r ←
+                liftM
+                    (AdapterRw.r1_pool_adapter.owned.validate_asq8 sorry sorry accounts data
+                      (core.result.Result.Ok a✝³))
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let oa ← liftM (accounts.index_usize 0#usize)
+                  let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data sorry oa)
+                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let oa1 ← liftM (accounts.index_usize 6#usize)
+                      let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data sorry oa1)
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          let proof_start ←
+                            liftM
+                                (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                  sorry)
+                          let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                          let r3 ←
+                            liftM
+                                (AdapterRw.core.option.Option.ok_or o1
+                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                          let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 =>
+                              if (val1.len != val3) = true then
+                                pure
+                                  (core.result.Result.Err
+                                    AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                              else do
+                                let r4 ← perform (Call.op22 val.statement)
+                                let r5 ←
+                                  liftM
+                                      (AdapterRw.core.result.Result.map_err
+                                        AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                        r4 ())
+                                let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                match cf4 with
+                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                    let s1 ← liftM (lift val4.to_slice)
+                                    let i3 ←
+                                      liftM
+                                          (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                            sorry)
+                                    if (s1.len != i3) = true then
+                                        pure
+                                          (core.result.Result.Err
+                                            AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                                      else do
+                                        let s2 ← liftM (lift val4.to_slice)
+                                        let s3 ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) val1
+                                                { start := proof_start, «end» := val3 })
+                                        let o2 ← liftM (AdapterRw.observer sorry)
+                                        let r6 ←
+                                          perform
+                                              (Call.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sorry)
+                                                s2 s3 val2 () o2)
+                                        let r7 ← S2W_Outer.mapError (fun a0 => perform (Call.op44 a0)) r6
+                                        let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue a =>
+                                            perform (Call.op53 val.statement)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual))
+        a✝)
+      [] =
+    ok (core.result.Result.Ok (), log)
+⊢ List.filterMap
+      (fun x =>
+        match x with
+        | Event.returned (Call.op10 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 a5) a => some false
+        | Event.returned (Call.op11 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4) a => some true
+        | x => none)
+      log =
+    [true]
+
+case h_1
+ops : sorry
+program : sorry
+accounts : Slice Cuts.Account
+data : Slice U8
+log : Log
+a✝³ : Cuts.PE
+h✝ : ¬(accounts.len != 7#usize) = true
+r✝² : Result (Option (Slice U8))
+a✝² : Option (Slice U8)
+heq✝² :
+  monadLift (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize }) = ok a✝²
+r✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  monadLift
+      (core.array.Array.index
+        (core.ops.index.IndexSlice
+          (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice sorry U8))
+        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()) =
+    ok a✝¹
+r✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  monadLift
+      (core.cmp.PartialEq.ne.trait_default
+        (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption sorry
+          (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+        a✝² (some a✝¹)) =
+    ok a✝
+execution :
+  run sorry
+      ((fun b =>
+          S2W_Trace.bind (Code.done b) fun b =>
+            if b = true then
+              pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else do
+              let r ←
+                liftM
+                    (AdapterRw.r1_pool_adapter.owned.validate_asq8 sorry sorry accounts data
+                      (core.result.Result.Err a✝³))
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let oa ← liftM (accounts.index_usize 0#usize)
+                  let r1 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data sorry oa)
+                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let oa1 ← liftM (accounts.index_usize 6#usize)
+                      let r2 ← liftM (AdapterRw.r1_pool_adapter.owned.OwnedAccount.data sorry oa1)
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          let proof_start ←
+                            liftM
+                                (AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                  sorry)
+                          let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                          let r3 ←
+                            liftM
+                                (AdapterRw.core.option.Option.ok_or o1
+                                  AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                          let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 =>
+                              if (val1.len != val3) = true then
+                                pure
+                                  (core.result.Result.Err
+                                    AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                              else do
+                                let r4 ← perform (Call.op22 val.statement)
+                                let r5 ←
+                                  liftM
+                                      (AdapterRw.core.result.Result.map_err
+                                        AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                        r4 ())
+                                let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                match cf4 with
+                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                    let s1 ← liftM (lift val4.to_slice)
+                                    let i3 ←
+                                      liftM
+                                          (AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                            sorry)
+                                    if (s1.len != i3) = true then
+                                        pure
+                                          (core.result.Result.Err
+                                            AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                                      else do
+                                        let s2 ← liftM (lift val4.to_slice)
+                                        let s3 ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) val1
+                                                { start := proof_start, «end» := val3 })
+                                        let o2 ← liftM (AdapterRw.observer sorry)
+                                        let r6 ←
+                                          perform
+                                              (Call.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sorry)
+                                                s2 s3 val2 () o2)
+                                        let r7 ← S2W_Outer.mapError (fun a0 => perform (Call.op44 a0)) r6
+                                        let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue a =>
+                                            perform (Call.op53 val.statement)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                                residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame AdapterRw.solana_program_error.ProgramError)
+                                        residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual))
+        a✝)
+      [] =
+    ok (core.result.Result.Ok (), log)
+⊢ List.filterMap
+      (fun x =>
+        match x with
+        | Event.returned (Call.op10 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 a5) a => some false
+        | Event.returned (Call.op11 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4) a => some true
+        | x => none)
+      log =
+    [true]
+S2W_OuterOccurrences.lean:37:36: warning: This simp argument is unused:
+  S2W_TraceFacts.run_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵2̵W̵_̵O̵u̵t̵e̵r̵.̵s̵t̵a̵g̵e̵2̵_̵o̵w̵n̵e̵d̵,̵S̵2̵W̵_̵T̵r̵a̵c̵e̵F̵a̵c̵t̵s̵.̵r̵u̵n̵_̵b̵i̵n̵d̵,̵r̵u̵n̵_̵p̵u̵r̵e̵,̵r̵u̵n̵_̵l̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵S̵2̵W̵_̵O̵u̵t̵e̵r̵.̵t̵r̵a̵c̵e̵E̵f̵f̵e̵c̵t̵s̵,̵r̵u̵n̵_̵p̵e̵r̵f̵o̵r̵m̵]̵[̲S̲2̲W̲_̲O̲u̲t̲e̲r̲.̲s̲t̲a̲g̲e̲2̲_̲o̲w̲n̲e̲d̲,̲ ̲r̲u̲n̲_̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲_̲l̲i̲f̲t̲,̲ ̲S̲2̲W̲_̲O̲u̲t̲e̲r̲.̲t̲r̲a̲c̲e̲E̲f̲f̲e̲c̲t̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲u̲n̲_̲p̲e̲r̲f̲o̲r̲m̲]̲ at execution
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_OuterOccurrences.lean:37:60: warning: This simp argument is unused:
+  run_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [S2W_Outer.stage2_owned, ̲S2W_TraceFacts.run_bind, ̲run_p̵u̵r̵e̵,̵r̵u̵n̵_̵lift,
+  ̵  ̵ ̵ ̵S2W_Outer.traceEffects,
+  ̲ ̲ ̲ ̲ ̲run_perform] at execution
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_OuterOccurrences.lean:37:69: warning: This simp argument is unused:
+  run_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [S2W_Outer.stage2_owned, ̲S2W_TraceFacts.run_bind, ̲run_pure,r̵u̵n̵_̵l̵i̵f̵t̵,̵
+  ̵  ̵ ̵ ̵S2W_Outer.traceEffects,
+  ̲ ̲ ̲ ̲ ̲run_perform] at execution
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_OuterOccurrences.lean:38:27: warning: This simp argument is unused:
+  run_perform
+
+Hint: Omit it from the simp argument list.
+  simp only [S2W_Outer.stage2_owned, ̲S2W_TraceFacts.run_bind, ̲run_pure, ̲run_lift,
+      S2W_Outer.traceEffects,̵r̵u̵n̵_̵p̵e̵r̵f̵o̵r̵m̵] at execution
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W_OuterOccurrences.run_pure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterOccurrences.run_lift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterOccurrences.run_perform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterOccurrences.second_occurrence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

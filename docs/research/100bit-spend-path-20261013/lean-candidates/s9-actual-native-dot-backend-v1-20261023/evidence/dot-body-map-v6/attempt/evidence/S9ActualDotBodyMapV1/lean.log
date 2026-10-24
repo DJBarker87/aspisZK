@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/pair-dot-body-map-v6-20261023/sources/S9ActualDotBodyMapV1.lean:38:11: error: unsolved goals
+case e_a.some
+raw : Std.Array U64 4#usize
+iter : Iter
+s : NativeDot
+iterNext : core.ops.range.Range (UScalar UScalarTy.Usize)
+j : UScalar UScalarTy.Usize
+⊢ (match do
+      let x ← s.sums.index_usize j
+      let r ← raw.index_usize j
+      let updated ←
+        s.sums.update j
+            (core.num.U64.wrapping_add x
+              (core.num.U64.wrapping_add (r &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                (r.wrapping_shr 31#u32)))
+      ok (cont (iterNext, { sums := updated })) with
+    | ok x =>
+      ok
+        (match x with
+        | cont a => cont (a.1, { sums := a.2.sums })
+        | done b => done { sums := b.sums })
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ← s.sums.index_usize j
+    let r ← raw.index_usize j
+    let updated ←
+      s.sums.update j
+          (core.num.U64.wrapping_add x
+            (core.num.U64.wrapping_add (r &&& core.convert.num.FromU64U32.from 2147483647#u32) (r.wrapping_shr 31#u32)))
+    ok (cont (iterNext, { sums := updated }))
+/home/dombarker/project-offloads/pair-dot-body-map-v6-20261023/sources/S9ActualDotBodyMapV1.lean:56:15: warning: This simp argument is unused:
+  mapResult_bind_id
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵_̵i̵d̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵m̵a̵p̵F̵l̵o̵w̵,̵s̵t̵a̵t̵e̵T̵o̵O̵l̵d̵,̵t̵o̵O̵l̵d̵]̵[̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲m̲a̲p̲F̲l̲o̲w̲,̲ ̲s̲t̲a̲t̲e̲T̲o̲O̲l̲d̲,̲ ̲t̲o̲O̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualDotBodyMapV1.actual_dot_body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

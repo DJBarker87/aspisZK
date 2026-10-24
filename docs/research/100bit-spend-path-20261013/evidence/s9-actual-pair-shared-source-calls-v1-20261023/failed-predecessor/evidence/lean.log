@@ -1,0 +1,1030 @@
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:9:8: warning: automatically included section variable(s) unused in theorem `_private.S9ActualPairSharedCallsV1.0.AspisR1S9ActualPairSharedCallsV1.bind_success`:
+  allocation
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit allocation in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:75:8: error: Invalid alternative name `Err`: Expected `mk`
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:80:8: error: Invalid alternative name `Ok`: Expected `mk`
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:74:8: error: Alternative `mk` has not been provided
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:68:13: error: unsolved goals
+case false.Ok.Ok.unit.Break
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+self : weights.Weights
+alpha : Slice W
+f : Slice U8
+kappa out : W
+hfold : alpha.len = 2#usize
+hguard : weights.shared_two_point_guard self 2#usize = ok true
+h✝⁸ :
+  (have i := f.len;
+    do
+    let n ← i / 32#usize
+    have folds : Usize := alpha.len
+    let expected_n ← weights.Weights.pair_loop0 { start := 0#usize, «end» := folds } 1024#usize
+    if (n != expected_n) = true then ok (core.result.Result.Err verifier.Error.Parse)
+      else do
+        let we ← alpha.index_usize 0#usize
+        let ap0 ← weights.powers 4#usize we
+        let ap1 ←
+          if folds = 2#usize then do
+              let we1 ← alpha.index_usize 1#usize
+              weights.powers 4#usize we1
+            else ok (Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ONE)
+        let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+        match r with
+          | core.result.Result.Ok v =>
+            have parts := Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO;
+            do
+            let shared_two_point ← weights.shared_two_point_guard self folds
+            let (r1, _, parts1) ← weights.process_regular_kinds self shared_two_point alpha f folds n ap0 ap1 v parts
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                if shared_two_point = true then
+                  have common := Array.repeat 16#usize aspis_core.field.QM31.ZERO;
+                  do
+                  let (self1, common1) ← weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self common
+                  let r2 ← weights.shared_partials f common1
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          if folds = 1#usize then
+                            have dual := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                            do
+                            let dual1 ← weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0 dual
+                            have groups : Std.Array aspis_core.field.wide_exact.WideExact 16#usize :=
+                              Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO
+                            let groups1 ← weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f groups
+                            let parts3 ←
+                              weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                            let parts4 ←
+                              weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                            let k ← weights.powers 7#usize kappa
+                            let sum ←
+                              weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                  aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                          else
+                            have low := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                            do
+                            let low1 ← weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1 low
+                            let we1 ← weights.grouped_inactive_pair self1 f low1
+                            let a ← parts2.update 0#usize we1
+                            let b ←
+                              transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                            let libra ←
+                              if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                                else weights.twofold_libra_weights low1 self1.extra
+                            let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                            let k ← weights.powers 7#usize kappa
+                            let sum ←
+                              weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                  aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                else
+                  if folds = 1#usize then
+                    have dual := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let dual1 ← weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0 dual
+                    have groups : Std.Array aspis_core.field.wide_exact.WideExact 16#usize :=
+                      Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO
+                    let groups1 ← weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f groups
+                    let parts2 ←
+                      weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                    let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                    let k ← weights.powers 7#usize kappa
+                    let sum ←
+                      weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                          aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+                  else
+                    have low := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let low1 ← weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1 low
+                    let we1 ← weights.grouped_inactive_pair self f low1
+                    let a ← parts1.update 0#usize we1
+                    let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                    let libra ←
+                      if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                        else weights.twofold_libra_weights low1 self.extra
+                    let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                    let k ← weights.powers 7#usize kappa
+                    let sum ←
+                      weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                          aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+hquot : f.len / 32#usize = ok 64#usize
+n : UScalar UScalarTy.Usize
+hn : f.len / 32#usize = ok n
+h✝⁷ :
+  (have folds := alpha.len;
+    do
+    let expected_n ← weights.Weights.pair_loop0 { start := 0#usize, «end» := folds } 1024#usize
+    if (n != expected_n) = true then ok (core.result.Result.Err verifier.Error.Parse)
+      else do
+        let we ← alpha.index_usize 0#usize
+        let ap0 ← weights.powers 4#usize we
+        let ap1 ←
+          if folds = 2#usize then do
+              let we1 ← alpha.index_usize 1#usize
+              weights.powers 4#usize we1
+            else ok (Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ONE)
+        let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+        match r with
+          | core.result.Result.Ok v =>
+            have parts := Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO;
+            do
+            let shared_two_point ← weights.shared_two_point_guard self folds
+            let (r1, _, parts1) ← weights.process_regular_kinds self shared_two_point alpha f folds n ap0 ap1 v parts
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                if shared_two_point = true then
+                  have common := Array.repeat 16#usize aspis_core.field.QM31.ZERO;
+                  do
+                  let (self1, common1) ← weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self common
+                  let r2 ← weights.shared_partials f common1
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a =>
+                          if folds = 1#usize then
+                            have dual := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                            do
+                            let dual1 ← weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0 dual
+                            have groups : Std.Array aspis_core.field.wide_exact.WideExact 16#usize :=
+                              Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO
+                            let groups1 ← weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f groups
+                            let parts3 ←
+                              weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                            let parts4 ←
+                              weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                            let k ← weights.powers 7#usize kappa
+                            let sum ←
+                              weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                  aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                          else
+                            have low := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                            do
+                            let low1 ← weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1 low
+                            let we1 ← weights.grouped_inactive_pair self1 f low1
+                            let a ← parts2.update 0#usize we1
+                            let b ←
+                              transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                            let libra ←
+                              if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                                else weights.twofold_libra_weights low1 self1.extra
+                            let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                            let k ← weights.powers 7#usize kappa
+                            let sum ←
+                              weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                  aspis_core.field.wide_exact.WideExact.ZERO
+                            ok (core.result.Result.Ok sum)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                else
+                  if folds = 1#usize then
+                    have dual := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let dual1 ← weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0 dual
+                    have groups : Std.Array aspis_core.field.wide_exact.WideExact 16#usize :=
+                      Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO
+                    let groups1 ← weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f groups
+                    let parts2 ←
+                      weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                    let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                    let k ← weights.powers 7#usize kappa
+                    let sum ←
+                      weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                          aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+                  else
+                    have low := Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO;
+                    do
+                    let low1 ← weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1 low
+                    let we1 ← weights.grouped_inactive_pair self f low1
+                    let a ← parts1.update 0#usize we1
+                    let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                    let libra ←
+                      if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                        else weights.twofold_libra_weights low1 self.extra
+                    let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                    let k ← weights.powers 7#usize kappa
+                    let sum ←
+                      weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                          aspis_core.field.wide_exact.WideExact.ZERO
+                    ok (core.result.Result.Ok sum)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+hn64 : n = 64#usize
+expectedN : Usize
+he : weights.Weights.pair_loop0 { start := 0#usize, «end» := alpha.len } 1024#usize = ok expectedN
+hg : (n != expectedN) = false
+h✝⁶ :
+  (do
+      let we ← alpha.index_usize 0#usize
+      let ap0 ← weights.powers 4#usize we
+      let ap1 ←
+        if alpha.len = 2#usize then do
+            let we1 ← alpha.index_usize 1#usize
+            weights.powers 4#usize we1
+          else ok (Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ONE)
+      let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v => do
+          let shared_two_point ← weights.shared_two_point_guard self alpha.len
+          let (r1, _, parts1) ←
+            weights.process_regular_kinds self shared_two_point alpha f alpha.len n ap0 ap1 v
+                (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then do
+                let (self1, common1) ←
+                  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                      (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+                let r2 ← weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        if alpha.len = 1#usize then do
+                          let dual1 ←
+                            weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let groups1 ←
+                            weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let parts3 ←
+                            weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                          let parts4 ←
+                            weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                        else do
+                          let low1 ←
+                            weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let we1 ← weights.grouped_inactive_pair self1 f low1
+                          let a ← parts2.update 0#usize we1
+                          let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                          let libra ←
+                            if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                              else weights.twofold_libra_weights low1 self1.extra
+                          let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              else
+                if alpha.len = 1#usize then do
+                  let dual1 ←
+                    weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let groups1 ←
+                    weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                  let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+                else do
+                  let low1 ←
+                    weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let we1 ← weights.grouped_inactive_pair self f low1
+                  let a ← parts1.update 0#usize we1
+                  let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                  let libra ←
+                    if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                      else weights.twofold_libra_weights low1 self.extra
+                  let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+        | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+a0 : aspis_core.field.wide_exact.WideExact
+ha0 : alpha.index_usize 0#usize = ok a0
+h✝⁵ :
+  (do
+      let ap0 ← weights.powers 4#usize a0
+      let ap1 ←
+        if alpha.len = 2#usize then do
+            let we1 ← alpha.index_usize 1#usize
+            weights.powers 4#usize we1
+          else ok (Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ONE)
+      let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v => do
+          let shared_two_point ← weights.shared_two_point_guard self alpha.len
+          let (r1, _, parts1) ←
+            weights.process_regular_kinds self shared_two_point alpha f alpha.len n ap0 ap1 v
+                (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then do
+                let (self1, common1) ←
+                  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                      (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+                let r2 ← weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        if alpha.len = 1#usize then do
+                          let dual1 ←
+                            weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let groups1 ←
+                            weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let parts3 ←
+                            weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                          let parts4 ←
+                            weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                        else do
+                          let low1 ←
+                            weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let we1 ← weights.grouped_inactive_pair self1 f low1
+                          let a ← parts2.update 0#usize we1
+                          let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                          let libra ←
+                            if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                              else weights.twofold_libra_weights low1 self1.extra
+                          let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              else
+                if alpha.len = 1#usize then do
+                  let dual1 ←
+                    weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let groups1 ←
+                    weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                  let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+                else do
+                  let low1 ←
+                    weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let we1 ← weights.grouped_inactive_pair self f low1
+                  let a ← parts1.update 0#usize we1
+                  let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                  let libra ←
+                    if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                      else weights.twofold_libra_weights low1 self.extra
+                  let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+        | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+ap0 : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+hap0 : weights.powers 4#usize a0 = ok ap0
+h✝⁴ :
+  (do
+      let ap1 ←
+        do
+          let we1 ← alpha.index_usize 1#usize
+          weights.powers 4#usize we1
+      let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v => do
+          let shared_two_point ← weights.shared_two_point_guard self 2#usize
+          let (r1, _, parts1) ←
+            weights.process_regular_kinds self shared_two_point alpha f 2#usize n ap0 ap1 v
+                (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then do
+                let (self1, common1) ←
+                  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                      (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+                let r2 ← weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        if 2#usize = 1#usize then do
+                          let dual1 ←
+                            weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let groups1 ←
+                            weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let parts3 ←
+                            weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                          let parts4 ←
+                            weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                        else do
+                          let low1 ←
+                            weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let we1 ← weights.grouped_inactive_pair self1 f low1
+                          let a ← parts2.update 0#usize we1
+                          let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                          let libra ←
+                            if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                              else weights.twofold_libra_weights low1 self1.extra
+                          let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              else
+                if 2#usize = 1#usize then do
+                  let dual1 ←
+                    weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let groups1 ←
+                    weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                  let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+                else do
+                  let low1 ←
+                    weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let we1 ← weights.grouped_inactive_pair self f low1
+                  let a ← parts1.update 0#usize we1
+                  let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                  let libra ←
+                    if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                      else weights.twofold_libra_weights low1 self.extra
+                  let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+        | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+ap1 : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+hap1producer :
+  (do
+      let we1 ← alpha.index_usize 1#usize
+      weights.powers 4#usize we1) =
+    ok ap1
+h✝³ :
+  (do
+      let r ← aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO
+      match r with
+        | core.result.Result.Ok v => do
+          let shared_two_point ← weights.shared_two_point_guard self 2#usize
+          let (r1, _, parts1) ←
+            weights.process_regular_kinds self shared_two_point alpha f 2#usize n ap0 ap1 v
+                (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if shared_two_point = true then do
+                let (self1, common1) ←
+                  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                      (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+                let r2 ← weights.shared_partials f common1
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue a =>
+                        if 2#usize = 1#usize then do
+                          let dual1 ←
+                            weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let groups1 ←
+                            weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let parts3 ←
+                            weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                          let parts4 ←
+                            weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                        else do
+                          let low1 ←
+                            weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                                (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                          let we1 ← weights.grouped_inactive_pair self1 f low1
+                          let a ← parts2.update 0#usize we1
+                          let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                          let libra ←
+                            if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                              else weights.twofold_libra_weights low1 self1.extra
+                          let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                          let k ← weights.powers 7#usize kappa
+                          let sum ←
+                            weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                                aspis_core.field.wide_exact.WideExact.ZERO
+                          ok (core.result.Result.Ok sum)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              else
+                if 2#usize = 1#usize then do
+                  let dual1 ←
+                    weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let groups1 ←
+                    weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+                  let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+                else do
+                  let low1 ←
+                    weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let we1 ← weights.grouped_inactive_pair self f low1
+                  let a ← parts1.update 0#usize we1
+                  let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+                  let libra ←
+                    if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                      else weights.twofold_libra_weights low1 self.extra
+                  let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+        | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+a1 : aspis_core.field.wide_exact.WideExact
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+scratch : alloc.vec.Vec aspis_core.field.QM31
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+h✝² :
+  (match core.result.Result.Ok scratch with
+    | core.result.Result.Ok v => do
+      let shared_two_point ← weights.shared_two_point_guard self 2#usize
+      let (r1, _, parts1) ←
+        weights.process_regular_kinds self shared_two_point alpha f 2#usize n ap0 ap1 v
+            (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          if shared_two_point = true then do
+            let (self1, common1) ←
+              weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                  (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+            let r2 ← weights.shared_partials f common1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    if 2#usize = 1#usize then do
+                      let dual1 ←
+                        weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let groups1 ←
+                        weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let parts3 ←
+                        weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                      let parts4 ← weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                      let k ← weights.powers 7#usize kappa
+                      let sum ←
+                        weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                            aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                    else do
+                      let low1 ←
+                        weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let we1 ← weights.grouped_inactive_pair self1 f low1
+                      let a ← parts2.update 0#usize we1
+                      let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                      let libra ←
+                        if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                          else weights.twofold_libra_weights low1 self1.extra
+                      let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                      let k ← weights.powers 7#usize kappa
+                      let sum ←
+                        weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                            aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          else
+            if 2#usize = 1#usize then do
+              let dual1 ←
+                weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let groups1 ←
+                weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+              let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+              let k ← weights.powers 7#usize kappa
+              let sum ←
+                weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                    aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+            else do
+              let low1 ←
+                weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← weights.grouped_inactive_pair self f low1
+              let a ← parts1.update 0#usize we1
+              let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+              let libra ←
+                if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                  else weights.twofold_libra_weights low1 self.extra
+              let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+              let k ← weights.powers 7#usize kappa
+              let sum ←
+                weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                    aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+    | core.result.Result.Err a => ok (core.result.Result.Err verifier.Error.Allocation)) =
+    ok (core.result.Result.Ok out)
+hshared : weights.shared_two_point_guard self 2#usize = ok true
+h✝¹ :
+  (do
+      let (r1, _, parts1) ←
+        weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+            (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          if true = true then do
+            let (self1, common1) ←
+              weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                  (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+            let r2 ← weights.shared_partials f common1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    if 2#usize = 1#usize then do
+                      let dual1 ←
+                        weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let groups1 ←
+                        weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let parts3 ←
+                        weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                      let parts4 ← weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                      let k ← weights.powers 7#usize kappa
+                      let sum ←
+                        weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                            aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                    else do
+                      let low1 ←
+                        weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                            (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                      let we1 ← weights.grouped_inactive_pair self1 f low1
+                      let a ← parts2.update 0#usize we1
+                      let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                      let libra ←
+                        if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                          else weights.twofold_libra_weights low1 self1.extra
+                      let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                      let k ← weights.powers 7#usize kappa
+                      let sum ←
+                        weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                            aspis_core.field.wide_exact.WideExact.ZERO
+                      ok (core.result.Result.Ok sum)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          else
+            if 2#usize = 1#usize then do
+              let dual1 ←
+                weights.Weights.pair_loop10 { start := 0#usize, «end» := 16#usize } ap0
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let groups1 ←
+                weights.Weights.pair_loop11 { start := 0#usize, «end» := n } self f
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let parts2 ← weights.Weights.pair_loop12 { start := 1#usize, «end» := 16#usize } parts1 dual1 groups1
+              let parts3 ← weights.Weights.pair_loop13 { start := 0#usize, «end» := 2#usize } self f ap0 parts2
+              let k ← weights.powers 7#usize kappa
+              let sum ←
+                weights.Weights.pair_loop14 { start := 0#usize, «end» := 7#usize } parts3 k
+                    aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+            else do
+              let low1 ←
+                weights.Weights.pair_loop15 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                    (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+              let we1 ← weights.grouped_inactive_pair self f low1
+              let a ← parts1.update 0#usize we1
+              let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self.variant transport.Variant.S2
+              let libra ←
+                if b = true then weights.factored_s2_libra_weights ap0 ap1 self.extra
+                  else weights.twofold_libra_weights low1 self.extra
+              let parts2 ← weights.Weights.pair_loop16 { start := 0#usize, «end» := 4#usize } f a libra
+              let k ← weights.powers 7#usize kappa
+              let sum ←
+                weights.Weights.pair_loop17 { start := 0#usize, «end» := 7#usize } parts2 k
+                    aspis_core.field.wide_exact.WideExact.ZERO
+              ok (core.result.Result.Ok sum)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+scratchOut : alloc.vec.Vec aspis_core.field.QM31
+partsRegular : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+hprocessed :
+  weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok PUnit.unit, scratchOut, partsRegular)
+h✝ :
+  (let (r1, _, parts1) := (core.result.Result.Ok PUnit.unit, scratchOut, partsRegular)
+    do
+    let cf ←
+      match r1 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (self1, common1) ←
+          weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+              (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+        let r2 ← weights.shared_partials f common1
+        let cf1 ←
+          match r2 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 parts1
+            let cf2 ←
+              match r3 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                if 2#usize = 1#usize then do
+                  let dual1 ←
+                    weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let groups1 ←
+                    weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let parts3 ← weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                  let parts4 ← weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+                else do
+                  let low1 ←
+                    weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                        (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                  let we1 ← weights.grouped_inactive_pair self1 f low1
+                  let a ← parts2.update 0#usize we1
+                  let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                  let libra ←
+                    if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                      else weights.twofold_libra_weights low1 self1.extra
+                  let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                  let k ← weights.powers 7#usize kappa
+                  let sum ←
+                    weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                        aspis_core.field.wide_exact.WideExact.ZERO
+                  ok (core.result.Result.Ok sum)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+a✝ : core.result.Result core.convert.Infallible verifier.Error
+hcommon :
+  (match core.result.Result.Ok PUnit.unit with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Break a✝)
+h :
+  (match core.ops.control_flow.ControlFlow.Break a✝ with
+    | core.ops.control_flow.ControlFlow.Continue a => do
+      let (self1, common1) ←
+        weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+            (Array.repeat 16#usize aspis_core.field.QM31.ZERO)
+      let r2 ← weights.shared_partials f common1
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r3, parts2) ← weights.shared_high val self1 ap0 ap1 partsRegular
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              if 2#usize = 1#usize then do
+                let dual1 ←
+                  weights.Weights.pair_loop2 { start := 0#usize, «end» := 16#usize } ap0
+                      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                let groups1 ←
+                  weights.Weights.pair_loop3 { start := 0#usize, «end» := n } self1 f
+                      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                let parts3 ← weights.Weights.pair_loop4 { start := 1#usize, «end» := 16#usize } parts2 dual1 groups1
+                let parts4 ← weights.Weights.pair_loop5 { start := 0#usize, «end» := 2#usize } self1 f ap0 parts3
+                let k ← weights.powers 7#usize kappa
+                let sum ←
+                  weights.Weights.pair_loop6 { start := 0#usize, «end» := 7#usize } parts4 k
+                      aspis_core.field.wide_exact.WideExact.ZERO
+                ok (core.result.Result.Ok sum)
+              else do
+                let low1 ←
+                  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+                      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO)
+                let we1 ← weights.grouped_inactive_pair self1 f low1
+                let a ← parts2.update 0#usize we1
+                let b ← transport.Variant.Insts.CoreCmpPartialEqVariant.eq self1.variant transport.Variant.S2
+                let libra ←
+                  if b = true then weights.factored_s2_libra_weights ap0 ap1 self1.extra
+                    else weights.twofold_libra_weights low1 self1.extra
+                let parts3 ← weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f a libra
+                let k ← weights.powers 7#usize kappa
+                let sum ←
+                  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } parts3 k
+                      aspis_core.field.wide_exact.WideExact.ZERO
+                ok (core.result.Result.Ok sum)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        aspis_core.field.wide_exact.WideExact (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok out)
+⊢ ∃ n a0 a1 ap0 ap1 scratch scratchOut partsRegular partsShared selfCommon common partials,
+    f.len / 32#usize = ok n ∧
+      n = 64#usize ∧
+        alpha.index_usize 0#usize = ok a0 ∧
+          weights.powers 4#usize a0 = ok ap0 ∧
+            alpha.index_usize 1#usize = ok a1 ∧
+              weights.powers 4#usize a1 = ok ap1 ∧
+                aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+                    ok (core.result.Result.Ok scratch) ∧
+                  weights.process_regular_kinds self true alpha f 2#usize n ap0 ap1 scratch
+                        (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+                      ok (core.result.Result.Ok (), scratchOut, partsRegular) ∧
+                    weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } self
+                          (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+                        ok (selfCommon, common) ∧
+                      weights.shared_partials f common = ok (core.result.Result.Ok partials) ∧
+                        weights.shared_high partials selfCommon ap0 ap1 partsRegular =
+                          ok (core.result.Result.Ok (), partsShared)
+/private/tmp/a3-s9-actual-pair-shared-calls-v1-check-20261023/sources/S9ActualPairSharedCallsV1.lean:70:62: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲↓reduceIte] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualPairSharedCallsV1.actual_pair_success_shared_calls' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

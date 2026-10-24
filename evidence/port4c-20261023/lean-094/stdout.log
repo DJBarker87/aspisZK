@@ -1,0 +1,72 @@
+Port4C_CollectStd.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+in the target expression
+  (do
+      let __x ←
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next { iter := iter, f := flat }.iter
+      match __x with
+        | (x, i') =>
+          match x with
+          | none => ok (none, { iter := i', f := { iter := iter, f := flat }.f })
+          | some x => do
+            let __x ←
+              (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      (install ops)).call_mut
+                  { iter := iter, f := flat }.f x
+            match __x with
+              | (y, c') => ok (some y, { iter := i', f := c' })) =
+    ok (some (Port4C_GeometryGroups.record flat i), { iter := iter1, f := flat })
+
+CoreError : Type
+ops : Port3_NativeGeometryBody.Ops CoreError
+flat : alloc.vec.Vec U32
+count : Usize
+iter iter1 : core.ops.range.Range Usize
+i : Usize
+bound : ↑count ≤ 22
+size : (↑flat).length = 5 * ↑count
+hi : ↑i < ↑count
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some i, iter1)
+group :
+  Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315.call_mut
+      (Port4C_GeometryGroups.install (install ops)) flat i =
+    ok (Port4C_GeometryGroups.record flat i, flat)
+⊢ (do
+      let __x ←
+        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize).next { iter := iter, f := flat }.iter
+      match __x with
+        | (x, i') =>
+          match x with
+          | none => ok (none, { iter := i', f := { iter := iter, f := flat }.f })
+          | some x => do
+            let __x ←
+              (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      (install ops)).call_mut
+                  { iter := iter, f := flat }.f x
+            match __x with
+              | (y, c') => ok (some y, { iter := i', f := c' })) =
+    ok (some (Port4C_GeometryGroups.record flat i), { iter := iter1, f := flat })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+@[irreducible] def Aeneas.Std.alloc.vec.FromIteratorVec.iterToList : {T IntoIter : Type} →
+  core.iter.traits.iterator.Iterator IntoIter T → IntoIter → List T → Result (List T) :=
+fun {T IntoIter} iterInst =>
+  Lean.Order.fix
+    (fun f iter acc => do
+      let __x ← iterInst.next iter
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => f iter (item :: acc))
+    ⋯

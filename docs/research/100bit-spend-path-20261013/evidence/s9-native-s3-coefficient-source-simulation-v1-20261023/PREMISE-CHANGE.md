@@ -1,0 +1,5 @@
+Before: old S3 source/helper semantics did not apply automatically to the current native nominal field types or its wrapping native reader. Old reader success, source add/update correspondence and old whole-loop success would have been extra assumptions.
+
+After: SAME actual native field/body/loop events derive each of those successes with exact coordinate-mapped outputs. The fitting window follows the real coefficient64 caller domain, resolving the retained unrestricted wrapping-vs-checked counterexample. Native fieldCan uses the already proved same strict old reader and coordinate map, rather than adding the legacy unused Allocation interface. Generic array maps and existing arithmetic/loop invariants are reused.
+
+Still retained: canonical arbitrary initial array and actual range/span domain. Source zero initialization, all64 readback, semantic prefix and final inactive contribution are follow-on obligations; source/allocator/runtime and complete security experiment binding are not silently assumed or claimed closed.

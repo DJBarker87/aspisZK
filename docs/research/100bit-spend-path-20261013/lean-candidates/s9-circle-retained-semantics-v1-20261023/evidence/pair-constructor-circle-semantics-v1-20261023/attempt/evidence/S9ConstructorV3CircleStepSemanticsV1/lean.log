@@ -1,0 +1,76 @@
+/home/dombarker/project-offloads/pair-constructor-circle-semantics-v1-20261023/sources/S9ConstructorV3CircleStepSemanticsV1.lean:59:55: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.20) 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  Type ?u.20
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/pair-constructor-circle-semantics-v1-20261023/sources/S9ConstructorV3CircleStepSemanticsV1.lean:59:58: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+/home/dombarker/project-offloads/pair-constructor-circle-semantics-v1-20261023/sources/S9ConstructorV3CircleStepSemanticsV1.lean:66:87: error: unsolved goals
+before : Table
+original : ExactQM
+k : Usize
+iter iterNext : R
+factors factorsOut : Factors
+x xNext : Q
+hk : ↑k < 2
+hend : iter.end = 5#usize
+hstart : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+hx : Can x
+hxm : decode x = base original ↑iter.start
+hm : Meaning factors (prefixTable before (3 + ↑k) 1 (↑iter.start) original)
+hbody :
+  AspisR1S9ActualWeightsNewBoxNewV3.weights_new_loop1_loop0.body k iter factors x =
+    ok (cont (iterNext, factorsOut, xNext))
+d : Usize
+y q : Q
+i : Usize
+old : Row
+back : Row → Factors
+rowOut : Row
+hnext : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some d, iterNext)
+hmut : Array.index_mut_usize factors i = ok (old, back)
+hrow : Array.update old d (Array.make 4#usize [AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.ONE, x, y, q] ⋯) = ok rowOut
+hout : factorsOut = back rowOut
+hyc : Can y
+hqc : Can q
+hxc : Can xNext
+hyd : decode y = decode x * decode x + decode x * decode x - 1
+hqd : decode q = decode x * decode y
+hxd : decode xNext = decode y * decode y + decode y * decode y - 1
+hlt : ↑iter.start < ↑iter.end
+hd : d = iter.start
+hs : ↑iterNext.start = ↑iter.start + 1
+he : iterNext.end = iter.end
+hdval : ↑d = ↑iter.start
+hdb : ↑d < 5
+hib : ↑i < ↑5#usize
+hi : ok (Usize.wrapping_add 3#usize k) = ok i
+hie : Usize.wrapping_add 3#usize k = i
+hiv : ↑i = 3 + ↑k
+hym : decode y = doubledFactor (decode x) 1
+hxn : decode xNext = doubledFactor (decode y) 1
+hxnext : decode xNext = base original (↑iter.start + 1)
+hc :
+  ∀ (i : Usize) (hi : ↑i < 4),
+    decode (atN (Array.make 4#usize [AspisR1S9ActualWeightsNewBoxNewV3.field.QM31.ONE, x, y, q] ⋯) i hi) =
+      coefficient original ↑iter.start ↑i
+hmeaning :
+  Meaning (back rowOut)
+    (write (prefixTable before (3 + ↑k) 1 (↑iter.start) original) (3 + ↑k) (↑iter.start)
+      (coefficient original ↑iter.start))
+⊢ ↑iterNext.start = ↑iter.start + 1 ∧
+    iterNext.end = 5#usize ∧
+      Can xNext ∧
+        decode xNext = base original ↑iterNext.start ∧
+          Meaning factorsOut (prefixTable before (3 + ↑k) 1 (↑iterNext.start) original)
+'_private.S9ConstructorV3CircleStepSemanticsV1.0.AspisR1S9ConstructorV3CircleStepSemanticsV1.row_index_value' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'_private.S9ConstructorV3CircleStepSemanticsV1.0.AspisR1S9ConstructorV3CircleStepSemanticsV1.make4_circle_meaning' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ConstructorV3CircleStepSemanticsV1.circle_body_success_model_step' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,156 @@
+Port4A_ReaderNormalize.lean:46:2: error: unsolved goals
+case neg
+ops : ResumeOps
+sizeBound : ∀ (v : transport.Variant) (n : Usize), ops.checkpointSize v = ok n → 32 ≤ ↑n
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+bytes proof pub : Slice U8
+v : transport.Variant
+tailEq :
+  ∀ (i4 : U8) (end1 : Usize) (s6 : Slice U8) (a2 : Std.Array U8 32#usize),
+    Port4A_NativeReader.tail ops bytes v i4 end1 s6 a2 = CheckpointBytes5Resume.tail ops bytes v i4 end1 s6 a2
+size : Usize
+hsize : ops.checkpointSize v = ok size
+same : ¬bytes.len = size
+⊢ (if bytes.len ≠ size then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize }
+      let b ←
+        core.cmp.impls.PartialEqShared.ne (slicePartialEq ops 8#usize core.cmp.PartialEqU8) s
+            (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+              Port4A_NativeReader.resume._proof_8)
+      if b = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let i2 ← bytes.index_usize 8#usize
+          let i3 ← ops.tag v
+          if i2 ≠ i3 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+            else do
+              let i4 ← bytes.index_usize 9#usize
+              if i4 > 22#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                else do
+                  let i5 ← bytes.index_usize 10#usize
+                  if i5 ≠ 1#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                    else do
+                      let s1 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                            { start := 11#usize, «end» := 16#usize }
+                      let i6 ← core.slice.Slice.iter s1
+                      let (b1, _) ← ops.headerAny i6
+                      if b1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                        else do
+                          let end1 ← lift (bytes.len.wrapping_sub 32#usize)
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                { start := 16#usize, «end» := 48#usize }
+                          let s3 ← lift (Array.make 1#usize [proof] ⋯).to_slice
+                          let a ← D.digest hash s3
+                          let b2 ← ops.ne core.cmp.PartialEqU8 s2 a
+                          if b2 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                            else do
+                              let s4 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                    { start := 48#usize, «end» := 80#usize }
+                              let s5 ← lift (Array.make 1#usize [pub] ⋯).to_slice
+                              let a1 ← D.digest hash s5
+                              let b3 ← ops.ne core.cmp.PartialEqU8 s4 a1
+                              if b3 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                                else do
+                                  let s6 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                        bytes { start := end1 }
+                                  let s7 ←
+                                    lift
+                                        (Array.make 22#usize
+                                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                              49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                              105#u8, 110#u8, 116#u8]
+                                            Port4A_NativeReader.resume._proof_33).to_slice
+                                  let s8 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                        { «end» := end1 }
+                                  let s9 ← lift (Array.make 2#usize [s7, s8] ⋯).to_slice
+                                  let a2 ← D.digest hash s9
+                                  Port4A_NativeReader.tail ops bytes v i4 end1 s6 a2) =
+    if bytes.len ≠ size then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else do
+      let a ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := 8#usize }
+      let a ←
+        core.cmp.impls.PartialEqShared.ne (slicePartialEq ops 8#usize core.cmp.PartialEqU8) a
+            (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+              CheckpointBytes5Resume.program._proof_8)
+      if a = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let a ← bytes.index_usize 8#usize
+          let a_1 ← ops.tag v
+          if a ≠ a_1 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+            else do
+              let a ← bytes.index_usize 9#usize
+              if a > 22#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                else do
+                  let a_2 ← bytes.index_usize 10#usize
+                  if a_2 ≠ 1#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                    else do
+                      let a_3 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                            { start := 11#usize, «end» := 16#usize }
+                      let a_4 ← core.slice.Slice.iter a_3
+                      let a_5 ← ops.headerAny a_4
+                      if a_5.1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                        else do
+                          let a_6 ← bytes.len - 32#usize
+                          let a_7 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                { start := 16#usize, «end» := 48#usize }
+                          let a_8 ← lift (Array.make 1#usize [proof] ⋯).to_slice
+                          let a_9 ← D.digest hash a_8
+                          let a_10 ← ops.ne core.cmp.PartialEqU8 a_7 a_9
+                          if a_10 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                            else do
+                              let a_11 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                    { start := 48#usize, «end» := 80#usize }
+                              let a_12 ← lift (Array.make 1#usize [pub] ⋯).to_slice
+                              let a_13 ← D.digest hash a_12
+                              let a_14 ← ops.ne core.cmp.PartialEqU8 a_11 a_13
+                              if a_14 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+                                else do
+                                  let a_15 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                        bytes { start := a_6 }
+                                  let a_16 ←
+                                    lift
+                                        (Array.make 22#usize
+                                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                              49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                              105#u8, 110#u8, 116#u8]
+                                            CheckpointBytes5Resume.program._proof_33).to_slice
+                                  let a_17 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                        { «end» := a_6 }
+                                  let a_18 ← lift (Array.make 2#usize [a_16, a_17] ⋯).to_slice
+                                  let a_19 ← D.digest hash a_18
+                                  CheckpointBytes5Resume.tail ops bytes v a a_6 a_15 a_19
+Port4A_ReaderNormalize.lean:46:26: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne,s̵a̵m̵e̵,̵ ̲not_false_eq_true, ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4A_ReaderNormalize.lean:46:31: warning: This simp argument is unused:
+  not_false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵s̵a̵m̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲s̲a̲m̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4A_ReaderNormalize.lean:46:49: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵s̵a̵m̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲s̲a̲m̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4A_ReaderNormalize.checked_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderNormalize.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

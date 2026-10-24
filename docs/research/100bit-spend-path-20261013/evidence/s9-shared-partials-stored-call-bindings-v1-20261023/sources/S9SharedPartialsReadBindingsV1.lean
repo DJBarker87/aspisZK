@@ -1,0 +1,165 @@
+import S9PartialHighFinishReachedV1
+import S9FactorArrayEntryV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9SharedPartialsReadBindingsV1
+open AspisR1S9PartialHighFinishReachedV1 (W Q Iter)
+open AspisR1S9FactorArrayEntryV1
+abbrev Buffer := Array W 4#usize
+abbrev Common := Array Q 16#usize
+abbrev State := Iter × Buffer
+abbrev Outcome := core.result.Result Buffer verifier.Error
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m; next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+private theorem cont_calls (f : Slice U8) (common : Common)
+    (it itNext : Iter) (buf bufNext : Buffer)
+    (h : weights.shared_partials_loop.body f common it buf=.ok (.cont (itNext,bufNext))) :
+    ∃ (j : Usize) (value : W),
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize it=.ok (some j,itNext) ∧
+      weights.partial_dot f common j=.ok (.Ok value) ∧ Array.update buf j value=.ok bufNext := by
+  unfold weights.shared_partials_loop.body at h
+  obtain ⟨next,hn,h⟩ := bind_success _ _ _ h
+  rcases next with ⟨o,it1⟩
+  cases o with
+  | none => cases h
+  | some j =>
+    obtain ⟨r,hr,h⟩ := bind_success _ _ _ h
+    cases r with
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at h
+      cases h
+    | Ok value =>
+      obtain ⟨cf,hcf,h⟩ := bind_success
+        (core.result.Result.Insts.CoreOpsTry.branch (E:=verifier.Error) (.Ok value)) _ _ h
+      have hecf : cf=core.ops.control_flow.ControlFlow.Continue value := (Result.ok.inj hcf).symm
+      cases hecf
+      obtain ⟨b,hu,h⟩ := bind_success _ _ _ h
+      have he : (it1,b)=(itNext,bufNext) := ControlFlow.cont.inj (Result.ok.inj h)
+      have hi : it1=itNext := congrArg Prod.fst he
+      have hb : b=bufNext := congrArg Prod.snd he
+      subst it1; subst b
+      exact ⟨j,value,hn,hr,hu⟩
+
+private theorem next_none_stopped (it itNext : Iter)
+    (hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize it=.ok (none,itNext)) :
+    it.end.val ≤ it.start.val := by
+  have hs := core.iter.range.IteratorRange.next_UScalar_spec
+    (cloneInst:=core.clone.CloneUsize) (partialOrdInst:=core.cmp.PartialOrdUsize)
+    (by intros; rfl) (by intros; rfl) it
+  rw [hn,WP.spec_ok] at hs
+  by_cases hlt : it.start.val < it.end.val
+  · simp only [hlt,↓reduceIte] at hs
+    rcases hs with ⟨⟨ho,_⟩,_⟩
+    cases ho
+  · omega
+
+private theorem done_output (f : Slice U8) (common : Common)
+    (it : Iter) (buf out : Buffer)
+    (h : weights.shared_partials_loop.body f common it buf=.ok (.done (.Ok out))) :
+    it.end.val ≤ it.start.val ∧ out=buf := by
+  unfold weights.shared_partials_loop.body at h
+  obtain ⟨next,hn,h⟩ := bind_success _ _ _ h
+  rcases next with ⟨o,it1⟩
+  cases o with
+  | none =>
+    have he : buf=out := core.result.Result.Ok.inj (ControlFlow.done.inj (Result.ok.inj h))
+    exact ⟨next_none_stopped it it1 hn,he.symm⟩
+  | some j =>
+    obtain ⟨r,hr,h⟩ := bind_success _ _ _ h
+    cases r with
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at h
+      cases h
+    | Ok value =>
+      obtain ⟨cf,hcf,h⟩ := bind_success
+        (core.result.Result.Insts.CoreOpsTry.branch (E:=verifier.Error) (.Ok value)) _ _ h
+      have hecf : cf=core.ops.control_flow.ControlFlow.Continue value := (Result.ok.inj hcf).symm
+      cases hecf
+      obtain ⟨b,hu,h⟩ := bind_success _ _ _ h
+      cases h
+
+/-- Every stored output entry of the SAME complete accepted shared-partials
+run came from that index's SAME accepted partial-dot child call. Initial
+buffer values, dot meaning and data Can are not assumed. -/
+theorem actual_shared_partials_output_calls (f : Slice U8) (common : Common) (out : Buffer)
+    (h : weights.shared_partials f common=.ok (.Ok out)) :
+    ∀ (i : Usize) (hi : i.val < 4),
+      weights.partial_dot f common i=.ok (.Ok (atN out i hi)) := by
+  let step : State → Result (ControlFlow State Outcome) :=
+    fun s => weights.shared_partials_loop.body f common s.1 s.2
+  let inv : State → Prop := fun s =>
+    s.1.end=4#usize ∧ s.1.start.val ≤ 4 ∧
+      ∀ (i : Usize) (hb : i.val < s.1.start.val) (hi : i.val < 4),
+        weights.partial_dot f common i=.ok (.Ok (atN s.2 i hi))
+  let post : Outcome → Prop := fun r => ∀ out : Buffer,r=.Ok out →
+    ∀ (i : Usize) (hi : i.val < 4),weights.partial_dot f common i=.ok (.Ok (atN out i hi))
+  have hd : ∀ s result,inv s → step s=.ok (.done result) → post result := by
+    rintro ⟨it,buf⟩ result hi hb out heq
+    subst result
+    dsimp only [inv] at hi
+    obtain ⟨hend,hstart,hprefix⟩ := hi
+    obtain ⟨hstop,hout⟩ := done_output f common it buf out hb
+    have hat : it.start.val=4 := by rw [hend] at hstop; change 4 ≤ it.start.val at hstop; omega
+    subst out
+    intro i hi
+    exact hprefix i (by omega) hi
+  have hc : ∀ s t,inv s → step s=.ok (.cont t) → inv t := by
+    rintro ⟨it,buf⟩ ⟨it1,buf1⟩ hi hb
+    dsimp only [inv] at hi ⊢
+    obtain ⟨hend,hstart,hprefix⟩ := hi
+    obtain ⟨j,value,hn,hcall,hu⟩ := cont_calls f common it it1 buf buf1 hb
+    obtain ⟨hj,hlt,hs,he⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds it it1 j hn
+    have hstartEq : j.val=it.start.val := congrArg (fun x : Usize => x.val) hj
+    have hj4 : j.val < 4 := by rw [hend] at hlt; change j.val < 4 at hlt; exact hlt
+    have hbuf : buf1=buf.set j value := accepted_update_eq_set buf j hj4 value buf1 hu
+    refine ⟨he.trans hend,by omega,?_⟩
+    intro i hb hi
+    rw [hbuf,atN_set buf j i value hj4 hi]
+    by_cases heq : i.val=j.val
+    · rw [if_pos heq]
+      have hij : i=j := UScalar.eq_of_val_eq heq
+      subst i
+      exact hcall
+    · rw [if_neg heq]
+      exact hprefix i (by omega) hi
+  have hdec : ∀ s t,step s=.ok (.cont t) →
+      t.1.end.val-t.1.start.val < s.1.end.val-s.1.start.val := by
+    rintro ⟨it,buf⟩ ⟨it1,buf1⟩ hb
+    change it1.end.val-it1.start.val < it.end.val-it.start.val
+    obtain ⟨j,value,hn,hcall,hu⟩ := cont_calls f common it it1 buf buf1 hb
+    obtain ⟨hj,hlt,hs,he⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds it it1 j hn
+    have ha : it.start.val < it.end.val := by simpa only [hj] using hlt
+    have heval := congrArg (fun x : Usize => x.val) he
+    omega
+  have hloop : Aeneas.Std.loop step
+      ({start:=0#usize,«end»:=4#usize},Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ZERO)=.ok (.Ok out) := h
+  have hinit : inv ({start:=0#usize,«end»:=4#usize},Array.repeat 4#usize aspis_core.field.wide_exact.WideExact.ZERO) := by
+    refine ⟨rfl,by decide,?_⟩
+    intro i hb hi
+    change i.val < 0 at hb
+    omega
+  have hp := AspisR1S9LoopInvariantPropertyV1.loop_invariant_property step
+    (fun s => s.1.end.val-s.1.start.val) inv post hd hc hdec _ (.Ok out) hinit hloop
+  exact hp out rfl
+
+theorem actual_shared_partials_output_canonical (f : Slice U8) (common : Common) (out : Buffer)
+    (h : weights.shared_partials f common=.ok (.Ok out)) :
+    ∀ (i : Usize) (hi : i.val < 4),
+      AspisR1S9ActualPairWideCanonicalV1.Canonical (atN out i hi) := by
+  intro i hi
+  exact AspisR1S9PartialHighFinishReachedV1.actual_partial_success_canonical
+    f common i (atN out i hi) (actual_shared_partials_output_calls f common out h i hi)
+
+#print axioms actual_shared_partials_output_calls
+#print axioms actual_shared_partials_output_canonical
+end AspisR1S9SharedPartialsReadBindingsV1

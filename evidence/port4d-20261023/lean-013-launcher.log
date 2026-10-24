@@ -1,0 +1,46 @@
+{"attempt": "lean-013", "exit_status": 1, "wall_seconds": 4.453078107006149, "peak_rss_kib": "4401764", "swaps": "0", "print_axioms": ["'AspisR1.Port4D_Round.round_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4D_Round.round_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4D_Round.parent_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4D_Round.lean:39:2: error: Tactic `rfl` failed: The left-hand side
+  round ops poly alpha claim 0#usize
+is not definitionally equal to the right-hand side
+  verifier.finishRelationRoundWithOps ops poly alpha claim 0#usize
+
+W : Type
+ops : FinishOps W
+poly : Slice U8
+alpha claim : E
+⊢ round ops poly alpha claim 0#usize = verifier.finishRelationRoundWithOps ops poly alpha claim 0#usize
+Port4D_Round.lean:43:2: error: Tactic `rfl` failed: The left-hand side
+  round ops poly alpha claim 1#usize
+is not definitionally equal to the right-hand side
+  verifier.finishRelationRoundWithOps ops poly alpha claim 1#usize
+
+W : Type
+ops : FinishOps W
+poly : Slice U8
+alpha claim : E
+⊢ round ops poly alpha c
+...
+     if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                              else do
+                                let b1 ← (Port3_FinishStage.release ops).ne val4 a.rhs
+                                if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                                  else do
+                                    (Port3_FinishStage.release ops).mark obs verifier.Phase.Final
+                                    ok (core.result.Result.Ok ())
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+'AspisR1.Port4D_Round.round_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4D_Round.round_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4D_Round.parent_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r218469f465a242df80098b246498ac56.scope; invocation ID: 99065de242d746b494bb86de2a0e9844

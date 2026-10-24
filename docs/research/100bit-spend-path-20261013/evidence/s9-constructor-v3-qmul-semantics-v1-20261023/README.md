@@ -1,0 +1,3 @@
+For the exact extracted V3 constructor QM31 multiplication, canonical inputs and success of that same source call imply canonical output and decoded output equal to the product of the decoded inputs. Reuses the existing checked/wrapping map and exact tower multiplication theorem. This discharges the multiplication semantic leaf for constructor factor formulas; it does not establish the factor loops, allocation/runtime refinement, source adoption, S9 closure or the release security theorem.
+
+Focused Lean check: 14.729 seconds; peak aggregate RSS 2516008960 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

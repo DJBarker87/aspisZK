@@ -1,0 +1,3 @@
+The SAME current strict source resume and concrete constructor event choose ONE source receiver/table model with existing D18, circle, actual point producer, variant and extra semantics. Constructor execution and full receiver map are exported with that model. No independent Current View/finish, canonical input or per-row model premise. Cached complete constructor proofs reused; normalization/allocation/runtime and spend/security linkage remain separate. Predecessor had ambiguous receiver name only.
+
+Focused Lean check: 37.604 seconds; peak aggregate RSS 3902603264 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

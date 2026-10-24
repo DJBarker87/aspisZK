@@ -1,0 +1,13 @@
+def semanticUsing (read : ReadK) (bytes : Slice U8) (start : Usize) :
+    Result (core.result.Result (Array K 10#usize × Usize) verifier.Error) :=
+  withK read ⟨bytes,start⟩ fun x0 r1 =>
+  withK read r1 fun x1 r2 =>
+  withK read r2 fun x2 r3 =>
+  withK read r3 fun x3 r4 =>
+  withK read r4 fun x4 r5 =>
+  withK read r5 fun x5 r6 =>
+  withK read r6 fun x6 r7 =>
+  withK read r7 fun x7 r8 =>
+  withK read r8 fun x8 r9 =>
+  withK read r9 fun x9 r10 =>
+  ok (.Ok (Array.make 10#usize [x0,x1,x2,x3,x4,x5,x6,x7,x8,x9],r10.at))

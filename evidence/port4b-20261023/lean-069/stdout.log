@@ -1,0 +1,40 @@
+Port4B_VerifyInstall.lean:61:4: error: Tactic `subst` failed: did not find equation for eliminating 'out'
+
+case h_1.isTrue
+run : reference.Scratch → Result reference.Level
+root : Std.Array U8 32#usize
+s out : reference.Scratch
+nodes : Slice U8
+h✝⁶ : ¬s.n = 0#usize
+h✝⁵ : ¬s.n > 16#usize
+x✝⁴ : Result Bool
+a✝³ : Bool
+heq✝⁴ : reference.valid_indices s.idx s.n 0#usize = ok a✝³
+h✝⁴ : a✝³ = true
+h✝³ : ¬(nodes.len.bv.umod 32#usize.bv#uscalar != 0#usize) = true
+x✝³ : Result reference.Level
+l✝ : reference.Level
+out✝ : reference.Scratch
+heq✝³ : run { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } = ok (reference.Level.Done out✝)
+h✝² : out✝.n = 1#usize
+x✝² : Result U32
+a✝² : U32
+heq✝² : out✝.idx.index_usize 0#usize = ok a✝²
+h✝¹ : a✝² = 0#u32
+x✝¹ : Result (Std.Array U8 32#usize)
+a✝¹ : Std.Array U8 32#usize
+heq✝¹ : out✝.val.index_usize 0#usize = ok a✝¹
+x✝ : Result Bool
+a✝ : Bool
+heq✝ : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a✝¹ root = ok a✝
+h✝ : a✝ = true
+accepted : ok (decide (out✝.at = nodes.len), out✝) = ok (true, out)
+pair : (decide (out✝.at = nodes.len), out✝) = (true, out)
+cursor : (decide (out✝.at = nodes.len), out✝).1 = (true, out).1
+state : (decide (out✝.at = nodes.len), out✝).2 = (true, out).2
+⊢ run { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } = ok (reference.Level.Done out) ∧
+    MultiproofConeRootGuard.sourceRoot root nodes out = true
+'AspisR1.Port4B_VerifyInstall.normalization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_VerifyInstall.read_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_VerifyInstall.compare_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_VerifyInstall.wrapper_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

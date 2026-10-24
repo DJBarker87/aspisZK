@@ -1,0 +1,71 @@
+Port3_NativeRowLoop.lean:46:16: error: Dependent elimination failed: Failed to solve equation
+  ok out =
+    match
+      match (iter, b) with
+      | (iter1, weights1) =>
+        verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter1
+          weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis
+                iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+Port3_NativeRowLoop.lean:47:13: error: Dependent elimination failed: Failed to solve equation
+  ok out =
+    match
+      match (iter, b) with
+      | (iter1, weights1) =>
+        verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter1
+          weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis
+                iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+Port3_NativeRowLoop.lean:52:6: error: 'change' tactic failed, pattern
+  verifier.accumulate_batched_with_node_loop1 (Port3_NativeRowFrame.install ops) iter1 v q next b1 width basis = ok out
+is not definitionally equal to target
+  (match
+      match (iter, b) with
+      | (iter1, weights1) =>
+        verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis iter1
+          weights1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, weights1) =>
+              verifier.accumulate_batched_with_node_loop1.body (Port3_NativeRowFrame.install ops) v q next width basis
+                iter1 weights1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+Port3_NativeRowLoop.lean:37:20: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [halt,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at accepted
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port3_NativeRowLoop.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeRowLoop.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

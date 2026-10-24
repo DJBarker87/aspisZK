@@ -1,0 +1,78 @@
+Port5Q1_Gather.lean:52:80: error: don't know how to synthesize placeholder for argument `right`
+context:
+CoreError : Type
+ops : Ops CoreError
+leaves : Port5Q1_GeometryCanonical.SessionAPrimitives ops
+domain : Port5Q1_Domain.SessionADomain ops
+start : Usize
+out : verifier.QueryGeometry
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+remaining : iter.i + 0 = (↑iter.slice).length
+canonical : ∀ x ∈ ↑flat, Port5Q1_GeometryCanonical.Canonical x
+raw : ∀ x ∈ ↑flat, x ≠ 0#u32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (none, iter)
+bodyRun :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (done (core.result.Result.Ok out))
+run :
+  (match ok (done (core.result.Result.Ok out)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start x.1 x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok out)
+⊢ List.map S7JoinBasisMachine.decode ↑zs =
+    List.map S7JoinBasisMachine.decode ↑zs ++ List.map (fun q => Port5Q1_Domain.lineZ ↑q) (List.drop iter.i ↑iter.slice)
+Port5Q1_Gather.lean:52:77: error: don't know how to synthesize placeholder for argument `left`
+context:
+CoreError : Type
+ops : Ops CoreError
+leaves : Port5Q1_GeometryCanonical.SessionAPrimitives ops
+domain : Port5Q1_Domain.SessionADomain ops
+start : Usize
+out : verifier.QueryGeometry
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+remaining : iter.i + 0 = (↑iter.slice).length
+canonical : ∀ x ∈ ↑flat, Port5Q1_GeometryCanonical.Canonical x
+raw : ∀ x ∈ ↑flat, x ≠ 0#u32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (none, iter)
+bodyRun :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (done (core.result.Result.Ok out))
+run :
+  (match ok (done (core.result.Result.Ok out)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start x.1 x.2.1 x.2.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok out)
+⊢ List.map S7JoinBasisMachine.decode ↑flat =
+    List.map S7JoinBasisMachine.decode ↑flat ++
+      List.flatMap (fun q => Port5Q1_Domain.words ↑q) (List.drop iter.i ↑iter.slice)
+Port5Q1_Gather.lean:38:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_Gather.lean:66:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q1_Gather.traversal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

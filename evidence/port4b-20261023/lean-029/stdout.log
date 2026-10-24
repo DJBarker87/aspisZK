@@ -1,0 +1,49 @@
+Port4B_LeafStep.lean:83:6: error: unsolved goals
+case neg
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+readI : s.idx.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.idx)[↑s.n - 1]!
+readV : s.val.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.val)[↑s.n - 1]!
+nonempty : s.n > 0#usize
+same : (↑s.idx)[↑s.n - 1]! = index
+equal : ¬(↑s.val)[↑s.n - 1]! = leaf
+⊢ (if false = true then ok (cont (s.idx, s.val, s.n, pos))
+    else ok (done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle)))) =
+    ok (done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port4B_LeafStep.lean:86:4: error: unsolved goals
+case neg
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+readI : s.idx.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.idx)[↑s.n - 1]!
+readV : s.val.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.val)[↑s.n - 1]!
+nonempty : s.n > 0#usize
+same : ¬(↑s.idx)[↑s.n - 1]! = index
+⊢ (if false = true then do
+      let equal ← Port3_BatchStd.sameLeaf s.val (s.n.wrapping_sub 1#usize) leaf
+      if equal = true then ok (cont (s.idx, s.val, s.n, pos))
+        else ok (done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle)))
+    else ok (cont (s.idx.set s.n index, s.val.set s.n leaf, UScalar.ofNat (↑s.n + 1) ⋯, pos))) =
+    ok (cont (s.idx.set s.n index, s.val.set s.n leaf, UScalar.ofNat (↑s.n + 1) ⋯, pos))
+'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,3 @@
+The actual successful mutable row-index operation followed by successful row update satisfies an exact two-dimensional write/frame rule: the changed cell contains the written value and every other entry retains its prior value. Generalizes the existing prepared-channel nested-set proof and imports the generic fixed-array source read/update theorem. This discharges the mutation frame interface for factor-loop value invariants, not a whole constructor or security result.
+
+Focused Lean check: 11.881 seconds; peak aggregate RSS 2165768192 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

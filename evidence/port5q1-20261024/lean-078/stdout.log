@@ -1,0 +1,66 @@
+Port5Q1_Endpoint.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytes5Output.accumulator
+    { weights := ⟨↑flushed22, ⋯⟩, rhs := out22.rhs, power := out22.power, next := out22.next }
+in the target expression
+  CheckpointBytes5Output.accumulator (materialize out22 flushed22) =
+    QueryAccumulator.run22 (OraclePortCheckpointResumeC5.model data rho q).iota
+      (OraclePortCheckpointResumeC5.model data rho q).rho (OraclePortCheckpointResumeC5.model data rho q).values
+      (OraclePortCheckpointResumeC5.model data rho q).basis
+
+base : VTop_Stages.Ops
+ops : Ops
+ports : SessionAPrimitives ops
+proof : Slice U8
+p : verifier.Prepared
+a0 out10 out22 : verifier.Accumulator
+g : Std.Array Stage2E 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry0 geometry1 : verifier.QueryGeometry
+b0 b10 b1 b12 : verifier.BatchedWeights
+flushed10 flushed22 : Slice aspis_core.field.QM31
+parsed : Parsed
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+data : MatchingSupport.Data FE
+rho : FK
+prepare : SessionAPrepare p data q rho
+read : LiteralMatchingData.read (typedRows parsed q tr) = some data
+wire : parsed.wire = bytesOf ↑proof
+proofLength : (↑proof).length = 57607
+recovered : ℕ → Option Bytes
+authenticated : ∀ pos < 22, recovered (index q 2 pos) = some (OraclePortPackedChoiceC4.payload parsed 2 pos)
+geo0 : Port5Q1_GeometryBinding.Binding p.queries 0#usize 10#usize geometry0
+geo1 : Port5Q1_GeometryBinding.Binding p.queries 10#usize 22#usize geometry1
+reserved : Bool
+initial : Port3_Initial.constructor reserved transport.Variant.S2 = ok (core.result.Result.Ok a0)
+pending0 : Port3_NativePendingInstall.source reserved a0.weights.deref = ok (core.result.Result.Ok b0)
+calls0 :
+  Port3_NativeQueryBody.verifier.candidate.query_loop (Port4C_RowStd.install (install ops)) proof p a0 g obs geometry0
+      b0 10#usize =
+    ok (core.result.Result.Ok (out10, b10))
+flush0 : Port3_FlushInstall.flush b10 out10.weights.deref = ok flushed10
+pending1 :
+  Port3_NativePendingInstall.source reserved (materialize out10 flushed10).weights.deref = ok (core.result.Result.Ok b1)
+calls1 :
+  Port3_NativeQueryBody.verifier.candidate.query_loop (Port4C_RowStd.install (install ops)) proof p
+      (materialize out10 flushed10) g obs geometry1 b1 22#usize =
+    ok (core.result.Result.Ok (out22, b12))
+flush1 : Port3_FlushInstall.flush b12 out22.weights.deref = ok flushed22
+first :
+  CheckpointBytes5Output.accumulator
+        { weights := ⟨↑flushed10, ⋯⟩, rhs := out10.rhs, power := out10.power, next := out10.next } =
+      (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+    (↑flushed10).length = 64 ∧
+      ↑out10.next = 10 ∧ Port4C_QueryArithmetic.CanonE out10.rhs ∧ Port3_FlushInstall.Canonical out10.power
+second :
+  CheckpointBytes5Output.accumulator
+        { weights := ⟨↑flushed22, ⋯⟩, rhs := out22.rhs, power := out22.power, next := out22.next } =
+      OraclePortCheckpointStateC3.advance (OraclePortCheckpointResumeC5.model data rho q) (↑22#usize - ↑10#usize)
+        (CheckpointBytes5Output.accumulator (materialize out10 flushed10)) ∧
+    (↑flushed22).length = 64 ∧
+      ↑out22.next = ↑22#usize ∧ Port4C_QueryArithmetic.CanonE out22.rhs ∧ Port3_FlushInstall.Canonical out22.power
+⊢ CheckpointBytes5Output.accumulator (materialize out22 flushed22) =
+    QueryAccumulator.run22 (OraclePortCheckpointResumeC5.model data rho q).iota
+      (OraclePortCheckpointResumeC5.model data rho q).rho (OraclePortCheckpointResumeC5.model data rho q).values
+      (OraclePortCheckpointResumeC5.model data rho q).basis
+'AspisR1.Port5Q1_Endpoint.ten_twelve' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

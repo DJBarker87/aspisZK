@@ -1,0 +1,83 @@
+S2W_ClosureAudit.lean:20:83: error(lean.unknownIdentifier): Unknown identifier `Parsed`
+
+Note: It is not possible to treat `Parsed` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_ClosureAudit.lean:36:83: error(lean.unknownIdentifier): Unknown identifier `Parsed`
+
+Note: It is not possible to treat `Parsed` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.S2W_ClosureAudit.facts_require_backend_returns' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.S2W_ClosureAudit.nonreturn_excludes_facts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_ChildJoins.internal_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TrustedStd.specification_satisfies' does not depend on any axioms
+'AspisR1.S2W_TrustedStd.cells_compose' depends on axioms: [Quot.sound]
+'AspisR1.S2W_TrustedStd.accepted_copy' does not depend on any axioms
+'AspisR1.S2W_TrustedStd.mismatched_copy' does not depend on any axioms
+'AspisR1.S2W_TrustedStd.copy_frame' depends on axioms: [propext]
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : S2Trust.Heap F → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : S2Trust.Heap F) (dst : ℕ) (src : S2Trust.Payload),
+      copy s dst src = S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : S2Trust.Heap F → ℕ → S2Trust.Payload → S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : S2Trust.Heap F) (dst : ℕ) (src : S2Trust.Payload),
+        copy s dst src = S2W_TrustedStd.specification s dst src) :
+    S2W_TrustedStd.TrustedStd copy
+structure AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin (proof : Slice U8) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.parsed : ∃ tr p,
+      OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p
+constructor:
+  AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin.mk {proof : Slice U8}
+    (parsed : ∃ tr p, OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some p) :
+    S2W_ChildJoins.FirstEntryVerifierConeJoin proof
+structure AspisR1.S2W_ChildJoins.MultiproofConeJoin (proof0 proof1 : Slice U8) (nodes : ℕ → ℕ → Slice U8) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1
+constructor:
+  AspisR1.S2W_ChildJoins.MultiproofConeJoin.mk {proof0 proof1 : Slice U8} {nodes : ℕ → ℕ → Slice U8}
+    (batch0Ranges : S2Y_OwnedChildren.NodeRanges proof0 nodes 0)
+    (batch1Ranges : S2Y_OwnedChildren.NodeRanges proof1 nodes 1) : S2W_ChildJoins.MultiproofConeJoin proof0 proof1 nodes
+structure AspisR1.S2W_ChildJoins.S8StageConeJoin (proof y1 : Slice U8) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.scanArgument : S2Y_OwnedChildren.Y1Range proof y1
+constructor:
+  AspisR1.S2W_ChildJoins.S8StageConeJoin.mk {proof y1 : Slice U8} (scanArgument : S2Y_OwnedChildren.Y1Range proof y1) :
+    S2W_ChildJoins.S8StageConeJoin proof y1
+structure AspisR1.S2W_ChildJoins.S7StageConeJoin (old : S8OwnedP6Finish.Weights)
+  (state : S7Kani2AccumulatorLoop.BatchedWeights) (sum : S7Kani3CallerTrace.Sum) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_ChildJoins.S7StageConeJoin.pushes : S7Kani3CallerTrace.PushTrace old state sum
+constructor:
+  AspisR1.S2W_ChildJoins.S7StageConeJoin.mk {old : S8OwnedP6Finish.Weights}
+    {state : S7Kani2AccumulatorLoop.BatchedWeights} {sum : S7Kani3CallerTrace.Sum}
+    (pushes : S7Kani3CallerTrace.PushTrace old state sum) : S2W_ChildJoins.S7StageConeJoin old state sum
+structure AspisR1.S2W_ChildJoins.CheckpointConeJoin (wp : CheckpointBytes5Writer.Prepared)
+  (wa : CheckpointBytes5Writer.Accumulator) (pm : OraclePortCheckpointAbiC5.Prepared)
+  (am : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_ChildJoins.CheckpointConeJoin.stateProvenance : CheckpointBytes5Join.S1S7S8StateProvenance wp wa pm am
+constructor:
+  AspisR1.S2W_ChildJoins.CheckpointConeJoin.mk {wp : CheckpointBytes5Writer.Prepared}
+    {wa : CheckpointBytes5Writer.Accumulator} {pm : OraclePortCheckpointAbiC5.Prepared}
+    {am : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E}
+    (stateProvenance : CheckpointBytes5Join.S1S7S8StateProvenance wp wa pm am) :
+    S2W_ChildJoins.CheckpointConeJoin wp wa pm am
+structure AspisR1.S2W_ChildJoins.FullForestConeJoin (ops : AdapterRw.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.S2W_ChildJoins.FullForestConeJoin.acceptedRoundtrip : S2Y_ForestPublic.FullForestAcceptedRoundtrip ops
+constructor:
+  AspisR1.S2W_ChildJoins.FullForestConeJoin.mk {ops : AdapterRw.Ops}
+    (acceptedRoundtrip : S2Y_ForestPublic.FullForestAcceptedRoundtrip ops) : S2W_ChildJoins.FullForestConeJoin ops

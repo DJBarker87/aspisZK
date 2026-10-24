@@ -1,0 +1,6 @@
+def Aeneas.Std.U32.wrapping_shl : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+BitVec.toNat_shiftLeft {v n : ℕ} {x : BitVec v} : (x <<< n).toNat = x.toNat <<< n % 2 ^ v
+Nat.shiftLeft_eq (a b : ℕ) : a <<< b = a * 2 ^ b

@@ -1,0 +1,38 @@
+{
+  "attempt": "kani-003",
+  "kind": "kani",
+  "source_revision": "bdeb6c700a4a4722b57346347b19149d50b7e925",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_native/Cargo.toml",
+    "--target-dir",
+    "kani-target",
+    "-j",
+    "4",
+    "--exact",
+    "--harness",
+    "S2W_checkpoint_write",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_native/src/lib.rs",
+    "S2W_native/Cargo.toml"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Exact source checkpoint-write expression only; full1768 SDK destination/source; selected byte universally quantified; actual alias handles"
+  },
+  "expected_time": "Optimized small-crate compilation then symbolic1768-byte native SDK copy, destination metadata and guard restoration; no arithmetic",
+  "change": "Independent exact checkpoint write expression; actual SDK full1768 bytes, aliases permitted, no child/frame assumption"
+}

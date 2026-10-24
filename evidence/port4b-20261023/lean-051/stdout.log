@@ -1,0 +1,65 @@
+Port4B_AnyFalse.lean:36:16: error: Dependent elimination failed: Failed to solve equation
+  ok (false, after) =
+    match
+      let (next, s) := (some chunk, { chunks := rest, remainder := remainder })
+      match next with
+      | none => ok (done (false, s))
+      | some value => do
+        let (stop, f) ← predicate.call_mut () value
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorChunksExact.next } predicate) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+Port4B_AnyFalse.lean:37:13: error: Dependent elimination failed: Failed to solve equation
+  ok (false, after) =
+    match
+      let (next, s) := (some chunk, { chunks := rest, remainder := remainder })
+      match next with
+      | none => ok (done (false, s))
+      | some value => do
+        let (stop, f) ← predicate.call_mut () value
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorChunksExact.next } predicate) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+Port4B_AnyFalse.lean:42:16: error: Dependent elimination failed: Failed to solve equation
+  ok (false, after) =
+    match
+      let (next, s) := (some chunk, { chunks := rest, remainder := remainder })
+      match next with
+      | none => ok (done (false, s))
+      | some value => do
+        let (stop, f) ← predicate.call_mut () value
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorChunksExact.next } predicate) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+Port4B_AnyFalse.lean:44:8: error: 'change' tactic failed, pattern
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8) predicate
+      { chunks := rest, remainder := remainder } () =
+    ok (false, after)
+is not definitionally equal to target
+  (match
+      let (next, s) := (some chunk, { chunks := rest, remainder := remainder })
+      match next with
+      | none => ok (done (false, s))
+      | some value => do
+        let (stop, f) ← predicate.call_mut () value
+        if stop = true then ok (done (true, s)) else ok (cont (s, f)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorChunksExact.next } predicate) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (false, after)
+'AspisR1.Port4B_AnyFalse.all_chunks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

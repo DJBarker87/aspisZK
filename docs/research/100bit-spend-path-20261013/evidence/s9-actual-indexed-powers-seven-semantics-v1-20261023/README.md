@@ -1,0 +1,3 @@
+Proved: for canonical actual kappa, every successful indexed read of the SAME successful native powers(7,kappa) output is canonical and decodes to kappa raised to that index. Reuses existing powers4 arithmetic, source-step and loop-invariant proof, specializes the same generic source function at seven, and strengthens the written-prefix invariant. No independent child success, output canonicality or output power-meaning premise remains. No full Pair, runtime or security closure is claimed.
+
+Focused Lean check: 25.39 seconds; peak aggregate RSS 3202793472 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

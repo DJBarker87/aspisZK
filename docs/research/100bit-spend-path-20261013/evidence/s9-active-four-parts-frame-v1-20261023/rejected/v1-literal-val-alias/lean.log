@@ -1,0 +1,90 @@
+/private/tmp/a3-s9-active-four-frame-v1-check-20261023/sources/S9ActiveFourFrameV1.lean:34:52: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑k = 4 then ?m.211 else ?m.212
+in the target expression
+  (if ↑k = ↑4#usize then total else atN a k hk) = atN initial k hk
+
+f : Slice U8
+libra : Libra
+iter : R
+initial final : Parts
+hloop : weights.Weights.pair_loop8 iter f initial libra = ok final
+step : R × Parts →
+  Result
+    (ControlFlow (core.ops.range.Range Usize × Std.Array aspis_core.field.wide_exact.WideExact 7#usize)
+      (Std.Array aspis_core.field.wide_exact.WideExact 7#usize)) :=
+  fun s => weights.Weights.pair_loop8.body f libra s.1 s.2
+inv : R × Parts → Prop := fun s => SameOutside4 initial s.2
+measure : R × Parts → ℕ := fun s => ↑s.1.end - ↑s.1.start
+hd :
+  ∀ (s : R × Parts) (result : Std.Array aspis_core.field.wide_exact.WideExact 7#usize),
+    inv s → step s = ok (done result) → SameOutside4 initial result
+r : R
+a : Parts
+r' : core.ops.range.Range Usize
+a' : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+hi : inv (r, a)
+hb : step (r, a) = ok (cont (r', a'))
+j : Usize
+carry value coefficient product total : AspisR1S9NativeArrayCanonicalV1.W
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize r = ok (some j, r')
+hcarry : Array.index_usize a 4#usize = ok carry
+hfield : weights.field f j = ok value
+hcf : Array.index_usize libra j = ok coefficient
+hm : aspis_core.field.wide_exact.WideExact.mul value coefficient = ok product
+ha : aspis_core.field.wide_exact.WideExact.add carry product = ok total
+hu : Array.update a 4#usize total = ok a'
+he : a' = Std.Array.set a 4#usize total
+k : Usize
+hk : ↑k < 7
+hne : ↑k ≠ 4
+⊢ (if ↑k = ↑4#usize then total else atN a k hk) = atN initial k hk
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/private/tmp/a3-s9-active-four-frame-v1-check-20261023/sources/S9ActiveFourFrameV1.lean:66:71: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑j = 0 then ?m.65 else ?m.66
+in the target expression
+  (if ↑j = ↑0#usize then inactive else atN initial j hj) = atN initial j hj
+
+f : Slice U8
+libra : Libra
+iter : R
+initial middle final : Parts
+inactive : W
+hwrite : Array.update initial 0#usize inactive = ok middle
+hloop : weights.Weights.pair_loop8 iter f middle libra = ok final
+hf : SameOutside4 middle final
+he : middle = Std.Array.set initial 0#usize inactive
+j : Usize
+hj : ↑j < 7
+hn0 : ↑j ≠ 0
+hn4 : ↑j ≠ 4
+⊢ (if ↑j = ↑0#usize then inactive else atN initial j hj) = atN initial j hj
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S9ActiveFourFrameV1.active_success_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1S9ActiveFourFrameV1.unshared_active_success_frame' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActiveFourFrameV1.inactive_active_preserves_point_parts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,43 @@
+{"attempt": "rust-001", "exit_status": 0, "wall_seconds": 29.002565119008068, "peak_rss_kib": "586888", "swaps": "0", "print_axioms": "N/A: rust-native-counterexample"}
+     Locking 6 packages to latest compatible versions
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/crates/aspis-core)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+warning: unexpected `cfg` condition value: `solana`
+   --> 
+...
+ffloads/codex-cx-ports3-20261023/src/crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+warning: `aspis-statement` (lib) generated 102 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+   Compiling port3-writer-boundary v0.1.0 (/home/dombarker/project-offloads/codex-cx-ports3-20261023/writer-boundary)
+    Finished `release` profile [optimized] target(s) in 28.98s
+     Running unittests src/lib.rs (rust-target/release/deps/port3_writer_boundary-07edeeb9b36f077a)
+
+running 1 test
+
+thread 'tests::s2_empty_weights_writer_panics_after_three_reads' (191754) panicked at /home/dombarker/project-offloads/codex-cx-ports3-20261023/src/crates/aspis-r1-cost-probe/src/verifier.rs:340:5:
+assertion `left == right` failed
+  left: 744
+ right: 1768
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+S2 canonical empty weights: native panic at size assertion after 3 reads; selector reference always emits 1768 bytes
+test tests::s2_empty_weights_writer_panics_after_three_reads ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+Running as unit: run-r9ecd6e9a02b749f6895ef936bf5bf939.scope; invocation ID: 3a1de64508e9458b92ae2a7e6ad051f4

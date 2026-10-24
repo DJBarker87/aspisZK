@@ -1,0 +1,13 @@
+private theorem cons_success (read : ReadK) (n : Nat) (r next last : verifier.Reader)
+    (x : K) (xs : List K)
+    (first : read r = ok (.Ok x,next))
+    (tail : readList read n next = ok (.Ok (xs,last))) :
+    readList read (n+1) r = ok (.Ok (x::xs,last)) := by
+  rw [readList,first]
+  change (do
+    let rest ← readList read n next
+    match rest with
+    | .Err e => ok (core.result.Result.Err e)
+    | .Ok (ys,finish) => ok (core.result.Result.Ok (x::ys,finish))) = _
+  rw [tail]
+  rfl

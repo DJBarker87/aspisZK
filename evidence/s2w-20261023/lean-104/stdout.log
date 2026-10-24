@@ -1,0 +1,81 @@
+S2W_D189Wrappers.lean:112:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1 (source (nativeBytes value))
+in the target expression
+  (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok saved =>
+      match
+        copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+          (source (nativeBytes saved)) with
+      | Outcome.panic => fail Error.assertionFailure
+      | Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        ok (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+
+case Ok.returned
+A : Type
+native : S2W_ExtractionBoundary.First
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+state final : A
+saved : alloc.vec.Vec U8
+after : Heap (ℕ → Record)
+accepted :
+  (do
+      let allocated ← reserve allocator (admittedSizes e 3 firstSizes) state
+      let result ← native program e.first data
+      match result with
+        | core.result.Result.Err error => ok (core.result.Result.Err error)
+        | core.result.Result.Ok saved =>
+          match
+            copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+              (source (nativeBytes saved)) with
+          | Outcome.panic => fail Error.assertionFailure
+          | Outcome.returned written => do
+            let cleaned ← allocator.cleanup allocated
+            ok (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+allocated : A
+left✝ : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+rest✝ :
+  (do
+      let result ← native program e.first data
+      match result with
+        | core.result.Result.Err error => ok (core.result.Result.Err error)
+        | core.result.Result.Ok saved =>
+          match
+            copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+              (source (nativeBytes saved)) with
+          | Outcome.panic => fail Error.assertionFailure
+          | Outcome.returned written => do
+            let cleaned ← allocator.cleanup allocated
+            ok (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+value : alloc.vec.Vec U8
+called : native program e.first data = ok (core.result.Result.Ok value)
+rest :
+  (match core.result.Result.Ok value with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok saved =>
+      match
+        copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+          (source (nativeBytes saved)) with
+      | Outcome.panic => fail Error.assertionFailure
+      | Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        ok (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))) =
+    ok (core.result.Result.Ok (saved, after, final))
+written : Heap (ℕ → Record)
+copied :
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1 (source (nativeBytes value)) =
+    Outcome.returned written
+⊢ native program e.first data = ok (core.result.Result.Ok saved) ∧
+    after = writeBracket e.heap 2 0 0 (source (nativeBytes saved))
+'AspisR1.S2W_D189Wrappers.allocation_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Wrappers.first_accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_D189Wrappers.second_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

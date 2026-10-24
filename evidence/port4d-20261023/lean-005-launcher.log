@@ -1,0 +1,54 @@
+{"attempt": "lean-005", "exit_status": 1, "wall_seconds": 4.202518999998574, "peak_rss_kib": "4398524", "swaps": "0", "print_axioms": ["'AspisR1.Port4D_FlushABI.finish_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4D_FlushABI.prefix_transport' depends on axioms: [propext]", "'AspisR1.Port4D_FlushABI.slice_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.Port4D_FlushABI.reference_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4D_FlushABI.vec_backwrite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4D_FlushResult.lean:53:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun x => Port3_FlushInstall.fromMutable (S8Kani2FinishReferenceJoin.toFinish (Port3_FlushInstall.toOwned x))
+in the target expression
+  List.map (Port3_FlushInstall.fromMutable ∘ S8Kani2FinishReferenceJoin.toFinish ∘ Port3_FlushInstall.toOwned) ↑s = ↑s
+
+s : Slice K
+id :
+  (fun x => Port3_FlushInstall.fromMutable (S8Kani2FinishReferenceJoin.toFinish (Port3_FlushInstall.toOwned x))) =
+    fun x => x
+⊢ List.map (Port3_FlushInstall.fromMutable ∘ S8Kani2FinishReferenceJoin.toFinish ∘ Port3_FlushInstall.toOwned) ↑s = ↑s
+
+Note: The target expression is not type-correct under the `instances` tra
+...
+se`
+Port4D_FlushResult.lean:89:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self weights.deref
+in the target expression
+  (let (s, back) := (⟨↑weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let out ← Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self s
+    ok (back out)) =
+    do
+    let out ← Port3_FlushInstall.flush self weights.deref
+    ok ⟨↑out, ⋯⟩
+
+self : verifier.BatchedWeights
+weights : alloc.vec.Vec K
+lengths : (↑weights).length ≤ (↑self.raw).length
+⊢ (let (s, back) := (⟨↑weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let out ← Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self s
+    ok (back out)) =
+    do
+    let out ← Port3_FlushInstall.flush self weights.deref
+    ok ⟨↑out, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    weights
+  has type
+    alloc.vec.Vec K
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑weights
+'AspisR1.Port4D_FlushABI.finish_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushABI.prefix_transport' depends on axioms: [propext]
+'AspisR1.Port4D_FlushABI.slice_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.Port4D_FlushABI.reference_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushABI.vec_backwrite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r83e046a6e63c41fb8bccad42dad4f9f7.scope; invocation ID: d11ca2a4a1064556a68cca85735b8e36

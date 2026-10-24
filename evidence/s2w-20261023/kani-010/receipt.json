@@ -1,0 +1,63 @@
+{
+  "attempt": "kani-010",
+  "kind": "kani",
+  "source_revision": "76d32f4680a19b9609522decfdb6cdbc3e5e923b",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "S2W_copy/Cargo.toml",
+    "--target-dir",
+    "copy-target",
+    "-j",
+    "4",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "60s",
+    "--exact",
+    "--harness",
+    "S2W_copy_contract",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_copy/src/lib.rs",
+    "S2W_copy/Cargo.toml"
+  ],
+  "timeout": 100,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "S2G selected-byte actual copy contract instantiated at57607, arbitrary observed index, expected bound to source[index], destination-only modifies"
+  },
+  "expected_time": "Optimized compilation then named standalone symbolic-index copy contract; no SDK allocation/borrow wrapper",
+  "change": "Replace timed-out SDK to_vec/whole-copy expansion with isolated byte contract as directed",
+  "exit_status": 1,
+  "wall_seconds": 62.367983118994744,
+  "peak_rss_kib": "4722972",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r5b148e06391e42388ef6f311ba3b9524.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "4847222784",
+  "source_hashes": {
+    "S2W_copy/src/lib.rs": "1ac568c957c716ec03cbf6f4ce4abeced0f6439cf20cb567f415052b85419eb6",
+    "S2W_copy/Cargo.toml": "b225df54a161c1210a62b12d039d64a6c3eead4932154939281a4922c4432a65"
+  },
+  "print_axioms": "N/A: kani"
+}

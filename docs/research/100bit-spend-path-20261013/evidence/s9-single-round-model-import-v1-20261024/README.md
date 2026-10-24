@@ -1,0 +1,3 @@
+Checked import-only RoundPairing -> R1RoundPairing adapter for the joint caller/point environment. Adds no declarations, assumptions or mathematical bodies. Separate read-only diagnostics compare shared declaration types/computational bodies and retain compiler-generated proof-helper differences. This is module integration evidence, not a new soundness theorem or final coherent replay.
+
+Focused Lean check: 9.049 seconds; peak aggregate RSS 1837662208 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

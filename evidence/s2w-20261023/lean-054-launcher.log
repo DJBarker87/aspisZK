@@ -1,0 +1,45 @@
+{"attempt": "lean-054", "exit_status": 1, "wall_seconds": 3.02590767100628, "peak_rss_kib": "4377868", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ExtractionBoundary.accepted_native_observation' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]", "'AspisR1.S2W_ExtractionBoundary.native_oracle' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+S2W_ExtractionBoundary.lean:22:34: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+S2W_ExtractionBoundary.lean:25:36: error(lean.unknownIdentifier): Unknown identifier `r1_pool_adapter.owned.stage1_owned`
+S2W_ExtractionBoundary.lean:27:41: error(lean.unknownIdentifier): Unknown identifier `r1_pool_adapter.owned.stage2_owned`
+S2W_ExtractionBoundary.lean:60:53: error: unexpected token 'prefix'; expected rcasesPat
+S2W_ExtractionBoundary.lean:42:43: error(lean.unknownIdentifier): Unknown identifier `Ops`
+
+Note: It is not possible to treat `Ops` as an implicit
+...
+: Program
+accounts : Accounts
+data : Slice U8
+checkpoint : alloc.vec.Vec U8
+accepted : native1 program accounts data = ok (core.result.Result.Ok checkpoint)
+⊢ ∃ proofAccount publicAccount publicInput raw statement semantic proof split,
+    Slice.index_usize accounts 0#usize = ok proofAccount ∧
+      Slice.index_usize accounts 1#usize = ok publicAccount ∧
+        sorry = ok ?m.36 ∧
+          sorry = ok ?m.40 ∧ sorry = ok ?m.44 ∧ sorry = ok ?m.48 ∧ sorry = 57607 ∧ sorry = ?m.57 ++ sorry
+'AspisR1.S2W_ExtractionBoundary.accepted_native_observation' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.S2W_ExtractionBoundary.native_oracle' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+S2W_ExtractionBoundary.lean:99:14: error(lean.unknownIdentifier): Unknown constant `native_first_fields`
+S2W_ExtractionBoundary.lean:100:7: error(lean.unknownIdentifier): Unknown constant `AeneasExtraction`
+structure AspisR1.S2W_ExtractionBoundary.P1 (sha256 H : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : Bytes → State} (realization : S2Z.Oracle.P1Realization sha256 H) :
+    P1 sha256 H
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+  (sha256 : Bytes → State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk {hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest}
+    {sha256 : Bytes → State} (returningValue : S2Z.Oracle.RuntimeSyscall hashv sha256) : RuntimeSyscall hashv sha256
+
+Running as unit: run-r8608995fac0f435da3e3c5420a5cc1c0.scope; invocation ID: e55ef0ae4e4444db81a3ccfdaf5103ff

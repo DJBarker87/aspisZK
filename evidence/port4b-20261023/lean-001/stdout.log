@@ -1,0 +1,89 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port4B_Rejection.lean:44:4: error: Tactic `rfl` failed: The left-hand side
+  let (lo, hi) := (lo, hi)
+  do
+  let n ← lift (Usize.wrapping_sub hi lo)
+  let s ← ok s
+  let a ← ops.op4 queries lo n tree
+  let keys ← ops.op5 a n
+  let (idx1, val1, pending_return) ←
+    Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s keys 0#usize
+        0#usize
+  match pending_return with
+    | none => fail Error.panic
+    | some r => ok (r, idx1, val1)
+is not definitionally equal to the right-hand side
+  do
+    let (idx', val', pending) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s sorted 0#usize
+          0#usize
+    emittedReturn idx' val' pending
+
+case ok
+ops : Port3_NativeBatchBody.Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+proof : Slice U8
+queries : Std.Array U32 22#usize
+root : Std.Array U8 32#usize
+batch tree lo hi n s : Usize
+idx : Indices
+val : Values
+keys sorted : Std.Array U64 16#usize
+range :
+  (if batch = 0#usize then do
+      let i ← ops.op13
+      ok (0#usize, i)
+    else do
+      let i ← ops.op13
+      ok (i, 22#usize)) =
+    ok (lo, hi)
+width : lift (hi.wrapping_sub lo) = ok n
+packed : ops.op4 queries lo n tree = ok keys
+sort : ops.op5 keys n = ok sorted
+i : Usize
+hm : lift (Usize.wrapping_mul 3#usize batch) = ok i
+slot : lift (i.wrapping_add tree) = ok s
+⊢ (let (lo, hi) := (lo, hi)
+    do
+    let n ← lift (Usize.wrapping_sub hi lo)
+    let s ← ok s
+    let a ← ops.op4 queries lo n tree
+    let keys ← ops.op5 a n
+    let (idx1, val1, pending_return) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s keys 0#usize
+          0#usize
+    match pending_return with
+      | none => fail Error.panic
+      | some r => ok (r, idx1, val1)) =
+    do
+    let (idx', val', pending) ←
+      Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s sorted 0#usize
+          0#usize
+    emittedReturn idx' val' pending
+Port4B_Rejection.lean:18:8: error: (kernel) excessive memory consumption detected
+Port4B_Rejection.lean:36:71: warning: This simp argument is unused:
+  width
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeBatchBody.verifier.candidate.batch_tree, ̲range,w̵i̵d̵t̵h̵,̵ ̲bind_tc_ok, ̲packed, ̲sort]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_Rejection.lean:36:88: warning: This simp argument is unused:
+  packed
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeBatchBody.verifier.candidate.batch_tree, ̲range, ̲width, ̲bind_tc_ok,p̵a̵c̵k̵e̵d̵,̵ ̲sort]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4B_Rejection.lean:36:95: warning: This simp argument is unused:
+  sort
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_NativeBatchBody.verifier.candidate.batch_tree, ̲range, ̲width, ̲bind_tc_ok, ̲packed,̵s̵o̵r̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_Rejection.tree_return' depends on axioms: [propext, Classical.choice, Quot.sound, tree_return]
+'AspisR1.Port4B_Rejection.missing_return' depends on axioms: [propext, Classical.choice, Quot.sound]

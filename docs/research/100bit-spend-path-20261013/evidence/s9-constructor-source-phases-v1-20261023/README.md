@@ -1,0 +1,3 @@
+Proved: the same extracted weights constructor success yields its actual point producer, statement and circle phase successes, extra alpha reads and exact resulting record fields. No independent child-success premise is retained. This is an extracted value-level theorem; actual ABI/runtime, source migration and artifact correspondence remain separate.
+
+Focused Lean check: 12.967 seconds; peak aggregate RSS 2213740544 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

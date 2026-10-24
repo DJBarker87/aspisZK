@@ -1,0 +1,38 @@
+{"attempt": "lean-098", "exit_status": 1, "wall_seconds": 2.5478104219946545, "peak_rss_kib": "4403756", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_CollectLoop.list_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_CollectLoop.lean:50:4: error: 'change' tactic failed, pattern
+  (do
+      let p ← (iterator ops).next { iter := iter, f := flat }
+      match p.1 with
+        | none => ok acc.reverse
+        | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) p.2 (item :: acc)) =
+    ?m.226
+is not definitionally equal to target
+  (do
+      let __x ← (iterator ops).next { iter := iter, f := flat }
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) iter (item :: acc)) =
+    ok (acc.reverse ++ List.map (record flat) (List.range' (↑iter.start) (fuel + 1)))
+'As
+...
+Port4C_CollectLoop.lean:50:4: error: 'change' tactic failed, pattern
+  (do
+      let p ← (iterator ops).next { iter := iter, f := flat }
+      match p.1 with
+        | none => ok acc.reverse
+        | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) p.2 (item :: acc)) =
+    ?m.226
+is not definitionally equal to target
+  (do
+      let __x ← (iterator ops).next { iter := iter, f := flat }
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => alloc.vec.FromIteratorVec.iterToList (iterator ops) iter (item :: acc)) =
+    ok (acc.reverse ++ List.map (record flat) (List.range' (↑iter.start) (fuel + 1)))
+'AspisR1.Port4C_CollectLoop.list_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0e650e87473f400ca3f6a86563224192.scope; invocation ID: 5b2bdb6710094239a9ba01ae4d8be9e9

@@ -1,0 +1,140 @@
+/home/dombarker/project-offloads/pair-ebyk-push-source-v1-20261023/sources/S9ActualEbyKPushSourceV1.lean:41:11: error: unsolved goals
+case isFalse.Ok
+self out : fast_pairing.EbyKDot
+value : NativeW
+scalar : NativeQ
+hcount : ¬self.count ≥ fast_pairing.MAX_TERMS
+h✝⁵ :
+  (do
+      let a ← fast_pairing.canonical.Q.from_wide value
+      let value_c0 ← a.index_usize 0#usize
+      let value_c1 ← a.index_usize 1#usize
+      let r ← fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push value_c0 val
+          let d1 ← self.c1.push value_c1 val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)) =
+    ok (core.result.Result.Ok (), out)
+arr : Std.Array fast_pairing.canonical.Q 2#usize
+hfrom : fast_pairing.canonical.Q.from_wide value = ok arr
+h✝⁴ :
+  (do
+      let value_c0 ← arr.index_usize 0#usize
+      let value_c1 ← arr.index_usize 1#usize
+      let r ← fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push value_c0 val
+          let d1 ← self.c1.push value_c1 val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)) =
+    ok (core.result.Result.Ok (), out)
+lo : fast_pairing.canonical.Q
+hlo : arr.index_usize 0#usize = ok lo
+h✝³ :
+  (do
+      let value_c1 ← arr.index_usize 1#usize
+      let r ← fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push lo val
+          let d1 ← self.c1.push value_c1 val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)) =
+    ok (core.result.Result.Ok (), out)
+hi : fast_pairing.canonical.Q
+hhi : arr.index_usize 1#usize = ok hi
+h✝² :
+  (do
+      let r ← fast_pairing.checked_q scalar
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let d ← self.c0.push lo val
+          let d1 ← self.c1.push hi val
+          let i ← lift (self.count.wrapping_add 1#usize)
+          ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame Unit) residual
+          ok (r1, self)) =
+    ok (core.result.Result.Ok (), out)
+q : fast_pairing.canonical.Q
+hchecked : fast_pairing.checked_q scalar = ok (core.result.Result.Ok q)
+h✝¹ :
+  (do
+      let d ← self.c0.push lo q
+      let d1 ← self.c1.push hi q
+      let i ← lift (self.count.wrapping_add 1#usize)
+      ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })) =
+    ok (core.result.Result.Ok (), out)
+d0 : fast_pairing.canonical.Dot
+hd0 : self.c0.push lo q = ok d0
+h✝ :
+  (do
+      let d1 ← self.c1.push hi q
+      let i ← lift (self.count.wrapping_add 1#usize)
+      ok (core.result.Result.Ok (), { c0 := d0, c1 := d1, count := i })) =
+    ok (core.result.Result.Ok (), out)
+d1 : fast_pairing.canonical.Dot
+hd1 : self.c1.push hi q = ok d1
+h :
+  ok (core.result.Result.Ok (), { c0 := d0, c1 := d1, count := self.count.wrapping_add 1#usize }) =
+    ok (core.result.Result.Ok (), out)
+hout : { c0 := d0, c1 := d1, count := self.count.wrapping_add 1#usize } = out
+hsFrom : AspisR1EbyKPushWideToQ.fromWide (toSourceWide value) = ok arr
+hsChecked :
+  AspisR1EbyKCheckedQAllParamV1.checkedQWithAll AspisR1EbyKCheckedQConcreteAll.concreteAll (toSourceQ scalar) =
+    ok (core.result.Result.Ok q)
+hsDot0 : AspisR1EbyKPushDotBackend.dotViaRaw actualRaw { sums := self.c0.sums } lo q = ok { sums := d0.sums }
+hsDot1 : AspisR1EbyKPushDotBackend.dotViaRaw actualRaw { sums := self.c1.sums } hi q = ok { sums := d1.sums }
+hc : self.count < fast_pairing.MAX_TERMS
+hadd : UScalar.add self.count 1#usize = ok (self.count.wrapping_add 1#usize)
+hcountOld : ¬(toSourceState self).count ≥ AspisR1EbyKPushExplicitOpsV1.maxTerms
+⊢ (if self.count ≥ AspisR1EbyKPushExplicitOpsV1.maxTerms then
+      ok
+        (core.result.Result.Err (),
+          { c0 := { sums := self.c0.sums }, c1 := { sums := self.c1.sums }, count := self.count })
+    else
+      ok
+        (core.result.Result.Ok (),
+          { c0 := { sums := d0.sums }, c1 := { sums := d1.sums }, count := self.count.wrapping_add 1#usize })) =
+    ok
+      (core.result.Result.Ok (),
+        { c0 := { sums := d0.sums }, c1 := { sums := d1.sums }, count := self.count.wrapping_add 1#usize })
+/home/dombarker/project-offloads/pair-ebyk-push-source-v1-20261023/sources/S9ActualEbyKPushSourceV1.lean:62:17: warning: This simp argument is unused:
+  if_neg hcountOld
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵n̵e̵g̵ ̵h̵c̵o̵u̵n̵t̵O̵l̵d̵,̵h̵s̵F̵r̵o̵m̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵l̵o̵,̵h̵h̵i̵,̵h̵s̵C̵h̵e̵c̵k̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵h̵s̵D̵o̵t̵0̵,̵h̵s̵D̵o̵t̵1̵,̵h̵a̵d̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵t̵o̵S̵o̵u̵r̵c̵e̵S̵t̵a̵t̵e̵,̵t̵o̵S̵o̵u̵r̵c̵e̵D̵o̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲s̲F̲r̲o̲m̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲l̲o̲,̲ ̲h̲h̲i̲,̲ ̲h̲s̲C̲h̲e̲c̲k̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲h̲s̲D̲o̲t̲0̲,̲ ̲h̲s̲D̲o̲t̲1̲,̲ ̲h̲a̲d̲d̲,̲ ̲t̲o̲S̲o̲u̲r̲c̲e̲S̲t̲a̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲o̲S̲o̲u̲r̲c̲e̲D̲o̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualEbyKPushSourceV1.actual_push_success_source_backend' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

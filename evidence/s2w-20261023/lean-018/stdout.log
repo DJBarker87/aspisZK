@@ -1,0 +1,998 @@
+S2W_OuterErasure.lean:20:73: error: unsolved goals
+ops : Ops
+program_id : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+⊢ (do
+      let a ← ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] stage1_owned._proof_4)
+      if a = true then
+          if (accounts.len != 3#usize) = true then
+            ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+          else do
+            let a ← accounts.index_usize 0#usize
+            let a_1 ← accounts.index_usize 1#usize
+            let a_2 ← accounts.index_usize 2#usize
+            let a_3 ← r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a, a_1, a_2] ⋯)
+            let a_4 ← core.result.Result.Insts.CoreOpsTry.branch a_3
+            erase ops
+                (match a_4 with
+                | core.ops.control_flow.ControlFlow.Continue a_5 => do
+                  let r1 ← liftM (r1_pool_adapter.owned.require_readonly_buffer a)
+                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a_6 => do
+                      let r2 ← liftM (r1_pool_adapter.owned.require_readonly_buffer a_1)
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a_7 => do
+                          let r3 ← liftM (r1_pool_adapter.owned.require_verifier_checkpoint ops a_2 program_id true)
+                          let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue a_8 => do
+                              let r4 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops a_2)
+                              let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                              match cf4 with
+                                | core.ops.control_flow.ControlFlow.Continue val => do
+                                  let r5 ← liftM (r1_pool_adapter.owned.require_zero val)
+                                  let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                  match cf5 with
+                                    | core.ops.control_flow.ControlFlow.Continue a_9 => do
+                                      let r6 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops a_1)
+                                      let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                      match cf6 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let r7 ← perform (Call.op47 val1)
+                                          let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                          match cf7 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let r8 ← perform (Call.op21 val2)
+                                              let r9 ←
+                                                liftM
+                                                    (core.result.Result.map_err
+                                                      r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                      r8 ())
+                                              let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                              match cf8 with
+                                                | core.ops.control_flow.ControlFlow.Continue a_10 => do
+                                                  let pvpftcv ← liftM val2.common
+                                                  let r10 ←
+                                                    perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                                  let r11 ←
+                                                    liftM
+                                                        (core.result.Result.map_err
+                                                          r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                          r10 ())
+                                                  let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                                  match cf9 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                      let r12 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops a)
+                                                      let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                      match cf10 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                          let proof_length ←
+                                                            liftM aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                          let proof_start ←
+                                                            liftM
+                                                                (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                                  ops)
+                                                          let o ← liftM (lift (proof_start.checked_add proof_length))
+                                                          let r13 ←
+                                                            liftM
+                                                                (core.option.Option.ok_or o
+                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                          let cf11 ←
+                                                            liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                          match cf11 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                              if (val4.len != val5) = true then
+                                                                pure
+                                                                  (core.result.Result.Err
+                                                                    solana_program_error.ProgramError.InvalidAccountData)
+                                                              else do
+                                                                let s ←
+                                                                  liftM
+                                                                      (core.slice.index.Slice.index
+                                                                        (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                          U8)
+                                                                        val4 { «end» := proof_start })
+                                                                let b1 ← perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                                if b1 = true then
+                                                                    pure
+                                                                      (core.result.Result.Err
+                                                                        solana_program_error.ProgramError.InvalidAccountData)
+                                                                  else do
+                                                                    let i2 ←
+                                                                      liftM (lift (proof_start.wrapping_add 8#usize))
+                                                                    let i3 ← liftM (val4.index_usize i2)
+                                                                    let i4 ←
+                                                                      liftM aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                    if (i3 != i4) = true then
+                                                                        pure
+                                                                          (core.result.Result.Err
+                                                                            solana_program_error.ProgramError.InvalidAccountData)
+                                                                      else do
+                                                                        let p ← liftM val2.semantic_public
+                                                                        let s1 ←
+                                                                          liftM
+                                                                              (core.slice.index.Slice.index
+                                                                                (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                  U8)
+                                                                                val4
+                                                                                { start := proof_start, «end» := val5 })
+                                                                        let i5 ← liftM (data.index_usize 1#usize)
+                                                                        let i6 ←
+                                                                          liftM (lift (UScalar.cast UScalarTy.Usize i5))
+                                                                        let r14 ← liftM (first_decoded ops p val1 s1 i6)
+                                                                        let cf12 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r14)
+                                                                        match cf12 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              val6 =>
+                                                                            if (val6.len != val.len) = true then
+                                                                              pure
+                                                                                (core.result.Result.Err
+                                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                                            else pure (core.result.Result.Ok val6)
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            liftM
+                                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                (alloc.vec.Vec U8)
+                                                                                (core.convert.FromSame
+                                                                                  solana_program_error.ProgramError)
+                                                                                residual)
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              liftM
+                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8)
+                                                                  (core.convert.FromSame
+                                                                    solana_program_error.ProgramError)
+                                                                  residual)
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8)
+                                                              (core.convert.FromSame solana_program_error.ProgramError)
+                                                              residual)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      liftM
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8)
+                                                          (core.convert.FromSame solana_program_error.ProgramError)
+                                                          residual)
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  liftM
+                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8)
+                                                      (core.convert.FromSame solana_program_error.ProgramError)
+                                                      residual)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              liftM
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (alloc.vec.Vec U8)
+                                                  (core.convert.FromSame solana_program_error.ProgramError) residual)
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (alloc.vec.Vec U8)
+                                              (core.convert.FromSame solana_program_error.ProgramError) residual)
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                          residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                      residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual))
+        else do
+          let a ← ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 11#u8] stage1_owned._proof_10)
+          if a = true then
+              if (accounts.len != 3#usize) = true then
+                ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let a ← accounts.index_usize 0#usize
+                let a_1 ← accounts.index_usize 1#usize
+                let a_2 ← accounts.index_usize 2#usize
+                let a_3 ← r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [a, a_1, a_2] ⋯)
+                let a_4 ← core.result.Result.Insts.CoreOpsTry.branch a_3
+                erase ops
+                    (match a_4 with
+                    | core.ops.control_flow.ControlFlow.Continue a_5 => do
+                      let r1 ← liftM (r1_pool_adapter.owned.require_readonly_buffer a)
+                      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a_6 => do
+                          let r2 ← liftM (r1_pool_adapter.owned.require_readonly_buffer a_1)
+                          let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                          match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue a_7 => do
+                              let r3 ← liftM (r1_pool_adapter.owned.require_verifier_checkpoint ops a_2 program_id true)
+                              let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                              match cf3 with
+                                | core.ops.control_flow.ControlFlow.Continue a_8 => do
+                                  let r4 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops a_2)
+                                  let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                  match cf4 with
+                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                      let r5 ← liftM (r1_pool_adapter.owned.require_zero val)
+                                      let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                      match cf5 with
+                                        | core.ops.control_flow.ControlFlow.Continue a_9 => do
+                                          let r6 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops a_1)
+                                          let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                          match cf6 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let r7 ← perform (Call.op47 val1)
+                                              let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                              match cf7 with
+                                                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                  let r8 ← perform (Call.op21 val2)
+                                                  let r9 ←
+                                                    liftM
+                                                        (core.result.Result.map_err
+                                                          r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                          r8 ())
+                                                  let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                                  match cf8 with
+                                                    | core.ops.control_flow.ControlFlow.Continue a_10 => do
+                                                      let pvpftcv ← liftM val2.common
+                                                      let r10 ←
+                                                        perform (Call.op24 pvpftcv.lane_transition.candidate_afterstate)
+                                                      let r11 ←
+                                                        liftM
+                                                            (core.result.Result.map_err
+                                                              r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                              r10 ())
+                                                      let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                                      match cf9 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                          let r12 ←
+                                                            liftM (r1_pool_adapter.owned.OwnedAccount.data ops a)
+                                                          let cf10 ←
+                                                            liftM (core.result.Result.Insts.CoreOpsTry.branch r12)
+                                                          match cf10 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                              let proof_length ←
+                                                                liftM aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                              let proof_start ←
+                                                                liftM
+                                                                    (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                                      ops)
+                                                              let o ←
+                                                                liftM (lift (proof_start.checked_add proof_length))
+                                                              let r13 ←
+                                                                liftM
+                                                                    (core.option.Option.ok_or o
+                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                              let cf11 ←
+                                                                liftM (core.result.Result.Insts.CoreOpsTry.branch r13)
+                                                              match cf11 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                                  if (val4.len != val5) = true then
+                                                                    pure
+                                                                      (core.result.Result.Err
+                                                                        solana_program_error.ProgramError.InvalidAccountData)
+                                                                  else do
+                                                                    let s ←
+                                                                      liftM
+                                                                          (core.slice.index.Slice.index
+                                                                            (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                              U8)
+                                                                            val4 { «end» := proof_start })
+                                                                    let b1 ←
+                                                                      perform (Call.op0 core.cmp.PartialEqU8 s val3)
+                                                                    if b1 = true then
+                                                                        pure
+                                                                          (core.result.Result.Err
+                                                                            solana_program_error.ProgramError.InvalidAccountData)
+                                                                      else do
+                                                                        let i2 ←
+                                                                          liftM
+                                                                              (lift (proof_start.wrapping_add 8#usize))
+                                                                        let i3 ← liftM (val4.index_usize i2)
+                                                                        let i4 ←
+                                                                          liftM
+                                                                              aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                        if (i3 != i4) = true then
+                                                                            pure
+                                                                              (core.result.Result.Err
+                                                                                solana_program_error.ProgramError.InvalidAccountData)
+                                                                          else do
+                                                                            let p ← liftM val2.semantic_public
+                                                                            let s1 ←
+                                                                              liftM
+                                                                                  (core.slice.index.Slice.index
+                                                                                    (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                      U8)
+                                                                                    val4
+                                                                                    { start := proof_start,
+                                                                                      «end» := val5 })
+                                                                            let i5 ← liftM (data.index_usize 1#usize)
+                                                                            let i6 ←
+                                                                              liftM
+                                                                                  (lift
+                                                                                    (UScalar.cast UScalarTy.Usize i5))
+                                                                            let r14 ←
+                                                                              liftM (first_decoded ops p val1 s1 i6)
+                                                                            let cf12 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r14)
+                                                                            match cf12 with
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Continue
+                                                                                  val6 =>
+                                                                                if (val6.len != val.len) = true then
+                                                                                  pure
+                                                                                    (core.result.Result.Err
+                                                                                      solana_program_error.ProgramError.InvalidAccountData)
+                                                                                else pure (core.result.Result.Ok val6)
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    (alloc.vec.Vec U8)
+                                                                                    (core.convert.FromSame
+                                                                                      solana_program_error.ProgramError)
+                                                                                    residual)
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  liftM
+                                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (alloc.vec.Vec U8)
+                                                                      (core.convert.FromSame
+                                                                        solana_program_error.ProgramError)
+                                                                      residual)
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              liftM
+                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8)
+                                                                  (core.convert.FromSame
+                                                                    solana_program_error.ProgramError)
+                                                                  residual)
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8)
+                                                              (core.convert.FromSame solana_program_error.ProgramError)
+                                                              residual)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      liftM
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8)
+                                                          (core.convert.FromSame solana_program_error.ProgramError)
+                                                          residual)
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  liftM
+                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8)
+                                                      (core.convert.FromSame solana_program_error.ProgramError)
+                                                      residual)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              liftM
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (alloc.vec.Vec U8)
+                                                  (core.convert.FromSame solana_program_error.ProgramError) residual)
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (alloc.vec.Vec U8)
+                                              (core.convert.FromSame solana_program_error.ProgramError) residual)
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                          residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                      residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual))
+            else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)) =
+    do
+    let b ←
+      ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] r1_pool_adapter.owned.stage1_owned._proof_2)
+    if b = true then
+        if (accounts.len != 3#usize) = true then
+          ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let proof_account ← accounts.index_usize 0#usize
+          let public_account ← accounts.index_usize 1#usize
+          let checkpoint_account ← accounts.index_usize 2#usize
+          let r ←
+            r1_pool_adapter.owned.require_distinct_accounts ops
+                (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let r1 ← r1_pool_adapter.owned.require_readonly_buffer proof_account
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r2 ← r1_pool_adapter.owned.require_readonly_buffer public_account
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let r3 ← r1_pool_adapter.owned.require_verifier_checkpoint ops checkpoint_account program_id true
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let r4 ← r1_pool_adapter.owned.OwnedAccount.data ops checkpoint_account
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val => do
+                              let r5 ← r1_pool_adapter.owned.require_zero val
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                  let r6 ← r1_pool_adapter.owned.OwnedAccount.data ops public_account
+                                  let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                  match cf6 with
+                                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                      let r7 ← ops.op47 val1
+                                      let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                      match cf7 with
+                                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                          let r8 ← ops.op21 val2
+                                          let r9 ←
+                                            core.result.Result.map_err
+                                                r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                r8 ()
+                                          let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                                          match cf8 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let pvpftcv ← val2.common
+                                              let r10 ← ops.op24 pvpftcv.lane_transition.candidate_afterstate
+                                              let r11 ←
+                                                core.result.Result.map_err
+                                                    r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                    r10 ()
+                                              let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                                              match cf9 with
+                                                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                  let r12 ← r1_pool_adapter.owned.OwnedAccount.data ops proof_account
+                                                  let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                                                  match cf10 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                      let proof_length ← aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                      let proof_start ←
+                                                        aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                            ops
+                                                      let o ← lift (proof_start.checked_add proof_length)
+                                                      let r13 ←
+                                                        core.option.Option.ok_or o
+                                                            solana_program_error.ProgramError.InvalidAccountData
+                                                      let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                                                      match cf11 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                          if (val4.len != val5) = true then
+                                                            ok
+                                                              (core.result.Result.Err
+                                                                solana_program_error.ProgramError.InvalidAccountData)
+                                                          else do
+                                                            let s ←
+                                                              core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice U8) val4
+                                                                  { «end» := proof_start }
+                                                            let b1 ← ops.op0 core.cmp.PartialEqU8 s val3
+                                                            if b1 = true then
+                                                                ok
+                                                                  (core.result.Result.Err
+                                                                    solana_program_error.ProgramError.InvalidAccountData)
+                                                              else do
+                                                                let i2 ← lift (proof_start.wrapping_add 8#usize)
+                                                                let i3 ← val4.index_usize i2
+                                                                let i4 ← aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                if (i3 != i4) = true then
+                                                                    ok
+                                                                      (core.result.Result.Err
+                                                                        solana_program_error.ProgramError.InvalidAccountData)
+                                                                  else do
+                                                                    let p ← val2.semantic_public
+                                                                    let s1 ←
+                                                                      core.slice.index.Slice.index
+                                                                          (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                            U8)
+                                                                          val4 { start := proof_start, «end» := val5 }
+                                                                    let i5 ← data.index_usize 1#usize
+                                                                    let i6 ← lift (UScalar.cast UScalarTy.Usize i5)
+                                                                    let r14 ← first_decoded ops p val1 s1 i6
+                                                                    let cf12 ←
+                                                                      core.result.Result.Insts.CoreOpsTry.branch r14
+                                                                    match cf12 with
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                                        if (val6.len != val.len) = true then
+                                                                          ok
+                                                                            (core.result.Result.Err
+                                                                              solana_program_error.ProgramError.InvalidAccountData)
+                                                                        else ok (core.result.Result.Ok val6)
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (alloc.vec.Vec U8)
+                                                                          (core.convert.FromSame
+                                                                            solana_program_error.ProgramError)
+                                                                          residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame solana_program_error.ProgramError)
+                                                            residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame solana_program_error.ProgramError)
+                                                        residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame solana_program_error.ProgramError) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame solana_program_error.ProgramError) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                            residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                        residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame solana_program_error.ProgramError) residual
+      else do
+        let b1 ←
+          ops.op1 core.cmp.PartialEqU8 data
+              (Array.make 2#usize [3#u8, 11#u8] r1_pool_adapter.owned.stage1_owned._proof_6)
+        if b1 = true then
+            if (accounts.len != 3#usize) = true then
+              ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+            else do
+              let proof_account ← accounts.index_usize 0#usize
+              let public_account ← accounts.index_usize 1#usize
+              let checkpoint_account ← accounts.index_usize 2#usize
+              let r ←
+                r1_pool_adapter.owned.require_distinct_accounts ops
+                    (Array.make 3#usize [proof_account, public_account, checkpoint_account] ⋯)
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r1 ← r1_pool_adapter.owned.require_readonly_buffer proof_account
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let r2 ← r1_pool_adapter.owned.require_readonly_buffer public_account
+                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let r3 ←
+                            r1_pool_adapter.owned.require_verifier_checkpoint ops checkpoint_account program_id true
+                          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let r4 ← r1_pool_adapter.owned.OwnedAccount.data ops checkpoint_account
+                              let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                              match cf4 with
+                                | core.ops.control_flow.ControlFlow.Continue val => do
+                                  let r5 ← r1_pool_adapter.owned.require_zero val
+                                  let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                  match cf5 with
+                                    | core.ops.control_flow.ControlFlow.Continue a => do
+                                      let r6 ← r1_pool_adapter.owned.OwnedAccount.data ops public_account
+                                      let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                      match cf6 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let r7 ← ops.op47 val1
+                                          let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                          match cf7 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let r8 ← ops.op21 val2
+                                              let r9 ←
+                                                core.result.Result.map_err
+                                                    r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                                    r8 ()
+                                              let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                                              match cf8 with
+                                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                                  let pvpftcv ← val2.common
+                                                  let r10 ← ops.op24 pvpftcv.lane_transition.candidate_afterstate
+                                                  let r11 ←
+                                                    core.result.Result.map_err
+                                                        r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError
+                                                        r10 ()
+                                                  let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                                                  match cf9 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                      let r12 ←
+                                                        r1_pool_adapter.owned.OwnedAccount.data ops proof_account
+                                                      let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                                                      match cf10 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                          let proof_length ← aspis_r1_cost_probe.verifier.PROOF_BYTES
+                                                          let proof_start ←
+                                                            aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+                                                                ops
+                                                          let o ← lift (proof_start.checked_add proof_length)
+                                                          let r13 ←
+                                                            core.option.Option.ok_or o
+                                                                solana_program_error.ProgramError.InvalidAccountData
+                                                          let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                                                          match cf11 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                                              if (val4.len != val5) = true then
+                                                                ok
+                                                                  (core.result.Result.Err
+                                                                    solana_program_error.ProgramError.InvalidAccountData)
+                                                              else do
+                                                                let s ←
+                                                                  core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      val4 { «end» := proof_start }
+                                                                let b1 ← ops.op0 core.cmp.PartialEqU8 s val3
+                                                                if b1 = true then
+                                                                    ok
+                                                                      (core.result.Result.Err
+                                                                        solana_program_error.ProgramError.InvalidAccountData)
+                                                                  else do
+                                                                    let i2 ← lift (proof_start.wrapping_add 8#usize)
+                                                                    let i3 ← val4.index_usize i2
+                                                                    let i4 ←
+                                                                      aspis_r1_cost_probe.transport.Variant.S2.tag
+                                                                    if (i3 != i4) = true then
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            solana_program_error.ProgramError.InvalidAccountData)
+                                                                      else do
+                                                                        let p ← val2.semantic_public
+                                                                        let s1 ←
+                                                                          core.slice.index.Slice.index
+                                                                              (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                U8)
+                                                                              val4
+                                                                              { start := proof_start, «end» := val5 }
+                                                                        let i5 ← data.index_usize 1#usize
+                                                                        let i6 ← lift (UScalar.cast UScalarTy.Usize i5)
+                                                                        let r14 ← first_decoded ops p val1 s1 i6
+                                                                        let cf12 ←
+                                                                          core.result.Result.Insts.CoreOpsTry.branch r14
+                                                                        match cf12 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              val6 =>
+                                                                            if (val6.len != val.len) = true then
+                                                                              ok
+                                                                                (core.result.Result.Err
+                                                                                  solana_program_error.ProgramError.InvalidAccountData)
+                                                                            else ok (core.result.Result.Ok val6)
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              (alloc.vec.Vec U8)
+                                                                              (core.convert.FromSame
+                                                                                solana_program_error.ProgramError)
+                                                                              residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8)
+                                                                (core.convert.FromSame
+                                                                  solana_program_error.ProgramError)
+                                                                residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8)
+                                                            (core.convert.FromSame solana_program_error.ProgramError)
+                                                            residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8)
+                                                        (core.convert.FromSame solana_program_error.ProgramError)
+                                                        residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8)
+                                                    (core.convert.FromSame solana_program_error.ProgramError) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8)
+                                                (core.convert.FromSame solana_program_error.ProgramError) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                            residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                        residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+          else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+S2W_OuterErasure.lean:23:42: error: unexpected identifier; expected command
+S2W_OuterErasure.lean:30:78: error: unsolved goals
+ops : Ops
+program_id : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+slot : core.result.Result U64 solana_program_error.ProgramError
+⊢ (if (accounts.len != 7#usize) = true then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+    else do
+      let a ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize }
+      let a_1 ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice (core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()
+      let a ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            a (some a_1)
+      if a = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let a ← r1_pool_adapter.owned.validate_asq8 ops program_id accounts data slot
+          let a ← core.result.Result.Insts.CoreOpsTry.branch a
+          erase ops
+              (match a with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let oa ← liftM (accounts.index_usize 0#usize)
+                let r1 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops oa)
+                let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let oa1 ← liftM (accounts.index_usize 6#usize)
+                    let r2 ← liftM (r1_pool_adapter.owned.OwnedAccount.data ops oa1)
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let proof_start ←
+                          liftM (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
+                        let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                        let r3 ←
+                          liftM (core.option.Option.ok_or o1 solana_program_error.ProgramError.InvalidAccountData)
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 =>
+                            if (val1.len != val3) = true then
+                              pure (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                            else do
+                              let r4 ← perform (Call.op22 val.statement)
+                              let r5 ←
+                                liftM
+                                    (core.result.Result.map_err
+                                      r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                      r4 ())
+                              let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                              match cf4 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                  let s1 ← liftM (lift val4.to_slice)
+                                  let i3 ←
+                                    liftM
+                                        (aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                          ops)
+                                  if (s1.len != i3) = true then
+                                      pure
+                                        (core.result.Result.Err
+                                          solana_program_error.ProgramError.InvalidInstructionData)
+                                    else do
+                                      let s2 ← liftM (lift val4.to_slice)
+                                      let s3 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) val1
+                                              { start := proof_start, «end» := val3 })
+                                      let o2 ← liftM (observer ops)
+                                      let r6 ←
+                                        perform
+                                            (Call.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 val2 ()
+                                              o2)
+                                      let r7 ←
+                                        liftM
+                                            (core.result.Result.map_err
+                                              (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error
+                                                solana_program_error.ProgramError)
+                                              r6 ops.op44)
+                                      let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                      match cf5 with
+                                        | core.ops.control_flow.ControlFlow.Continue a =>
+                                          perform (Call.op53 val.statement)
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame solana_program_error.ProgramError) residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame solana_program_error.ProgramError) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual))) =
+    if (accounts.len != 7#usize) = true then
+      ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+    else do
+      let o ← core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize }
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice (core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            o (some s)
+      if b = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let r ← r1_pool_adapter.owned.validate_asq8 ops program_id accounts data slot
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let oa ← accounts.index_usize 0#usize
+              let r1 ← r1_pool_adapter.owned.OwnedAccount.data ops oa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let oa1 ← accounts.index_usize 6#usize
+                  let r2 ← r1_pool_adapter.owned.OwnedAccount.data ops oa1
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let proof_start ← aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops
+                      let o1 ← lift (proof_start.checked_add val.proof_length)
+                      let r3 ← core.option.Option.ok_or o1 solana_program_error.ProgramError.InvalidAccountData
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 =>
+                          if (val1.len != val3) = true then
+                            ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                          else do
+                            let r4 ← ops.op22 val.statement
+                            let r5 ←
+                              core.result.Result.map_err
+                                  r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                  r4 ()
+                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let s1 ← lift val4.to_slice
+                                let i3 ←
+                                  aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                      ops
+                                if (s1.len != i3) = true then
+                                    ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+                                  else do
+                                    let s2 ← lift val4.to_slice
+                                    let s3 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) val1
+                                          { start := proof_start, «end» := val3 }
+                                    let o2 ← observer ops
+                                    let r6 ← ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 val2 () o2
+                                    let r7 ←
+                                      core.result.Result.map_err
+                                          (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error
+                                            solana_program_error.ProgramError)
+                                          r6 ops.op44
+                                    let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                    match cf5 with
+                                      | core.ops.control_flow.ControlFlow.Continue a => ops.op53 val.statement
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame solana_program_error.ProgramError) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame solana_program_error.ProgramError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame solana_program_error.ProgramError) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame solana_program_error.ProgramError) residual
+S2W_OuterErasure.lean:32:41: warning: This simp argument is unused:
+  erase_perform
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, r1_pool_adapter.owned.stage2_owned, traceEffects,
+  ̵  ̵ ̵ ̵erase_bind,
+  ̲  ̲ ̲ ̲erase_liftM, erase_pure, e̵r̵a̵s̵e̵_̵p̵e̵r̵f̵o̵r̵m̵,̵ ̵invoke, erase_if]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_OuterErasure.lean:32:56: warning: This simp argument is unused:
+  invoke
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, r1_pool_adapter.owned.stage2_owned, traceEffects,
+  ̵  ̵ ̵ ̵erase_bind,
+  ̲  ̲ ̲ ̲erase_liftM, erase_pure, erase_perform, i̵n̵v̵o̵k̵e,̵ ̵e̵rase_if]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_OuterErasure.lean:33:42: error: unexpected identifier; expected command
+'AspisR1.S2W_OuterErasure.erase_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterErasure.erase_liftM' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterErasure.erase_if' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterErasure.stage1_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_OuterErasure.stage2_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

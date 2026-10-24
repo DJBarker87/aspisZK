@@ -1,0 +1,52 @@
+{"attempt": "lean-026", "exit_status": 1, "wall_seconds": 6.269145999001921, "peak_rss_kib": "4412176", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_GeometryGather.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_GeometryGather.lean:57:48: error: Application type mismatch: The argument
+  h
+has type
+  (match parent with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let p ← ops.op15 val
+      let i ← u / 4#usize
+      let i1 ← lift (Usize.wrapping_mul i 4#usize)
+      let r2 ← ops.op12 i1
+      let r3 ←
+        match r2 with
+          | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+          | core.result.Result.Err e => do
+            let e1 ←
+              verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                  { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                    op2 := fun {T 
+...
+et r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+⊢ ∃ r u parent left right fibre fleft fright point square doubled one,
+    iterOut = iter1 ∧
+      lift (UScalar.cast UScalarTy.Usize query) = ok u ∧
+        ops.op12 u = ok (core.result.Result.Ok fibre) ∧
+          ops.op15 fibre = ok point ∧
+            u / 4#usize = ok parent ∧
+              left = parent.wrapping_mul 4#usize ∧
+                ops.op12 left = ok (core.result.Result.Ok fleft) ∧
+                  ops.op14 fleft = ok r.lineX ∧
+                    right = left.wrapping_add 3#usize ∧
+                      ops.op12 right = ok (core.result.Result.Ok fright) ∧
+                        ops.op14 fright = ok r.lineY ∧
+                          r.x = point.x ∧
+                            r.y = point.y ∧
+                              ops.op9 r.lineX r.lineX = ok square ∧
+                                ops.op10 square = ok doubled ∧
+                                  ops.op7 = ok one ∧
+                                    ops.op8 doubled one = ok r.lineZ ∧
+                                      (∀ x ∈ r.words, x ≠ 0#u32) ∧
+                                        ↑flatOut = ↑flat ++ r.words ∧ ↑zsOut = ↑zs ++ [r.lineZ]
+'AspisR1.Port4C_GeometryGather.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf15d71cfc8b24ee686d8edb1e819414d.scope; invocation ID: fdb785c050dc4b8a905748b03b74ded1

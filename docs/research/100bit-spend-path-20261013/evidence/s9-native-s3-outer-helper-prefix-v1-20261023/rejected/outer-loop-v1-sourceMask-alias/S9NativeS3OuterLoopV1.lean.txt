@@ -1,0 +1,116 @@
+import S9NativeS3OuterBodyV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+namespace AspisR1S9NativeS3OuterLoopV1
+open AspisR1S9ProductionPairCutV1
+open AspisR1S9NativeS3WeightBodyV1 (W R Low Can decode)
+open AspisR1S9NativeS3OuterBodyV1 (Coefficients)
+open AspisR1S9NativeS3WeightLoopV1 (sourceMask actualSelectedPrefix)
+abbrev Wide := AspisWideTower.WideExact
+
+def groupTerm (low : Low) (coefficients : Coefficients) (n : Nat) : Wide :=
+  ((coefficients.val.map decode).drop n).headD 0 *
+    actualSelectedPrefix ((weights.S2_INACTIVE_MASKS.val[n]?).getD 0#u16).val
+      16 (low.val.map decode)
+
+def outerPrefix (low : Low) (coefficients : Coefficients) : Nat → Wide
+  | 0 => 0
+  | n+1 => outerPrefix low coefficients n+groupTerm low coefficients n
+
+theorem outer_prefix_step (low : Low) (coefficients : Coefficients) (n : Nat) :
+    outerPrefix low coefficients (n+1)=outerPrefix low coefficients n+groupTerm low coefficients n := rfl
+
+private theorem bind_success {A B : Type} (m : Result A) (next : A → Result B) (out : B)
+    (h : (do let x ← m;next x)=.ok out) : ∃ x,m=.ok x ∧ next x=.ok out := by
+  cases m with
+  | fail e => simp only [bind_tc_fail] at h;cases h
+  | div => simp only [bind_tc_div] at h;cases h
+  | ok x => exact ⟨x,rfl,h⟩
+
+private theorem done_next_none (low : Low) (coefficients : Coefficients) (iter : R) (pair out : W)
+    (h : weights.s2_grouped_inactive_pair_loop1.body low coefficients iter pair=.ok (.done out)) :
+    ∃ iter1,core.iter.range.IteratorRange.next core.iter.range.StepUsize iter=.ok (none,iter1) := by
+  unfold weights.s2_grouped_inactive_pair_loop1.body at h
+  obtain ⟨next,hn,h⟩ := bind_success _ _ _ h
+  rcases next with ⟨opt,iterNext⟩
+  cases opt with
+  | none => exact ⟨iterNext,hn⟩
+  | some group =>
+    obtain ⟨weight,hweight,h⟩ := bind_success _ _ _ h
+    obtain ⟨coefficient,hcoeff,h⟩ := bind_success _ _ _ h
+    obtain ⟨product,hmul,h⟩ := bind_success _ _ _ h
+    obtain ⟨total,hadd,h⟩ := bind_success _ _ _ h
+    cases h
+
+/-- SAME accepted actual outer12 traversal computes the concrete group
+product sum on SAME coefficient and low arrays, with no child run/value or
+product/add meaning premise. Canonical incoming arrays/carry remain inputs. -/
+theorem native_outer_loop_prefix (low : Low) (coefficients : Coefficients) (pair out : W)
+    (hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low)
+    (hcoeff : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical coefficients) (hpair : Can pair)
+    (h : weights.s2_grouped_inactive_pair_loop1 {start:=0#usize,«end»:=12#usize}
+      low coefficients pair=.ok out) :
+    Can out ∧ decode out=decode pair+outerPrefix low coefficients 12 := by
+  let step := fun s : R × W => weights.s2_grouped_inactive_pair_loop1.body low coefficients s.1 s.2
+  let inv := fun s : R × W => s.1.end.val=12 ∧ s.1.start.val≤12 ∧ Can s.2 ∧
+    decode s.2=decode pair+outerPrefix low coefficients s.1.start.val
+  let post := fun result : W => Can result ∧ decode result=decode pair+outerPrefix low coefficients 12
+  let measure := fun s : R × W => s.1.end.val-s.1.start.val
+  have hd : ∀ s result,inv s → step s=.ok (.done result) → post result := by
+    rintro ⟨r,c⟩ result ⟨he,hs,hcan,hmeaning⟩ hb
+    change r.end.val=12 at he
+    change r.start.val≤12 at hs
+    change decode c=decode pair+outerPrefix low coefficients r.start.val at hmeaning
+    have hout := AspisR1S9S2InactiveCanonicalV1.outer_body_done_same low coefficients r c result hb
+    obtain ⟨r1,hn⟩ := done_next_none low coefficients r c result hb
+    have hstop := AspisR1S9StatementSourceLoopFactsV1.next_none_stop r r1 hn
+    have hstart : r.start.val=12 := by omega
+    subst result
+    exact ⟨hcan,by simpa only [hstart] using hmeaning⟩
+  have hc : ∀ s s',inv s → step s=.ok (.cont s') → inv s' := by
+    rintro ⟨r,c⟩ ⟨r1,c1⟩ ⟨he,hs,hcan,hmeaning⟩ hb
+    change r.end.val=12 at he
+    change r.start.val≤12 at hs
+    change decode c=decode pair+outerPrefix low coefficients r.start.val at hmeaning
+    obtain ⟨group,coefficient,hn,hread,hgroup,cout,hvalue⟩ :=
+      AspisR1S9NativeS3OuterBodyV1.native_outer_cont_decoded
+        low coefficients r r1 c c1 (by omega) hlow hcoeff hcan hb
+    obtain ⟨hj,hlt,hadvance,hend⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds r r1 group hn
+    have hv : group.val=r.start.val := congrArg (fun x : Usize => x.val) hj
+    have he1 : r1.end.val=12 := by rw [hend];exact he
+    have hs1 : r1.start.val≤12 := by omega
+    have hhead := AspisR1S9ArrayReadDropHeadV1.array_read_map_drop_head decode 0 coefficients group coefficient hread
+    have hterm : decode coefficient*actualSelectedPrefix (sourceMask group).val 16 (low.val.map decode)=
+        groupTerm low coefficients group.val := by
+      change decode coefficient*actualSelectedPrefix _ _ _=
+        ((coefficients.val.map decode).drop group.val).headD 0*actualSelectedPrefix _ _ _
+      rw [hhead]
+    have hnext : decode c1=decode pair+outerPrefix low coefficients r1.start.val := by
+      rw [hadvance,outer_prefix_step]
+      calc
+        decode c1=decode c+groupTerm low coefficients group.val := by rw [←hterm];exact hvalue
+        _ = (decode pair+outerPrefix low coefficients r.start.val)+groupTerm low coefficients r.start.val := by
+          rw [hmeaning,hv]
+        _ = decode pair+(outerPrefix low coefficients r.start.val+groupTerm low coefficients r.start.val) := add_assoc _ _ _
+    change r1.end.val=12 ∧ r1.start.val≤12 ∧ Can c1 ∧
+      decode c1=decode pair+outerPrefix low coefficients r1.start.val
+    exact ⟨he1,hs1,cout,hnext⟩
+  have hm : ∀ s s',step s=.ok (.cont s') → measure s'<measure s := by
+    rintro ⟨r,c⟩ ⟨r1,c1⟩ hb
+    obtain ⟨group,weight,coefficient,product,hn,hi,hr,hmul,hadd⟩ :=
+      AspisR1S9S2InactiveCanonicalV1.outer_body_cont_source low coefficients r r1 c c1 hb
+    obtain ⟨hj,hlt,hadvance,hend⟩ := AspisR1S9ActualDotRangeBoundsV1.range_next_index_bounds r r1 group hn
+    change r1.end.val-r1.start.val < r.end.val-r.start.val
+    rw [hend,hadvance]
+    have hv : group.val=r.start.val := congrArg (fun x : Usize => x.val) hj
+    omega
+  have hi : inv ({start:=0#usize,«end»:=12#usize},pair) := by
+    refine ⟨rfl,by change 0≤12;decide,hpair,?_⟩
+    change decode pair=decode pair+0
+    exact (add_zero _).symm
+  have hr : Aeneas.Std.loop step ({start:=0#usize,«end»:=12#usize},pair)=.ok out := h
+  exact AspisR1S9LoopInvariantPropertyV1.loop_invariant_property step measure inv post hd hc hm _ out hi hr
+
+#print axioms outer_prefix_step
+#print axioms native_outer_loop_prefix
+end AspisR1S9NativeS3OuterLoopV1

@@ -1,0 +1,3 @@
+Proved: the same successful actual native Wide addition or multiplication on canonical inputs yields a canonical output and the exact decoded field sum or product. Reuses existing actual-to-Current full Result transports and CurrentWide field theorems. Canonical input guards remain explicit; no full pairing, runtime or security closure is claimed.
+
+Focused Lean check: 20.43 seconds; peak aggregate RSS 3190816768 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

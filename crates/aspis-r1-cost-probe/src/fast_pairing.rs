@@ -8,8 +8,8 @@ mod canonical {
     #[derive(Clone,Copy,Debug,PartialEq,Eq,Default)]
     pub struct Q([u32;4]);
     #[inline(always)] pub(crate) fn reduce(mut x:u64)->u32 {
-        x=(x & u64::from(P))+(x>>31);
-        x=(x & u64::from(P))+(x>>31);
+        x=(x & u64::from(P))+(x>>31u32);
+        x=(x & u64::from(P))+(x>>31u32);
         if x>=u64::from(P) {(x-u64::from(P)) as u32}else{x as u32}
     }
     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
@@ -17,7 +17,7 @@ mod canonical {
     }
     #[inline(always)] fn pair(a:u32,b:u32)->u64 {u64::from(a)|(u64::from(b)<<32)}
     #[inline(always)] fn reduce_pair(s:u64)->u64 {
-        (s.wrapping_add(((s.wrapping_add(ONES))>>31)&ONES))&MASK
+        (s.wrapping_add(((s.wrapping_add(ONES))>>31u32)&ONES))&MASK
     }
     impl Q {
         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
@@ -45,21 +45,27 @@ mod canonical {
             Self([a as u32,(a>>32) as u32,b as u32,(b>>32) as u32])
         }
         #[inline(always)] pub fn half(self)->Self {
-            let h=|x:u32|(x>>1)|((x&1)<<30);Self(self.0.map(h))
+            let h=|x:u32|(x>>1)|((x&1)<<30);
+            let mut out=[0u32;4]; for i in 0..4 {out[i]=h(self.0[i]);} Self(out)
         }
         pub fn half_pow(self,n:u8)->Option<Self>{
             if n>30{return None}if n==0{return Some(self)}
-            Some(Self(self.0.map(|x|(x>>n)|((x&((1u32<<n)-1))<<(31-n)))))
+            let mut out=[0u32;4];
+            for i in 0..4 {let x=self.0[i];out[i]=(x>>n)|((x&((1u32<<n)-1))<<(31-n));}
+            Some(Self(out))
         }
         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
-            if rhs>=P{return None}Some(Self(self.0.map(|x|reduce(u64::from(x)*u64::from(rhs)))))
+            if rhs>=P{return None}
+            let mut out=[0u32;4]; for i in 0..4 {out[i]=reduce(u64::from(self.0[i])*u64::from(rhs));}
+            Some(Self(out))
         }
         /// Benchmark candidate, not an assertion of superiority over staged R19.
         /// All intermediates are nonnegative and strictly below 2^64.
         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
-            let [a,b,c,d]=self.0.map(u64::from);let [e,f,g,h]=rhs.0.map(u64::from);
+            let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
+            let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
             const PP:u64=(P as u64)*(P as u64);
-            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31);
+            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31u32);
             let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));
             let v=partial((c*h).wrapping_add(d*g));
             Self([reduce((a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v)),
@@ -74,9 +80,10 @@ mod canonical {
     impl Q {
         #[inline(always)]
         fn raw(self,rhs:Self)->[u64;4] {
-            let [a,b,c,d]=self.0.map(u64::from);let [e,f,g,h]=rhs.0.map(u64::from);
+            let [a,b,c,d]=[u64::from(self.0[0]),u64::from(self.0[1]),u64::from(self.0[2]),u64::from(self.0[3])];
+            let [e,f,g,h]=[u64::from(rhs.0[0]),u64::from(rhs.0[1]),u64::from(rhs.0[2]),u64::from(rhs.0[3])];
             const PP:u64=(P as u64)*(P as u64);
-            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31);
+            let partial=|x:u64|(x&u64::from(P)).wrapping_add(x>>31u32);
             let u=partial((c*g).wrapping_add(PP).wrapping_sub(d*h));
             let v=partial((c*h).wrapping_add(d*g));
             [(a*e).wrapping_add(PP).wrapping_sub(b*f).wrapping_add(2*u).wrapping_add(3*u64::from(P)).wrapping_sub(v),
@@ -89,10 +96,10 @@ mod canonical {
             assert!(N<=4);let mut sums=[0u64;4];
             for i in 0..N {
                 let raw=left[i].raw(right[i]);
-                for j in 0..4 {sums[j]=sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));}
+                for j in 0..4 {sums[j]=sums[j].wrapping_add((raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));}
             }
             // Retained R59 bounds: each folded raw value <2^34, N<=4.
-            Self(sums.map(reduce))
+            Self([reduce(sums[0]),reduce(sums[1]),reduce(sums[2]),reduce(sums[3])])
         }
         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
@@ -110,10 +117,10 @@ mod canonical {
             let raw=a.raw(b);
             for j in 0..4 {
                 self.sums[j]=self.sums[j].wrapping_add(
-                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31));
+                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));
             }
         }
-        pub fn finish(self)->Q {Q(self.sums.map(reduce))}
+        pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
     }
 }
 
@@ -129,7 +136,7 @@ fn limbs_of(k: QM31) -> [u32; 4] {
 
 #[inline(always)]
 fn checked_q(k: QM31) -> Result<canonical::Q, ()> {
-    canonical::Q::from_limbs(limbs_of(k)).ok_or(())
+    match canonical::Q::from_limbs(limbs_of(k)) { Some(q) => Ok(q), None => Err(()) }
 }
 
 #[inline(always)]

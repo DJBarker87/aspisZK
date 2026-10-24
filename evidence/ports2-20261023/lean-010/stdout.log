@@ -1,0 +1,135 @@
+Port2_QueryLoop.lean:58:13: error: unsolved goals
+case succ.fail
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+end1 : Usize
+advance :
+  ∀ (a a1 : verifier.Accumulator) (b b1 : verifier.BatchedWeights),
+    call proof p a g obs geometry b = ok (core.result.Result.Ok (a1, b1)) → ↑a1.next = ↑a.next + 1
+out : Acc
+bout : BW
+n : ℕ
+ih :
+  ∀ (a : Acc) (b : BW),
+    ↑a.next ≤ ↑end1 →
+      verifier.candidate.query_loop_loop call (core.result.Result.Ok (a, b)) proof p g obs geometry end1 =
+          ok (core.result.Result.Ok (out, bout)) →
+        ↑end1 - ↑a.next = n → Calls (fun a b => call proof p a g obs geometry b) (↑end1) a b out bout n
+a : Acc
+b : BW
+bound : ↑a.next ≤ ↑end1
+fuel : ↑end1 - ↑a.next = n + 1
+active : ↑a.next < ↑end1
+inactive : ¬↑end1 ≤ ↑a.next
+e : Error
+hc : call proof p a g obs geometry b = fail e
+success :
+  (match if ↑end1 ≤ ↑a.next then ok (done (core.result.Result.Ok (a, b))) else fail e with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if ↑end1 ≤ ↑a.next then ok (done state1)
+              else do
+                let state1 ← call proof p a g obs geometry pending
+                ok (cont state1)
+            | core.result.Result.Err a => ok (done state1))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, bout))
+⊢ Calls (fun a b => call proof p a g obs geometry b) (↑end1) a b out bout (n + 1)
+Port2_QueryLoop.lean:59:10: error: unsolved goals
+case succ.div
+call : QueryCall
+proof : Slice U8
+p : verifier.Prepared
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+obs : Option (verifier.Phase → Result Unit)
+geometry : verifier.QueryGeometry
+end1 : Usize
+advance :
+  ∀ (a a1 : verifier.Accumulator) (b b1 : verifier.BatchedWeights),
+    call proof p a g obs geometry b = ok (core.result.Result.Ok (a1, b1)) → ↑a1.next = ↑a.next + 1
+out : Acc
+bout : BW
+n : ℕ
+ih :
+  ∀ (a : Acc) (b : BW),
+    ↑a.next ≤ ↑end1 →
+      verifier.candidate.query_loop_loop call (core.result.Result.Ok (a, b)) proof p g obs geometry end1 =
+          ok (core.result.Result.Ok (out, bout)) →
+        ↑end1 - ↑a.next = n → Calls (fun a b => call proof p a g obs geometry b) (↑end1) a b out bout n
+a : Acc
+b : BW
+bound : ↑a.next ≤ ↑end1
+fuel : ↑end1 - ↑a.next = n + 1
+active : ↑a.next < ↑end1
+inactive : ¬↑end1 ≤ ↑a.next
+hc : call proof p a g obs geometry b = div
+success :
+  (match if ↑end1 ≤ ↑a.next then ok (done (core.result.Result.Ok (a, b))) else div with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if ↑end1 ≤ ↑a.next then ok (done state1)
+              else do
+                let state1 ← call proof p a g obs geometry pending
+                ok (cont state1)
+            | core.result.Result.Err a => ok (done state1))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, bout))
+⊢ Calls (fun a b => call proof p a g obs geometry b) (↑end1) a b out bout (n + 1)
+Port2_QueryLoop.lean:62:8: error: Type mismatch: After simplification, term
+  success
+ has type
+  (match if ↑end1 ≤ ↑a.next then ok (done (core.result.Result.Ok (a, b))) else ok (cont r) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun state1 =>
+            match state1 with
+            | core.result.Result.Ok p1 =>
+              let (a, pending) := p1
+              if ↑end1 ≤ ↑a.next then ok (done state1)
+              else do
+                let state1 ← call proof p a g obs geometry pending
+                ok (cont state1)
+            | core.result.Result.Err a => ok (done state1))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (out, bout))
+but is expected to have type
+  loop (fun state1 => verifier.candidate.query_loop_loop.body call proof p g obs geometry end1 state1) r =
+    ok (core.result.Result.Ok (out, bout))
+Port2_QueryLoop.lean:56:55: warning: This simp argument is unused:
+  if_neg inactive
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.candidate.query_loop_loop.body,̵i̵f̵_̵n̵e̵g̵ ̵i̵n̵a̵c̵t̵i̵v̵e̵] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port2_QueryLoop.error_stops' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.source_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.query_body_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port2_QueryLoop.returned_next' depends on axioms: [propext, Classical.choice, Quot.sound]

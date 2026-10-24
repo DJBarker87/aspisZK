@@ -1,0 +1,11 @@
+# Same native coefficient execution simulates the existing S3 source helper
+
+The strict-reader leaf derives SAME old S3 decodeField success, canonical output and exact decoded value from SAME accepted native field call and its fitting actual byte window. It uses the existing fullResult native-to-S5 checked reader, inverts SAME finishField result and proves coordinate identities (zero axioms). No decoder success, input Can, old read or desired value map is assumed.
+
+The arithmetic leaf reuses existing canonical-input fullResult current Wide add/mul maps to derive SAME old actualOperations successes with exact mapped outputs. No field algebra is reproved. The body theorem derives native index/field/add/update witnesses from SAME source continuation, derives native fieldCan through the proved strict-reader coordinate map without an Allocation premise, formally identifies the64 source group literals, and reuses existing generic mapArray index/update proofs to obtain SAME old continuation and mapped array.
+
+The whole64-loop theorem uses the existing generic loop invariant property. It preserves the equality of original old run to the remaining old run, canonical native state and actual range bounds. SAME source termination returns exactly the mapped native output. It does not assume old loop success, hfields, input coefficient meaning, or target output semantics.
+
+Retained whole-loop inputs are the actual incoming canonical array, end64/start<=64 and at least2048 input bytes; the real source zero seed discharges the array guard in the next semantic-prefix packet. The exact source caller supplies the span. Existing old readback/prefix algebra is next; no full inactive/grouped-pair, relation contribution, runtime/artifact, stored-carrier experiment or100-bit soundness closure is claimed here. Accepted source-to-helper simulation and protocol mathematical semantics remain separate.
+
+These are focused checks against pinned warm owner selections, not a coherent release rebuild. Selected current native owners are preserved; historical backup owner differences are explicitly recorded. The final dependency replay/source/runtime/artifact bindings remain open. All accepted targets have standard axioms, zero swap and no resource overrides. No compiled artifacts are included.

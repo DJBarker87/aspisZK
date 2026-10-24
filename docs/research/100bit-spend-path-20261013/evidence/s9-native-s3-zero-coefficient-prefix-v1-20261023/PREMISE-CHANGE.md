@@ -1,0 +1,3 @@
+Before: general source-loop simulation retained incoming arrayCan, and the old prefix theorem required all64 per-index read/value witnesses(hfields). Neither could be assumed about an adversarial accepted input.
+
+After: real source zero initialization supplies seedCan; SAME native event maps to SAME old run; existing success readback derives all64 strict reads internally. Existing prefix semantics then applies to the SAME output, without independent initialCan/hfields/old event/meaning premises. The decoded input function is fixed by actual same-byte reader outputs and is not an unconstrained relation witness. Mathematical choice is explicit; no extractor effectiveness/cost conclusion is added.

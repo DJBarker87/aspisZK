@@ -1,0 +1,85 @@
+import S3ActualLoop0Outer12PrefixRetentionV1
+
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+
+namespace AspisR1GroupedPairActualFieldOpsV3.ActualGroupedPairPrefixFormula
+
+open AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete
+open AspisR1GroupedPairActualFieldOpsV3.ActualLoop0Outer12PrefixRetention
+open AspisR1GroupedPairActualFieldOpsV3.ActualLoop1OuterPrefixPublic
+open AspisR1GroupedPairActualFieldOpsV3.ActualLoop1
+open AspisR1GroupedPairActualFieldOpsV3.SuccessPrefixComposition
+
+abbrev Wide := AspisWideTower.WideExact
+
+def parserGroupContribution (low : Array field.WideExact 16#usize)
+    (input : Nat → Wide) (n : Nat) : Wide :=
+  if hn : n < 12 then
+    PrefixMeaning input (fun _ => 0) 64 ⟨n, hn⟩ *
+      actualSelectedPrefix
+        (weights.S2_INACTIVE_MASKS.val[n]'(by
+          have hp := weights.S2_INACTIVE_MASKS.property
+          change weights.S2_INACTIVE_MASKS.val.length = 12 at hp
+          omega)).val 16 (low.val.map decode)
+  else 0
+
+def parserGroupedPrefix (low : Array field.WideExact 16#usize)
+    (input : Nat → Wide) : Nat → Wide
+  | 0 => 0
+  | n + 1 => parserGroupedPrefix low input n + parserGroupContribution low input n
+
+/-- The actual outer recurrence is exactly the grouped accumulation whose
+coefficient at each mask group is the same helper call's parser-backed
+loop-0 prefix. This is the source-level grouped target before applying the
+separate inactive-row classification theorem. -/
+theorem actual_outer_prefix_eq_parser_grouped_prefix
+    (low : Array field.WideExact 16#usize)
+    (coefficients : Array field.WideExact 12#usize)
+    (input : Nat → Wide)
+    (hcoeff : ∀ g : Fin 12, decode (coefficients.val[g.val]'(by
+      have hp := coefficients.property
+      change coefficients.val.length = 12 at hp
+      omega)) = PrefixMeaning input (fun _ => 0) 64 g) :
+    actualOuterPrefix low coefficients 12 = parserGroupedPrefix low input 12 := by
+  have hrec : ∀ n : Nat, n ≤ 12 →
+      actualOuterPrefix low coefficients n = parserGroupedPrefix low input n := by
+    intro n
+    induction n with
+    | zero => intro _; rfl
+    | succ n ih =>
+        intro hn
+        have hnlt : n < 12 := by omega
+        have hcell : decode (coefficients.val[n]'(by
+            have hp := coefficients.property
+            change coefficients.val.length = 12 at hp
+            omega)) = PrefixMeaning input (fun _ => 0) 64 ⟨n, hnlt⟩ :=
+          hcoeff ⟨n, hnlt⟩
+        rw [actualOuterPrefix, parserGroupedPrefix, ih (by omega)]
+        simp [actualGroupTerm, parserGroupContribution, hnlt, hcell]
+  exact hrec 12 le_rfl
+
+/-- A successful actual helper execution therefore returns the parser-derived
+grouped prefix value, while preserving the same decoded coefficient prefix. -/
+theorem actual_grouped_success_has_parser_grouped_value
+    (bytes : Slice Std.U8) (low : Array field.WideExact 16#usize)
+    (out : field.WideExact)
+    (hlow : CanonicalLow low)
+    (h : weights.s2_grouped_inactive_pair actualOperations bytes low = .ok out) :
+    ∃ coefficients,
+      weights.s2_grouped_inactive_pair_loop0 actualOperations
+        { start := 0#usize, «end» := 64#usize } bytes
+        (Array.repeat 12#usize field.WideExact.ZERO) = .ok coefficients ∧
+      DecodedMeaning coefficients
+        (PrefixMeaning (successfulInput bytes low out h) (fun _ => 0) 64) ∧
+      decode out = parserGroupedPrefix low (successfulInput bytes low out h) 12 := by
+  obtain ⟨coefficients, hloop0, hprefix, hcanonical, hloop1, houtCan, hout⟩ :=
+    actual_grouped_success_supplies_prefix_and_outer_meaning bytes low out hlow h
+  have hformula := actual_outer_prefix_eq_parser_grouped_prefix low coefficients
+    (successfulInput bytes low out h) hprefix
+  exact ⟨coefficients, hloop0, hprefix, by rw [hout, hformula]⟩
+
+#print axioms actual_outer_prefix_eq_parser_grouped_prefix
+#print axioms actual_grouped_success_has_parser_grouped_value
+
+end AspisR1GroupedPairActualFieldOpsV3.ActualGroupedPairPrefixFormula

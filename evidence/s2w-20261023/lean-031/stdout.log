@@ -1,0 +1,32 @@
+S2W_Observation.lean:89:39: error: unsolved goals
+ops : Ops
+program_id : solana_pubkey.Pubkey
+accounts1 : Slice Account
+data1 : Slice U8
+accounts2 : Slice Account
+data2 : Slice U8
+slot : core.result.Result U64 PE
+checkpoint : alloc.vec.Vec U8
+accepted1 : r1_pool_adapter.owned.stage1_owned ops program_id accounts1 data1 = ok (core.result.Result.Ok checkpoint)
+accepted2 : r1_pool_adapter.owned.stage2_owned ops program_id accounts2 data2 slot = ok (core.result.Result.Ok ())
+firstLog : Log
+first :
+  run ops (S2W_Outer.stage1_owned ops S2W_Outer.traceEffects program_id accounts1 data1) [] =
+    ok (core.result.Result.Ok checkpoint, firstLog)
+finalLog : Log
+second :
+  run ops (S2W_Outer.stage2_owned ops S2W_Outer.traceEffects program_id accounts2 data2 slot) firstLog =
+    ok (core.result.Result.Ok (), finalLog)
+suffix : Log
+extension : finalLog = firstLog ++ suffix
+⊢ run ops (pure (core.result.Result.Ok checkpoint)) finalLog = ok (core.result.Result.Ok checkpoint, finalLog)
+S2W_Observation.lean:100:65: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [two, ̲S2W_TraceFacts.run_bind, ̲first, ̲second, ̲thenResult,̵r̵u̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W_Observation.accepted_segments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_Observation.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_Observation.accepted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]

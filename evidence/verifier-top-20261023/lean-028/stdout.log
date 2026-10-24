@@ -1,0 +1,110 @@
+'AspisR1.VTop_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.VTop_Accepted.accepted_run : ∀ {W A E : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction (VTop_Entry.install adapter stage) native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (reserved : Bool),
+                                VTop_Checkpoint.CheckpointSourceJoin stage
+                                    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                      (VTop_Entry.install adapter stage))
+                                    () reserved →
+                                  CheckpointBytes5Inputs.Oracle
+                                      (VTop_Checkpoint.digest
+                                        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                          (VTop_Entry.install adapter stage)))
+                                      () H →
+                                    ∀ (port : ChildConeJoin E (VTop_Entry.install adapter stage)),
+                                      FirstMarks port →
+                                        SecondMarks port →
+                                          ∃ f s outer pre middle fs ss,
+                                            SourceCuts (VTop_Entry.install adapter stage) e1.first
+                                                (e2.second secondSizes) saved f s ∧
+                                              S2W_ExpandedTrace.runExpanded (VTop_Entry.install adapter stage)
+                                                    (children port)
+                                                    (S2W_Observation.two (VTop_Entry.install adapter stage) program
+                                                      e1.first data1 (e2.second secondSizes) data2 slot)
+                                                    [] =
+                                                  ok
+                                                    (core.result.Result.Ok saved,
+                                                      S2W_ExpandedTrace.full (children port) outer) ∧
+                                                S2W_D189Interpretation.runOwned (VTop_Entry.install adapter stage)
+                                                      (S2W_Observation.two (VTop_Entry.install adapter stage) program
+                                                        e1.first data1 (e2.second secondSizes) data2 slot)
+                                                      [] e1.heap =
+                                                    ok (core.result.Result.Ok saved, outer, e1.heap) ∧
+                                                  projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                                    post2 = e2.heap ∧
+                                                      before e1 e2 Site.tx1 =
+                                                          S2W_D189Interpretation.nativeObserve L encode e1.metadata 3 w1
+                                                            e1.heap.ambient ∧
+                                                        before e1 e2 Site.tx2 =
+                                                            S2W_D189Interpretation.nativeObserve L encode e2.metadata 7
+                                                              w2 e2.heap.ambient ∧
+                                                          ∀ (nodes : ℕ → ℕ → Slice U8) (y1 : Slice U8),
+                                                            VTop_Checkpoint.WriterProvenance stage
+                                                                (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                                                  (VTop_Entry.install adapter stage))
+                                                                () f.proof f.pub →
+                                                              ∀
+                                                                (a :
+                                                                  S2X.CheckpointVersionBinding
+                                                                    (payloadBytes encode
+                                                                      (post1.payload (e1.heap.accounts 2).1) 1768)
+                                                                    (bytesOf ↑s.checkpoint)),
+                                                                ⋯ :=
+fun {W A E} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapter stage native1 native2 hashv extraction
+    sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
+    reserved checkpointSource checkpointOracle port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    ChildJoin_Accepted.accepted_run L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+      (VTop_Entry.install adapter stage) native1 native2 hashv extraction sha256 H p1 syscall program data1 data2 slot
+      state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨expanded, right✝¹⟩ := right✝
+  let ⟨owned, right✝²⟩ := right✝¹
+  let ⟨layout, right✝³⟩ := right✝²
+  let ⟨unchanged, right✝⁴⟩ := right✝³
+  let ⟨firstBefore, right✝⁵⟩ := right✝⁴
+  let ⟨secondBefore, continuation⟩ := right✝⁵
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨expanded,
+                    ⟨owned,
+                      ⟨layout,
+                        ⟨unchanged,
+                          ⟨firstBefore,
+                            ⟨secondBefore, fun nodes y1 provenance history p2prime entry multiproof scan =>
+                              continuation nodes y1
+                                (VTop_Checkpoint.writer_join adapter stage H f.semantic f.pub f.proof f.split reserved
+                                  checkpointSource checkpointOracle provenance)
+                                (VTop_Checkpoint.reader_join adapter stage H s.pub s.proof s.checkpoint reserved
+                                  checkpointSource checkpointOracle)
+                                history p2prime entry multiproof scan⟩⟩⟩⟩⟩⟩⟩))))))

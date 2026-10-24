@@ -1,0 +1,58 @@
+{"attempt": "lean-001", "exit_status": 1, "wall_seconds": 3.403134977997979, "peak_rss_kib": "4402024", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q1_GeometryTerminal.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port5Q1_GeometryTerminal.lean:40:23: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  1 ≤ f ≤ 22
+  f ≥ 0
+  e ≥ 0
+  e - g ≤ -1
+where
+ e := ↑(↑iter.slice).length
+ f := ↑(↑zs).length
+ g := ↑↑iter.slice.len
+Port5Q1_GeometryTerminal.lean:60:58: error: unsolved goals
+case isTrue
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+start : Usize
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+endi
+...
+rray aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝ :
+  (do
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) mapped
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted :
+  ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs })) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+resizeSize : (↑resized).length = (↑flat).length
+hpref1 : Port4C_GeometryInverse.prefixCall (install ops) flat.deref = ok (prefixes, product)
+⊢ (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix ← (install ops).op11 product
+    verifier.QueryGeometry.for_range_loop0_loop0 (install ops) (Port4C_Reverse.reverse flat.len) flat prefixes suffix
+        resized) =
+    ok inverse
+Port5Q1_GeometryTerminal.lean:78:82: error: Type mismatch: After simplification, term
+  Eq.trans len size
+ has type
+  @Eq ℕ (↑inverse).length (5 * (↑zs).length)
+but is expected to have type
+  @Eq ℕ (↑inverse).length (5 * ↑(Usize.ofNatCore (↑zs).length ⋯))
+'AspisR1.Port5Q1_GeometryTerminal.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-reb6a3d19ddf042e4a36795e7087314b8.scope; invocation ID: 1c0062bb7b634c2e87956df02805c8f4

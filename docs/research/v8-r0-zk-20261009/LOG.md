@@ -8981,3 +8981,108 @@ into owned, Aeneas-extractable code, with heavy arithmetic as small verified lea
 Base it on the v2 constant-time candidate, which is the intended host prover. Gates: design
 note first; byte-identical proofs on fixtures for identical coins; at least 1,000 differential runs;
 median prover time under 15 s on the build host (D168/D169); the verifier untouched. Host-only.
+
+## D188 (lead, 2026-10-23 16:40): what "native" means for extracted code (S2 closure ruling)
+
+S2-W keeps listing a residual "native-to-owned association" for code that Aeneas has
+already extracted. Lead ruling: the project's source semantics are the Charon/Aeneas
+extractions, as for every soundness cone (S1–S10, checkpoint, multiproof). Correspondence
+between Rust source and its extraction is the existing extraction trust boundary (named
+`AeneasExtraction`, beside rustc/P7). Correspondence between source and the deployed binary
+is S10's ELF certificates plus P7. So for the extracted owned adapter, "native = extracted"
+is not a new S2 obligation, and no per-call re-proof is needed. What S2 must still prove:
+(i) the non-extracted wrappers, by their Kani contracts, which pass; (ii) composition of
+the traced outer execution. Child-internal site events (verifier stage internals, the nine
+internal sites) belong to the child cones and are carried as the named per-child cone-join
+hypotheses. Multiproof's separate P6 total-oracle premise stays with the multiproof cone. With
+this, the consolidated `S2CallerFacts` theorem should be statable. `AeneasExtraction` is added
+to the headline trust list explicitly; it has always been implicit in every cone.
+
+## D189 (lead, 2026-10-23 17:35): S2: the native AccountInfo ↔ heap association is the trust item's job
+
+S2-W composed every field at the interpreted heap boundary: `callOrder`/`reachedPrefix`
+by flatMap over the outer log; returned vector → write → checkpoint version; full account
+frame and metadata. It stops at identifying native `AccountInfo` wrapper pre/post states
+with the interpreted heap. Lead ruling: that identification is exactly what
+`S2TrustedSdkBorrow` supplies. Its fields `account_data_cell`, `cell_payload`, `cell_counter`
+and `borrow_frame` *are* the explicit trusted relation between the actual typed Rust carrier
+and the abstract heap (plan, route B; C3-BIN 01:20), and the wrapper Kani contracts check the
+native wrapper code against it. Vec snapshot allocation and cleanup are TrustedStd plus the
+runtime allocator premise (allocation failure aborts the transaction). Child frames are empty on account
+state because the owned design passes children only owned values and never an
+`AccountInfo`. This is to be proved from the extracted signatures, not assumed. With these, the full
+`S2CallerFacts` theorem follows. No new assumption is introduced. These are the existing items,
+used for their stated purpose.
+
+
+## D190 (lead, 2026-10-24 10:55): entropy interpretation obstruction retained
+
+The unmerged prover candidate at `7db89a0216` proves
+`ProverRwEntropyIteration.no_retry_then_success`: a fixed pure external
+getrandom.fill dictionary cannot produce a retry followed by success on the
+same freshly zeroed buffer. Native E1 admits a zero draw followed by a nonzero
+draw. The lead inspected that theorem and `no_two_draw_dictionary`; this is a
+real obstruction to the proposed fixed-tape refinement, not a privacy attack.
+Do not hide the false equality inside PrefixContract or BodyContract.
+
+Authorize a proof/tooling-only effect-aware entropy interpretation carrying
+an explicit tape cursor/world state through the actual entropy and retry owner.
+Preserve every draw, errors, exhaustion, the unchanged bad-event probability
+law, and joint L1/L2 observations. A hand-written stateful model alone is not
+source refinement: connect it to the pinned source/emission with a checked
+transformation or a proved sufficient observational transport. No new extraction
+trust, RNG assumption, source change or security-contract change is authorized.
+If existing tools cannot support this without new trust, report the smallest
+concrete decision and its consequences. The zero-then-nonzero counterexample
+remains a regression obligation.
+
+The candidate's sampler/retry/salt helper results remain conditional on its
+uninstalled external dictionary (260 function entries and 28 type carriers).
+Audit 11261 passed in worker evidence: exit 0, 1.69 s, peak 4,266,180 KiB RSS,
+swap 0, source revision d735d8174e plus exact source hashes, standard axioms.
+This evidence is reused, not independently replayed; no candidate adoption or
+release proof is claimed. Stage-3 budget used 60/100 Lean and 42/60 Kani;
+continuation has 40 Lean and 18 Kani remaining, IDs beginning 11262 through
+11399 subject to collision checks. Absolute quiet-host timing remains open.
+See candidate `design/PROVER-RW-20261024-STAGE3-CONTINUATION.md`.
+
+
+## D191 (lead, 2026-10-24 11:29 UK): effect packet reviewed; explicit entropy plumbing preflight
+
+Candidate `748e710252` retains the fixed-pure-dictionary obstruction and adds
+checked factoring of the emitted entropy owner. `ProverRwEffectOwner.pure_owner_eq`
+and `ProverRwEffectRetry.client_retry` connect only the PURE specialization to
+the emitted owner/callback. `owner_zero_then_one` proves the separate world
+interpreter's two-read regression. The lead inspected these complete statements:
+there is no native worldOwner equality or E1/L1/L2 transport theorem. The pinned
+backend inspection finds no implemented implicit-world extraction option.
+
+Read-only final-source/receipt/axiom checks pass. Worker audit 11288: exit 0,
+1.80 s, RSS 4,264,628 KiB, swap 0, source 45e27024aa and exact hashes, standard
+axioms. No new shipped changes or derived files over 5 MB. This remains on the
+unmerged adoption candidate. Existing evidence was reused; no proof replay,
+new native identity, privacy closure or new trust item is accepted.
+
+D187 already authorizes a proof-friendly host prover rewrite as a gated
+candidate. Within that scope, authorize an explicit entropy-state/coin-provider
+interface in the HOST candidate, after a committed design and extraction
+preflight. Preserve actual OS draw order and count, nonce rejection, entropy
+error mapping, zero-buffer/zeroization behaviour, cap16 and outer retry behaviour,
+including errors. State must actually distinguish successive calls and be
+threaded across the complete retry owner; a constant ghost token or a reset
+cursor cannot stand in for fresh effects. The native OS leaf must remain tied
+to the exact existing E1 boundary; do not assume a whole-owner equivalence,
+introduce new freshness/trust, or rename a missing source proof as an assumption.
+The fixed-tape coupling must use the same event sequence, not merely equal
+successful outputs. If this cannot be justified under the existing boundary,
+stop the dependent source change with a concrete minimal decision for review.
+
+First align the candidate with the already-approved H5 source change from
+research. Any host refactor remains UNADOPTED pending source/effect equivalence,
+relevant differential and L1/L2 gates, all three current ELF identities, and
+quiet-host <15 s plus <=10% slowdown. Never change frozen verifier bytes or
+adopt a backend patch/new extraction trust. Preserve all historical source and
+counterexample evidence. Stage-3 budget is 84/100 Lean and 42/60 Kani used;
+this preflight gets only the remaining 16 Lean and 18 Kani, IDs starting11289
+through11399 subject to used-ID checks. A broader follow-up needs lead review
+of this concrete preflight, not an unannounced budget reset.

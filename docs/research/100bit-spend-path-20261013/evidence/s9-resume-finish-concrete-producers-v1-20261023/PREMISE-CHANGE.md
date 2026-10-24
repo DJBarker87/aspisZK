@@ -1,0 +1,5 @@
+Before: direct accepted native Pair reachability required self.S2, canonical native alpha and input length2, and the prior producer composition additionally retained a separate native Pair success/source prefix.
+
+Now: the same strict resume and finish accepted under actual constructor+Pair slots derive every one of those contracts and child successes. Receiver.S2 follows from the SAME V3 constructor accepted run and proved variant preservation. Input identity follows from the SAME prepared transport and source prefix operation; canonicality and length follow from strict decoder and Array2. The actual Pair accepted run then supplies its own powers/helper calls. No unrelated successful calls are substituted.
+
+The only retained top execution premises are strict resume with explicit raw source boundary and accepted finish on that exact mapped output with concrete constructor/Pair and other finish children explicit. Complete runtime installation and all final security obligations remain open; no adversary/metric/target is weakened.

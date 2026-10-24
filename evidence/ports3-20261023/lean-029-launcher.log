@@ -1,0 +1,61 @@
+{"attempt": "lean-029", "exit_status": 1, "wall_seconds": 2.4913045749999583, "peak_rss_kib": "4394356", "swaps": "0", "print_axioms": ["'AspisR1.Port3_RowsInstall.accepted_rows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_RowsInstall.accumulate_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_RowsInstall.lean:55:96: error: don't know how to synthesize placeholder for argument `basis`
+context:
+base : AspisR1Stage2.AccumulateOps
+p : AspisR1Stage2.verifier.Prepared
+a out : AspisR1Stage2.verifier.Accumulator
+node : AspisR1Stage2.Stage2M
+value : AspisR1Stage2.Stage2E
+pending after : BW
+weights : (↑a.weights).length = 64
+size : (↑pending.raw).length = 64
+success✝⁴ :
+  (have width := a.weights.len;
+    do
+    let m ← (arithmetic base).zero
+    have basis : Std.Array AspisR1Stage2.Stage2M 256#usize := Array.repeat 256#usize m
+    let m1 ← (arithmetic base).one
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← (arithmetic base).basisLoop m1 node width basis1 1#usize
+    let 
+...
+ic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+x : Std.Array AspisR1Stage2.Stage2M 256#usize
+left✝ : (arithmetic base).basisLoop x✝¹ node a.weights.len x✝ 1#usize = ok x
+success✝ :
+  (do
+      let weights1 ←
+        (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+            a.weights.len x
+      let i ← weights1.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    ok (out, after)
+mid : AspisR1Stage2.verifier.BatchedWeights
+hrows :
+  (arithmetic base).weightLoop { start := 0#usize, «end» := a.weights.len } a.weights a.power a.next pending
+      a.weights.len x =
+    ok mid
+success :
+  (do
+      let i ← mid.terms + 1#usize
+      let we ← (arithmetic base).mulE value a.power
+      let we1 ← (arithmetic base).addE a.rhs we
+      (arithmetic base).trace 11#u16 a.next we1
+      let q ← (arithmetic base).mulK a.power p.rho
+      let i1 ← a.next + 1#usize
+      ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := mid.raw, terms := i })) =
+    ok (out, after)
+width : a.weights.len = 64#usize
+⊢ out.weights = a.weights ∧ (↑after.raw).length = 64
+'AspisR1.Port3_RowsInstall.accepted_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_RowsInstall.accumulate_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5d6aa2d9a2494fc7a88f27fdfa41527e.scope; invocation ID: 9290c588867b4ff18c3bde0e7a912a72

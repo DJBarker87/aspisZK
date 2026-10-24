@@ -1,0 +1,41 @@
+{
+  "attempt": "kani-014",
+  "kind": "kani",
+  "source_revision": "e842a258b13620592266c0a6df859a6849eca6cb",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "S2W_wrapper/Cargo.toml",
+    "--target-dir",
+    "wrapper-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "30s",
+    "--harness",
+    "S2W_",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "S2W_wrapper/src/lib.rs",
+    "S2W_wrapper/Cargo.toml"
+  ],
+  "timeout": 120,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "deps_fingerprint": {
+    "scope": "Verbatim native snapshot and checkpoint-write expression under selected-cell SDK/std semantic interpretation; no foreign guard or native ABI claim"
+  },
+  "expected_time": "Optimized tiny projected wrapper source checks, no bulk copy or arithmetic gate",
+  "change": "Repair CLI missing unstable-options; predecessor013 exited before compiler"
+}

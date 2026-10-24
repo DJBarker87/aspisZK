@@ -1,0 +1,1 @@
+Rejected initial proof: only ambiguous opened aliases Weights/mapArray/fromCtorWeights. V2 explicitly qualifies the existing same carriers/functions; no semantic or quantifier change. An earlier command announced an incorrect hash and was rejected before any compiler launch; corrected announced hash then entered this actual proof attempt. No failed axiom output is accepted.

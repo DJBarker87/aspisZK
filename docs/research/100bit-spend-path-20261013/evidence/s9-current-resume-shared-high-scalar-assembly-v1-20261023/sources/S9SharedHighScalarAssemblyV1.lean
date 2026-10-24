@@ -1,0 +1,112 @@
+import S9ActualSharedHighCallsV1
+import S9PartialHighFinishReachedV1
+import S9ProcessKindScalarMeaningV1
+import S9NativeWideDecodedArithmeticV1
+import S9CanonicalPartsUpdateV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9SharedHighScalarAssemblyV1
+open AspisR1S9ActualSharedHighCallsV1
+open AspisR1S9ProcessKindScalarMeaningV1 (ScalarMeaning)
+open AspisR1S9NativeWideDecodedArithmeticV1 (decode)
+open AspisR1S9FactorArrayEntryV1
+abbrev CanW := AspisR1S9ActualPairWideCanonicalV1.Canonical
+abbrev GoodParts := AspisR1S9ActualFinalSumV1.Good
+abbrev GoodPowers := AspisR1S9ActualPairScalarCallbackV1.GoodArray
+abbrev FactorsCanonical := AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical
+
+def Assembly (partials : Array W 4#usize) (self : weights.Weights)
+    (ap0 ap1 : Array W 4#usize) (parts out : Parts) : Prop :=
+    ∃ (row0 row2 : Row) (high0 high2 f00 f01 f20 f21 : Coeff)
+      (dot0 dot2 s00 s01 s20 s21 scale0 scale2 product0 product2 : W),
+      Array.index_usize self.factors 0#usize=.ok row0 ∧
+      Array.index_usize row0 4#usize=.ok high0 ∧ weights.high_dot partials high0=.ok (.Ok dot0) ∧
+      Array.index_usize row0 0#usize=.ok f00 ∧
+      weights.Weights.scalar_factor f00 ap0=.ok s00 ∧
+      Array.index_usize row0 1#usize=.ok f01 ∧
+      weights.Weights.scalar_factor f01 ap1=.ok s01 ∧
+      Array.index_usize self.factors 2#usize=.ok row2 ∧
+      Array.index_usize row2 4#usize=.ok high2 ∧ weights.high_dot partials high2=.ok (.Ok dot2) ∧
+      Array.index_usize row2 0#usize=.ok f20 ∧
+      weights.Weights.scalar_factor f20 ap0=.ok s20 ∧
+      Array.index_usize row2 1#usize=.ok f21 ∧
+      weights.Weights.scalar_factor f21 ap1=.ok s21 ∧
+      ScalarMeaning f00 ap0 s00 ∧ ScalarMeaning f01 ap1 s01 ∧
+      ScalarMeaning f20 ap0 s20 ∧ ScalarMeaning f21 ap1 s21 ∧
+      aspis_core.field.wide_exact.WideExact.mul s00 s01=.ok scale0 ∧
+      aspis_core.field.wide_exact.WideExact.mul scale0 dot0=.ok product0 ∧
+      aspis_core.field.wide_exact.WideExact.mul s20 s21=.ok scale2 ∧
+      aspis_core.field.wide_exact.WideExact.mul scale2 dot2=.ok product2 ∧
+      CanW product0 ∧ CanW product2 ∧
+      decode product0=(decode s00*decode s01)*decode dot0 ∧
+      decode product2=(decode s20*decode s21)*decode dot2 ∧
+      out=(parts.set 1#usize product0).set 3#usize product2 ∧ GoodParts out ∧
+      ∀ (j : Usize) (hj : j.val<7),
+        atN out j hj=if j.val=3 then product2 else if j.val=1 then product0 else atN parts j hj
+
+/-- SAME accepted shared_high supplies every real operand and write. Its four
+scalar factors have the existing PERM/quarter meanings; the two actual wide
+products have exact decoded meanings. Dot canonicality comes from their own
+accepted source finish paths, never a desired dot-value premise. -/
+theorem shared_high_success_value_assembly
+    (partials : Array W 4#usize) (self : weights.Weights)
+    (ap0 ap1 : Array W 4#usize) (parts out : Parts)
+    (hfactors : FactorsCanonical self) (hp0 : GoodPowers ap0) (hp1 : GoodPowers ap1)
+    (hparts : GoodParts parts)
+    (h : weights.shared_high partials self ap0 ap1 parts=.ok (.Ok (),out)) :
+    Assembly partials self ap0 ap1 parts out := by
+  unfold Assembly
+  obtain ⟨row0,row2,high0,high2,f00,f01,f20,f21,dot0,dot2,s00,s01,s20,s21,
+    scale0,scale2,product0,product2,oldPart,back,hr0,hh0,hd0,hf00,hs00,hf01,hs01,
+    hscale0,hproduct0,hmut,hr2,hh2,hd2,hf20,hs20,hf21,hs21,hscale2,hproduct2,hupdate⟩ :=
+    shared_high_success_calls partials self ap0 ap1 parts out h
+  have q00 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f00 := by
+    intro i q hq; exact hfactors 0#usize 0#usize row0 f00 i q hr0 hf00 hq
+  have q01 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f01 := by
+    intro i q hq; exact hfactors 0#usize 1#usize row0 f01 i q hr0 hf01 hq
+  have q20 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f20 := by
+    intro i q hq; exact hfactors 2#usize 0#usize row2 f20 i q hr2 hf20 hq
+  have q21 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f21 := by
+    intro i q hq; exact hfactors 2#usize 1#usize row2 f21 i q hr2 hf21 hq
+  have m00 : ScalarMeaning f00 ap0 s00 :=
+    AspisR1S9ActualScalarNativeReadsV1.actual_scalar_success_native_reads_quarter f00 ap0 s00 hp0 q00 hs00
+  have m01 : ScalarMeaning f01 ap1 s01 :=
+    AspisR1S9ActualScalarNativeReadsV1.actual_scalar_success_native_reads_quarter f01 ap1 s01 hp1 q01 hs01
+  have m20 : ScalarMeaning f20 ap0 s20 :=
+    AspisR1S9ActualScalarNativeReadsV1.actual_scalar_success_native_reads_quarter f20 ap0 s20 hp0 q20 hs20
+  have m21 : ScalarMeaning f21 ap1 s21 :=
+    AspisR1S9ActualScalarNativeReadsV1.actual_scalar_success_native_reads_quarter f21 ap1 s21 hp1 q21 hs21
+  have cd0 := AspisR1S9PartialHighFinishReachedV1.actual_high_success_canonical partials high0 dot0 hd0
+  have cd2 := AspisR1S9PartialHighFinishReachedV1.actual_high_success_canonical partials high2 dot2 hd2
+  obtain ⟨cs0,vs0⟩ := AspisR1S9NativeWideDecodedArithmeticV1.actual_mul_success_decoded s00 s01 scale0 m00.1 m01.1 hscale0
+  obtain ⟨cs2,vs2⟩ := AspisR1S9NativeWideDecodedArithmeticV1.actual_mul_success_decoded s20 s21 scale2 m20.1 m21.1 hscale2
+  obtain ⟨cp0,vp0⟩ := AspisR1S9NativeWideDecodedArithmeticV1.actual_mul_success_decoded scale0 dot0 product0 cs0 cd0 hproduct0
+  obtain ⟨cp2,vp2⟩ := AspisR1S9NativeWideDecodedArithmeticV1.actual_mul_success_decoded scale2 dot2 product2 cs2 cd2 hproduct2
+  rw [vs0] at vp0
+  rw [vs2] at vp2
+  have hb := AspisR1S9ConstructorV3Loop2InnerCanonicalV1.index_mut_back_set
+    parts 1#usize oldPart back (by decide) hmut
+  have hu : Array.update (parts.set 1#usize product0) 3#usize product2=.ok out := by
+    simpa only [hb] using hupdate
+  have hout := accepted_update_eq_set (parts.set 1#usize product0) 3#usize (by decide) product2 out hu
+  obtain ⟨middle,hmiddle,hpost⟩ := WP.spec_imp_exists
+    (Array.update_spec parts 1#usize product0 (by simpa [parts.property]))
+  have hmiddleEq := accepted_update_eq_set parts 1#usize (by decide) product0 middle hmiddle
+  have hfirst : GoodParts (parts.set 1#usize product0) := by
+    rw [←hmiddleEq]
+    exact AspisR1S9CanonicalPartsUpdateV1.update_preserves_good parts middle 1#usize product0
+      (by decide) hparts cp0 hmiddle
+  have hgood := AspisR1S9CanonicalPartsUpdateV1.update_preserves_good
+    (parts.set 1#usize product0) out 3#usize product2 (by decide) hfirst cp2 hu
+  refine ⟨row0,row2,high0,high2,f00,f01,f20,f21,dot0,dot2,s00,s01,s20,s21,
+    scale0,scale2,product0,product2,hr0,hh0,hd0,hf00,hs00,hf01,hs01,
+    hr2,hh2,hd2,hf20,hs20,hf21,hs21,m00,m01,m20,m21,hscale0,hproduct0,hscale2,hproduct2,
+    cp0,cp2,vp0,vp2,hout,hgood,?_⟩
+  intro j hj
+  rw [hout,atN_set (parts.set 1#usize product0) 3#usize j product2 (by decide) hj,
+    atN_set parts 1#usize j product0 (by decide) hj]
+  rfl
+
+#print axioms shared_high_success_value_assembly
+end AspisR1S9SharedHighScalarAssemblyV1

@@ -1,0 +1,122 @@
+{
+  "native-unit": {
+    "argv": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "test",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j1",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/pair-h5-adoption-native-runtime-v1-20261023/work/src/Cargo.toml",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--lib",
+      "weights::",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "target": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/native-target",
+    "expected_time": "incremental compile of H5 changed own crates using warm host cache, then two optimized weight/helper unit tests (including512cases); no proof generation"
+  },
+  "native-arithmetic": {
+    "argv": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "test",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j1",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/pair-h5-adoption-native-runtime-v1-20261023/work/src/Cargo.toml",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--test",
+      "pairing_equivalence",
+      "--test",
+      "weights_equivalence",
+      "--test",
+      "dots_equivalence",
+      "--test",
+      "h5_shared_point_contraction_equivalence",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "target": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/native-target",
+    "expected_time": "incremental optimized own integration test compile, then named pairing/dots/weights/shared-point equivalence arithmetic including4096term boundaries; no proof generation"
+  },
+  "native-adapter": {
+    "argv": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "test",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j1",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/pair-h5-adoption-native-runtime-v1-20261023/work/src/Cargo.toml",
+      "-p",
+      "aspis-r1-cost-probe-program",
+      "--features",
+      "pool-adapter,private-leaf-salts",
+      "--lib",
+      "owned_adapter_native_differential_six_fixtures_and_1200_mutations",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "target": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/native-target",
+    "expected_time": "incremental optimized H5 program compile, then actual SDK adapter native1200malformed-input differential suite; no proof generation"
+  },
+  "readonly-build": {
+    "argv": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "build",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j1",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/pair-h5-adoption-native-runtime-v1-20261023/work/src/tools/r1-cost-probe/Cargo.toml",
+      "--bin",
+      "adapter_rw_replay",
+      "--features",
+      "private-leaf-salts,litesvm/persistence-internal"
+    ],
+    "target": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/replay-target",
+    "expected_time": "incremental driver-only optimized relink after replacing retired diagnostic-log predicate with mandatory exact current afterstate; Core already compiled final31c2",
+    "require_compiled": [
+      "aspis-r1-cu-probe"
+    ]
+  },
+  "final-core-math": {
+    "argv": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "test",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j1",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/pair-h5-adoption-native-runtime-v1-20261023/work/src/Cargo.toml",
+      "-p",
+      "aspis-r1-cost-probe",
+      "--test",
+      "final_core_statement_points_equivalence",
+      "--test",
+      "weights_equivalence",
+      "--test",
+      "h5_shared_point_contraction_equivalence",
+      "--",
+      "--test-threads=1",
+      "--nocapture"
+    ],
+    "target": "/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023/native-target",
+    "expected_time": "incremental own-crate compile for final Core source, then only affected point/weights/shared equivalence; no unchanged dots-only rerun and no proof generation",
+    "require_compiled": [
+      "aspis-core"
+    ]
+  }
+}

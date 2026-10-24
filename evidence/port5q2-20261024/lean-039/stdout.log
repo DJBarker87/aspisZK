@@ -1,0 +1,303 @@
+Port5Q2_ReaderWeights.lean:114:21: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+Port5Q2_ReaderWeights.lean:114:27: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+Port5Q2_ReaderWeights.lean:114:53: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+Port5Q2_ReaderWeights.lean:114:59: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+Port5Q2_ReaderWeights.lean:114:79: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+where
+ e := ↑(↑it.slice).length
+Port5Q2_ReaderWeights.lean:113:9: error: unsolved goals
+case zero
+read : CheckpointBytes4Sections.ReadK
+bytes : Slice U8
+it : Iter
+back : Iter → Iter
+at1 : Usize
+remaining : it.i + 0 = (↑it.slice).length
+inactive : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (do
+      let r ←
+        match do
+            let (o, iter1, next_back) ←
+              if h : it.i < ↑it.slice.len then
+                  ok
+                    (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                      match x with
+                      | none => it'
+                      | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+                else ok (none, it, fun it x => it)
+            match o with
+              | none => ok (done (at1, none, back (next_back iter1 none)))
+              | some val => do
+                let (r, reader) ← read { bytes := bytes, «at» := at1 }
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    ok (cont (iter1, fun im => back (next_back im (some val)), reader.at))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r1 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error) residual
+                    ok (done (at1, some r1, back (next_back iter1 o))) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1, next_back) ←
+                    if h : x.1.i < ↑x.1.slice.len then
+                        ok
+                          (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                            match x_1 with
+                            | none => it'
+                            | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                      else ok (none, x.1, fun it x => it)
+                  match o with
+                    | none => ok (done (x.2.2, none, x.2.1 (next_back iter1 none)))
+                    | some val => do
+                      let (r, reader) ← read { bytes := bytes, «at» := x.2.2 }
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          ok (cont (iter1, fun im => x.2.1 (next_back im (some val)), reader.at))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      match r.2.1 with
+        | none => ok (core.result.Result.Ok (⟨↑r.2.2.slice, ⋯⟩, r.1))
+        | some v => ok v) =
+    ok (core.result.Result.Ok (⟨↑(back { slice := it.slice, i := it.i }).slice, ⋯⟩, at1))
+Port5Q2_ReaderWeights.lean:120:18: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.83
+of sort `Type (?u.83 + 1)` in the application
+  @PrincipalSeg it.i
+Port5Q2_ReaderWeights.lean:120:24: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+Port5Q2_ReaderWeights.lean:120:49: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.91
+of sort `Type (?u.91 + 1)` in the application
+  @PrincipalSeg it.i
+Port5Q2_ReaderWeights.lean:120:55: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+Port5Q2_ReaderWeights.lean:120:75: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ -1
+where
+ e := ↑n
+ f := ↑(↑it.slice).length
+Port5Q2_ReaderWeights.lean:125:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.165 ?m.166 ?m.167).mpr`
+  ?m.165 >>= ?m.166 = ?m.165 >>= ?m.167
+with the goal
+  (do
+      let r ←
+        match do
+            let (o, iter1, next_back) ←
+              if h : it.i < ↑it.slice.len then
+                  ok
+                    (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                      match x with
+                      | none => it'
+                      | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+                else ok (none, it, fun it x => it)
+            match o with
+              | none => ok (done (at1, none, back (next_back iter1 none)))
+              | some val => do
+                let (r, reader) ← read { bytes := bytes, «at» := at1 }
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    ok (cont (iter1, fun im => back (next_back im (some val)), reader.at))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r1 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error) residual
+                    ok (done (at1, some r1, back (next_back iter1 o))) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1, next_back) ←
+                    if h : x.1.i < ↑x.1.slice.len then
+                        ok
+                          (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                            match x_1 with
+                            | none => it'
+                            | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                      else ok (none, x.1, fun it x => it)
+                  match o with
+                    | none => ok (done (x.2.2, none, x.2.1 (next_back iter1 none)))
+                    | some val => do
+                      let (r, reader) ← read { bytes := bytes, «at» := x.2.2 }
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          ok (cont (iter1, fun im => x.2.1 (next_back im (some val)), reader.at))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x ← read { bytes := bytes, «at» := at1 }
+    let r ←
+      match x.1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x_1 => do
+          let tail ← reads read bytes n x.2.at
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x_1 :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+
+Note: The full type of `(bind_eq_iff ?m.165 ?m.166 ?m.167).mpr` is
+  (∀ (v : ?m.163), ?m.165 = ok v → ?m.166 v = ?m.167 v) → ?m.165 >>= ?m.166 = ?m.165 >>= ?m.167
+
+case succ
+read : CheckpointBytes4Sections.ReadK
+bytes : Slice U8
+n : ℕ
+ih :
+  ∀ (it : Iter) (back : Iter → Iter) (at1 : Usize),
+    it.i + n = (↑it.slice).length →
+      (do
+          let r ← weights_loop read it back bytes at1
+          finish r) =
+        do
+        let r ← reads read bytes n at1
+        match r with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok (xs, last) =>
+            let final := back { slice := write it.slice it.i xs, i := it.i + n };
+            ok (core.result.Result.Ok (⟨↑final.slice, ⋯⟩, last))
+it : Iter
+back : Iter → Iter
+at1 : Usize
+remaining : it.i + (n + 1) = (↑it.slice).length
+active : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (do
+      let r ←
+        match do
+            let (o, iter1, next_back) ←
+              if h : it.i < ↑it.slice.len then
+                  ok
+                    (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun it' x =>
+                      match x with
+                      | none => it'
+                      | some x => { slice := it'.slice.setAtNat it.i x, i := it'.i })
+                else ok (none, it, fun it x => it)
+            match o with
+              | none => ok (done (at1, none, back (next_back iter1 none)))
+              | some val => do
+                let (r, reader) ← read { bytes := bytes, «at» := at1 }
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    ok (cont (iter1, fun im => back (next_back im (some val)), reader.at))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r1 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error) residual
+                    ok (done (at1, some r1, back (next_back iter1 o))) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1, next_back) ←
+                    if h : x.1.i < ↑x.1.slice.len then
+                        ok
+                          (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                            match x_1 with
+                            | none => it'
+                            | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                      else ok (none, x.1, fun it x => it)
+                  match o with
+                    | none => ok (done (x.2.2, none, x.2.1 (next_back iter1 none)))
+                    | some val => do
+                      let (r, reader) ← read { bytes := bytes, «at» := x.2.2 }
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          ok (cont (iter1, fun im => x.2.1 (next_back im (some val)), reader.at))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x ← read { bytes := bytes, «at» := at1 }
+    let r ←
+      match x.1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x_1 => do
+          let tail ← reads read bytes n x.2.at
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x_1 :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+Port5Q2_ReaderWeights.lean:118:17: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [weights_loop.body, ̲core.slice.iter.IteratorIterMut.next, ̲dif_neg inactive,
+        bind_tc_ok,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵ ̲rr̵y̵,̵r̵eads, ̲finish, ̲write, ̲Nat.add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderWeights.lean:124:6: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [weights_loop.body, ̲core.slice.iter.IteratorIterMut.next, ̲dif_pos active,
+        b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵Aeneas.Std.uncurry, ̲reads, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

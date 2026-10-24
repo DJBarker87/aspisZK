@@ -1,0 +1,3 @@
+The SAME accepted extracted source tx2, concrete derived equality/default-ne and SAME operationally traced parts/k give the actual source round-claim kappa equation and pair/claim plus dot/rhs structural equalities. All original source/call witnesses and actual Trace are retained. No independent Current finish, caller guard or detached polynomial vector. Replaces historical untraced provenance interface; parts relation and other implementation/security obligations remain open.
+
+Focused Lean check: 48.836 seconds; peak aggregate RSS 3805691904 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

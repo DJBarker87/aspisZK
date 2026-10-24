@@ -1,0 +1,94 @@
+/home/dombarker/project-offloads/pair-actual32-scalar-fold-v2-20261023/sources/S9ActualPairScalarFactorV1.lean:68:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S3S9RangeFoldP6.rangeFoldRun 4 { start := 0#usize, «end» := 4#usize }
+    (AspisR1S9TransparentFoldRangeLawV1.foldStep helperCallback)
+    (AspisR1S9HelperP6.field.WideExact.ZERO, mapClosure (p, f))
+in the target expression
+  (do
+      let (value, _) ←
+        AspisR1S3S9RangeFoldP6.rangeFoldRun
+            (↑{ start := 0#usize, «end» := 4#usize }.end - ↑{ start := 0#usize, «end» := 4#usize }.start)
+            { start := 0#usize, «end» := 4#usize } (AspisR1S9TransparentFoldRangeLawV1.foldStep helperCallback)
+            (AspisR1S9HelperP6.field.WideExact.ZERO, mapClosure (p, f))
+      ok value) =
+    ok (toHelperW acc)
+
+f : Std.Array Q 4#usize
+p : Std.Array W 4#usize
+out : W
+hp : GoodArray p
+h :
+  (do
+      let we ←
+        core.iter.traits.iterator.Iterator.fold.default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact
+            { start := 0#usize, «end» := 4#usize } aspis_core.field.wide_exact.WideExact.ZERO (p, f)
+      we.mul_m31 weights.QUARTER) =
+    ok out
+acc : aspis_core.field.wide_exact.WideExact
+hmul : acc.mul_m31 weights.QUARTER = ok out
+hfold :
+  (do
+      let __x ←
+        AspisR1S3S9RangeFoldP6.rangeFoldRun 4 { start := 0#usize, «end» := 4#usize }
+            (AspisR1S9TransparentFoldRangeLawV1.foldStep sourceCallback)
+            (aspis_core.field.wide_exact.WideExact.ZERO, p, f)
+      match __x with
+        | (value, snd) => ok value) =
+    ok acc
+capOut : weights.Weights.scalar_factor.closure
+hrange :
+  AspisR1S3S9RangeFoldP6.rangeFoldRun 4 { start := 0#usize, «end» := 4#usize }
+      (AspisR1S9TransparentFoldRangeLawV1.foldStep sourceCallback) (aspis_core.field.wide_exact.WideExact.ZERO, p, f) =
+    ok (acc, capOut)
+hacc :
+  (match (acc, capOut) with
+    | (value, snd) => ok value) =
+    ok acc
+hcap : capOut = (p, f)
+hcanon : Canonical acc
+hzero : toHelperW aspis_core.field.wide_exact.WideExact.ZERO = AspisR1S9HelperP6.field.WideExact.ZERO
+htargetRange :
+  AspisR1S3S9RangeFoldP6.rangeFoldRun 4 { start := 0#usize, «end» := 4#usize }
+      (AspisR1S9TransparentFoldRangeLawV1.foldStep helperCallback)
+      (AspisR1S9HelperP6.field.WideExact.ZERO, mapClosure (p, f)) =
+    ok (toHelperW acc, mapClosure capOut)
+⊢ (do
+      let (value, _) ←
+        AspisR1S3S9RangeFoldP6.rangeFoldRun
+            (↑{ start := 0#usize, «end» := 4#usize }.end - ↑{ start := 0#usize, «end» := 4#usize }.start)
+            { start := 0#usize, «end» := 4#usize } (AspisR1S9TransparentFoldRangeLawV1.foldStep helperCallback)
+            (AspisR1S9HelperP6.field.WideExact.ZERO, mapClosure (p, f))
+      ok value) =
+    ok (toHelperW acc)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/pair-actual32-scalar-fold-v2-20261023/sources/S9ActualPairScalarFactorV1.lean:84:13: error: Invalid `←` modifier: `mapClosure` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `mapClosure`.
+/home/dombarker/project-offloads/pair-actual32-scalar-fold-v2-20261023/sources/S9ActualPairScalarFactorV1.lean:84:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1S9ActualPairScalarFactorV1.actual_scalar_factor_success_maps' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

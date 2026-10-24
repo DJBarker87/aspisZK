@@ -1,0 +1,3 @@
+Proved: a same successful native mutable write extends the seven-entry canonical decoded-power prefix. Reuses existing powers4 source proof and generic read/write/frame lemmas, instantiated at seven and strengthened to carry canonicality as well as the decoded power. Canonical written value and incoming prefix remain explicit in this local write theorem; complete actual powers7 semantics discharges them.
+
+Focused Lean check: 23.655 seconds; peak aggregate RSS 3171614720 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,353 @@
+VTop_Order.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (core.result.Result.Ok saved, after).2
+in the target expression
+  ids after = ids before ++ tx1Schedule
+
+case h_1
+ops : Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+obs : Option (verifier.Phase → Result Unit)
+saved : alloc.vec.Vec U8
+before after : Log
+r✝²¹ : Result Usize
+a✝²⁰ : Usize
+heq✝²¹ : invoke ops Call.op16 = ok a✝²⁰
+h✝ : ¬(split != a✝²⁰) = true
+r✝²⁰ : Result (core.result.Result transport.Variant verifier.Error)
+a✝¹⁹ : transport.Variant
+heq✝²⁰ : invoke ops (Call.op3 proof) = ok (core.result.Result.Ok a✝¹⁹)
+r✝¹⁹ : Result (core.result.Result Unit verifier.Error)
+a✝¹⁸ : Unit
+heq✝¹⁹ : invoke ops (Call.op4 proof) = ok (core.result.Result.Ok a✝¹⁸)
+r✝¹⁸ : Result Unit
+a✝¹⁷ : Unit
+heq✝¹⁸ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) = ok a✝¹⁷
+r✝¹⁷ : Result aspis_core.field.wide_exact.WideExact
+a✝¹⁶ : aspis_core.field.wide_exact.WideExact
+heq✝¹⁷ : invoke ops Call.op1 = ok a✝¹⁶
+r✝¹⁶ :
+  Result
+    (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+a✝¹⁵ : core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+heq✝¹⁶ : invoke ops (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶)) = ok a✝¹⁵
+r✝¹⁵ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) verifier.Prepared)
+cf2✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) verifier.Prepared
+val✝ : verifier.Prepared
+heq✝¹⁵ :
+  monadLift (core.result.Result.Insts.CoreOpsTry.branch a✝¹⁵.1) = ok (core.ops.control_flow.ControlFlow.Continue val✝)
+r✝¹⁴ : Result (core.result.Result verifier.Accumulator verifier.Error)
+a✝¹⁴ : verifier.Accumulator
+heq✝¹⁴ : invoke ops (Call.op12 AspisR1Stage2.transport.Variant.S2) = ok (core.result.Result.Ok a✝¹⁴)
+r✝¹³ : Result Unit
+a✝¹³ : Unit
+heq✝¹³ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare) = ok a✝¹³
+r✝¹² : Result Usize
+a✝¹² : Usize
+heq✝¹² : invoke ops Call.op15 = ok a✝¹²
+r✝¹¹ : Result Usize
+a✝¹¹ : Usize
+heq✝¹¹ : invoke ops Call.op14 = ok a✝¹¹
+r✝¹⁰ : Result (Slice U8)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ :
+  monadLift
+      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := a✝¹², «end» := a✝¹¹ }) =
+    ok a✝¹⁰
+r✝⁹ : Result (core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError)
+a✝⁹ : Std.Array U8 32#usize
+heq✝⁹ :
+  monadLift (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 a✝¹⁰) =
+    ok (core.result.Result.Ok a✝⁹)
+r✝⁸ : Result (Std.Array U8 32#usize)
+a✝⁸ : Std.Array U8 32#usize
+heq✝⁸ : invoke ops (Call.unwrap32 (core.result.Result.Ok a✝⁹)) = ok a✝⁸
+r✝⁷ : Result (core.result.Result Unit verifier.Error)
+a✝⁷ : Unit
+heq✝⁷ : invoke ops (Call.op5 D proof val✝ a✝⁸ 0#usize hash) = ok (core.result.Result.Ok a✝⁷)
+r✝⁶ : Result Unit
+a✝⁶ : Unit
+heq✝⁶ : invoke ops (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize)) = ok a✝⁶
+r✝⁵ : Result (core.result.Result verifier.QueryGeometry verifier.Error)
+a✝⁵ : verifier.QueryGeometry
+heq✝⁵ : invoke ops (Call.op11 val✝.queries 0#usize split) = ok (core.result.Result.Ok a✝⁵)
+r✝⁴ : Result (core.result.Result verifier.BatchedWeights verifier.Error)
+a✝⁴ : verifier.BatchedWeights
+heq✝⁴ : invoke ops (Call.op10 a✝¹⁴.weights.deref) = ok (core.result.Result.Ok a✝⁴)
+r✝³ : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+a✝³ : verifier.Accumulator × verifier.BatchedWeights
+heq✝³ : invoke ops (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) = ok (core.result.Result.Ok a✝³)
+r✝² : Result (Slice aspis_core.field.QM31)
+a✝² : Slice aspis_core.field.QM31
+heq✝² : invoke ops (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) = ok a✝²
+r✝¹ : Result (alloc.vec.Vec U8)
+a✝¹ : alloc.vec.Vec U8
+heq✝¹ :
+  invoke ops
+      (Call.op8 D val✝
+        { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power, next := a✝³.1.next } proof
+        pub hash) =
+    ok a✝¹
+r✝ : Result Unit
+a✝ : Unit
+heq✝ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) = ok a✝
+accepted :
+  ok
+      (core.result.Result.Ok a✝¹,
+        before ++ [Event.returned Call.op16 a✝²⁰] ++ [Event.returned (Call.op3 proof) (core.result.Result.Ok a✝¹⁹)] ++
+                                          [Event.returned (Call.op4 proof) (core.result.Result.Ok a✝¹⁸)] ++
+                                        [Event.returned
+                                            (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) a✝¹⁷] ++
+                                      [Event.returned Call.op1 a✝¹⁶] ++
+                                    [Event.returned (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶))
+                                        a✝¹⁵] ++
+                                  [Event.returned (Call.op12 AspisR1Stage2.transport.Variant.S2)
+                                      (core.result.Result.Ok a✝¹⁴)] ++
+                                [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare)
+                                    a✝¹³] ++
+                              [Event.returned Call.op15 a✝¹²] ++
+                            [Event.returned Call.op14 a✝¹¹] ++
+                          [Event.returned (Call.unwrap32 (core.result.Result.Ok a✝⁹)) a✝⁸] ++
+                        [Event.returned (Call.op5 D proof val✝ a✝⁸ 0#usize hash) (core.result.Result.Ok a✝⁷)] ++
+                      [Event.returned (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize))
+                          a✝⁶] ++
+                    [Event.returned (Call.op11 val✝.queries 0#usize split) (core.result.Result.Ok a✝⁵)] ++
+                  [Event.returned (Call.op10 a✝¹⁴.weights.deref) (core.result.Result.Ok a✝⁴)] ++
+                [Event.returned (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) (core.result.Result.Ok a✝³)] ++
+              [Event.returned (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) a✝²] ++
+            [Event.returned
+                (Call.op8 D val✝
+                  { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power,
+                    next := a✝³.1.next }
+                  proof pub hash)
+                a✝¹] ++
+          [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) a✝]) =
+    ok (core.result.Result.Ok saved, after)
+same :
+  (core.result.Result.Ok a✝¹,
+        before ++ [Event.returned Call.op16 a✝²⁰] ++ [Event.returned (Call.op3 proof) (core.result.Result.Ok a✝¹⁹)] ++
+                                          [Event.returned (Call.op4 proof) (core.result.Result.Ok a✝¹⁸)] ++
+                                        [Event.returned
+                                            (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) a✝¹⁷] ++
+                                      [Event.returned Call.op1 a✝¹⁶] ++
+                                    [Event.returned (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶))
+                                        a✝¹⁵] ++
+                                  [Event.returned (Call.op12 AspisR1Stage2.transport.Variant.S2)
+                                      (core.result.Result.Ok a✝¹⁴)] ++
+                                [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare)
+                                    a✝¹³] ++
+                              [Event.returned Call.op15 a✝¹²] ++
+                            [Event.returned Call.op14 a✝¹¹] ++
+                          [Event.returned (Call.unwrap32 (core.result.Result.Ok a✝⁹)) a✝⁸] ++
+                        [Event.returned (Call.op5 D proof val✝ a✝⁸ 0#usize hash) (core.result.Result.Ok a✝⁷)] ++
+                      [Event.returned (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize))
+                          a✝⁶] ++
+                    [Event.returned (Call.op11 val✝.queries 0#usize split) (core.result.Result.Ok a✝⁵)] ++
+                  [Event.returned (Call.op10 a✝¹⁴.weights.deref) (core.result.Result.Ok a✝⁴)] ++
+                [Event.returned (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) (core.result.Result.Ok a✝³)] ++
+              [Event.returned (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) a✝²] ++
+            [Event.returned
+                (Call.op8 D val✝
+                  { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power,
+                    next := a✝³.1.next }
+                  proof pub hash)
+                a✝¹] ++
+          [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) a✝]).2 =
+    (core.result.Result.Ok saved, after).2
+⊢ ids after = ids before ++ tx1Schedule
+VTop_Order.lean:29:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (core.result.Result.Ok saved, after).2
+in the target expression
+  ids after = ids before ++ tx1Schedule
+
+case h_1
+ops : Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+obs : Option (verifier.Phase → Result Unit)
+saved : alloc.vec.Vec U8
+before after : Log
+r✝²¹ : Result Usize
+a✝²⁰ : Usize
+heq✝²¹ : invoke ops Call.op16 = ok a✝²⁰
+h✝ : ¬(split != a✝²⁰) = true
+r✝²⁰ : Result (core.result.Result transport.Variant verifier.Error)
+a✝¹⁹ : transport.Variant
+heq✝²⁰ : invoke ops (Call.op3 proof) = ok (core.result.Result.Ok a✝¹⁹)
+r✝¹⁹ : Result (core.result.Result Unit verifier.Error)
+a✝¹⁸ : Unit
+heq✝¹⁹ : invoke ops (Call.op4 proof) = ok (core.result.Result.Ok a✝¹⁸)
+r✝¹⁸ : Result Unit
+a✝¹⁷ : Unit
+heq✝¹⁸ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) = ok a✝¹⁷
+r✝¹⁷ : Result aspis_core.field.wide_exact.WideExact
+a✝¹⁶ : aspis_core.field.wide_exact.WideExact
+heq✝¹⁷ : invoke ops Call.op1 = ok a✝¹⁶
+r✝¹⁶ :
+  Result
+    (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+a✝¹⁵ : core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+heq✝¹⁶ : invoke ops (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶)) = ok a✝¹⁵
+r✝¹⁵ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) verifier.Prepared)
+cf2✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) verifier.Prepared
+val✝ : verifier.Prepared
+heq✝¹⁵ :
+  monadLift (core.result.Result.Insts.CoreOpsTry.branch a✝¹⁵.1) = ok (core.ops.control_flow.ControlFlow.Continue val✝)
+r✝¹⁴ : Result (core.result.Result verifier.Accumulator verifier.Error)
+a✝¹⁴ : verifier.Accumulator
+heq✝¹⁴ : invoke ops (Call.op12 AspisR1Stage2.transport.Variant.S2) = ok (core.result.Result.Ok a✝¹⁴)
+r✝¹³ : Result Unit
+a✝¹³ : Unit
+heq✝¹³ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare) = ok a✝¹³
+r✝¹² : Result Usize
+a✝¹² : Usize
+heq✝¹² : invoke ops Call.op15 = ok a✝¹²
+r✝¹¹ : Result Usize
+a✝¹¹ : Usize
+heq✝¹¹ : invoke ops Call.op14 = ok a✝¹¹
+r✝¹⁰ : Result (Slice U8)
+a✝¹⁰ : Slice U8
+heq✝¹⁰ :
+  monadLift
+      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := a✝¹², «end» := a✝¹¹ }) =
+    ok a✝¹⁰
+r✝⁹ : Result (core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError)
+a✝⁹ : core.array.TryFromSliceError
+heq✝⁹ :
+  monadLift (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 a✝¹⁰) =
+    ok (core.result.Result.Err a✝⁹)
+r✝⁸ : Result (Std.Array U8 32#usize)
+a✝⁸ : Std.Array U8 32#usize
+heq✝⁸ : invoke ops (Call.unwrap32 (core.result.Result.Err a✝⁹)) = ok a✝⁸
+r✝⁷ : Result (core.result.Result Unit verifier.Error)
+a✝⁷ : Unit
+heq✝⁷ : invoke ops (Call.op5 D proof val✝ a✝⁸ 0#usize hash) = ok (core.result.Result.Ok a✝⁷)
+r✝⁶ : Result Unit
+a✝⁶ : Unit
+heq✝⁶ : invoke ops (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize)) = ok a✝⁶
+r✝⁵ : Result (core.result.Result verifier.QueryGeometry verifier.Error)
+a✝⁵ : verifier.QueryGeometry
+heq✝⁵ : invoke ops (Call.op11 val✝.queries 0#usize split) = ok (core.result.Result.Ok a✝⁵)
+r✝⁴ : Result (core.result.Result verifier.BatchedWeights verifier.Error)
+a✝⁴ : verifier.BatchedWeights
+heq✝⁴ : invoke ops (Call.op10 a✝¹⁴.weights.deref) = ok (core.result.Result.Ok a✝⁴)
+r✝³ : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+a✝³ : verifier.Accumulator × verifier.BatchedWeights
+heq✝³ : invoke ops (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) = ok (core.result.Result.Ok a✝³)
+r✝² : Result (Slice aspis_core.field.QM31)
+a✝² : Slice aspis_core.field.QM31
+heq✝² : invoke ops (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) = ok a✝²
+r✝¹ : Result (alloc.vec.Vec U8)
+a✝¹ : alloc.vec.Vec U8
+heq✝¹ :
+  invoke ops
+      (Call.op8 D val✝
+        { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power, next := a✝³.1.next } proof
+        pub hash) =
+    ok a✝¹
+r✝ : Result Unit
+a✝ : Unit
+heq✝ : invoke ops (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) = ok a✝
+accepted :
+  ok
+      (core.result.Result.Ok a✝¹,
+        before ++ [Event.returned Call.op16 a✝²⁰] ++ [Event.returned (Call.op3 proof) (core.result.Result.Ok a✝¹⁹)] ++
+                                          [Event.returned (Call.op4 proof) (core.result.Result.Ok a✝¹⁸)] ++
+                                        [Event.returned
+                                            (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) a✝¹⁷] ++
+                                      [Event.returned Call.op1 a✝¹⁶] ++
+                                    [Event.returned (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶))
+                                        a✝¹⁵] ++
+                                  [Event.returned (Call.op12 AspisR1Stage2.transport.Variant.S2)
+                                      (core.result.Result.Ok a✝¹⁴)] ++
+                                [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare)
+                                    a✝¹³] ++
+                              [Event.returned Call.op15 a✝¹²] ++
+                            [Event.returned Call.op14 a✝¹¹] ++
+                          [Event.returned (Call.unwrap32 (core.result.Result.Err a✝⁹)) a✝⁸] ++
+                        [Event.returned (Call.op5 D proof val✝ a✝⁸ 0#usize hash) (core.result.Result.Ok a✝⁷)] ++
+                      [Event.returned (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize))
+                          a✝⁶] ++
+                    [Event.returned (Call.op11 val✝.queries 0#usize split) (core.result.Result.Ok a✝⁵)] ++
+                  [Event.returned (Call.op10 a✝¹⁴.weights.deref) (core.result.Result.Ok a✝⁴)] ++
+                [Event.returned (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) (core.result.Result.Ok a✝³)] ++
+              [Event.returned (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) a✝²] ++
+            [Event.returned
+                (Call.op8 D val✝
+                  { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power,
+                    next := a✝³.1.next }
+                  proof pub hash)
+                a✝¹] ++
+          [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) a✝]) =
+    ok (core.result.Result.Ok saved, after)
+same :
+  (core.result.Result.Ok a✝¹,
+        before ++ [Event.returned Call.op16 a✝²⁰] ++ [Event.returned (Call.op3 proof) (core.result.Result.Ok a✝¹⁹)] ++
+                                          [Event.returned (Call.op4 proof) (core.result.Result.Ok a✝¹⁸)] ++
+                                        [Event.returned
+                                            (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) a✝¹⁷] ++
+                                      [Event.returned Call.op1 a✝¹⁶] ++
+                                    [Event.returned (Call.op7 D semantic proof hash obs (Array.repeat 29#usize a✝¹⁶))
+                                        a✝¹⁵] ++
+                                  [Event.returned (Call.op12 AspisR1Stage2.transport.Variant.S2)
+                                      (core.result.Result.Ok a✝¹⁴)] ++
+                                [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare)
+                                    a✝¹³] ++
+                              [Event.returned Call.op15 a✝¹²] ++
+                            [Event.returned Call.op14 a✝¹¹] ++
+                          [Event.returned (Call.unwrap32 (core.result.Result.Err a✝⁹)) a✝⁸] ++
+                        [Event.returned (Call.op5 D proof val✝ a✝⁸ 0#usize hash) (core.result.Result.Ok a✝⁷)] ++
+                      [Event.returned (Call.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize))
+                          a✝⁶] ++
+                    [Event.returned (Call.op11 val✝.queries 0#usize split) (core.result.Result.Ok a✝⁵)] ++
+                  [Event.returned (Call.op10 a✝¹⁴.weights.deref) (core.result.Result.Ok a✝⁴)] ++
+                [Event.returned (Call.op6 proof val✝ a✝¹⁴ a✝¹⁵.2 obs a✝⁵ a✝⁴ split) (core.result.Result.Ok a✝³)] ++
+              [Event.returned (Call.op9 a✝³.2 a✝³.1.weights.deref_mut.1) a✝²] ++
+            [Event.returned
+                (Call.op8 D val✝
+                  { weights := a✝³.1.weights.deref_mut.2 a✝², rhs := a✝³.1.rhs, power := a✝³.1.power,
+                    next := a✝³.1.next }
+                  proof pub hash)
+                a✝¹] ++
+          [Event.returned (Call.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite) a✝]).2 =
+    (core.result.Result.Ok saved, after).2
+⊢ ids after = ids before ++ tx1Schedule
+VTop_Order.lean:23:36: warning: This simp argument is unused:
+  VTop_Trace.run
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Trace.r̵u̵n̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵bind, ̲VTop_Trace.perform, ̲traceEffects,
+  ̲ ̲ ̲ ̲ ̲VTop_Trace.thenResult, ̲VTop_Trace.liftResult] at accepted
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+VTop_Order.lean:23:99: warning: This simp argument is unused:
+  VTop_Trace.thenResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵r̵u̵n̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵b̵i̵n̵d̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵p̵e̵r̵f̵o̵r̵m̵,̵t̵r̵a̵c̵e̵E̵f̵f̵e̵c̵t̵s̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]̵[̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲r̲u̲n̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲b̲i̲n̲d̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲p̲e̲r̲f̲o̲r̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲t̲r̲a̲c̲e̲E̲f̲f̲e̲c̲t̲s̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲]̲ at accepted
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+VTop_Order.lean:23:121: warning: This simp argument is unused:
+  VTop_Trace.liftResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵r̵u̵n̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵b̵i̵n̵d̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵p̵e̵r̵f̵o̵r̵m̵,̵t̵r̵a̵c̵e̵E̵f̵f̵e̵c̵t̵s̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵t̵h̵e̵n̵R̵e̵s̵u̵l̵t̵,̵V̵T̵o̵p̵_̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]̵[̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲r̲u̲n̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲b̲i̲n̲d̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲p̲e̲r̲f̲o̲r̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲t̲r̲a̲c̲e̲E̲f̲f̲e̲c̲t̲s̲,̲ ̲V̲T̲o̲p̲_̲T̲r̲a̲c̲e̲.̲t̲h̲e̲n̲R̲e̲s̲u̲l̲t̲]̲ at accepted
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.VTop_Order.tx1_order' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,93 @@
+Port4D_FlushResult.lean:53:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun x => Port3_FlushInstall.fromMutable (S8Kani2FinishReferenceJoin.toFinish (Port3_FlushInstall.toOwned x))
+in the target expression
+  List.map (Port3_FlushInstall.fromMutable ∘ S8Kani2FinishReferenceJoin.toFinish ∘ Port3_FlushInstall.toOwned) ↑s = ↑s
+
+s : Slice K
+id :
+  (fun x => Port3_FlushInstall.fromMutable (S8Kani2FinishReferenceJoin.toFinish (Port3_FlushInstall.toOwned x))) =
+    fun x => x
+⊢ List.map (Port3_FlushInstall.fromMutable ∘ S8Kani2FinishReferenceJoin.toFinish ∘ Port3_FlushInstall.toOwned) ↑s = ↑s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice K
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+Port4D_FlushResult.lean:64:114: error: unsolved goals
+self : verifier.BatchedWeights
+old : Slice K
+lengths : (↑old).length ≤ (↑self.raw).length
+bw : S8Kani2MutableValue.F.BW := { raw := self.raw, terms := self.terms }
+f : ℕ → S8Kani2MutableValue.F.Q := S8Kani2MutableValue.valueAt bw
+i : Usize
+hi : ↑i < (↑old).length
+⊢ (do
+      let q ← S8Kani2MutableValue.F.value { raw := self.raw, terms := self.terms } i
+      ok (Port3_FlushInstall.fromMutable q)) =
+    ok (Port3_FlushInstall.fromMutable (f ↑i))
+Port4D_FlushResult.lean:67:36: error: Application type mismatch: The argument
+  hv
+has type
+  ∀ (i : Usize), ↑i < (↑old).length → value self i = ok (Port3_FlushInstall.fromMutable (f ↑i))
+but is expected to have type
+  ∀ (i : Usize), ↑i < (↑old).length → value self i = ok (?m.33 ↑i)
+in the application
+  finish_total self value old ?m.33 hv
+Port4D_FlushResult.lean:66:21: warning: This simp argument is unused:
+  S8Kani2MutableValue.valueAt_success bw i (by change i.val < self.raw.val.length; omega)
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵v̵a̵l̵u̵e̵,̵S̵8̵K̵a̵n̵i̵2̵M̵u̵t̵a̵b̵l̵e̵V̵a̵l̵u̵e̵.̵v̵a̵l̵u̵e̵A̵t̵_̵s̵u̵c̵c̵e̵s̵s̵ ̵b̵w̵ ̵i̵ ̵(̵b̵y̵ ̵c̵h̵a̵n̵g̵e̵ ̵i̵.̵v̵a̵l̵ ̵<̵ ̵s̵e̵l̵f̵.̵r̵a̵w̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵;̵ ̵o̵m̵e̵g̵a̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4D_FlushResult.lean:66:109: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [value,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S8Kani2MutableValue.valueAt_success bw i (by change i.val < self.raw.val.length; omega),̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4D_FlushResult.lean:89:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self weights.deref
+in the target expression
+  (let (s, back) := (⟨↑weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let out ← Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self s
+    ok (back out)) =
+    do
+    let out ← Port3_FlushInstall.flush self weights.deref
+    ok ⟨↑out, ⋯⟩
+
+self : verifier.BatchedWeights
+weights : alloc.vec.Vec K
+lengths : (↑weights).length ≤ (↑self.raw).length
+⊢ (let (s, back) := (⟨↑weights, ⋯⟩, fun s => ⟨↑s, ⋯⟩)
+    do
+    let out ← Port3_NativeFlushBody.verifier.BatchedWeights.finish std value self s
+    ok (back out)) =
+    do
+    let out ← Port3_FlushInstall.flush self weights.deref
+    ok ⟨↑out, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    weights
+  has type
+    alloc.vec.Vec K
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑weights
+'AspisR1.Port4D_FlushABI.finish_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushABI.prefix_transport' depends on axioms: [propext]
+'AspisR1.Port4D_FlushABI.slice_roundtrip' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.Port4D_FlushABI.reference_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushABI.vec_backwrite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

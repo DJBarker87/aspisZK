@@ -1,0 +1,3 @@
+The SAME accepted source shared_high call changes only slots1/3. All other incoming cells, including private slot4, are preserved without canonicality, arithmetic or desired-value premises. Exact actual mutation callback and array update events are used. This local frame supports actual final-parts composition; it is not a whole pairing, runtime or soundness closure.
+
+Focused Lean check: 21.695 seconds; peak aggregate RSS 3094675456 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,10 @@
+  have hb := congrArg iota h
+  rw [map_mul,map_one,map_ofNat] at hb
+  have hn : (4 : B)≠0 := by
+    intro hz
+    rw [hz,mul_zero] at hb
+    exact zero_ne_one hb
+  calc
+    _ = iota q*((4 : B)*(4 : B)⁻¹) := by rw [mul_inv_cancel₀ hn,mul_one]
+    _ = (iota q*(4 : B))*(4 : B)⁻¹ := (mul_assoc _ _ _).symm
+    _ = _ := by rw [hb,one_mul]

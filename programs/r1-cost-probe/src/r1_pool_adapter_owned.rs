@@ -70,11 +70,10 @@ fn require_distinct_accounts<const N: usize>(accounts: &[&OwnedAccount; N]) -> P
     }
     Ok(())
 }
-fn require_zero(bytes: &[u8]) -> ProgramResult {
-    let mut index = 0;
-    while index < bytes.len() {
-        if bytes[index] != 0 { return Err(ProgramError::AccountAlreadyInitialized); }
-        index += 1;
+fn require_zero(mut remaining: &[u8]) -> ProgramResult {
+    while !remaining.is_empty() {
+        if remaining[0] != 0 { return Err(ProgramError::AccountAlreadyInitialized); }
+        remaining = &remaining[1..];
     }
     Ok(())
 }

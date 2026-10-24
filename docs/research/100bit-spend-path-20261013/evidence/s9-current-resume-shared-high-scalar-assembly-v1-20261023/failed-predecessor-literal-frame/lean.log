@@ -1,0 +1,71 @@
+/private/tmp/a3-s9-shared-high-scalar-assembly-v2c-check-20261023/sources/S9SharedHighScalarAssemblyV1.lean:94:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/private/tmp/a3-s9-shared-high-scalar-assembly-v2c-check-20261023/sources/S9SharedHighScalarAssemblyV1.lean:58:48: error: unsolved goals
+partials : Std.Array W 4#usize
+self : weights.Weights
+ap0 ap1 : Std.Array W 4#usize
+parts out : Parts
+hfactors : FactorsCanonical self
+hp0 : GoodPowers ap0
+hp1 : GoodPowers ap1
+hparts : GoodParts parts
+h : weights.shared_high partials self ap0 ap1 parts = ok (core.result.Result.Ok (), out)
+row0 row2 : Row
+high0 high2 f00 f01 f20 f21 : Coeff
+dot0 dot2 s00 s01 s20 s21 scale0 scale2 product0 product2 oldPart : W
+back : W → Parts
+hr0 : self.factors.index_usize 0#usize = ok row0
+hh0 : Array.index_usize row0 4#usize = ok high0
+hd0 : weights.high_dot partials high0 = ok (core.result.Result.Ok dot0)
+hf00 : Array.index_usize row0 0#usize = ok f00
+hs00 : weights.Weights.scalar_factor f00 ap0 = ok s00
+hf01 : Array.index_usize row0 1#usize = ok f01
+hs01 : weights.Weights.scalar_factor f01 ap1 = ok s01
+hscale0 : aspis_core.field.wide_exact.WideExact.mul s00 s01 = ok scale0
+hproduct0 : aspis_core.field.wide_exact.WideExact.mul scale0 dot0 = ok product0
+hmut : Array.index_mut_usize parts 1#usize = ok (oldPart, back)
+hr2 : self.factors.index_usize 2#usize = ok row2
+hh2 : Array.index_usize row2 4#usize = ok high2
+hd2 : weights.high_dot partials high2 = ok (core.result.Result.Ok dot2)
+hf20 : Array.index_usize row2 0#usize = ok f20
+hs20 : weights.Weights.scalar_factor f20 ap0 = ok s20
+hf21 : Array.index_usize row2 1#usize = ok f21
+hs21 : weights.Weights.scalar_factor f21 ap1 = ok s21
+hscale2 : aspis_core.field.wide_exact.WideExact.mul s20 s21 = ok scale2
+hproduct2 : aspis_core.field.wide_exact.WideExact.mul scale2 dot2 = ok product2
+hupdate : Array.update (back product0) 3#usize product2 = ok out
+q00 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f00
+q01 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f01
+q20 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f20
+q21 : AspisR1S9ActualScalarFourTermMeaningV1.GoodQArray f21
+m00 : ScalarMeaning f00 ap0 s00
+m01 : ScalarMeaning f01 ap1 s01
+m20 : ScalarMeaning f20 ap0 s20
+m21 : ScalarMeaning f21 ap1 s21
+cd0 : AspisR1S9ActualPairWideCanonicalV1.Canonical dot0
+cd2 : AspisR1S9ActualPairWideCanonicalV1.Canonical dot2
+cs0 : AspisR1S9NativeWideDecodedArithmeticV1.Canonical scale0
+vs0 : decode scale0 = decode s00 * decode s01
+cs2 : AspisR1S9NativeWideDecodedArithmeticV1.Canonical scale2
+vs2 : decode scale2 = decode s20 * decode s21
+cp0 : AspisR1S9NativeWideDecodedArithmeticV1.Canonical product0
+vp0 : decode product0 = decode s00 * decode s01 * decode dot0
+cp2 : AspisR1S9NativeWideDecodedArithmeticV1.Canonical product2
+vp2 : decode product2 = decode s20 * decode s21 * decode dot2
+hb : back = fun v => Std.Array.set parts 1#usize v
+hu : (Std.Array.set parts 1#usize product0).update 3#usize product2 = ok out
+hout : out = (Std.Array.set parts 1#usize product0).set 3#usize product2
+middle : Std.Array W 7#usize
+hmiddle : Array.update parts 1#usize product0 = ok middle
+hpost hmiddleEq : middle = Std.Array.set parts 1#usize product0
+hfirst : GoodParts (Std.Array.set parts 1#usize product0)
+hgood : AspisR1S9ActualFinalSumV1.Good out
+j : Usize
+hj : ↑j < 7
+⊢ (if ↑j = ↑3#usize then product2 else if ↑j = ↑1#usize then product0 else atN parts j hj) =
+    if ↑j = 3 then product2 else if ↑j = 1 then product0 else atN parts j hj
+'AspisR1S9SharedHighScalarAssemblyV1.shared_high_success_value_assembly' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

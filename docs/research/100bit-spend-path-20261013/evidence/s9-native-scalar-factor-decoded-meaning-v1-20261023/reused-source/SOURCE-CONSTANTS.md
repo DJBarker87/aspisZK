@@ -1,0 +1,1 @@
+Authoritative H5 Rust weights.rs6: PERM=[0,3,2,1]; QUARTER=M31(536870912). Actual generated Funs371afe declarations weights.PERM/weights.QUARTER preserve those exact constants. New native_perm_eq_helper/native_quarter_eq_helper kernel-prove equality to retained helper constants. No [0,2,1,3] summary is used.

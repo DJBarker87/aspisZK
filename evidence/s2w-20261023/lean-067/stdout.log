@@ -1,0 +1,70 @@
+S2W_DigestExtraction.lean:23:44: warning: Variable name `self` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+S2W_DigestExtraction.lean:31:35: error: Tactic `rfl` failed: The left-hand side
+  digest hashv self parts
+is not definitionally equal to the right-hand side
+  ok v✝
+
+case ok
+hashv : Parts → Result Digest
+self : AdapterRw.SolanaDigest
+parts : Parts
+v✝ : Digest
+returned : hashv parts = ok v✝
+⊢ digest hashv self parts = ok v✝
+S2W_DigestExtraction.lean:31:35: error: Tactic `rfl` failed: The left-hand side
+  digest hashv self parts
+is not definitionally equal to the right-hand side
+  fail e✝
+
+case fail
+hashv : Parts → Result Digest
+self : AdapterRw.SolanaDigest
+parts : Parts
+e✝ : Error
+returned : hashv parts = fail e✝
+⊢ digest hashv self parts = fail e✝
+S2W_DigestExtraction.lean:31:35: error: Tactic `rfl` failed: The left-hand side
+  digest hashv self parts
+is not definitionally equal to the right-hand side
+  div
+
+case div
+hashv : Parts → Result Digest
+self : AdapterRw.SolanaDigest
+parts : Parts
+returned : hashv parts = div
+⊢ digest hashv self parts = div
+S2W_DigestExtraction.lean:52:0: warning: Definition `sourceBoundary` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+'AspisR1.S2W_DigestExtraction.digest_eq_hashv' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_DigestExtraction.native_oracle' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops) (native1 : First) (native2 : Second)
+  (hashv : Parts → Result Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : Program) (accounts : Accounts) (data : Slice U8)
+      (slot : Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Slice (Slice U8)), ops.op43 self parts = digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops} {native1 : First} {native2 : Second}
+    {hashv : Parts → Result Digest}
+    (stage1 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : Program) (accounts : Accounts) (data : Slice U8) (slot : Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Slice (Slice U8)), ops.op43 self parts = digest hashv self parts) :
+    AeneasExtraction ops native1 native2 hashv

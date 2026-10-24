@@ -1,0 +1,3 @@
+One successful actual V3 statement-factor cell body, on canonical same-input statement points, supplies its own TAU/index operations, point reads, exact mutable row write and four canonical decoded bilinear coefficients. Independent arithmetic success and prior factor-canonicality premises are not needed. This proves the exact cell written by the actual body; carrying the meanings through the complete constructor loops and source/runtime adoption remains open.
+
+Focused Lean check: 18.14 seconds; peak aggregate RSS 3226140672 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

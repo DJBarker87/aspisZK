@@ -1,0 +1,9 @@
+# Actual native push loop reader-domain proof
+
+The exact actual source `push_byte_products_loop.body` is used. A successful body step either exhausted its real iterator, or yields same-call iterator index, native field output, scratch scalar and EbyK push witnesses. In the active case, its index is below the actual Pair quotient and the existing concrete S5 checked reader returns that same mapped field value. The source parse-error terminal branch is covered, so the proof does not silently treat every successful Lean Result as verifier acceptance.
+
+The explicit `Reached` relation contains only finite execution prefixes beginning at the actual 0..n source initialization and following actual successful continuation steps. `reached_end` proves those prefixes preserve end=n. Consequently `reached_success_reader_call` has no separately assumed safe-offset/index/decoder-success hypothesis: its child witnesses and reader equality follow from the same actual reached body execution. The only input arithmetic fact is the successful byte-length division, already derived from accepted Pair in the dependency packet.
+
+This is source loop-control and reader-domain closure. It does not yet prove a complete accepted-loop ordered product trace, accumulator mathematics, the shared partial-dot branch, whole Pair output semantics, runtime/source extraction equivalence or 100-bit soundness. Those remain distinct and open at this packet boundary. No abstract dot-meaning premise is introduced.
+
+Focused serial checks compiled only the changed modules against pinned warm objects; exact source/revision, commands, wall/RSS/swap, exits and standard axioms are recorded. No full replay or binary artifacts are included. The superseded first push-body draft had an incorrect inner error type; it was corrected before any compiler launch, so it is not misreported as a failed compile.

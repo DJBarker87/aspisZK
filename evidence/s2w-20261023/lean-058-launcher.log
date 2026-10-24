@@ -1,0 +1,51 @@
+{"attempt": "lean-058", "exit_status": 0, "wall_seconds": 2.2755629519961076, "peak_rss_kib": "4411652", "swaps": "0", "print_axioms": ["'AspisR1.S2W_NativeConsolidation.cuts_of_acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_NativeConsolidation.accepted_native_consolidation' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]"]}
+'AspisR1.S2W_NativeConsolidation.cuts_of_acceptance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_NativeConsolidation.accepted_native_consolidation' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+theorem AspisR1.S2W_NativeConsolidation.accepted_native_consolidation : ∀ (ops : AdapterRw.Ops) (native1 : First)
+  (native2 : Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+  AeneasExtraction ops native1 native2 hashv →
+    ∀ (sha256 H : Bytes → State),
+      P1 sha256 H →
+        RuntimeSyscall hashv sha256 →
+          ∀ (program : Program) (accounts1 accounts2 : Accounts) (data1 data2 : Slice U8) (slot : Slot)
+            (saved : alloc.vec
+...
+                                                                    (3 * b + k))) ∧
+                                                              y1 = S8JoinFrozenScan.segment f.proof 7031 464 ∧
+                                                                S8OwnedP6.check_values_owned y1 =
+                                                                  ok (core.result.Result.Ok ()) :=
+fun ops native1 native2 hashv extraction sha256 H p1 runtime program accounts1 accounts2 data1 data2 slot saved
+    accepted1 accepted2 =>
+  let ⟨f, h✝⟩ :=
+    cuts_of_acceptance ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot saved accepted1
+      accepted2
+  let ⟨s, cuts⟩ := h✝
+  let ⟨l1, h✝¹⟩ :=
+    accepted_native_observation ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot saved
+      accepted1 accepted2
+  let ⟨l2, h✝²⟩ := h✝¹
+  let ⟨suffix, h✝³⟩ := h✝²
+  let ⟨first, right✝⟩ := h✝³
+  let ⟨second, right✝¹⟩ := right✝
+  let ⟨both, right✝²⟩ := right✝¹
+  let ⟨extension, valid⟩ := right✝²
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro l1
+        (Exists.intro l2
+          (Exists.intro suffix
+            ⟨cuts,
+              ⟨first,
+                ⟨second,
+                  ⟨both,
+                    ⟨extension,
+                      ⟨valid,
+                        ⟨native_oracle ops native1 native2 hashv extraction sha256 H p1 runtime,
+                          fun decode y1 nodes writer reader version p2prime entry multiproof scan =>
+                          authenticated_geometry ops decode H f.semantic f.pub f.proof s.pub s.proof s.checkpoint y1
+                            nodes f.split saved cuts.first cuts.second writer reader version p2prime entry multiproof
+                            scan⟩⟩⟩⟩⟩⟩⟩))))
+
+Running as unit: run-r0dc856f8b98e4f3ea65ef1006afb6b06.scope; invocation ID: 0830b742448747a58a675da70101d5d4

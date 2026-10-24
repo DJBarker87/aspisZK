@@ -1,0 +1,32 @@
+Port1_ByteDriver.lean:64:84: error: unsolved goals
+adapter : AdapterRw.Ops
+impl : Implementation
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+s : Submission
+bound : 75 + List.length s.publicBytes ≤ SelectedTranscriptParams.L
+⊢ (match Port1_Driver.asSlice s.publicBytes, Port1_Driver.asSlice s.stored with
+    | some pub, some proof =>
+      match Port1_Driver.decodeSemantic adapter pub with
+      | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+      | x => Program.done false
+    | x, x_1 => Program.done false) =
+    match Port1_Driver.asSlice (statement s).pubBytes, Port1_Driver.asSlice s.stored with
+    | some pub, some proof =>
+      match Port1_Driver.decodeSemantic adapter pub with
+      | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+      | x => Program.done false
+    | x, x_1 => Program.done false
+Port1_ByteDriver.lean:65:36: warning: This simp argument is unused:
+  public_bytes s bound
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵s̵t̵,̵P̵o̵r̵t̵1̵_̵D̵r̵i̵v̵e̵r̵.̵r̵u̵s̵t̵,̵p̵u̵b̵l̵i̵c̵_̵b̵y̵t̵e̵s̵ ̵s̵ ̵b̵o̵u̵n̵d̵,̵i̵n̵p̵u̵t̵]̵[̲r̲u̲s̲t̲,̲ ̲P̲o̲r̲t̲1̲_̲D̲r̲i̲v̲e̲r̲.̲r̲u̲s̲t̲,̲ ̲i̲n̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port1_ByteDriver.slice_length' depends on axioms: [propext]
+'AspisR1.Port1_ByteDriver.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.canonical_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.accepted_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.substitute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

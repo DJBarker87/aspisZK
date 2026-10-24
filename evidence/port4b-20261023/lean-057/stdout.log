@@ -1,0 +1,28 @@
+Port4B_ByteWord.lean:21:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (0#?w)[?i]!
+in the target expression
+  Byte.testBit b k = 0[8 * j + k]!
+
+bs : List (BitVec 8)
+zero : BitVec.fromLEBytes bs = 0
+b : BitVec 8
+mem : b ∈ bs
+j : ℕ
+hj : j < bs.length
+same : bs[j] = b
+k : ℕ
+hk : k < 8
+read : Byte.testBit b k = 0[8 * j + k]!
+div : (8 * j + k) / 8 = j
+mod : (8 * j + k) % 8 = k
+element : bs[j]! = b
+⊢ Byte.testBit b k = Byte.testBit 0 k
+Port4B_ByteWord.lean:34:4: error: Type mismatch: After simplification, term
+  read
+ has type
+  @Eq Bool ((BitVec.cast width (BitVec.fromLEBytes (List.map U8.bv ↑word))).toNat.testBit k)
+    ((BitVec.toNat 0).testBit k)
+but is expected to have type
+  @Eq Bool ((BitVec.fromLEBytes (List.map U8.bv ↑word)).toNat.testBit k) ((BitVec.toNat 0).testBit k)
+'AspisR1.Port4B_ByteWord.fromLE_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.Port4B_ByteWord.u64_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

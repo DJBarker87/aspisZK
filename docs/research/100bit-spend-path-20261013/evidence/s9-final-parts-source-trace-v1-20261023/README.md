@@ -1,0 +1,3 @@
+One accepted shared or unshared two-fold native Pair supplies an explicit operational trace for the SAME exported final parts and power-array parameters. Trace contains parent/branch/read/powers/regular/common/partial/high/low/inactive/private/active/write/final-sum SOURCE EVENTS ONLY, without desired canonicality, kappa polynomial or relation meaning. This repairs the missing vector provenance in historical untraced existential endpoints; other source/runtime/security boundaries remain explicit.
+
+Focused Lean check: 15.383 seconds; peak aggregate RSS 2235957248 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

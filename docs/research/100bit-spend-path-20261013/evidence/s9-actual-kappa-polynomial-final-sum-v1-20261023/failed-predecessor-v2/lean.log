@@ -1,0 +1,45 @@
+/private/tmp/a3-s9-actual-kappa-final-sum-v2-check-20261023/sources/S9ActualKappaFinalSumV1.lean:55:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1S9ActualIndexedPowersArithmeticV1.decode (↑k)[↑j]
+in the target expression
+  decode (↑k)[↑j] * decode (↑parts)[↑j] = decode kappa ^ ↑j * decode (↑parts)[↑j]
+
+parts k : A
+kappa : W
+hc : Canonical kappa
+hp : weights.powers 7#usize kappa = ok k
+i : ℕ
+hi : i ∈ Finset.range 7
+hib : i < 7
+j : Usize := Usize.ofNatCore i ⋯
+hj : ↑j = i
+hjb : ↑j < 7
+hread : Array.index_usize k j = ok (AspisR1S9FactorArrayEntryV1.atN k j hjb)
+hvalue :
+  AspisR1S9ActualIndexedPowersArithmeticV1.decode (↑k)[↑j] = AspisR1S9ActualIndexedPowersArithmeticV1.decode kappa ^ ↑j
+⊢ decode (↑k)[↑j] * decode (↑parts)[↑j] = decode kappa ^ ↑j * decode (↑parts)[↑j]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    k
+  has type
+    A
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑k
+'AspisR1S9ActualKappaFinalSumV1.zero_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualKappaFinalSumV1.zero_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualKappaFinalSumV1.actual_powers_seven_good' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualKappaFinalSumV1.actual_powers_partial_sum' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActualKappaFinalSumV1.actual_final_sum_is_kappa_polynomial' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActualKappaFinalSumV1.actual_shared_final_sum_is_kappa_polynomial' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

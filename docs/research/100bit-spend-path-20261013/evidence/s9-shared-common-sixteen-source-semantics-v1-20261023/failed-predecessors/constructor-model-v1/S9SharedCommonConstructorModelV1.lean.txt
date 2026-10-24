@@ -1,0 +1,60 @@
+import S9SharedCommonLoopMeaningV1
+import S9ActualPairQuotient64V1
+import S9ConstructorTableNativeTensorV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+open AspisR1S9ProductionPairCutV1
+namespace AspisR1S9SharedCommonConstructorModelV1
+open AspisR1S9SharedCommonBodyTraceV1
+open AspisR1S9SharedCommonBodyMeaningV1
+open AspisR1S9SharedCommonLoopMeaningV1
+open AspisR1S9ActualTensorArithmeticV1
+open AspisR1S9ActualTensorStoredProductV1
+open AspisR1S9FactorArrayEntryV1
+
+theorem mask_three_val (j : Usize) : (j &&& 3#usize).val=j.val%4 := by
+  have ha := UScalar.val_and j 3#usize
+  have ht : (3#usize).val=3 := rfl
+  rw [ha,ht]
+  exact Nat.and_two_pow_sub_one_eq_mod j.val 2
+
+theorem expectedBits_eq (self : weights.Weights) (j : Usize) :
+    expectedBits self j=storedFactor self 0#usize 2 (j.val%4) *
+      storedFactor self 0#usize 3 (j.val/4) := by
+  unfold expectedBits
+  rw [mask_three_val,AspisR1S9ActualPairQuotient64V1.shift_two_val]
+
+/-- Same complete sixteen-write loop, interpreted in ONE constructor table.
+The generic receiver canonicality and table meaning are explicit; no initial
+common-array meaning, child-call success, or per-entry model is assumed. -/
+theorem constructor_common_loop_success
+    (w : AspisR1S9ActualWeightsNewBoxNewV3.Weights)
+    (model : AspisR1S9FactorTableSemanticsV1.Table)
+    (hm : AspisR1S9FactorTableSemanticsV1.Meaning w.factors model)
+    (hcan : FactorsCanonical (AspisR1S9FinishActualConstructorSlotV1.fromCtorWeights w))
+    (selfOut : weights.Weights) (common commonOut : Common)
+    (h : weights.Weights.pair_loop1 {start:=0#usize,«end»:=16#usize}
+      (AspisR1S9FinishActualConstructorSlotV1.fromCtorWeights w) common=.ok (selfOut,commonOut)) :
+    selfOut=AspisR1S9FinishActualConstructorSlotV1.fromCtorWeights w ∧
+      ∀ (j : Usize) (hj : j.val<16), Can (atN commonOut j hj) ∧
+        decode (atN commonOut j hj)=model 0 2 (j.val%4)*model 0 3 (j.val/4) := by
+  obtain ⟨hself,hprefix⟩ := actual_common_loop_success _ selfOut
+    {start:=0#usize,«end»:=16#usize} common commonOut hcan rfl rfl h
+  refine ⟨hself,?_⟩
+  intro j hj
+  obtain ⟨hc,hv⟩ := hprefix j hj hj
+  refine ⟨hc,?_⟩
+  rw [hv,expectedBits_eq]
+  have hlo : j.val%4<4 := Nat.mod_lt _ (by decide)
+  have hhi : j.val/4<4 := by omega
+  have e2 := AspisR1S9ConstructorTableNativeTensorV1.native_stored_factor_model_nat
+    w model hm 0#usize (by decide) 2 (j.val%4) (by decide) hlo
+  have e3 := AspisR1S9ConstructorTableNativeTensorV1.native_stored_factor_model_nat
+    w model hm 0#usize (by decide) 3 (j.val/4) (by decide) hhi
+  rw [e2,e3]
+  rfl
+
+#print axioms mask_three_val
+#print axioms expectedBits_eq
+#print axioms constructor_common_loop_success
+end AspisR1S9SharedCommonConstructorModelV1

@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/pair-dot-backend-map-v2-20261023/sources/S9ActualDotBackendMapV1.lean:7:20: error(lean.unknownIdentifier): Unknown constant `AspisR1S9ProductionPairCutV1.fast_pairing.canonical.Q.raw`
+/home/dombarker/project-offloads/pair-dot-backend-map-v2-20261023/sources/S9ActualDotBackendMapV1.lean:39:40: error(lean.unknownIdentifier): Unknown identifier `actualRaw`
+
+Note: It is not possible to treat `actualRaw` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/pair-dot-backend-map-v2-20261023/sources/S9ActualDotBackendMapV1.lean:44:52: error(lean.unknownIdentifier): Unknown identifier `actualRaw`
+/home/dombarker/project-offloads/pair-dot-backend-map-v2-20261023/sources/S9ActualDotBackendMapV1.lean:39:93: error: unsolved goals
+self out : NativeDot
+left right : Std.Array U32 4#usize
+h :
+  (do
+      let raw1 ← fast_pairing.canonical.Q.raw left right
+      AspisR1S9ProductionPairCutV1.fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self
+          raw1) =
+    ok out
+raw : Std.Array U64 4#usize
+hraw : fast_pairing.canonical.Q.raw left right = ok raw
+hloop :
+  AspisR1S9ProductionPairCutV1.fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self raw =
+    ok out
+hsums : out.sums = AspisR1DotPushLocal.Proof.updatedSums self.sums raw
+⊢ (do
+      let out ← AspisR1DotPushLocal.canonical.Dot.push sorry { sums := { sums := self.sums }.sums } left right
+      ok { sums := out.sums }) =
+    ok { sums := out.sums }
+'AspisR1S9ActualDotBackendMapV1.native_loop_success_sums' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualDotBackendMapV1.native_dot_push_success_backend' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

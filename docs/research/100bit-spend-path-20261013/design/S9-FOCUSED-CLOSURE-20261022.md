@@ -1259,3 +1259,337 @@ source adoption, new CU gate or compiled artifact pin is claimed here.
 Source normalization, Box/allocation effects, caller installation, whole
 constructor totality, the remaining source/refinement obligations and the
 composed security contract all remain required.
+
+## 2026-10-23 accepted-run coefficient and tensor update
+
+This update supersedes the preceding descriptions of the complete helper
+and stored tensor product as still under composition. It does not supersede
+the remaining source-adoption/runtime/security boundaries.
+
+**Proved, candidate C.**
+`AspisR1S9StrictResumeFinishOriginalCoefficientsV1.strict_resume_finish_same_original_coefficients`
+derives the original four S2 helper coefficient equations from the same
+accepted strict-resume/finish execution with the concrete constructor/Pair
+slots installed. The receiver, S2 variant, canonical native inputs, indexed
+powers and child helper success come from that execution; independent
+canonicality and child-success premises are not added. The actual helper
+is transported to the already-proved old helper and reuses its original
+coefficient algebra. Source-only packets are in
+`lean-candidates/s9-actual-pair-allocator-uniform-v1-20261023/{scalar-factor-candidate,helper-transport-candidate,original-coefficients-candidate}/`.
+Their exact candidate weights source is
+`ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b`.
+
+**Proved, same stored factors.**
+`AspisR1S9ActualTensorStoredProductV1.actual_tensor_success_stored_product`
+establishes that the accepted actual S2 tensor loop returns the product of
+its own stored factors at the three base-four digits. Existing native
+factor canonicality and that same tensor success suffice; an independently
+assumed factor-meaning contract was removed. See
+`evidence/s9-actual-tensor-product-semantics-v1-20261023/` and
+`evidence/s9-actual-tensor-stored-product-v1-20261023/`.
+This does **not** prove that the constructor stores the required protocol
+factor formulas; that is the next mathematical join.
+
+**Proved, constructor arithmetic semantics.** The exact V3 constructor's
+accepted multiplication, addition and subtraction calls now give the
+corresponding decoded exact-tower product, sum and difference, with
+canonical output. These reuse existing checked/wrapping arithmetic and the
+exact tower, rather than replacing it with new arithmetic assumptions. See
+`evidence/s9-constructor-v3-qmul-semantics-v1-20261023/`,
+`evidence/s9-constructor-v3-qm-add-sub-map-v1-20261023/` and
+`evidence/s9-constructor-v3-qm-add-sub-semantics-v1-20261023/`.
+All accepted focused checks report only standard axioms and zero swap;
+the packets retain exact source/object hashes, target, revision, command,
+wall time and RSS. Unchanged cached dependencies were reused. This is not
+a final dependency-closure replay.
+
+**Measured, not adopted.** Candidate C passed six fixtures and the retained
+full-OS-mask proof in its historical caller context against the approved
+S4 comparator: maximum six-fixture stage-1 increase 11,689 CU, maximum
+settlement increase 1,491 CU; the retained full-mask sample increases were
+11,689 and 1,496 CU. That full-mask check reuses one retained OS-random
+proof, not a new sample or a proof of value-independent worst-case cost.
+The actual current owned-adapter snapshot at source revision
+`76d32f4680a19b9609522decfdb6cdbc3e5e923b` plus C is more expensive:
+maximum stage-1 increase **13,982 CU**, settlement increase **2,294 CU**.
+All six fixtures accepted and matched their checkpoint tails/return data,
+but stage 1 exceeds the authorized +12,000 CU allowance by **1,982 CU**.
+The comparator and allowance have not been changed. An isolated initialized
+Box experiment gave no stage-1 saving and worsened settlement by 20 CU;
+it is rejected as a solution to this regression. Further performance
+attribution is isolated on the NUC. No candidate C/D production source
+adoption, new release artifact, or CU-budget pass is claimed for the current
+owned adapter. Exact runtime receipts remain in the named private NUC job
+directories pending source-only evidence packaging.
+
+Remaining local joins include actual constructor stored-factor/statement
+point semantics, the current checkpoint-reader accepted-run bridge,
+source normalization and allocation effects, and concrete runtime/artifact
+refinement. The global source-to-model and security-experiment obligations
+remain governed by the gap map and security contract. **The 100-bit target
+is not yet established.**
+
+
+## 2026-10-23 continuation: constructor-to-actual-tensor composition
+
+This entry supersedes the earlier entry's outstanding constructor-factor and
+checkpoint-reader joins and its obsolete +12,000 CU allowance. The owner
+explicitly approved **+12,214 CU per transaction**, against the same comparator.
+The global 100-bit target remains **not yet established**.
+
+**Proved, extracted value semantics.** The same accepted constructor call now
+provides every statement D18 and circle-basis factor formula and canonical
+factor required by the native tensor theorem. The statement rows are connected
+to the existing protocol opening-point model, including its bit ordering.
+The actual pairing success supplies its own three shared or five unshared
+regular tensor-call traces; independent successful-tensor-call premises are
+removed in the final composition. The same accepted current checkpoint resume
+and finish select **one** constructor model for all these traces. Canonical
+alpha/z guards are derived from that reader path. Successful output reads below
+64 have the exact three-factor high-product meaning. Output length, complete
+weighted dot/pairing values, other finish operations and runtime simulation are
+not conclusions of these theorems.
+
+The source-only packets are:
+
+- `evidence/s9-constructor-source-phases-v1-20261023/`
+- `evidence/s9-constructor-table-native-tensor-v1-20261023/`
+- `evidence/s9-actual-constructor-native-tensor-v1-20261023/`
+- `evidence/s9-statement-d18-model-opening-factors-v1-20261023/`
+- `evidence/s9-complete-constructor-model-statement-factors-v1-20261023/`
+- `evidence/s9-actual-pair-same-tensor-witnesses-v1-20261023/`
+- `evidence/s9-current-reader-native-producer-path-v1-20261023/`
+- `evidence/s9-current-resume-finish-native-tensor-v1-20261023/`
+- `evidence/s9-current-resume-finish-real-tensor-model-v1-20261023/`
+
+Each retains the exact complete theorem source, focused target/receipt and
+standard-axiom audit; unchanged pinned dependencies were reused. No final
+manifest replay or source-to-runtime security closure is claimed.
+
+**Measured, isolated candidate.** The callback-free H5 candidate with two
+explicit ordered statement-point complement writes passes all six fixtures,
+the strict stack gate, and the retained full-random-mask sample. Stage-1 maximum
+increase is **12,214 CU**; settlement maximum is **2,296 CU** over the six
+fixtures and **2,301 CU** on the retained full-mask sample. This is one retained
+OS-random proof, not a fresh sampling campaign or an analytical worst-case
+bound. Final candidate ELF SHA256 is
+`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`.
+See `evidence/s9-h5-explicit-complements-feasibility-v1-20261023/`.
+
+**Source architecture and trust.** The explicit writes remove the actual
+fixed-size Std iterator from the candidate source and match the already
+extracted V3 helper span byte for byte. The correct constructor extraction is
+the attempt22 exact-attribute cut. Stock Aeneas erases Box ownership/allocation
+at the value level: its generated packer returns the exact record, without a
+custom allocation-success premise. This identifies the translator trust
+boundary; it is not a Lean proof of the physical allocator, ABI, runtime abort
+law or adaptive oracle transport. See
+`evidence/s9-h5-constructor-sourcecut-reconciliation-v1-20261023/`.
+The candidate remains isolated pending the final runtime gates and explicit
+source-impact/freeze decision; no deployment is authorized by this report.
+
+**Next concrete obligations.** Decode actual scalar-factor results using the
+existing four-term theorem (authoritative PERM is `[0,3,2,1]`, with QUARTER),
+connect actual wide-field reads to the existing dot reader under its real index
+bounds, then compose the remaining weighted dot/shared-high/grouped-inactive
+and final kappa sum. Wrapping source offsets and checked model offsets must
+not be equated for arbitrary indices. Complete source/runtime/artifact and
+security-experiment obligations remain open under the authoritative gap map.
+
+
+## 2026-10-23 working-source freeze and actual scalar joins
+
+The isolated-candidate status above is superseded by working-source adoption
+commit `60cb14bde2`. All four before/after file hashes were checked against the
+measured H5 plus explicit-Core candidate. The existing final-ELF six fixtures,
+stack audit, retained full-mask sample, affected rebuilt native suites and
+final readonly 13-negative/two-control gate passed. No deployment occurred.
+See `design/H5-SOURCE-ADOPTION-20261023.md` and
+`evidence/s9-h5-source-application-v1-20261023/`. Full source-cone/S10, runtime,
+artifact and coherent-release proof obligations remain open.
+
+**Proved, actual reader correspondence with the real domain.** Any successful
+actual native wide-field read is canonical, without a data-canonicality or
+index-safety hypothesis. The full decoder Result maps to the retained decoder.
+The native wrapping field reader equals the EXISTING S5 checked reader on its
+fitting window domain, preserving success, errors and divergence. The same
+accepted Pair supplies its actual length quotient; every index below that
+quotient has a fitting window and this reader equality. Actual loop-index
+membership is a separate consumer, not silently assumed closed. An unrestricted
+reader equality would be false due to wrapping aliases; the retained arithmetic
+counterexample is explicitly not a full-reader Lean theorem. Packets:
+`evidence/s9-native-field-current-decoder-canonical-v1-20261023/` and
+`evidence/s9-native-field-existing-s5-reader-bounded-v1-20261023/`.
+
+**Proved, same actual tensor/scalar model.** The same accepted current resume
+and finish derive one constructor model, the actual three shared or five
+unshared regular-kind call traces, exact native tensor products and both
+scalar-factor PERM/quarter formulas. Receiver/factor canonicality, power
+canonicality and independent successful child tensor/scalar/power calls are
+not premises of the final composition. The selected current-alpha prefix
+binding remains explicit. The formula reuses the existing scalar theorem;
+PERM is `[0,3,2,1]`, with the exact quarter scaling. See
+`evidence/s9-current-resume-finish-real-tensor-scalar-model-v1-20261023/`,
+`evidence/s9-process-kind-same-scalar-meanings-v1-20261023/` and
+`evidence/s9-native-scalar-factor-decoded-meaning-v1-20261023/`.
+
+**Proved, actual shared guard.** Actual guard success true supplies raw row0/2
+factor equality at dimensions 2 and 3. The same constructor's table model
+therefore shares these factors, while retaining row2's OWN dimension4 factor.
+No independent raw/model equality or table-meaning assumption remains in that
+constructor composition. This is not yet the optimized shared-dot value
+proof. See `lean-candidates/s9-actual-shared-guard-semantics-v1-20261023/`.
+
+**Proved, actual final sum loop.** The actual final sum loops in both two-fold
+branches compute the seven-term decoded product sum; their loop bodies are
+definitionally identical. The proof recovers its own actual read/multiply/add
+calls and reuses the existing loop-invariant theorem and S1 weighted-sum proof
+pattern. Canonical input arrays and initial prefix meaning remain explicit in
+this generic result. The separate actual kappa-seven powers/initial-zero bridge
+is in progress; no complete Pair polynomial conclusion is inferred yet. See
+`evidence/s9-actual-seven-term-final-sum-v1-20261023/` and
+`evidence/s9-native-wide-decoded-arithmetic-v1-20261023/`.
+
+All accepted results above have focused receipts and standard-axiom audits;
+unchanged pinned dependencies were reused. The continuing mathematical work
+is concrete native EbyK accumulator transport to the existing S5 product proof,
+actual dot-loop read/index traces, shared-common contraction, and kappa/parts
+assembly. This entry does not close S9, the source/runtime security experiment,
+or the >=100-bit target. **Target not yet established.**
+
+
+## 2026-10-23 continued composition and actual raw-body refinement
+
+The actual current shared branch now has a SAME-resume/SAME-Pair composition
+for its real common16 producer and shared-high writes: one constructor model,
+actual powers, exact four scalar PERM/quarter formulas, scale-times-actual-dot
+values, canonical parts1/3 and all-other-cell frame. Independent initial
+parts/model/factor/power/common/child-success guards are discharged at the
+current-model caller. See
+`evidence/s9-current-resume-same-shared-common-model-v1-20261023/` and
+`evidence/s9-current-resume-shared-high-scalar-assembly-v1-20261023/`.
+This starts from the current finish model; its concrete Stage2.View installer
+and other runtime/source boundaries are not silently supplied.
+
+The actual regular push loop now yields its exact ordered source operands
+and accumulator trace, reusing existing S5 product mathematics. The partial-dot
+trace has 16 entries; the accepted two-fold Pair fixes the regular quotient at 64.
+Fresh native new discharges initial-history guards. Partial-dot source/value
+consumers and universal actual partial/high finish canonicality are pinned
+separately. The stored partials theorem ties each actual partial call to the
+SAME stored output, removing an independent partial-array canonicality guard.
+These results do not infer a finished-Wide value equation before the finish
+transport is composed. Their raw external-binding scope is qualified by
+`design/S9-RAW-SOURCE-BOUNDARY-20261023.md`.
+
+The actual C raw body was freshly extracted without opacity, and canonical
+source-to-retained-kernel complete Result equality now passes with all 23
+checked-operation successes discharged by existing S5 totality. No arithmetic,
+protocol, source implementation or compute allowance changed. The same actual
+fromWide/checked_q operand-domain and installed-hook/EbyK substitution joins
+are being checked explicitly. Earlier broad arbitrary-input model-cut results
+are not retroactively arbitrary-input Rust theorems. The failed whole-DAG
+specialization hit the existing M4400 guard; generic factoring over opaque
+scalar variables fixed it without increasing resource limits.
+
+Native parts canonicality now has proved generic array frames, actual regular
+S2 calls from zero, the optimized S2 coefficient64/mask16/outer12 helper, and
+the final kappa polynomial loop. The optimized dispatch requires EXACT final
+span 64*32; floor(length/32)=64 alone is insufficient and admits trailing bytes.
+The existing tx2_common emitted constructor explicitly supplies that fixed
+View span, with candidate.rs/compact.rs unchanged from 2ec373; its SAME-view
+suffix/finish installer is a separate source binding being proved. The low16
+source formula includes PERM and QUARTER squared; the earlier requested plain
+product was incorrect and was never an accepted result.
+
+Shared dependency directories and split Lean cache companions are now staged
+by `scripts/r1_stage_selected_lean_cache.py`: selected .olean owners plus
+same-owner private/server/IR companions, all hashed. This fixes repeated
+preflight companion failures. No green theorem or unchanged full regression
+was rerun for that tooling repair. Different historical math cohorts remain
+explicitly pinned; final joint closure selection/replay is still required.
+
+Complete paired value/relation, actual current finish installer, global
+source/runtime/artifact and security-experiment obligations remain open.
+**The >=100-bit target is not yet established.**
+
+
+### 2026-10-23 continuation: same execution and actual finish value
+
+The owner confirmed the +12,214 CU allowance per verification/settlement
+transaction. The source adopted at 60cb14bde2 remains unchanged in crates/
+and programs/ through this continuation; the new work consists of proofs
+and evidence.
+
+The SAME complete extracted tx2 operation-cut now supplies its original
+resume result, internally constructed final View and actual submitted-byte
+range of exactly 2,048 bytes (`s9-tx2-same-final-view-span-v1-20261023`).
+`S9Stage2NativeFinishSlotsV1` and `S9Tx2SourceNativePairV1` then install the
+native constructor/Pair in the emitted finish control and derive the SAME
+native S2 receiver and Pair success from that event. The independently
+supplied Current View/finish premise is removed at this boundary. Other
+operation installers, runtime effects and the StoredCarrierBinding security
+experiment transport are still explicit open boundaries; this does not
+establish the whole runtime or an arbitrary-view equivalence.
+
+`S9ActualPairSharedFinalTraceV1.actual_pair_success_shared_final_trace`
+derives the complete same accepted shared two-fold Pair trace through
+regular/common/partials/high/low/inactive/private-four/active-four/powers-seven
+and the returned final sum. Its actual shared-guard result and two-fold
+alpha length remain premises. `S9ActiveFourCanonicalV1` proves both active
+source loops preserve canonical parts from canonical actual coefficients
+and incoming parts, obtaining field/arithmetic success from that same loop.
+Whole-parent parts canonicality and its kappa polynomial composition are
+candidates in progress, not closure claims in this checkpoint.
+
+`S9ActualFinishDecodedStateV1.actual_finish_success_decodes_state` establishes
+that the actual successful native finish output decodes to the SAME final
+accumulator's field value, universally over that final state. No independent
+history, state/count bounds, input canonicality or model-finish success is a
+premise. Its product-sum corollary consumes the separately proved SAME-state
+product equation. The focused NUC target passed with standard axioms and zero
+swap. This reuses retained arithmetic math; it does not attribute historical
+Std Array.map source semantics to the adopted source.
+
+The actual Pair returned value still needs its final parts connected to the
+spend relation and its concrete caller guards discharged. The final coherent
+dependency replay, remaining source/runtime/artifact bindings and composed
+security experiment remain open. **The 100-bit target is not established.**
+
+
+### Later continuation: complete Pair canonicality and kappa value
+
+The parent compositions are now proved in both actual source branches:
+`S9ActualSharedParentPartsCanonicalV1` and
+`S9ActualUnsharedParentPartsCanonicalV1` derive canonical final parts and
+the SAME powers-seven/final-sum calls from one accepted native Pair. They
+do not assume intermediate child successes, canonical low/private arrays,
+or initial/intermediate parts. The shared branch retains canonical receiver
+factors; the unshared branch does not require that premise.
+
+`S9ActualPairKappaPolynomialV1.actual_pair_returns_own_kappa_polynomial`
+then proves that the accepted native Pair returns the exact kappa polynomial
+of those own canonical final parts. Its actual shared-guard result is obtained
+from the SAME accepted source prefix and eliminated by cases, rather than
+assumed. The focused target passed with standard axioms, 25.476 seconds,
+3,233,595,392-byte aggregate RSS and zero swap; use its packet receipt as the
+authoritative resource record. The branch and unified packets were committed
+at cedcb1ac1e.
+
+Remaining caller guards are explicit: S2, canonical factors/private extra,
+canonical alpha/kappa, two-fold alpha length and the exact final-message
+span. `S9ResumeKappaAlphaCanonicalV1.resume_kappa_alpha_canonical` proves
+canonical stored kappa and both fold challenges, together with the exact
+Prepared alpha array, from the SAME successful strict Reader.e resume.
+The concrete caller endpoint composing these guards with the accepted tx2
+native Pair event is in progress. No alternate Current finish is supplied.
+
+The final parts still require their spend-relation interpretation. Native
+optimized coefficient64/mask16/outer12 source semantics are being connected
+to the existing S3 grouping theorem and identical tables; the pure grouping
+algebra is reused. Shared partial/high returned values and their exact source
+indices are being joined to the existing tensor-contraction theorem. These
+remain mathematical/source integration obligations, not cryptographic
+assumptions. Other operation/runtime/StoredCarrierBinding experiment ports,
+release artifact linkage and coherent final replay remain open. **The
+100-bit target is not established.**

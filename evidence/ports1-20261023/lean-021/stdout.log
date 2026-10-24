@@ -1,0 +1,115 @@
+'AspisR1.Port1_StoredCarrier.input_carried' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.parsed_proof' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.public_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.lift_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.lift_carried' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.enrich_carried' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.canon_carried' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.canon_lift_carried' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_StoredCarrier.driver_physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ParserCarrier.source_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalJoin.carried_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalJoin.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalJoin.accepted_experiment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalHeadline.lift_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalHeadline.runtime_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_CanonicalHeadline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.slice_length' depends on axioms: [propext]
+'AspisR1.Port1_ByteDriver.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.canonical_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.accepted_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ByteDriver.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port1_ModelOrder.silent_before_batch' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port1_ModelOrder.silent_bind' depends on axioms: [propext]
+'AspisR1.Port1_ModelOrder.body_joins_refl' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.Port1_StoredCarrier.Submission : Type
+number of parameters: 0
+fields:
+  AspisR1.Port1_StoredCarrier.Submission.publicBytes : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.Port1_StoredCarrier.Submission.stored : AspisV8R19.DuplexFrames.Bytes
+constructor:
+  AspisR1.Port1_StoredCarrier.Submission.mk (publicBytes stored : AspisV8R19.DuplexFrames.Bytes) :
+    AspisR1.Port1_StoredCarrier.Submission
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : AspisR1.Port1_StoredCarrier.Submission)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s))).2 = true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+            (AspisR1.Port1_StoredCarrier.input s))
+structure AspisR1.Port1_CanonicalJoin.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+              true →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust)
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust
+def AspisR1.Port1_ByteDriver.PublicAdmission : AdapterRw.Ops → Prop :=
+fun adapter =>
+  ∀ (pub : Aeneas.Std.Slice Aeneas.Std.U8) (semantic : AspisR1.Port1_Driver.Semantic),
+    AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok (some semantic) →
+      75 + (↑pub).length ≤ AspisR1.SelectedTranscriptParams.L
+AspisR1.Port1_CanonicalHeadline.final_soundness : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P) runtime →
+          AspisR1.OraclePortHeadlineFrozen2.Claims D (AspisR1.Port1_StoredCarrier.lift P) Q runtime
+AspisR1.Port1_ByteDriver.substitute : ∀ (adapter : AdapterRw.Ops),
+  AspisR1.Port1_ByteDriver.PublicAdmission adapter →
+    ∀ (ops : VTop_Stages.Ops),
+      AspisR1.Port1_Library.TrustedStd ops →
+        ∀ (source model : AspisR1.VTop_OracleCode.Implementation),
+          (AspisR1.Port1_DriverSubstitution.BodyJoins (fun {A} => source) fun {A} => model) →
+            ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+              (s : AspisR1.Port1_StoredCarrier.Submission)
+              (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.Port1_ByteDriver.rust adapter
+                        (fun {A} => AspisR1.Port1_Library.implementation ops fun {A} => source) D hash s)).2 =
+                  true →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.Port1_ByteDriver.rust adapter
+                      (fun {A} => AspisR1.Port1_Library.implementation ops fun {A} => source) D hash s) =
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.Port1_ByteDriver.rust adapter
+                      (fun {A} => AspisR1.Port1_Library.implementation (AspisR1.Port1_Library.std ops) fun {A} => model)
+                      D hash s)
+AspisR1.OraclePortHeadlineFrozen2.final_soundness : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2.Claims D P Q runtime
+AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.OraclePortStoredExperimentC4.Prover → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop

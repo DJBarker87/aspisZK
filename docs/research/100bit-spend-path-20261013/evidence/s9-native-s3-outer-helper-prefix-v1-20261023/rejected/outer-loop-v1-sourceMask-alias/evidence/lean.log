@@ -1,0 +1,52 @@
+/private/tmp/a3-s9-native-s3-outer-loop-v1-check-20261023/sources/S9NativeS3OuterLoopV1.lean:84:48: error: unsolved goals
+low : Low
+coefficients : Coefficients
+pair out : W
+hlow : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical low
+hcoeff : AspisR1S9NativeArrayCanonicalV1.ReadsCanonical coefficients
+hpair : Can pair
+h : weights.s2_grouped_inactive_pair_loop1 { start := 0#usize, «end» := 12#usize } low coefficients pair = ok out
+step : R × W →
+  Result
+    (ControlFlow (core.ops.range.Range Usize × aspis_core.field.wide_exact.WideExact)
+      aspis_core.field.wide_exact.WideExact) :=
+  fun s => weights.s2_grouped_inactive_pair_loop1.body low coefficients s.1 s.2
+inv : R × W → Prop :=
+  fun s =>
+    ↑s.1.end = 12 ∧ ↑s.1.start ≤ 12 ∧ Can s.2 ∧ decode s.2 = decode pair + outerPrefix low coefficients ↑s.1.start
+post : W → Prop := fun result => Can result ∧ decode result = decode pair + outerPrefix low coefficients 12
+measure : R × W → ℕ := fun s => ↑s.1.end - ↑s.1.start
+hd : ∀ (s : R × W) (result : aspis_core.field.wide_exact.WideExact), inv s → step s = ok (done result) → post result
+r : R
+c : W
+r1 : core.ops.range.Range Usize
+c1 : aspis_core.field.wide_exact.WideExact
+hcan : Can (r, c).2
+hb : step (r, c) = ok (cont (r1, c1))
+he : ↑r.end = 12
+hs : ↑r.start ≤ 12
+hmeaning : decode c = decode pair + outerPrefix low coefficients ↑r.start
+group : Usize
+coefficient : W
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize r = ok (some group, r1)
+hread : Array.index_usize coefficients group = ok coefficient
+hgroup : ↑group < 12
+cout : Can c1
+hvalue :
+  decode c1 = decode c + decode coefficient * actualSelectedPrefix (↑(sourceMask group)) 16 (List.map decode ↑low)
+hj : group = r.start
+hlt : ↑group < ↑r.end
+hadvance : ↑r1.start = ↑r.start + 1
+hend : r1.end = r.end
+hv : ↑group = ↑r.start
+he1 : ↑r1.end = 12
+hs1 : ↑r1.start ≤ 12
+hhead : (List.drop (↑group) (List.map decode ↑coefficients)).headD 0 = decode coefficient
+⊢ decode coefficient * actualSelectedPrefix (↑(sourceMask group)) 16 (List.map decode ↑low) =
+    decode coefficient *
+      actualSelectedPrefix (↑((↑weights.S2_INACTIVE_MASKS)[↑group]?.getD 0#u16)) 16 (List.map decode ↑low)
+'AspisR1S9NativeS3OuterLoopV1.outer_prefix_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9NativeS3OuterLoopV1.native_outer_loop_prefix' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

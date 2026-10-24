@@ -1,0 +1,15 @@
+# H5 explicit ordered complement source feasibility
+
+**Measured: PASS within the approved +12,214 CU allowance. Candidate only; no production source or release freeze changed.**
+
+The exact isolated H5 source snapshot was copied and checked against its manifest. Only state_only_statement_points in crates/aspis-core/src/state_only_prefix.rs changed: the fixed [7usize,6] IntoIter loop became ordered absorption[7] and absorption[6] assignments. v6_transcript and every other manifest source stayed byte-identical. C weights, fast pairing and callback-free scanner remain H5.
+
+Optimized SBF build exited0 in52.549s, process peak671692KiB, cgroup peak657375232bytes, zero swap;3/4GiB high/max,j1,600s watchdog. Core, costprobe and program each recompiled (explicit compile-line assertions). New stripped artifact f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4 differs from H5 b5cb382b1738a016b2463d2388fd38523e55577bf8053b7b4f68aee482fa4d5b, so runtime gates were rerun.
+
+All six retained partial-mask fixtures and strict-stack checks passed. Stage1 CU is identical to H5 on every fixture, with maximum increase12,214 against the SAME approved S4 comparator. Settlement costs2CU more than H5, maximum increase2,296. Checkpoint tails and returned bytes match the comparator. Retained full-random-mask sample passed:1,208,282 stage1 /1,142,225 settlement, increases12,214 /2,301, identical H5 checkpoint/return, no error,882transaction bytes. This reuses proof42fc1617dbc212ef07f7a5cd4f177d2014530198a2fefa40d25914d79ca46ee8: no fresh entropy draw, distribution claim or formal worst-case CU theorem.
+
+Initial fixture admission at48.375GiB reservations was denied before a child ran. Once live reservations fell to40.375GiB, a fresh immutable attempt passed all admission checks. All actual gate jobs retained explicit cgroup caps and SwapMax0. No foreign reservation was changed.
+
+**Source assessment:** the entire changed Rust state_only_statement_points function is byte-identical to the existing extracted/proved V3 input (span SHA8346e577ae70dfac7c8a0b5e64005c0f17b47b77d93427dcce7c63dde8af34ba). Adopting this candidate would remove the original real Std IntoIter-to-two-writes transformation obligation for this function. This is exact source-span reuse, not a fresh extraction of the whole H5 crate, a theorem that old unsafe Std refines List, or a whole runtime/source-to-ELF proof. Prior source cuts, field/body/constructor/Box/allocation/caller/toolchain/ABI/refinement and final artifact linkage retain their stated scope. Reused statement semantics already supplies full mathematical original/successor/absorption output, not merely canonicality.
+
+Recommendation: lead may adopt this candidate after its integration/source-pin assessment; it meets the approved measured budget and matches the proved normalized source architecture. Actual adoption and integration gates remain lead-owned. 100-bit target not yet established. No binaries, proof blobs or task keys are included. No new Lean compile/axiom claim; print-axioms is N/A for these build/runtime measurements.

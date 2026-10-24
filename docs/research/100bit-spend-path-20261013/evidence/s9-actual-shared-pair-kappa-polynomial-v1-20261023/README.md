@@ -1,0 +1,3 @@
+One accepted native shared two-fold S2 Pair returns the exact kappa polynomial of its own canonical final parts, with all intermediate calls/arrays and canonicality discharged by same-parent source composition. Caller receiver/alpha/kappa canonicality, S2, exact final span and actual shared branch guard remain explicit. This does not identify those parts with spend-relation contributions or establish a complete runtime/security theorem. The initial workspace was mutex-only and did not compile.
+
+Focused Lean check: 25.748 seconds; peak aggregate RSS 3223584768 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

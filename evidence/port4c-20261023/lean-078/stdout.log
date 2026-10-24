@@ -1,0 +1,45 @@
+Port4C_GeometryInverse.lean:13:3: error: unexpected token 'prefix'; expected identifier
+Port4C_GeometryInverse.lean:17:46: error: unexpected token 'prefix'; expected term
+Port4C_GeometryInverse.lean:17:53: error: unexpected identifier; expected ':'
+Port4C_GeometryInverse.lean:23:81: error: unexpected token 'prefix'; expected term
+Port4C_GeometryInverse.lean:24:10: error: unexpected identifier; expected ':'
+Port4C_GeometryInverse.lean:39:26: error: unexpected token 'prefix'; expected identifier or term
+Port4C_GeometryInverse.lean:39:33: error: unexpected identifier; expected ':'
+Port4C_GeometryInverse.lean:66:6: error(lean.unknownIdentifier): Unknown identifier `prefix_reference`
+Port4C_GeometryInverse.lean:56:81: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+flat inverse : alloc.vec.Vec U32
+bound : (↑flat).length ≤ 110
+size : (↑inverse).length = (↑flat).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+out : alloc.vec.Vec U32
+run✝¹ :
+  (do
+      let r ← S7Kani2PrefixLoop.prefixes_owned flat (alloc.vec.Vec.new U32) 1#u32 0#usize
+      let suffix ← Port4C_InverseExecution.inverse_owned r.2.2
+      Port4C_OwnedInverse.inverse_owned flat r.2.1 inverse suffix flat.len) =
+    ok out
+hlen : (↑out).length = (↑flat).length
+hvalues :
+  ∀ j < (↑flat).length,
+    S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑out) j) =
+      (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑flat) j))⁻¹
+r : alloc.vec.Vec U32 × alloc.vec.Vec U32 × U32
+hprefix : S7Kani2PrefixLoop.prefixes_owned flat (alloc.vec.Vec.new U32) 1#u32 0#usize = ok r
+run✝ :
+  (do
+      let suffix ← Port4C_InverseExecution.inverse_owned r.2.2
+      Port4C_OwnedInverse.inverse_owned flat r.2.1 inverse suffix flat.len) =
+    ok out
+suffix : U32
+hsuffix : Port4C_InverseExecution.inverse_owned r.2.2 = ok suffix
+run : Port4C_OwnedInverse.inverse_owned flat r.2.1 inverse suffix flat.len = ok out
+native :
+  verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse = ok out
+⊢ sorry = ok out
+Port4C_GeometryInverse.lean:74:14: error(lean.unknownIdentifier): Unknown constant `prefix_reference`
+'AspisR1.Port4C_GeometryInverse.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

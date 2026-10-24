@@ -1,0 +1,34 @@
+import Aeneas
+import AspisR1S9ProductionPairCutV1.Types
+import AspisR1CanonicalQRaw.Funs
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow Error
+open AspisR1S9ProductionPairCutV1
+/-- [core::result::{core::result::Result<T, E>}::map_err]:
+    Source: '/rustc/library/core/src/result.rs', lines 962:4-964:53
+    Name pattern: [core::result::{core::result::Result<@T, @E>}::map_err]
+    Visibility: public -/
+@[rust_fun "core::result::{core::result::Result<@T, @E>}::map_err"]
+def core.result.Result.map_err
+  {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
+  core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) :
+  Result (core.result.Result T F)
+  := do
+  match self with
+  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+  | core.result.Result.Err e =>
+    let t ← opsfunctionFnOnceOTupleEFInst.call_once op e
+    ok (core.result.Result.Err t)
+
+
+/-- Uniform external primitive: deliberately arbitrary outcomes. -/
+def alloc.vec.Vec.try_reserve_exact {T : Type}
+    [a : AspisR1S9AllocationInterfaceV1.Allocation]
+    (A : Type) (self : alloc.vec.Vec T) (n : Usize) :
+    Result ((core.result.Result Unit alloc.collections.TryReserveError) × alloc.vec.Vec T) :=
+  a.reserve A self n
+/-- Exact typed S5 source owner. The source/raw-coefficient refinement boundary
+is retained; this definition does not assert arbitrary-input native equality. -/
+def fast_pairing.canonical.Q.raw (self rhs : fast_pairing.canonical.Q) :
+    Result (Array U64 4#usize) :=
+  AspisR1CanonicalDotFinish.canonical.Q.raw self rhs

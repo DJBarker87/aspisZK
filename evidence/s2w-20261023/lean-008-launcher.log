@@ -1,0 +1,57 @@
+{"attempt": "lean-008", "exit_status": 1, "wall_seconds": 1.865638464994845, "peak_rss_kib": "2633700", "swaps": "0", "print_axioms": ["'AspisR1.S2W.Snapshot.to_vec_identity' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W.Snapshot.admitted_snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W.Snapshot.rejected_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W.Snapshot.borrow_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W.Snapshot.successful_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.S2W.Snapshot.checkpoint_entry_size' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+S2W_SnapshotFacts.lean:45:37: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp [snapshot, borrow, deref, f̵i̵r̵st̵,̵ ̵s̵econd, to_vec_identity, projected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+S2W_SnapshotFacts.lean:42:70: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+S2W_SnapshotFacts.lean:44:72: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+S2W_SnapshotFacts.lean:45:80: warning: Used `tac1 <;>
+...
+12: error: Tactic `subst` failed: did not find equation for eliminating 'out'
+
+case pos
+C : Carriers
+ops : Ops C
+account : AccountInfo C
+length1 length2 : Usize
+out : OwnedAccount
+bytes : alloc.vec.Vec U8
+successful : out.bytes = core.result.Result.Ok bytes
+back : core.result.Result (C.Ref (Slice U8)) PE → Unit
+guard : C.Ref (Slice U8)
+borrowed : ops.borrow account = ok (core.result.Result.Ok guard, back)
+data : Slice U8
+read : ops.deref guard = ok data
+first : ¬data.len = length1
+second : data.len = length2
+returned :
+  (do
+      let v ← ok data
+      ok
+          { key := account.key, owner := account.owner, is_signer := account.is_signer,
+            is_writable := account.is_writable, executable := account.executable,
+            length := core.result.Result.Ok length2, bytes := core.result.Result.Ok v }) =
+    ok out
+⊢ out.length = core.result.Result.Ok bytes.len ∧ (bytes.len = length1 ∨ bytes.len = length2)
+S2W_SnapshotFacts.lean:107:32: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp [borrowed, ̲read,f̵i̵r̵ ̲st̵,̵s̵econd, ̲to_vec_identity] at returned
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W.Snapshot.to_vec_identity' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W.Snapshot.admitted_snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.rejected_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.borrow_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.successful_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W.Snapshot.checkpoint_entry_size' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd0f47f2c131f4d1bb2a45f9bac21be97.scope; invocation ID: 2e58a8be73154933a7cfd43c62774950

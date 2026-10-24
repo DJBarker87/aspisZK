@@ -1,0 +1,31 @@
+{"attempt": "lean-097", "exit_status": 0, "wall_seconds": 2.6930789269972593, "peak_rss_kib": "4415576", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[irreducible] def Aeneas.Std.alloc.vec.FromIteratorVec.iterToList : {T IntoIter : Type} →
+  core.iter.traits.iterator.Iterator IntoIter T → IntoIter → List T → Result (List T) :=
+fun {T IntoIter} iterInst =>
+  Lean.Order.fix
+    (fun f iter acc => do
+      let __x ← iterInst.next iter
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => f iter (item :: acc))
+    ⋯
+
+...
+'AspisR1.Port4C_CollectStd.next_group' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[irreducible] def Aeneas.Std.alloc.vec.FromIteratorVec.iterToList : {T IntoIter : Type} →
+  core.iter.traits.iterator.Iterator IntoIter T → IntoIter → List T → Result (List T) :=
+fun {T IntoIter} iterInst =>
+  Lean.Order.fix
+    (fun f iter acc => do
+      let __x ← iterInst.next iter
+      match __x with
+        | (opt, iter) =>
+          match opt with
+          | none => ok acc.reverse
+          | some item => f iter (item :: acc))
+    ⋯
+
+Running as unit: run-ref8d17056f684a06a1059b7e2b5e650f.scope; invocation ID: 070e752fa14d4210a9f210339ffa00fc

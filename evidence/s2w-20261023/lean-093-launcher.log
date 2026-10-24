@@ -1,0 +1,51 @@
+{"attempt": "lean-093", "exit_status": 0, "wall_seconds": 2.0887628579948796, "peak_rss_kib": "4402424", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ScheduledConsolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_ReturnedCheckpoint.returned_committed' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_AccountObservations.snapshot_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_AccountObservations.admitted_write_frame' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_AccountObservations.write_metadata' depends on axioms: [propext, Quot.sound]", "'AspisR1.S2W_TwoFieldAudit.full_fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TwoFieldAudit.changed_metadata_excludes_facts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_ScheduledConsolidation.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_ReturnedCheckpoint.returned_committed' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_AccountObservations.snapshot_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_AccountObservations.admitted_write_frame' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_AccountObservations.write_metadata' depends on axioms: [propext, Quot.sound]
+'AspisR1.S2W_TwoFieldAudit.full_fields_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+d_run ops native1 native2 hashv extraction program accounts1 accounts2 data1 data2 slot
+      saved accepted1 accepted2 port firstMarks secondMarks
+  let ⟨pre, h✝²⟩ := h✝¹
+  let ⟨middle, h✝³⟩ := h✝²
+  let ⟨fs, h✝⁴⟩ := h✝³
+  let ⟨ss, h✝⁵⟩ := h✝⁴
+  let ⟨execution, right✝⟩ := h✝⁵
+  let ⟨expanded, right✝¹⟩ := right✝
+  let ⟨left✝, right✝²⟩ := right✝¹
+  let ⟨layout, right✝³⟩ := right✝²
+  let ⟨left✝¹, right✝⁴⟩ := right✝³
+  let ⟨left✝², right✝⁵⟩ := right✝⁴
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨execution,
+                    ⟨expanded,
+                      ⟨layout, fun decode nodes y1 writer reader version p2prime entry multiproof scan before after =>
+                        let ⟨parsed, facts⟩ :=
+                          input_schedule ops H accounts1 accounts2 f s saved cuts decode nodes y1 writer reader version
+                            p2prime entry multiproof scan
+                            (S2W_DigestExtraction.native_oracle ops native1 native2 hashv extraction sha256 H p1
+                              runtime)
+                            pre middle fs ss before after
+                        Exists.intro parsed
+                          ⟨facts, fun site =>
+                            Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    (observation f s saved nodes y1 pre middle fs ss before after).reached site ↔
+                                      S2W_SiteSchedule.Event.site site ∈ _a)
+                                  layout))
+                              Iff.rfl⟩⟩⟩⟩⟩))))))
+
+Running as unit: run-r20a0ee129e764f8ca5c146ced7052892.scope; invocation ID: 3461907c684d492095009a0a8a2cbc9e

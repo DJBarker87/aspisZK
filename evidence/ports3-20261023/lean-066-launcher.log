@@ -1,0 +1,52 @@
+{"attempt": "lean-066", "exit_status": 1, "wall_seconds": 2.730971850003698, "peak_rss_kib": "4400580", "swaps": "0", "print_axioms": ["'AspisR1.Port3_NativeQueryFrame.accumulate_fields' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativeQueryFrame.query_read_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'_private.Port3_NativeQueryFrame.0.AspisR1.Port3_NativeQueryFrame.guard' does not depend on any axioms", "'AspisR1.Port3_NativeQueryFrame.query_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_NativeQueryFrame.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+Port3_NativeQueryFrame.lean:55:24: error: Application type mismatch: The argument
+  h
+has type
+  (do
+      let i9 ← x✝²² % 4#usize
+      let we5 ← x.index_usize i9
+      let b_1 ← core.cmp.PartialEq.ne.trait_default ops.widePartialEq x✝² we5
+      if b_1 = true then ok (core.result.Result.Err verifier.Error.Query)
+        else do
+          let we6 ← p.alpha.index_usize 1#usize
+          let folded1 ← ops.op16 we6 x x✝⁴
+          let i10 ← lift (Usize.wrapping_mul 2#usize a.next)
+          let i11 ← lift (i10.wrapping_add 1#usize)
+          ops.op15 10#u16 i11 folded1
+          let i12 ← lift (a.next.wrapping_sub geometry.start)
+          let z ← alloc.vec.Vec.index (core.slice.index.SliceInd
+...
+field.wide_exact.WideExact 4#usize
+left✝ :
+  ops.op0 4#usize (verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact ops) x✝²¹ =
+    ok x
+h :
+  (do
+      let i9 ← x✝²² % 4#usize
+      let we5 ← x.index_usize i9
+      let b_1 ← core.cmp.PartialEq.ne.trait_default ops.widePartialEq x✝² we5
+      if b_1 = true then ok (core.result.Result.Err verifier.Error.Query)
+        else do
+          let we6 ← p.alpha.index_usize 1#usize
+          let folded1 ← ops.op16 we6 x x✝⁴
+          let i10 ← lift (Usize.wrapping_mul 2#usize a.next)
+          let i11 ← lift (i10.wrapping_add 1#usize)
+          ops.op15 10#u16 i11 folded1
+          let i12 ← lift (a.next.wrapping_sub geometry.start)
+          let z ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) geometry.line_z i12
+          let m ← ops.op7 z z
+          let m1 ← ops.op8 m
+          let m2 ← ops.op5
+          let node ← ops.op6 m1 m2
+          let (a1, pending1) ← verifier.accumulate_batched_with_node ops p a node folded1 b
+          ops.op19 obs (verifier.Phase.Query a.next)
+          ok (core.result.Result.Ok (a1, pending1))) =
+    ok (core.result.Result.Ok (out, bout))
+⊢ ↑a.next < 22 ∧ out.weights = a.weights ∧ ↑out.next = ↑a.next + 1
+'AspisR1.Port3_NativeQueryFrame.accumulate_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeQueryFrame.query_read_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Port3_NativeQueryFrame.0.AspisR1.Port3_NativeQueryFrame.guard' does not depend on any axioms
+'AspisR1.Port3_NativeQueryFrame.query_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_NativeQueryFrame.loop_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r56786ebb881a449cacf04bd9ba6fc9a8.scope; invocation ID: 5ffdc252403a45d4a440f32eeb57ab6b

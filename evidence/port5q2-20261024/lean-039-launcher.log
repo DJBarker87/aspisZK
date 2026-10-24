@@ -1,0 +1,65 @@
+{"attempt": "lean-039", "exit_status": 1, "wall_seconds": 2.622504847997334, "peak_rss_kib": "4410044", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q2_ReaderWeights.lean:114:21: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+Port5Q2_ReaderWeights.lean:114:27: error(lean.unknownIdentifier): Unknown identifier `t.slice.len`
+Port5Q2_ReaderWeights.lean:114:53: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+Port5Q2_ReaderWeights.lean:114:59: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+Port5Q2_ReaderWeights.lean:114:79: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+where
+ e := ↑(↑it.slice).leng
+...
+                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x ← read { bytes := bytes, «at» := at1 }
+    let r ←
+      match x.1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x_1 => do
+          let tail ← reads read bytes n x.2.at
+          match tail with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x_1 :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+Port5Q2_ReaderWeights.lean:118:17: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [weights_loop.body, ̲core.slice.iter.IteratorIterMut.next, ̲dif_neg inactive,
+        bind_tc_ok,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵ ̲rr̵y̵,̵r̵eads, ̲finish, ̲write, ̲Nat.add_zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderWeights.lean:124:6: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [weights_loop.body, ̲core.slice.iter.IteratorIterMut.next, ̲dif_pos active,
+        b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵Aeneas.Std.uncurry, ̲reads, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r09eaa12f83d6450ea8bb300b2cefd173.scope; invocation ID: 955cf851c6a14aee8be91b2fb1f1a9fa

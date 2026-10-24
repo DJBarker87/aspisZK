@@ -1,0 +1,44 @@
+{"attempt": "lean-046", "exit_status": 0, "wall_seconds": 2.0387718489946565, "peak_rss_kib": "4383144", "swaps": "0", "print_axioms": ["'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+S2W_SuccessOracle.lean:72:34: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [S2W.OracleAudit.mask,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵] at returned
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.S2W_SuccessOracle.returned_raw' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.native_success_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.before_to_after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_SuccessOracle.masked_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem Asp
+...
+.reference.Scratch),
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 1 s)).2 =
+                  true →
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q c.nodes 1 s) =
+                  AspisV8R19.MemoizedProgramLaw.eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1) :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts binary occupied sibling leaf p6 q =>
+  MultiproofConeP6Frozen2Stage.both_batches (S2W_LeadInterface.multiproofDigest D) hash H binary occupied sibling leaf
+    p6 parsed q c.nodes facts.nodeViews
+theorem AspisR1.S2W_LeadInterface.y1_join : ∀ {Observer Hash : Type} (c : S2W_LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State) (stored pub ck : Bytes)
+  (parsed : Parsed),
+  S2W_LeadInterface.S2CallerFacts c D hash H stored pub ck parsed →
+    c.reached S2LeadInterface.Site.tx1 →
+      ∀ (tr : RawCutTranscriptRun.ErasedPrefix),
+        OraclePortStoredParserC4.parseReached stored tr = some parsed →
+          S8OwnedP6.check_values_owned c.y1 = ok (core.result.Result.Ok ()) :=
+fun {Observer Hash} c D hash H stored pub ck parsed facts reached tr parser =>
+  Eq.mpr
+    (id (congrArg (fun _a => S8OwnedP6.check_values_owned _a = ok (core.result.Result.Ok ())) (facts.y1Input reached)))
+    (S8JoinFrozenScan.parsed_y1 (c.proof S2LeadInterface.Site.tx1) tr parsed
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => OraclePortStoredParserC4.parseReached _a tr = some parsed)
+              (facts.proofBytes S2LeadInterface.Site.tx1 reached)))
+          parser)))
+
+Running as unit: run-rbd7fca7f590049fdb4d7ac8f4403b0cc.scope; invocation ID: 6ad83c98eb2c48f5adee6fb6b8f059da

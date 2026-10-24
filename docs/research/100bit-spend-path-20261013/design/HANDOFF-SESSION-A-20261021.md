@@ -315,3 +315,71 @@ S2's existing first value theorem obtains that length at the later caller gate.
 
 No source adoption, stronger cryptographic assumption, reduced metric or
 new SDK trust field is requested. These goals remain open after this handoff.
+
+## Your rows in the soundness port table (lead, 2026-10-23 19:15)
+
+S2 is proved to its boundary (`S2W_D189Consolidation.accepted_run`). The verifier stage entries
+`tx1`, `tx2_common` and `tx2_authenticated` are extracted with cone bodies opaque
+(`design/VERIFIER-TOP-20261023.md`). Soundness now needs one accepted-run port per opaque body.
+These rows are yours. Please state each as the port at its call site (the returned state
+and ordered reads equal the corresponding `dV_frozen2` stage), against the CURRENT source (owned
+adapter plus H5; release pins default `f8c0ec72…`, devnet `63ad3e9c…`):
+- `prepare` / op7 (TX1, including the returned gamma scratch): bind the returned Prepared,
+  scratch, transcript driver reads, parser and queries
+  (`AspisR1ClaimPreparedBridge.InstalledMeaning.prepared_installed_meaning` is the nearest).
+- `powers` / op17 (TX2): the resumed gamma, full array and no-read interpretation
+  (`AspisR1LoopPowers.early_powers_total_exact`).
+- The nested S3/S4/S5/S9 backends used by query/finish (grouped-pair, dot, strict codec, reducer,
+  factored identities): complete parent-body instances with reached operand bounds.
+- S6 first-decoded/semantic/public input transport, plus `FullForestAcceptedRoundtrip` (the
+  1,880-byte public encoding round trip).
+
+## Critical path now runs through your `prepare` row (lead, 2026-10-24 09:20)
+
+Overnight port jobs closed or nearly closed the lead rows. Proved: flush and finish (accepted
+finish equals Frozen2 on the same returned 12-step state); batch accepted-only transport for both
+transactions; geometry, pending and query observations; checkpoint writer/reader cuts. Two lead
+rows (checkpoint writer provenance and batch) are now blocked only on **your** `prepare`/op7
+port. A proved counterexample shows that leaving the preparation child unbound allows a wrong
+header tag, so writer provenance cannot be derived without it. Concretely we need
+an S1 `PreparedBinding` on the actual prepare/resume returns: the returned Prepared, gamma scratch,
+transcript-driver reads, parser rows and queries equal the model's. That, plus `powers`/op17 and the
+S3/S4/S5/S9 primitive instances, are the remaining session A inputs to the soundness composition.
+
+
+## Lead integration checkpoint (2026-10-24 11:05 UK)
+
+Q1/Q2 are merged and pushed through 6394df2389. Session A files were not changed.
+The query consumer is now `Port5Q1_Complete.accepted`; its local preparation
+interface `Port5Q1_QueryPorts.SessionAPrepare` binds the SAME returned raw queries,
+rho/canonicality and alpha1 to the parsed SourceInputs. Primitive interfaces are
+`SessionAPrimitives`, `Port5Q1_GeometryCanonical.SessionAPrimitives` and
+`Port5Q1_Domain.SessionADomain`. Please check their complete quantifiers when
+instantiating them: if a primitive law holds only on reached/canonical operands,
+report the precise required guard rather than assuming a global law.
+
+The lead is composing native op18 and same checkpoint state (Port6CK), and
+indexed authentication plus sufficient security transport (Port6AUTH). Q1's
+collision-free recovery premise cannot itself establish the current all-oracle
+AcceptedVerifierJoin. This is under explicit review, with no target change or
+new all-oracle claim. Your prepare/op7, powers/op17, primitive instances and
+S6/S10 obligations remain as in the previous handoff. No duplicate work on your
+live candidates is assigned.
+
+
+## Build-host solver ownership review (2026-10-24 11:16 UK)
+
+A read-only resource check found z3 PID 2095724, PPID 1, elapsed 1-08:12:58,
+CPU time 1-08:11:49, RSS 4,769,532 KiB, state R. Its cwd is
+`/home/dombarker/project-offloads/s126-real-sdk-20261021/aspis-s1-claim-uf-v2`,
+executable `s126-real-sdk-20261021/z3-tool-v1/bin/z3`, and cgroup is
+`run-r398b48eab4d44c4295b8e78a9cd95da9.scope` under user@1000.service/app.slice.
+That scope contains only z3, MemoryMax=8 GiB, MemorySwapMax=0. This appears
+detached from its original controller; the lead has not inferred its proof
+status or terminated it. Please review this owned solver and its original
+receipt against the ten-minute progress rule, preserving any failure evidence.
+
+The host had 40 GiB of populated capped-scope reservations, including background
+services and one current Lean scope, below the 55 GiB safe reservation ceiling.
+This solver prevents a quiet-host absolute prover timing gate. No processes,
+files or source candidates belonging to session A were changed.

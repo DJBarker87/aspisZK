@@ -1,0 +1,9 @@
+# Actual zero-seeded64 coefficient producer to existing S3 semantic prefix
+
+SAME accepted native coefficient loop with its actual zero seed now yields the exact old S3 run on the same mapped output; initial canonicality is internally supplied by the existing zero theorem. Existing loop0_success_parser_reads then derives EVERY one of the64 same strict old field reads. Existing actual_loop0_whole_prefix fixes the semantic PrefixMeaning of that SAME mapped output by determinism, and proves its coefficient canonicality. No seedCan, hfields, old loop success, source field output or desired coefficient meaning is assumed.
+
+The input model function is defined from the unique outputs of those SAME strict reader calls on the SAME bytes. It uses Classical.choose as a mathematical witness selector, matching existing old semantic proof structure. This packet does NOT claim a runtime extractor, effective extraction cost, or M10 closure. Input is constrained by actual decoder outputs, not chosen from the desired grouped relation result.
+
+Only actual byte-window domain(at least2048 bytes) and SAME accepted native zero-seeded run remain. Exact source caller span/parent provenance is a separate event proof. This establishes coefficient64 meaning; inner masked16, outer12, full inactive contribution, logical stored-carrier experiment transport, runtime/artifact binding and global100-bit soundness remain open/separate.
+
+The3existing old zero declarations/proofs are copied byte-for-byte under a namespace/import change, with a textual block hash. The old zero module was not warm locally and imported unrelated helper composition; thin reuse avoided a cold dependency replay. Focused targets passed with standard axioms and zero swap; no source changes, resource overrides, full release replay or compiled artifacts are included.

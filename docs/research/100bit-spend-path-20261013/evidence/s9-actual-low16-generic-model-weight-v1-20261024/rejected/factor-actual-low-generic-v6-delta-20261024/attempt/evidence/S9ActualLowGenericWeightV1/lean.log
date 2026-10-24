@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/factor-actual-low-generic-v6-delta-20261024/sources/S9ActualLowGenericWeightV1.lean:51:2: error: Tactic `delta` failed: did not delta reduce [AspisR1S9LowOperatorShapeV1.E,
+ AspisR1S9NativeLowScalarArithmeticV1.E,
+ AspisR1S9ActualLowGenericWeightV1.E,
+ AspisR1S9ActualLowGenericWeightV1.sourceQuarter] at hs
+
+x0 x1 : W
+ap0 ap1 : Powers
+hx0 : Canonical x0
+hx1 : Canonical x1
+hp0 : weights.powers 4#usize x0 = ok ap0
+hp1 : weights.powers 4#usize x1 = ok ap1
+s : Fin 16
+hpi : AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s % 4) < 4
+hpj : AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s / 4) < 4
+hs :
+  decode x0 ^ AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s % 4) *
+        decode x1 ^ AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s / 4) *
+      (sourceQuarter * sourceQuarter) =
+    lowWithQuarter (decode x0) (decode x1) sourceQuarter s
+⊢ decode x0 ^ AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s % 4) *
+        decode x1 ^ AspisR1S9ActualLow16BodyMeaningV1.permutedIndex (↑s / 4) *
+      (AspisR1S9NativeLowScalarArithmeticV1.embed weights.QUARTER *
+        AspisR1S9NativeLowScalarArithmeticV1.embed weights.QUARTER) =
+    lowWithQuarter (decode x0) (decode x1) sourceQuarter s
+'AspisR1S9ActualLowGenericWeightV1.actual_power_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualLowGenericWeightV1.actual_expected_low_generic' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1S9ActualLowGenericWeightV1.low_value_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualLowGenericWeightV1.actual_low_success_generic' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

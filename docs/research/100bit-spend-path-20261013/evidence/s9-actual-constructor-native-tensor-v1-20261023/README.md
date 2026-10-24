@@ -1,0 +1,3 @@
+Proved: canonical actual alpha/z inputs and the same extracted constructor success supply all statement/circle factor formulas and canonical factors needed for the same successful native tensor call at a valid row. Independent table-meaning and canonical-factor premises are discharged. The source-adapter, toolchain, ABI/runtime and artifact correspondence remain separate; successful indexed output reads do not establish output length or full pairing soundness.
+
+Focused Lean check: 22.537 seconds; peak aggregate RSS 3223044096 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

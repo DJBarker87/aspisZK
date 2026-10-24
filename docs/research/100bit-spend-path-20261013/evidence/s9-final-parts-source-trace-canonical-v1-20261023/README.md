@@ -1,0 +1,3 @@
+Canonicality is proved for the exact final array PARAMETER of an actual source phase/write trace in either branch, reusing the accepted native phase proofs. No unrelated existential vector is substituted. Caller S2/input receiver/private-extra/alpha canonicality and actual exact final span remain explicit; desired Good or relation meaning is not hidden in Trace. No Rust or metric change.
+
+Focused Lean check: 21.269 seconds; peak aggregate RSS 3230236672 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,5 @@
+Before: the complete source loops had only canonicality preservation; semantic correctness of their stored factors was not proved.
+
+Now: same accepted source outer run +canonical point inputs establish every stored statement factor's retained D18 formula. All inner and arithmetic/read/write successes are derived from the same execution. A generic helper's initial table Meaning premise is discharged by unconditional rawTable_meaning in the concrete entry. This is genuine source arithmetic/execution refinement, not canonicality relabelled as algebra. Untouched rows are exactly framed.
+
+Retained: canonical point inputs (discharged by existing concrete constructor point-producer canonicality), accepted source/model C/V3 phase, source/caller/runtime/ABI and release-artifact correspondence, complete security composition. No cryptographic/allocator/source-refinement assumptions are added or hidden. The generic table interface records proven decoded values; it does not assume the target formulas.

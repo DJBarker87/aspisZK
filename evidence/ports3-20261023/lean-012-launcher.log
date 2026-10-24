@@ -1,0 +1,51 @@
+{"attempt": "lean-012", "exit_status": 1, "wall_seconds": 2.247003484997549, "peak_rss_kib": "4400304", "swaps": "0", "print_axioms": ["'AspisR1.Port3_Constructor.map_error_exact' depends on axioms: [propext]", "'AspisR1.Port3_Constructor.normalization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.installed_constructor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.initial_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port3_Constructor.allocation_rejects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port3_Constructor.lean:58:32: error: unsolved goals
+AllocError : Type
+ops : Leaves AllocError
+v : transport.Variant
+⊢ (do
+      let i ← ops.finalLen v
+      let q ← ops.zero
+      let r ← ops.filled ops.copy i q
+      let r1 ← Port3_Initial.mapFilled r
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let we ← ops.zeroWide
+          let q1 ← ops.one
+          ok (core.result.Result.Ok { weights := val, rhs := we, power := q1, next := 0#usize })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_r
+...
+r ← ops.filled ops.copy i q
+      let r1 ← Port3_Initial.mapFilled r
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let we ← ops.zeroWide
+          let q1 ← ops.one
+          ok (core.result.Result.Ok { weights := val, rhs := we, power := q1, next := 0#usize })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Accumulator
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let i ← ops.finalLen v
+    let q ← ops.zero
+    let r ← ops.filled ops.copy i q
+    let r1 ← Port3_Initial.mapFilled r
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue weights => do
+        let rhs ← ops.zeroWide
+        let power ← ops.one
+        ok (core.result.Result.Ok { weights := weights, rhs := rhs, power := power, next := 0#usize })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Accumulator
+          (core.convert.FromSame verifier.Error) residual
+'AspisR1.Port3_Constructor.map_error_exact' depends on axioms: [propext]
+'AspisR1.Port3_Constructor.normalization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.installed_constructor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.initial_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.allocation_rejects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r431acb7d82bf42f693d513766f5fc5e5.scope; invocation ID: 5a836e5f2fae41f6ae00db1138a4686b

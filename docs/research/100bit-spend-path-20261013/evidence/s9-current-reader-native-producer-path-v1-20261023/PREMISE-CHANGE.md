@@ -1,0 +1,3 @@
+Before: the full concrete receiver/powers/helper canonical route used the retained checkpoint K decoder in its strict reader installer.
+
+Now: current-source decoder reader and exact ten-read helper are installed, their accepted-output canonicality feeds the exact constructor inputs, and the existing SAME-run native producer composition applies. Every previous conclusion is retained with the same carriers, values, output witness quantifiers and native calls; only the concrete K-reader installer changes. Full Result/rejected-trace equality is not assumed. Remaining raw/current caller/runtime/source/refinement boundaries are explicit, not cryptographic assumptions.

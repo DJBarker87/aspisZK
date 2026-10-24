@@ -1,0 +1,58 @@
+{"attempt": "lean-079", "exit_status": 1, "wall_seconds": 3.505605462996755, "peak_rss_kib": "4412756", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4B_TailRun.lean:8:46: error: unexpected token '('; expected command
+Port4B_TailRun.lean:63:31: error: Application type mismatch: The argument
+  mem
+has type
+  decodeByte raw ∈ bytesOf ↑padding
+but is expected to have type
+  raw ∈ ↑padding
+in the application
+  zeroBytes raw mem
+Port4B_TailRun.lean:35:92: error: unsolved goals
+case this
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+binary occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+p6 : MultiproofConeP6Frozen2Stage.P6Boundary (Port4B_VerifyInstall.digest D) hash H binary occupied sibling leaf
+proof : Slice U8
+len : (↑proof).lengt
+...
+oof slot = ok nodes
+width : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind)
+bytes :
+  bytesOf ↑nodes =
+    OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind))
+widthCap : (↑nodes).length = 32 * ↑cap
+scale : ↑(Usize.wrapping_mul 32#usize count) = 32 * ↑count
+scaleFit : ↑(Usize.wrapping_mul 32#usize count) ≤ (↑nodes).length
+padRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok (nodes.drop (Usize.wrapping_mul 32#usize count))
+samePadding : padding = nodes.drop (Usize.wrapping_mul 32#usize count)
+padContent : ↑padding = List.drop (32 * ↑count) ↑nodes
+padLength : (↑padding).length = 32 * (↑cap - ↑count)
+zeroBytes : ∀ b ∈ ↑padding, b = 0#u8
+allZero : (List.all (bytesOf ↑padding) fun byte => byte == 0) = true
+padScan : MultiproofConePadding.scan (4 * (↑cap - ↑count)) (bytesOf ↑padding) = true
+this : ?m.560
+⊢ ∃ nodes final,
+    Port4B_SlotInstall.nodeSlot proof slot = ok nodes ∧
+      bytesOf ↑nodes =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind)) ∧
+        (eval H
+                (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed b (↑kind)
+                  nodes s)).2 =
+            (true, final) ∧
+          final.idx = outIdx ∧ final.val = outVal
+Port4B_TailRun.lean:69:13: error: unexpected token ':='; expected ':'
+Port4B_TailRun.lean:70:66: error: unexpected token ')'; expected ':'
+'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf136f45e748544e88142d13fd545f7dd.scope; invocation ID: e92098e6b7c442c4850ad1ecff5ff536

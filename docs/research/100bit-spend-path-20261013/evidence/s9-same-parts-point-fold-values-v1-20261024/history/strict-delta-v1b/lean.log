@@ -1,0 +1,22 @@
+/private/tmp/a3-s9-point-common-input-fold-v1b-check-20261024/sources/S9PointCommonInputFoldV1.lean:16:19: warning: `AspisR1S9SharedHighConstructorModelV1.rowValue._proof_1` refers to an auto-generated auxiliary declaration. These are not stable across refactors; consider using a different approach.
+
+Note: This linter can be disabled with `set_option linter.auxLemma false`
+/private/tmp/a3-s9-point-common-input-fold-v1b-check-20261024/sources/S9PointCommonInputFoldV1.lean:30:2: error: Tactic `delta` failed: did not delta reduce [AspisR1S9StoredRowsCommonInputV1.E, AspisR1S9SharedSumObservationsV1.E]
+
+model : Table
+a0 a1 : E
+f : Slice U8
+row : ℕ
+h :
+  rowValue model a0 a1 f row =
+    RoundPairing.dot
+      (fun i =>
+        AspisR1S9SharedSumObservationsV1.fieldValue f (AspisR1S9SharedSumObservationsV1.finIndex rowValue._proof_1 i))
+      (RoundPairing.dualFold a1 (RoundPairing.dualFold a0 fun j => embedQ (rawRow model row j)))
+⊢ rowValue model a0 a1 f row =
+    RoundPairing.dot (commonInput f rowValue._proof_1)
+      (RoundPairing.dualFold a1 (RoundPairing.dualFold a0 fun j => embedQ (rawRow model row j)))
+'AspisR1S9PointCommonInputFoldV1.rowValue_eq_common_input_fold' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

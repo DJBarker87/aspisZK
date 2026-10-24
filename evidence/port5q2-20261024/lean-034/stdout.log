@@ -1,0 +1,111 @@
+Port5Q2_ReaderValidate.lean:62:25: warning: This simp argument is unused:
+  core.cmp.PartialEqU32
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵a̵n̵y̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲L̲i̲s̲t̲.̲a̲n̲y̲M̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:62:47: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [List.anyM, ̲core.cmp.PartialEqU32,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:86:2: error: unsolved goals
+case pos
+q : Std.Array U32 22#usize
+i : Usize
+pre tail : List U32
+x : U32
+shape : ↑q = pre ++ x :: tail
+index : ↑i = pre.length
+room : ↑i < (↑q).length
+read : q.index_usize i = ok (↑q)[↑i]
+valueEq : (↑q)[↑i] = x
+front : Slice U32
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) q
+      { «end» := i } =
+    ok front
+contents : ↑front = List.take ↑i ↑q
+frontEq : ↑front = pre
+active : i < q.to_slice.len
+high : ↑x ≥ 262144
+⊢ (if (↑q)[↑i] ≥ 262144#u32 then ok (done none)
+    else do
+      let s1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) q
+            { «end» := i }
+      let b ← core.slice.Slice.contains core.cmp.PartialEqU32 s1 (↑q)[↑i]
+      if b = true then ok (done none) else ok (cont (i.wrapping_add 1#usize))) =
+    ok (done none)
+Port5Q2_ReaderValidate.lean:87:2: error: unsolved goals
+case pos
+q : Std.Array U32 22#usize
+i : Usize
+pre tail : List U32
+x : U32
+shape : ↑q = pre ++ x :: tail
+index : ↑i = pre.length
+room : ↑i < (↑q).length
+read : q.index_usize i = ok (↑q)[↑i]
+valueEq : (↑q)[↑i] = x
+front : Slice U32
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) q
+      { «end» := i } =
+    ok front
+contents : ↑front = List.take ↑i ↑q
+frontEq : ↑front = pre
+active : i < q.to_slice.len
+high : ¬↑x ≥ 262144
+duplicate : x ∈ pre
+⊢ ↑(↑q)[↑i] < 262144 → (↑q)[↑i] ∈ pre
+
+case neg
+q : Std.Array U32 22#usize
+i : Usize
+pre tail : List U32
+x : U32
+shape : ↑q = pre ++ x :: tail
+index : ↑i = pre.length
+room : ↑i < (↑q).length
+read : q.index_usize i = ok (↑q)[↑i]
+valueEq : (↑q)[↑i] = x
+front : Slice U32
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) q
+      { «end» := i } =
+    ok front
+contents : ↑front = List.take ↑i ↑q
+frontEq : ↑front = pre
+active : i < q.to_slice.len
+high : ¬↑x ≥ 262144
+duplicate : x ∉ pre
+⊢ (if 262144 ≤ ↑(↑q)[↑i] then ok (done none)
+    else if (↑q)[↑i] ∈ pre then ok (done none) else ok (cont (i.wrapping_add 1#usize))) =
+    ok (cont (i.wrapping_add 1#usize))
+Port5Q2_ReaderValidate.lean:86:15: warning: This simp argument is unused:
+  show x ≥ 262144#u32 from high
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵h̵o̵w̵ ̵x̵≥̵2̵6̵2̵1̵4̵4̵#̵u̵3̵2̵ ̵f̵r̵o̵m̵ ̵h̵i̵g̵h̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵h̵i̵g̵h̵,̵t̵r̵u̵e̵_̵o̵r̵]̵[̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲h̲i̲g̲h̲,̲ ̲t̲r̲u̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:87:15: warning: This simp argument is unused:
+  show ¬x ≥ 262144#u32 from high
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵h̵o̵w̵ ̵¬̵x̵≥̵2̵6̵2̵1̵4̵4̵#̵u̵3̵2̵ ̵f̵r̵o̵m̵ ̵h̵i̵g̵h̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵f̵r̵o̵n̵t̵R̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲f̲r̲o̲n̲t̲R̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:87:44: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show ¬̵x̵≥̵2̵6̵2̵1̵4̵4̵#̵u̵3̵2̵¬̲x̲ ̲≥̲ ̲2̲6̲2̲1̲4̲4̲#̲u̲3̲2̲ from h̵i̵g̵h̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵f̵r̵o̵n̵t̵R̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲i̲g̲h̲,̲ ̲f̲r̲o̲n̲t̲R̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q2_ReaderValidate.contains' depends on axioms: [propext]
+'AspisR1.Port5Q2_ReaderValidate.iteration' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

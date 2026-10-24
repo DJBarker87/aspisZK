@@ -1,0 +1,57 @@
+{"attempt": "lean-042", "exit_status": 1, "wall_seconds": 2.4069328359910287, "peak_rss_kib": "4409688", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q2_ReaderWeights.lean:136:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let r ← weights_loop read ?m.251 ?m.252 bytes out.at
+    finish r
+in the target expression
+  (do
+      let r ←
+        match
+            let (r, reader) := (core.result.Result.Ok x, out)
+            do
+            let cf ←
+              match r with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                ok
+        
+...
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x_1 ← reads read bytes n out.at
+    let r ←
+      match x_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+Port5Q2_ReaderWeights.lean:136:30: error: 'change' tactic failed, pattern
+  it.i + 1 + n = (↑it.slice).length
+is not definitionally equal to target
+  core.slice.iter.IterMut.i ?m.251 + n = (↑(core.slice.iter.IterMut.slice ?m.251)).length
+'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r773d34493fb941a5ac7f1837a2130bcf.scope; invocation ID: e5fe64dc31cd43afb15dd2d46e97e4c3

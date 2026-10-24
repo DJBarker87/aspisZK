@@ -1,0 +1,3 @@
+Before: the pure stored-row theorems required caller S2, selected-alpha/extra canonicality, exact f span and SAME operational Trace. These were not a theorem about a concrete accepted source caller by themselves.
+
+After: SAME strict source resume/actual constructor/selected events discharge S2 and canonicality. The SAME accepted tx2 source View event derives span; its SAME real Trace supplies children, final array and values. The final accepted owned-cut h is the only execution-success input, with exactly the pre-existing operation/interface parameters. All original source comparisons and kappa events are retained, not replaced by unrelated existentials. No security contract or protocol/metric change is made.

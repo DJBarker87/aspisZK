@@ -1,0 +1,422 @@
+Port4C_GeometryGather.lean:57:48: error: Application type mismatch: The argument
+  h
+has type
+  (match parent with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let p ← ops.op15 val
+      let i ← u / 4#usize
+      let i1 ← lift (Usize.wrapping_mul i 4#usize)
+      let r2 ← ops.op12 i1
+      let r3 ←
+        match r2 with
+          | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+          | core.result.Result.Err e => do
+            let e1 ←
+              verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                  { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                    op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                    op3 := fun {T F} pred it f =>
+                      Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                    op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)), op6 := ok 0#u32,
+                    op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10, op11 := ops.op11,
+                    op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                    mapIterator := @Ops.mapIterator CoreError ops }
+                  () e
+            ok (core.result.Result.Err e1)
+      let cf1 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let line_x ← ops.op14 val1
+          let i2 ← lift (Usize.wrapping_mul i 4#usize)
+          let i3 ← lift (i2.wrapping_add 3#usize)
+          let r4 ← ops.op12 i3
+          let r5 ←
+            match r4 with
+              | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+              | core.result.Result.Err e => do
+                let e1 ←
+                  verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                      { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                        op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                        op3 := fun {T F} pred it f =>
+                          Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                        op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)), op6 := ok 0#u32,
+                        op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10, op11 := ops.op11,
+                        op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                        mapIterator := @Ops.mapIterator CoreError ops }
+                      () e
+                ok (core.result.Result.Err e1)
+          let cf2 ←
+            match r5 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let line_y ← ops.op14 val2
+              let m ← ops.op9 line_x line_x
+              let m1 ← ops.op10 m
+              let m2 ← ops.op7
+              let line_z ← ops.op8 m1 m2
+              let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+              let i4 ← core.slice.Slice.iter s
+              let (b, _) ←
+                Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)
+                    (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                      { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                        op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                        op3 := fun {T F} pred it f =>
+                          Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                        op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)), op6 := ok 0#u32,
+                        op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10, op11 := ops.op11,
+                        op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                        mapIterator := @Ops.mapIterator CoreError ops })
+                    i4 ()
+              if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                else do
+                  let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                  let line_z_values1 ← zs.push line_z
+                  ok (cont (iter1, line_z_values1, flat1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r6)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r4 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r4)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+            (core.convert.FromSame verifier.Error) residual
+      ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+but is expected to have type
+  (do
+      let x ← ?m.343
+      ?m.344 x) =
+    ok ?m.345
+in the application
+  bind_success ?m.343 ?m.344 ?m.345 h
+case Ok
+CoreError : Type
+ops : Ops CoreError
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec M
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+h✝¹ :
+  (let (o, iter1) := (some query, iter1)
+    match o with
+    | none => do
+      let b ← (Port4C_GeometryStd.install ops).op4 Global flat
+      if b = true then
+          ok
+            (done
+              (core.result.Result.Ok
+                { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                  line_z := zs }))
+        else
+          have s := flat.deref;
+          do
+          let (prefixes, product) ← (Port4C_GeometryStd.install ops).op13 s
+          let suffix_inverse ← (Port4C_GeometryStd.install ops).op11 product
+          have i : Usize := flat.len
+          have flat_inverse : alloc.vec.Vec aspis_core.field.M31 := alloc.vec.Vec.with_capacity aspis_core.field.M31 i
+          have i1 : Usize := flat.len
+          let m ← (Port4C_GeometryStd.install ops).op6
+          let flat_inverse1 ← alloc.vec.Vec.resize core.marker.CopyU32.cloneInst flat_inverse i1 m
+          have i2 : Usize := flat.len
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := i2 }
+          let flat_inverse2 ←
+            verifier.QueryGeometry.for_range_loop0_loop0 (Port4C_GeometryStd.install ops) iter2 flat prefixes
+                suffix_inverse flat_inverse1
+          have i3 : Usize := zs.len
+          let m1 ←
+            (Port4C_GeometryStd.install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  (Port4C_GeometryStd.install ops))
+                { start := 0#usize, «end» := i3 } flat_inverse2
+          let inverses ←
+            core.iter.traits.iterator.Iterator.collect.default
+                ((Port4C_GeometryStd.install ops).mapIterator
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                    (Port4C_GeometryStd.install ops)))
+                (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+          ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (Port4C_GeometryStd.install ops).op12 u
+      let r1 ←
+        (Port4C_GeometryStd.install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Port4C_GeometryStd.install ops))
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (Port4C_GeometryStd.install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (Port4C_GeometryStd.install ops).op12 i1
+          let r3 ←
+            (Port4C_GeometryStd.install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  (Port4C_GeometryStd.install ops))
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (Port4C_GeometryStd.install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (Port4C_GeometryStd.install ops).op12 i3
+              let r5 ←
+                (Port4C_GeometryStd.install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (Port4C_GeometryStd.install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (Port4C_GeometryStd.install ops).op14 val2
+                  let m ← (Port4C_GeometryStd.install ops).op9 line_x line_x
+                  let m1 ← (Port4C_GeometryStd.install ops).op10 m
+                  let m2 ← (Port4C_GeometryStd.install ops).op7
+                  let line_z ← (Port4C_GeometryStd.install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (Port4C_GeometryStd.install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (Port4C_GeometryStd.install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.marker.CopyU32.cloneInst flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+u : UScalar UScalarTy.Usize
+hu : lift (UScalar.cast UScalarTy.Usize query) = ok u
+h✝ :
+  (do
+      let r ← (Port4C_GeometryStd.install ops).op12 u
+      let r1 ←
+        (Port4C_GeometryStd.install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Port4C_GeometryStd.install ops))
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (Port4C_GeometryStd.install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (Port4C_GeometryStd.install ops).op12 i1
+          let r3 ←
+            (Port4C_GeometryStd.install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  (Port4C_GeometryStd.install ops))
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (Port4C_GeometryStd.install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (Port4C_GeometryStd.install ops).op12 i3
+              let r5 ←
+                (Port4C_GeometryStd.install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (Port4C_GeometryStd.install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (Port4C_GeometryStd.install ops).op14 val2
+                  let m ← (Port4C_GeometryStd.install ops).op9 line_x line_x
+                  let m1 ← (Port4C_GeometryStd.install ops).op10 m
+                  let m2 ← (Port4C_GeometryStd.install ops).op7
+                  let line_z ← (Port4C_GeometryStd.install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (Port4C_GeometryStd.install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (Port4C_GeometryStd.install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.marker.CopyU32.cloneInst flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+fibre : aspis_core.r0.domain.FibreIndex
+hdom : (Port4C_GeometryStd.install ops).op12 u = ok (core.result.Result.Ok fibre)
+h :
+  (do
+      let r1 ← ok (core.result.Result.Ok fibre)
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← ops.op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← ops.op12 i1
+          let r3 ←
+            match r2 with
+              | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+              | core.result.Result.Err e => do
+                let e1 ←
+                  verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                      { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                        op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                        op3 := fun {T F} pred it f =>
+                          Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                        op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)), op6 := ok 0#u32,
+                        op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10, op11 := ops.op11,
+                        op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                        mapIterator := @Ops.mapIterator CoreError ops }
+                      () e
+                ok (core.result.Result.Err e1)
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← ops.op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← ops.op12 i3
+              let r5 ←
+                match r4 with
+                  | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+                  | core.result.Result.Err e => do
+                    let e1 ←
+                      verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                          { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                            op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                            op3 := fun {T F} pred it f =>
+                              Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                            op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)),
+                            op6 := ok 0#u32, op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10,
+                            op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                            mapIterator := @Ops.mapIterator CoreError ops }
+                          () e
+                    ok (core.result.Result.Err e1)
+              let cf2 ←
+                match r5 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← ops.op14 val2
+                  let m ← ops.op9 line_x line_x
+                  let m1 ← ops.op10 m
+                  let m2 ← ops.op7
+                  let line_z ← ops.op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                            op2 := fun {T E F O} => Port4C_GeometryStd.mapError,
+                            op3 := fun {T F} pred it f =>
+                              Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred it f,
+                            op4 := fun {T} x v => ok (↑v).isEmpty, op5 := fun x y => ok (decide (x = y)),
+                            op6 := ok 0#u32, op7 := ops.op7, op8 := ops.op8, op9 := ops.op9, op10 := ops.op10,
+                            op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                            mapIterator := @Ops.mapIterator CoreError ops })
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+⊢ ∃ r u parent left right fibre fleft fright point square doubled one,
+    iterOut = iter1 ∧
+      lift (UScalar.cast UScalarTy.Usize query) = ok u ∧
+        ops.op12 u = ok (core.result.Result.Ok fibre) ∧
+          ops.op15 fibre = ok point ∧
+            u / 4#usize = ok parent ∧
+              left = parent.wrapping_mul 4#usize ∧
+                ops.op12 left = ok (core.result.Result.Ok fleft) ∧
+                  ops.op14 fleft = ok r.lineX ∧
+                    right = left.wrapping_add 3#usize ∧
+                      ops.op12 right = ok (core.result.Result.Ok fright) ∧
+                        ops.op14 fright = ok r.lineY ∧
+                          r.x = point.x ∧
+                            r.y = point.y ∧
+                              ops.op9 r.lineX r.lineX = ok square ∧
+                                ops.op10 square = ok doubled ∧
+                                  ops.op7 = ok one ∧
+                                    ops.op8 doubled one = ok r.lineZ ∧
+                                      (∀ x ∈ r.words, x ≠ 0#u32) ∧
+                                        ↑flatOut = ↑flat ++ r.words ∧ ↑zsOut = ↑zs ++ [r.lineZ]
+'AspisR1.Port4C_GeometryGather.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

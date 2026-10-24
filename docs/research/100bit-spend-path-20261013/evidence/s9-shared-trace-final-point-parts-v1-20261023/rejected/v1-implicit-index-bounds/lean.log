@@ -1,0 +1,263 @@
+/private/tmp/a3-s9-shared-trace-point-parts-v1b-check-20261023/sources/S9SharedTracePointPartsV1.lean:58:54: error: unsolved goals
+case hi
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+w : Ctor
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtor w)
+hs2 : (fromCtor w).variant = transport.Variant.S2
+alpha : Slice NativeW
+f : Slice U8
+kappa out : NativeW
+partsFinal : Parts
+k : Std.Array NativeW 7#usize
+halpha : ∀ (i : Usize) (a : NativeW), alpha.index_usize i = ok a → Can a
+hfold : alpha.len = 2#usize
+hguard : weights.shared_two_point_guard (fromCtor w) 2#usize = ok true
+hpair : weights.Weights.pair (fromCtor w) alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : AspisR1S9ActualProcessKindTensorReachedV1.Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular partsShared : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+selfCommon : weights.Weights
+common : Std.Array aspis_core.field.QM31 16#usize
+partials : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+useFactored : Bool
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds (fromCtor w) true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hcommon :
+  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (fromCtor w)
+      (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+    ok (selfCommon, common)
+hpartials : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hhigh : weights.shared_high partials selfCommon ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hlow :
+  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair selfCommon f low = ok inactive
+hpartsInactive : Array.update partsShared 0#usize inactive = ok partsInactive
+huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq selfCommon.variant transport.Variant.S2 = ok useFactored
+hlibra :
+  (if useFactored = true then weights.factored_s2_libra_weights ap0 ap1 selfCommon.extra
+    else weights.twofold_libra_weights low selfCommon.extra) =
+    ok libra
+hactive : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+ha0c : Can a0
+ha1c : Can a1
+hcap0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hcap1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hpg : AspisR1S9ActualFinalSumV1.Good partsRegular
+hcommonSelf : selfCommon = fromCtor w
+hhigh' : weights.shared_high partials (fromCtor w) ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hn' : f.len / 32#usize = ok 64#usize
+p0 p2 : NativeW
+cp0 : AspisR1S9SharedHighConstructorModelV1.Can p0
+cp2 : AspisR1S9SharedHighConstructorModelV1.Can p2
+hout : partsShared = (Std.Array.set partsRegular 1#usize p0).set 3#usize p2
+hv0 : decodeNative p0 = rowValue model (decodeNative a0) (decodeNative a1) f 0
+hv2 : decodeNative p2 = rowValue model (decodeNative a0) (decodeNative a1) f 2
+frame : ∀ (j : Usize) (hj : ↑j < 7), ↑j ≠ 0 → ↑j ≠ 4 → atN partsFinal j hj = atN partsShared j hj
+⊢ ↑1#usize < ↑7#usize
+
+case hi
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+w : Ctor
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtor w)
+hs2 : (fromCtor w).variant = transport.Variant.S2
+alpha : Slice NativeW
+f : Slice U8
+kappa out : NativeW
+partsFinal : Parts
+k : Std.Array NativeW 7#usize
+halpha : ∀ (i : Usize) (a : NativeW), alpha.index_usize i = ok a → Can a
+hfold : alpha.len = 2#usize
+hguard : weights.shared_two_point_guard (fromCtor w) 2#usize = ok true
+hpair : weights.Weights.pair (fromCtor w) alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : AspisR1S9ActualProcessKindTensorReachedV1.Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular partsShared : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+selfCommon : weights.Weights
+common : Std.Array aspis_core.field.QM31 16#usize
+partials : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+useFactored : Bool
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds (fromCtor w) true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hcommon :
+  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (fromCtor w)
+      (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+    ok (selfCommon, common)
+hpartials : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hhigh : weights.shared_high partials selfCommon ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hlow :
+  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair selfCommon f low = ok inactive
+hpartsInactive : Array.update partsShared 0#usize inactive = ok partsInactive
+huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq selfCommon.variant transport.Variant.S2 = ok useFactored
+hlibra :
+  (if useFactored = true then weights.factored_s2_libra_weights ap0 ap1 selfCommon.extra
+    else weights.twofold_libra_weights low selfCommon.extra) =
+    ok libra
+hactive : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+ha0c : Can a0
+ha1c : Can a1
+hcap0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hcap1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hpg : AspisR1S9ActualFinalSumV1.Good partsRegular
+hcommonSelf : selfCommon = fromCtor w
+hhigh' : weights.shared_high partials (fromCtor w) ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hn' : f.len / 32#usize = ok 64#usize
+p0 p2 : NativeW
+cp0 : AspisR1S9SharedHighConstructorModelV1.Can p0
+cp2 : AspisR1S9SharedHighConstructorModelV1.Can p2
+hout : partsShared = (Std.Array.set partsRegular 1#usize p0).set 3#usize p2
+hv0 : decodeNative p0 = rowValue model (decodeNative a0) (decodeNative a1) f 0
+hv2 : decodeNative p2 = rowValue model (decodeNative a0) (decodeNative a1) f 2
+frame : ∀ (j : Usize) (hj : ↑j < 7), ↑j ≠ 0 → ↑j ≠ 4 → atN partsFinal j hj = atN partsShared j hj
+⊢ ↑3#usize < ↑7#usize
+/private/tmp/a3-s9-shared-trace-point-parts-v1b-check-20261023/sources/S9SharedTracePointPartsV1.lean:60:54: error: unsolved goals
+case hi
+allocation : AspisR1S9AllocationInterfaceV1.Allocation
+w : Ctor
+model : Table
+hm : Meaning w.factors model
+hc : AspisR1S9ConstructorNativeReceiverCanonicalV1.FactorsCanonical (fromCtor w)
+hs2 : (fromCtor w).variant = transport.Variant.S2
+alpha : Slice NativeW
+f : Slice U8
+kappa out : NativeW
+partsFinal : Parts
+k : Std.Array NativeW 7#usize
+halpha : ∀ (i : Usize) (a : NativeW), alpha.index_usize i = ok a → Can a
+hfold : alpha.len = 2#usize
+hguard : weights.shared_two_point_guard (fromCtor w) 2#usize = ok true
+hpair : weights.Weights.pair (fromCtor w) alpha f kappa = ok (core.result.Result.Ok out)
+n : Usize
+a0 a1 : AspisR1S9ActualProcessKindTensorReachedV1.W
+ap0 ap1 : AspisR1S9ActualProcessKindTensorReachedV1.Powers
+scratch scratchOut : AspisR1S9ActualProcessKindTensorReachedV1.Scratch
+partsRegular partsShared : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+selfCommon : weights.Weights
+common : Std.Array aspis_core.field.QM31 16#usize
+partials : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+low : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 16#usize
+inactive : AspisR1S9ActualProcessKindTensorReachedV1.W
+partsInactive : AspisR1S9ActualProcessKindTensorReachedV1.Parts
+useFactored : Bool
+libra : Std.Array AspisR1S9ActualProcessKindTensorReachedV1.W 4#usize
+hn : f.len / 32#usize = ok n
+hn64 : n = 64#usize
+ha0 : alpha.index_usize 0#usize = ok a0
+hap0 : weights.powers 4#usize a0 = ok ap0
+ha1 : alpha.index_usize 1#usize = ok a1
+hap1 : weights.powers 4#usize a1 = ok ap1
+hreserved :
+  aspis_core.r0.heap.filled aspis_core.field.QM31.Insts.CoreMarkerCopy n aspis_core.field.QM31.ZERO =
+    ok (core.result.Result.Ok scratch)
+hregular :
+  weights.process_regular_kinds (fromCtor w) true alpha f 2#usize n ap0 ap1 scratch
+      (Array.repeat 7#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok (core.result.Result.Ok (), scratchOut, partsRegular)
+hcommon :
+  weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } (fromCtor w)
+      (Array.repeat 16#usize aspis_core.field.QM31.ZERO) =
+    ok (selfCommon, common)
+hpartials : weights.shared_partials f common = ok (core.result.Result.Ok partials)
+hhigh : weights.shared_high partials selfCommon ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hlow :
+  weights.Weights.pair_loop7 { start := 0#usize, «end» := 16#usize } ap0 ap1
+      (Array.repeat 16#usize aspis_core.field.wide_exact.WideExact.ZERO) =
+    ok low
+hinactive : weights.grouped_inactive_pair selfCommon f low = ok inactive
+hpartsInactive : Array.update partsShared 0#usize inactive = ok partsInactive
+huse : transport.Variant.Insts.CoreCmpPartialEqVariant.eq selfCommon.variant transport.Variant.S2 = ok useFactored
+hlibra :
+  (if useFactored = true then weights.factored_s2_libra_weights ap0 ap1 selfCommon.extra
+    else weights.twofold_libra_weights low selfCommon.extra) =
+    ok libra
+hactive : weights.Weights.pair_loop8 { start := 0#usize, «end» := 4#usize } f partsInactive libra = ok partsFinal
+hk : weights.powers 7#usize kappa = ok k
+hsum :
+  weights.Weights.pair_loop9 { start := 0#usize, «end» := 7#usize } partsFinal k
+      aspis_core.field.wide_exact.WideExact.ZERO =
+    ok out
+ha0c : Can a0
+ha1c : Can a1
+hcap0 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap0 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hcap1 :
+  ∀ (i : Usize) (v : AspisR1S9ActualPairWideCanonicalV1.W),
+    Array.index_usize ap1 i = ok v → AspisR1S9ActualPairWideCanonicalV1.Canonical v
+hpg : AspisR1S9ActualFinalSumV1.Good partsRegular
+hcommonSelf : selfCommon = fromCtor w
+hhigh' : weights.shared_high partials (fromCtor w) ap0 ap1 partsRegular = ok (core.result.Result.Ok (), partsShared)
+hn' : f.len / 32#usize = ok 64#usize
+p0 p2 : NativeW
+cp0 : AspisR1S9SharedHighConstructorModelV1.Can p0
+cp2 : AspisR1S9SharedHighConstructorModelV1.Can p2
+hout : partsShared = (Std.Array.set partsRegular 1#usize p0).set 3#usize p2
+hv0 : decodeNative p0 = rowValue model (decodeNative a0) (decodeNative a1) f 0
+hv2 : decodeNative p2 = rowValue model (decodeNative a0) (decodeNative a1) f 2
+frame : ∀ (j : Usize) (hj : ↑j < 7), ↑j ≠ 0 → ↑j ≠ 4 → atN partsFinal j hj = atN partsShared j hj
+e1 : atN partsShared 1#usize ⋯ = p0
+⊢ ↑3#usize < ↑7#usize
+'AspisR1S9SharedTracePointPartsV1.shared_trace_final_point_parts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

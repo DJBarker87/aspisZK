@@ -1,0 +1,158 @@
+'AspisR1.Port3_CheckpointEndpoint.final_checkpoint_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointEndpoint.checkpoint_endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.erase_success_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.writer_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.reader_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointInstall.source_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointRows.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_CheckpointRows.fields_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.source_zero_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.source_one_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.source_zero_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.decode_zero_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.decode_one_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constants.decode_zero_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.map_error_exact' depends on axioms: [propext]
+'AspisR1.Port3_Constructor.normalization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.installed_constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.initial_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Constructor.allocation_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Initial.constructor_shell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Initial.accepted_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Initial.allocation_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Initial.accepted_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_Initial.no_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_WriterBoundary.selector_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_WriterBoundary.not_shipped_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port3_WriterBoundary.not_shipped_d_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port3_Constructor.installed : VTop_Stages.Ops → Bool → VTop_Stages.Ops :=
+fun base reserved =>
+  have __src := AspisR1.Port3_Initial.install base reserved;
+  { op0 := @VTop_Stages.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3, op4 := __src.op4,
+    op5 := @VTop_Stages.Ops.op5 __src, op6 := __src.op6, op7 := @VTop_Stages.Ops.op7 __src,
+    op8 := @VTop_Stages.Ops.op8 __src, op9 := __src.op9, op10 := __src.op10, op11 := __src.op11,
+    op12 := AspisR1.Port3_Constructor.extracted (AspisR1.Port3_Constructor.leaves reserved), op13 := __src.op13,
+    op14 := __src.op14, op15 := __src.op15, op16 := __src.op16, op17 := __src.op17, op18 := @VTop_Stages.Ops.op18 __src,
+    op19 := __src.op19, op20 := __src.op20, op21 := __src.op21, op22 := __src.op22, op23 := __src.op23,
+    unwrap32 := __src.unwrap32 }
+theorem AspisR1.Port3_Constructor.initial_success : ∀ (base : VTop_Stages.Ops) (reserved : Bool)
+  (a : VTop_Stages.verifier.Accumulator),
+  (AspisR1.Port3_Constructor.installed base reserved).op12 AspisR1Stage2.transport.Variant.S2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) →
+    AspisR1.CheckpointBytes5Output.accumulator a = AspisR1.QueryAccumulator.initial :=
+fun base reserved a accepted =>
+  AspisR1.Port3_Initial.accepted_initial base reserved a
+    (Eq.mp
+      (congrArg (fun _a => _a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a))
+        (AspisR1.Port3_Constructor.installed_constructor base reserved AspisR1Stage2.transport.Variant.S2))
+      accepted)
+theorem AspisR1.Port3_CheckpointEndpoint.checkpoint_endpoint : ∀ (base : VTop_Stages.Ops) (reserved : Bool)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (wp : VTop_Stages.verifier.Prepared)
+  (wa : VTop_Stages.verifier.Accumulator) (proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+  (v : AspisR1.LiteralOpeningView.View),
+  AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+    AspisR1.OraclePortSelectedDraft.queries tr = some q →
+      AspisR1.CheckpointBytes5Join.S2S10CallerBinding (AspisR1.VTop_Checkpoint.digest D) hash H proof pub stored
+          tr.statement.pubBytes →
+        AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+            (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa)
+            (AspisR1.OraclePortCheckpointResumeC5.prepared (AspisR1.OraclePortAcceptedContextC6.context parsed i v)
+              i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+            (AspisR1.OraclePortCheckpointStateC3.write
+                (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho)
+                  q)).accumulator →
+          ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+            (a : VTop_Stages.verifier.Accumulator),
+            (AspisR1.Port3_Constructor.installed base reserved).op8 D wp wa proof pub hash =
+                Aeneas.Std.Result.ok saved →
+              (AspisR1.Port3_Constructor.installed base reserved).op18 D (AspisR1.VTop_Checkpoint.checkpointSlice saved)
+                    proof pub AspisR1Stage2.transport.Variant.S2 hash =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+                ∃ after,
+                  AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                        (AspisR1.CheckpointBytes5Join.stage reserved (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+                          (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) proof pub)
+                        [] =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+                    (AspisR1.CheckpointBytes5Inputs.observe after,
+                        some (AspisR1.CheckpointBytes5Join.resumedSource i.data p a)) =
+                      AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortFrozen2.checkpoint stored parsed q tr i v) :=
+fun base reserved {Hash} D hash H wp wa proof pub stored parsed q tr i v input query caller provenance saved p a wrote
+    resumed =>
+  let ⟨after, success⟩ :=
+    AspisR1.Port3_CheckpointRows.combined_run base reserved D hash wp wa proof pub saved p a wrote resumed []
+  Exists.intro after
+    ⟨success,
+      AspisR1.CheckpointBytes5Join.success_conditioned_checkpoint_stage_join (AspisR1.VTop_Checkpoint.digest D) hash H
+        reserved (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+        (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) proof pub stored parsed q tr i v input query caller
+        provenance p a after success⟩
+theorem AspisR1.Port3_CheckpointInstall.source_join : ∀ (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 H) (hash : H),
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin (AspisR1.Port3_CheckpointInstall.install base reserved) D hash
+    reserved :=
+fun base reserved {H} D hash =>
+  {
+    writer := fun semantic proof pub split p a saved a_1 accepted =>
+      let ⟨after, success⟩ := AspisR1.Port3_CheckpointInstall.writer_run D p a proof pub hash saved accepted []
+      Exists.intro [] (Exists.intro after success),
+    reader := fun ck proof pub p a accepted =>
+      AspisR1.Port3_CheckpointInstall.reader_success reserved D ck proof pub AspisR1Stage2.transport.Variant.S2 hash p a
+        accepted }
+theorem AspisR1.Port3_WriterBoundary.not_shipped_tag : ∀
+  (p : OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Prepared)
+  (a : OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.verifier.Accumulator)
+  (hp hu : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  p.variant = OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S1 →
+    OraclePortCkptAbi2Extracted.body_byte p a hp hu 8#usize ≠
+      Aeneas.Std.Result.ok (AspisR1.Port3_WriterBoundary.shippedTag p.variant) :=
+fun p a hp hu variant =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a ≠ Aeneas.Std.Result.ok (AspisR1.Port3_WriterBoundary.shippedTag p.variant))
+        (AspisR1.Port3_WriterBoundary.selector_tag p a hp hu)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a => Aeneas.Std.Result.ok 2#u8 ≠ Aeneas.Std.Result.ok (AspisR1.Port3_WriterBoundary.shippedTag _a))
+          variant))
+      fun h =>
+      have wrong := congrArg Aeneas.Std.UScalar.val (Aeneas.Std.Result.ok.inj h);
+      id (fun wrong => AspisR1.Port3_WriterBoundary.not_shipped_tag._proof_1 wrong) wrong)
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource

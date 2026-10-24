@@ -1,0 +1,103 @@
+/private/tmp/a3-s9-native-s3-coefficient-loop-v2-check-20261023/sources/S9NativeS3CoefficientLoopV1.lean:25:9: error: unsolved goals
+case none
+f : Slice U8
+r : R
+c : C
+r1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize r = ok (none, r1)
+h✝ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize r
+      match o with
+        | none => ok (done c)
+        | some j => do
+          let i ← weights.S2_INACTIVE_GROUPS.index_usize j
+          let group ← lift (UScalar.cast UScalarTy.Usize i)
+          let we ← Array.index_usize c group
+          let we1 ← weights.field f j
+          let we2 ← we.add we1
+          let a ← Array.update c group we2
+          ok (cont (iter1, a))) =
+    ok (done c)
+h :
+  (let (o, iter1) := (none, r1)
+    match o with
+    | none => ok (done c)
+    | some j => do
+      let i ← weights.S2_INACTIVE_GROUPS.index_usize j
+      let group ← lift (UScalar.cast UScalarTy.Usize i)
+      let we ← Array.index_usize c group
+      let we1 ← weights.field f j
+      let we2 ← we.add we1
+      let a ← Array.update c group we2
+      ok (cont (iter1, a))) =
+    ok (done c)
+⊢ (let (o, iter1) := (none, r1)
+    match o with
+    | none => ok (done (toOld c))
+    | some j => do
+      let i ← AspisR1GroupedPairActualFieldOpsV3.weights.S2_INACTIVE_GROUPS.index_usize j
+      let group ← lift (UScalar.cast UScalarTy.Usize i)
+      let we ← (toOld c).index_usize group
+      let we1 ← AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations.decodeField f j
+      let we2 ← AspisR1GroupedPairActualFieldOpsV3.ActualFieldComplete.actualOperations.add we we1
+      let a ← (toOld c).update group we2
+      ok (cont (iter1, a))) =
+    ok (done (toOld c))
+/private/tmp/a3-s9-native-s3-coefficient-loop-v2-check-20261023/sources/S9NativeS3CoefficientLoopV1.lean:74:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 64
+  g ≥ 0
+  g - h ≥ 1
+  0 ≤ e ≤ 64
+  0 ≤ d ≤ 64
+  b ≥ 2048
+where
+ b := ↑(↑f).length
+ d := ↑↑iter.start
+ e := ↑↑(r, c).1.start
+ g := ↑↑r.end
+ h := ↑↑r.start
+/private/tmp/a3-s9-native-s3-coefficient-loop-v2-check-20261023/sources/S9NativeS3CoefficientLoopV1.lean:76:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ i ≤ 63
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 1
+  0 ≤ e ≤ 64
+  0 ≤ d ≤ 64
+  b ≥ 2048
+  b - 32*h ≤ 31
+where
+ b := ↑(↑f).length
+ d := ↑↑iter.start
+ e := ↑↑(r, c).1.start
+ g := ↑↑r.end
+ h := ↑↑j
+ i := ↑↑r.start
+/private/tmp/a3-s9-native-s3-coefficient-loop-v2-check-20261023/sources/S9NativeS3CoefficientLoopV1.lean:84:31: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  k ≥ 0
+  k - l ≥ 1
+  0 ≤ i ≤ 63
+  h ≥ 0
+  g ≥ 65
+  g - h ≥ 1
+  0 ≤ e ≤ 64
+  0 ≤ d ≤ 64
+  b ≥ 2048
+  b - 32*h ≥ 32
+where
+ b := ↑(↑f).length
+ d := ↑↑iter.start
+ e := ↑↑(r, c).1.start
+ g := ↑↑r.end
+ h := ↑↑j
+ i := ↑↑r.start
+ k := ↑↑12#usize
+ l := ↑↑group
+'AspisR1S9NativeS3CoefficientLoopV1.native_coefficient_loop_success_old' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

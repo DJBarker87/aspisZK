@@ -1,0 +1,1 @@
+The initial focused check failed on three omitted fixed array-index bounds in the atN_set rewrite. The accepted v2 supplies the exact arrays, indices, values and bounds. No theorem statement, source model, math or premise changed; failed logs are not accepted proof evidence.

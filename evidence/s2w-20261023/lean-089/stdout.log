@@ -1,0 +1,43 @@
+S2W_TraceSplice.lean:24:14: error: Type mismatch: After simplification, term
+  ih
+ has type
+  ∀ (a : B✝) (log : Log),
+    run ops (k a) (headLog ++ log) =
+      match run ops (k a) log with
+      | ok a => ok (a.1, headLog ++ a.2)
+      | fail e => fail e
+      | div => div
+but is expected to have type
+  run ops (k b) (headLog ++ (log ++ [Event.returned call b])) =
+    match run ops (k b) (log ++ [Event.returned call b]) with
+    | ok a => ok (a.1, headLog ++ a.2)
+    | fail e => fail e
+    | div => div
+S2W_TraceSplice.lean:25:11: error: unexpected identifier; expected command
+'AspisR1.S2W_TraceSplice.run_shift' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs) :
+    FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss) :
+    SecondMarks port

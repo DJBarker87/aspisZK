@@ -1,0 +1,3 @@
+Concrete source-carrier comparator under a literal eight-coordinate map to the existing emitted derived WideExact Eq body: accepted false inequality implies source structural equality for arbitrary carriers, without canonicality or arithmetic premises. The installer changes only the Stage2 finish ne interpretation; physical source-body reuse is recorded with the companion derived-body/default-ne packet. Other finish operations, runtime/artifact and global security transport remain explicit.
+
+Focused Lean check: 9.165 seconds; peak aggregate RSS 2194178048 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

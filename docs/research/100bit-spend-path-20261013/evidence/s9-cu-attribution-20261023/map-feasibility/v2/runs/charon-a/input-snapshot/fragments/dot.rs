@@ -1,0 +1,1 @@
+    pub struct Dot { sums:[u64;4] }

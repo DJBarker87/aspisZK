@@ -1,0 +1,3 @@
+Before: native scalar decoded formula requires independently supplied successful scalar call and f/p canonical-read guards.
+
+After: SAME accepted actual S2/folds2 process_kind supplies both scalar successes and exact native factors[k][0]/[1] reads. Receiver 3D FactorsCanonical supplies f0/f1 canonicality internally. Both source scalar equations then apply to SAME outputs; no independent hscalar, fCanonical or output semantics is retained. Receiver FactorsCanonical and p0/p1 GoodArray guards remain EXPLICIT generic caller obligations, as does S2 and the SAME source process_kind execution. This is local source-helper semantic refinement, not yet the same-resume/finish complete caller theorem.

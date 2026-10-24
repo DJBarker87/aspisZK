@@ -1,0 +1,111 @@
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:85:15: error: unsolved goals
+case isFalse.fail
+self : fast_pairing.EbyKDot
+w : NativeW
+scalar : NativeQ
+hw :
+  ↑w.c0.c0.a ≤ 2 ^ 31 - 2 ∧
+    ↑w.c0.c0.b ≤ 2 ^ 31 - 2 ∧
+      ↑w.c0.c1.a ≤ 2 ^ 31 - 2 ∧
+        ↑w.c0.c1.b ≤ 2 ^ 31 - 2 ∧
+          ↑w.c1.c0.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c0.b ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.b ≤ 2 ^ 31 - 2
+h✝ : ¬self.count ≥ fast_pairing.MAX_TERMS
+err : Error
+hc : fast_pairing.checked_q scalar = fail err
+⊢ fail err = do
+    let _ ← (Array.make 2#usize [low w, high w] ⋯).index_usize 0#usize
+    let _ ← (Array.make 2#usize [low w, high w] ⋯).index_usize 1#usize
+    fail err
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:86:10: error: unsolved goals
+case isFalse.div
+self : fast_pairing.EbyKDot
+w : NativeW
+scalar : NativeQ
+hw :
+  ↑w.c0.c0.a ≤ 2 ^ 31 - 2 ∧
+    ↑w.c0.c0.b ≤ 2 ^ 31 - 2 ∧
+      ↑w.c0.c1.a ≤ 2 ^ 31 - 2 ∧
+        ↑w.c0.c1.b ≤ 2 ^ 31 - 2 ∧
+          ↑w.c1.c0.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c0.b ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.b ≤ 2 ^ 31 - 2
+h✝ : ¬self.count ≥ fast_pairing.MAX_TERMS
+hc : fast_pairing.checked_q scalar = div
+⊢ div = do
+    let _ ← (Array.make 2#usize [low w, high w] ⋯).index_usize 0#usize
+    let _ ← (Array.make 2#usize [low w, high w] ⋯).index_usize 1#usize
+    div
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:90:13: error: unsolved goals
+case isFalse.ok.Ok
+self : fast_pairing.EbyKDot
+w : NativeW
+scalar : NativeQ
+hw :
+  ↑w.c0.c0.a ≤ 2 ^ 31 - 2 ∧
+    ↑w.c0.c0.b ≤ 2 ^ 31 - 2 ∧
+      ↑w.c0.c1.a ≤ 2 ^ 31 - 2 ∧
+        ↑w.c0.c1.b ≤ 2 ^ 31 - 2 ∧
+          ↑w.c1.c0.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c0.b ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.a ≤ 2 ^ 31 - 2 ∧ ↑w.c1.c1.b ≤ 2 ^ 31 - 2
+h✝ : ¬self.count ≥ fast_pairing.MAX_TERMS
+q : fast_pairing.canonical.Q
+hc : fast_pairing.checked_q scalar = ok (core.result.Result.Ok q)
+hlo :
+  AspisR1S9ActualRawCutV1.fast_pairing.canonical.Q.raw (low w) q = AspisR1S9ActualDotBackendMapV1.actualRaw (low w) q
+hhi :
+  AspisR1S9ActualRawCutV1.fast_pairing.canonical.Q.raw (high w) q = AspisR1S9ActualDotBackendMapV1.actualRaw (high w) q
+⊢ (do
+      let d ←
+        do
+          let raw1 ← AspisR1S9ActualDotBackendMapV1.actualRaw (low w) q
+          fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.c0 raw1
+      let d1 ←
+        do
+          let raw1 ← AspisR1S9ActualDotBackendMapV1.actualRaw (high w) q
+          fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.c1 raw1
+      let i ← lift (self.count.wrapping_add 1#usize)
+      ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })) =
+    do
+    let value_c0 ← (Array.make 2#usize [low w, high w] ⋯).index_usize 0#usize
+    let value_c1 ← (Array.make 2#usize [low w, high w] ⋯).index_usize 1#usize
+    let d ←
+      do
+        let raw1 ← AspisR1S9ActualDotBackendMapV1.actualRaw value_c0 q
+        fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.c0 raw1
+    let d1 ←
+      do
+        let raw1 ← AspisR1S9ActualDotBackendMapV1.actualRaw value_c1 q
+        fast_pairing.canonical.Dot.push_loop { start := 0#usize, «end» := 4#usize } self.c1 raw1
+    let i ← lift (self.count.wrapping_add 1#usize)
+    ok (core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:85:29: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:86:24: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:89:28: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/private/tmp/a3-s9-actual-raw-ebyk-body-v2-check-20261023/sources/S9ActualRawEbyKBodyV1.lean:92:19: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵c̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1S9ActualRawEbyKBodyV1.model_dot_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualRawEbyKBodyV1.model_ebyk_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1S9ActualRawEbyKBodyV1.actual_raw_source_body_eq_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,9 @@
+# Actual statement-factor source semantics
+
+**Proved:** `statement_outer_success_actual_table` takes canonical actual stored point inputs and the SAME accepted source statement phase (outer k=0..2, inner d=0..4). It derives all3x5x4 decoded factor entries as the EXISTING D18 `pairFactor` at the exact source TAU-selected coordinates. Every other row (including later circle rows3/4) retains its initial model values. Initial factor contents can be arbitrary; no independent initial canonicality/meaning or per-cell child success premise remains.
+
+The proof composes the same source six arithmetic calls, point/TAU/index reads, actual mutable row writes, the existing exact field semantics, native4slot readback, and the existing D18 coordinates. Generic loop invariants cover the entire actual source loops, rather than unrolling60cells. The shared full `Meaning`/`write` interface composes directly with the circle phase. The included accepted Table v3 source/receipt is exact, not the failed candidate v2.
+
+The source/control helper reuses two exact canonical-proof spans with only private-to-public visibility changes; named generic stop geometry is proved using the actual iterator specification. Four new focused targets and one already-green shared helper have standard axioms/zero swap under root mutex/M4400/one thread/7.5GiB stop/120s watchdog. Exact source/revision/commands/profiles/receipts/failures retained. No binaries/full inventories/final release replay.
+
+Scope: mathematical source/model C/V3 constructor phase. This does NOT establish current caller/Box/runtime/source-normalization, deployed artifact identity, complete pairing/fold/security composition or100bit security. The input point producer's semantics and circle phase are separate composable results. Target not yet established.

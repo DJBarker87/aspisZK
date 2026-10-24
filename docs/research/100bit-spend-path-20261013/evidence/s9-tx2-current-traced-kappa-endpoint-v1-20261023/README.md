@@ -1,0 +1,3 @@
+The same accepted extracted source tx2 with current strict readers and native constructor/Pair supplies the SAME source View/resume/calls and SAME parts/k WITH explicit operational Trace, canonicality and kappa equation. Caller guards are discharged from that execution. No detached existential vector or independent Current finish. Other operations, parts-to-spend relation, runtime/artifact and security-experiment transport remain open.
+
+Focused Lean check: 39.99 seconds; peak aggregate RSS 3801448448 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

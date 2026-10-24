@@ -1,0 +1,3 @@
+Direct actual partial/high output parameters equal ordinary finite sums of the SAME deterministic source field/common/partials/high-array read observations. Actual source runs/producers and quotient64 supply all operand values; no free operand vector, finish, model or canonicality premise. Other implementation/security ports remain open.
+
+Focused Lean check: 14.678 seconds; peak aggregate RSS 3257597952 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

@@ -1,0 +1,34 @@
+import S9ActiveOriginalValueV1
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace AspisR1S9OriginalDotProofTransportV1
+open AspisR1S9ActualPairOldCarrierScalarV1 (toHelperW toHelperQ)
+open AspisR1S9CandidateFoldMapPrimitivesV1 (mapArray)
+abbrev W := AspisR1S9ActualPairWideHelperTransportV1.W
+abbrev HW := AspisR1S9BodyPrefixPolynomialSumsV1.W
+abbrev Q := AspisR1S9ActiveOriginalCoefficientsV1.Q
+abbrev A := AspisR1S9ActiveFourCanonicalV1.Libra
+abbrev E := AspisWideTower.WideExact
+
+/-- Expose only the phantom array-length bound evidence as a parameter.
+Its data value is always4; field inputs and the ORIGINAL formula are unchanged. -/
+def originalDotWithProof (h : 4≤UScalar.cMax .Usize) (input : Nat → E)
+    (ap0 ap1 : A) (q0 q1 : Q) : E :=
+  ∑j : Fin 4,input j.val * AspisR1.S2LibraFactoredIdentity.original
+    (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase
+      (@mapArray W HW (Usize.ofNat 4 h) toHelperW ap0))
+    (AspisR1S9ActualPairHelperOriginalCoefficientsV1.ScaledBase
+      (@mapArray W HW (Usize.ofNat 4 h) toHelperW ap1))
+    (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q0))
+    (AspisR1S9ActualPairHelperOriginalCoefficientsV1.Seed (toHelperQ q1)) j
+
+/-- Function equality is proved before specializing any source values or
+expanding the coefficient polynomial. No bound numeral is normalized. -/
+theorem original_dot_bound_proof_irrel (h1 h2 : 4≤UScalar.cMax .Usize) :
+    originalDotWithProof h1=originalDotWithProof h2 := by
+  have he : h1=h2 := Subsingleton.elim _ _
+  cases he
+  rfl
+
+#print axioms original_dot_bound_proof_irrel
+end AspisR1S9OriginalDotProofTransportV1

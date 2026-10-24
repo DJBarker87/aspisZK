@@ -1,0 +1,131 @@
+'AspisR1.ChildJoin_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.ChildJoin_Accepted.accepted_run : ∀ {W A E : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (port : ChildConeJoin E ops),
+                                FirstMarks port →
+                                  SecondMarks port →
+                                    ∃ f s outer pre middle fs ss,
+                                      SourceCuts ops e1.first (e2.second secondSizes) saved f s ∧
+                                        S2W_ExpandedTrace.runExpanded ops (children port)
+                                              (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes)
+                                                data2 slot)
+                                              [] =
+                                            ok
+                                              (core.result.Result.Ok saved,
+                                                S2W_ExpandedTrace.full (children port) outer) ∧
+                                          S2W_D189Interpretation.runOwned ops
+                                                (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes)
+                                                  data2 slot)
+                                                [] e1.heap =
+                                              ok (core.result.Result.Ok saved, outer, e1.heap) ∧
+                                            projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                              post2 = e2.heap ∧
+                                                before e1 e2 Site.tx1 =
+                                                    S2W_D189Interpretation.nativeObserve L encode e1.metadata 3 w1
+                                                      e1.heap.ambient ∧
+                                                  before e1 e2 Site.tx2 =
+                                                      S2W_D189Interpretation.nativeObserve L encode e2.metadata 7 w2
+                                                        e2.heap.ambient ∧
+                                                    ∀ (nodes : ℕ → ℕ → Slice U8) (y1 : Slice U8),
+                                                      CheckpointWriterConeJoin ops checkpointHeader H f.semantic f.pub
+                                                          f.proof f.split →
+                                                        CheckpointReaderConeJoin ops checkpointHeader H s.pub s.proof
+                                                            s.checkpoint →
+                                                          ∀
+                                                            (a :
+                                                              S2X.CheckpointVersionBinding
+                                                                (payloadBytes encode
+                                                                  (post1.payload (e1.heap.accounts 2).1) 1768)
+                                                                (bytesOf ↑s.checkpoint)),
+                                                            P2Prime H f.proof f.pub s.proof s.pub →
+                                                              S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+                                                                S2W_ChildJoins.MultiproofConeJoin f.proof s.proof
+                                                                    nodes →
+                                                                  ⋯ :=
+fun {W A E} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 ops native1 native2 hashv extraction sha256 H p1
+    syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 port firstMarks
+    secondMarks =>
+  let ⟨owned1, written⟩ :=
+    first_accepted native1 copy std allocator e1 program data1 state1 final1 saved post1 accepted1
+  let ⟨owned2, unchanged⟩ := second_accepted native2 allocator e2 program data2 slot state2 final2 post2 accepted2
+  let boundary := S2W_DigestExtraction.sourceBoundary ops native1 native2 hashv extraction;
+  have source1 := Eq.trans (Eq.symm (boundary.stage1 program e1.first data1)) owned1;
+  let ⟨f, h✝⟩ :=
+    S2W_ScheduledConsolidation.accepted_run ops native1 native2 hashv extraction sha256 H p1 syscall program e1.first
+      (e2.second secondSizes) data1 data2 slot saved owned1 owned2 port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨execution, right✝¹⟩ := right✝
+  let ⟨expanded, right✝²⟩ := right✝¹
+  let ⟨layout, projectedInputs⟩ := right✝²
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨expanded,
+                    ⟨S2W_D189Interpretation.accepted_owned_frame ops
+                        (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes) data2 slot) [] outer
+                        (core.result.Result.Ok saved) e1.heap execution,
+                      ⟨layout,
+                        ⟨unchanged,
+                          ⟨Eq.symm
+                              (S2W_D189Interpretation.native_observation L sdk encode e1.metadata 3 w1 e1.heap
+                                admission1.related admission1.entry.valid),
+                            ⟨Eq.symm
+                                (S2W_D189Interpretation.native_observation L sdk encode e2.metadata 7 w2 e2.heap
+                                  admission2.related admission2.entry.valid),
+                              fun nodes y1 writer reader history p2prime entry multiproof scan =>
+                              have destinationSize := checkpoint_size e1 ops program data1 saved source1;
+                              have versionAtWrite :=
+                                (id
+                                      (congrArg
+                                        (fun _a =>
+                                          S2X.CheckpointVersionBinding
+                                            (payloadBytes encode (_a.payload (e1.heap.accounts 2).1) 1768)
+                                            (bytesOf ↑s.checkpoint))
+                                        (Eq.symm written))).mpr
+                                  history;
+                              let ⟨left✝, right✝³⟩ :=
+                                returned_committed e1.heap 2 0 0 saved (bytesOf ↑s.checkpoint) rfl rfl destinationSize
+                                  (writer.size saved cuts.first) versionAtWrite
+                              let ⟨version⟩ := right✝³
+                              let ⟨parsed, h✝⁷⟩ :=
+                                projectedInputs checkpointHeader nodes y1 writer reader version p2prime entry multiproof
+                                  scan (before e1 e2) (after e1 e2 post1)
+                              let ⟨partialFacts, sites⟩ := h✝⁷
+                              have frames := wrapper_frames e1 e2 ops program data1 saved source1 post1 written;
+                              Exists.intro parsed
+                                ⟨(S2W_TwoFieldAudit.full_fields_iff
+                                        (observation f s saved nodes y1 pre middle fs ss (before e1 e2)
+                                          (after e1 e2 post1))
+                                        ops H (bytesOf ↑f.proof) (bytesOf ↑f.pub) (bytesOf ↑saved) parsed
+                                        partialFacts).mpr
+                                    ⟨fun site x a allowed => frames.left site a allowed, fun x => frames.right⟩,
+                                  sites⟩⟩⟩⟩⟩⟩⟩⟩))))))

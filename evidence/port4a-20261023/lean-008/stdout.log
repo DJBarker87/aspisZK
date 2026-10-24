@@ -1,0 +1,42 @@
+Port4A_ReaderInstall.lean:14:4: error: Dependent elimination failed: Failed to solve equation
+  ok n =
+    match 16#usize * 256#usize with
+    | ok v => (fun weights => 744#usize + weights) v
+    | fail v => fail v
+    | div => div
+Port4A_ReaderInstall.lean:14:4: error: Dependent elimination failed: Failed to solve equation
+  ok n =
+    match 16#usize * 64#usize with
+    | ok v => (fun weights => 744#usize + weights) v
+    | fail v => fail v
+    | div => div
+Port4A_ReaderInstall.lean:14:4: error: Dependent elimination failed: Failed to solve equation
+  ok n =
+    match 16#usize * 64#usize with
+    | ok v => (fun weights => 744#usize + weights) v
+    | fail v => fail v
+    | div => div
+Port4A_ReaderInstall.lean:28:71: error: unsolved goals
+reserved : Bool
+H : Type
+D : aspis_core.digest.Digest32 H
+ck proof pub : Slice U8
+v : transport.Variant
+hash : H
+⊢ (do
+      let out ←
+        AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.digest D) ck proof pub
+            v hash
+      match out with
+        | core.result.Result.Ok pair => ok (core.result.Result.Ok pair)
+        | core.result.Result.Err e => ok (core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    do
+    let out ←
+      AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) (VTop_Checkpoint.digest D) ck proof pub v
+          hash
+    match out with
+      | core.result.Result.Ok pair => ok (core.result.Result.Ok pair)
+      | core.result.Result.Err e => ok (core.result.Result.Err (Port3_CheckpointInstall.error e))
+'AspisR1.Port4A_ReaderInstall.size_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.reference_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.accepted_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

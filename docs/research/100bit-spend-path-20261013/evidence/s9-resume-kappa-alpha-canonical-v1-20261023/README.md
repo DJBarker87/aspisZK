@@ -1,0 +1,3 @@
+The same successful checkpoint resume with actual strict Reader.e installed supplies canonical stored kappa and both alpha fold challenges, and Prepared.alpha is exactly those two values. No independent source read or canonicality premise is assumed. The raw reader and other ResumeOps remain explicit; concrete caller/runtime binding is separate. This reuses existing emitted source-fields and Reader.e canonicality, not a new cryptographic or sampler uniformity claim.
+
+Focused Lean check: 13.983 seconds; peak aggregate RSS 2223243264 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.

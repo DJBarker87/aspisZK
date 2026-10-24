@@ -1,0 +1,229 @@
+'AspisR1.VTop_Accepted.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Checkpoint.writer_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Checkpoint.reader_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Cuts.writer_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Cuts.resume_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Entry.op10_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Entry.op11_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Entry.first_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx1_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx1_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx2_common_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx2_common_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx2_authenticated_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.tx2_authenticated_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.erase_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.erase_liftM' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Erasure.erase_if' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VTop_Stages.verifier.candidate.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VTop_Stages.verifier.candidate.tx2_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'VTop_Stages.verifier.candidate.tx2_authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Order.tx1_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Order.tx2_common_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Order.tx2_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Order.accepted_tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Order.accepted_tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.accepted_execution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.run_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.run_perform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.run_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.run_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Run.thenResult_assoc' does not depend on any axioms
+'AspisR1.VTop_Run.thenResult_ok' does not depend on any axioms
+'AspisR1.VTop_SecondFlow.common_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_SecondOrder.tail_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_SecondOrder.common_order' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Trace.erase_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Trace.run_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Trace.erase_perform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Trace.erase_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.VTop_Trace.erase_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.VTop_Checkpoint.CheckpointSourceJoin (stage : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (reserved : Bool) : Prop
+number of parameters: 5
+fields:
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.writer : ∀ (p : VTop_Stages.verifier.Prepared)
+      (a : VTop_Stages.verifier.Accumulator) (proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+      (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      stage.op8 D p a proof pub hash = Aeneas.Std.Result.ok saved →
+        ∃ before after,
+          AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+              (AspisR1.CheckpointBytes5Writer.writer (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+                (AspisR1.CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+              before =
+            Aeneas.Std.Result.ok (AspisR1.VTop_Checkpoint.checkpointSlice saved, after)
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.reader : ∀ (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+      (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator),
+      stage.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+        AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved)
+            (AspisR1.VTop_Checkpoint.digest D) ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))
+constructor:
+  AspisR1.VTop_Checkpoint.CheckpointSourceJoin.mk {stage : VTop_Stages.Ops} {Hash : Type}
+    {D : VTop_Stages.aspis_core.digest.Digest32 Hash} {hash : Hash} {reserved : Bool}
+    (writer :
+      ∀ (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+        (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+        stage.op8 D p a proof pub hash = Aeneas.Std.Result.ok saved →
+          ∃ before after,
+            AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                (AspisR1.CheckpointBytes5Writer.writer (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+                  (AspisR1.CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+                before =
+              Aeneas.Std.Result.ok (AspisR1.VTop_Checkpoint.checkpointSlice saved, after))
+    (reader :
+      ∀ (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+        (a : VTop_Stages.verifier.Accumulator),
+        stage.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+          AspisR1Stage2.verifier.resumeWithOps (AspisR1.CheckpointBytes4Ops.ops reserved)
+              (AspisR1.VTop_Checkpoint.digest D) ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a))) :
+    AspisR1.VTop_Checkpoint.CheckpointSourceJoin stage D hash reserved
+def AspisR1.VTop_Checkpoint.WriterProvenance : VTop_Stages.Ops →
+  {Hash : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 Hash →
+      Hash → Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun stage {Hash} D hash proof pub =>
+  ∀ (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+    (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+    stage.op8 D p a proof pub hash = Aeneas.Std.Result.ok saved →
+      ∃ pm am,
+        AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+          (AspisR1.CheckpointBytes3Namespaces.toAccumulator a) pm am
+theorem AspisR1.VTop_Accepted.accepted_run : ∀ {W A E : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapter : AdapterRw.Ops) (stage : VTop_Stages.Ops) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.VTop_Entry.install adapter stage) native1 native2
+                    hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+                          (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (reserved : Bool),
+                                AspisR1.VTop_Checkpoint.CheckpointSourceJoin stage
+                                    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                      (AspisR1.VTop_Entry.install adapter stage))
+                                    () reserved →
+                                  AspisR1.CheckpointBytes5Inputs.Oracle
+                                      (AspisR1.VTop_Checkpoint.digest
+                                        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                          (AspisR1.VTop_Entry.install adapter stage)))
+                                      () H →
+                                    ∀
+                                      (port :
+                                        AspisR1.S2W_ExpandedChildren.ChildConeJoin E
+                                          (AspisR1.VTop_Entry.install adapter stage)),
+                                      AspisR1.S2W_TraceSplice.FirstMarks port →
+                                        AspisR1.S2W_TraceSplice.SecondMarks port →
+                                          ∃ f s outer pre middle fs ss,
+                                            AspisR1.S2W_NativeConsolidation.SourceCuts
+                                                (AspisR1.VTop_Entry.install adapter stage) e1.first
+                                                (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+                                              AspisR1.S2W_ExpandedTrace.runExpanded
+                                                    (AspisR1.VTop_Entry.install adapter stage)
+                                                    (AspisR1.S2W_ExpandedChildren.children port)
+                                                    (AspisR1.S2W_Observation.two
+                                                      (AspisR1.VTop_Entry.install adapter stage) program e1.first data1
+                                                      (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot)
+                                                    [] =
+                                                  Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.core.result.Result.Ok saved,
+                                                      AspisR1.S2W_ExpandedTrace.full
+                                                        (AspisR1.S2W_ExpandedChildren.children port) outer) ∧
+                                                AspisR1.S2W_D189Interpretation.runOwned
+                                                      (AspisR1.VTop_Entry.install adapter stage)
+                                                      (AspisR1.S2W_Observation.two
+                                                        (AspisR1.VTop_Entry.install adapter stage) program e1.first
+                                                        data1 (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2
+                                                        slot)
+                                                      [] e1.heap =
+                                                    Aeneas.Std.Result.ok
+                                                      (Aeneas.Std.core.result.Result.Ok saved, outer, e1.heap) ∧
+                                                  AspisR1.S2W_TraceSplice.projected port outer =
+                                                      AspisR1.S2W_SiteSchedule.timeline pre middle fs ss ∧
+                                                    post2 = e2.heap ∧
+                                                      AspisR1.S2W_D189Consolidation.before e1 e2
+                                                            AspisR1.S2LeadInterface.Site.tx1 =
+                                                          AspisR1.S2W_D189Interpretation.nativeObserve L
+                                                            AspisR1.S2W_ReturnedCheckpoint.encode e1.metadata 3 w1
+                                                            e1.heap.ambient ∧
+                                                        AspisR1.S2W_D189Consolidation.before e1 e2
+                                                              AspisR1.S2LeadInterface.Site.tx2 =
+                                                            AspisR1.S2W_D189Interpretation.nativeObserve L
+                                                              AspisR1.S2W_ReturnedCheckpoint.encode e2.metadata 7 w2
+                                                              e2.heap.ambient ∧
+                                                          ∀ (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8)
+                                                            (y1 : Aeneas.Std.Slice Aeneas.Std.U8),
+                                                            AspisR1.VTop_Checkpoint.WriterProvenance stage
+                                                                (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                                                  (AspisR1.VTop_Entry.install adapter stage))
+                                                                () f.proof f.pub →
+                                                              ∀
+                                                                (a :
+                                                                  AspisR1.S2X.CheckpointVersionBinding
+                                                                    (AspisR1.S2W_EntryWriteHistory.payloadBytes
+                                                                      AspisR1.S2W_ReturnedCheckpoint.encode
+                                                                      (post1.payload (e1.heap.accounts 2).1) 1768)
+                                                                    (AspisR1.MultiproofConeCanonical.bytesOf
+                                                                      ↑s.checkpoint)),
+                                                                ⋯ :=
+fun {W A E} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapter stage native1 native2 hashv extraction
+    sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
+    reserved checkpointSource checkpointOracle port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    AspisR1.ChildJoin_Accepted.accepted_run L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+      (AspisR1.VTop_Entry.install adapter stage) native1 native2 hashv extraction sha256 H p1 syscall program data1
+      data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨expanded, right✝¹⟩ := right✝
+  let ⟨owned, right✝²⟩ := right✝¹
+  let ⟨layout, right✝³⟩ := right✝²
+  let ⟨unchanged, right✝⁴⟩ := right✝³
+  let ⟨firstBefore, right✝⁵⟩ := right✝⁴
+  let ⟨secondBefore, continuation⟩ := right✝⁵
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨expanded,
+                    ⟨owned,
+                      ⟨layout,
+                        ⟨unchanged,
+                          ⟨firstBefore,
+                            ⟨secondBefore, fun nodes y1 provenance history p2prime entry multiproof scan =>
+                              continuation nodes y1
+                                (AspisR1.VTop_Checkpoint.writer_join adapter stage H f.semantic f.pub f.proof f.split
+                                  reserved checkpointSource checkpointOracle provenance)
+                                (AspisR1.VTop_Checkpoint.reader_join adapter stage H s.pub s.proof s.checkpoint reserved
+                                  checkpointSource checkpointOracle)
+                                history p2prime entry multiproof scan⟩⟩⟩⟩⟩⟩⟩))))))

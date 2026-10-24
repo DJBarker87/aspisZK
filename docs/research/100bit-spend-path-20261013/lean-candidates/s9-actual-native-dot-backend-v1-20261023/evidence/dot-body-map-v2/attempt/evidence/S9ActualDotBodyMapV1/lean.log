@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/pair-dot-body-map-v2-20261023/sources/S9ActualDotBodyMapV1.lean:35:14: error: Tactic `rfl` failed: The left-hand side
+  mapResult (mapFlow stateToOld toOld)
+    (let (o, iter1) := (some j, iterNext)
+    match o with
+    | none => ok (done s)
+    | some j => do
+      let i ← s.sums.index_usize j
+      let i1 ← raw.index_usize j
+      let i2 ← lift (core.convert.num.FromU64U32.from AspisR1S9ProductionPairCutV1.fast_pairing.canonical.P)
+      let i3 ← lift (i1 &&& i2)
+      let i4 ← lift (i1.wrapping_shr 31#u32)
+      let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+      let i6 ← lift (core.num.U64.wrapping_add i i5)
+      let a ← s.sums.update j i6
+      ok (cont (iter1, { sums := a })))
+is not definitionally equal to the right-hand side
+  let (o, iter1) := (some j, iterNext)
+  match o with
+  | none => ok (done (toOld s))
+  | some j => do
+    let i ← (toOld s).sums.index_usize j
+    let i1 ← raw.index_usize j
+    let i2 ← lift (core.convert.num.FromU64U32.from AspisR1EbyKDotPushSourceV1.fast_pairing.canonical.P)
+    let i3 ← lift (i1 &&& i2)
+    let i4 ← i1 >>> 31#i32
+    let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+    let i6 ← lift (core.num.U64.wrapping_add i i5)
+    let a ← (toOld s).sums.update j i6
+    ok (cont (iter1, { sums := a }))
+
+case e_a.some
+raw : Std.Array U64 4#usize
+iter : Iter
+s : NativeDot
+iterNext : core.ops.range.Range (UScalar UScalarTy.Usize)
+j : UScalar UScalarTy.Usize
+⊢ mapResult (mapFlow stateToOld toOld)
+      (let (o, iter1) := (some j, iterNext)
+      match o with
+      | none => ok (done s)
+      | some j => do
+        let i ← s.sums.index_usize j
+        let i1 ← raw.index_usize j
+        let i2 ← lift (core.convert.num.FromU64U32.from AspisR1S9ProductionPairCutV1.fast_pairing.canonical.P)
+        let i3 ← lift (i1 &&& i2)
+        let i4 ← lift (i1.wrapping_shr 31#u32)
+        let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+        let i6 ← lift (core.num.U64.wrapping_add i i5)
+        let a ← s.sums.update j i6
+        ok (cont (iter1, { sums := a }))) =
+    let (o, iter1) := (some j, iterNext)
+    match o with
+    | none => ok (done (toOld s))
+    | some j => do
+      let i ← (toOld s).sums.index_usize j
+      let i1 ← raw.index_usize j
+      let i2 ← lift (core.convert.num.FromU64U32.from AspisR1EbyKDotPushSourceV1.fast_pairing.canonical.P)
+      let i3 ← lift (i1 &&& i2)
+      let i4 ← i1 >>> 31#i32
+      let i5 ← lift (core.num.U64.wrapping_add i3 i4)
+      let i6 ← lift (core.num.U64.wrapping_add i i5)
+      let a ← (toOld s).sums.update j i6
+      ok (cont (iter1, { sums := a }))
+'AspisR1S9ActualDotBodyMapV1.actual_dot_body_map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

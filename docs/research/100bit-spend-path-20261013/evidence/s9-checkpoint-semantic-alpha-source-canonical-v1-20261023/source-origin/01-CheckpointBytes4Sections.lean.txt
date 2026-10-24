@@ -1,0 +1,12 @@
+def readList (read : ReadK) : Nat → verifier.Reader →
+    Result (core.result.Result (List K × verifier.Reader) verifier.Error)
+  | 0, r => ok (.Ok ([],r))
+  | n+1, r => do
+      let (value,out) ← read r
+      match value with
+      | .Err e => ok (.Err e)
+      | .Ok x => do
+          let rest ← readList read n out
+          match rest with
+          | .Err e => ok (.Err e)
+          | .Ok (xs,last) => ok (.Ok (x::xs,last))

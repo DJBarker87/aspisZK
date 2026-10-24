@@ -1,0 +1,40 @@
+{"attempt": "lean-090", "exit_status": 0, "wall_seconds": 3.232591690000845, "peak_rss_kib": "4426444", "swaps": "0", "print_axioms": ["'AspisR1.S2W_TraceSplice.run_shift' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.S2W_TraceSplice.run_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event :
+...
+'AspisR1.S2W_TraceSplice.run_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.split_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.invocation_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.S2W_TraceSplice.expanded_schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.S2W_TraceSplice.FirstMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.FirstMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs
+constructor:
+  AspisR1.S2W_TraceSplice.FirstMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some false → ∃ fs, List.map project (events port event) = S2W_SiteSchedule.firstTrace fs) :
+    FirstMarks port
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops} (port : ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : S2W_Trace.Event),
+      mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops} {port : ChildConeJoin E ops}
+    (source :
+      ∀ (event : S2W_Trace.Event),
+        mark event = some true → ∃ ss, List.map project (events port event) = S2W_SiteSchedule.secondTrace ss) :
+    SecondMarks port
+
+Running as unit: run-reb3432659b224a6ca5197145e12108df.scope; invocation ID: 0768e028025640ce9a696ef559140a6e

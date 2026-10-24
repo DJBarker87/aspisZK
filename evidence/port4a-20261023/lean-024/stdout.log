@@ -1,0 +1,51 @@
+'AspisR1.Port4A_Prefix.reached_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.reference_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.accepted_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_CheckpointRows.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_CheckpointRows.fields_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_PhysicalReads.six_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_Parents.prefix_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_Variant.not_uniform_provenance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_WriterObstruction.reached_tag_mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_PrepareCut.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_PrepareCut.variant_of_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4A_PhysicalReads.six_reads (base : VTop_Stages.Ops) (reserved : Bool) {H : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 H) (hash : H) (wp : VTop_Stages.verifier.Prepared)
+  (wa : VTop_Stages.verifier.Accumulator) (proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator)
+  (wrote : AspisR1.Port3_CheckpointInstall.writer D wp wa proof pub hash = Aeneas.Std.Result.ok saved)
+  (resumed :
+    (AspisR1.Port4A_ReaderInstall.install base reserved).op18 D (AspisR1.VTop_Checkpoint.checkpointSlice saved) proof
+        pub AspisR1Stage2.transport.Variant.S2 hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)))
+  (before : AspisR1.CheckpointBytes5Effect.Log) :
+  ∃ hp hu hc c,
+    AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+        (AspisR1.CheckpointBytes5Join.stage reserved (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+          (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) proof pub)
+        before =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Ok (p, a),
+          before ++
+            [(AspisR1Stage2.WireTx2.singletonParts proof, hp), (AspisR1Stage2.WireTx2.singletonParts pub, hu),
+              (AspisR1Stage2.WireTx2.checksumParts
+                  (AspisR1.CheckpointBytes5Writer.bodySlice (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+                    (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) hp hu),
+                hc),
+              (c.proofParts, c.proofDigest), (c.publicParts, c.publicDigest), (c.checksumParts, c.checksumDigest)])
+AspisR1.Port4A_Variant.not_uniform_provenance {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (batch : AspisR1.Port3_NativeBatchBody.Ops) (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps W) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator)
+  (reached :
+    AspisR1.VTop_Provenance.WriterPrefix
+      (AspisR1.Port3_NativeWriterShape.installed base reserved batch geometryOps queryOps finish) D hash semantic proof
+      split none p a) :
+  ¬∀ (base' : VTop_Stages.Ops),
+      AspisR1.VTop_Checkpoint.WriterProvenance
+        (AspisR1.Port3_NativeWriterShape.installed base' reserved batch geometryOps queryOps finish) D hash semantic
+        proof split
