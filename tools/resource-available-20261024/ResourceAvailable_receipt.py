@@ -19,7 +19,7 @@ def main():
     assert label.replace('-','').isalnum()
     target=sys.argv[2] if len(sys.argv)>2 else 'audit'
     assert target in ('audit',)
-    command=[sys.executable,'-B',str(HERE/('ResourceAvailable_'+target+'.py'))]
+    command=[sys.executable,'-B',str(HERE/('ResourceAvailable_'+target+'.py'))]+(['--details'] if '--details' in sys.argv else [])
     start=time.monotonic()
     with (OUT/(label+'.json')).open('x') as log,(OUT/(label+'.log')).open('x') as err:
         child=subprocess.Popen(command,cwd=ROOT,stdout=log,stderr=err)

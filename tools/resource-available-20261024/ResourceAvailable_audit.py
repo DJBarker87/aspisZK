@@ -34,7 +34,10 @@ def causal_scan(snapshot):
     def read(path,*a,**kw):
         e=next(attempts)
         assert e['path']==str(path),(e['path'],str(path))
-        if e['errno']:raise OSError(e['errno'],e['error'])
+        if e['errno']:
+            cls=type(OSError(e['errno'],e['error']))
+            error=type('ResourceAvailableRecordedError',(cls,),{'__str__':lambda self:e['error']})
+            raise error(e['errno'],e['error'])
         assert sha(e['content'].encode())==e['sha256']
         return e['content']
     def scandir(path):
@@ -142,7 +145,18 @@ def main():
             limits='Recorded estimate only; no atomicity, reclaim, future guarantee, binary identity, adoption or real GO/consumer')
         raw=json.dumps(output,sort_keys=True,indent=2)+'\n'
         assert len(raw.encode())<5_000_000
-        print(raw,end='')
+        if '--details' in sys.argv:
+            print(raw,end='')
+        else:
+            print(json.dumps(dict(schema=output['schema'],status=output['status'],
+                focused_validation=focused,events=original['events'],
+                original_gate_byte_identical=original['gate_byte_identical'],
+                original_hashes=original['original_hashes'],
+                actual_pair_counterfactual_only=actual,
+                reused_capture_counterfactuals=reused,
+                new_observer_causal_scan=causal,new_host_reads=0,
+                live_boundary='DISABLED',current_headroom='UNKNOWN',
+                adopted=False,print_axioms=output['print_axioms']),sort_keys=True,indent=2))
     finally:objects.close()
 
 if __name__=='__main__':main()
