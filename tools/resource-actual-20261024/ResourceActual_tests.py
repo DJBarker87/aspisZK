@@ -93,6 +93,16 @@ class Preflight(unittest.TestCase):
             # SSH's one remote command is shell quoted; recover Python -c payload.
             import shlex
             argv=shlex.split(command[-1]);ast.parse(argv[-1])
+            if 'data' not in kw and 'input' in kw and kw['input']:
+                import io
+                payload=argv[-1]
+                with tempfile.TemporaryDirectory() as remote:
+                    root=Path(remote)/'stage'
+                    payload=payload.replace(repr(local.REMOTE),repr(str(root)))
+                    with patch.object(sys,'stdin',io.StringIO(kw['input'])):
+                        exec(compile(payload,'synthetic-stage','exec'),{})
+                    staged=json.loads((root/'manifest.json').read_text())
+                    self.assertEqual(staged,json.loads(kw['input'])['manifest'])
             return subprocess.CompletedProcess(command,0,json.dumps(dict(runtime={},uid=1000,stage_exists=False,parent_uid=1000,parent_mode='0o755',lock_exists=True)),'')
         with tempfile.TemporaryDirectory() as t,patch.object(local,'OUT',Path(t)),patch.object(local.subprocess,'run',fake):
             local.inspect()

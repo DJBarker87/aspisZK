@@ -39,21 +39,24 @@ def replay(phase):
         event=events[position];position+=1
         assert event['kind']==kind and event[key]==value,(position,event,kind,value)
         return event
+    def raw_error(e):
+        kind=type(OSError(e['errno'],e['error']))
+        return type('RecordedError',(kind,),{'__str__':lambda self:e['error']})(e['errno'],e['error'])
     def read(path,*a,**k):
         e=take('read','path',str(path))
-        if e['errno']:raise OSError(e['errno'],e['error'])
+        if e['errno']:raise raw_error(e)
         assert hashlib.sha256(e['content'].encode()).hexdigest()==e['sha256']
         assert len(e['content'].encode())==e['size']
         return e['content']
     @contextlib.contextmanager
     def scan(path):
         e=take('scandir','path',str(path))
-        if 'error' in e:raise OSError(e['errno'],e['error'])
+        if 'error' in e:raise raw_error(e)
         yield iter([SimpleNamespace(name=x['name'],path=x['path'],is_dir=lambda follow_symlinks=False,b=x['is_dir']:b) for x in e['entries']])
     def execute(args,*a,**k):
         e=take('command','command',args)
         if 'error' in e:
-            if e.get('errno'):raise OSError(e['errno'],e['error'])
+            if e.get('errno'):raise raw_error(e)
             if e.get('exit') is not None:raise subprocess.CalledProcessError(e['exit'],args,output=e['stdout'],stderr=e['stderr'])
             raise subprocess.TimeoutExpired(args,k.get('timeout'),output=e.get('stdout'),stderr=e.get('stderr'))
         return subprocess.CompletedProcess(args,e['exit'],e['stdout'],e['stderr'])

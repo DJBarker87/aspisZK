@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,os,pathlib,sys,hashlib\nx=json.load(sys.stdin); root=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-actual-20261024'\"'\"')\nassert not root.exists(), '\"'\"'existing stage: conflicting writer or prior attempt'\"'\"'\nassert root.parent.stat().st_uid==os.getuid()\nroot.mkdir(mode=0o700)\nfor name,source in x['\"'\"'files'\"'\"'].items():\n p=root/name; p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)\n with p.open('\"'\"'x'\"'\"') as f:f.write(source)\n p.chmod(0o444)\n assert hashlib.sha256(p.read_bytes()).hexdigest()==x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'][name]['\"'\"'sha256'\"'\"']\nwith (root/'\"'\"'manifest.json'\"'\"').open('\"'\"'x'\"'\"') as f:json.dump(x['\"'\"'manifest'\"'\"'],f,sort_keys=True,indent=2); f.write('\"'\"'\\n'\"'\"')\n(root/'\"'\"'manifest.json'\"'\"').chmod(0o444)\nprint(json.dumps(dict(stage=str(root),uid=os.getuid(),files=x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'])))\n'"
+  ],
+  "exit": 0,
+  "print_axioms": "N/A",
+  "source_revision": "4d8529707a69fa60dd236c55c5ea49054d4c6361",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "3362de28e6cee9b6e8336a95b4d608154a6c2c62f17460645f579a6325a7afb1",
+    "size": 148056
+  },
+  "stdout": "{\"stage\": \"/home/dombarker/project-offloads/codex-cx-resource-actual-20261024\", \"uid\": 1000, \"files\": {\"ResourceStat_go.py\": {\"sha256\": \"0ff959fd4e01414fa7748c2598a19cdb34dd24b38ba14ac85e2294f282429000\", \"size\": 15649}, \"ResourceStat_candidate.py\": {\"sha256\": \"30f8b09904e64d8ca0e78bcef8f3c3f4a5fb09a792df5eed94b9b81614a5c762\", \"size\": 22982}, \"baseline/reservation.py\": {\"sha256\": \"88b93d8aee084b8c728f82a5ee26aa3bf3ca9fc4ec636054221c42abcd811cbc\", \"size\": 3011}, \"baseline/reservation_base.py\": {\"sha256\": \"a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2\", \"size\": 4713}, \"ResourceActual_host.py\": {\"sha256\": \"27ae9d9a5b2ffcc1999c99fb5defbbb84e708386f4e6a21ea0ba2b813ce4cbe0\", \"size\": 9103}}}\n",
+  "wall_seconds": 0.9342989167198539
+}

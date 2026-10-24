@@ -97,7 +97,7 @@ for name,source in x['files'].items():
  with p.open('x') as f:f.write(source)
  p.chmod(0o444)
  assert hashlib.sha256(p.read_bytes()).hexdigest()==x['manifest']['files'][name]['sha256']
-with (root/'manifest.json').open('x') as f:json.dump(x['manifest'],f,sort_keys=True,indent=2); f.write('\\n')
+with (root/'manifest.json').open('x') as f:json.dump(x['manifest'],f,sort_keys=True,indent=2); f.write(chr(10))
 (root/'manifest.json').chmod(0o444)
 print(json.dumps(dict(stage=str(root),uid=os.getuid(),files=x['manifest']['files'])))
 """.replace('REMOTE',repr(REMOTE))
