@@ -41,3 +41,10 @@ reconstruction before the actual same-tuple/lower-constructor consumer. The
 SourceCuts semantic/split gap remains a proof obligation, not the data failure.
 Both security targets and whole experiment remain NOT ESTABLISHED. No kernel,
 current-SDK, source-native, whole-cone, release or security conclusion.
+
+
+## Correction supersession
+
+This document retains its historical stage. The additional authorized diagnostic
+and current available data/gaps are recorded in Port28ROOTEXPORT_CORRECTION-REPORT.md
+and Port28ROOTEXPORT_correction-audit.json. Earlier failures/pins remain unchanged.

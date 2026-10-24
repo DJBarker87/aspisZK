@@ -51,3 +51,10 @@ closed original donor ownership/path/source/hash and metadata writer exclusion
 under the manager's resource authorization before any data acquisition. Original
 object parts plus complete untrusted ConstantInfo closure must precede the
 separate current-A comparison and actual same-tuple concrete consumer join.
+
+
+## Correction supersession
+
+This document retains its historical stage. The additional authorized diagnostic
+and current available data/gaps are recorded in Port28ROOTEXPORT_CORRECTION-REPORT.md
+and Port28ROOTEXPORT_correction-audit.json. Earlier failures/pins remain unchanged.
