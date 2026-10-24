@@ -88,3 +88,17 @@ double-counting, not a cap increase or resource-failure replay. The planned
 commands move to051 (Charon) and052 (Aeneas), using all remaining extraction
 allocation; no fourth command is authorized. Two actual extractions remain
 planned, three total preflight slots charged including the failed admission.
+
+## Second admission and final-slot scope
+
+051 also launched nothing. Correct exclusive accounting retained47.96GB uncapped
+current, including retired build pagecache. The additional reserve check charged
+all that reclaimable cache plus every capped maximum. Retain rejection and charge
+051. Final052 is Charon ONLY; no Aeneas allowance remains afterward. Its source
+inspection must determine whether the precise opaque helper and dependencies
+can match056/P6. No Lean result can be claimed from Charon observation.
+Reserve accounting now explicitly inventories inactive_file and subtracts only
+that reclaimable uncapped file cache, keeping anonymous/VM/kernel/active-file
+usage plus7GiB OS/control headroom. Both finite maxima+8GiB<55GiB and current
+MemAvailable>10GiB remain mandatory. No actual job resource failure occurred,
+no unchanged build was rerun, no cap was raised. If052 cannot launch, stop.

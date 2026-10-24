@@ -27,8 +27,20 @@ def admission(requested=8*2**30):
             exclusive.append(dict(path=r['path'],exclusive_current_bytes=usage))
         out['uncapped_exclusive_usage']=exclusive
         out['uncapped_current_bytes']=sum(r['exclusive_current_bytes'] for r in exclusive)
+        # Retired compiler pagecache is reclaimable; retain all anon, active file,
+        # kernel and VM usage. Read and retain exactly the inactive_file data.
+        stats=[]
+        for r in rows:
+            if r.get('populated') and r.get('memory_controller_enabled'):
+                data=dict(line.split() for line in (Path(r['path'])/'memory.stat').read_text().splitlines())
+                stats.append(dict(path=r['path'],inactive_file=int(data['inactive_file']),frontier=Path(r['path']).parent==Path('/sys/fs/cgroup'),bounded_frontier=r['charged_bytes']>0))
+        out['inactive_file_inventory']=stats
+        inactive=sum(r['inactive_file'] for r in stats if r['frontier'])-sum(r['inactive_file'] for r in stats if r['bounded_frontier'])
+        if not 0<=inactive<=out['uncapped_current_bytes']: raise ValueError('inactive file snapshot raced')
+        out['uncapped_reclaimable_inactive_file_bytes']=inactive
+        out['uncapped_resident_reserve_bytes']=out['uncapped_current_bytes']-inactive
         out['os_remote_reserve_bytes']=7*2**30
-        out['reserve_check']=out.get('projected_reserved_bytes',2**63)+out['uncapped_current_bytes']+out['os_remote_reserve_bytes']<mem['MemTotal'] and mem['MemAvailable']>requested+2*2**30
+        out['reserve_check']=out.get('projected_reserved_bytes',2**63)+out['uncapped_resident_reserve_bytes']+out['os_remote_reserve_bytes']<mem['MemTotal'] and mem['MemAvailable']>requested+2*2**30
         out['allowed']=out['allowed'] and out['reserve_check']
     except (OSError,ValueError,subprocess.SubprocessError) as e:
         out.update(allowed=False,visibility_error=str(e))
