@@ -152,3 +152,8 @@ This is source/probability refinement, not new trust or a changed contract.
 ## Callback review and native source producer — 2026-10-24
 
 D194 records reviewed candidate abbee7673d at prototype scope only. Independent source-map/step-cut checks and8 final source hashes passed; compiled audit reused. Native error carrier/body/audit/cleanup/event correspondence remains open. Explicit new60 Lean allocation preserves old160 consumed (ceiling220), Kani44/60 unchanged. RNG-native worker57141 now owns same unmerged candidate, prototype-only source correspondence stage; archived prompt in evidence/coordinator-20261024. Port9OR worker51800 remains live with its existing64 remaining allocation, no duplicate effect worker. Both deployed targets remain not yet established.
+
+
+## Port9OR integrated; physical authentication transport next — 2026-10-24
+
+Reviewed Port9OR e45800d44e merged f8c9814c28. C3/STATUS and session A handoff record exact source/probability boundaries and independently checked evidence. Explicit new60 Lean allocation adds to inherited4 remaining: Port10AUTH may use64 attempts; previous96 consumed retained, cumulative ceiling160. Kani0/20 unchanged. Concrete task is canonical sourceBatch read containment inside actual physical op5 observations plus both accepted driver batch embeddings, feeding Port6AUTH contains without assuming it. Prepare7/powers17 stays Session A. Worker PID63880, branch codex/cx-port10auth-20261024, output scratchpad codex-port10auth-20261024.out. Prompt archived evidence/coordinator-20261024/prompt-port10auth-20261024.txt. Native-prover worker57141 remains live. Both deployed targets not yet established.

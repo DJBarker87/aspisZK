@@ -149,3 +149,14 @@ Oracle agreement. It is NOT yet a fixed adaptive source probability experiment.
 Port9OR must repair/justify reply-driven interpretation before op5 expansion.
 Batch/sampler/no-hit/source1161/runtime/artifact obligations remain open.
 Both targets not yet established; no conditional merge is deployed closure.
+
+
+## Port9OR review: reply-driven physical source effects (2026-10-24)
+
+Reviewed worker e45800d44e and merged its four commits. Port9OR_Code.correspondence now equates a fixed reply-driven Program with pointwise native interpretation, preserving full returns and ordered successful-read prefixes on all outcomes. Reply byte/state round trips are proved. Reader/batch lazy laws quantify arbitrary rational observations under that one fixed law. Existing primitive success/fail/div policy and source/lowering boundaries remain; this is not real SHA equality with every H or a new artifact identity.
+
+Port9OR_Installed.effects installs physical op5 alongside8/18. FirstBatch.first_batch derives the reached batch1 observation inside the same first accepted source record, with actual saved checkpoint/current18 p/a and p.gamma powers operand. P6/source lowering, primitive instances, canonical parsed binding and Session A prepare7/powers17 remain explicit. Rejection.no_sampler demonstrates why unconditional charged-sampler containment is unavailable at actual decoder-rejection paths (local decoder premise, not a deployed fixture). Accepted-source failure domination/no-hit, source1161, StoredCarrierBinding and release linkage remain open. Exact bound (Q+34)*B+kappa(Q+1161)+2^-126+2^-454 is unchanged. Both deployed targets remain not yet established.
+
+Lead read complete Code/Reply/Law/Installed/FirstBatch/Batch/P6Verify/loop/rejection statements and stage boundaries. Independently reran receipt/cap/aggregate/axiom checks and inverse-lift audit read-only; both generators --check pass. All25 final source hashes match green receipts. Audit060: c4c08b5c81c6169cb08505f0cf0084591482b82d,exit0,1.917377429s,RSS4459028KiB,swap0,69 standard reports. Compilation reused; no full manifest or new ELF gate.60 new Lean attempts plus inherited36 =96/100,4 remaining;0/20 Kani.
+
+Next independent producer is canonical sourceBatch read containment from the ACTUAL physical batch observation, consumed by Port6AUTH_Native.authenticated/Query.accepted. Their contains premise still refers to abstract sourceBatch rather than Port9OR physical logs. Prove that local accepted comparison and both reached batch embeddings without assuming the desired log containment. Prepare sampler/probability transport remains separately owned/open.

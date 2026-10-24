@@ -470,3 +470,8 @@ Program sampled under the oracle law; do not assume all-H agreement with one
 fixed native digest or condition the oracle. Existing source/trust/ownership
 boundaries remain; no protocol/security change is proposed. Prepare sampler
 history and rejected prefixes remain your local source deliverable.
+
+
+## Reply-driven source effects ready (2026-10-24)
+
+Port9OR now merged: Code.correspondence separates fixed response-driven Program from per-H native interpretation; actual reader branches consume replies. Installed.effects covers physical batch op5 (duplicate hashing before compare, rejection suffixes and scratch), plus8/18. FirstBatch.first_batch supplies accepted-source batch1 chronology. See evidence/port9oracle-20261024/README.md/STAGE1-3. Your prepare7/powers17/primitive frontier is unchanged. Lead next owns physical-to-canonical batch read containment for Port6AUTH contains; no duplicate sampler work. Full-source accepted-failure domination, source1161 and StoredCarrierBinding remain open. Both targets not yet established.
