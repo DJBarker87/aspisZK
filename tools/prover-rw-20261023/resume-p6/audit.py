@@ -34,6 +34,9 @@ for tag,local,attempt in [('original',D,58),('compact',D/'compact',59)]:
  assert go['limits']=={'memory.high':str(3*2**30),'memory.max':str(4*2**30),'memory.swap.max':'0','pids.max':'64'}
  h=json.loads((P/'go-hashes.json').read_text())['source_sha256']
  assert h==pre['source_sha256']==receipt['source_sha256']
+ for suffix,relative in [('vendor/zeroize-1.8.1/src/lib.rs','zeroize-instrumented.rs.txt'),('vendor/getrandom-0.3.4/src/error.rs','getrandom-error-instrumented.rs.txt'),('proof/selected.rs','proof/selected.rs'),('proof/lib.rs','proof/lib.rs')]:
+  matches=[v for p,v in h.items() if p.endswith('/'+suffix)]
+  assert len(matches)==1 and matches[0]==sha((local/relative).read_bytes()),suffix
  post=json.loads((P/'postrun.json').read_text());assert post['unchanged'] and post['source_sha256']==h
  assert receipt['pins_unchanged'] and receipt['actual_invocations']==1
  res=json.loads((P/'resources.json').read_text());assert res['peak_swap_bytes']==0

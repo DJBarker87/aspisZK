@@ -1,0 +1,174 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:466:63
+    |
+466 |             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:7:41
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |                                         ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+466 -             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+466 +             volatile_set((self as *mut Self).cast::<u8>(), 0, size_of::<Self>());
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:511:43
+    |
+511 |         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+511 -         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+511 +         let size = self.len().checked_mul(size_of::<Z>()).unwrap();
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:895:16
+    |
+895 |     let size = mem::size_of::<F>();
+    |                ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+895 -     let size = mem::size_of::<F>();
+895 +     let size = size_of::<F>();
+    |
+
+warning: missing documentation for a module
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:274:1
+    |
+274 | pub mod ProverRwResumeP6 {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:7:9
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |         ^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:300:5
+    |
+300 |     fn prover_rw_resume_p6_snapshot(&self) -> Option<ProverRwResumeP6::Snapshot> { None }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:302:5
+    |
+302 |     fn prover_rw_resume_p6_byte(&self) -> Option<u8> { None }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:312:5
+    |
+312 |     fn prover_rw_resume_p6_byte(&self) -> Option<u8> { None }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:276:5
+    |
+276 |     pub struct Snapshot { pub bytes: [u8;64], pub len: usize }
+    |     ^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:276:27
+    |
+276 |     pub struct Snapshot { pub bytes: [u8;64], pub len: usize }
+    |                           ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:276:47
+    |
+276 |     pub struct Snapshot { pub bytes: [u8;64], pub len: usize }
+    |                                               ^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:278:5
+    |
+278 |     pub struct Event { pub ordinal: usize, pub before: Snapshot, pub after: Snapshot }
+    |     ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:278:24
+    |
+278 |     pub struct Event { pub ordinal: usize, pub before: Snapshot, pub after: Snapshot }
+    |                        ^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:278:44
+    |
+278 |     pub struct Event { pub ordinal: usize, pub before: Snapshot, pub after: Snapshot }
+    |                                            ^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:278:66
+    |
+278 |     pub struct Event { pub ordinal: usize, pub before: Snapshot, pub after: Snapshot }
+    |                                                                  ^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:282:5
+    |
+282 |     pub fn record(before: Option<Snapshot>, after: Option<Snapshot>) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/zeroize-1.8.1/src/lib.rs:291:5
+    |
+291 |     pub fn events() -> ([Event;3],usize) { unsafe { (EVENTS,COUNT) } }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+  --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/getrandom-0.3.4/src/error.rs:40:5
+   |
+40 |     pub const fn prover_rw_resume_p6_from_repr(code: core::num::NonZeroI32) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: the lint level is defined here
+  --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/vendor/getrandom-0.3.4/src/lib.rs:11:45
+   |
+11 | #![warn(rust_2018_idioms, unused_lifetimes, missing_docs)]
+   |                                             ^^^^^^^^^^^^
+
+warning: associated function `start` is never used
+  --> selected.rs:48:8
+   |
+47 | impl ProverRwResumeP6Request {
+   | ---------------------------- associated function in this implementation
+48 |     fn start(mask_nonce: [u8; 32]) -> Result<Self, StateOnlyAttemptEntropyError> {
+   |        ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: associated function `generate_for_mask_nonce` is never used
+   --> selected.rs:103:12
+    |
+102 | impl StateOnlyAttemptSecrets {
+    | ---------------------------- associated function in this implementation
+103 |     pub fn generate_for_mask_nonce(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `fill_boundary` is never used
+  --> lib.rs:13:12
+   |
+13 |         fn fill_boundary(dest: &mut [u8])->Result<(),getrandom::Error> {
+   |            ^^^^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_singlethreadfence (4)
+         
+
+Checking harness ProverRwResumeP6::checks::native_draw_resume_events...
