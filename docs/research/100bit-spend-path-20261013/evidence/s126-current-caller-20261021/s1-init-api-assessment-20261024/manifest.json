@@ -1,0 +1,39 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_revision": "58502da1a8fd80493990a7e0cef779922e7aac96",
+  "external_revision": "4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d",
+  "external_tag": "kani-0.67.0",
+  "sources": [
+    {
+      "path": "library/kani_core/src/mem.rs",
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/library/kani_core/src/mem.rs",
+      "sha256": "598428730a32f2c4034091688b50dde5a44deb69e2e3c61e08a0d394a5e42844",
+      "bytes": 13512
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/kani_intrinsics.rs",
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/kani_intrinsics.rs",
+      "sha256": "d811b56aa6234b8f07dd5e7e92a1f6fe401a31669378c8bb0eb825b15c80a243",
+      "bytes": 26332
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/check_uninit/ty_layout.rs",
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/check_uninit/ty_layout.rs",
+      "sha256": "53c1047761004a17798f847f086c129932078957812a17a3b7f0abab32f839da",
+      "bytes": 22325
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/check_uninit/mod.rs",
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/check_uninit/mod.rs",
+      "sha256": "bf59a84a3636354b7bdb12396ba30fcc3f7c6616cf1fdbf04ff2c9426a491920",
+      "bytes": 31140
+    }
+  ],
+  "assessment": "API is_initialized is crate-private. Public can_dereference calls assert_is_initialized, but compiler lowers IsInitializedIntrinsic to constant true unless enable_uninit. Therefore mem-predicates alone cannot establish initializedness and is not a workaround for the existing uninit-checks layout ICE. No source/backend change or verification run. Source inspection only; no new native memory proof. Host builds remain unadmitted.",
+  "locations": {
+    "public_check": "library/kani_core/src/mem.rs:68",
+    "private_intrinsic": "library/kani_core/src/mem.rs:231",
+    "disabled_short_circuit": "kani-compiler/src/kani_middle/transform/kani_intrinsics.rs:185",
+    "known_ice": "kani-compiler/src/kani_middle/transform/check_uninit/ty_layout.rs:190"
+  }
+}
