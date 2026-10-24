@@ -1,0 +1,40 @@
+{"attempt": "lean-027", "exit_status": 0, "wall_seconds": 2.27156029001344, "peak_rss_kib": "4450708", "swaps": "0", "print_axioms": ["'AspisR1.Port7CLEAN_Terminal.typed_of_finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Recovered.of_typed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.erased_statement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.reached_statement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.checks_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.transcript_statement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.parsed_valid' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.canon_parsed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.first_proof' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Carrier.rows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Extractor.fixed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Accepted.terminal_from_calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Driver.accepted_entry' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Driver.first_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_Driver.accepted_stages' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_TraceObstruction.interpret_empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_TraceObstruction.stages_empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_TraceObstruction.driver_empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port7CLEAN_TraceObstruction.no_sampler_embedding' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Port7CLEAN_Terminal.typed_of_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Recovered.of_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Carrier.erased_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Carrier.reached_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Carrier.checks_to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Carrier.transcript_statement' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port7CLEAN_Carrier.parsed_valid' depends on axioms: [propext, 
+...
+icalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+def AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.OraclePortStoredExperimentC4.Prover → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (run : AspisR1.OraclePortStoredExperimentC4.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run →
+      run.2.2 = true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust (AspisR1.OraclePortStoredAdmissionC4.canon P))
+@[reducible] def AspisR1.VTop_OracleCode.Implementation : Type 1 :=
+{A : Type} →
+  AspisR1.VTop_Trace.Call A →
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Aeneas.Std.Result A)
+def AspisR1.Port1_Driver.rust : AdapterRw.Ops →
+  AspisR1.VTop_OracleCode.Implementation →
+    {Hash : Type} → VTop_Stages.aspis_core.digest.Digest32 Hash → Hash → AspisR1.OraclePortRuntimeBindingC7.Verifier :=
+fun adapter impl {Hash} D hash i =>
+  match AspisR1.Port1_Driver.asSlice i.statement.pubBytes, AspisR1.Port1_Driver.asSlice i.stored with
+  | some pub, some proof =>
+    match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+    | Aeneas.Std.Result.ok (some semantic) => AspisR1.Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+    | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+  | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false
+
+Running as unit: run-ra4809ae0e5774847838fe4ca1d0ee8fb.scope; invocation ID: f0cbb473c850441b829fc41b886fad1a
