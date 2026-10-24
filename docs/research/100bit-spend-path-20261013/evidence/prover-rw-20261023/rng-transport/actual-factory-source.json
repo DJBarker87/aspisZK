@@ -1,0 +1,26 @@
+[
+  {
+    "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+    "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+    "bytes": 34067,
+    "first": 580,
+    "last": 597,
+    "text": "pub struct RetriedProof { pub proof:Vec<u8>, pub audit:MaskedFixtureAudit, pub attempts:usize }\n\n/// D38.3 retry loop with fresh OS attempt secrets for every attempt.\n#[cfg(feature=\"r1p-check\")]\npub fn prove_masked_retrying(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n)->Result<RetriedProof,Error> {\n    prove_masked_retrying_with(public,compiled,variant,hash,nonce_store,|_|StateOnlyAttemptSecrets::generate().map_err(|_|Error::Entropy))\n}\n\n/// D38.3 retry loop. `next_attempt(k)` must return fresh OS-generated secrets\n/// for attempt k; a client that binds the nonce to the proof-account address\n/// (D38.4) generates a fresh account keypair per attempt and calls\n/// `StateOnlyAttemptSecrets::generate_for_mask_nonce` with its public key."
+  },
+  {
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+    "bytes": 62542,
+    "first": 68,
+    "last": 89,
+    "text": "const ENTROPY_RETRY_LIMIT: usize = 16;\n\n#[derive(Debug)]\npub enum StateOnlyAttemptEntropyError {\n    Os(getrandom::Error),\n    RepeatedZeroBlock,\n}\n\nimpl From<getrandom::Error> for StateOnlyAttemptEntropyError {\n    fn from(value: getrandom::Error) -> Self {\n        Self::Os(value)\n    }\n}\n\n/// Three independent 256-bit attempt values sampled from the operating\n/// system. The public nonce is serialized; both private seeds are zeroized on\n/// drop. The field seed and leaf-salt seed are never derived from one another.\npub struct StateOnlyAttemptSecrets {\n    mask_nonce: [u8; 32],\n    field_mask_entropy: Zeroizing<[u8; 32]>,\n    leaf_salt_seed: Zeroizing<[u8; 32]>,\n}"
+  },
+  {
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+    "bytes": 62542,
+    "first": 181,
+    "last": 244,
+    "text": "    pub fn generate() -> Result<Self, StateOnlyAttemptEntropyError> {\n        for _ in 0..ENTROPY_RETRY_LIMIT {\n            let mut bytes = Zeroizing::new([0u8; 96]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut mask_nonce = [0u8; 32];\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            mask_nonce.copy_from_slice(&bytes[..32]);\n            field_mask_entropy.copy_from_slice(&bytes[32..64]);\n            leaf_salt_seed.copy_from_slice(&bytes[64..]);\n\n            if mask_nonce != [0; 32] && *field_mask_entropy != [0; 32] && *leaf_salt_seed != [0; 32]\n            {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }\n\n    /// Generate fresh private attempt entropy for a preselected public nonce.\n    ///\n    /// A deployed proof binds this nonce to the proof-account address. Clients\n    /// therefore generate the account keypair first and pass its public key\n    /// here. The public nonce only needs to be unique; both secret seeds still\n    /// come independently from the operating system and are zeroized on drop.\n    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }\n\n    pub fn mask_nonce(&self) -> [u8; 32] {\n        self.mask_nonce\n    }\n\n    /// Durably burn the public nonce, then build the atomic affine masks."
+  }
+]

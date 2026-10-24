@@ -1,0 +1,15 @@
+import R1Z.ProverRwRngTransportValidity
+
+#print R1Z.ProverRwRngTransportValidity.Pattern
+#print R1Z.ProverRwRngTransportValidity.PatternValue
+#print R1Z.ProverRwRngTransportValidity.ValidI32
+#print R1Z.ProverRwRngTransportValidity.toValid
+#print R1Z.ProverRwRngTransportValidity.toPattern
+#check R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero
+#check R1Z.ProverRwRngTransportValidity.toValid_preserves_value
+#check R1Z.ProverRwRngTransportValidity.pattern_roundtrip
+#check R1Z.ProverRwRngTransportValidity.valid_roundtrip
+#print axioms R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero
+#print axioms R1Z.ProverRwRngTransportValidity.toValid_preserves_value
+#print axioms R1Z.ProverRwRngTransportValidity.pattern_roundtrip
+#print axioms R1Z.ProverRwRngTransportValidity.valid_roundtrip

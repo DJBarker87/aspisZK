@@ -1,0 +1,31 @@
+reservation: populated 24 GiB + 7 GiB; window=0 (London 1421); env=J
+def R1Z.ProverRwRngTransportValidity.Pattern : Aeneas.Std.I32 → Prop :=
+fun x => -2147483648 ≤ ↑x ∧ ↑x ≤ -1 ∨ 1 ≤ ↑x ∧ ↑x ≤ 2147483647
+@[reducible] def R1Z.ProverRwRngTransportValidity.PatternValue : Type :=
+{ x // R1Z.ProverRwRngTransportValidity.Pattern x }
+@[reducible] def R1Z.ProverRwRngTransportValidity.ValidI32 : Type :=
+{ x // ↑x ≠ 0 }
+def R1Z.ProverRwRngTransportValidity.toValid : R1Z.ProverRwRngTransportValidity.PatternValue →
+  R1Z.ProverRwRngTransportValidity.ValidI32 :=
+fun x => ⟨↑x, ⋯⟩
+def R1Z.ProverRwRngTransportValidity.toPattern : R1Z.ProverRwRngTransportValidity.ValidI32 →
+  R1Z.ProverRwRngTransportValidity.PatternValue :=
+fun x => ⟨↑x, ⋯⟩
+R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero (x : Aeneas.Std.I32) :
+  R1Z.ProverRwRngTransportValidity.Pattern x ↔ ↑x ≠ 0
+R1Z.ProverRwRngTransportValidity.toValid_preserves_value (x : R1Z.ProverRwRngTransportValidity.PatternValue) :
+  ↑(R1Z.ProverRwRngTransportValidity.toValid x) = ↑x
+R1Z.ProverRwRngTransportValidity.pattern_roundtrip (x : R1Z.ProverRwRngTransportValidity.PatternValue) :
+  R1Z.ProverRwRngTransportValidity.toPattern (R1Z.ProverRwRngTransportValidity.toValid x) = x
+R1Z.ProverRwRngTransportValidity.valid_roundtrip (x : R1Z.ProverRwRngTransportValidity.ValidI32) :
+  R1Z.ProverRwRngTransportValidity.toValid (R1Z.ProverRwRngTransportValidity.toPattern x) = x
+'R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTransportValidity.toValid_preserves_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTransportValidity.pattern_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTransportValidity.valid_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.05
+	Maximum resident set size (kbytes): 2622568
+	Swaps: 0
+	Exit status: 0

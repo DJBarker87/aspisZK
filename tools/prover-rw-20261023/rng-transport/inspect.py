@@ -10,7 +10,7 @@ import hashlib,json,subprocess
 T=Path('/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain')
 C=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src')
 S=Path('/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src')
-items=[(T/'aeneas-full/src/llbc/TypesAnalysis.ml',[(300,490),(780,830)]),(T/'aeneas-full/src/interp/InterpStatements.ml',[(20,58),(975,1000)]),(T/'aeneas-full/src/interp/InterpExpressions.ml',[(149,170),(570,604)]),(C/'ast/expressions.rs',[(350,375)]),(C/'ast/ullbc_ast.rs',[(120,150)]),(C/'ast/types.rs',[(1,1)]),(S/'num/niche_types.rs',[(1,52),(115,130)]),(S/'num/nonzero.rs',[(115,130)]),(S/'result.rs',[(960,973)])]
+items=[(T/'aeneas-full/src/llbc/TypesAnalysis.ml',[(300,490),(780,830)]),(T/'aeneas-full/src/interp/InterpStatements.ml',[(20,58),(975,1000)]),(T/'aeneas-full/src/interp/InterpExpressions.ml',[(149,170),(570,604)]),(C/'ast/expressions.rs',[(350,375)]),(C/'ast/ullbc_ast.rs',[(120,150)]),(C/'ast/types.rs',[(1,1)]),(S/'num/niche_types.rs',[(1,52),(115,130)]),(S/'num/nonzero.rs',[(115,130)]),(S/'result.rs',[(960,973)]),(S/'marker.rs',[(408,425)])]
 out=[]
 for p,spans in items:
  b=p.read_bytes();lines=b.decode().splitlines();out.append(dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b),excerpts=[dict(first=a,last=z,text='\n'.join(lines[a-1:z])) for a,z in spans]))
@@ -30,3 +30,12 @@ selected={k:[x for x in data[k] if x is not None and any(t in json.dumps(x['item
 selected.update(target_information=data['target_information'],options=data['options'],llbc_sha256=hashlib.sha256(llbc.read_bytes()).hexdigest(),assessment='Reused prototype extraction, not actual secure factory extraction. Complete selected declarations retained; primitive library opaque bodies remain absent.')
 (E/'selected-llbc.json').write_text(json.dumps(selected,indent=2)+'\n')
 print('Retained selected source and LLBC inventories')
+
+failed=E.parent/'rng-caller/rng-caller-aeneas-003/inputs/ProverRwRngCaller.llbc'
+f=json.loads(failed.read_text())['translated']
+(E/'failed-pattern.json').write_text(json.dumps(dict(path=str(failed.relative_to(R)),sha256=hashlib.sha256(failed.read_bytes()).hexdigest(),target_information=f['target_information'],options=f['options'],types=[x for x in f['type_decls'] if x is not None and any(t in json.dumps(x['item_meta']['name']) for t in ['NonZero','getrandom'])]),indent=2)+'\n')
+# Retain exact actual factory/source wrappers without extracting or changing them.
+rows=[]
+for rel,a,z in [('crates/aspis-r1-cost-probe/src/prover.rs',580,597),('crates/aspis-prover/src/state_only_entropy.rs',68,89),('crates/aspis-prover/src/state_only_entropy.rs',181,244)]:
+ p=R/rel;b=p.read_bytes();rows.append(dict(path=rel,sha256=hashlib.sha256(b).hexdigest(),bytes=len(b),first=a,last=z,text='\n'.join(b.decode().splitlines()[a-1:z])))
+(E/'actual-factory-source.json').write_text(json.dumps(rows,indent=2)+'\n')

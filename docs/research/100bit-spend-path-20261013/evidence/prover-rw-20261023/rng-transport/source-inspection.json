@@ -1,0 +1,257 @@
+{
+  "sources": [
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/llbc/TypesAnalysis.ml",
+      "sha256": "90a1a01cb026c1c846ca047cec2733a428b2d3ffa5201684d1b200e698e2b02e",
+      "bytes": 41703,
+      "excerpts": [
+        {
+          "first": 300,
+          "last": 490,
+          "text": "        (* Update the information for the proper parameter, if necessary *)\n        match ty_info.param_infos with\n        | None -> ty_info\n        | Some param_infos ->\n            let param_info =\n              TypeVarId.nth param_infos (expect_free_var span var_id)\n            in\n            (* Set [under_borrow] *)\n            let under_borrow =\n              check_update_bool param_info.under_borrow expl_info.under_borrow\n            in\n            (* Set [under_nested_borrows] *)\n            let under_mut_borrow =\n              check_update_bool param_info.under_mut_borrow\n                expl_info.under_mut_borrow\n            in\n            (* Update param_info *)\n            let param_info = { under_borrow; under_mut_borrow } in\n            let param_infos =\n              TypeVarId.update_nth param_infos\n                (expect_free_var span var_id)\n                param_info\n            in\n            let param_infos = Some param_infos in\n            { ty_info with param_infos })\n    | TRef (r, rty, rkind) ->\n        (* Update the type info *)\n        let contains_static = r_is_static r in\n        let contains_borrow = true in\n        let is_mut, region =\n          match rkind with\n          | RMut -> (true, Some r)\n          | RShared -> (false, None)\n        in\n        let contains_mut_borrow = is_mut in\n        let contains_nested_borrows = expl_info.under_borrow in\n        let contains_borrow_under_mut = expl_info.under_mut_borrow in\n        let contains_nested_mut = expl_info.under_mut_borrow && is_mut in\n        let ty_b_info =\n          {\n            contains_static;\n            contains_borrow;\n            contains_mut_borrow;\n            contains_nested_borrows;\n            contains_borrow_under_mut;\n            contains_nested_mut;\n          }\n        in\n        let ty_info = update_ty_info ty_info region ty_b_info in\n        (* Update the exploration info *)\n        let expl_info =\n          {\n            under_borrow = true;\n            under_mut_borrow = expl_info.under_mut_borrow || rkind = RMut;\n          }\n        in\n        (* Continue exploring *)\n        analyze span expl_info ty_info rty\n    | TRawPtr (rty, _) ->\n        (* TODO: not sure what to do here *)\n        analyze span expl_info ty_info rty\n    | TArray (ty, _) | TSlice ty ->\n        (* Nothing to update: just explore the type parameters *)\n        analyze span expl_info ty_info ty\n    | TAdt { id = TTuple | TBuiltin (TBox | TStr); generics } ->\n        (* Nothing to update: just explore the type parameters *)\n        List.fold_left\n          (fun ty_info ty -> analyze span expl_info ty_info ty)\n          ty_info generics.types\n    | TAdt { id = TAdtId adt_id; generics } ->\n        (* Lookup the information for this type definition *)\n        let adt_info =\n          [%silent_unwrap_opt_span] span (TypeDeclId.Map.find_opt adt_id infos)\n        in\n        (* Update the type info with the information from the adt *)\n        let ty_info = update_ty_info ty_info None adt_info.borrows_info in\n        (* Check if there are regions, and if 'static appears in the region parameters *)\n        let found_static = List.exists r_is_static generics.regions in\n        let borrows_info = ty_info.borrows_info in\n        let borrows_info =\n          {\n            borrows_info with\n            contains_borrow =\n              borrows_info.contains_borrow || adt_info.has_regions;\n            contains_static =\n              check_update_bool borrows_info.contains_static found_static;\n          }\n        in\n        let ty_info = { ty_info with borrows_info } in\n        (* For every instantiated type parameter: update the exploration info\n           then explore the type *)\n        let params_tys = List.combine adt_info.param_infos generics.types in\n        let ty_info =\n          List.fold_left\n            (fun ty_info (param_info, ty) ->\n              (* Update the type info *)\n              (* Below: we use only the information which we learn only\n               * by taking the type parameter into account. *)\n              let contains_static = false in\n              let contains_borrow = param_info.under_borrow in\n              let contains_mut_borrow = param_info.under_mut_borrow in\n              let contains_nested_borrows =\n                expl_info.under_borrow && param_info.under_borrow\n              in\n              let contains_borrow_under_mut =\n                expl_info.under_mut_borrow && param_info.under_borrow\n              in\n              let contains_nested_mut =\n                expl_info.under_mut_borrow && param_info.under_mut_borrow\n              in\n              let ty_b_info =\n                {\n                  contains_static;\n                  contains_borrow;\n                  contains_mut_borrow;\n                  contains_nested_borrows;\n                  contains_borrow_under_mut;\n                  contains_nested_mut;\n                }\n              in\n              let ty_info = update_ty_info ty_info None ty_b_info in\n              (* Update the exploration info *)\n              let expl_info =\n                {\n                  under_borrow =\n                    expl_info.under_borrow || param_info.under_borrow;\n                  under_mut_borrow =\n                    expl_info.under_mut_borrow || param_info.under_mut_borrow;\n                }\n              in\n              (* Continue exploring *)\n              analyze span expl_info ty_info ty)\n            ty_info params_tys\n        in\n        (* For every region parameter: do the same *)\n        let mut_regions =\n          List.fold_left\n            (fun mut_regions (adt_rid, r) ->\n              (* Check if the region is a variable and is used for mutable borrows *)\n              match r with\n              | RStatic | RVar (Bound _) | RErased -> mut_regions\n              (* We can have bound vars because of arrows, and erased regions\n                 when analyzing types appearing in function bodies *)\n              | RVar (Free rid) ->\n                  if RegionId.Set.mem adt_rid adt_info.mut_regions then\n                    update_mut_regions_with_rid mut_regions rid\n                  else mut_regions\n              | RBody _ -> [%craise_opt_span] span \"unsupported: Body region\")\n            ty_info.mut_regions\n            (RegionId.mapi (fun adt_rid r -> (adt_rid, r)) generics.regions)\n        in\n        (* Return *)\n        { ty_info with mut_regions }\n    | TFnPtr fn_sig ->\n        (* References in a function-pointer signature are call-local. The\n           pointer value itself neither contains nor owns those borrows, so\n           they must not make a struct field look like an expandable borrowed\n           value. Calls still check their instantiated argument and result\n           types separately. *)\n        ignore fn_sig;\n        ty_info\n    | TFnDef { binder_regions; binder_value = { kind = _; generics } } ->\n        (* For now we check that there are no regions anywhere.\n\n           TODO: the best would be to open all binders and then do a sanity\n           check (probably that no region bound at the level of the signature\n           is outlived by a locally bound region).\n         *)\n        [%cassert_opt_span] span (binder_regions = []) \"Unimplemented\";\n        let visitor =\n          object\n            inherit [_] iter_ty\n            method! visit_region _ _ = raise Utils.Found\n          end\n        in\n        let has_regions =\n          try\n            visitor#visit_generic_args () generics;\n            false\n          with Utils.Found -> true\n        in\n        [%cassert_opt_span] span (not has_regions) \"Unimplemented\";\n        ty_info\n    | TError _ ->\n        [%craise_opt_span] span \"Found type error in the output of charon\"\n    | _ -> [%craise_opt_span] span (\"unsupported type: \" ^ show_ty ty)\n  in\n  (* Explore *)\n  analyze span expl_info_init ty_info ty\n\nlet type_decl_is_opaque (d : type_decl) : bool ="
+        },
+        {
+          "first": 780,
+          "last": 830,
+          "text": "                      visit_region_register_outlive r1 r0\n                  end\n                in\n\n                (* Visit the region outlives constraints (the first region outlives the second)  *)\n                List.iter\n                  (fun (pred : (region, region) outlives_pred region_binder) ->\n                    [%cassert_opt_span] span (pred.binder_regions = [])\n                      \"Bound regions are not supported yet\";\n                    let r0, r1 = pred.binder_value in\n                    visit_region_register_outlive r0 r1)\n                  regions_outlive;\n\n                (* Visit the type outlives constraints (the type outlives the region) *)\n                List.iter\n                  (fun (pred : (ty, region) outlives_pred region_binder) ->\n                    [%cassert_opt_span] span (pred.binder_regions = [])\n                      \"Bound regions are not supported yet\";\n                    let ty, r = pred.binder_value in\n                    outlive_visitor#visit_ty r ty)\n                  types_outlive\n            | TTuple -> super#visit_ty outer ty\n            | TBuiltin builtin_ty -> (\n                match builtin_ty with\n                | TBox | TStr -> super#visit_ty outer ty)\n          end\n        | TArray _ | TSlice _ -> super#visit_ty outer ty\n        | TVar _ | TLiteral _ | TNever -> ()\n        | TRef (r, ref_ty, _) ->\n            self#visit_region outer r;\n            let outer = r :: outer in\n            self#visit_ty outer ref_ty\n        | TTraitType (tref, _, _) ->\n            (* TODO: normalize the trait types.\n               For now we only emit a warning because it makes some tests fail. *)\n            [%cassert_warn_opt_span] span\n              (not (trait_instance_id_reducible span tref.kind))\n              \"Found an unexpected trait impl associated type which was not \\\n               inlined while analyzing a type. This is a case we currently do \\\n               not handle in all generality. As a result,the consumed/given \\\n               back values computed for the generated backward functions may \\\n               be incorrect.\";\n            ()\n        | TError _ ->\n            [%craise_opt_span] span \"Found type error in the output of charon\"\n        | _ -> [%craise_opt_span] span (\"unsupported type: \" ^ show_ty ty)\n    end\n  in\n  visitor#visit_ty [] ty;\n\n  (* Compute the strongly connected components, and for each of them,"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/interp/InterpStatements.ml",
+      "sha256": "9f3252a6456445f06bad25bcd642d0b58d909b7a45831e3f90f168075b2ca3cd",
+      "bytes": 75021,
+      "excerpts": [
+        {
+          "first": 20,
+          "last": 58,
+          "text": "\n(** Drop a value at a given place - TODO: factorize this with [assign_to_place]\n*)\nlet drop_value (config : config) (span : Meta.span) (p : place) : cm_fun =\n fun ctx ->\n  log#ltrace\n    (lazy\n      (\"drop_value: place: \" ^ place_to_string ctx p ^ \"\\n- Initial context:\\n\"\n      ^ eval_ctx_to_string ~span:(Some span) ctx));\n  (* Note that we use [Write], not [Move]: we allow to drop values *below* borrows *)\n  let access = Write in\n  (* First make sure we can access the place, by ending loans or expanding\n   * symbolic values along the path, for instance *)\n  let ctx, cc = update_ctx_along_read_place config span access p ctx in\n  (* Prepare the place (by ending the outer loans *at* the place). *)\n  let v, ctx, cc = comp2 cc (prepare_lplace config span p ctx) in\n  (* Replace the value with {!Bottom} *)\n  let ctx =\n    (* Move the value at destination (that we will overwrite) to a dummy variable\n     * to preserve the borrows it may contain *)\n    let _, mv = InterpPaths.read_place span access p ctx in\n    let dummy_id = ctx.fresh_dummy_var_id () in\n    let ctx = ctx_push_dummy_var ctx dummy_id mv in\n    (* Update the destination to \u22a5 *)\n    let nv = { v with value = VBottom } in\n    let ctx = write_place span access p nv ctx in\n    [%ltrace\n      \"place: \" ^ place_to_string ctx p ^ \"\\n- Final context:\\n\"\n      ^ eval_ctx_to_string ~span:(Some span) ctx];\n    ctx\n  in\n  (* Compose and apply *)\n  (ctx, cc)\n\n(** Push a dummy variable to the environment *)\nlet push_dummy_var (vid : DummyVarId.id) (v : tvalue) (ctx : eval_ctx) :\n    eval_ctx =\n  ctx_push_dummy_var ctx vid v\n"
+        },
+        {
+          "first": 975,
+          "last": 1000,
+          "text": "         now we treat this as a no-op *)\n      ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ st.span (fun e -> e))\n  | Drop (p, _, _, _) ->\n      if !Config.drop_as_no_op then\n        ([ (ctx, Unit) ], cf_singleton __FILE__ __LINE__ st.span)\n      else\n        let ctx, cc = drop_value config st.span p ctx in\n        ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ st.span cc)\n  | StorageDead local ->\n      let p = mk_place_from_var_id ctx st.span local in\n      let ctx, cc = drop_value config st.span p ctx in\n      (* A StorageDead statement ends the lifetime of the local immediately.\n         The ordinary drop path preserves its value in a dummy binding while\n         outstanding borrows are returned.  Simplify that dead binding before\n         the MIR reuses the local in an enclosing loop; otherwise an IterMut\n         from the preceding iteration can look like a live mutable escape when\n         the next iteration borrows the freshly initialized local. *)\n      let ctx, cc =\n        comp cc\n          (InterpBorrows.simplify_dummy_values_useless_abs config st.span ctx)\n      in\n      ([ (ctx, Unit) ], cc_singleton __FILE__ __LINE__ st.span cc)\n  | Assert (assertion, _on_failure, _) ->\n      let (ctx, res), cc = eval_assertion config st.span assertion ctx in\n      ([ (ctx, res) ], cc_singleton __FILE__ __LINE__ st.span cc)\n  | Call (call, _) -> eval_function_call config st.span call ctx"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/interp/InterpExpressions.ml",
+      "sha256": "1908f2d452fe825a52f2b5f8febdd83921104f43135d2a9ddb02102938bcaceb",
+      "bytes": 63197,
+      "excerpts": [
+        {
+          "first": 149,
+          "last": 170,
+          "text": "(** Copy a value, and return the: the original value (we may have need to update\n    it - see the remark about the symbolic values with borrows) and the\n    resulting value.\n\n    This function essentially duplicates the value while refreshing the shared\n    borrow identifiers (which uniquely identify shared borrows).\n\n    Also, this function is actually more general than it should be: it can be\n    used to copy concrete ADT values, while ADT copy should be done through the\n    Copy trait (i.e., by calling a dedicated function). This is why we added a\n    parameter to control this copy ([allow_adt_copy]). Note that here by ADT we\n    mean the user-defined ADTs (not tuples or builtin types).\n\n    **Symbolic values with borrows**: Side note about copying symbolic values\n    with borrows: in order to make the joins easier to compute, especially for\n    the loops, whenever we copy a symbolic value containing borrows we introduce\n    an auxiliary abstraction and freshen the copied value. This enforces the\n    invariant that there can't be several occurrences of the same borrow\n    projector over the same symbolic value. More precisely, we do something like\n    this:\n    {[\n      // x -> s0"
+        },
+        {
+          "first": 570,
+          "last": 604,
+          "text": "  | Copy p ->\n      (* Access the value *)\n      let access = Read in\n      let _, v = read_place_check span access p ctx in\n      (* Sanity checks *)\n      [%cassert] span\n        (not (bottom_in_value ctx.ended_regions v))\n        \"Can not copy a value containing bottom\";\n      [%sanity_check] span\n        (Option.is_none\n           (find_first_expandable_sv_with_borrows (Some span)\n              ctx.type_ctx.type_decls ctx.type_ctx.type_infos v));\n      (* Copy the value *)\n      let allow_adt_copy = false in\n      let updated_value, copied_value, ctx, cc =\n        copy_value span allow_adt_copy config ctx v\n      in\n      (* Update the original value *)\n      let ctx = write_place span access p updated_value ctx in\n      (* *)\n      (copied_value, ctx, cc)\n  | Move p ->\n      (* Access the value *)\n      let access = Move in\n      let _, v = read_place_check span access p ctx in\n      (* Check that there are no bottoms in the value we are about to move *)\n      [%cassert] span\n        (not (bottom_in_value ctx.ended_regions v))\n        \"There should be no bottoms in the value we are about to move\";\n      (* Move the value *)\n      let bottom : tvalue = { value = VBottom; ty = v.ty } in\n      let ctx = write_place span access p bottom ctx in\n      (v, ctx, fun e -> e)\n\nlet eval_operand (config : config) (span : Meta.span) (op : operand)"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/ast/expressions.rs",
+      "sha256": "7339c83c73fc0d3399d1da03aaae7f6190a9bc6bbfc8d6c6657e4a0690b6e3b5",
+      "bytes": 27541,
+      "excerpts": [
+        {
+          "first": 350,
+          "last": 375,
+          "text": "\n#[derive(\n    Debug,\n    PartialEq,\n    Eq,\n    Clone,\n    EnumIsA,\n    EnumToGetters,\n    EnumAsGetters,\n    VariantName,\n    SerializeState,\n    DeserializeState,\n    Drive,\n    DriveMut,\n)]\n#[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive\npub enum Operand {\n    Copy(Place),\n    Move(Place),\n    /// Constant value (including constant and static variables)\n    #[cfg_attr(feature = \"charon_on_charon\", charon::rename(\"Constant\"))]\n    Const(Box<ConstantExpr>),\n}\n\n/// A function identifier. See [crate::ullbc_ast::Terminator]\n#[derive("
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/ast/ullbc_ast.rs",
+      "sha256": "16b141c94c2b1d0af457cf27cc3f76d61dab0b38238820419a07a49dc4a97a23",
+      "bytes": 6150,
+      "excerpts": [
+        {
+          "first": 120,
+          "last": 150,
+          "text": "    Switch {\n        discr: Operand,\n        targets: SwitchTargets,\n    },\n    Call {\n        call: Call,\n        target: BlockId,\n        on_unwind: BlockId,\n    },\n    /// Drop the value at the given place.\n    ///\n    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call\n    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`\n    /// for more details; to get precise drops use `--precise-drops`.\n    Drop {\n        #[drive(skip)]\n        kind: DropKind,\n        place: Place,\n        /// Reference to the `drop_glue` code to call on drop.\n        fn_ptr: FnPtr,\n        target: BlockId,\n        on_unwind: BlockId,\n    },\n    /// Assert that the given condition holds, and if not, unwind to the given block. This is used for\n    /// bounds checks, overflow checks, etc.\n    #[cfg_attr(feature = \"charon_on_charon\", charon::rename(\"TAssert\"))]\n    Assert {\n        assert: Assert,\n        target: BlockId,\n        on_unwind: BlockId,\n    },"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/ast/types.rs",
+      "sha256": "144d183af79a5341424cc0ffaa99fe99a414546c05fdfccfd364e5bc2e6de5eb",
+      "bytes": 35409,
+      "excerpts": [
+        {
+          "first": 1,
+          "last": 1,
+          "text": "use crate::ast::*;"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/niche_types.rs",
+      "sha256": "1a74080c73dd7687b08e667d5611d4068a1b7556311f0b58e44edadb17d0a160",
+      "bytes": 5171,
+      "excerpts": [
+        {
+          "first": 1,
+          "last": 52,
+          "text": "#![unstable(\n    feature = \"temporary_niche_types\",\n    issue = \"none\",\n    reason = \"for core, alloc, and std internals until pattern types are further along\"\n)]\n\nuse crate::cmp::Ordering;\nuse crate::hash::{Hash, Hasher};\nuse crate::marker::StructuralPartialEq;\nuse crate::{fmt, pattern_type};\n\nmacro_rules! define_valid_range_type {\n    ($(\n        $(#[$m:meta])*\n        $vis:vis struct $name:ident($int:ident is $pat:pat);\n    )+) => {$(\n        #[derive(Clone, Copy)]\n        #[repr(transparent)]\n        $(#[$m])*\n        $vis struct $name(pattern_type!($int is $pat));\n        impl $name {\n            #[inline]\n            pub const fn new(val: $int) -> Option<Self> {\n                #[allow(non_contiguous_range_endpoints)]\n                if let $pat = val {\n                    // SAFETY: just checked that the value matches the pattern\n                    Some(unsafe { $name(crate::mem::transmute(val)) })\n                } else {\n                    None\n                }\n            }\n\n            /// Constructs an instance of this type from the underlying integer\n            /// primitive without checking whether its valid.\n            ///\n            /// # Safety\n            /// Immediate language UB if `val` is not within the valid range for this\n            /// type, as it violates the validity invariant.\n            #[inline]\n            pub const unsafe fn new_unchecked(val: $int) -> Self {\n                // SAFETY: Caller promised that `val` is within the valid range.\n                unsafe { crate::mem::transmute(val) }\n            }\n\n            #[inline]\n            pub const fn as_inner(self) -> $int {\n                // SAFETY: pattern types are always legal values of their base type\n                // (Not using `.0` because that has perf regressions.)\n                unsafe { crate::mem::transmute(self) }\n            }\n        }\n"
+        },
+        {
+          "first": 115,
+          "last": 130,
+          "text": "define_valid_range_type! {\n    pub struct NonZeroU8Inner(u8 is 1..);\n    pub struct NonZeroU16Inner(u16 is 1..);\n    pub struct NonZeroU32Inner(u32 is 1..);\n    pub struct NonZeroU64Inner(u64 is 1..);\n    pub struct NonZeroU128Inner(u128 is 1..);\n\n    pub struct NonZeroI8Inner(i8 is ..0 | 1..);\n    pub struct NonZeroI16Inner(i16 is ..0 | 1..);\n    pub struct NonZeroI32Inner(i32 is ..0 | 1..);\n    pub struct NonZeroI64Inner(i64 is ..0 | 1..);\n    pub struct NonZeroI128Inner(i128 is ..0 | 1..);\n\n    pub struct UsizeNoHighBit(usize is 0..=HALF_USIZE);\n    pub struct NonZeroUsizeInner(usize is 1..);\n    pub struct NonZeroIsizeInner(isize is ..0 | 1..);"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/nonzero.rs",
+      "sha256": "15cd2f2e2dcdd808bd75ebb4ebd14f6264db8ac6e191175478751329d6b76b83",
+      "bytes": 101896,
+      "excerpts": [
+        {
+          "first": 115,
+          "last": 130,
+          "text": "///\n/// # Note on generic usage\n///\n/// `NonZero<T>` can only be used with some standard library primitive types\n/// (such as `u8`, `i32`, and etc.). The type parameter `T` must implement the\n/// internal trait [`ZeroablePrimitive`], which is currently permanently unstable\n/// and cannot be implemented by users. Therefore, you cannot use `NonZero<T>`\n/// with your own types, nor can you implement traits for all `NonZero<T>`,\n/// only for concrete types.\n#[stable(feature = \"generic_nonzero\", since = \"1.79.0\")]\n#[repr(transparent)]\n#[rustc_nonnull_optimization_guaranteed]\n#[rustc_diagnostic_item = \"NonZero\"]\npub struct NonZero<T: ZeroablePrimitive>(T::NonZeroInner);\n\nmacro_rules! impl_nonzero_fmt {"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "sha256": "09a569f9ed39e2ec809fa28701e64652887a94e0814996b13dc24f370c8f1933",
+      "bytes": 73869,
+      "excerpts": [
+        {
+          "first": 960,
+          "last": 973,
+          "text": "    #[stable(feature = \"rust1\", since = \"1.0.0\")]\n    #[rustc_const_unstable(feature = \"const_result_trait_fn\", issue = \"144211\")]\n    pub const fn map_err<F, O>(self, op: O) -> Result<T, F>\n    where\n        O: [const] FnOnce(E) -> F + [const] Destruct,\n    {\n        match self {\n            Ok(t) => Ok(t),\n            Err(e) => Err(op(e)),\n        }\n    }\n\n    /// Calls a function with a reference to the contained value if [`Ok`].\n    ///"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/marker.rs",
+      "sha256": "0aed53724eade60e5fa60f598faee5245b599903f79d8eb3c0590bf9a94d2f44",
+      "bytes": 52129,
+      "excerpts": [
+        {
+          "first": 408,
+          "last": 425,
+          "text": "/// struct PointListWrapper<'a> {\n///     point_list_ref: &'a PointList,\n/// }\n/// ```\n///\n/// ## When *can't* my type be `Copy`?\n///\n/// Some types can't be copied safely. For example, copying `&mut T` would create an aliased\n/// mutable reference. Copying [`String`] would duplicate responsibility for managing the\n/// [`String`]'s buffer, leading to a double free.\n///\n/// Generalizing the latter case, any type implementing [`Drop`] can't be `Copy`, because it's\n/// managing some resource besides its own [`size_of::<T>`] bytes.\n///\n/// If you try to implement `Copy` on a struct or enum containing non-`Copy` data, you will get\n/// the error [E0204].\n///\n/// [E0204]: ../../error_codes/E0204.html"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/nonzero.rs",
+      "sha256": "15cd2f2e2dcdd808bd75ebb4ebd14f6264db8ac6e191175478751329d6b76b83",
+      "bytes": 101896,
+      "matches": [
+        {
+          "line": 188,
+          "text": "\n#[stable(feature = \"nonzero\", since = \"1.28.0\")]\n#[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\nconst impl<T> Clone for NonZero<T>\nwhere\n    T: ZeroablePrimitive,\n{\n    #[inline]\n    fn clone(&self) -> Self {"
+        },
+        {
+          "line": 202,
+          "text": "impl<T> UseCloned for NonZero<T> where T: ZeroablePrimitive {}\n\n#[stable(feature = \"nonzero\", since = \"1.28.0\")]\nimpl<T> Copy for NonZero<T> where T: ZeroablePrimitive {}\n\n#[doc(hidden)]\n#[unstable(feature = \"trivial_clone\", issue = \"none\")]\n#[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\nconst unsafe impl<T> TrivialClone for NonZero<T> where T: ZeroablePrimitive {}"
+        },
+        {
+          "line": 207,
+          "text": "#[doc(hidden)]\n#[unstable(feature = \"trivial_clone\", issue = \"none\")]\n#[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\nconst unsafe impl<T> TrivialClone for NonZero<T> where T: ZeroablePrimitive {}\n\n#[stable(feature = \"nonzero\", since = \"1.28.0\")]\n#[rustc_const_unstable(feature = \"const_cmp\", issue = \"143800\")]\nconst impl<T> PartialEq for NonZero<T>\nwhere"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/ast/types.rs",
+      "sha256": "144d183af79a5341424cc0ffaa99fe99a414546c05fdfccfd364e5bc2e6de5eb",
+      "bytes": 35409,
+      "matches": [
+        {
+          "line": 1101,
+          "text": "    Slice(Ty),\n    /// A pattern type. This is a newtype over the first type whose valid values are restricted by\n    /// the pattern.\n    Pattern(Ty, TypePattern),\n    /// A type that could not be computed or was incorrect.\n    #[drive(skip)]\n    Error(String),\n}\n"
+        },
+        {
+          "line": 1280,
+          "text": "    pub binder: Binder<Ty>,\n}\n\n/// A type-level pattern used by [`TyKind::Pattern`].\n#[derive(\n    Debug,\n    Clone,\n    PartialEq,\n    Eq,"
+        },
+        {
+          "line": 1297,
+          "text": "    DriveMut,\n)]\n#[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive\npub enum TypePattern {\n    Range(Box<ConstantExpr>, Box<ConstantExpr>),\n    OrPattern(Vec<TypePattern>),\n    NotNull,\n}"
+        },
+        {
+          "line": 1298,
+          "text": ")]\n#[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive\npub enum TypePattern {\n    Range(Box<ConstantExpr>, Box<ConstantExpr>),\n    OrPattern(Vec<TypePattern>),\n    NotNull,\n}"
+        },
+        {
+          "line": 1299,
+          "text": "#[serde_state(state_implements = HashConsSerializerState)] // Avoid corecursive impls due to perfect derive\npub enum TypePattern {\n    Range(Box<ConstantExpr>, Box<ConstantExpr>),\n    OrPattern(Vec<TypePattern>),\n    NotNull,\n}"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/ast/llbc_ast.rs",
+      "sha256": "80e760c56b6b4cfb57df30bc867a04b9b3df7af16999a1ce9d16424cb119e6d6",
+      "bytes": 6797,
+      "matches": [
+        {
+          "line": 46,
+          "text": "    /// associated with them.\n    StorageLive(LocalId),\n    /// Indicates that this local should be deallocated; if it is already deallocated, this is\n    /// a no-op. A local may not have a `StorageDead` in the function's body, in which case it\n    /// is implicitly deallocated at the end of the function. The return local does not receive a\n    /// `StorageDead`. We ensure in the micro-pass `insert_storage_statements` that all other locals\n    /// have a `StorageDead` before function exits.\n    StorageDead(LocalId),\n    /// A place is mentioned, but not accessed. The place itself must still be valid though, so"
+        },
+        {
+          "line": 48,
+          "text": "    /// Indicates that this local should be deallocated; if it is already deallocated, this is\n    /// a no-op. A local may not have a `StorageDead` in the function's body, in which case it\n    /// is implicitly deallocated at the end of the function. The return local does not receive a\n    /// `StorageDead`. We ensure in the micro-pass `insert_storage_statements` that all other locals\n    /// have a `StorageDead` before function exits.\n    StorageDead(LocalId),\n    /// A place is mentioned, but not accessed. The place itself must still be valid though, so\n    /// this statement is not a no-op: it can trigger UB if the place's projections are not valid\n    /// (e.g. because they go out of bounds)."
+        },
+        {
+          "line": 49,
+          "text": "    /// a no-op. A local may not have a `StorageDead` in the function's body, in which case it\n    /// is implicitly deallocated at the end of the function. The return local does not receive a\n    /// `StorageDead`. We ensure in the micro-pass `insert_storage_statements` that all other locals\n    /// have a `StorageDead` before function exits.\n    StorageDead(LocalId),\n    /// A place is mentioned, but not accessed. The place itself must still be valid though, so\n    /// this statement is not a no-op: it can trigger UB if the place's projections are not valid\n    /// (e.g. because they go out of bounds).\n    PlaceMention(Place),"
+        },
+        {
+          "line": 50,
+          "text": "    /// is implicitly deallocated at the end of the function. The return local does not receive a\n    /// `StorageDead`. We ensure in the micro-pass `insert_storage_statements` that all other locals\n    /// have a `StorageDead` before function exits.\n    StorageDead(LocalId),\n    /// A place is mentioned, but not accessed. The place itself must still be valid though, so\n    /// this statement is not a no-op: it can trigger UB if the place's projections are not valid\n    /// (e.g. because they go out of bounds).\n    PlaceMention(Place),\n    /// Drop the value at the given place."
+        },
+        {
+          "line": 55,
+          "text": "    /// this statement is not a no-op: it can trigger UB if the place's projections are not valid\n    /// (e.g. because they go out of bounds).\n    PlaceMention(Place),\n    /// Drop the value at the given place.\n    ///\n    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call\n    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`\n    /// for more details; to get precise drops use `--precise-drops`.\n    Drop {"
+        },
+        {
+          "line": 57,
+          "text": "    PlaceMention(Place),\n    /// Drop the value at the given place.\n    ///\n    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call\n    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`\n    /// for more details; to get precise drops use `--precise-drops`.\n    Drop {\n        place: Place,\n        /// Reference to the `drop_glue` code to call on drop."
+        },
+        {
+          "line": 58,
+          "text": "    /// Drop the value at the given place.\n    ///\n    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call\n    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`\n    /// for more details; to get precise drops use `--precise-drops`.\n    Drop {\n        place: Place,\n        /// Reference to the `drop_glue` code to call on drop.\n        fn_ptr: FnPtr,"
+        },
+        {
+          "line": 60,
+          "text": "    /// Depending on `DropKind`, this may be a real call to `drop_glue`, or a conditional call\n    /// that should only happen if the place has not been moved out of. See the docs of `DropKind`\n    /// for more details; to get precise drops use `--precise-drops`.\n    Drop {\n        place: Place,\n        /// Reference to the `drop_glue` code to call on drop.\n        fn_ptr: FnPtr,\n        #[drive(skip)]\n        kind: DropKind,"
+        },
+        {
+          "line": 65,
+          "text": "        /// Reference to the `drop_glue` code to call on drop.\n        fn_ptr: FnPtr,\n        #[drive(skip)]\n        kind: DropKind,\n        on_unwind: Block,\n    },\n    Assert {\n        assert: Assert,\n        on_failure: AbortKind,"
+        }
+      ]
+    }
+  ],
+  "binaries": [
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+      "sha256": "4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5",
+      "bytes": 49419624
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+      "sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+      "bytes": 14041040
+    },
+    {
+      "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon-driver",
+      "sha256": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45",
+      "bytes": 18376344
+    }
+  ],
+  "command": [
+    "ssh",
+    "dombarker@100.108.41.90",
+    "python3 -"
+  ],
+  "source_revision": "76e1dd33405524d0bc072f4d98e4959c96053777",
+  "assessment": "Read-only source excerpts and current tool hashes, not a new extraction or release identity gate. Backend source directory includes accepted extensions; source association to selected failure is corroborative, not a reproducible binary build."
+}
