@@ -31,9 +31,11 @@ erasure/roles/world remain open. ResumeRoles66304 obtains concrete success
 moves/disposal/source projection. Privacy Kani59/60, final slot reserved;
 privacy Lean240/260; known soundness332/368 before new job usage. No adoption.
 
-New Session A640d3ebcf6 caller-range report has been read; its five new proof
-sources and receipts still await full independent review. It is not silently
-attributed to the older merged logical closure.
+Session A640d3ebcf6 caller-range packet is now reviewed: five source modules,
+selected receipts and immutable import/source metadata pass independent audit.
+Accepted rounds/semantic/preparation/owned-stage1 calls derive canonical ranges
+on the SAME returned semantic arrays. Claims/Terminal/native/S6 installation and
+release joins remain explicit. This does not repin the older logical closure.
 
 Session A's committed packets through `19b60f915262fb3c7f64656b6826fc8429e30d91`
 have been reviewed from immutable Git objects. They establish accepted
