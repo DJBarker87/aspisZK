@@ -3,7 +3,7 @@ Copyright (c) 2023 Kim Morrison. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Kim Morrison
 -/
-/-!
+/-
 Modified adapter of Lean 4.32.0 Lean/Replay.lean. See
 Port18VALIDATE_ATTRIBUTION.md and Port18VALIDATE_LICENSE for provenance/license.
 Changes: frontend/import/namespace, default heartbeat limit, and rejection
