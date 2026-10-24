@@ -2,7 +2,8 @@ from pathlib import Path
 import re,hashlib,json
 D=Path(__file__).resolve().parent;R=D.parents[2]
 t=(D/'generated/Types.lean.txt').read_text();f=(D/'generated/Funs.lean.txt').read_text();e=(D/'generated/FunsExternal_Template.lean.txt').read_text()
-# Keep generated max options verbatim, solely in the generated emission module.
+# Archive raw generated options unchanged; normalize the imported adaptation to defaults.
+t=re.sub(r'/\- You can set the `max(?:Heartbeats|RecDepth)`[^\n]*\nset_option max(?:Heartbeats|RecDepth) \d+\n', '', t)
 t=t.replace('end ProverRwRng','')
 extern='''
 -- Unused erasure callbacks stay explicit parameters. Their runtime/drop
@@ -26,4 +27,4 @@ pin=lambda x:hashlib.sha256(x.encode()).hexdigest()
 entries=[]
 for m in re.finditer(r'/-- \[([^\n]+)[\s\S]*?\naxiom ([\s\S]*?)(?=\n/--|\Z)',e):
  entries.append(dict(qualified_source=m.group(1),template_signature=m.group(2).strip(),template_signature_sha256=pin(m.group(2).strip())))
-(D/'adaptation.json').write_text(json.dumps({'inputs':{n:pin((D/'generated'/n).read_text()) for n in ['Types.lean.txt','Funs.lean.txt','FunsExternal_Template.lean.txt']},'output':str(p.relative_to(R)),'output_sha256':pin(out),'external_bindings':entries,'changes':['combine type/fun modules without rewriting emitted control','two unused erasure callbacks parameterized as ErasureFns','transparent value-level new/deref/deref_mut definitions; no native drop claim'],'no_implicit_world':True},indent=2)+'\n')
+(D/'adaptation.json').write_text(json.dumps({'inputs':{n:pin((D/'generated'/n).read_text()) for n in ['Types.lean.txt','Funs.lean.txt','FunsExternal_Template.lean.txt']},'output':str(p.relative_to(R)),'output_sha256':pin(out),'external_bindings':entries,'changes':['remove generated maxHeartbeats/maxRecDepth overrides; default options; raw input archives unchanged','combine type/fun modules without rewriting emitted control','two unused erasure callbacks parameterized as ErasureFns','transparent value-level new/deref/deref_mut definitions; no native drop claim'],'no_implicit_world':True},indent=2)+'\n')
