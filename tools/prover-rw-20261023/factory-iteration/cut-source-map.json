@@ -1,0 +1,21 @@
+{
+  "schema": "ProverRwFactoryIteration-cut-source-v1",
+  "original_selected_sha256": "7daae5b71c4fa236be48b8da67af9a54418634894f0c95b6ee604b0824788cb3",
+  "original_loop_body": {
+    "start_byte": 1058,
+    "end_byte": 1712,
+    "start_line": 40,
+    "end_line": 56,
+    "sha256": "0115337170eed8af9ba1bbbdced7bc6821f49e87f9b8035c441378f4f618af74"
+  },
+  "cut_sha256": "6ca3b19a9adb83aff665142323538041b92016df7eb44640599d9102d82c3455",
+  "success_before": "return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });",
+  "success_after": "return Ok((retry, Some(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                })));",
+  "body_changes": "Only success return container; all other loop-body bytes including retry+=1 and lexical end scope identical.",
+  "outer_changes": [
+    "Remove nonce guard and retry loop: entry represents admitted iteration",
+    "Initialize local retry from argument",
+    "Return (retry,None) after rejection scope; not actual factory exhaustion"
+  ],
+  "scope": "Checked syntactic factoring only. Mechanized equivalence to actual body/caller/MIR and finite16 composition OPEN. Actual Zeroizing/Drop kept; no event instrumentation."
+}
