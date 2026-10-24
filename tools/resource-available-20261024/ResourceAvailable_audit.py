@@ -62,6 +62,8 @@ def compact(d):
 def variant(old,q):
     # Counterfactual request projection only: retain all observed legacy errors,
     # visibility and nonreserve decisions rather than recomputing them away.
+    if not old or 'bounded_reserved_bytes' not in old:
+        return old
     result=dict(old)
     result['projected_reserved_bytes']=c.add((c.uint(old['bounded_reserved_bytes']),q))
     return result

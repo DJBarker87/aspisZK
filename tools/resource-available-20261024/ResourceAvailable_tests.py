@@ -195,6 +195,17 @@ class ResourceAvailableTests(unittest.TestCase):
         b,e=scope();after=copy.deepcopy(b);after['self_observation']['starttime']+=1
         self.assertIn('error',evaluate(b,q=0,after=after,phase='inside-scope',expected=e))
 
+    def test_raw_global_parser_and_delegation(self):
+        for raw in ('MemTotal: 1 kB\nMemTotal: 2 kB', 'Unused: -1',
+                    'MemAvailable: 1 MB', 'Unused: 18446744073709551616',
+                    'Unused: not-a-number'):
+            with patch.object(Path,'read_text',return_value=raw):
+                self.assertRaises(ValueError,c.scan)
+        s=fixture();lg=legacy(s,4*G)
+        for key,value in (('controllers',[]),('subtree_memory',False)):
+            b=copy.deepcopy(s);b['rows'][0][key]=value
+            self.assertIn('error',evaluate(b,old=lg))
+
     def test_live_disabled_and_source_read_errors(self):
         self.assertRaises(RuntimeError,go.read_only_admission,phase='prospective',additional_bytes=G)
         for exc in (PermissionError(13,'denied'),FileNotFoundError(2,'missing')):

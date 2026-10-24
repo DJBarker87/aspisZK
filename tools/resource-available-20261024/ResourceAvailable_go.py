@@ -11,11 +11,12 @@ def bind_scope(snapshot, expected):
             expected['high'] <= 6*GIB and expected['swap_max'] == 0 and expected['tasks_max'] == 64):
         raise ValueError('invalid expected scope limits')
     identity = snapshot['self_observation']
+    uint(identity['starttime'])
     unified = identity['unified_path']
     if not unified.startswith('/') or str(PurePosixPath(unified)) != unified or '..' in PurePosixPath(unified).parts:
         raise ValueError('noncanonical self cgroup path')
     path = identity['path']
-    # Pure replay checks binding to recorded procfs; live entrypoint supplies it.
+    # Pure replay checks recorded procfs binding; public live entrypoint is disabled.
     expected_path = '/sys/fs/cgroup'+('' if identity['unified_path']=='/' else identity['unified_path'])
     if path != expected_path:
         raise ValueError('fake self cgroup path')
@@ -77,7 +78,7 @@ def evaluate(old, before, after, requested, *, phase, expected=None):
             if first != second:
                 raise ValueError('self scope identity/control race')
             out['scope_binding'] = first
-        if not old or old.get('error') or old.get('visibility_error'):
+        if not isinstance(old, dict) or not old or old.get('error') or old.get('visibility_error'):
             raise ValueError('legacy visibility error/missing')
         for field in ('process_visibility', 'service_visibility', 'docker_visibility',
                       'cgroups', 'projected_reserved_bytes', 'allowed', 'reserve_check'):

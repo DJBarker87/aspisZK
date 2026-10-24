@@ -165,10 +165,18 @@ def scan(root=Path('/sys/fs/cgroup')):
         if tag(path) != kind:
             raise ValueError('cgroup.type transition')
     try:
+        seen_mem = set()
         for line in read(Path('/proc/meminfo')).splitlines():
             key, rest = line.split(':', 1)
-            if rest.strip().endswith(' kB'):
-                mem[key] = uint(parse_number(rest.split()[0]) * 1024)
+            if key in seen_mem:
+                raise ValueError('duplicate global field')
+            seen_mem.add(key)
+            words = rest.split()
+            if len(words) not in (1,2) or (len(words)==2 and words[1]!='kB'):
+                raise ValueError('invalid global unit/format')
+            value = parse_number(words[0])
+            if len(words)==2:
+                mem[key] = uint(value * 1024)
         visit(root, False, str(root))
         result = dict(rows=rows, meminfo=mem, raw_inputs=raw, read_attempts=attempts,
                       raw_sha256={k: hashlib.sha256(v.encode()).hexdigest() for k, v in raw.items()})
@@ -264,6 +272,12 @@ def observe(snapshot):
                 raise ValueError('invalid population')
             if r['populated'] and not parent['root'] and not parent['populated']:
                 raise ValueError('population race')
+        if len(r['controllers']) != len(set(r['controllers'])):
+            raise ValueError('duplicate available controller')
+        if r['subtree_memory'] and 'memory' not in r['controllers']:
+            raise ValueError('memory delegation unavailable')
+        if r['subtree_pids'] and 'pids' not in r['controllers']:
+            raise ValueError('pids delegation unavailable')
         for key in ('procs', 'threads'):
             ids = r[key]
             if ids != sorted(set(ids)) or any(not uint(i) for i in ids):
