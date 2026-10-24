@@ -9114,3 +9114,32 @@ ledgers. This stage changes isolated prototypes/proofs only; native plumbing
 follows its predecessor gate. Scope/prompt is archived under
  evidence/coordinator-20261024/prompt-prover-rng-owner-20261024.txt.
 No security target, contract, native source, trust or candidate adoption changes.
+
+
+## D193 — universal source-derived cap16 gate reviewed (2026-10-24)
+
+Candidate03444c5e5e remains unmerged. universal_cap16 quantifies over arbitrary
+nonces and typed finite tapes, proving both complete owner equality and shared
+body-state replay with exact consumed reply order/count, fresh zero inputs,
+available indices, returned status/provider and final suffix. Its admitted
+.ok execution includes native-prototype OS/exhaustion errors; tape unavailability
+stays extraction failure. It is stronger than the prior zero-then-one example.
+Replay/OwnerReplay and concrete body/loop proof were inspected; they do not hide
+old/new owner equality in a premise. The Kani cut is not a Lean hypothesis.
+
+Lead checked14 final matching-source green receipts, default-option cleanup
+and22 standard-axiom reports. Audit11439 at ad9e91a840067eae7a44e8ab7f103b0e59b24698:
+exit0,wall1.79s,RSS3847484KiB,swap0. Independently reran binding-audit read-only
+against LLBCcfb6f9bec8a6d002ed6f1e141649334256af3d17d7837b27cbd811ddeedc364d:
+eight transparent local declarations,13 identical shared definitions and actual
+source substitutions checked. No new full-manifest/native identity gate.
+
+Native getrandom::Error/E1 association, physical cleanup, selected callback,
+cap8 owner, durable ledger and joint L1/L2 remain open. No crates/programs delta
+in this stage. Next source-derived prototype task targets the actual native
+error carrier plus RealR1_client callback and retry_attempt, preserving all
+mutable provider/nonce-policy state and failed/rejected effects. It may use only
+20 remaining Lean from the60 owner allocation and16 unused Kani; stage3 stays
+100 exhausted and cumulative usage140/160. No budget reset, new trust, contract
+change or native adoption. Archived prompt is
+ evidence/coordinator-20261024/prompt-prover-rng-caller-20261024.txt.

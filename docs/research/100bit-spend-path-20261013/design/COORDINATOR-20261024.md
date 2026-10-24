@@ -13,11 +13,11 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
-| Entropy cap16 equivalence | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D192 universal same-event source owner induction and default-option cleanup | New60 Lean; old100 exhausted;16 Kani remain; J11400–11499 after collision checks |
+| Actual entropy callback preflight | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D193 native error carrier and actual selected callback/cap8 source-derived state transport | Remaining20/60 Lean; old100 exhausted;16 Kani remain; J11440–11499 after collision checks |
 | Effectful driver instance | .worktrees/cx-port8effects / codex/cx-port8effects-20261024 | Actual batch/checkpoint effects and driver read embeddings, with explicit Session A op7 frontier | 100 Lean,20 Kani |
 
-All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively39815,41663. Scratch output names:
-codex-prover-rng-owner-20261024.out,codex-port8effects-20261024.out. Only terminal markers
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively50535,41663. Scratch output names:
+codex-prover-rng-caller-20261024.out,codex-port8effects-20261024.out. Only terminal markers
 or missing handles trigger reading the final ~40 lines. Prompts archived under
 evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
 
@@ -126,3 +126,13 @@ failure or cancellation. This removes the previously observed solver load,
 but does not itself establish a quiet timing interval. A focused Lean process
 was live during the check. Recheck all host activity/reservations immediately
 before any later absolute prover timing gate; no timing result is claimed.
+
+
+## Cap16 review and actual caller preflight — 2026-10-24
+
+Candidate03444c5e5e universal_cap16 is reviewed at the isolated source-derived
+boundary. LOG D193 records exact statements/axioms/hashes and independent LLBC
+source-binding audit. Native getrandom error/E1/cleanup and callback/cap8/ledger
+and joint L1/L2 remain open. The next worker consumes only20 remaining Lean
+and16 Kani, with old100 and current40/60 ledgers preserved. No source adoption
+or native artifact/timing gate claimed. Driver-effect worker41663 is still live.
