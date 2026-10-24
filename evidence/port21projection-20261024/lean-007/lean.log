@@ -1,0 +1,452 @@
+inductive AspisR1.Port21PROJECTION_Core.Sim : {I A N M : Type} →
+  (N → M → Prop) → AspisV8R19.MemoizedProgramLaw.Program I A N → AspisV8R19.MemoizedProgramLaw.Program I A M → Prop
+number of parameters: 5
+constructors:
+AspisR1.Port21PROJECTION_Core.Sim.done : ∀ {I A N M : Type} {R : N → M → Prop} (n : N) (m : M),
+  R n m →
+    Port21PROJECTION_Core.Sim R (AspisV8R19.MemoizedProgramLaw.Program.done n)
+      (AspisV8R19.MemoizedProgramLaw.Program.done m)
+AspisR1.Port21PROJECTION_Core.Sim.ask : ∀ {I A N M : Type} {R : N → M → Prop} (i : I)
+  (n : A → AspisV8R19.MemoizedProgramLaw.Program I A N) (m : A → AspisV8R19.MemoizedProgramLaw.Program I A M),
+  (∀ (a : A), Port21PROJECTION_Core.Sim R (n a) (m a)) →
+    Port21PROJECTION_Core.Sim R (AspisV8R19.MemoizedProgramLaw.Program.ask i n)
+      (AspisV8R19.MemoizedProgramLaw.Program.ask i m)
+theorem AspisR1.Port21PROJECTION_Core.evaluated : ∀ {I A N M : Type} {R : N → M → Prop}
+  {n : AspisV8R19.MemoizedProgramLaw.Program I A N} {m : AspisV8R19.MemoizedProgramLaw.Program I A M},
+  Port21PROJECTION_Core.Sim R n m →
+    ∀ (H : I → A),
+      (AspisV8R19.MemoizedProgramLaw.eval H n).1 = (AspisV8R19.MemoizedProgramLaw.eval H m).1 ∧
+        R (AspisV8R19.MemoizedProgramLaw.eval H n).2 (AspisV8R19.MemoizedProgramLaw.eval H m).2 :=
+fun {I A N M} {R} {n} {m} h H =>
+  Port21PROJECTION_Core.Sim.rec (fun n m related => ⟨rfl, related⟩)
+    (fun i n m related ih =>
+      let ⟨logs, values⟩ := ih (H i)
+      ⟨congrArg (List.cons (i, H i)) logs, values⟩)
+    h
+theorem AspisR1.Port21PROJECTION_Core.charge : ∀ {I A N M : Type} {R : N → M → Prop}
+  {n : AspisV8R19.MemoizedProgramLaw.Program I A N} {m : AspisV8R19.MemoizedProgramLaw.Program I A M},
+  Port21PROJECTION_Core.Sim R n m →
+    ∀ (H : I → A) (cost : List (I × A) → ℕ),
+      cost (AspisV8R19.MemoizedProgramLaw.eval H n).1 = cost (AspisV8R19.MemoizedProgramLaw.eval H m).1 :=
+fun {I A N M} {R} {n} {m} h H cost => congrArg cost (Port21PROJECTION_Core.evaluated h H).left
+theorem AspisR1.Port21PROJECTION_Core.bind_sim : ∀ {I A N M : Type} {R : N → M → Prop}
+  {n : AspisV8R19.MemoizedProgramLaw.Program I A N} {m : AspisV8R19.MemoizedProgramLaw.Program I A M} {N' M' : Type}
+  {S : N' → M' → Prop},
+  Port21PROJECTION_Core.Sim R n m →
+    ∀ (kn : N → AspisV8R19.MemoizedProgramLaw.Program I A N') (km : M → AspisV8R19.MemoizedProgramLaw.Program I A M'),
+      (∀ (n : N) (m : M), R n m → Port21PROJECTION_Core.Sim S (kn n) (km m)) →
+        Port21PROJECTION_Core.Sim S (AspisV8R19.OracleProgramOps.bind n kn) (AspisV8R19.OracleProgramOps.bind m km) :=
+fun {I A N M} {R} {n} {m} {N' M'} {S} h kn km next =>
+  Port21PROJECTION_Core.Sim.rec (fun n m related => next n m related)
+    (fun i n m related ih =>
+      Port21PROJECTION_Core.Sim.ask i (fun a => AspisV8R19.OracleProgramOps.bind (n a) kn)
+        (fun a => AspisV8R19.OracleProgramOps.bind (m a) km) ih)
+    h
+theorem AspisR1.Port21PROJECTION_Core.mass_le : ∀ {I A N M : Type} [inst : DecidableEq I] [inst_1 : Fintype A]
+  [Inhabited A] {R : N → M → Prop} {n : AspisV8R19.MemoizedProgramLaw.Program I A N}
+  {m : AspisV8R19.MemoizedProgramLaw.Program I A M},
+  Port21PROJECTION_Core.Sim R n m →
+    ∀ (fn : AspisV8R19.MemoizedProgramLaw.View I A N → ℚ) (fm : AspisV8R19.MemoizedProgramLaw.View I A M → ℚ),
+      (∀ (log : List (I × A)) (n : N) (m : M), R n m → fn (log, n) ≤ fm (log, m)) →
+        AspisV8R19.MemoizedProgramLaw.lazyMean n FS.emptyTable fn ≤
+          AspisV8R19.MemoizedProgramLaw.lazyMean m FS.emptyTable fm :=
+fun {I A N M} [DecidableEq I] [Fintype A] [Inhabited A] {R} {n} {m} h fn fm leaf =>
+  OracleProgramLawExt.lazyMean_le_of_eval n m fn fm fun H =>
+    let ⟨logs, values⟩ := Port21PROJECTION_Core.evaluated h H
+    have result :=
+      leaf (AspisV8R19.MemoizedProgramLaw.eval H n).1 (AspisV8R19.MemoizedProgramLaw.eval H n).2
+        (AspisV8R19.MemoizedProgramLaw.eval H m).2 values;
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              fn ((AspisV8R19.MemoizedProgramLaw.eval H n).1, (AspisV8R19.MemoizedProgramLaw.eval H n).2) ≤
+                fm (_a, (AspisV8R19.MemoizedProgramLaw.eval H m).2))
+            (Eq.symm logs)))
+        result)
+@[reducible] def AspisR1.Port21PROJECTION_Experiment.NativeRuntime : Type → Type :=
+fun Private =>
+  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+    (Option OraclePortStoredExperimentC4.RunView × Private)
+def AspisR1.Port21PROJECTION_Experiment.AcceptedLeaf : {Private : Type} →
+  Option OraclePortStoredExperimentC4.RunView × Private → Option OraclePortStoredExperimentC4.RunView → Prop :=
+fun {Private} n m => ∀ (run : OraclePortStoredExperimentC4.RunView), n.1 = some run → run.2.2 = true → m = some run
+def AspisR1.Port21PROJECTION_Experiment.nativeMass : {Private : Type} →
+  AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Option OraclePortStoredExperimentC4.RunView × Private) →
+    ℚ :=
+fun {Private} v => OraclePortRuntimeBindingC7.runtimeMass (v.1, v.2.1)
+theorem AspisR1.Port21PROJECTION_Experiment.accepted_event : ∀ {Private : Type}
+  (n : Option OraclePortStoredExperimentC4.RunView × Private) (m : Option OraclePortStoredExperimentC4.RunView),
+  Port21PROJECTION_Experiment.AcceptedLeaf n m →
+    ∀ (run : OraclePortStoredExperimentC4.RunView),
+      n.1 = some run →
+        run.2.2 = true →
+          ∀ (coins : GSConcreteByteDecoderBank.RawCoins),
+            RawRecordedPublicSpendExtractorBin.extract (OraclePortStoredExperimentC4.view run) coins = none →
+              m = some run ∧
+                RawRecordedPublicSpendExtractorBin.extract (OraclePortStoredExperimentC4.view run) coins = none :=
+fun {Private} n m leaf run present accepted coins failed => ⟨leaf run present accepted, failed⟩
+theorem AspisR1.Port21PROJECTION_Experiment.failure_transport : ∀ {Private : Type}
+  (native : Port21PROJECTION_Experiment.NativeRuntime Private) (model : OraclePortRuntimeBindingC7.Runtime),
+  Port21PROJECTION_Core.Sim Port21PROJECTION_Experiment.AcceptedLeaf native model →
+    AspisV8R19.MemoizedProgramLaw.lazyMean native FS.emptyTable Port21PROJECTION_Experiment.nativeMass ≤
+      OraclePortRuntimeBindingC7.deployedFailure model :=
+fun {Private} native model steps =>
+  Port21PROJECTION_Core.mass_le steps Port21PROJECTION_Experiment.nativeMass OraclePortRuntimeBindingC7.runtimeMass
+    Port21PROJECTION_Experiment.leaf_mass
+theorem AspisR1.Port21PROJECTION_Experiment.all_outcome_queries : ∀ {Private : Type}
+  (native : Port21PROJECTION_Experiment.NativeRuntime Private) (model : OraclePortRuntimeBindingC7.Runtime),
+  Port21PROJECTION_Core.Sim Port21PROJECTION_Experiment.AcceptedLeaf native model →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H native).1.length = (AspisV8R19.MemoizedProgramLaw.eval H model).1.length ∧
+        FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H native).1 =
+          FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H model).1 :=
+fun {Private} native model steps H =>
+  ⟨Port21PROJECTION_Core.charge steps H List.length, Port21PROJECTION_Core.charge steps H (FS.firstReads FS.emptyTable)⟩
+theorem AspisR1.Port21PROJECTION_Experiment.accepted_mass_transport : ∀ {Private : Type}
+  (native : Port21PROJECTION_Experiment.NativeRuntime Private) (model : OraclePortRuntimeBindingC7.Runtime),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      Port21PROJECTION_Experiment.AcceptedLeaf (AspisV8R19.MemoizedProgramLaw.eval H native).2
+        (AspisV8R19.MemoizedProgramLaw.eval H model).2) →
+    AspisV8R19.MemoizedProgramLaw.lazyMean native FS.emptyTable Port21PROJECTION_Experiment.nativeMass ≤
+      OraclePortRuntimeBindingC7.deployedFailure model :=
+fun {Private} native model matched =>
+  OracleProgramLawExt.lazyMean_le_of_eval native model Port21PROJECTION_Experiment.nativeMass
+    OraclePortRuntimeBindingC7.runtimeMass fun H =>
+    Port21PROJECTION_Experiment.leaf_mass (AspisV8R19.MemoizedProgramLaw.eval H native).1
+      (AspisV8R19.MemoizedProgramLaw.eval H native).2 (AspisV8R19.MemoizedProgramLaw.eval H model).2 (matched H)
+theorem AspisR1.Port21PROJECTION_Experiment.soundness_and_query_transport : ∀ {Private : Type}
+  (native : Port21PROJECTION_Experiment.NativeRuntime Private) (model : OraclePortRuntimeBindingC7.Runtime) (Q : ℕ)
+  (ε : ℚ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      Port21PROJECTION_Experiment.AcceptedLeaf (AspisV8R19.MemoizedProgramLaw.eval H native).2
+        (AspisV8R19.MemoizedProgramLaw.eval H model).2) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H native).1.length ≤ Q) →
+      OraclePortRuntimeBindingC7.deployedFailure model ≤ ε →
+        AspisV8R19.MemoizedProgramLaw.lazyMean native FS.emptyTable Port21PROJECTION_Experiment.nativeMass ≤ ε ∧
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H native).1.length ≤ Q :=
+fun {Private} native model Q ε matched accounted bound =>
+  ⟨LE.le.trans (Port21PROJECTION_Experiment.accepted_mass_transport native model matched) bound, accounted⟩
+@[reducible] def AspisR1.OraclePortRuntimeBindingC7.Runtime : Type :=
+AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+  (Option OraclePortStoredExperimentC4.RunView)
+def AspisR1.OraclePortRuntimeBindingC7.runtimeMass : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes
+    AspisV8R19.SourceDuplexStep.State (Option OraclePortStoredExperimentC4.RunView) →
+  ℚ :=
+fun v =>
+  match v.2 with
+  | none => 0
+  | some run => RawRecordedOracleExtractionMassBin.failureMass (OraclePortStoredExperimentC4.view run)
+def AspisR1.OraclePortRuntimeBindingC7.deployedFailure : OraclePortRuntimeBindingC7.Runtime → ℚ :=
+fun runtime => AspisV8R19.MemoizedProgramLaw.lazyMean runtime FS.emptyTable OraclePortRuntimeBindingC7.runtimeMass
+def AspisR1.RawRecordedOracleExtractionMassBin.failureMass : RawCutProverCompiler.RunView → ℚ :=
+fun run =>
+  AspisV8R19.OracleResampling.mean fun coins =>
+    AspisV8R19.CausalFirstHitUnionBound.indicator
+      (run.2.2 = true ∧ RawRecordedPublicSpendExtractorBin.extract run coins = none)
+theorem AspisR1.OracleProgramLawExt.lazyMean_le_of_eval : ∀ {I A O O' : Type} [inst : DecidableEq I]
+  [inst_1 : Fintype A] [Inhabited A] (p : AspisV8R19.MemoizedProgramLaw.Program I A O)
+  (q : AspisV8R19.MemoizedProgramLaw.Program I A O') (f : AspisV8R19.MemoizedProgramLaw.View I A O → ℚ)
+  (g : AspisV8R19.MemoizedProgramLaw.View I A O' → ℚ),
+  (∀ (H : I → A), f (AspisV8R19.MemoizedProgramLaw.eval H p) ≤ g (AspisV8R19.MemoizedProgramLaw.eval H q)) →
+    AspisV8R19.MemoizedProgramLaw.lazyMean p FS.emptyTable f ≤
+      AspisV8R19.MemoizedProgramLaw.lazyMean q FS.emptyTable g :=
+fun {I A O O'} [DecidableEq I] [Fintype A] [Inhabited A] p q f g h =>
+  let s := AspisV8R19.OracleFiniteSupport.support p ∪ AspisV8R19.OracleFiniteSupport.support q;
+  have hp := Finset.subset_union_left;
+  have hq := Finset.subset_union_right;
+  Trans.trans
+    (Trans.trans (Eq.symm (AspisV8R19.OracleFiniteSupport.finite_support_oracle_law p s hp default f))
+      (FS.mean_mono fun H => h (AspisV8R19.OracleFiniteSupport.extend s H default)))
+    (AspisV8R19.OracleFiniteSupport.finite_support_oracle_law q s hq default g)
+theorem AspisR1.Port21PROJECTION_Counterexamples.same_output : ∀ (H : Bool → Bool),
+  (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).2 =
+    (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).2 :=
+fun H =>
+  Bool.casesOn (motive := fun t =>
+    H false = t →
+      (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).2 =
+        (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).2)
+    (H false)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        H false = x →
+          (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).2 =
+            (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).2)
+        (fun h =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                        if b = true then AspisV8R19.MemoizedProgramLaw.Program.done true
+                        else
+                          AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done false)
+                      (congr
+                        (congrArg Prod.mk
+                          (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                  (Eq.trans
+                                    (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) Bool.false_eq_true)
+                                      (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                      Eq.refl
+                                        (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                    (if_false (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                      (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H true fun x =>
+                                  AspisV8R19.MemoizedProgramLaw.Program.done false)))))
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) Bool.false_eq_true)
+                                  (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                  Eq.refl
+                                    (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                (if_false (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                  (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                            (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H true fun x =>
+                              AspisV8R19.MemoizedProgramLaw.Program.done false)))))))
+                (congrArg Prod.snd
+                  (Eq.trans
+                    (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                      AspisV8R19.MemoizedProgramLaw.Program.done b)
+                    (congr
+                      (congrArg Prod.mk
+                        (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                          (congrArg Prod.fst (congrArg (Prod.mk []) h))))
+                      (congrArg Prod.snd (congrArg (Prod.mk []) h))))))
+              (eq_self false)))
+        (Eq.symm h) (Eq.refl (H false)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        H false = x →
+          (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).2 =
+            (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).2)
+        (fun h =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                        if b = true then AspisV8R19.MemoizedProgramLaw.Program.done true
+                        else
+                          AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done false)
+                      (congr
+                        (congrArg Prod.mk
+                          (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                  (Eq.trans
+                                    (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) (eq_self true))
+                                      (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                      Eq.refl
+                                        (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                    (if_true (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                      (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H true)))))
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) (eq_self true))
+                                  (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                  Eq.refl
+                                    (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                (if_true (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                  (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                            (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H true)))))))
+                (congrArg Prod.snd
+                  (Eq.trans
+                    (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                      AspisV8R19.MemoizedProgramLaw.Program.done b)
+                    (congr
+                      (congrArg Prod.mk
+                        (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                          (congrArg Prod.fst (congrArg (Prod.mk []) h))))
+                      (congrArg Prod.snd (congrArg (Prod.mk []) h))))))
+              (eq_self true)))
+        (Eq.symm h) (Eq.refl (H false)))
+    (Eq.refl (H false))
+theorem AspisR1.Port21PROJECTION_Counterexamples.accepted_same_log : ∀ (H : Bool → Bool),
+  (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).2 = true →
+    (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).1 =
+      (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).1 :=
+fun H accepted =>
+  Bool.casesOn (motive := fun t =>
+    H false = t →
+      (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).1 =
+        (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).1)
+    (H false)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        H false = x →
+          (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).1 =
+            (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).1)
+        (fun h =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg Prod.snd
+                      (Eq.trans
+                        (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                          if b = true then AspisV8R19.MemoizedProgramLaw.Program.done true
+                          else
+                            AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                              AspisV8R19.MemoizedProgramLaw.Program.done false)
+                        (congr
+                          (congrArg Prod.mk
+                            (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                              (congrArg Prod.fst
+                                (Eq.trans
+                                  (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                    (Eq.trans
+                                      (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) Bool.false_eq_true)
+                                        (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                        Eq.refl
+                                          (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                            AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                      (if_false (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                        (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                                  (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H true fun x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done false)))))
+                          (congrArg Prod.snd
+                            (Eq.trans
+                              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                (Eq.trans
+                                  (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) Bool.false_eq_true)
+                                    (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                    Eq.refl
+                                      (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                  (if_false (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                    (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                              (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H true fun x =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done false)))))))
+                  true)
+                Bool.false_eq_true)
+              accepted))
+        (Eq.symm h) (Eq.refl (H false)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        H false = x →
+          (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.native).1 =
+            (AspisV8R19.MemoizedProgramLaw.eval H Port21PROJECTION_Counterexamples.model).1)
+        (fun h =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg Prod.fst
+                    (Eq.trans
+                      (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                        if b = true then AspisV8R19.MemoizedProgramLaw.Program.done true
+                        else
+                          AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done false)
+                      (congr
+                        (congrArg Prod.mk
+                          (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                  (Eq.trans
+                                    (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) (eq_self true))
+                                      (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                      Eq.refl
+                                        (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                          AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                    (if_true (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                      (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H true)))))
+                        (congrArg Prod.snd
+                          (Eq.trans
+                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                              (Eq.trans
+                                (ite_congr (Eq.trans (congrFun' (congrArg Eq h) true) (eq_self true))
+                                  (fun a => Eq.refl (AspisV8R19.MemoizedProgramLaw.Program.done true)) fun a =>
+                                  Eq.refl
+                                    (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                      AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                (if_true (AspisV8R19.MemoizedProgramLaw.Program.done true)
+                                  (AspisV8R19.MemoizedProgramLaw.Program.ask true fun x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done false))))
+                            (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H true)))))))
+                (congrArg Prod.fst
+                  (Eq.trans
+                    (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H false fun b =>
+                      AspisV8R19.MemoizedProgramLaw.Program.done b)
+                    (congr
+                      (congrArg Prod.mk
+                        (congr (congrArg List.cons (congrArg (Prod.mk false) h))
+                          (congrArg Prod.fst (congrArg (Prod.mk []) h))))
+                      (congrArg Prod.snd (congrArg (Prod.mk []) h))))))
+              (eq_self [(false, true)])))
+        (Eq.symm h) (Eq.refl (H false)))
+    (Eq.refl (H false))
+theorem AspisR1.Port21PROJECTION_Counterexamples.rejected_extra_queries : (AspisV8R19.MemoizedProgramLaw.eval
+        (fun x => false) Port21PROJECTION_Counterexamples.native).2 =
+    false ∧
+  (AspisV8R19.MemoizedProgramLaw.eval (fun x => false) Port21PROJECTION_Counterexamples.native).1.length = 2 ∧
+    (AspisV8R19.MemoizedProgramLaw.eval (fun x => false) Port21PROJECTION_Counterexamples.model).1.length = 1 :=
+⟨rfl, ⟨rfl, rfl⟩⟩
+'AspisR1.Port21PROJECTION_Core.evaluated' does not depend on any axioms
+'AspisR1.Port21PROJECTION_Core.charge' does not depend on any axioms
+'AspisR1.Port21PROJECTION_Core.bind_sim' does not depend on any axioms
+'AspisR1.Port21PROJECTION_Core.mass_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.nonnegative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.accepted_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.leaf_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.failure_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.all_outcome_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.accepted_mass_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port21PROJECTION_Experiment.soundness_and_query_transport' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Port21PROJECTION_Counterexamples.same_output' depends on axioms: [propext]
+'AspisR1.Port21PROJECTION_Counterexamples.accepted_same_log' depends on axioms: [propext]
+'AspisR1.Port21PROJECTION_Counterexamples.rejected_extra_queries' does not depend on any axioms
+       23.31 real         1.92 user         4.01 sys
+          3513352192  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              112930  page reclaims
+              173011  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               33437  voluntary context switches
+              157730  involuntary context switches
+         61179013632  instructions retired
+         21743903611  cycles elapsed
+           564601592  peak memory footprint
