@@ -65,3 +65,11 @@ the already collision-charged model failure bound would double charge collisions
 that route is rejected. Source ordered execution equality is not necessary if
 source clean checks, exact prefix containment/replay and the original query
 budget are established. These are proof obligations, not new trust assumptions.
+
+The local source challenge is now kernel checked as
+`Port6AUTH_Challenge.frontier_independent` and `both_batches`: for arbitrary
+queries and any two Parsed byte carriers, a constant oracle gives identical
+returned source digest frontiers for both full sorted batch schedules. This
+includes distinct queries with repeated folded parents. It is deliberately a
+leaf-scan statement; it does not assert accepted full source, parser validity,
+or falsity of the strong join. No full-source counterexample is claimed.
