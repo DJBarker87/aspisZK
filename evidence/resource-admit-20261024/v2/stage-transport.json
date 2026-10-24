@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "/usr/bin/env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,os,pathlib,sys,hashlib\nx=json.load(sys.stdin); root=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'\"'\"')\nassert not root.exists(), '\"'\"'existing stage: conflicting writer or prior attempt'\"'\"'\nassert root.parent.resolve()==root.parent\nassert root.parent.stat().st_uid==os.getuid()\nassert str(root.parent.resolve())==x['\"'\"'manifest'\"'\"']['\"'\"'parent_resolved'\"'\"']\nroot.mkdir(mode=0o700)\nfor name,source in x['\"'\"'files'\"'\"'].items():\n p=root/name; p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)\n with p.open('\"'\"'x'\"'\"') as f:f.write(source)\n p.chmod(0o444)\n assert hashlib.sha256(p.read_bytes()).hexdigest()==x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'][name]['\"'\"'sha256'\"'\"']\nwith (root/'\"'\"'ResourceAdmit_manifest.json'\"'\"').open('\"'\"'x'\"'\"') as f:json.dump(x['\"'\"'manifest'\"'\"'],f,sort_keys=True,indent=2); f.write(chr(10))\n(root/'\"'\"'ResourceAdmit_manifest.json'\"'\"').chmod(0o444)\nassert json.loads((root/'\"'\"'ResourceAdmit_manifest.json'\"'\"').read_text())==x['\"'\"'manifest'\"'\"']\nassert root.resolve()==root and root.stat().st_uid==os.getuid() and (root.stat().st_mode & 0o777)==0o700\nprint(json.dumps(dict(stage=str(root),uid=os.getuid(),files=x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'])))\n'"
+  ],
+  "exit": 0,
+  "print_axioms": "N/A",
+  "source_revision": "48ae0c6804f802ae920aec995d61a9de7318ecf0",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "839c100e1f1f77a7a6ad730bc8335f10be5eeac4991a1d29277a8195166224ce",
+    "size": 223811
+  },
+  "stdout": "{\"stage\": \"/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2\", \"uid\": 1000, \"files\": {\"ResourceAdmit_adapter.py\": {\"sha256\": \"20ba7f302947ad38f997513f1f6807a08d6804b226894effb2da0c485f54e884\", \"size\": 4858}, \"ResourceAdmit_audit.py\": {\"sha256\": \"71bd71ca75873af2151de40d71874e375aa307e212a560af583049feae3694ef\", \"size\": 7488}, \"ResourceAdmit_coordination.py\": {\"sha256\": \"0f9aa41ec12c275debd178928316c4dc25a473b6cb6a20093a16e1c7d16ddf6b\", \"size\": 2616}, \"ResourceAdmit_host.py\": {\"sha256\": \"154748f9fcf6f1381df547e60c4aa28b14b5810b7e38b3b1325f5ba5d8c2efc8\", \"size\": 13799}, \"ResourceAdmit_local.py\": {\"sha256\": \"adca267d92719874c2a112a344e205197a2f0de2d4aaacabc7bf890fa077ef58\", \"size\": 11186}, \"ResourceAdmit_receipt.py\": {\"sha256\": \"fcf6fb8f70b2826ae98929a9063e10a5ad22503c3651503ee0bead9bfc0bed62\", \"size\": 1818}, \"ResourceAdmit_sources.py\": {\"sha256\": \"1962e47c11eff8cf663f6e13bfe85ca7e320cd7a778790693f94512b58f13b90\", \"size\": 3071}, \"ResourceAdmit_tests.py\": {\"sha256\": \"19f71c4720a6ef091cbc85fd17c1272a75acbc41f36d552731d05e2e4a8a9f91\", \"size\": 15880}, \"ResourceAdmit_tests_v2.py\": {\"sha256\": \"921d65ef1cf6f2e68321d9e0fa764dfe16a198c26ba5df6c9ae2d04de3fa01a3\", \"size\": 5542}, \"ResourceAdmit_reviewed.json\": {\"sha256\": \"a1977025895c9ef1ae65148973f09c2c0cea0fc896ed4b770ddc16673e49feb9\", \"size\": 61415}}}\n",
+  "wall_seconds": 0.897324541117996
+}
