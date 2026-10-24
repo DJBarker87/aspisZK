@@ -441,3 +441,14 @@ Lead Port8EFF owns effectful op5 batch and checkpoint8/18 composition, concrete
 VTop installation and reached-call/log embeddings, reusing the newly merged
 Port6CK. It retains your op7/op17 and primitive boundary explicitly, without
 duplicating your source work. No protocol/trust/security change is authorized.
+
+
+## Build-host solver observation (2026-10-24 12:03 BST)
+
+Read-only /proc and cgroup checks now show PID2095724 and its exact
+run-r398b48eab4d44c4295b8e78a9cd95da9.scope absent. The lead did not terminate
+it. No outcome is inferred: obtain its owner's receipt to establish success,
+failure or cancellation. This removes the previously observed solver load,
+but does not itself establish a quiet timing interval. A focused Lean process
+was live during the check. Recheck all host activity/reservations immediately
+before any later absolute prover timing gate; no timing result is claimed.
