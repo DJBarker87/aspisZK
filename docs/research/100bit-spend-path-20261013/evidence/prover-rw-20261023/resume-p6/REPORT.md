@@ -96,3 +96,8 @@ Source adoption remains withheld: fresh all-three current ELF identities,
 full-prover fixedcoin1000/exact proof bytes/native refinement/events/E1/L1/L2/L3/
 selectedclient/quiet median<15s and <=10% slowdown remain mandatory. Factory
 checks do not replace them. The focused packet audit is recorded separately.
+
+Final focused audit at099a00da4b: exit0, wall0.15s, peak102055936B RSS,
+swap0, full axioms N/A. Exact command/direct-input hashes in audit-receipt.json;
+stdout/time and integrity.json retained. This is new packet consistency evidence,
+not a full regression, unchanged proof replay or missing native theorem.
