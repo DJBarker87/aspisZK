@@ -1,0 +1,61 @@
+Port5Q2_ReaderValidate.lean:61:25: warning: This simp argument is unused:
+  core.cmp.PartialEqU32
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵a̵n̵y̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵3̵2̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲L̲i̲s̲t̲.̲a̲n̲y̲M̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:61:47: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [List.anyM, ̲core.cmp.PartialEqU32,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q2_ReaderValidate.lean:79:111: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≤ -1
+  f - g + h ≤ -2
+  e ≥ 0
+  e + f - g ≥ 0
+where
+ e := ↑(↑q).length
+ f := ↑tail.length
+ g := ↑↑22#usize
+ h := ↑Usize.max
+Port5Q2_ReaderValidate.lean:83:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (↑i ≤ (↑q).length) ?m.145 ?m.146
+in the target expression
+  (if ↑i ≤ q.to_slice.length then ok ⟨List.slice 0 ↑i ↑q.to_slice, ⋯⟩ else fail Error.panic) = ok front
+
+q : Std.Array U32 22#usize
+i : Usize
+pre tail : List U32
+x : U32
+shape : ↑q = pre ++ x :: tail
+index : ↑i = pre.length
+room : ↑i < (↑q).length
+read : q.index_usize i = ok (↑q)[↑i]
+valueEq : (↑q)[↑i] = x
+front : Slice U32 := ⟨pre, ⋯⟩
+⊢ (if ↑i ≤ q.to_slice.length then ok ⟨List.slice 0 ↑i ↑q.to_slice, ⋯⟩ else fail Error.panic) = ok front
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port5Q2_ReaderValidate.lean:72:56: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.Port5Q2_ReaderValidate.contains' depends on axioms: [propext]

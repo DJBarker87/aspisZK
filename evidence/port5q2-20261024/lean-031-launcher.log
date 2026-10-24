@@ -1,0 +1,17 @@
+{"attempt": "lean-031", "exit_status": 0, "wall_seconds": 2.115799681021599, "peak_rss_kib": "4392868", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.U32.wrapping_shl : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+BitVec.toNat_shiftLeft {v n : ℕ} {x : BitVec v} : (x <<< n).toNat = x.toNat <<< n % 2 ^ v
+Nat.shiftLeft_eq (a b : ℕ) : a <<< b = a * 2 ^ b
+
+...
+def Aeneas.Std.U32.wrapping_shl : U32 → U32 → U32 :=
+fun x s => UScalar.wrapping_shl x s
+def Aeneas.Std.UScalar.wrapping_shl : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.shiftLeft (↑s % ty.numBits)#uscalar
+BitVec.toNat_shiftLeft {v n : ℕ} {x : BitVec v} : (x <<< n).toNat = x.toNat <<< n % 2 ^ v
+Nat.shiftLeft_eq (a b : ℕ) : a <<< b = a * 2 ^ b
+
+Running as unit: run-r78988f86ef87471898942fda5648300b.scope; invocation ID: 339d87086a2d4647a0edc94169ed36a7

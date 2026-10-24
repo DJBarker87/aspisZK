@@ -22,12 +22,29 @@ theorem reference_{kind} (r : verifier.Reader) :
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro pair success
   rcases pair with ⟨bytes,out⟩
-  dsimp only
-  simp only [lift,bind_tc_ok]
+  try dsimp only
+  simp only [lift,bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro value decoded
   cases value <;> rfl
 
 #print axioms reference_{kind}
+'''
+for kind,width in [('k',16),('e',32)]:
+ out+=f'''
+/-- Bounded CURRENT scalar helper with an arbitrary debug panic handler.
+The field codec is the separately certified concrete content interpretation. -/
+theorem current_{kind}
+    (unwrap : (N : Usize) → core.result.Result (Array U8 N) core.array.TryFromSliceError → Result (Array U8 N))
+    (unwrap_ok : ∀ N b, unwrap N (.Ok b)=ok b)
+    (r : verifier.Reader) (bound : r.at.val+{width}≤r.bytes.val.length)
+    (size : r.bytes.val.length≤4096) :
+    read{kind.upper()} (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) decode{kind.upper()} r=CheckpointBytes3Reader.read{kind.upper()} r := by
+  rw [← reference_{kind} r]
+  unfold read{kind.upper()}
+  dsimp only
+  rw [Port5Q2_ReaderRaw.reference {width}#usize (unwrap {width}#usize) (unwrap_ok {width}#usize) r bound size]
+
+#print axioms current_{kind}
 '''
 out+='end AspisR1.Port5Q2_ReaderScalar\nend\n';(L/'Port5Q2_ReaderScalar.lean').write_text(out);(E/'scalar-emission.json').write_text(json.dumps({'source_sha256':hashlib.sha256(s.encode()).hexdigest(),'spans':spans,'module_sha256':hashlib.sha256(out.encode()).hexdigest(),'changes':['raw reader and field from_le_bytes are explicit leaves','namespace/carriers reused from AspisR1Stage2'],'external_template_imported':False},indent=2)+'\n')

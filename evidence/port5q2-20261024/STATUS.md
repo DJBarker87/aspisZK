@@ -94,3 +94,38 @@ These discharge current helper control/cursor transport; the scalar decoder and
 actual native library/runtime interpretation remain explicit. Early semantic
 normalization elaboration failures are excluded and replaced by ten fresh-name
 bind decompositions; none timed out or consumed extra resources.
+
+Reader continuation: scalar helper FULL Result normalization accepted024 and
+bounded CURRENT raw+scalar composition accepted027 (all four top audits standard).
+Option.ok_or is instantiated with existing Port1_LibrarySource.okOr under the
+existing TrustedStd boundary, not a new axiom. Reference field decode contracts
+remain independently pinned native/P6 obligations.
+
+The newly emitted validator has an ill-typed18#i32 argument at cached Std's U32
+wrapping_shl. The unqualified raw-emission import is stopped. The corrected
+candidate explicitly rebases ONLY that literal to18#u32 and records the carrier
+substitution. No native Rust behavior is changed. The initial monolithic
+iteration proof028 hit the standard heartbeat ceiling after prefix-read errors;
+it was split: Port5Q2_ReaderPrefix.read accepted029 proves exact native prefix
+contents. Replacement030 exposed remaining concrete shift normalization at the
+same default heartbeat ceiling. That numeral reduction is now isolated into a
+symbolic BitVec shift lemma; no limits/options are raised and no unchanged
+failed job is rerun. Validator iteration has no proof credit yet.
+
+Stage 5: COMPLETE validator Result transport now accepted037: exact physical
+prefix and actual query reads, duplicate/out-of-range rejection, no assumed
+successful validation. The isolated shift lemma033 uses BitVec's closed form
+and small exponent arithmetic instead of concrete shift reduction. All top
+axioms standard;035 was the successful iteration predecessor. The two heartbeat
+failures are excluded and source-changed/split before replacement.
+
+Port5Q2_Checkpoint.accepted accepted038 composes ONE accepted TX1 and the
+reader on its SAME returned saved Vec. It constructs state provenance from
+that prefix and gives complete returned BodyMatches and all six ordered model
+reads. It does not accept a free S1S7S8StateProvenance, separate writer success,
+query success, flush success or combined run. It retains SessionAPrepare,
+SessionABasis/SessionABackends,line canonicality,caller/ROM and LOCAL observed
+value/basis binding. Model Prepared is still the decoded immutable inventory;
+identification with frozen2's Context/Data Prepared is NOT inferred. Checkpoint8
+remains the reference selector with the separately pinned native domain admission.
+This is a concrete conditional row improvement, not deployed S2 closure.

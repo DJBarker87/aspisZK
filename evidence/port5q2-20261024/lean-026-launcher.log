@@ -1,0 +1,61 @@
+{"attempt": "lean-026", "exit_status": 1, "wall_seconds": 2.1147065040131565, "peak_rss_kib": "4396920", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_ReaderScalar.reference_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.reference_e' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.current_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.current_e' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+'AspisR1.Port5Q2_ReaderScalar.reference_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_ReaderScalar.reference_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+Port5Q2_ReaderScalar.lean:75:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port5Q2_ReaderRaw.raw 16#usize (unwrap 16#usize) r
+in the target expression
+  (do
+      let (a, self1) ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 16#usize r
+      let s ← lift a.to_slice
+      let o ← decodeK s
+      let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+      ok (r, self1)) =
+    do
+    let (a, self1) ← CheckpointBytes3Reader.raw 16#usize r
+    let s ← lift
+...
+fier.Error.Checkpoint
+      ok (r, self1)) =
+    do
+    let (a, self1) ← CheckpointBytes3Reader.raw 16#usize r
+    let s ← lift a.to_slice
+    let o ← decodeK s
+    let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+    ok (r, self1)
+'AspisR1.Port5Q2_ReaderScalar.current_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+Port5Q2_ReaderScalar.lean:89:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r
+in the target expression
+  (do
+      let (a, self1) ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r
+      let s ← lift a.to_slice
+      let o ← decodeE s
+      let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+      ok (r, self1)) =
+    do
+    let (a, self1) ← CheckpointBytes3Reader.raw 32#usize r
+    let s ← lift a.to_slice
+    let o ← decodeE s
+    let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+    ok (r, self1)
+
+unwrap : (N : Usize) → core.result.Result (Std.Array U8 N) core.array.TryFromSliceError → Result (Std.Array U8 N)
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+r : verifier.Reader
+bound : ↑r.at + 32 ≤ (↑r.bytes).length
+size : (↑r.bytes).length ≤ 4096
+⊢ (do
+      let (a, self1) ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r
+      let s ← lift a.to_slice
+      let o ← decodeE s
+      let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+      ok (r, self1)) =
+    do
+    let (a, self1) ← CheckpointBytes3Reader.raw 32#usize r
+    let s ← lift a.to_slice
+    let o ← decodeE s
+    let r ← Port1_LibrarySource.okOr o verifier.Error.Checkpoint
+    ok (r, self1)
+'AspisR1.Port5Q2_ReaderScalar.current_e' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc2d74a09ed4e4fecad1dc2e2201a219b.scope; invocation ID: 78e3f81a5c6440c78def9890fac83396
