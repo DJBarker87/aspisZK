@@ -27,3 +27,6 @@ pub fn Port20ALLOC_qm31(n: usize, value: field::QM31) -> Result<alloc::vec::Vec<
 pub fn Port20ALLOC_row(n: usize, value: [u64;4]) -> Result<alloc::vec::Vec<[u64;4]>,r0::Error> {
     r0::heap::filled(n,value)
 }
+
+#[cfg(kani)]
+mod Port20ALLOC_kani;
