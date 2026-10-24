@@ -1,0 +1,158 @@
+--- a/src/extract/ExtractBase.ml
++++ b/src/extract/ExtractBase.ml
+@@ -2146,6 +2146,7 @@
+               trait_ref.trait_decl_ref.trait_decl_id type_id
+           in
+           name_from_type_ident name
++      | TProverRwNonZeroI32 -> "nz"
+       | TNever | TError -> "x"
+       | TDynTrait _ -> "dyn")
+ 
+--- a/src/extract/ExtractTypes.ml
++++ b/src/extract/ExtractTypes.ml
+@@ -456,6 +456,10 @@
+   | TVar var ->
+       let origin, id = origin_from_de_bruijn_var var in
+       F.pp_print_string fmt (ctx_get_type_var span origin id ctx)
++  | TProverRwNonZeroI32 ->
++      [%cassert] span (Config.backend () = Lean)
++        "ProverRwRngExtractor refined I32 supports only Lean";
++      F.pp_print_string fmt "{ x : I32 // x.val ≠ 0 }"
+   | TLiteral lty -> extract_literal_type ctx fmt lty
+   | TArrow (arg_ty, ret_ty) ->
+       if inside then F.pp_print_string fmt "(";
+--- a/src/interp/InterpExpressions.ml
++++ b/src/interp/InterpExpressions.ml
+@@ -796,6 +796,9 @@
+     * (SymbolicAst.expr -> SymbolicAst.expr) =
+   (* Evaluate the operand *)
+   let v, ctx, cc = eval_operand config span op ctx in
++  (match v.ty with
++  | TPattern _ -> [%craise] span "ProverRwRngExtractor: refined unary/cast operation unsupported"
++  | _ -> ());
+   (* There is a special case for casts which convert dyn traits (for instance:
+      [Box<...>] to [Box<dyn ...>]) *)
+   match unop with
+@@ -1153,6 +1156,10 @@
+     * (SymbolicAst.expr -> SymbolicAst.expr) =
+   (* Evaluate the operands *)
+   let (v1, v2), ctx, cc = eval_two_operands config span op1 op2 ctx in
++  (match (v1.ty, v2.ty) with
++  | TPattern _, _ | _, TPattern _ ->
++      [%craise] span "ProverRwRngExtractor: refined binary/comparison operation unsupported"
++  | _ -> ());
+   (* Generate a fresh symbolic value to store the result *)
+   let res_sv_id = ctx.fresh_symbolic_value_id () in
+   let res_sv_ty =
+--- a/src/llbc/Types.ml
++++ b/src/llbc/Types.ml
+@@ -11,3 +11,18 @@
+     Note that using this type (rather than, e.g., [ty]) only has an informative
+     purpose. *)
+ type norm_proj_ty = ty [@@deriving show, eq, ord]
++
++(* ProverRwRngExtractor: an exact refined scalar, never an I32 alias.
++   No range reordering, generalized pattern or unchecked constructor support. *)
++let prover_rw_nonzero_i32_pattern (ty : ty) : bool =
++  let bound (c : constant_expr) expected =
++    match (c.ty, c.kind) with
++    | TLiteral (TInt I32), CLiteral (Charon.Values.VScalar (Charon.Values.SignedScalar (I32, n))) ->
++        Z.equal n (Z.of_string expected)
++    | _ -> false
++  in
++  match ty with
++  | TPattern (TLiteral (TInt I32), OrPattern [Range (a,b); Range (c,d)]) ->
++      bound a "-2147483648" && bound b "-1" && bound c "1" && bound d "2147483647"
++  | _ -> false
++
+--- a/src/llbc/TypesAnalysis.ml
++++ b/src/llbc/TypesAnalysis.ml
+@@ -99,7 +99,15 @@
+   let param_info = { under_borrow = false; under_mut_borrow = false } in
+   let param_infos = List.map (fun _ -> param_info) def.generics.types in
+   let is_tuple_struct =
+-    !Config.use_tuple_structs && (not is_rec) && type_decl_is_tuple_struct def
++    let retained_refined_record =
++      match def.item_meta.name with
++      | [PeIdent ("core",0); PeIdent ("num",0); PeIdent ("niche_types",0); PeIdent ("NonZeroI32Inner",0)]
++      | [PeIdent ("core",0); PeIdent ("num",0); PeIdent ("nonzero",0); PeIdent ("NonZero",0)]
++      | [PeIdent ("getrandom",0); PeIdent ("error",0); PeIdent ("Error",0)] -> true
++      | _ -> false
++    in
++    !Config.use_tuple_structs && (not retained_refined_record)
++    && (not is_rec) && type_decl_is_tuple_struct def
+   in
+   let has_regions = List.length def.generics.regions > 0 in
+   let name_matcher_ctx : Charon.NameMatcher.ctx =
+@@ -284,6 +292,7 @@
+   let rec analyze (span : Meta.span option) (expl_info : expl_info)
+       (ty_info : partial_type_info) (ty : ty) : partial_type_info =
+     match ty with
++    | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> ty_info
+     | TLiteral _ | TNever | TDynTrait _ -> ty_info
+     | TTraitType (tref, _, _) ->
+         (* TODO: normalize the trait types.
+@@ -804,6 +813,7 @@
+                 | TBox | TStr -> super#visit_ty outer ty)
+           end
+         | TArray _ | TSlice _ -> super#visit_ty outer ty
++        | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> ()
+         | TVar _ | TLiteral _ | TNever -> ()
+         | TRef (r, ref_ty, _) ->
+             self#visit_region outer r;
+--- a/src/pure/PrintPure.ml
++++ b/src/pure/PrintPure.ml
+@@ -311,6 +311,7 @@
+           let ty_s = type_id_to_string env id ^ generics_s in
+           if generics <> [] && inside then "(" ^ ty_s ^ ")" else ty_s)
+   | TVar tv -> type_db_var_to_string env tv
++  | TProverRwNonZeroI32 -> "ProverRwRngExtractor.NonZeroI32"
+   | TLiteral lty -> literal_type_to_string lty
+   | TArrow (arg_ty, ret_ty) ->
+       let ty =
+--- a/src/pure/Pure.ml
++++ b/src/pure/Pure.ml
+@@ -566,6 +566,9 @@
+   | TVar of type_var_id de_bruijn_var
+     (* Note: the `de_bruijn_id`s are incorrect, see comment on `translate_region_binder` *)
+   | TLiteral of literal_type
++  | TProverRwNonZeroI32
++      (** Experimental exact I32 nonzero refinement. No literal constructor,
++          projection, cast or implicit coercion exists for this node. *)
+   | TArrow of ty * ty
+   | TTraitType of trait_ref * assoc_type_id
+   | TNever
+--- a/src/symbolic/SymbolicToPureTypes.ml
++++ b/src/symbolic/SymbolicToPureTypes.ml
+@@ -189,6 +189,7 @@
+   | TVar var ->
+       TVar var
+       (* Note: the `de_bruijn_id`s are incorrect, see comment on `translate_region_binder` *)
++  | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> TProverRwNonZeroI32
+   | TLiteral ty -> TLiteral (translate_literal_type ty)
+   | TNever -> TNever
+   | TRef (_, rty, _) -> translate span rty
+@@ -407,6 +408,7 @@
+           { types = [ ty ]; const_generics = []; trait_refs = [] } )
+   | TVar var -> TVar var
+   | TNever -> TNever
++  | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> TProverRwNonZeroI32
+   | TLiteral lty -> TLiteral (translate_literal_type lty)
+   | TRef (_, rty, _) -> translate rty
+   | TRawPtr (ty, rkind) ->
+@@ -520,6 +522,7 @@
+                   "Unreachable: boxes receive exactly one type parameter")
+         | TTuple -> List.iter (explore outer_regions) generics.types)
+     | T.TArray (ty, _) | T.TSlice ty -> explore outer_regions ty
++    | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> save_count outer_regions
+     | TVar _ | TNever | TLiteral _ -> save_count outer_regions
+     | TRef (r, rty, rkind) -> (
+         match rkind with
+@@ -661,6 +664,7 @@
+         if keep_adt outer_regions ty then
+           Some (translate_fwd_ty span decls_ctx ty)
+         else None
++    | TPattern _ when Types.prover_rw_nonzero_i32_pattern ty -> stop outer_regions ty
+     | TVar _ | TNever | TLiteral _ -> stop outer_regions ty
+     | TRef (r, rty, rkind) -> (
+         match rkind with
