@@ -49,7 +49,7 @@ reclaimable build pagecache.052 explicitly removed22.91GB inactive file cache;
 uncapped resident reserve remained25,065,172,992 bytes. Finite capped maxima
 plus requested8GiB were34,762,391,552 bytes (32.375GiB, below55), but this added
 reserve plus7GiB OS/control headroom totaled67,343,757,312 bytes versus host
-66,698,661,888. That EXTRA design reserve check denied launch by644,095,424
+66,698,661,888. That EXTRA design reserve check denied launch by645,095,424
 bytes. This does not mean the mandatory55GiB reservation gate failed, nor prove
 that the host cannot run a focused job. No reserve/cap was lowered afterward.
 All Docker/process/service/cgroup snapshots and failed source versions remain.
@@ -81,3 +81,11 @@ prover identicalcoins>=1000, native source/effect refinement, outer8 adaptive
 policy/full ledger/error events, E1/L1/L2/L3, native selected client, quiet<15s
 and H5<=10% remain open. Current f8c0ec72/63ad3e9c/121f3e29 ELF pins are targets
 only, not reused as new identity gates. Generic96 remains outside scope.
+
+Local audit.py passes exit0,0.390766s,102055936-byte peak RSS; swap N/A
+(macOS time does not expose it). Exact command, preflight source/dependency
+hashes, revisionf61b03d2ab, full stdout/time and N/A axioms are retained in
+local-audit-*.json/log. It checks the prospective/source/056 identities, all
+three rejected admissions, archived source hashes and absence of compiled or
+oversized JSON artifacts. This is read-only evidence validation, not proof
+replay or native/ELF validation. No unchanged full regression was run.
