@@ -29,7 +29,7 @@ try:
  index={r['path']:r for r in rows};check('unique archive paths',len(index)==len(rows))
  old=json.loads(immutable('evidence/sbf-identity-20261024/current-content.json'));prefix=old['root']+'/platform-tools/'
  for name,r in old['pins'].items():
-  check('baseline remains exact '+name,name.startswith(prefix) and index[name[len(prefix):]].get('current_sha256')==r['sha256'] and index[name[len(prefix):]]['current_size']==r['bytes'])
+  check('baseline remains exact '+name,name.startswith(prefix) and r['resolved'].startswith(prefix) and index[r['resolved'][len(prefix):]].get('current_sha256')==r['sha256'] and index[r['resolved'][len(prefix):]]['current_size']==r['bytes'])
  check('all packaged targets',all(any(r['path'].startswith('rust/lib/rustlib/'+target+'/lib/') for r in rows) for target in ['sbf-solana-solana','sbpf-solana-solana','sbpfv1-solana-solana','sbpfv2-solana-solana','x86_64-unknown-linux-gnu']))
  s10='docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/'
  b=immutable(s10+'source-inputs.json');m=json.loads(b);check('frozen manifest exact',sha(b)=='a84a528cfc4b294c603fe5381343cdaf9df0547467bcc94e61a67e5111adb9d1' and len(m['files'])==7978)

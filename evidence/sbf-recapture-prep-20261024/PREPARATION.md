@@ -68,3 +68,14 @@ before=after P7 is the reviewed compilation boundary, not a proved instance.
 No new trust, historical certification, compiler correctness, native memory/
 effect or security claim. Both deployed security targets remain not established.
 All task keys retained; no wallet/key read, mutation, cleanup, RPC or chain work.
+
+Final focused audit:10376 checks passed, including all2230 reviewed current-content
+pins at their recorded resolved paths and every frozen manifest record's Git
+blob/mode/hash association. Failed first checker (2293 checks, exit1,0.035186s,
+33177600-byte process peak,swap0) is retained with its exact source. It compared
+the clang symlink row to a resolved-file content digest. Correction uses the
+baseline's already recorded resolved path; no acquisition or host scan rerun.
+Final audit source changed, so the focused offline rerun is justified. Actual
+invocation includes Python -B (bytecode suppression); the audit's own command
+field omits that interpreter flag. Transport commands for host work are exact.
+Report-only edits follow audit and do not change measured scripts or inputs.
