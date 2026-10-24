@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 22:18 BST
+## Current coordinator checkpoint — 2026-10-24 22:22 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -38,6 +38,11 @@ Latest complete capture denies all proposed sizes on a4KiB counter mismatch;
 ResourceSTAT87430 investigates primary kernel semantics and conservative
 full-charge/no-credit accounting. No heavy consumer is authorized.
 No production adoption.
+
+Session A64901f632b same-account source packet is independently reviewed:
+actual proof/public account reads and original proof slice now survive the
+owned-stage1-to-prepare/numeric composition. Native SDK candidate remains
+UNCHECKED after memory/import failures; no cap raise or new admission.
 
 Session A3ae2507a57 Claims-step packet is now independently reviewed: exact
 extracted owned update, bounded finite composition and complete three-row
