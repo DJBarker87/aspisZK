@@ -1,0 +1,22 @@
+Port4C_Reverse.lean:32:2: error: 'change' tactic failed, pattern
+  (do
+      let lt ← ok (decide (0#usize < end1))
+      let r ←
+        if lt = true then do
+            let b ← core.iter.range.StepUsize.backward_checked end1 1#usize
+            match b with
+              | none => fail Error.panic
+              | some e => ok (some e, { start := 0#usize, «end» := e })
+          else ok (none, { start := 0#usize, «end» := end1 })
+      ok (r.1, { iter := r.2 })) =
+    ok (some i, reverse i)
+is not definitionally equal to target
+  (do
+      let __x ←
+        (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize).next_back
+            { iter := { start := 0#usize, «end» := end1 } }.iter
+      match __x with
+        | (o, it) => ok (o, { iter := it })) =
+    ok (some i, { iter := { start := 0#usize, «end» := i } })
+'AspisR1.Port4C_Reverse.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_Reverse.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

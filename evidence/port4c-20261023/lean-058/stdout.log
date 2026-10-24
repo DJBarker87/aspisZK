@@ -1,0 +1,80 @@
+Port4C_PrefixMeaning.lean:29:95: error: No goals to be solved
+Port4C_PrefixMeaning.lean:29:49: error: unsolved goals
+ops : Leaves
+multiply : ops.mul = AspisR1Qm31ArithmeticProbe.field.M31.mul
+flat : Slice U32
+bound : (↑flat).length ≤ 110
+fuel : ℕ
+ih :
+  ∀ (prefixes : alloc.vec.Vec U32) (product : U32) (index : Usize),
+    ↑index + fuel = (↑flat).length →
+      (↑prefixes).length + fuel ≤ 110 →
+        ∃ out finalProduct,
+          verifier.batch_prefix_products_loop ops flat prefixes product index = ok (out, finalProduct) ∧
+            (↑out, finalProduct) = model (List.drop ↑index ↑flat) (↑prefixes) product
+prefixes : alloc.vec.Vec U32
+product : U32
+index : Usize
+remaining : ↑index + (fuel + 1) = (↑flat).length
+capacity : (↑prefixes).length + (fuel + 1) ≤ 110
+active : index < flat.len
+cap : 110 < Usize.max
+⊢ (↑prefixes).length < Usize.max
+Port4C_PrefixMeaning.lean:37:58: error: unsolved goals
+ops : Leaves
+multiply : ops.mul = AspisR1Qm31ArithmeticProbe.field.M31.mul
+flat : Slice U32
+bound : (↑flat).length ≤ 110
+fuel : ℕ
+ih :
+  ∀ (prefixes : alloc.vec.Vec U32) (product : U32) (index : Usize),
+    ↑index + fuel = (↑flat).length →
+      (↑prefixes).length + fuel ≤ 110 →
+        ∃ out finalProduct,
+          verifier.batch_prefix_products_loop ops flat prefixes product index = ok (out, finalProduct) ∧
+            (↑out, finalProduct) = model (List.drop ↑index ↑flat) (↑prefixes) product
+prefixes : alloc.vec.Vec U32
+product : U32
+index : Usize
+remaining : ↑index + (fuel + 1) = (↑flat).length
+capacity : (↑prefixes).length + (fuel + 1) ≤ 110
+active : index < flat.len
+hcap : (↑prefixes).length < Usize.max
+x : U32
+hread : flat.index_usize index = ok x
+hx : x = (↑flat)[↑index]
+prefixes1 : alloc.vec.Vec U32
+hpush : prefixes.push product = ok prefixes1
+hprefix : ↑prefixes1 = ↑prefixes ++ [product]
+index1 : Usize := index.wrapping_add 1#usize
+hv : ↑index1 = ↑index + 1
+cap1 : (↑prefixes1).length + fuel ≤ 110
+out : alloc.vec.Vec aspis_core.field.M31
+finalProduct : aspis_core.field.M31
+tail : verifier.batch_prefix_products_loop ops flat prefixes1 (wordMul product x) index1 = ok (out, finalProduct)
+meaning : (↑out, finalProduct) = model (List.drop ↑index1 ↑flat) (↑prefixes1) (wordMul product x)
+⊢ ok (cont (prefixes1, wordMul product x, index.wrapping_add 1#usize)) =
+    ok (cont (prefixes1, wordMul product x, index1))
+Port4C_PrefixMeaning.lean:46:8: error: Type mismatch: After simplification, term
+  List.drop_eq_getElem_cons
+    (Decidable.byContradiction fun a => loop_total._proof_8 flat fuel prefixes index remaining prefixes1 a)
+ has type
+  List.drop ↑index ↑flat = (↑flat)[↑index] :: List.drop (↑index + 1) ↑flat
+but is expected to have type
+  List.drop ↑index ↑flat = x :: List.drop (↑index + 1) ↑flat
+Port4C_PrefixMeaning.lean:24:17: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵b̵a̵t̵c̵h̵_̵p̵r̵e̵f̵i̵x̵_̵p̵r̵o̵d̵u̵c̵t̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲b̲a̲t̲c̲h̲_̲p̲r̲e̲f̲i̲x̲_̲p̲r̲o̲d̲u̲c̲t̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ inactive]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_PrefixMeaning.lean:43:17: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_PrefixMeaning.loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_PrefixMeaning.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

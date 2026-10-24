@@ -1,0 +1,55 @@
+{"attempt": "lean-024", "exit_status": 1, "wall_seconds": 3.8012614580075024, "peak_rss_kib": "4410200", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_GeometryGather.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_GeometryGather.lean:56:48: error: Application type mismatch: The argument
+  h
+has type
+  (match parent with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let p ← ops.op15 val
+      let i ← u / 4#usize
+      let i1 ← lift (Usize.wrapping_mul i 4#usize)
+      let r2 ← ops.op12 i1
+      let r3 ←
+        match r2 with
+          | core.result.Result.Ok x => ok (core.result.Result.Ok x)
+          | core.result.Result.Err e => do
+            let e1 ←
+              verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once
+                  { op0 := @Ops.op0 CoreError ops, op1 := @Ops.op1 CoreError ops,
+                    op2 := fun {T 
+...
+ := ops.op10, op11 := ops.op11,
+                        op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+                        mapIterator := @Ops.mapIterator CoreError ops })
+                    i4 ()
+              if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                else do
+                  let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                  let line_z_values1 ← zs.push line_z
+                  ok (cont (iter1, line_z_values1, flat1))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r6)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r4 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r4)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+            (core.convert.FromSame verifier.Error) residual
+      ok (done r2)) =
+    ok (cont (iterOut, zsOut, flatOut))
+but is expected to have type
+  (do
+      let x ← ?m.343
+      ?m.344 x) =
+    ok ?m.345
+in the application
+  bind_success ?m.343 ?m.344 ?m.345 h
+'AspisR1.Port4C_GeometryGather.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6232ec9f2dc045c3bbb343d34424e79a.scope; invocation ID: 0c1bbe53ac424e39a98e6c6e993855f0

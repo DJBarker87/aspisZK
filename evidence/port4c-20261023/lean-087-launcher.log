@@ -1,0 +1,52 @@
+{"attempt": "lean-087", "exit_status": 1, "wall_seconds": 3.677058481000131, "peak_rss_kib": "4400308", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_Installed.writer_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_Installed.lean:12:14: error(lean.unknownIdentifier): Unknown identifier `AspisR1Stage2.Stage2Finish.FinishOps`
+Port4C_Installed.lean:13:2: error(lean.unknownIdentifier): Unknown identifier `Port3_Parents.installed`
+Port4C_Installed.lean:22:14: error(lean.unknownIdentifier): Unknown identifier `AspisR1Stage2.Stage2Finish.FinishOps`
+Port4C_Installed.lean:43:53: error: Application type mismatch: The argument
+  hs
+has type
+  (installed base reserved batch geometryOps queryOps finish).op16 = ok sv
+but is expected to have type
+  ok 10#usize = ok sv
+in the application
+  ok.inj hs
+Port4C_Installed.lean:47:4: error: 'change' tactic failed, pattern
+  Port3_Constructor.extracted (Port3_Construct
+...
+  (installed base reserved batch geometryOps queryOps finish).op5 D proof p root 0#usize hash =
+    ok (core.result.Result.Ok ())
+hgeom :
+  (installed base reserved batch geometryOps queryOps finish).op11 p.queries 0#usize split =
+    ok (core.result.Result.Ok geometry)
+hpending :
+  (installed base reserved batch geometryOps queryOps finish).op10 initial.weights.deref =
+    ok (core.result.Result.Ok pending)
+hquery :
+  (installed base reserved batch geometryOps queryOps finish).op6 proof p initial g none geometry pending split =
+    ok (core.result.Result.Ok returned)
+hflush :
+  (installed base reserved batch geometryOps queryOps finish).op9 returned.2 returned.1.weights.deref = ok flushed
+hw : ↑a.weights = ↑flushed
+hr : a.rhs = returned.1.rhs
+hp : a.power = returned.1.power
+hn : a.next = returned.1.next
+splitValue : ↑split = 10
+init : Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 = ok (core.result.Result.Ok initial)
+initialFields :
+  reserved = true ∧
+    ↑initial.weights = List.replicate 64 Port2_Initial.zeroK ∧
+      initial.rhs = Port2_Initial.zeroE ∧ initial.power = Port2_Initial.oneK ∧ initial.next = 0#usize
+size : (↑initial.weights).length = 64
+powerCanonical : Port3_FlushInstall.Canonical initial.power
+rhsCanonical : Port4C_QueryArithmetic.CanonE initial.rhs
+⊢ reserved = true ∧
+    ↑split = 10 ∧
+      ↑a.next = 10 ∧
+        (↑a.weights).length = 64 ∧
+          Port4C_QueryArithmetic.CanonE a.rhs ∧
+            Port3_FlushInstall.Canonical a.power ∧
+              (∀ q ∈ ↑a.weights, Port3_FlushInstall.Canonical q) ∧
+                ∃ sum, ∀ (i : Fin 64), (CheckpointBytes5Output.accumulator a).weights i = Port4C_SumField.weight sum ↑i
+'AspisR1.Port4C_Installed.writer_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b5ca6db25b941a18c1a517f79ca25ee.scope; invocation ID: 94b89d4b62d448bf8e5b120b17517fd5

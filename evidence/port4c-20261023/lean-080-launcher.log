@@ -1,0 +1,60 @@
+{"attempt": "lean-080", "exit_status": 1, "wall_seconds": 2.409764529002132, "peak_rss_kib": "4401304", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_GeometryInverse.prefix_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port4C_GeometryInverse.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_GeometryInverse.lean:29:76: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+flat : Slice U32
+bound : (↑flat).length ≤ 110
+cur : alloc.vec.Vec aspis_core.field.M31
+prod : aspis_core.field.M31
+run : Port4C_NativePrefix.verifier.batch_prefix_products (leaves ops) flat = ok (cur, prod)
+meaning : (↑cur, prod) = S7Kani2PrefixLoop.model ↑flat [] 1#u32
+⊢ (↑flat).length = (↑(vec flat)).length
+Port4C_GeometryInverse.lean:33:76: error: Application type mismatch: The argument
+  sameModel
+has type
+  (↑cur, prod) = (↑old, oldProd)
+but is expected to have type
+  (cur, prod) = (old, oldProd)
+in the appli
+...
+Port4C_GeometryInverse.lean:29:76: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+flat : Slice U32
+bound : (↑flat).length ≤ 110
+cur : alloc.vec.Vec aspis_core.field.M31
+prod : aspis_core.field.M31
+run : Port4C_NativePrefix.verifier.batch_prefix_products (leaves ops) flat = ok (cur, prod)
+meaning : (↑cur, prod) = S7Kani2PrefixLoop.model ↑flat [] 1#u32
+⊢ (↑flat).length = (↑(vec flat)).length
+Port4C_GeometryInverse.lean:33:76: error: Application type mismatch: The argument
+  sameModel
+has type
+  (↑cur, prod) = (↑old, oldProd)
+but is expected to have type
+  (cur, prod) = (old, oldProd)
+in the application
+  congrArg Prod.snd sameModel
+Port4C_GeometryInverse.lean:67:2: error: 'change' tactic failed, pattern
+  (do
+      let r ← S7Kani2PrefixLoop.prefixes_owned flat (alloc.vec.Vec.new U32) 1#u32 0#usize
+      let suffix ← ops.op11 r.2.2
+      verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse flat.len) flat r.2.1 suffix inverse) =
+    ok out
+is not definitionally equal to target
+  (do
+      let (prefixes, product) ←
+        do
+          let r ← S7Kani2PrefixLoop.prefixes_owned (vec flat.deref) (alloc.vec.Vec.new U32) 1#u32 0#usize
+          ok (r.2.1, r.2.2)
+      let suffix ← ops.op11 product
+      verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse flat.len) flat prefixes suffix inverse) =
+    ok out
+'AspisR1.Port4C_GeometryInverse.prefix_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4C_GeometryInverse.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d758674f6f74fa0ab3f55917a1647bd.scope; invocation ID: 67b19e8ed6594703b76537d7645e5875

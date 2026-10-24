@@ -1,0 +1,42 @@
+{"attempt": "lean-045", "exit_status": 1, "wall_seconds": 4.301285054010805, "peak_rss_kib": "4407756", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_BasisOuter.checked_mul' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4C_BasisOuter.from_levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_BasisOuter.lean:76:4: error: Type mismatch
+  tail
+has type
+  verifier.accumulate_batched_with_node_loop0 ops 1#u32 node1 64#usize basis1 (n.wrapping_mul 2#usize) = ok out
+but is expected to have type
+  loop
+      (fun x =>
+        if x.2.2 < 64#usize then do
+          let basis1 ←
+            verifier.accumulate_batched_with_node_loop0_loop0 ops { start := 0#usize, «end» := x.2.2 } x.1 x.2.1 x.2.2
+          let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul x.1 x.1
+          let m2 ← S7Kani3BasisOuter.double m1
+          let node1 ← AspisR1Qm31ArithmeticProbe.field.M31.sub m2 1#u32
+          ok (cont (node1, basis1, x.2.2.wrapping_mul 2#usize))
+        else ok (done x.2.1))
+      (node
+...
+ (cont (node1, basis1, x.2.2.wrapping_mul 2#usize))
+        else ok (done x.2.1))
+      (node1, basis1, n.wrapping_mul 2#usize) =
+    ok out
+Port4C_BasisOuter.lean:46:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵a̵c̵c̵u̵m̵u̵l̵a̵t̵e̵_̵b̵a̵t̵c̵h̵e̵d̵_̵w̵i̵t̵h̵_̵n̵o̵d̵e̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲a̲c̲c̲u̲m̲u̲l̲a̲t̲e̲_̲b̲a̲t̲c̲h̲e̲d̲_̲w̲i̲t̲h̲_̲n̲o̲d̲e̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ inactive]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_BasisOuter.lean:73:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵a̵c̵c̵u̵m̵u̵l̵a̵t̵e̵_̵b̵a̵t̵c̵h̵e̵d̵_̵w̵i̵t̵h̵_̵n̵o̵d̵e̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲a̲c̲c̲u̲m̲u̲l̲a̲t̲e̲_̲b̲a̲t̲c̲h̲e̲d̲_̲w̲i̲t̲h̲_̲n̲o̲d̲e̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ if_pos a̵c̵t̵i̵v̵e̵,̵b̵l̵o̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵a̵c̵k̵e̵n̵d̵.̵s̵3̵_̵s̵4̵_̵m̵u̵l̵,̵b̵a̵c̵k̵e̵n̵d̵.̵s̵3̵_̵s̵4̵_̵d̵o̵u̵b̵l̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵a̵c̵k̵e̵n̵d̵.̵s̵3̵_̵s̵4̵_̵s̵u̵b̵,̵h̵s̵q̵u̵a̵r̵e̵,̵h̵d̵o̵u̵b̵l̵e̵,̵h̵s̵u̵b̵,̵l̵i̵f̵t̵]̵a̲c̲t̲i̲v̲e̲,̲ ̲b̲l̲o̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲a̲c̲k̲e̲n̲d̲.̲s̲3̲_̲s̲4̲_̲m̲u̲l̲,̲ ̲b̲a̲c̲k̲e̲n̲d̲.̲s̲3̲_̲s̲4̲_̲d̲o̲u̲b̲l̲e̲,̲ ̲b̲a̲c̲k̲e̲n̲d̲.̲s̲3̲_̲s̲4̲_̲s̲u̲b̲,̲ ̲h̲s̲q̲u̲a̲r̲e̲,̲ ̲h̲d̲o̲u̲b̲l̲e̲,̲ ̲h̲s̲u̲b̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_BasisOuter.checked_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_BasisOuter.from_levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re95a6d1a2c7547f69cc30d36102a9e2b.scope; invocation ID: 3109a8b247a141fcb4cc201684f55873

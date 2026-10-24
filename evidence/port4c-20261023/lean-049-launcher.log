@@ -1,0 +1,65 @@
+{"attempt": "lean-049", "exit_status": 1, "wall_seconds": 2.4585712279949803, "peak_rss_kib": "4395740", "swaps": "0", "print_axioms": ["'_private.Port4C_Accumulation.0.AspisR1.Port4C_Accumulation.backend_std' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.Port4C_Accumulation.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_Accumulation.lean:49:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(after.terms.wrapping_add 1#usize)
+in the target expression
+  ↑((fromBW after).terms.wrapping_add 1#usize) = t + 1
+
+ops : Ops
+backend : Port4C_BasisOuter.SessionABasis ops
+old : S8OwnedP6Finish.Weights
+p : verifier.Prepared
+a out : verifier.Accumulator
+b bout : verifier.BatchedWeights
+node : U32
+value : Stage2E
+sum : S7Kani3CallerTrace.Sum
+t : ℕ
+size : (↑a.weights).length = 64
+nextBound : ↑a.next ≤ 22
+termBound : t < 22
+powerCanonical : S7JoinBackendCarriers.Canonical (toK a.power)
+history : PushTrace old (toBW b) sum
+phase : Progress t 0 (toBW b)
+h✝² :
+  (do
+      let basis ← Port4C_
+...
+    (Port4C_RowStd.install ops).op15 11#u16 a.next rhs
+      let power ← (Port4C_RowStd.install ops).op9 a.power p.rho
+      let next ← lift (a.next.wrapping_add 1#usize)
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := next },
+            { raw := (fromBW after).raw, terms := terms })) =
+    ok (out, bout)
+terms : Usize
+hterms : lift ((fromBW after).terms.wrapping_add 1#usize) = ok terms
+h :
+  (do
+      let product ← (Port4C_RowStd.install ops).op3 value a.power
+      let rhs ← (Port4C_RowStd.install ops).op2 a.rhs product
+      (Port4C_RowStd.install ops).op15 11#u16 a.next rhs
+      let power ← (Port4C_RowStd.install ops).op9 a.power p.rho
+      let next ← lift (a.next.wrapping_add 1#usize)
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := next },
+            { raw := (fromBW after).raw, terms := terms })) =
+    ok (out, bout)
+same : (fromBW after).terms.wrapping_add 1#usize = terms
+⊢ ↑((fromBW after).terms.wrapping_add 1#usize) = t + 1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'_private.Port4C_Accumulation.0.AspisR1.Port4C_Accumulation.backend_std' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Port4C_Accumulation.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2613e978136a417d87cd5223ada68169.scope; invocation ID: fe3f9094d7b14a7fbd485334d7b0c657

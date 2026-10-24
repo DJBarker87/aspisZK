@@ -1,0 +1,54 @@
+{"attempt": "lean-068", "exit_status": 1, "wall_seconds": 5.432941798004322, "peak_rss_kib": "4384992", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_InverseLoop.from_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_InverseLoop.lean:33:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4C_Reverse.next 0#usize
+in the target expression
+  (do
+      let (o, iter1) ←
+        core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse 0#usize)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.
+...
+IterTraitsIteratorIterator.next
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse index)
+      match o with
+        | none => ok (done inverse)
+        | some i => do
+          let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+          let m1 ← ops.op9 suffix m
+          let (_, index_mut_back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+          have flat_inverse1 : alloc.vec.Vec aspis_core.field.M31 := index_mut_back m1
+          let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+          let suffix_inverse1 ← ops.op9 suffix m2
+          ok (cont (iter1, suffix_inverse1, flat_inverse1))) =
+    ok (cont (Port4C_Reverse.reverse i, suffix1, back newValue))
+Port4C_InverseLoop.lean:27:15: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:37:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_InverseLoop.from_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbff4c70910bf448fbc33de43e4e4801d.scope; invocation ID: a7572ae3530045c4bd29ea82308f4fbe

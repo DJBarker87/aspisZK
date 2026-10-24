@@ -1,0 +1,166 @@
+Port4C_InverseLoop.lean:51:57: error: Application type mismatch: The argument
+  h
+has type
+  Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i = ok out
+but is expected to have type
+  ↑i = n
+in the application
+  ih (back newValue) suffix1 i ?m.342 h
+Port4C_InverseLoop.lean:54:70: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+flat prefixes out : alloc.vec.Vec U32
+n : ℕ
+ih :
+  ∀ (inverse : alloc.vec.Vec U32) (suffix : U32) (index : Usize),
+    Port4C_OwnedInverse.inverse_owned flat prefixes inverse suffix index = ok out →
+      ↑index = n →
+        n ≤ 110 →
+          verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse index) flat prefixes suffix inverse =
+            ok out
+inverse : alloc.vec.Vec U32
+suffix : U32
+index : Usize
+hn : ↑index = n + 1
+bound : n + 1 ≤ 110
+nonzero : index ≠ 0#usize
+i : UScalar UScalarTy.Usize
+h✝⁴ :
+  (do
+      let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back m1
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+hsub : index - 1#usize = ok i
+hvalue : ↑i + 1 = ↑index
+hnext :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) (Port4C_Reverse.reverse index) =
+    ok (some i, Port4C_Reverse.reverse i)
+hiv : ↑i = n
+pref : U32
+hpref : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) prefixes i = ok pref
+h✝³ :
+  (do
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix pref
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back m1
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+newValue : AspisR1Qm31ArithmeticProbe.field.M31
+hnew : AspisR1Qm31ArithmeticProbe.field.M31.mul suffix pref = ok newValue
+h✝² :
+  (do
+      let (_, index_mut_back) ← alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i
+      have inverse1 : alloc.vec.Vec U32 := index_mut_back newValue
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+old : U32
+back : U32 → alloc.vec.Vec U32
+hmut : alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice U32) inverse i = ok (old, back)
+h✝¹ :
+  (let (_, index_mut_back) := (old, back)
+    have inverse1 := index_mut_back newValue;
+    do
+    let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i
+    let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+    Port4C_OwnedInverse.inverse_owned flat prefixes inverse1 suffix1 i) =
+    ok out
+x : U32
+hx : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice U32) flat i = ok x
+h✝ :
+  (do
+      let suffix1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix x
+      Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i) =
+    ok out
+suffix1 : AspisR1Qm31ArithmeticProbe.field.M31
+hsuffix : AspisR1Qm31ArithmeticProbe.field.M31.mul suffix x = ok suffix1
+h : Port4C_OwnedInverse.inverse_owned flat prefixes (back newValue) suffix1 i = ok out
+tail :
+  verifier.QueryGeometry.for_range_loop0_loop0 ops (Port4C_Reverse.reverse i) flat prefixes suffix1 (back newValue) =
+    ok out
+⊢ (let (o, iter1) := (some i, Port4C_Reverse.reverse i)
+    match o with
+    | none => ok (done inverse)
+    | some i => do
+      let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) prefixes i
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m
+      let (_, index_mut_back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) inverse i
+      let m2 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) flat i
+      let suffix_inverse1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul suffix m2
+      ok (cont (iter1, suffix_inverse1, index_mut_back m1))) =
+    ok (cont (Port4C_Reverse.reverse i, suffix1, back newValue))
+Port4C_InverseLoop.lean:27:15: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵ ̵at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:39:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:26: warning: This simp argument is unused:
+  hpref
+
+Hint: Omit it from the simp argument list.
+  simp only [multiply, ̲hp̵r̵e̵f̵,̵h̵new, ̲hmut, ̲hx, ̲hsuffix, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:32: warning: This simp argument is unused:
+  hnew
+
+Hint: Omit it from the simp argument list.
+  simp only [multiply, ̲hpref, ̲hn̵e̵w̵,̵h̵mut, ̲hx, ̲hsuffix, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:37: warning: This simp argument is unused:
+  hmut
+
+Hint: Omit it from the simp argument list.
+  simp only [multiply, ̲hpref, ̲hnew, ̲hm̵u̵t̵,̵h̵x, ̲hsuffix, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:42: warning: This simp argument is unused:
+  hx
+
+Hint: Omit it from the simp argument list.
+  simp only [multiply, ̲hpref, ̲hnew, ̲hmut, ̲hx̵,̵h̵suffix, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:45: warning: This simp argument is unused:
+  hsuffix
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵u̵l̵t̵i̵p̵l̵y̵,̵h̵p̵r̵e̵f̵,̵h̵n̵e̵w̵,̵h̵m̵u̵t̵,̵h̵x̵,̵h̵s̵u̵f̵f̵i̵x̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲m̲u̲l̲t̲i̲p̲l̲y̲,̲ ̲h̲p̲r̲e̲f̲,̲ ̲h̲n̲e̲w̲,̲ ̲h̲m̲u̲t̲,̲ ̲h̲x̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:57:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵u̵l̵t̵i̵p̵l̵y̵,̵h̵p̵r̵e̵f̵,̵h̵n̵e̵w̵,̵h̵m̵u̵t̵,̵h̵x̵,̵h̵s̵u̵f̵f̵i̵x̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲m̲u̲l̲t̲i̲p̲l̲y̲,̲ ̲h̲p̲r̲e̲f̲,̲ ̲h̲n̲e̲w̲,̲ ̲h̲m̲u̲t̲,̲ ̲h̲x̲,̲ ̲h̲s̲u̲f̲f̲i̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4C_InverseLoop.lean:60:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵bodyRun]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_InverseLoop.from_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,110 @@
+Port4C_Installed.lean:12:14: error(lean.unknownIdentifier): Unknown identifier `AspisR1Stage2.Stage2Finish.FinishOps`
+Port4C_Installed.lean:13:2: error(lean.unknownIdentifier): Unknown identifier `Port3_Parents.installed`
+Port4C_Installed.lean:22:14: error(lean.unknownIdentifier): Unknown identifier `AspisR1Stage2.Stage2Finish.FinishOps`
+Port4C_Installed.lean:43:53: error: Application type mismatch: The argument
+  hs
+has type
+  (installed base reserved batch geometryOps queryOps finish).op16 = ok sv
+but is expected to have type
+  ok 10#usize = ok sv
+in the application
+  ok.inj hs
+Port4C_Installed.lean:47:4: error: 'change' tactic failed, pattern
+  Port3_Constructor.extracted (Port3_Constructor.leaves reserved) AspisR1Stage2.transport.Variant.S2 = ?m.265
+is not definitionally equal to target
+  (installed base reserved batch geometryOps queryOps finish).op12 AspisR1Stage2.transport.Variant.S2 =
+    ok (core.result.Result.Ok initial)
+Port4C_Installed.lean:54:4: error: failed to synthesize
+  Decidable (Port3_FlushInstall.Canonical Port2_Initial.oneK)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port4C_Installed.lean:57:4: error: failed to synthesize
+  Decidable (Port4C_QueryArithmetic.CanonE Port2_Initial.zeroE)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port4C_Installed.lean:58:24: error(lean.unknownIdentifier): Unknown identifier `Port4C_Pending.accepted`
+Port4C_Installed.lean:38:93: error: unsolved goals
+CoreError : Type
+base : Ops
+reserved : Bool
+batch : Port3_NativeBatchBody.Ops
+geometryOps : Port3_NativeGeometryBody.Ops CoreError
+queryOps : Port3_NativeQueryBody.Ops
+finish : sorry
+basisBackend : Port4C_BasisOuter.SessionABasis queryOps
+arithmetic : Port4C_QueryArithmetic.SessionABackends queryOps
+lineCanonical :
+  ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (values : Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+    (inverses : Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+    (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+    queryOps.op16 alpha values inverses = ok value → Port4C_QueryArithmetic.CanonE value
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+split : Usize
+p : verifier.Prepared
+a : verifier.Accumulator
+rhoCanonical : Port3_FlushInstall.Canonical p.rho
+zero : aspis_core.field.wide_exact.WideExact
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+prep : core.result.Result verifier.Prepared verifier.Error
+initial : verifier.Accumulator
+root : Std.Array U8 32#usize
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+returned : verifier.Accumulator × verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+parsed : transport.Variant
+sv : Usize
+hs : (installed base reserved batch geometryOps queryOps finish).op16 = ok sv
+hsv : ↑split = ↑sv
+hparse : (installed base reserved batch geometryOps queryOps finish).op3 proof = ok (core.result.Result.Ok parsed)
+hscan : (installed base reserved batch geometryOps queryOps finish).op4 proof = ok (core.result.Result.Ok ())
+hzero : (installed base reserved batch geometryOps queryOps finish).op1 = ok zero
+hprep :
+  (installed base reserved batch geometryOps queryOps finish).op7 D semantic proof hash none
+      (Array.repeat 29#usize zero) =
+    ok (prep, g)
+hbranch : core.result.Result.Insts.CoreOpsTry.branch prep = ok (core.ops.control_flow.ControlFlow.Continue p)
+hinit :
+  (installed base reserved batch geometryOps queryOps finish).op12 AspisR1Stage2.transport.Variant.S2 =
+    ok (core.result.Result.Ok initial)
+hbatch :
+  (installed base reserved batch geometryOps queryOps finish).op5 D proof p root 0#usize hash =
+    ok (core.result.Result.Ok ())
+hgeom :
+  (installed base reserved batch geometryOps queryOps finish).op11 p.queries 0#usize split =
+    ok (core.result.Result.Ok geometry)
+hpending :
+  (installed base reserved batch geometryOps queryOps finish).op10 initial.weights.deref =
+    ok (core.result.Result.Ok pending)
+hquery :
+  (installed base reserved batch geometryOps queryOps finish).op6 proof p initial g none geometry pending split =
+    ok (core.result.Result.Ok returned)
+hflush :
+  (installed base reserved batch geometryOps queryOps finish).op9 returned.2 returned.1.weights.deref = ok flushed
+hw : ↑a.weights = ↑flushed
+hr : a.rhs = returned.1.rhs
+hp : a.power = returned.1.power
+hn : a.next = returned.1.next
+splitValue : ↑split = 10
+init : Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 = ok (core.result.Result.Ok initial)
+initialFields :
+  reserved = true ∧
+    ↑initial.weights = List.replicate 64 Port2_Initial.zeroK ∧
+      initial.rhs = Port2_Initial.zeroE ∧ initial.power = Port2_Initial.oneK ∧ initial.next = 0#usize
+size : (↑initial.weights).length = 64
+powerCanonical : Port3_FlushInstall.Canonical initial.power
+rhsCanonical : Port4C_QueryArithmetic.CanonE initial.rhs
+⊢ reserved = true ∧
+    ↑split = 10 ∧
+      ↑a.next = 10 ∧
+        (↑a.weights).length = 64 ∧
+          Port4C_QueryArithmetic.CanonE a.rhs ∧
+            Port3_FlushInstall.Canonical a.power ∧
+              (∀ q ∈ ↑a.weights, Port3_FlushInstall.Canonical q) ∧
+                ∃ sum, ∀ (i : Fin 64), (CheckpointBytes5Output.accumulator a).weights i = Port4C_SumField.weight sum ↑i
+'AspisR1.Port4C_Installed.writer_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

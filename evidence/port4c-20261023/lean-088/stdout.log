@@ -1,0 +1,6 @@
+def Aeneas.Std.alloc.vec.FromIteratorVec.from_iter : {T I IntoIter : Type} →
+  core.iter.traits.collect.IntoIterator I T IntoIter → I → Result (alloc.vec.Vec T) :=
+fun {T I IntoIter} IntoIteratorInst input => do
+  let iter ← IntoIteratorInst.into_iter input
+  let list ← alloc.vec.FromIteratorVec.iterToList IntoIteratorInst.iteratorInst iter []
+  if h : list.length ≤ Usize.max then ok ⟨list, h⟩ else fail Error.panic

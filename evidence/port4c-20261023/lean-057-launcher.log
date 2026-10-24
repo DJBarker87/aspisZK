@@ -1,0 +1,58 @@
+{"attempt": "lean-057", "exit_status": 1, "wall_seconds": 3.251353603001917, "peak_rss_kib": "4408836", "swaps": "0", "print_axioms": ["'AspisR1.Port4C_Reverse.zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4C_Reverse.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4C_Reverse.lean:39:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.StepUsize.backward_checked end1 1#usize
+in the target expression
+  (do
+      let __x ←
+        do
+          let b ← core.iter.range.StepUsize.backward_checked end1 1#usize
+          match b with
+            | none => fail Error.panic
+            | some e' => ok (some e', { start := 0#usize, «end» := e' })
+      ok (__x.1, { iter := __x.2 })) =
+    ok (some i, { iter := { start := 0#usize, «end» := i } })
+
+end1 : Usize
+positive : 0 < ↑end1
+i : UScalar UScalarTy.Usize
+hsub : UScalar.sub end1 1#usize = ok i
+hi : ↑i = ↑end1 - ↑1#usize
+value : ↑i = ↑end1 - 1
+back : core.iter.range
+...
+         match b with
+            | none => fail Error.panic
+            | some e' => ok (some e', { start := 0#usize, «end» := e' })
+      ok (__x.1, { iter := __x.2 })) =
+    ok (some i, { iter := { start := 0#usize, «end» := i } })
+
+end1 : Usize
+positive : 0 < ↑end1
+i : UScalar UScalarTy.Usize
+hsub : UScalar.sub end1 1#usize = ok i
+hi : ↑i = ↑end1 - ↑1#usize
+value : ↑i = ↑end1 - 1
+back : core.iter.range.StepUsize.backward_checked end1 1#usize = ok (some i)
+active : 0#usize < end1
+cmp : core.iter.range.StepUsize.partialOrdInst.lt 0#usize end1 = ok true
+⊢ (do
+      let __x ←
+        do
+          let b ← core.iter.range.StepUsize.backward_checked end1 1#usize
+          match b with
+            | none => fail Error.panic
+            | some e' => ok (some e', { start := 0#usize, «end» := e' })
+      ok (__x.1, { iter := __x.2 })) =
+    ok (some i, { iter := { start := 0#usize, «end» := i } })
+Port4C_Reverse.lean:32:13: warning: This simp argument is unused:
+  core.ops.range.Range.Insts.DoubleEndedIterator
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵o̵p̵s̵.̵r̵a̵n̵g̵e̵.̵R̵a̵n̵g̵e̵.̵I̵n̵s̵t̵s̵.̵D̵o̵u̵b̵l̵e̵E̵n̵d̵e̵d̵I̵t̵e̵r̵a̵t̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵r̵a̵n̵g̵e̵.̵R̵a̵n̵g̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵I̵t̵e̵r̵T̵r̵a̵i̵t̵s̵D̵o̵u̵b̵l̵e̵E̵n̵d̵e̵d̵I̵t̵e̵r̵a̵t̵o̵r̵.̵n̵e̵x̵t̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲c̲o̲r̲e̲.̲o̲p̲s̲.̲r̲a̲n̲g̲e̲.̲R̲a̲n̲g̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲I̲t̲e̲r̲T̲r̲a̲i̲t̲s̲D̲o̲u̲b̲l̲e̲E̲n̲d̲e̲d̲I̲t̲e̲r̲a̲t̲o̲r̲.̲n̲e̲x̲t̲_̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4C_Reverse.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4C_Reverse.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d4014ce31b546eaa92e2f2f1faca0df.scope; invocation ID: 3f8919933035473c8b4669d529593929
