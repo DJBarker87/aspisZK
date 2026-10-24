@@ -1,0 +1,37 @@
+// Job-only scalar ghost storage. No field is added to an owned source object.
+#[cfg(any(kani, prover_rw_resume_scalar))]
+#[allow(non_snake_case)]
+pub mod ProverRwResumeScalar {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }
+    #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+    pub struct Event { pub before: Observation, pub after: Observation }
+    const EMPTY: Observation = Observation { len: 0, low: 0, high: 0 };
+    const EMPTY_EVENT: Event = Event { before: EMPTY, after: EMPTY };
+    static mut J: usize = 0;
+    static mut COUNT: u8 = 0;
+    static mut OVERFLOW: bool = false;
+    static mut E0: Event = EMPTY_EVENT;
+    static mut E1: Event = EMPTY_EVENT;
+    static mut E2: Event = EMPTY_EVENT;
+    // Called exactly once at harness entry, before constructing source owners.
+    pub fn initialize(j: u8) {
+        unsafe { J = (j % 32) as usize; COUNT = 0; OVERFLOW = false;
+            E0 = EMPTY_EVENT; E1 = EMPTY_EVENT; E2 = EMPTY_EVENT; }
+    }
+    pub fn coordinate() -> usize { unsafe { J } }
+    pub fn record(before: Observation, after: Observation) {
+        let event = Event { before, after };
+        unsafe {
+            match COUNT {
+                0 => { E0 = event; COUNT = 1; }
+                1 => { E1 = event; COUNT = 2; }
+                2 => { E2 = event; COUNT = 3; }
+                _ => { OVERFLOW = true; }
+            }
+        }
+    }
+    pub fn events() -> (Event, Event, Event, u8, bool) {
+        unsafe { (E0, E1, E2, COUNT, OVERFLOW) }
+    }
+}
