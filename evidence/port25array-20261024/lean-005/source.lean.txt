@@ -1,0 +1,118 @@
+import Port25ARRAY_Lane
+set_option autoImplicit false
+noncomputable section
+namespace Port25ARRAY
+open Aeneas Aeneas.Std Result ControlFlow
+open Port23PUSH
+abbrev Row := Array U64 4#usize
+abbrev Power := Port23PUSH.field.QM31
+
+def toK (q : Power) : S7Kani2AccumulatorLoop.K :=
+  ⟨(q.c0.a,q.c0.b),(q.c1.a,q.c1.b)⟩
+
+theorem row_four (row : Row) : ∃ a b c d, row = Array.make 4#usize [a,b,c,d] := by
+  rcases row with ⟨l,h⟩
+  change l.length = 4 at h
+  rcases l with _ | ⟨a,l⟩
+  · cases h
+  rcases l with _ | ⟨b,l⟩
+  · cases h
+  rcases l with _ | ⟨c,l⟩
+  · cases h
+  rcases l with _ | ⟨d,l⟩
+  · cases h
+  rcases l with _ | ⟨e,l⟩
+  · exact ⟨a,b,c,d,rfl⟩
+  · simp at h
+
+/-- One symbolic source loop unfolding, retaining checked operations and order. -/
+theorem add_unroll (iter : core.ops.range.Range Usize) (row : Row)
+    (basis : U32) (limbs : Array U32 4#usize) :
+    verifier.update_residue_row_loop0 iter row basis limbs =
+      (do let step ← verifier.update_residue_row_loop0.body limbs iter row basis
+          match step with
+          | done out => ok out
+          | cont (it,r,b) => verifier.update_residue_row_loop0 it r b limbs) := by
+  unfold verifier.update_residue_row_loop0
+  rw [loop.eq_def]
+  cases h : verifier.update_residue_row_loop0.body limbs iter row basis with
+  | ok step => cases step with
+    | done out => rfl
+    | cont state => rcases state with ⟨it,r,b⟩; rfl
+  | fail e => rfl
+  | div => rfl
+
+/-- Concrete four-lane add loop, still over arbitrary full words. -/
+theorem add_four (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0 ⟨0#usize,4#usize⟩
+      (Array.make 4#usize [a,b,c,d]) basis (Array.make 4#usize [p,q,r,s]) =
+      (do let x0 ← addWord a p basis
+          let x1 ← addWord b q basis
+          let x2 ← addWord c r basis
+          let x3 ← addWord d s basis
+          ok (Array.make 4#usize [x0,x1,x2,x3])) := by
+  have n0 : core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      ⟨0#usize,4#usize⟩ = ok (some 0#usize,⟨1#usize,4#usize⟩) := by decide
+  have n1 : core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      ⟨1#usize,4#usize⟩ = ok (some 1#usize,⟨2#usize,4#usize⟩) := by decide
+  have n2 : core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      ⟨2#usize,4#usize⟩ = ok (some 2#usize,⟨3#usize,4#usize⟩) := by decide
+  have n3 : core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      ⟨3#usize,4#usize⟩ = ok (some 3#usize,⟨4#usize,4#usize⟩) := by decide
+  have n4 : core.iter.range.IteratorRange.next core.iter.range.StepUsize
+      ⟨4#usize,4#usize⟩ = ok (none,⟨4#usize,4#usize⟩) := by decide
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body, n0, bind_tc_ok,
+    verifier.residue_limb_at, verifier.power_limb_at, Array.index_usize,
+    Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, Array.make, UScalar.val,
+    List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+  unfold addWord
+  simp only [lift, bind_tc_ok, bind_assoc_eq]
+  congr 1
+  funext product
+  congr 1
+  funext x0
+  simp only [Array.update, Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val,
+    List.getElem?_cons_zero, List.set, bind_tc_ok]
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body, n1, bind_tc_ok,
+    verifier.residue_limb_at, verifier.power_limb_at, Array.index_usize,
+    Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val, List.getElem?_cons_succ,
+    List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+  congr 1
+  funext product
+  congr 1
+  funext x1
+  simp only [Array.update, Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val,
+    List.getElem?_cons_succ, List.getElem?_cons_zero, List.set, bind_tc_ok]
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body, n2, bind_tc_ok,
+    verifier.residue_limb_at, verifier.power_limb_at, Array.index_usize,
+    Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val, List.getElem?_cons_succ,
+    List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+  congr 1
+  funext product
+  congr 1
+  funext x2
+  simp only [Array.update, Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val,
+    List.getElem?_cons_succ, List.getElem?_cons_zero, List.set, bind_tc_ok]
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body, n3, bind_tc_ok,
+    verifier.residue_limb_at, verifier.power_limb_at, Array.index_usize,
+    Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val, List.getElem?_cons_succ,
+    List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+  congr 1
+  funext product
+  congr 1
+  funext x3
+  simp only [Array.update, Array.getElem?_Usize_eq, Array.getElem?_Nat_eq, UScalar.val,
+    List.getElem?_cons_succ, List.getElem?_cons_zero, List.set, bind_tc_ok]
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body,n4,bind_tc_ok]
+
+#print axioms toK
+#print axioms row_four
+#print axioms add_unroll
+#print axioms add_four
+end Port25ARRAY
+end

@@ -1,0 +1,275 @@
+{
+  "scope": "selected extraction-host native std graph, not SBF identity or primitive effect proof",
+  "files": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "bytes": 37605,
+      "hits": [
+        {
+          "needle": "fn into_iter(self) -> IterMut",
+          "start_line": 376,
+          "end_line": 378,
+          "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+        },
+        {
+          "needle": "fn index_mut(&mut self",
+          "start_line": 402,
+          "end_line": 404,
+          "text": "    fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }"
+        },
+        {
+          "needle": "fn as_mut_slice(",
+          "start_line": 658,
+          "end_line": 660,
+          "text": "    pub const fn as_mut_slice(&mut self) -> &mut [T] {\n        self\n    }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "sha256": "354992a6a3d69a0185eef9044a07ea5180e767bdb467aef55e69ee3d44317840",
+      "bytes": 219078,
+      "hits": [
+        {
+          "needle": "pub const fn iter_mut(",
+          "start_line": 1061,
+          "end_line": 1063,
+          "text": "    pub const fn iter_mut(&mut self) -> IterMut<'_, T> {\n        IterMut::new(self)\n    }"
+        }
+      ],
+      "unmatched": [
+        "pub fn iter_mut("
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "bytes": 101431,
+      "hits": [
+        {
+          "needle": "pub(super) const fn new(slice: &'a mut [T])",
+          "start_line": 219,
+          "end_line": 244,
+          "text": "    pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 140,
+          "end_line": 148,
+          "text": "iterator! {struct Iter -> *const T, &'a T, const, {/* no mut */}, as_ref, each_ref, {\n    fn is_sorted_by<F>(self, mut compare: F) -> bool\n    where\n        Self: Sized,\n        F: FnMut(&Self::Item, &Self::Item) -> bool,\n    {\n        self.as_slice().is_sorted_by(|a, b| compare(&a, &b))\n    }\n}}"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 369,
+          "end_line": 369,
+          "text": "iterator! {struct IterMut -> *mut T, &'a mut T, mut, {mut}, as_mut, each_mut, {}}"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 1304,
+          "end_line": 1304,
+          "text": "forward_iterator! { SplitN: T, &'a [T] }"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 1305,
+          "end_line": 1305,
+          "text": "forward_iterator! { RSplitN: T, &'a [T] }"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 1306,
+          "end_line": 1306,
+          "text": "forward_iterator! { SplitNMut: T, &'a mut [T] }"
+        },
+        {
+          "needle": "iterator! {",
+          "start_line": 1307,
+          "end_line": 1307,
+          "text": "forward_iterator! { RSplitNMut: T, &'a mut [T] }"
+        },
+        {
+          "needle": "fn into_iter(self) -> IterMut",
+          "start_line": 33,
+          "end_line": 35,
+          "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "sha256": "0ac47d295999ba8847d0df93557292fbad65d256db0c6521c396798d2e37677d",
+      "bytes": 21339,
+      "hits": [
+        {
+          "needle": "fn next(&mut self) -> Option<$elem>",
+          "start_line": 157,
+          "end_line": 192,
+          "text": "            fn next(&mut self) -> Option<$elem> {\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "sha256": "1bf3c8e2dacb8d09393c5ac7d51fd8496e4d270e583c40979c5c6364b59e2ea9",
+      "bytes": 36709,
+      "hits": [
+        {
+          "needle": "fn index_mut(self, slice: &mut [T]) -> &mut T",
+          "start_line": 276,
+          "end_line": 279,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }"
+        },
+        {
+          "needle": "fn index(self, slice: &[T]) -> &T",
+          "start_line": 270,
+          "end_line": 273,
+          "text": "    fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+      "bytes": 167769,
+      "hits": [
+        {
+          "needle": "fn index_mut(&mut self",
+          "start_line": 3879,
+          "end_line": 3881,
+          "text": "    fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(&mut **self, index)\n    }"
+        },
+        {
+          "needle": "fn deref_mut(&mut self",
+          "start_line": 3802,
+          "end_line": 3804,
+          "text": "    fn deref_mut(&mut self) -> &mut [T] {\n        self.as_mut_slice()\n    }"
+        },
+        {
+          "needle": "pub const fn as_mut_slice(",
+          "start_line": 1890,
+          "end_line": 1912,
+          "text": "    pub const fn as_mut_slice(&mut self) -> &mut [T] {\n        // SAFETY: `BufWriter::flush_buf` assumes that this will not\n        // de-initialize any elements of the spare capacity.\n\n        // SAFETY: `slice::from_raw_parts_mut` requires pointee is a contiguous, aligned buffer of\n        // size `len` containing properly-initialized `T`s. Data must not be accessed through any\n        // other pointer for the returned lifetime. Further, `len * size_of::<T>` <=\n        // `isize::MAX` and allocation does not \"wrap\" through overflowing memory addresses.\n        //\n        // * Vec API guarantees that self.buf:\n        //      * contains only properly-initialized items within 0..len\n        //      * is aligned, contiguous, and valid for `len` reads\n        //      * obeys size and address-wrapping constraints\n        //\n        // * We only construct references to `self.buf` through `&self` and `&mut self` methods;\n        //   borrow-check ensures that it is not possible to construct a reference to `self.buf`\n        //   within the returned lifetime.\n        unsafe {\n            // normally this would use `slice::from_raw_parts_mut`, but it's\n            // instantiated often enough that avoiding the UB check is worth it\n            &mut *core::intrinsics::aggregate_raw_ptr::<*mut [T], _, _>(self.as_mut_ptr(), self.len)\n        }\n    }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "sha256": "df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079",
+      "bytes": 52919,
+      "hits": [
+        {
+          "needle": "fn next(&mut self)",
+          "start_line": 984,
+          "end_line": 986,
+          "text": "    fn next(&mut self) -> Option<A> {\n        self.spec_next()\n    }"
+        },
+        {
+          "needle": "fn next(&mut self)",
+          "start_line": 1160,
+          "end_line": 1163,
+          "text": "    fn next(&mut self) -> Option<A> {\n        let n = Step::forward(self.start.clone(), 1);\n        Some(mem::replace(&mut self.start, n))\n    }"
+        },
+        {
+          "needle": "fn next(&mut self)",
+          "start_line": 1396,
+          "end_line": 1398,
+          "text": "    fn next(&mut self) -> Option<A> {\n        self.spec_next()\n    }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 67,
+          "end_line": 94,
+          "text": "    fn forward_checked(start: Self, count: usize) -> Option<Self>;\n\n    /// Returns the value that would be obtained by taking the *successor*\n    /// of `self` `count` times.\n    ///\n    /// If this would overflow the range of values supported by `Self`,\n    /// this function is allowed to panic, wrap, or saturate.\n    /// The suggested behavior is to panic when debug assertions are enabled,\n    /// and to wrap or saturate otherwise.\n    ///\n    /// Unsafe code should not rely on the correctness of behavior after overflow.\n    ///\n    /// # Invariants\n    ///\n    /// For any `a`, `n`, and `m`, where no overflow occurs:\n    ///\n    /// * `Step::forward(Step::forward(a, n), m) == Step::forward(a, n + m)`\n    ///\n    /// For any `a` and `n`, where no overflow occurs:\n    ///\n    /// * `Step::forward_checked(a, n) == Some(Step::forward(a, n))`\n    /// * `Step::forward(a, n) == (0..n).fold(a, |x, _| Step::forward(x, 1))`\n    ///   * Corollary: `Step::forward(a, 0) == a`\n    /// * `Step::forward(a, n) >= a`\n    /// * `Step::backward(Step::forward(a, n), n) == a`\n    fn forward(start: Self, count: usize) -> Self {\n        Step::forward_checked(start, count).expect(\"overflow in `Step::forward`\")\n    }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 282,
+          "end_line": 287,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    match Self::try_from(n) {\n                        Ok(n) => start.checked_add(n),\n                        Err(_) => None, // if n is out of range, `unsigned_start + n` is too\n                    }\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 321,
+          "end_line": 339,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    match $u_narrower::try_from(n) {\n                        Ok(n) => {\n                            // Wrapping handles cases like\n                            // `Step::forward(-120_i8, 200) == Some(80_i8)`,\n                            // even though 200 is out of range for i8.\n                            let wrapped = start.wrapping_add(n as Self);\n                            if wrapped >= start {\n                                Some(wrapped)\n                            } else {\n                                None // Addition overflowed\n                            }\n                        }\n                        // If n is out of range of e.g. u8,\n                        // then it is bigger than the entire range for i8 is wide\n                        // so `any_i8 + n` necessarily overflows i8.\n                        Err(_) => None,\n                    }\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 386,
+          "end_line": 388,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    start.checked_add(n as Self)\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 424,
+          "end_line": 426,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    start.checked_add(n as Self)\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 521,
+          "end_line": 526,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    match $narrower::try_from(n) {\n                        Ok(n) => start.checked_add(n),\n                        Err(_) => None, // if n is out of range, `unsigned_start + n` is too\n                    }\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 547,
+          "end_line": 549,
+          "text": "                fn forward_checked(start: Self, n: usize) -> Option<Self> {\n                    start.checked_add(n as $wider)\n                }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 603,
+          "end_line": 616,
+          "text": "    fn forward_checked(start: char, count: usize) -> Option<char> {\n        let start = start as u32;\n        let mut res = Step::forward_checked(start, count)?;\n        if start < 0xD800 && 0xD800 <= res {\n            res = Step::forward_checked(res, 0x800)?;\n        }\n        if res <= char::MAX as u32 {\n            // SAFETY: res is a valid unicode scalar\n            // (below 0x110000 and not in 0xD800..0xE000)\n            Some(unsafe { char::from_u32_unchecked(res) })\n        } else {\n            None\n        }\n    }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 672,
+          "end_line": 675,
+          "text": "    fn forward_checked(start: AsciiChar, count: usize) -> Option<AsciiChar> {\n        let end = Step::forward_checked(start.to_u8(), count)?;\n        AsciiChar::from_u8(end)\n    }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 715,
+          "end_line": 717,
+          "text": "    fn forward_checked(start: Ipv4Addr, count: usize) -> Option<Ipv4Addr> {\n        u32::forward_checked(start.to_bits(), count).map(Ipv4Addr::from_bits)\n    }"
+        },
+        {
+          "needle": "fn forward_checked(",
+          "start_line": 748,
+          "end_line": 750,
+          "text": "    fn forward_checked(start: Ipv6Addr, count: usize) -> Option<Ipv6Addr> {\n        u128::forward_checked(start.to_bits(), count).map(Ipv6Addr::from_bits)\n    }"
+        }
+      ],
+      "unmatched": []
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/num.rs",
+      "sha256": "d4dd7ab28d6c36f6890c79a1148e9c72653ca2b7fe12de6582b83191073bdb3c",
+      "bytes": 28440,
+      "hits": [
+        {
+          "needle": "macro_rules! impl_from {",
+          "start_line": 72,
+          "end_line": 86,
+          "text": "macro_rules! impl_from {\n    ($small:ty => $large:ty, $(#[$attrs:meta]),+) => {\n        $(#[$attrs])+\n        #[rustc_const_unstable(feature = \"const_convert\", issue = \"143773\")]\n        impl const From<$small> for $large {\n            #[doc = concat!(\"Converts from [`\", stringify!($small), \"`] to [`\", stringify!($large), \"`] losslessly.\")]\n            #[inline(always)]\n            fn from(small: $small) -> Self {\n                debug_assert!(<$large>::MIN as i128 <= <$small>::MIN as i128);\n                debug_assert!(<$small>::MAX as u128 <= <$large>::MAX as u128);\n                small as Self\n            }\n        }\n    }\n}"
+        },
+        {
+          "needle": "impl_from!(u32 => u64,",
+          "start_line": 97,
+          "end_line": 176,
+          "text": "impl_from!(u32 => u64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u32 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u64 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\n\n// signed integer -> signed integer\nimpl_from!(i8 => i16, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i8 => isize, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i32 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i32 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i64 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\n\n// unsigned integer -> signed integer\nimpl_from!(u8 => i16, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u16 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u16 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u16 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u32 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u32 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u64 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\n\n// The C99 standard defines bounds on INTPTR_MIN, INTPTR_MAX, and UINTPTR_MAX\n// which imply that pointer-sized integers must be at least 16 bits:\n// https://port70.net/~nsz/c/c99/n1256.html#7.18.2.4\nimpl_from!(u16 => usize, #[stable(feature = \"lossless_iusize_conv\", since = \"1.26.0\")]);\nimpl_from!(u8 => isize, #[stable(feature = \"lossless_iusize_conv\", since = \"1.26.0\")]);\nimpl_from!(i16 => isize, #[stable(feature = \"lossless_iusize_conv\", since = \"1.26.0\")]);\n\n// RISC-V defines the possibility of a 128-bit address space (RV128).\n\n// CHERI proposes 128-bit \u201ccapabilities\u201d. Unclear if this would be relevant to usize/isize.\n// https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/20171017a-cheri-poster.pdf\n// https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-951.pdf\n\n// Note: integers can only be represented with full precision in a float if\n// they fit in the significand, which is:\n// * 11 bits in f16\n// * 24 bits in f32\n// * 53 bits in f64\n// * 113 bits in f128\n// Lossy float conversions are not implemented at this time.\n// FIXME(f16,f128): The `f16`/`f128` impls `#[stable]` attributes should be changed to reference\n// `f16`/`f128` when they are stabilised (trait impls have to have a `#[stable]` attribute, but none\n// of the `f16`/`f128` impls can be used on stable as the `f16` and `f128` types are unstable).\n\n// signed integer -> float\nimpl_from!(i8 => f16, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i8 => f32, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i8 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i8 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i16 => f32, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i16 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i16 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i32 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i32 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(i64 => f128, #[unstable(feature = \"f128\", issue = \"116909\")], #[unstable_feature_bound(f128)]);\n\n// unsigned integer -> float\nimpl_from!(u8 => f16, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u8 => f32, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u8 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u8 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u16 => f32, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u16 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u16 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u32 => f64, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u32 => f128, #[stable(feature = \"lossless_float_conv\", since = \"1.6.0\")]);\nimpl_from!(u64 => f128, #[unstable(feature = \"f128\", issue = \"116909\")], #[unstable_feature_bound(f128)]);\n\n// float -> float\n\n// FIXME(f16): adding the additional `From<{float}>` impl to `f32` would break inference in cases"
+        }
+      ],
+      "unmatched": []
+    }
+  ]
+}
