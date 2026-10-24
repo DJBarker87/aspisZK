@@ -1,0 +1,22 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_fixtures.py
++++ ResourceRssGO_fixtures.py
+@@ -5,8 +5,8 @@
+ import subprocess
+ from types import SimpleNamespace
+ from unittest.mock import patch
+-import ResourceStableGO_adapter as a
+-from ResourceStableGO_sources import functions,load_bundle
++import ResourceRssGO_adapter as a
++from ResourceRssGO_sources import functions,load_bundle
+ fixtures=functions(load_bundle()['fixtures']['source'],['node','fixture','scope'],dict(c=a.c,G=a.c.GIB))
+ def fixture(ancestor=False):
+     s, _ = fixtures['scope'](3 * a.c.GIB, 4 * a.c.GIB, ancestor)
+@@ -40,7 +40,7 @@
+         for i in row['identities']:
+             prefix = '/proc/' + str(i['tid'])
+             pid = i['tid']
+-            files[prefix + '/stat'] = f'{pid} (ResourceStableGO synthetic) ' + ' '.join(['S'] + ['0'] * 18 + [str(i['starttime'])]) + '\n'
++            files[prefix + '/stat'] = f'{pid} (ResourceRssGO synthetic) ' + ' '.join(['S'] + ['0'] * 18 + [str(i['starttime'])]) + '\n'
+             files[prefix + '/status'] = f'Pid: {pid}\nTgid: {i['tgid']}\n'
+             files[prefix + '/cgroup'] = '0::' + p[len('/sys/fs/cgroup'):] + '\n'
+     own = s['self_observation']['pid']

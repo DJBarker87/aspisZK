@@ -1,0 +1,29 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_sources.py
++++ ResourceRssGO_sources.py
+@@ -31,7 +31,7 @@
+     return sources
+ 
+ def load_bundle():
+-    path=HERE/'ResourceStableGO_reviewed.json'
++    path=HERE/'ResourceRssGO_reviewed.json'
+     data=json.loads(path.read_bytes()) if path.exists() else bundle()
+     if set(data)!=set(SPECS):raise ValueError('reviewed source set drift')
+     for key,(rev,path) in SPECS.items():
+@@ -45,7 +45,7 @@
+     tree=ast.parse(source)
+     selected=[n for n in tree.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name in names]
+     if {n.name for n in selected}!=set(names):raise ValueError('missing reviewed function')
+-    exec(compile(ast.Module(body=selected,type_ignores=[]),'ResourceStableGO-reviewed-functions','exec'),env)
++    exec(compile(ast.Module(body=selected,type_ignores=[]),'ResourceRssGO-reviewed-functions','exec'),env)
+     return env
+ 
+ def load(data=None):
+@@ -72,7 +72,7 @@
+     previous=sys.modules.get('ResourceStability_sources')
+     sys.modules['ResourceStability_sources']=aliases
+     try:
+-        policy=types.ModuleType('ResourceStableGO_reviewed_policy')
++        policy=types.ModuleType('ResourceRssGO_reviewed_policy')
+         exec(compile(data['policy']['source'],data['policy']['path'],'exec'),policy.__dict__)
+     finally:
+         if previous is None:sys.modules.pop('ResourceStability_sources',None)
