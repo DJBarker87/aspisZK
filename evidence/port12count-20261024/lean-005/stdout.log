@@ -1,0 +1,298 @@
+Port12COUNT_Rows.lean:22:16: error: unsolved goals
+case step.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+B✝ : Type
+f : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+v✝ : B✝
+⊢ eval H (Port9OR_Code.program D hash (Code.step (ok v✝) f >>= k)) =
+    match (eval H (Port9OR_Code.program D hash (f v✝))).2 with
+    | ok a =>
+      ((eval H (Port9OR_Code.program D hash (f v✝))).1 ++ (eval H (Port9OR_Code.program D hash (k a))).1,
+        (eval H (Port9OR_Code.program D hash (k a))).2)
+    | fail e => ((eval H (Port9OR_Code.program D hash (f v✝))).1, fail e)
+    | div => ((eval H (Port9OR_Code.program D hash (f v✝))).1, div)
+
+case step.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+B✝ : Type
+f : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+e✝ : Error
+⊢ eval H (Port9OR_Code.program D hash (Code.step (fail e✝) f >>= k)) = ([], fail e✝)
+
+case step.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+B✝ : Type
+f : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+⊢ eval H (Port9OR_Code.program D hash (Code.step div f >>= k)) = ([], div)
+Port12COUNT_Rows.lean:26:16: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (Code.read parts f >>= k))
+is not definitionally equal to the right-hand side
+  let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+  match first.2 with
+  | ok a =>
+    let rest := eval H (Port9OR_Code.program D hash (k a));
+    (first.1 ++ rest.1, rest.2)
+  | fail e => (first.1, fail e)
+  | div => (first.1, div)
+
+case read.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+e : Error
+call : D.digest hash parts = fail e
+⊢ eval H (Port9OR_Code.program D hash (Code.read parts f >>= k)) =
+    let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+    match first.2 with
+    | ok a =>
+      let rest := eval H (Port9OR_Code.program D hash (k a));
+      (first.1 ++ rest.1, rest.2)
+    | fail e => (first.1, fail e)
+    | div => (first.1, div)
+Port12COUNT_Rows.lean:27:13: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (Code.read parts f >>= k))
+is not definitionally equal to the right-hand side
+  let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+  match first.2 with
+  | ok a =>
+    let rest := eval H (Port9OR_Code.program D hash (k a));
+    (first.1 ++ rest.1, rest.2)
+  | fail e => (first.1, fail e)
+  | div => (first.1, div)
+
+case read.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+call : D.digest hash parts = div
+⊢ eval H (Port9OR_Code.program D hash (Code.read parts f >>= k)) =
+    let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+    match first.2 with
+    | ok a =>
+      let rest := eval H (Port9OR_Code.program D hash (k a));
+      (first.1 ++ rest.1, rest.2)
+    | fail e => (first.1, fail e)
+    | div => (first.1, div)
+Port12COUNT_Rows.lean:30:16: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (Code.read parts f >>= k))
+is not definitionally equal to the right-hand side
+  ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+        (eval H
+            (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1 ++
+      (eval H (Port9OR_Code.program D hash (k a✝))).1,
+    (eval H (Port9OR_Code.program D hash (k a✝))).2)
+
+case h_1
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+digest : Std.Array U8 32#usize
+call : D.digest hash parts = ok digest
+x✝ : Result A
+a✝ : A
+heq✝ :
+  (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).2 =
+    ok a✝
+⊢ eval H (Port9OR_Code.program D hash (Code.read parts f >>= k)) =
+    ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+          (eval H
+              (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1 ++
+        (eval H (Port9OR_Code.program D hash (k a✝))).1,
+      (eval H (Port9OR_Code.program D hash (k a✝))).2)
+Port12COUNT_Rows.lean:30:16: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (Code.read parts f >>= k))
+is not definitionally equal to the right-hand side
+  ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+      (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1,
+    fail e✝)
+
+case h_2
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+digest : Std.Array U8 32#usize
+call : D.digest hash parts = ok digest
+x✝ : Result A
+e✝ : Error
+heq✝ :
+  (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).2 =
+    fail e✝
+⊢ eval H (Port9OR_Code.program D hash (Code.read parts f >>= k)) =
+    ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+        (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1,
+      fail e✝)
+Port12COUNT_Rows.lean:30:16: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (Code.read parts f >>= k))
+is not definitionally equal to the right-hand side
+  ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+      (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1,
+    div)
+
+case h_3
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (f a >>= k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+digest : Std.Array U8 32#usize
+call : D.digest hash parts = ok digest
+x✝ : Result A
+heq✝ :
+  (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).2 = div
+⊢ eval H (Port9OR_Code.program D hash (Code.read parts f >>= k)) =
+    ((AspisR1DigestLogCarrier.flatten parts, H (AspisR1DigestLogCarrier.flatten parts)) ::
+        (eval H (Port9OR_Code.program D hash (f (Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))))).1,
+      div)
+Port12COUNT_Rows.lean:22:42: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵P̵o̵r̵t̵9̵O̵R̵_̵C̵o̵d̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵V̵T̵o̵p̵_̵O̵r̵a̵c̵l̵e̵C̵o̵d̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵W̵i̵t̵h̵,̵e̵v̵a̵l̵,̵i̵h̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲P̲o̲r̲t̲9̲O̲R̲_̲C̲o̲d̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲V̲T̲o̲p̲_̲O̲r̲a̲c̲l̲e̲C̲o̲d̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲W̲i̲t̲h̲,̲ ̲e̲v̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port12COUNT_Rows.lean:23:40: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲Port9OR_Code.program,
+       ̵ ̵VTop_OracleCode.continueWith, ̲eval,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port12COUNT_Rows.lean:29:17: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵P̵o̵r̵t̵9̵O̵R̵_̵C̵o̵d̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵c̵a̵l̵l̵,̵e̵v̵a̵l̵,̵i̵h̵]̵[̲P̲o̲r̲t̲9̲O̲R̲_̲C̲o̲d̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲c̲a̲l̲l̲,̲ ̲e̲v̲a̲l̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port12COUNT_Rows.lean:29:76: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲Port9OR_Code.program, ̲call, ̲eval,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port12COUNT_Rows.lean:79:12: error: Type mismatch: After simplification, term
+  localCost
+ has type
+  log.length ≤ credit physical s i w
+but is expected to have type
+  ((log ++ (eval H (Port9OR_Code.program D hash (pure (reference.Level.Stop stopped)))).1).length +
+      match (eval H (Port9OR_Code.program D hash (pure (reference.Level.Stop stopped)))).2 with
+      | ok a => levelPost physical a
+      | x => 0) ≤
+    credit physical s i w
+'AspisR1.Port12COUNT_Rows.eval_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Rows.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
