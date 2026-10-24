@@ -35,16 +35,19 @@ def inspect(d):
                 if member(target):row['matches'].append(name)
             except FileNotFoundError:
                 if not kernel:raise
-        fds=list((d/'fd').iterdir())
-        if len(fds)>20000:raise ValueError('fd bound exceeded')
-        row['fd_count']=len(fds)
-        for fd in fds:
-            target=os.readlink(fd)
-            info=bounded(d/'fdinfo'/fd.name).decode()
-            flags=[line.split(':',1)[1].strip() for line in info.splitlines() if line.startswith('flags:')]
-            if len(flags)!=1:raise ValueError('missing fd flags')
-            flag=int(flags[0],8)
-            if member(target):row['matches'].append(dict(fd=int(fd.name),access_mode=flag & os.O_ACCMODE,donor=True))
+        row['fd_count']=0
+        # Keep directory stream open while inspecting its entries. Materializing
+        # then closing it makes our own /proc fd entry disappear artificially.
+        with os.scandir(d/'fd') as entries:
+            for entry in entries:
+                row['fd_count']+=1
+                if row['fd_count']>20000:raise ValueError('fd bound exceeded')
+                fd=pathlib.Path(entry.path);target=os.readlink(fd)
+                info=bounded(d/'fdinfo'/fd.name).decode()
+                flags=[line.split(':',1)[1].strip() for line in info.splitlines() if line.startswith('flags:')]
+                if len(flags)!=1:raise ValueError('missing fd flags')
+                flag=int(flags[0],8)
+                if member(target):row['matches'].append(dict(fd=int(fd.name),access_mode=flag & os.O_ACCMODE,donor=True))
     except (OSError,ValueError,KeyError) as e:row['errors'].append(type(e).__name__)
     try:
         after=identity(bounded(d/'stat').decode());row['identity_stable']=before==after
@@ -79,6 +82,7 @@ def main():
         r=observe(pathlib.Path('/proc'));exit_code=0
     except Exception as e:r=dict(allowed_to_enter=False,error=type(e).__name__);exit_code=1
     u=resource.getrusage(0)
+    r['observer_pid']=os.getpid()
     r['receipt']=dict(command=['sudo','-n','python3','-'],exit=exit_code,wall_seconds=time.monotonic()-start,peak_rss_kib=u.ru_maxrss,swaps=u.ru_nswap,print_axioms='N/A',runtime=sys.version)
     output=json.dumps(r,sort_keys=True)
     if len(output)>16*1024**2:output=json.dumps(dict(allowed_to_enter=False,error='output bound exceeded'));exit_code=1
