@@ -1,0 +1,5 @@
+import ExtractedVerifyFinishModel
+#check AspisR1PublicPreparation.FinishModel.finish
+#check AspisR1PublicPreparation.VerifyPrefix.verify
+#check AspisR1PublicPreparation.FinishModel.payload
+#print axioms AspisR1PublicPreparation.FinishModel.finish
