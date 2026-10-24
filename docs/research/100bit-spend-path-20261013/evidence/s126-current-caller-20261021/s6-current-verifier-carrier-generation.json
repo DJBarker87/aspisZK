@@ -1,0 +1,244 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "adapter_types_sha256": "9d1b619f5235ea7a79e39ee31609a89a07ad5ffb52b5df6025cdaf799e2cb3e9",
+  "verifier_types_sha256": "dd338a7e3a4d4ad4662b40ce64bcb0eeae8f0208b0747803e03a8a27e0b517b4",
+  "complete_declarations": {
+    "aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1": {
+      "kind": "structure",
+      "items": [
+        [
+          "pool",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "deployment_domain",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "sequence",
+          "Std.U64"
+        ],
+        [
+          "next_pair_index",
+          "Std.U64"
+        ],
+        [
+          "current_root",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "frontier",
+          "Array (Array aspis_core.field.M31 8#usize) 20#usize"
+        ]
+      ]
+    },
+    "aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1": {
+      "kind": "structure",
+      "items": [
+        [
+          "next_pair_index",
+          "Std.U64"
+        ],
+        [
+          "next_root",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "next_frontier",
+          "Array (Array aspis_core.field.M31 8#usize) 20#usize"
+        ]
+      ]
+    },
+    "aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1": {
+      "kind": "structure",
+      "items": [
+        [
+          "live_snapshot",
+          "aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1"
+        ],
+        [
+          "candidate_afterstate",
+          "aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1"
+        ]
+      ]
+    },
+    "aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1": {
+      "kind": "structure",
+      "items": [
+        [
+          "pool",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "deployment_domain",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "anchor_sequence",
+          "Std.U64"
+        ],
+        [
+          "anchor_root",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "nullifier",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "asset_id",
+          "aspis_core.field.M31"
+        ],
+        [
+          "amount",
+          "Std.U32"
+        ],
+        [
+          "destination_token_account",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "change_commitment",
+          "Array aspis_core.field.M31 8#usize"
+        ]
+      ]
+    },
+    "aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1": {
+      "kind": "structure",
+      "items": [
+        [
+          "pool",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "deployment_domain",
+          "Array Std.U8 32#usize"
+        ],
+        [
+          "anchor_sequence",
+          "Std.U64"
+        ],
+        [
+          "anchor_root",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "nullifier",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "asset_id",
+          "aspis_core.field.M31"
+        ],
+        [
+          "recipient_commitment",
+          "Array aspis_core.field.M31 8#usize"
+        ],
+        [
+          "change_commitment",
+          "Array aspis_core.field.M31 8#usize"
+        ]
+      ]
+    },
+    "aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public": {
+      "kind": "inductive",
+      "items": [
+        [
+          "Transfer",
+          "aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 \u2192 aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192 aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public"
+        ],
+        [
+          "Withdrawal",
+          "aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 \u2192 aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 \u2192 aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public"
+        ]
+      ]
+    },
+    "aspis_r1_cost_probe.verifier.Error": {
+      "kind": "inductive",
+      "items": [
+        [
+          "Parse",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Semantic",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Transcript",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Relation",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Merkle",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Query",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Checkpoint",
+          "aspis_r1_cost_probe.verifier.Error"
+        ],
+        [
+          "Allocation",
+          "aspis_r1_cost_probe.verifier.Error"
+        ]
+      ]
+    },
+    "aspis_r1_cost_probe.verifier.Phase": {
+      "kind": "inductive",
+      "items": [
+        [
+          "Parsed",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Semantic",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "SemanticPart",
+          "Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Prepare",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "CheckpointRead",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Merkle",
+          "Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Query",
+          "Std.Usize \u2192 aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "QueryPart",
+          "Std.Usize \u2192 Std.U8 \u2192 aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "CheckpointWrite",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Relation",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ],
+        [
+          "Final",
+          "aspis_r1_cost_probe.verifier.Phase"
+        ]
+      ]
+    }
+  },
+  "candidate_sha256": "0741dec0fb5d41d8c845bff30bf4853bc77b33e8b290a0082bcc6237251ba2d0"
+}
