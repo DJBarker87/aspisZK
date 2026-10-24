@@ -149,3 +149,23 @@ class PublicAdapterTests(unittest.TestCase):
             report=go.read_only_admission(phase='inside-scope',additional_bytes=0,expected=EXPECTED)
         self.assertFalse(report['decision']['allowed'])
         self.assertEqual(set(report['decision']['collection_failures']),{'before','after'})
+
+class GoCollectorTests(unittest.TestCase):
+    def test_remote_payload_and_receipt_without_host(self):
+        import ast
+        import importlib.util
+        import json
+        import subprocess
+        from tempfile import TemporaryDirectory
+        spec=importlib.util.spec_from_file_location('go_collector',Path(__file__).with_name('collect_go_readonly.py'))
+        collector=importlib.util.module_from_spec(spec);spec.loader.exec_module(collector)
+        report=dict(legacy_read_inputs=[],snapshots=dict(before=None,after=None),decisions={},original_legacy={},failures={},collection_error='synthetic missing snapshot')
+        def transport(command,*,input,**kw):
+            ast.parse(input)
+            self.assertIn("candidate=virtual_run('go_api.py')",input)
+            return subprocess.CompletedProcess(command,0,json.dumps(report),'')
+        with TemporaryDirectory() as temp,patch.object(collector,'OUT',Path(temp)),patch.object(collector.subprocess,'run',transport),patch.object(collector.subprocess,'check_output',return_value='synthetic'):
+            collector.main()
+            receipt=json.loads((Path(temp)/'live-command.json').read_text())
+            self.assertEqual(receipt['api_version'],go.API_VERSION)
+            self.assertEqual(receipt['exit'],0)

@@ -36,7 +36,7 @@ def save_reads(phase, attempts):
 def main():
     files=['reservation.py','reservation_base.py','resource_slab_candidate.py','go_api.py']
     hashes={f:digest(HERE/f) for f in files}
-    hashes['collect_go_readonly.py']=digest(Path(__file__))
+    hashes['collect_go_readonly.py']=digest(pathlib.Path(__file__))
     sources={f:(HERE/f).read_text() for f in files}
     # Only __file__ reads / run_path of the immutable legacy helper are
     # virtualized. All sysfs/proc/service/process/Docker reads are unchanged.
