@@ -20,6 +20,11 @@ meta=json.loads((D/'source-map.json').read_text())
 assert sha(D/'production-source.txt')==meta['production_map']['source_sha256']
 s=(D/'proof/selected.rs').read_text();assert s.count(meta['annotation'])==1
 assert hashlib.sha256(s.replace(meta['annotation'],'').encode()).hexdigest()==meta['erased_selected_sha256']
+frame=json.loads((D/'frame-source-map.json').read_text())
+f=(D/'proof-frame/selected.rs').read_text()
+assert sha(D/'proof-frame/selected.rs')==frame['selected_sha256']
+assert f.count(frame['additional_annotation'])==1 and f.count(meta['annotation'])==1
+assert hashlib.sha256(f.replace(frame['additional_annotation'],'').replace(meta['annotation'],'').encode()).hexdigest()==frame['erased_selected_sha256']
 before=runpy.run_path(str(D/'reservation.py'))['admission']();assert before['allowed'],before
 O=D/'packet'/f'kani{a:03d}';O.mkdir(parents=True)
 (O/'admission-before.json').write_text(json.dumps(before,indent=2)+'\n')
