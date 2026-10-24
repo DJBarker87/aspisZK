@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Isolated host objects, capped admission and complete per-attempt receipts."""
+import pathlib,json,subprocess,sys,hashlib
+ROOT=pathlib.Path(__file__).resolve().parents[2]
+TOOLS=ROOT/'tools/port17release-20261024'; E=ROOT/'evidence/port17release-20261024'
+HOST='dombarker@100.108.41.90'; REMOTE='/home/dombarker/project-offloads/codex-cx-port17release-20261024'
+module=sys.argv[1]; assert module.startswith('Port17RELEASE_')
+source=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{module}.lean'
+number=1+max((int(p.stem.split('-')[1]) for p in TOOLS.glob('lean-*.json')),default=0)
+assert len(list(TOOLS.glob("lean-*.json"))) < 26, "Port17RELEASE budget exhausted (250 inherited charged + 26 new)"
+attempt=f'lean-{number:03d}'
+base=ROOT/'docs/research/100bit-spend-path-20261013/evidence/adapter-rw-20261023/lean-048/receipt.json'
+inherited=json.loads(base.read_text())
+cfg={'attempt':attempt,'kind':'lean','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'source_tree_dirty':True,'command':['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M4400','-DElab.async=false','-o',f'{module}.olean',f'{module}.lean'],'sources':[f'{module}.lean'],'timeout':180,'env':{'LEAN_PATH':REMOTE+':/home/dombarker/project-offloads/codex-cx-ports1-20261023:/home/dombarker/project-offloads/codex-cx-verifier-top-20261023:'+'/home/dombarker/project-offloads/codex-cx-s2w-20261023:/home/dombarker/project-offloads/codex-cx-s2w-20261023/history-cache:/home/dombarker/project-offloads/codex-cx-s2y-20261023:/home/dombarker/project-offloads/codex-cx-s2y-20261023/parser-cache:/home/dombarker/project-offloads/codex-cx-s2z-20261023:/home/dombarker/project-offloads/codex-cx-s2x-20261023:'+'/home/dombarker/project-offloads/codex-cx-child-joins-20261023:'+inherited['env']['LEAN_PATH']},'deps_fingerprint':{'inherited_receipt_sha256':hashlib.sha256(base.read_bytes()).hexdigest(),'scope':'Selected direct objects pinned; AdapterRw stage3 inherited closure reused'},'expected_time':'Focused cached Lean module, no cold dependency build, generation or elimination'}
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port11prov-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port10auth-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port9oracle-20261024:/home/dombarker/project-offloads/codex-cx-port8effects-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port6auth-20261024:/home/dombarker/project-offloads/codex-cx-port5q1-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port4c-20261023:/home/dombarker/project-offloads/codex-cx-port4d-20261023:/home/dombarker/project-offloads/codex-cx-port4b-20261023:/home/dombarker/project-offloads/codex-cx-port4a-20261023'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-ports3-20261023:/home/dombarker/project-offloads/codex-cx-ports3-20261023/retained-cache'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-ports2-20261023:/home/dombarker/project-offloads/codex-cx-ports2-20261023/parser-cache'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port6ck-20261024:/home/dombarker/project-offloads/codex-cx-port5q2-20261024:/home/dombarker/project-offloads/codex-cx-port7clean-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port12count-20261024'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port15driver-20261024:/home/dombarker/project-offloads/codex-cx-port16cut-20261024'
+cfg['env']['LEAN_PATH'] = REMOTE + ':' + REMOTE+'/dependency-objects:' + cfg['env']['LEAN_PATH']
+E.mkdir(exist_ok=True)
+cfg['deps_fingerprint']['direct_source_hashes']={}
+for line in source.read_text().splitlines():
+ if line.startswith('import '):
+  for imported in line[7:].split():
+   dependency=source.parent/(imported.replace('.','/')+'.lean')
+   if dependency.is_file():
+    cfg['deps_fingerprint']['direct_source_hashes'][imported]=hashlib.sha256(dependency.read_bytes()).hexdigest()
+c=TOOLS/f'{attempt}.json'
+# Reserve before any remote work; an in-flight receipt is not yet present.
+with c.open('x') as handle: handle.write(json.dumps(cfg,indent=2)+'\n')
+def run(args,**kw):return subprocess.run(args,check=True,**kw)
+run(['ssh',HOST,'mkdir','-p',REMOTE])
+run(['scp','-q',str(source),str(c),str(TOOLS/'Port17RELEASE_run_host.py'),str(TOOLS/'Port17RELEASE_lean_host.py'),HOST+':'+REMOTE+'/'])
+# Fresh admission is inside the shared lock, immediately before scope creation.
+run(['scp','-q',str(TOOLS/'Port17RELEASE_admission.py'),HOST+':'+REMOTE+'/'])
+cmd=f'cd {REMOTE} && flock /tmp/aspis-r0-lean.lock sh -c "python3 Port17RELEASE_admission.py > {attempt}-reservation.json && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 Port17RELEASE_lean_host.py {attempt}.json"'
+r=subprocess.run(['ssh',HOST,cmd],capture_output=True,text=True)
+(E/f'{attempt}-launcher.log').write_text(r.stdout+r.stderr)
+run(['scp','-q',HOST+':'+REMOTE+'/'+attempt+'-reservation.json',str(E)])
+run(['scp','-qr',HOST+':'+REMOTE+'/'+attempt,str(E) ])
+print(r.stdout);print(r.stderr);sys.exit(r.returncode)
