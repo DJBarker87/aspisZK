@@ -1,0 +1,64 @@
+{
+  "schema": "Port21PROJECTION-runtime-source-graph-v1",
+  "command": "python3 tools/port21projection-20261024/Port21PROJECTION_graph.py",
+  "script_sha256": "b54abd5b90eb9cfc73c3264ac6ac56d7dd0eef6ff8f84859c8be47f2ade1bb8a",
+  "source_revision": "66a7e58dc139b5caa47f58eab53af39c71470647",
+  "files": [
+    {
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "revision": "e2747dd63d2468cff93d5c76880234c5c710defe",
+      "sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+      "bytes": 7551
+    },
+    {
+      "path": "programs/r1-cost-probe/Cargo.toml",
+      "revision": "e2747dd63d2468cff93d5c76880234c5c710defe",
+      "sha256": "6aa7d08708762ddadf3a6173b14256d7c5a3f1eba12e8631e9abb0c154eebe7b",
+      "bytes": 999
+    },
+    {
+      "path": "programs/aspis-verifier/Cargo.toml",
+      "revision": "e2747dd63d2468cff93d5c76880234c5c710defe",
+      "sha256": "51194a1a498919684b7b53789de2cc41bdfe04e2c1713734e2ada613f08192a5",
+      "bytes": 11201
+    },
+    {
+      "path": "Cargo.lock",
+      "revision": "e2747dd63d2468cff93d5c76880234c5c710defe",
+      "sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+      "bytes": 117349
+    },
+    {
+      "path": "/Users/dominic/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-2.3.0/src/lib.rs",
+      "sha256": "027efed4018bc8f1a340e576bbb0135cb70ba31fc465a23f4732ff8d5196d919",
+      "bytes": 22746,
+      "lock_package": "\nname = \"solana-program-entrypoint\"\nversion = \"2.3.0\"\nsource = \"registry+https://github.com/rust-lang/crates.io-index\"\nchecksum = \"32ce041b1a0ed275290a5008ee1a4a6c48f5054c8a3d78d313c08958a06aedbd\"\ndependencies = [\n \"solana-account-info\",\n \"solana-msg\",\n \"solana-program-error\",\n \"solana-pubkey\",\n]\n\n",
+      "package_checksum": "32ce041b1a0ed275290a5008ee1a4a6c48f5054c8a3d78d313c08958a06aedbd",
+      "registry_content_checksum_verified": true,
+      "spans": [
+        {
+          "start_line": 130,
+          "end_line": 142,
+          "text": "        /// # Safety\n        #[no_mangle]\n        pub unsafe extern \"C\" fn entrypoint(input: *mut u8) -> u64 {\n            let (program_id, accounts, instruction_data) = unsafe { $crate::deserialize(input) };\n            match $process_instruction(program_id, &accounts, instruction_data) {\n                Ok(()) => $crate::SUCCESS,\n                Err(error) => error.into(),\n            }\n        }\n        $crate::custom_heap_default!();\n        $crate::custom_panic_default!();\n    };\n}"
+        },
+        {
+          "start_line": 222,
+          "end_line": 234,
+          "text": "macro_rules! custom_heap_default {\n    () => {\n        #[cfg(all(not(feature = \"custom-heap\"), target_os = \"solana\"))]\n        #[global_allocator]\n        #[allow(deprecated)] //we get to use deprecated pub fields\n        static A: $crate::BumpAllocator = $crate::BumpAllocator {\n            start: $crate::HEAP_START_ADDRESS as usize,\n            len: $crate::HEAP_LENGTH,\n        };\n    };\n}\n\n/// Define the default global panic handler."
+        },
+        {
+          "start_line": 279,
+          "end_line": 288,
+          "text": "macro_rules! custom_panic_default {\n    () => {\n        #[cfg(all(not(feature = \"custom-panic\"), target_os = \"solana\"))]\n        #[no_mangle]\n        fn custom_panic(info: &core::panic::PanicInfo<'_>) {\n            // Full panic reporting\n            $crate::__msg!(\"{}\", info);\n        }\n    };\n}"
+        },
+        {
+          "start_line": 291,
+          "end_line": 365,
+          "text": "pub struct BumpAllocator {\n    #[deprecated(\n        since = \"2.2.2\",\n        note = \"This field should not be accessed directly. It will become private in future versions\"\n    )]\n    pub start: usize,\n    #[deprecated(\n        since = \"2.2.2\",\n        note = \"This field should not be accessed directly. It will become private in future versions\"\n    )]\n    pub len: usize,\n}\n\nimpl BumpAllocator {\n    /// Creates the allocator tied to a provided slice.\n    /// This will not initialize the provided memory, except for the first\n    /// bytes where the pointer is stored.\n    ///\n    /// # Safety\n    /// As long as BumpAllocator or any of its allocations are alive,\n    /// writing into or deallocating the arena will cause UB.\n    ///\n    /// Integer arithmetic in this global allocator implementation is safe when\n    /// operating on the prescribed `HEAP_START_ADDRESS` and `HEAP_LENGTH`. Any\n    /// other use may overflow and is thus unsupported and at one's own risk.\n    #[inline]\n    #[allow(clippy::arithmetic_side_effects)]\n    pub unsafe fn new(arena: &mut [u8]) -> Self {\n        debug_assert!(\n            arena.len() > size_of::<usize>(),\n            \"Arena should be larger than usize\"\n        );\n\n        // create a pointer to the start of the arena\n        // that will hold an address of the byte following free space\n        let pos_ptr = arena.as_mut_ptr() as *mut usize;\n        // initialize the data there\n        *pos_ptr = pos_ptr as usize + arena.len();\n\n        #[allow(deprecated)] //we get to use deprecated pub fields\n        Self {\n            start: pos_ptr as usize,\n            len: arena.len(),\n        }\n    }\n}\n\n/// Integer arithmetic in this global allocator implementation is safe when\n/// operating on the prescribed `HEAP_START_ADDRESS` and `HEAP_LENGTH`. Any\n/// other use may overflow and is thus unsupported and at one's own risk.\n#[allow(clippy::arithmetic_side_effects)]\nunsafe impl std::alloc::GlobalAlloc for BumpAllocator {\n    #[inline]\n    #[allow(deprecated)] //we get to use deprecated pub fields\n    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {\n        let pos_ptr = self.start as *mut usize;\n        let mut pos = *pos_ptr;\n        if pos == 0 {\n            // First time, set starting position\n            pos = self.start + self.len;\n        }\n        pos = pos.saturating_sub(layout.size());\n        pos &= !(layout.align().wrapping_sub(1));\n        if pos < self.start + size_of::<*mut u8>() {\n            return null_mut();\n        }\n        *pos_ptr = pos;\n        pos as *mut u8\n    }\n    #[inline]\n    unsafe fn dealloc(&self, _: *mut u8, _: Layout) {\n        // I'm a bump allocator, I don't free\n    }\n}\n"
+        }
+      ]
+    }
+  ],
+  "scope": "actual cost-probe global allocator declaration and lock-matched SDK; no SBF object identity or native primitive effect proof",
+  "print_axioms": "N/A: source inspection"
+}

@@ -1,0 +1,130 @@
+{
+  "scope": "pinned extraction host std source, NOT SBF sysroot or deployed identity",
+  "files": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+      "bytes": 167769,
+      "hits": [
+        {
+          "needle": "pub const fn new()",
+          "start_line": 463,
+          "end_line": 465,
+          "text": "    pub const fn new() -> Self {\n        Vec { buf: RawVec::new(), len: 0 }\n    }"
+        },
+        {
+          "needle": "pub fn try_reserve_exact(",
+          "start_line": 1580,
+          "end_line": 1582,
+          "text": "    pub fn try_reserve_exact(&mut self, additional: usize) -> Result<(), TryReserveError> {\n        self.buf.try_reserve_exact(self.len, additional)\n    }"
+        },
+        {
+          "needle": "pub fn resize(",
+          "start_line": 3529,
+          "end_line": 3537,
+          "text": "    pub fn resize(&mut self, new_len: usize, value: T) {\n        let len = self.len();\n\n        if new_len > len {\n            self.extend_with(new_len - len, value)\n        } else {\n            self.truncate(new_len);\n        }\n    }"
+        },
+        {
+          "needle": "fn extend_with(",
+          "start_line": 3655,
+          "end_line": 3681,
+          "text": "    fn extend_with(&mut self, n: usize, value: T) {\n        self.reserve(n);\n\n        unsafe {\n            let mut ptr = self.as_mut_ptr().add(self.len());\n            // Use SetLenOnDrop to work around bug where compiler\n            // might not realize the store through `ptr` through self.set_len()\n            // don't alias.\n            let mut local_len = SetLenOnDrop::new(&mut self.len);\n\n            // Write all elements except the last one\n            for _ in 1..n {\n                ptr::write(ptr, value.clone());\n                ptr = ptr.add(1);\n                // Increment the length in every step in case clone() panics\n                local_len.increment_len(1);\n            }\n\n            if n > 0 {\n                // We can write the last element directly without cloning needlessly\n                ptr::write(ptr, value);\n                local_len.increment_len(1);\n            }\n\n            // len set by scope guard\n        }\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "bytes": 35336,
+      "hits": [
+        {
+          "needle": "fn try_reserve_exact(",
+          "start_line": 378,
+          "end_line": 385,
+          "text": "    pub(crate) fn try_reserve_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n    ) -> Result<(), TryReserveError> {\n        // SAFETY: All calls on self.inner pass T::LAYOUT as the elem_layout\n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }"
+        },
+        {
+          "needle": "fn try_reserve_exact(",
+          "start_line": 719,
+          "end_line": 736,
+          "text": "    unsafe fn try_reserve_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n        elem_layout: Layout,\n    ) -> Result<(), TryReserveError> {\n        if self.needs_to_grow(len, additional, elem_layout) {\n            // SAFETY: Precondition passed to caller\n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            // Inform the optimizer that the reservation has succeeded or wasn't needed\n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }"
+        },
+        {
+          "needle": "fn grow_exact(",
+          "start_line": 785,
+          "end_line": 805,
+          "text": "    unsafe fn grow_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n        elem_layout: Layout,\n    ) -> Result<(), TryReserveError> {\n        if elem_layout.size() == 0 {\n            // Since we return a capacity of `usize::MAX` when the type size is\n            // 0, getting to here necessarily means the `RawVec` is overfull.\n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        // SAFETY: preconditions passed to caller\n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        // SAFETY: `finish_grow` would have failed if `cap > isize::MAX`\n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }"
+        },
+        {
+          "needle": "fn finish_grow(",
+          "start_line": 543,
+          "end_line": 567,
+          "text": "    unsafe fn finish_grow(\n        &self,\n        cap: usize,\n        elem_layout: Layout,\n    ) -> Result<NonNull<[u8]>, TryReserveError> {\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            // FIXME(const-hack): switch to `debug_assert_eq`\n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                // The allocator checks for alignment equality\n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        // FIXME(const-hack): switch back to `map_err`\n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "bytes": 22366,
+      "hits": [
+        {
+          "needle": "pub unsafe fn alloc(",
+          "start_line": 95,
+          "end_line": 103,
+          "text": "pub unsafe fn alloc(layout: Layout) -> *mut u8 {\n    unsafe {\n        // Make sure we don't accidentally allow omitting the allocator shim in\n        // stable code until it is actually stabilized.\n        __rust_no_alloc_shim_is_unstable_v2();\n\n        __rust_alloc(layout.size(), layout.alignment())\n    }\n}"
+        },
+        {
+          "needle": "fn allocate(",
+          "start_line": 448,
+          "end_line": 450,
+          "text": "    fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {\n        self.alloc_impl(layout, false)\n    }"
+        },
+        {
+          "needle": "fn grow(",
+          "start_line": 467,
+          "end_line": 475,
+          "text": "    unsafe fn grow(\n        &self,\n        ptr: NonNull<u8>,\n        old_layout: Layout,\n        new_layout: Layout,\n    ) -> Result<NonNull<[u8]>, AllocError> {\n        // SAFETY: all conditions must be upheld by the caller\n        unsafe { self.grow_impl(ptr, old_layout, new_layout, false) }\n    }"
+        },
+        {
+          "needle": "fn handle_alloc_error(",
+          "start_line": 543,
+          "end_line": 562,
+          "text": "pub const fn handle_alloc_error(layout: Layout) -> ! {\n    const fn ct_error(_: Layout) -> ! {\n        panic!(\"allocation failed\");\n    }\n\n    #[inline]\n    fn rt_error(layout: Layout) -> ! {\n        unsafe {\n            __rust_alloc_error_handler(layout.size(), layout.align());\n        }\n    }\n\n    #[cfg(not(panic = \"immediate-abort\"))]\n    {\n        core::intrinsics::const_eval_select((layout,), ct_error, rt_error)\n    }\n\n    #[cfg(panic = \"immediate-abort\")]\n    ct_error(layout)\n}"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/global.rs",
+      "sha256": "3c33d30d18b51d866ea3d6a76599fe1daa884addf79c189ff05f5008d3d40ee2",
+      "bytes": 13192,
+      "hits": [
+        {
+          "needle": "unsafe fn realloc(",
+          "start_line": 286,
+          "end_line": 302,
+          "text": "    unsafe fn realloc(&self, ptr: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {\n        let alignment = layout.alignment();\n        // SAFETY: the caller must ensure that the `new_size` does not overflow\n        // when rounded up to the next multiple of `alignment`.\n        let new_layout = unsafe { Layout::from_size_alignment_unchecked(new_size, alignment) };\n        // SAFETY: the caller must ensure that `new_layout` is greater than zero.\n        let new_ptr = unsafe { self.alloc(new_layout) };\n        if !new_ptr.is_null() {\n            // SAFETY: the previously allocated block cannot overlap the newly allocated block.\n            // The safety contract for `dealloc` must be upheld by the caller.\n            unsafe {\n                ptr::copy_nonoverlapping(ptr, new_ptr, cmp::min(layout.size(), new_size));\n                self.dealloc(ptr, layout);\n            }\n        }\n        new_ptr\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "bytes": 37605,
+      "hits": [
+        {
+          "needle": "fn clone(&self)",
+          "start_line": 449,
+          "end_line": 451,
+          "text": "    fn clone(&self) -> Self {\n        SpecArrayClone::clone(self)\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "sha256": "09a569f9ed39e2ec809fa28701e64652887a94e0814996b13dc24f370c8f1933",
+      "bytes": 73869,
+      "hits": []
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+test_confirmed_exit_after_pin (__main__.GateTests.test_confirmed_exit_after_pin) ... ERROR
+test_esrch_existing_proc_denied (__main__.GateTests.test_esrch_existing_proc_denied) ... ERROR
+test_kernel_esrch_revalidated_and_absent (__main__.GateTests.test_kernel_esrch_revalidated_and_absent) ... ERROR
+test_live_metrics_recorded (__main__.GateTests.test_live_metrics_recorded) ... ERROR
+test_missing_live_metric_denied (__main__.GateTests.test_missing_live_metric_denied) ... ERROR
+test_replacement_identity_denied (__main__.GateTests.test_replacement_identity_denied) ... ERROR
+test_unreadable_live_denied (__main__.GateTests.test_unreadable_live_denied) ... ERROR
+
+======================================================================
+ERROR: test_confirmed_exit_after_pin (__main__.GateTests.test_confirmed_exit_after_pin)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 24, in test_confirmed_exit_after_pin
+    rows,exits=self.invoke([77],[ (77,1) ]);self.assertFalse(rows);self.assertEqual(len(exits),1)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_esrch_existing_proc_denied (__main__.GateTests.test_esrch_existing_proc_denied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 33, in test_esrch_existing_proc_denied
+    with self.assertRaises(AssertionError):self.invoke([ProcessLookupError(errno.ESRCH,'gone'),ProcessLookupError(errno.ESRCH,'gone')],[])
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_kernel_esrch_revalidated_and_absent (__main__.GateTests.test_kernel_esrch_revalidated_and_absent)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 29, in test_kernel_esrch_revalidated_and_absent
+    rows,exits=self.invoke([ProcessLookupError(errno.ESRCH,'gone'),ProcessLookupError(errno.ESRCH,'gone')],[])
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_live_metrics_recorded (__main__.GateTests.test_live_metrics_recorded)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 37, in test_live_metrics_recorded
+    self.live();rows,exits=self.invoke([77],[]);self.assertEqual(rows[0]['rss'],12288);self.assertFalse(exits)
+                           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_missing_live_metric_denied (__main__.GateTests.test_missing_live_metric_denied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 40, in test_missing_live_metric_denied
+    with self.assertRaises(AssertionError):self.invoke([77],[])
+                                           ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_replacement_identity_denied (__main__.GateTests.test_replacement_identity_denied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 35, in test_replacement_identity_denied
+    with self.assertRaises(RuntimeError):self.invoke([ProcessLookupError(errno.ESRCH,'gone'),88],[])
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+======================================================================
+ERROR: test_unreadable_live_denied (__main__.GateTests.test_unreadable_live_denied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 27, in test_unreadable_live_denied
+    with self.assertRaises(AssertionError): self.invoke([77],[])
+                                            ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-port19rest/tools/port21projection-20261024/Port21PROJECTION_gate_test.py", line 15, in invoke
+    with patch.object(gate,'pathlib',types.SimpleNamespace(Path=self.path)), patch.object(gate.os,'pidfd_open',side_effect=pin), patch.object(gate.os,'close'),patch.object(gate.select,'poll',return_value=types.SimpleNamespace(register=lambda *a:None,poll=lambda _:poll)):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'pidfd_open'
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.006s
+
+FAILED (errors=7)
