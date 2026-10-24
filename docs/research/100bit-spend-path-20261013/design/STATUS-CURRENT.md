@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 22:34 BST
+## Current coordinator checkpoint — 2026-10-24 22:44 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -39,9 +39,12 @@ SbfCachePrep94997 follows up with narrow read-only privileged metadata,
 private export/provenance/cold-guard preparation; ZERO builds/scopes. Resource audit merged25b0b9df48 is NOT ADOPTED.
 Latest complete capture denies all proposed sizes on a4KiB counter mismatch;
 ResourceStat full-charge/no-credit fallback reviewed and merged74d67bcc99.
-ResourceACTUAL91101 may run one prospective/actual-scope metadata-only
-rehearsal with3G/4G/noSwap; no heavy consumer/general gate adoption.
-Port27SDK92445 has6 existing Lean slots for the coherent SDK/caller join.
+Resource rehearsal merged5756082d85: prospective DENIED on derived
+parent-minus-child anon -14,086,144B. NO scope/GO/marker/workload launched.
+ResourceHierarchy96923 assesses conservative accounting OFFLINE ONLY;
+current headroom UNKNOWN, no heavy consumer/general gate adoption.
+SDK audit merged93de4606f3: current immutable declaration export requested
+from A, actual same-cut integration still open;0/6 Lean used,6 reserved.
 No production adoption.
 
 Session A9acc015544 factored SDK packet is independently reviewed:
