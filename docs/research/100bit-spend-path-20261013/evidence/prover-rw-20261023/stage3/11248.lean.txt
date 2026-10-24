@@ -1,0 +1,44 @@
+import R1Z.ProverRwFullFuns
+import R1Z.ProverRwSamplerArithmetic
+
+/-! Local API-normalization facts. No source dictionary, filesystem semantics,
+IEEE754 interpretation or compiler/ROM transport is concluded here. -/
+set_option autoImplicit false
+namespace R1Z.ProverRwEmissionAdapters
+open Aeneas Aeneas.Std Result
+
+theorem low_count (n : Nat) (width : Nat) (h : width ∣ 2^32) :
+    (n % 2^32) % width = n % width := by
+  exact Nat.mod_mod_of_dvd n h
+
+theorem neq_default {A : Type} (eq : A → A → Result Bool) (a b : A) :
+    core.cmp.PartialEq.ne.default eq a b = (do let value ← eq a b; ok (!value)) := by
+  cases h : eq a b with
+  | fail e => simp only [core.cmp.PartialEq.ne.default,h,bind_tc_fail]
+  | div => simp only [core.cmp.PartialEq.ne.default,h,bind_tc_div]
+  | ok value =>
+    simp only [core.cmp.PartialEq.ne.default,h,bind_tc_ok]
+    cases value <;> rfl
+
+/-- The generated backward continuation for this owned closure is identity. -/
+theorem owned_callback {C R : Type} (callback : C → Usize → Result (R × C))
+    (c : C) (i : Usize) :
+    (do let (r,after) ← callback c i; ok (r,(fun x : C => x) after)) =
+      callback c i := by
+  cases h : callback c i with
+  | fail e => rfl
+  | div => rfl
+  | ok out => cases out; rfl
+
+theorem unwrap_ok {A E : Type} (value : A) :
+    ProverRwFull.unwrapSlice (core.result.Result.Ok (E := E) value) = ok value := rfl
+
+theorem unwrap_error {A E : Type} (error : E) :
+    ProverRwFull.unwrapSlice (T := A) (core.result.Result.Err error) = fail .panic := rfl
+
+#print axioms low_count
+#print axioms neq_default
+#print axioms owned_callback
+#print axioms unwrap_ok
+#print axioms unwrap_error
+end R1Z.ProverRwEmissionAdapters

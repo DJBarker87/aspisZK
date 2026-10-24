@@ -113,3 +113,12 @@ established. The next concrete deliverable is an axiom-free, fully typed
 external dictionary and selected semantic-row caller binding that consumes
 `ProverRwSemanticSampler.sample_total_semChal`; it must identify the actual
 read block and retained ordered effects rather than assume their equality.
+
+## Continuation checkpoint (2026-10-24)
+
+The full caller now has an axiom-audited **parameterized** dictionary and a
+concrete selected sampler entry, plus direct rewritten retry-control refinement.
+This supersedes the earlier statement that no full Funs proof build was attempted.
+It does not supply the remaining native dictionary instances or conjunct 1.
+See `design/PROVER-RW-20261024-STAGE3-CONTINUATION.md` for exact claims,
+backend adaptations, rejected audits and the remaining obligations.

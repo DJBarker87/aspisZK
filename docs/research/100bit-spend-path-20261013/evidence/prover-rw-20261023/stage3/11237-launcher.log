@@ -1,0 +1,50 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1007); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwFullSemantic.lean:31:84: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H : Type
+hash : aspis_core.digest.Digest32 H
+s next : host_wire.SemanticTranscript H
+row : U8
+frame : Slice U8
+block : Std.Array U8 32#usize
+valid : ¬row > 24#u8
+read : host_wire.SemanticTranscript.sample_block hash s row frame = ok (core.result.Result.Ok block, next)
+q : CallerQM
+hq : sampler.qm31_sample block = ok q
+he :
+  (algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact) (decode q) =
+    R0P.SemSource.semChal (AspisV8R19.SqueezeOracleBridge.decodeState block)
+⊢ (let (r, self1) := (core.result.Result.Ok block, next)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)) =
+    ok (core.result.Result.Ok q, next)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwFullSemantic.lean:35:47: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [host_wire.SemanticTranscript.semantic, ̲valid, ̲if_false, ̲read, ̲bind_tc_ok,
+      core.result.Result.Insts.CoreOpsTry.branch,̵h̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwFullSemantic.invalid_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwFullSemantic.from_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.77
+	Maximum resident set size (kbytes): 4076264
+	Swaps: 0
+	Exit status: 1

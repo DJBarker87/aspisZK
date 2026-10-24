@@ -1,0 +1,83 @@
+import Aeneas
+open Aeneas Aeneas.Std Result ControlFlow Error
+namespace ProverRwWire
+
+/-- [aspis_core::field::M31]
+    Source: 'crates/aspis-core/src/field.rs', lines 23:0-23:14
+    Name pattern: [aspis_core::field::M31]
+    Visibility: public -/
+@[reducible, rust_type "aspis_core::field::M31"]
+def aspis_core.field.M31 := Std.U32
+
+/-- [aspis_core::field::CM31]
+    Source: 'crates/aspis-core/src/field.rs', lines 255:0-255:15
+    Name pattern: [aspis_core::field::CM31]
+    Visibility: public -/
+@[rust_type "aspis_core::field::CM31"]
+structure aspis_core.field.CM31 where
+  a : aspis_core.field.M31
+  b : aspis_core.field.M31
+
+/-- [aspis_core::field::QM31]
+    Source: 'crates/aspis-core/src/field.rs', lines 432:0-432:15
+    Name pattern: [aspis_core::field::QM31]
+    Visibility: public -/
+@[rust_type "aspis_core::field::QM31"]
+structure aspis_core.field.QM31 where
+  c0 : aspis_core.field.CM31
+  c1 : aspis_core.field.CM31
+
+/-- Trait declaration: [aspis_core::digest::Digest32]
+    Source: 'crates/aspis-core/src/digest.rs', lines 6:0-6:24
+    Name pattern: [aspis_core::digest::Digest32]
+    Visibility: public -/
+@[rust_trait "aspis_core::digest::Digest32"
+  (parentClauses := ["coremarkerCopyInst"])]
+structure aspis_core.digest.Digest32 (Self : Type) where
+  coremarkerCopyInst : core.marker.Copy Self
+  digest : Self → (Slice (Slice Std.U8)) → Result (Array Std.U8 32#usize)
+
+/-- [aspis_r1_cost_probe::r1_wire::Error]
+    Source: 'crates/aspis-r1-cost-probe/src/r1_wire.rs', lines 24:0-36:1
+    Visibility: public -/
+inductive r1_wire.Error where
+| Allocation : r1_wire.Error
+| RowOrder : Std.U8 → Std.U8 → r1_wire.Error
+| InvalidRow : r1_wire.Error
+| Tag : Std.U8 → r1_wire.Error
+| Length : Std.U8 → r1_wire.Error
+| NonCanonical : Std.U8 → Std.Usize → r1_wire.Error
+| Boundary : Std.Usize → r1_wire.Error
+| Terminal : r1_wire.Error
+| EqualCirclePoints : r1_wire.Error
+| TrailingBytes : r1_wire.Error
+| Public : r1_wire.Error
+| ActivePole : r1_wire.Error
+
+/-- [aspis_r1_cost_probe::host_wire::SemanticTranscript]
+    Source: 'crates/aspis-r1-cost-probe/src/host_wire.rs', lines 50:0-54:1
+    Visibility: public -/
+structure host_wire.SemanticTranscript (H : Type) where
+  state : Array Std.U8 32#usize
+  hash : H
+  next_row : Std.U8
+
+def r1_wire.Error.read_discriminant : r1_wire.Error → Isize
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+  | .ActivePole => 11#isize
+
+instance _root_.ProverRwWire.r1_wire.Error.instDiscriminant :
+    Aeneas.Std.Discriminant r1_wire.Error Isize where
+  read_discriminant := r1_wire.Error.read_discriminant
+
+end ProverRwWire

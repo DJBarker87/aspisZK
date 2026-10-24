@@ -1,0 +1,41 @@
+import R1Z.ProverRwFullFuns
+import R1Z.ProverRwFullSampler
+
+/-! The selected sampler is consumed by the actual full-caller semantic
+method. The read block is identified by the caller's own sample_block call,
+not an unrelated tape parameter. Parser/hash success remains explicit. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwFullSemantic
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRwFullSampler
+variable [ExternalTypes]
+
+theorem invalid_row (ops : ExternalFuns) {H : Type}
+    (hash : aspis_core.digest.Digest32 H) (s : host_wire.SemanticTranscript H)
+    (row : U8) (frame : Slice U8) (invalid : row > 24#u8) :
+    @host_wire.SemanticTranscript.semantic _ (install ops) H hash s row frame =
+      ok (.Err r1_wire.Error.InvalidRow,s) := by
+  simp only [host_wire.SemanticTranscript.semantic,invalid,if_true]
+
+theorem from_read (ops : ExternalFuns) {H : Type}
+    (hash : aspis_core.digest.Digest32 H) (s next : host_wire.SemanticTranscript H)
+    (row : U8) (frame : Slice U8) (block : Array U8 32#usize)
+    (valid : ¬ row > 24#u8)
+    (read : @host_wire.SemanticTranscript.sample_block _ (install ops) H hash s row frame =
+      ok (.Ok block,next)) :
+    ∃ q : aspis_core.field.QM31,
+      @host_wire.SemanticTranscript.semantic _ (install ops) H hash s row frame =
+        ok (.Ok q,next) ∧
+      algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact (decode q) =
+        R0P.SemSource.semChal (AspisV8R19.SqueezeOracleBridge.decodeState block) := by
+  obtain ⟨q,hq,he⟩ := total ops block
+  refine ⟨q,?_,he⟩
+  simp only [host_wire.SemanticTranscript.semantic,valid,if_false,read,bind_tc_ok,
+    core.result.Result.Insts.CoreOpsTry.branch]
+  dsimp only
+  simp only [bind_tc_ok,hq]
+
+#print axioms invalid_row
+#print axioms from_read
+end R1Z.ProverRwFullSemantic
