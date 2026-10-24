@@ -1,0 +1,111 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:49:10: warning: Variable name `reply` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:77:18: error: Type mismatch
+  ih value
+has type
+  erase (next value >>= k) = do
+    let value ← erase (next value)
+    erase (k value)
+but is expected to have type
+  erase (Code.digest D hash parts next >>= k) = do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:78:20: error: Tactic `rfl` failed: The left-hand side
+  erase (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+
+case digest.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+error : Error
+⊢ erase (Code.digest D hash parts next >>= k) = do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:79:13: error: Tactic `rfl` failed: The left-hand side
+  erase (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+
+case digest.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+⊢ erase (Code.digest D hash parts next >>= k) = do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:91:18: error: Type mismatch: After simplification, term
+  ih value
+ has type
+  (run (next value)).2 = erase (next value)
+but is expected to have type
+  (match reply : D.digest hash parts with
+      | ok value => (Event.digest D hash parts (ok value) :: (run (next value)).1, (run (next value)).2)
+      | fail error => ([Event.digest D hash parts (fail error)], fail error)
+      | div => ([Event.digest D hash parts div], div)).2 =
+    erase (next value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:92:17: error: unsolved goals
+case digest.fail
+A H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), (run (next a)).2 = erase (next a)
+error : Error
+reply : D.digest hash parts = fail error
+⊢ (match reply : D.digest hash parts with
+      | ok value => (Event.digest D hash parts (ok value) :: (run (next value)).1, (run (next value)).2)
+      | fail error => ([Event.digest D hash parts (fail error)], fail error)
+      | div => ([Event.digest D hash parts div], div)).2 =
+    fail error
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:93:10: error: unsolved goals
+case digest.div
+A H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), (run (next a)).2 = erase (next a)
+reply : D.digest hash parts = div
+⊢ (match reply : D.digest hash parts with
+      | ok value => (Event.digest D hash parts (ok value) :: (run (next value)).1, (run (next value)).2)
+      | fail error => ([Event.digest D hash parts (fail error)], fail error)
+      | div => ([Event.digest D hash parts div], div)).2 =
+    div
+'AspisR1PublicPreparation.PreparedHashCode.erase_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_bind' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.run_value' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

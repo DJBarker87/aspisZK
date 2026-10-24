@@ -1,0 +1,63 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:77:18: error: Type mismatch: After simplification, term
+  ih value
+ has type
+  @Eq (Result B) (erase (bind (next value) k)) (Std.bind (erase (next value)) fun value => erase (k value))
+but is expected to have type
+  @Eq (Result B) (Std.bind (ok value) fun value => erase (bind (next value) k))
+    (Std.bind (Std.bind (ok value) fun value => erase (next value)) fun value => erase (k value))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:78:17: error: unsolved goals
+case digest.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+error : Error
+reply : D.digest hash parts = fail error
+⊢ (Std.bind (fail error) fun value => erase (bind (next value) k)) =
+    Std.bind (Std.bind (fail error) fun value => erase (next value)) fun value => erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:79:10: error: unsolved goals
+case digest.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+reply : D.digest hash parts = div
+⊢ (Std.bind div fun value => erase (bind (next value) k)) =
+    Std.bind (Std.bind div fun value => erase (next value)) fun value => erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:78:58: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵,̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲r̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:79:51: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵,̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲r̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1PublicPreparation.PreparedHashCode.erase_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_bind' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.run_value' depends on axioms: [propext, Classical.choice, Quot.sound]

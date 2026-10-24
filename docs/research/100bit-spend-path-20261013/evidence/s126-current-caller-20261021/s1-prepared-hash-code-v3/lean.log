@@ -1,0 +1,45 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:75:32: error: unsolved goals
+case this
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+⊢ ?m.93
+
+case digest
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    erase (next a >>= k) = do
+      let value ← erase (next a)
+      erase (k value)
+this : ?m.93
+⊢ (do
+      let value ← D.digest hash parts
+      erase (bind (next value) k)) =
+    do
+    let value ← erase (Code.digest D hash parts next)
+    erase (k value)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:77:14: error: unexpected token ':'; expected 'add_aesop_rules', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'progress_array_spec', 'simproc', 'step_array_spec', 'syntax' or 'unif_hint'
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedHashCodeV1.lean:79:20: error: unexpected token ','; expected 'add_aesop_rules', 'binder_predicate', 'builtin_cbv_simproc', 'builtin_dsimproc', 'builtin_simproc', 'cbv_simproc', 'def_eval_config_item', 'dsimproc', 'elab', 'elab_rules', 'grind_pattern', 'infix', 'infixl', 'infixr', 'instance', 'macro', 'macro_rules', 'notation', 'notation3', 'postfix', 'prefix', 'progress_array_spec', 'simproc', 'step_array_spec', 'syntax' or 'unif_hint'
+'AspisR1PublicPreparation.PreparedHashCode.erase_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.erase_bind' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.run_value' depends on axioms: [propext, Classical.choice, Quot.sound]
