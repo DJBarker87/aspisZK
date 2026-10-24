@@ -9086,3 +9086,31 @@ counterexample evidence. Stage-3 budget is 84/100 Lean and 42/60 Kani used;
 this preflight gets only the remaining 16 Lean and 18 Kani, IDs starting11289
 through11399 subject to used-ID checks. A broader follow-up needs lead review
 of this concrete preflight, not an unannounced budget reset.
+
+
+## D192 — explicit entropy preflight reviewed; cap16 source gate next (2026-10-24)
+
+Candidate ece5baabbc remains unmerged. The source-derived owned Draw64
+prototype is extracted with real changing provider state; concrete_zero_then_one
+consumes two entries from one finite Tape and returns cursor2. Error and cap
+control preserve provider state. Four final module hashes and nine standard
+axiom reports were checked; audit11305 at ddb833a1cd exited0,wall2.14s,
+RSS3873112KiB,swap0. Same-event runtime coverage is26214 LOCAL entropy-helper
+cases, and Kani proves an arbitrary-input ONE-iteration source cut only.
+Neither establishes universal cap16 or cap8/native event correspondence.
+No crates/programs change against H5 base71100fccbd; no ELF/timing rerun.
+
+E1/E2, native error-carrier association, physical cleanup, callback/retry and
+joint L1/L2 transport remain undischarged. Generated Emission carries explicit
+heartbeat/recursion defaults; the next stage must remove them in adaptation
+and validate the affected closure under default options. No limit increase is
+authorized. This is a proof-configuration cleanup, not a rejected mathematical
+claim or permission to substitute a model theorem for native refinement.
+
+Stage3 consumed100/100 Lean and44/60 Kani. After review, authorize a separate
+bounded continuation of60 NEW Lean attempts for universal cap16 same-event
+source-owner induction; retain only16 unused Kani runs and both old/new
+ledgers. This stage changes isolated prototypes/proofs only; native plumbing
+follows its predecessor gate. Scope/prompt is archived under
+ evidence/coordinator-20261024/prompt-prover-rng-owner-20261024.txt.
+No security target, contract, native source, trust or candidate adoption changes.

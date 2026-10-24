@@ -13,11 +13,11 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
-| Explicit entropy preflight | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D191 host-only explicit entropy-state extraction and native caller coupling | Remaining16 Lean,18 Kani; J11289–11399, check unused IDs |
+| Entropy cap16 equivalence | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D192 universal same-event source owner induction and default-option cleanup | New60 Lean; old100 exhausted;16 Kani remain; J11400–11499 after collision checks |
 | Concrete clean-source driver | .worktrees/cx-port7clean / codex/cx-port7clean-20261024 | Terminal Checks/no-hit plus actual source trace embeddings | 100 Lean,20 Kani |
 
-All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively33914,35253. Scratch output names:
-codex-prover-rng-20261024.out,codex-port7clean-20261024.out. Only terminal markers
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively39815,35253. Scratch output names:
+codex-prover-rng-owner-20261024.out,codex-port7clean-20261024.out. Only terminal markers
 or missing handles trigger reading the final ~40 lines. Prompts archived under
 evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
 
@@ -93,3 +93,14 @@ stage commits, then compose checkpoint/authentication in the concrete driver.
 No additional worker is launched on overlapping driver glue while it owns
 that path. The next independent job should follow the actual residuals in its
 handoff, not duplicate its optional source count/trace investigation.
+
+
+## Explicit entropy preflight reviewed — 2026-10-24
+
+Candidate ece5baabbc adds the actual changing-state extraction prototype and
+local source cut; no native source delta. See LOG D192 for exact retained
+scope, accepted hashes/axioms and generated-option cleanup. New owner stage
+uses a separately authorized60 Lean budget, preserving exhausted100/100 and
+44/60 Kani history. Primary deliverable is universal cap16 same-event equality;
+native provider/error/E1/callback/cap8 and L1/L2 remain next. No candidate merge
+or adoption. The checkpoint/authentication integration remains with Port7CLEAN.
