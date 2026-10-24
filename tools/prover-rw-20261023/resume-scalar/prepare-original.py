@@ -6,7 +6,7 @@ R=Path('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zer
 T=D/'vendor/zeroize-original';assert not T.exists()
 assert (R/'src/lib.rs').read_bytes()==(D/'zeroize-original.rs.txt').read_bytes()
 shutil.copytree(R,T)
-p=T/'Cargo.toml';before=p.read_text();assert before.count('name = "zeroize"')==2
+p=T/'Cargo.toml';before=p.read_text()
 # Rename only the package; preserve [lib] name so Cargo dependency alias resolves it.
 header=before.index('[package]');end=before.index('\n[',header+1)
 a=before[header:end];assert a.count('name = "zeroize"')==1
