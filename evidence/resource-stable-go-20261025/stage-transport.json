@@ -1,0 +1,23 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "/usr/bin/env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,os,pathlib,sys,hashlib\nx=json.load(sys.stdin); root=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-stable-go-20261025'\"'\"')\nassert not root.exists(), '\"'\"'existing stage: conflicting writer or prior attempt'\"'\"'\nassert root.parent.resolve()==root.parent\nassert root.parent.stat().st_uid==os.getuid()\nassert str(root.parent.resolve())==x['\"'\"'manifest'\"'\"']['\"'\"'parent_resolved'\"'\"']\nroot.mkdir(mode=0o700)\nfor name,source in x['\"'\"'files'\"'\"'].items():\n p=root/name; p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)\n with p.open('\"'\"'x'\"'\"') as f:f.write(source)\n p.chmod(0o444)\n assert hashlib.sha256(p.read_bytes()).hexdigest()==x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'][name]['\"'\"'sha256'\"'\"']\nwith (root/'\"'\"'ResourceStableGO_manifest.json'\"'\"').open('\"'\"'x'\"'\"') as f:json.dump(x['\"'\"'manifest'\"'\"'],f,sort_keys=True,indent=2); f.write(chr(10))\n(root/'\"'\"'ResourceStableGO_manifest.json'\"'\"').chmod(0o444)\nassert json.loads((root/'\"'\"'ResourceStableGO_manifest.json'\"'\"').read_text())==x['\"'\"'manifest'\"'\"']\nassert root.resolve()==root and root.stat().st_uid==os.getuid() and (root.stat().st_mode & 0o777)==0o700\nprint(json.dumps(dict(stage=str(root),uid=os.getuid(),files=x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'])))\n'"
+  ],
+  "exit": 0,
+  "peak_rss_bytes": "N/A unmeasured SSH transport",
+  "print_axioms": "N/A",
+  "source_revision": "34c01b253bdfc886f5aaf5923dbe9f3dfb038b45",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "7c70b0f80e270e0da5e4dd28d530e02f54b5ef260ec50c1f8c344085cc3a636d",
+    "size": 242556
+  },
+  "stdout": "{\"stage\": \"/home/dombarker/project-offloads/codex-cx-resource-stable-go-20261025\", \"uid\": 1000, \"files\": {\"ResourceStableGO_adapter.py\": {\"sha256\": \"88c252ecbd3872e1f17dc944fcf5ff4d33e9b0318257d0a48080bdcdfbe1ef51\", \"size\": 4556}, \"ResourceStableGO_audit.py\": {\"sha256\": \"73ac93b44e67152b2f07dc64de5eca02310510c1df7607287d633846f34e4500\", \"size\": 7829}, \"ResourceStableGO_fixtures.py\": {\"sha256\": \"ca4fbc7ddb43302d9f69c7ae8faea09a255b34501e5d1bcbfa4fb1837f6f9f49\", \"size\": 4029}, \"ResourceStableGO_host.py\": {\"sha256\": \"45c41fe193488c28bea292f5d02c2706c481e3aa549cfdd1f4a6b750abe8eca4\", \"size\": 14246}, \"ResourceStableGO_local.py\": {\"sha256\": \"20b9bd44d64b7420d3105e1168d9452802d62176f3c0e4035e6813eadeec7776\", \"size\": 12622}, \"ResourceStableGO_prepare_history.py\": {\"sha256\": \"1c5355ba112a7f00ac93072fe692f35acec6b4a97ca9bcf4eb165e7be566d0d0\", \"size\": 10358}, \"ResourceStableGO_receipt.py\": {\"sha256\": \"ff52fc2b53dd0e9ade71d960df441a510968a82225e21eb8f05a0597bdb31ef8\", \"size\": 2203}, \"ResourceStableGO_seal.py\": {\"sha256\": \"169fccbc89e4878b8fcb712031a6023f635299738cee875a9d8224bfe112fa44\", \"size\": 3880}, \"ResourceStableGO_sources.py\": {\"sha256\": \"44e80ecef7a9605a7f602e77744a4d691499a40f93dcc0abbdd3716f753b0eb1\", \"size\": 4896}, \"ResourceStableGO_tests.py\": {\"sha256\": \"fc91c23d2370784b4b495eb1a2c5769518d196e38a5c287ba4a0e2e5c135a988\", \"size\": 11823}, \"ResourceStableGO_reviewed.json\": {\"sha256\": \"ce3415ad130a35de66ee29820326fe385daa99ab593f063b95e5efe442d5acaf\", \"size\": 69294}}}\n",
+  "swap": "N/A unmeasured SSH transport",
+  "wall_seconds": 0.9283970831893384
+}
