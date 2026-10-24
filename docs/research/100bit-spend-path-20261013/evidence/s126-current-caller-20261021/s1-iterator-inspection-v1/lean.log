@@ -1,0 +1,22 @@
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepU8 : core.iter.range.Step (UScalar UScalarTy.U8) :=
+core.iter.range.UScalarStep UScalarTy.U8 core.clone.CloneU8 core.cmp.PartialOrdU8
+def Aeneas.Std.core.iter.range.UScalarStep.forward_checked : {ty : UScalarTy} →
+  UScalar ty → Usize → Result (Option (UScalar ty)) :=
+fun {ty} start n => if h : ↑start + ↑n ≤ UScalar.max ty then ok (some (UScalar.ofNatCore (↑start + ↑n) ⋯)) else ok none
+@[reducible] def Aeneas.Std.core.cmp.PartialOrdU8 : core.cmp.PartialOrd U8 U8 :=
+{ partialEqInst := core.cmp.PartialEqU8, partial_cmp := liftFun2 core.cmp.impls.PartialOrdU8.partial_cmp,
+  lt := liftFun2 core.cmp.impls.PartialOrdU8.lt, le := liftFun2 core.cmp.impls.PartialOrdU8.le,
+  gt := liftFun2 core.cmp.impls.PartialOrdU8.gt, ge := liftFun2 core.cmp.impls.PartialOrdU8.ge }
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
