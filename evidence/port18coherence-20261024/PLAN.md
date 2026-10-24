@@ -1,0 +1,12 @@
+# Port18COHERENCE design before compilation
+
+Full Port17 composition remains WITHHELD. Pinned proof root is 5544611e5fa592c7ca44ab12bf799618d8f773a4, with immutable A a4fa5c5ab357a4f6732a3e053965640c90a0df1e only. Later A deliveries are not selected. No source/model retargeting, additional compatibility premise, shipped change, or ELF identity gate.
+
+1. Classify all 246 object comparisons (111 structurally differing modules) using exact declaration fields, then binder-name/metadata normalization diagnostics. No diagnostic is a trusted equivalence oracle. Theorem proof bodies may be ignored only after matching propositions and their environment; this packet does not infer that from names.
+2. Trace constants from full claimed theorem types AND proofs, actual Flow/saved-Vec/adapter/decoder/source installation definitions, including structures, instances and opaque values. Record both origins and source provenance. The raw module import count is not a rebuild count.
+3. Choose one canonical source basis. Reuse byte-identical imports only with origin assessment. Rebuild changed source dependencies and required reverse dependents into owned outputs, only if the concrete programs/carriers/events are preserved. If a real mismatch prevents composition, retain exact before/after and the smallest repair instead of changing the model.
+4. Smallest release-domain theorem, concrete prepare, driver/effects/accounting, one full statement/axioms/import audit. No full frozen replay. Reserve 8 of 81 available charges for audit. Initial charged total 275 (273 actual Lean, 2 pre-Lean), ceiling 356. Kani 0/20; no backend/extraction/heavy Rust.
+
+Host: fresh all-system cgroup inventory before and immediately at launch, ancestors counted once, unreadable data fails closed; existing+8GiB <55GiB; independent 6G/8G/Swap0/Tasks64; global lock outside 22:30–14:00 London. Warm local only with pinned closure, atomic shared lock, -j1 -M4400, owned output and aggregate RSS hard stop 8GiB. Ten minutes without a new compiled target stops for review. No unchanged failed resource reruns/cap changes.
+
+Retain OtherBudgets R; candidate 1161+R, Q+1161+R, Q+2322+2R. Installed count 115 and effects at actual op7 None, arbitrary inputs/H/results. Native bindings, SDK/primitives, source/release associations and both deployed targets remain open. Full metrics, source/object/tool hashes, statements, failures and axioms retained.
