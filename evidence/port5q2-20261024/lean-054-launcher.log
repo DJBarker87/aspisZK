@@ -1,0 +1,42 @@
+{"attempt": "lean-054", "exit_status": 0, "wall_seconds": 2.123200984002324, "peak_rss_kib": "4406492", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_Advance.advance_step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Advance.calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Checkpoint.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Prepared.reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Provenance.reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderFrame.raw' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port5Q2_ReaderFrame.readK' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderPrefix.read' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderRaw.normalization' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderRaw.reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.reference_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.reference_e' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.current_k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderScalar.current_e' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderSemantic.normalization' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderValidate.contains' depends on axioms: [propext]", "'AspisR1.Port5Q2_ReaderValidate.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderValidate.loop_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderValidate.query_result' depends on axioms: [propext]", "'AspisR1.Port5Q2_ReaderValidate.reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderWeightJoin.sequence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderWeightJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderWeights.exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_ReaderWeights.write_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Shift.eighteen' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Ten.initial_state' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Ten.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Port5Q2_Advance.advance_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_Advance.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_Checkpoint.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_Prepared.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_Provenance.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_ReaderFrame.raw' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port5Q2_ReaderFrame.readK' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_ReaderPrefix.read' depends on axioms:
+...
+unwrap N (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b) →
+    ∀ (r : AspisR1Stage2.verifier.Reader),
+      ↑r.at + 16 ≤ (↑r.bytes).length →
+        (↑r.bytes).length ≤ 4096 →
+          AspisR1.Port5Q2_ReaderScalar.readK (fun N => AspisR1.Port5Q2_ReaderRaw.raw N (unwrap N))
+              AspisR1.Port5Q2_ReaderScalar.decodeK r =
+            AspisR1.CheckpointBytes3Reader.readK r
+AspisR1.Port5Q2_ReaderWeightJoin.accepted : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (start finish : Aeneas.Std.Usize)
+  (v out : Aeneas.Std.alloc.vec.Vec AspisR1.Port5Q2_ReaderWeightJoin.K),
+  AspisR1.Port5Q2_ReaderWeights.weights AspisR1.CheckpointBytes3Reader.readK bytes start v =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, finish)) →
+    AspisR1.CheckpointBytes4Ops.readWeights bytes start v =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, finish))
+def AspisR1.Port5Q2_Ten.Inputs : VTop_Stages.Ops →
+  VTop_Stages.Ops →
+    {H : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 H →
+        H →
+          VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Usize →
+                VTop_Stages.verifier.Prepared →
+                  Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize →
+                    VTop_Stages.verifier.QueryGeometry → Prop :=
+fun base ops {H} D hash semantic proof split p g geometry =>
+  ∃ zero,
+    base.op1 = Aeneas.Std.Result.ok zero ∧
+      base.op7 D semantic proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) ∧
+        ops.op11 p.queries 0#usize split = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry)
+
+Running as unit: run-r294e72e3a54f4686983f535fe8d57c56.scope; invocation ID: a5d705a04b7c4bd48e3e3c91098b07f6

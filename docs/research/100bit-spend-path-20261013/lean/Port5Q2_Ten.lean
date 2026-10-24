@@ -26,6 +26,17 @@ theorem initial_state (a : verifier.Accumulator) :
   | none => simp only [h,Option.map_none,Option.getD_none]; rfl
   | some q => simp only [h,Option.map_some,Option.getD_some]; rfl
 
+/-- Public cut inventory: model bindings attach to these exact preparation
+and geometry returns of the SAME installed prefix. -/
+def Inputs (base ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
+    (semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (proof : Slice U8) (split : Usize) (p : verifier.Prepared)
+    (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
+    (geometry : verifier.QueryGeometry) : Prop :=
+  ∃ zero, base.op1=ok zero ∧
+    base.op7 D semantic proof hash none (Array.repeat 29#usize zero)=ok (.Ok p,g) ∧
+    ops.op11 p.queries 0#usize split=ok (.Ok geometry)
+
 variable {CoreError W : Type}
 /-- The SAME prefix selects its actual g/geometry. Once their LOCAL observed
 values/basis are bound, its physical writer accumulator is exactly ten steps.
@@ -46,6 +57,8 @@ theorem reached (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.Op
       D hash semantic proof split none p a) :
     ∃ (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
       (geometry : verifier.QueryGeometry),
+      Inputs base (Port4C_Installed.installed base reserved batch geometryOps queryOps finish)
+        D hash semantic proof split p g geometry ∧
       ∀ m : OraclePortCheckpointStateC3.Prepared FK FE,
       Port5Q2_Advance.ObservationBinding (Port3_QueryStage.release queryOps)
         proof p g (Port3_QueryInstall.observer none) geometry m →
@@ -99,7 +112,7 @@ theorem reached (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.Op
     ⟨basisBackend.s3_s4_mul,basisBackend.s3_s4_sub,basisBackend.s3_s4_double,basisBackend.zero,basisBackend.one⟩
   have arithmetic1 : Port4C_QueryArithmetic.SessionABackends (Port3_QueryStage.release queryOps) :=
     ⟨arithmetic.s3_s4_s5_mulE,arithmetic.s3_s4_s5_addE,arithmetic.s3_s4_s9_mulK⟩
-  refine ⟨g,geometry,?_⟩
+  refine ⟨g,geometry,⟨zero,hzero,prepared,hgeom⟩,?_⟩
   intro m binding
   obtain ⟨sumOut,trace,progress,meaning⟩ := Port5Q2_Advance.calls
     (Port3_QueryStage.release queryOps) basis arithmetic1

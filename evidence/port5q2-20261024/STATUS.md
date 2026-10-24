@@ -156,3 +156,28 @@ scalar/helper substitutions at every reached op18 call under concrete native
 codec/allocator/Std/runtime admission. The production writer certificate is valid
 on its exact domain, but no whole native dictionary or source/ELF refinement is
 created by a certificate-admission audit. S2 target not yet established.
+
+
+Final statement/audit stage: Ten.Inputs is now explicitly returned by Ten,
+Provenance and Checkpoint, and the final checkpoint statement also exports the
+SAME installed WriterPrefix and op8 return on saved. This strengthens the public
+cut inventory without adding a premise or claiming the missing source bindings.
+Focused051/052/053 all pass; no generic/backend source changed. The changed source
+and dependencies justify superseding audit050 with final union054.
+
+Final Port5Q2_Audit054: exit0,wall2.123200984s,peak RSS4406492KiB,swap0,
+source revisioncc73ca30ad plus exact dirty source/dependency fingerprints in the
+receipt. All28 new top-theorem audits use only propext/Classical.choice/Quot.sound.
+The final log prints the named prepare/observation boundaries and exact public
+cut/row/helper signatures. Static Port5Q2_audit.py passes all15 final modules,
+receipt/source hashes,caps,budgets,current173 native pins and protected-file scope.
+Writer and codec admission audits also pass, with no proof replay.
+
+FINAL BUDGET:54/100 actual Lean compiles,0/60 new Kani runs; two optimized Charon
+and two Aeneas extraction runs. All launched jobs terminal. No memory kill or cap
+increase; two default-heartbeat failures were isolated/split before replacements.
+No unchanged full regression or frozen-manifest replay. No source/artifact/key/
+other-worktree/session A edit and no push. Full Q2/S2 target remains OPEN on the
+concrete semantic/native-runtime gates in HANDOFF.md; this is not exhaustion or
+permission to assume those gates. The lead can consume the checked local rows
+and exact cuts while the corresponding owner delivers those source instances.

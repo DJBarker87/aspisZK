@@ -45,6 +45,11 @@ theorem accepted (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.O
         (Port3_DecodeCoherence.inventory p a size fields.queries))
       (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
       (geometry : verifier.QueryGeometry),
+    VTop_Provenance.WriterPrefix (installed base reserved batch geometryOps queryOps finish)
+      D hash semantic proof split none p a ∧
+    (installed base reserved batch geometryOps queryOps finish).op8 D p a proof pub hash=ok saved ∧
+    Port5Q2_Ten.Inputs base (Port4C_Installed.installed base reserved batch geometryOps queryOps finish)
+      D hash semantic proof split p g geometry ∧
     ∀ m : OraclePortCheckpointStateC3.Prepared FK FE,
       Port5Q2_Advance.ObservationBinding (Port3_QueryStage.release queryOps)
         proof p g (Port3_QueryInstall.observer none) geometry m →
@@ -63,9 +68,9 @@ theorem accepted (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.O
   have reached2 := (Port4A_PrefixReader.prefix_iff
     (Port4C_Installed.installed base reserved batch geometryOps queryOps finish)
     reserved D hash semantic proof split p a).mp reached1
-  obtain ⟨fields,size,canonical,g,geometry,provenance⟩ := Port5Q2_Provenance.reached base reserved batch
+  obtain ⟨fields,size,canonical,g,geometry,cuts,provenance⟩ := Port5Q2_Provenance.reached base reserved batch
     geometryOps queryOps finish prepare basis arithmetic lineCanonical D hash semantic proof split p a reached2
-  refine ⟨p,a,fields,size,canonical,g,geometry,?_⟩
+  refine ⟨p,a,fields,size,canonical,g,geometry,reached1,wrote,cuts,?_⟩
   intro m binding
   obtain ⟨after,success,body,next,reservedEq,reads⟩ := Port4A_CheckpointRows.fields_and_reads base reserved
     D hash H p a proof pub stored publicBytes _ _ caller (provenance m binding)

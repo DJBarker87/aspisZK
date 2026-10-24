@@ -32,6 +32,8 @@ theorem reached (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.Op
       (Port3_DecodeCoherence.inventory p a size fields.queries),
     ∃ (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
       (geometry : verifier.QueryGeometry),
+    Port5Q2_Ten.Inputs base (Port4C_Installed.installed base reserved batch geometryOps queryOps finish)
+      D hash semantic proof split p g geometry ∧
     ∀ m : OraclePortCheckpointStateC3.Prepared FK FE,
       Port5Q2_Advance.ObservationBinding (Port3_QueryStage.release queryOps)
         proof p g (Port3_QueryInstall.observer none) geometry m →
@@ -40,9 +42,9 @@ theorem reached (base : Ops) (reserved : Bool) (batch : Port3_NativeBatchBody.Op
         (OraclePortCheckpointStateC3.write m).accumulator := by
   obtain ⟨fields,_,_,next,size,canonical⟩ := Port5Q2_Prepared.reached base reserved batch
     geometryOps queryOps finish prepare basis arithmetic lineCanonical D hash semantic proof split p a reached1
-  obtain ⟨g,geometry,ten⟩ := Port5Q2_Ten.reached base reserved batch geometryOps queryOps finish
+  obtain ⟨g,geometry,cuts,ten⟩ := Port5Q2_Ten.reached base reserved batch geometryOps queryOps finish
     prepare basis arithmetic lineCanonical D hash semantic proof split p a reached1
-  refine ⟨fields,size,canonical,g,geometry,?_⟩
+  refine ⟨fields,size,canonical,g,geometry,cuts,?_⟩
   intro m binding
   refine ⟨?_,?_,fields.queries,canonical,next,rfl,?_⟩
   · change toVariant p.variant=_
