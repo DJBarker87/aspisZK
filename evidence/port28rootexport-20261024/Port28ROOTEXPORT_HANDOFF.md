@@ -1,53 +1,43 @@
-# Port28ROOTEXPORT handoff
+# Port28ROOTEXPORT resumed handoff
 
-Branch codex/cx-root-sdk-export-20261024; entry e37ef5182a83.
-Criteria/design committed first b024771795; immutable preparation23aba06945.
-Only the two authorized job directories changed. No merge/push.
+Branch codex/cx-root-sdk-export-20261024; resumed5de60d6c748f. Management release
+and criteria amendment committed b4617123df before acquisition. No merge/push.
+Old source-only preflight PASS is reused; source-only HANDOFF is preserved
+separately. SbfCachePrep94997 coordination is RESOLVED by the lead report and
+exact terminal marker. No retrospective start identity is invented.
 
-**ROOT raw declaration export remains BLOCKED.** No SSH/host process/read/copy,
-object/cache traversal, Lean invocation, scope, build, consumer, key/service/RPC
-operation or source change occurred. PID94997 is absent on repeated local
-metadata observations; the required recorded start identity and post-exit
-terminal marker were not supplied or found in the bounded immutable records.
-The pending question requests precisely those records. Released old preparation
-report a33c366324 is not evidence that the specified live launcher terminated.
-Port28ROOTEXPORT_host-gate.json retains the last exact observation.
+**New data:**1,622 regular original-donor object files,888 unique modules,
+389,153,824 bytes, copied into two private retained local stages. All required
+seed modules are present. Main D189Consolidation matches2968435770a73273…,
+Wrappers767215ab84602f60…, ScheduledConsolidationee41f8ace38ec3dd… historical
+direct receipt pins. Other hashes and absent optional parts are current
+observations only. Full source-to-artifact association is not established.
 
-New useful data:36 immutable Git inputs audited, fourteen original spans
-reconstruct current factor text exactly,67 explicitly qualified source seed
-names, full original carrier/boundary/caller source data, and complete original
-lean109/110 receipts including ordered LEAN_PATH and full historical axioms.
-Port28ROOTEXPORT_sources.json and seed-plan.json retain those bytes and origins.
-Main-object receipt pins for D189Consolidation/Wrappers/ScheduledConsolidation
-are metadata only; no object was opened. Server/private hashes remain unknown.
-The original D189 source matches lean109's dirty-overlay source digest; lean110
-provides the D189 main-object direct dependency pin. No inferred output pin.
+Pre/copy/post content hashes agree for every retained file; independent local
+files have link count1. Successful before/during/after process observations and
+ancestor owner/type checks are retained. Sequential metadata/hashes do not
+prove atomicity, no concurrent writer, or future TOU identity. The first strict
+observer churn denials and symlink-stop partial capture are retained.1,102
+symlink origins were subsequently excluded without following them. Two original
+path roots are missing. Source-import regular-copy gaps are exactly
+R1SelectedChallengeMapCore and R1UnifiedSamplerPublic; the external source
+frontier remains explicit. This is not a raw dependency graph.
 
-Port28ROOTEXPORT_EXPORTER-REVIEW.md records required duplicate-origin,
-fixed-point/group closure and compacted-region safeguards. Original Port18 tool
-is retained as source DATA, never executed. Every emitted/private/generated
-group, type/value edge, unresolved set and duplicate conflict remains NOT
-COMPUTED. There is no raw transport. No existing transport is relabelled.
+**Raw ConstantInfo export FAILED before IO.** The sole local core-only Lean
+invocation exited1 on exporter syntax/type errors. Wall4.756840041838586s,
+peak RSS1,285,439,488B,swap0. Failed source/logs and proposed uncompiled fixes
+are in DIAGNOSTIC-FAILURE.md. No transport, emitted-name/group inventory,
+type/value closure, core-leaf mapping or duplicate ConstantInfo decision exists.
+All raw object origins/byte variants are retained without first-wins acceptance.
 
-New final nonmutating source/manifest audit:
-`python3 -B tools/port28rootexport-20261024/Port28ROOTEXPORT_audit.py`.
-Exit0; checked child command wall0.6328437081538141s, peak RSS103038976B,swap0.
-Exact commands/revisions/source/tool/input/output hashes are in audit.receipt.json;
-preparation stdout/time retain its separate metrics. New print axioms N/A (data
-preparation only). Standard-only historical lean109/110 axiom lines are REUSED,
-not a new identity/coherence gate. macOS AS-limit setup failure and exact old
-source/log retained; corrected aggregate RSS monitor stops at448MiB. Final
-source change added the complete Port27 check receipt as the36th pinned input,
-justifying the final source/manifest audit after regeneration.
+Budget1/1 diagnostic charged;0 remains. Five consumer slots held/untouched.
+All host/compiler/build/Kani/extraction/backend/ELF/scope budgets0. Axioms N/A;
+original standard-only lean109/110 reports explicitly REUSED. No A live files,
+wallet/keys, donor state, shipped source/model/protocol/trust or premises changed.
 
-Assumptions retained unchanged; none discharged/added. No premise changes and
-no before/after theorem. No kernel/current-SDK/source-native/whole-cone/release/
-security claim. Both security targets and whole experiment not yet established.
-One allocated Lean slot remains unused (0 charged); other five Port27 slots
-untouched. All other requested budgets0.
-
-Next concrete prerequisite: release launcher start/terminal records, then assess
-closed original donor ownership/path/source/hash and metadata writer exclusion
-under the manager's resource authorization before any data acquisition. Original
-object parts plus complete untrusted ConstantInfo closure must precede the
-separate current-A comparison and actual same-tuple concrete consumer join.
+Next: separately allocate a corrected core diagnostic over these retained
+inputs, then exact current/original declaration comparison and guarded kernel
+reconstruction before the actual same-tuple/lower-constructor consumer. The
+SourceCuts semantic/split gap remains a proof obligation, not the data failure.
+Both security targets and whole experiment remain NOT ESTABLISHED. No kernel,
+current-SDK, source-native, whole-cone, release or security conclusion.
