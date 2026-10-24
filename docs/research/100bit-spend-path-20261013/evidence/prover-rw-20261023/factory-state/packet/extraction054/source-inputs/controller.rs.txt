@@ -1,0 +1,18 @@
+    pub fn generate_for_mask_nonce(
+        mask_nonce: [u8; 32],
+    ) -> Result<Self, StateOnlyAttemptEntropyError> {
+        let mut request = ProverRwFactoryStateRequest::start(mask_nonce)?;
+        loop {
+            let (control, result) = request.draw().resume();
+            match result {
+                Err(error) => return Err(error),
+                Ok(Some(owner)) => return Ok(owner),
+                Ok(None) => match control {
+                    ProverRwFactoryStateControl::More(next) => request = next,
+                    ProverRwFactoryStateControl::Done => {
+                        return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);
+                    }
+                },
+            }
+        }
+    }

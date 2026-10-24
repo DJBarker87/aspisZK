@@ -1,0 +1,21 @@
+   Compiling libc v0.2.186
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.4
+   Compiling zeroize v1.8.1
+   Compiling prover-rw-factory-state v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/factory-state/preflight)
+warning: fields `mask_nonce`, `field_mask_entropy`, and `leaf_salt_seed` are never read
+  --> lib.rs:18:5
+   |
+17 | pub struct StateOnlyAttemptSecrets {
+   |            ----------------------- fields in this struct
+18 |     mask_nonce: [u8; 32],
+   |     ^^^^^^^^^^
+19 |     field_mask_entropy: Zeroizing<[u8; 32]>,
+   |     ^^^^^^^^^^^^^^^^^^
+20 |     leaf_salt_seed: Zeroizing<[u8; 32]>,
+   |     ^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `prover-rw-factory-state` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.80s
