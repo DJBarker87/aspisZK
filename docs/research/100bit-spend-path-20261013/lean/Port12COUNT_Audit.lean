@@ -37,6 +37,8 @@ set_option pp.proofs false
 #print axioms AspisR1.Port12COUNT_FirstReads.checkpointChain
 #print AspisR1.Port12COUNT_FirstReads.owned_calls
 #print axioms AspisR1.Port12COUNT_FirstReads.owned_calls
+#print AspisR1.Port12COUNT_Installed.batch0
+#print axioms AspisR1.Port12COUNT_Installed.batch0
 #print AspisR1.Port12COUNT_Installed.batch1
 #print axioms AspisR1.Port12COUNT_Installed.batch1
 #print AspisR1.Port12COUNT_Installed.owned_calls

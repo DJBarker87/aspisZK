@@ -1,13 +1,17 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
-  "status": "Conditional actual-source authentication; both deployed targets not established",
-  "revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+  "status": "All-input physical P6 and installed owned-call bounds; whole-driver1161 and both deployed targets not established",
+  "revision": "cd118a6bc6b3f4e16ebd8b1c9c4f45cf0bd5336c",
   "inherited_lean_attempts": 185,
   "new_lean_attempts": 28,
-  "actual_lean_receipts": 27,
+  "allocated_lean_slots": 29,
+  "pre_lean_rejections": 1,
+  "actual_lean_receipts": 28,
   "cumulative_lean_attempts": 213,
+  "conservative_cumulative_allocations": 214,
   "lean_limit": 220,
   "remaining_lean_attempts": 7,
+  "unreserved_lean_slots": 6,
   "kani_runs": 0,
   "kani_limit": 20,
   "prior_ledger": {
@@ -58,6 +62,10 @@
     "Port12COUNT_FirstReads.lean": {
       "sha256": "af515550b6c4f5f3c1dfb080cfd42363e2c82408bfe2c3c4391fee872d726d47",
       "attempt": "lean-028"
+    },
+    "Port12COUNT_Audit.lean": {
+      "sha256": "f531156de949b4c1b13b992b9d2f30aa9ed6ad835e22f4452b54d21ee2e5125f",
+      "attempt": "lean-029"
     }
   },
   "attempts": [
@@ -1246,6 +1254,81 @@
       "print_axioms": [
         "'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-029",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_Audit.olean",
+        "Port12COUNT_Audit.lean"
+      ],
+      "source_revision": "cd118a6bc6b3f4e16ebd8b1c9c4f45cf0bd5336c",
+      "source_hashes": {
+        "Port12COUNT_Audit.lean": "f531156de949b4c1b13b992b9d2f30aa9ed6ad835e22f4452b54d21ee2e5125f"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_FirstReads": "af515550b6c4f5f3c1dfb080cfd42363e2c82408bfe2c3c4391fee872d726d47"
+        },
+        "selected_objects": {
+          "Port12COUNT_FirstReads.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_FirstReads.olean",
+            "sha256": "72063faf73041c4a7548e243a4824f31463660aeba62acc3d9f66fe5910eb9f3",
+            "bytes": 36920
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 1.96390285299276,
+      "peak_rss_kib": "4414056",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_Batch.pure_cap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.values0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.values1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLeaf.lift_cap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLeaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLeaf.cont_shape' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLoop.count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Levels.level' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Levels.levels' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Levels.count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Potential.count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Potential.finish_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Potential.parent_funded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Potential.read32_spec' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Potential.node_funded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Rows.eval_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Rows.rows' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Verify.eval_lift_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Verify.bind_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Verify.count' depends on axioms: [propext, Classical.choice, Quot.sound]"
       ]
     }
   ]
