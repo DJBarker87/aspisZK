@@ -64,3 +64,27 @@ source cap1161 and the unchanged runtime carrier binding. S1 prepare/root,
 Session A primitive/domain leaves, and Port6CK resume BodyMatches remain at
 those explicit local boundaries. Neither all-H join nor the deployed100-bit
 release target is established by this conditional development packet.
+
+## First-pass correction and two-pass metadata
+
+The final Q1 consumer uses the literal first source record
+`SourceCut.first rust adversary H`, not an arbitrary containing log or the later
+full log, for all cuts and recovered maps. It fixes transcript public/proof to
+that record's actual source-indexed input. Full-log collision exclusion is
+transported to that first prefix; no collision term is added. Batch and sampler
+read containment must be supplied for those exact first-pass producers.
+
+`Port6AUTH_Compiler.maps_eq_builder` derives the WHOLE compiler map identity
+from actual replayed commitment frames and their decoded roots. It assumes no
+map equality. `Port6AUTH_WordStability.words_stable` proves the two source passes
+have identical binary metadata: enrichment preserves erased chains, consistent
+source-log replay reconstructs their frames, and first-commitment cuts cannot
+move under a suffix. It holds even on rejection, without collision exclusion,
+physicality or any source/frozen-model equality. The final query consumer adds
+both source map identity and full-to-first metadata stability to Q1's exact
+accumulator conclusion. This removes a previously loose full-log choice.
+
+The statement/import audit at lean-023 was provisional. SourceCut, Compiler,
+WordStability and the corrected first-pass Query were then added, so the final
+closure requires a NEW focused audit. This is a changed-source audit, not an
+unchanged regression replay. Failed elaboration/heartbeat approaches are kept.

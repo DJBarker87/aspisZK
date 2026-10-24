@@ -1,6 +1,6 @@
 import Port6AUTH_Native
 import Port6AUTH_Frames
-import Port6AUTH_Accounting
+import Port6AUTH_WordStability
 import Port5Q1_Complete
 set_option autoImplicit false
 noncomputable section
@@ -11,8 +11,9 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
 open MultiproofConeCanonical OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortStoredDecisionDraftC4
-open OraclePortRuntimeBindingC7 Port1_StoredCarrier
+open OraclePortStoredExperimentC4 OraclePortRuntimeBindingC7 OraclePortStoredAdmissionC4 Port1_StoredCarrier
 open Port5Q1_QueryPorts Port5Q1_Endpoint OraclePortAllSelectedRecoveryC6
+attribute [local irreducible] originalWith canon Port1_StoredCarrier.lift Port6AUTH_Prefix.source BinCompiledRunWordStability.wordsFromRun
 attribute [local irreducible] OraclePortCheckpointStateC3.advance QueryAccumulator.run22
   OraclePortCheckpointStateC3.write QueryResidualBridge.values QueryResidualBridge.basis
 
@@ -44,7 +45,7 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
     (sourceCalls : ∀ oracle input, (eval oracle (rust input)).1.length ≤ 1161)
     (contains : ∀ b : Fin 2, ∀ x,
       Read (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
-        c.nodes b.val Port4B_BatchJoin.initial)).1 x → Read (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1 x)
+        c.nodes b.val Port4B_BatchJoin.initial)).1 x → Read (Port6AUTH_SourceCut.first rust adversary H).1 x)
     (clean : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
       BinRawByteCollisionTargets.pred (Q+1161)) emptyTable (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1)
  {CoreError : Type} (base : VTop_Stages.Ops) (ops : Ops) (ports : SessionAPrimitives ops)
@@ -78,21 +79,26 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
       proof p (materialize out10 flushed10) g obs geometry1 b1 22#usize=ok (.Ok (out22,b12)))
     (flush1 : Port3_FlushInstall.flush b12 out22.weights.deref=ok flushed22)
     (queryBinding : pm.queries=q)
-    (transcriptPublic : LiteralTranscript.Public)
-    (transcriptProof : LiteralProtocol.Proof)
-    (trBinding : tr=Port6AUTH_Frames.reached decoder H transcriptPublic transcriptProof)
+    (trBinding : tr=Port6AUTH_Frames.reached decoder H (Port6AUTH_SourceCut.first rust adversary H).2.1.statement (Port6AUTH_SourceCut.first rust adversary H).2.1.proof)
     (parseReached : OraclePortStoredParserC4.parseReached stored tr=some parsed)
     (samplerContains : ∀ x, Read (eval H (RawCutProverCompiler.verifier decoder (fun _ _ => false)
-      transcriptPublic transcriptProof)).1 x → Read (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1 x) :
+      (Port6AUTH_SourceCut.first rust adversary H).2.1.statement (Port6AUTH_SourceCut.first rust adversary H).2.1.proof)).1 x → Read (Port6AUTH_SourceCut.first rust adversary H).1 x) :
     let model := OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q
+    let first := Port6AUTH_SourceCut.first rust adversary H
+    let frames := Port6AUTH_Frames.frames decoder H first.2.1.statement first.2.1.proof
     CheckpointBytes5Output.accumulator (materialize out10 flushed10)=(OraclePortCheckpointStateC3.write model).accumulator ∧
     CheckpointBytes5Output.accumulator (materialize out22 flushed22)=
       OraclePortCheckpointStateC3.advance model 12 (CheckpointBytes5Output.accumulator (materialize out10 flushed10)) ∧
     CheckpointBytes5Output.accumulator (materialize out22 flushed22)=OraclePortFrozen2.completeState i q ∧
-    flushed10.val.length=64 ∧ flushed22.val.length=64 ∧ out10.next.val=10 ∧ out22.next.val=22 := by
-  let log := (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1
-  have consistent := FS.eval_consistent H (Port6AUTH_Prefix.source decoder rust adversary)
-  have bound := Port6AUTH_Accounting.budget decoder rust adversary Q hqueries physical sourceCalls H
+    flushed10.val.length=64 ∧ flushed22.val.length=64 ∧ out10.next.val=10 ∧ out22.next.val=22 ∧
+    OraclePortFrozenOrderChecks.maps first.1 frames parsed=build decoder (view first) ∧
+    build decoder (eval H (Port6AUTH_Prefix.source decoder rust adversary))=build decoder (view first) := by
+  let log := (Port6AUTH_SourceCut.first rust adversary H).1
+  let transcriptPublic := (Port6AUTH_SourceCut.first rust adversary H).2.1.statement
+  let transcriptProof := (Port6AUTH_SourceCut.first rust adversary H).2.1.proof
+  have consistent := FS.eval_consistent H (OraclePortRuntimeBindingC7.originalWith rust (OraclePortStoredAdmissionC4.canon (lift adversary)))
+  have bound := Port6AUTH_SourceCut.budget decoder rust adversary Q hqueries physical sourceCalls H
+  have cleanFirst := Port6AUTH_SourceCut.clean_first decoder rust adversary (Q+1161) H clean
   obtain ⟨parseOK,wireStored,aligned⟩ := OraclePortStoredParserC4.parsed stored tr parsed parseReached
   have matching := read
   rw [trBinding] at matching aligned
@@ -102,14 +108,19 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
   have rootRead := Port6AUTH_Frames.targets decoder H transcriptPublic transcriptProof parsed q i.data matching aligned
   have auth := Port6AUTH_Native.authenticated c D hash H stored pub saved parsed facts wireStored parseOK
     binary occupied sibling leaf p6 batchPrepared batchAccumulator pm am fields modelRoots folded foldedInput
-    reached native log (Q+1161) contains consistent bound clean frames selectors frameRead rootRead
+    reached native log (Q+1161) contains consistent bound cleanFirst frames selectors frameRead rootRead
   have indexed : ∀ pos, pos<22 → recovered log (frames 2) parsed 2 (index q 2 pos)=
       some (OraclePortPackedChoiceC4.payload parsed 2 pos) := by
     simpa only [queryBinding,show (2 : Fin 3).val=2 by decide] using auth 2
-  exact Port5Q1_Complete.accepted base ops ports proof p a0 out10 out22 g obs geometry0 geometry1 b0 b10 b1 b12
+  have completed := Port5Q1_Complete.accepted base ops ports proof p a0 out10 out22 g obs geometry0 geometry1 b0 b10 b1 b12
     flushed10 flushed22 parsed q tr i prepare read wire proofLength
     (recovered log (frames 2) parsed 2) indexed geometryOps geometryCanonical domain multiply one inverse
     geometryCall0 geometryCall1 reserved initial pending0 calls0 flush0 pending1 calls1 flush1
+
+  have maps := Port6AUTH_Compiler.maps_eq_builder decoder rust adversary H parsed samplerContains rootRead
+  have stable := Port6AUTH_WordStability.words_stable decoder rust adversary H samplerContains
+  obtain ⟨c0,c1,c2,c3,c4,c5,c6⟩ := completed
+  exact ⟨c0,c1,c2,c3,c4,c5,c6,maps,stable⟩
 
 #print axioms accepted
 end AspisR1.Port6AUTH_Query

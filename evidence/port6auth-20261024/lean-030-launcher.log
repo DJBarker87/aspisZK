@@ -1,0 +1,64 @@
+{"attempt": "lean-030", "exit_status": 1, "wall_seconds": 2.15297579599428, "peak_rss_kib": "4352648", "swaps": "0", "print_axioms": ["'AspisR1.Port6AUTH_WordStability.frame_replay' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_WordStability.words_stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port6AUTH_WordStability.lean:38:40: error: unsolved goals
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : ByteProver
+H : Bytes → State
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (RawCutProverCompiler.verifier D (fun x x_1 => false) (first rust P H).2.1.statement
+              (first rust P H).2.1.proof)).1
+        a →
+      Read (first rust P H).1 a
+before : RawCutProverCompiler.RunView := view (first rust P H)
+after : View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool) :=
+  eval H (source D rust P)
+⊢ (enrich
+        (build D
+          ((eval H (originalWith rust (canon (lift P)))).1,
+            ((eval H (originalWith rust (canon 
+...
+ramReplay.oracleOf before.1) before.2.1.1 before.2.1.2 row
+
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : ByteProver
+H : Bytes → State
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (RawCutProverCompiler.verifier D (fun x x_1 => false) (first rust P H).2.1.statement
+              (first rust P H).2.1.proof)).1
+        a →
+      Read (first rust P H).1 a
+before : RawCutProverCompiler.RunView := view (first rust P H)
+after : View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool) :=
+  eval H (source D rust P)
+hp : after.2.1.1 = before.2.1.1
+hf : after.2.1.2 = RawCutTranscriptRun.proof (build D before) before.2.1.2
+tail : List (Bytes × State)
+append : (eval H (source D rust P)).1 = (first rust P H).1 ++ tail
+containsAfter :
+  ∀ (a : Bytes),
+    Read (eval H (RawCutProverCompiler.verifier D (fun x x_1 => false) before.2.1.1 before.2.1.2)).1 a → Read after.1 a
+row : ℕ
+bound : row < 33
+erase :
+  (firstCell
+          ((LiteralByteProtocol.protocol D).chain (OracleProgramReplay.oracleOf after.1) before.2.1.1
+            (RawCutTranscriptRun.proof (build D before) before.2.1.2) row)).getD
+      [] =
+    (firstCell
+          ((LiteralByteProtocol.protocol D).chain (OracleProgramReplay.oracleOf after.1) before.2.1.1 before.2.1.2
+            row)).getD
+      []
+⊢ RawCutWordsFromView.frame D (OracleProgramReplay.oracleOf after.1) before.2.1.1
+      (RawCutTranscriptRun.proof (build D before) before.2.1.2) row =
+    RawCutWordsFromView.frame D (OracleProgramReplay.oracleOf before.1) before.2.1.1 before.2.1.2 row
+'AspisR1.Port6AUTH_WordStability.frame_replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_WordStability.words_stable' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb142710a472c41b9aa5d9ef70cae03b6.scope; invocation ID: 5447be3915b2467c91a184ff292bd8b5
