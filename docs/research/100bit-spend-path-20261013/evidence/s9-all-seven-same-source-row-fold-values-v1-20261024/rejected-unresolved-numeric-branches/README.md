@@ -1,0 +1,1 @@
+Rejected proof: unrestricted rewriting of each index equality changed earlier branch conditions into unsimplified small numeric equalities. Replacement uses directed if_neg/if_pos lemmas on each condition. No theorem statement, quantifier, assumption or resource limit changed.

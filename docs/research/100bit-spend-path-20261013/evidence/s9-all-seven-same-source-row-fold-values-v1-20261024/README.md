@@ -1,0 +1,3 @@
+Proves all seven decoded cells of ONE supplied final parts array equal the ordered inactive/statement/private/circle raw-row two-fold dots on ONE source input vector and ONE challenge pair. Consumes already-derived same-array FivePointFolds and StoredZeroFour Meanings; retains actual private seed reads. No independent coefficient vector or desired source result is introduced. Applying these outputs to the original accepted caller and replacing the public-layout frontier remain subsequent obligations.
+
+Focused Lean check: 21.824 seconds; peak aggregate RSS 3285958656 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
