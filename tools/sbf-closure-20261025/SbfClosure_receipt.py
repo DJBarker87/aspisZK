@@ -1,5 +1,5 @@
 """Small bounded receipt support; no host access, build or privilege operations."""
-import hashlib, json, os, pathlib, resource, subprocess, sys, time, traceback
+import hashlib, json, os, pathlib, resource, subprocess, sys, time, traceback, threading
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 E = ROOT / 'evidence/sbf-closure-20261025'
 T = ROOT / 'tools/sbf-closure-20261025'
@@ -27,12 +27,22 @@ def write(name, value):
     return pin(E / name)
 
 def run(name, action):
-    resource.setrlimit(resource.RLIMIT_AS, (LIMIT, LIMIT))
+    # Darwin rejects RLIMIT_AS: data cap + sampled RSS guard, NOT hard total RSS.
+    kind = resource.RLIMIT_DATA if sys.platform == 'darwin' else resource.RLIMIT_AS
+    resource.setrlimit(kind, (LIMIT, LIMIT))
+    if sys.platform == 'darwin':
+        def guard():
+            while True:
+                if resource.getrusage(0).ru_maxrss >= 480*1024**2:
+                    os._exit(125)
+                time.sleep(0.01)
+        threading.Thread(target=guard, daemon=True).start()
     os.umask(0o077)
     start = time.monotonic()
     r = {'command': [sys.executable, '-B', *sys.argv],
          'source_revision': git('rev-parse', 'HEAD').decode().strip(),
-         'address_space_limit_bytes': LIMIT,
+         'memory_limit_bytes': LIMIT,
+         'memory_limit_kind': 'RLIMIT_DATA + sampled 480MiB RSS guard' if sys.platform == 'darwin' else 'RLIMIT_AS',
          'helpers': {p.name: pin(p) for p in sorted(T.glob('*.py'))},
          'interpreter': {'path': str(pathlib.Path(sys.executable).resolve()),
                          'version': sys.version, **pin(pathlib.Path(sys.executable).resolve())},
