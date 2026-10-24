@@ -75,3 +75,16 @@ zeroize bodies. This is source/glue observation only, not monomorphization,
 accepted Aeneas emission or a P6 caller theorem. Keep output on host if>5MB;
 retain hashes/size and a compact expanded-type/normal-path drop audit. No backend
 or printer experiment. Existing generic iterator/Drop barriers remain open.
+
+## Retained timeout and replacement proof shape
+
+Kani052 timed out at240s during symbolic execution, not a failed assertion or
+OOM. The actual retry source loop is statically bounded16 but the blanket
+unwind66 expands it unnecessarily. inspect001 identifies its exact goto loop
+ID. Replacement053 changes the proof's per-loop unwind to17 (all other loops66)
+with unwinding assertions retained: no feasible suffix can be silently omitted.
+No factory source or primitive data/outcome restrictions change. Save original
+runner/scope/harness. Timeout GNU time underreports killed grandchildren RSS;
+052's exact process-tree peak is unavailable (observed CBMC1991040KiB at221s).
+For053 add capped-scope aggregate RSS sampling and kernel memory.peak recording.
+Kernel memory peak is not RSS; report both honestly. Do not raise time/memory.

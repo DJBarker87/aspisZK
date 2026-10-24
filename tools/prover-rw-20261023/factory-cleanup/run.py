@@ -7,6 +7,11 @@ a=int(sys.argv[1]);target=sys.argv[2]
 assert 51<=a<=54
 assert target in ['zero_nonce','all_outcomes']
 cmd=['/usr/bin/timeout','240','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',str(D/'proof/Cargo.toml'),'--lib','--exact','--harness','ProverRwFactoryCleanup::checks::'+target,'--solver','kissat','--output-format','terse','-j','1','-Z','unstable-options','-Z','stubbing','--extra-pointer-checks','--cbmc-args','--unwinding-assertions']
+if a>=53:
+    # Exact source retry loop: at most16 entries; assertion17 checks back-edge
+    # completion rather than truncating a feasible trace. All other loops66.
+    loop='_RNvMs_NtCsiAUeGDGq3lA_25prover_rw_factory_cleanup22ProverRwFactoryCleanupNtB4_23StateOnlyAttemptSecrets23generate_for_mask_nonce.0'
+    cmd+=['--unwindset',loop+':17']
 # Read-only admission and input completeness precede charged reservation.
 inputs=list((D/'proof').glob('*'))+[D/x for x in ['revision.txt','run.py','scope.py','reservation.py','source-map.json','source.py']]
 registry=Path('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f')
