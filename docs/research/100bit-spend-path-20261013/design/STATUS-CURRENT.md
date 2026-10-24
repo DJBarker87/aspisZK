@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 22:22 BST
+## Current coordinator checkpoint — 2026-10-24 22:17 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
