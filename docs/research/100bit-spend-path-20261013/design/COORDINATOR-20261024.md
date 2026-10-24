@@ -192,3 +192,8 @@ Reviewed Port11PROV2ab0c21054 and merged431346f953. C3/STATUS/A handoff record e
 ## Extractor Drop and resource accounting corrections — 2026-10-24
 
 D199 records candidate005Dropcounterexample and candidate007failclosedrejection; neither toolcandidate accepted. Nativewholecallback stilluncompiled; localtypeproofscope retained. Historical aggregate reservations unverified becauseDocker scopesomitted; live all-scopefinitecheck24.375GiB is currentonly. Worker93315 fixes admission beforeheavyjobs, then concrete safe source/tool strategy and actual64-byte providerpath under D187/D191 with explicitnewbudgets. Physicalcount worker87723 remainslive. Bothtargets notyetestablished.
+
+
+## Resource-accounting correction (lead, 2026-10-24)
+
+Read-only inspection of Port9OR_compile/Port10AUTH_compile/Port11PROV_compile confirms their admission scan is rooted in user-1000's user@1000.service and checks direct cgroup.procs in *.scope. It omits system.slice Docker/services and hierarchical populated descendants. Earlier lead statements that their static aggregate checks passed mean only the recorded SUBSET arithmetic; claims of complete historical aggregate<55GiB are superseded as unverified. Individual no-swap/MemoryHigh/MemoryMax/TasksMax and source/axiom evidence are unaffected. A new current host-wide finite capped subtree inventory found24.375GiB; this cannot reconstruct historical totals. Future admissions must include all populated capped subtrees once and retain unreadable/uncapped-background handling. Existing proofs are local mathematical evidence, not retroactively compliant resource/release certificates. D199 has the privacy finding and correction path.
