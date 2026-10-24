@@ -157,3 +157,8 @@ D194 records reviewed candidate abbee7673d at prototype scope only. Independent 
 ## Port9OR integrated; physical authentication transport next — 2026-10-24
 
 Reviewed Port9OR e45800d44e merged f8c9814c28. C3/STATUS and session A handoff record exact source/probability boundaries and independently checked evidence. Explicit new60 Lean allocation adds to inherited4 remaining: Port10AUTH may use64 attempts; previous96 consumed retained, cumulative ceiling160. Kani0/20 unchanged. Concrete task is canonical sourceBatch read containment inside actual physical op5 observations plus both accepted driver batch embeddings, feeding Port6AUTH contains without assuming it. Prepare7/powers17 stays Session A. Worker PID63880, branch codex/cx-port10auth-20261024, output scratchpad codex-port10auth-20261024.out. Prompt archived evidence/coordinator-20261024/prompt-port10auth-20261024.txt. Native-prover worker57141 remains live. Both deployed targets not yet established.
+
+
+## Native reservation review; material generator next — 2026-10-24
+
+D195 retains candidate dbc123fdc8 at conditional emitted-source scope. Dependency pin resolved; actual borrowedproducer/nativeaudit errors and post-reservationstate are proved under exact localreplies; filesystemimplementation and nativeentropy/cap8/runtimeclosure remainopen. Independentbindings/sourcehash/receiptchecks pass; no merge/adoption. Materialworker67242 uses36remaining Leanonly,cumulative184/220,Kani44/60. Port10AUTH63880 remainslive. Both deployedtargets notyetestablished.
