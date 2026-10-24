@@ -204,6 +204,14 @@ class ScannerTests(unittest.TestCase):
             with patch.object(Path,'read_text',read):
                 a=scan(root); self.assertEqual(accounting(a)['uncovered_reserve_bytes'],100)
                 self.assertIn(str(child/'memory.stat'),a['raw_sha256'])
+                # A memory-enabled child need not delegate pids. Missing pids.max
+                # is legitimate only when the parent does not enable pids.
+                (child/'pids.max').unlink()
+                self.assertIsNone(scan(root)['rows'][1]['tasks_max'])
+                (root/'cgroup.subtree_control').write_text('memory pids')
+                self.assertRaises(OSError,scan,root)
+                (child/'pids.max').write_text('64')
+                self.assertEqual(scan(root)['rows'][1]['tasks_max'],64)
                 (child/'memory.stat').unlink()
                 self.assertRaises(OSError,scan,root)
                 (child/'memory.stat').write_text('anon 100')

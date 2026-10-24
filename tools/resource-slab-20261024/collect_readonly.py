@@ -53,6 +53,10 @@ def main():
     snapshots=report.pop('snapshots')
     decisions=report.pop('decisions')
     original=report.pop('original_legacy')
+    partial=report.pop('partial_raw_inputs', None)
+    if partial:
+        for i,(path,value) in enumerate(sorted(partial.items())):
+            save(f'failed-input-{i:03d}.json', dict(path=path,content=value,sha256=hashlib.sha256(value.encode()).hexdigest()))
     save('live-summary.json',report)
     save('legacy-snapshot.json',original)
     for phase,snapshot in snapshots.items():

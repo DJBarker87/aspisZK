@@ -70,7 +70,7 @@ def scan(root=Path('/sys/fs/cgroup')):
             mem[key] = uint(parse_number(rest.split()[0]) * 1024)
     rows = []
 
-    def visit(path, enabled, owner):
+    def visit(path, enabled, owner, pids_enabled=False):
         with os.scandir(path) as entries:
             children = sorted(Path(e.path) for e in entries if e.is_dir(follow_symlinks=False))
         subtree = read(path/'cgroup.subtree_control').split()
@@ -79,7 +79,8 @@ def scan(root=Path('/sys/fs/cgroup')):
         procs = [parse_number(x) for x in read(path/'cgroup.procs').split()]
         row = dict(path=str(path), parent=None if path == root else str(path.parent),
                    enabled=enabled, owner=owner, subtree_memory='memory' in subtree,
-                   procs=procs, root=path == root)
+                   procs=procs, root=path == root,
+                   pids_enabled=pids_enabled, subtree_pids='pids' in subtree)
         if path != root:
             events = pairs(read(path/'cgroup.events'))
             if events.get('populated') not in (0, 1):
@@ -91,15 +92,19 @@ def scan(root=Path('/sys/fs/cgroup')):
                        high=parse_number(read(path/'memory.high'), True),
                        swap_max=parse_number(read(path/'memory.swap.max'), True),
                        swap_current=parse_number(read(path/'memory.swap.current')),
-                       tasks_max=parse_number(read(path/'pids.max'), True),
+                       tasks_max=parse_number(read(path/'pids.max'), True) if pids_enabled else None,
                        stat=pairs(read(path/'memory.stat')))
             owner = str(path)
         elif path != root and row['subtree_memory']:
             raise ValueError('memory enabled below disabled parent')
         rows.append(row)
         for child in children:
-            visit(child, row['subtree_memory'], owner)
-    visit(root, False, str(root))
+            visit(child, row['subtree_memory'], owner, row['subtree_pids'])
+    try:
+        visit(root, False, str(root))
+    except (OSError, ValueError) as exc:
+        exc.partial_raw_inputs = raw
+        raise
     return dict(rows=rows, meminfo=mem, raw_inputs=raw,
                 raw_sha256={k: hashlib.sha256(v.encode()).hexdigest() for k, v in raw.items()})
 
@@ -192,7 +197,7 @@ def accounting(snapshot):
 def membership(snapshot):
     return [(r['path'], r['parent'], r['enabled'], r['owner'], r['subtree_memory'],
              r.get('populated'), r.get('cap'), r.get('high'), r.get('swap_max'),
-             r.get('tasks_max'), tuple(r['procs'])) for r in snapshot['rows']]
+             r.get('tasks_max'), r.get('pids_enabled'), r.get('subtree_pids'), tuple(r['procs'])) for r in snapshot['rows']]
 
 
 def propose(old, before, after, requested):
@@ -253,13 +258,15 @@ def live(legacy_admission, source_hashes):
     start = time.monotonic()
     before = after = old = None
     error = None
+    partial_raw = None
     try:
+        old = legacy_admission(requested=4*GIB)
         before = scan()
         # Legacy helper supplies unchanged full process/service/Docker visibility.
-        old = legacy_admission(requested=4*GIB)
         after = scan()
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
         error = str(exc)
+        partial_raw = getattr(exc, 'partial_raw_inputs', None)
     decisions = {}
     for size in (1, 2, 3, 4, 6, 7, 8):
         # Preserve the one measured legacy snapshot, algebraically re-evaluate
@@ -277,6 +284,6 @@ def live(legacy_admission, source_hashes):
                 source_hashes=source_hashes, uname=os.uname().release,
                 mode='READONLY PROPOSAL; no allocation, lock, consumer or adoption',
                 snapshots=dict(before=before, after=after), original_legacy=old,
-                decisions=decisions, collection_error=error,
+                decisions=decisions, collection_error=error, partial_raw_inputs=partial_raw,
                 wall_seconds=time.monotonic()-start, peak_rss_kib=usage.ru_maxrss,
                 swaps=usage.ru_nswap, exit=0, print_axioms='N/A; formal budget ZERO')
