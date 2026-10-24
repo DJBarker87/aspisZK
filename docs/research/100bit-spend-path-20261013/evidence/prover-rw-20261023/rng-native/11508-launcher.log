@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1323); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    ok (true = true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:41:4: error: Type mismatch
+  ih
+has type
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← core.cmp.PartialEqU8.ne x y
+          ok ¬b = true)
+      (xs.zip xs) =
+    ok (true = true)
+but is expected to have type
+  (do
+      let __do_lift ← ok ¬core.cmp.impls.PartialEqU8.ne x x = true
+      match __do_lift with
+        | true => List.allM (fun x => ok ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true) (xs.zip xs)
+        | false => pure false) =
+    ok True
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:40:44: warning: This simp argument is unused:
+  byte_ne_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵z̵i̵p̵_̵c̵o̵n̵s̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵b̵y̵t̵e̵_̵n̵e̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲_̲c̲o̲n̲s̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲M̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:46:24: error(lean.unknownIdentifier): Unknown identifier `list_compare_self`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:47:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ←
+      if True then List.allM (fun x => ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) ((↑a).zip ↑a)
+        else ok false
+    ok (decide ¬b = true)
+is not definitionally equal to the right-hand side
+  ok false
+
+inst✝¹ : TypeLeaves
+inst✝ : LocalLeaves
+N : Usize
+a : Std.Array U8 N
+⊢ (do
+      let b ←
+        if True then List.allM (fun x => ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) ((↑a).zip ↑a)
+          else ok false
+      ok (decide ¬b = true)) =
+    ok false
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:46:13: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵l̵i̵s̵t̵_̵c̵o̵m̵p̵a̵r̵e̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲l̲i̲s̲t̲_̲c̲o̲m̲p̲a̲r̲e̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeReserve.lean:49:14: error(lean.unknownIdentifier): Unknown constant `list_compare_self`
+'R1Z.ProverRwRngNativeReserve.array_ne_self' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeReserve.mask_error_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeReserve.acknowledgment_single_use' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeReserve.byte_ne_self' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.24
+	Maximum resident set size (kbytes): 2630708
+	Swaps: 0
+	Exit status: 1

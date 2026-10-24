@@ -1,0 +1,65 @@
+import R1Z.ProverRwRngNativeReserve
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwRngNativeBuildControl
+open Aeneas Aeneas.Std Result ProverRwRngNativeBody
+open aspis_prover.state_only_entropy aspis_prover.state_only_hiding
+open aspis_core.state_only_hiding ProverRwRngNativeReserve
+variable [TypeLeaves] [LocalLeaves]
+
+def LayoutOk (a : Secrets) (c : Context) : Prop :=
+  c.mask_nonce = a.mask_nonce ∧
+  c.mask_layout_fingerprint = PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1 ∧
+  c.layout_factor_fingerprint = PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1
+
+omit [TypeLeaves] [LocalLeaves] in
+theorem acknowledgment_fresh (statement nonce : Array U8 32#usize) :
+    acknowledge ⟨statement,nonce,false⟩ statement nonce =
+      .ok (true,⟨statement,nonce,true⟩) := by
+  simp only [acknowledge,PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve,
+    Bool.false_eq_true,if_false,array_ne_self,bind_tc_ok]
+
+theorem reservation_false {S : Type} (store : Store S)
+    (a : Secrets) (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (s after : S) (layout : LayoutOk a c)
+    (reserve : store.reserve s c.statement_digest c.mask_nonce = .ok (false,after)) :
+    reserveBuild store a hash binding c s = .ok (.Err .ReusedMaskNonce,after) := by
+  rcases layout with ⟨nonce,mask,factor⟩
+  unfold reserveBuild StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+  have compare : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+      c.mask_nonce a.mask_nonce = .ok false := by rw [nonce,array_ne_self]
+  simp [compare,mask,factor,reserve]
+
+theorem body_reservation_error {S : Type} (store : Store S)
+    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (variant : transport.Variant) (a : Secrets) (hash : Hash)
+    (binding : Array U8 32#usize) (c : Context) (s after : S) (e : BuildError)
+    (reservation : reserveBuild store a hash binding c s = .ok (.Err e,after)) :
+    prover.prove_masked_with_attempt store public1 compiled variant hash c binding a s =
+      .ok (.Err (match e with
+        | .MaskSampleExhausted => verifier.Error.Rejected
+        | _ => verifier.Error.Semantic),after) := by
+  unfold prover.prove_masked_with_attempt
+  rw [reservation]
+  simp only [bind_tc_ok,Aeneas.Std.uncurry,core.result.Result.map_err]
+  rw [mask_error_exact]
+  cases e <;> rfl
+
+theorem duplicate_fatal {S : Type} (store : Store S)
+    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (variant : transport.Variant) (a : Secrets) (hash : Hash)
+    (binding : Array U8 32#usize) (c : Context) (s after : S)
+    (layout : LayoutOk a c)
+    (reserve : store.reserve s c.statement_digest c.mask_nonce = .ok (false,after)) :
+    prover.prove_masked_with_attempt store public1 compiled variant hash c binding a s =
+      .ok (.Err verifier.Error.Semantic,after) := by
+  exact body_reservation_error store public1 compiled variant a hash binding c s after
+    .ReusedMaskNonce (reservation_false store a hash binding c s after layout reserve)
+
+#print axioms acknowledgment_fresh
+#print axioms reservation_false
+#print axioms body_reservation_error
+#print axioms duplicate_fatal
+end R1Z.ProverRwRngNativeBuildControl

@@ -1,0 +1,485 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildControl.lean:44:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (do
+        let (r, nonce_store1) ←
+          StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1 store a hash binding c s
+        let r1 ← core.result.Result.map_err (BuiltinFnOnce StateOnlyMaskBuildError verifier.Error) r prover.mask_error
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (reserved, material) := val
+            do
+            let noised_c1 ←
+              aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone compiled.semantic_c1
+            let (r2, noised_c11) ← apply_pool_v1_pair_forest_mask_material_v1 noised_c1 material
+            let r3 ←
+              core.result.Result.map_err
+                  (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+                    store)
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+                let r5 ←
+                  core.result.Result.map_err
+                      (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+                        store)
+                      r4 ()
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let r6 ← reserved.derive_pool_v1_pair_forest_zero_factor_d hash c
+                    let r7 ←
+                      core.result.Result.map_err (BuiltinFnOnce StateOnlyMaskBuildError verifier.Error) r6
+                          prover.mask_error
+                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                        let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                        let r9 ←
+                          core.result.Result.map_err
+                              (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+                                store)
+                              r8 ()
+                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 =>
+                            have i := val1.g.len;
+                            if (i != 1024#usize) = true then
+                              ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                            else
+                              have i1 := val1.h1_padding.len;
+                              if (i1 != 1024#usize) = true then
+                                ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                              else
+                                have s := val1.g.deref;
+                                do
+                                let g ← prover.fixed_k_column s
+                                have s1 : Slice aspis_core.field.QM31 := val1.h1_padding.deref
+                                let h1_padding ← prover.fixed_k_column s1
+                                let s2 ← lift noised_c11.c1.to_slice
+                                let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                                if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                                    ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                  else
+                                    if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                      ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                    else
+                                      if audit.d_inactive_balanced = true then
+                                        if audit.g_inactive_balanced = true then
+                                          if audit.h1_padding_inactive_balanced = true then do
+                                            let i2 ← aspis_core.r0.merkle.C1_TAG
+                                            let r10 ← prover.derive_private_salts reserved c hash i2
+                                            let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r10
+                                            match cf5 with
+                                              | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                let i3 ← aspis_core.r0.merkle.C2_TAG
+                                                let r11 ← prover.derive_private_salts reserved c hash i3
+                                                let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                                                match cf6 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                    let r12 ← host_commitment.EncodingDomain.new
+                                                    let r13 ←
+                                                      core.result.Result.map_err
+                                                          (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                            store)
+                                                          r12 ()
+                                                    let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                                                    match cf7 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                        let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                        have a :
+                                                          Std.Array aspis_core.field.wide_exact.WideExact 1024#usize :=
+                                                          Array.repeat 1024#usize we
+                                                        let v ←
+                                                          alloc.vec.from_elem
+                                                              (core.clone.CloneArray 1024#usize
+                                                                aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                              a 29#usize
+                                                        let (r14, backend) ←
+                                                          host_semantic.build_with_material
+                                                              aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                              prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                              public1 compiled noised_c11 val1.mask_only_c1 val4 g
+                                                              h1_padding
+                                                              { hash := hash, variant := variant, domain := val7,
+                                                                messages := v, c1 := none, c2 := none,
+                                                                c1_salts := some val5, c2_salts := some val6 }
+                                                              hash variant
+                                                        let r15 ←
+                                                          core.result.Result.map_err
+                                                              (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                              prover.semantic_error
+                                                        let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                                                        match cf8 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                            let v1 ← val8.columns.index_usize 26#usize
+                                                            have s3 : Slice aspis_core.field.QM31 := v1.deref
+                                                            let o ←
+                                                              aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                                  s3
+                                                            let q ← aspis_core.field.QM31.ZERO
+                                                            let h1_total_balanced ←
+                                                              core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                                  aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o
+                                                                  (some q)
+                                                            if h1_total_balanced = true then do
+                                                                let r16 ←
+                                                                  prover.prove_from_semantics public1 variant hash
+                                                                      backend val8 (reserved, c)
+                                                                let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                                                match cf9 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                    ok
+                                                                      (core.result.Result.Ok
+                                                                          (val9,
+                                                                            {
+                                                                              c1_columns_inactive_balanced :=
+                                                                                audit.c1_columns_inactive_balanced,
+                                                                              mask_only_columns_inactive_balanced :=
+                                                                                audit.mask_only_columns_inactive_balanced,
+                                                                              d_inactive_balanced :=
+                                                                                audit.d_inactive_balanced,
+                                                                              g_inactive_balanced :=
+                                                                                audit.g_inactive_balanced,
+                                                                              h1_padding_inactive_balanced :=
+                                                                                audit.h1_padding_inactive_balanced,
+                                                                              h1_total_balanced := true }),
+                                                                        nonce_store1)
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    do
+                                                                    let r17 ←
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                          (core.convert.FromSame verifier.Error)
+                                                                          residual
+                                                                    ok (r17, nonce_store1)
+                                                              else
+                                                                ok
+                                                                  (core.result.Result.Err verifier.Error.Semantic,
+                                                                    nonce_store1)
+                                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                                            let r16 ←
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                  (core.convert.FromSame verifier.Error) residual
+                                                            ok (r16, nonce_store1)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r14 ←
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                        ok (r14, nonce_store1)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r12 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                    ok (r12, nonce_store1)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r11 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                                ok (r11, nonce_store1)
+                                          else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                        else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r10 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                                  residual
+                            ok (r10, nonce_store1)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r8 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                              residual
+                        ok (r8, nonce_store1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                    ok (r6, nonce_store1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r4 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                ok (r4, nonce_store1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+            ok (r2, nonce_store1)) =
+      ok
+        (core.result.Result.Err
+            (match e, reservation with
+            | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+            | x, reservation => verifier.Error.Semantic),
+          after)
+Error: Application type mismatch: The argument
+  fun e reservation => verifier.Error
+has type
+  (e : BuildError) → _a = ok (core.result.Result.Err e, after) → Type
+but is expected to have type
+  (e : BuildError) → reserveBuild store a hash binding c s = ok (core.result.Result.Err e, after) → Type
+in the application
+  body_reservation_error.match_1 store a hash ⋯ binding c s after fun e reservation => verifier.Error
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+inst✝¹ : TypeLeaves
+inst✝ : LocalLeaves
+S : Type
+store : Store S
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+a : Secrets
+hash : Hash
+binding : Std.Array U8 32#usize
+c : Context
+s after : S
+e : BuildError
+reservation : reserveBuild store a hash binding c s = ok (core.result.Result.Err e, after)
+⊢ (do
+      let (r, nonce_store1) ←
+        StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1 store a hash binding c s
+      let r1 ← core.result.Result.map_err (BuiltinFnOnce StateOnlyMaskBuildError verifier.Error) r prover.mask_error
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (reserved, material) := val
+          do
+          let noised_c1 ←
+            aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone compiled.semantic_c1
+          let (r2, noised_c11) ← apply_pool_v1_pair_forest_mask_material_v1 noised_c1 material
+          let r3 ←
+            core.result.Result.map_err
+                (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+                  store)
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r4 ← aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+              let r5 ←
+                core.result.Result.map_err
+                    (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+                      store)
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let r6 ← reserved.derive_pool_v1_pair_forest_zero_factor_d hash c
+                  let r7 ←
+                    core.result.Result.map_err (BuiltinFnOnce StateOnlyMaskBuildError verifier.Error) r6
+                        prover.mask_error
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let r8 ← Array.Insts.CoreConvertTryFromVecVec.try_from Global 1024#usize val3
+                      let r9 ←
+                        core.result.Result.map_err
+                            (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+                              store)
+                            r8 ()
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                          have i := val1.g.len;
+                          if (i != 1024#usize) = true then
+                            ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                          else
+                            have i1 := val1.h1_padding.len;
+                            if (i1 != 1024#usize) = true then
+                              ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                            else
+                              have s := val1.g.deref;
+                              do
+                              let g ← prover.fixed_k_column s
+                              have s1 : Slice aspis_core.field.QM31 := val1.h1_padding.deref
+                              let h1_padding ← prover.fixed_k_column s1
+                              let s2 ← lift noised_c11.c1.to_slice
+                              let audit ← prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                              if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                                  ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                else
+                                  if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                    ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                  else
+                                    if audit.d_inactive_balanced = true then
+                                      if audit.g_inactive_balanced = true then
+                                        if audit.h1_padding_inactive_balanced = true then do
+                                          let i2 ← aspis_core.r0.merkle.C1_TAG
+                                          let r10 ← prover.derive_private_salts reserved c hash i2
+                                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r10
+                                          match cf5 with
+                                            | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                              let i3 ← aspis_core.r0.merkle.C2_TAG
+                                              let r11 ← prover.derive_private_salts reserved c hash i3
+                                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                                              match cf6 with
+                                                | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                  let r12 ← host_commitment.EncodingDomain.new
+                                                  let r13 ←
+                                                    core.result.Result.map_err
+                                                        (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                          store)
+                                                        r12 ()
+                                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                                                  match cf7 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                      let we ← aspis_core.field.wide_exact.WideExact.ZERO
+                                                      have a :
+                                                        Std.Array aspis_core.field.wide_exact.WideExact 1024#usize :=
+                                                        Array.repeat 1024#usize we
+                                                      let v ←
+                                                        alloc.vec.from_elem
+                                                            (core.clone.CloneArray 1024#usize
+                                                              aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                            a 29#usize
+                                                      let (r14, backend) ←
+                                                        host_semantic.build_with_material
+                                                            aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                            prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                            public1 compiled noised_c11 val1.mask_only_c1 val4 g
+                                                            h1_padding
+                                                            { hash := hash, variant := variant, domain := val7,
+                                                              messages := v, c1 := none, c2 := none,
+                                                              c1_salts := some val5, c2_salts := some val6 }
+                                                            hash variant
+                                                      let r15 ←
+                                                        core.result.Result.map_err
+                                                            (BuiltinFnOnce r1_wire.Error verifier.Error) r14
+                                                            prover.semantic_error
+                                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                                                      match cf8 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                          let v1 ← val8.columns.index_usize 26#usize
+                                                          have s3 : Slice aspis_core.field.QM31 := v1.deref
+                                                          let o ←
+                                                            aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                                s3
+                                                          let q ← aspis_core.field.QM31.ZERO
+                                                          let h1_total_balanced ←
+                                                            core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                                aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 o
+                                                                (some q)
+                                                          if h1_total_balanced = true then do
+                                                              let r16 ←
+                                                                prover.prove_from_semantics public1 variant hash backend
+                                                                    val8 (reserved, c)
+                                                              let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                                              match cf9 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                  ok
+                                                                    (core.result.Result.Ok
+                                                                        (val9,
+                                                                          {
+                                                                            c1_columns_inactive_balanced :=
+                                                                              audit.c1_columns_inactive_balanced,
+                                                                            mask_only_columns_inactive_balanced :=
+                                                                              audit.mask_only_columns_inactive_balanced,
+                                                                            d_inactive_balanced :=
+                                                                              audit.d_inactive_balanced,
+                                                                            g_inactive_balanced :=
+                                                                              audit.g_inactive_balanced,
+                                                                            h1_padding_inactive_balanced :=
+                                                                              audit.h1_padding_inactive_balanced,
+                                                                            h1_total_balanced := true }),
+                                                                      nonce_store1)
+                                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                  let r17 ←
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                  ok (r17, nonce_store1)
+                                                            else
+                                                              ok
+                                                                (core.result.Result.Err verifier.Error.Semantic,
+                                                                  nonce_store1)
+                                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                                          let r16 ←
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                          ok (r16, nonce_store1)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r14 ←
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                      ok (r14, nonce_store1)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r12 ←
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                  ok (r12, nonce_store1)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r11 ←
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                              ok (r11, nonce_store1)
+                                        else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                    else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r10 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (r10, nonce_store1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r8 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                            residual
+                      ok (r8, nonce_store1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                  ok (r6, nonce_store1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+              ok (r4, nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+          ok (r2, nonce_store1)) =
+    ok
+      (core.result.Result.Err
+          (match e, reservation with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+          | x, reservation => verifier.Error.Semantic),
+        after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.reservation_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.body_reservation_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.duplicate_fatal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

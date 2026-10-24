@@ -1,0 +1,46 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1332); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildPaths.lean:54:66: error: unsolved goals
+inst✝¹ : TypeLeaves
+inst✝ : LocalLeaves
+S : Type
+store : Store S
+a : Secrets
+hash : Hash
+binding : Std.Array U8 32#usize
+c : Context
+s after : S
+entropy : Std.Array U8 32#usize
+ack : PreReservedNonce
+e : BuildError
+reserved : store.reserve s c.statement_digest c.mask_nonce = ok (true, after)
+deref :
+  zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+      a.field_mask_entropy =
+    ok entropy
+built :
+  build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+      PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding c entropy
+      { statement_digest := c.statement_digest, mask_nonce := c.mask_nonce, consumed := false } =
+    ok (core.result.Result.Err e, ack)
+nonce : c.mask_nonce = a.mask_nonce
+mask : c.mask_layout_fingerprint = PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1
+factor : c.layout_factor_fingerprint = PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1
+compare : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 c.mask_nonce a.mask_nonce = ok false
+⊢ (do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (ReservedStateOnlyAttemptSecrets × StateOnlyMaskMaterial) (core.convert.FromSame StateOnlyMaskBuildError)
+            (core.result.Result.Err e)
+      ok (r1, after)) =
+    ok (core.result.Result.Err e, after)
+'R1Z.ProverRwRngNativeBuildPaths.layout_mask_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildPaths.missing_ack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildPaths.material_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.19
+	Maximum resident set size (kbytes): 2630420
+	Swaps: 0
+	Exit status: 1

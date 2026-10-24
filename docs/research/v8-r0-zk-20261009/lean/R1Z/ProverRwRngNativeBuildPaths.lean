@@ -1,0 +1,67 @@
+import R1Z.ProverRwRngNativeBuildControl
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwRngNativeBuildPaths
+open Aeneas Aeneas.Std Result ProverRwRngNativeBody
+open aspis_prover.state_only_entropy aspis_prover.state_only_hiding
+open aspis_core.state_only_hiding ProverRwRngNativeReserve ProverRwRngNativeBuildControl
+variable [TypeLeaves] [LocalLeaves]
+abbrev derefEntropy (a : Secrets) :=
+  zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+    a.field_mask_entropy
+abbrev freshAck (c : Context) : PreReservedNonce := ⟨c.statement_digest,c.mask_nonce,false⟩
+abbrev buildMaterial (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (entropy : Array U8 32#usize) :=
+  build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+    PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+    hash binding c entropy (freshAck c)
+
+theorem layout_mask_rejected {S : Type} (store : Store S)
+    (a : Secrets) (hash : Hash) (binding : Array U8 32#usize) (c : Context) (s : S)
+    (nonce : c.mask_nonce = a.mask_nonce)
+    (wrong : c.mask_layout_fingerprint ≠ PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1) :
+    reserveBuild store a hash binding c s = .ok (.Err .Layout,s) := by
+  have compare : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+      c.mask_nonce a.mask_nonce = .ok false := by rw [nonce,array_ne_self]
+  unfold reserveBuild StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+  simp [compare,wrong]
+
+theorem missing_ack {S : Type} (store : Store S)
+    (a : Secrets) (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (s after : S) (entropy : Array U8 32#usize) (material : StateOnlyMaskMaterial)
+    (ack : PreReservedNonce) (layout : LayoutOk a c)
+    (reserved : store.reserve s c.statement_digest c.mask_nonce = .ok (true,after))
+    (deref : derefEntropy a = .ok entropy)
+    (built : buildMaterial hash binding c entropy = .ok (.Ok material,ack))
+    (missing : ack.consumed = false) :
+    reserveBuild store a hash binding c s = .ok (.Err .ReusedMaskNonce,after) := by
+  rcases layout with ⟨nonce,mask,factor⟩
+  have compare : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+      c.mask_nonce a.mask_nonce = .ok false := by rw [nonce,array_ne_self]
+  unfold reserveBuild StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+  simp only [derefEntropy] at deref
+  simp only [buildMaterial,freshAck] at built
+  simp [compare,mask,factor,reserved,deref,built,core.result.Result.Insts.CoreOpsTry.branch,missing]
+
+theorem material_error {S : Type} (store : Store S)
+    (a : Secrets) (hash : Hash) (binding : Array U8 32#usize) (c : Context)
+    (s after : S) (entropy : Array U8 32#usize) (ack : PreReservedNonce) (e : BuildError)
+    (layout : LayoutOk a c)
+    (reserved : store.reserve s c.statement_digest c.mask_nonce = .ok (true,after))
+    (deref : derefEntropy a = .ok entropy)
+    (built : buildMaterial hash binding c entropy = .ok (.Err e,ack)) :
+    reserveBuild store a hash binding c s = .ok (.Err e,after) := by
+  rcases layout with ⟨nonce,mask,factor⟩
+  have compare : core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+      c.mask_nonce a.mask_nonce = .ok false := by rw [nonce,array_ne_self]
+  unfold reserveBuild StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+  simp only [derefEntropy] at deref
+  simp only [buildMaterial,freshAck] at built
+  simp [compare,mask,factor,reserved,deref,built,core.result.Result.Insts.CoreOpsTry.branch]
+  rfl
+
+#print axioms layout_mask_rejected
+#print axioms missing_ack
+#print axioms material_error
+end R1Z.ProverRwRngNativeBuildPaths

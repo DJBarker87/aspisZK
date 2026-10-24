@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1326); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                if pre_reserved.consumed = true then do
+                  let s ← lift binding.to_slice
+                  let a1 ← StateOnlyHidingContext.encode c
+                  let s1 ← lift a1.to_slice
+                  let s2 ←
+                    zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                        (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                        a.field_mask_entropy
+                  let s3 ← lift (Array.make 4#usize [POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2] ⋯).to_slice
+                  let a2 ← hash s3
+                  let source_mask_seed ←
+                    zeroize.Zeroizing.new
+                        (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                        a2
+                  let _ ←
+                    zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                        (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                        a.field_mask_entropy
+                  ok
+                      (core.result.Result.Ok
+                          ({ mask_nonce := c.mask_nonce, precommit_binding := binding, reserved_context := c,
+                              leaf_salt_seed := a.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                            val),
+                        nonce_store1)
+                else ok (core.result.Result.Err StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (ReservedStateOnlyAttemptSecrets × StateOnlyMaskMaterial)
+                      (core.convert.FromSame StateOnlyMaskBuildError) residual
+                ok (r1, nonce_store1)
+          else ok (core.result.Result.Err StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)) =
+    ok (core.result.Result.Err StateOnlyMaskBuildError.ReusedMaskNonce, after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildControl.lean:41:79: error: unexpected token '|'; expected ')', ',' or ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildControl.lean:49:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildControl.lean:54:5: warning: Variable name `layout` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNativeBuildControl.lean:55:5: warning: Variable name `reserve` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.reservation_false' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.body_reservation_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.duplicate_fatal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.11
+	Maximum resident set size (kbytes): 2628808
+	Swaps: 0
+	Exit status: 1

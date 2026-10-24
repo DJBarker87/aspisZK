@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1328); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (alloc.vec.Vec U8 × prover.MaskedFixtureAudit)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                              ok (r11, nonce_store1)
+                                        else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                      else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                                    else ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r10 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (r10, nonce_store1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r8 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error)
+                            residual
+                      ok (r8, nonce_store1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+                  ok (r6, nonce_store1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+              ok (r4, nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+          ok (r2, nonce_store1)) =
+    ok
+      (core.result.Result.Err
+          (match e, reservation with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+          | x, reservation => verifier.Error.Semantic),
+        after)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.reservation_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.body_reservation_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngNativeBuildControl.duplicate_fatal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.28
+	Maximum resident set size (kbytes): 2632412
+	Swaps: 0
+	Exit status: 1

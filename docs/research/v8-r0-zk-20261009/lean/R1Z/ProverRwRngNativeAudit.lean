@@ -1,0 +1,65 @@
+import R1Z.ProverRwRngNativeProducer
+import R1Z.ProverRwRngNativeReservationInvariant
+import R1Z.ProverRwRngNativeEmission
+set_option autoImplicit false
+#check @R1Z.ProverRwRngNativeReserve.mask_error_exact
+#print axioms R1Z.ProverRwRngNativeReserve.mask_error_exact
+#check @R1Z.ProverRwRngNativeReserve.acknowledgment_single_use
+#print axioms R1Z.ProverRwRngNativeReserve.acknowledgment_single_use
+#check @R1Z.ProverRwRngNativeReserve.byte_ne_self
+#print axioms R1Z.ProverRwRngNativeReserve.byte_ne_self
+#check @R1Z.ProverRwRngNativeReserve.list_compare_self
+#print axioms R1Z.ProverRwRngNativeReserve.list_compare_self
+#check @R1Z.ProverRwRngNativeReserve.array_ne_self
+#print axioms R1Z.ProverRwRngNativeReserve.array_ne_self
+#check @R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh
+#print axioms R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh
+#check @R1Z.ProverRwRngNativeBuildControl.reservation_false
+#print axioms R1Z.ProverRwRngNativeBuildControl.reservation_false
+#check @R1Z.ProverRwRngNativeBuildControl.body_reservation_error
+#print axioms R1Z.ProverRwRngNativeBuildControl.body_reservation_error
+#check @R1Z.ProverRwRngNativeBuildControl.duplicate_fatal
+#print axioms R1Z.ProverRwRngNativeBuildControl.duplicate_fatal
+#check @R1Z.ProverRwRngNativeBuildPaths.layout_mask_rejected
+#print axioms R1Z.ProverRwRngNativeBuildPaths.layout_mask_rejected
+#check @R1Z.ProverRwRngNativeBuildPaths.missing_ack
+#print axioms R1Z.ProverRwRngNativeBuildPaths.missing_ack
+#check @R1Z.ProverRwRngNativeBuildPaths.material_error
+#print axioms R1Z.ProverRwRngNativeBuildPaths.material_error
+#check @R1Z.ProverRwRngNativeReservationInvariant.returns_bind
+#print axioms R1Z.ProverRwRngNativeReservationInvariant.returns_bind
+#check @R1Z.ProverRwRngNativeReservationInvariant.reservation_invariant
+#print axioms R1Z.ProverRwRngNativeReservationInvariant.reservation_invariant
+#check @R1Z.ProverRwRngNativeProducer.durable_duplicate
+#print axioms R1Z.ProverRwRngNativeProducer.durable_duplicate
+#check @R1Z.ProverRwRngNativeProducer.durable_failure
+#print axioms R1Z.ProverRwRngNativeProducer.durable_failure
+#check @R1Z.ProverRwRngNativeProducer.selected_reservation_false
+#print axioms R1Z.ProverRwRngNativeProducer.selected_reservation_false
+#check @R1Z.ProverRwRngNativeProducer.selected_duplicate_fatal
+#print axioms R1Z.ProverRwRngNativeProducer.selected_duplicate_fatal
+#check @R1Z.ProverRwRngNativeProducer.selected_io_failure
+#print axioms R1Z.ProverRwRngNativeProducer.selected_io_failure
+#print ProverRwRngNative.NativeTypes
+#print ProverRwRngNative.ErasureFns
+#print ProverRwRngNativeBody.TypeLeaves
+#print ProverRwRngNativeBody.LocalLeaves
+#print ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore
+#print ProverRwRngNativeBody.prover.MaskedFixtureAudit
+#print ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+#print R1Z.ProverRwRngNativeBuildControl.LayoutOk
+#print R1Z.ProverRwRngNativeReservationInvariant.Returns
+#print R1Z.ProverRwRngNativeReservationInvariant.AfterReserve
+#print R1Z.ProverRwRngNativeReservationInvariant.clearEntropy
+#print R1Z.ProverRwRngNativeProducer.contextFor
+#print R1Z.ProverRwRngNativeProducer.privateDomain
+#print R1Z.ProverRwRngNativeProducer.publicHashInput
+#print R1Z.ProverRwRngNativeProducer.bindingInput
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+#print ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+#print ProverRwRngNativeBody.prover.prove_masked_with_attempt
+#print ProverRwRngNativeBody.prover.prove_masked_attempt
