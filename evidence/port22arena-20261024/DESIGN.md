@@ -107,3 +107,24 @@ extraction claim, no native oracle-trace or abort-handler theorem. Its actual
 integer/pointer support is tested, never replaced with assumed pointer laws.
 
 Native preflight correction: size=0 is outside GlobalAlloc::alloc safety contract; fresh Vec additional=0 skips allocation. Harness returns before that call, rather than interpreting UB. This is a reached primitive precondition, not successful-allocation conditioning.
+
+## Dependent field-frame statements, before Lean execution
+
+Define readLE mem base count recursively for little-endian bytes. Define
+Separated u v := u+8<=v OR v+8<=u, without inventing Rust field offsets.
+Prove: eight-byte cursor/ptr/cap stores at pairwise length-disjoint addresses
+preserve readLE of the length word, on any prefix of these stores. Specialize
+to actual source write order: allocator cursor, RawVec ptr, RawVec cap;
+capacity-overflow/null prefixes and normal Err contain fewer stores. A fresh
+length read of zero remains zero, so its initialized index range is empty.
+This derives the byte-frame implication from explicit disjointness, rather
+than assuming the post-length. Native association still must identify actual
+field addresses, writes, and admitted private arena. The passing finite arena
+Kani check supplies its selected allocator side only, not those Vec addresses.
+
+ReadLE/store representation is a mathematical memory interpretation, not an
+edit to Aeneas Vec, installation of a primitive record, or general noRO law.
+No whole-helper conclusion appears in a premise. Error mapping is the literal
+pinned Result::map_err match; a reserve error remains Allocation independently
+of resize. Full Clone source association is recorded separately; no new
+content wrapper will be presented as concrete native Vec progress.
