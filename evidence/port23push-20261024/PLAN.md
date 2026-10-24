@@ -5,7 +5,7 @@ codex/cx-port23push-20261024. Only new job-prefixed tools, evidence and modules.
 No shipped changes, merge/push, allocator job, backend or release replay.
 
 Producer: include immutable base verifier.rs lines 204 (BatchedWeights carrier),
-217-220 (actual mutable push), 230-247 (residue/power access and row update),
+216-220 (attribute and actual mutable push), 230-245 (residue/power access and row update),
 and full unchanged field.rs/wide_exact.rs. Supply enclosing impl braces only.
 A job-only free function directly calls the unchanged inherent method, recovering
 ordered reachability without replacing its body. Source audit records whole-file
