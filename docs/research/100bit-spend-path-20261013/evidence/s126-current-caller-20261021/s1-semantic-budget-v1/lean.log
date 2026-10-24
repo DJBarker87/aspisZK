@@ -1,0 +1,932 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:10:120: error: unsolved goals
+case isFalse
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+h✝ : ¬(row != self.next_row) = true
+x✝² : Slice U8
+x✝¹ : UScalar UScalarTy.U8
+x✝ : Slice (UScalar UScalarTy.U8)
+x : Slice (Slice U8)
+⊢ bounded 3 do
+    let absorbed ← effects.digest D self.hash x
+    let s3 ← liftM (lift absorbed.to_slice)
+    let s4 ← liftM (lift (Array.make 1#usize [1#u8] sampleBlock._proof_10).to_slice)
+    let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+    let block ← effects.digest D self.hash s5
+    let s6 ← liftM (lift absorbed.to_slice)
+    let s7 ← liftM (lift (Array.make 1#usize [2#u8] sampleBlock._proof_13).to_slice)
+    let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+    let a ← effects.digest D self.hash s8
+    let i1 ← liftM (self.next_row + 1#u8)
+    pure (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:24:128: error: unsolved goals
+case isFalse
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+record1 : r1_wire.ValidatedRecord
+x✝ : U8
+h✝ : ¬x✝ > 24#u8
+x : Slice U8
+⊢ bounded 3 do
+    let __x ← sampleBlock D self x✝ x
+    match __x with
+      | (r, self1) => do
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let q ← liftM (sampler.qm31_sample val)
+            pure (core.result.Result.Ok q, self1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+            pure (r1, self1)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:47:169: error: unsolved goals
+case h_1
+H : Type
+D : aspis_core.Digest32 H
+prefix1 : r1_wire.Prefix
+transcript13 : r1_wire.SemanticTranscript H
+val val1 val2 val12 : aspis_core.field.QM31
+index_mut_back9 : aspis_core.field.QM31 → Std.Array aspis_core.field.QM31 10#usize
+x✝ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+cf26✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+vr13✝ : r1_wire.ValidatedRecord
+x : U8
+⊢ bounded 6
+    (PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun row =>
+            if row > 24#u8 then pure (core.result.Result.Err r1_wire.Error.InvalidRow, transcript13)
+            else do
+              let s ← liftM (r1_wire.ValidatedRecord.impl.framed vr13✝)
+              let __x ← sampleBlock D transcript13 row s
+              match __x with
+                | (r, self1) => do
+                  let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let q ← liftM (sampler.qm31_sample val)
+                      pure (core.result.Result.Ok q, self1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r1 ←
+                        liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                      pure (r1, self1))
+        x)
+      fun __x =>
+      match __x with
+      | (r27, transcript14) => do
+        let cf27 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r27)
+        match cf27 with
+          | core.ops.control_flow.ControlFlow.Continue val13 => do
+            let r28 ← liftM (prefix1.validated_record 14#u8)
+            let cf28 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r28)
+            match cf28 with
+              | core.ops.control_flow.ControlFlow.Continue vr14 => do
+                let __x ← semanticValidated D transcript14 vr14
+                match __x with
+                  | (r29, transcript15) => do
+                    let cf29 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r29)
+                    match cf29 with
+                      | core.ops.control_flow.ControlFlow.Continue val14 =>
+                        have zc10 := index_mut_back9 val12;
+                        pure
+                          (core.result.Result.Ok
+                              { lambda := val, chi := val1, theta := val2, zc := zc10, mu := val13, eta := val14 },
+                            transcript15)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r30 ←
+                          liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual)
+                        pure (r30, transcript15)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r29 ←
+                  liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual)
+                pure (r29, transcript14)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r28 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges
+                    (core.convert.FromSame r1_wire.Error) residual)
+            pure (r28, transcript14))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:84:17: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:114:17: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:142:17: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:156:122: error: unsolved goals
+case h_1
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+publicBytes : Slice U8
+root : Std.Array U8 32#usize
+x✝⁵ : core.result.Result U32 core.num.error.TryFromIntError
+x✝⁴ : core.result.Result U32 r1_wire.Error
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) U32
+val✝ : U32
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : Std.Array U8 4#usize
+x✝¹ x✝ : Slice U8
+x : Slice (Slice U8)
+⊢ bounded 1 do
+    let a1 ← effects.digest D hash x
+    pure (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:181:7: warning: '· intro x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:183:7: warning: 'apply then_bound (cost := 1)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:184:7: warning: '· omega' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:185:7: warning: '·
+  solve
+  | apply digest_bound' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:186:7: warning: '· intro x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:181:7: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:184:7: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:185:7: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:186:7: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:192:171: error: unsolved goals
+case h_1
+B : RoundModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+prefix1 : r1_wire.Prefix
+transcript : r1_wire.SemanticTranscript H
+alpha : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+x✝⁵ x✝⁴ : UScalar UScalarTy.U8
+x✝³ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+cf✝¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+vr✝¹ : r1_wire.ValidatedRecord
+x✝² : core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error
+cf1✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (Std.Array aspis_core.field.QM31 28#usize)
+val✝ : Std.Array aspis_core.field.QM31 28#usize
+x✝¹ : aspis_core.field.QM31
+x✝ : Bool
+h✝ : ¬x✝ = true
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+vr✝ : r1_wire.ValidatedRecord
+x : U8
+⊢ bounded 3
+    (PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun row =>
+            if row > 24#u8 then pure (core.result.Result.Err r1_wire.Error.InvalidRow, transcript)
+            else do
+              let s ← liftM (r1_wire.ValidatedRecord.impl.framed vr✝)
+              let __x ← sampleBlock D transcript row s
+              match __x with
+                | (r, self1) => do
+                  let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let q ← liftM (sampler.qm31_sample val)
+                      pure (core.result.Result.Ok q, self1)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r1 ←
+                        liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                      pure (r1, self1))
+        x)
+      fun __x =>
+      match __x with
+      | (r2, transcript1) => do
+        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+        match cf3 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let alpha1 ← liftM (alpha.update round val1)
+            let value ← liftM (B.value val✝ alpha1 round)
+            pure (core.result.Result.Ok (value, alpha1, transcript1))
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                (core.convert.FromSame r1_wire.Error) residual))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:213:123: error: unsolved goals
+case h_1
+B : RoundModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+prefix1 : r1_wire.Prefix
+transcript : r1_wire.SemanticTranscript H
+x✝⁵ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+vr✝ : r1_wire.ValidatedRecord
+x✝⁴ : core.result.Result (Std.Array aspis_core.field.QM31 1#usize) r1_wire.Error
+cf1✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (Std.Array aspis_core.field.QM31 1#usize)
+val✝ : Std.Array aspis_core.field.QM31 1#usize
+x✝³ : aspis_core.field.QM31
+x✝² x✝¹ : UScalar UScalarTy.U8
+x✝ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+x : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+⊢ bounded 30
+    (PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun cf =>
+            match cf with
+            | core.ops.control_flow.ControlFlow.Continue vr => do
+              let r1 ← liftM (B.decode 28#usize vr 0#usize)
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let boundary ← liftM (B.boundary val)
+                  let b ←
+                    liftM
+                        (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary
+                          x✝³)
+                  if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary 0#usize))
+                    else do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch x✝)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                          let __x ← semanticValidated D transcript vr1
+                          match __x with
+                            | (r2, transcript1) => do
+                              let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                              match cf3 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                  let alpha1 ←
+                                    liftM ((Array.repeat 10#usize aspis_core.field.QM31.ZERO).update 0#usize val1)
+                                  let value ← liftM (B.value val alpha1 0#usize)
+                                  pure (core.result.Result.Ok (value, alpha1, transcript1))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (aspis_core.field.QM31 ×
+                                        Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                      (core.convert.FromSame r1_wire.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (aspis_core.field.QM31 ×
+                                Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                              (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                  (core.convert.FromSame r1_wire.Error) residual))
+        x)
+      fun r2 => do
+      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val1 =>
+          match val1 with
+          | (running1, alpha1, transcript1) => do
+            let r3 ← roundStep B D prefix1 transcript1 alpha1 running1 1#usize
+            let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue val2 =>
+                match val2 with
+                | (running2, alpha2, transcript2) => do
+                  let r4 ← roundStep B D prefix1 transcript2 alpha2 running2 2#usize
+                  let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      match val3 with
+                      | (running3, alpha3, transcript3) => do
+                        let r5 ← roundStep B D prefix1 transcript3 alpha3 running3 3#usize
+                        let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                        match cf5 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 =>
+                            match val4 with
+                            | (running4, alpha4, transcript4) => do
+                              let r6 ← roundStep B D prefix1 transcript4 alpha4 running4 4#usize
+                              let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                  match val5 with
+                                  | (running5, alpha5, transcript5) => do
+                                    let r7 ← roundStep B D prefix1 transcript5 alpha5 running5 5#usize
+                                    let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf7 with
+                                      | core.ops.control_flow.ControlFlow.Continue val6 =>
+                                        match val6 with
+                                        | (running6, alpha6, transcript6) => do
+                                          let r8 ← roundStep B D prefix1 transcript6 alpha6 running6 6#usize
+                                          let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r8)
+                                          match cf8 with
+                                            | core.ops.control_flow.ControlFlow.Continue val7 =>
+                                              match val7 with
+                                              | (running7, alpha7, transcript7) => do
+                                                let r9 ← roundStep B D prefix1 transcript7 alpha7 running7 7#usize
+                                                let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                                match cf9 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val8 =>
+                                                    match val8 with
+                                                    | (running8, alpha8, transcript8) => do
+                                                      let r10 ←
+                                                        roundStep B D prefix1 transcript8 alpha8 running8 8#usize
+                                                      let cf10 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r10)
+                                                      match cf10 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                          match val9 with
+                                                          | (running9, alpha9, transcript9) => do
+                                                            let r11 ←
+                                                              roundStep B D prefix1 transcript9 alpha9 running9 9#usize
+                                                            let cf11 ←
+                                                              liftM (core.result.Result.Insts.CoreOpsTry.branch r11)
+                                                            match cf11 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val10 =>
+                                                                pure (core.result.Result.Ok val10)
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                liftM
+                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (aspis_core.field.QM31 ×
+                                                                      Std.Array aspis_core.field.QM31 10#usize ×
+                                                                        r1_wire.SemanticTranscript H)
+                                                                    (core.convert.FromSame r1_wire.Error) residual)
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (aspis_core.field.QM31 ×
+                                                                Std.Array aspis_core.field.QM31 10#usize ×
+                                                                  r1_wire.SemanticTranscript H)
+                                                              (core.convert.FromSame r1_wire.Error) residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (aspis_core.field.QM31 ×
+                                                          Std.Array aspis_core.field.QM31 10#usize ×
+                                                            r1_wire.SemanticTranscript H)
+                                                        (core.convert.FromSame r1_wire.Error) residual)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              liftM
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (aspis_core.field.QM31 ×
+                                                    Std.Array aspis_core.field.QM31 10#usize ×
+                                                      r1_wire.SemanticTranscript H)
+                                                  (core.convert.FromSame r1_wire.Error) residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (aspis_core.field.QM31 ×
+                                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                            (core.convert.FromSame r1_wire.Error) residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (aspis_core.field.QM31 ×
+                                        Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                      (core.convert.FromSame r1_wire.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (aspis_core.field.QM31 ×
+                                  Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                (core.convert.FromSame r1_wire.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (aspis_core.field.QM31 ×
+                            Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                          (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+              (core.convert.FromSame r1_wire.Error) residual))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:234:128: error: unsolved goals
+case h_1
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+record1 : r1_wire.ValidatedRecord
+row✝ : U8
+x : Slice U8
+⊢ bounded 3 do
+    let __x ← sampleBlock D self 25#u8 x
+    match __x with
+      | (r, self1) => do
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let scp ← liftM (B.circle val FinishModel.CircleRow.First)
+            pure (core.result.Result.Ok scp, self1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual)
+            pure (r1, self1)
+
+case h_2
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+record1 : r1_wire.ValidatedRecord
+row✝ : U8
+x : Slice U8
+⊢ bounded 3 do
+    let __x ← sampleBlock D self 26#u8 x
+    match __x with
+      | (r, self1) => do
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let scp ← liftM (B.circle val FinishModel.CircleRow.Second)
+            pure (core.result.Result.Ok scp, self1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual)
+            pure (r1, self1)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:257:119: error: unsolved goals
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+prefix1 : r1_wire.Prefix
+transcript : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+obs : Option (verifier.Phase → Result Unit)
+x✝ : core.result.Result r1_wire.ValidatedRecord r1_wire.Error
+x : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.ValidatedRecord
+⊢ bounded 36
+    (PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun cf =>
+            match cf with
+            | core.ops.control_flow.ControlFlow.Continue vr => do
+              let r1 ← liftM (R.decode 1#usize vr 0#usize)
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let running ← liftM (val.index_usize 0#usize)
+                  have alpha : Std.Array aspis_core.field.QM31 10#usize :=
+                    Array.repeat 10#usize aspis_core.field.QM31.ZERO
+                  let r2 ← roundStep R D prefix1 transcript alpha running 0#usize
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                      match val1 with
+                      | (running1, alpha1, transcript1) => do
+                        let r3 ← roundStep R D prefix1 transcript1 alpha1 running1 1#usize
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val2 =>
+                            match val2 with
+                            | (running2, alpha2, transcript2) => do
+                              let r4 ← roundStep R D prefix1 transcript2 alpha2 running2 2#usize
+                              let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                              match cf4 with
+                                | core.ops.control_flow.ControlFlow.Continue val3 =>
+                                  match val3 with
+                                  | (running3, alpha3, transcript3) => do
+                                    let r5 ← roundStep R D prefix1 transcript3 alpha3 running3 3#usize
+                                    let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                    match cf5 with
+                                      | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                        match val4 with
+                                        | (running4, alpha4, transcript4) => do
+                                          let r6 ← roundStep R D prefix1 transcript4 alpha4 running4 4#usize
+                                          let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                          match cf6 with
+                                            | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                              match val5 with
+                                              | (running5, alpha5, transcript5) => do
+                                                let r7 ← roundStep R D prefix1 transcript5 alpha5 running5 5#usize
+                                                let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                                match cf7 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                    match val6 with
+                                                    | (running6, alpha6, transcript6) => do
+                                                      let r8 ← roundStep R D prefix1 transcript6 alpha6 running6 6#usize
+                                                      let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r8)
+                                                      match cf8 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val7 =>
+                                                          match val7 with
+                                                          | (running7, alpha7, transcript7) => do
+                                                            let r9 ←
+                                                              roundStep R D prefix1 transcript7 alpha7 running7 7#usize
+                                                            let cf9 ←
+                                                              liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                                            match cf9 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val8 =>
+                                                                match val8 with
+                                                                | (running8, alpha8, transcript8) => do
+                                                                  let r10 ←
+                                                                    roundStep R D prefix1 transcript8 alpha8 running8
+                                                                        8#usize
+                                                                  let cf10 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r10)
+                                                                  match cf10 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val9 =>
+                                                                      match val9 with
+                                                                      | (running9, alpha9, transcript9) => do
+                                                                        let r11 ←
+                                                                          roundStep R D prefix1 transcript9 alpha9
+                                                                              running9 9#usize
+                                                                        let cf11 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r11)
+                                                                        match cf11 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              val10 =>
+                                                                            pure (core.result.Result.Ok val10)
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            liftM
+                                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                (aspis_core.field.QM31 ×
+                                                                                  Std.Array aspis_core.field.QM31
+                                                                                      10#usize ×
+                                                                                    r1_wire.SemanticTranscript H)
+                                                                                (core.convert.FromSame r1_wire.Error)
+                                                                                residual)
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      liftM
+                                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (aspis_core.field.QM31 ×
+                                                                            Std.Array aspis_core.field.QM31 10#usize ×
+                                                                              r1_wire.SemanticTranscript H)
+                                                                          (core.convert.FromSame r1_wire.Error)
+                                                                          residual)
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                liftM
+                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (aspis_core.field.QM31 ×
+                                                                      Std.Array aspis_core.field.QM31 10#usize ×
+                                                                        r1_wire.SemanticTranscript H)
+                                                                    (core.convert.FromSame r1_wire.Error) residual)
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (aspis_core.field.QM31 ×
+                                                                Std.Array aspis_core.field.QM31 10#usize ×
+                                                                  r1_wire.SemanticTranscript H)
+                                                              (core.convert.FromSame r1_wire.Error) residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (aspis_core.field.QM31 ×
+                                                          Std.Array aspis_core.field.QM31 10#usize ×
+                                                            r1_wire.SemanticTranscript H)
+                                                        (core.convert.FromSame r1_wire.Error) residual)
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              liftM
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (aspis_core.field.QM31 ×
+                                                    Std.Array aspis_core.field.QM31 10#usize ×
+                                                      r1_wire.SemanticTranscript H)
+                                                  (core.convert.FromSame r1_wire.Error) residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (aspis_core.field.QM31 ×
+                                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                            (core.convert.FromSame r1_wire.Error) residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (aspis_core.field.QM31 ×
+                                        Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                      (core.convert.FromSame r1_wire.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (aspis_core.field.QM31 ×
+                                  Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                                (core.convert.FromSame r1_wire.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (aspis_core.field.QM31 ×
+                            Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                          (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                      (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                  (core.convert.FromSame r1_wire.Error) residual))
+        x)
+      fun r => do
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          match val with
+          | (running, alpha, transcript1) => do
+            liftM (VerifyPrefix.mark obs 2#u8)
+            let r1 ← liftM (B.claims prefix1)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r2 ← liftM (B.terminal pub val1 alpha challenges)
+                let r3 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 D) r2 ())
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    liftM (VerifyPrefix.mark obs 3#u8)
+                    let a ← liftM (B.fromFn 16#usize (FinishModel.closureFn9 D) val1)
+                    let a1 ← liftM (B.fromFn 10#usize (FinishModel.closureFn5 D) val1)
+                    let a2 ← liftM (val1.index_usize 0#usize)
+                    let q ← liftM (a2.index_usize 27#usize)
+                    let mask ← liftM (B.mask a a1 q alpha)
+                    let r4 ← liftM (prefix1.validated_record 25#u8)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue vr => do
+                        let r5 ← liftM (R.decode 29#usize vr 87#usize)
+                        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let q1 ← liftM (B.mul challenges.eta val2)
+                            let q2 ← liftM (B.add mask q1)
+                            let q3 ← liftM (val3.index_usize 28#usize)
+                            let masked_terminal ← liftM (B.add q2 q3)
+                            let b ←
+                              liftM
+                                  (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                    running masked_terminal)
+                            if b = true then pure (core.result.Result.Err r1_wire.Error.Terminal)
+                              else do
+                                liftM (VerifyPrefix.mark obs 4#u8)
+                                let state_before_z0 ← liftM (r1_wire.SemanticTranscript.impl.state D transcript1)
+                                let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                match cf5 with
+                                  | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                    let __x ← circleValidated B D transcript1 vr1
+                                    match __x with
+                                      | (r6, transcript2) => do
+                                        let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                        match cf6 with
+                                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                            let r7 ← liftM (prefix1.validated_record 26#u8)
+                                            let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                            match cf7 with
+                                              | core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                                let r8 ← liftM (R.decode 29#usize vr2 0#usize)
+                                                let cf8 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r8)
+                                                match cf8 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                    let cf9 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                                    match cf9 with
+                                                      | core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                                        let __x ← circleValidated B D transcript2 vr3
+                                                        match __x with
+                                                          | (r9, transcript3) => do
+                                                            let cf10 ←
+                                                              liftM (core.result.Result.Insts.CoreOpsTry.branch r9)
+                                                            match cf10 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                                                liftM (VerifyPrefix.mark obs 5#u8)
+                                                                let b1 ← liftM (FinishModel.pointEq val4 val6)
+                                                                if b1 = true then
+                                                                    pure
+                                                                      (core.result.Result.Err
+                                                                        r1_wire.Error.EqualCirclePoints)
+                                                                  else do
+                                                                    let r10 ← liftM (FinishModel.payload prefix1 2#u8)
+                                                                    let cf11 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTry.branch
+                                                                            r10)
+                                                                    match cf11 with
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Continue val7 =>
+                                                                        do
+                                                                        let r11 ←
+                                                                          liftM
+                                                                              (core.array.TryFromArrayCopySlice.try_from
+                                                                                32#usize core.marker.CopyU8 val7)
+                                                                        let a3 ← liftM (B.unwrapRoot r11)
+                                                                        pure
+                                                                            (core.result.Result.Ok
+                                                                              {
+                                                                                roots :=
+                                                                                  Array.make 2#usize
+                                                                                    [prefix1.c1_root, a3] ⋯,
+                                                                                challenges := challenges,
+                                                                                alpha := alpha, claims := val1,
+                                                                                extra := val3, before_z1 := val5,
+                                                                                state_before_z0 := state_before_z0,
+                                                                                z := Array.make 2#usize [val4, val6] ⋯,
+                                                                                transcript := transcript3 })
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        liftM
+                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            (r1_semantic.Verified H)
+                                                                            (core.convert.FromSame r1_wire.Error)
+                                                                            residual)
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                liftM
+                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (r1_semantic.Verified H)
+                                                                    (core.convert.FromSame r1_wire.Error) residual)
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (r1_semantic.Verified H)
+                                                            (core.convert.FromSame r1_wire.Error) residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)
+                                                        residual)
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)
+                                                    residual)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetV1.lean:286:109: error: unsolved goals
+case h_1
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+obs : Option (verifier.Phase → Result Unit)
+x✝³ : core.result.Result r1_wire.Prefix r1_wire.Error
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) r1_wire.Prefix
+p✝ : r1_wire.Prefix
+x✝² : Unit
+x✝¹ : core.result.Result (alloc.vec.Vec U8) aspis_core.state_only_prefix.r0.Error
+x✝ : core.result.Result (alloc.vec.Vec U8) r1_wire.Error
+x : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (alloc.vec.Vec U8)
+⊢ bounded 82
+    (PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun cf =>
+            match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              have s := val.deref;
+              newTranscript D hash s p✝.c1_root
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual))
+        x)
+      fun r1 => do
+      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let __x ← begin D p✝ val
+          match __x with
+            | (r2, val1) => do
+              let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  liftM (VerifyPrefix.mark obs 1#u8)
+                  (fun {H} => finish R B) D pub p✝ val1 val2 obs
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual))
+'AspisR1PublicPreparation.S1SemanticCode.sampleBlock_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.semanticValidated_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.begin13_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.begin9_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.begin5_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.begin_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.newTranscript_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.publicTranscript_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.roundStep_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.rounds_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.circleValidated_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.finish_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.S1SemanticCode.verify_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

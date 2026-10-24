@@ -1,0 +1,292 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:18:6: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:18:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:31:6: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:31:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:47:6: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:47:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:62:7: warning: 'budget_then 1' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:62:25: warning: 'first
+| omega
+|
+  (solve
+    | exact digest_bound _ _ _)
+| intro x' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:62:25: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:78:6: warning: '(budget_then 1 <;>
+    first
+    | omega
+    |
+      (solve
+        | exact digest_bound _ _ _)
+    | intro x)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:79:6: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:78:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:79:6: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedBudgetV1.lean:101:220: error: unsolved goals
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x : Std.Array U8 32#usize
+⊢ bounded 33 do
+    let t ←
+      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+              toBytes := fun x => monadLift (B.sampling.toBytes x),
+              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+              powers := fun N x => monadLift (B.powers N x),
+              claim := fun {H} D sem bytes inactive powers kappa =>
+                monadLift (B.claim D sem bytes inactive powers kappa) }.newTranscript
+          D hash x view.variant
+    let __x ←
+      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+              toBytes := fun x => monadLift (B.sampling.toBytes x),
+              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+              powers := fun N x => monadLift (B.powers N x),
+              claim := fun {H} D sem bytes inactive powers kappa =>
+                monadLift (B.claim D sem bytes inactive powers kappa) }.scalar
+          D t 27#u8 view.y1 true
+    match __x with
+      | (gamma, t1) => do
+        let a1 ←
+          { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                  scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                  toBytes := fun x => monadLift (B.sampling.toBytes x),
+                  queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                  rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                  powers := fun N x => monadLift (B.powers N x),
+                  claim := fun {H} D sem bytes inactive powers kappa =>
+                    monadLift (B.claim D sem bytes inactive powers kappa) }.toBytes
+              view.inactive
+        let s ← liftM (lift a1.to_slice)
+        let __x ←
+          { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                  scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                  toBytes := fun x => monadLift (B.sampling.toBytes x),
+                  queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                  rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                  powers := fun N x => monadLift (B.powers N x),
+                  claim := fun {H} D sem bytes inactive powers kappa =>
+                    monadLift (B.claim D sem bytes inactive powers kappa) }.scalar
+              D t1 28#u8 s false
+        match __x with
+          | (kappa, t2) => do
+            let __x ←
+              { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                      scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                      toBytes := fun x => monadLift (B.sampling.toBytes x),
+                      queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                      rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                      powers := fun N x => monadLift (B.powers N x),
+                      claim := fun {H} D sem bytes inactive powers kappa =>
+                        monadLift (B.claim D sem bytes inactive powers kappa) }.scalar
+                  D t2 29#u8 view.round0 false
+            match __x with
+              | (alpha0, t3) => do
+                let i ← liftM view.variant.folds
+                if i = 2#usize then do
+                    let i1 ← liftM (32#usize + 224#usize)
+                    have bytes : alloc.vec.Vec U8 := alloc.vec.Vec.with_capacity U8 i1
+                    let a2 ← liftM (core.option.Option.unwrap view.folded_root)
+                    let s1 ← liftM (lift a2.to_slice)
+                    let bytes1 ← liftM (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1)
+                    let bytes2 ← liftM (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 view.round1)
+                    have s2 : Slice U8 := bytes2.deref
+                    let __x ←
+                      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                              toBytes := fun x => monadLift (B.sampling.toBytes x),
+                              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                              powers := fun N x => monadLift (B.powers N x),
+                              claim := fun {H} D sem bytes inactive powers kappa =>
+                                monadLift (B.claim D sem bytes inactive powers kappa) }.scalar
+                          D t3 30#u8 s2 false
+                    match __x with
+                      | (we, t4) => do
+                        let __x ←
+                          { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                  scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                  toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                  queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                  rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                  powers := fun N x => monadLift (B.powers N x),
+                                  claim := fun {H} D sem bytes inactive powers kappa =>
+                                    monadLift (B.claim D sem bytes inactive powers kappa) }.queries
+                              D t4 31#u8 view.final_message
+                        match __x with
+                          | (r, t5) => do
+                            let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val => do
+                                let i2 ← liftM (31#u8 + 1#u8)
+                                let s3 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                let __x ←
+                                  { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                          scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                          toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                          queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                          rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                          powers := fun N x => monadLift (B.powers N x),
+                                          claim := fun {H} D sem bytes inactive powers kappa =>
+                                            monadLift (B.claim D sem bytes inactive powers kappa) }.rho
+                                      D t5 i2 s3
+                                match __x with
+                                  | (rho, t6) => do
+                                    let g1 ←
+                                      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                              toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                              powers := fun N x => monadLift (B.powers N x),
+                                              claim := fun {H} D sem bytes inactive powers kappa =>
+                                                monadLift (B.claim D sem bytes inactive powers kappa) }.powers
+                                          29#usize gamma
+                                    let r1 ←
+                                      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                              toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                              powers := fun N x => monadLift (B.powers N x),
+                                              claim := fun {H} D sem bytes inactive powers kappa =>
+                                                monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+                                          D sem view.y1 view.inactive g1 kappa
+                                    let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                    match cf1 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                        pure
+                                          (core.result.Result.Ok
+                                              { variant := view.variant, roots := sem.roots, gamma := gamma,
+                                                kappa := kappa, alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho,
+                                                queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                                                state := t6.state },
+                                            g1)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r2 ←
+                                          liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                        pure (r2, g1)
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r1 ←
+                                  liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                pure (r1, scratch)
+                  else do
+                    let we ← liftM OriginalPreparedNative.zero
+                    let __x ←
+                      { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                              scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                              toBytes := fun x => monadLift (B.sampling.toBytes x),
+                              queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                              rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                              powers := fun N x => monadLift (B.powers N x),
+                              claim := fun {H} D sem bytes inactive powers kappa =>
+                                monadLift (B.claim D sem bytes inactive powers kappa) }.queries
+                          D t3 30#u8 view.final_message
+                    match __x with
+                      | (r, t4) => do
+                        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val => do
+                            let i1 ← liftM (30#u8 + 1#u8)
+                            let s1 ← liftM (lift (Std.Array.empty U8).to_slice)
+                            let __x ←
+                              { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                      scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                      toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                      queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                      rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                      powers := fun N x => monadLift (B.powers N x),
+                                      claim := fun {H} D sem bytes inactive powers kappa =>
+                                        monadLift (B.claim D sem bytes inactive powers kappa) }.rho
+                                  D t4 i1 s1
+                            match __x with
+                              | (rho, t5) => do
+                                let g1 ←
+                                  { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                          scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                          toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                          queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                          rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                          powers := fun N x => monadLift (B.powers N x),
+                                          claim := fun {H} D sem bytes inactive powers kappa =>
+                                            monadLift (B.claim D sem bytes inactive powers kappa) }.powers
+                                      29#usize gamma
+                                let r1 ←
+                                  { newTranscript := fun {H} => PreparedHashEffects.new effects,
+                                          scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+                                          toBytes := fun x => monadLift (B.sampling.toBytes x),
+                                          queries := fun {H} => PreparedQueryEffects.queries effects Q,
+                                          rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+                                          powers := fun N x => monadLift (B.powers N x),
+                                          claim := fun {H} D sem bytes inactive powers kappa =>
+                                            monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+                                      D sem view.y1 view.inactive g1 kappa
+                                let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                match cf1 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                    pure
+                                      (core.result.Result.Ok
+                                          { variant := view.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                                            alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                                            semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                                        g1)
+                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                    let r2 ←
+                                      liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                    pure (r2, g1)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r1 ←
+                              liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                            pure (r1, scratch)
+'AspisR1PublicPreparation.PreparedBudget.new_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.absorb_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.block_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.scalar_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.scalar_k_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.queries_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1PublicPreparation.PreparedBudget.preparation_bounded' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

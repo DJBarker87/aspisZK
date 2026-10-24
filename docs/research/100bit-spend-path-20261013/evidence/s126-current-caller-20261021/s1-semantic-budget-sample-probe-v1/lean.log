@@ -1,0 +1,24 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticBudgetSampleProbeV1.lean:9:49: error: unsolved goals
+case isFalse
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+h✝ : ¬(row != self.next_row) = true
+x✝² : Slice U8
+x✝¹ : UScalar UScalarTy.U8
+x✝ : Slice (UScalar UScalarTy.U8)
+x : Slice (Slice U8)
+⊢ bounded 3 do
+    let absorbed ← effects.digest D self.hash x
+    let s3 ← liftM (lift absorbed.to_slice)
+    let s4 ← liftM (lift (Array.make 1#usize [1#u8] sampleBlock._proof_10).to_slice)
+    let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+    let block ← effects.digest D self.hash s5
+    let s6 ← liftM (lift absorbed.to_slice)
+    let s7 ← liftM (lift (Array.make 1#usize [2#u8] sampleBlock._proof_13).to_slice)
+    let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+    let a ← effects.digest D self.hash s8
+    let i1 ← liftM (self.next_row + 1#u8)
+    pure (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })
