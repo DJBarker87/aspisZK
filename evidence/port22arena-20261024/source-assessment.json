@@ -1,0 +1,136 @@
+{
+  "schema": "Port22ARENA-source-assessment-v1",
+  "command": "python3 tools/port22arena-20261024/Port22ARENA_source.py",
+  "script_sha256": "f2298dd6c8489057eb084431ee125dd76d5f83058a0b93ce3e0e649fc64f989b",
+  "source_revision": "1fd3097c5aa81fba97c62eef2c74640838cffdbc",
+  "exit_status": 0,
+  "wall_seconds": 1.15791245829314,
+  "source_dependencies": [
+    {
+      "path": "crates/aspis-core/src/r0/heap.rs",
+      "sha256": "67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9",
+      "bytes": 842,
+      "assessment": "Current worktree bytes equal historical exact-source pin; no new ELF identity claim"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+      "bytes": 121363,
+      "assessment": "Current worktree bytes equal historical exact-source pin; no new ELF identity claim"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+      "bytes": 25102,
+      "assessment": "Current worktree bytes equal historical exact-source pin; no new ELF identity claim"
+    },
+    {
+      "path": "programs/r1-cost-probe/src/lib.rs",
+      "sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+      "bytes": 7551
+    },
+    {
+      "path": "/Users/dominic/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-program-entrypoint-2.3.0/src/lib.rs",
+      "sha256": "027efed4018bc8f1a340e576bbb0135cb70ba31fc465a23f4732ff8d5196d919",
+      "selected_sha256": "e4b56670e981526c9dcc7842762a1d6fcd5d48f1371ad1000cb1745c55deeaf2",
+      "exact_contiguous_source": true
+    }
+  ],
+  "host_std": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/clone.rs",
+      "sha256": "23f9cfc80347fde6b8457d46fbf7a2b8d9f34c8c58601b0b6f714ca2f6d1976b",
+      "bytes": 29380,
+      "spans": [
+        {
+          "start_line": 684,
+          "end_line": 721,
+          "text": "/// Implementations that cannot be described in Rust\n/// are implemented in `traits::SelectionContext::copy_clone_conditions()`\n/// in `rustc_trait_selection`.\nmod impls {\n    use super::{Share, TrivialClone};\n    use crate::marker::PointeeSized;\n\n    macro_rules! impl_clone {\n        ($($t:ty)*) => {\n            $(\n                #[stable(feature = \"rust1\", since = \"1.0.0\")]\n                #[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\n                impl const Clone for $t {\n                    #[inline(always)]\n                    fn clone(&self) -> Self {\n                        *self\n                    }\n                }\n\n                #[doc(hidden)]\n                #[unstable(feature = \"trivial_clone\", issue = \"none\")]\n                #[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\n                unsafe impl const TrivialClone for $t {}\n            )*\n        }\n    }\n\n    impl_clone! {\n        usize u8 u16 u32 u64 u128\n        isize i8 i16 i32 i64 i128\n        f16 f32 f64 f128\n        bool char\n    }\n\n    #[unstable(feature = \"never_type\", issue = \"35121\")]\n    #[rustc_const_unstable(feature = \"const_clone\", issue = \"142757\")]\n    const impl Clone for ! {\n        #[inline]"
+        }
+      ],
+      "historical_pin_matched": false
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "bytes": 22366,
+      "spans": [
+        {
+          "start_line": 201,
+          "end_line": 218,
+          "text": "\nimpl Global {\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn alloc_impl_runtime(layout: Layout, zeroed: bool) -> Result<NonNull<[u8]>, AllocError> {\n        match layout.size() {\n            0 => Ok(layout.dangling_ptr().cast_slice(0)),\n            // SAFETY: `layout` is non-zero in size,\n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(ptr.cast_slice(size))\n            },\n        }\n    }\n\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces"
+        }
+      ],
+      "historical_pin_matched": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "bytes": 37605,
+      "spans": [
+        {
+          "start_line": 443,
+          "end_line": 488,
+          "text": "#[stable(feature = \"copy_clone_array_lib\", since = \"1.58.0\")]\nimpl<T: Copy, const N: usize> Copy for [T; N] {}\n\n#[stable(feature = \"copy_clone_array_lib\", since = \"1.58.0\")]\nimpl<T: Clone, const N: usize> Clone for [T; N] {\n    #[inline]\n    fn clone(&self) -> Self {\n        SpecArrayClone::clone(self)\n    }\n\n    #[inline]\n    fn clone_from(&mut self, other: &Self) {\n        self.clone_from_slice(other);\n    }\n}\n\n#[doc(hidden)]\n#[unstable(feature = \"trivial_clone\", issue = \"none\")]\nunsafe impl<T: TrivialClone, const N: usize> TrivialClone for [T; N] {}\n\ntrait SpecArrayClone: Clone {\n    fn clone<const N: usize>(array: &[Self; N]) -> [Self; N];\n}\n\nimpl<T: Clone> SpecArrayClone for T {\n    #[inline]\n    default fn clone<const N: usize>(array: &[T; N]) -> [T; N] {\n        let mut ptr: *const T = array.as_ptr();\n        // SAFETY: Unless a panic occurs, from_fn will call the closure N times,\n        // so our pointer arithmetic will be in bounds for the N-element array.\n        // This works even for ZSTs, since in that case, add() is a no-op.\n        from_fn(move |_| unsafe {\n            let old = ptr;\n            ptr = ptr.add(1);\n            (&*old).clone()\n        })\n    }\n}\n\nimpl<T: TrivialClone> SpecArrayClone for T {\n    #[inline]\n    fn clone<const N: usize>(array: &[T; N]) -> [T; N] {\n        // SAFETY: `TrivialClone` implies that this is equivalent to calling\n        // `Clone` on every element.\n        unsafe { ptr::read(array) }\n    }"
+        }
+      ],
+      "historical_pin_matched": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+      "bytes": 167769,
+      "spans": [
+        {
+          "start_line": 1580,
+          "end_line": 1582,
+          "text": "    pub fn try_reserve_exact(&mut self, additional: usize) -> Result<(), TryReserveError> {\n        self.buf.try_reserve_exact(self.len, additional)\n    }"
+        },
+        {
+          "start_line": 3529,
+          "end_line": 3537,
+          "text": "    pub fn resize(&mut self, new_len: usize, value: T) {\n        let len = self.len();\n\n        if new_len > len {\n            self.extend_with(new_len - len, value)\n        } else {\n            self.truncate(new_len);\n        }\n    }"
+        },
+        {
+          "start_line": 3655,
+          "end_line": 3681,
+          "text": "    fn extend_with(&mut self, n: usize, value: T) {\n        self.reserve(n);\n\n        unsafe {\n            let mut ptr = self.as_mut_ptr().add(self.len());\n            // Use SetLenOnDrop to work around bug where compiler\n            // might not realize the store through `ptr` through self.set_len()\n            // don't alias.\n            let mut local_len = SetLenOnDrop::new(&mut self.len);\n\n            // Write all elements except the last one\n            for _ in 1..n {\n                ptr::write(ptr, value.clone());\n                ptr = ptr.add(1);\n                // Increment the length in every step in case clone() panics\n                local_len.increment_len(1);\n            }\n\n            if n > 0 {\n                // We can write the last element directly without cloning needlessly\n                ptr::write(ptr, value);\n                local_len.increment_len(1);\n            }\n\n            // len set by scope guard\n        }\n    }"
+        }
+      ],
+      "historical_pin_matched": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "bytes": 35336,
+      "spans": [
+        {
+          "start_line": 719,
+          "end_line": 736,
+          "text": "    unsafe fn try_reserve_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n        elem_layout: Layout,\n    ) -> Result<(), TryReserveError> {\n        if self.needs_to_grow(len, additional, elem_layout) {\n            // SAFETY: Precondition passed to caller\n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            // Inform the optimizer that the reservation has succeeded or wasn't needed\n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }"
+        },
+        {
+          "start_line": 772,
+          "end_line": 805,
+          "text": "    const unsafe fn set_ptr_and_cap(&mut self, ptr: NonNull<[u8]>, cap: usize) {\n        // Allocators currently return a `NonNull<[u8]>` whose length matches\n        // the size requested. If that ever changes, the capacity here should\n        // change to `ptr.len() / size_of::<T>()`.\n        self.ptr = Unique::from(ptr.cast());\n        self.cap = unsafe { Cap::new_unchecked(cap) };\n    }\n\n    /// # Safety\n    /// - `elem_layout` must be valid for `self`, i.e. it must be the same `elem_layout` used to\n    ///   initially construct `self`\n    /// - `elem_layout`'s size must be a multiple of its alignment\n    /// - The sum of `len` and `additional` must be greater than the current capacity\n    unsafe fn grow_exact(\n        &mut self,\n        len: usize,\n        additional: usize,\n        elem_layout: Layout,\n    ) -> Result<(), TryReserveError> {\n        if elem_layout.size() == 0 {\n            // Since we return a capacity of `usize::MAX` when the type size is\n            // 0, getting to here necessarily means the `RawVec` is overfull.\n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        // SAFETY: preconditions passed to caller\n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        // SAFETY: `finish_grow` would have failed if `cap > isize::MAX`\n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }"
+        },
+        {
+          "start_line": 543,
+          "end_line": 567,
+          "text": "    unsafe fn finish_grow(\n        &self,\n        cap: usize,\n        elem_layout: Layout,\n    ) -> Result<NonNull<[u8]>, TryReserveError> {\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            // FIXME(const-hack): switch to `debug_assert_eq`\n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                // The allocator checks for alignment equality\n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        // FIXME(const-hack): switch back to `map_err`\n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }"
+        }
+      ],
+      "historical_pin_matched": true
+    }
+  ],
+  "remote_read_command": [
+    "ssh",
+    "dombarker@100.108.41.90",
+    "python3",
+    "-"
+  ],
+  "remote_read_script": "from pathlib import Path\nimport hashlib,json\nroot=Path('/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library')\nrows=[]\nfor rel,spans in [('core/src/clone.rs',[(684,721)]),('alloc/src/alloc.rs',[(201,218)]),('core/src/array/mod.rs',[(443,488)]),('alloc/src/vec/mod.rs',[(1580,1582),(3529,3537),(3655,3681)]),('alloc/src/raw_vec/mod.rs',[(719,736),(772,805),(543,567)])]:\n p=root/rel;b=p.read_bytes();ls=b.decode().splitlines()\n rows.append(dict(path=str(p),sha256=hashlib.sha256(b).hexdigest(),bytes=len(b),spans=[dict(start_line=a,end_line=z,text='\\n'.join(ls[a-1:z])) for a,z in spans]))\nprint(json.dumps(rows,indent=2))\n",
+  "print_axioms": "N/A: read-only source assessment",
+  "assessment": "Host extraction std differs from Kani sysroot and SBF sysroot. Exact copied allocator body checked with Kani; shim/Vec/deployed associations not proved.",
+  "span_presentation": "JSON span strings decoded from literal newline escapes; whole-file hashes unchanged"
+}

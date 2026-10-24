@@ -143,3 +143,14 @@ Source detail correction: pinned host array specialization is on TrivialClone,
 not merely Copy. core::clone impl_clone explicitly includes u64 and gives both
 clone=*self and unsafe TrivialClone; specialized array clone uses ptr::read of
 the FULL [u64;4]. This still needs the selected native read interpretation.
+
+## Focused final audit
+
+Import Port22ARENA_VecFrame and Port22ARENA_WordBody; print all definitions,
+check all21 complete theorem signatures, and print axioms individually. No
+new theorem, native assumption or release composition. Runner now records
+complete transitive core/job module/source/olean/sidecar/tool-library hashes,
+verifies them under the shared lock at go, and uses only job objects plus the
+Lean sysroot in LEAN_PATH. Earlier focused receipts retain their original
+direct-dependency at-go hashes; later closure assessment is not retroactively
+attributed as an earlier fresh gate.
