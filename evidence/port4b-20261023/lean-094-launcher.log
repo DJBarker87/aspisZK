@@ -1,0 +1,49 @@
+{"attempt": "lean-094", "exit_status": 1, "wall_seconds": 3.222019704990089, "peak_rss_kib": "4422248", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4B_PrepareCut.lean:41:11: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro verifier.Prepared
+    (fun p =>
+      ∃ root view,
+        base.op1 = ok a✝¹³ ∧
+          base.op7 D semantic proof hash none (Array.repeat 29#usize a✝¹³) = ok (core.result.Result.Ok p, ?m.2283) ∧
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                  { start := 7751#usize, «end» := 7783#usize } =
+                ok view ∧
+              core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view =
+                  ok (core.result.Result.Ok root) ∧
+                Port4B_Install.batch D proof p root 0#usize hash = ok 
+...
+ay U8 32#usize
+heq✝⁸ : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 a✝⁹ = ok (core.result.Result.Ok a✝⁸)
+x✝⁷ : Result (core.result.Result Unit verifier.Error)
+a✝⁷ : Unit
+heq✝⁷ : Port4B_Install.batch D proof val✝ a✝⁸ 0#usize hash = ok (core.result.Result.Ok a✝⁷)
+x✝⁶ : Result Unit
+a✝⁶ : Unit
+heq✝⁶ : base.op13 none (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize) = ok a✝⁶
+x✝⁵ : Result (core.result.Result verifier.QueryGeometry verifier.Error)
+a✝⁵ : verifier.QueryGeometry
+heq✝⁵ : base.op11 val✝.queries 0#usize split = ok (core.result.Result.Ok a✝⁵)
+x✝⁴ : Result (core.result.Result verifier.BatchedWeights verifier.Error)
+a✝⁴ : verifier.BatchedWeights
+heq✝⁴ : base.op10 a✝¹¹.weights.deref = ok (core.result.Result.Ok a✝⁴)
+x✝³ : Result (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+a✝³ : verifier.Accumulator × verifier.BatchedWeights
+heq✝³ : base.op6 proof val✝ a✝¹¹ a✝¹².2 none a✝⁵ a✝⁴ split = ok (core.result.Result.Ok a✝³)
+x✝² : Result (Slice aspis_core.field.QM31)
+a✝² : Slice aspis_core.field.QM31
+heq✝² : base.op9 a✝³.2 ⟨↑a✝³.1.weights, ⋯⟩ = ok a✝²
+x✝¹ : Result (alloc.vec.Vec U8)
+a✝¹ : alloc.vec.Vec U8
+heq✝¹ :
+  base.op8 D val✝ { weights := (fun s => ⟨↑s, ⋯⟩) a✝², rhs := a✝³.1.rhs, power := a✝³.1.power, next := a✝³.1.next }
+      proof pub hash =
+    ok a✝¹
+x✝ : Result Unit
+a✝ : Unit
+heq✝ : base.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite = ok a✝
+accepted : ok (core.result.Result.Ok a✝¹) = ok (core.result.Result.Ok saved)
+⊢ Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf5b766d5fd12416ebe592a6b09d55dae.scope; invocation ID: a96d71e9047047bd9114e9bf158c5585

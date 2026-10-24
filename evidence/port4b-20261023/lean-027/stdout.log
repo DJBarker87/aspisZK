@@ -1,0 +1,32 @@
+Port4B_LeafStep.lean:64:2: error: unsolved goals
+case pos
+s : reference.Scratch
+index : U32
+leaf : Std.Array U8 32#usize
+pos : Usize
+room : ↑s.n < 16
+ilen : (↑s.idx).length = 16
+vlen : (↑s.val).length = 16
+writeI : s.idx.update s.n index = ok (s.idx.set s.n index)
+writeV : s.val.update s.n leaf = ok (s.val.set s.n leaf)
+inc : s.n.wrapping_add 1#usize = UScalar.ofNat (↑s.n + 1) ⋯
+positive : 0 < ↑s.n
+prev : ↑(s.n.wrapping_sub 1#usize) = ↑s.n - 1
+readI : s.idx.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.idx)[↑s.n - 1]!
+readV : s.val.index_usize (s.n.wrapping_sub 1#usize) = ok (↑s.val)[↑s.n - 1]!
+⊢ (if (↑s.idx)[↑s.n - 1]?.getD default = index then
+      if decide ((↑s.val)[↑s.n - 1]?.getD default = leaf) = true then ok (cont (s.idx, s.val, s.n, pos))
+      else ok (done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle)))
+    else ok (cont (s.idx.set s.n index, s.val.set s.n leaf, UScalar.ofNat (↑s.n + 1) ⋯, pos))) =
+    ok
+      (match
+        if (↑s.idx)[↑s.n - 1]?.getD default = index then if (↑s.val)[↑s.n - 1]! = leaf then some s else none
+        else
+          some
+            { idx := s.idx.set s.n index, val := s.val.set s.n leaf, n := UScalar.ofNat (↑s.n + 1) ⋯,
+              «at» := s.at } with
+      | none => done (s.idx, s.val, some (core.result.Result.Err verifier.Error.Merkle))
+      | some t => cont (t.idx, t.val, t.n, pos))
+'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

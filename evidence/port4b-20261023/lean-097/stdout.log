@@ -1,0 +1,104 @@
+Port4B_PrepareCut.lean:37:26: error: unknown tactic
+Port4B_PrepareCut.lean:32:70: error: unsolved goals
+base : Ops
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+accepted :
+  (do
+      let i ← base.op16
+      if (split != i) = true then ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+        else do
+          let r ← base.op3 proof
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let r1 ← base.op4 proof
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  base.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                  let we ← base.op1
+                  let (r2, g1) ← base.op7 D semantic proof hash none (Array.repeat 29#usize we)
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      let r3 ← base.op12 AspisR1Stage2.transport.Variant.S2
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          base.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare
+                          let i1 ← ok 7751#usize
+                          let i2 ← ok 7783#usize
+                          let s ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i1, «end» := i2 }
+                          let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+                          let folded_root ← Port4B_FoldedCut.unwrap32 r4
+                          let r5 ← Port4B_Install.batch D proof val folded_root 0#usize hash
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              base.op13 none (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize)
+                              let r6 ← base.op11 val.queries 0#usize split
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                  let r7 ← base.op10 val1.weights.deref
+                                  let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                                  match cf6 with
+                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                      let r8 ← base.op6 proof val val1 g1 none val2 val3 split
+                                      let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                                      match cf7 with
+                                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                          let (a, pending) := val4
+                                          do
+                                          let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                                          let s3 ← base.op9 pending s2
+                                          let bytes ←
+                                            base.op8 D val
+                                                { weights := deref_mut_back s3, rhs := a.rhs, power := a.power,
+                                                  next := a.next }
+                                                proof pub hash
+                                          base.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite
+                                          ok (core.result.Result.Ok bytes)
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok saved)
+⊢ ∃ zero g p root view,
+    base.op1 = ok zero ∧
+      base.op7 D semantic proof hash none (Array.repeat 29#usize zero) = ok (core.result.Result.Ok p, g) ∧
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+              { start := 7751#usize, «end» := 7783#usize } =
+            ok view ∧
+          core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root) ∧
+            Port4B_Install.batch D proof p root 0#usize hash = ok (core.result.Result.Ok ())
+'AspisR1.Port4B_PrepareCut.branch_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

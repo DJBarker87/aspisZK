@@ -1,0 +1,42 @@
+Port4B_ByteWord.lean:21:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => bs[_a].testBit ((8 * j + k) % 8) = 0[8 * j + k]
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < bs.length
+but is expected to have type
+  ¬(8 * j + k) / 8 < bs.length
+in the application
+  BitVec.fromLEBytes_getElem._proof_1 bs (8 * j + k) bound a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+bs : List (BitVec 8)
+zero : BitVec.fromLEBytes bs = 0
+b : BitVec 8
+mem : b ∈ bs
+j : ℕ
+hj : j < bs.length
+same : bs[j] = b
+k : ℕ
+hk : k < 8
+bound : 8 * j + k < 8 * bs.length
+read : bs[(8 * j + k) / 8].testBit ((8 * j + k) % 8) = 0[8 * j + k]
+div : (8 * j + k) / 8 = j
+mod : (8 * j + k) % 8 = k
+⊢ b[k] = 0[k]
+Port4B_ByteWord.lean:28:56: error: don't know how to synthesize placeholder for argument `eq`
+context:
+word : Std.Array U8 8#usize
+zero : core.num.U64.from_le_bytes word = 0#u64
+bits : (core.num.U64.from_le_bytes word).bv = 0#u64.bv
+⊢ 8 * (List.map U8.bv ↑word).length = UScalarTy.U64.numBits
+Port4B_ByteWord.lean:26:77: error: unsolved goals
+word : Std.Array U8 8#usize
+zero : core.num.U64.from_le_bytes word = 0#u64
+bits : (core.num.U64.from_le_bytes word).bv = 0#u64.bv
+⊢ ∀ b ∈ ↑word, b = 0#u8
+'AspisR1.Port4B_ByteWord.fromLE_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.Port4B_ByteWord.u64_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

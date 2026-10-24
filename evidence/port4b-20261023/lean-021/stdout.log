@@ -1,0 +1,69 @@
+Port4B_LeafCode.lean:48:2: error: unsolved goals
+case isTrue
+kind : Usize
+o : Slice U8
+len : (↑o).length = 832
+range : ∀ (s e : Usize), ↑s ≤ ↑e → ↑e ≤ 832 → readRange o s e = ok (sub o s e)
+h✝ : kind = 0#usize
+⊢ (Code.step (ok (sub o 608#usize 640#usize)) fun salt =>
+      Code.step (ok (sub o 0#usize 480#usize)) fun value => Code.read (parts 113#u8 value salt) Code.done) =
+    Code.read (parts 113#u8 (sub o 0#usize 480#usize) (sub o 608#usize 640#usize)) Code.done
+Port4B_LeafCode.lean:51:4: error: unsolved goals
+case isFalse.isTrue
+kind : Usize
+o : Slice U8
+len : (↑o).length = 832
+range : ∀ (s e : Usize), ↑s ≤ ↑e → ↑e ≤ 832 → readRange o s e = ok (sub o s e)
+h✝¹ : ¬kind = 0#usize
+h✝ : kind = 1#usize
+⊢ (Code.step (ok (sub o 640#usize 672#usize)) fun salt =>
+      Code.step (ok (sub o 480#usize 608#usize)) fun value => Code.read (parts 241#u8 value salt) Code.done) =
+    Code.read (parts 241#u8 (sub o 480#usize 608#usize) (sub o 640#usize 672#usize)) Code.done
+Port4B_LeafCode.lean:53:4: error: unsolved goals
+case isFalse.isFalse
+kind : Usize
+o : Slice U8
+len : (↑o).length = 832
+range : ∀ (s e : Usize), ↑s ≤ ↑e → ↑e ≤ 832 → readRange o s e = ok (sub o s e)
+h✝¹ : ¬kind = 0#usize
+h✝ : ¬kind = 1#usize
+⊢ (Code.step (ok (sub o 800#usize 832#usize)) fun salt =>
+      Code.step (ok (sub o 672#usize 800#usize)) fun value => Code.read (parts 114#u8 value salt) Code.done) =
+    Code.read (parts 114#u8 (sub o 672#usize 800#usize) (sub o 800#usize 832#usize)) Code.done
+Port4B_LeafCode.lean:57:99: error: unsolved goals
+case isTrue
+kind : Usize
+o : Slice U8
+zero : kind = 0#usize ↔ ↑kind = 0
+one : kind = 1#usize ↔ ↑kind = 1
+h✝ : ↑kind = 0
+⊢ decodeByte 16#u8 = 16 ∧ decodeByte 113#u8 = 113
+
+case isFalse.isTrue
+kind : Usize
+o : Slice U8
+zero : kind = 0#usize ↔ ↑kind = 0
+one : kind = 1#usize ↔ ↑kind = 1
+h✝¹ : ¬↑kind = 0
+h✝ : ↑kind = 1
+⊢ decodeByte 16#u8 = 16 ∧ decodeByte 241#u8 = 241
+
+case isFalse.isFalse
+kind : Usize
+o : Slice U8
+zero : kind = 0#usize ↔ ↑kind = 0
+one : kind = 1#usize ↔ ↑kind = 1
+h✝¹ : ¬↑kind = 0
+h✝ : ¬↑kind = 1
+⊢ decodeByte 16#u8 = 16 ∧ decodeByte 114#u8 = 114
+Port4B_LeafCode.lean:83:9: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.33 = ?m.33
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+'AspisR1.Port4B_LeafCode.code_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafCode.address' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafCode.native_and_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

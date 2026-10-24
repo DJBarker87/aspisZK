@@ -1,0 +1,39 @@
+Port4B_Padding.lean:22:29: error: unsolved goals
+xs : List U8
+whole : xs.length % 8 = 0
+short : ¬xs.length < 8
+all :
+  ∀
+    c ∈
+      (if h : xs.length < 8 then ([], xs)
+        else
+          (List.take 8 xs :: (List.toChunksExact 8 ⋯ (List.drop 8 xs)).1,
+            (List.toChunksExact 8 ⋯ (List.drop 8 xs)).2)).1,
+    ∀ b ∈ c, b = 0#u8
+b : U8
+mem : b ∈ xs
+front : b ∈ List.take 8 xs
+⊢ List.take 8 xs ∈
+    (if xs.length < 8 then ([], xs)
+      else
+        (List.take 8 xs :: (List.toChunksExact 8 ⋯ (List.drop 8 xs)).1, (List.toChunksExact 8 ⋯ (List.drop 8 xs)).2)).1
+Port4B_Padding.lean:24:27: error: Application type mismatch: The argument
+  List.mem_cons_of_mem ?m.143 hc
+has type
+  c ∈ ?m.143 :: (List.toChunksExact 8 ⋯ (List.drop 8 xs)).1
+but is expected to have type
+  c ∈
+    (if h : xs.length < 8 then ([], xs)
+      else
+        (List.take 8 xs :: (List.toChunksExact 8 ⋯ (List.drop 8 xs)).1, (List.toChunksExact 8 ⋯ (List.drop 8 xs)).2)).1
+in the application
+  all c (List.mem_cons_of_mem ?m.143 hc)
+Port4B_Padding.lean:17:15: warning: This simp argument is unused:
+  if_neg short
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵n̵e̵g̵ ̵s̵h̵o̵r̵t̵]̵ ̵at all
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_Padding.chunks_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port4B_Padding.native_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

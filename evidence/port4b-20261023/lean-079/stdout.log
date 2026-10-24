@@ -1,0 +1,199 @@
+Port4B_TailRun.lean:8:46: error: unexpected token '('; expected command
+Port4B_TailRun.lean:63:31: error: Application type mismatch: The argument
+  mem
+has type
+  decodeByte raw ∈ bytesOf ↑padding
+but is expected to have type
+  raw ∈ ↑padding
+in the application
+  zeroBytes raw mem
+Port4B_TailRun.lean:35:92: error: unsolved goals
+case this
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+binary occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+p6 : MultiproofConeP6Frozen2Stage.P6Boundary (Port4B_VerifyInstall.digest D) hash H binary occupied sibling leaf
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+b : ℕ
+kind lo n slot : Usize
+hb : b < 2
+hk : ↑kind < 3
+slotValue : ↑slot = 3 * b + ↑kind
+root : Std.Array U8 32#usize
+rootValue : root = encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+outIdx : Indices
+outVal : Values
+run :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install base)) D proof root kind hash lo n slot keys s.idx s.val s.n
+      n =
+    ok (done (outIdx, outVal, some (core.result.Result.Ok ())))
+front : Slice U32
+count cap : Usize
+nodes padding supplied : Slice U8
+ce after : core.slice.iter.ChunksExact U8
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) s.idx
+      { «end» := s.n } =
+    ok front
+countRead : (Port4B_VerifyInstall.install base).op11 Port3_NativeBatchBody.multiproof.Arity.Two front = ok (some count)
+nodeRead : (Port4B_VerifyInstall.install base).op3 proof slot = ok nodes
+capRead :
+  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize slot = ok cap
+fit : ¬count > cap
+paddingRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok padding
+chunksRead : core.slice.Slice.chunks_exact padding 8#usize = ok ce
+scanRead :
+  (Port3_BatchStd.install (Port4B_VerifyInstall.install base)).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install (Port4B_VerifyInstall.install base)) D)
+      ce () =
+    ok (false, after)
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+      { «end» := Usize.wrapping_mul 32#usize count } =
+    ok supplied
+verifyRead :
+  (Port4B_VerifyInstall.install base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n
+      supplied =
+    ok (true, outIdx, outVal)
+frontEq : List.map UScalar.val ↑front = List.map Prod.fst (live s 0 ↑s.n)
+counted :
+  OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+    ↑count = OraclePortFrozenOrder.nodeCount 18 (List.map Prod.fst (live s 0 ↑s.n)) ∧ ↑count ≤ 288
+countValue : ↑count = slotCount s
+capValue : ↑cap = OraclePortSelectedDraft.capacity (3 * b + ↑kind)
+countBound : ↑count ≤ ↑cap
+viewRead : Port4B_SlotInstall.nodeSlot proof slot = ok nodes
+width : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind)
+bytes :
+  bytesOf ↑nodes =
+    OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind))
+widthCap : (↑nodes).length = 32 * ↑cap
+scale : ↑(Usize.wrapping_mul 32#usize count) = 32 * ↑count
+scaleFit : ↑(Usize.wrapping_mul 32#usize count) ≤ (↑nodes).length
+padRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok (nodes.drop (Usize.wrapping_mul 32#usize count))
+samePadding : padding = nodes.drop (Usize.wrapping_mul 32#usize count)
+padContent : ↑padding = List.drop (32 * ↑count) ↑nodes
+padLength : (↑padding).length = 32 * (↑cap - ↑count)
+zeroBytes : ∀ b ∈ ↑padding, b = 0#u8
+allZero : (List.all (bytesOf ↑padding) fun byte => byte == 0) = true
+padScan : MultiproofConePadding.scan (4 * (↑cap - ↑count)) (bytesOf ↑padding) = true
+⊢ ?m.560
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+binary occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+p6 : MultiproofConeP6Frozen2Stage.P6Boundary (Port4B_VerifyInstall.digest D) hash H binary occupied sibling leaf
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+b : ℕ
+kind lo n slot : Usize
+hb : b < 2
+hk : ↑kind < 3
+slotValue : ↑slot = 3 * b + ↑kind
+root : Std.Array U8 32#usize
+rootValue : root = encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+outIdx : Indices
+outVal : Values
+run :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install base)) D proof root kind hash lo n slot keys s.idx s.val s.n
+      n =
+    ok (done (outIdx, outVal, some (core.result.Result.Ok ())))
+front : Slice U32
+count cap : Usize
+nodes padding supplied : Slice U8
+ce after : core.slice.iter.ChunksExact U8
+frontRead :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) s.idx
+      { «end» := s.n } =
+    ok front
+countRead : (Port4B_VerifyInstall.install base).op11 Port3_NativeBatchBody.multiproof.Arity.Two front = ok (some count)
+nodeRead : (Port4B_VerifyInstall.install base).op3 proof slot = ok nodes
+capRead :
+  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize slot = ok cap
+fit : ¬count > cap
+paddingRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok padding
+chunksRead : core.slice.Slice.chunks_exact padding 8#usize = ok ce
+scanRead :
+  (Port3_BatchStd.install (Port4B_VerifyInstall.install base)).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install (Port4B_VerifyInstall.install base)) D)
+      ce () =
+    ok (false, after)
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+      { «end» := Usize.wrapping_mul 32#usize count } =
+    ok supplied
+verifyRead :
+  (Port4B_VerifyInstall.install base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n
+      supplied =
+    ok (true, outIdx, outVal)
+frontEq : List.map UScalar.val ↑front = List.map Prod.fst (live s 0 ↑s.n)
+counted :
+  OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+    ↑count = OraclePortFrozenOrder.nodeCount 18 (List.map Prod.fst (live s 0 ↑s.n)) ∧ ↑count ≤ 288
+countValue : ↑count = slotCount s
+capValue : ↑cap = OraclePortSelectedDraft.capacity (3 * b + ↑kind)
+countBound : ↑count ≤ ↑cap
+viewRead : Port4B_SlotInstall.nodeSlot proof slot = ok nodes
+width : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind)
+bytes :
+  bytesOf ↑nodes =
+    OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind))
+widthCap : (↑nodes).length = 32 * ↑cap
+scale : ↑(Usize.wrapping_mul 32#usize count) = 32 * ↑count
+scaleFit : ↑(Usize.wrapping_mul 32#usize count) ≤ (↑nodes).length
+padRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok (nodes.drop (Usize.wrapping_mul 32#usize count))
+samePadding : padding = nodes.drop (Usize.wrapping_mul 32#usize count)
+padContent : ↑padding = List.drop (32 * ↑count) ↑nodes
+padLength : (↑padding).length = 32 * (↑cap - ↑count)
+zeroBytes : ∀ b ∈ ↑padding, b = 0#u8
+allZero : (List.all (bytesOf ↑padding) fun byte => byte == 0) = true
+padScan : MultiproofConePadding.scan (4 * (↑cap - ↑count)) (bytesOf ↑padding) = true
+this : ?m.560
+⊢ ∃ nodes final,
+    Port4B_SlotInstall.nodeSlot proof slot = ok nodes ∧
+      bytesOf ↑nodes =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + ↑kind)) ∧
+        (eval H
+                (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed b (↑kind)
+                  nodes s)).2 =
+            (true, final) ∧
+          final.idx = outIdx ∧ final.val = outVal
+Port4B_TailRun.lean:69:13: error: unexpected token ':='; expected ':'
+Port4B_TailRun.lean:70:66: error: unexpected token ')'; expected ':'
+'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

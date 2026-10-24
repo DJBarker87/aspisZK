@@ -1,0 +1,358 @@
+def AspisR1.Port4B_Install.leaves : AspisR1.Port3_NativeBatchBody.Ops :=
+{ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+  op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := AspisR1.Port4B_Opening.opening,
+  op3 := AspisR1.Port4B_SlotInstall.nodeSlot, op4 := AspisR1.Port4B_KeyInstall.build,
+  op5 := fun keys n => MultiproofSortRef.sort_reference.sort_rows keys 1#usize n,
+  op6 := fun {H} => AspisR1.Port4B_LeafCode.native, op7 := AspisR1.Port3_BatchStd.sameLeaf,
+  op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Aeneas.Std.Array.index_usize,
+  op10 := fun {H} => AspisR1.Port4B_VerifyInstall.verify, op11 := AspisR1.Port4B_CountInstall.nodeCount,
+  op12 :=
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+        AspisR1.Port4B_Install.leaves._proof_8),
+  op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+def AspisR1.Port4B_StageRows.PreparedBinding : VTop_Stages.verifier.Prepared →
+  AspisR1.OraclePortCompactDraft.Parsed → Prop :=
+fun p parsed =>
+  ∃ a pm am,
+    AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am ∧
+      ∀ (j : Fin 2), pm.roots j = AspisR1.OraclePortBatchDraft.committedRoot parsed ↑j
+theorem AspisR1.Port4B_CallerJoin.accepted : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub saved : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub saved parsed →
+    parsed.wire = stored →
+      ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+        (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+            (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling
+            leaf →
+          ∀ (p : VTop_Stages.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+            (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+            (am :
+              AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+            AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am →
+              (∀ (j : Fin 2), pm.roots j = AspisR1.OraclePortBatchDraft.committedRoot parsed ↑j) →
+                ∀ (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                  AspisR1.MultiproofConeCanonical.bytesOf ↑folded =
+                      AspisV8R19.SourceDuplexStep.bytes (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                    ∀ (batch : Aeneas.Std.Usize),
+                      ↑batch < 2 →
+                        c.reached (AspisR1.Port4B_CallerJoin.site batch) →
+                          AspisR1.Port4B_Install.batch D (c.proof (AspisR1.Port4B_CallerJoin.site batch)) p folded batch
+                                hash =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                            ∃ log,
+                              AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed
+                                      pm.queries c.nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                  (log, true) ∧
+                                AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed
+                                      pm.queries c.nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                  AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.OraclePortFrozen2.batch parsed pm.queries
+                                      (if ↑batch = 0 then AspisR1.OraclePortFrozen2.batch0
+                                      else AspisR1.OraclePortFrozen2.batch1)) :=
+fun {Observer X} c D hash H stored pub saved parsed facts wireStored binary occupied sibling leaf p6 p a pm am fields
+    modelRoots folded foldedInput batch hb reached native =>
+  have original := facts.proofBytes (AspisR1.Port4B_CallerJoin.site batch) reached;
+  have size := congrArg List.length original;
+  have length :=
+    Eq.trans
+      (Eq.mp (congrFun' (congrArg Eq (List.length_map AspisV8R19.SqueezeOracleBridge.decodeByte)) (List.length stored))
+        size)
+      facts.proofLength;
+  have wire := Eq.trans wireStored (Eq.symm original);
+  let localP6 :=
+    { oracle := facts.oracle, binary_parent := p6.binary_parent, occupied_parent := p6.occupied_parent,
+      sibling_parent := p6.sibling_parent, leaf := p6.leaf };
+  have queryBinding := AspisR1.Port4B_KeyInstall.queries_bound p a pm am fields;
+  have roots := AspisR1.Port4B_Prepared.roots p a pm am fields;
+  have installed :=
+    Eq.trans
+      (AspisR1.Port4B_Install.parent AspisR1.Port4B_Install.leaves D (c.proof (AspisR1.Port4B_CallerJoin.site batch)) p
+        folded batch hash)
+      native;
+  have keys := fun k =>
+    AspisR1.Port4B_KeyInstall.packed AspisR1.Port4B_Install.leaves p.queries pm.queries queryBinding batch (↑k)#usize hb
+      (have this := k.isLt;
+      AspisR1.Port4B_CallerJoin.accepted._proof_2 c stored folded batch k this);
+  let ⟨log, source⟩ :=
+    AspisR1.Port4B_BatchJoin.accepted (AspisR1.Port4B_KeyInstall.install AspisR1.Port4B_Install.leaves) D hash H binary
+      occupied sibling leaf localP6 (c.proof (AspisR1.Port4B_CallerJoin.site batch)) length parsed wire p folded
+      pm.queries batch hb c.nodes facts.nodeViews keys
+      (Eq.trans roots.left (congrArg AspisV8R19.SqueezeOracleBridge.encodeState (modelRoots 0)))
+      (Eq.trans roots.right (congrArg AspisV8R19.SqueezeOracleBridge.encodeState (modelRoots 1)))
+      (AspisR1.Port4B_Prepared.digest_of_bytes folded (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) foldedInput)
+      installed
+  have complete :=
+    AspisR1.MultiproofConeP6Frozen2Stage.both_batches
+      (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling leaf
+      localP6 parsed pm.queries c.nodes facts.nodeViews;
+  have success := Eq.mpr (id (congrArg (fun _a => _a.2 = true) source)) (Eq.refl (log, true).2);
+  Exists.intro log
+    ⟨source,
+      if zero : ↑batch = 0 then
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                  (congrFun'
+                    (congrArg
+                      (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries c.nodes)
+                      zero)
+                    AspisR1.Port4B_BatchJoin.initial)))
+              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                (congrArg (AspisR1.OraclePortFrozen2.batch parsed pm.queries)
+                  (ite_congr (Eq.trans (congrFun' (congrArg Eq zero) 0) (eq_self 0))
+                    (fun a => Eq.refl AspisR1.OraclePortFrozen2.batch0) fun a =>
+                    Eq.refl AspisR1.OraclePortFrozen2.batch1)))))
+          (complete.left AspisR1.Port4B_BatchJoin.initial
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.snd
+                    (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                      (congrFun'
+                        (congrArg
+                          (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                            c.nodes)
+                          zero)
+                        AspisR1.Port4B_BatchJoin.initial))))
+                true)
+              success))
+      else
+        have one :=
+          Decidable.byContradiction fun a => AspisR1.Port4B_CallerJoin.accepted._proof_3 c stored batch hb zero a;
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                  (congrFun'
+                    (congrArg
+                      (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries c.nodes)
+                      one)
+                    AspisR1.Port4B_BatchJoin.initial)))
+              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                (congrArg (AspisR1.OraclePortFrozen2.batch parsed pm.queries)
+                  (Eq.trans
+                    (ite_congr
+                      (Eq.trans (congrFun' (congrArg Eq one) 0)
+                        (eq_false
+                          (have this := of_decide_eq_true (id (Eq.refl true));
+                          this)))
+                      (fun a => Eq.refl AspisR1.OraclePortFrozen2.batch0) fun a =>
+                      Eq.refl AspisR1.OraclePortFrozen2.batch1)
+                    (if_false AspisR1.OraclePortFrozen2.batch0 AspisR1.OraclePortFrozen2.batch1))))))
+          (complete.right AspisR1.Port4B_BatchJoin.initial
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Prod.snd
+                    (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                      (congrFun'
+                        (congrArg
+                          (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                            c.nodes)
+                          one)
+                        AspisR1.Port4B_BatchJoin.initial))))
+                true)
+              success))⟩
+theorem AspisR1.Port4B_StageRows.tx1 : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (base : VTop_Stages.Ops) (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pubInput : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (stored pub ck : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub ck parsed →
+    parsed.wire = stored →
+      c.reached AspisR1.S2LeadInterface.Site.batch0 →
+        ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+          (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+          AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+              (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling
+              leaf →
+            (∀ (zero : VTop_Stages.aspis_core.field.wide_exact.WideExact)
+                (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+                (p : VTop_Stages.verifier.Prepared),
+                base.op1 = Aeneas.Std.Result.ok zero →
+                  base.op7 D semantic (c.proof AspisR1.S2LeadInterface.Site.batch0) hash none
+                        (Aeneas.Std.Array.repeat 29#usize zero) =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) →
+                    AspisR1.Port4B_StageRows.PreparedBinding p parsed) →
+              VTop_Stages.verifier.candidate.tx1 (AspisR1.Port4B_FoldedCut.install base) D semantic pubInput
+                    (c.proof AspisR1.S2LeadInterface.Site.batch0) split hash none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+                ∃ pm log,
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 0 AspisR1.Port4B_BatchJoin.initial) =
+                      (log, true) ∧
+                    AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 0 AspisR1.Port4B_BatchJoin.initial) =
+                      AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortFrozen2.batch parsed pm.queries AspisR1.OraclePortFrozen2.batch0) :=
+fun {Observer X} c base D hash H semantic pubInput split saved stored pub ck parsed facts wireStored reached binary
+    occupied sibling leaf p6 prepare accepted =>
+  let ⟨zero, h✝⟩ :=
+    AspisR1.Port4B_PrepareCut.tx1 base D hash semantic pubInput (c.proof AspisR1.S2LeadInterface.Site.batch0) split
+      saved accepted
+  let ⟨g, h✝¹⟩ := h✝
+  let ⟨p, h✝²⟩ := h✝¹
+  let ⟨root, h✝³⟩ := h✝²
+  let ⟨view, h✝⁴⟩ := h✝³
+  let ⟨hzero, right✝⟩ := h✝⁴
+  let ⟨hprepare, right✝¹⟩ := right✝
+  let ⟨range, right✝²⟩ := right✝¹
+  let ⟨copy, batch⟩ := right✝²
+  let ⟨a, h✝⁵⟩ := prepare zero g p hzero hprepare
+  let ⟨pm, h✝⁶⟩ := h✝⁵
+  let ⟨am, h✝⁷⟩ := h✝⁶
+  let ⟨fields, roots⟩ := h✝⁷
+  have original := facts.proofBytes AspisR1.S2LeadInterface.Site.batch0 reached;
+  have size := congrArg List.length original;
+  have folded :=
+    AspisR1.Port4B_FoldedCut.model (c.proof AspisR1.S2LeadInterface.Site.batch0) view root
+      (Eq.trans
+        (Eq.mp
+          (congrFun' (congrArg Eq (List.length_map AspisV8R19.SqueezeOracleBridge.decodeByte)) (List.length stored))
+          size)
+        facts.proofLength)
+      parsed (Eq.trans wireStored (Eq.symm original)) range copy;
+  let ⟨log, h✝⁸⟩ :=
+    AspisR1.Port4B_CallerJoin.accepted c D hash H stored pub ck parsed facts wireStored binary occupied sibling leaf p6
+      p a pm am fields roots root folded 0#usize (of_decide_eq_true (id (Eq.refl true))) reached batch
+  let ⟨source, frozen⟩ := h✝⁸
+  Exists.intro pm
+    (Exists.intro log
+      ⟨source,
+        Eq.mp
+          (congr
+            (congrArg Eq
+              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                (congrFun'
+                  (congrArg
+                    (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries c.nodes)
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                        (of_decide_eq_true (id (Eq.refl true))))))
+                  AspisR1.Port4B_BatchJoin.initial)))
+            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+              (congrArg (AspisR1.OraclePortFrozen2.batch parsed pm.queries)
+                (ite_cond_eq_true AspisR1.OraclePortFrozen2.batch0 AspisR1.OraclePortFrozen2.batch1
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 0
+                            (of_decide_eq_true (id (Eq.refl true))))))
+                      0)
+                    (eq_self 0))))))
+          frozen⟩)
+theorem AspisR1.Port4B_StageRows.tx2 : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (base : VTop_Stages.Ops) (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pubInput checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (stored pub ck : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub ck parsed →
+    parsed.wire = stored →
+      c.reached AspisR1.S2LeadInterface.Site.batch1 →
+        ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+          (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+          AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+              (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling
+              leaf →
+            (∀ (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator),
+                base.op18 D checkpoint (c.proof AspisR1.S2LeadInterface.Site.batch1) pubInput
+                      AspisR1Stage2.transport.Variant.S2 hash =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+                  AspisR1.Port4B_StageRows.PreparedBinding p parsed) →
+              VTop_Stages.verifier.candidate.tx2_authenticated (AspisR1.Port4B_FoldedCut.install base) D pubInput
+                    (c.proof AspisR1.S2LeadInterface.Site.batch1) checkpoint hash none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                ∃ pm log,
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 1 AspisR1.Port4B_BatchJoin.initial) =
+                      (log, true) ∧
+                    AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 1 AspisR1.Port4B_BatchJoin.initial) =
+                      AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortFrozen2.batch parsed pm.queries AspisR1.OraclePortFrozen2.batch1) :=
+fun {Observer X} c base D hash H pubInput checkpoint stored pub ck parsed facts wireStored reached binary occupied
+    sibling leaf p6 resume accepted =>
+  let ⟨p, h✝⟩ :=
+    AspisR1.Port4B_FoldedCut.tx2 base D hash pubInput (c.proof AspisR1.S2LeadInterface.Site.batch1) checkpoint accepted
+  let ⟨a, h✝¹⟩ := h✝
+  let ⟨root, h✝²⟩ := h✝¹
+  let ⟨view, h✝³⟩ := h✝²
+  let ⟨read, right✝⟩ := h✝³
+  let ⟨range, right✝¹⟩ := right✝
+  let ⟨copy, batch⟩ := right✝¹
+  let ⟨aModel, h✝⁴⟩ := resume p a read
+  let ⟨pm, h✝⁵⟩ := h✝⁴
+  let ⟨am, h✝⁶⟩ := h✝⁵
+  let ⟨fields, roots⟩ := h✝⁶
+  have original := facts.proofBytes AspisR1.S2LeadInterface.Site.batch1 reached;
+  have size := congrArg List.length original;
+  have folded :=
+    AspisR1.Port4B_FoldedCut.model (c.proof AspisR1.S2LeadInterface.Site.batch1) view root
+      (Eq.trans
+        (Eq.mp
+          (congrFun' (congrArg Eq (List.length_map AspisV8R19.SqueezeOracleBridge.decodeByte)) (List.length stored))
+          size)
+        facts.proofLength)
+      parsed (Eq.trans wireStored (Eq.symm original)) range copy;
+  let ⟨log, h✝⁷⟩ :=
+    AspisR1.Port4B_CallerJoin.accepted c D hash H stored pub ck parsed facts wireStored binary occupied sibling leaf p6
+      p aModel pm am fields roots root folded 1#usize (of_decide_eq_true (id (Eq.refl true))) reached batch
+  let ⟨source, frozen⟩ := h✝⁷
+  Exists.intro pm
+    (Exists.intro log
+      ⟨source,
+        Eq.mp
+          (congr
+            (congrArg Eq
+              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                (congrFun'
+                  (congrArg
+                    (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries c.nodes)
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 1
+                        (of_decide_eq_true (id (Eq.refl true))))))
+                  AspisR1.Port4B_BatchJoin.initial)))
+            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+              (congrArg (AspisR1.OraclePortFrozen2.batch parsed pm.queries)
+                (ite_cond_eq_false AspisR1.OraclePortFrozen2.batch0 AspisR1.OraclePortFrozen2.batch1
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 1
+                            (of_decide_eq_true (id (Eq.refl true))))))
+                      0)
+                    one_ne_zero._simp_1)))))
+          frozen⟩)
+'AspisR1.Port4B_Install.installation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_KeyInstall.packed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_LeafLoop.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_Padding.native_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_VerifyRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_TailRun.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_TreeJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_BatchJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_CallerJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_Prepared.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_Prepared.query_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_FoldedCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_PrepareCut.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_StageRows.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4B_StageRows.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.MultiproofConeP6Frozen2Stage.both_batches' depends on axioms: [propext, Classical.choice, Quot.sound]

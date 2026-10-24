@@ -1,0 +1,64 @@
+{"attempt": "lean-041", "exit_status": 1, "wall_seconds": 5.022004846017808, "peak_rss_kib": "4405000", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafLoop.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4B_LeafLoop.lean:68:13: error: unsolved goals
+case cons.some
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch : ℕ
+kind lo n slot : Usize
+root : Std.Array U8 32#usize
+keys : Std.Array U64 16#usize
+outIdx : Indices
+outVal : Values
+loValue : ↑lo = if batch = 0 then 0 else 10
+small : ↑n ≤ 16
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (s : reference.Scratch) (pos : Usize),
+
+...
+sh lo n slot keys t.n (pos.wrapping_add 1#usize) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+final : reference.Scratch
+fold :
+  eval H (MultiproofConeP6Batch.leaves MultiproofConeP6Batch.referenceLeaf parsed q (↑kind) rest t) =
+    (List.map
+        (fun p => (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+        rest,
+      ok (some final))
+terminal :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install (Port4B_LeafInstall.install base)) D
+      proof root kind final.idx final.val hash lo n slot keys final.n n =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+⊢ ((OraclePortSelectedDraft.leaf parsed (↑kind) selected, H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)) ::
+        ([] ++
+          List.map
+            (fun p =>
+              (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+            rest),
+      ok (some final)) =
+    ((OraclePortSelectedDraft.leaf parsed (↑kind) selected, H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)) ::
+        List.map
+          (fun p => (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+          rest,
+      ok (some final))
+Port4B_LeafLoop.lean:62:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵body, ̲MultiproofConeP6Batch.referenceLeaf, ̲eval,
+        MultiproofConeLeafContent.step_exact s _ _ bound, ̲bind_tc_ok] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4B_LeafLoop.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r380317d87a0c445885ab1d2cfddfa11e.scope; invocation ID: 4aca4ee3c99f49bda8e1ce79b09ab872

@@ -28,6 +28,6 @@ out={'schema':'focused-extractor-proof-packet-v1','start_revision':start,
  'actual_lean_attempts':len(receipts),'kani_runs':0,'final_modules':final,
  'changed_paths':changed,'shipped_source_changed':False,'elf_rebuild_triggered':False,
  'limits':'6G high/8G max/no swap/64 tasks; never raised',
- 'scope':'Focused module union only. Exact full-error native/P6 port is not established; local emitted error lowering is defective. No release replay or security conclusion.'}
+ 'scope':'Focused module union only. Scoped accepted batch/TX1/TX2 transport is proved under named P6 local lowerings and explicit S1 PreparedBinding/parser-model provenance. Concrete upstream binding instances remain open; target not yet established. No total error-preserving transport, release replay or security conclusion.'}
 (E/'manifest.json').write_text(json.dumps(out,indent=2)+'\n')
 print(json.dumps({'modules':len(final),'lean':len(receipts),'kani':0,'shipped_source_changed':False}))
