@@ -64,6 +64,8 @@ def main():
     threading.Thread(target=monitor, daemon=True).start()
     request = load(REQUEST, 'evidence/port27sdk-20261024/Port27SDK_export-request.json')
     audit = load(REQUEST, 'evidence/port27sdk-20261024/Port27SDK_audit.json')
+    prior_check = load(REQUEST, 'evidence/port27sdk-20261024/Port27SDK_check.receipt.json')
+    assert prior_check  # full immutable receipt retained among hashed inputs; not a new kernel gate
     for name in ['README.md', 'INTEGRATION.md', 'EXPORT-REQUEST.md']:
         blob(REQUEST, 'evidence/port27sdk-20261024/' + name)
     selection = load(CURRENT, BASE + 'evidence/s126-current-caller-20261021/s6-sdk-first-factor-20261024/declarations.json')
