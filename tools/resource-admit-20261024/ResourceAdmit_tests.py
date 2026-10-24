@@ -201,6 +201,17 @@ class ResourceAdmitTests(unittest.TestCase):
                 (cap/'export-receipt.json').write_text(json.dumps(dict(host_files=pins)))
                 with patch.object(audit,'OUT',cap):self.assertFalse(audit.replay('prospective')['allowed'])
 
+    def test_transport_failure_charges_once_and_retains_bytes(self):
+        with tempfile.TemporaryDirectory() as t,patch.object(local,'OUT',Path(t)),patch.object(local,'coordination',return_value={}),patch.object(local,'revision',return_value='synthetic-source'):
+            (Path(t)/'manifest.json').write_text(json.dumps(dict(env=local.env(1000))))
+            with patch.object(subprocess,'run',side_effect=subprocess.TimeoutExpired(['ssh'],120,output=b'raw output',stderr=b'raw error')):
+                with self.assertRaises(subprocess.TimeoutExpired):local.run()
+            self.assertTrue((Path(t)/'ATTEMPTED').exists())
+            receipt=json.loads((Path(t)/'run-transport.json').read_text())
+            self.assertEqual(receipt['stdout_base64'],'cmF3IG91dHB1dA==')
+            with patch.object(subprocess,'run',side_effect=AssertionError('second transport')):
+                with self.assertRaises(FileExistsError):local.run()
+
     def test_coordination_never_reads_live_output(self):
         result=subprocess.CompletedProcess([],0,'7112 '+local.COORD_START+' sh codex-run.sh','')
         with patch.object(subprocess,'run',return_value=result),patch.object(Path,'read_text',side_effect=AssertionError('read live output')):
