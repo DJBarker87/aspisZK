@@ -1,0 +1,197 @@
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:38:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:41:29: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:42:59: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:43:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:44:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:68:28: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑↑{ start := 4#usize, «end» := 4#usize }.end
+ b := ↑↑{ start := 4#usize, «end» := 4#usize }.start
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:94:2: error: Tactic `apply` failed: could not unify the conclusion of `congrArg fun k => ?m.113 k >>= k`
+  ?m.113 ?m.104 >>= ?m.104 = ?m.113 ?m.105 >>= ?m.105
+with the goal
+  (do
+      let step ←
+        let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 4#usize })
+          match o with
+          | none => ok (done ⟨[a, b, c, d], ⋯⟩)
+          | some j => do
+            let old ←
+              match ⟨[a, b, c, d], ⋯⟩[j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let limb ←
+              match ⟨[p, q, r, s], ⋯⟩[j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+            let i3 ← old + i2
+            let row1 ← Array.update ⟨[a, b, c, d], ⋯⟩ j i3
+            ok (cont (iter1, row1, basis))
+      match step with
+        | done out => ok out
+        | cont (it, r_1, b) => verifier.update_residue_row_loop0 it r_1 b ⟨[p, q, r, s], ⋯⟩) =
+    do
+    let x ← core.convert.num.FromU64U32.from p * core.convert.num.FromU64U32.from basis
+    let x0 ← a + x
+    let x ← core.convert.num.FromU64U32.from q * core.convert.num.FromU64U32.from basis
+    let x1 ← b + x
+    let x ← core.convert.num.FromU64U32.from r * core.convert.num.FromU64U32.from basis
+    let x2 ← c + x
+    let x ← core.convert.num.FromU64U32.from s * core.convert.num.FromU64U32.from basis
+    let x3 ← d + x
+    ok ⟨[x0, x1, x2, x3], ⋯⟩
+
+Note: The full type of `congrArg fun k => ?m.113 k >>= k` is
+  ?m.104 = ?m.105 → ?m.113 ?m.104 >>= ?m.104 = ?m.113 ?m.105 >>= ?m.105
+
+a b c d : U64
+p q r s basis : U32
+n0 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 4#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 4#usize })
+n1 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 1#usize, «end» := 4#usize } =
+    ok (some 1#usize, { start := 2#usize, «end» := 4#usize })
+n2 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 2#usize, «end» := 4#usize } =
+    ok (some 2#usize, { start := 3#usize, «end» := 4#usize })
+n3 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 3#usize, «end» := 4#usize } =
+    ok (some 3#usize, { start := 4#usize, «end» := 4#usize })
+n4 :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 4#usize, «end» := 4#usize } =
+    ok (none, { start := 4#usize, «end» := 4#usize })
+⊢ (do
+      let step ←
+        let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 4#usize })
+          match o with
+          | none => ok (done ⟨[a, b, c, d], ⋯⟩)
+          | some j => do
+            let old ←
+              match ⟨[a, b, c, d], ⋯⟩[j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let limb ←
+              match ⟨[p, q, r, s], ⋯⟩[j]? with
+                | none => fail Error.arrayOutOfBounds
+                | some x => ok x
+            let i2 ← core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis
+            let i3 ← old + i2
+            let row1 ← Array.update ⟨[a, b, c, d], ⋯⟩ j i3
+            ok (cont (iter1, row1, basis))
+      match step with
+        | done out => ok out
+        | cont (it, r_1, b) => verifier.update_residue_row_loop0 it r_1 b ⟨[p, q, r, s], ⋯⟩) =
+    do
+    let x ← core.convert.num.FromU64U32.from p * core.convert.num.FromU64U32.from basis
+    let x0 ← a + x
+    let x ← core.convert.num.FromU64U32.from q * core.convert.num.FromU64U32.from basis
+    let x1 ← b + x
+    let x ← core.convert.num.FromU64U32.from r * core.convert.num.FromU64U32.from basis
+    let x2 ← c + x
+    let x ← core.convert.num.FromU64U32.from s * core.convert.num.FromU64U32.from basis
+    let x3 ← d + x
+    ok ⟨[x0, x1, x2, x3], ⋯⟩
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:90:4: warning: This simp argument is unused:
+  Array.getElem?_Usize_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, n0, bind_tc_ok,
+  ̵  ̵ ̵ ̵verifier.residue_limb_at,
+  ̲  ̲ ̲ ̲verifier.power_limb_at, Array.index_usize,
+  ̵  ̵ ̵ ̵Array.getElem?_U̵s̵i̵z̵e̵_̵e̵q̵,̵ ̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵Nat_eq, Array.make, UScalar.val,
+      List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:90:29: warning: This simp argument is unused:
+  Array.getElem?_Nat_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, n0, bind_tc_ok,
+  ̵  ̵ ̵ ̵verifier.residue_limb_at,
+  ̲  ̲ ̲ ̲verifier.power_limb_at, Array.index_usize,
+  ̵  ̵ ̵ ̵Array.getElem?_Usize_eq, Array.g̵e̵t̵E̵l̵e̵m?̵_̵N̵at̵_̵e̵q̵,̵ ̵A̵r̵r̵a̵y̵.̵m̵a̵ke, UScalar.val,
+      List.getElem?_cons_zero, lift, bind_tc_ok, bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:91:4: warning: This simp argument is unused:
+  List.getElem?_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, n0, bind_tc_ok,
+  ̵  ̵ ̵ ̵verifier.residue_limb_at,
+  ̲  ̲ ̲ ̲verifier.power_limb_at, Array.index_usize,
+  ̵  ̵ ̵ ̵Array.getElem?_Usize_eq, Array.getElem?_Nat_eq,
+  ̲  ̲ ̲ ̲Array.make, UScalar.val,
+  ̵  ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵le̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵ ̵l̵ift, bind_tc_ok, bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Row.lean:91:47: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.update_residue_row_loop0.body, n0, bind_tc_ok,
+  ̵  ̵ ̵ ̵verifier.residue_limb_at,
+  ̲  ̲ ̲ ̲verifier.power_limb_at, Array.index_usize,
+  ̵  ̵ ̵ ̵Array.getElem?_Usize_eq, Array.getElem?_Nat_eq,
+  ̲  ̲ ̲ ̲Array.make, UScalar.val,
+  ̵  ̵ ̵ ̵List.getElem?_cons_zero, lift, bind_tc_ok,̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'Port25ARRAY.toK' does not depend on any axioms
+'Port25ARRAY.row_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.add_unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.add_four' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       12.88 real         1.07 user         1.74 sys
+          2229501952  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               76822  page reclaims
+              106520  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               18802  voluntary context switches
+               86017  involuntary context switches
+         24714109244  instructions retired
+         10273992214  cycles elapsed
+           375885968  peak memory footprint

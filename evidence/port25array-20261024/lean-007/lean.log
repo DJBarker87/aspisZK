@@ -1,0 +1,1056 @@
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:38:13: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:41:29: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:42:59: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:43:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:44:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:93:11: error: unsolved goals
+case ok.none
+it : Iter U64
+back : Iter U64 → Iter U64
+it1 : core.slice.iter.IterMut U64
+nextBack : core.slice.iter.IterMut U64 → Option U64 → core.slice.iter.IterMut U64
+h : core.slice.iter.IteratorIterMut.next it = ok (none, it1, nextBack)
+⊢ (let (o, iter1, next_back) := (none, it1, nextBack)
+    match o with
+    | none => ok (done fun im => back (next_back im none))
+    | some limb => do
+      let i ← lift (limb &&& 2147483647#u64)
+      let i1 ← limb >>> 31#i32
+      let limb1 ← i + i1
+      ok (cont (iter1, fun im => back (next_back im (some limb1))))) =
+    let (o, it1, nextBack) := (none, it1, nextBack)
+    match o with
+    | none => ok (done fun im => back (nextBack im none))
+    | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb)))))
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port25ARRAY_Audit.lean:94:16: error: unsolved goals
+case ok.some
+it : Iter U64
+back : Iter U64 → Iter U64
+it1 : core.slice.iter.IterMut U64
+nextBack : core.slice.iter.IterMut U64 → Option U64 → core.slice.iter.IterMut U64
+limb : U64
+h : core.slice.iter.IteratorIterMut.next it = ok (some limb, it1, nextBack)
+⊢ ok (cont (it1, fun im => back (nextBack im (some (folded limb))))) =
+    let (o, it1, nextBack) := (some limb, it1, nextBack)
+    match o with
+    | none => ok (done fun im => back (nextBack im none))
+    | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb)))))
+def Port25ARRAY.arrayIntoIter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (Iter T × ((Iter T → Iter T) → Std.Array T N)) :=
+fun {T} {N} a => do
+  let (s, arrayBack) ← lift a.to_slice_mut
+  let (it, sliceBack) ← core.slice.Slice.iter_mut s
+  ok (it, fun transform => arrayBack (sliceBack (transform it)))
+def Aeneas.Std.Array.to_slice_mut.{u} : {α : Type u} →
+  {n : Usize} → Std.Array α n → Slice α × (Slice α → Std.Array α n) :=
+fun {α} {n} a => (a.to_slice, a.from_slice)
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => ok ({ slice := slice }, fun it => it.slice)
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+theorem Port25ARRAY.delegation : ∀ {T : Type} {N : Usize} (a : Std.Array T N),
+  arrayIntoIter a =
+    ok ({ slice := a.to_slice }, fun transform => a.from_slice (transform { slice := a.to_slice }).slice) :=
+fun {T} {N} a => Eq.refl (arrayIntoIter a)
+theorem Port25ARRAY.back_carrier : ∀ {T : Type} {N : Usize} (a : Std.Array T N) (f : Iter T → Iter T),
+  ↑(a.from_slice (f { slice := a.to_slice }).slice) =
+    if (↑(f { slice := a.to_slice }).slice).length = ↑N then ↑(f { slice := a.to_slice }).slice else ↑a :=
+fun {T} {N} a f =>
+  id
+    (Decidable.casesOn (instDecidableEqNat (↑(f { slice := a.to_slice }).slice).length ↑N)
+      (fun h => Eq.mpr (id (congr (congrArg Eq (congrArg Subtype.val (dif_neg h))) (if_neg h))) (Eq.refl ↑a)) fun h =>
+      Eq.mpr (id (congr (congrArg Eq (congrArg Subtype.val (dif_pos h))) (if_pos h)))
+        (Eq.refl ↑⟨↑(f { slice := a.to_slice }).slice, Array.from_slice._proof_1 (f { slice := a.to_slice }).slice h⟩))
+theorem Port25ARRAY.back_identity : ∀ {T : Type} {N : Usize} (a : Std.Array T N),
+  a.from_slice (id { slice := a.to_slice }).slice = a :=
+fun {T} {N} a =>
+  let ⟨val✝, property✝, h✝⟩ := a
+  Eq.symm h✝ ▸
+    of_eq_true
+      (Eq.trans
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (dite_congr (Eq.refl (val✝.length = ↑N))
+                (fun h =>
+                  Eq.refl
+                    ⟨val✝,
+                      id (Eq.refl val✝) ▸
+                        Array.from_slice._proof_1 (id { slice := Array.to_slice ⟨val✝, property✝⟩ }).slice
+                          (Eq.mpr_prop (Eq.refl (val✝.length = ↑N)) h)⟩)
+                fun h => Eq.refl ⟨val✝, property✝⟩))
+            ⟨val✝, property✝⟩)
+          dite_eq_right_iff._simp_1)
+        (Eq.trans
+          (forall_congr fun h =>
+            eq_self
+              ⟨val✝,
+                id (Eq.refl val✝) ▸
+                  Array.from_slice._proof_1 (id { slice := Array.to_slice ⟨val✝, property✝⟩ }).slice
+                    (Eq.mpr_prop (Eq.refl (val✝.length = ↑N)) h)⟩)
+          (implies_true (val✝.length = ↑N))))
+theorem Port25ARRAY.scalar_all_results : ∀ (raw : U64) (limb basis : U32) (flush : Bool),
+  S7OwnedP6Scalar.residue_scalar_owned raw limb basis flush = do
+    let x ← addWord raw limb basis
+    ok (finish flush x) :=
+fun raw limb basis flush =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (Bind.bind (ok (core.convert.num.FromU64U32.from limb)))
+              (funext fun i =>
+                Eq.trans
+                  (congrArg (Bind.bind (ok (core.convert.num.FromU64U32.from basis)))
+                    (funext fun i1 =>
+                      congrArg (Bind.bind (i * i1))
+                        (funext fun i2 =>
+                          congrArg (Bind.bind (raw + i2))
+                            (funext fun updated =>
+                              ite_congr (Eq.refl (flush = true))
+                                (fun a =>
+                                  bind_tc_ok (updated &&& 2147483647#u64) fun y => do
+                                    let i4 ← updated >>> 31#i32
+                                    y + i4)
+                                fun a => Eq.refl (ok updated)))))
+                  (bind_tc_ok (core.convert.num.FromU64U32.from basis) fun y => do
+                    let i2 ← i * y
+                    let updated ← raw + i2
+                    if flush = true then do
+                        let i4 ← updated >>> 31#i32
+                        (updated &&& 2147483647#u64) + i4
+                      else ok updated)))
+            (bind_tc_ok (core.convert.num.FromU64U32.from limb) fun y => do
+              let i2 ← y * core.convert.num.FromU64U32.from basis
+              let updated ← raw + i2
+              if flush = true then do
+                  let i4 ← updated >>> 31#i32
+                  (updated &&& 2147483647#u64) + i4
+                else ok updated)))
+        (Eq.trans
+          (congrFun'
+            (congrArg Bind.bind
+              (Eq.trans
+                (congrArg (Bind.bind (ok (core.convert.num.FromU64U32.from limb)))
+                  (funext fun a =>
+                    bind_tc_ok (core.convert.num.FromU64U32.from basis) fun y => do
+                      let p ← a * y
+                      raw + p))
+                (bind_tc_ok (core.convert.num.FromU64U32.from limb) fun y => do
+                  let p ← y * core.convert.num.FromU64U32.from basis
+                  raw + p)))
+            fun x => ok (finish flush x))
+          (bind_assoc_eq (core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis)
+            (fun p => raw + p) fun x => ok (finish flush x)))))
+    ((fun {m} [Bind m] {α β} a a_1 e_a =>
+        Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+          (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+      (core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis)
+      (core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis)
+      (Eq.refl (core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis))
+      (fun i2 => do
+        let updated ← raw + i2
+        if flush = true then do
+            let i4 ← updated >>> 31#i32
+            (updated &&& 2147483647#u64) + i4
+          else ok updated)
+      (fun x => do
+        let x ← raw + x
+        ok (finish flush x))
+      (funext fun p =>
+        (fun {m} [Bind m] {α β} a a_1 e_a =>
+            Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+              (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+          (raw + p) (raw + p) (Eq.refl (raw + p))
+          (fun updated =>
+            if flush = true then do
+              let i4 ← updated >>> 31#i32
+              (updated &&& 2147483647#u64) + i4
+            else ok updated)
+          (fun x => ok (finish flush x))
+          (funext fun x =>
+            Bool.casesOn (motive := fun t =>
+              flush = t →
+                (if flush = true then do
+                    let i4 ← x >>> 31#i32
+                    (x &&& 2147483647#u64) + i4
+                  else ok x) =
+                  ok (finish flush x))
+              flush
+              (fun h =>
+                Eq.symm h ▸
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_congr Bool.false_eq_true
+                              (fun a =>
+                                Eq.refl do
+                                  let i4 ← x >>> 31#i32
+                                  (x &&& 2147483647#u64) + i4)
+                              fun a => Eq.refl (ok x))
+                            (if_false
+                              (do
+                                let i4 ← x >>> 31#i32
+                                (x &&& 2147483647#u64) + i4)
+                              (ok x))))
+                        (congrArg ok
+                          (Eq.trans (ite_congr Bool.false_eq_true (fun a => Eq.refl (folded x)) fun a => Eq.refl x)
+                            (if_false (folded x) x))))
+                      (eq_self (ok x))))
+              (fun h =>
+                Eq.symm h ▸
+                  Eq.mpr
+                    (id
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_congr (eq_self true)
+                              (fun a =>
+                                Eq.refl do
+                                  let i4 ← x >>> 31#i32
+                                  (x &&& 2147483647#u64) + i4)
+                              fun a => Eq.refl (ok x))
+                            (if_true
+                              (do
+                                let i4 ← x >>> 31#i32
+                                (x &&& 2147483647#u64) + i4)
+                              (ok x))))
+                        (congrArg ok
+                          (Eq.trans (ite_congr (eq_self true) (fun a => Eq.refl (folded x)) fun a => Eq.refl x)
+                            (if_true (folded x) x)))))
+                    (fold_eq x))
+              (Eq.refl flush))))
+theorem Port25ARRAY.product_total : ∀ (limb basis : U32),
+  ∃ p, core.convert.num.FromU64U32.from limb * core.convert.num.FromU64U32.from basis = ok p :=
+fun limb basis =>
+  have ha := AspisR1.ExtractedCurrentCM31Mul.widen_value limb;
+  have hb := AspisR1.ExtractedCurrentCM31Mul.widen_value basis;
+  have hp :=
+    Eq.mpr (id (congrArg (fun _a => _a * ↑(core.convert.num.FromU64U32.from basis) < 2 ^ 64) ha))
+      (Eq.mpr (id (congrArg (fun _a => ↑limb * _a < 2 ^ 64) hb))
+        (have h := Nat.mul_lt_mul_of_lt_of_lt (BitVec.isLt limb.bv) (BitVec.isLt basis.bv);
+        h));
+  let ⟨p, h✝⟩ :=
+    AspisR1.ExtractedCurrentReducerOps.mul_success (core.convert.num.FromU64U32.from limb)
+      (core.convert.num.FromU64U32.from basis) hp
+  let ⟨hp, right✝⟩ := h✝
+  Exists.intro p hp
+theorem Port25ARRAY.fold_total : ∀ (x : U64), ∃ y, foldWord x = ok y :=
+fun x =>
+  let ⟨y, h✝⟩ := AspisR1.ExtractedCurrentReducer.foldExecution_success x
+  let ⟨hy, right✝⟩ := h✝
+  Exists.intro y (id hy)
+theorem Port25ARRAY.owned_four : ∀ (a b c d : U64) (power : Power) (basis : U32) (flush : Bool),
+  S7Kani2OwnedRow.residue_owned (Array.make 4#usize [a, b, c, d] ⋯) (toK power) basis flush = do
+    let x0 ← addWord a power.c0.a basis
+    let x1 ← addWord b power.c0.b basis
+    let x2 ← addWord c power.c1.a basis
+    let x3 ← addWord d power.c1.b basis
+    ok (Array.make 4#usize [finish flush x0, finish flush x1, finish flush x2, finish flush x3] ⋯) :=
+fun a b c d power basis flush =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congr (congrArg Bind.bind (scalar_all_results a power.c0.a basis flush))
+                  (funext fun x0 =>
+                    Eq.trans
+                      (Eq.trans
+                        (congr (congrArg Bind.bind (scalar_all_results b power.c0.b basis flush))
+                          (funext fun x1 =>
+                            Eq.trans
+                              (Eq.trans
+                                (congr (congrArg Bind.bind (scalar_all_results c power.c1.a basis flush))
+                                  (funext fun x2 =>
+                                    Eq.trans
+                                      (Eq.trans
+                                        (congrFun' (congrArg Bind.bind (scalar_all_results d power.c1.b basis flush))
+                                          fun x3 =>
+                                          ok
+                                            (Array.make 4#usize [x0, x1, x2, x3]
+                                              (of_eq_true
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Eq
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                            1))
+                                                        1))
+                                                    (UScalar.ofNatCore_val_eq
+                                                      (UScalar.bound_suffices UScalarTy.Usize 4
+                                                        (of_decide_eq_true (id (Eq.refl true))))))
+                                                  (eq_self 4)))))
+                                        (bind_assoc_eq (addWord d power.c1.b basis) (fun x => ok (finish flush x))
+                                          fun x3 =>
+                                          ok
+                                            (Array.make 4#usize [x0, x1, x2, x3]
+                                              (of_eq_true
+                                                (Eq.trans
+                                                  (congr
+                                                    (congrArg Eq
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                            1))
+                                                        1))
+                                                    (UScalar.ofNatCore_val_eq
+                                                      (UScalar.bound_suffices UScalarTy.Usize 4
+                                                        (of_decide_eq_true (id (Eq.refl true))))))
+                                                  (eq_self 4))))))
+                                      (congrArg (Bind.bind (addWord d power.c1.b basis))
+                                        (funext fun x =>
+                                          bind_tc_ok (finish flush x) fun y =>
+                                            ok
+                                              (Array.make 4#usize [x0, x1, x2, y]
+                                                (of_eq_true
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg Eq
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                              1))
+                                                          1))
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.Usize 4
+                                                          (of_decide_eq_true (id (Eq.refl true))))))
+                                                    (eq_self 4))))))))
+                                (bind_assoc_eq (addWord c power.c1.a basis) (fun x => ok (finish flush x)) fun x2 => do
+                                  let x ← addWord d power.c1.b basis
+                                  ok
+                                      (Array.make 4#usize [x0, x1, x2, finish flush x]
+                                        (of_eq_true
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg Eq
+                                                (congrFun'
+                                                  (congrArg HAdd.hAdd
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                      1))
+                                                  1))
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.Usize 4
+                                                  (of_decide_eq_true (id (Eq.refl true))))))
+                                            (eq_self 4))))))
+                              (congrArg (Bind.bind (addWord c power.c1.a basis))
+                                (funext fun x =>
+                                  bind_tc_ok (finish flush x) fun y => do
+                                    let x ← addWord d power.c1.b basis
+                                    ok
+                                        (Array.make 4#usize [x0, x1, y, finish flush x]
+                                          (of_eq_true
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg Eq
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                        1))
+                                                    1))
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 4
+                                                    (of_decide_eq_true (id (Eq.refl true))))))
+                                              (eq_self 4))))))))
+                        (bind_assoc_eq (addWord b power.c0.b basis) (fun x => ok (finish flush x)) fun x1 => do
+                          let x ← addWord c power.c1.a basis
+                          let x_1 ← addWord d power.c1.b basis
+                          ok
+                              (Array.make 4#usize [x0, x1, finish flush x, finish flush x_1]
+                                (of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (congrFun'
+                                          (congrArg HAdd.hAdd
+                                            (congrFun'
+                                              (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                          1))
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.Usize 4
+                                          (of_decide_eq_true (id (Eq.refl true))))))
+                                    (eq_self 4))))))
+                      (congrArg (Bind.bind (addWord b power.c0.b basis))
+                        (funext fun x =>
+                          bind_tc_ok (finish flush x) fun y => do
+                            let x ← addWord c power.c1.a basis
+                            let x_1 ← addWord d power.c1.b basis
+                            ok
+                                (Array.make 4#usize [x0, y, finish flush x, finish flush x_1]
+                                  (of_eq_true
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Eq
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                            1))
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 4
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (eq_self 4))))))))
+                (bind_assoc_eq (addWord a power.c0.a basis) (fun x => ok (finish flush x)) fun x0 => do
+                  let x ← addWord b power.c0.b basis
+                  let x_1 ← addWord c power.c1.a basis
+                  let x_2 ← addWord d power.c1.b basis
+                  ok
+                      (Array.make 4#usize [x0, finish flush x, finish flush x_1, finish flush x_2]
+                        (of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Eq
+                                (congrFun'
+                                  (congrArg HAdd.hAdd
+                                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                  1))
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                            (eq_self 4))))))
+              (congrArg (Bind.bind (addWord a power.c0.a basis))
+                (funext fun x =>
+                  bind_tc_ok (finish flush x) fun y => do
+                    let x ← addWord b power.c0.b basis
+                    let x_1 ← addWord c power.c1.a basis
+                    let x_2 ← addWord d power.c1.b basis
+                    ok
+                        (Array.make 4#usize [y, finish flush x, finish flush x_1, finish flush x_2]
+                          (of_eq_true
+                            (Eq.trans
+                              (congr
+                                (congrArg Eq
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                        1))
+                                    1))
+                                (UScalar.ofNatCore_val_eq
+                                  (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                              (eq_self 4))))))))
+          do
+          let x ← addWord a power.c0.a basis
+          let x_1 ← addWord b power.c0.b basis
+          let x_2 ← addWord c power.c1.a basis
+          let x_3 ← addWord d power.c1.b basis
+          ok
+              (Array.make 4#usize [finish flush x, finish flush x_1, finish flush x_2, finish flush x_3]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 4)))))
+        (eq_self do
+          let x ← addWord a power.c0.a basis
+          let x_1 ← addWord b power.c0.b basis
+          let x_2 ← addWord c power.c1.a basis
+          let x_3 ← addWord d power.c1.b basis
+          ok
+              (Array.make 4#usize [finish flush x, finish flush x_1, finish flush x_2, finish flush x_3]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 4)))))))
+theorem Port25ARRAY.fold_body_complete : ∀ (it : Iter U64) (back : Iter U64 → Iter U64),
+  verifier.update_residue_row_loop1.body it back = do
+    let (o, it1, nextBack) ← core.slice.iter.IteratorIterMut.next it
+    match o with
+      | none => ok (done fun im => back (nextBack im none))
+      | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))) :=
+fun it back =>
+  Result.casesOn (motive := fun t =>
+    core.slice.iter.IteratorIterMut.next it = t →
+      verifier.update_residue_row_loop1.body it back = do
+        let (o, it1, nextBack) ← core.slice.iter.IteratorIterMut.next it
+        match o with
+          | none => ok (done fun im => back (nextBack im none))
+          | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+    (core.slice.iter.IteratorIterMut.next it)
+    (fun value h =>
+      Eq.ndrec (motive := fun x =>
+        core.slice.iter.IteratorIterMut.next it = x →
+          verifier.update_residue_row_loop1.body it back = do
+            let (o, it1, nextBack) ← x
+            match o with
+              | none => ok (done fun im => back (nextBack im none))
+              | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+        (fun h =>
+          let ⟨o, snd✝, h⟩ := value
+          let ⟨it1, nextBack, h⟩ := snd✝
+          Option.casesOn (motive := fun t =>
+            o = t →
+              verifier.update_residue_row_loop1.body it back = do
+                let (o, it1, nextBack) ← ok (o, it1, nextBack)
+                match o with
+                  | none => ok (done fun im => back (nextBack im none))
+                  | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+            o
+            (fun h_1 =>
+              Eq.ndrec (motive := fun o =>
+                core.slice.iter.IteratorIterMut.next it = ok (o, it1, nextBack) →
+                  verifier.update_residue_row_loop1.body it back = do
+                    let (o, it1, nextBack) ← ok (o, it1, nextBack)
+                    match o with
+                      | none => ok (done fun im => back (nextBack im none))
+                      | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+                (fun h => sorry) (Eq.symm h_1) h)
+            (fun limb h_1 =>
+              Eq.ndrec (motive := fun o =>
+                core.slice.iter.IteratorIterMut.next it = ok (o, it1, nextBack) →
+                  verifier.update_residue_row_loop1.body it back = do
+                    let (o, it1, nextBack) ← ok (o, it1, nextBack)
+                    match o with
+                      | none => ok (done fun im => back (nextBack im none))
+                      | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+                (fun h => sorry) (Eq.symm h_1) h)
+            (Eq.refl o))
+        (Eq.symm h) (Eq.refl (core.slice.iter.IteratorIterMut.next it)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        core.slice.iter.IteratorIterMut.next it = x →
+          verifier.update_residue_row_loop1.body it back = do
+            let (o, it1, nextBack) ← x
+            match o with
+              | none => ok (done fun im => back (nextBack im none))
+              | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+        (fun h =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind h)
+                      (uncurry fun o =>
+                        uncurry fun iter1 next_back =>
+                          match o with
+                          | none => ok (done fun im => back (next_back im none))
+                          | some limb => do
+                            let i ← lift (limb &&& 2147483647#u64)
+                            let i1 ← limb >>> 31#i32
+                            let limb1 ← i + i1
+                            ok (cont (iter1, fun im => back (next_back im (some limb1))))))
+                    (bind_tc_fail e
+                      (uncurry fun o =>
+                        uncurry fun iter1 next_back =>
+                          match o with
+                          | none => ok (done fun im => back (next_back im none))
+                          | some limb => do
+                            let i ← lift (limb &&& 2147483647#u64)
+                            let i1 ← limb >>> 31#i32
+                            let limb1 ← i + i1
+                            ok (cont (iter1, fun im => back (next_back im (some limb1))))))))
+                (bind_tc_fail e
+                  (uncurry fun o =>
+                    uncurry fun it1 nextBack =>
+                      match o with
+                      | none => ok (done fun im => back (nextBack im none))
+                      | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))))
+              (eq_self (fail e))))
+        (Eq.symm h) (Eq.refl (core.slice.iter.IteratorIterMut.next it)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        core.slice.iter.IteratorIterMut.next it = x →
+          verifier.update_residue_row_loop1.body it back = do
+            let (o, it1, nextBack) ← x
+            match o with
+              | none => ok (done fun im => back (nextBack im none))
+              | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))
+        (fun h =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind h)
+                      (uncurry fun o =>
+                        uncurry fun iter1 next_back =>
+                          match o with
+                          | none => ok (done fun im => back (next_back im none))
+                          | some limb => do
+                            let i ← lift (limb &&& 2147483647#u64)
+                            let i1 ← limb >>> 31#i32
+                            let limb1 ← i + i1
+                            ok (cont (iter1, fun im => back (next_back im (some limb1))))))
+                    (bind_tc_div
+                      (uncurry fun o =>
+                        uncurry fun iter1 next_back =>
+                          match o with
+                          | none => ok (done fun im => back (next_back im none))
+                          | some limb => do
+                            let i ← lift (limb &&& 2147483647#u64)
+                            let i1 ← limb >>> 31#i32
+                            let limb1 ← i + i1
+                            ok (cont (iter1, fun im => back (next_back im (some limb1))))))))
+                (bind_tc_div
+                  (uncurry fun o =>
+                    uncurry fun it1 nextBack =>
+                      match o with
+                      | none => ok (done fun im => back (nextBack im none))
+                      | some limb => ok (cont (it1, fun im => back (nextBack im (some (folded limb))))))))
+              (eq_self div)))
+        (Eq.symm h) (Eq.refl (core.slice.iter.IteratorIterMut.next it)))
+    (Eq.refl (core.slice.iter.IteratorIterMut.next it))
+theorem Port25ARRAY.add_unroll : ∀ (iter : core.ops.range.Range Usize) (row : Row) (basis : U32)
+  (limbs : Std.Array U32 4#usize),
+  verifier.update_residue_row_loop0 iter row basis limbs = do
+    let step ← verifier.update_residue_row_loop0.body limbs iter row basis
+    match step with
+      | done out => ok out
+      | cont (it, r, b) => verifier.update_residue_row_loop0 it r b limbs :=
+fun iter row basis limbs =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = do
+              let step ← verifier.update_residue_row_loop0.body limbs iter row basis
+              match step with
+                | done out => ok out
+                | cont (it, r, b) =>
+                  loop
+                    (fun x =>
+                      match x with
+                      | (iter1, row1, basis1) => verifier.update_residue_row_loop0.body limbs iter1 row1 basis1)
+                    (it, r, b))
+          (loop.eq_def
+            (fun x =>
+              match x with
+              | (iter1, row1, basis1) => verifier.update_residue_row_loop0.body limbs iter1 row1 basis1)
+            (iter, row, basis))))
+      (id
+        (Result.casesOn (motive := fun t =>
+          verifier.update_residue_row_loop0.body limbs iter row basis = t →
+            (match verifier.update_residue_row_loop0.body limbs iter row basis with
+              | ok r =>
+                match r with
+                | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                | done x => ok x
+              | fail e => fail e
+              | div => div) =
+              do
+              let step ← verifier.update_residue_row_loop0.body limbs iter row basis
+              match step with
+                | done out => ok out
+                | cont (it, r, b) =>
+                  loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+          (verifier.update_residue_row_loop0.body limbs iter row basis)
+          (fun step h =>
+            Eq.ndrec (motive := fun x =>
+              verifier.update_residue_row_loop0.body limbs iter row basis = x →
+                (match x with
+                  | ok r =>
+                    match r with
+                    | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                    | done x => ok x
+                  | fail e => fail e
+                  | div => div) =
+                  do
+                  let step ← x
+                  match step with
+                    | done out => ok out
+                    | cont (it, r, b) =>
+                      loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+              (fun h =>
+                ControlFlow.casesOn (motive := fun t =>
+                  step = t →
+                    (match ok step with
+                      | ok r =>
+                        match r with
+                        | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                        | done x => ok x
+                      | fail e => fail e
+                      | div => div) =
+                      do
+                      let step ← ok step
+                      match step with
+                        | done out => ok out
+                        | cont (it, r, b) =>
+                          loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+                  step
+                  (fun state h_1 =>
+                    Eq.ndrec (motive := fun step =>
+                      verifier.update_residue_row_loop0.body limbs iter row basis = ok step →
+                        (match ok step with
+                          | ok r =>
+                            match r with
+                            | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                            | done x => ok x
+                          | fail e => fail e
+                          | div => div) =
+                          do
+                          let step ← ok step
+                          match step with
+                            | done out => ok out
+                            | cont (it, r, b) =>
+                              loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+                      (fun h =>
+                        let ⟨it, snd✝, h⟩ := state
+                        let ⟨r, b, h⟩ := snd✝
+                        of_eq_true
+                          (Eq.trans
+                            (congrArg
+                              (Eq
+                                (loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2)
+                                  (it, r, b)))
+                              (bind_tc_ok (cont (it, r, b)) fun y =>
+                                match y with
+                                | done out => ok out
+                                | cont (it, r, b) =>
+                                  loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2)
+                                    (it, r, b)))
+                            (eq_self
+                              (loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2)
+                                (it, r, b)))))
+                      (Eq.symm h_1) h)
+                  (fun out h_1 =>
+                    Eq.ndrec (motive := fun step =>
+                      verifier.update_residue_row_loop0.body limbs iter row basis = ok step →
+                        (match ok step with
+                          | ok r =>
+                            match r with
+                            | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                            | done x => ok x
+                          | fail e => fail e
+                          | div => div) =
+                          do
+                          let step ← ok step
+                          match step with
+                            | done out => ok out
+                            | cont (it, r, b) =>
+                              loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+                      (fun h =>
+                        of_eq_true
+                          (Eq.trans
+                            (congrArg (Eq (ok out))
+                              (bind_tc_ok (done out) fun y =>
+                                match y with
+                                | done out => ok out
+                                | cont (it, r, b) =>
+                                  loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2)
+                                    (it, r, b)))
+                            (eq_self (ok out))))
+                      (Eq.symm h_1) h)
+                  (Eq.refl step))
+              (Eq.symm h) (Eq.refl (verifier.update_residue_row_loop0.body limbs iter row basis)))
+          (fun e h =>
+            Eq.ndrec (motive := fun x =>
+              verifier.update_residue_row_loop0.body limbs iter row basis = x →
+                (match x with
+                  | ok r =>
+                    match r with
+                    | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                    | done x => ok x
+                  | fail e => fail e
+                  | div => div) =
+                  do
+                  let step ← x
+                  match step with
+                    | done out => ok out
+                    | cont (it, r, b) =>
+                      loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+              (fun h =>
+                of_eq_true
+                  (Eq.trans
+                    (congrArg (Eq (fail e))
+                      (bind_tc_fail e fun y =>
+                        match y with
+                        | done out => ok out
+                        | cont (it, r, b) =>
+                          loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b)))
+                    (eq_self (fail e))))
+              (Eq.symm h) (Eq.refl (verifier.update_residue_row_loop0.body limbs iter row basis)))
+          (fun h =>
+            Eq.ndrec (motive := fun x =>
+              verifier.update_residue_row_loop0.body limbs iter row basis = x →
+                (match x with
+                  | ok r =>
+                    match r with
+                    | cont x => loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) x
+                    | done x => ok x
+                  | fail e => fail e
+                  | div => div) =
+                  do
+                  let step ← x
+                  match step with
+                    | done out => ok out
+                    | cont (it, r, b) =>
+                      loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b))
+              (fun h =>
+                of_eq_true
+                  (Eq.trans
+                    (congrArg (Eq div)
+                      (bind_tc_div fun y =>
+                        match y with
+                        | done out => ok out
+                        | cont (it, r, b) =>
+                          loop (fun x => verifier.update_residue_row_loop0.body limbs x.1 x.2.1 x.2.2) (it, r, b)))
+                    (eq_self div)))
+              (Eq.symm h) (Eq.refl (verifier.update_residue_row_loop0.body limbs iter row basis)))
+          (Eq.refl (verifier.update_residue_row_loop0.body limbs iter row basis)))))
+theorem Port25ARRAY.range_next : ∀ (j k : Usize),
+  ↑j < 4 →
+    ↑k = ↑j + 1 →
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := j, «end» := 4#usize } =
+        ok (some j, { start := k, «end» := 4#usize }) :=
+fun j k active inc =>
+  let ⟨w✝, h✝⟩ :=
+    WP.spec_imp_exists
+      (core.iter.range.IteratorRange.next_UScalar_some_spec (fun x => Eq.refl (core.clone.CloneUsize.clone x))
+        (fun a b => Eq.refl (core.cmp.PartialOrdUsize.lt a b)) { start := j, «end» := 4#usize } active)
+  let ⟨o, it, h✝⟩ := w✝
+  let ⟨run, right✝⟩ := h✝
+  let ⟨ho, right✝¹⟩ := right✝
+  let ⟨hs, he⟩ := right✝¹
+  Eq.ndrec (motive := fun o =>
+    core.iter.range.IteratorRange.next
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize)
+          { start := j, «end» := 4#usize } =
+        ok (o, it) →
+      core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := j, «end» := 4#usize } =
+        ok (some j, { start := k, «end» := 4#usize }))
+    (fun run =>
+      have hk := UScalar.eq_of_val_eq (Decidable.byContradiction fun a => range_next._proof_1 j k inc it hs a);
+      let ⟨start, ending, hs, he, run, hk⟩ := it
+      Eq.ndrec (motive := fun start =>
+        ↑{ start := start, «end» := ending }.start = ↑{ start := j, «end» := 4#usize }.start + 1 →
+          core.iter.range.IteratorRange.next
+                (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize)
+                { start := j, «end» := 4#usize } =
+              ok (some { start := j, «end» := 4#usize }.start, { start := start, «end» := ending }) →
+            core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := j, «end» := 4#usize } =
+              ok (some j, { start := k, «end» := 4#usize }))
+        (fun hs run =>
+          Eq.ndrec (motive := fun ending =>
+            ↑{ start := k, «end» := ending }.start = ↑{ start := j, «end» := 4#usize }.start + 1 →
+              core.iter.range.IteratorRange.next
+                    (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize)
+                    { start := j, «end» := 4#usize } =
+                  ok (some { start := j, «end» := 4#usize }.start, { start := k, «end» := ending }) →
+                core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := j, «end» := 4#usize } =
+                  ok (some j, { start := k, «end» := 4#usize }))
+            (fun hs run => run) (Eq.symm he) hs run)
+        (Eq.symm hk) hs run)
+    (Eq.symm ho) run
+theorem Port25ARRAY.row_four : ∀ (row : Row), ∃ a b c d, row = Array.make 4#usize [a, b, c, d] ⋯ :=
+fun row =>
+  let ⟨l, h⟩ := row
+  id
+    (fun h =>
+      List.casesOn (motive := fun x =>
+        ∀ (h : x.length = 4),
+          ∃ a b c d,
+            ⟨x, h⟩ =
+              Array.make 4#usize [a, b, c, d]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 4))))
+        l
+        (fun h =>
+          let ⟨⟩ := 4
+          h)
+        (fun a l h =>
+          List.casesOn (motive := fun x =>
+            ∀ (h : (a :: x).length = 4),
+              ∃ a_1 b c d,
+                ⟨a :: x, h⟩ =
+                  Array.make 4#usize [a_1, b, c, d]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                              1))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 4))))
+            l
+            (fun h =>
+              let ⟨⟩ := 4
+              h)
+            (fun b l h =>
+              List.casesOn (motive := fun x =>
+                ∀ (h : (a :: b :: x).length = 4),
+                  ∃ a_1 b_1 c d,
+                    ⟨a :: b :: x, h⟩ =
+                      Array.make 4#usize [a_1, b_1, c, d]
+                        (of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Eq
+                                (congrFun'
+                                  (congrArg HAdd.hAdd
+                                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                  1))
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                            (eq_self 4))))
+                l
+                (fun h =>
+                  let ⟨⟩ := 4
+                  h)
+                (fun c l h =>
+                  List.casesOn (motive := fun x =>
+                    ∀ (h : (a :: b :: c :: x).length = 4),
+                      ∃ a_1 b_1 c_1 d,
+                        ⟨a :: b :: c :: x, h⟩ =
+                          Array.make 4#usize [a_1, b_1, c_1, d]
+                            (of_eq_true
+                              (Eq.trans
+                                (congr
+                                  (congrArg Eq
+                                    (congrFun'
+                                      (congrArg HAdd.hAdd
+                                        (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                          1))
+                                      1))
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.Usize 4 (of_decide_eq_true (id (Eq.refl true))))))
+                                (eq_self 4))))
+                    l
+                    (fun h =>
+                      let ⟨⟩ := 4
+                      h)
+                    (fun d l h =>
+                      List.casesOn (motive := fun x =>
+                        ∀ (h : (a :: b :: c :: d :: x).length = 4),
+                          ∃ a_1 b_1 c_1 d_1,
+                            ⟨a :: b :: c :: d :: x, h⟩ =
+                              Array.make 4#usize [a_1, b_1, c_1, d_1]
+                                (of_eq_true
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Eq
+                                        (congrFun'
+                                          (congrArg HAdd.hAdd
+                                            (congrFun'
+                                              (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                          1))
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.Usize 4
+                                          (of_decide_eq_true (id (Eq.refl true))))))
+                                    (eq_self 4))))
+                        l (fun h => Exists.intro a (Exists.intro b (Exists.intro c (Exists.intro d rfl))))
+                        (fun e l h =>
+                          False.elim (Eq.mp (Nat.Simproc.add_eq_gt l.length (of_decide_eq_true (Eq.refl true))) h))
+                        h)
+                    h)
+                h)
+            h)
+        h)
+    h
+'Port25ARRAY.delegation' depends on axioms: [propext, Quot.sound]
+'Port25ARRAY.back_carrier' depends on axioms: [propext, Quot.sound]
+'Port25ARRAY.back_identity' depends on axioms: [propext, Quot.sound]
+'Port25ARRAY.scalar_all_results' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.product_total' depends on axioms: [propext, Quot.sound]
+'Port25ARRAY.fold_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.total_fold_order' does not depend on any axioms
+'Port25ARRAY.toK' does not depend on any axioms
+'Port25ARRAY.row_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.add_unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.range_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.owned_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port25ARRAY.fold_body_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       14.20 real         1.30 user         1.84 sys
+          2240446464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               77157  page reclaims
+              106558  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               26989  voluntary context switches
+               84889  involuntary context switches
+         27800936806  instructions retired
+         11457287121  cycles elapsed
+           377393344  peak memory footprint

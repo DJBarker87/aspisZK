@@ -1,0 +1,134 @@
+{
+  "schema": "Port25ARRAY-source-assessment-v1",
+  "command": "python3 tools/port25array-20261024/Port25ARRAY_sourceaudit.py",
+  "script_sha256": "32210867e4636672964510f67fe3277f3e85edd4192640d429550a7127613340",
+  "revision": "e29c6b6e98b54160b246e7f1f1849e88fb5cbf74",
+  "inherited_graph": {
+    "path": "evidence/port23push-20261024/std-source-graph-focused.json",
+    "sha256": "df7371ef15b03efd6db41180e60e05d757df0f70fdd533b0dc9992f17e51f8a9",
+    "new_native_identity_gate": false
+  },
+  "literal_delegation": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "whole_sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "bytes": 37605,
+      "hits": [
+        {
+          "needle": "fn into_iter(self) -> IterMut",
+          "start_line": 376,
+          "end_line": 378,
+          "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "whole_sha256": "354992a6a3d69a0185eef9044a07ea5180e767bdb467aef55e69ee3d44317840",
+      "bytes": 219078,
+      "hits": [
+        {
+          "needle": "pub const fn iter_mut(",
+          "start_line": 1061,
+          "end_line": 1063,
+          "text": "    pub const fn iter_mut(&mut self) -> IterMut<'_, T> {\n        IterMut::new(self)\n    }"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "whole_sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "bytes": 101431,
+      "hits": [
+        {
+          "needle": "pub(super) const fn new(slice: &'a mut [T])",
+          "start_line": 219,
+          "end_line": 244,
+          "text": "    pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }"
+        },
+        {
+          "needle": "fn into_iter(self) -> IterMut",
+          "start_line": 33,
+          "end_line": 35,
+          "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+        }
+      ]
+    }
+  ],
+  "assessed_inputs": {
+    "evidence/port23push-20261024/Port23PUSH.llbc": {
+      "sha256": "c72fd07d42fb22616dd3285236da053eaabe41c94fce298a3c8954931450aced",
+      "bytes": 598648
+    },
+    "evidence/port23push-20261024/source-pins.json": {
+      "sha256": "f0b592f200036e1832e763a142d3ed3e90d7df06ff16d053114c8d6ed0835adf",
+      "bytes": 3102
+    },
+    "evidence/port23push-20261024/Port23PUSH-generated/Funs.lean.txt": {
+      "sha256": "d14bc2a2e494f767fd4fcaaa9472e0a89091d4feefdcf30e4c2c98351c598403",
+      "bytes": 5703
+    },
+    "evidence/port23push-20261024/Port23PUSH-generated/FunsExternal_Template.lean.txt": {
+      "sha256": "cebf3565390d992883c19a94ae3e98a0cdd6e4cc9cf8107ce8783bc25d44404f",
+      "bytes": 1375
+    },
+    "docs/research/100bit-spend-path-20261013/lean/Port23PUSH_Source.lean": {
+      "sha256": "9ce426987059c191f30b61d6ba779e5cb29c180105658eab08779bca7921309e",
+      "bytes": 6208
+    }
+  },
+  "focused_checks": {
+    "lean-001": {
+      "source_sha256": "e6905bdd7771da3d721f4ad39d9b78a74b19443f50724094aedf470dc768775c",
+      "dependencies": [
+        {
+          "module": "Port23PUSH_Source",
+          "object_path": "/tmp/port23push-20261024-objects/Port23PUSH_Source.olean",
+          "object_sha256": "8a15f72731e8533dc46f092ecfa4652e59de5fd30daefaf110db236dfb4ffa30",
+          "source_sha256": "9ce426987059c191f30b61d6ba779e5cb29c180105658eab08779bca7921309e"
+        }
+      ],
+      "source_revision": "e29c6b6e98b54160b246e7f1f1849e88fb5cbf74"
+    },
+    "lean-003": {
+      "source_sha256": "a8c9432227e3564e2fd694dee259611168ad08fb149fe188f3c9be8b3ccecd2c",
+      "dependencies": [
+        {
+          "module": "Port25ARRAY_Std",
+          "object_path": "/tmp/port25array-20261024-objects/Port25ARRAY_Std.olean",
+          "object_sha256": "a3c125a90f366605c91ea63c9a722d91fbe37a3a7854bf1859e628917641f095",
+          "source_sha256": "e6905bdd7771da3d721f4ad39d9b78a74b19443f50724094aedf470dc768775c"
+        },
+        {
+          "module": "S7Kani2OwnedPush",
+          "object_path": "/tmp/codex-cx-s7-kani2-20261021-objects/S7Kani2OwnedPush.olean",
+          "object_sha256": "4afd1f88904a5c2e1d2b19f100101e6804f8d32ebb3bfd43c8fbe353e24cc9df",
+          "source_sha256": "dd2f1278e69adda57fffe812ca5533daeb87280df682aafbee98458a234375b1"
+        }
+      ],
+      "source_revision": "e29c6b6e98b54160b246e7f1f1849e88fb5cbf74"
+    },
+    "lean-007": {
+      "source_sha256": "733331fa0f0d4d64485a5d68affa469615a96fdc952933db81f4a86fd09c252b",
+      "dependencies": [
+        {
+          "module": "Port25ARRAY_Lane",
+          "object_path": "/tmp/port25array-20261024-objects/Port25ARRAY_Lane.olean",
+          "object_sha256": "4e8d6f29310ed82f07ee861e6e9725c2addc5bae62e434b45a0f65432a57efa3",
+          "source_sha256": "a8c9432227e3564e2fd694dee259611168ad08fb149fe188f3c9be8b3ccecd2c"
+        }
+      ],
+      "source_revision": "e29c6b6e98b54160b246e7f1f1849e88fb5cbf74"
+    }
+  },
+  "established": "existing content wrapper composition and scalar facts only; inspect Lean receipts for accepted declarations",
+  "retained": [
+    "raw generated template/caller ABI mismatch",
+    "native/compiler association of new composition to missing external is not installed",
+    "actual complete mutable row equivalence",
+    "fixed native primitive effects and ordered rejected prefix",
+    "full op6 and trace/observer composition"
+  ],
+  "trust": "no fields or assumptions added; D157 existing pure content interpretation only, no unsafe/panic/allocator policy expansion",
+  "early_integrity": "Port23 lean-001..004 lack explicit post/sysroot snapshots; no retroactive repair claimed"
+}
