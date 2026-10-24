@@ -1,0 +1,102 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "status": "PREPARED_NOT_RUN",
+  "source_revision": "d7f3d70f9b17684f85b3351bebfa389924457840",
+  "basis_receipt": "s1-claims-row-step-20261024/extra/uninit-min/attempt/receipt.json",
+  "basis_receipt_sha256": "214c40b994c15109943a9274fb1c0fba7eb97e0c2e6243fc12737d254c0ac63f",
+  "basis_input": "s1-claims-row-step-20261024/extra/uninit-min/attempt/input.json",
+  "basis_input_sha256": "66c8c72c3a3f3561ec297764b9e6bb4141bb5a38e6cffed1d2f2ef791b637929",
+  "command": [
+    "cargo",
+    "kani",
+    "--only-codegen",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-claims-row-step-min-v1-20261024/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "r1_semantic::claims_write_proofs::claims_row_write_preserves_initialized_prefix",
+    "--solver",
+    "cadical",
+    "--no-assertion-reach-checks",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "uninit-checks",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "180",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "environment_delta": {
+    "KANI_LOG": "kani_compiler::kani_middle::transform::check_uninit::ptr_uninit=trace"
+  },
+  "source_change": "NONE to native fragment, full carriers, decoder stub, input domain, tool binary or backend. Only compile-only option and supported narrow compiler log directive.",
+  "expected_output": "The UninitPass logs instance.name before instrumentation. Retain complete compiler stdout/stderr; identify last transform function before the existing layout ICE. This narrows the current function; it does NOT necessarily reveal the offending nested type and does NOT establish initializedness.",
+  "why_not_unchanged_proof_replay": "Changed diagnostic environment and compile-only stop. No SAT verification requested; no default-check proof rerun, tool upgrade or cap rise.",
+  "planned_limits": {
+    "MemoryHigh": 1610612736,
+    "MemoryMax": 2147483648,
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "execution_prerequisites": [
+    "Fresh reviewed admission/allocation after the lead queued host rehearsal and cache-source work are terminal; no general host authority inferred from an offline policy or old receipt.",
+    "Private source/cache ownership and no competing writer; original current native/dependency/sysroot/tool hashes must match basis or abort. Do not open another session live donor.",
+    "Own systemd/cgroup scope with explicit high/max/swap/tasks and strict inner environment, pre/post source/tools/import pins, proc/cgroup/exit/wall/RSS/peak/swap capture.",
+    "If compile/logging does not identify enough context, retain that failure and review before any changed probe; never invent an offending type or initializedness theorem."
+  ],
+  "tool_source_revision": "4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d",
+  "upstream": [
+    {
+      "path": "kani-driver/src/args/mod.rs",
+      "sha256": "c0e38d1525c162c230a49c810e4808bacd66d42a954524200f9e37b19ee77ded",
+      "bytes": 44528,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-driver/src/args/mod.rs"
+    },
+    {
+      "path": "kani-compiler/src/session.rs",
+      "sha256": "9dcd9cc3c478b79f74f88c2acefe545f0163e95119671386f90b862ee48df8be",
+      "bytes": 4824,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/session.rs"
+    },
+    {
+      "path": "kani-compiler/src/args.rs",
+      "sha256": "9ef1a817d12e0bc075161879cfb127a59b09575621a8116e7866f1fd0adf20b2",
+      "bytes": 5466,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/args.rs"
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/check_uninit/ptr_uninit/mod.rs",
+      "sha256": "c734642cf147203ecf1cc8cb84b54cfc100fc952a3215c03173fb2e7db094df3",
+      "bytes": 4267,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/check_uninit/ptr_uninit/mod.rs"
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/mod.rs",
+      "sha256": "2e1b28acd8e92329e00b759956eee57de772dee16ec122dd019bc33210e09f08",
+      "bytes": 12532,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/mod.rs"
+    },
+    {
+      "path": "kani-compiler/src/kani_middle/transform/dump_mir_pass.rs",
+      "sha256": "6274d23f98174af2850e927d898837983b54a857e5d093df51dedcdd7f965a92",
+      "bytes": 2598,
+      "url": "https://raw.githubusercontent.com/model-checking/kani/4feaaad1d6a2378a6ff6caa3b4fc5d6999c7bb5d/kani-compiler/src/kani_middle/transform/dump_mir_pass.rs"
+    }
+  ],
+  "host_operations_performed": 0,
+  "compiler_or_solver_launched": false,
+  "native_initializedness_proved": false,
+  "print_axioms": "N/A: prepared compiler diagnostic, not a theorem or executed result",
+  "exit_status": null,
+  "wall_seconds": null,
+  "peak_rss_bytes": null,
+  "swap": null
+}
