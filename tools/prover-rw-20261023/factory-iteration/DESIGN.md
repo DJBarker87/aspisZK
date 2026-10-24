@@ -82,3 +82,20 @@ either half zero, retry unchanged on success and r+1 on reject, and arbitrary
 provider ghost advancement. Real Drop executes, event/provenance/unwind
 transport stays open. Reserve056 for this cut relation only. No new Rust
 check/test/extraction is justified unless needed for this concrete interface.
+
+##057: explicit write set after055 timeout
+
+055 timed out124/240s;056 single-draw candidate passes (462 checks,4 unreachable).
+Read-only inspect001 shows dynamic-contract write-set inclusion loop in055's
+instrumented artifact, alongside original-named loops. This is evidence of
+instrumentation cost, not proof of its exact time attribution. Installed pinned
+loop_modifies macro accepts a tuple of explicit pointer expressions. Reserve057
+for a separate immutable annotated snapshot with explicit writes to retry and
+six ghost statics (CALLS/LAST/LAST_ERROR/PRIOR_REJECTED/PROVIDER_STATE/LAST_STATE).
+Fresh per-iteration local allocations must remain checked under Kani's frame
+semantics. The source body is unchanged; no write set is assumed correct: all
+checks stay enabled and any missing target must fail. Replace only the harness's
+32-iteration returned-byte assertion loop with one arbitrary u8-mod32 index,
+which quantifies all32 coordinates. Retain055 original files/receipt; do not
+raise timeout/unwind/cap. This tests a concrete instrumented-write-set change,
+not an unchanged resource retry. If it fails, retain it and stop this method.
