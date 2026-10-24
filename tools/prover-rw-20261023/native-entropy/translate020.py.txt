@@ -1,0 +1,21 @@
+"""New extraction020: pinned accepted baseline, never use partial output."""
+from pathlib import Path
+import hashlib,json,subprocess
+D=Path(__file__).resolve().parent
+baseline=Path('/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static')
+# In host src/tools/... the retained provenance lives beside src, not within it.
+provenance=D.parents[2].parent/'rng-extractor/base-provenance.json'
+pin=lambda p:dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+assert pin(baseline)==json.loads(provenance.read_text())['installed_binary']
+output=D/'baseline-drop-v4-output'
+assert not output.exists()
+cmd=[str(baseline),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean',
+    '-namespace','ProverRwNativeEntropyDrop','-dest',str(output),'-split-files','-emit-json',str(D/'ProverRwNativeEntropyDropV4.llbc')]
+(D/'baseline-v4-pins.json').write_text(json.dumps(dict(command=cmd,binary=pin(baseline),
+    input=pin(D/'ProverRwNativeEntropyDropV4.llbc'),provenance=pin(provenance),
+    source_assessment='Reused baseline source association from base-provenance.json. No baseline rebuild or installed-tool modification.',
+    drop_as_no_op=False,print_axioms='N/A: baseline translation; no Lean theorem'),indent=2)+'\n')
+result=subprocess.run(cmd)
+(D/'baseline-v4-status.json').write_text(json.dumps(dict(exit_status=result.returncode,
+    accepted_artifact=False,assessment='Raw output only. Full diagnostics and semantic check required even if exit zero.'),indent=2)+'\n')
+raise SystemExit(result.returncode)

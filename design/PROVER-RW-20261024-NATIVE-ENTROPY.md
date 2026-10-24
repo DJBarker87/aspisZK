@@ -129,3 +129,62 @@ then decide whether narrow real destructor semantics are feasible within the
 five remaining backend builds. A matching omission requires a precise affected
 source/trust inventory and explicit correction of closure claims; it does not
 prove unrelated installed-backend unsoundness by itself.
+
+## Observed continuation and revised boundary
+
+The new prerequisite is complete at aeec7331d8; later Docker barrier fixtures
+also verify wrong caps and aggregate denial never create go. No Docker backend
+build ran. The installed extractor and its source were read-only throughout.
+
+Five dependency-free native Guard probes preserve physical destruction and
+return counter1 from an initial0 in optimized Rust. Versions1–3 (direct field,
+scalar-first, explicit reborrow) translate with baseline exit2: `Can't copy a
+mutable borrow`. Version4 uses Option::take to move the owned borrow; baseline
+translation020 exits0 but emits real_drop(counter)=ok counter and
+counter_probe=real_drop(0), omitting the source Drop-call effect. The complete
+emission, however, FAILS Lean11560: Option::take returns a pair while the
+emission expects `(o, o1, take_back)`. Version5 uses mem::swap; baseline022
+also exits0 and emits identity real_drop, while its emitted triple conflicts
+with the pair signature confirmed by the final interface audit. Version5 was
+not Lean-compiled, and no partial output or inferred signature repair is
+accepted. Raw code, LLBC, exact commands, pins, status and diagnostics remain.
+
+This is a successful-translation Drop-effect omission plus a complete-output
+kernel blocker, not a kernel-accepted baseline unsoundness demonstration.
+No baseline whole-source result or source simulation theorem was established.
+The observation narrows the attempted claim; it is not hidden behind local
+counter/field proofs. Proposed counterexample proofs were never compiled
+because their complete emission dependency failed; their text is retained
+as unaccepted, outside the Lean source tree. Lean11561's first interface audit
+failed on unqualified names; corrected11562 prints the actual pair signatures
+and shows Guard/take/swap depend on no axioms. Only structural Types and the
+interface inspection pass, with no new source theorem. No premise changed.
+
+The exact baseline InterpStatements.ml hash matches the retained accepted-base
+manifest: `Drop (p, _, _, _)` calls drop_value and ignores fn_ptr. It shares
+the observed omission at that implementation branch; this does not establish
+any scope outside the pinned baseline/probes and selected candidate. The
+required source/trust inventory is: every accepted extraction cone on this
+backend that relies on user Drop effects; its actual monomorphized destructor
+and field cleanup/call/loan order; caller-visible effects versus existing
+TrustedStd allocator cleanup; and the complete output's successful kernel
+status. Secret cleanup, arbitrary policy captures and SensitiveQm31Vec deserve
+explicit checks. This worker did not modify or reassess session A candidates.
+It cannot carry a whole-source cleanup claim across this observation. The
+older candidate005 scalar/refined-record operations remain only their local
+non-destructor slice facts. The manager's existing no-native-closure boundary
+is retained, not silently promoted or generalized to a release-wide defect.
+
+Candidate007 negative invocations023/024 now test the minimal version4 and
+ACTUAL selected64 inputs: both exit2 with the structured-Drop preflight error,
+no output directory. These are successful rejection tests, never source support.
+
+Final cumulative use: backend7/12, extraction24/24, Lean223/260, Kani44/60.
+All failures count; no further extraction is authorized in this budget. The
+next producer is a scoped destructor/loan implementation preflight that calls
+real drop_glue and preserves loan writeback/Bottom/dummy state, followed by a
+complete kernel-accepted minimal counter0→1 regression and concrete Zeroizing
+array semantics. It needs renewed extraction budget before validation. An
+owned provider alone cannot discharge this shared obstruction. Native provider
+state/event transport, complete retry owner, E1 association and all adoption
+gates remain open. Both deployed targets remain not yet established.

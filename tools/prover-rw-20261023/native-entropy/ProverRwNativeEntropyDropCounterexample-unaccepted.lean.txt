@@ -1,0 +1,18 @@
+import R1Z.ProverRwNativeEntropyDropEmission
+
+namespace ProverRwNativeEntropyDrop
+
+/-- A fact about the complete successful baseline emission, not source semantics. -/
+theorem baseline_real_drop_identity (counter : Aeneas.Std.U32) :
+    real_drop counter = .ok counter := rfl
+
+/-- Native optimized test returns one; baseline emission returns zero. -/
+theorem baseline_counter_eq_zero : counter_probe = .ok 0#u32 := rfl
+
+theorem baseline_counter_not_one : counter_probe ≠ .ok 1#u32 := by decide
+
+#print axioms baseline_real_drop_identity
+#print axioms baseline_counter_eq_zero
+#print axioms baseline_counter_not_one
+#print axioms Guard.Insts.CoreOpsDropDrop.drop
+end ProverRwNativeEntropyDrop

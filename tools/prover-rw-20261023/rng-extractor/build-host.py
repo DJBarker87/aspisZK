@@ -19,7 +19,7 @@ command = ['docker', 'create', '--name', name, '--network', 'none', '--memory', 
     '--mount', f'type=bind,src={D},dst=/job', '--entrypoint', '/bin/bash', IMAGE,
     '-c', 'while [ ! -f /job/'+name+'/go ]; do sleep 0.1; done; exec /usr/bin/time -v -o /job/'+name+'/time.log opam exec -- bash /job/build-base.sh']
 preflight = dict(command=command, expected_phase='Optimized OCaml compilation of pinned Charon dependency then pinned extended Aeneas base; no Rust arithmetic, extraction or proof generation.',
-    source_revision=subprocess.check_output(['git','-C',str(D.parent/'src'),'rev-parse','HEAD'],text=True).strip(), provenance_sha256=hashlib.sha256((D/'base-provenance.json').read_bytes()).hexdigest(),
+    source_revision=(D.parent/'src/source-revision.txt').read_text().strip(), provenance_sha256=hashlib.sha256((D/'base-provenance.json').read_bytes()).hexdigest(),
     populated_reservations=rows, requested_memory_max=8*2**30, build_attempt=attempt,
     candidate_source_sha256={str(p.relative_to(D/'base')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (D/'base').rglob('*') if p.is_file() and not p.is_symlink() and '_build' not in p.parts and '.git' not in p.parts},
     driver_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
@@ -32,16 +32,15 @@ info = json.loads(subprocess.check_output(['docker', 'inspect', cid]))[0]
 pid = info['State']['Pid']
 cg = Path('/sys/fs/cgroup'+Path(f'/proc/{pid}/cgroup').read_text().split('0::')[1].strip())
 subprocess.run(['sudo', '-n', 'tee', str(cg/'memory.high')], input=str(6*2**30), text=True, check=True, stdout=subprocess.DEVNULL)
-limits = {k:(cg/k).read_text().strip() for k in ['memory.high','memory.max','memory.swap.max','pids.max']}
-assert limits == dict(zip(limits, [str(6*2**30),str(8*2**30),'0','64'])), limits
-(O/'cap-receipt.json').write_text(json.dumps(dict(cgroup=str(cg),limits=limits,container_id=cid), indent=2)+'\n')
-# The container is blocked behind go. Re-inventory with its cap included,
-# so a racing new reservation cannot be omitted at actual build admission.
-barrier = scanner['admission'](requested=0)
-(O/'reservation-at-barrier.json').write_text(json.dumps(barrier, indent=2)+'\n')
-assert barrier['allowed'], barrier
+# Only this owned container may be stopped on failed admission; no other
+# service/container is inspected for mutation or killed.
+release = runpy.run_path(str(Path(__file__).resolve().parents[1]/'native-entropy/docker_gate.py'))['release']
 start = time.monotonic()
-(O/'go').touch()
+try:
+    limits = release(cg, O, scanner['admission'])
+except BaseException:
+    subprocess.run(['docker','stop','--time','1',cid], check=True, stdout=subprocess.DEVNULL)
+    raise
 waiter = subprocess.Popen(['docker', 'wait', cid], text=True, stdout=subprocess.PIPE)
 peaks = {}
 while waiter.poll() is None:

@@ -1,0 +1,10 @@
+import R1Z.ProverRwNativeEntropyDropTypes
+open Aeneas.Std
+
+-- Interface inspection only; no theorem about source cleanup or output transport.
+#print ProverRwNativeEntropyDrop.Guard
+#print core.option.Option.take
+#print core.mem.swap
+#print axioms ProverRwNativeEntropyDrop.Guard
+#print axioms core.option.Option.take
+#print axioms core.mem.swap
