@@ -1,0 +1,74 @@
+Port5Q1_LineInputs.lean:54:2: error: Type mismatch
+  Port5Q1_LineModel.fold data.alpha1 data.V ?m.159
+has type
+  (FoldRuntimeAlgebra.lineWithInverses data.alpha1 (FoldGeometryBridge.lx ?m.159)⁻¹ (FoldGeometryBridge.ly ?m.159)⁻¹
+      (FoldGeometryBridge.lz ?m.159)⁻¹ fun j => data.V (childIndex ?m.159 j)) =
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels data.V) data.alpha1 ?m.159
+but is expected to have type
+  (FoldRuntimeAlgebra.lineWithInverses data.alpha1
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.lx (parentIndex query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.ly (parentIndex query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.lz (parentIndex query))⁻¹) fun x =>
+      data.V (childIndex (parentIndex query) x)) =
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels data.V) data.alpha1
+      (parentIndex query)
+ops : Ops
+leaves : Port5Q1_QueryPorts.SessionAPrimitives ops
+alpha result : aspis_core.field.wide_exact.WideExact
+values : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+inverse : Std.Array U32 5#usize
+data : MatchingSupport.Data FE
+query : Fin 262144
+alphaEq : ofE alpha = data.alpha1
+valueEq : ∀ (t : Fin 4), Port5Q1_OpeningValues.values values t = data.V (childIndex (parentIndex query) t)
+ix :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 2) =
+    (FoldGeometryBridge.lx (Port5Q1_Domain.parent ↑query))⁻¹
+iy :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 3) =
+    (FoldGeometryBridge.ly (Port5Q1_Domain.parent ↑query))⁻¹
+iz :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 4) =
+    (FoldGeometryBridge.lz (Port5Q1_Domain.parent ↑query))⁻¹
+run : ops.op16 alpha values inverse = ok result
+sourceFold : FE → FE → FE → FE → (Fin 4 → FE) → FE := FoldRuntimeAlgebra.lineWithInverses
+parentEq : Port5Q1_Domain.parent ↑query = parentIndex query
+⊢ (FoldRuntimeAlgebra.lineWithInverses data.alpha1
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.lx (parentIndex query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.ly (parentIndex query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE) (FoldGeometryBridge.lz (parentIndex query))⁻¹) fun x =>
+      data.V (childIndex (parentIndex query) x)) =
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels data.V) data.alpha1
+      (parentIndex query)
+Port5Q1_LineInputs.lean:52:13: warning: This simp argument is unused:
+  map_inv
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵i̵n̵v̵,̵m̵a̵p̵_̵x̵,̵m̵a̵p̵_̵y̵,̵m̵a̵p̵_̵z̵,̵p̵a̵r̵e̵n̵t̵E̵q̵]̵[̲m̲a̲p̲_̲x̲,̲ ̲m̲a̲p̲_̲y̲,̲ ̲m̲a̲p̲_̲z̲,̲ ̲p̲a̲r̲e̲n̲t̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_LineInputs.lean:52:21: warning: This simp argument is unused:
+  map_x
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵i̵n̵v̵,̵m̵a̵p̵_̵x̵,̵m̵a̵p̵_̵y̵,̵m̵a̵p̵_̵z̵,̵p̵a̵r̵e̵n̵t̵E̵q̵]̵[̲m̲a̲p̲_̲i̲n̲v̲,̲ ̲m̲a̲p̲_̲y̲,̲ ̲m̲a̲p̲_̲z̲,̲ ̲p̲a̲r̲e̲n̲t̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_LineInputs.lean:52:27: warning: This simp argument is unused:
+  map_y
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵i̵n̵v̵,̵m̵a̵p̵_̵x̵,̵m̵a̵p̵_̵y̵,̵m̵a̵p̵_̵z̵,̵p̵a̵r̵e̵n̵t̵E̵q̵]̵[̲m̲a̲p̲_̲i̲n̲v̲,̲ ̲m̲a̲p̲_̲x̲,̲ ̲m̲a̲p̲_̲z̲,̲ ̲p̲a̲r̲e̲n̲t̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_LineInputs.lean:52:33: warning: This simp argument is unused:
+  map_z
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵i̵n̵v̵,̵m̵a̵p̵_̵x̵,̵m̵a̵p̵_̵y̵,̵m̵a̵p̵_̵z̵,̵p̵a̵r̵e̵n̵t̵E̵q̵]̵[̲m̲a̲p̲_̲i̲n̲v̲,̲ ̲m̲a̲p̲_̲x̲,̲ ̲m̲a̲p̲_̲y̲,̲ ̲p̲a̲r̲e̲n̲t̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q1_LineInputs.map_x' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.map_y' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.map_z' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

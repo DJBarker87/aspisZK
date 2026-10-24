@@ -1,0 +1,626 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port5Q1_GeometryTerminal.lean:40:23: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  1 ≤ f ≤ 22
+  f ≥ 0
+  e ≥ 0
+  e - g ≤ -1
+where
+ e := ↑(↑iter.slice).length
+ f := ↑(↑zs).length
+ g := ↑↑iter.slice.len
+Port5Q1_GeometryTerminal.lean:60:58: error: unsolved goals
+case isTrue
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+start : Usize
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : iter.i = (↑iter.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+next : core.slice.iter.IteratorSliceIter.next iter = ok (none, iter)
+empty : (install ops).op4 Global flat = ok false
+prefixes : alloc.vec.Vec aspis_core.field.M31
+product : aspis_core.field.M31
+hpref : (install ops).op13 flat.deref = ok (prefixes, product)
+suffix : aspis_core.field.M31
+hsuffix : (install ops).op11 product = ok suffix
+zero : aspis_core.field.M31
+hzero : (install ops).op6 = ok zero
+resized : alloc.vec.Vec U32
+rev : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hrev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+      { start := 0#usize, «end» := flat.len } =
+    ok rev
+inverse : alloc.vec.Vec aspis_core.field.M31
+hback : verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix resized = ok inverse
+mapped :
+  core.iter.adapters.map.Map (core.ops.range.Range (UScalar UScalarTy.Usize)) verifier.QueryGeometry.for_range.closure_4
+hmap :
+  (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+      { start := 0#usize, «end» := zs.len } inverse =
+    ok mapped
+groups : alloc.vec.Vec (Std.Array aspis_core.field.M31 5#usize)
+hcollect :
+  core.iter.traits.iterator.Iterator.collect.default
+      ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+      (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) mapped =
+    ok groups
+accepted✝¹ :
+  (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (install ops).op12 u
+      let r1 ←
+        (install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (install ops).op12 i1
+          let r3 ←
+            (install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r2
+                ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (install ops).op12 i3
+              let r5 ←
+                (install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (install ops).op14 val2
+                  let m ← (install ops).op9 line_x line_x
+                  let m1 ← (install ops).op10 m
+                  let m2 ← (install ops).op7
+                  let line_z ← (install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r6)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r6 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r6)) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝ :
+  (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix_inverse ← (install ops).op11 product
+    let flat_inverse1 ←
+      alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len zero
+    let flat_inverse2 ←
+      verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix_inverse flat_inverse1
+    let m1 ←
+      (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+          { start := 0#usize, «end» := zs.len } flat_inverse2
+    let inverses ←
+      core.iter.traits.iterator.Iterator.collect.default
+          ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+          (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+    ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted :
+  (do
+      let flat_inverse1 ←
+        alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len
+            zero
+      let flat_inverse2 ←
+        verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix flat_inverse1
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+h✝ : ↑flat.len < (alloc.vec.Vec.with_capacity U32 flat.len).length
+hresize : ok ⟨(↑(alloc.vec.Vec.with_capacity U32 flat.len)).resize (↑flat.len) zero, ⋯⟩ = ok resized
+⊢ (↑resized).length = 5 * (↑zs).length
+
+case isFalse
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+start : Usize
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : iter.i = (↑iter.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+next : core.slice.iter.IteratorSliceIter.next iter = ok (none, iter)
+empty : (install ops).op4 Global flat = ok false
+prefixes : alloc.vec.Vec aspis_core.field.M31
+product : aspis_core.field.M31
+hpref : (install ops).op13 flat.deref = ok (prefixes, product)
+suffix : aspis_core.field.M31
+hsuffix : (install ops).op11 product = ok suffix
+zero : aspis_core.field.M31
+hzero : (install ops).op6 = ok zero
+resized : alloc.vec.Vec U32
+rev : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hrev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+      { start := 0#usize, «end» := flat.len } =
+    ok rev
+inverse : alloc.vec.Vec aspis_core.field.M31
+hback : verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix resized = ok inverse
+mapped :
+  core.iter.adapters.map.Map (core.ops.range.Range (UScalar UScalarTy.Usize)) verifier.QueryGeometry.for_range.closure_4
+hmap :
+  (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+      { start := 0#usize, «end» := zs.len } inverse =
+    ok mapped
+groups : alloc.vec.Vec (Std.Array aspis_core.field.M31 5#usize)
+hcollect :
+  core.iter.traits.iterator.Iterator.collect.default
+      ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+      (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) mapped =
+    ok groups
+accepted✝¹ :
+  (let (o, iter1) := (none, iter)
+    match o with
+    | none => ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (install ops).op12 u
+      let r1 ←
+        (install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (install ops).op12 i1
+          let r3 ←
+            (install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r2
+                ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (install ops).op12 i3
+              let r5 ←
+                (install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (install ops).op14 val2
+                  let m ← (install ops).op9 line_x line_x
+                  let m1 ← (install ops).op10 m
+                  let m2 ← (install ops).op7
+                  let line_z ← (install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r6)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r6 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r6)) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝ :
+  (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix_inverse ← (install ops).op11 product
+    let flat_inverse1 ←
+      alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len zero
+    let flat_inverse2 ←
+      verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix_inverse flat_inverse1
+    let m1 ←
+      (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+          { start := 0#usize, «end» := zs.len } flat_inverse2
+    let inverses ←
+      core.iter.traits.iterator.Iterator.collect.default
+          ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+          (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+    ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted :
+  (do
+      let flat_inverse1 ←
+        alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len
+            zero
+      let flat_inverse2 ←
+        verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix flat_inverse1
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+h✝ : ¬↑flat.len < (alloc.vec.Vec.with_capacity U32 flat.len).length
+hresize :
+  ok ⟨(↑(alloc.vec.Vec.with_capacity U32 flat.len)).resize (↑flat.len) (core.clone.impls.CloneU32.clone zero), ⋯⟩ =
+    ok resized
+⊢ (↑resized).length = 5 * (↑zs).length
+Port5Q1_GeometryTerminal.lean:69:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (install ops).op11 product
+in the target expression
+  (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix ← (install ops).op11 product
+    verifier.QueryGeometry.for_range_loop0_loop0 (install ops) (Port4C_Reverse.reverse flat.len) flat prefixes suffix
+        resized) =
+    ok inverse
+
+CoreError : Type
+ops : Ops CoreError
+multiply : ops.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+one : ops.op7 = ok 1#u32
+inverseLeaf : ops.op11 = Port4C_InverseExecution.inverse_owned
+start : Usize
+iter : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : iter.i = (↑iter.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+next : core.slice.iter.IteratorSliceIter.next iter = ok (none, iter)
+empty : (install ops).op4 Global flat = ok false
+prefixes : alloc.vec.Vec aspis_core.field.M31
+product : aspis_core.field.M31
+hpref : (install ops).op13 flat.deref = ok (prefixes, product)
+suffix : aspis_core.field.M31
+hsuffix : (install ops).op11 product = ok suffix
+zero : aspis_core.field.M31
+hzero : (install ops).op6 = ok zero
+resized : alloc.vec.Vec U32
+hresize :
+  alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len zero =
+    ok resized
+rev : core.iter.adapters.rev.Rev (core.ops.range.Range (UScalar UScalarTy.Usize))
+hrev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+      { start := 0#usize, «end» := flat.len } =
+    ok rev
+inverse : alloc.vec.Vec aspis_core.field.M31
+hback : verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix resized = ok inverse
+mapped :
+  core.iter.adapters.map.Map (core.ops.range.Range (UScalar UScalarTy.Usize)) verifier.QueryGeometry.for_range.closure_4
+hmap :
+  (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+      { start := 0#usize, «end» := zs.len } inverse =
+    ok mapped
+groups : alloc.vec.Vec (Std.Array aspis_core.field.M31 5#usize)
+hcollect :
+  core.iter.traits.iterator.Iterator.collect.default
+      ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+        (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+      (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) mapped =
+    ok groups
+accepted✝⁷ :
+  (let (o, iter1) := (none, iter)
+    match o with
+    | none => do
+      let (prefixes, product) ← (install ops).op13 flat.deref
+      let suffix_inverse ← (install ops).op11 product
+      let m ← (install ops).op6
+      let flat_inverse1 ←
+        alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len m
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := flat.len }
+      let flat_inverse2 ←
+        verifier.QueryGeometry.for_range_loop0_loop0 (install ops) iter2 flat prefixes suffix_inverse flat_inverse1
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (install ops).op12 u
+      let r1 ←
+        (install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (install ops).op12 i1
+          let r3 ←
+            (install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError (install ops)) r2
+                ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (install ops).op12 i3
+              let r5 ←
+                (install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (install ops).op14 val2
+                  let m ← (install ops).op9 line_x line_x
+                  let m1 ← (install ops).op10 m
+                  let m2 ← (install ops).op7
+                  let line_z ← (install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r6)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r6 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r6)) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝⁶ :
+  (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix_inverse ← (install ops).op11 product
+    let m ← (install ops).op6
+    let flat_inverse1 ←
+      alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len m
+    let iter2 ←
+      core.iter.traits.iterator.Iterator.rev.trait_default
+          (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+          { start := 0#usize, «end» := flat.len }
+    let flat_inverse2 ←
+      verifier.QueryGeometry.for_range_loop0_loop0 (install ops) iter2 flat prefixes suffix_inverse flat_inverse1
+    let m1 ←
+      (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+          { start := 0#usize, «end» := zs.len } flat_inverse2
+    let inverses ←
+      core.iter.traits.iterator.Iterator.collect.default
+          ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+          (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+    ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝⁵ :
+  (do
+      let m ← (install ops).op6
+      let flat_inverse1 ←
+        alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len m
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := flat.len }
+      let flat_inverse2 ←
+        verifier.QueryGeometry.for_range_loop0_loop0 (install ops) iter2 flat prefixes suffix flat_inverse1
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝⁴ :
+  (do
+      let flat_inverse1 ←
+        alloc.vec.Vec.resize core.clone.CloneU32 (alloc.vec.Vec.with_capacity aspis_core.field.M31 flat.len) flat.len
+            zero
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := flat.len }
+      let flat_inverse2 ←
+        verifier.QueryGeometry.for_range_loop0_loop0 (install ops) iter2 flat prefixes suffix flat_inverse1
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝³ :
+  (do
+      let iter2 ←
+        core.iter.traits.iterator.Iterator.rev.trait_default
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+            { start := 0#usize, «end» := flat.len }
+      let flat_inverse2 ← verifier.QueryGeometry.for_range_loop0_loop0 (install ops) iter2 flat prefixes suffix resized
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝² :
+  (do
+      let flat_inverse2 ← verifier.QueryGeometry.for_range_loop0_loop0 (install ops) rev flat prefixes suffix resized
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } flat_inverse2
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝¹ :
+  (do
+      let m1 ←
+        (install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+            (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops))
+            { start := 0#usize, «end» := zs.len } inverse
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted✝ :
+  (do
+      let inverses ←
+        core.iter.traits.iterator.Iterator.collect.default
+            ((install ops).mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+              (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315 (install ops)))
+            (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) mapped
+      ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+accepted :
+  ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs })) =
+    ok (done (core.result.Result.Ok { start := start, inverses := groups, line_z := zs }))
+resizeSize : (↑resized).length = (↑flat).length
+hpref1 : Port4C_GeometryInverse.prefixCall (install ops) flat.deref = ok (prefixes, product)
+⊢ (let (prefixes, product) := (prefixes, product)
+    do
+    let suffix ← (install ops).op11 product
+    verifier.QueryGeometry.for_range_loop0_loop0 (install ops) (Port4C_Reverse.reverse flat.len) flat prefixes suffix
+        resized) =
+    ok inverse
+Port5Q1_GeometryTerminal.lean:78:82: error: Type mismatch: After simplification, term
+  Eq.trans len size
+ has type
+  @Eq ℕ (↑inverse).length (5 * (↑zs).length)
+but is expected to have type
+  @Eq ℕ (↑inverse).length (5 * ↑(Usize.ofNatCore (↑zs).length ⋯))
+'AspisR1.Port5Q1_GeometryTerminal.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

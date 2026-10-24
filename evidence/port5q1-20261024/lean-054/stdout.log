@@ -1,0 +1,48 @@
+Port5Q1_LineInputs.lean:49:62: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?f ?a⁻¹
+in the target expression
+  (FoldRuntimeAlgebra.lineWithInverses data.alpha1
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.lx (Port5Q1_Domain.parent ↑query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.ly (Port5Q1_Domain.parent ↑query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.lz (Port5Q1_Domain.parent ↑query))⁻¹)
+      fun x => data.V (childIndex (parentIndex query) x)) =
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels data.V) data.alpha1
+      (parentIndex query)
+
+ops : Ops
+leaves : Port5Q1_QueryPorts.SessionAPrimitives ops
+alpha result : aspis_core.field.wide_exact.WideExact
+values : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+inverse : Std.Array U32 5#usize
+data : MatchingSupport.Data FE
+query : Fin 262144
+alphaEq : ofE alpha = data.alpha1
+valueEq : ∀ (t : Fin 4), Port5Q1_OpeningValues.values values t = data.V (childIndex (parentIndex query) t)
+ix :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 2) =
+    (FoldGeometryBridge.lx (Port5Q1_Domain.parent ↑query))⁻¹
+iy :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 3) =
+    (FoldGeometryBridge.ly (Port5Q1_Domain.parent ↑query))⁻¹
+iz :
+  S7JoinBasisMachine.decode (Port5Q1_GeometryBinding.lane inverse 4) =
+    (FoldGeometryBridge.lz (Port5Q1_Domain.parent ↑query))⁻¹
+run : ops.op16 alpha values inverse = ok result
+parentEq : Port5Q1_Domain.parent ↑query = parentIndex query
+⊢ (FoldRuntimeAlgebra.lineWithInverses data.alpha1
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.lx (Port5Q1_Domain.parent ↑query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.ly (Port5Q1_Domain.parent ↑query))⁻¹)
+      ((algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE)
+        (FoldGeometryBridge.lz (Port5Q1_Domain.parent ↑query))⁻¹)
+      fun x => data.V (childIndex (parentIndex query) x)) =
+    AspisV5FriDegreeThreeCorrelatedAgreement.curveValue (SecondFoldRestoration.channels data.V) data.alpha1
+      (parentIndex query)
+'AspisR1.Port5Q1_LineInputs.map_x' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.map_y' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.map_z' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_LineInputs.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

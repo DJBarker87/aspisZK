@@ -1,0 +1,95 @@
+Port5Q1_GeometryCanonical.lean:50:47: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  x = r.lineZ ∨ x ∈ []
+
+case inr.inr.inr.inr.inr
+CoreError : Type
+ops : Ops CoreError
+leaves : SessionAPrimitives ops
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+canonical : ∀ x ∈ ↑flat, Canonical x
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u parent left right fibre fleft fright : Usize
+point : aspis_core.r0.domain.Point Port4C_GeometryGather.M
+square doubled one : Port4C_GeometryGather.M
+left✝⁸ : iterOut = iter1
+left✝⁷ : lift (UScalar.cast UScalarTy.Usize query) = ok u
+left✝⁶ : ops.op12 u = ok (core.result.Result.Ok fibre)
+pointRun : ops.op15 fibre = ok point
+left✝⁵ : u / 4#usize = ok parent
+left✝⁴ : left = parent.wrapping_mul 4#usize
+left✝³ : ops.op12 left = ok (core.result.Result.Ok fleft)
+lineX : ops.op14 fleft = ok r.lineX
+left✝² : right = left.wrapping_add 3#usize
+left✝¹ : ops.op12 right = ok (core.result.Result.Ok fright)
+lineY : ops.op14 fright = ok r.lineY
+hx : r.x = point.x
+hy : r.y = point.y
+mul : ops.op9 r.lineX r.lineX = ok square
+dbl : ops.op10 square = ok doubled
+unit : ops.op7 = ok one
+sub : ops.op8 doubled one = ok r.lineZ
+left✝ : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+right✝ : ↑zsOut = ↑zs ++ [r.lineZ]
+cp : Canonical point.x ∧ Canonical point.y
+cx : Canonical r.lineX
+cy : Canonical r.lineY
+cz : Canonical r.lineZ
+x : U32
+h✝ : x = r.lineZ ∨ x ∈ []
+⊢ Canonical x
+Port5Q1_GeometryCanonical.lean:49:61: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵G̵a̵t̵h̵e̵r̵.̵R̵o̵w̵.̵w̵o̵r̵d̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲G̲a̲t̲h̲e̲r̲.̲R̲o̲w̲.̲w̲o̲r̲d̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at member
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_GeometryCanonical.lean:123:21: error(lean.projNonPropFromProp): Invalid projection: Cannot project a value of non-propositional type
+  Port4C_GeometryGather.M
+from the expression
+  fields
+which has propositional type
+  ∃ one,
+    iter1 = nextIter ∧
+      lift (UScalar.cast UScalarTy.Usize query) = ok w✝⁹ ∧
+        ops.op12 w✝⁹ = ok (core.result.Result.Ok w✝⁵) ∧
+          ops.op15 w✝⁵ = ok w✝² ∧
+            w✝⁹ / 4#usize = ok w✝⁸ ∧
+              w✝⁷ = w✝⁸.wrapping_mul 4#usize ∧
+                ops.op12 w✝⁷ = ok (core.result.Result.Ok w✝⁴) ∧
+                  ops.op14 w✝⁴ = ok r.lineX ∧
+                    w✝⁶ = w✝⁷.wrapping_add 3#usize ∧
+                      ops.op12 w✝⁶ = ok (core.result.Result.Ok w✝³) ∧
+                        ops.op14 w✝³ = ok r.lineY ∧
+                          r.x = w✝².x ∧
+                            r.y = w✝².y ∧
+                              ops.op9 r.lineX r.lineX = ok w✝¹ ∧
+                                ops.op10 w✝¹ = ok w✝ ∧
+                                  ops.op7 = ok one ∧
+                                    ops.op8 w✝ one = ok r.lineZ ∧
+                                      (∀ x ∈ r.words, x ≠ 0#u32) ∧ ↑flat1 = ↑flat ++ r.words ∧ ↑zs1 = ↑zs ++ [r.lineZ]
+Port5Q1_GeometryCanonical.lean:81:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_GeometryCanonical.lean:107:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵ ̵at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q1_GeometryCanonical.field_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_GeometryCanonical.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_GeometryCanonical.traversal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

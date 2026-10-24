@@ -1,0 +1,51 @@
+{"attempt": "lean-024", "exit_status": 1, "wall_seconds": 3.223820054990938, "peak_rss_kib": "4396524", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q1_Advance.advance_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port5Q1_Advance.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q1_Advance.lean:81:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port4C_SumField.scalar (AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode o.node) ↑i)
+in the target expression
+  (Port4C_QueryState.state a sum).weights i +
+      (Port4C_QueryState.state a sum).power *
+        (fun x i =>
+            Port4C_SumField.scalar (AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode o.node) ↑i))
+          (Port4C_QueryState.state a sum).next i =
+    (Port4C_QueryState.state a sum).weights i +
+      (Port4C_QueryState.state a sum).power *
+        QueryAccumulator.extend22 model.basis (Port4C_QueryState.state a sum).next i
+
+case 
+...
+trace : PushTrace old (toBW b1) sum1
+progress : Progress (t + 1) 0 (toBW b1)
+stateStep :
+  Port4C_QueryState.state a1 sum1 =
+    QueryAccumulator.step LiteralOpeningView.eK (ofK p.rho) (fun x => ofE o.value)
+      (fun x i =>
+        Port4C_SumField.scalar (AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode o.node) ↑i))
+      (Port4C_QueryState.state a sum)
+w✝¹ : Port4C_QueryValues.Observation (Port4C_RowStd.install ops) proof p a a1 g obs geometry b b1
+w✝ : S7Kani3CallerTrace.Sum
+left✝⁵ : PushTrace old (toBW b1) w✝
+left✝⁴ : Progress (t + 1) 0 (toBW b1)
+left✝³ :
+  ∀ i < 64,
+    ∀ (k : Fin 4),
+      ↑(w✝ i k) =
+        ↑(sum i k) +
+          ↑↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK a.power) k) *
+            AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode w✝¹.node) i
+left✝² : ofE a1.rhs = ofE a.rhs + LiteralOpeningView.eK (ofK a.power) * ofE w✝¹.value
+left✝¹ : ofK a1.power = ofK a.power * ofK p.rho
+left✝ : ↑a1.next = ↑a.next + 1
+weights : a1.weights = a.weights
+canonRhs : Port4C_QueryArithmetic.CanonE a1.rhs
+canonPower : Port3_FlushInstall.Canonical a1.power
+meaning : Binds model ops proof p g obs geometry a a1 b b1 o
+⊢ (Port4C_QueryState.state a sum).rhs +
+      LiteralOpeningView.eK (Port4C_QueryState.state a sum).power *
+        (fun x => QueryAccumulator.extend22 model.values ↑a.next) (Port4C_QueryState.state a sum).next =
+    (Port4C_QueryState.state a sum).rhs +
+      LiteralOpeningView.eK (Port4C_QueryState.state a sum).power *
+        QueryAccumulator.extend22 model.values (Port4C_QueryState.state a sum).next
+'AspisR1.Port5Q1_Advance.advance_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Advance.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc34f987799994dd6aa5db10982a7878d.scope; invocation ID: 676b299ba7db4c6e95d06337b43bd532
