@@ -1,0 +1,39 @@
+@[defeq] theorem ProverRwNativeDropABI.moveSwap_relation : ∀ {V H : Type} (left right : V) (heap : H),
+  ProverRwNativeDropABI.moveSwap left right heap = (right, left, heap, none) :=
+fun {V H} left right heap => rfl
+@[defeq] theorem ProverRwNativeDropABI.model_relation : ∀ {V H : Type} (a b : V) (heap : H),
+  ProverRwNativeDropABI.moveSwap a b heap =
+    ((ProverRwNativeDropABI.forward (a, b)).1, (ProverRwNativeDropABI.forward (a, b)).2, heap, none) :=
+fun {V H} a b heap => rfl
+@[defeq] theorem ProverRwNativeDropABI.callback_relation : ∀ {F B H : Type} (k : (F × F) × H → (B × B) × H) (a b : F)
+  (heap : H),
+  have out := k (ProverRwNativeDropABI.forward (a, b), heap);
+  (ProverRwNativeDropABI.backward out.1, out.2) = ((out.1.2, out.1.1), out.2) :=
+fun {F B H} k a b heap => rfl
+theorem ProverRwNativeDropABI.backward_involution : ∀ {B : Type} (p : B × B),
+  ProverRwNativeDropABI.backward (ProverRwNativeDropABI.backward p) = p :=
+fun {B} p =>
+  let ⟨fst✝, snd✝, h✝⟩ := p
+  Eq.symm h✝ ▸ Eq.refl (ProverRwNativeDropABI.backward (ProverRwNativeDropABI.backward (fst✝, snd✝)))
+def ProverRwNativeDropABInodrop.increment : Aeneas.Std.U32 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun counter => Aeneas.Std.Result.ok (Aeneas.Std.core.num.U32.wrapping_add counter 1#u32)
+structure ProverRwNativeDropABIminimal.Guard : Type
+number of parameters: 0
+fields:
+  ProverRwNativeDropABIminimal.Guard.counter : Option Aeneas.Std.U32
+constructor:
+  ProverRwNativeDropABIminimal.Guard.mk (counter : Option Aeneas.Std.U32) : ProverRwNativeDropABIminimal.Guard
+def Aeneas.Std.core.mem.swap : {T : Type} → T → T → T × T :=
+fun {T} a b => (b, a)
+def Aeneas.Std.core.option.Option.take : {T : Type} → Option T → Option T × Option T :=
+fun {T} self => (self, none)
+'ProverRwNativeDropABI.moveSwap_relation' does not depend on any axioms
+'ProverRwNativeDropABI.model_relation' does not depend on any axioms
+'ProverRwNativeDropABI.callback_relation' does not depend on any axioms
+'ProverRwNativeDropABI.backward_involution' does not depend on any axioms
+'ProverRwNativeDropABInodrop.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ProverRwNativeDropABIminimal.Guard' does not depend on any axioms
+'Aeneas.Std.core.mem.swap' does not depend on any axioms
+'Aeneas.Std.core.option.Option.take' does not depend on any axioms
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh

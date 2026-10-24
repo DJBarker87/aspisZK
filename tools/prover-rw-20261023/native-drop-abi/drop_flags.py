@@ -12,6 +12,7 @@ def assess(command, config, main):
     # Only accept one known option, with no later option capable of resetting it.
     assert command.count('-eval-drops') == 1, 'Drop validation requires explicit -eval-drops'
     assert all(not x.startswith('-eval-drops=') for x in command)
+    assert digest(main) == '765dae94c5afe919c842b9c961b3fe35b62c7cfe24e897ab8c29411c73e8acd2', 'unsupported Main source'
     text = main.read_text()
     assert re.search(r'"-eval-drops",\s*Arg.Clear drop_as_no_op,', text), 'unsupported flag binding'
     # Require the sole CLI binding of the flag: fail closed if source evolves.

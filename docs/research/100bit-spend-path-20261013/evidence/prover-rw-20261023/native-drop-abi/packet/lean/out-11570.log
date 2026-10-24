@@ -1,0 +1,21 @@
+@[defeq] theorem ProverRwNativeDropABI.moveSwap_relation : ∀ {V H : Type} (left right : V) (heap : H),
+  moveSwap left right heap = (right, left, heap, none) :=
+fun {V H} left right heap => rfl
+@[defeq] theorem ProverRwNativeDropABI.model_relation : ∀ {V H : Type} (a b : V) (heap : H),
+  moveSwap a b heap = ((forward (a, b)).1, (forward (a, b)).2, heap, none) :=
+fun {V H} a b heap => rfl
+@[defeq] theorem ProverRwNativeDropABI.callback_relation : ∀ {F B H : Type} (k : (F × F) × H → (B × B) × H) (a b : F)
+  (heap : H),
+  have out := k (forward (a, b), heap);
+  (backward out.1, out.2) = ((out.1.2, out.1.1), out.2) :=
+fun {F B H} k a b heap => rfl
+theorem ProverRwNativeDropABI.backward_involution : ∀ {B : Type} (p : B × B), backward (backward p) = p :=
+fun {B} p =>
+  let ⟨fst✝, snd✝, h✝⟩ := p
+  Eq.symm h✝ ▸ Eq.refl (backward (backward (fst✝, snd✝)))
+'ProverRwNativeDropABI.moveSwap_relation' does not depend on any axioms
+'ProverRwNativeDropABI.model_relation' does not depend on any axioms
+'ProverRwNativeDropABI.callback_relation' does not depend on any axioms
+'ProverRwNativeDropABI.backward_involution' does not depend on any axioms
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
