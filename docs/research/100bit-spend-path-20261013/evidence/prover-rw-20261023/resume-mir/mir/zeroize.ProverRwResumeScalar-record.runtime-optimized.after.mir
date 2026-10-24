@@ -1,0 +1,84 @@
+// MIR for `ProverRwResumeScalar::record` after runtime-optimized
+
+fn record(_1: Observation, _2: Observation) -> () {
+    debug before => _1;
+    debug after => _2;
+    let mut _0: ();
+    let _3: ProverRwResumeScalar::Event;
+    let mut _4: *mut u8;
+    let mut _5: *mut ProverRwResumeScalar::Event;
+    let mut _6: *mut ProverRwResumeScalar::Event;
+    let mut _7: *mut ProverRwResumeScalar::Event;
+    let mut _8: *mut bool;
+    scope 1 {
+        debug event => _3;
+    }
+
+    bb0: {
+        _3 = Event { before: copy _1, after: copy _2 };
+        _4 = const {alloc6: *mut u8};
+        switchInt(copy (*_4)) -> [0: bb4, 1: bb3, 2: bb2, otherwise: bb1];
+    }
+
+    bb1: {
+        StorageLive(_8);
+        _8 = const {alloc7: *mut bool};
+        (*_8) = const true;
+        StorageDead(_8);
+        goto -> bb5;
+    }
+
+    bb2: {
+        StorageLive(_7);
+        _7 = const {alloc12: *mut Event};
+        (*_7) = copy _3;
+        StorageDead(_7);
+        (*_4) = const 3_u8;
+        goto -> bb5;
+    }
+
+    bb3: {
+        StorageLive(_6);
+        _6 = const {alloc10: *mut Event};
+        (*_6) = copy _3;
+        StorageDead(_6);
+        (*_4) = const 2_u8;
+        goto -> bb5;
+    }
+
+    bb4: {
+        StorageLive(_5);
+        _5 = const {alloc8: *mut Event};
+        (*_5) = copy _3;
+        StorageDead(_5);
+        (*_4) = const 1_u8;
+        goto -> bb5;
+    }
+
+    bb5: {
+        return;
+    }
+}
+
+alloc12 (static: E2, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc10 (static: E1, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc8 (static: E0, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc7 (static: OVERFLOW, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc6 (static: COUNT, size: 1, align: 1) {
+    00                                              │ .
+}

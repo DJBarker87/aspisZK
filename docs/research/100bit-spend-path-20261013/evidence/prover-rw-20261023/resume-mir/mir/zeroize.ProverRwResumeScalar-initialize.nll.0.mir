@@ -1,0 +1,125 @@
+// MIR for `ProverRwResumeScalar::initialize` 0 nll
+
+| Free Region Mapping
+| '?0 | Global | ['?0, '?1]
+| '?1 | Local | ['?1]
+|
+| Inferred Region Values
+| '?0 | U0 | {bb0[0..=4], bb1[0..=28], bb2[0], '?0, '?1}
+| '?1 | U0 | {bb0[0..=4], bb1[0..=28], bb2[0], '?1}
+|
+| Inference Constraints
+| '?0 live at {bb0[0..=4], bb1[0..=28], bb2[0]}
+| '?1 live at {bb0[0..=4], bb1[0..=28], bb2[0]}
+|
+fn initialize(_1: u8) -> () {
+    debug j => _1;                       // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:288:23: 288:24
+    let mut _0: ();                      // return place in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:288:29: 288:29
+    let mut _2: u8;                      // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+    let mut _3: u8;                      // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:23: 289:24
+    let mut _4: bool;                    // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+    let mut _5: *mut usize;              // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:18: 289:19
+    let mut _6: *mut u8;                 // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:41: 289:46
+    let mut _7: *mut bool;               // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:52: 289:60
+    let mut _8: *mut ProverRwResumeScalar::Event; // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:13: 290:15
+    let mut _9: *mut ProverRwResumeScalar::Event; // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:31: 290:33
+    let mut _10: *mut ProverRwResumeScalar::Event; // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:49: 290:51
+
+    bb0: {
+        StorageLive(_2);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+        StorageLive(_3);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:23: 289:24
+        _3 = copy _1;                    // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:23: 289:24
+        _4 = Eq(const 32_u8, const 0_u8); // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+        assert(!move _4, "attempt to calculate the remainder of `{}` with a divisor of zero", copy _3) -> [success: bb1, unwind: bb2]; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+    }
+
+    bb1: {
+        _2 = Rem(move _3, const 32_u8);  // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:22: 289:30
+        StorageDead(_3);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:29: 289:30
+        StorageLive(_5);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:18: 289:19
+        _5 = const {alloc5: *mut usize}; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:18: 289:19
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:18: 289:19
+                                         // + const_: Const { ty: *mut usize, val: Value({alloc5: *mut usize}) }
+        (*_5) = move _2 as usize (IntToInt); // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:18: 289:39
+        StorageDead(_2);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:38: 289:39
+        StorageDead(_5);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:39: 289:40
+        StorageLive(_6);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:41: 289:46
+        _6 = const {alloc6: *mut u8};    // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:41: 289:46
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:41: 289:46
+                                         // + const_: Const { ty: *mut u8, val: Value({alloc6: *mut u8}) }
+        (*_6) = const 0_u8;              // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:41: 289:50
+        StorageDead(_6);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:50: 289:51
+        StorageLive(_7);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:52: 289:60
+        _7 = const {alloc7: *mut bool};  // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:52: 289:60
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:52: 289:60
+                                         // + const_: Const { ty: *mut bool, val: Value({alloc7: *mut bool}) }
+        (*_7) = const false;             // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:52: 289:68
+        StorageDead(_7);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:68: 289:69
+        StorageLive(_8);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:13: 290:15
+        _8 = const {alloc8: *mut Event}; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:13: 290:15
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:13: 290:15
+                                         // + const_: Const { ty: *mut Event, val: Value({alloc8: *mut Event}) }
+        (*_8) = const ProverRwResumeScalar::EMPTY_EVENT; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:13: 290:29
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:18: 290:29
+                                         // + const_: Const { ty: Event, val: Unevaluated(EMPTY_EVENT, [], None) }
+        StorageDead(_8);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:29: 290:30
+        StorageLive(_9);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:31: 290:33
+        _9 = const {alloc10: *mut Event}; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:31: 290:33
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:31: 290:33
+                                         // + const_: Const { ty: *mut Event, val: Value({alloc10: *mut Event}) }
+        (*_9) = const ProverRwResumeScalar::EMPTY_EVENT; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:31: 290:47
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:36: 290:47
+                                         // + const_: Const { ty: Event, val: Unevaluated(EMPTY_EVENT, [], None) }
+        StorageDead(_9);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:47: 290:48
+        StorageLive(_10);                // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:49: 290:51
+        _10 = const {alloc12: *mut Event}; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:49: 290:51
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:49: 290:51
+                                         // + const_: Const { ty: *mut Event, val: Value({alloc12: *mut Event}) }
+        (*_10) = const ProverRwResumeScalar::EMPTY_EVENT; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:49: 290:65
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:54: 290:65
+                                         // + const_: Const { ty: Event, val: Unevaluated(EMPTY_EVENT, [], None) }
+        StorageDead(_10);                // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:290:65: 290:66
+        _0 = const ();                   // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:289:9: 290:68
+        return;                          // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:291:6: 291:6
+    }
+
+    bb2 (cleanup): {
+        resume;                          // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:288:5: 291:6
+    }
+}
+
+alloc12 (static: E2, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc10 (static: E1, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc8 (static: E0, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc7 (static: OVERFLOW, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc6 (static: COUNT, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc5 (static: J, size: 8, align: 8) {
+    00 00 00 00 00 00 00 00                         │ ........
+}

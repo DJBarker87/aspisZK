@@ -1,0 +1,82 @@
+// MIR for `<impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:788:1: 790:16>::drop` after built
+
+fn <impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:788:1: 790:16>::drop(_1: &mut Zeroizing<Z>) -> () {
+    debug self => _1;
+    let mut _0: ();
+    let _2: usize;
+    let mut _4: &Z;
+    let mut _5: usize;
+    let _6: ();
+    let mut _7: &mut Z;
+    let _8: ();
+    let mut _9: ProverRwResumeScalar::Observation;
+    let mut _10: ProverRwResumeScalar::Observation;
+    let mut _11: &Z;
+    let mut _12: usize;
+    scope 1 {
+        debug j => _2;
+        let _3: ProverRwResumeScalar::Observation;
+        scope 2 {
+            debug before => _3;
+        }
+    }
+
+    bb0: {
+        StorageLive(_2);
+        _2 = coordinate() -> [return: bb1, unwind: bb6];
+    }
+
+    bb1: {
+        FakeRead(ForLet(None), _2);
+        StorageLive(_3);
+        StorageLive(_4);
+        _4 = &((*_1).0: Z);
+        StorageLive(_5);
+        _5 = copy _2;
+        _3 = <Z as Zeroize>::prover_rw_resume_scalar_observe(move _4, move _5) -> [return: bb2, unwind: bb6];
+    }
+
+    bb2: {
+        StorageDead(_5);
+        StorageDead(_4);
+        FakeRead(ForLet(None), _3);
+        StorageLive(_6);
+        StorageLive(_7);
+        _7 = &mut ((*_1).0: Z);
+        _6 = <Z as Zeroize>::zeroize(move _7) -> [return: bb3, unwind: bb6];
+    }
+
+    bb3: {
+        StorageDead(_7);
+        StorageDead(_6);
+        StorageLive(_8);
+        StorageLive(_9);
+        _9 = copy _3;
+        StorageLive(_10);
+        StorageLive(_11);
+        _11 = &((*_1).0: Z);
+        StorageLive(_12);
+        _12 = copy _2;
+        _10 = <Z as Zeroize>::prover_rw_resume_scalar_observe(move _11, move _12) -> [return: bb4, unwind: bb6];
+    }
+
+    bb4: {
+        StorageDead(_12);
+        StorageDead(_11);
+        _8 = record(move _9, move _10) -> [return: bb5, unwind: bb6];
+    }
+
+    bb5: {
+        StorageDead(_10);
+        StorageDead(_9);
+        StorageDead(_8);
+        _0 = const ();
+        StorageDead(_3);
+        StorageDead(_2);
+        return;
+    }
+
+    bb6 (cleanup): {
+        resume;
+    }
+}

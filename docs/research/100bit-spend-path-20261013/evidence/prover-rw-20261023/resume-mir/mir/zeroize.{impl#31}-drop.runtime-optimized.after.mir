@@ -1,0 +1,135 @@
+// MIR for `<impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:788:1: 790:16>::drop` after runtime-optimized
+
+fn <impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:788:1: 790:16>::drop(_1: &mut Zeroizing<Z>) -> () {
+    debug self => _1;
+    let mut _0: ();
+    let _2: usize;
+    let mut _4: &Z;
+    let _5: ();
+    let mut _6: &mut Z;
+    let mut _7: ProverRwResumeScalar::Observation;
+    let mut _8: &Z;
+    scope 1 {
+        debug j => _2;
+        let _3: ProverRwResumeScalar::Observation;
+        scope 2 {
+            debug before => _3;
+            scope 4 (inlined record) {
+                let _10: ProverRwResumeScalar::Event;
+                let mut _11: *mut u8;
+                let mut _12: *mut ProverRwResumeScalar::Event;
+                let mut _13: *mut ProverRwResumeScalar::Event;
+                let mut _14: *mut ProverRwResumeScalar::Event;
+                let mut _15: *mut bool;
+                scope 5 {
+                }
+            }
+        }
+    }
+    scope 3 (inlined coordinate) {
+        let mut _9: *mut usize;
+    }
+
+    bb0: {
+        StorageLive(_9);
+        _9 = const {alloc5: *mut usize};
+        _2 = copy (*_9);
+        StorageDead(_9);
+        StorageLive(_4);
+        _4 = &((*_1).0: Z);
+        _3 = <Z as Zeroize>::prover_rw_resume_scalar_observe(move _4, copy _2) -> [return: bb1, unwind continue];
+    }
+
+    bb1: {
+        StorageDead(_4);
+        StorageLive(_6);
+        _6 = &mut ((*_1).0: Z);
+        _5 = <Z as Zeroize>::zeroize(move _6) -> [return: bb2, unwind continue];
+    }
+
+    bb2: {
+        StorageDead(_6);
+        StorageLive(_7);
+        StorageLive(_8);
+        _8 = &((*_1).0: Z);
+        _7 = <Z as Zeroize>::prover_rw_resume_scalar_observe(move _8, move _2) -> [return: bb3, unwind continue];
+    }
+
+    bb3: {
+        StorageDead(_8);
+        StorageLive(_10);
+        StorageLive(_11);
+        _10 = Event { before: copy _3, after: copy _7 };
+        _11 = const {alloc6: *mut u8};
+        switchInt(copy (*_11)) -> [0: bb8, 1: bb7, 2: bb6, otherwise: bb5];
+    }
+
+    bb4: {
+        StorageDead(_11);
+        StorageDead(_10);
+        StorageDead(_7);
+        return;
+    }
+
+    bb5: {
+        StorageLive(_15);
+        _15 = const {alloc7: *mut bool};
+        (*_15) = const true;
+        StorageDead(_15);
+        goto -> bb4;
+    }
+
+    bb6: {
+        StorageLive(_14);
+        _14 = const {alloc12: *mut Event};
+        (*_14) = copy _10;
+        StorageDead(_14);
+        (*_11) = const 3_u8;
+        goto -> bb4;
+    }
+
+    bb7: {
+        StorageLive(_13);
+        _13 = const {alloc10: *mut Event};
+        (*_13) = copy _10;
+        StorageDead(_13);
+        (*_11) = const 2_u8;
+        goto -> bb4;
+    }
+
+    bb8: {
+        StorageLive(_12);
+        _12 = const {alloc8: *mut Event};
+        (*_12) = copy _10;
+        StorageDead(_12);
+        (*_11) = const 1_u8;
+        goto -> bb4;
+    }
+}
+
+alloc12 (static: E2, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc10 (static: E1, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc8 (static: E0, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc7 (static: OVERFLOW, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc6 (static: COUNT, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc5 (static: J, size: 8, align: 8) {
+    00 00 00 00 00 00 00 00                         │ ........
+}

@@ -1,0 +1,141 @@
+{
+  "schema": "ProverRwResumeMIR-role-association-v1",
+  "input_sha256": {
+    "prover_rw_resume_scalar.Instrumented-{impl#1}-draw.ElaborateDrops.after.mir": "11d2d0070c1e6f5189c44e128672b02532be8cc5daf9afd732f6e4f674618702",
+    "prover_rw_resume_scalar.Instrumented-{impl#2}-resume.ElaborateDrops.after.mir": "f4de80190e30bf3929a1b1d03e1d16eaf8bddd92eb4733a44e66a49528478a76",
+    "prover_rw_resume_scalar.Instrumented-run.ElaborateDrops.after.mir": "069a02aaebb92be6163c330b7487b63ac9e51dd7a7992fa4668f7883a94cd2bd",
+    "zeroize.{impl#31}-drop.ElaborateDrops.after.mir": "c15493043fa8b1275fd29cee4273ce83c41c19640b1917086f357bc692c8d60c",
+    "zeroize.{impl#31}-drop.nll.0.mir": "8ea738143a6666eec37dcb786ae1b42bae3b78aad9dc24acc99af3ca721fa207",
+    "zeroize.{impl#5}-prover_rw_resume_scalar_observe.ElaborateDrops.after.mir": "d880d567d892d88c3a7ff00192577ed0c4e8faa9dbc1e336bb8de952de6f7897",
+    "zeroize.{impl#1}-prover_rw_resume_scalar_byte.runtime-optimized.after.mir": "e154b54d034ff6b8c0b24f12f846690aa454b773404a4072db550f44d603557e",
+    "zeroize.ProverRwResumeScalar-record.ElaborateDrops.after.mir": "9629f955cac7621c4c9ce0c3649635c342c4303cdae4a5bcd722467269b1bd46",
+    "core.ptr-drop_in_place.Instrumented__StateOnlyAttemptSecrets.AddMovesForPackedDrops.before.mir": "7f7e75716510b0386ae26adbd423a7e08c25f5bfac306b95697690dac6345f35"
+  },
+  "draw": {
+    "bytes": "_2 -> _9 -> return0.bytes",
+    "outcome": "fill return _4 copied to _10 -> return0.outcome",
+    "normal_drop_flags": "none retained; normal moved-from drops eliminated",
+    "blocks": {
+      "bb0": "        StorageLive(_2);\n        StorageLive(_3);\n        _3 = [const 0_u8; 64];\n        _2 = zeroize::Zeroizing::<[u8; 64]>::new(move _3) -> [return: bb1, unwind continue];\n",
+      "bb1": "        StorageDead(_3);\n        StorageLive(_4);\n        StorageLive(_5);\n        StorageLive(_6);\n        StorageLive(_7);\n        _7 = &mut _2;\n        _6 = <zeroize::Zeroizing<[u8; 64]> as AsMut<[u8]>>::as_mut(move _7) -> [return: bb2, unwind: bb6];\n",
+      "bb2": "        _5 = &mut (*_6);\n        StorageDead(_7);\n        _4 = fill(move _5) -> [return: bb3, unwind: bb6];\n",
+      "bb3": "        StorageDead(_5);\n        StorageDead(_6);\n        StorageLive(_8);\n        _8 = move _1;\n        StorageLive(_9);\n        _9 = move _2;\n        StorageLive(_10);\n        _10 = copy _4;\n        _0 = Instrumented::ProverRwResumeScalarDraw { request: move _8, bytes: move _9, outcome: move _10 };\n        StorageDead(_10);\n        goto -> bb4;\n",
+      "bb6": "        drop(_2) -> [return: bb7, unwind terminate(cleanup)];\n"
+    }
+  },
+  "resume": {
+    "request": "_2",
+    "bytes": "_3",
+    "field": "_13",
+    "leaf": "_15",
+    "owner": "_56 -> _55.Some -> _54.Ok -> return0.1",
+    "success_blocks": [
+      "bb21",
+      "bb22",
+      "bb23",
+      "bb24",
+      "bb25",
+      "bb26",
+      "bb40",
+      "bb41",
+      "bb42",
+      "bb43",
+      "bb60",
+      "bb58",
+      "bb44"
+    ],
+    "rejection_drops": [
+      "bb36:_15",
+      "bb37:_13",
+      "bb38:_3"
+    ],
+    "error_blocks": [
+      "bb3",
+      "bb4",
+      "bb5",
+      "bb42"
+    ],
+    "normal_drop_flags": "none retained; static move-path elimination, not reconstructed flags"
+  },
+  "run": {
+    "owner": "result_11.Ok.Some -> owner_35 -> temp_51 -> mem::drop",
+    "phase": "bb12 before owner move bb16",
+    "copies": [
+      "bb20:_35.0[j] -> _37",
+      "bb22:field via _41 -> _40",
+      "bb24:leaf via _46 -> _45"
+    ],
+    "raw_boolean_assignments": [
+      "        _57 = const false;",
+      "        _54 = const false;",
+      "        _55 = const false;",
+      "        _56 = const false;",
+      "        _58 = const false;",
+      "        _54 = const true;",
+      "        _55 = const true;",
+      "        _56 = const true;",
+      "        _58 = const true;",
+      "        _58 = const false;",
+      "        _57 = const true;",
+      "        _57 = const false;",
+      "        _57 = const false;",
+      "        _54 = const false;",
+      "        _55 = const false;",
+      "        _56 = const false;",
+      "        _58 = const false;",
+      "        _55 = const false;"
+    ],
+    "raw_flag_blocks": {
+      "bb0": "        _57 = const false;\n        _54 = const false;\n        _55 = const false;\n        _56 = const false;\n        _58 = const false;\n        StorageLive(_5);\n        StorageLive(_6);\n        _6 = copy _1;\n        StorageLive(_7);\n        _7 = copy _2;\n        _5 = Instrumented::ProverRwResumeScalarRequest { mask_nonce: move _6, retry: move _7 };\n        StorageDead(_7);\n        StorageDead(_6);\n        StorageLive(_8);\n        StorageLive(_9);\n        _9 = move _5;\n        _8 = Instrumented::ProverRwResumeScalarRequest::draw(move _9) -> [return: bb1, unwind continue];\n",
+      "bb2": "        StorageDead(_13);\n        PlaceMention(_12);\n        StorageLive(_10);\n        _10 = move (_12.0: Instrumented::ProverRwResumeScalarControl);\n        StorageLive(_11);\n        _54 = const true;\n        _55 = const true;\n        _56 = const true;\n        _58 = const true;\n        _11 = move (_12.1: std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>);\n        goto -> bb38;\n",
+      "bb16": "        StorageLive(_35);\n        _58 = const false;\n        _57 = const true;\n        _35 = move ((((_11 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>) as Some).0: Instrumented::StateOnlyAttemptSecrets);\n        StorageLive(_36);\n        StorageLive(_37);\n        StorageLive(_38);\n        _38 = copy _3;\n        _39 = Lt(copy _38, const 32_usize);\n        assert(move _39, \"index out of bounds: the length is {} but the index is {}\", const 32_usize, copy _38) -> [success: bb20, unwind: bb31];\n",
+      "bb24": "        _45 = copy (*_46)[_48];\n        _36 = ResultProjection::Owner(move _37, move _40, move _45);\n        StorageDead(_45);\n        StorageDead(_40);\n        StorageDead(_37);\n        StorageDead(_48);\n        StorageDead(_46);\n        StorageDead(_43);\n        StorageDead(_41);\n        StorageDead(_38);\n        StorageLive(_50);\n        StorageLive(_51);\n        _57 = const false;\n        _51 = move _35;\n        _50 = std::mem::drop::<Instrumented::StateOnlyAttemptSecrets>(move _51) -> [return: bb25, unwind: bb30];\n",
+      "bb26": "        _57 = const false;\n        StorageDead(_35);\n        goto -> bb27;\n",
+      "bb28": "        _54 = const false;\n        _55 = const false;\n        _56 = const false;\n        _58 = const false;\n        StorageDead(_11);\n        StorageDead(_10);\n        goto -> bb29;\n",
+      "bb65": "        drop(_35) -> [return: bb32, unwind terminate(cleanup)];\n",
+      "bb66": "        switchInt(copy _57) -> [0: bb32, otherwise: bb65];\n",
+      "bb69": "        drop(((((_11 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>) as Some).0: Instrumented::StateOnlyAttemptSecrets)) -> [return: bb34, unwind terminate(cleanup)];\n",
+      "bb70": "        switchInt(copy _58) -> [0: bb34, otherwise: bb69];\n"
+    },
+    "flag_roles": {
+      "_57": "owner_35 initialized; false before move to drop argument",
+      "_58": "result_11.Ok.Some payload initialized; false at owner move",
+      "_54/_55/_56": "retained elaborator scaffolding; exact assignments/branches in full MIR; no invented owner role"
+    }
+  },
+  "drop": {
+    "active_place": "(*self_1).0",
+    "NLL_loans": [
+      {
+        "borrow": "bw0",
+        "region": "'?3",
+        "points": "bb1[3..=6]",
+        "kind": "shared pre"
+      },
+      {
+        "borrow": "bw1",
+        "region": "'?4",
+        "points": "bb2[5..=6]",
+        "kind": "mutable zeroize"
+      },
+      {
+        "borrow": "bw2",
+        "region": "'?5",
+        "points": "bb3[7..=10]",
+        "kind": "shared post"
+      }
+    ],
+    "copy_return": "Observation usize/u8/u8; no source reference escapes",
+    "record_static_allocations": {
+      "alloc12": "E2",
+      "alloc10": "E1",
+      "alloc8": "E0",
+      "alloc7": "OVERFLOW",
+      "alloc6": "COUNT"
+    }
+  },
+  "established": "current pinned compiler/source normal-path move/drop/loan/static role association only",
+  "unwind": "full built/NLL/drop-elaborated/optimized dumps retained; not proved",
+  "native_projection": false,
+  "full_axioms": "N/A: no new Lean declarations"
+}

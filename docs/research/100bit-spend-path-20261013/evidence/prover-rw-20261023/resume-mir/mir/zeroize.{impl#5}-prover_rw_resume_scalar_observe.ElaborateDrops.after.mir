@@ -1,0 +1,209 @@
+// MIR for `<impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:426:1: 428:16>::prover_rw_resume_scalar_observe` after ElaborateDrops
+
+fn <impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:426:1: 428:16>::prover_rw_resume_scalar_observe(_1: &[Z; N], _2: usize) -> Observation {
+    debug self => _1;
+    debug j => _2;
+    let mut _0: ProverRwResumeScalar::Observation;
+    let _3: ();
+    let mut _4: bool;
+    let mut _5: bool;
+    let mut _6: bool;
+    let mut _7: usize;
+    let mut _8: !;
+    let _9: u8;
+    let mut _10: core::option::Option<u8>;
+    let mut _11: &Z;
+    let _12: usize;
+    let mut _13: bool;
+    let mut _14: isize;
+    let _15: u8;
+    let mut _16: !;
+    let mut _18: bool;
+    let mut _19: core::option::Option<u8>;
+    let mut _20: &Z;
+    let _21: usize;
+    let mut _22: usize;
+    let mut _23: (usize, bool);
+    let mut _24: bool;
+    let mut _25: isize;
+    let mut _27: !;
+    let mut _28: u8;
+    let mut _29: u8;
+    scope 1 {
+        debug low => _9;
+        let _17: u8;
+        let _26: u8;
+        scope 3 {
+            debug high => _17;
+        }
+        scope 4 {
+            debug byte => _26;
+        }
+    }
+    scope 2 {
+        debug byte => _15;
+    }
+
+    bb0: {
+        StorageLive(_3);
+        StorageLive(_4);
+        _4 = Ne(const N, const 32_usize);
+        switchInt(move _4) -> [0: bb2, otherwise: bb1];
+    }
+
+    bb1: {
+        StorageLive(_5);
+        _5 = Ne(const N, const 64_usize);
+        switchInt(move _5) -> [0: bb2, otherwise: bb4];
+    }
+
+    bb2: {
+        StorageLive(_6);
+        StorageLive(_7);
+        _7 = copy _2;
+        _6 = Ge(move _7, const 32_usize);
+        switchInt(move _6) -> [0: bb5, otherwise: bb3];
+    }
+
+    bb3: {
+        StorageDead(_7);
+        goto -> bb4;
+    }
+
+    bb4: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_6);
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageDead(_3);
+        goto -> bb20;
+    }
+
+    bb5: {
+        StorageDead(_7);
+        _3 = const ();
+        StorageDead(_6);
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageDead(_3);
+        StorageLive(_9);
+        StorageLive(_10);
+        StorageLive(_11);
+        StorageLive(_12);
+        _12 = copy _2;
+        _13 = Lt(copy _12, const N);
+        assert(move _13, "index out of bounds: the length is {} but the index is {}", const N, copy _12) -> [success: bb6, unwind continue];
+    }
+
+    bb6: {
+        _11 = &(*_1)[_12];
+        _10 = <Z as Zeroize>::prover_rw_resume_scalar_byte(move _11) -> [return: bb7, unwind continue];
+    }
+
+    bb7: {
+        StorageDead(_11);
+        PlaceMention(_10);
+        _14 = discriminant(_10);
+        switchInt(move _14) -> [0: bb9, 1: bb10, otherwise: bb8];
+    }
+
+    bb8: {
+        unreachable;
+    }
+
+    bb9: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_12);
+        StorageDead(_10);
+        goto -> bb19;
+    }
+
+    bb10: {
+        StorageLive(_15);
+        _15 = copy ((_10 as Some).0: u8);
+        _9 = copy _15;
+        StorageDead(_15);
+        StorageDead(_12);
+        StorageDead(_10);
+        StorageLive(_17);
+        StorageLive(_18);
+        _18 = Eq(const N, const 64_usize);
+        switchInt(move _18) -> [0: bb12, otherwise: bb11];
+    }
+
+    bb11: {
+        StorageLive(_19);
+        StorageLive(_20);
+        StorageLive(_21);
+        StorageLive(_22);
+        _22 = copy _2;
+        _23 = AddWithOverflow(copy _22, const 32_usize);
+        assert(!move (_23.1: bool), "attempt to compute `{} + {}`, which would overflow", move _22, const 32_usize) -> [success: bb13, unwind continue];
+    }
+
+    bb12: {
+        _17 = const 0_u8;
+        goto -> bb18;
+    }
+
+    bb13: {
+        _21 = move (_23.0: usize);
+        StorageDead(_22);
+        _24 = Lt(copy _21, const N);
+        assert(move _24, "index out of bounds: the length is {} but the index is {}", const N, copy _21) -> [success: bb14, unwind continue];
+    }
+
+    bb14: {
+        _20 = &(*_1)[_21];
+        _19 = <Z as Zeroize>::prover_rw_resume_scalar_byte(move _20) -> [return: bb15, unwind continue];
+    }
+
+    bb15: {
+        StorageDead(_20);
+        PlaceMention(_19);
+        _25 = discriminant(_19);
+        switchInt(move _25) -> [0: bb16, 1: bb17, otherwise: bb8];
+    }
+
+    bb16: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_21);
+        StorageDead(_19);
+        StorageDead(_18);
+        StorageDead(_17);
+        goto -> bb19;
+    }
+
+    bb17: {
+        StorageLive(_26);
+        _26 = copy ((_19 as Some).0: u8);
+        _17 = copy _26;
+        StorageDead(_26);
+        StorageDead(_21);
+        StorageDead(_19);
+        goto -> bb18;
+    }
+
+    bb18: {
+        StorageDead(_18);
+        StorageLive(_28);
+        _28 = copy _9;
+        StorageLive(_29);
+        _29 = copy _17;
+        _0 = Observation { len: const N, low: move _28, high: move _29 };
+        StorageDead(_29);
+        StorageDead(_28);
+        StorageDead(_17);
+        StorageDead(_9);
+        goto -> bb20;
+    }
+
+    bb19: {
+        StorageDead(_9);
+        goto -> bb20;
+    }
+
+    bb20: {
+        return;
+    }
+}

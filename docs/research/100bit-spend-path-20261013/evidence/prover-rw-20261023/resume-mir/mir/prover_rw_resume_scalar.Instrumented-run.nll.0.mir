@@ -1,0 +1,461 @@
+// MIR for `Instrumented::run` 0 nll
+
+| Free Region Mapping
+| '?0 | Global | ['?0, '?1]
+| '?1 | Local | ['?1]
+|
+| Inferred Region Values
+| '?0 | U0 | {bb0[0..=12], bb1[0..=5], bb2[0..=6], bb3[0..=4], bb4[0..=1], bb5[0], bb6[0..=1], bb7[0..=10], bb8[0..=8], bb9[0..=6], bb10[0..=1], bb11[0..=1], bb12[0], bb13[0..=1], bb14[0..=7], bb15[0..=6], bb16[0..=1], bb17[0..=1], bb18[0], bb19[0], bb20[0..=1], bb21[0], bb22[0..=8], bb23[0..=1], bb24[0..=1], bb25[0..=7], bb26[0..=5], bb27[0..=5], bb28[0..=5], bb29[0..=5], bb30[0..=14], bb31[0..=4], bb32[0..=1], bb33[0..=11], bb34[0..=2], bb35[0..=2], bb36[0], bb37[0], bb38[0], bb39[0], bb40[0], bb41[0], '?0, '?1}
+| '?1 | U0 | {bb0[0..=12], bb1[0..=5], bb2[0..=6], bb3[0..=4], bb4[0..=1], bb5[0], bb6[0..=1], bb7[0..=10], bb8[0..=8], bb9[0..=6], bb10[0..=1], bb11[0..=1], bb12[0], bb13[0..=1], bb14[0..=7], bb15[0..=6], bb16[0..=1], bb17[0..=1], bb18[0], bb19[0], bb20[0..=1], bb21[0], bb22[0..=8], bb23[0..=1], bb24[0..=1], bb25[0..=7], bb26[0..=5], bb27[0..=5], bb28[0..=5], bb29[0..=5], bb30[0..=14], bb31[0..=4], bb32[0..=1], bb33[0..=11], bb34[0..=2], bb35[0..=2], bb36[0], bb37[0], bb38[0], bb39[0], bb40[0], bb41[0], '?1}
+| '?2 | U0 | {bb9[3..=6], bb11[0]}
+| '?3 | U0 | {bb26[4..=5], bb27[0..=5], bb28[0]}
+| '?4 | U0 | {bb28[4..=5], bb29[0..=5], bb30[0]}
+| '?5 | U0 | {bb9[4..=6], bb11[0]}
+| '?6 | U0 | {bb27[0..=5], bb28[0]}
+| '?7 | U0 | {bb26[5], bb27[0..=5], bb28[0]}
+| '?8 | U0 | {bb29[0..=5], bb30[0]}
+| '?9 | U0 | {bb28[5], bb29[0..=5], bb30[0]}
+| '?10 | U0 | {bb26[5], bb27[0..=5], bb28[0]}
+| '?11 | U0 | {bb28[5], bb29[0..=5], bb30[0]}
+|
+| Inference Constraints
+| '?0 live at {bb0[0..=12], bb1[0..=5], bb2[0..=6], bb3[0..=4], bb4[0..=1], bb5[0], bb6[0..=1], bb7[0..=10], bb8[0..=8], bb9[0..=6], bb10[0..=1], bb11[0..=1], bb12[0], bb13[0..=1], bb14[0..=7], bb15[0..=6], bb16[0..=1], bb17[0..=1], bb18[0], bb19[0], bb20[0..=1], bb21[0], bb22[0..=8], bb23[0..=1], bb24[0..=1], bb25[0..=7], bb26[0..=5], bb27[0..=5], bb28[0..=5], bb29[0..=5], bb30[0..=14], bb31[0..=4], bb32[0..=1], bb33[0..=11], bb34[0..=2], bb35[0..=2], bb36[0], bb37[0], bb38[0], bb39[0], bb40[0], bb41[0]}
+| '?1 live at {bb0[0..=12], bb1[0..=5], bb2[0..=6], bb3[0..=4], bb4[0..=1], bb5[0], bb6[0..=1], bb7[0..=10], bb8[0..=8], bb9[0..=6], bb10[0..=1], bb11[0..=1], bb12[0], bb13[0..=1], bb14[0..=7], bb15[0..=6], bb16[0..=1], bb17[0..=1], bb18[0], bb19[0], bb20[0..=1], bb21[0], bb22[0..=8], bb23[0..=1], bb24[0..=1], bb25[0..=7], bb26[0..=5], bb27[0..=5], bb28[0..=5], bb29[0..=5], bb30[0..=14], bb31[0..=4], bb32[0..=1], bb33[0..=11], bb34[0..=2], bb35[0..=2], bb36[0], bb37[0], bb38[0], bb39[0], bb40[0], bb41[0]}
+| '?2 live at {bb9[3]}
+| '?3 live at {bb26[4]}
+| '?4 live at {bb28[4]}
+| '?5 live at {bb9[4..=6], bb11[0]}
+| '?6 live at {bb27[0..=5], bb28[0]}
+| '?7 live at {bb26[5]}
+| '?8 live at {bb29[0..=5], bb30[0]}
+| '?9 live at {bb28[5]}
+| '?10 live at {bb26[5]}
+| '?11 live at {bb28[5]}
+| '?2: '?5 due to Boring at Single(bb9[3]) (observe.rs:10:26: 10:33 (#0)
+| '?3: '?7 due to Boring at Single(bb26[4]) (observe.rs:18:37: 18:61 (#0)
+| '?4: '?9 due to Boring at Single(bb28[4]) (observe.rs:18:65: 18:85 (#0)
+| '?7: '?10 due to Boring at Single(bb26[5]) (observe.rs:18:37: 18:61 (#0)
+| '?9: '?11 due to Boring at Single(bb28[5]) (observe.rs:18:65: 18:85 (#0)
+| '?10: '?6 due to Boring at Single(bb26[5]) (observe.rs:18:37: 18:61 (#0)
+| '?11: '?8 due to Boring at Single(bb28[5]) (observe.rs:18:65: 18:85 (#0)
+|
+| Borrows
+| bw0: issued at bb9[3] in '?2
+| bw1: issued at bb26[4] in '?3
+| bw2: issued at bb28[4] in '?4
+|
+fn Instrumented::run(_1: [u8; 32], _2: usize, _3: usize, _4: fn(bool)) -> Projection {
+    debug nonce => _1;                   // in scope 0 at observe.rs:2:12: 2:17
+    debug entry => _2;                   // in scope 0 at observe.rs:2:26: 2:31
+    debug j => _3;                       // in scope 0 at observe.rs:2:38: 2:39
+    debug phase => _4;                   // in scope 0 at observe.rs:2:46: 2:51
+    let mut _0: Projection;              // return place in scope 0 at observe.rs:2:65: 2:82
+    let _5: Instrumented::ProverRwResumeScalarRequest; // in scope 0 at observe.rs:3:9: 3:16
+    let mut _6: [u8; 32];                // in scope 0 at observe.rs:3:57: 3:62
+    let mut _7: usize;                   // in scope 0 at observe.rs:3:69: 3:74
+    let mut _9: Instrumented::ProverRwResumeScalarRequest; // in scope 0 at observe.rs:4:14: 4:21
+    let mut _12: (Instrumented::ProverRwResumeScalarControl, std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>); // in scope 0 at observe.rs:5:26: 5:39
+    let mut _13: Instrumented::ProverRwResumeScalarDraw; // in scope 0 at observe.rs:5:26: 5:30
+    let mut _15: isize;                  // in scope 0 at observe.rs:7:9: 7:48
+    let mut _17: (usize, u8);            // in scope 0 at observe.rs:7:55: 7:86
+    let mut _18: usize;                  // in scope 0 at observe.rs:7:56: 7:66
+    let mut _19: u8;                     // in scope 0 at observe.rs:7:67: 7:85
+    let _20: usize;                      // in scope 0 at observe.rs:7:83: 7:84
+    let mut _21: bool;                   // in scope 0 at observe.rs:7:67: 7:85
+    let mut _23: &std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>; // in scope 0 at observe.rs:10:26: 10:33
+    let mut _24: isize;                  // in scope 0 at observe.rs:10:37: 10:44
+    let mut _25: isize;                  // in scope 0 at observe.rs:10:34: 10:45
+    let _26: ();                         // in scope 0 at observe.rs:11:5: 11:19
+    let mut _27: fn(bool);               // in scope 0 at observe.rs:11:5: 11:10
+    let mut _28: bool;                   // in scope 0 at observe.rs:11:11: 11:18
+    let mut _30: isize;                  // in scope 0 at observe.rs:13:13: 13:52
+    let mut _31: isize;                  // in scope 0 at observe.rs:15:12: 15:16
+    let mut _32: isize;                  // in scope 0 at observe.rs:13:9: 13:53
+    let mut _34: getrandom::Error;       // in scope 0 at observe.rs:13:83: 13:88
+    let mut _37: u8;                     // in scope 0 at observe.rs:18:17: 18:36
+    let _38: usize;                      // in scope 0 at observe.rs:18:34: 18:35
+    let mut _39: bool;                   // in scope 0 at observe.rs:18:17: 18:36
+    let mut _40: u8;                     // in scope 0 at observe.rs:18:37: 18:64
+    let mut _41: &[u8; 32];              // in scope 0 at observe.rs:18:37: 18:61
+    let mut _42: &zeroize::Zeroizing<[u8; 32]>; // in scope 0 at observe.rs:18:37: 18:61
+    let _43: usize;                      // in scope 0 at observe.rs:18:62: 18:63
+    let mut _44: bool;                   // in scope 0 at observe.rs:18:37: 18:64
+    let mut _45: u8;                     // in scope 0 at observe.rs:18:65: 18:88
+    let mut _46: &[u8; 32];              // in scope 0 at observe.rs:18:65: 18:85
+    let mut _47: &zeroize::Zeroizing<[u8; 32]>; // in scope 0 at observe.rs:18:65: 18:85
+    let _48: usize;                      // in scope 0 at observe.rs:18:86: 18:87
+    let mut _49: bool;                   // in scope 0 at observe.rs:18:65: 18:88
+    let _50: ();                         // in scope 0 at observe.rs:20:13: 20:24
+    let mut _51: Instrumented::StateOnlyAttemptSecrets; // in scope 0 at observe.rs:20:18: 20:23
+    let mut _52: std::option::Option<(usize, u8)>; // in scope 0 at observe.rs:24:24: 24:29
+    let mut _53: ResultProjection;       // in scope 0 at observe.rs:24:30: 24:36
+    scope 1 {
+        debug request => _5;             // in scope 1 at observe.rs:3:9: 3:16
+        let _8: Instrumented::ProverRwResumeScalarDraw; // in scope 1 at observe.rs:4:9: 4:13
+        scope 2 {
+            debug draw => _8;            // in scope 2 at observe.rs:4:9: 4:13
+            let _10: Instrumented::ProverRwResumeScalarControl; // in scope 2 at observe.rs:5:10: 5:17
+            let _11: std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>; // in scope 2 at observe.rs:5:18: 5:24
+            scope 3 {
+                debug control => _10;    // in scope 3 at observe.rs:5:10: 5:17
+                debug result => _11;     // in scope 3 at observe.rs:5:18: 5:24
+                let _14: std::option::Option<(usize, u8)>; // in scope 3 at observe.rs:6:9: 6:14
+                let _16: Instrumented::ProverRwResumeScalarRequest; // in scope 3 at observe.rs:7:43: 7:47
+                scope 4 {
+                    debug retry => _14;  // in scope 4 at observe.rs:6:9: 6:14
+                    let _22: bool;       // in scope 4 at observe.rs:10:9: 10:16
+                    scope 6 {
+                        debug success => _22; // in scope 6 at observe.rs:10:9: 10:16
+                        let _29: ResultProjection; // in scope 6 at observe.rs:12:9: 12:15
+                        let _33: getrandom::Error; // in scope 6 at observe.rs:13:46: 13:51
+                        let _35: Instrumented::StateOnlyAttemptSecrets; // in scope 6 at observe.rs:16:17: 16:22
+                        scope 8 {
+                            debug result => _29; // in scope 8 at observe.rs:12:9: 12:15
+                        }
+                        scope 9 {
+                            debug error => _33; // in scope 9 at observe.rs:13:46: 13:51
+                        }
+                        scope 10 {
+                            debug owner => _35; // in scope 10 at observe.rs:16:17: 16:22
+                            let _36: ResultProjection; // in scope 10 at observe.rs:17:17: 17:27
+                            scope 11 {
+                                debug projection => _36; // in scope 11 at observe.rs:17:17: 17:27
+                            }
+                        }
+                    }
+                    scope 7 {
+                    }
+                }
+                scope 5 {
+                    debug next => _16;   // in scope 5 at observe.rs:7:43: 7:47
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_5);                 // scope 0 at observe.rs:3:9: 3:16
+        StorageLive(_6);                 // scope 0 at observe.rs:3:57: 3:62
+        _6 = copy _1;                    // scope 0 at observe.rs:3:57: 3:62
+        StorageLive(_7);                 // scope 0 at observe.rs:3:69: 3:74
+        _7 = copy _2;                    // scope 0 at observe.rs:3:69: 3:74
+        _5 = Instrumented::ProverRwResumeScalarRequest { mask_nonce: move _6, retry: move _7 }; // scope 0 at observe.rs:3:17: 3:75
+        StorageDead(_7);                 // scope 0 at observe.rs:3:74: 3:75
+        StorageDead(_6);                 // scope 0 at observe.rs:3:74: 3:75
+        FakeRead(ForLet(None), _5);      // scope 0 at observe.rs:3:9: 3:16
+        StorageLive(_8);                 // scope 1 at observe.rs:4:9: 4:13
+        StorageLive(_9);                 // scope 1 at observe.rs:4:14: 4:21
+        _9 = move _5;                    // scope 1 at observe.rs:4:14: 4:21
+        _8 = Instrumented::ProverRwResumeScalarRequest::draw(move _9) -> [return: bb1, unwind: bb41]; // scope 1 at observe.rs:4:14: 4:28
+                                         // mir::ConstOperand
+                                         // + span: observe.rs:4:22: 4:26
+                                         // + const_: Const { ty: fn(Instrumented::ProverRwResumeScalarRequest) -> Instrumented::ProverRwResumeScalarDraw {Instrumented::ProverRwResumeScalarRequest::draw}, val: Value(Instrumented::ProverRwResumeScalarRequest::draw) }
+    }
+
+    bb1: {
+        StorageDead(_9);                 // scope 1 at observe.rs:4:27: 4:28
+        FakeRead(ForLet(None), _8);      // scope 1 at observe.rs:4:9: 4:13
+        StorageLive(_12);                // scope 2 at observe.rs:5:26: 5:39
+        StorageLive(_13);                // scope 2 at observe.rs:5:26: 5:30
+        _13 = move _8;                   // scope 2 at observe.rs:5:26: 5:30
+        _12 = Instrumented::ProverRwResumeScalarDraw::resume(move _13) -> [return: bb2, unwind: bb39]; // scope 2 at observe.rs:5:26: 5:39
+                                         // mir::ConstOperand
+                                         // + span: observe.rs:5:31: 5:37
+                                         // + const_: Const { ty: fn(Instrumented::ProverRwResumeScalarDraw) -> (Instrumented::ProverRwResumeScalarControl, Result<Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>) {Instrumented::ProverRwResumeScalarDraw::resume}, val: Value(Instrumented::ProverRwResumeScalarDraw::resume) }
+    }
+
+    bb2: {
+        StorageDead(_13);                // scope 2 at observe.rs:5:38: 5:39
+        PlaceMention(_12);               // scope 2 at observe.rs:5:26: 5:39
+        StorageLive(_10);                // scope 2 at observe.rs:5:10: 5:17
+        _10 = move (_12.0: Instrumented::ProverRwResumeScalarControl); // scope 2 at observe.rs:5:10: 5:17
+        StorageLive(_11);                // scope 2 at observe.rs:5:18: 5:24
+        _11 = move (_12.1: std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>); // scope 2 at observe.rs:5:18: 5:24
+        drop(_12) -> [return: bb3, unwind: bb38]; // scope 2 at observe.rs:5:39: 5:40
+    }
+
+    bb3: {
+        StorageDead(_12);                // scope 2 at observe.rs:5:39: 5:40
+        StorageLive(_14);                // scope 3 at observe.rs:6:9: 6:14
+        PlaceMention(_10);               // scope 3 at observe.rs:6:21: 6:28
+        _15 = discriminant(_10);         // scope 3 at observe.rs:6:21: 6:28
+        switchInt(move _15) -> [0: bb5, 1: bb6, otherwise: bb4]; // scope 3 at observe.rs:6:15: 6:28
+    }
+
+    bb4: {
+        FakeRead(ForMatchedPlace(None), _10); // scope 3 at observe.rs:6:21: 6:28
+        unreachable;                     // scope 3 at observe.rs:6:21: 6:28
+    }
+
+    bb5: {
+        falseEdge -> [real: bb7, imaginary: bb6]; // scope 3 at observe.rs:7:9: 7:48
+    }
+
+    bb6: {
+        _14 = Option::<(usize, u8)>::None; // scope 3 at observe.rs:8:44: 8:48
+        goto -> bb9;                     // scope 3 at observe.rs:8:44: 8:48
+    }
+
+    bb7: {
+        StorageLive(_16);                // scope 3 at observe.rs:7:43: 7:47
+        _16 = move ((_10 as More).0: Instrumented::ProverRwResumeScalarRequest); // scope 3 at observe.rs:7:43: 7:47
+        StorageLive(_17);                // scope 5 at observe.rs:7:55: 7:86
+        StorageLive(_18);                // scope 5 at observe.rs:7:56: 7:66
+        _18 = copy (_16.1: usize);       // scope 5 at observe.rs:7:56: 7:66
+        StorageLive(_19);                // scope 5 at observe.rs:7:67: 7:85
+        StorageLive(_20);                // scope 5 at observe.rs:7:83: 7:84
+        _20 = copy _3;                   // scope 5 at observe.rs:7:83: 7:84
+        FakeRead(ForIndex, (_16.0: [u8; 32])); // scope 5 at observe.rs:7:67: 7:85
+        _21 = Lt(copy _20, const 32_usize); // scope 5 at observe.rs:7:67: 7:85
+        assert(move _21, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _20) -> [success: bb8, unwind: bb38]; // scope 5 at observe.rs:7:67: 7:85
+    }
+
+    bb8: {
+        _19 = copy (_16.0: [u8; 32])[_20]; // scope 5 at observe.rs:7:67: 7:85
+        _17 = (move _18, move _19);      // scope 5 at observe.rs:7:55: 7:86
+        StorageDead(_19);                // scope 5 at observe.rs:7:85: 7:86
+        StorageDead(_18);                // scope 5 at observe.rs:7:85: 7:86
+        _14 = Option::<(usize, u8)>::Some(move _17); // scope 5 at observe.rs:7:50: 7:87
+        StorageDead(_17);                // scope 5 at observe.rs:7:86: 7:87
+        StorageDead(_20);                // scope 3 at observe.rs:7:86: 7:87
+        StorageDead(_16);                // scope 3 at observe.rs:7:86: 7:87
+        goto -> bb9;                     // scope 3 at observe.rs:7:86: 7:87
+    }
+
+    bb9: {
+        FakeRead(ForLet(None), _14);     // scope 3 at observe.rs:6:9: 6:14
+        StorageLive(_22);                // scope 4 at observe.rs:10:9: 10:16
+        StorageLive(_23);                // scope 7 at observe.rs:10:26: 10:33
+        _23 = &_11;                      // scope 7 at observe.rs:10:26: 10:33
+        PlaceMention(_23);               // scope 7 at observe.rs:10:26: 10:33
+        _25 = discriminant((*_23));      // scope 7 at observe.rs:10:26: 10:33
+        switchInt(move _25) -> [0: bb11, otherwise: bb10]; // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:437:9: 437:26
+    }
+
+    bb10: {
+        _22 = const false;               // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:439:18: 439:23
+        goto -> bb14;                    // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:439:18: 439:23
+    }
+
+    bb11: {
+        _24 = discriminant((((*_23) as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>)); // scope 7 at observe.rs:10:26: 10:33
+        switchInt(move _24) -> [1: bb12, otherwise: bb10]; // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:437:9: 437:26
+    }
+
+    bb12: {
+        falseEdge -> [real: bb13, imaginary: bb10]; // scope 7 at observe.rs:10:34: 10:45
+    }
+
+    bb13: {
+        _22 = const true;                // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:438:39: 438:43
+        goto -> bb14;                    // scope 7 at /rustc/53732d5e076329a62f71d3c6901886ce8a71e812/library/core/src/macros/mod.rs:438:39: 438:43
+    }
+
+    bb14: {
+        FakeRead(ForLet(None), _22);     // scope 4 at observe.rs:10:9: 10:16
+        StorageDead(_23);                // scope 4 at observe.rs:10:46: 10:47
+        StorageLive(_26);                // scope 6 at observe.rs:11:5: 11:19
+        StorageLive(_27);                // scope 6 at observe.rs:11:5: 11:10
+        _27 = copy _4;                   // scope 6 at observe.rs:11:5: 11:10
+        StorageLive(_28);                // scope 6 at observe.rs:11:11: 11:18
+        _28 = copy _22;                  // scope 6 at observe.rs:11:11: 11:18
+        _26 = move _27(move _28) -> [return: bb15, unwind: bb38]; // scope 6 at observe.rs:11:5: 11:19
+    }
+
+    bb15: {
+        StorageDead(_28);                // scope 6 at observe.rs:11:18: 11:19
+        StorageDead(_27);                // scope 6 at observe.rs:11:18: 11:19
+        StorageDead(_26);                // scope 6 at observe.rs:11:19: 11:20
+        StorageLive(_29);                // scope 6 at observe.rs:12:9: 12:15
+        PlaceMention(_11);               // scope 6 at observe.rs:12:22: 12:28
+        _32 = discriminant(_11);         // scope 6 at observe.rs:12:22: 12:28
+        switchInt(move _32) -> [0: bb20, 1: bb17, otherwise: bb16]; // scope 6 at observe.rs:12:16: 12:28
+    }
+
+    bb16: {
+        FakeRead(ForMatchedPlace(None), _11); // scope 6 at observe.rs:12:22: 12:28
+        unreachable;                     // scope 6 at observe.rs:12:22: 12:28
+    }
+
+    bb17: {
+        _30 = discriminant(((_11 as Err).0: Instrumented::StateOnlyAttemptEntropyError)); // scope 6 at observe.rs:12:22: 12:28
+        switchInt(move _30) -> [0: bb18, 1: bb19, otherwise: bb16]; // scope 6 at observe.rs:12:16: 12:28
+    }
+
+    bb18: {
+        falseEdge -> [real: bb25, imaginary: bb19]; // scope 6 at observe.rs:13:9: 13:53
+    }
+
+    bb19: {
+        falseEdge -> [real: bb24, imaginary: bb20]; // scope 6 at observe.rs:14:9: 14:61
+    }
+
+    bb20: {
+        _31 = discriminant(((_11 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>)); // scope 6 at observe.rs:12:22: 12:28
+        switchInt(move _31) -> [0: bb21, 1: bb22, otherwise: bb16]; // scope 6 at observe.rs:12:16: 12:28
+    }
+
+    bb21: {
+        falseEdge -> [real: bb23, imaginary: bb22]; // scope 6 at observe.rs:15:9: 15:17
+    }
+
+    bb22: {
+        StorageLive(_35);                // scope 6 at observe.rs:16:17: 16:22
+        _35 = move ((((_11 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>) as Some).0: Instrumented::StateOnlyAttemptSecrets); // scope 6 at observe.rs:16:17: 16:22
+        StorageLive(_36);                // scope 10 at observe.rs:17:17: 17:27
+        StorageLive(_37);                // scope 10 at observe.rs:18:17: 18:36
+        StorageLive(_38);                // scope 10 at observe.rs:18:34: 18:35
+        _38 = copy _3;                   // scope 10 at observe.rs:18:34: 18:35
+        FakeRead(ForIndex, (_35.0: [u8; 32])); // scope 10 at observe.rs:18:17: 18:36
+        _39 = Lt(copy _38, const 32_usize); // scope 10 at observe.rs:18:17: 18:36
+        assert(move _39, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _38) -> [success: bb26, unwind: bb37]; // scope 10 at observe.rs:18:17: 18:36
+    }
+
+    bb23: {
+        _29 = ResultProjection::More;    // scope 6 at observe.rs:15:19: 15:48
+        goto -> bb33;                    // scope 6 at observe.rs:15:19: 15:48
+    }
+
+    bb24: {
+        _29 = ResultProjection::Exhausted; // scope 6 at observe.rs:14:63: 14:97
+        goto -> bb33;                    // scope 6 at observe.rs:14:63: 14:97
+    }
+
+    bb25: {
+        StorageLive(_33);                // scope 6 at observe.rs:13:46: 13:51
+        _33 = copy ((((_11 as Err).0: Instrumented::StateOnlyAttemptEntropyError) as Os).0: getrandom::Error); // scope 6 at observe.rs:13:46: 13:51
+        StorageLive(_34);                // scope 9 at observe.rs:13:83: 13:88
+        _34 = copy _33;                  // scope 9 at observe.rs:13:83: 13:88
+        _29 = ResultProjection::Os(move _34); // scope 9 at observe.rs:13:55: 13:89
+        StorageDead(_34);                // scope 9 at observe.rs:13:88: 13:89
+        StorageDead(_33);                // scope 6 at observe.rs:13:88: 13:89
+        goto -> bb33;                    // scope 6 at observe.rs:13:88: 13:89
+    }
+
+    bb26: {
+        _37 = copy (_35.0: [u8; 32])[_38]; // scope 10 at observe.rs:18:17: 18:36
+        StorageLive(_40);                // scope 10 at observe.rs:18:37: 18:64
+        StorageLive(_41);                // scope 10 at observe.rs:18:37: 18:61
+        StorageLive(_42);                // scope 10 at observe.rs:18:37: 18:61
+        _42 = &(_35.1: zeroize::Zeroizing<[u8; 32]>); // scope 10 at observe.rs:18:37: 18:61
+        _41 = <zeroize::Zeroizing<[u8; 32]> as Deref>::deref(move _42) -> [return: bb27, unwind: bb37]; // scope 10 at observe.rs:18:37: 18:61
+                                         // mir::ConstOperand
+                                         // + span: observe.rs:18:37: 18:61
+                                         // + const_: Const { ty: for<'a> fn(&'a zeroize::Zeroizing<[u8; 32]>) -> &'a <zeroize::Zeroizing<[u8; 32]> as Deref>::Target {<zeroize::Zeroizing<[u8; 32]> as Deref>::deref}, val: Value(<zeroize::Zeroizing<[u8; 32]> as Deref>::deref) }
+    }
+
+    bb27: {
+        StorageDead(_42);                // scope 10 at observe.rs:18:60: 18:61
+        StorageLive(_43);                // scope 10 at observe.rs:18:62: 18:63
+        _43 = copy _3;                   // scope 10 at observe.rs:18:62: 18:63
+        FakeRead(ForIndex, (*_41));      // scope 10 at observe.rs:18:37: 18:64
+        _44 = Lt(copy _43, const 32_usize); // scope 10 at observe.rs:18:37: 18:64
+        assert(move _44, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _43) -> [success: bb28, unwind: bb37]; // scope 10 at observe.rs:18:37: 18:64
+    }
+
+    bb28: {
+        _40 = copy (*_41)[_43];          // scope 10 at observe.rs:18:37: 18:64
+        StorageLive(_45);                // scope 10 at observe.rs:18:65: 18:88
+        StorageLive(_46);                // scope 10 at observe.rs:18:65: 18:85
+        StorageLive(_47);                // scope 10 at observe.rs:18:65: 18:85
+        _47 = &(_35.2: zeroize::Zeroizing<[u8; 32]>); // scope 10 at observe.rs:18:65: 18:85
+        _46 = <zeroize::Zeroizing<[u8; 32]> as Deref>::deref(move _47) -> [return: bb29, unwind: bb37]; // scope 10 at observe.rs:18:65: 18:85
+                                         // mir::ConstOperand
+                                         // + span: observe.rs:18:65: 18:85
+                                         // + const_: Const { ty: for<'a> fn(&'a zeroize::Zeroizing<[u8; 32]>) -> &'a <zeroize::Zeroizing<[u8; 32]> as Deref>::Target {<zeroize::Zeroizing<[u8; 32]> as Deref>::deref}, val: Value(<zeroize::Zeroizing<[u8; 32]> as Deref>::deref) }
+    }
+
+    bb29: {
+        StorageDead(_47);                // scope 10 at observe.rs:18:84: 18:85
+        StorageLive(_48);                // scope 10 at observe.rs:18:86: 18:87
+        _48 = copy _3;                   // scope 10 at observe.rs:18:86: 18:87
+        FakeRead(ForIndex, (*_46));      // scope 10 at observe.rs:18:65: 18:88
+        _49 = Lt(copy _48, const 32_usize); // scope 10 at observe.rs:18:65: 18:88
+        assert(move _49, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _48) -> [success: bb30, unwind: bb37]; // scope 10 at observe.rs:18:65: 18:88
+    }
+
+    bb30: {
+        _45 = copy (*_46)[_48];          // scope 10 at observe.rs:18:65: 18:88
+        _36 = ResultProjection::Owner(move _37, move _40, move _45); // scope 10 at observe.rs:17:28: 18:89
+        StorageDead(_45);                // scope 10 at observe.rs:18:88: 18:89
+        StorageDead(_40);                // scope 10 at observe.rs:18:88: 18:89
+        StorageDead(_37);                // scope 10 at observe.rs:18:88: 18:89
+        FakeRead(ForLet(None), _36);     // scope 10 at observe.rs:17:17: 17:27
+        StorageDead(_48);                // scope 10 at observe.rs:18:89: 18:90
+        StorageDead(_46);                // scope 10 at observe.rs:18:89: 18:90
+        StorageDead(_43);                // scope 10 at observe.rs:18:89: 18:90
+        StorageDead(_41);                // scope 10 at observe.rs:18:89: 18:90
+        StorageDead(_38);                // scope 10 at observe.rs:18:89: 18:90
+        StorageLive(_50);                // scope 11 at observe.rs:20:13: 20:24
+        StorageLive(_51);                // scope 11 at observe.rs:20:18: 20:23
+        _51 = move _35;                  // scope 11 at observe.rs:20:18: 20:23
+        _50 = std::mem::drop::<Instrumented::StateOnlyAttemptSecrets>(move _51) -> [return: bb31, unwind: bb36]; // scope 11 at observe.rs:20:13: 20:24
+                                         // mir::ConstOperand
+                                         // + span: observe.rs:20:13: 20:17
+                                         // + const_: Const { ty: fn(Instrumented::StateOnlyAttemptSecrets) {std::mem::drop::<Instrumented::StateOnlyAttemptSecrets>}, val: Value(std::mem::drop::<Instrumented::StateOnlyAttemptSecrets>) }
+    }
+
+    bb31: {
+        StorageDead(_51);                // scope 11 at observe.rs:20:23: 20:24
+        StorageDead(_50);                // scope 11 at observe.rs:20:24: 20:25
+        _29 = move _36;                  // scope 11 at observe.rs:21:13: 21:23
+        StorageDead(_36);                // scope 10 at observe.rs:22:9: 22:10
+        drop(_35) -> [return: bb32, unwind: bb38]; // scope 6 at observe.rs:22:9: 22:10
+    }
+
+    bb32: {
+        StorageDead(_35);                // scope 6 at observe.rs:22:9: 22:10
+        goto -> bb33;                    // scope 6 at observe.rs:22:9: 22:10
+    }
+
+    bb33: {
+        FakeRead(ForLet(None), _29);     // scope 6 at observe.rs:12:9: 12:15
+        StorageLive(_52);                // scope 8 at observe.rs:24:24: 24:29
+        _52 = copy _14;                  // scope 8 at observe.rs:24:24: 24:29
+        StorageLive(_53);                // scope 8 at observe.rs:24:30: 24:36
+        _53 = move _29;                  // scope 8 at observe.rs:24:30: 24:36
+        _0 = Projection { retry: move _52, result: move _53 }; // scope 8 at observe.rs:24:5: 24:37
+        StorageDead(_53);                // scope 8 at observe.rs:24:36: 24:37
+        StorageDead(_52);                // scope 8 at observe.rs:24:36: 24:37
+        StorageDead(_29);                // scope 6 at observe.rs:25:1: 25:2
+        StorageDead(_22);                // scope 4 at observe.rs:25:1: 25:2
+        StorageDead(_14);                // scope 3 at observe.rs:25:1: 25:2
+        drop(_11) -> [return: bb34, unwind: bb40]; // scope 2 at observe.rs:25:1: 25:2
+    }
+
+    bb34: {
+        StorageDead(_11);                // scope 2 at observe.rs:25:1: 25:2
+        StorageDead(_10);                // scope 2 at observe.rs:25:1: 25:2
+        drop(_8) -> [return: bb35, unwind: bb41]; // scope 1 at observe.rs:25:1: 25:2
+    }
+
+    bb35: {
+        StorageDead(_8);                 // scope 1 at observe.rs:25:1: 25:2
+        StorageDead(_5);                 // scope 0 at observe.rs:25:1: 25:2
+        return;                          // scope 0 at observe.rs:25:2: 25:2
+    }
+
+    bb36 (cleanup): {
+        drop(_51) -> [return: bb37, unwind terminate(cleanup)]; // scope 11 at observe.rs:20:23: 20:24
+    }
+
+    bb37 (cleanup): {
+        drop(_35) -> [return: bb38, unwind terminate(cleanup)]; // scope 6 at observe.rs:22:9: 22:10
+    }
+
+    bb38 (cleanup): {
+        drop(_11) -> [return: bb40, unwind terminate(cleanup)]; // scope 2 at observe.rs:25:1: 25:2
+    }
+
+    bb39 (cleanup): {
+        drop(_13) -> [return: bb40, unwind terminate(cleanup)]; // scope 2 at observe.rs:5:38: 5:39
+    }
+
+    bb40 (cleanup): {
+        drop(_8) -> [return: bb41, unwind terminate(cleanup)]; // scope 1 at observe.rs:25:1: 25:2
+    }
+
+    bb41 (cleanup): {
+        resume;                          // scope 0 at observe.rs:2:1: 25:2
+    }
+}

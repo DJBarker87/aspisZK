@@ -1,0 +1,33 @@
+// MIR for `ProverRwResumeScalar::coordinate` 0 nll
+
+| Free Region Mapping
+| '?0 | Global | ['?0, '?1]
+| '?1 | Local | ['?1]
+|
+| Inferred Region Values
+| '?0 | U0 | {bb0[0..=4], '?0, '?1}
+| '?1 | U0 | {bb0[0..=4], '?1}
+|
+| Inference Constraints
+| '?0 live at {bb0[0..=4]}
+| '?1 live at {bb0[0..=4]}
+|
+fn coordinate() -> usize {
+    let mut _0: usize;                   // return place in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:28: 292:33
+    let mut _1: *mut usize;              // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:45: 292:46
+
+    bb0: {
+        StorageLive(_1);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:45: 292:46
+        _1 = const {alloc5: *mut usize}; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:45: 292:46
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:45: 292:46
+                                         // + const_: Const { ty: *mut usize, val: Value({alloc5: *mut usize}) }
+        _0 = copy (*_1);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:45: 292:46
+        StorageDead(_1);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:49: 292:50
+        return;                          // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:50: 292:50
+    }
+}
+
+alloc5 (static: J, size: 8, align: 8) {
+    00 00 00 00 00 00 00 00                         │ ........
+}

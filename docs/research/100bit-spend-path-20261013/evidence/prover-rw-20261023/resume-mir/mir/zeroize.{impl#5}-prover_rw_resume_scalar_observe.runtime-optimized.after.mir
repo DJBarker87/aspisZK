@@ -1,0 +1,159 @@
+// MIR for `<impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:426:1: 428:16>::prover_rw_resume_scalar_observe` after runtime-optimized
+
+fn <impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:426:1: 428:16>::prover_rw_resume_scalar_observe(_1: &[Z; N], _2: usize) -> Observation {
+    debug self => _1;
+    debug j => _2;
+    let mut _0: ProverRwResumeScalar::Observation;
+    let mut _3: bool;
+    let mut _4: bool;
+    let mut _5: bool;
+    let mut _6: core::option::Option<u8>;
+    let mut _7: &Z;
+    let mut _8: bool;
+    let mut _9: isize;
+    let _10: u8;
+    let mut _11: bool;
+    let mut _12: core::option::Option<u8>;
+    let mut _13: &Z;
+    let _14: usize;
+    let mut _15: (usize, bool);
+    let mut _16: bool;
+    let mut _17: isize;
+    scope 1 {
+        debug low => _10;
+        let _18: u8;
+        scope 3 {
+            debug high => _18;
+        }
+        scope 4 {
+            debug byte => _18;
+        }
+    }
+    scope 2 {
+        debug byte => _10;
+    }
+
+    bb0: {
+        StorageLive(_3);
+        _3 = Ne(const N, const 32_usize);
+        switchInt(move _3) -> [0: bb2, otherwise: bb1];
+    }
+
+    bb1: {
+        StorageLive(_4);
+        _4 = Ne(const N, const 64_usize);
+        switchInt(move _4) -> [0: bb2, otherwise: bb3];
+    }
+
+    bb2: {
+        StorageLive(_5);
+        _5 = Ge(copy _2, const 32_usize);
+        switchInt(move _5) -> [0: bb4, otherwise: bb3];
+    }
+
+    bb3: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageDead(_3);
+        goto -> bb19;
+    }
+
+    bb4: {
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageDead(_3);
+        StorageLive(_6);
+        StorageLive(_7);
+        _8 = Lt(copy _2, const N);
+        assert(move _8, "index out of bounds: the length is {} but the index is {}", const N, copy _2) -> [success: bb5, unwind continue];
+    }
+
+    bb5: {
+        _7 = &(*_1)[_2];
+        _6 = <Z as Zeroize>::prover_rw_resume_scalar_byte(move _7) -> [return: bb6, unwind continue];
+    }
+
+    bb6: {
+        StorageDead(_7);
+        _9 = discriminant(_6);
+        switchInt(move _9) -> [0: bb8, 1: bb9, otherwise: bb7];
+    }
+
+    bb7: {
+        unreachable;
+    }
+
+    bb8: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_6);
+        goto -> bb18;
+    }
+
+    bb9: {
+        _10 = copy ((_6 as Some).0: u8);
+        StorageDead(_6);
+        StorageLive(_11);
+        _11 = Eq(const N, const 64_usize);
+        switchInt(move _11) -> [0: bb11, otherwise: bb10];
+    }
+
+    bb10: {
+        StorageLive(_12);
+        StorageLive(_13);
+        StorageLive(_14);
+        _15 = AddWithOverflow(copy _2, const 32_usize);
+        assert(!move (_15.1: bool), "attempt to compute `{} + {}`, which would overflow", copy _2, const 32_usize) -> [success: bb12, unwind continue];
+    }
+
+    bb11: {
+        _18 = const 0_u8;
+        goto -> bb17;
+    }
+
+    bb12: {
+        _14 = move (_15.0: usize);
+        _16 = Lt(copy _14, const N);
+        assert(move _16, "index out of bounds: the length is {} but the index is {}", const N, copy _14) -> [success: bb13, unwind continue];
+    }
+
+    bb13: {
+        _13 = &(*_1)[_14];
+        _12 = <Z as Zeroize>::prover_rw_resume_scalar_byte(move _13) -> [return: bb14, unwind continue];
+    }
+
+    bb14: {
+        StorageDead(_13);
+        _17 = discriminant(_12);
+        switchInt(move _17) -> [0: bb15, 1: bb16, otherwise: bb7];
+    }
+
+    bb15: {
+        _0 = Observation { len: const 0_usize, low: const 0_u8, high: const 0_u8 };
+        StorageDead(_14);
+        StorageDead(_12);
+        StorageDead(_11);
+        goto -> bb18;
+    }
+
+    bb16: {
+        _18 = copy ((_12 as Some).0: u8);
+        StorageDead(_14);
+        StorageDead(_12);
+        goto -> bb17;
+    }
+
+    bb17: {
+        StorageDead(_11);
+        _0 = Observation { len: const N, low: copy _10, high: move _18 };
+        goto -> bb19;
+    }
+
+    bb18: {
+        goto -> bb19;
+    }
+
+    bb19: {
+        return;
+    }
+}

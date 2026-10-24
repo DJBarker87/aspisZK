@@ -1,0 +1,264 @@
+// MIR for `Instrumented::run` after runtime-optimized
+
+fn Instrumented::run(_1: [u8; 32], _2: usize, _3: usize, _4: fn(bool)) -> Projection {
+    debug nonce => _1;
+    debug entry => _2;
+    debug j => _3;
+    debug phase => _4;
+    let mut _0: Projection;
+    let _5: Instrumented::ProverRwResumeScalarRequest;
+    let mut _9: (Instrumented::ProverRwResumeScalarControl, std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>);
+    let mut _11: isize;
+    let mut _12: (usize, u8);
+    let mut _13: u8;
+    let mut _14: bool;
+    let mut _16: isize;
+    let mut _17: isize;
+    let _18: ();
+    let mut _19: isize;
+    let mut _20: isize;
+    let mut _21: isize;
+    let mut _25: u8;
+    let mut _26: bool;
+    let mut _27: u8;
+    let mut _28: u8;
+    let mut _29: Instrumented::StateOnlyAttemptSecrets;
+    let mut _30: bool;
+    let mut _31: bool;
+    let mut _32: isize;
+    let mut _33: isize;
+    let mut _34: isize;
+    scope 1 {
+        debug request => _5;
+        let _6: Instrumented::ProverRwResumeScalarDraw;
+        scope 2 {
+            debug draw => _6;
+            let _7: Instrumented::ProverRwResumeScalarControl;
+            let _8: std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>;
+            scope 3 {
+                debug control => _7;
+                debug result => _8;
+                let _10: std::option::Option<(usize, u8)>;
+                let _35: [u8; 32];
+                let _36: usize;
+                scope 4 {
+                    debug retry => _10;
+                    let _15: bool;
+                    scope 6 {
+                        debug success => _15;
+                        let _22: getrandom::Error;
+                        let _23: Instrumented::StateOnlyAttemptSecrets;
+                        scope 8 {
+                            debug result => _24;
+                        }
+                        scope 9 {
+                            debug error => _22;
+                        }
+                        scope 10 {
+                            debug owner => _23;
+                            let _24: ResultProjection;
+                            scope 11 {
+                                debug projection => _24;
+                                scope 14 (inlined std::mem::drop::<Instrumented::StateOnlyAttemptSecrets>) {
+                                }
+                            }
+                            scope 12 (inlined <zeroize::Zeroizing<[u8; 32]> as Deref>::deref) {
+                            }
+                            scope 13 (inlined <zeroize::Zeroizing<[u8; 32]> as Deref>::deref) {
+                            }
+                        }
+                    }
+                    scope 7 {
+                    }
+                }
+                scope 5 {
+                    debug ((next: Instrumented::ProverRwResumeScalarRequest).0: [u8; 32]) => _35;
+                    debug ((next: Instrumented::ProverRwResumeScalarRequest).1: usize) => _36;
+                }
+            }
+        }
+    }
+
+    bb0: {
+        _5 = Instrumented::ProverRwResumeScalarRequest { mask_nonce: copy _1, retry: copy _2 };
+        _6 = Instrumented::ProverRwResumeScalarRequest::draw(move _5) -> [return: bb1, unwind continue];
+    }
+
+    bb1: {
+        StorageLive(_9);
+        _9 = Instrumented::ProverRwResumeScalarDraw::resume(move _6) -> [return: bb2, unwind continue];
+    }
+
+    bb2: {
+        StorageLive(_7);
+        _7 = move (_9.0: Instrumented::ProverRwResumeScalarControl);
+        StorageLive(_8);
+        _31 = const true;
+        _8 = move (_9.1: std::result::Result<std::option::Option<Instrumented::StateOnlyAttemptSecrets>, Instrumented::StateOnlyAttemptEntropyError>);
+        StorageDead(_9);
+        _11 = discriminant(_7);
+        switchInt(move _11) -> [0: bb5, 1: bb4, otherwise: bb3];
+    }
+
+    bb3: {
+        unreachable;
+    }
+
+    bb4: {
+        _10 = Option::<(usize, u8)>::None;
+        goto -> bb7;
+    }
+
+    bb5: {
+        StorageLive(_35);
+        _35 = move (((_7 as More).0: Instrumented::ProverRwResumeScalarRequest).0: [u8; 32]);
+        _36 = move (((_7 as More).0: Instrumented::ProverRwResumeScalarRequest).1: usize);
+        StorageLive(_12);
+        StorageLive(_13);
+        _14 = Lt(copy _3, const 32_usize);
+        assert(move _14, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _3) -> [success: bb6, unwind: bb29];
+    }
+
+    bb6: {
+        _13 = copy _35[_3];
+        _12 = (copy _36, move _13);
+        StorageDead(_13);
+        _10 = Option::<(usize, u8)>::Some(move _12);
+        StorageDead(_12);
+        StorageDead(_35);
+        goto -> bb7;
+    }
+
+    bb7: {
+        _17 = discriminant(_8);
+        switchInt(move _17) -> [0: bb9, 1: bb8, otherwise: bb3];
+    }
+
+    bb8: {
+        _15 = const false;
+        goto -> bb10;
+    }
+
+    bb9: {
+        _16 = discriminant(((_8 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>));
+        _15 = Eq(copy _16, const 1_isize);
+        goto -> bb10;
+    }
+
+    bb10: {
+        _18 = copy _4(move _15) -> [return: bb11, unwind: bb29];
+    }
+
+    bb11: {
+        _21 = discriminant(_8);
+        switchInt(move _21) -> [0: bb13, 1: bb12, otherwise: bb3];
+    }
+
+    bb12: {
+        _19 = discriminant(((_8 as Err).0: Instrumented::StateOnlyAttemptEntropyError));
+        switchInt(move _19) -> [0: bb17, 1: bb16, otherwise: bb3];
+    }
+
+    bb13: {
+        _20 = discriminant(((_8 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>));
+        switchInt(move _20) -> [0: bb15, 1: bb14, otherwise: bb3];
+    }
+
+    bb14: {
+        StorageLive(_23);
+        _31 = const false;
+        _30 = const true;
+        _23 = move ((((_8 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>) as Some).0: Instrumented::StateOnlyAttemptSecrets);
+        StorageLive(_25);
+        _26 = Lt(copy _3, const 32_usize);
+        assert(copy _26, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _3) -> [success: bb18, unwind: bb25];
+    }
+
+    bb15: {
+        _24 = ResultProjection::More;
+        goto -> bb21;
+    }
+
+    bb16: {
+        _24 = ResultProjection::Exhausted;
+        goto -> bb21;
+    }
+
+    bb17: {
+        _22 = copy ((((_8 as Err).0: Instrumented::StateOnlyAttemptEntropyError) as Os).0: getrandom::Error);
+        _24 = ResultProjection::Os(copy _22);
+        goto -> bb21;
+    }
+
+    bb18: {
+        _25 = copy (_23.0: [u8; 32])[_3];
+        StorageLive(_27);
+        assert(copy _26, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _3) -> [success: bb19, unwind: bb25];
+    }
+
+    bb19: {
+        _27 = copy ((_23.1: zeroize::Zeroizing<[u8; 32]>).0: [u8; 32])[_3];
+        StorageLive(_28);
+        assert(copy _26, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _3) -> [success: bb20, unwind: bb25];
+    }
+
+    bb20: {
+        _28 = copy ((_23.2: zeroize::Zeroizing<[u8; 32]>).0: [u8; 32])[_3];
+        _24 = ResultProjection::Owner(move _25, move _27, move _28);
+        StorageDead(_28);
+        StorageDead(_27);
+        StorageDead(_25);
+        StorageLive(_29);
+        _30 = const false;
+        _29 = move _23;
+        drop(_29) -> [return: bb30, unwind: bb25];
+    }
+
+    bb21: {
+        _0 = Projection { retry: move _10, result: move _24 };
+        _32 = discriminant(_8);
+        switchInt(move _32) -> [0: bb23, 1: bb23, otherwise: bb3];
+    }
+
+    bb22 (cleanup): {
+        resume;
+    }
+
+    bb23: {
+        StorageDead(_8);
+        StorageDead(_7);
+        return;
+    }
+
+    bb24 (cleanup): {
+        drop(_23) -> [return: bb29, unwind terminate(cleanup)];
+    }
+
+    bb25 (cleanup): {
+        switchInt(copy _30) -> [0: bb29, otherwise: bb24];
+    }
+
+    bb26 (cleanup): {
+        _33 = discriminant(((_8 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>));
+        switchInt(move _33) -> [1: bb27, otherwise: bb22];
+    }
+
+    bb27 (cleanup): {
+        switchInt(copy _31) -> [0: bb22, otherwise: bb28];
+    }
+
+    bb28 (cleanup): {
+        drop(((((_8 as Ok).0: std::option::Option<Instrumented::StateOnlyAttemptSecrets>) as Some).0: Instrumented::StateOnlyAttemptSecrets)) -> [return: bb22, unwind terminate(cleanup)];
+    }
+
+    bb29 (cleanup): {
+        _34 = discriminant(_8);
+        switchInt(move _34) -> [0: bb26, otherwise: bb22];
+    }
+
+    bb30: {
+        StorageDead(_29);
+        StorageDead(_23);
+        goto -> bb21;
+    }
+}

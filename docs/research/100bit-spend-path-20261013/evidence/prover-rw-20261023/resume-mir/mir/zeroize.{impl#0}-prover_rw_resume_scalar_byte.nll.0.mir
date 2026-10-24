@@ -1,0 +1,52 @@
+// MIR for `<impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:345:1: 347:24>::prover_rw_resume_scalar_byte` 0 nll
+
+| Free Region Mapping
+| '?0 | Global | ['?0, '?2, '?1]
+| '?1 | Local | ['?2, '?1]
+| '?2 | Local | ['?2]
+|
+| Inferred Region Values
+| '?0 | U0 | {bb0[0..=2], bb1[0..=1], bb2[0], '?0, '?1, '?2}
+| '?1 | U0 | {bb0[0..=2], bb1[0..=1], bb2[0], '?1}
+| '?2 | U0 | {bb0[0..=2], bb1[0..=1], bb2[0], '?2}
+| '?3 | U0 | {bb0[1..=2]}
+| '?4 | U0 | {bb0[0..=2], bb1[0..=1], bb2[0], '?1}
+| '?5 | U0 | {bb0[2]}
+| '?6 | U0 | {bb0[2]}
+|
+| Inference Constraints
+| '?0 live at {bb0[0..=2], bb1[0..=1], bb2[0]}
+| '?1 live at {bb0[0..=2], bb1[0..=1], bb2[0]}
+| '?2 live at {bb0[0..=2], bb1[0..=1], bb2[0]}
+| '?3 live at {bb0[1]}
+| '?5 live at {bb0[2]}
+| '?6 live at {bb0[2]}
+| '?1: '?4 due to BoringNoLocation at All(/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:37: 354:42) (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:37: 354:42 (#0)
+| '?3: '?5 due to Boring at Single(bb0[1]) (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:62: 355:66 (#0)
+| '?4: '?1 due to BoringNoLocation at All(/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:37: 354:42) (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:37: 354:42 (#0)
+| '?4: '?3 due to Boring at Single(bb0[1]) (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:62: 355:66 (#0)
+| '?5: '?6 due to CallArgument(Some(FnDef(DefId(0:59 ~ zeroize[91be]::DefaultIsZeroes::prover_rw_resume_scalar_byte), [Z/#0]))) at Single(bb0[2]) (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:9: 355:67 (#0)
+|
+fn <impl at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:345:1: 347:24>::prover_rw_resume_scalar_byte(_1: &Z) -> Option<u8> {
+    debug self => _1;                    // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:37: 354:42
+    let mut _0: core::option::Option<u8>; // return place in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:47: 354:57
+    let mut _2: &Z;                      // in scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:62: 355:66
+
+    bb0: {
+        StorageLive(_2);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:62: 355:66
+        _2 = &(*_1);                     // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:62: 355:66
+        _0 = <Z as DefaultIsZeroes>::prover_rw_resume_scalar_byte(move _2) -> [return: bb1, unwind: bb2]; // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:9: 355:67
+                                         // mir::ConstOperand
+                                         // + span: /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:9: 355:61
+                                         // + const_: Const { ty: for<'a> fn(&'a Z) -> Option<u8> {<Z as DefaultIsZeroes>::prover_rw_resume_scalar_byte}, val: Value(<Z as DefaultIsZeroes>::prover_rw_resume_scalar_byte) }
+    }
+
+    bb1: {
+        StorageDead(_2);                 // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:355:66: 355:67
+        return;                          // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:356:6: 356:6
+    }
+
+    bb2 (cleanup): {
+        resume;                          // scope 0 at /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:354:5: 356:6
+    }
+}

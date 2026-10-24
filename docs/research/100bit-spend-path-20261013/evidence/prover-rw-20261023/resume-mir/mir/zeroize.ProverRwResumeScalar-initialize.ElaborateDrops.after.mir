@@ -1,0 +1,82 @@
+// MIR for `ProverRwResumeScalar::initialize` after ElaborateDrops
+
+fn initialize(_1: u8) -> () {
+    debug j => _1;
+    let mut _0: ();
+    let mut _2: u8;
+    let mut _3: u8;
+    let mut _4: bool;
+    let mut _5: *mut usize;
+    let mut _6: *mut u8;
+    let mut _7: *mut bool;
+    let mut _8: *mut ProverRwResumeScalar::Event;
+    let mut _9: *mut ProverRwResumeScalar::Event;
+    let mut _10: *mut ProverRwResumeScalar::Event;
+
+    bb0: {
+        StorageLive(_2);
+        StorageLive(_3);
+        _3 = copy _1;
+        _4 = Eq(const 32_u8, const 0_u8);
+        assert(!move _4, "attempt to calculate the remainder of `{}` with a divisor of zero", copy _3) -> [success: bb1, unwind continue];
+    }
+
+    bb1: {
+        _2 = Rem(move _3, const 32_u8);
+        StorageDead(_3);
+        StorageLive(_5);
+        _5 = const {alloc5: *mut usize};
+        (*_5) = move _2 as usize (IntToInt);
+        StorageDead(_2);
+        StorageDead(_5);
+        StorageLive(_6);
+        _6 = const {alloc6: *mut u8};
+        (*_6) = const 0_u8;
+        StorageDead(_6);
+        StorageLive(_7);
+        _7 = const {alloc7: *mut bool};
+        (*_7) = const false;
+        StorageDead(_7);
+        StorageLive(_8);
+        _8 = const {alloc8: *mut Event};
+        (*_8) = const ProverRwResumeScalar::EMPTY_EVENT;
+        StorageDead(_8);
+        StorageLive(_9);
+        _9 = const {alloc10: *mut Event};
+        (*_9) = const ProverRwResumeScalar::EMPTY_EVENT;
+        StorageDead(_9);
+        StorageLive(_10);
+        _10 = const {alloc12: *mut Event};
+        (*_10) = const ProverRwResumeScalar::EMPTY_EVENT;
+        StorageDead(_10);
+        _0 = const ();
+        return;
+    }
+}
+
+alloc12 (static: E2, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc10 (static: E1, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc8 (static: E0, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc7 (static: OVERFLOW, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc6 (static: COUNT, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc5 (static: J, size: 8, align: 8) {
+    00 00 00 00 00 00 00 00                         │ ........
+}

@@ -1,0 +1,60 @@
+// MIR for `Instrumented::<impl at selected.rs:47:1: 47:33>::draw` after runtime-optimized
+
+fn Instrumented::<impl at selected.rs:47:1: 47:33>::draw(_1: Instrumented::ProverRwResumeScalarRequest) -> Instrumented::ProverRwResumeScalarDraw {
+    debug self => _1;
+    let mut _0: Instrumented::ProverRwResumeScalarDraw;
+    let mut _2: zeroize::Zeroizing<[u8; 64]>;
+    let mut _3: [u8; 64];
+    let mut _5: &mut [u8];
+    let mut _6: zeroize::Zeroizing<[u8; 64]>;
+    scope 1 {
+        debug bytes => _2;
+        let _4: std::result::Result<(), getrandom::Error>;
+        scope 2 {
+            debug outcome => _4;
+        }
+        scope 4 (inlined <zeroize::Zeroizing<[u8; 64]> as AsMut<[u8]>>::as_mut) {
+            let mut _7: &mut [u8; 64];
+            scope 5 (inlined array::<impl AsMut<[u8]> for [u8; 64]>::as_mut) {
+                scope 6 (inlined #[track_caller] array::<impl IndexMut<RangeFull> for [u8; 64]>::index_mut) {
+                    scope 7 (inlined #[track_caller] core::slice::index::<impl IndexMut<RangeFull> for [u8]>::index_mut) {
+                        scope 8 (inlined #[track_caller] <RangeFull as SliceIndex<[u8]>>::index_mut) {
+                        }
+                    }
+                }
+            }
+        }
+    }
+    scope 3 (inlined zeroize::Zeroizing::<[u8; 64]>::new) {
+    }
+
+    bb0: {
+        StorageLive(_2);
+        StorageLive(_3);
+        _3 = [const 0_u8; 64];
+        _2 = zeroize::Zeroizing::<[u8; 64]>(copy _3);
+        StorageDead(_3);
+        StorageLive(_7);
+        _7 = &mut (_2.0: [u8; 64]);
+        _5 = copy _7 as &mut [u8] (PointerCoercion(Unsize, AsCast));
+        StorageDead(_7);
+        _4 = fill(move _5) -> [return: bb1, unwind: bb2];
+    }
+
+    bb1: {
+        StorageLive(_6);
+        _6 = move _2;
+        _0 = Instrumented::ProverRwResumeScalarDraw { request: copy _1, bytes: move _6, outcome: copy _4 };
+        StorageDead(_6);
+        StorageDead(_2);
+        return;
+    }
+
+    bb2 (cleanup): {
+        drop(_2) -> [return: bb3, unwind terminate(cleanup)];
+    }
+
+    bb3 (cleanup): {
+        resume;
+    }
+}

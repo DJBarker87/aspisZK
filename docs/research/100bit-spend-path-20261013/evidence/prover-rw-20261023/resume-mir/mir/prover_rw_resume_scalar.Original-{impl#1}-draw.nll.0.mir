@@ -1,0 +1,129 @@
+// MIR for `Original::<impl at selected.rs:47:1: 47:33>::draw` 0 nll
+
+| Free Region Mapping
+| '?0 | Global | ['?0, '?1]
+| '?1 | Local | ['?1]
+|
+| Inferred Region Values
+| '?0 | U0 | {bb0[0..=3], bb1[0..=7], bb2[0..=2], bb3[0..=11], bb4[0..=3], bb5[0..=1], bb6[0], bb7[0], '?0, '?1}
+| '?1 | U0 | {bb0[0..=3], bb1[0..=7], bb2[0..=2], bb3[0..=11], bb4[0..=3], bb5[0..=1], bb6[0], bb7[0], '?1}
+| '?2 | U0 | {bb1[6..=7], bb2[0..=2]}
+| '?3 | U0 | {bb2[0..=2]}
+| '?4 | U0 | {bb2[1..=2]}
+| '?5 | U0 | {bb2[0..=2]}
+| '?6 | U0 | {bb1[7], bb2[0..=2]}
+| '?7 | U0 | {bb1[7], bb2[0..=2]}
+| '?8 | U0 | {bb2[2]}
+|
+| Inference Constraints
+| '?0 live at {bb0[0..=3], bb1[0..=7], bb2[0..=2], bb3[0..=11], bb4[0..=3], bb5[0..=1], bb6[0], bb7[0]}
+| '?1 live at {bb0[0..=3], bb1[0..=7], bb2[0..=2], bb3[0..=11], bb4[0..=3], bb5[0..=1], bb6[0], bb7[0]}
+| '?2 live at {bb1[6]}
+| '?3 live at {bb2[0]}
+| '?4 live at {bb2[1..=2]}
+| '?5 live at {bb2[0]}
+| '?6 live at {bb1[7]}
+| '?7 live at {bb1[7]}
+| '?8 live at {bb2[2]}
+| '?2: '?6 due to Boring at Single(bb1[6]) (selected.rs:58:39: 58:44 (#0)
+| '?3: '?4 due to Boring at Single(bb2[0]) (selected.rs:58:39: 58:53 (#0)
+| '?4: '?8 due to CallArgument(Some(FnDef(DefId(22:44 ~ getrandom[162d]::fill), []))) at Single(bb2[2]) (selected.rs:58:23: 58:54 (#0)
+| '?5: '?3 due to Boring at Single(bb2[0]) (selected.rs:58:39: 58:53 (#0)
+| '?6: '?7 due to CallArgument(Some(FnDef(DefId(2:3481 ~ core[2cc0]::convert::AsMut::as_mut), [prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64_usize]>, [u8]]))) at Single(bb1[7]) (selected.rs:58:39: 58:53 (#0)
+| '?7: '?5 due to Boring at Single(bb1[7]) (selected.rs:58:39: 58:53 (#0)
+|
+| Borrows
+| bw0: issued at bb1[6] in '?2
+| bw1: issued at bb2[0] in '?3
+|
+| User Type Annotations
+| 0: user_ty: Canonical { value: TypeOf(DefId(20:106 ~ prover_rw_resume_scalar_zeroize_original[413c]::{impl#21}::new), UserArgs { args: [^c_0], user_self_ty: Some(UserSelfTy { impl_def_id: DefId(20:104 ~ prover_rw_resume_scalar_zeroize_original[413c]::{impl#21}), self_ty: prover_rw_resume_scalar_zeroize_original::Zeroizing<^c_1> }) }), max_universe: U0, variables: [Ty { ui: U0, sub_root: 0 }, Ty { ui: U0, sub_root: 1 }] }, span: selected.rs:57:25: 57:39, inferred_ty: fn([u8; 64]) -> prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]> {prover_rw_resume_scalar_zeroize_original::Zeroizing::<[u8; 64]>::new}
+|
+fn Original::<impl at selected.rs:47:1: 47:33>::draw(_1: Original::ProverRwResumeScalarRequest) -> Original::ProverRwResumeScalarDraw {
+    debug self => _1;                    // in scope 0 at selected.rs:56:13: 56:17
+    let mut _0: Original::ProverRwResumeScalarDraw; // return place in scope 0 at selected.rs:56:22: 56:46
+    let mut _2: prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]>; // in scope 0 at selected.rs:57:13: 57:22
+    let mut _3: [u8; 64];                // in scope 0 at selected.rs:57:40: 57:49
+    let mut _5: &mut [u8];               // in scope 0 at selected.rs:58:39: 58:53
+    let mut _6: &mut [u8];               // in scope 0 at selected.rs:58:39: 58:53
+    let mut _7: &mut prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]>; // in scope 0 at selected.rs:58:39: 58:44
+    let mut _8: Original::ProverRwResumeScalarRequest; // in scope 0 at selected.rs:59:45: 59:49
+    let mut _9: prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]>; // in scope 0 at selected.rs:59:51: 59:56
+    let mut _10: std::result::Result<(), getrandom::Error>; // in scope 0 at selected.rs:59:58: 59:65
+    scope 1 {
+        debug bytes => _2;               // in scope 1 at selected.rs:57:13: 57:22
+        let _4: std::result::Result<(), getrandom::Error>; // in scope 1 at selected.rs:58:13: 58:20
+        scope 2 {
+            debug outcome => _4;         // in scope 2 at selected.rs:58:13: 58:20
+        }
+    }
+
+    bb0: {
+        StorageLive(_2);                 // scope 0 at selected.rs:57:13: 57:22
+        StorageLive(_3);                 // scope 0 at selected.rs:57:40: 57:49
+        _3 = [const 0_u8; 64];           // scope 0 at selected.rs:57:40: 57:49
+        _2 = prover_rw_resume_scalar_zeroize_original::Zeroizing::<[u8; 64]>::new(move _3) -> [return: bb1, unwind: bb7]; // scope 0 at selected.rs:57:25: 57:50
+                                         // mir::ConstOperand
+                                         // + span: selected.rs:57:25: 57:39
+                                         // + user_ty: UserType(0)
+                                         // + const_: Const { ty: fn([u8; 64]) -> prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]> {prover_rw_resume_scalar_zeroize_original::Zeroizing::<[u8; 64]>::new}, val: Value(prover_rw_resume_scalar_zeroize_original::Zeroizing::<[u8; 64]>::new) }
+    }
+
+    bb1: {
+        StorageDead(_3);                 // scope 0 at selected.rs:57:49: 57:50
+        FakeRead(ForLet(None), _2);      // scope 0 at selected.rs:57:13: 57:22
+        StorageLive(_4);                 // scope 1 at selected.rs:58:13: 58:20
+        StorageLive(_5);                 // scope 1 at selected.rs:58:39: 58:53
+        StorageLive(_6);                 // scope 1 at selected.rs:58:39: 58:53
+        StorageLive(_7);                 // scope 1 at selected.rs:58:39: 58:44
+        _7 = &mut _2;                    // scope 1 at selected.rs:58:39: 58:44
+        _6 = <prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]> as AsMut<[u8]>>::as_mut(move _7) -> [return: bb2, unwind: bb6]; // scope 1 at selected.rs:58:39: 58:53
+                                         // mir::ConstOperand
+                                         // + span: selected.rs:58:45: 58:51
+                                         // + const_: Const { ty: for<'a> fn(&'a mut prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]>) -> &'a mut [u8] {<prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]> as AsMut<[u8]>>::as_mut}, val: Value(<prover_rw_resume_scalar_zeroize_original::Zeroizing<[u8; 64]> as AsMut<[u8]>>::as_mut) }
+    }
+
+    bb2: {
+        _5 = &mut (*_6);                 // scope 1 at selected.rs:58:39: 58:53
+        StorageDead(_7);                 // scope 1 at selected.rs:58:52: 58:53
+        _4 = fill(move _5) -> [return: bb3, unwind: bb6]; // scope 1 at selected.rs:58:23: 58:54
+                                         // mir::ConstOperand
+                                         // + span: selected.rs:58:23: 58:38
+                                         // + const_: Const { ty: for<'a> fn(&'a mut [u8]) -> Result<(), getrandom::Error> {fill}, val: Value(fill) }
+    }
+
+    bb3: {
+        StorageDead(_5);                 // scope 1 at selected.rs:58:53: 58:54
+        FakeRead(ForLet(None), _4);      // scope 1 at selected.rs:58:13: 58:20
+        StorageDead(_6);                 // scope 1 at selected.rs:58:54: 58:55
+        StorageLive(_8);                 // scope 2 at selected.rs:59:45: 59:49
+        _8 = move _1;                    // scope 2 at selected.rs:59:45: 59:49
+        StorageLive(_9);                 // scope 2 at selected.rs:59:51: 59:56
+        _9 = move _2;                    // scope 2 at selected.rs:59:51: 59:56
+        StorageLive(_10);                // scope 2 at selected.rs:59:58: 59:65
+        _10 = copy _4;                   // scope 2 at selected.rs:59:58: 59:65
+        _0 = Original::ProverRwResumeScalarDraw { request: move _8, bytes: move _9, outcome: move _10 }; // scope 2 at selected.rs:59:9: 59:67
+        StorageDead(_10);                // scope 2 at selected.rs:59:66: 59:67
+        drop(_9) -> [return: bb4, unwind: bb6]; // scope 2 at selected.rs:59:66: 59:67
+    }
+
+    bb4: {
+        StorageDead(_9);                 // scope 2 at selected.rs:59:66: 59:67
+        StorageDead(_8);                 // scope 2 at selected.rs:59:66: 59:67
+        StorageDead(_4);                 // scope 1 at selected.rs:60:5: 60:6
+        drop(_2) -> [return: bb5, unwind: bb7]; // scope 0 at selected.rs:60:5: 60:6
+    }
+
+    bb5: {
+        StorageDead(_2);                 // scope 0 at selected.rs:60:5: 60:6
+        return;                          // scope 0 at selected.rs:60:6: 60:6
+    }
+
+    bb6 (cleanup): {
+        drop(_2) -> [return: bb7, unwind terminate(cleanup)]; // scope 0 at selected.rs:60:5: 60:6
+    }
+
+    bb7 (cleanup): {
+        resume;                          // scope 0 at selected.rs:56:5: 60:6
+    }
+}

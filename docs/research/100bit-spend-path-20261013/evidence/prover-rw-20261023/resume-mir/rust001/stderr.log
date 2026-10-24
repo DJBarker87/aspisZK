@@ -1,0 +1,465 @@
+   Compiling libc v0.2.186
+   Compiling getrandom v0.3.4 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/getrandom-0.3.4)
+   Compiling cfg-if v1.0.4
+warning: unexpected `cfg` condition name: `kani`
+  --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/getrandom-0.3.4/src/error.rs:39:15
+   |
+39 |     #[cfg(all(kani, target_os="linux", target_arch="x86_64"))]
+   |               ^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, `getrandom_backend`, `getrandom_msan`, `getrandom_test_linux_fallback`, `getrandom_test_linux_without_fallback`, `getrandom_test_netbsd_fallback`, and `test` and 31 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: requested on the command line with `-W unexpected-cfgs`
+
+warning: `getrandom` (lib) generated 1 warning
+   Compiling prover-rw-resume-scalar-zeroize-original v1.8.1 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-original)
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-original/src/lib.rs:415:63
+    |
+415 |             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-original/src/lib.rs:7:41
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |                                         ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+415 -             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+415 +             volatile_set((self as *mut Self).cast::<u8>(), 0, size_of::<Self>());
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-original/src/lib.rs:460:43
+    |
+460 |         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+460 -         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+460 +         let size = self.len().checked_mul(size_of::<Z>()).unwrap();
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-original/src/lib.rs:840:16
+    |
+840 |     let size = mem::size_of::<F>();
+    |                ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+840 -     let size = mem::size_of::<F>();
+840 +     let size = size_of::<F>();
+    |
+
+warning: `prover-rw-resume-scalar-zeroize-original` (lib) generated 3 warnings (run `cargo fix --lib -p prover-rw-resume-scalar-zeroize-original` to apply 3 suggestions)
+   Compiling zeroize v1.8.1 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1)
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:272:11
+    |
+272 | #[cfg(any(kani, prover_rw_resume_scalar))]
+    |           ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:272:17
+    |
+272 | #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:314:15
+    |
+314 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:314:21
+    |
+314 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:318:15
+    |
+318 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:318:21
+    |
+318 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:328:15
+    |
+328 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:328:21
+    |
+328 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:353:15
+    |
+353 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:353:21
+    |
+353 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:374:15
+    |
+374 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:374:21
+    |
+374 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:433:15
+    |
+433 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |               ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:433:21
+    |
+433 |     #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:490:63
+    |
+490 |             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+    |                                                               ^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:7:41
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |                                         ^^^^^^^^^^^^^^^^^^^^^
+help: remove the unnecessary path segments
+    |
+490 -             volatile_set((self as *mut Self).cast::<u8>(), 0, mem::size_of::<Self>());
+490 +             volatile_set((self as *mut Self).cast::<u8>(), 0, size_of::<Self>());
+    |
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:535:43
+    |
+535 |         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+    |                                           ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+535 -         let size = self.len().checked_mul(mem::size_of::<Z>()).unwrap();
+535 +         let size = self.len().checked_mul(size_of::<Z>()).unwrap();
+    |
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:793:19
+    |
+793 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                   ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:793:25
+    |
+793 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:795:19
+    |
+795 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                   ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:795:25
+    |
+795 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:798:19
+    |
+798 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                   ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `prover_rw_resume_scalar`
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:798:25
+    |
+798 |         #[cfg(any(kani, prover_rw_resume_scalar))]
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(prover_rw_resume_scalar)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(prover_rw_resume_scalar)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unnecessary qualification
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:921:16
+    |
+921 |     let size = mem::size_of::<F>();
+    |                ^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+921 -     let size = mem::size_of::<F>();
+921 +     let size = size_of::<F>();
+    |
+
+warning: missing documentation for a module
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:274:1
+    |
+274 | pub mod ProverRwResumeScalar {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:7:9
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms, unused_qualifications)]
+    |         ^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:315:5
+    |
+315 |     fn prover_rw_resume_scalar_observe(&self, _j: usize) -> ProverRwResumeScalar::Observation {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:319:5
+    |
+319 |     fn prover_rw_resume_scalar_byte(&self) -> Option<u8> { None }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:329:5
+    |
+329 |     fn prover_rw_resume_scalar_byte(&self) -> Option<u8> { None }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:276:5
+    |
+276 |     pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }
+    |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:276:30
+    |
+276 |     pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }
+    |                              ^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:276:46
+    |
+276 |     pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }
+    |                                              ^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:276:59
+    |
+276 |     pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }
+    |                                                           ^^^^^^^^^^^^
+
+warning: missing documentation for a struct
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:278:5
+    |
+278 |     pub struct Event { pub before: Observation, pub after: Observation }
+    |     ^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:278:24
+    |
+278 |     pub struct Event { pub before: Observation, pub after: Observation }
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a struct field
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:278:49
+    |
+278 |     pub struct Event { pub before: Observation, pub after: Observation }
+    |                                                 ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:288:5
+    |
+288 |     pub fn initialize(j: u8) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:292:5
+    |
+292 |     pub fn coordinate() -> usize { unsafe { J } }
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:293:5
+    |
+293 |     pub fn record(before: Observation, after: Observation) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: missing documentation for a function
+   --> /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/vendor/zeroize-1.8.1/src/lib.rs:304:5
+    |
+304 |     pub fn events() -> (Event, Event, Event, u8, bool) {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `zeroize` (lib) generated 38 warnings (run `cargo fix --lib -p zeroize` to apply 3 suggestions)
+   Compiling prover-rw-resume-scalar v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/proof)
+    Finished `release` profile [optimized] target(s) in 5.72s

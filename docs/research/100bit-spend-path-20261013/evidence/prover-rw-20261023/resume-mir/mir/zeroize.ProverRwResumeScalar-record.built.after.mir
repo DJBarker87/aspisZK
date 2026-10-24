@@ -1,0 +1,155 @@
+// MIR for `ProverRwResumeScalar::record` after built
+
+fn record(_1: Observation, _2: Observation) -> () {
+    debug before => _1;
+    debug after => _2;
+    let mut _0: ();
+    let _3: ProverRwResumeScalar::Event;
+    let mut _4: ProverRwResumeScalar::Observation;
+    let mut _5: ProverRwResumeScalar::Observation;
+    let mut _6: *mut u8;
+    let mut _7: ProverRwResumeScalar::Event;
+    let mut _8: *mut ProverRwResumeScalar::Event;
+    let mut _9: *mut u8;
+    let mut _10: ProverRwResumeScalar::Event;
+    let mut _11: *mut ProverRwResumeScalar::Event;
+    let mut _12: *mut u8;
+    let mut _13: ProverRwResumeScalar::Event;
+    let mut _14: *mut ProverRwResumeScalar::Event;
+    let mut _15: *mut u8;
+    let mut _16: *mut bool;
+    scope 1 {
+        debug event => _3;
+    }
+
+    bb0: {
+        StorageLive(_3);
+        StorageLive(_4);
+        _4 = copy _1;
+        StorageLive(_5);
+        _5 = copy _2;
+        _3 = Event { before: move _4, after: move _5 };
+        StorageDead(_5);
+        StorageDead(_4);
+        FakeRead(ForLet(None), _3);
+        StorageLive(_6);
+        _6 = const {alloc6: *mut u8};
+        PlaceMention((*_6));
+        switchInt(copy (*_6)) -> [0: bb2, 1: bb4, 2: bb6, otherwise: bb1];
+    }
+
+    bb1: {
+        StorageLive(_16);
+        _16 = const {alloc7: *mut bool};
+        (*_16) = const true;
+        StorageDead(_16);
+        _0 = const ();
+        goto -> bb12;
+    }
+
+    bb2: {
+        falseEdge -> [real: bb11, imaginary: bb4];
+    }
+
+    bb3: {
+        goto -> bb1;
+    }
+
+    bb4: {
+        falseEdge -> [real: bb10, imaginary: bb6];
+    }
+
+    bb5: {
+        goto -> bb1;
+    }
+
+    bb6: {
+        falseEdge -> [real: bb9, imaginary: bb1];
+    }
+
+    bb7: {
+        goto -> bb1;
+    }
+
+    bb8: {
+        FakeRead(ForMatchedPlace(None), (*_6));
+        unreachable;
+    }
+
+    bb9: {
+        StorageLive(_13);
+        _13 = copy _3;
+        StorageLive(_14);
+        _14 = const {alloc12: *mut Event};
+        (*_14) = move _13;
+        StorageDead(_13);
+        StorageDead(_14);
+        StorageLive(_15);
+        _15 = const {alloc6: *mut u8};
+        (*_15) = const 3_u8;
+        StorageDead(_15);
+        _0 = const ();
+        goto -> bb12;
+    }
+
+    bb10: {
+        StorageLive(_10);
+        _10 = copy _3;
+        StorageLive(_11);
+        _11 = const {alloc10: *mut Event};
+        (*_11) = move _10;
+        StorageDead(_10);
+        StorageDead(_11);
+        StorageLive(_12);
+        _12 = const {alloc6: *mut u8};
+        (*_12) = const 2_u8;
+        StorageDead(_12);
+        _0 = const ();
+        goto -> bb12;
+    }
+
+    bb11: {
+        StorageLive(_7);
+        _7 = copy _3;
+        StorageLive(_8);
+        _8 = const {alloc8: *mut Event};
+        (*_8) = move _7;
+        StorageDead(_7);
+        StorageDead(_8);
+        StorageLive(_9);
+        _9 = const {alloc6: *mut u8};
+        (*_9) = const 1_u8;
+        StorageDead(_9);
+        _0 = const ();
+        goto -> bb12;
+    }
+
+    bb12: {
+        StorageDead(_3);
+        StorageDead(_6);
+        return;
+    }
+}
+
+alloc12 (static: E2, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc10 (static: E1, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc8 (static: E0, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+    0x10 │ 00 00 00 00 00 00 00 00 00 00 __ __ __ __ __ __ │ ..........░░░░░░
+}
+
+alloc7 (static: OVERFLOW, size: 1, align: 1) {
+    00                                              │ .
+}
+
+alloc6 (static: COUNT, size: 1, align: 1) {
+    00                                              │ .
+}

@@ -1,0 +1,120 @@
+// MIR for `Original::entropy_nonzero32` after built
+
+fn Original::entropy_nonzero32(_1: &[u8; 32]) -> bool {
+    debug bytes => _1;
+    let mut _0: bool;
+    let mut _2: u8;
+    let _4: ();
+    let mut _5: ();
+    let mut _6: bool;
+    let mut _7: usize;
+    let mut _8: u8;
+    let _9: usize;
+    let mut _10: bool;
+    let mut _11: (usize, bool);
+    let mut _12: !;
+    let _13: ();
+    let mut _14: !;
+    let mut _15: u8;
+    scope 1 {
+        debug combined => _2;
+        let mut _3: usize;
+        scope 2 {
+            debug i => _3;
+        }
+    }
+
+    bb0: {
+        StorageLive(_2);
+        _2 = const 0_u8;
+        FakeRead(ForLet(None), _2);
+        StorageLive(_3);
+        _3 = const 0_usize;
+        FakeRead(ForLet(None), _3);
+        StorageLive(_4);
+        goto -> bb1;
+    }
+
+    bb1: {
+        falseUnwind -> [real: bb2, unwind: bb13];
+    }
+
+    bb2: {
+        StorageLive(_6);
+        StorageLive(_7);
+        _7 = copy _3;
+        _6 = Lt(move _7, const 32_usize);
+        switchInt(move _6) -> [0: bb4, otherwise: bb3];
+    }
+
+    bb3: {
+        StorageDead(_7);
+        StorageLive(_8);
+        StorageLive(_9);
+        _9 = copy _3;
+        FakeRead(ForIndex, (*_1));
+        _10 = Lt(copy _9, const 32_usize);
+        assert(move _10, "index out of bounds: the length is {} but the index is {}", const 32_usize, copy _9) -> [success: bb5, unwind: bb13];
+    }
+
+    bb4: {
+        goto -> bb7;
+    }
+
+    bb5: {
+        _8 = copy (*_1)[_9];
+        _2 = BitOr(copy _2, move _8);
+        StorageDead(_8);
+        StorageDead(_9);
+        _11 = AddWithOverflow(copy _3, const 1_usize);
+        assert(!move (_11.1: bool), "attempt to compute `{} + {}`, which would overflow", copy _3, const 1_usize) -> [success: bb6, unwind: bb13];
+    }
+
+    bb6: {
+        _3 = move (_11.0: usize);
+        _5 = const ();
+        goto -> bb11;
+    }
+
+    bb7: {
+        StorageDead(_7);
+        StorageLive(_13);
+        _4 = const ();
+        goto -> bb12;
+    }
+
+    bb8: {
+        unreachable;
+    }
+
+    bb9: {
+        StorageDead(_13);
+        unreachable;
+    }
+
+    bb10: {
+        goto -> bb11;
+    }
+
+    bb11: {
+        StorageDead(_6);
+        goto -> bb1;
+    }
+
+    bb12: {
+        StorageDead(_13);
+        StorageDead(_6);
+        StorageDead(_4);
+        StorageLive(_15);
+        _15 = copy _2;
+        _0 = Ne(move _15, const 0_u8);
+        StorageDead(_15);
+        StorageDead(_3);
+        StorageDead(_2);
+        return;
+    }
+
+    bb13 (cleanup): {
+        resume;
+    }
+}
