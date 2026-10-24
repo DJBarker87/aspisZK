@@ -1,0 +1,936 @@
+'AspisR1.Port10AUTH_FirstBoth.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Batch.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    ∀ (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+        AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+          AspisR1.MultiproofConeP6Batch.LeafGate H leaf →
+            ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+              (↑proof).length = 57607 →
+                ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+                  parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                    ∀ (p : VTop_Stages.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                      (q : Fin 22 → Fin 262144) (batch : Aeneas.Std.Usize),
+                      ↑batch < 2 →
+                        ∀ (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+                          (∀ (b k : ℕ),
+                              b < 2 →
+                                k < 3 →
+                                  AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                                    AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                      (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                                      (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+                            (∀ (k : Fin 3), AspisR1.Port4B_TreeJoin.PackedKeys base p.queries q batch (↑k)#usize) →
+                              AspisR1.Port3_BatchStage.root0 p =
+                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                    (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                                AspisR1.Port3_BatchStage.root1 p =
+                                    AspisV8R19.SqueezeOracleBridge.encodeState
+                                      (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                                  folded =
+                                      AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                                    AspisR1.Port3_BatchStage.batch (AspisR1.Port4B_VerifyInstall.install base) D proof p
+                                          folded batch hash =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                                      AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed
+                                            q nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                        (AspisR1.CheckpointBytes5Inputs.observe
+                                            (AspisR1.Port9OR_Code.trace (AspisR1.VTop_Checkpoint.digest D) hash
+                                                (AspisR1.Port9OR_Batch.code base (AspisR1.VTop_Checkpoint.digest D) hash
+                                                  proof p folded batch)).1,
+                                          true) :=
+⋯
+'AspisR1.Port10AUTH_Batch.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_BatchLog.bind_success : ∀ {A B X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+  (hash : X) (p : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B) (a : A),
+  AspisR1.CheckpointBytes5Effect.erase D hash p = Aeneas.Std.Result.ok a →
+    AspisR1.Port9OR_Code.trace D hash (p >>= k) =
+      ((AspisR1.Port9OR_Code.trace D hash p).1 ++ (AspisR1.Port9OR_Code.trace D hash (k a)).1,
+        (AspisR1.Port9OR_Code.trace D hash (k a)).2) :=
+⋯
+'AspisR1.Port10AUTH_BatchLog.bind_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_BatchLog.logs : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : AspisR1.CheckpointBytes5Effect.Digest) (batch : Aeneas.Std.Usize)
+  (idx1 idx2 idx3 : AspisR1.Port9OR_BatchStep.Indices) (val1 val2 val3 : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.CheckpointBytes5Effect.erase D hash
+        (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries (AspisR1.Port3_BatchStage.root0 p) batch 0#usize
+          AspisR1.Port4B_BatchJoin.initial.idx AspisR1.Port4B_BatchJoin.initial.val) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx1, val1) →
+    AspisR1.CheckpointBytes5Effect.erase D hash
+          (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries (AspisR1.Port3_BatchStage.root1 p) batch 1#usize
+            idx1 val1) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx2, val2) →
+      AspisR1.CheckpointBytes5Effect.erase D hash
+            (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx3, val3) →
+        (AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_Batch.code base D hash proof p folded batch)).1 =
+          (AspisR1.Port9OR_Code.trace D hash
+                  (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries (AspisR1.Port3_BatchStage.root0 p) batch
+                    0#usize AspisR1.Port4B_BatchJoin.initial.idx AspisR1.Port4B_BatchJoin.initial.val)).1 ++
+              (AspisR1.Port9OR_Code.trace D hash
+                  (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries (AspisR1.Port3_BatchStage.root1 p) batch
+                    1#usize idx1 val1)).1 ++
+            (AspisR1.Port9OR_Code.trace D hash
+                (AspisR1.Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2)).1 :=
+⋯
+'AspisR1.Port10AUTH_BatchLog.logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Dictionary.loop : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (kind lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (fuel : ℕ) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos : Aeneas.Std.Usize),
+  AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys fuel idx val d pos =
+    AspisR1.Port9OR_BatchLoop.code base E hash proof root kind lo n slot keys fuel idx val d pos :=
+⋯
+'AspisR1.Port10AUTH_Dictionary.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Dictionary.tree : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (batch kind : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.Port9OR_BatchTree.code base D hash proof queries root batch kind idx val =
+    AspisR1.Port9OR_BatchTree.code base E hash proof queries root batch kind idx val :=
+⋯
+'AspisR1.Port10AUTH_Dictionary.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Dictionary.batch : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : AspisR1.CheckpointBytes5Effect.Digest) (which : Aeneas.Std.Usize),
+  AspisR1.Port9OR_Batch.code base D hash proof p folded which =
+    AspisR1.Port9OR_Batch.code base E hash proof p folded which :=
+⋯
+'AspisR1.Port10AUTH_Dictionary.batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_FirstBoth.accepted : ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder)
+  (adapter : AdapterRw.Ops) (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (P : AspisR1.Port1_StoredCarrier.ByteProver) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+    AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+      AspisR1.MultiproofConeP6Batch.LeafGate H leaf →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port6AUTH_Prefix.source decoder
+                    (AspisR1.Port1_Driver.rust adapter
+                      (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                    P)).2.2 =
+            true →
+          have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+          have rust := AspisR1.Port1_Driver.rust adapter (fun {A} => impl) D hash;
+          have input := (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1;
+          ∃ pub proof semantic saved p a g folded p0 a0 g0 folded0 slice conversion,
+            AspisR1.Port1_Driver.asSlice input.statement.pubBytes = some pub ∧
+              AspisR1.Port1_Driver.asSlice input.stored = some proof ∧
+                AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok (some semantic) ∧
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                            (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash
+                              none))).2 =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                    AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D H) saved.deref proof
+                          pub AspisR1Stage2.transport.Variant.S2 hash =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+                      a.next = 10#usize ∧
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (rest (AspisR1.VTop_Trace.Call.op17 29#usize p.gamma))).2 =
+                            Aeneas.Std.Result.ok g ∧
+                          AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded 1#usize hash =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                            Aeneas.Std.core.slice.index.Slice.index
+                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+                                  { start := 7751#usize, «end» := 7783#usize } =
+                                Aeneas.Std.Result.ok slice ∧
+                              Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize
+                                    Aeneas.Std.core.marker.CopyU8 slice =
+                                  Aeneas.Std.Result.ok conversion ∧
+                                ops.unwrap32 conversion = Aeneas.Std.Result.ok folded0 ∧
+                                  AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p0 folded0
+                                        0#usize hash =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.VTop_OracleCode.interpret (fun {A} => impl) ⋯)).2 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                      (∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                                          (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8), ⋯) ∧
+                                        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                                          (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8), ⋯ :=
+⋯
+'AspisR1.Port10AUTH_FirstBoth.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_FirstOne.first_logs : ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier)
+  (P : AspisR1.Port1_StoredCarrier.ByteProver) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  ∃ before,
+    (AspisR1.Port6AUTH_SourceCut.first rust P H).1 =
+      before ++ (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1)).1 :=
+⋯
+'AspisR1.Port10AUTH_FirstOne.first_logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_FirstOne.accepted : ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder)
+  (adapter : AdapterRw.Ops) (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (P : AspisR1.Port1_StoredCarrier.ByteProver) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+    AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+      AspisR1.MultiproofConeP6Batch.LeafGate H leaf →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port6AUTH_Prefix.source decoder
+                    (AspisR1.Port1_Driver.rust adapter
+                      (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                    P)).2.2 =
+            true →
+          have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+          have rust := AspisR1.Port1_Driver.rust adapter (fun {A} => impl) D hash;
+          have input := (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1;
+          ∃ pub proof semantic saved p a g folded,
+            AspisR1.Port1_Driver.asSlice input.statement.pubBytes = some pub ∧
+              AspisR1.Port1_Driver.asSlice input.stored = some proof ∧
+                AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok (some semantic) ∧
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                            (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash
+                              none))).2 =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                    AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D H) saved.deref proof
+                          pub AspisR1Stage2.transport.Variant.S2 hash =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+                      a.next = 10#usize ∧
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (rest (AspisR1.VTop_Trace.Call.op17 29#usize p.gamma))).2 =
+                            Aeneas.Std.Result.ok g ∧
+                          AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded 1#usize hash =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                            ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                              (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+                              (↑proof).length = 57607 →
+                                parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                                  AspisR1.Port4B_KeyInstall.queries p.queries = q →
+                                    (∀ (b k : ℕ),
+                                        b < 2 →
+                                          k < 3 →
+                                            AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                                              AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                                (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                                                (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+                                      AspisR1.Port3_BatchStage.root0 p =
+                                          AspisV8R19.SqueezeOracleBridge.encodeState
+                                            (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                                        AspisR1.Port3_BatchStage.root1 p =
+                                            AspisV8R19.SqueezeOracleBridge.encodeState
+                                              (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                                          folded =
+                                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                                (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                                            ∀ (x : AspisV8R19.DuplexFrames.Bytes),
+                                              FS2.Duplex.Read
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling
+                                                        leaf parsed q nodes 1 AspisR1.Port4B_BatchJoin.initial)).1
+                                                  x →
+                                                FS2.Duplex.Read (AspisR1.Port6AUTH_SourceCut.first rust P H).1 x :=
+⋯
+'AspisR1.Port10AUTH_FirstOne.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Installed.accepted : ∀ {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+  AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+    AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+      AspisR1.MultiproofConeP6Batch.LeafGate H leaf →
+        ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+          (↑proof).length = 57607 →
+            ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+              parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                ∀ (p : VTop_Stages.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                  (q : Fin 22 → Fin 262144),
+                  AspisR1.Port4B_KeyInstall.queries p.queries = q →
+                    ∀ (batch : Aeneas.Std.Usize),
+                      ↑batch < 2 →
+                        ∀ (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8),
+                          (∀ (b k : ℕ),
+                              b < 2 →
+                                k < 3 →
+                                  AspisR1.MultiproofConeCanonical.bytesOf ↑(nodes b k) =
+                                    AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                      (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                                      (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+                            AspisR1.Port3_BatchStage.root0 p =
+                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                  (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                              AspisR1.Port3_BatchStage.root1 p =
+                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                    (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                                folded =
+                                    AspisV8R19.SqueezeOracleBridge.encodeState
+                                      (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                                  AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded batch
+                                        hash =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                                    AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                                          nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.Port9OR_Installed.batch D hash proof p folded batch)).1,
+                                        true) :=
+⋯
+'AspisR1.Port10AUTH_Installed.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Leaf.lift_bind : ∀ {A B X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (r : Aeneas.Std.Result A) (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisR1.Port9OR_Code.trace D hash (AspisR1.CheckpointBytes5Effect.liftResult r >>= k) =
+    match r with
+    | Aeneas.Std.Result.ok a => AspisR1.Port9OR_Code.trace D hash (k a)
+    | Aeneas.Std.Result.fail e => ([], Aeneas.Std.Result.fail e)
+    | Aeneas.Std.Result.div => ([], Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port10AUTH_Leaf.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem AspisR1.Port10AUTH_Leaf.pure_trace : ∀ {A X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+  (hash : X) (a : A), AspisR1.Port9OR_Code.trace D hash (pure a) = ([], Aeneas.Std.Result.ok a) :=
+⋯
+'AspisR1.Port10AUTH_Leaf.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Leaf.active : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (kind lo n slot d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (key : Aeneas.Std.U64) (view : Aeneas.Std.Slice Aeneas.Std.U8),
+  pos < n →
+    keys.index_usize pos = Aeneas.Std.Result.ok key →
+      (AspisR1.Port9OR_BatchStep.ops base).op2 proof (AspisR1.Port4B_NativeLeaf.openingIndex lo key) =
+          Aeneas.Std.Result.ok view →
+        AspisR1.Port9OR_Code.trace D hash
+            (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys idx val d pos) =
+          AspisR1.Port9OR_Code.trace D hash do
+            let leaf ← AspisR1.Port4B_LeafCode.code kind view
+            AspisR1.CheckpointBytes5Effect.liftResult
+                (AspisR1.Port4B_LeafStep.post idx val d (AspisR1.Port4B_NativeLeaf.decodedIndex key) leaf
+                  (pos.wrapping_add 1#usize)) :=
+⋯
+'AspisR1.Port10AUTH_Leaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Leaf.leaf_trace : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (kind : Aeneas.Std.Usize) (view : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑view).length = 832 →
+    AspisR1.Port9OR_Code.trace D hash (AspisR1.Port4B_LeafCode.code kind view) =
+      match D.digest hash (AspisR1.Port4B_LeafCode.input kind view) with
+      | Aeneas.Std.Result.ok d => ([(AspisR1.Port4B_LeafCode.input kind view, d)], Aeneas.Std.Result.ok d)
+      | Aeneas.Std.Result.fail e => ([], Aeneas.Std.Result.fail e)
+      | Aeneas.Std.Result.div => ([], Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port10AUTH_Leaf.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Leaf.accepted_trace : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (kind lo n slot d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (key : Aeneas.Std.U64) (view : Aeneas.Std.Slice Aeneas.Std.U8),
+  pos < n →
+    keys.index_usize pos = Aeneas.Std.Result.ok key →
+      (AspisR1.Port9OR_BatchStep.ops base).op2 proof (AspisR1.Port4B_NativeLeaf.openingIndex lo key) =
+          Aeneas.Std.Result.ok view →
+        (↑view).length = 832 →
+          ∀ (out : Aeneas.Std.ControlFlow AspisR1.Port9OR_BatchStep.Next AspisR1.Port9OR_BatchStep.Out),
+            AspisR1.CheckpointBytes5Effect.erase D hash
+                  (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys idx val d pos) =
+                Aeneas.Std.Result.ok out →
+              ∃ digest,
+                D.digest hash (AspisR1.Port4B_LeafCode.input kind view) = Aeneas.Std.Result.ok digest ∧
+                  AspisR1.Port4B_LeafStep.post idx val d (AspisR1.Port4B_NativeLeaf.decodedIndex key) digest
+                        (pos.wrapping_add 1#usize) =
+                      Aeneas.Std.Result.ok out ∧
+                    AspisR1.Port9OR_Code.trace D hash
+                        (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys idx val d pos) =
+                      ([(AspisR1.Port4B_LeafCode.input kind view, digest)], Aeneas.Std.Result.ok out) :=
+⋯
+'AspisR1.Port10AUTH_Leaf.accepted_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Leaves.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize)
+              (root : AspisR1.CheckpointBytes5Effect.Digest) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+              (outIdx : AspisR1.Port9OR_BatchStep.Indices) (outVal : AspisR1.Port9OR_BatchStep.Values) (ps : List ℕ)
+              (s : MultiproofConeRef.reference.Scratch) (pos : Aeneas.Std.Usize) (fuel : ℕ),
+              (∀ p ∈ ps, p ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑pos + ps.length = ↑n →
+                    ↑n ≤ 16 →
+                      ↑s.n + ps.length ≤ 16 →
+                        AspisR1.Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos ps →
+                          AspisR1.CheckpointBytes5Effect.erase D hash
+                                (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys fuel s.idx
+                                  s.val s.n pos) =
+                              Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())) →
+                            ∃ t remaining,
+                              AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.MultiproofConeP6Batch.leaves AspisR1.MultiproofConeP6Batch.referenceLeaf
+                                      parsed q (↑kind) ps s) =
+                                  (List.map
+                                      (fun p =>
+                                        (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                                          H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                                      ps,
+                                    Aeneas.Std.Result.ok (some t)) ∧
+                                AspisR1.CheckpointBytes5Effect.erase D hash
+                                      (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys
+                                        remaining t.idx t.val t.n n) =
+                                    Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())) ∧
+                                  AspisR1.CheckpointBytes5Inputs.observe
+                                      (AspisR1.Port9OR_Code.trace D hash
+                                          (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys
+                                            fuel s.idx s.val s.n pos)).1 =
+                                    List.map
+                                        (fun p =>
+                                          (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p,
+                                            H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+                                        ps ++
+                                      AspisR1.CheckpointBytes5Inputs.observe
+                                        (AspisR1.Port9OR_Code.trace D hash
+                                            (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys
+                                              remaining t.idx t.val t.n n)).1 :=
+⋯
+'AspisR1.Port10AUTH_Leaves.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Levels.rows : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (fuel : ℕ)
+  (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8) (i w : Aeneas.Std.Usize),
+  AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash
+      (AspisR1.Port9OR_P6Rows.rows fuel s physical i w) =
+    AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+      (AspisR1.MultiproofConePhysicalLevels.rows fuel s physical i w) :=
+⋯
+'AspisR1.Port10AUTH_Levels.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Levels.level : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (s : MultiproofConeRef.reference.Scratch)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash
+      (AspisR1.Port9OR_P6Levels.level s physical) =
+    AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+      (AspisR1.MultiproofConePhysicalLevels.level s physical) :=
+⋯
+'AspisR1.Port10AUTH_Levels.level' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Levels.levels : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (height : ℕ)
+  (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash
+      (AspisR1.Port9OR_P6Levels.levels height s physical) =
+    AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+      (AspisR1.MultiproofConePhysicalLevels.levels height s physical) :=
+⋯
+'AspisR1.Port10AUTH_Levels.levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Levels.accepted : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (height : ℕ) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+      (out : MultiproofConeRef.reference.Level),
+      AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Levels.levels height s physical) =
+          Aeneas.Std.Result.ok out →
+        AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_P6Levels.levels height s physical) =
+          AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+            (AspisR1.MultiproofConePhysicalLevels.levels height s physical) :=
+⋯
+'AspisR1.Port10AUTH_Levels.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_LoopTail.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (kind lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch)
+  (outIdx : AspisR1.Port9OR_BatchStep.Indices) (outVal : AspisR1.Port9OR_BatchStep.Values),
+  ↑n < 256 →
+    ∀ (fuel : ℕ),
+      AspisR1.CheckpointBytes5Effect.erase D hash
+            (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys fuel s.idx s.val s.n n) =
+          Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())) →
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port9OR_BatchStep.ops base) D
+              proof root kind hash lo n slot keys s.idx s.val s.n n =
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.ControlFlow.done (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))) ∧
+          (AspisR1.Port9OR_Code.trace D hash
+                (AspisR1.Port9OR_BatchLoop.code base D hash proof root kind lo n slot keys fuel s.idx s.val s.n n)).1 =
+            (AspisR1.Port9OR_Code.trace D hash
+                (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val s.n n)).1 :=
+⋯
+'AspisR1.Port10AUTH_LoopTail.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Node.parent : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (s : MultiproofConeRef.reference.Scratch)
+  (left right : AspisR1.CheckpointBytes5Effect.Digest) (ni cursor : Aeneas.Std.Usize) (index : Aeneas.Std.U32)
+  (w : Aeneas.Std.Usize),
+  AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash
+      (AspisR1.Port9OR_P6Node.parent s left right ni cursor index w) =
+    AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+      (AspisR1.MultiproofConePhysicalProgram.writer s left right ni cursor index w) :=
+⋯
+'AspisR1.Port10AUTH_Node.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Node.node : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (s : MultiproofConeRef.reference.Scratch)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (i w : Aeneas.Std.Usize),
+  AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash
+      (AspisR1.Port9OR_P6Node.node s physical i w) =
+    AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+      (AspisR1.MultiproofConePhysicalProgram.node s physical i w) :=
+⋯
+'AspisR1.Port10AUTH_Node.node' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Node.accepted : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8) (i w : Aeneas.Std.Usize)
+      (out : MultiproofConeRef.reference.Row),
+      AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Node.node s physical i w) =
+          Aeneas.Std.Result.ok out →
+        AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_P6Node.node s physical i w) =
+          AspisV8R19.MemoizedProgramLaw.eval (AspisR1.MultiproofConePhysicalTransport.rawOracle H)
+            (AspisR1.MultiproofConePhysicalProgram.node s physical i w) :=
+⋯
+'AspisR1.Port10AUTH_Node.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Selected.iteration : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+      (↑proof).length = 57607 →
+        ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot pos : Aeneas.Std.Usize)
+              (root : AspisR1.CheckpointBytes5Effect.Digest) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+              (s : MultiproofConeRef.reference.Scratch),
+              selected ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  pos < n →
+                    ∀ (room : ↑s.n < 16),
+                      keys.index_usize pos =
+                          Aeneas.Std.Result.ok (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected) →
+                        ∀ (out : Aeneas.Std.ControlFlow AspisR1.Port9OR_BatchStep.Next AspisR1.Port9OR_BatchStep.Out),
+                          AspisR1.CheckpointBytes5Effect.erase D hash
+                                (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val
+                                  s.n pos) =
+                              Aeneas.Std.Result.ok out →
+                            ∃ view,
+                              (AspisR1.Port9OR_BatchStep.ops base).op2 proof
+                                    (AspisR1.Port4B_NativeLeaf.openingIndex lo
+                                      (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+                                  Aeneas.Std.Result.ok view ∧
+                                AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind view) =
+                                    AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+                                  AspisR1.Port9OR_Code.trace D hash
+                                      (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx
+                                        s.val s.n pos) =
+                                    ([(AspisR1.Port4B_LeafCode.input kind view,
+                                          AspisV8R19.SqueezeOracleBridge.encodeState
+                                            (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))],
+                                      Aeneas.Std.Result.ok
+                                        (AspisR1.Port4B_LeafStep.project s (pos.wrapping_add 1#usize)
+                                          (AspisR1.MultiproofConeLeafContent.next s
+                                            (AspisR1.MultiproofConeLeafFold.key q (↑kind) selected)
+                                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                                              (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+                                            room))) :=
+⋯
+'AspisR1.Port10AUTH_Selected.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem AspisR1.Port10AUTH_TX1Cut.source : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (public1 : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public_bytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (k : Aeneas.Std.Usize) (hash : Hash)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)),
+  AspisR1.Port10AUTH_TX1Cut.code D public1 public_bytes proof k hash obs =
+    AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D public1 public_bytes proof k hash obs :=
+⋯
+'AspisR1.Port10AUTH_TX1Cut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_TX1Reached.accepted : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) {X : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.VTop_OracleCode.interpret
+            (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+            (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+    ∃ p a g folded slice conversion earlier,
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            proof { start := 7751#usize, «end» := 7783#usize } =
+          Aeneas.Std.Result.ok slice ∧
+        Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 slice =
+            Aeneas.Std.Result.ok conversion ∧
+          ops.unwrap32 conversion = Aeneas.Std.Result.ok folded ∧
+            AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded 0#usize hash =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                        (AspisR1.Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p a g
+                          (Aeneas.Std.core.result.Result.Ok ())))).2 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                        (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash
+                          none))).1 =
+                  earlier ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.Port9OR_Installed.batch D hash proof p folded 0#usize)).1 ++
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                          (AspisR1.Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p a g
+                            (Aeneas.Std.core.result.Result.Ok ())))).1 :=
+⋯
+'AspisR1.Port10AUTH_TX1Reached.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Tail.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent),
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+        AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+          ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+            (↑proof).length = 57607 →
+              ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+                parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                  ∀ (b : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+                    b < 2 →
+                      ↑kind < 3 →
+                        ↑slot = 3 * b + ↑kind →
+                          ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                            root =
+                                AspisV8R19.SqueezeOracleBridge.encodeState
+                                  (AspisR1.OraclePortBatchDraft.committedRoot parsed ↑kind) →
+                              ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+                                (s : MultiproofConeRef.reference.Scratch)
+                                (outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+                                (outVal : AspisR1.Port3_NativeBatchCalls.Values),
+                                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                                      (AspisR1.Port9OR_BatchStep.ops base) D proof root kind hash lo n slot keys s.idx
+                                      s.val s.n n =
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.ControlFlow.done
+                                        (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))) →
+                                  ∃ nodes final,
+                                    AspisR1.Port4B_SlotInstall.nodeSlot proof slot = Aeneas.Std.Result.ok nodes ∧
+                                      AspisR1.MultiproofConeCanonical.bytesOf ↑nodes =
+                                          AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                            (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + ↑kind))
+                                            (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + ↑kind)) ∧
+                                        AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.MultiproofConeP6Batch.tailState
+                                                (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed b
+                                                (↑kind) nodes s) =
+                                            (AspisR1.CheckpointBytes5Inputs.observe
+                                                (AspisR1.Port9OR_Code.trace D hash
+                                                    (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n
+                                                      slot keys s.idx s.val s.n n)).1,
+                                              true, final) ∧
+                                          final.idx = outIdx ∧ final.val = outVal :=
+⋯
+'AspisR1.Port10AUTH_Tail.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_TerminalCut.map_log : ∀ {A B X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+  (hash : X) (p : AspisR1.CheckpointBytes5Effect.Code A) (f : A → B),
+  (AspisR1.Port9OR_Code.trace D hash do
+        let a ← p
+        pure (f a)).1 =
+    (AspisR1.Port9OR_Code.trace D hash p).1 :=
+⋯
+'AspisR1.Port10AUTH_TerminalCut.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_TerminalCut.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (kind lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch)
+  (outIdx : AspisR1.Port9OR_BatchStep.Indices) (outVal : AspisR1.Port9OR_BatchStep.Values),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port9OR_BatchStep.ops base) D proof
+        root kind hash lo n slot keys s.idx s.val s.n n =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))) →
+    ∃ front count cap nodes padding supplied ce after,
+      Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+            s.idx { «end» := s.n } =
+          Aeneas.Std.Result.ok front ∧
+        (AspisR1.Port4B_VerifyInstall.install base).op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two front =
+            Aeneas.Std.Result.ok (some count) ∧
+          (AspisR1.Port4B_VerifyInstall.install base).op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+            (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                      ⋯).index_usize
+                  slot =
+                Aeneas.Std.Result.ok cap ∧
+              ¬count > cap ∧
+                Aeneas.Std.core.slice.index.Slice.index
+                      (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes
+                      { start := Aeneas.Std.Usize.wrapping_mul 32#usize count } =
+                    Aeneas.Std.Result.ok padding ∧
+                  Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+                    (AspisR1.Port9OR_BatchStep.ops base).op0
+                          (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+                          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                            (AspisR1.Port9OR_BatchStep.ops base) D)
+                          ce () =
+                        Aeneas.Std.Result.ok (false, after) ∧
+                      Aeneas.Std.core.slice.index.Slice.index
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes
+                            { «end» := Aeneas.Std.Usize.wrapping_mul 32#usize count } =
+                          Aeneas.Std.Result.ok supplied ∧
+                        (AspisR1.Port4B_VerifyInstall.install base).op10 D hash
+                              AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n supplied =
+                            Aeneas.Std.Result.ok (true, outIdx, outVal) ∧
+                          (AspisR1.Port9OR_Code.trace D hash
+                                (AspisR1.Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val
+                                  s.n n)).1 =
+                            (AspisR1.Port9OR_Code.trace D hash
+                                (AspisR1.Port9OR_BatchStep.verify root s.idx s.val s.n supplied)).1 :=
+⋯
+'AspisR1.Port10AUTH_TerminalCut.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Total.replace : ∀ {A X : Type} (D E : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (p : AspisR1.CheckpointBytes5Effect.Code A) (out : A),
+  (∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      D.digest hash parts = Aeneas.Std.Result.ok digest → E.digest hash parts = Aeneas.Std.Result.ok digest) →
+    AspisR1.CheckpointBytes5Effect.erase D hash p = Aeneas.Std.Result.ok out →
+      AspisR1.Port9OR_Code.trace E hash p = AspisR1.Port9OR_Code.trace D hash p :=
+⋯
+'AspisR1.Port10AUTH_Total.replace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Total.accepted : ∀ {A X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (p : AspisR1.CheckpointBytes5Effect.Code A)
+  (out : A),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    AspisR1.CheckpointBytes5Effect.erase D hash p = Aeneas.Std.Result.ok out →
+      AspisR1.Port9OR_Code.trace (AspisR1.Port10AUTH_Total.dictionary D H) hash p =
+        AspisR1.Port9OR_Code.trace D hash p :=
+⋯
+'AspisR1.Port10AUTH_Total.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Trace.trace_bind : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (p : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisR1.Port9OR_Code.trace D hash (p >>= k) =
+    match AspisR1.Port9OR_Code.trace D hash p with
+    | (before, Aeneas.Std.Result.ok a) =>
+      have after := AspisR1.Port9OR_Code.trace D hash (k a);
+      (before ++ after.1, after.2)
+    | (before, Aeneas.Std.Result.fail e) => (before, Aeneas.Std.Result.fail e)
+    | (before, Aeneas.Std.Result.div) => (before, Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Trace.run_of_trace : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (p : AspisR1.CheckpointBytes5Effect.Code A) (a : A) (before : AspisR1.CheckpointBytes5Effect.Log),
+  (AspisR1.Port9OR_Code.trace D hash p).2 = Aeneas.Std.Result.ok a →
+    AspisR1.CheckpointBytes5Effect.run D hash p before =
+      Aeneas.Std.Result.ok (a, before ++ (AspisR1.Port9OR_Code.trace D hash p).1) :=
+⋯
+'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Trace.trace_lift : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (r : Aeneas.Std.Result A),
+  AspisR1.Port9OR_Code.trace D hash (AspisR1.CheckpointBytes5Effect.liftResult r) = ([], r) :=
+⋯
+'AspisR1.Port10AUTH_Trace.trace_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Tree.accepted : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied →
+        AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling →
+          AspisR1.MultiproofConeP6Batch.LeafGate H leaf →
+            ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+              (↑proof).length = 57607 →
+                ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+                  parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                    ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (q : Fin 22 → Fin 262144)
+                      (batch kind : Aeneas.Std.Usize),
+                      ↑batch < 2 →
+                        ↑kind < 3 →
+                          AspisR1.Port4B_TreeJoin.PackedKeys base queries q batch kind →
+                            ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                              root =
+                                  AspisV8R19.SqueezeOracleBridge.encodeState
+                                    (AspisR1.OraclePortBatchDraft.committedRoot parsed ↑kind) →
+                                ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8),
+                                  AspisR1.MultiproofConeCanonical.bytesOf ↑physical =
+                                      AspisR1.OraclePortCompactDraft.slice parsed.wire
+                                        (AspisR1.OraclePortSelectedDraft.slotStart (3 * ↑batch + ↑kind))
+                                        (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * ↑batch + ↑kind)) →
+                                    ∀ (initial : MultiproofConeRef.reference.Scratch)
+                                      (outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+                                      (outVal : AspisR1.Port3_NativeBatchCalls.Values),
+                                      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+                                            (AspisR1.Port3_BatchStd.install (AspisR1.Port4B_VerifyInstall.install base))
+                                            D proof queries root batch kind initial.idx initial.val hash =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), outIdx, outVal) →
+                                        ∃ final,
+                                          AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.MultiproofConeP6Batch.batch_tree
+                                                  (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+                                                  parsed q (↑batch) (↑kind) physical initial) =
+                                              (AspisR1.CheckpointBytes5Inputs.observe
+                                                  (AspisR1.Port9OR_Code.trace D hash
+                                                      (AspisR1.Port9OR_BatchTree.code base D hash proof queries root
+                                                        batch kind initial.idx initial.val)).1,
+                                                true, final) ∧
+                                            final.idx = outIdx ∧ final.val = outVal :=
+⋯
+'AspisR1.Port10AUTH_Tree.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_Verify.accepted : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (nodeSource : AspisR1.MultiproofConeP6Composition.Node),
+      AspisR1.MultiproofConeP6Composition.NodeGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) nodeSource →
+        ∀ (root : AspisR1.CheckpointBytes5Effect.Digest) (s out : MultiproofConeRef.reference.Scratch)
+          (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+          AspisR1.OraclePortFrozenOrder.wellFormed
+              (List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)) →
+            (↑nodes).length % 32 = 0 →
+              (↑nodes).length ≤ 5504 →
+                AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) =
+                    Aeneas.Std.Result.ok (true, out) →
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.MultiproofConeP6Verify.verifyState nodeSource root nodes
+                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }) =
+                    (AspisR1.CheckpointBytes5Inputs.observe
+                        (AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_P6Verify.code root s nodes)).1,
+                      true, out) :=
+⋯
+'AspisR1.Port10AUTH_Verify.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_VerifyCut.after_success : ∀ (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8) (level : MultiproofConeRef.reference.Level)
+  (out : MultiproofConeRef.reference.Scratch),
+  AspisR1.Port9OR_P6Verify.after root nodes level = Aeneas.Std.Result.ok (true, out) →
+    level = MultiproofConeRef.reference.Level.Done out ∧
+      AspisR1.MultiproofConeRootGuard.sourceRoot root nodes out = true :=
+⋯
+'AspisR1.Port10AUTH_VerifyCut.after_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_VerifyCut.accepted : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (s out : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) =
+      Aeneas.Std.Result.ok (true, out) →
+    AspisR1.CheckpointBytes5Effect.erase D hash
+          (AspisR1.Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes) =
+        Aeneas.Std.Result.ok (MultiproofConeRef.reference.Level.Done out) ∧
+      AspisR1.MultiproofConeRootGuard.sourceRoot root nodes out = true ∧
+        (AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_P6Verify.code root s nodes)).1 =
+          (AspisR1.Port9OR_Code.trace D hash
+              (AspisR1.Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)).1 :=
+⋯
+'AspisR1.Port10AUTH_VerifyCut.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port10AUTH_VerifyProjection.log : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+  (hash : X) (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisR1.Port9OR_Code.trace D hash (AspisR1.Port9OR_BatchStep.verify root s.idx s.val s.n nodes)).1 =
+    (AspisR1.Port9OR_Code.trace D hash
+        (AspisR1.Port9OR_P6Verify.code root { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)).1 :=
+⋯
+'AspisR1.Port10AUTH_VerifyProjection.log' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+def AspisR1.MultiproofConeP6Callbacks.ParentGate : (AspisR1.MultiproofConePhysicalProgram.Address →
+    AspisR1.MultiproofConePhysicalProgram.Digest) →
+  AspisR1.MultiproofConeP6Callbacks.Parent → Prop :=
+fun H callback =>
+  ∀ (left right : AspisR1.MultiproofConePhysicalProgram.Digest),
+    AspisV8R19.MemoizedProgramLaw.eval H (callback left right) =
+      ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+            H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+        H (AspisR1.MultiproofConePhysicalDigest.parts left right))
+def AspisR1.MultiproofConeP6Batch.LeafGate : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.MultiproofConeP6Batch.Leaf → Prop :=
+fun H source =>
+  ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind pos : ℕ)
+    (s : MultiproofConeRef.reference.Scratch),
+    ↑s.n < 16 →
+      AspisV8R19.MemoizedProgramLaw.eval H (source p q kind pos s) =
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeP6Batch.referenceLeaf p q kind pos s)
+def AspisR1.Port4B_TreeJoin.PackedKeys : AspisR1.Port3_NativeBatchBody.Ops →
+  Aeneas.Std.Array Aeneas.Std.U32 22#usize → (Fin 22 → Fin 262144) → Aeneas.Std.Usize → Aeneas.Std.Usize → Prop :=
+fun base queries q batch kind =>
+  ∀ (raw : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+    base.op4 queries (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) kind =
+        Aeneas.Std.Result.ok raw →
+      List.take ↑(AspisR1.Port4B_TreeCuts.count batch) ↑raw =
+        List.map (AspisR1.MultiproofConeSortOrder.packed q ↑batch ↑kind)
+          (AspisR1.OraclePortSelectedDraft.batchPositions ↑batch)
+structure AspisR1.CheckpointBytes4SavedFields.BodyMatches (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 4
+fields:
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.variant : p.variant = AspisR1Stage2.transport.Variant.S2
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.state : AspisR1.MultiproofConeCanonical.bytesOf ↑p.state =
+      AspisV8R19.SourceDuplexStep.bytes pm.state
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.roots : List.map (fun b => AspisR1.MultiproofConeCanonical.bytesOf ↑b)
+        ↑p.roots =
+      [AspisV8R19.SourceDuplexStep.bytes (pm.roots 0), AspisV8R19.SourceDuplexStep.bytes (pm.roots 1)]
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.gamma : p.gamma =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.gamma
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.kappa : p.kappa =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.kappa
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.alpha : ↑p.alpha =
+      [AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 0),
+        AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 1)]
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.rho : p.rho = AspisR1.CheckpointBytes4ReaderFields.sourceK pm.rho
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.queries : List.map Aeneas.Std.UScalar.val ↑p.queries =
+      List.ofFn fun j => ↑(pm.queries j)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.semantic : ↑p.semantic_alpha =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.semanticAlpha)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.coordinates : List.flatMap (fun z => [z.x, z.y]) ↑p.z =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.coordinates)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.claim : p.claim =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.claim
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.rhs : a.rhs = AspisR1.CheckpointBytes4ReaderFields.sourceE am.rhs
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.power : a.power =
+      AspisR1.CheckpointBytes4ReaderFields.sourceK am.power
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.weights : ↑a.weights =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn am.weights)
+constructor:
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.mk {p : AspisR1Stage2.verifier.Prepared}
+    {a : AspisR1Stage2.verifier.Accumulator} {pm : AspisR1.OraclePortCheckpointAbiC5.Prepared}
+    {am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E}
+    (variant : p.variant = AspisR1Stage2.transport.Variant.S2)
+    (state : AspisR1.MultiproofConeCanonical.bytesOf ↑p.state = AspisV8R19.SourceDuplexStep.bytes pm.state)
+    (roots :
+      List.map (fun b => AspisR1.MultiproofConeCanonical.bytesOf ↑b) ↑p.roots =
+        [AspisV8R19.SourceDuplexStep.bytes (pm.roots 0), AspisV8R19.SourceDuplexStep.bytes (pm.roots 1)])
+    (gamma : p.gamma = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.gamma)
+    (kappa : p.kappa = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.kappa)
+    (alpha :
+      ↑p.alpha =
+        [AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 0),
+          AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 1)])
+    (rho : p.rho = AspisR1.CheckpointBytes4ReaderFields.sourceK pm.rho)
+    (queries : List.map Aeneas.Std.UScalar.val ↑p.queries = List.ofFn fun j => ↑(pm.queries j))
+    (semantic : ↑p.semantic_alpha = List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.semanticAlpha))
+    (coordinates :
+      List.flatMap (fun z => [z.x, z.y]) ↑p.z =
+        List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.coordinates))
+    (claim : p.claim = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.claim)
+    (rhs : a.rhs = AspisR1.CheckpointBytes4ReaderFields.sourceE am.rhs)
+    (power : a.power = AspisR1.CheckpointBytes4ReaderFields.sourceK am.power)
+    (weights : ↑a.weights = List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn am.weights)) :
+    AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am
+def AspisR1.Port10AUTH_Total.dictionary : {X : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 X →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1Stage2.aspis_core.digest.Digest32 X :=
+fun {X} D H =>
+  { coremarkerCopyInst := D.coremarkerCopyInst,
+    digest := fun x parts =>
+      Aeneas.Std.Result.ok
+        (AspisV8R19.SqueezeOracleBridge.encodeState (H (AspisV8R19.SqueezeOracleBridge.flatten parts))) }

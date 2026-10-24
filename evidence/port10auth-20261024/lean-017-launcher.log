@@ -1,0 +1,41 @@
+{"attempt": "lean-017", "exit_status": 0, "wall_seconds": 2.452651415980654, "peak_rss_kib": "4415544", "swaps": "0", "print_axioms": ["'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Trace.trace_lift' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaf.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaf.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaf.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaf.accepted_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Selected.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Leaves.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port10AUTH_Trace.trace_bind : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (p : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisR1.Port9OR_Code.trace D hash (p >>= k) =
+    match AspisR1.Port9OR_Code.trace D hash p with
+    | (before, Aeneas.Std.Result.ok a) =>
+      have after := AspisR1.Port9OR_Code.trace D hash (k a);
+      (before ++ after.1, after.2)
+    | (before, Aeneas.Std.Result.fail e) => (before, Aeneas.Std.Result.fail e)
+    | (before, Aeneas.Std.Result.div) => (before, Aeneas.Std.Result.div) :=
+fun {A B Hash} D hash p k =>
+  id
+    (AspisR1.CheckpointBytes5Effect.Code.rec (f
+...
+       (Eq.symm h)
+                    (Eq.refl
+                      (AspisR1.MultiproofConeLeafContent.next s (AspisR1.MultiproofConeLeafFold.key q (↑kind) selected)
+                        (AspisV8R19.SqueezeOracleBridge.encodeState
+                          (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+                        bound))
+                    traced stepValue stepEq)
+                (Eq.refl
+                  (AspisR1.MultiproofConeLeafContent.next s (AspisR1.MultiproofConeLeafFold.key q (↑kind) selected)
+                    (AspisV8R19.SqueezeOracleBridge.encodeState
+                      (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+                    bound)))
+            (Eq.symm h) run)
+        (Eq.refl fuel))
+    ps s pos fuel positions span room stream run
+'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Trace.trace_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.accepted_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Selected.iteration' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaves.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdddc6f508a3a4980ba84edfe5f7f8537.scope; invocation ID: 4c21d9dc529b41d389442b60ae43400b
