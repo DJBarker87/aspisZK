@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 19:48 BST
+## Current coordinator checkpoint — 2026-10-24 20:08 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -18,6 +18,14 @@ as904745b496. This does
 not certify external textual-module provenance, IR/native or release identity.
 Residual other-operation budgets and concrete native/source/artifact joins
 remain open.
+
+Newly merged51ff811857 adds conditional accepted-full-stored-run probability
+transport, keeps all-outcome query accounting separate, and recovers both native
+parent declarations in source extraction. It does not supply the concrete
+allocator/Vec frame/effect laws. Port22ARENA60355 is working on that boundary.
+Privacy ResumeP6's two240s Kani checks timed out without proof/counterexample.
+ResumeScalar61137 now prepares scalar observation/source-role/erasure; the final
+privacy Kani slot remains reserved (59/60 used). No production adoption.
 
 Session A's committed packets through `19b60f915262fb3c7f64656b6826fc8429e30d91`
 have been reviewed from immutable Git objects. They establish accepted
