@@ -1,0 +1,837 @@
+Port11PROV_Authenticated.lean:79:50: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H
+    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize) Port4B_BatchJoin.initial)
+in the target expression
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).2 =
+    true
+
+decoder : LiteralByteProtocol.Decoder
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+P : Port1_StoredCarrier.ByteProver
+H : Bytes → State
+std : Port1_Library.TrustedStd ops
+occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+binary : MultiproofConeP6Callbacks.Parent
+p6 :
+  MultiproofConeP6Frozen2Stage.P6Boundary
+    (Port4B_VerifyInstall.digest (VTop_Checkpoint.digest (Port9OR_Bodies.native D H))) hash H binary occupied sibling
+    leaf
+sourceAccepted :
+  (eval H
+          (Port6AUTH_Prefix.source decoder
+            (Port1_Driver.rust adapter (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+              D hash)
+            P)).2.2 =
+    true
+impl : Implementation := fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest
+rust : OraclePortRuntimeBindingC7.Verifier := Port1_Driver.rust adapter (fun {A} => impl) D hash
+pub proof : Slice U8
+semantic : Port1_Driver.Semantic
+saved : alloc.vec.Vec U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded : Std.Array U8 32#usize
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+g0 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded0 : Std.Array U8 32#usize
+slice : Slice U8
+conversion : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+hpub :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+                (Port1_Driver.rust adapter
+                  (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                P H).2.1.statement.pubBytes =
+    some pub
+hproof :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+              (Port1_Driver.rust adapter
+                (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+              P H).2.1.stored =
+    some proof
+decoded : Port1_Driver.decodeSemantic adapter pub = ok (some semantic)
+tx1 :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+    ok (core.result.Result.Ok saved)
+resumed :
+  Port6CK_Reader.reader reserved unwrap (Port9OR_Bodies.native D H) saved.deref proof pub
+      AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+next : a.next = 10#usize
+powered : (eval H (rest (Call.op17 29#usize p.gamma))).2 = ok g
+native1 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded 1#usize hash = ok (core.result.Result.Ok ())
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok slice
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice = ok conversion
+unwrapped : ops.unwrap32 conversion = ok folded0
+native0 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p0 folded0 0#usize hash = ok (core.result.Result.Ok ())
+suffix :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p0 a0 g0 (core.result.Result.Ok ())))).2 =
+    ok (core.result.Result.Ok saved)
+sameRoot : folded = folded0
+contains0 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p0.queries = q →
+          Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 0 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+contains1 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p.queries = q →
+          Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 1 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+parsed : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+len : (↑proof).length = 57607
+wire : parsed.wire = bytesOf ↑proof
+parseOK : OraclePortCompactDraft.parse (bytesOf ↑proof) = some parsed
+binding0 : Port4B_KeyInstall.queries p0.queries = q
+binding1 : Port4B_KeyInstall.queries p.queries = q
+root00 : Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root01 : Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root10 : Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root11 : Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+Q : ℕ
+bound :
+  firstReads emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1 ≤
+    Q
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1
+kind : Fin 3
+frame : Bytes
+selector : Fin 5
+frameRead :
+  Read
+    (Port6AUTH_SourceCut.first
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          D hash)
+        P H).1
+    frame
+rootRead : BinRawByteCollisionTargets.pred selector frame = some (OraclePortBatchDraft.committedRoot parsed ↑kind)
+nodes : ℕ → ℕ → Slice U8 := Port11PROV_Views.nodes proof
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(Port11PROV_Views.nodes proof b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root20 : folded0 = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+root21 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+source0 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+source1 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+frozen :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1)
+⊢ (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).2 =
+    true
+Port11PROV_Authenticated.lean:81:50: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H
+    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize) Port4B_BatchJoin.initial)
+in the target expression
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).2 =
+    true
+
+decoder : LiteralByteProtocol.Decoder
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+P : Port1_StoredCarrier.ByteProver
+H : Bytes → State
+std : Port1_Library.TrustedStd ops
+occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+binary : MultiproofConeP6Callbacks.Parent
+p6 :
+  MultiproofConeP6Frozen2Stage.P6Boundary
+    (Port4B_VerifyInstall.digest (VTop_Checkpoint.digest (Port9OR_Bodies.native D H))) hash H binary occupied sibling
+    leaf
+sourceAccepted :
+  (eval H
+          (Port6AUTH_Prefix.source decoder
+            (Port1_Driver.rust adapter (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+              D hash)
+            P)).2.2 =
+    true
+impl : Implementation := fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest
+rust : OraclePortRuntimeBindingC7.Verifier := Port1_Driver.rust adapter (fun {A} => impl) D hash
+pub proof : Slice U8
+semantic : Port1_Driver.Semantic
+saved : alloc.vec.Vec U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded : Std.Array U8 32#usize
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+g0 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded0 : Std.Array U8 32#usize
+slice : Slice U8
+conversion : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+hpub :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+                (Port1_Driver.rust adapter
+                  (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                P H).2.1.statement.pubBytes =
+    some pub
+hproof :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+              (Port1_Driver.rust adapter
+                (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+              P H).2.1.stored =
+    some proof
+decoded : Port1_Driver.decodeSemantic adapter pub = ok (some semantic)
+tx1 :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+    ok (core.result.Result.Ok saved)
+resumed :
+  Port6CK_Reader.reader reserved unwrap (Port9OR_Bodies.native D H) saved.deref proof pub
+      AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+next : a.next = 10#usize
+powered : (eval H (rest (Call.op17 29#usize p.gamma))).2 = ok g
+native1 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded 1#usize hash = ok (core.result.Result.Ok ())
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok slice
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice = ok conversion
+unwrapped : ops.unwrap32 conversion = ok folded0
+native0 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p0 folded0 0#usize hash = ok (core.result.Result.Ok ())
+suffix :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p0 a0 g0 (core.result.Result.Ok ())))).2 =
+    ok (core.result.Result.Ok saved)
+sameRoot : folded = folded0
+contains0 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p0.queries = q →
+          Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 0 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+contains1 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p.queries = q →
+          Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 1 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+parsed : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+len : (↑proof).length = 57607
+wire : parsed.wire = bytesOf ↑proof
+parseOK : OraclePortCompactDraft.parse (bytesOf ↑proof) = some parsed
+binding0 : Port4B_KeyInstall.queries p0.queries = q
+binding1 : Port4B_KeyInstall.queries p.queries = q
+root00 : Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root01 : Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root10 : Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root11 : Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+Q : ℕ
+bound :
+  firstReads emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1 ≤
+    Q
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1
+kind : Fin 3
+frame : Bytes
+selector : Fin 5
+frameRead :
+  Read
+    (Port6AUTH_SourceCut.first
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          D hash)
+        P H).1
+    frame
+rootRead : BinRawByteCollisionTargets.pred selector frame = some (OraclePortBatchDraft.committedRoot parsed ↑kind)
+nodes : ℕ → ℕ → Slice U8 := Port11PROV_Views.nodes proof
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(Port11PROV_Views.nodes proof b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root20 : folded0 = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+root21 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+source0 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+source1 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+frozen :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1)
+accepted0 :
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).2 =
+    true
+⊢ (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).2 =
+    true
+Port11PROV_Authenticated.lean:92:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H
+    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize) Port4B_BatchJoin.initial)
+in the target expression
+  Read
+    (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).1
+    x
+
+case contains0
+decoder : LiteralByteProtocol.Decoder
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+P : Port1_StoredCarrier.ByteProver
+H : Bytes → State
+std : Port1_Library.TrustedStd ops
+occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+binary : MultiproofConeP6Callbacks.Parent
+p6 :
+  MultiproofConeP6Frozen2Stage.P6Boundary
+    (Port4B_VerifyInstall.digest (VTop_Checkpoint.digest (Port9OR_Bodies.native D H))) hash H binary occupied sibling
+    leaf
+sourceAccepted :
+  (eval H
+          (Port6AUTH_Prefix.source decoder
+            (Port1_Driver.rust adapter (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+              D hash)
+            P)).2.2 =
+    true
+impl : Implementation := fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest
+rust : OraclePortRuntimeBindingC7.Verifier := Port1_Driver.rust adapter (fun {A} => impl) D hash
+pub proof : Slice U8
+semantic : Port1_Driver.Semantic
+saved : alloc.vec.Vec U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded : Std.Array U8 32#usize
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+g0 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded0 : Std.Array U8 32#usize
+slice : Slice U8
+conversion : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+hpub :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+                (Port1_Driver.rust adapter
+                  (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                P H).2.1.statement.pubBytes =
+    some pub
+hproof :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+              (Port1_Driver.rust adapter
+                (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+              P H).2.1.stored =
+    some proof
+decoded : Port1_Driver.decodeSemantic adapter pub = ok (some semantic)
+tx1 :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+    ok (core.result.Result.Ok saved)
+resumed :
+  Port6CK_Reader.reader reserved unwrap (Port9OR_Bodies.native D H) saved.deref proof pub
+      AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+next : a.next = 10#usize
+powered : (eval H (rest (Call.op17 29#usize p.gamma))).2 = ok g
+native1 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded 1#usize hash = ok (core.result.Result.Ok ())
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok slice
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice = ok conversion
+unwrapped : ops.unwrap32 conversion = ok folded0
+native0 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p0 folded0 0#usize hash = ok (core.result.Result.Ok ())
+suffix :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p0 a0 g0 (core.result.Result.Ok ())))).2 =
+    ok (core.result.Result.Ok saved)
+sameRoot : folded = folded0
+contains0 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p0.queries = q →
+          Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 0 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+contains1 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p.queries = q →
+          Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 1 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+parsed : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+len : (↑proof).length = 57607
+wire : parsed.wire = bytesOf ↑proof
+parseOK : OraclePortCompactDraft.parse (bytesOf ↑proof) = some parsed
+binding0 : Port4B_KeyInstall.queries p0.queries = q
+binding1 : Port4B_KeyInstall.queries p.queries = q
+root00 : Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root01 : Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root10 : Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root11 : Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+Q : ℕ
+bound :
+  firstReads emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1 ≤
+    Q
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1
+kind : Fin 3
+frame : Bytes
+selector : Fin 5
+frameRead :
+  Read
+    (Port6AUTH_SourceCut.first
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          D hash)
+        P H).1
+    frame
+rootRead : BinRawByteCollisionTargets.pred selector frame = some (OraclePortBatchDraft.committedRoot parsed ↑kind)
+nodes : ℕ → ℕ → Slice U8 := Port11PROV_Views.nodes proof
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(Port11PROV_Views.nodes proof b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root20 : folded0 = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+root21 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+source0 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+source1 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+frozen :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1)
+accepted0 :
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).2 =
+    true
+accepted1 :
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).2 =
+    true
+zero :
+  eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+one :
+  eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+consistent :
+  ∀
+    q ∈
+      (eval H
+          (OraclePortRuntimeBindingC7.originalWith rust
+            (OraclePortStoredAdmissionC4.canon (Port1_StoredCarrier.lift P)))).1,
+    q.2 = H q.1
+x : Bytes
+hx : Read (eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1 x
+⊢ Read
+    (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).1
+    x
+Port11PROV_Authenticated.lean:98:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H
+    (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize) Port4B_BatchJoin.initial)
+in the target expression
+  Read
+    (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).1
+    x
+
+case contains1
+decoder : LiteralByteProtocol.Decoder
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+P : Port1_StoredCarrier.ByteProver
+H : Bytes → State
+std : Port1_Library.TrustedStd ops
+occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+binary : MultiproofConeP6Callbacks.Parent
+p6 :
+  MultiproofConeP6Frozen2Stage.P6Boundary
+    (Port4B_VerifyInstall.digest (VTop_Checkpoint.digest (Port9OR_Bodies.native D H))) hash H binary occupied sibling
+    leaf
+sourceAccepted :
+  (eval H
+          (Port6AUTH_Prefix.source decoder
+            (Port1_Driver.rust adapter (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+              D hash)
+            P)).2.2 =
+    true
+impl : Implementation := fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest
+rust : OraclePortRuntimeBindingC7.Verifier := Port1_Driver.rust adapter (fun {A} => impl) D hash
+pub proof : Slice U8
+semantic : Port1_Driver.Semantic
+saved : alloc.vec.Vec U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded : Std.Array U8 32#usize
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+g0 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+folded0 : Std.Array U8 32#usize
+slice : Slice U8
+conversion : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+hpub :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+                (Port1_Driver.rust adapter
+                  (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                P H).2.1.statement.pubBytes =
+    some pub
+hproof :
+  Port1_Driver.asSlice
+      (Port6AUTH_SourceCut.first
+              (Port1_Driver.rust adapter
+                (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+              P H).2.1.stored =
+    some proof
+decoded : Port1_Driver.decodeSemantic adapter pub = ok (some semantic)
+tx1 :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 =
+    ok (core.result.Result.Ok saved)
+resumed :
+  Port6CK_Reader.reader reserved unwrap (Port9OR_Bodies.native D H) saved.deref proof pub
+      AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+next : a.next = 10#usize
+powered : (eval H (rest (Call.op17 29#usize p.gamma))).2 = ok g
+native1 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded 1#usize hash = ok (core.result.Result.Ok ())
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok slice
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice = ok conversion
+unwrapped : ops.unwrap32 conversion = ok folded0
+native0 : Port4B_Install.batch (Port9OR_Bodies.native D H) proof p0 folded0 0#usize hash = ok (core.result.Result.Ok ())
+suffix :
+  (eval H
+        (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p0 a0 g0 (core.result.Result.Ok ())))).2 =
+    ok (core.result.Result.Ok saved)
+sameRoot : folded = folded0
+contains0 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p0.queries = q →
+          Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 0 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+contains1 :
+  ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144),
+    (↑proof).length = 57607 →
+      parsed.wire = bytesOf ↑proof →
+        Port4B_KeyInstall.queries p.queries = q →
+          Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0) →
+            Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1) →
+              ∀ (x : Bytes),
+                Read
+                    (eval H
+                        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                          (Port11PROV_Views.nodes proof) 1 Port4B_BatchJoin.initial)).1
+                    x →
+                  Read
+                    (Port6AUTH_SourceCut.first
+                        (Port1_Driver.rust adapter
+                          (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                        P H).1
+                    x
+parsed : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+len : (↑proof).length = 57607
+wire : parsed.wire = bytesOf ↑proof
+parseOK : OraclePortCompactDraft.parse (bytesOf ↑proof) = some parsed
+binding0 : Port4B_KeyInstall.queries p0.queries = q
+binding1 : Port4B_KeyInstall.queries p.queries = q
+root00 : Port3_BatchStage.root0 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root01 : Port3_BatchStage.root1 p0 = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root10 : Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root11 : Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+Q : ℕ
+bound :
+  firstReads emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1 ≤
+    Q
+clean :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable
+      (Port6AUTH_SourceCut.first
+          (Port1_Driver.rust adapter
+            (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+          P H).1
+kind : Fin 3
+frame : Bytes
+selector : Fin 5
+frameRead :
+  Read
+    (Port6AUTH_SourceCut.first
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          D hash)
+        P H).1
+    frame
+rootRead : BinRawByteCollisionTargets.pred selector frame = some (OraclePortBatchDraft.committedRoot parsed ↑kind)
+nodes : ℕ → ℕ → Slice U8 := Port11PROV_Views.nodes proof
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(Port11PROV_Views.nodes proof b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+root20 : folded0 = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+root21 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+source0 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑0#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+source1 :
+  eval H
+      (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes (↑1#usize)
+        Port4B_BatchJoin.initial) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+frozen :
+  (∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0)) ∧
+    ∀ (s : MultiproofConeRef.reference.Scratch),
+      (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s)).2 = true →
+        eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 s) =
+          eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1)
+accepted0 :
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 0 Port4B_BatchJoin.initial)).2 =
+    true
+accepted1 :
+  (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).2 =
+    true
+zero :
+  eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch0) =
+    ((eval H (Port9OR_Installed.batch D hash proof p0 folded0 0#usize)).1, true)
+one :
+  eval H (OraclePortFrozen2.batch parsed q OraclePortFrozen2.batch1) =
+    ((eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1, true)
+consistent :
+  ∀
+    q ∈
+      (eval H
+          (OraclePortRuntimeBindingC7.originalWith rust
+            (OraclePortStoredAdmissionC4.canon (Port1_StoredCarrier.lift P)))).1,
+    q.2 = H q.1
+x : Bytes
+hx : Read (eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1 x
+⊢ Read
+    (eval H
+        (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q nodes 1 Port4B_BatchJoin.initial)).1
+    x
+'AspisR1.Port11PROV_Authenticated.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
