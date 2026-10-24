@@ -27,8 +27,8 @@ Port24SBFMAP67250 now follows that exact artifact/source boundary. Port23's
 actual mutable-push outer frame is reviewed but unmerged; Port25ARRAY68143
 resolves its explicit array iterator ABI and row sequencing. Privacy scalar
 observer payload384->12 is reviewed as structural reduction only; native
-erasure/roles/world remain open. ResumeRoles66304 obtains concrete success
-moves/disposal/source projection. Privacy Kani59/60, final slot reserved;
+erasure/roles/world remain open. ResumeMIR70362 obtains current hook/draw/disposal MIR and source projection;
+the reused success-move association is now recovered. Privacy Kani59/60, final slot reserved;
 privacy Lean240/260; known soundness332/368 before new job usage. No adoption.
 
 Session A640d3ebcf6 caller-range packet is now reviewed: five source modules,
