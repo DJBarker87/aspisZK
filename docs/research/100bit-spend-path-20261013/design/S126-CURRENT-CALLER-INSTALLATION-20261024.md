@@ -180,3 +180,18 @@ proof attempts exposed alias qualification/projection and whole-Result map/bind
 normalization, repaired with explicit source/Result facts, without higher limits.
 Failed compiler-recovery sorryAx is not accepted evidence. No failed target was
 rerun unchanged; the source/import/key/normalization changes are recorded.
+
+## Addendum: named lead consumer checked
+
+`S6-NAMED-FOREST-PORT-20261024.md` records the subsequent exact
+`S2Y_ForestPublic.FullForestAcceptedRoundtrip` instance and the checked
+specialization of `S2Y_ForestPublic.owned_public_field` without its codec-law
+premise. This supersedes the earlier statement that the named consumer had
+not been imported/checked. It is focused application against reused checked
+imports, not a fresh coherent release replay. Child-input retention,
+reconstructed-statement identity and native/SDK interpretation remain explicit.
+
+`S1-CLOSED-PREPARATION-INSTALLATION-20261024.md` similarly records removal of
+the inactive sampling seed from the enclosing owned S1 theorem; every active
+sampling field was already concretely overwritten, and full Result equality
+now proves seed irrelevance. Original native claim correspondence is still open.
