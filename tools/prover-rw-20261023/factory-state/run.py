@@ -27,7 +27,11 @@ pre=dict(schema='ProverRwFactoryState-extraction-v1',attempt=a,command=cmd,
 code=1
 try:
     assert sha(binary)==json.loads(br.read_text())['versioned_binary']['sha256']
-    inputs=[p for p in D.rglob('*') if p.is_file() and not any(x in p.relative_to(D).parts for x in ['packet','target','diagnostics','__pycache__'])]
+    def source_input(p):
+        return p.is_file() and not any(x in ['packet','target','__pycache__'] or x.startswith('diagnostics') for x in p.relative_to(D).parts)
+    inputs=[p for p in D.rglob('*') if source_input(p)]
+    originals=[D.parent/'factory-iteration/production-source.txt',D.parent/'factory-iteration/proof-cut/selected.rs',D.parent/'factory-iteration/RELATION.md',D.parent/'factory-source/RELATION.md']
+    inputs += originals
     registry=Path('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f')
     for name in ['zeroize-1.8.1','getrandom-0.3.4','libc-0.2.186','cfg-if-1.0.4']:
         p=registry/name;assert p.is_dir();inputs += [q for q in p.rglob('*') if q.is_file()]
@@ -44,8 +48,10 @@ try:
     (O/'preflight.json').write_text(json.dumps(pre,indent=2)+'\n')
     # Preserve originals before any compiler reservation.
     for p in D.rglob('*'):
-        if p.is_file() and not any(x in p.relative_to(D).parts for x in ['packet','target','diagnostics','__pycache__']):
+        if source_input(p):
             dest=O/'source-inputs'/p.relative_to(D);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
+    for p in originals:
+        dest=O/'original-inputs'/p.relative_to(D.parent);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(p.read_bytes())
     before=runpy.run_path(str(D/'reservation.py'))['admission'](requested=2*2**30)
     (O/'admission-before.json').write_text(json.dumps(before,indent=2)+'\n')
     assert before['allowed'],'fresh before admission denied; no scope/compiler launched'

@@ -9,8 +9,9 @@ scan=runpy.run_path(str(Path(__file__).resolve().parent/'reservation.py'))
 r=scan['admission'](requested=0);r.update(own_cgroup=str(cg),limits=limits,command=cmd)
 (O/'admission-barrier.json').write_text(json.dumps(r,indent=2)+'\n');assert r['allowed']
 pre=json.loads((O/'preflight.json').read_text())
-for p,h in pre['source_sha256'].items():
- assert hashlib.sha256(Path(p).read_bytes()).hexdigest()==h,p
+go={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in pre['source_sha256']}
+(O/'go-hashes.json').write_text(json.dumps(dict(utc=time.time(),source_sha256=go),indent=2)+'\n')
+assert go==pre['source_sha256'],'input changed before go'
 (O/'target-started.json').write_text(json.dumps(dict(command=cmd,utc=time.time()))+'\n')
 proc=subprocess.Popen(['/usr/bin/time','-v','-o',str(O/'time.log'),*cmd])
 peak_rss=0;peak_swap=0;samples=0
