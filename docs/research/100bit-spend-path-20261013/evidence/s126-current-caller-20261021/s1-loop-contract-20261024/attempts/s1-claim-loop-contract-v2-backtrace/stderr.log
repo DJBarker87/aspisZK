@@ -1,0 +1,47 @@
+   Compiling aspis-s1-claim-source-steps v0.0.0 (/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-claim-loop-contract-v2-20261024)
+
+thread 'rustc' (1834041) panicked at kani-compiler/src/kani_middle/transform/body.rs:646:14:
+not implemented: Kani can only insert instructions after terminators that have a `target` field.
+stack backtrace:
+   0:     0x7effb5537213 - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::hefb8f4075f5287aa
+   1:     0x7effb5c10948 - core::fmt::write::h9efc4df57a83a2be
+   2:     0x7effb54ecc76 - std::io::Write::write_fmt::ha441154b7754443a
+   3:     0x7effb5503efc - std::panicking::default_hook::{{closure}}::hca02991224f6e328
+   4:     0x7effb5503a53 - std::panicking::default_hook::hac7a1b948746b127
+   5:     0x6246b245ccb0 - kani_compiler[f870aead00bfafdf]::session::PANIC_HOOK::{closure#0}::{closure#0}
+   6:     0x6246b245d04d - kani_compiler[f870aead00bfafdf]::session::JSON_PANIC_HOOK::{closure#0}::{closure#0}
+   7:     0x6246b245d230 - kani_compiler[f870aead00bfafdf]::codegen_cprover_gotoc::utils::debug::DEFAULT_HOOK::{closure#0}::{closure#0}
+   8:     0x7effb55042b2 - std::panicking::panic_with_hook::h99bd9d6fda5058b9
+   9:     0x7effb550407a - std::panicking::panic_handler::{{closure}}::hce691e3283d81aa4
+  10:     0x7effb54fdfa9 - std::sys::backtrace::__rust_end_short_backtrace::h123b3c6fed40e660
+  11:     0x7effb54df29d - __rustc[f01a1aa1bacb466]::rust_begin_unwind
+  12:     0x7effb24c034c - core::panicking::panic_fmt::he767e81dad5ec5d0
+  13:     0x6246b23ecd4f - <kani_compiler[f870aead00bfafdf]::kani_middle::transform::body::MutableBody>::insert_bb
+  14:     0x6246b23fa088 - <kani_compiler[f870aead00bfafdf]::kani_middle::transform::loop_contracts::LoopContractPass>::transform_body_with_loop
+  15:     0x6246b23fe5d2 - <kani_compiler[f870aead00bfafdf]::kani_middle::transform::loop_contracts::LoopContractPass as kani_compiler[f870aead00bfafdf]::kani_middle::transform::TransformPass>::transform
+  16:     0x6246b23eae04 - <kani_compiler[f870aead00bfafdf]::kani_middle::transform::BodyTransformation>::body_ref
+  17:     0x6246b254587b - <kani_compiler[f870aead00bfafdf]::kani_middle::reachability::MonoItemsCollector>::reachable_items
+  18:     0x6246b254a86a - kani_compiler[f870aead00bfafdf]::kani_middle::reachability::collect_reachable_items
+  19:     0x6246b247764e - <kani_compiler[f870aead00bfafdf]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend>::codegen_items
+  20:     0x6246b253a240 - <scoped_tls[53219eef8bafdd00]::ScopedKey<core[2cc081e1ca4e22ab]::cell::Cell<*const ()>>>::set::<rustc_public[5a797407d7991f27]::compiler_interface::run<rustc_public[5a797407d7991f27]::rustc_internal::run<<kani_compiler[f870aead00bfafdf]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[3bf1ed111e297bcd]::traits::backend::CodegenBackend>::codegen_crate::{closure#0}, alloc[b38a0b67e7b55095]::boxed::Box<dyn core[2cc081e1ca4e22ab]::any::Any>>::{closure#0}, alloc[b38a0b67e7b55095]::boxed::Box<dyn core[2cc081e1ca4e22ab]::any::Any>>::{closure#0}, core[2cc081e1ca4e22ab]::result::Result<alloc[b38a0b67e7b55095]::boxed::Box<dyn core[2cc081e1ca4e22ab]::any::Any>, rustc_public[5a797407d7991f27]::error::Error>>
+  21:     0x6246b23e2790 - rustc_public[5a797407d7991f27]::rustc_internal::run::<<kani_compiler[f870aead00bfafdf]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[3bf1ed111e297bcd]::traits::backend::CodegenBackend>::codegen_crate::{closure#0}, alloc[b38a0b67e7b55095]::boxed::Box<dyn core[2cc081e1ca4e22ab]::any::Any>>
+  22:     0x6246b24874c9 - <kani_compiler[f870aead00bfafdf]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[3bf1ed111e297bcd]::traits::backend::CodegenBackend>::codegen_crate
+  23:     0x7effb6ed5ccc - <rustc_interface[1b310367b2bb206b]::queries::Linker>::codegen_and_build_linker
+  24:     0x7effb6ed335b - <rustc_interface[1b310367b2bb206b]::passes::create_and_enter_global_ctxt<core[2cc081e1ca4e22ab]::option::Option<rustc_interface[1b310367b2bb206b]::queries::Linker>, rustc_driver_impl[f7180a6874526da8]::run_compiler::{closure#0}::{closure#2}>::{closure#2} as core[2cc081e1ca4e22ab]::ops::function::FnOnce<(&rustc_session[6b56fe5d9fbbf930]::session::Session, rustc_middle[d4de40f5ddde0997]::ty::context::CurrentGcx, alloc[b38a0b67e7b55095]::sync::Arc<rustc_data_structures[865088aa186e24a8]::jobserver::Proxy>, &std[7d326e869719067]::sync::once_lock::OnceLock<rustc_middle[d4de40f5ddde0997]::ty::context::GlobalCtxt>, &rustc_data_structures[865088aa186e24a8]::sync::worker_local::WorkerLocal<rustc_middle[d4de40f5ddde0997]::arena::Arena>, &rustc_data_structures[865088aa186e24a8]::sync::worker_local::WorkerLocal<rustc_hir[43afd27857da51ff]::Arena>, rustc_driver_impl[f7180a6874526da8]::run_compiler::{closure#0}::{closure#2})>>::call_once::{shim:vtable#0}
+  25:     0x7effb6def145 - rustc_interface[1b310367b2bb206b]::interface::run_compiler::<(), rustc_driver_impl[f7180a6874526da8]::run_compiler::{closure#0}>::{closure#1}
+  26:     0x7effb6cf5f3a - std[7d326e869719067]::sys::backtrace::__rust_begin_short_backtrace::<rustc_interface[1b310367b2bb206b]::util::run_in_thread_with_globals<rustc_interface[1b310367b2bb206b]::util::run_in_thread_pool_with_globals<rustc_interface[1b310367b2bb206b]::interface::run_compiler<(), rustc_driver_impl[f7180a6874526da8]::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}, ()>
+  27:     0x7effb6cf5c28 - <<std[7d326e869719067]::thread::Builder>::spawn_unchecked_<rustc_interface[1b310367b2bb206b]::util::run_in_thread_with_globals<rustc_interface[1b310367b2bb206b]::util::run_in_thread_pool_with_globals<rustc_interface[1b310367b2bb206b]::interface::run_compiler<(), rustc_driver_impl[f7180a6874526da8]::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}, ()>::{closure#1} as core[2cc081e1ca4e22ab]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  28:     0x7effb6cfb96f - std::sys::thread::unix::Thread::new::thread_start::hb1c7ce44d9ca47bd
+  29:     0x7effb069cb84 - <unknown>
+  30:     0x7effb0729ecc - <unknown>
+  31:                0x0 - <unknown>
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] no current codegen item.
+[Kani] no current codegen location.
+error: could not compile `aspis-s1-claim-source-steps` (lib); 12 warnings emitted
+
+Caused by:
+  process didn't exit successfully: `/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name aspis_s1_claim_source_steps --edition=2021 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C embed-bitcode=no -C debuginfo=2 --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values())' -C metadata=d6cfa8921bd6aac9 -C extra-filename=-2f6d6bcbcbe6295d --out-dir /home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/incremental -L dependency=/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/debug/deps --extern aspis_core=/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_core-44ee0c6512cd0eeb.rmeta --extern aspis_r1_cost_probe=/home/dombarker/project-offloads/s126-real-sdk-20261021/target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r1_cost_probe-1e9a468d2e5a8492.rmeta '-Cllvm-args=--reachability=harnesses --log-level=warn --enable-stubbing --harness proofs::original_and_owned_ordered_normal_return_contract --exact -Z unstable-options -Z stubbing -Z loop-contracts -Z c-ffi' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)

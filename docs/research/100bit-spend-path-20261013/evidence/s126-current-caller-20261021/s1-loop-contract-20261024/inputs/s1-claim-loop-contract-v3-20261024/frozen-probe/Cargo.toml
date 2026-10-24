@@ -1,0 +1,93 @@
+[package]
+name = "aspis-r1-cost-probe"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+description = "UNPROVED R1 COST PROBE, isolated P2 experiments"
+
+[features]
+# PREREG-PROOF-SIZE-2 (2026-10-19): the adopted R1 proof format is the compact
+# binary-multiproof format (fixed length 57,607 bytes), which is defined only
+# over private leaf salts; the default build therefore carries them.
+default = ["private-leaf-salts"]
+detail-phases = []
+# Existing exact terminal kernels from the selected V7/R117 bundle.
+# This changes arithmetic evaluation only; the isolated R1 protocol is unproved.
+optimized-terminal = [
+    "aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+    "aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit",
+    "aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit",
+    "aspis-statement/pool-v1-pair-forest-semantic-factor-audit",
+    "aspis-statement/pool-v1-pair-forest-pattern-window-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit",
+    "aspis-statement/pool-v1-pair-forest-packed-range-audit",
+    "aspis-statement/pool-v1-pair-forest-active-mask-basis-audit",
+]
+prover = ["private-leaf-salts", "dep:aspis-prover", "dep:serde_json", "dep:sha2"]
+private-leaf-salts = []
+# LOG D38.3: the prover-side P_R1 check (extracted C3 checker via the z4 probe
+# library) and the capped retry loop; requires private leaf salts.
+r1p-check = ["prover", "private-leaf-salts", "dep:aspis-z4b-probe", "dep:getrandom"]
+r0-op-count = ["aspis-core/r0-op-count"]
+# AUDIT ONLY (PREREG-PROOF-SIZE-2 item 4): the retired eight-way verifier
+# (124,343-byte proof) under `verifier::eight_way`, for differential evidence
+# against saved eight-way fixtures. It never changes the default entrypoints,
+# and it is a compile error together with `prover` or on an SBF target.
+audit-eight-way = []
+# Internal marker set by program dependencies, including native program tests.
+program-build = []
+
+[dependencies]
+aspis-core = { path = "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-core", features = ["r0"] }
+aspis-statement = { path = "../frozen-source/crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+aspis-prover = { path = "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/crates/aspis-prover", features = ["r0", "insecure-spend-fixture"], optional = true }
+serde_json = { version = "1.0.145", optional = true }
+sha2 = { version = "0.10.8", optional = true }
+aspis-z4b-probe = { path = "/home/dombarker/project-offloads/codex-cx-repin-s6-20261020/src/docs/research/v8-r0-zk-20261009/z4", optional = true }
+getrandom = { version = "0.3.4", optional = true }
+
+# Historical S1 tool: reads saved eight-way fixtures with the eight-way
+# verifier and the host prover, a combination the adopted tree forbids
+# (`audit-eight-way` + `prover`). Kept for the record; not buildable.
+[[example]]
+name = "proof_size_s1"
+required-features = ["prover", "audit-eight-way"]
+
+[[example]]
+name = "proof_size_s2"
+required-features = ["prover"]
+
+[[example]]
+name = "readbudget_count"
+required-features = ["prover", "compact-binary"]
+
+[[example]]
+name = "semantic_gate"
+required-features = ["prover"]
+
+# Eight-way mutation offsets (pre-adoption gate); not buildable on the
+# adopted tree for the same reason as proof_size_s1.
+[[example]]
+name = "native_gate"
+required-features = ["prover", "audit-eight-way"]
+
+[[example]]
+name = "masked_fixture_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "authenticated_tx2_gate"
+required-features = ["prover"]
+
+[[example]]
+name = "secure_attempt_gate"
+required-features = ["prover", "private-leaf-salts"]
+
+[[example]]
+name = "r1p_retry_gate"
+required-features = ["r1p-check"]
+
+[[example]]
+name = "r1p_sim_gate"
+required-features = ["r1p-check"]

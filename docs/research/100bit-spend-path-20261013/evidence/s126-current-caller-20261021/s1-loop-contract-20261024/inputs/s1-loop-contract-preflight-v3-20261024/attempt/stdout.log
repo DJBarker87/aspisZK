@@ -1,0 +1,22 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unused variable: `i`
+ --> src/lib.rs:6:6
+  |
+6 |  for i in 0usize..6usize {if i==stop{return Err(());} count+=1;}
+  |      ^ help: if this is intentional, prefix it with an underscore: `_i`
+  |
+  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+Checking harness range_loop_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 209 failed
+Failed Checks: assertion failed: early(stop) == if stop<6{Err(())}else{Ok(6)}
+ File: "src/lib.rs", line 13, in range_loop_contract
+
+VERIFICATION:- FAILED
+Verification Time: 0.11315073s
+
+Manual Harness Summary:
+Verification failed for - range_loop_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

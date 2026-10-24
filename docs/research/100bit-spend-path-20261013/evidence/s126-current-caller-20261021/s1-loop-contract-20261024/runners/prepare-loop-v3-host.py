@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Instrument unchanged executable source with checked loop invariants only."""
+from pathlib import Path
+import shutil,hashlib,json
+H=Path('/home/dombarker/project-offloads/s126-real-sdk-20261021')
+parent=H/'aspis-s1-claim-powers-cut-v1-20261024';W=H/'s1-claim-loop-contract-v3-20261024'
+shutil.copytree(parent,W,ignore=shutil.ignore_patterns('target','.git'))
+p=W/'src/lib.rs';original=p.read_text();s=original
+s='#![feature(stmt_expr_attributes, proc_macro_hygiene)]\n'+s
+# Six outer points remain ordinary source loops; only the 29-step loop is abstracted.
+s=s.replace('for l in 0..29 {','#[cfg_attr(kani,kani::loop_invariant(proofs::inner_invariant(point,kani::index,&dot)))]\n            for l in 0..29 {')
+# Seven final additions remain ordinary source loops.
+# Make the originally inferred usize ranges explicit: the Kani transform otherwise
+# defaults the detached iterator expression to i32.
+s=s.replace('0..6 {','0usize..6usize {').replace('0..29 {','0usize..29usize {').replace('0..7 {','0usize..7usize {')
+# Annotations touch only three kinds of loops. Removing exactly the inserted
+# attribute lines and feature line recovers executable source modulo indentation.
+import re
+strip=lambda x:re.sub(r'\s+','',re.sub(r'#\[cfg_attr\(kani,kani::loop_invariant\([^\n]*\)\)\]\n','',x).replace('#![feature(stmt_expr_attributes, proc_macro_hygiene)]\n',''))
+assert strip(s).replace('0usize..6usize','0..6').replace('0usize..29usize','0..29').replace('0usize..7usize','0..7')==strip(original)
+p.write_text(s);shutil.copyfile(H/'s1-loop-proofs-20261024.rs',W/'src/proofs.rs')
+sha=lambda x:hashlib.sha256(x.read_bytes()).hexdigest()
+(W/'loop-instrumentation.json').write_text(json.dumps(dict(parent_lib_sha256=hashlib.sha256(original.encode()).hexdigest(),instrumented_lib_sha256=sha(p),proofs_sha256=sha(W/'src/proofs.rs'),executable_token_equality_modulo_explicit_original_usize_range_types=True,qualification='Verification-only loop invariants; common arbitrary normal-return child tapes. No native arithmetic or SDK/effect closure.'),indent=2)+'\n')
+print(W)

@@ -1,0 +1,35 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+error[E0658]: attributes on expressions are experimental
+ --> src/lib.rs:5:2
+  |
+5 |  #[kani::loop_invariant(count==kani::index())]
+  |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: see issue #15701 <https://github.com/rust-lang/rust/issues/15701> for more information
+  = help: add `#![feature(stmt_expr_attributes)]` to the crate attributes to enable
+  = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0658]: custom attributes cannot be applied to expressions
+ --> src/lib.rs:5:2
+  |
+5 |  #[kani::loop_invariant(count==kani::index())]
+  |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: see issue #54727 <https://github.com/rust-lang/rust/issues/54727> for more information
+  = help: add `#![feature(proc_macro_hygiene)]` to the crate attributes to enable
+  = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0618]: expected function, found `usize`
+ --> src/lib.rs:5:2
+  |
+5 |  #[kani::loop_invariant(count==kani::index())]
+  |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |  |
+  |  call expression requires function
+  |  `kani_index_6_2_6_38` has type `usize`
+  |
+  = note: this error originates in the attribute macro `kani::loop_invariant` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+Some errors have detailed explanations: E0618, E0658.
+For more information about an error, try `rustc --explain E0618`.
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
