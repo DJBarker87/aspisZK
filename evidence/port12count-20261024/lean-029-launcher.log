@@ -1,0 +1,39 @@
+{"attempt": "lean-029", "exit_status": 0, "wall_seconds": 1.96390285299276, "peak_rss_kib": "4414056", "swaps": "0", "print_axioms": ["'AspisR1.Port12COUNT_Batch.pure_cap' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Batch.values0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Batch.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Batch.values1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Batch.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchLeaf.lift_cap' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchLeaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchLeaf.cont_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchLoop.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTail.verify_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Levels.level' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Levels.levels' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Levels.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.finish_spec' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.parent_funded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.read32_spec' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.node_funded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Rows.eval_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Rows.rows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Verify.eval_lift_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Verify.bind_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Verify.count' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.Port12COUNT_Batch.pure_cap : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (r : Aeneas.Std.Result A)
+  (n : ℕ),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash (AspisR1.CheckpointBytes5Effect.liftResult r))).1.length ≤
+    n :=
+⋯
+'AspisR1.Port12COUNT_Batch.pure_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Batch.values0 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes
+...
+isV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a))
+    | Aeneas.Std.Result.fail e => ([], Aeneas.Std.Result.fail e)
+    | Aeneas.Std.Result.div => ([], Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port12COUNT_Verify.eval_lift_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Verify.bind_count : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B) (n m : ℕ),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code)).1.length ≤ n →
+    (∀ (a : A),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code)).2 = Aeneas.Std.Result.ok a →
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a))).1.length ≤ m) →
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (code >>= k))).1.length ≤ n + m :=
+⋯
+'AspisR1.Port12COUNT_Verify.bind_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Verify.count : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Verify.code root s nodes))).1.length ≤
+    (↑nodes).length / 32 + ↑s.n - 1 :=
+⋯
+'AspisR1.Port12COUNT_Verify.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra2bfd5c1df6f44e5a13b10c54d8ca5e8.scope; invocation ID: 9b97179b73c441f2a2eb5bc7850a575c

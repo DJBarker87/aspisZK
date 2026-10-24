@@ -1,0 +1,79 @@
+Port12COUNT_Rows.lean:27:16: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (Code.read parts f) k))
+is not definitionally equal to the right-hand side
+  let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+  match first.2 with
+  | ok a =>
+    let rest := eval H (Port9OR_Code.program D hash (k a));
+    (first.1 ++ rest.1, rest.2)
+  | fail e => (first.1, fail e)
+  | div => (first.1, div)
+
+case read.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (f a) k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+e : Error
+call : D.digest hash parts = fail e
+⊢ eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (Code.read parts f) k)) =
+    let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+    match first.2 with
+    | ok a =>
+      let rest := eval H (Port9OR_Code.program D hash (k a));
+      (first.1 ++ rest.1, rest.2)
+    | fail e => (first.1, fail e)
+    | div => (first.1, div)
+Port12COUNT_Rows.lean:28:13: error: Tactic `rfl` failed: The left-hand side
+  eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (Code.read parts f) k))
+is not definitionally equal to the right-hand side
+  let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+  match first.2 with
+  | ok a =>
+    let rest := eval H (Port9OR_Code.program D hash (k a));
+    (first.1 ++ rest.1, rest.2)
+  | fail e => (first.1, fail e)
+  | div => (first.1, div)
+
+case read.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+k : A → Code B
+parts : Parts
+f : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (f a) k)) =
+      let first := eval H (Port9OR_Code.program D hash (f a));
+      match first.2 with
+      | ok a =>
+        let rest := eval H (Port9OR_Code.program D hash (k a));
+        (first.1 ++ rest.1, rest.2)
+      | fail e => (first.1, fail e)
+      | div => (first.1, div)
+call : D.digest hash parts = div
+⊢ eval H (Port9OR_Code.program D hash (CheckpointBytes5Effect.bind (Code.read parts f) k)) =
+    let first := eval H (Port9OR_Code.program D hash (Code.read parts f));
+    match first.2 with
+    | ok a =>
+      let rest := eval H (Port9OR_Code.program D hash (k a));
+      (first.1 ++ rest.1, rest.2)
+    | fail e => (first.1, fail e)
+    | div => (first.1, div)
+'AspisR1.Port12COUNT_Rows.eval_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Rows.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
