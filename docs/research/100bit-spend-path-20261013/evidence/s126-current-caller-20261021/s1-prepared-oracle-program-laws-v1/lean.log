@@ -1,0 +1,96 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:21:117: error: Tactic `assumption` failed
+
+case step.ok
+A B : Type
+k : A → Code B
+B✝ : Type
+next : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    oracleProgram (next a >>= k) =
+      AspisV8R19.OracleProgramOps.bind (oracleProgram (next a)) fun r => continueOracle r fun a => oracleProgram (k a)
+v✝ : B✝
+⊢ oracleProgram (Code.step (ok v✝) next >>= k) =
+    AspisV8R19.OracleProgramOps.bind (oracleProgram (next v✝)) fun r =>
+      match r with
+      | ok a => oracleProgram (k a)
+      | fail e => Program.done (fail e)
+      | div => Program.done div
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:21:117: error: Tactic `assumption` failed
+
+case step.fail
+A B : Type
+k : A → Code B
+B✝ : Type
+next : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    oracleProgram (next a >>= k) =
+      AspisV8R19.OracleProgramOps.bind (oracleProgram (next a)) fun r => continueOracle r fun a => oracleProgram (k a)
+e✝ : Error
+⊢ oracleProgram (Code.step (fail e✝) next >>= k) = Program.done (fail e✝)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:21:117: error: Tactic `assumption` failed
+
+case step.div
+A B : Type
+k : A → Code B
+B✝ : Type
+next : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    oracleProgram (next a >>= k) =
+      AspisV8R19.OracleProgramOps.bind (oracleProgram (next a)) fun r => continueOracle r fun a => oracleProgram (k a)
+⊢ oracleProgram (Code.step div next >>= k) = Program.done div
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:22:32: error: unsolved goals
+case digest
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    oracleProgram (next a >>= k) =
+      AspisV8R19.OracleProgramOps.bind (oracleProgram (next a)) fun r => continueOracle r fun a => oracleProgram (k a)
+⊢ oracleProgram (Code.digest D hash parts next >>= k) =
+    Program.ask (flatten parts) fun a =>
+      AspisV8R19.OracleProgramOps.bind (oracleProgram (next (encodeState a))) fun r =>
+        continueOracle r fun a => oracleProgram (k a)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:21:45: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵,̵oracleProgram, ̲continueOracle,
+  ̲ ̲ ̲ ̲ ̲AspisV8R19.OracleProgramOps.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:23:15: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵,̵oracleProgram, ̲AspisV8R19.OracleProgramOps.bind, ̲ih]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedOracleProgramLawsV1.lean:23:67: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [bind, ̲oracleProgram, ̲AspisV8R19.OracleProgramOps.bind,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1PublicPreparation.PreparedHashCode.oracleProgram_bind_congr' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.oracleProgram_bind' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.oracleProgram_lift' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.oracleProgram_digest' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
