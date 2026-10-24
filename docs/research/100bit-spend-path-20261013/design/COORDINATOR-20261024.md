@@ -228,3 +228,12 @@ Active handles: Port14LOCAL PID99174 and native Drop PID386; prompts archived in
 ## Selected64 client route gate reconfirmed (lead, 2026-10-24)
 
 Read-only current source inspection confirms tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:112 still calls generic prove_masked_retrying; RealR1_client selected64 is separate. CLIENT-ROUTE-ADOPTION-GATE-20261024.md pins exact sources, selected successful account/key-retention requirements and source/artifact adoption evidence. This is D162's existing integration obligation, not permission needed or a target change. No source/key/build/chain action performed. Keep deployed-client coverage distinct from adapter theorem closure. Current workers99174/386 remain live.
+
+
+## Addendum (lead, 2026-10-24): callback audit; actual driver partition next
+
+Port14LOCAL d297222029 reviewed: callbacks are proof-only comparison witnesses; native parent/leaf accepted physical transport already exists in Port9/10. No callback wrapper or kernel theorem added and no source assumption discharged. Source audit43files/10byte-identicalhistoricalgreenreceipts plus localadmissionfixtures independently rechecked read-only. Full source interfaces and unchanged endpoint statement retained. The all-failD counterexample explains why literal totalParentGate cannot describe failure-preserving nativeproducer; choosing canonicalcomparison witnesses is not nativeadoption. No shipped/security/trust/keychange or formalreplay.
+
+NEXT-PRODUCER.md identifies exact actual TX1/TX2 sites and weighted delegated bound:2*w3+w4+2*w6+w7+2*w9+2*w10+2*w11+w12+w17+w19<=115. Unrestrictedrest can issue1162asks at firstop3 and reject, so full1161 is false without localproducerbounds. Lead next owns proving actualdrivercontrolpartition/all-outcome composition from explicit per-op budget producers, using realreturned savedVec/Prepared and 477+3+3+563=1046, NOT checkpointChainprojection equality. SessionA retains concrete parser/prepare/powers/sampler/primitive bounds; no duplicate work. A conditional partition theorem will close only sourcecontrolcomposition, not concrete115orfullrelease. Budget219/240charged,21remain,Kani0/20; no newLean allocation.
+
+Client64 worker2349 now implements D162 caller migration separately on unmergedcandidate, tools/scripts only with offline mocks; no chain/key operations, crates/programs changes or nativeprivacy/adoptionclaim. NativeDrop386 remainsactive. Bothdeployedtargetsnotyetestablished.
