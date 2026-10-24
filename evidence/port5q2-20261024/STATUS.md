@@ -73,3 +73,24 @@ exact inherited target/exit/wall/RSS/swap/revision and domain. This admits the
 certificate on the reached S2/64/next10 raw domain under the existing native/P6
 carrier boundary and exact caller lengths, not a new whole-op equality axiom.
 No native-to-ELF or soundness closure is claimed.
+
+Stage 4: isolated CURRENT reader helper extraction, rather than replaying the
+old timed-out whole parent. charon001/aeneas001 emitted three helpers but left
+Reader.raw/k/e opaque because the include pattern did not match impl methods.
+Changed method patterns `_::raw/k/e` produced all six in charon002/aeneas002.
+Each runs optimized/in its own admitted6G/8G/Swap0/Tasks64 scope; no cap increase,
+source change, old timeout rerun or external template import. Full LLBC/source/
+command/tool environment/time/RSS/revision receipts retained. A collector nesting
+issue on the second generated-output copy was corrected; final reader-helpers/
+is the second emission, not a mix of generations.
+
+Port5Q2_ReaderSemantic.normalization proves the CURRENT ten-read helper's FULL
+Result and cursor equality to semanticUsing for every ReadK, including rejected
+fields and no suffix reads. Port5Q2_ReaderRaw.normalization/reference prove the
+CURRENT wrapping raw reader agrees with retained checked raw at bounded positions
+and that ANY unwrap handler agreeing on Ok yields the SAME bytes/cursor; its
+panic/debug path is unreachable there. Accepted017/018, standard axioms only.
+These discharge current helper control/cursor transport; the scalar decoder and
+actual native library/runtime interpretation remain explicit. Early semantic
+normalization elaboration failures are excluded and replaced by ten fresh-name
+bind decompositions; none timed out or consumed extra resources.
