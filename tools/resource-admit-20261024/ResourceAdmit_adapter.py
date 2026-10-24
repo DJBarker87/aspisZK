@@ -7,7 +7,7 @@ from ResourceAdmit_sources import load
 
 c, go, identity, inventory = load()
 EXPECTED=dict(high=3*c.GIB,cap=4*c.GIB,swap_max=0,tasks_max=64)
-UNIT='resource-admit-20261024'
+UNIT='resource-admit-20261025-v2'
 COMMANDS=[['ps','-e','-o','pid,ppid,rss,comm,cgroup'],
           ['systemctl','list-units','--type=service','--state=running','--no-pager','--no-legend'],
           ['docker','ps','-q']]
@@ -77,5 +77,5 @@ def read_only_admission(*,phase):
         if Path(path).name!=UNIT+'.scope':
             failures['unit']=dict(error='actual own scope unit differs from preregistration')
     if failures:decision.update(allowed=False,collection_failures=failures)
-    return dict(api_version='ResourceAdmit20261024-v1',collector_pid=os.getpid(),decision=decision,
+    return dict(api_version='ResourceAdmit20261025-v2',collector_pid=os.getpid(),decision=decision,
                 snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')

@@ -15,9 +15,10 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[2]
-OUT=ROOT/'evidence/resource-admit-20261024'
+OUT=ROOT/'evidence/resource-admit-20261024/v2'
 import ResourceAdmit_adapter as adapter
 import ResourceAdmit_sources as sources
+import ResourceAdmit_host as host
 
 
 def load(name):return json.loads((OUT/name).read_text())
@@ -88,6 +89,8 @@ def replay(phase):
 
 def main():
     manifest=load('manifest.json')
+    assert manifest['epoch']==host.EPOCH and manifest['stage']==host.STAGE
+    assert manifest['scope_argv']==host.scope_argv(manifest)
     for name,pin in manifest['files'].items():
         p=Path(__file__).with_name(name)
         raw=(json.dumps(sources.bundle(),sort_keys=True,indent=2)+chr(10)).encode() if name=='ResourceAdmit_reviewed.json' else p.read_bytes()
@@ -112,6 +115,23 @@ def main():
         assert not (OUT/'marker.json').exists()
         assert load('run-exit.json')['terminal']=='PROSPECTIVE_DENY'
     if 'inside-scope' in phases and not phases['inside-scope']['allowed']:assert not (OUT/'marker.json').exists()
-    print(json.dumps(dict(status='PASS',phases=phases,print_axioms='N/A'),sort_keys=True))
+    marker=(OUT/'marker.json').exists()
+    if (OUT/'scope-argv.json').exists():assert load('scope-argv.json')==manifest['scope_argv']
+    if marker:
+        assert phases['inside-scope']['allowed'] is True
+        for name in ('go-pre-pins.json','go-pins.json','go-post-pins.json','run-pre-pins.json','run-post-pins.json'):
+            observed=load(name)
+            for key in ('files','runtime','env'):assert observed[key]==manifest[key]
+        assert load('go-control-check.json')['allowed'] is True
+        binding=load('inside-scope-report-summary.json' if not (OUT/'inside-scope-report.json').exists() else 'inside-scope-report.json')['decision']['scope_binding']['self_identity']
+        for name in ('go-controls-before.json','go-controls-after-scan.json','go-controls-after.json'):
+            control=load(name);host.check_controls(control)
+            assert control['pid']==binding['pid'] and control['path']==binding['path']
+            assert {k:v for k,v in control['self_observation'].items() if k!='reads'}==binding
+        assert load('marker.json')['pid']==binding['pid']
+        assert load('marker.json')['cgroup']=='0::'+binding['unified_path']+'\n'
+        assert load('go-exit.json')['terminal']=='GO_MARKER_PASS'
+        assert load('scope-child.json')['exit']==load('run-exit.json')['exit']==0
+    print(json.dumps(dict(status='PASS',actual_GO_marker=marker,phases=phases,print_axioms='N/A'),sort_keys=True))
 
 if __name__=='__main__':main()

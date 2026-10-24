@@ -8,7 +8,7 @@ import time
 from ResourceAdmit_sources import bundle,digest
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
-OUT=ROOT/'evidence/resource-admit-20261024'
+OUT=ROOT/'evidence/resource-admit-20261024/v2'
 
 def main():
     label=sys.argv[1] if len(sys.argv)>1 else 'actual-audit'

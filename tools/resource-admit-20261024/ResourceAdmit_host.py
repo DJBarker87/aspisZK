@@ -11,6 +11,7 @@ import runpy
 import shutil
 import signal
 import subprocess
+import struct
 import sys
 import sysconfig
 import time
@@ -19,7 +20,11 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
 import ResourceAdmit_adapter as adapter
 EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
-UNIT = 'resource-admit-20261024'
+UNIT = 'resource-admit-20261025-v2'
+EPOCH = 'ResourceAdmit-20261025-v2'
+STAGE = '/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'
+ENV_BINARY = '/usr/bin/env'
+PYTHON_BINARY = '/usr/bin/python3'
 LOCK = '/tmp/aspis-r0-lean.lock'
 MODE = 'limited ResourceAvailable policy; metadata-only; no consumer'
 ENV_KEYS = {'HOME','USER','LOGNAME','PATH','LANG','XDG_RUNTIME_DIR','DBUS_SESSION_BUS_ADDRESS'}
@@ -34,6 +39,29 @@ def filepin(path):
 
 
 def runtime_pins():
+    # Pure ELF metadata inspection: no ldd/native helper execution. Reject new
+    # env runtime dependencies rather than silently leaving them unpinned.
+    raw=Path('/usr/bin/env').read_bytes()
+    if raw[:6] != b'\x7fELF\x02\x01' or struct.unpack_from('<H',raw,18)[0] != 62:
+        raise ValueError('env ELF ABI drift')
+    phoff,shoff=struct.unpack_from('<QQ',raw,32)
+    phsize,phnum,shsize,shnum=struct.unpack_from('<HHHH',raw,54)
+    interp=[]
+    for i in range(phnum):
+        ph=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
+        if ph[0]==3:interp.append(raw[ph[2]:ph[2]+ph[5]].rstrip(b'\0').decode())
+    sections=[struct.unpack_from('<IIQQQQIIQQ',raw,shoff+i*shsize) for i in range(shnum)]
+    needed=[]
+    for section in sections:
+        if section[1]!=6:continue
+        strings=sections[section[6]]
+        table=raw[strings[4]:strings[4]+strings[5]]
+        for off in range(section[4],section[4]+section[5],section[9]):
+            tag,value=struct.unpack_from('<qQ',raw,off)
+            if tag==1:needed.append(table[value:].split(b'\0',1)[0].decode())
+            if tag in (15,29):raise ValueError('env ELF search path drift')
+    if interp!=['/lib64/ld-linux-x86-64.so.2'] or needed!=['libc.so.6']:
+        raise ValueError('env ELF runtime dependency drift')
     std = Path(sysconfig.get_path('stdlib')).resolve()
     files = {}
     for root, dirs, names in os.walk(std):
@@ -51,7 +79,10 @@ def runtime_pins():
     tools = {name:dict(path=shutil.which(name), **filepin(shutil.which(name)))
              for name in ('ps','systemctl','docker','systemd-run')}
     return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable),
-                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools)
+                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools,
+                env_binary=dict(path='/usr/bin/env', **filepin('/usr/bin/env')),
+                env_elf_contract=dict(interpreter=interp,needed=needed),
+                env_dependencies={p:filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})
 
 
 def save(name, value):
@@ -63,7 +94,20 @@ def save(name, value):
         out.write('\n')
 
 
+def verify_environment(expected):
+    if set(expected) != ENV_KEYS or dict(os.environ) != expected:
+        # Only names and expected-key observed-value digests; never dirty values.
+        detail=dict(missing_keys=sorted(ENV_KEYS-set(os.environ)),
+                    unexpected_keys=sorted(set(os.environ)-ENV_KEYS),
+                    expected_key_value_digests={k:digest(os.environ[k].encode()) if k in os.environ else None for k in sorted(ENV_KEYS)})
+        raise ValueError('environment differs from allowlist pin: '+json.dumps(detail,sort_keys=True))
+
+
 def verify(manifest):
+    if manifest.get('epoch') != EPOCH or manifest.get('stage') != STAGE or str(HERE) != STAGE:
+        raise ValueError('epoch/stage pin drift')
+    if manifest.get('scope_argv') != scope_argv(manifest):
+        raise ValueError('literal scope argv pin drift')
     if manifest.get('mode') != MODE:raise ValueError('mode pin drift')
     actual={name:filepin(HERE/name) for name in manifest['files']}
     if actual != manifest['files']:
@@ -71,15 +115,16 @@ def verify(manifest):
     runtime=runtime_pins()
     if runtime != manifest['runtime']:
         raise ValueError('runtime/dependency drift')
-    if set(os.environ) != ENV_KEYS or dict(os.environ) != manifest['env']:
-        raise ValueError('environment differs from allowlist pin')
+    verify_environment(manifest['env'])
     return dict(files=actual,runtime=runtime,env=dict(os.environ),mode=MODE)
 
 
-def scope_argv():
-    return ['systemd-run','--user','--scope','--unit='+UNIT,
+def scope_argv(manifest):
+    if set(manifest['env']) != ENV_KEYS:raise ValueError('invalid pinned env keys')
+    return ['/usr/bin/systemd-run','--user','--scope','--unit='+UNIT,
             '-p','MemoryHigh=3G','-p','MemoryMax=4G','-p','MemorySwapMax=0','-p','TasksMax=64',
-            sys.executable,'-I','-B',str(HERE/'ResourceAdmit_host.py'),'go']
+            ENV_BINARY,'-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+[
+            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceAdmit_host.py','go']
 
 
 def flow(prospective, launch):
@@ -186,7 +231,7 @@ def main():
     save(action+'-pre-pins.json',verify(manifest))
     if action=='run':
         with (HERE/'ResourceAdmit_ATTEMPTED').open('x') as sentinel:
-            sentinel.write('fixed Q4GiB; transport/observation failures terminal'+chr(10))
+            sentinel.write(EPOCH+'; epoch 2/2; fixed Q4GiB; transport/observation failures terminal'+chr(10))
     if action=='go':
         before_controls=controls()
         save('go-controls-before.json',before_controls)
@@ -200,6 +245,10 @@ def main():
         gated=report
         try:
             check_controls(before_controls);check_controls(after_controls)
+            binding=report['decision']['scope_binding']['self_identity']
+            for observed in (before_controls,after_controls):
+                if {k:v for k,v in observed['self_observation'].items() if k!='reads'}!=binding:
+                    raise ValueError('control/GO process identity drift')
             save('go-control-check.json',dict(allowed=True))
         except (KeyError,TypeError,ValueError) as exc:
             save('go-control-check.json',dict(allowed=False,error=str(exc)))
@@ -215,7 +264,7 @@ def main():
             save('lock.json',dict(path=LOCK,mode='LOCK_EX|LOCK_NB',held_through='prospective and scope exit',
                                   inode=os.fstat(lock.fileno()).st_ino))
             def launch():
-                argv=scope_argv()
+                argv=scope_argv(manifest)
                 save('scope-argv.json',argv)
                 child=subprocess.Popen(argv,stdout=(HERE/'capture/scope.stdout').open('x'),stderr=(HERE/'capture/scope.stderr').open('x'),env=manifest['env'])
                 _,status,usage=os.wait4(child.pid,0)

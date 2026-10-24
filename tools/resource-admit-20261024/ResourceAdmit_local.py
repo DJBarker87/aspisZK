@@ -17,28 +17,18 @@ import ResourceAdmit_host as host
 
 ROOT=Path(__file__).resolve().parents[2]
 HERE=Path(__file__).resolve().parent
-OUT=ROOT/'evidence/resource-admit-20261024'
-REMOTE='/home/dombarker/project-offloads/codex-cx-resource-admit-20261024'
+OUT=ROOT/'evidence/resource-admit-20261024/v2'
+REMOTE=host.STAGE
 SSH=['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10','dombarker@100.108.41.90']
 from ResourceAdmit_sources import bundle
-COORD_PID=7112
-COORD_START='Sat Oct 24 23:43:22 2026'
-COORD_OUTPUT=Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/codex-sbf-inputs-20261024.out')
-
 def coordination():
-    result=subprocess.run(['ps','-p',str(COORD_PID),'-o','pid=,lstart=,command='],text=True,capture_output=True)
-    if result.returncode not in (0,1):raise RuntimeError('coordination ps failed')
-    if result.stdout.strip():
-        if COORD_START not in result.stdout or 'codex-run.sh' not in result.stdout:
-            raise RuntimeError('coordination identity unknown; deny host operations')
-        raise RuntimeError('WAITING: exact SbfInputs preparation still live')
-    # Only after process is absent is reading its exact output permitted.
-    lines=COORD_OUTPUT.read_text().splitlines()
-    terminal=[line for line in lines if 'codex-exit' in line]
-    if not terminal or terminal[-1]!=lines[-1]:raise RuntimeError('missing last codex-exit terminal marker')
-    return dict(ps_argv=['ps','-p',str(COORD_PID),'-o','pid=,lstart=,command='],
-                ps_exit=result.returncode,ps_stdout=result.stdout,ps_stderr=result.stderr,
-                output=str(COORD_OUTPUT),terminal=terminal[-1],output_pin=host.filepin(COORD_OUTPUT))
+    # Explicit manager update supersedes old PID/start wait. No old output reads.
+    return dict(authority='2026-10-25 explicit v2 allocation',
+        sbf_inputs=dict(terminal=0, revision='c3c81cb691', merged='8373ebf51b'),
+        root_export=dict(terminal=0, revision='a554', merged='7b3ff55'),
+        port29='SDKDATA16027 LOCALONLY/host0',
+        sbf_closure='manager requires waiting for this process terminal',
+        epochs_total=2, old_epoch='1/1 USED retained', new_epochs=1)
 
 
 def save(name,value):
@@ -62,7 +52,7 @@ def env(uid):
 
 def ssh_python(payload, label, environment=None, data=None):
     coordination()
-    command=SSH+[shlex.join((['env','-i']+[k+'='+v for k,v in sorted(environment.items())] if environment else [])+
+    command=SSH+[shlex.join((['/usr/bin/env','-i']+[k+'='+v for k,v in sorted(environment.items())] if environment else [])+
                            ['/usr/bin/python3','-I','-B','-c',payload])]
     start=time.monotonic()
     try:
@@ -79,7 +69,7 @@ def ssh_python(payload, label, environment=None, data=None):
 def tests():
     label=sys.argv[2] if len(sys.argv)>2 else 'tests'
     if not label.replace('-','').isalnum():raise ValueError('invalid receipt label')
-    command=[sys.executable,'-B',str(HERE/'ResourceAdmit_tests.py')]
+    command=[sys.executable,'-B',str(HERE/'ResourceAdmit_tests_v2.py')]
     start=time.monotonic()
     with (OUT/(label+'.log')).open('x') as f:
         child=subprocess.Popen(command,stdout=f,stderr=subprocess.STDOUT)
@@ -116,7 +106,8 @@ def stage():
     info=json.loads((OUT/'runtime-inspection.json').read_text())
     files=sources()
     manifest=dict(files={name:host.digest(s.encode()) for name,s in files.items()},runtime=info['runtime'],env=env(info['uid']),
-                  source_revision=revision(),parent_resolved=info['parent_resolved'],reviewed_base='fbe04424e7553d9b0844ae19c2206b15cf3dd831',mode=host.MODE)
+                  epoch=host.EPOCH,stage=REMOTE,source_revision=revision(),parent_resolved=info['parent_resolved'],reviewed_base='fbe04424e7553d9b0844ae19c2206b15cf3dd831',mode=host.MODE)
+    manifest['scope_argv']=host.scope_argv(manifest)
     save('manifest.json',manifest)
     package=json.dumps(dict(files=files,manifest=manifest))
     bootstrap="""import json,os,pathlib,sys,hashlib
@@ -146,7 +137,7 @@ def run():
     # Exclusive local sentinel protects the one live attempt, including transport failures.
     (OUT/'ATTEMPTED').open('x').close()
     manifest=json.loads((OUT/'manifest.json').read_text())
-    command=SSH+[shlex.join(['env','-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+
+    command=SSH+[shlex.join(['/usr/bin/env','-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+
                            ['/usr/bin/python3','-I','-B',REMOTE+'/ResourceAdmit_host.py','run'])]
     start=time.monotonic()
     try:

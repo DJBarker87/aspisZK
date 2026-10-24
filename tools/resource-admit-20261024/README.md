@@ -40,3 +40,15 @@ Do not invoke actual audit while WAITING with no real capture. Historical
 15015/14587 audits are reused, not rerun. A passing rehearsal establishes only
 metadata admission; separate consumer review/allocation and a fresh pre-GO are
 still required. Both security targets remain not yet established.
+
+## Authorized v2 resume (2026-10-25)
+
+Current operative runner is v2. Use only evidence/resource-admit-20261024/v2,
+new remote codex-cx-resource-admit-20261025-v2 and resource-admit-20261025-v2
+unit. Old stage/captures/sentinels are immutable retained evidence. New v2
+CRITERIA and SOURCE-ASSESSMENT supersede the old coordination and exhausted
+allocation ONLY for this one additional epoch. `tests` runs only focused v2
+groups; old suites are reused. The exact inner `/usr/bin/env -i` argv restores
+the pinned environment inside systemd scope; strict equality remains required.
+No host retry is authorized. The old coordination utility/test suite is retained
+as historical source, not an operative v2 entrypoint.
