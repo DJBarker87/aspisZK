@@ -10,7 +10,10 @@ finite=26172456960
 resident=25021128704
 total=66698661888
 assert finite+8*gib < 55*gib
-assert finite+8*gib+resident+7*gib-total == 645095424
+# Corrected052 and the lead's later2GiB diagnostic have different resident
+# snapshots. Keep them separate; diagnostic001 retained the mistaken mixture.
+assert finite+8*gib+25065172992+7*gib-total == 645095424
+assert finite+8*gib+resident+7*gib-total == 601051136
 assert finite+2*gib+resident+7*gib < total
 # Parent100 contains capped child30 and uncapped child20: exclusive50+20,
 # and reserve30 are charged once; hierarchical100+20 is not added.
