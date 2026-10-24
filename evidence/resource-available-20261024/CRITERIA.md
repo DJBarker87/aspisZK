@@ -34,11 +34,14 @@ numeric-equality claim. Old decisions and original bytes remain immutable.
 
 Exact Ubuntu-6.8.0-147.147 mm/show_mem.c si_mem_available (lines 32-73)
 uses free F, totalreserve D, active+inactive file A+I, low-watermark W and
-reclaimable K: M=max(0,F-D+A+I-min(floor((A+I)/2),W)
-+K-min(floor(K/2),W)). fs/proc/meminfo.c defines K as reclaimable slab S
+reclaimable K, all in pages: M=max(0,F-D+A+I-min(floor((A+I)/2),W)
++K-min(floor(K/2),W)). Convert the result and components to bytes. In byte
+notation each kernel half term is P*floor(X/(2*P)), with page size P; the
+policy half-slab term remains floor(S_bytes/2) exactly as preregistered. fs/proc/meminfo.c defines K as reclaimable slab S
 plus misc reclaimable kernel. With a coherent reference and positive adjusted
 availability, clipping cannot apply (clipped M=0 cannot pass). Subtracting
-A and T=K-floor(S/2) leaves F-D+I+floor(S/2) minus both existing watermark
+A_bytes and T_bytes=K_bytes-floor(S_bytes/2) leaves
+F_bytes-D_bytes+I_bytes+floor(S_bytes/2) minus both existing watermark
 deductions. Thus active file and all misc reclaimable kernel are removed,
 at least half S is withheld, and original kernel reserves/watermarks remain.
 Subtracting full R again and charging B+Q+7 GiB adds policy conservatism even
