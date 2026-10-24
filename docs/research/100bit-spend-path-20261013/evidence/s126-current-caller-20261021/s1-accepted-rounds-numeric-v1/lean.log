@@ -1,0 +1,38 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1AcceptedRoundsNumericV1.lean:73:53: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1AcceptedRoundsNumericV1.lean:80:47: error: Tactic `subst` failed: did not find equation for eliminating 'step'
+
+case refine_1.inr.inr.inr.inr.inr.inr.inr.inr.inr
+H : Type
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+self after : r1_wire.SemanticTranscript H
+running : MainQM
+alpha : Std.Array MainQM 10#usize
+accepted : RoundModel.rounds children D pre self = ok (core.result.Result.Ok (running, alpha, after))
+record : r1_wire.ValidatedRecord
+initialArray : Std.Array QM 1#usize
+initial : QM
+recordCall : pre.validated_record 14#u8 = ok (core.result.Result.Ok record)
+decoded : children.decode 1#usize record 0#usize = ok (core.result.Result.Ok initialArray)
+indexed : initialArray.index_usize 0#usize = ok initial
+run :
+  CheckedRun children D pre schedule (initial, Array.repeat 10#usize aspis_core.field.QM31.ZERO, self)
+    (running, alpha, after)
+step : Usize × U8
+h : step = (9#usize, 24#u8) ∨ step ∈ []
+⊢ ↑step.1 < 10
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1AcceptedRoundsNumericV1.lean:79:38: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵c̵h̵e̵d̵u̵l̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲s̲c̲h̲e̲d̲u̲l̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at member
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1AcceptedRoundsNumeric.checked_step_numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1AcceptedRoundsNumeric.checked_run_numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1AcceptedRoundsNumeric.accepted_rounds_numeric' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

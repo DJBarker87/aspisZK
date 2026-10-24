@@ -1,0 +1,5 @@
+import S1OwnedStage1FinishChildrenV1
+import S1AcceptedSemanticNumericV1
+set_option autoImplicit false
+#check AspisS1AcceptedRoundsNumeric.installed_verify_numeric
+#check AspisS1ValuesOwnedInstallation.owned_stage1_finish_children
