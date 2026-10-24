@@ -14,10 +14,10 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
 | Entropy cap16 equivalence | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D192 universal same-event source owner induction and default-option cleanup | New60 Lean; old100 exhausted;16 Kani remain; J11400–11499 after collision checks |
-| Concrete clean-source driver | .worktrees/cx-port7clean / codex/cx-port7clean-20261024 | Terminal Checks/no-hit plus actual source trace embeddings | 100 Lean,20 Kani |
+| Effectful driver instance | .worktrees/cx-port8effects / codex/cx-port8effects-20261024 | Actual batch/checkpoint effects and driver read embeddings, with explicit Session A op7 frontier | 100 Lean,20 Kani |
 
-All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively39815,35253. Scratch output names:
-codex-prover-rng-owner-20261024.out,codex-port7clean-20261024.out. Only terminal markers
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively39815,41663. Scratch output names:
+codex-prover-rng-owner-20261024.out,codex-port8effects-20261024.out. Only terminal markers
 or missing handles trigger reading the final ~40 lines. Prompts archived under
 evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
 
@@ -104,3 +104,14 @@ uses a separately authorized60 Lean budget, preserving exhausted100/100 and
 44/60 Kani history. Primary deliverable is universal cap16 same-event equality;
 native provider/error/E1/callback/cap8 and L1/L2 remain next. No candidate merge
 or adoption. The checkpoint/authentication integration remains with Port7CLEAN.
+
+
+## Shared effectful-body obstruction — 2026-10-24
+
+Port7CLEAN finished, reviewed and merged ata23a58fb09. Its call-level terminal
+Checks result is retained, with no CleanAcceptedModel/no-hit closure claim.
+The concrete valueOnly counterexample rules out deriving oracle containment
+from native return values alone. Port8EFF starts from both this packet and the
+merged Port6CK; assigned actual owned op5/8/18 effect installation and reached
+chronological embeddings. Session A has the exact missing op7 effects request.
+See latest C3-BIN and HANDOFF for precise retained premises and source ownership.

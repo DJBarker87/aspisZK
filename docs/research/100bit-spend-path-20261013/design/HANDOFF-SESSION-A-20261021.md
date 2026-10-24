@@ -417,3 +417,27 @@ runtime/artifact obligations remain explicit; no deployed closure is claimed.
 Port7CLEAN owns the enclosing driver composition; no duplicate session A work
 is assigned. Full assumptions and receipt review are in the latest C3-BIN
 addendum and evidence/port6ck-20261024/HANDOFF.md.
+
+
+## Concrete effectful prepare interface needed (2026-10-24)
+
+Port7CLEAN derives terminal Checks from actual local calls, but its compiled
+TraceObstruction.no_sampler_embedding shows that native return-value laws alone
+cannot supply source sampler containment: valueOnly returns invoke ops call
+exactly while its driver log is empty. This is not a frozen-driver or security
+counterexample. The missing item is the pinned effectful body Implementation.
+
+Please include in your owned prepare/op7 deliverable the actual effect program
+and its source correspondence, with the SAME returned Prepared/gamma state,
+ordered sampler frames/read history and early-rejection behavior. Successful
+return equality/PreparedBinding alone is insufficient for adaptive security
+transport. The exact consumer is Port7CLEAN_Accepted's first-source sampler
+containment and Port6AUTH_Prefix charged-prefix replay; see Port7CLEAN STAGE2.
+Accepted-only local refinement may suffice, but the enclosing probability/count
+argument must justify its use and retain rejected effects. Do not assume
+all-driver equality to manufacture this local instance.
+
+Lead Port8EFF owns effectful op5 batch and checkpoint8/18 composition, concrete
+VTop installation and reached-call/log embeddings, reusing the newly merged
+Port6CK. It retains your op7/op17 and primitive boundary explicitly, without
+duplicating your source work. No protocol/trust/security change is authorized.

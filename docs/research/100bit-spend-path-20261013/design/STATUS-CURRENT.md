@@ -127,3 +127,14 @@ Port6CK_Complete.accepted consumes the actual returned state; the earlier
 literal same-state premise is removed. SourceJoin.source/provenance are ready
 for VTop reader_join/writer_join and Port7CLEAN composition. Authentication
 and source-driver obligations remain explicit. Both targets not yet established.
+
+
+### Lead checkpoint — source-call terminal Checks, 2026-10-24
+
+Port7CLEAN is reviewed/merged at a23a58fb09. Terminal Checks follow from the
+explicit local source-call premises; full CleanAcceptedModel/no-hit does not.
+A value-only driver counterexample identifies the missing concrete effectful
+body instance. Port8EFF owns actual batch/checkpoint effect installation and
+reached-call embeddings; Session A op7 must supply ordered sampler effects.
+The current worktree includes reviewed Port6CK for saved/resumed integration.
+Source1161, runtime binding and release replay remain open; targets not established.
