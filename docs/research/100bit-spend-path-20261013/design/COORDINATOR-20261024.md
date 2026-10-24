@@ -187,3 +187,8 @@ D198 reviews candidate003 translation probe and candidate004 IDmatch failure; al
 ## Checkpoint provenance integrated; physical counts next — 2026-10-24
 
 Reviewed Port11PROV2ab0c21054 and merged431346f953. C3/STATUS/A handoff record exact raw checkpoint preservation and indexed recovery under retained initial parser/prepare/P6/Std/frame/budget/no-hit gates. Independent checks pass13final modules,25receipts and standardaxioms. Worker87723 now uses ONLY35remaining Lean (185/220used,Kani0/20) for concrete physical row/level read-potential and installed batch counts.1040/1161 audit arithmetic remains TO PROVE; unrestricted rest has no fullsource cap. Prompt archived evidence/coordinator-20261024/prompt-port12count-20261024.txt. Extractorrepair85279 remainslive. Both deployedtargets notyetestablished.
+
+
+## Extractor Drop and resource accounting corrections — 2026-10-24
+
+D199 records candidate005Dropcounterexample and candidate007failclosedrejection; neither toolcandidate accepted. Nativewholecallback stilluncompiled; localtypeproofscope retained. Historical aggregate reservations unverified becauseDocker scopesomitted; live all-scopefinitecheck24.375GiB is currentonly. Worker93315 fixes admission beforeheavyjobs, then concrete safe source/tool strategy and actual64-byte providerpath under D187/D191 with explicitnewbudgets. Physicalcount worker87723 remainslive. Bothtargets notyetestablished.
