@@ -13,7 +13,7 @@ Nonmutating, network/host-read-disabled offline entrypoint (small summary defaul
 `--details` explicitly emits bounded diagnostics and the complete sealed input
 manifest, never the complete 15,015-event stream. The receipt wrapper records
 exact command, revision, source/dependency/interpreter hashes, exit, wall, RSS,
-swap and N/A axioms. Completed `audit-third` is the authoritative result; reuse
+swap and N/A axioms. Completed `audit-final` is the authoritative result; reuse
 it rather than rerunning unchanged. An original stream/report over 5 MB is only
 represented by hash+size. Existing meaningful event shards remain immutable.
 

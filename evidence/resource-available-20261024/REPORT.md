@@ -13,8 +13,8 @@ Exact Ubuntu source hash/version pointers and page-to-byte reserve derivation
 precede code. This is changed operator policy, not a tolerance patch or physical
 memory theorem. No native/security assumptions were added or discharged.
 
-New validation: audit-third on aa6cc96d42, exact command/hashes in receipt,
-exit 0, wall 0.957654625 s, peak RSS 174784512 B, swap 0; 15 focused groups.
+New validation: audit-final on dccd194a28, exact command/hashes in receipt,
+exit 0, wall 1.114058875 s, peak RSS 183189504 B, swap 0; 16 focused groups.
 Original 15,015-event input/report replay byte-identical and DENY. New full
 observer consumed 6,908 reads per snapshot with raw/receipt/hash equality.
 Original input hash 7665034cab34d7ef560c012106eeb6ef1d7dd31091c99de8c2aaa600d76ddeae
