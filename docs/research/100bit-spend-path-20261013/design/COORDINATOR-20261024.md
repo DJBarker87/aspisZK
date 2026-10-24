@@ -242,3 +242,17 @@ Client64 worker2349 now implements D162 caller migration separately on unmergedc
 ## Active concrete follow-ups — 2026-10-24
 
 Port14 audit merged and its clean owned worktree/branch removed. Port15DRIVER3466 now proves actualTX1/TX2 sourcecontrol partition and per-op weightedcount composition within remaining21/240Lean slots; no concrete115/full1161claim until actualproducerinstances. NativeDrop386 and Client642349 remainlive. Client64 budgets0Lean/Kani/extraction/backend,atmost4optimizedcargocommands+12focusedPythonchecks,tools/scripts-onlyunadoptedcandidate; nochain/keyoperations. All prompts archived; outsideLeanwindow sharedgloballockandfullhierarchyadmission apply. Bothdeployedtargetsnotyetestablished.
+
+
+## D201 — Actual drop-glue emission remains unaccepted; baseline flag correction (lead, 2026-10-24)
+
+Reviewed unmergedcandidatec42a29bc58 (37cc3cf769/69d404c658/c24fc5da9f). Generatedlimitsremoved and correctedTypes/dependentaudit recompiled. Candidate012 preservesregularpreciseglue and emitsactualcall, but WHOLEGuard11566 fails borrowedstdlibpair/tripleABI and generatedok-matchtyping/syntax. No destructorrefinement/counter0->1kernelresult/sourceorE1premisedischarged. CompleteunchangednoDropincrementclosure passes,notcleanupsemantics. Selected64andactualescape/capture035rejectbeforeoutput;031onlylegacymutatedLLBC,notnativeescapeevidence. Candidateandinstalledtoolremainseparate,noadoption.
+
+CORRECTION toD200/baseline20/22metadata: exactpinnedConfigdefaultdrop_as_no_op=true;commandsomit-eval-drops. Priorlabelsfalse/claims thatthosecommands exercised drop_value are unsupported. Their omittedDrop effects areconsistentwiththeno-opdefault. Staticnon-no-opbranchignoringfn_ptrremainsexactsourceobservation,not executionevidenceforthosecommands. Nocompletekernelacceptedbaselinecounterexampleorbroadinstalledtoolunsoundnessclaimfollows. Oldreceipts retainedhistorically.
+
+Leadreadsourcepatch/design/fullacceptedTypes/noDrop/audits/rawGuarderrors/flags;independentread-onlycollectorand223integrityhashespass. Backend008pre-gomissingbarrierfailurecharged,compilerRSS/swap/timeunavailable;remainingcompilers/extractorscappedandmeasuredswap0. Audit11569atc24fc5da9f+candidate012 exactsource/dephashes exit0,1.07s,RSS2622024KiB,swap0,standardfourreports(incrementstandardthree;Guard/take/swapnone). Cached/localproofscopeonly,noELF/performance/frozenreplay. Historicalfullaggregateunverifiedunchanged.
+
+Budgetbackend12/12,extraction35/36,Lean230/260,Kani44/60. Leadallocates4backendbuilds ceiling16 and8extracts ceiling44(9available);Lean30remaining/Kani16unchanged. NextisolatedABI/printerworker mustderivecompleteforward/backwardloaninterface,repairsourcebackend,thenwholeGuardkernelregression. No extra-tupleslot/handwrittenoutput/newcleanupaxiom. Bothdeployedtargetsnotyetestablished.
+
+
+NativeDrop386 terminal reviewed; continuationABI PID6628 launched with D201budgets. Port15DRIVER3466 andClient642349 remaintheotheractivehandles. Promptarchived.
