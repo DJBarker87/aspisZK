@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+"""Bounded metadata/download/hash preparation. Never invokes a compiler or build."""
+import argparse,hashlib,json,os,pathlib,resource,shutil,stat,sys,tarfile,time,urllib.request
+P=pathlib.Path
+STAGE=P('/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024')
+GLOBAL=P('/home/dombarker/.cache/solana/v1.52/platform-tools')
+DONOR=P('/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023')
+SIZE=519270959
+DIGEST='8b3861e93daf085ec12b65c4fac374d9bec4587a3de16871da6b08ab0c1d907e'
+START=time.monotonic()
+resource.setrlimit(resource.RLIMIT_AS,(512*1024**2,512*1024**2))
+def digest(p):
+ h=hashlib.sha256()
+ with open(p,'rb') as f:
+  while b:=f.read(1024**2):h.update(b)
+ return h.hexdigest()
+def safe(s):
+ p=pathlib.PurePosixPath(s)
+ if p.is_absolute() or '..' in p.parts or not p.parts:raise ValueError('unsafe path '+s)
+ return p
+
+def check_stage():
+ assert STAGE.is_dir() and not STAGE.is_symlink()
+ assert STAGE.stat().st_uid==os.getuid() and (STAGE/'OWNER').read_text()=='SbfRecapturePrep 20261024\n'
+
+def put(name,x):
+ p=STAGE/name
+ with p.open('x') as f:json.dump(x,f,indent=2);f.write('\n')
+ return {'path':str(p),'sha256':digest(p),'bytes':p.stat().st_size}
+def receipt(action,result,exit=0):
+ u=resource.getrusage(0)
+ result.update(receipt=dict(command=[sys.executable,str(P(__file__).absolute()),action],exit=exit,wall_seconds=time.monotonic()-START,peak_rss_kib=u.ru_maxrss,swaps=u.ru_nswap,print_axioms='N/A: no proof',script_sha256=os.environ['SBF_PREP_SCRIPT_SHA256'],python_sha256=digest(sys.executable),source_revision=os.environ.get('SBF_PREP_REVISION','UNKNOWN')))
+ print(json.dumps(result,indent=2))
+def init():
+ assert not os.path.lexists(STAGE),'stage exists: refuse ownership conflict'
+ assert STAGE.parent.stat().st_uid==os.getuid()
+ space=shutil.disk_usage(STAGE.parent)
+ assert space.free>4*1024**3
+ STAGE.mkdir(mode=0o700);(STAGE/'OWNER').write_text('SbfRecapturePrep 20261024\n')
+ return dict(stage=str(STAGE),space=space._asdict(),mode=oct(STAGE.stat().st_mode&0o777))
+def download():
+ check_stage();meta=json.loads((STAGE/'platform-release.txt').read_text())
+ assert meta['tag_name']=='v1.52' and meta['target_commitish']=='e3ebfccfe63ba936dd6951ede390496c6bc2f296'
+ a=next(a for a in meta['assets'] if a['name']=='platform-tools-linux-x86_64.tar.bz2')
+ assert a['size']==SIZE and a['digest']=='sha256:'+DIGEST
+ url=a['browser_download_url'];assert url=='https://github.com/anza-xyz/platform-tools/releases/download/v1.52/platform-tools-linux-x86_64.tar.bz2'
+ p=STAGE/a['name'];attempts=[]
+ assert not p.exists(),'never redownload an existing archive'
+ assert shutil.disk_usage(STAGE).free>SIZE+1024**3
+ # A second attempt is permitted ONLY after a partial response, with matching ETag
+ # and a verified Content-Range. No second full request is made.
+ etag=None
+ for attempt in range(2):
+  offset=p.stat().st_size if p.exists() else 0
+  if attempt and (not offset or not etag):break
+  headers={'User-Agent':'Aspis-SbfRecapturePrep/1','Accept-Encoding':'identity'}
+  if offset:headers.update({'Range':f'bytes={offset}-','If-Range':etag})
+  row=dict(attempt=attempt+1,offset=offset,url=url);attempts.append(row)
+  try:
+   with urllib.request.urlopen(urllib.request.Request(url,headers=headers),timeout=45) as r:
+    row.update(status=r.status,etag=r.headers.get('ETag'),content_range=r.headers.get('Content-Range'),content_length=r.headers.get('Content-Length'))
+    if offset:
+     assert r.status==206 and r.headers.get('ETag')==etag
+     assert r.headers.get('Content-Range')==f'bytes {offset}-{SIZE-1}/{SIZE}'
+    else:
+     assert r.status==200;etag=r.headers.get('ETag')
+    with p.open('ab' if offset else 'xb') as f:
+     while b:=r.read(1024**2):
+      assert f.tell()+len(b)<=SIZE,'oversize archive';f.write(b)
+   assert p.stat().st_size==SIZE,'short response'
+   break
+  except Exception as e:
+   row['error']=type(e).__name__+': '+str(e)
+ result=dict(metadata_sha256=digest(STAGE/'platform-release.txt'),asset=a,attempts=attempts,retained_partial=True)
+ result['bytes']=p.stat().st_size if p.exists() else 0
+ result['sha256']=digest(p) if p.exists() else None
+ result['verified']=result['bytes']==SIZE and result['sha256']==DIGEST
+ return result
+
+def archive():
+ check_stage();p=STAGE/'platform-tools-linux-x86_64.tar.bz2'
+ assert p.stat().st_size==SIZE and digest(p)==DIGEST
+ # Compare every archived member, not just selected binaries. Never extract.
+ assert GLOBAL.resolve()==GLOBAL and GLOBAL.is_dir()
+ rows=[];seen=set();differences=[];global_paths=set()
+ for root,ds,fs in os.walk(GLOBAL,followlinks=False):
+  for n in ds+fs:global_paths.add(str((P(root)/n).relative_to(GLOBAL)))
+ with tarfile.open(p,'r|bz2') as t:
+  for m in t:
+   rel=str(safe(m.name));parts=pathlib.PurePosixPath(rel).parts
+   if rel=='.':continue
+   # Archive root is discovered, not silently stripped from arbitrary paths.
+   if parts[0]=='platform-tools':parts=parts[1:]
+   if not parts:continue
+   rel='/'.join(parts);assert rel not in seen,'duplicate archive member';seen.add(rel)
+   q=GLOBAL/rel;row=dict(path=rel,archive_mode=oct(m.mode&0o7777),archive_size=m.size,archive_type=m.type.decode('ascii'),archive_link=m.linkname)
+   # No parent symlink is followed, including when comparing a regular file.
+   for parent in q.parents:
+    if parent==GLOBAL:break
+    assert not parent.is_symlink(),'global parent link: '+str(parent)
+   if m.issym() or m.islnk():
+    target=safe(str(pathlib.PurePosixPath(rel).parent/m.linkname)) if m.issym() else safe(m.linkname)
+    row['safe_link_target']=str(target)
+   assert m.isdir() or m.isfile() or m.issym() or m.islnk(),'special archive member'
+   if m.isfile():
+    h=hashlib.sha256();f=t.extractfile(m)
+    while b:=f.read(1024**2):h.update(b)
+    row['archive_sha256']=h.hexdigest()
+   try:
+    s=q.lstat();row.update(current_mode=oct(s.st_mode&0o7777),current_size=s.st_size)
+    if m.isdir():equal=stat.S_ISDIR(s.st_mode)
+    elif m.issym():equal=stat.S_ISLNK(s.st_mode) and os.readlink(q)==m.linkname
+    elif m.isfile():
+     equal=stat.S_ISREG(s.st_mode) and s.st_size==m.size
+     if stat.S_ISREG(s.st_mode):row['current_sha256']=digest(q);equal=equal and row['current_sha256']==row['archive_sha256']
+    else:equal=False # Hard-link equivalence requires explicit inode/target assessment.
+    row['equal']=equal and (s.st_mode&0o7777)==(m.mode&0o7777)
+   except FileNotFoundError:row['equal']=False;row['missing']=True
+   if not row['equal']:differences.append(row)
+   rows.append(row)
+ extra=sorted(global_paths-seen)
+ raw=put('archive-members.json',rows)
+ return dict(archive_sha256=DIGEST,global_root=str(GLOBAL),members=len(rows),differences=differences,extra_current_paths=extra,full_equality=not differences and not extra,raw_manifest=raw)
+
+def cache_observe():
+ check_stage();denied=[];matches=[];observed=0
+ roots=[str(DONOR/x) for x in ['sbf-target-verifier','sbf-target-pool']]
+ # Do not traverse any cache until process visibility proves quiescence. Read
+ # /proc link metadata, never fd contents or environment. No logs are read.
+ for d in P('/proc').iterdir():
+  if not d.name.isdecimal() or int(d.name)==os.getpid():continue
+  try:
+   uid=d.stat().st_uid
+   cmd=(d/'cmdline').read_bytes();cwd=os.readlink(d/'cwd')
+   cg=(d/'cgroup').read_text();fds=[]
+   for fd in (d/'fd').iterdir():
+    try:fds.append(os.readlink(fd))
+    except FileNotFoundError:pass
+   observed+=1
+   if any(r in cwd or r.encode() in cmd or any(f==r or f.startswith(r+'/') for f in fds) for r in roots):
+    matches.append(dict(pid=int(d.name),uid=uid,cwd=cwd,command_sha256=hashlib.sha256(cmd).hexdigest(),cgroup=cg))
+  except (FileNotFoundError,ProcessLookupError):continue
+  except PermissionError:denied.append(int(d.name))
+ ownership=[]
+ for r in roots:
+  p=P(r);s=p.lstat();ownership.append(dict(path=r,uid=s.st_uid,mode=oct(s.st_mode&0o777),symlink=p.is_symlink()))
+ allowed=not denied and not matches and all(x['uid']==os.getuid() and not x['symlink'] for x in ownership)
+ return dict(allowed_to_enter=allowed,observed_processes=observed,permission_denied_pids=denied,matching_processes=matches,ownership=ownership,cache_hash_or_copy_run=False,reason='Fail closed: process visibility/ownership is incomplete or concurrent use' if not allowed else 'Visibility passed; separate full inventory/export still required')
+
+def main():
+ a=argparse.ArgumentParser();a.add_argument('action',choices=['init','download','archive','cache-observe']);args=a.parse_args()
+ try:r={'init':init,'download':download,'archive':archive,'cache-observe':cache_observe}[args.action]();receipt(args.action,r)
+ except Exception as e:
+  receipt(args.action,dict(error=type(e).__name__+': '+str(e)),1);sys.exit(1)
+if __name__=='__main__':main()
