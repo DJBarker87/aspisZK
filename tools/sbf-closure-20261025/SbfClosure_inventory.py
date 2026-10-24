@@ -49,7 +49,12 @@ def main():
         if row['type']=='regular':row.update(bytes=x['archive_size'],sha256=x['archive_sha256'])
         if row['type']=='symlink':row['link']=x['archive_link']
         rows.append(row)
-    allow=write('public-input-candidates.json',dict(status='FINITE PARTIAL ALLOWLIST; NOT EXECUTION-SEALED',files=rows,forbidden_broad_binds=['/','/home','/usr','/etc','/run','/home/dombarker/.cargo','/home/dombarker/.rustup','/home/dombarker/.local'],missing=['native/runtime and outer stable package exact sets','SDK exact public subset','index modes/config metadata','private tool extraction association','pre/GO/post identity and immutable sealing']))
+    # Small deterministic shards; no oversized derived JSON is persisted.
+    shards=[]
+    for i in range(0,len(rows),1000):
+        name='public-input-candidates-%02d.json' % (i//1000)
+        shards.append(dict(path=name,**write(name,rows[i:i+1000])))
+    allow=write('public-input-candidates.json',dict(status='FINITE PARTIAL ALLOWLIST; NOT EXECUTION-SEALED',shards=shards,forbidden_broad_binds=['/','/home','/usr','/etc','/run','/home/dombarker/.cargo','/home/dombarker/.rustup','/home/dombarker/.local'],missing=['native/runtime and outer stable package exact sets','SDK exact public subset','index modes/config metadata','private tool extraction association','pre/GO/post identity and immutable sealing']))
     root=tomllib.loads(read('Cargo.toml',SRC).decode())
     lock=tomllib.loads(read('Cargo.lock',SRC).decode())
     prepared=json.loads(read('evidence/sbf-inputs-20261024/packages.json'))
