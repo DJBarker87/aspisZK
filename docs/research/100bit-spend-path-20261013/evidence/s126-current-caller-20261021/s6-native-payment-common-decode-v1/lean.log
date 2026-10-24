@@ -1,0 +1,152 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativePaymentCommonDecodeV1.lean:27:57: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativePaymentCommonDecodeV1.lean:43:75: error: unsolved goals
+case refl
+bytes : Std.Array U8 216#usize
+s : Slice U8
+_✝²⁶ :
+  [> let s ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 144#usize, «end» := 148#usize } bytes.to_slice <]
+a✝⁶ : Std.Array U8 4#usize
+_✝²⁵ : [> let core.result.Result.Ok a✝⁶ ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s <]
+s_post1 : ↑s = List.slice 144 148 ↑bytes
+s_post2 : (List.slice 144 148 ↑bytes).length = 4
+r_post : ↑a✝⁶ = List.slice 144 148 ↑bytes
+a : Std.Array U8 4#usize
+_✝²⁴ :
+  [> let a ←
+    atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝⁶) <]
+a_post : a = a✝⁶
+asset : U32
+_✝²³ : [> let asset ← lift (core.num.U32.from_le_bytes a) <]
+s1 : Slice U8
+_✝²² :
+  [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := 8#usize, «end» := 40#usize } bytes.to_slice <]
+a✝⁵ : Std.Array U8 32#usize
+_✝²¹ : [> let core.result.Result.Ok a✝⁵ ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1 <]
+asset_post : asset = core.num.U32.from_le_bytes a✝⁶
+h✝³ : ↑(core.num.U32.from_le_bytes a✝⁶) < ↑aspis_core.field.P
+s1_post1 : ↑s1 = List.slice 8 40 ↑bytes
+s1_post2 : (List.slice 8 40 ↑bytes).length = 32
+r1_post : ↑a✝⁵ = List.slice 8 40 ↑bytes
+a1 : Std.Array U8 32#usize
+_✝²⁰ :
+  [> let a1 ←
+    atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝⁵) <]
+a1_post : a1 = a✝⁵
+s2 : Slice U8
+_✝¹⁹ :
+  [> let s2 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 40#usize, «end» := 72#usize } bytes.to_slice <]
+a✝⁴ : Std.Array U8 32#usize
+_✝¹⁸ : [> let core.result.Result.Ok a✝⁴ ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2 <]
+s2_post1 : ↑s2 = List.slice 40 72 ↑bytes
+s2_post2 : (List.slice 40 72 ↑bytes).length = 32
+r2_post : ↑a✝⁴ = List.slice 40 72 ↑bytes
+a2 : Std.Array U8 32#usize
+_✝¹⁷ :
+  [> let a2 ←
+    atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝⁴) <]
+a2_post : a2 = a✝⁴
+s3 : Slice U8
+_✝¹⁶ :
+  [> let s3 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 72#usize, «end» := 80#usize } bytes.to_slice <]
+a✝³ : Std.Array U8 8#usize
+_✝¹⁵ : [> let core.result.Result.Ok a✝³ ← core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s3 <]
+s3_post1 : ↑s3 = List.slice 72 80 ↑bytes
+s3_post2 : (List.slice 72 80 ↑bytes).length = 8
+r3_post : ↑a✝³ = List.slice 72 80 ↑bytes
+a3 : Std.Array U8 8#usize
+_✝¹⁴ :
+  [> let a3 ←
+    atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 8#usize core.marker.CopyU8)
+      (core.result.Result.Ok a✝³) <]
+a3_post : a3 = a✝³
+i : U64
+_✝¹³ : [> let i ← lift (core.num.U64.from_le_bytes a3) <]
+s4 : Slice U8
+_✝¹² :
+  [> let s4 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 80#usize, «end» := 112#usize } bytes.to_slice <]
+a✝² : Std.Array U8 32#usize
+_✝¹¹ : [> let core.result.Result.Ok a✝² ← core.array.TryFromSharedArraySlice.try_from 32#usize s4 <]
+i_post : i = core.num.U64.from_le_bytes a✝³
+s4_post1 : ↑s4 = List.slice 80 112 ↑bytes
+s4_post2 : (List.slice 80 112 ↑bytes).length = 32
+r4_post : ↑a✝² = List.slice 80 112 ↑bytes
+a4 : Std.Array U8 32#usize
+_✝¹⁰ :
+  [> let a4 ←
+    atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize))
+      (core.result.Result.Ok a✝²) <]
+a4_post : a4 = a✝²
+r5 : core.result.Result (Std.Array U32 8#usize) atomic_statement.AtomicStatementError
+_✝⁹ : [> let r5 ← atomic_statement.decode_digest_canonical a4 <]
+r6 : core.result.Result (Std.Array U32 8#usize) PoolV1PaymentStatementFormatError
+_✝⁸ :
+  [> let r6 ←
+    core.result.Result.map_err
+      decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r5
+      () <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PaymentStatementFormatError)
+    (Std.Array U32 8#usize)
+_✝⁷ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r6 <]
+val : Std.Array aspis_core.field.M31 8#usize
+s5 : Slice U8
+_✝⁶ :
+  [> let s5 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 112#usize, «end» := 144#usize } bytes.to_slice <]
+a✝¹ : Std.Array U8 32#usize
+_✝⁵ : [> let core.result.Result.Ok a✝¹ ← core.array.TryFromSharedArraySlice.try_from 32#usize s5 <]
+r5_post : AspisS6SourceCodec.aspis_statement.atomic_statement.encode_digest_canonical val = ok a✝²
+r6_post : r5 = core.result.Result.Ok val
+cf_post : r6 = core.result.Result.Ok val
+h✝² : cf = core.ops.control_flow.ControlFlow.Continue val
+s5_post1 : ↑s5 = List.slice 112 144 ↑bytes
+s5_post2 : (List.slice 112 144 ↑bytes).length = 32
+r7_post : ↑a✝¹ = List.slice 112 144 ↑bytes
+a5 : Std.Array U8 32#usize
+_✝⁴ :
+  [> let a5 ←
+    atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize))
+      (core.result.Result.Ok a✝¹) <]
+a5_post : a5 = a✝¹
+r8 : core.result.Result (Std.Array U32 8#usize) atomic_statement.AtomicStatementError
+_✝³ : [> let r8 ← atomic_statement.decode_digest_canonical a5 <]
+r9 : core.result.Result (Std.Array U32 8#usize) PoolV1PaymentStatementFormatError
+_✝² :
+  [> let r9 ←
+    core.result.Result.map_err
+      decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r8
+      () <]
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PaymentStatementFormatError)
+    (Std.Array U32 8#usize)
+_✝¹ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r9 <]
+val1 : Std.Array aspis_core.field.M31 8#usize
+r10 : core.result.Result Unit PoolV1PaymentStatementFormatError
+_✝ :
+  [> let r10 ←
+    validate_common
+      { pool := a✝⁵, deployment_domain := a✝⁴, anchor_sequence := core.num.U64.from_le_bytes a✝³, anchor_root := val,
+        nullifier := val1, asset_id := core.num.U32.from_le_bytes a✝⁶ } <]
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PaymentStatementFormatError) Unit
+_ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r10 <]
+a✝ : Unit
+r8_post : AspisS6SourceCodec.aspis_statement.atomic_statement.encode_digest_canonical val1 = ok a✝¹
+r9_post : r8 = core.result.Result.Ok val1
+cf1_post : r9 = core.result.Result.Ok val1
+h✝¹ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+cf2_post : ∀ (value : Unit), r10 = core.result.Result.Ok value
+h✝ : cf2 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ (∃ encoded, atomic_statement.encode_digest_canonical val = ok encoded ∧ ↑encoded = List.slice 80 112 ↑bytes) ∧
+    ∃ encoded, atomic_statement.encode_digest_canonical val1 = ok encoded ∧ ↑encoded = List.slice 112 144 ↑bytes
+'AspisS6NativePaymentDecode.common_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6NativePaymentDecode.common_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
