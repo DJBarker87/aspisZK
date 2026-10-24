@@ -1,0 +1,30 @@
+Port6AUTH_Accounting.lean:58:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ d ≤ 1161
+  0 ≤ c ≤ 1161
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 0
+  a - b - c - e ≤ -2323
+where
+ a := ↑Q
+ b := ↑(eval H (canon (lift P))).1.length
+ c := ↑(eval H (rust (eval H (canon (lift P))).2)).1.length
+ d := ↑(eval H
+        (rust
+          (enrich (build D (view (eval H (originalWith rust (canon (lift P))))))
+            (eval H (originalWith rust (canon (lift P)))).2.1))).1.length
+ e := ↑(eval H
+        (rust
+          (enrich
+            (build D
+              ((eval H (canon (lift P))).1 ++ (eval H (rust (eval H (canon (lift P))).2)).1,
+                ((eval H (canon (lift P))).2.statement, (eval H (canon (lift P))).2.proof),
+                (eval H (rust (eval H (canon (lift P))).2)).2))
+            (eval H (canon (lift P))).2))).1.length
+Port6AUTH_Accounting.lean:66:4: error(lean.unknownIdentifier): Unknown identifier `FS2.mean`
+'AspisR1.Port6AUTH_Accounting.first_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_Accounting.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_Accounting.log_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_Accounting.extractor_cost' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

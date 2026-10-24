@@ -1,5 +1,6 @@
 import Port6AUTH_Native
 import Port6AUTH_Frames
+import Port6AUTH_Accounting
 import Port5Q1_Complete
 set_option autoImplicit false
 noncomputable section
@@ -10,6 +11,7 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open AspisV8R19.AdaptiveFirstReadLaw
 open MultiproofConeCanonical OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft OraclePortStoredDecisionDraftC4
+open OraclePortRuntimeBindingC7 Port1_StoredCarrier
 open Port5Q1_QueryPorts Port5Q1_Endpoint OraclePortAllSelectedRecoveryC6
 attribute [local irreducible] OraclePortCheckpointStateC3.advance QueryAccumulator.run22
   OraclePortCheckpointStateC3.write QueryResidualBridge.values QueryResidualBridge.basis
@@ -36,14 +38,15 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
     (native : ∀ b : Fin 2, Port4B_Install.batch D
       (c.proof (Port4B_CallerJoin.site (Usize.ofNat b.val (by scalar_tac))))
       (batchPrepared b) (folded b) (Usize.ofNat b.val (by scalar_tac)) hash=ok (.Ok ()))
-    (log : List (Bytes × State)) (Q : Nat)
+    (decoder : LiteralByteProtocol.Decoder) (rust : Verifier) (adversary : ByteProver) (Q : Nat)
+    (hqueries : ∀ oracle : Bytes → State, (eval oracle adversary).1.length ≤ Q)
+    (physical : Physical rust)
+    (sourceCalls : ∀ oracle input, (eval oracle (rust input)).1.length ≤ 1161)
     (contains : ∀ b : Fin 2, ∀ x,
       Read (eval H (MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
-        c.nodes b.val Port4B_BatchJoin.initial)).1 x → Read log x)
-    (consistent : ∀ x ∈ log, x.2=H x.1)
-    (bound : firstReads emptyTable log ≤ Q)
+        c.nodes b.val Port4B_BatchJoin.initial)).1 x → Read (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1 x)
     (clean : ¬ hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv
-      BinRawByteCollisionTargets.pred Q) emptyTable log)
+      BinRawByteCollisionTargets.pred (Q+1161)) emptyTable (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1)
  {CoreError : Type} (base : VTop_Stages.Ops) (ops : Ops) (ports : SessionAPrimitives ops)
     (proof : Slice U8) (p : verifier.Prepared) (a0 out10 out22 : verifier.Accumulator)
     (g : Array Stage2E 29#usize) (obs : Option (verifier.Phase → Result Unit))
@@ -75,18 +78,21 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
       proof p (materialize out10 flushed10) g obs geometry1 b1 22#usize=ok (.Ok (out22,b12)))
     (flush1 : Port3_FlushInstall.flush b12 out22.weights.deref=ok flushed22)
     (queryBinding : pm.queries=q)
-    (decoder : LiteralByteProtocol.Decoder) (transcriptPublic : LiteralTranscript.Public)
+    (transcriptPublic : LiteralTranscript.Public)
     (transcriptProof : LiteralProtocol.Proof)
     (trBinding : tr=Port6AUTH_Frames.reached decoder H transcriptPublic transcriptProof)
     (parseReached : OraclePortStoredParserC4.parseReached stored tr=some parsed)
     (samplerContains : ∀ x, Read (eval H (RawCutProverCompiler.verifier decoder (fun _ _ => false)
-      transcriptPublic transcriptProof)).1 x → Read log x) :
+      transcriptPublic transcriptProof)).1 x → Read (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1 x) :
     let model := OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q
     CheckpointBytes5Output.accumulator (materialize out10 flushed10)=(OraclePortCheckpointStateC3.write model).accumulator ∧
     CheckpointBytes5Output.accumulator (materialize out22 flushed22)=
       OraclePortCheckpointStateC3.advance model 12 (CheckpointBytes5Output.accumulator (materialize out10 flushed10)) ∧
     CheckpointBytes5Output.accumulator (materialize out22 flushed22)=OraclePortFrozen2.completeState i q ∧
     flushed10.val.length=64 ∧ flushed22.val.length=64 ∧ out10.next.val=10 ∧ out22.next.val=22 := by
+  let log := (eval H (Port6AUTH_Prefix.source decoder rust adversary)).1
+  have consistent := FS.eval_consistent H (Port6AUTH_Prefix.source decoder rust adversary)
+  have bound := Port6AUTH_Accounting.budget decoder rust adversary Q hqueries physical sourceCalls H
   obtain ⟨parseOK,wireStored,aligned⟩ := OraclePortStoredParserC4.parsed stored tr parsed parseReached
   have matching := read
   rw [trBinding] at matching aligned
@@ -96,7 +102,7 @@ theorem accepted {Observer X : Type} (c : S2LeadInterface.Inputs Observer)
   have rootRead := Port6AUTH_Frames.targets decoder H transcriptPublic transcriptProof parsed q i.data matching aligned
   have auth := Port6AUTH_Native.authenticated c D hash H stored pub saved parsed facts wireStored parseOK
     binary occupied sibling leaf p6 batchPrepared batchAccumulator pm am fields modelRoots folded foldedInput
-    reached native log Q contains consistent bound clean frames selectors frameRead rootRead
+    reached native log (Q+1161) contains consistent bound clean frames selectors frameRead rootRead
   have indexed : ∀ pos, pos<22 → recovered log (frames 2) parsed 2 (index q 2 pos)=
       some (OraclePortPackedChoiceC4.payload parsed 2 pos) := by
     simpa only [queryBinding,show (2 : Fin 3).val=2 by decide] using auth 2
