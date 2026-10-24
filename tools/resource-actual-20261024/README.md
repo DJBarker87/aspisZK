@@ -18,3 +18,10 @@ has a hash/size record plus bounded summary; no binaries are committed.
 
 Do not rerun `run` or remove its sentinel. A future workload always needs new
 lead authorization and fresh prospective/in-scope admission.
+
+Terminal outcome: prospective DENY, no scope. See REPORT.md and FAILURES.md.
+`ResourceActual_repair_staging.py` is retained as a guarded failed approach:
+it rejected the already valid manifest before writing; do not invoke it again.
+Additional nonmutating diagnosis entrypoint: `ResourceActual_diagnose.py`.
+`ResourceActual_receipt.py audit`/`diagnose` writes new local exact wait4 receipts;
+existing receipt filenames are exclusive, so do not rerun unchanged targets.

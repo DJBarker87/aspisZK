@@ -28,6 +28,9 @@ def replay(phase):
     else:
         events=[]
         for shard in sorted(OUT.glob(phase+'-ordered-*.json')):events.extend(json.loads(shard.read_text()))
+    ordered_pin=load('export-receipt.json')['host_files'][phase+'-ordered.json']
+    ordered_raw=(json.dumps(events,sort_keys=True,indent=2)+'\n').encode()
+    assert len(ordered_raw)==ordered_pin['size'] and hashlib.sha256(ordered_raw).hexdigest()==ordered_pin['sha256']
     summary=OUT/(phase+'-report.json')
     report=json.loads(summary.read_text()) if summary.exists() else load(phase+'-report-summary.json')
     api=runpy.run_path(str(BASE/'ResourceStat_go.py'))
@@ -71,6 +74,12 @@ def replay(phase):
     assert position==len(events),('unconsumed inputs',position,len(events))
     assert actual['decision']==report['decision'],('decision differs',actual['decision'],report['decision'])
     assert actual['original_legacy']==report['original_legacy']
+    # Reconstruct ALL original report bytes; recorded measurement scalars are
+    # retained rather than represented as measurements of this offline replay.
+    for key in ('wall_seconds','peak_rss_kib','swaps'):actual[key]=report[key]
+    rebuilt=(json.dumps(actual,sort_keys=True,indent=2)+'\n').encode()
+    original_pin=load('export-receipt.json')['host_files'][phase+'-report.json']
+    assert len(rebuilt)==original_pin['size'] and hashlib.sha256(rebuilt).hexdigest()==original_pin['sha256']
     # Summary excludes only exact duplicates of separately retained raw reads.
     for value in (actual,report):
         for snapshot in value['snapshots'].values():

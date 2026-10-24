@@ -24,3 +24,14 @@ No backup/rewrite happened. The repair script is a retained failed approach,
 NOT an authorized retry entrypoint. The chr(10) change is clarity only and the
 new execution/parsing test improves preflight. Earlier commentary's staging-bug
 claim is withdrawn. No live capture, scope or attempt sentinel yet.
+
+The single authorized live prospective capture is terminal DENY (exit 78):
+`ValueError: invalid/overflow unsigned quantity`. Both full snapshots collected;
+no collection failure was hidden. Before-snapshot system.slice parent anon
+2,108,788,736 minus direct-child anon 2,122,874,880 = -14,086,144 bytes.
+Exclusive current there is 1,085,534,208 bytes. Negative component is rejected
+by unchanged accounting's `uint(value)`; full fallback only addresses a positive
+recorded sum greater than current and cannot override this negative-component
+rule. No rounding/tolerance claim or gate change. The after snapshot's anon
+exclusive is +34,562,048, which does not repair the earlier snapshot or justify
+using a different snapshot. No size search, second capture, scope or marker.
