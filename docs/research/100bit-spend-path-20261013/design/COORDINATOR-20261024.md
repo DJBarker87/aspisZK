@@ -177,3 +177,8 @@ D197 records mathematical validity packet review and corrects alternate96-byte f
 ## Both batch traces reviewed; provenance instantiation next — 2026-10-24
 
 Port10AUTH d1069e1971 reviewed and merged7b887b23ac. Independent static checks passed23 final sources, dependency/source hashes,five generators,resource receipts and41standard reports. C3/STATUS/session A handoff retain exact provenance/P6/primitive boundaries. Explicit new60 Lean allocation (old160exhausted, new ceiling220);Kani0/20 unchanged. Worker78498 on codex/cx-port11prov-20261024 now owns actual wire/query/root/node-view/checkpoint provenance instantiation at both reached witnesses and Port6AUTH composition. If shared A boundary blocks that item, audit/prove owned physical source counts instead; no invented source1161 claim. Prompt archived evidence/coordinator-20261024/prompt-port11prov-20261024.txt. Extractor candidate77049 remains live on selected64-byte privacy adapter. Both deployed targets not yet established.
+
+
+## Bounded extractor repair — 2026-10-24
+
+D198 reviews candidate003 translation probe and candidate004 IDmatch failure; all7 receipts pinned. Worker85279 uses4additional backendbuild attempts (ceiling8), original9extractions/7Lean remaining for retainedrecord/operation checks and selected64translation. No sharedtool adoption/nativeclosure. Provenance worker78498 remainslive. Both targets notyetestablished.
