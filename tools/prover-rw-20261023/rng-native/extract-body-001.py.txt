@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+"""Small selected-source extraction before enlarging the prover cone."""
+from pathlib import Path
+import subprocess,sys
+R=Path(__file__).resolve().parents[3]
+cmd=['/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon','cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','crate','--opaque','aspis_prover','--opaque','aspis_core','--opaque','aspis_statement','--start-from','crate::prover::prove_masked_attempt','--include','crate::prover::prove_masked_attempt','--include','crate::prover::prove_masked_with_attempt','--include','crate::prover::MaskedFixtureAudit','--include','crate::prover::mask_error','--include','aspis_prover::state_only_entropy::_::reserve_and_build_pool_v1_pair_forest_mask_material_v1','--include','aspis_prover::state_only_entropy::PreReservedNonce','--include','aspis_prover::state_only_entropy::_::reserve','--include','aspis_prover::state_only_entropy::StateOnlyAttemptSecrets','--include','aspis_prover::state_only_entropy::ReservedStateOnlyAttemptSecrets','--include','aspis_prover::state_only_hiding::StateOnlyMaskBuildError','--dest-file',str(R/'tools/prover-rw-20261023/rng-native/ProverRwRngNativeBody.llbc'),'--','--manifest-path',str(R/'crates/aspis-r1-cost-probe/Cargo.toml'),'--features','optimized-terminal,ct-host-prover','--offline','--release','--lib','--jobs','1']
+raise SystemExit(subprocess.run(cmd,cwd=R).returncode)
