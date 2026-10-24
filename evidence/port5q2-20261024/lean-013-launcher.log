@@ -1,0 +1,45 @@
+{"attempt": "lean-013", "exit_status": 1, "wall_seconds": 2.582944126013899, "peak_rss_kib": "4408148", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_ReaderSemantic.normalization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q2_ReaderSemantic.lean:101:84: error: unsolved goals
+case Ok
+read : CheckpointBytes4Sections.ReadK
+bytes : Slice U8
+start : Usize
+reader : verifier.Reader
+a✝ : CheckpointBytes4Sections.K
+success : read { bytes := bytes, «at» := start } = ok (core.result.Result.Ok a✝, reader)
+⊢ (let (r, r1) := (core.result.Result.Ok a✝, reader)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r2, r3) ← read r1
+        let cf1 ←
+  
+...
+alue, out) ← read out
+                                  match value with
+                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                    | core.result.Result.Ok x_8 => do
+                                      let (value, out) ← read out
+                                      match value with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok x_9 =>
+                                          ok
+                                            (core.result.Result.Ok
+                                              (Array.make 10#usize [x, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9] ⋯,
+                                                out.at))
+Port5Q2_ReaderSemantic.lean:104:265: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q2_ReaderSemantic.normalization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f8684509e644d48a1d527e10683e9c9.scope; invocation ID: c22b35888f614359aaf1123f493c0ddf
