@@ -1,0 +1,220 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SdkOriginalObjectCallerV1.lean:50:94: error: unsolved goals
+case sourceAccepted
+W A : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+world : W
+admission : S2W_D189Consolidation.RuntimeEntrypointAdmission L e world 3
+ops : AdapterRw.Ops
+vops : Ops
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (AspisS6CurrentFirstInstallation.install ops vops) native1 native2 hashv
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+initial final : A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+accepted :
+  AspisS6SdkFirstObjectEquivalence.originalFirst native1 copy allocator e program data initial =
+    ok (core.result.Result.Ok (saved, post, final))
+⊢ first native1 copy allocator e program data initial = ok (core.result.Result.Ok (saved, post, final))
+
+W A : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+world : W
+admission : S2W_D189Consolidation.RuntimeEntrypointAdmission L e world 3
+ops : AdapterRw.Ops
+vops : Ops
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (AspisS6CurrentFirstInstallation.install ops vops) native1 native2 hashv
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+initial final : A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+accepted :
+  AspisS6SdkFirstObjectEquivalence.originalFirst native1 copy allocator e program data initial =
+    ok (core.result.Result.Ok (saved, post, final))
+sourceAccepted : first native1 copy allocator e program data initial = ok (core.result.Result.Ok (saved, post, final))
+⊢ post = writeBracket e.heap 2 0 0 (source (nativeBytes saved)) ∧
+    S2W_AccountObservations.observe S2W_ReturnedCheckpoint.encode e.metadata 3 post 1 =
+        S2W_D189Interpretation.nativeObserve L S2W_ReturnedCheckpoint.encode e.metadata 3 world e.heap.ambient 1 ∧
+      ∀ (accounts2 : Slice AdapterRw.Cuts.Account) (f : FirstCut) (s : SecondCut),
+        SourceCuts (AspisS6CurrentFirstInstallation.install ops vops) e.first accounts2 saved f s →
+          f.pub = e.buffers (e.handles 1).1 ∧
+            (↑f.pub).length = 1880 ∧
+              payloadBytes S2W_ReturnedCheckpoint.encode (L.cellPayload world (L.accountData world 1))
+                    (L.cellPayload world (L.accountData world 1)).descriptor.length =
+                  MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                ∃ encoded,
+                  decode f.pub = ok (core.result.Result.Ok f.statement) ∧
+                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1
+                          f.pub =
+                        ok (core.result.Result.Ok (toPoolV1PairForestTerminalStatementV1 f.statement)) ∧
+                      AspisS6CurrentCodecInstallation.encode f.statement = ok (core.result.Result.Ok encoded) ∧
+                        ↑encoded = ↑f.pub ∧
+                          f.split = compact.SPLIT ∧
+                            FirstComposition.firstCurrent AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+                                vops
+                                (toDigest
+                                  (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                                    (AspisS6CurrentFirstInstallation.install ops vops)))
+                                (fun error => ops.op44 (fromError error)) f.pub f.proof f.split =
+                              ok (core.result.Result.Ok saved)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SdkOriginalObjectCallerV1.lean:52:33: error: unexpected token ')'; expected command
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SdkOriginalObjectCallerV1.lean:123:69: error: unsolved goals
+case sourceAccepted
+W A : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+world : W
+admission : S2W_D189Consolidation.RuntimeEntrypointAdmission L e world 3
+adapterOps : AdapterRw.Ops
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction
+    (AspisS6CurrentFirstInstallation.install adapterOps
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B))
+    native1 native2 hashv
+program : AdapterRw.solana_pubkey.Pubkey
+data : Slice U8
+out : alloc.vec.Vec U8
+initial final : A
+post : Heap (ℕ → Record)
+accepted :
+  AspisS6SdkFirstObjectEquivalence.originalFirst native1 copy allocator e program data initial =
+    ok (core.result.Result.Ok (out, post, final))
+⊢ first native1 copy allocator e program data initial = ok (core.result.Result.Ok (out, post, final))
+
+W A : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e : Entry
+world : W
+admission : S2W_D189Consolidation.RuntimeEntrypointAdmission L e world 3
+adapterOps : AdapterRw.Ops
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction
+    (AspisS6CurrentFirstInstallation.install adapterOps
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B))
+    native1 native2 hashv
+program : AdapterRw.solana_pubkey.Pubkey
+data : Slice U8
+out : alloc.vec.Vec U8
+initial final : A
+post : Heap (ℕ → Record)
+accepted :
+  AspisS6SdkFirstObjectEquivalence.originalFirst native1 copy allocator e program data initial =
+    ok (core.result.Result.Ok (out, post, final))
+sourceAccepted : first native1 copy allocator e program data initial = ok (core.result.Result.Ok (out, post, final))
+⊢ post = writeBracket e.heap 2 0 0 (source (nativeBytes out)) ∧
+    S2W_AccountObservations.observe S2W_ReturnedCheckpoint.encode e.metadata 3 post 1 =
+        S2W_D189Interpretation.nativeObserve L S2W_ReturnedCheckpoint.encode e.metadata 3 world e.heap.ambient 1 ∧
+      ∀ (accounts2 : Slice AdapterRw.Cuts.Account) (f : FirstCut) (s : SecondCut),
+        SourceCuts
+            (AspisS6CurrentFirstInstallation.install adapterOps
+              (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B))
+            e.first accounts2 out f s →
+          f.pub = e.buffers (e.handles 1).1 ∧
+            (↑f.pub).length = 1880 ∧
+              payloadBytes S2W_ReturnedCheckpoint.encode (L.cellPayload world (L.accountData world 1))
+                    (L.cellPayload world (L.accountData world 1)).descriptor.length =
+                  MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                AspisR1PublicPreparation.S6DecoderScopedReuseV1.decodeActual f.pub =
+                    ok (core.result.Result.Ok (toPoolV1PairForestTerminalStatementV1 f.statement)) ∧
+                  f.split = compact.SPLIT ∧
+                    ∃ zero prepared scratch root0 root1,
+                      verifier.candidate.prepare
+                            (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children
+                              B)
+                            (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues
+                              AspisS1ExtractedRoundChildren.children B)
+                            (FirstComposition.toCurrentPublic
+                              (AspisR1PublicPreparation.PreparationBinding.preparationPublic
+                                (toPoolV1PairForestTerminalStatementV1 f.statement)))
+                            f.proof () none (Array.repeat 29#usize zero) =
+                          ok (core.result.Result.Ok prepared, scratch) ∧
+                        prepared.roots = Array.make 2#usize [root0, root1] ⋯ ∧
+                          ↑root0 = List.slice 16 48 ↑f.proof ∧
+                            ↑root1 = List.slice 63 95 ↑f.proof ∧
+                              Tx1Reachability.afterPrepare
+                                    (NativeBuffers.install (withValues ops) nativeValues
+                                      AspisS1ExtractedRoundChildren.children B)
+                                    (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues
+                                      AspisS1ExtractedRoundChildren.children B)
+                                    f.pub f.proof f.split () none prepared scratch =
+                                  ok (core.result.Result.Ok out) ∧
+                                ∃ stored initial semantic view sem,
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) f.proof
+                                        { start := 7031#usize, «end» := 7495#usize } =
+                                      ok stored ∧
+                                    expandValues stored initial = ok (core.result.Result.Ok (), view.y1) ∧
+                                      stored.length = 464 ∧
+                                        initial.length = 928 ∧
+                                          view.y1.length = 928 ∧
+                                            (∀ j < 928,
+                                                (↑view.y1)[j]? =
+                                                  if j % 32 < 16 then (↑stored)[j / 32 * 16 + j % 32]? else some 0#u8) ∧
+                                              sourceView f.proof semantic view.y1 = ok (core.result.Result.Ok view) ∧
+                                                (NativeBuffers.install (withValues ops) nativeValues
+                                                          AspisS1ExtractedRoundChildren.children B).op9
+                                                      (NativeBuffers.callerDigest adapterOps (withValues ops)
+                                                        nativeValues AspisS1ExtractedRoundChildren.children B)
+                                                      (FirstComposition.toCurrentPublic
+                                                        (AspisR1PublicPreparation.PreparationBinding.preparationPublic
+                                                          (toPoolV1PairForestTerminalStatementV1 f.statement)))
+                                                      view.semantic () none =
+                                                    ok (core.result.Result.Ok sem) ∧
+                                                  (NativeBuffers.install (withValues ops) nativeValues
+                                                            AspisS1ExtractedRoundChildren.children B).op8
+                                                        (NativeBuffers.callerDigest adapterOps (withValues ops)
+                                                          nativeValues AspisS1ExtractedRoundChildren.children B)
+                                                        sem view () (Array.repeat 29#usize zero) =
+                                                      ok (core.result.Result.Ok prepared, scratch) ∧
+                                                    AspisS1SemanticArrayRanges.CurrentVerifiedNumeric sem ∧
+                                                      ∀ (l : Usize),
+                                                        ↑l < 29 →
+                                                          ∃ parsed,
+                                                            AspisR1CurrentPreparedClaim.ClaimParser.field view.y1 l =
+                                                                ok parsed ∧
+                                                              AspisR1CurrentPreparedClaim.Concrete.Canonical parsed
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6SdkOriginalObjectCallerV1.lean:125:31: error: unexpected token ')'; expected command
+'AspisS6SdkOriginalObjectCaller.original_sdk_all_cuts' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS6SdkOriginalObjectCaller.original_sdk_source_cut_numeric' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

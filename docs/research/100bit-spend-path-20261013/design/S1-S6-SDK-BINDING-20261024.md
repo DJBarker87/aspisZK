@@ -128,3 +128,12 @@ concrete Terminal; remaining mask/eta/terminal domains; native/Std/abort/effect
 and final caller/release joins. Kani's uninit-checks ICE remains unresolved.
 Shared probability/oracle-law/artifact/coherent final replay gates remain open.
 No security target or prior failed validation has been redefined as complete.
+
+## Later enclosing-cut and compiled-equivalence addendum
+
+See S1-S6-ENCLOSING-CUTS-20261024.md. The accepted SDK parent now yields reuse
+and S1 preparation/numeric on EVERY matching published enclosing SourceCuts.
+A read-only compiled declaration comparison exposed a generated first matcher
+difference; a checked all-outcome equality to the pinned original body resolves
+it, and two enclosing consumers use that equality. Source/coherent-module/event/
+release re-pins remain explicit; no original failed target was relabelled passed.
