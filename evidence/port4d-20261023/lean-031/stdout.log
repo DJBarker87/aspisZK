@@ -1,0 +1,62 @@
+AspisR1.Port4D_FinishInstall.installed {W CoreError : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (batch : AspisR1.Port3_NativeBatchBody.Ops) (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (ops : AspisR1Stage2.Stage2Finish.FinishOps W) : VTop_Stages.Ops
+AspisR1.Port4D_NativeRows.materialized_weights (b : AspisR1Stage2.verifier.BatchedWeights)
+  (loopOut : AspisR1Stage2.verifier.Accumulator) (w : Fin 64 → AspisR1.Port4D_NativeRows.ExactK)
+  (size : (↑loopOut.weights).length = 64) (lengths : (↑loopOut.weights).length ≤ (↑b.raw).length)
+  (meaning :
+    ∀ (l : Fin 64) (row : Aeneas.Std.Array Aeneas.Std.U64 4#usize),
+      (↑b.raw)[↑l]? = some row → AspisR1.S8JoinFinishField.rawValue row = w l) :
+  ∃ out,
+    AspisR1.Port4D_Value.flush b loopOut.weights.deref = Aeneas.Std.Result.ok out ∧
+      (AspisR1.CheckpointBytes5Output.accumulator (AspisR1.Port4D_FlushRows.materialize loopOut out)).weights = w ∧
+        (AspisR1.Port4D_FlushRows.materialize loopOut out).rhs = loopOut.rhs ∧
+          (AspisR1.Port4D_FlushRows.materialize loopOut out).power = loopOut.power ∧
+            (AspisR1.Port4D_FlushRows.materialize loopOut out).next = loopOut.next
+AspisR1.Port4D_ReturnedFinish.accepted_twelve {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+  (s2 : p.variant = AspisR1Stage2.transport.Variant.S2)
+  (read :
+    AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some i.data)
+  (decoded : AspisR1.LiteralQueryRead.decode i.queryBytes = some q)
+  (pairing_S3_S5_S9 :
+    AspisR1.Port4D_Pairing.PairingLaws (AspisR1.Port3_FinishStage.release ops) AspisR1.CheckpointBytes5Output.ofE v p
+      i.data)
+  (matches_S4_S7 : ∀ (j : Fin 22), AspisR1.MatchingSupport.match0 i.data (q j))
+  (semantic_S3_S9 :
+    AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+      (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data)
+  (dot_S5 :
+    ∀ (actual : AspisR1Stage2.Stage2Finish.E),
+      ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok actual) →
+        AspisR1.CheckpointBytes5Output.ofE actual =
+          ∑ l, i.data.f l * AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l))
+  (saved : AspisR1Stage2.verifier.Accumulator)
+  (saved_ten :
+    AspisR1.CheckpointBytes5Output.accumulator saved =
+      (AspisR1.OraclePortCheckpointStateC3.write
+          (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator)
+  (twelve :
+    AspisR1.CheckpointBytes5Output.accumulator a =
+      AspisR1.OraclePortCheckpointStateC3.advance
+        (AspisR1.OraclePortCheckpointResumeC5.model i.data (AspisR1.SelectedChallengeMap.rhoOf i.rho) q) 12
+        (AspisR1.CheckpointBytes5Output.accumulator saved))
+  (success :
+    AspisR1.Port4D_FinishInstall.finish ops v p a none = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) :
+  ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a.rhs) ∧
+    a.next = 22#usize ∧
+      decide
+          (AspisR1.Port4D_FinishInstall.finish ops v p a none =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+        AspisR1.OraclePortFrozen2.finish parsed q tr i (AspisR1.CheckpointBytes5Output.accumulator a)
+'AspisR1.Port4D_FlushABI.reference_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushABI.vec_backwrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_Value.reference_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_NativeRows.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_NativeRows.materialized_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushPrefix.reached_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FlushPrefix.accepted_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_FinishInstall.accepted_dot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4D_ReturnedFinish.accepted_twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
