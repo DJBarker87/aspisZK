@@ -45,7 +45,7 @@ def replay(phase):
         return event
     def raw_error(e):
         kind=type(OSError(e['errno'],e['error']))
-        return type('RecordedError',(kind,),{'__str__':lambda self:e['error']})(e['errno'],e['error'])
+        return type(kind.__name__,(kind,),{'__str__':lambda self:e['error']})(e['errno'],e['error'])
     def read(path,*a,**k):
         e=take('read','path',str(path))
         if e['errno']:raise raw_error(e)
