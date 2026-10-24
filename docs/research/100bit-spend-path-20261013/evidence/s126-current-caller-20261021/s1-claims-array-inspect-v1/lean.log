@@ -1,0 +1,17 @@
+def Aeneas.Std.Array.set.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Array α n :=
+fun {α} {n} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimsArrayInspectV1.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.getElem?`
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+List.length_eq_three.{u} {α : Type u} {l : List α} : l.length = 3 ↔ ∃ a b c, l = [a, b, c]

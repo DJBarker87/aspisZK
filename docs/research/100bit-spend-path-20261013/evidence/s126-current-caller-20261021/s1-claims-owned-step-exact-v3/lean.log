@@ -1,0 +1,40 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimsOwnedStepExactV1.lean:75:60: error: unsolved goals
+before : Claims
+row0 row1 row2 : Row
+h0 :
+  ∀ (s : Claims) (r : Row),
+    r1_semantic.claims_owned_step s 0#usize (core.result.Result.Ok r) =
+      ok (core.result.Result.Ok (), Std.Array.set s 0#usize r)
+h1 :
+  ∀ (s : Claims) (r : Row),
+    r1_semantic.claims_owned_step s 1#usize (core.result.Result.Ok r) =
+      ok (core.result.Result.Ok (), Std.Array.set s 1#usize r)
+h2 :
+  ∀ (s : Claims) (r : Row),
+    r1_semantic.claims_owned_step s 2#usize (core.result.Result.Ok r) =
+      ok (core.result.Result.Ok (), Std.Array.set s 2#usize r)
+⊢ (let (status, after) := (core.result.Result.Ok (), Std.Array.set before 0#usize row0)
+    match status with
+    | core.result.Result.Err error => ok (core.result.Result.Err error, after)
+    | core.result.Result.Ok PUnit.unit =>
+      let (status, after) := (core.result.Result.Ok (), after.set 1#usize row1)
+      match status with
+      | core.result.Result.Err error => ok (core.result.Result.Err error, after)
+      | core.result.Result.Ok PUnit.unit =>
+        let (status, after) := (core.result.Result.Ok (), after.set 2#usize row2)
+        match status with
+        | core.result.Result.Err error => ok (core.result.Result.Err error, after)
+        | core.result.Result.Ok PUnit.unit => ok (core.result.Result.Ok (), after)) =
+    ok (core.result.Result.Ok (), ⟨[row0, row1, row2], ⋯⟩)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1ClaimsOwnedStepExactV1.lean:85:37: warning: This simp argument is unused:
+  overwrite_three
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵o̵v̵e̵r̵w̵r̵i̵t̵e̵_̵t̵h̵r̵e̵e̵]̵[̲r̲u̲n̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1ClaimsOwnedStepExact.error_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1ClaimsOwnedStepExact.ok_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1ClaimsOwnedStepExact.run_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1ClaimsOwnedStepExact.first_error_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1ClaimsOwnedStepExact.three_rows_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

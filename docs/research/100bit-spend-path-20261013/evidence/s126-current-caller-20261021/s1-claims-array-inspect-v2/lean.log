@@ -1,0 +1,28 @@
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  @Aeneas.Std.Array.index_usize.match_1 α (fun x => Aeneas.Std.Result (Aeneas.Std.Array α n))
+    (@getElem? (Aeneas.Std.Array α n) Aeneas.Std.Usize α
+      (fun a i =>
+        @LT.lt Nat instLTNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize i)
+          (@List.length α
+            (@Subtype.val (List α)
+              (fun l => @Eq Nat (@List.length α l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n)) a)))
+      (@Aeneas.Std.instGetElem?ArrayUsizeLtNatValLengthValListEq α n) v i)
+    (fun _ => @Aeneas.Std.Result.fail (Aeneas.Std.Array α n) Aeneas.Std.Error.arrayOutOfBounds) fun val =>
+    @Aeneas.Std.Result.ok (Aeneas.Std.Array α n)
+      (@Subtype.mk (List α) (fun l => @Eq Nat (@List.length α l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+        (@List.set α
+          (@Subtype.val (List α)
+            (fun l => @Eq Nat (@List.length α l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n)) v)
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize i) x)
+        ⋯)
+def Aeneas.Std.Array.set.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Array α n :=
+fun {α} {n} v i x =>
+  @Subtype.mk (List α) (fun l => @Eq Nat (@List.length α l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+    (@List.set α
+      (@Subtype.val (List α)
+        (fun l => @Eq Nat (@List.length α l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n)) v)
+      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize i) x)
+    ⋯
