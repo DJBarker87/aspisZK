@@ -33,9 +33,13 @@ for i,r in enumerate(REQUEST['roots']):
         except FileNotFoundError:continue
         for suffix in ('','.server','.private'):
             p=Path(str(main)+suffix)
+            if str(p) in REQUEST.get('already_retained',[]):
+                emit(dict(kind='reused-own-capture',path=str(p),root_index=i,module=m,suffix=suffix));continue
             try:p.lstat()
             except FileNotFoundError:
                 emit(dict(kind='absent-part',root_index=i,module=m,suffix=suffix));continue
+            if stat.S_ISLNK(p.lstat().st_mode):
+                emit(dict(kind='excluded-symlink',root_index=i,module=m,path=str(p),assessment='Not followed; this origin is unresolved unless a separately admitted regular origin provides it'));continue
             chain=inspect(p,'file');before=p.stat();assert before.st_size<=64*1024**2
             historical=REQUEST['historical'].get(m+'.olean') if not suffix else None
             if historical and historical['path']!=str(p):historical=None

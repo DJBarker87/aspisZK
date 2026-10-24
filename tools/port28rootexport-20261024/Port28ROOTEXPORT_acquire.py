@@ -26,14 +26,15 @@ def main():
     assert label=='copy'
     gate=json.loads((E/'Port28ROOTEXPORT_host-gate.json').read_text())
     assert gate['host_gate'].startswith('RELEASED')
-    observe('copy-pre-v2')
+    observe('copy-pre-v3')
     plan=json.loads((E/'Port28ROOTEXPORT_seed-plan.json').read_text())
     roots=list(dict.fromkeys(plan['ordered_original_lean_path']))
     graph=json.loads((E/'Port28ROOTEXPORT_source-import-plan.json').read_text())
     # Project modules only. No package-wide/sysroot content sweep. Missing header
     # and ConstantInfo dependencies remain explicit diagnostic gaps.
     modules=sorted(graph['modules'])
-    request=dict(roots=roots,modules=modules,historical=plan['historical_direct_object_pins'],observer=(T/'Port28ROOTEXPORT_proc-all-v2.py').read_text())
+    prior=json.loads((E/'Port28ROOTEXPORT_copy-failed-v1.json').read_text())
+    request=dict(roots=roots,modules=modules,historical=plan['historical_direct_object_pins'],observer=(T/'Port28ROOTEXPORT_proc-all-v2.py').read_text(),already_retained=[x['path'] for x in prior['objects']])
     remote=(T/'Port28ROOTEXPORT_read.py').read_text()
     body=('REQUEST='+repr(request)+'\n'+remote).encode(); ast.parse(body)
     retained=Path('/private/tmp')/('port28rootexport-20261024-'+uuid.uuid4().hex)
@@ -64,6 +65,6 @@ def main():
         limitation='Sequential metadata and pre/copy/post hashes do not prove atomicity, no concurrent writer, historical part provenance, or future TOU identity')
     (E/'Port28ROOTEXPORT_copy.json').write_text(json.dumps(summary,indent=2)+'\n')
     assert code==0, f'Remote copy failed {code}; retain partial data'
-    observe('copy-post')
+    observe('copy-post-v3')
     print(json.dumps(dict(parts=len(rows),bytes=sum(x['bytes'] for x in rows),retained=str(retained))))
 if __name__=='__main__':main()
