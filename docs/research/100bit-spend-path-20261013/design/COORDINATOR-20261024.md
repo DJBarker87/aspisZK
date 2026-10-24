@@ -223,3 +223,8 @@ Budget backend7/12,Lean223/260,Kani44/60. Lead allocates12newextracts after24/24
 
 
 Active handles: Port14LOCAL PID99174 and native Drop PID386; prompts archived in evidence/coordinator-20261024. Port14 budget219inherited+20new ceiling240,21available; native Drop extractionceiling36,backend7/12,Lean223/260,Kani44/60. Review terminal packets only; no unchanged replay.
+
+
+## Selected64 client route gate reconfirmed (lead, 2026-10-24)
+
+Read-only current source inspection confirms tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:112 still calls generic prove_masked_retrying; RealR1_client selected64 is separate. CLIENT-ROUTE-ADOPTION-GATE-20261024.md pins exact sources, selected successful account/key-retention requirements and source/artifact adoption evidence. This is D162's existing integration obligation, not permission needed or a target change. No source/key/build/chain action performed. Keep deployed-client coverage distinct from adapter theorem closure. Current workers99174/386 remain live.
