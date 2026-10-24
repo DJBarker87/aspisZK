@@ -82,3 +82,10 @@ remain open. S2 remains transferred. The target is not yet established.
 Any future source candidate adoption requires explicit equivalence and fresh
 current source/tool/artifact re-pins; this unchanged component requires no
 protocol/source decision.
+
+## Subsequent TOTAL result, 2026-10-24
+
+S6-OUTER-NATIVE-TOTAL-20261024.md now proves the concrete installed outer source
+encoder TOTAL on every full native statement, without child-success premises.
+This supersedes the earlier open TOTAL status above. Outer byte inverse and
+actual SDK/caller binding remain open.

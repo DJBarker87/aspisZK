@@ -1,0 +1,365 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6OuterNativeEncodeTotalV1.lean:16:52: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+statement :
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1
+r :
+  core.result.Result Unit
+    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+_✝²⁴ : [> let r ← nativeOps.validate statement <]
+cf :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible
+      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+    Unit
+_✝²³ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+a✝ : Unit
+common : AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+_✝²² : [> let common ← statement.common <]
+s : Slice U8
+index_mut_back : Slice U8 → Std.Array U8 1880#usize
+_✝²¹ :
+  [> let(s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+      (Array.repeat 1880#usize 0#u8) { «end» := 4#usize } <]
+s1 : Slice U8
+_✝²⁰ :
+  [> let s1 ←
+    lift
+      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s2 : Slice U8
+_✝¹⁹ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+output2 : Std.Array U8 1880#usize
+_✝¹⁸ :
+  [> let output2 ←
+    (index_mut_back s2).update 4#usize
+      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION <]
+pvtk : AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+_✝¹⁷ : [> let pvtk ← statement.transition_kind <]
+i1 : U8
+_✝¹⁶ : [> let i1 ← lift (UScalar.cast UScalarTy.U8 (read_discriminant pvtk)) <]
+output3 : Std.Array U8 1880#usize
+_✝¹⁵ : [> let output3 ← output2.update 5#usize i1 <]
+output4 : Std.Array U8 1880#usize
+_✝¹⁴ :
+  [> let output4 ←
+    output3.update 6#usize
+      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION <]
+output5 : Std.Array U8 1880#usize
+_✝¹³ : [> let output5 ← output4.update 7#usize common.output_lane <]
+s3 : Slice U8
+index_mut_back1 : Slice U8 → Std.Array U8 1880#usize
+_✝¹² :
+  [> let(s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output5
+      { start := 8#usize, «end» := 40#usize } <]
+s4 : Slice U8
+_✝¹¹ : [> let s4 ← lift common.master_account.to_slice <]
+s5 : Slice U8
+_✝¹⁰ : [> let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4 <]
+s6 : Slice U8
+index_mut_back2 : Slice U8 → Std.Array U8 1880#usize
+_✝⁹ :
+  [> let(s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize } <]
+s7 : Slice U8
+_✝⁸ : [> let s7 ← lift common.checkpoint_account.to_slice <]
+s8 : Slice U8
+_✝⁷ : [> let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7 <]
+s9 : Slice U8
+index_mut_back3 : Slice U8 → Std.Array U8 1880#usize
+_✝⁶ :
+  [> let(s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back2 s8) { start := 72#usize, «end» := 104#usize } <]
+s10 : Slice U8
+_✝⁵ : [> let s10 ← lift common.selected_lane_account.to_slice <]
+s11 : Slice U8
+_✝⁴ : [> let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10 <]
+s12 : Slice U8
+index_mut_back4 : Slice U8 → Std.Array U8 1880#usize
+_✝³ :
+  [> let(s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back3 s11) { start := 104#usize, «end» := 112#usize } <]
+a : Std.Array U8 8#usize
+_✝² : [> let a ← lift (core.num.U64.to_le_bytes common.checkpoint_sequence) <]
+s13 : Slice U8
+_✝¹ : [> let s13 ← lift a.to_slice <]
+s14 : Slice U8
+_✝ : [> let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13 <]
+s15 : Slice U8
+index_mut_back5 : Slice U8 → Std.Array U8 1880#usize
+_ :
+  [> let(s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+      (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize } <]
+cf_post : ∀ (value : Unit), True → r = core.result.Result.Ok value
+h✝ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑(Array.repeat 1880#usize 0#u8)).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 4 ↑(Array.repeat 1880#usize 0#u8)
+s_post2 : s.length = 4
+s1_post :
+  s1 =
+    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s2_post :
+  s2 =
+    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+output2_post :
+  output2 =
+    (index_mut_back
+          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+      4#usize
+      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION
+i1_post : i1 = UScalar.cast UScalarTy.U8 (read_discriminant pvtk)
+output3_post :
+  output3 =
+    ((index_mut_back
+              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+          4#usize
+          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))
+output4_post :
+  output4 =
+    (((index_mut_back
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+              4#usize
+              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+          5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+      6#usize AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+output5_post :
+  output5 =
+    ((((index_mut_back
+                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                  4#usize
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+              5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+          6#usize AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+      7#usize common.output_lane
+s3_post1 :
+  ↑s3 =
+    List.slice 8 40
+      ↑(((((index_mut_back
+                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                      4#usize
+                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                  5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+              6#usize AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+          7#usize common.output_lane)
+s3_post2 : s3.length = 40 - 8
+s3_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back1 s') =
+      (↑(((((index_mut_back
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                          4#usize
+                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                  6#usize
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑s'
+s4_post : s4 = common.master_account.to_slice
+s5_post : s5 = common.master_account.to_slice
+s6_post1 :
+  ↑s6 =
+    List.slice 40 72
+      ((↑(((((index_mut_back
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                          4#usize
+                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                  6#usize
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+              7#usize common.output_lane)).setSlice!
+        8 ↑common.master_account.to_slice)
+s6_post2 : s6.length = 72 - 40
+s6_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back2 s') =
+      ((↑(((((index_mut_back
+                                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                              4#usize
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                      6#usize
+                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑s'
+s7_post : s7 = common.checkpoint_account.to_slice
+s8_post : s8 = common.checkpoint_account.to_slice
+s9_post1 :
+  ↑s9 =
+    List.slice 72 104
+      (((↑(((((index_mut_back
+                                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                              4#usize
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                          5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                      6#usize
+                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                  7#usize common.output_lane)).setSlice!
+            8 ↑common.master_account.to_slice).setSlice!
+        40 ↑common.checkpoint_account.to_slice)
+s9_post2 : s9.length = 104 - 72
+s9_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back3 s') =
+      (((↑(((((index_mut_back
+                                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                  4#usize
+                                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                          6#usize
+                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑s'
+s10_post : s10 = common.selected_lane_account.to_slice
+s11_post : s11 = common.selected_lane_account.to_slice
+s12_post1 :
+  ↑s12 =
+    List.slice 104 112
+      ((((↑(((((index_mut_back
+                                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                  4#usize
+                                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                              5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                          6#usize
+                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                      7#usize common.output_lane)).setSlice!
+                8 ↑common.master_account.to_slice).setSlice!
+            40 ↑common.checkpoint_account.to_slice).setSlice!
+        72 ↑common.selected_lane_account.to_slice)
+s12_post2 : s12.length = 112 - 104
+s12_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back4 s') =
+      ((((↑(((((index_mut_back
+                                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                      4#usize
+                                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                              6#usize
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑s'
+a_post : a = core.num.U64.to_le_bytes common.checkpoint_sequence
+s13_post : s13 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s14_post : s14 = (core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice
+s15_post1 :
+  ↑s15 =
+    List.slice 112 144
+      (((((↑(((((index_mut_back
+                                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                      4#usize
+                                      AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                  5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                              6#usize
+                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                          7#usize common.output_lane)).setSlice!
+                    8 ↑common.master_account.to_slice).setSlice!
+                40 ↑common.checkpoint_account.to_slice).setSlice!
+            72 ↑common.selected_lane_account.to_slice).setSlice!
+        104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice)
+s15_post2 : s15.length = 144 - 112
+s15_post3 :
+  ∀ (s' : Slice U8),
+    ↑(index_mut_back5 s') =
+      (((((↑(((((index_mut_back
+                                              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice).set
+                                          4#usize
+                                          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION).set
+                                      5#usize (UScalar.cast UScalarTy.U8 (read_discriminant pvtk))).set
+                                  6#usize
+                                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION).set
+                              7#usize common.output_lane)).setSlice!
+                        8 ↑common.master_account.to_slice).setSlice!
+                    40 ↑common.checkpoint_account.to_slice).setSlice!
+                72 ↑common.selected_lane_account.to_slice).setSlice!
+            104 ↑(core.num.U64.to_le_bytes common.checkpoint_sequence).to_slice).setSlice!
+        112 ↑s'
+⊢ (do
+      let a1 ← nativeOps.digest common.historical_global_anchor
+      let s16 ← lift a1.to_slice
+      let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16
+      let i2 ← AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET
+      let (s18, index_mut_back6) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (index_mut_back5 s17) { start := 144#usize, «end» := i2 }
+      let (r1, s19) ← nativeOps.late common.lane_transition s18
+      let r2 ←
+        AspisS6FullForestEncoderNamed.core.result.Result.map_err
+            AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+            r1 ()
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          match statement with
+          |
+          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+              a public1 =>
+            do
+            let r3 ← nativeOps.transfer public1
+            let r4 ←
+              AspisS6FullForestEncoderNamed.core.result.Result.map_err
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+                  r3 ()
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (s20, index_mut_back7) ←
+                  core.array.Array.index_mut
+                      (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+                      (index_mut_back6 s19) { start := i2 }
+                let s21 ← lift val.to_slice
+                let s22 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s20 s21
+                ok (core.result.Result.Ok (index_mut_back7 s22))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array U8 1880#usize)
+                  (core.convert.FromSame
+                    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                  residual
+          |
+          AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+              a public1 =>
+            do
+            let r3 ← nativeOps.withdrawal public1
+            let r4 ←
+              AspisS6FullForestEncoderNamed.core.result.Result.map_err
+                  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+                  r3 ()
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (s20, index_mut_back7) ←
+                  core.array.Array.index_mut
+                      (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+                      (index_mut_back6 s19) { start := i2 }
+                let s21 ← lift val.to_slice
+                let s22 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s20 s21
+                ok (core.result.Result.Ok (index_mut_back7 s22))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array U8 1880#usize)
+                  (core.convert.FromSame
+                    AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                  residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U8 1880#usize)
+            (core.convert.FromSame
+              AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+            residual) ⦃
+    x✝ => True ⦄
+'AspisS6OuterNativeEncodeTotal.source_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS6OuterNativeEncodeTotal.encode_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

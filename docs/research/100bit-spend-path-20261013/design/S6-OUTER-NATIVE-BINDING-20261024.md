@@ -107,3 +107,10 @@ S1 whole native preparation/caller correspondence remains open. S2 remains
 transferred and other sessions' tracks are unchanged. Target not yet established.
 Any source candidate adoption still requires explicit equivalence and current
 source/tool/artifact re-pins; no adoption is needed for these proof-only copies.
+
+## Subsequent TOTAL result, 2026-10-24
+
+S6-OUTER-NATIVE-TOTAL-20261024.md now proves the concrete installed outer source
+encoder TOTAL on every full native statement, without child-success premises.
+This supersedes the earlier open TOTAL status above. Outer byte inverse and
+actual SDK/caller binding remain open.
