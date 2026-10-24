@@ -1,0 +1,60 @@
+Port6CK_BodySelf.lean:12:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port6CK_BodySelf.lean:21:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisV8R19.SourceDuplexStep.bytes (CheckpointBytesDigest.stateOf ?b)
+in the target expression
+  List.map (fun b => MultiproofConeCanonical.bytesOf ↑b) ↑p.roots =
+    [AspisV8R19.SourceDuplexStep.bytes ((CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).roots 0),
+      AspisV8R19.SourceDuplexStep.bytes ((CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).roots 1)]
+
+case refine_2
+p : verifier.Prepared
+a : verifier.Accumulator
+variant : p.variant = transport.Variant.S2
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (inventory p a size qb)
+x y : Std.Array U8 32#usize
+h : ↑p.roots = [x, y]
+⊢ List.map (fun b => MultiproofConeCanonical.bytesOf ↑b) ↑p.roots =
+    [AspisV8R19.SourceDuplexStep.bytes ((CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).roots 0),
+      AspisV8R19.SourceDuplexStep.bytes ((CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).roots 1)]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port6CK_BodySelf.lean:40:46: error: Type mismatch: After simplification, term
+  j.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑j) 10
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑j ↑10#usize
+Port6CK_BodySelf.lean:54:14: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port6CK_BodySelf.lean:56:6: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port6CK_BodySelf.lean:59:4: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port6CK_BodySelf.lean:64:2: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.Port6CK_BodySelf.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

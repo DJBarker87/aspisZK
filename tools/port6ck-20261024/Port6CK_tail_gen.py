@@ -1,3 +1,5 @@
+# Historical monolithic attempt generator, superseded by the checked Tail/Suffix split.
+# Retained for failed-approach reproducibility; do not overwrite final sources with it.
 from pathlib import Path
 P=Path('docs/research/100bit-spend-path-20261013/lean')
 s='''import Port6CK_Factor

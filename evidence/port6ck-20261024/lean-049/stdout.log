@@ -1,0 +1,57 @@
+Port6CK_BodySelf.lean:12:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port6CK_BodySelf.lean:28:113: error: don't know how to synthesize placeholder for argument `h`
+context:
+p : verifier.Prepared
+a : verifier.Accumulator
+variant : p.variant = transport.Variant.S2
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (inventory p a size qb)
+x y : aspis_core.field.wide_exact.WideExact
+h : ↑p.alpha = [x, y]
+⊢ OraclePortCkptAbi4Decode.CanonicalWide ((inventory p a size qb).alpha 1)
+Port6CK_BodySelf.lean:28:68: error: don't know how to synthesize placeholder for argument `h`
+context:
+p : verifier.Prepared
+a : verifier.Accumulator
+variant : p.variant = transport.Variant.S2
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (inventory p a size qb)
+x y : aspis_core.field.wide_exact.WideExact
+h : ↑p.alpha = [x, y]
+⊢ OraclePortCkptAbi4Decode.CanonicalWide ((inventory p a size qb).alpha 0)
+Port6CK_BodySelf.lean:61:4: error: Tactic `rfl` failed: The left-hand side
+  x.x :: x.y :: ([] ++ [y.x, y.y])
+is not definitionally equal to the right-hand side
+  List.ofFn (sourceK ∘ (CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).coordinates)
+
+case refine_9
+p : verifier.Prepared
+a : verifier.Accumulator
+variant : p.variant = transport.Variant.S2
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (inventory p a size qb)
+x y : aspis_core.circle.SecureCirclePoint
+h : ↑p.z = [x, y]
+each :
+  ∀ (j : Fin 4),
+    sourceK ((CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).coordinates j) =
+      match ↑j with
+      | 0 => (↑p.z)[0].x
+      | 1 => (↑p.z)[0].y
+      | 2 => (↑p.z)[1].x
+      | x => (↑p.z)[1].y
+⊢ x.x :: x.y :: ([] ++ [y.x, y.y]) =
+    List.ofFn (sourceK ∘ (CheckpointBytesBlocks.prepared (inventory p a size qb) canonical).coordinates)
+Port6CK_BodySelf.lean:58:29: warning: This simp argument is unused:
+  each
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_ofFn,̵e̵a̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port6CK_BodySelf.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

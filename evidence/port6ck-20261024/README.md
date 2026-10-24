@@ -30,3 +30,26 @@ cap was raised. Attempts008/016 never entered Lean (missing owned dependency
 and unchanged-source guard respectively). Attempt014's missing import path was
 corrected by adding the pinned parent Port4B object path; runner now includes
 LEAN_PATH in unchanged-input detection because environment changes are inputs.
+
+The depth-first native reader stage is now checked (`Reader.runs`, lean-050).
+`Tail.accepted` (lean-040) composes CURRENT raw, K/E, semantic, validator and
+mutable weights at the actual parent calls, deriving byte408/568/712 and the
+64-weight guard. `Header.accepted` (lean-047) preserves the complete ordered
+reader log. `Reader.accepted` supplies the retained success from current op18.
+No whole-op agreement premise is present. Debug panic is arbitrary; the public
+checkpoint instance uses `unwrapWithPanic`, discharging unwrap-on-Ok by definition.
+
+`Checkpoint.accepted` (lean-054) uses ONE accepted TX1's SAME saved Vec, derives
+its canonical raw inventory from actual writer-prefix fields, and proves the
+CURRENT resume returns literally the SAME Prepared and accumulator, including
+next10. It also derives the six digest reads through the retained effect join.
+It does not assume a ten-step model state to prove the physical round trip.
+`BodySelf.fields` and `BodyUnique.unique` supply the canonical physical inverse;
+all fields, including flattened coordinates and the counter, were inspected.
+
+Native codec content, TrustedStd/Vec iteration/back ABI, allocator outcome,
+P6 digest carrier and writer8 native admission retain their existing Q2/Port4
+interpretations. This stage composes their source-shaped implementations; it
+does not newly prove arbitrary SBF memory/ABI or native Rust/ELF equality.
+The writer selector is still the admitted reference8, exactly as Q2 documents.
+Historical writer/codec Kani receipts are reused, not rerun or reattributed.
