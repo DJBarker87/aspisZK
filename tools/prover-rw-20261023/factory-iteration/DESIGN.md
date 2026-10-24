@@ -59,3 +59,26 @@ instrumentation-erasure/admissibility for real Drop events, including caller
 provenance/order/lifetime. Leaf zeroize32/64 evidence alone does not supply it.
 Outer8/adaptive proof_account, durable ledger, complete observations, E1/L1/L2/L3,
 nativeclient/refinement/artifact and adoption/performance gates remain open.
+
+## Fallback cut interface (designed before implementation)
+
+If055 fails, preserve it without raising time/unwind/memory. Build a separate
+ProverRwFactoryIterationCut snapshot with one_draw(mask_nonce, retry) returning
+Result<(retry, Option<Self>), StateOnlyAttemptEntropyError>. Entry retry is
+arbitrary below16; nonce arbitrary (including zero: caller admissibility is a
+separate guard). It allocates the same64/32/32 owners and runs the verbatim
+loop body, with only the success Result wrapped in (retry, Some(...)). The
+rejection tail increments local retry exactly as the source and returns
+(retry, None) AFTER the same lexical owner scope ends. Errors use unchanged ?
+and From. Never make cut rejection look like actual factory exhaustion.
+
+A generator checks every copied fragment and reports all signature/control/
+return plumbing changes. This is a concrete candidate helper/cut, NOT verified
+whole-caller equivalence: byte correspondence is useful source evidence, but
+mechanized actual-body/caller/MIR equivalence and finite16 composition remain
+open. The harness checks every entry retry0..15, freshzero64, arbitrary draw
+outcome/postbuffer/custom-u16 error, exact returned arrays/nonce, rejection iff
+either half zero, retry unchanged on success and r+1 on reject, and arbitrary
+provider ghost advancement. Real Drop executes, event/provenance/unwind
+transport stays open. Reserve056 for this cut relation only. No new Rust
+check/test/extraction is justified unless needed for this concrete interface.
