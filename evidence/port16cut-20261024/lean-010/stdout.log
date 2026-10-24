@@ -1,0 +1,654 @@
+AspisR1.Port16CUT_TX2.tx2 : ∀ (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @AspisR1.Port15DRIVER_Cost.Fits
+    (fun {A : Type} => @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A) H
+    (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)
+    (@AspisR1.VTop_Flow.tx2_authenticated.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+      (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+        AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+      AspisR1.VTop_Flow.traceEffects Hash D pub proof checkpoint hash
+      (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit)))
+    (AspisR1.Port16CUT_TX2.sites w)
+AspisR1.Port15DRIVER_TX1.tx1 : ∀ (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @AspisR1.Port15DRIVER_Cost.Fits
+    (fun {A : Type} => @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A) H
+    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)
+    (@AspisR1.VTop_Flow.tx1.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+      (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+        AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+      AspisR1.VTop_Flow.traceEffects Hash D semantic pub proof
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))) ⋯) hash
+      (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit)))
+    (AspisR1.Port15DRIVER_TX1.sites w)
+AspisR1.Port16CUT_Cuts.sourceOne_eq : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  @Eq.{1}
+    (AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)))
+    (@AspisR1.Port16CUT_Cuts.sourceOne (fun {A : Type} => @impl A) Hash D hash semantic pub proof)
+    (@AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+      (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)
+      (@AspisR1.VTop_Flow.tx1.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+        (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+          AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+        AspisR1.VTop_Flow.traceEffects Hash D semantic pub proof
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))) ⋯) hash
+        (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit))))
+AspisR1.Port16CUT_Cuts.sourceTwo_eq : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  @Eq.{1}
+    (AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)))
+    (@AspisR1.Port16CUT_Cuts.sourceTwo (fun {A : Type} => @impl A) Hash D hash pub proof checkpoint)
+    (@AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+      (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)
+      (@AspisR1.VTop_Flow.tx2_authenticated.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+        (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+          AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+        AspisR1.VTop_Flow.traceEffects Hash D pub proof checkpoint hash
+        (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit))))
+AspisR1.Port16CUT_Cuts.sourceOne_bound : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            VTop_Stages.verifier.Error))
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              VTop_Stages.verifier.Error))
+          H
+          (@AspisR1.Port16CUT_Cuts.sourceOne
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash semantic pub proof))))
+    (AspisR1.Port16CUT_Cuts.oneWeight w)
+AspisR1.Port16CUT_Cuts.sourceTwo_bound : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error))
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) H
+          (@AspisR1.Port16CUT_Cuts.sourceTwo
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash pub proof checkpoint))))
+    (AspisR1.Port16CUT_Cuts.twoWeight w)
+AspisR1.Port16CUT_Driver.stages_eq : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8),
+  @Eq.{1} (AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+    (@AspisR1.Port1_Driver.stages (fun {A : Type} => @impl A) Hash D hash semantic pub proof)
+    (@AspisV8R19.OracleProgramOps.bind AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error))
+      Bool (@AspisR1.Port16CUT_Cuts.sourceOne (fun {A : Type} => @impl A) Hash D hash semantic pub proof)
+      (@AspisR1.Port16CUT_Driver.next (fun {A : Type} => @impl A) Hash D hash pub proof))
+AspisR1.Port16CUT_Driver.next_bound : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (first :
+    Aeneas.Std.Result.{0}
+      (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)) Bool
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+          (@AspisR1.Port16CUT_Driver.next
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash pub proof first))))
+    (AspisR1.Port16CUT_Cuts.twoWeight w)
+AspisR1.Port16CUT_Driver.stages : ∀ (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)) Bool
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+          (@AspisR1.Port1_Driver.stages
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash semantic pub proof))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1046) (instOfNatNat (nat_lit 1046))) (AspisR1.Port16CUT_Cuts.delegatedWeight w))
+AspisR1.Port16CUT_Driver.rust : ∀ (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w) (adapter : AdapterRw.Ops)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (i : AspisR1.OraclePortStoredExperimentC4.Input),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)) Bool
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+          (@AspisR1.Port1_Driver.rust adapter
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash i))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 1046) (instOfNatNat (nat_lit 1046))) (AspisR1.Port16CUT_Cuts.delegatedWeight w))
+AspisR1.Port16CUT_Driver.rust1161 : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w)
+  (weighted :
+    @LE.le.{0} Nat instLENat (AspisR1.Port16CUT_Cuts.delegatedWeight w)
+      (@OfNat.ofNat.{0} Nat (nat_lit 115) (instOfNatNat (nat_lit 115))))
+  (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (i : AspisR1.OraclePortStoredExperimentC4.Input),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)) Bool
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+          (@AspisR1.Port1_Driver.rust adapter
+            (fun {A : Type} =>
+              @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+            Hash D hash i))))
+    (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161)))
+AspisR1.Port16CUT_Accounting.budget : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w)
+  (weighted :
+    @LE.le.{0} Nat instLENat (AspisR1.Port16CUT_Cuts.delegatedWeight w)
+      (@OfNat.ofNat.{0} Nat (nat_lit 115) (instOfNatNat (nat_lit 115))))
+  (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (decoder : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : Nat)
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        Q)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@FS.firstReads AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+        @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+          (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+      (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool) H
+          (AspisR1.Port6AUTH_Prefix.source decoder
+            (@AspisR1.Port1_Driver.rust adapter
+              (fun {A : Type} =>
+                @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+              Hash D hash)
+            P))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q
+      (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161))))
+AspisR1.Port16CUT_Accounting.log_length : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat)
+  (budgets : AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A : Type} => @rest A) w)
+  (weighted :
+    @LE.le.{0} Nat instLENat (AspisR1.Port16CUT_Cuts.delegatedWeight w)
+      (@OfNat.ofNat.{0} Nat (nat_lit 115) (instOfNatNat (nat_lit 115))))
+  (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (decoder : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : Nat)
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        Q)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool) H
+          (AspisR1.Port6AUTH_Prefix.source decoder
+            (@AspisR1.Port1_Driver.rust adapter
+              (fun {A : Type} =>
+                @AspisR1.Port9OR_Installed.implementation ops reserved unwrap (fun {A : Type} => @rest A) A)
+              Hash D hash)
+            P))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q
+      (@OfNat.ofNat.{0} Nat (nat_lit 2322) (instOfNatNat (nat_lit 2322))))
+AspisR1.Port1_StoredCarrier.driver_physical : ∀ (adapter : AdapterRw.Ops)
+  (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash),
+  AspisR1.Port1_StoredCarrier.Physical (@AspisR1.Port1_Driver.rust adapter (fun {A : Type} => @impl A) Hash D hash)
+AspisR1.Port6AUTH_Accounting.budget : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : Nat)
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        Q)
+  (physical : AspisR1.Port1_StoredCarrier.Physical rust)
+  (calls :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (i : AspisR1.OraclePortStoredExperimentC4.Input),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            Bool
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+              (rust i))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161))))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@FS.firstReads AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (fun (a b : AspisV8R19.DuplexFrames.Bytes) =>
+        @instDecidableEqList.{0} AspisV8R19.DuplexFrames.Byte
+          (instDecidableEqFin (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))) a b)
+      (@FS.emptyTable AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool) H
+          (AspisR1.Port6AUTH_Prefix.source D rust P))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q
+      (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161))))
+AspisR1.Port6AUTH_Accounting.log_length : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : Nat)
+  (hq :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        Q)
+  (calls :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (i : AspisR1.OraclePortStoredExperimentC4.Input),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            Bool
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool H
+              (rust i))))
+        (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161))))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  @LE.le.{0} Nat instLENat
+    (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+      (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+        (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool)
+        (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Prod.{0, 0} (Prod.{0, 0} AspisR1.LiteralTranscript.Public (Nat → AspisR1.LiteralTranscript.Message)) Bool) H
+          (AspisR1.Port6AUTH_Prefix.source D rust P))))
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q
+      (@OfNat.ofNat.{0} Nat (nat_lit 2322) (instOfNatNat (nat_lit 2322))))
+def AspisR1.Port15DRIVER_Local.LocalBudgets : (rest : AspisR1.VTop_OracleCode.Implementation) →
+  (w : Nat → Nat) → Prop :=
+fun (rest : AspisR1.VTop_OracleCode.Implementation) (w : Nat → Nat) =>
+  ∀ {A : Type} (op : AspisR1.VTop_Trace.Call A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    @Membership.mem.{0, 0} Nat (List.{0} Nat) (@List.instMembership.{0} Nat) AspisR1.Port15DRIVER_Local.delegatedIds
+        (@AspisR1.VTop_Trace.operationId A op) →
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            (Aeneas.Std.Result.{0} A)
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (Aeneas.Std.Result.{0} A) H (@rest A op))))
+        (w (@AspisR1.VTop_Trace.operationId A op))
+def AspisR1.Port15DRIVER_Local.delegatedIds : List.{0} Nat :=
+@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+  (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))
+        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 17) (instOfNatNat (nat_lit 17)))
+                  (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19)))
+                    (@List.nil.{0} Nat))))))))))
+@[irreducible] def AspisR1.Port16CUT_Cuts.sourceOne : (impl : AspisR1.VTop_OracleCode.Implementation) →
+  {Hash : Type} →
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) →
+      (hash : Hash) →
+        (semantic : AspisR1.Port1_Driver.Semantic) →
+          (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (Aeneas.Std.Result.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                  VTop_Stages.verifier.Error)) :=
+fun (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic) (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+  @AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+    (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)
+    (@AspisR1.VTop_Flow.tx1.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+      (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+        AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+      AspisR1.VTop_Flow.traceEffects Hash D semantic pub proof
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+        AspisR1.Port16CUT_Cuts.sourceOne._proof_1)
+      hash (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit)))
+@[irreducible] def AspisR1.Port16CUT_Cuts.sourceTwo : (impl : AspisR1.VTop_OracleCode.Implementation) →
+  {Hash : Type} →
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) →
+      (hash : Hash) →
+        (pub proof checkpoint : Aeneas.Std.Slice.{0} Aeneas.Std.U8) →
+          AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) :=
+fun (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (pub proof checkpoint : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+  @AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+    (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)
+    (@AspisR1.VTop_Flow.tx2_authenticated.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+      (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+        AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+      AspisR1.VTop_Flow.traceEffects Hash D pub proof checkpoint hash
+      (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit)))
+def AspisR1.Port16CUT_Cuts.oneWeight : (w : Nat → Nat) → Nat :=
+fun (w : Nat → Nat) =>
+  @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 480) (instOfNatNat (nat_lit 480)))
+                  (w (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))
+                (w (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))
+              (w (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))))
+            (w (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))
+          (w (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))))
+        (w (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))))
+      (w (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))
+    (w (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9))))
+def AspisR1.Port16CUT_Cuts.twoWeight : (w : Nat → Nat) → Nat :=
+fun (w : Nat → Nat) =>
+  @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 566) (instOfNatNat (nat_lit 566)))
+                (w (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))
+              (w (@OfNat.ofNat.{0} Nat (nat_lit 17) (instOfNatNat (nat_lit 17)))))
+            (w (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11)))))
+          (w (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))))
+        (w (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6)))))
+      (w (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9)))))
+    (w (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19))))
+def AspisR1.Port16CUT_Cuts.delegatedWeight : (w : Nat → Nat) → Nat :=
+fun (w : Nat → Nat) =>
+  @HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+              (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                      (w (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))))
+                    (w (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))))
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                    (w (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))))
+                (w (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7)))))
+              (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                (w (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9))))))
+            (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+              (w (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))))))
+          (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (w (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))))
+        (w (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))
+      (w (@OfNat.ofNat.{0} Nat (nat_lit 17) (instOfNatNat (nat_lit 17)))))
+    (w (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19))))
+def AspisR1.Port15DRIVER_TX1.sites : (w : Nat → Nat) → List.{0} Nat :=
+fun (w : Nat → Nat) =>
+  @List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+    (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+      (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+            (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+              (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12))))
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 477) (instOfNatNat (nat_lit 477)))
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+                              (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))))
+                                (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))
+                                  (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9))))
+                                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                        (@List.nil.{0} Nat)))))))))))))))))))
+def AspisR1.Port16CUT_TX2.sites : (w : Nat → Nat) → List.{0} Nat :=
+fun (w : Nat → Nat) =>
+  @List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+          (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 17) (instOfNatNat (nat_lit 17))))
+            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                    (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                      (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                        (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                          (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                            (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 563) (instOfNatNat (nat_lit 563)))
+                              (@List.cons.{0} Nat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                (@List.cons.{0} Nat (w (@OfNat.ofNat.{0} Nat (nat_lit 11) (instOfNatNat (nat_lit 11))))
+                                  (@List.cons.{0} Nat
+                                    (w (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10))))
+                                    (@List.cons.{0} Nat
+                                      (w (@OfNat.ofNat.{0} Nat (nat_lit 6) (instOfNatNat (nat_lit 6))))
+                                      (@List.cons.{0} Nat
+                                        (w (@OfNat.ofNat.{0} Nat (nat_lit 9) (instOfNatNat (nat_lit 9))))
+                                        (@List.cons.{0} Nat
+                                          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                          (@List.cons.{0} Nat
+                                            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                            (@List.cons.{0} Nat
+                                              (w (@OfNat.ofNat.{0} Nat (nat_lit 19) (instOfNatNat (nat_lit 19))))
+                                              (@List.nil.{0} Nat))))))))))))))))))))))
+def AspisR1.Port16CUT_Driver.next : (impl : AspisR1.VTop_OracleCode.Implementation) →
+  {Hash : Type} →
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) →
+      (hash : Hash) →
+        (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) →
+          (first :
+              Aeneas.Std.Result.{0}
+                (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                  VTop_Stages.verifier.Error)) →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              Bool :=
+fun (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+    (first :
+      Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+          VTop_Stages.verifier.Error)) =>
+  AspisR1.Port16CUT_Driver.next.match_1.{1}
+    (fun
+        (first :
+          Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              VTop_Stages.verifier.Error)) =>
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+    first
+    (fun (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) =>
+      @AspisV8R19.OracleProgramOps.bind AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) Bool
+        (@AspisR1.Port16CUT_Cuts.sourceTwo (fun {A : Type} => @impl A) Hash D hash pub proof
+          (@Aeneas.Std.alloc.vec.Vec.deref Aeneas.Std.U8 saved))
+        fun (second : Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) =>
+        @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool
+          (AspisR1.Port1_Driver.verdict second))
+    fun
+      (x :
+        Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            VTop_Stages.verifier.Error)) =>
+    @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool
+      Bool.false
+def AspisR1.Port1_Driver.stages : (impl : AspisR1.VTop_OracleCode.Implementation) →
+  {Hash : Type} →
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) →
+      (hash : Hash) →
+        (semantic : AspisR1.Port1_Driver.Semantic) →
+          (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              Bool :=
+fun (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+    (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic) (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+  @AspisV8R19.OracleProgramOps.bind AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+    (Aeneas.Std.Result.{0}
+      (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error))
+    Bool
+    (@AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+      (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) VTop_Stages.verifier.Error)
+      (@AspisR1.VTop_Flow.tx1.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+        (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0} AspisR1.VTop_Trace.Code
+          AspisR1.VTop_Trace.instMonadLiftResultCode (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+        AspisR1.VTop_Flow.traceEffects Hash D semantic pub proof
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+          AspisR1.Port1_Driver.stages._proof_1)
+        hash (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit))))
+    fun
+      (first :
+        Aeneas.Std.Result.{0}
+          (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            VTop_Stages.verifier.Error)) =>
+    AspisR1.Port1_Driver.stages.match_1.{1}
+      (fun
+          (first :
+            Aeneas.Std.Result.{0}
+              (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+                VTop_Stages.verifier.Error)) =>
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+      first
+      (fun (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8) =>
+        @AspisV8R19.OracleProgramOps.bind AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) Bool
+          (@AspisR1.VTop_OracleCode.interpret (fun {A : Type} => @impl A)
+            (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)
+            (@AspisR1.VTop_Flow.tx2_authenticated.{1} AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadCode
+              (@instMonadLiftTOfMonadLift.{0, 0, 0, 1} Aeneas.Std.Result.{0} Aeneas.Std.Result.{0}
+                AspisR1.VTop_Trace.Code AspisR1.VTop_Trace.instMonadLiftResultCode
+                (instMonadLiftT.{0, 0} Aeneas.Std.Result.{0}))
+              AspisR1.VTop_Flow.traceEffects Hash D pub proof (@Aeneas.Std.alloc.vec.Vec.deref Aeneas.Std.U8 saved) hash
+              (@Option.none.{0} (VTop_Stages.verifier.Phase → Aeneas.Std.Result.{0} Unit))))
+          fun (second : Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit VTop_Stages.verifier.Error)) =>
+          @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+            Bool (AspisR1.Port1_Driver.verdict second))
+      fun
+        (x :
+          Aeneas.Std.Result.{0}
+            (Aeneas.Std.core.result.Result.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+              VTop_Stages.verifier.Error)) =>
+      @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool
+        Bool.false
+def AspisR1.Port1_Driver.rust : (adapter : AdapterRw.Ops) →
+  (impl : AspisR1.VTop_OracleCode.Implementation) →
+    {Hash : Type} →
+      (D : VTop_Stages.aspis_core.digest.Digest32 Hash) → (hash : Hash) → AspisR1.OraclePortRuntimeBindingC7.Verifier :=
+fun (adapter : AdapterRw.Ops) (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (i : AspisR1.OraclePortStoredExperimentC4.Input) =>
+  AspisR1.Port1_Driver.rust.match_2.{1}
+    (fun (x x_1 : Option.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)) =>
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+    (AspisR1.Port1_Driver.asSlice
+      (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+        (AspisR1.OraclePortStoredExperimentC4.Input.statement i)))
+    (AspisR1.Port1_Driver.asSlice (AspisR1.OraclePortStoredExperimentC4.Input.stored i))
+    (fun (pub proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) =>
+      AspisR1.Port1_Driver.rust.match_1.{1}
+        (fun (x : Aeneas.Std.Result.{0} (Option.{0} AspisR1.Port1_Driver.Semantic)) =>
+          AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+        (AspisR1.Port1_Driver.decodeSemantic adapter pub)
+        (fun (semantic : AspisR1.Port1_Driver.Semantic) =>
+          @AspisR1.Port1_Driver.stages (fun {A : Type} => @impl A) Hash D hash semantic pub proof)
+        fun (x : Aeneas.Std.Result.{0} (Option.{0} AspisR1.Port1_Driver.Semantic)) =>
+        @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool
+          Bool.false)
+    fun (x x_1 : Option.{0} (Aeneas.Std.Slice.{0} Aeneas.Std.U8)) =>
+    @AspisV8R19.MemoizedProgramLaw.Program.done AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool
+      Bool.false
+def AspisR1.Port1_StoredCarrier.Physical : (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) → Prop :=
+fun (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) =>
+  ∀ (i j : AspisR1.OraclePortStoredExperimentC4.Input),
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes
+        (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+          (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+        (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+          (AspisR1.OraclePortStoredExperimentC4.Input.statement j)) →
+      @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortStoredExperimentC4.Input.stored i)
+          (AspisR1.OraclePortStoredExperimentC4.Input.stored j) →
+        @Eq.{1}
+          (AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+          (rust i) (rust j)
+'AspisR1.Port16CUT_TX2.tx2' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port15DRIVER_TX1.tx1' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.sourceOne_eq' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.sourceTwo_eq' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.sourceOne_bound' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.sourceTwo_bound' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Driver.stages_eq' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Driver.next_bound' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Driver.stages' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Driver.rust' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Driver.rust1161' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Accounting.budget' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Accounting.log_length' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port1_StoredCarrier.driver_physical' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port6AUTH_Accounting.budget' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port6AUTH_Accounting.log_length' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]
+'AspisR1.Port16CUT_Bind.done_tail_length' depends on axioms: [propext]
+'AspisR1.Port16CUT_Cuts.one_sum' depends on axioms: [propext, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.two_sum' depends on axioms: [propext, Quot.sound.{u}]
+'AspisR1.Port16CUT_Cuts.weights' depends on axioms: [propext, Quot.sound.{u}]
