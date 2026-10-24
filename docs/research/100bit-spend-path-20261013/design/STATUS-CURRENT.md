@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 22:17 BST
+## Current coordinator checkpoint — 2026-10-24 22:27 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -35,14 +35,19 @@ projection yet, Kani59/60 final slot reserved. PrivacyLean240/260,Rust2/3charges
 (actual builds1); known soundness347/368. SBFRECAPTUREPREP86302 prepares official archive/frozen source/released-cache
 checks with ZERO builds. Resource audit merged25b0b9df48 is NOT ADOPTED.
 Latest complete capture denies all proposed sizes on a4KiB counter mismatch;
-ResourceSTAT87430 investigates primary kernel semantics and conservative
-full-charge/no-credit accounting. No heavy consumer is authorized.
+ResourceStat full-charge/no-credit fallback reviewed and merged74d67bcc99.
+ResourceACTUAL91101 may run one prospective/actual-scope metadata-only
+rehearsal with3G/4G/noSwap; no heavy consumer/general gate adoption.
+Port27SDK92445 has6 existing Lean slots for the coherent SDK/caller join.
 No production adoption.
 
-Session A64901f632b same-account source packet is independently reviewed:
-actual proof/public account reads and original proof slice now survive the
-owned-stage1-to-prepare/numeric composition. Native SDK candidate remains
-UNCHECKED after memory/import failures; no cap raise or new admission.
+Session A9acc015544 factored SDK packet is independently reviewed:
+ONE accepted wrapper derives original SDK public bytes, decoder reuse,
+computed checkpoint write and full public observation frame; S1 carries the
+SAME account/proof/bytes into preparation/numeric witnesses. Standing SDK/std/
+runtime/extraction boundaries remain. This supersedes the prior unchecked
+SDK status at factored theorem scope; coherent import/re-pin with enclosing
+caller remains assigned to Port27. No whole S1/S6/native/release closure.
 
 Session A3ae2507a57 Claims-step packet is now independently reviewed: exact
 extracted owned update, bounded finite composition and complete three-row
