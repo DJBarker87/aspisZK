@@ -1,0 +1,62 @@
+"""Owned job runner: before/go hierarchy checks, charged unique slots, exact receipts."""
+from pathlib import Path
+import datetime, hashlib, json, os, re, runpy, subprocess, sys, time
+D=Path(__file__).resolve().parent
+H=D
+sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+E=D/'packet';E.mkdir(exist_ok=True)
+kind=sys.argv[1];a=int(sys.argv[2]);target=sys.argv[3]
+O=E/f'{kind}{a:03d}'
+scanner=runpy.run_path(str(H/'reservation.py'))
+if kind=='inner':
+    raise RuntimeError('internal path unused')
+if kind=='kani':
+    assert 45<=a<=52
+    assert target in ['zeroize32','zeroize64','drop32','drop64','moved_drop32_frame','moved_drop64_frame']
+    cmd=['/usr/bin/timeout','180','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',str(D/'proof/Cargo.toml'),'--lib','--exact','--harness',target,'--solver','kissat','--output-format','terse','-j','1','-Z','unstable-options','--cbmc-args','--unwinding-assertions']
+    if target.startswith('moved_'):
+        cmd[cmd.index('--cbmc-args'):cmd.index('--cbmc-args')]=['--extra-pointer-checks']
+elif kind=='extraction':
+    assert 45<=a<=48
+    if target in ['charon','charon-focused']:
+        c='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
+        cmd=[c,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--precise-drops','--extract-opaque-bodies','--include','zeroize','--start-from','crate::destroy32','--start-from','crate::destroy64','--dest-file',str(D/'ProverRwOwnedDrop.llbc'),'--','--manifest-path',str(D/'proof/Cargo.toml'),'--offline','--release','--lib','--jobs','4']
+        if target=='charon-focused':
+            cmd.remove('--extract-opaque-bodies')
+            cmd[cmd.index('--dest-file')+1]=str(D/'ProverRwOwnedDropFocused.llbc')
+    else:
+        assert target in ['aeneas','aeneas-focused']
+        base=H.parent/'native-drop-abi/backend/ProverRwNativeDropABI-build-014'
+        binary=H.parent/'native-drop-abi/backend/candidate-014/main.exe'
+        receipt=base/'receipt.json'
+        assert sha(binary)==json.loads(receipt.read_text())['versioned_binary']['sha256']
+        cmd=[str(binary),'-sequential','-eval-drops','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','ProverRwOwnedDrop','-dest',str(O/'raw-output'),'-split-files','-emit-json',str(D/'ProverRwOwnedDrop.llbc')]
+        if target=='aeneas-focused':cmd[-1]=str(D/'ProverRwOwnedDropFocused.llbc')
+        flag=runpy.run_path(str(H/'drop_flags.py'))['assess'](cmd,base/'Config.ml.txt',base/'Main.ml.txt')
+else: raise RuntimeError(kind)
+# Barrier inputs checked before reserving a unique charged slot.
+assert (D/'proof/lib.rs').is_file() and (D/'proof/Cargo.lock').is_file()
+assert Path(cmd[0]).is_file()
+before=scanner['admission']();assert before['allowed'],before.get('error',before['projected_reserved_bytes'])
+O.mkdir() # Never overwrite or reclaim attempts.
+(O/'admission-before.json').write_text(json.dumps(before,indent=2)+'\n')
+inputs=[D/'proof/lib.rs',D/'proof/Cargo.toml',D/'proof/Cargo.lock',D/'revision.txt',Path(__file__),H/'scope.py',H/'reservation.py']
+inputs += list(Path('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.8.1').rglob('*.rs'))
+if kind=='extraction' and target.startswith('aeneas'): inputs += [binary,receipt,base/'Config.ml.txt',base/'Main.ml.txt',Path(cmd[-1]),H/'drop_flags.py']
+if kind=='kani': inputs += [Path('/home/dombarker/.kani/kani-0.67.0/bin')/x for x in ['kani-driver','kani-compiler','cbmc','goto-instrument','kissat'] if (Path('/home/dombarker/.kani/kani-0.67.0/bin')/x).is_file()]
+pins={str(p):sha(p) for p in inputs}
+pre=dict(kind=kind,attempt=a,target=target,command=cmd,source_revision=(D/'revision.txt').read_text().strip(),source_sha256=pins,dependency_fingerprint=hashlib.sha256(json.dumps(pins,sort_keys=True).encode()).hexdigest(),print_axioms='N/A: Rust source verification or extraction; no Lean theorem',expected_phase='optimized compilation then named symbolic byte proof; no elimination' if kind=='kani' else 'source extraction/translation; no arithmetic',accepted_artifact=False)
+if kind=='extraction' and target.startswith('aeneas'):pre['drop_flags']=flag
+(O/'preflight.json').write_text(json.dumps(pre,indent=2)+'\n')
+env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(D/'target'))
+if kind=='extraction':env['RUSTUP_TOOLCHAIN']='nightly-2026-06-01'
+scope=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(H/'scope.py'),str(O),*cmd]
+t=time.monotonic()
+with (O/'stdout.log').open('w') as out,(O/'stderr.log').open('w') as err:r=subprocess.run(scope,cwd=D,env=env,stdout=out,stderr=err)
+s=(O/'time.log').read_text() if (O/'time.log').exists() else ''
+def metric(n):
+    m=re.search(re.escape(n)+r':\s*(\d+)',s);return int(m[1]) if m else None
+pre.update(exit_status=r.returncode,wall_seconds=time.monotonic()-t,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),scope_command=scope,time_log=s)
+(O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n')
+print(json.dumps({k:pre[k] for k in ['kind','attempt','target','exit_status','wall_seconds','peak_rss_kib','swaps']}))
+raise SystemExit(r.returncode)
