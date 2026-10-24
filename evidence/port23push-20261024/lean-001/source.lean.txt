@@ -1,0 +1,172 @@
+import Aeneas
+import Aeneas.Std.RangeIter
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result ControlFlow Error
+namespace Port23PUSH
+
+/-- [port23push_native::verifier::BatchedWeights]
+    Source: 'src/carrier.rs', lines 1:0-1:55 -/
+structure verifier.BatchedWeights where
+  «raw» : alloc.vec.Vec (Array Std.U64 4#usize)
+  terms : Std.Usize
+
+/-- [port23push_native::field::M31]
+    Source: 'src/field.rs', lines 23:0-23:24
+    Visibility: public -/
+@[reducible]
+def field.M31 := Std.U32
+
+/-- [port23push_native::field::CM31]
+    Source: 'src/field.rs', lines 255:0-258:1
+    Visibility: public -/
+structure field.CM31 where
+  a : field.M31
+  b : field.M31
+
+/-- [port23push_native::field::QM31]
+    Source: 'src/field.rs', lines 432:0-435:1
+    Visibility: public -/
+structure field.QM31 where
+  c0 : field.CM31
+  c1 : field.CM31
+
+
+/-- Uninterpreted missing external ABI, not a trust field or equality premise. -/
+abbrev ArrayIntoIter := Array U64 4#usize →
+  Result (core.slice.iter.IterMut U64 × (core.slice.iter.IterMut U64 → Array U64 4#usize))
+
+
+/-- [port23push_native::verifier::power_limb_at]:
+    Source: 'src/update.rs', lines 4:0-4:64 -/
+def verifier.power_limb_at
+  (limbs : Array Std.U32 4#usize) (index : Std.Usize) : Result Std.U32 := do
+  Array.index_usize limbs index
+
+/-- [port23push_native::verifier::residue_limb_at]:
+    Source: 'src/update.rs', lines 2:0-2:62 -/
+def verifier.residue_limb_at
+  (row : Array Std.U64 4#usize) (index : Std.Usize) : Result Std.U64 := do
+  Array.index_usize row index
+
+/-- [port23push_native::verifier::update_residue_row]: loop body 0:
+    Source: 'src/update.rs', lines 8:4-12:5 -/
+@[rust_loop_body]
+def verifier.update_residue_row_loop0.body
+  (limbs : Array Std.U32 4#usize) (iter : core.ops.range.Range Std.Usize)
+  (row : Array Std.U64 4#usize) (basis : field.M31) :
+  Result (ControlFlow ((core.ops.range.Range Std.Usize) × (Array Std.U64
+    4#usize) × field.M31) (Array Std.U64 4#usize))
+  := do
+  let (o, iter1) ←
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+  | none => ok (done row)
+  | some j =>
+    let old ← verifier.residue_limb_at row j
+    let limb ← verifier.power_limb_at limbs j
+    let i ← lift (core.convert.num.FromU64U32.from limb)
+    let i1 ← lift (core.convert.num.FromU64U32.from basis)
+    let i2 ← i * i1
+    let i3 ← old + i2
+    let row1 ← Array.update row j i3
+    ok (cont (iter1, row1, basis))
+
+/-- [port23push_native::verifier::update_residue_row]: loop 0:
+    Source: 'src/update.rs', lines 8:4-12:5 -/
+@[rust_loop]
+def verifier.update_residue_row_loop0
+  (iter : core.ops.range.Range Std.Usize) (row : Array Std.U64 4#usize)
+  (basis : field.M31) (limbs : Array Std.U32 4#usize) :
+  Result (Array Std.U64 4#usize)
+  := do
+  loop
+    (fun (iter1, row1, basis1) => verifier.update_residue_row_loop0.body limbs
+      iter1 row1 basis1)
+    (iter, row, basis)
+
+/-- [port23push_native::verifier::update_residue_row]: loop body 1:
+    Source: 'src/update.rs', lines 14:8-14:64 -/
+@[rust_loop_body]
+def verifier.update_residue_row_loop1.body
+  (iter : core.slice.iter.IterMut Std.U64)
+  (back : core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  :
+  Result (ControlFlow ((core.slice.iter.IterMut Std.U64) ×
+    (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64))
+    (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64))
+  := do
+  let (o, iter1, next_back) ← core.slice.iter.IteratorIterMut.next iter
+  match o with
+  | none => ok (done (fun im => let im1 := next_back im none
+                                back im1))
+  | some limb =>
+    let i ← lift (limb &&& 2147483647#u64)
+    let i1 ← limb >>> 31#i32
+    let limb1 ← i + i1
+    ok (cont (iter1, fun im => let im1 := next_back im (some limb1)
+                               back im1))
+
+/-- [port23push_native::verifier::update_residue_row]: loop 1:
+    Source: 'src/update.rs', lines 14:8-14:64 -/
+@[rust_loop]
+def verifier.update_residue_row_loop1
+  (iter : core.slice.iter.IterMut Std.U64)
+  (back : core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  :
+  Result (core.slice.iter.IterMut Std.U64 → core.slice.iter.IterMut Std.U64)
+  := do
+  loop
+    (fun (iter1, back1) => verifier.update_residue_row_loop1.body iter1 back1)
+    (iter, back)
+
+/-- [port23push_native::verifier::update_residue_row]:
+    Source: 'src/update.rs', lines 6:0-16:1 -/
+def verifier.update_residue_row (arrayIntoIter : ArrayIntoIter)
+  (row : Array Std.U64 4#usize) (power : field.QM31) (basis : field.M31)
+  (flush : Bool) :
+  Result (Array Std.U64 4#usize)
+  := do
+  let i := power.c0.a
+  let i1 := power.c0.b
+  let i2 := power.c1.a
+  let i3 := power.c1.b
+  let row1 ←
+    verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize }
+      row basis (Array.make 4#usize [ i, i1, i2, i3 ])
+  if flush
+  then
+    let (iter, into_iter_back) ←
+      arrayIntoIter row1
+    let back ← verifier.update_residue_row_loop1 iter (fun im => im)
+    ok (into_iter_back back)
+  else ok row1
+
+/-- [port23push_native::verifier::{port23push_native::verifier::BatchedWeights}::push]:
+    Source: 'src/lib.rs', lines 10:4-13:5 -/
+def verifier.BatchedWeights.push (arrayIntoIter : ArrayIntoIter)
+  (self : verifier.BatchedWeights) (index : Std.Usize) (power : field.QM31)
+  (basis : field.M31) :
+  Result verifier.BatchedWeights
+  := do
+  let i ← lift (self.terms &&& 3#usize)
+  let (a, index_mut_back) ←
+    alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Array
+      Std.U64 4#usize)) self.«raw» index
+  let a1 ← verifier.update_residue_row arrayIntoIter a power basis (i = 3#usize)
+  let v := index_mut_back a1
+  ok { self with «raw» := v }
+
+/-- [port23push_native::verifier::Port23PUSH_push]:
+    Source: 'src/lib.rs', lines 16:4-18:5
+    Visibility: public -/
+def verifier.Port23PUSH_push (arrayIntoIter : ArrayIntoIter)
+  (b : verifier.BatchedWeights) (index : Std.Usize) (power : field.QM31)
+  (basis : field.M31) :
+  Result verifier.BatchedWeights
+  := do
+  verifier.BatchedWeights.push arrayIntoIter b index power basis
+
+
+end Port23PUSH
+end

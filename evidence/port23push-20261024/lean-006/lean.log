@@ -1,0 +1,377 @@
+@[reducible] def Port23PUSH.ArrayIntoIter : Type :=
+Std.Array U64 4#usize →
+  Result
+    (core.slice.iter.IterMut U64 ×
+      ((core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64) → Std.Array U64 4#usize))
+structure Port23PUSH.verifier.BatchedWeights : Type
+number of parameters: 0
+fields:
+  Port23PUSH.verifier.BatchedWeights.raw : alloc.vec.Vec (Std.Array U64 4#usize)
+  Port23PUSH.verifier.BatchedWeights.terms : Usize
+constructor:
+  Port23PUSH.verifier.BatchedWeights.mk (raw : alloc.vec.Vec (Std.Array U64 4#usize)) (terms : Usize) :
+    Port23PUSH.verifier.BatchedWeights
+@[reducible] def Port23PUSH.field.M31 : Type :=
+U32
+structure Port23PUSH.field.CM31 : Type
+number of parameters: 0
+fields:
+  Port23PUSH.field.CM31.a : Port23PUSH.field.M31
+  Port23PUSH.field.CM31.b : Port23PUSH.field.M31
+constructor:
+  Port23PUSH.field.CM31.mk (a b : Port23PUSH.field.M31) : Port23PUSH.field.CM31
+structure Port23PUSH.field.QM31 : Type
+number of parameters: 0
+fields:
+  Port23PUSH.field.QM31.c0 : Port23PUSH.field.CM31
+  Port23PUSH.field.QM31.c1 : Port23PUSH.field.CM31
+constructor:
+  Port23PUSH.field.QM31.mk (c0 c1 : Port23PUSH.field.CM31) : Port23PUSH.field.QM31
+structure Aeneas.Std.core.slice.iter.IterMut (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.IterMut.slice : Slice T
+  Aeneas.Std.core.slice.iter.IterMut.i : ℕ :=
+    0
+constructor:
+  Aeneas.Std.core.slice.iter.IterMut.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.IterMut T
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => ok ({ slice := slice }, fun it => it.slice)
+def Aeneas.Std.alloc.vec.Vec.index_mut_usize.{u} : {α : Type u} →
+  alloc.vec.Vec α → Usize → Result (α × (α → alloc.vec.Vec α)) :=
+fun {α} v i =>
+  match v.index_usize i with
+  | ok x => ok (x, v.set i)
+  | fail e => fail e
+  | div => div
+def Aeneas.Std.alloc.vec.Vec.index_usize.{u} : {α : Type u} → alloc.vec.Vec α → Usize → Result α :=
+fun {α} v i =>
+  match v[↑i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.alloc.vec.Vec.set.{u} : {α : Type u} → alloc.vec.Vec α → Usize → α → alloc.vec.Vec α :=
+fun {α} v i x => ⟨(↑v).set (↑i) x, ⋯⟩
+def Port23PUSH.verifier.update_residue_row_loop0.body : Std.Array U32 4#usize →
+  core.ops.range.Range Usize →
+    Std.Array U64 4#usize →
+      Port23PUSH.field.M31 →
+        Result
+          (ControlFlow (core.ops.range.Range Usize × Std.Array U64 4#usize × Port23PUSH.field.M31)
+            (Std.Array U64 4#usize)) :=
+fun limbs iter row basis => do
+  let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize iter
+  match o with
+    | none => ok (ControlFlow.done row)
+    | some j => do
+      let old ← Port23PUSH.verifier.residue_limb_at row j
+      let limb ← Port23PUSH.verifier.power_limb_at limbs j
+      let i ← lift (core.convert.num.FromU64U32.from limb)
+      let i1 ← lift (core.convert.num.FromU64U32.from basis)
+      let i2 ← i * i1
+      let i3 ← old + i2
+      let row1 ← row.update j i3
+      ok (ControlFlow.cont (iter1, row1, basis))
+def Port23PUSH.verifier.update_residue_row_loop0 : core.ops.range.Range Usize →
+  Std.Array U64 4#usize → Port23PUSH.field.M31 → Std.Array U32 4#usize → Result (Std.Array U64 4#usize) :=
+fun iter row basis limbs =>
+  loop
+    (fun x =>
+      match x with
+      | (iter1, row1, basis1) => Port23PUSH.verifier.update_residue_row_loop0.body limbs iter1 row1 basis1)
+    (iter, row, basis)
+def Port23PUSH.verifier.update_residue_row_loop1.body : core.slice.iter.IterMut U64 →
+  (core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64) →
+    Result
+      (ControlFlow (core.slice.iter.IterMut U64 × (core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64))
+        (core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64)) :=
+fun iter back => do
+  let (o, iter1, next_back) ← core.slice.iter.IteratorIterMut.next iter
+  match o with
+    | none =>
+      ok
+        (ControlFlow.done fun im =>
+          have im1 := next_back im none;
+          back im1)
+    | some limb => do
+      let i ← lift (limb &&& 2147483647#u64)
+      let i1 ← limb >>> 31#i32
+      let limb1 ← i + i1
+      ok
+          (ControlFlow.cont
+            (iter1, fun im =>
+              have im1 := next_back im (some limb1);
+              back im1))
+def Port23PUSH.verifier.update_residue_row_loop1 : core.slice.iter.IterMut U64 →
+  (core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64) →
+    Result (core.slice.iter.IterMut U64 → core.slice.iter.IterMut U64) :=
+fun iter back =>
+  loop
+    (fun x =>
+      match x with
+      | (iter1, back1) => Port23PUSH.verifier.update_residue_row_loop1.body iter1 back1)
+    (iter, back)
+def Port23PUSH.verifier.update_residue_row : Port23PUSH.ArrayIntoIter →
+  Std.Array U64 4#usize → Port23PUSH.field.QM31 → Port23PUSH.field.M31 → Bool → Result (Std.Array U64 4#usize) :=
+fun arrayIntoIter row power basis flush =>
+  let i := power.c0.a;
+  let i1 := power.c0.b;
+  let i2 := power.c1.a;
+  let i3 := power.c1.b;
+  do
+  let row1 ←
+    Port23PUSH.verifier.update_residue_row_loop0 { start := 0#usize, «end» := 4#usize } row basis
+        (Array.make 4#usize [i, i1, i2, i3] ⋯)
+  if flush = true then do
+      let (iter, into_iter_back) ← arrayIntoIter row1
+      let back ← Port23PUSH.verifier.update_residue_row_loop1 iter fun im => im
+      ok (into_iter_back back)
+    else ok row1
+def Port23PUSH.verifier.BatchedWeights.push : Port23PUSH.ArrayIntoIter →
+  Port23PUSH.verifier.BatchedWeights →
+    Usize → Port23PUSH.field.QM31 → Port23PUSH.field.M31 → Result Port23PUSH.verifier.BatchedWeights :=
+fun arrayIntoIter self index power basis => do
+  let i ← lift (self.terms &&& 3#usize)
+  let (a, index_mut_back) ←
+    alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) self.raw index
+  let a1 ← Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (i = 3#usize))
+  have v : alloc.vec.Vec (Std.Array U64 4#usize) := index_mut_back a1
+  ok { raw := v, terms := self.terms }
+theorem Port23PUSH.push_complete : ∀ (arrayIntoIter : Port23PUSH.ArrayIntoIter) (b : Port23PUSH.verifier.BatchedWeights)
+  (index : Usize) (power : Port23PUSH.field.QM31) (basis : Port23PUSH.field.M31),
+  Port23PUSH.verifier.BatchedWeights.push arrayIntoIter b index power basis = do
+    let row ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw index
+    let updated ←
+      Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := b.raw.set index updated, terms := b.terms } :=
+fun arrayIntoIter b index power basis =>
+  if bound : ↑index < (↑b.raw).length then
+    let ⟨row, h✝⟩ := WP.spec_imp_exists (alloc.vec.Vec.index_usize_spec b.raw index bound)
+    let ⟨hr, hrow⟩ := h✝
+    let ⟨w✝, h✝¹⟩ := WP.spec_imp_exists (alloc.vec.Vec.index_mut_usize_spec b.raw index bound)
+    let ⟨old, back, h✝¹⟩ := w✝
+    let ⟨hm, right✝⟩ := h✝¹
+    let ⟨hold, hback⟩ := right✝
+    have hm' :=
+      Eq.mpr (id (congrArg (fun _a => _a = ok (old, back)) (alloc.vec.Vec.index_mut_slice_index b.raw index))) hm;
+    have hr' := hr;
+    have oldrow := Eq.mpr (id (congrFun' (congrArg Eq hold) row)) (Eq.symm hrow);
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (congrArg (Bind.bind (ok (b.terms &&& 3#usize)))
+                (funext fun i =>
+                  Eq.trans
+                    (congrFun' (congrArg Bind.bind (Eq.trans hm' (congrArg ok (congr (congrArg Prod.mk oldrow) hback))))
+                      (uncurry fun a index_mut_back => do
+                        let a1 ←
+                          Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (i = 3#usize))
+                        ok { raw := index_mut_back a1, terms := b.terms }))
+                    (bind_tc_ok (row, b.raw.set index)
+                      (uncurry fun a index_mut_back => do
+                        let a1 ←
+                          Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (i = 3#usize))
+                        ok { raw := index_mut_back a1, terms := b.terms }))))
+              (bind_tc_ok (b.terms &&& 3#usize) fun y =>
+                let (a, index_mut_back) := (row, b.raw.set index)
+                do
+                let a1 ← Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (y = 3#usize))
+                ok { raw := index_mut_back a1, terms := b.terms })))
+          (Eq.trans
+            (congrFun' (congrArg Bind.bind hr') fun row => do
+              let updated ←
+                Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis
+                    (decide (b.terms &&& 3#usize = 3#usize))
+              ok { raw := b.raw.set index updated, terms := b.terms })
+            (bind_tc_ok row fun y => do
+              let updated ←
+                Port23PUSH.verifier.update_residue_row arrayIntoIter y power basis
+                    (decide (b.terms &&& 3#usize = 3#usize))
+              ok { raw := b.raw.set index updated, terms := b.terms }))))
+      (Eq.refl
+        (let (a, index_mut_back) := (row, b.raw.set index)
+        do
+        let a1 ←
+          Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (b.terms &&& 3#usize = 3#usize))
+        ok { raw := index_mut_back a1, terms := b.terms }))
+  else
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (congrArg (Bind.bind (ok (b.terms &&& 3#usize)))
+                (funext fun i =>
+                  Eq.trans
+                    (congrFun'
+                      (congrArg Bind.bind
+                        (Eq.trans (alloc.vec.Vec.index_mut_slice_index b.raw index)
+                          (congrArg
+                            (fun x =>
+                              match
+                                match x with
+                                | none => fail Error.arrayOutOfBounds
+                                | some x => ok x with
+                              | ok x => ok (x, b.raw.set index)
+                              | fail e => fail e
+                              | div => div)
+                            (Eq.trans (alloc.vec.Vec.getElem?_Nat_eq b.raw ↑index)
+                              (getElem?_neg (↑b.raw) (↑index)
+                                (of_eq_true (Eq.trans (congrArg Not (eq_false bound)) not_false_eq_true)))))))
+                      (uncurry fun a index_mut_back => do
+                        let a1 ←
+                          Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (i = 3#usize))
+                        ok { raw := index_mut_back a1, terms := b.terms }))
+                    (bind_tc_fail Error.arrayOutOfBounds
+                      (uncurry fun a index_mut_back => do
+                        let a1 ←
+                          Port23PUSH.verifier.update_residue_row arrayIntoIter a power basis (decide (i = 3#usize))
+                        ok { raw := index_mut_back a1, terms := b.terms }))))
+              (bind_tc_ok (b.terms &&& 3#usize) fun y => fail Error.arrayOutOfBounds)))
+          (Eq.trans
+            (congrFun'
+              (congrArg Bind.bind
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => fail Error.arrayOutOfBounds
+                    | some x => ok x)
+                  (Eq.trans (Slice.getElem?_Usize_eq b.raw index)
+                    (getElem?_neg (↑b.raw) (↑index)
+                      (of_eq_true (Eq.trans (congrArg Not (eq_false bound)) not_false_eq_true))))))
+              fun row => do
+              let updated ←
+                Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis
+                    (decide (b.terms &&& 3#usize = 3#usize))
+              ok { raw := b.raw.set index updated, terms := b.terms })
+            (bind_tc_fail Error.arrayOutOfBounds fun y => do
+              let updated ←
+                Port23PUSH.verifier.update_residue_row arrayIntoIter y power basis
+                    (decide (b.terms &&& 3#usize = 3#usize))
+              ok { raw := b.raw.set index updated, terms := b.terms })))
+        (eq_self (fail Error.arrayOutOfBounds)))
+theorem Port23PUSH.push_bad_index : ∀ (arrayIntoIter : Port23PUSH.ArrayIntoIter)
+  (b : Port23PUSH.verifier.BatchedWeights) (index : Usize) (power : Port23PUSH.field.QM31)
+  (basis : Port23PUSH.field.M31),
+  ¬↑index < (↑b.raw).length →
+    Port23PUSH.verifier.BatchedWeights.push arrayIntoIter b index power basis = fail Error.arrayOutOfBounds :=
+fun arrayIntoIter b index power basis bad =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = fail Error.arrayOutOfBounds)
+        (Port23PUSH.push_complete arrayIntoIter b index power basis)))
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congrFun'
+                (congrArg Bind.bind
+                  (congrArg
+                    (fun x =>
+                      match x with
+                      | none => fail Error.arrayOutOfBounds
+                      | some x => ok x)
+                    (Eq.trans (Slice.getElem?_Usize_eq b.raw index)
+                      (getElem?_neg (↑b.raw) (↑index)
+                        (of_eq_true (Eq.trans (congrArg Not (eq_false bad)) not_false_eq_true))))))
+                fun row => do
+                let updated ←
+                  Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis
+                      (decide (b.terms &&& 3#usize = 3#usize))
+                ok { raw := b.raw.set index updated, terms := b.terms })
+              (bind_tc_fail Error.arrayOutOfBounds fun y => do
+                let updated ←
+                  Port23PUSH.verifier.update_residue_row arrayIntoIter y power basis
+                      (decide (b.terms &&& 3#usize = 3#usize))
+                ok { raw := b.raw.set index updated, terms := b.terms })))
+          (fail Error.arrayOutOfBounds))
+        (eq_self (fail Error.arrayOutOfBounds))))
+theorem Port23PUSH.push_success_frame : ∀ (arrayIntoIter : Port23PUSH.ArrayIntoIter)
+  (b after : Port23PUSH.verifier.BatchedWeights) (index : Usize) (power : Port23PUSH.field.QM31)
+  (basis : Port23PUSH.field.M31),
+  Port23PUSH.verifier.BatchedWeights.push arrayIntoIter b index power basis = ok after →
+    ∃ row updated,
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw index = ok row ∧
+        Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis (decide (b.terms &&& 3#usize = 3#usize)) =
+            ok updated ∧
+          after = { raw := b.raw.set index updated, terms := b.terms } :=
+fun arrayIntoIter b after index power basis run =>
+  let ⟨row, h✝⟩ :=
+    Port23PUSH.bind_ok✝
+      (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw index)
+      (fun x => do
+        let updated ←
+          Port23PUSH.verifier.update_residue_row arrayIntoIter x power basis (decide (b.terms &&& 3#usize = 3#usize))
+        ok { raw := b.raw.set index updated, terms := b.terms })
+      after
+      (Eq.mp (congrArg (fun _a => _a = ok after) (Port23PUSH.push_complete arrayIntoIter b index power basis)) run)
+  let ⟨hr, run⟩ := h✝
+  let ⟨updated, h✝¹⟩ :=
+    Port23PUSH.bind_ok✝
+      (Port23PUSH.verifier.update_residue_row arrayIntoIter row power basis (decide (b.terms &&& 3#usize = 3#usize)))
+      (fun x => ok { raw := b.raw.set index x, terms := b.terms }) after run
+  let ⟨hu, run⟩ := h✝¹
+  Exists.intro row (Exists.intro updated ⟨hr, ⟨hu, Eq.symm (ok.inj run)⟩⟩)
+theorem Port23PUSH.push_terms_length : ∀ (arrayIntoIter : Port23PUSH.ArrayIntoIter)
+  (b after : Port23PUSH.verifier.BatchedWeights) (index : Usize) (power : Port23PUSH.field.QM31)
+  (basis : Port23PUSH.field.M31),
+  Port23PUSH.verifier.BatchedWeights.push arrayIntoIter b index power basis = ok after →
+    after.terms = b.terms ∧ (↑after.raw).length = (↑b.raw).length :=
+fun arrayIntoIter b after index power basis run =>
+  let ⟨row, h✝⟩ := Port23PUSH.push_success_frame arrayIntoIter b after index power basis run
+  let ⟨updated, h✝¹⟩ := h✝
+  let ⟨hr, right✝⟩ := h✝¹
+  let ⟨hu, frame⟩ := right✝
+  Eq.ndrec (motive := fun after =>
+    Port23PUSH.verifier.BatchedWeights.push arrayIntoIter b index power basis = ok after →
+      after.terms = b.terms ∧ (↑after.raw).length = (↑b.raw).length)
+    (fun run =>
+      ⟨rfl, of_eq_true (Eq.trans (congrFun' (congrArg Eq List.length_set) (↑b.raw).length) (eq_self (↑b.raw).length))⟩)
+    (Eq.symm frame) run
+'Port23PUSH.verifier.update_residue_row_loop0.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.update_residue_row_loop0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.update_residue_row_loop1.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.update_residue_row_loop1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.update_residue_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.BatchedWeights.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.verifier.Port23PUSH_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.push_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.push_bad_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.push_success_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port23PUSH.push_terms_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+       13.18 real         1.18 user         2.03 sys
+          2224996352  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               76410  page reclaims
+              105501  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               17032  voluntary context switches
+               82172  involuntary context switches
+         32125059035  instructions retired
+         11706272472  cycles elapsed
+           379342560  peak memory footprint

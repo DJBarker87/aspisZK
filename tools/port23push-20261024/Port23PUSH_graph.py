@@ -9,12 +9,12 @@ root=Path('/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-
 queries={
 'core/src/array/mod.rs':['fn into_iter(self) -> IterMut', 'fn index_mut(&mut self', 'fn as_mut_slice('],
 'core/src/slice/mod.rs':['pub const fn iter_mut(', 'pub fn iter_mut('],
-'core/src/slice/iter.rs':['pub(super) fn new(slice:', 'fn into_iter(self)', 'fn next('],
-'core/src/slice/iter/macros.rs':['fn next(', 'fn next_back(', 'unsafe fn next_unchecked('],
-'core/src/slice/index.rs':['fn index_mut(self, slice:', 'fn index(self, slice:'],
-'alloc/src/vec/mod.rs':['fn index_mut(&mut self', 'fn deref_mut(&mut self'],
+'core/src/slice/iter.rs':["pub(super) const fn new(slice: &'a mut [T])", "iterator! {", "fn into_iter(self) -> IterMut"],
+'core/src/slice/iter/macros.rs':['fn next(&mut self) -> Option<$elem>'],
+'core/src/slice/index.rs':['fn index_mut(self, slice: &mut [T]) -> &mut T', 'fn index(self, slice: &[T]) -> &T'],
+'alloc/src/vec/mod.rs':['fn index_mut(&mut self', 'fn deref_mut(&mut self', 'pub const fn as_mut_slice('],
 'core/src/iter/range.rs':['fn next(&mut self)', 'fn forward_checked('],
-'core/src/convert/num.rs':['impl_from! { u32 => u64 }']}
+'core/src/convert/num.rs':['macro_rules! impl_from {', 'impl_from!(u32 => u64,']}
 rows=[]
 for file,needles in queries.items():
  p=root/file;lines=p.read_text().splitlines();hits=[]
@@ -30,6 +30,6 @@ for file,needles in queries.items():
 print(json.dumps(dict(scope='selected extraction-host native std graph, not SBF identity or primitive effect proof',files=rows),indent=2))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True)
-(E/'std-source-graph.json').write_text(r.stdout);(E/'std-source-graph-stderr.txt').write_text(r.stderr)
+(E/'std-source-graph-focused.json').write_text(r.stdout);(E/'std-source-graph-focused-stderr.txt').write_text(r.stderr)
 assert r.returncode==0,r.stderr
 print(r.stdout)

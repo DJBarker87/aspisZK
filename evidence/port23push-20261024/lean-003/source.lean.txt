@@ -1,0 +1,41 @@
+import Port23PUSH_Source
+set_option autoImplicit false
+noncomputable section
+namespace Port23PUSH
+open Aeneas Aeneas.Std Result
+
+/-- Full-result outer normalization of the *mutable source-emitted* push.
+The row update is unchanged, with its external mutable-array primitive explicit.
+No row-success, overflow, canonicality or in-range premise is imposed. -/
+theorem push_complete (arrayIntoIter : ArrayIntoIter)
+    (b : verifier.BatchedWeights) (index : Usize) (power : field.QM31) (basis : field.M31) :
+    verifier.BatchedWeights.push arrayIntoIter b index power basis =
+      (do
+        let row ← alloc.vec.Vec.index
+          (core.slice.index.SliceIndexUsizeSlice (Array U64 4#usize)) b.raw index
+        let updated ← verifier.update_residue_row arrayIntoIter row power basis
+          ((b.terms &&& 3#usize) = 3#usize)
+        ok {b with raw := b.raw.set index updated}) := by
+  by_cases bound : index.val < b.raw.val.length
+  · obtain ⟨row,hr,hrow⟩ := WP.spec_imp_exists
+      (alloc.vec.Vec.index_usize_spec b.raw index bound)
+    obtain ⟨⟨old,back⟩,hm,hold,hback⟩ := WP.spec_imp_exists
+      (alloc.vec.Vec.index_mut_usize_spec b.raw index bound)
+    have hm' : alloc.vec.Vec.index_mut
+        (core.slice.index.SliceIndexUsizeSlice (Array U64 4#usize)) b.raw index =
+        ok (old,back) := by
+      rw [alloc.vec.Vec.index_mut_slice_index]
+      exact hm
+    have hr' : alloc.vec.Vec.index
+        (core.slice.index.SliceIndexUsizeSlice (Array U64 4#usize)) b.raw index =
+        ok row := hr
+    have oldrow : old = row := by
+      simpa only [hold] using hrow.symm
+    simp only [verifier.BatchedWeights.push, lift, bind_tc_ok, hm', hr', hback, oldrow]
+  · simp [verifier.BatchedWeights.push, alloc.vec.Vec.index_mut_slice_index,
+      alloc.vec.Vec.index_mut_usize, alloc.vec.Vec.index_usize, bound,
+      alloc.vec.Vec.index, core.slice.index.SliceIndexUsizeSlice, Slice.index_usize]
+
+#print axioms push_complete
+end Port23PUSH
+end
