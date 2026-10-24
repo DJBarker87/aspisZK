@@ -1,0 +1,58 @@
+{"attempt": "lean-046", "exit_status": 1, "wall_seconds": 2.4730394759972114, "peak_rss_kib": "4413544", "swaps": "0", "print_axioms": ["'AspisR1.Port6CK_BodySelf.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port6CK_BodySelf.lean:12:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+Port6CK_BodySelf.lean:23:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    List.map (fun b => MultiproofConeCanonical.bytesOf ↑b) _a =
+      [MultiproofConeCanonical.bytesOf ↑_a[↑0], MultiproofConeCanonical.bytesOf ↑_a[↑1]]
+Error: Application type mismatch: The argument
+  CheckpointBytesBody.fields._proof_5 (toPrepared p) 0
+has type
+  ↑0 < (↑(toPrepared p).roots).length
+but is expected to have type
+  ↑0 < _a.length
+in the application
+  _a[↑0]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equa
+...
+ 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case refine_2
+p : verifier.Prepared
+a : verifier.Accumulator
+variant : p.variant = transport.Variant.S2
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (inventory p a size qb)
+x y : Std.Array U8 32#usize
+h : ↑p.roots = [x, y]
+⊢ List.map (fun b => MultiproofConeCanonical.bytesOf ↑b) ↑p.roots =
+    [MultiproofConeCanonical.bytesOf ↑(↑p.roots)[↑0], MultiproofConeCanonical.bytesOf ↑(↑p.roots)[↑1]]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port6CK_BodySelf.lean:59:13: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port6CK_BodySelf.fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6e83a6176bee4a6480453cbae6950bda.scope; invocation ID: 5bc679465d8d4b86be9c0b1813d09ad4

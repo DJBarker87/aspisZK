@@ -1,0 +1,160 @@
+Port6CK_Header.lean:179:10: error: Dependent elimination failed: Failed to solve equation
+  ok (core.result.Result.Ok (p, a), after) =
+    Decidable.rec
+      (fun h =>
+        (fun x => do
+            let x ← bytes.index_usize 10#usize
+            if (x != 1#u8) = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before)
+              else do
+                let x ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                      { start := 11#usize, «end» := 16#usize }
+                let x ← core.slice.Slice.iter x
+                let x ← CheckpointBytes4Ops.headerAny x
+                if x.1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before)
+                  else do
+                    let x ← bytes.len - 32#usize
+                    let x_1 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                          { start := 16#usize, «end» := 48#usize }
+                    let x_2 ← lift (Array.make 1#usize [proof] ⋯).to_slice
+                    let x_3 ← D.digest hash x_2
+                    let x_4 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 x_1 x_3
+                    if x_4 = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before ++ [(x_2, x_3)])
+                      else do
+                        let x_5 ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                              { start := 48#usize, «end» := 80#usize }
+                        let x_6 ← lift (Array.make 1#usize [pub] ⋯).to_slice
+                        let x_7 ← D.digest hash x_6
+                        let x_8 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 x_5 x_7
+                        if x_8 = true then
+                            ok
+                              (core.result.Result.Err verifier.Error.Checkpoint, before ++ [(x_2, x_3)] ++ [(x_6, x_7)])
+                          else do
+                            let x_9 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                  { start := x }
+                            let x_10 ←
+                              lift
+                                  (Array.make 22#usize
+                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8,
+                                        58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8,
+                                        116#u8]
+                                      header._proof_37).to_slice
+                            let x_11 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                  { «end» := x }
+                            let x_12 ← lift (Array.make 2#usize [x_10, x_11] ⋯).to_slice
+                            let x_13 ← D.digest hash x_12
+                            let a ←
+                              Port4A_NativeReader.tail (ops reserved unwrap) bytes transport.Variant.S2 nextByte x x_9
+                                  x_13
+                            ok (a, before ++ [(x_2, x_3)] ++ [(x_6, x_7)] ++ [(x_12, x_13)]))
+          h)
+      (fun h => (fun x => ok (core.result.Result.Err verifier.Error.Checkpoint, before)) h) (22#u8.decLt nextByte)
+Port6CK_Header.lean:181:84: error: Application type mismatch: The argument
+  actual
+has type
+  (if nextByte > 22#u8 then ok (core.result.Result.Err verifier.Error.Checkpoint, before)
+    else do
+      let x ← bytes.index_usize 10#usize
+      if (x != 1#u8) = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before)
+        else do
+          let x ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 11#usize, «end» := 16#usize }
+          let x ← core.slice.Slice.iter x
+          let x ← CheckpointBytes4Ops.headerAny x
+          if x.1 = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before)
+            else do
+              let x ← bytes.len - 32#usize
+              let x_1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 16#usize, «end» := 48#usize }
+              let x_2 ← lift (Array.make 1#usize [proof] ⋯).to_slice
+              let x_3 ← D.digest hash x_2
+              let x_4 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 x_1 x_3
+              if x_4 = true then ok (core.result.Result.Err verifier.Error.Checkpoint, before ++ [(x_2, x_3)])
+                else do
+                  let x_5 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                        { start := 48#usize, «end» := 80#usize }
+                  let x_6 ← lift (Array.make 1#usize [pub] ⋯).to_slice
+                  let x_7 ← D.digest hash x_6
+                  let x_8 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 x_5 x_7
+                  if x_8 = true then
+                      ok (core.result.Result.Err verifier.Error.Checkpoint, before ++ [(x_2, x_3)] ++ [(x_6, x_7)])
+                    else do
+                      let x_9 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := x }
+                      let x_10 ←
+                        lift
+                            (Array.make 22#usize
+                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                  99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                header._proof_37).to_slice
+                      let x_11 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := x }
+                      let x_12 ← lift (Array.make 2#usize [x_10, x_11] ⋯).to_slice
+                      let x_13 ← D.digest hash x_12
+                      let a ←
+                        Port4A_NativeReader.tail (ops reserved unwrap) bytes transport.Variant.S2 nextByte x x_9 x_13
+                      ok (a, before ++ [(x_2, x_3)] ++ [(x_6, x_7)] ++ [(x_12, x_13)])) =
+    ok (core.result.Result.Ok (p, a), after)
+but is expected to have type
+  (do
+      let x ← ?m.435
+      ?m.436 x) =
+    ok ?m.437
+in the application
+  OraclePortCkptAbiTry.bind_success ?m.435 ?m.436 ?m.437 actual
+Port6CK_Header.lean:144:24: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port6CK_Header.lean:156:26: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port6CK_Header.lean:159:26: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port6CK_Header.lean:166:28: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port6CK_Header.lean:169:28: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port6CK_Header.lean:176:30: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵] at actual ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port6CK_Header.tail_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.current_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.reference_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.size_s2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

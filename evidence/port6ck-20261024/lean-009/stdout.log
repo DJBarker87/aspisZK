@@ -1,0 +1,63 @@
+Port6CK_Weights.lean:31:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port5Q2_ReaderWeights.reads (current unwrap) bytes n out.at
+in the target expression
+  (let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let tail ← Port5Q2_ReaderWeights.reads (current unwrap) bytes n out.at
+      match tail with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let tail ← Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes n out.at
+      match tail with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+
+case succ.Ok
+unwrap : Unwrap
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+bytes : Slice U8
+size : (↑bytes).length ≤ 4096
+n : ℕ
+ih :
+  ∀ (start : Usize),
+    ↑start + 16 * n ≤ (↑bytes).length →
+      Port5Q2_ReaderWeights.reads (current unwrap) bytes n start =
+        Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes n start
+start : Usize
+room : ↑start + 16 * (n + 1) ≤ (↑bytes).length
+out : verifier.Reader
+x : CheckpointBytes4Sections.K
+called : CheckpointBytes3Reader.readK { bytes := bytes, «at» := start } = ok (core.result.Result.Ok x, out)
+decoded : ExactLeafFieldCodec.QM31Exact
+decode :
+  ExactLeafFieldCodec.decodeQM31
+      (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑{ bytes := bytes, «at» := start }.bytes)
+        (↑{ bytes := bytes, «at» := start }.at) 16) =
+    some decoded
+valueEq : CheckpointBytes4ReaderFields.sourceK decoded = x
+cursor : ↑out.at = ↑start + 16
+backing : out.bytes = { bytes := bytes, «at» := start }.bytes
+⊢ (let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let tail ← Port5Q2_ReaderWeights.reads (current unwrap) bytes n out.at
+      match tail with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let tail ← Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes n out.at
+      match tail with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+'AspisR1.Port6CK_Weights.reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Weights.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

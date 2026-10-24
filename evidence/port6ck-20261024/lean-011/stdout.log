@@ -1,0 +1,2098 @@
+Port6CK_Tail.lean:64:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ h ≤ 31
+  1736 ≤ g ≤ 4096
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 32
+where
+ e := ↑(↑{ bytes := bytes, «at» := 80#usize }.bytes).length
+ f := ↑↑{ bytes := bytes, «at» := 80#usize }.at
+ g := ↑(↑r0.bytes).length
+ h := ↑↑32#usize
+Port6CK_Tail.lean:103:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE er0
+in the target expression
+  (match core.result.Result.Ok e0 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue { c0 := value, c1 := er1 })
+
+case neg.Ok.Continue
+reserved : Bool
+unwrap : Unwrap
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+bytes : Slice U8
+length : (↑bytes).length = 1768
+i4 : U8
+end1 : Usize
+s6 : Slice U8
+a2 : Std.Array U8 32#usize
+p : verifier.Prepared
+a : verifier.Accumulator
+actual✝⁵ :
+  (do
+      let b4 ← CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s6 a2
+      if b4 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let (state, r) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) { bytes := bytes, «at» := 80#usize }
+          let (a3, r1) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r
+          let (a4, r2) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r1
+          let (r3, r4) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r2
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r5, r6) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let (r7, r8) ←
+                    Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                        Port5Q2_ReaderScalar.decodeE r6
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let (r9, r10) ←
+                        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                            Port5Q2_ReaderScalar.decodeE r8
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          let (r11, r12) ← current unwrap r10
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val4 => do
+                              let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                              let i8 ← lift (core.num.U32.from_le_bytes a5)
+                              let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                              let i9 ← lift (core.num.U32.from_le_bytes a6)
+                              let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                              let i10 ← lift (core.num.U32.from_le_bytes a7)
+                              let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                              let i11 ← lift (core.num.U32.from_le_bytes a8)
+                              let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                              let i12 ← lift (core.num.U32.from_le_bytes a9)
+                              let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                              let i13 ← lift (core.num.U32.from_le_bytes a10)
+                              let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                              let i14 ← lift (core.num.U32.from_le_bytes a11)
+                              let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                              let i15 ← lift (core.num.U32.from_le_bytes a12)
+                              let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                              let i16 ← lift (core.num.U32.from_le_bytes a13)
+                              let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                              let i17 ← lift (core.num.U32.from_le_bytes a14)
+                              let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                              let i18 ← lift (core.num.U32.from_le_bytes a15)
+                              let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                              let i19 ← lift (core.num.U32.from_le_bytes a16)
+                              let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                              let i20 ← lift (core.num.U32.from_le_bytes a17)
+                              let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                              let i21 ← lift (core.num.U32.from_le_bytes a18)
+                              let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                              let i22 ← lift (core.num.U32.from_le_bytes a19)
+                              let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                              let i23 ← lift (core.num.U32.from_le_bytes a20)
+                              let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                              let i24 ← lift (core.num.U32.from_le_bytes a21)
+                              let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                              let i25 ← lift (core.num.U32.from_le_bytes a22)
+                              let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                              let i26 ← lift (core.num.U32.from_le_bytes a23)
+                              let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                              let i27 ← lift (core.num.U32.from_le_bytes a24)
+                              let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                              let i28 ← lift (core.num.U32.from_le_bytes a25)
+                              let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                              let i29 ← lift (core.num.U32.from_le_bytes a26)
+                              let r35 ←
+                                Port5Q2_ReaderValidate.validate
+                                    (Array.make 22#usize
+                                      [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23,
+                                        i24, i25, i26, i27, i28, i29]
+                                      ⋯)
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                  let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                                  let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                                  match cf6 with
+                                    | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                      let (semantic_alpha, at1) := val5
+                                      do
+                                      let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := at1 }
+                                      let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                      match cf7 with
+                                        | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                          let (r39, r40) ← current unwrap r38
+                                          let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                          match cf8 with
+                                            | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                              let (r41, r42) ← current unwrap r40
+                                              let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                              match cf9 with
+                                                | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                  let (r43, r44) ← current unwrap r42
+                                                  let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                                  match cf10 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                      let (r45, r46) ←
+                                                        Port5Q2_ReaderScalar.readE
+                                                            (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                            Port5Q2_ReaderScalar.decodeE r44
+                                                      let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                      match cf11 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                          let (r47, r48) ←
+                                                            Port5Q2_ReaderScalar.readE
+                                                                (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                                Port5Q2_ReaderScalar.decodeE r46
+                                                          let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                          match cf12 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                              let (r49, r50) ← current unwrap r48
+                                                              let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                              match cf13 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                                  let i30 ←
+                                                                    CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                                  let q ← CheckpointBytes4Ops.zeroK
+                                                                  let r52 ←
+                                                                    CheckpointBytes3Allocation.filled reserved i30 q
+                                                                  let cf14 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r52
+                                                                  match cf14 with
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Continue val13 =>
+                                                                      do
+                                                                      let r53 ←
+                                                                        Port5Q2_ReaderWeights.weights (current unwrap)
+                                                                            bytes r50.at val13
+                                                                      let cf15 ←
+                                                                        core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                      match cf15 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                            val14 =>
+                                                                          let (weights, at2) := val14
+                                                                          if (at2 != end1) = true then
+                                                                            ok
+                                                                              (core.result.Result.Err
+                                                                                verifier.Error.Checkpoint)
+                                                                          else do
+                                                                            let i31 ←
+                                                                              lift (UScalar.cast UScalarTy.Usize i4)
+                                                                            ok
+                                                                                (core.result.Result.Ok
+                                                                                  ({ variant := transport.Variant.S2,
+                                                                                      roots :=
+                                                                                        Array.make 2#usize [a3, a4] ⋯,
+                                                                                      gamma := val, kappa := val1,
+                                                                                      alpha :=
+                                                                                        Array.make 2#usize [val2, val3]
+                                                                                          ⋯,
+                                                                                      rho := val4,
+                                                                                      queries :=
+                                                                                        Array.make 22#usize
+                                                                                          [i8, i9, i10, i11, i12, i13,
+                                                                                            i14, ⋯]
+                                                                                          ⋯,
+                                                                                      semantic_alpha := semantic_alpha,
+                                                                                      z :=
+                                                                                        Array.make 2#usize
+                                                                                          [{ x := val6, y := val7 },
+                                                                                            { x := val8, y := val9 }]
+                                                                                          ⋯,
+                                                                                      claim := val10, state := state },
+                                                                                    { weights := weights, rhs := val11,
+                                                                                      power := val12, next := i31 }))
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            (verifier.Prepared × verifier.Accumulator)
+                                                                            (core.convert.FromSame verifier.Error)
+                                                                            residual
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (verifier.Prepared × verifier.Accumulator)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+bad : Bool
+called✝⁴ : CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s6 a2 = ok bad
+reject : ¬bad = true
+actual✝⁴ :
+  (do
+      let (state, r) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) { bytes := bytes, «at» := 80#usize }
+      let (a3, r1) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r
+      let (a4, r2) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r1
+      let (r3, r4) ←
+        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r2
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r5, r6) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let (r7, r8) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let (r9, r10) ←
+                    Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                        Port5Q2_ReaderScalar.decodeE r8
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let (r11, r12) ← current unwrap r10
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                          let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                          let i8 ← lift (core.num.U32.from_le_bytes a5)
+                          let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                          let i9 ← lift (core.num.U32.from_le_bytes a6)
+                          let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                          let i10 ← lift (core.num.U32.from_le_bytes a7)
+                          let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                          let i11 ← lift (core.num.U32.from_le_bytes a8)
+                          let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                          let i12 ← lift (core.num.U32.from_le_bytes a9)
+                          let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                          let i13 ← lift (core.num.U32.from_le_bytes a10)
+                          let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                          let i14 ← lift (core.num.U32.from_le_bytes a11)
+                          let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                          let i15 ← lift (core.num.U32.from_le_bytes a12)
+                          let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                          let i16 ← lift (core.num.U32.from_le_bytes a13)
+                          let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                          let i17 ← lift (core.num.U32.from_le_bytes a14)
+                          let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                          let i18 ← lift (core.num.U32.from_le_bytes a15)
+                          let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                          let i19 ← lift (core.num.U32.from_le_bytes a16)
+                          let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                          let i20 ← lift (core.num.U32.from_le_bytes a17)
+                          let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                          let i21 ← lift (core.num.U32.from_le_bytes a18)
+                          let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                          let i22 ← lift (core.num.U32.from_le_bytes a19)
+                          let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                          let i23 ← lift (core.num.U32.from_le_bytes a20)
+                          let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                          let i24 ← lift (core.num.U32.from_le_bytes a21)
+                          let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                          let i25 ← lift (core.num.U32.from_le_bytes a22)
+                          let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                          let i26 ← lift (core.num.U32.from_le_bytes a23)
+                          let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                          let i27 ← lift (core.num.U32.from_le_bytes a24)
+                          let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                          let i28 ← lift (core.num.U32.from_le_bytes a25)
+                          let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                          let i29 ← lift (core.num.U32.from_le_bytes a26)
+                          let r35 ←
+                            Port5Q2_ReaderValidate.validate
+                                (Array.make 22#usize
+                                  [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24,
+                                    i25, i26, i27, i28, i29]
+                                  ⋯)
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val5 =>
+                                  let (semantic_alpha, at1) := val5
+                                  do
+                                  let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := at1 }
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                      let (r39, r40) ← current unwrap r38
+                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                      match cf8 with
+                                        | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                          let (r41, r42) ← current unwrap r40
+                                          let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                          match cf9 with
+                                            | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                              let (r43, r44) ← current unwrap r42
+                                              let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                              match cf10 with
+                                                | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                  let (r45, r46) ←
+                                                    Port5Q2_ReaderScalar.readE
+                                                        (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                        Port5Q2_ReaderScalar.decodeE r44
+                                                  let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                  match cf11 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                      let (r47, r48) ←
+                                                        Port5Q2_ReaderScalar.readE
+                                                            (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                            Port5Q2_ReaderScalar.decodeE r46
+                                                      let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                      match cf12 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                          let (r49, r50) ← current unwrap r48
+                                                          let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                          match cf13 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                              let i30 ←
+                                                                CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                              let q ← CheckpointBytes4Ops.zeroK
+                                                              let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                              let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r52
+                                                              match cf14 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                                  let r53 ←
+                                                                    Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                        r50.at val13
+                                                                  let cf15 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                  match cf15 with
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                      let (weights, at2) := val14
+                                                                      if (at2 != end1) = true then
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            verifier.Error.Checkpoint)
+                                                                      else do
+                                                                        let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                        ok
+                                                                            (core.result.Result.Ok
+                                                                              ({ variant := transport.Variant.S2,
+                                                                                  roots :=
+                                                                                    Array.make 2#usize [a3, a4] ⋯,
+                                                                                  gamma := val, kappa := val1,
+                                                                                  alpha :=
+                                                                                    Array.make 2#usize [val2, val3] ⋯,
+                                                                                  rho := val4,
+                                                                                  queries :=
+                                                                                    Array.make 22#usize
+                                                                                      [i8, i9, i10, i11, i12, i13, i14,
+                                                                                        i15, i16, ⋯]
+                                                                                      ⋯,
+                                                                                  semantic_alpha := semantic_alpha,
+                                                                                  z :=
+                                                                                    Array.make 2#usize
+                                                                                      [{ x := val6, y := val7 },
+                                                                                        { x := val8, y := val9 }]
+                                                                                      ⋯,
+                                                                                  claim := val10, state := state },
+                                                                                { weights := weights, rhs := val11,
+                                                                                  power := val12, next := i31 }))
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (verifier.Prepared × verifier.Accumulator)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+state : Std.Array U8 32#usize
+r0 : verifier.Reader
+called✝³ : CheckpointBytes3Reader.raw 32#usize { bytes := bytes, «at» := 80#usize } = ok (state, r0)
+actual✝³ :
+  (do
+      let (a3, r1) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r0
+      let (a4, r2) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r1
+      let (r3, r4) ←
+        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r2
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r5, r6) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let (r7, r8) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let (r9, r10) ←
+                    Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                        Port5Q2_ReaderScalar.decodeE r8
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let (r11, r12) ← current unwrap r10
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                          let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                          let i8 ← lift (core.num.U32.from_le_bytes a5)
+                          let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                          let i9 ← lift (core.num.U32.from_le_bytes a6)
+                          let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                          let i10 ← lift (core.num.U32.from_le_bytes a7)
+                          let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                          let i11 ← lift (core.num.U32.from_le_bytes a8)
+                          let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                          let i12 ← lift (core.num.U32.from_le_bytes a9)
+                          let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                          let i13 ← lift (core.num.U32.from_le_bytes a10)
+                          let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                          let i14 ← lift (core.num.U32.from_le_bytes a11)
+                          let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                          let i15 ← lift (core.num.U32.from_le_bytes a12)
+                          let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                          let i16 ← lift (core.num.U32.from_le_bytes a13)
+                          let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                          let i17 ← lift (core.num.U32.from_le_bytes a14)
+                          let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                          let i18 ← lift (core.num.U32.from_le_bytes a15)
+                          let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                          let i19 ← lift (core.num.U32.from_le_bytes a16)
+                          let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                          let i20 ← lift (core.num.U32.from_le_bytes a17)
+                          let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                          let i21 ← lift (core.num.U32.from_le_bytes a18)
+                          let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                          let i22 ← lift (core.num.U32.from_le_bytes a19)
+                          let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                          let i23 ← lift (core.num.U32.from_le_bytes a20)
+                          let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                          let i24 ← lift (core.num.U32.from_le_bytes a21)
+                          let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                          let i25 ← lift (core.num.U32.from_le_bytes a22)
+                          let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                          let i26 ← lift (core.num.U32.from_le_bytes a23)
+                          let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                          let i27 ← lift (core.num.U32.from_le_bytes a24)
+                          let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                          let i28 ← lift (core.num.U32.from_le_bytes a25)
+                          let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                          let i29 ← lift (core.num.U32.from_le_bytes a26)
+                          let r35 ←
+                            Port5Q2_ReaderValidate.validate
+                                (Array.make 22#usize
+                                  [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24,
+                                    i25, i26, i27, i28, i29]
+                                  ⋯)
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                  let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := val5.2 }
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                      let (r39, r40) ← current unwrap r38
+                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                      match cf8 with
+                                        | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                          let (r41, r42) ← current unwrap r40
+                                          let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                          match cf9 with
+                                            | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                              let (r43, r44) ← current unwrap r42
+                                              let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                              match cf10 with
+                                                | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                  let (r45, r46) ←
+                                                    Port5Q2_ReaderScalar.readE
+                                                        (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                        Port5Q2_ReaderScalar.decodeE r44
+                                                  let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                  match cf11 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                      let (r47, r48) ←
+                                                        Port5Q2_ReaderScalar.readE
+                                                            (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                            Port5Q2_ReaderScalar.decodeE r46
+                                                      let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                      match cf12 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                          let (r49, r50) ← current unwrap r48
+                                                          let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                          match cf13 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                              let i30 ←
+                                                                CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                              let q ← CheckpointBytes4Ops.zeroK
+                                                              let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                              let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r52
+                                                              match cf14 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                                  let r53 ←
+                                                                    Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                        r50.at val13
+                                                                  let cf15 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                  match cf15 with
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                      if (val14.2 != end1) = true then
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            verifier.Error.Checkpoint)
+                                                                      else do
+                                                                        let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                        ok
+                                                                            (core.result.Result.Ok
+                                                                              ({ variant := transport.Variant.S2,
+                                                                                  roots :=
+                                                                                    Array.make 2#usize [a3, a4] ⋯,
+                                                                                  gamma := val, kappa := val1,
+                                                                                  alpha :=
+                                                                                    Array.make 2#usize [val2, val3] ⋯,
+                                                                                  rho := val4,
+                                                                                  queries :=
+                                                                                    Array.make 22#usize
+                                                                                      [i8, i9, i10, i11, i12, i13, i14,
+                                                                                        i15, i16, i17, i18, ⋯]
+                                                                                      ⋯,
+                                                                                  semantic_alpha := val5.1,
+                                                                                  z :=
+                                                                                    Array.make 2#usize
+                                                                                      [{ x := val6, y := val7 },
+                                                                                        { x := val8, y := val9 }]
+                                                                                      ⋯,
+                                                                                  claim := val10, state := state },
+                                                                                { weights := val14.1, rhs := val11,
+                                                                                  power := val12, next := i31 }))
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (verifier.Prepared × verifier.Accumulator)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+bound✝³ : ↑{ bytes := bytes, «at» := 80#usize }.at + 32 ≤ (↑{ bytes := bytes, «at» := 80#usize }.bytes).length
+contents✝¹ :
+  ↑state =
+    List.take (↑32#usize)
+      (List.drop ↑{ bytes := bytes, «at» := 80#usize }.at ↑{ bytes := bytes, «at» := 80#usize }.bytes)
+cursor✝² : ↑r0.at = 80 + 32
+backing✝² : r0.bytes = bytes
+cursor0 : ↑r0.at = 112
+backing0 oldBacking✝² : r0.bytes = bytes
+room0 : ↑r0.at + 1624 ≤ (↑r0.bytes).length
+size0 : (↑r0.bytes).length ≤ 4096
+root0 : Std.Array U8 32#usize
+r1 : verifier.Reader
+called✝² : CheckpointBytes3Reader.raw 32#usize r0 = ok (root0, r1)
+actual✝² :
+  (do
+      let (a4, r2) ← Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) r1
+      let (r3, r4) ←
+        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r2
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r5, r6) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let (r7, r8) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let (r9, r10) ←
+                    Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                        Port5Q2_ReaderScalar.decodeE r8
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let (r11, r12) ← current unwrap r10
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                          let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                          let i8 ← lift (core.num.U32.from_le_bytes a5)
+                          let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                          let i9 ← lift (core.num.U32.from_le_bytes a6)
+                          let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                          let i10 ← lift (core.num.U32.from_le_bytes a7)
+                          let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                          let i11 ← lift (core.num.U32.from_le_bytes a8)
+                          let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                          let i12 ← lift (core.num.U32.from_le_bytes a9)
+                          let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                          let i13 ← lift (core.num.U32.from_le_bytes a10)
+                          let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                          let i14 ← lift (core.num.U32.from_le_bytes a11)
+                          let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                          let i15 ← lift (core.num.U32.from_le_bytes a12)
+                          let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                          let i16 ← lift (core.num.U32.from_le_bytes a13)
+                          let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                          let i17 ← lift (core.num.U32.from_le_bytes a14)
+                          let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                          let i18 ← lift (core.num.U32.from_le_bytes a15)
+                          let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                          let i19 ← lift (core.num.U32.from_le_bytes a16)
+                          let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                          let i20 ← lift (core.num.U32.from_le_bytes a17)
+                          let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                          let i21 ← lift (core.num.U32.from_le_bytes a18)
+                          let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                          let i22 ← lift (core.num.U32.from_le_bytes a19)
+                          let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                          let i23 ← lift (core.num.U32.from_le_bytes a20)
+                          let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                          let i24 ← lift (core.num.U32.from_le_bytes a21)
+                          let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                          let i25 ← lift (core.num.U32.from_le_bytes a22)
+                          let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                          let i26 ← lift (core.num.U32.from_le_bytes a23)
+                          let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                          let i27 ← lift (core.num.U32.from_le_bytes a24)
+                          let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                          let i28 ← lift (core.num.U32.from_le_bytes a25)
+                          let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                          let i29 ← lift (core.num.U32.from_le_bytes a26)
+                          let r35 ←
+                            Port5Q2_ReaderValidate.validate
+                                (Array.make 22#usize
+                                  [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24,
+                                    i25, i26, i27, i28, i29]
+                                  ⋯)
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                  let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := val5.2 }
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                      let (r39, r40) ← current unwrap r38
+                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                      match cf8 with
+                                        | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                          let (r41, r42) ← current unwrap r40
+                                          let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                          match cf9 with
+                                            | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                              let (r43, r44) ← current unwrap r42
+                                              let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                              match cf10 with
+                                                | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                  let (r45, r46) ←
+                                                    Port5Q2_ReaderScalar.readE
+                                                        (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                        Port5Q2_ReaderScalar.decodeE r44
+                                                  let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                  match cf11 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                      let (r47, r48) ←
+                                                        Port5Q2_ReaderScalar.readE
+                                                            (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                            Port5Q2_ReaderScalar.decodeE r46
+                                                      let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                      match cf12 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                          let (r49, r50) ← current unwrap r48
+                                                          let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                          match cf13 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                              let i30 ←
+                                                                CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                              let q ← CheckpointBytes4Ops.zeroK
+                                                              let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                              let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r52
+                                                              match cf14 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                                  let r53 ←
+                                                                    Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                        r50.at val13
+                                                                  let cf15 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                  match cf15 with
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                      if (val14.2 != end1) = true then
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            verifier.Error.Checkpoint)
+                                                                      else do
+                                                                        let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                        ok
+                                                                            (core.result.Result.Ok
+                                                                              ({ variant := transport.Variant.S2,
+                                                                                  roots :=
+                                                                                    Array.make 2#usize [root0, a4] ⋯,
+                                                                                  gamma := val, kappa := val1,
+                                                                                  alpha :=
+                                                                                    Array.make 2#usize [val2, val3] ⋯,
+                                                                                  rho := val4,
+                                                                                  queries :=
+                                                                                    Array.make 22#usize
+                                                                                      [i8, i9, i10, i11, i12, i13, i14,
+                                                                                        i15, i16, i17, i18, ⋯]
+                                                                                      ⋯,
+                                                                                  semantic_alpha := val5.1,
+                                                                                  z :=
+                                                                                    Array.make 2#usize
+                                                                                      [{ x := val6, y := val7 },
+                                                                                        { x := val8, y := val9 }]
+                                                                                      ⋯,
+                                                                                  claim := val10, state := state },
+                                                                                { weights := val14.1, rhs := val11,
+                                                                                  power := val12, next := i31 }))
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (verifier.Prepared × verifier.Accumulator)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+bound✝² : ↑r0.at + 32 ≤ (↑r0.bytes).length
+contents✝ : ↑root0 = List.take (↑32#usize) (List.drop ↑r0.at ↑r0.bytes)
+cursor✝¹ : ↑r1.at = ↑r0.at + ↑32#usize
+backing✝¹ : r1.bytes = r0.bytes
+cursor1 : ↑r1.at = 144
+backing1 oldBacking✝¹ : r1.bytes = bytes
+room1 : ↑r1.at + 1592 ≤ (↑r1.bytes).length
+size1 : (↑r1.bytes).length ≤ 4096
+root1 : Std.Array U8 32#usize
+r2 : verifier.Reader
+called✝¹ : CheckpointBytes3Reader.raw 32#usize r1 = ok (root1, r2)
+actual✝¹ :
+  (do
+      let (r3, r4) ←
+        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r2
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r5, r6) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let (r7, r8) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let (r9, r10) ←
+                    Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                        Port5Q2_ReaderScalar.decodeE r8
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let (r11, r12) ← current unwrap r10
+                      let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                          let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                          let i8 ← lift (core.num.U32.from_le_bytes a5)
+                          let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                          let i9 ← lift (core.num.U32.from_le_bytes a6)
+                          let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                          let i10 ← lift (core.num.U32.from_le_bytes a7)
+                          let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                          let i11 ← lift (core.num.U32.from_le_bytes a8)
+                          let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                          let i12 ← lift (core.num.U32.from_le_bytes a9)
+                          let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                          let i13 ← lift (core.num.U32.from_le_bytes a10)
+                          let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                          let i14 ← lift (core.num.U32.from_le_bytes a11)
+                          let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                          let i15 ← lift (core.num.U32.from_le_bytes a12)
+                          let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                          let i16 ← lift (core.num.U32.from_le_bytes a13)
+                          let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                          let i17 ← lift (core.num.U32.from_le_bytes a14)
+                          let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                          let i18 ← lift (core.num.U32.from_le_bytes a15)
+                          let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                          let i19 ← lift (core.num.U32.from_le_bytes a16)
+                          let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                          let i20 ← lift (core.num.U32.from_le_bytes a17)
+                          let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                          let i21 ← lift (core.num.U32.from_le_bytes a18)
+                          let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                          let i22 ← lift (core.num.U32.from_le_bytes a19)
+                          let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                          let i23 ← lift (core.num.U32.from_le_bytes a20)
+                          let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                          let i24 ← lift (core.num.U32.from_le_bytes a21)
+                          let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                          let i25 ← lift (core.num.U32.from_le_bytes a22)
+                          let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                          let i26 ← lift (core.num.U32.from_le_bytes a23)
+                          let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                          let i27 ← lift (core.num.U32.from_le_bytes a24)
+                          let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                          let i28 ← lift (core.num.U32.from_le_bytes a25)
+                          let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                          let i29 ← lift (core.num.U32.from_le_bytes a26)
+                          let r35 ←
+                            Port5Q2_ReaderValidate.validate
+                                (Array.make 22#usize
+                                  [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24,
+                                    i25, i26, i27, i28, i29]
+                                  ⋯)
+                          let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue a => do
+                              let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                              let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                              match cf6 with
+                                | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                  let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := val5.2 }
+                                  let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                  match cf7 with
+                                    | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                      let (r39, r40) ← current unwrap r38
+                                      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                      match cf8 with
+                                        | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                          let (r41, r42) ← current unwrap r40
+                                          let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                          match cf9 with
+                                            | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                              let (r43, r44) ← current unwrap r42
+                                              let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                              match cf10 with
+                                                | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                  let (r45, r46) ←
+                                                    Port5Q2_ReaderScalar.readE
+                                                        (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                        Port5Q2_ReaderScalar.decodeE r44
+                                                  let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                  match cf11 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                      let (r47, r48) ←
+                                                        Port5Q2_ReaderScalar.readE
+                                                            (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                            Port5Q2_ReaderScalar.decodeE r46
+                                                      let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                      match cf12 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                          let (r49, r50) ← current unwrap r48
+                                                          let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                          match cf13 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                              let i30 ←
+                                                                CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                              let q ← CheckpointBytes4Ops.zeroK
+                                                              let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                              let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r52
+                                                              match cf14 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                                  let r53 ←
+                                                                    Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                        r50.at val13
+                                                                  let cf15 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                  match cf15 with
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                      if (val14.2 != end1) = true then
+                                                                        ok
+                                                                          (core.result.Result.Err
+                                                                            verifier.Error.Checkpoint)
+                                                                      else do
+                                                                        let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                        ok
+                                                                            (core.result.Result.Ok
+                                                                              ({ variant := transport.Variant.S2,
+                                                                                  roots :=
+                                                                                    Array.make 2#usize [root0, root1] ⋯,
+                                                                                  gamma := val, kappa := val1,
+                                                                                  alpha :=
+                                                                                    Array.make 2#usize [val2, val3] ⋯,
+                                                                                  rho := val4,
+                                                                                  queries :=
+                                                                                    Array.make 22#usize
+                                                                                      [i8, i9, i10, i11, i12, i13, i14,
+                                                                                        i15, i16, i17, i18, ⋯]
+                                                                                      ⋯,
+                                                                                  semantic_alpha := val5.1,
+                                                                                  z :=
+                                                                                    Array.make 2#usize
+                                                                                      [{ x := val6, y := val7 },
+                                                                                        { x := val8, y := val9 }]
+                                                                                      ⋯,
+                                                                                  claim := val10, state := state },
+                                                                                { weights := val14.1, rhs := val11,
+                                                                                  power := val12, next := i31 }))
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (verifier.Prepared × verifier.Accumulator)
+                                                                        (core.convert.FromSame verifier.Error) residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+bound✝¹ : ↑r1.at + 32 ≤ (↑r1.bytes).length
+contents : ↑root1 = List.take (↑32#usize) (List.drop ↑r1.at ↑r1.bytes)
+cursor✝ : ↑r2.at = ↑r1.at + ↑32#usize
+backing✝ : r2.bytes = r1.bytes
+cursor2 : ↑r2.at = 176
+backing2 oldBacking✝ : r2.bytes = bytes
+room2 : ↑r2.at + 1560 ≤ (↑r2.bytes).length
+size2 : (↑r2.bytes).length ≤ 4096
+er0 : verifier.Reader
+bound✝ : ↑r2.at + 32 ≤ (↑r2.bytes).length
+e0 : aspis_core.field.wide_exact.WideExact
+called✝ : CheckpointBytes3Reader.readE r2 = ok (core.result.Result.Ok e0, er0)
+actual✝ :
+  (let (r3, r4) := (core.result.Result.Ok e0, er0)
+    do
+    let cf ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r5, r6) ←
+          Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r4
+        let cf1 ←
+          match r5 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let (r7, r8) ←
+              Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+            let cf2 ←
+              match r7 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let (r9, r10) ←
+                  Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE
+                      r8
+                let cf3 ←
+                  match r9 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                    let (r11, r12) ← current unwrap r10
+                    let cf4 ←
+                      match r11 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                        let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                        let i8 ← lift (core.num.U32.from_le_bytes a5)
+                        let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                        let i9 ← lift (core.num.U32.from_le_bytes a6)
+                        let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                        let i10 ← lift (core.num.U32.from_le_bytes a7)
+                        let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                        let i11 ← lift (core.num.U32.from_le_bytes a8)
+                        let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                        let i12 ← lift (core.num.U32.from_le_bytes a9)
+                        let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                        let i13 ← lift (core.num.U32.from_le_bytes a10)
+                        let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                        let i14 ← lift (core.num.U32.from_le_bytes a11)
+                        let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                        let i15 ← lift (core.num.U32.from_le_bytes a12)
+                        let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                        let i16 ← lift (core.num.U32.from_le_bytes a13)
+                        let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                        let i17 ← lift (core.num.U32.from_le_bytes a14)
+                        let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                        let i18 ← lift (core.num.U32.from_le_bytes a15)
+                        let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                        let i19 ← lift (core.num.U32.from_le_bytes a16)
+                        let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                        let i20 ← lift (core.num.U32.from_le_bytes a17)
+                        let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                        let i21 ← lift (core.num.U32.from_le_bytes a18)
+                        let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                        let i22 ← lift (core.num.U32.from_le_bytes a19)
+                        let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                        let i23 ← lift (core.num.U32.from_le_bytes a20)
+                        let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                        let i24 ← lift (core.num.U32.from_le_bytes a21)
+                        let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                        let i25 ← lift (core.num.U32.from_le_bytes a22)
+                        let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                        let i26 ← lift (core.num.U32.from_le_bytes a23)
+                        let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                        let i27 ← lift (core.num.U32.from_le_bytes a24)
+                        let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                        let i28 ← lift (core.num.U32.from_le_bytes a25)
+                        let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                        let i29 ← lift (core.num.U32.from_le_bytes a26)
+                        let r35 ←
+                          Port5Q2_ReaderValidate.validate
+                              (Array.make 22#usize
+                                [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25,
+                                  i26, i27, i28, i29]
+                                ⋯)
+                        let cf5 ←
+                          match r35 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                        match cf5 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                            let cf6 ←
+                              match r36 with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf6 with
+                              | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := val5.2 }
+                                let cf7 ←
+                                  match r37 with
+                                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                    | core.result.Result.Err e =>
+                                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                match cf7 with
+                                  | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                    let (r39, r40) ← current unwrap r38
+                                    let cf8 ←
+                                      match r39 with
+                                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                        | core.result.Result.Err e =>
+                                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                    match cf8 with
+                                      | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                        let (r41, r42) ← current unwrap r40
+                                        let cf9 ←
+                                          match r41 with
+                                            | core.result.Result.Ok v =>
+                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                            | core.result.Result.Err e =>
+                                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                        match cf9 with
+                                          | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                            let (r43, r44) ← current unwrap r42
+                                            let cf10 ←
+                                              match r43 with
+                                                | core.result.Result.Ok v =>
+                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                | core.result.Result.Err e =>
+                                                  ok
+                                                    (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                            match cf10 with
+                                              | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                let (r45, r46) ←
+                                                  Port5Q2_ReaderScalar.readE
+                                                      (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                      Port5Q2_ReaderScalar.decodeE r44
+                                                let cf11 ←
+                                                  match r45 with
+                                                    | core.result.Result.Ok v =>
+                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                    | core.result.Result.Err e =>
+                                                      ok
+                                                        (core.ops.control_flow.ControlFlow.Break
+                                                          (core.result.Result.Err e))
+                                                match cf11 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                    let (r47, r48) ←
+                                                      Port5Q2_ReaderScalar.readE
+                                                          (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                          Port5Q2_ReaderScalar.decodeE r46
+                                                    let cf12 ←
+                                                      match r47 with
+                                                        | core.result.Result.Ok v =>
+                                                          ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                        | core.result.Result.Err e =>
+                                                          ok
+                                                            (core.ops.control_flow.ControlFlow.Break
+                                                              (core.result.Result.Err e))
+                                                    match cf12 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                        let (r49, r50) ← current unwrap r48
+                                                        let cf13 ←
+                                                          match r49 with
+                                                            | core.result.Result.Ok v =>
+                                                              ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                            | core.result.Result.Err e =>
+                                                              ok
+                                                                (core.ops.control_flow.ControlFlow.Break
+                                                                  (core.result.Result.Err e))
+                                                        match cf13 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                            let i30 ← CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                            let q ← CheckpointBytes4Ops.zeroK
+                                                            let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                            let cf14 ←
+                                                              match r52 with
+                                                                | core.result.Result.Ok v =>
+                                                                  ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                | core.result.Result.Err e =>
+                                                                  ok
+                                                                    (core.ops.control_flow.ControlFlow.Break
+                                                                      (core.result.Result.Err e))
+                                                            match cf14 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                                let r53 ←
+                                                                  Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                      r50.at val13
+                                                                let cf15 ←
+                                                                  match r53 with
+                                                                    | core.result.Result.Ok v =>
+                                                                      ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                    | core.result.Result.Err e =>
+                                                                      ok
+                                                                        (core.ops.control_flow.ControlFlow.Break
+                                                                          (core.result.Result.Err e))
+                                                                match cf15 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                    if (val14.2 != end1) = true then
+                                                                      ok
+                                                                        (core.result.Result.Err
+                                                                          verifier.Error.Checkpoint)
+                                                                    else do
+                                                                      let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                      ok
+                                                                          (core.result.Result.Ok
+                                                                            ({ variant := transport.Variant.S2,
+                                                                                roots :=
+                                                                                  Array.make 2#usize [root0, root1] ⋯,
+                                                                                gamma := val, kappa := val1,
+                                                                                alpha :=
+                                                                                  Array.make 2#usize [val2, val3] ⋯,
+                                                                                rho := val4,
+                                                                                queries :=
+                                                                                  Array.make 22#usize
+                                                                                    [i8, i9, i10, i11, i12, i13, i14,
+                                                                                      i15, i16, i17, ⋯]
+                                                                                    ⋯,
+                                                                                semantic_alpha := val5.1,
+                                                                                z :=
+                                                                                  Array.make 2#usize
+                                                                                    [{ x := val6, y := val7 },
+                                                                                      { x := val8, y := val9 }]
+                                                                                    ⋯,
+                                                                                claim := val10, state := state },
+                                                                              { weights := val14.1, rhs := val11,
+                                                                                power := val12, next := i31 }))
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (verifier.Prepared × verifier.Accumulator)
+                                                                      (core.convert.FromSame verifier.Error) residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (verifier.Prepared × verifier.Accumulator)
+                                                                  (core.convert.FromSame verifier.Error) residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (verifier.Prepared × verifier.Accumulator)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (verifier.Prepared × verifier.Accumulator)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (verifier.Prepared × verifier.Accumulator)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (verifier.Prepared × verifier.Accumulator)
+                                                  (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (verifier.Prepared × verifier.Accumulator)
+                                              (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (verifier.Prepared × verifier.Accumulator)
+                                          (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                      residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                  residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+decoded : FoldedLeafCodec.Wide
+decode :
+  FoldedLeafCodec.decodeWide (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑r2.bytes) (↑r2.at) 32) =
+    some decoded
+valueEq : CheckpointBytes4ReaderFields.sourceE decoded = e0
+cursor : ↑er0.at = ↑r2.at + 32
+backing : er0.bytes = r2.bytes
+cursor3 : ↑er0.at = 208
+backing3 oldBacking : er0.bytes = bytes
+room3 : ↑er0.at + 1528 ≤ (↑er0.bytes).length
+size3 : (↑er0.bytes).length ≤ 4096
+value er1 : aspis_core.field.QM31
+called :
+  (match core.result.Result.Ok e0 with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue { c0 := value, c1 := er1 })
+actual :
+  (match core.ops.control_flow.ControlFlow.Continue { c0 := value, c1 := er1 } with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let (r5, r6) ←
+        Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE er0
+      let cf1 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let (r7, r8) ←
+            Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r6
+          let cf2 ←
+            match r7 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let (r9, r10) ←
+                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) Port5Q2_ReaderScalar.decodeE r8
+              let cf3 ←
+                match r9 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let (r11, r12) ← current unwrap r10
+                  let cf4 ←
+                    match r11 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                      let (a5, r13) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r12
+                      let i8 ← lift (core.num.U32.from_le_bytes a5)
+                      let (a6, r14) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r13
+                      let i9 ← lift (core.num.U32.from_le_bytes a6)
+                      let (a7, r15) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r14
+                      let i10 ← lift (core.num.U32.from_le_bytes a7)
+                      let (a8, r16) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r15
+                      let i11 ← lift (core.num.U32.from_le_bytes a8)
+                      let (a9, r17) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r16
+                      let i12 ← lift (core.num.U32.from_le_bytes a9)
+                      let (a10, r18) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r17
+                      let i13 ← lift (core.num.U32.from_le_bytes a10)
+                      let (a11, r19) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r18
+                      let i14 ← lift (core.num.U32.from_le_bytes a11)
+                      let (a12, r20) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r19
+                      let i15 ← lift (core.num.U32.from_le_bytes a12)
+                      let (a13, r21) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r20
+                      let i16 ← lift (core.num.U32.from_le_bytes a13)
+                      let (a14, r22) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r21
+                      let i17 ← lift (core.num.U32.from_le_bytes a14)
+                      let (a15, r23) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r22
+                      let i18 ← lift (core.num.U32.from_le_bytes a15)
+                      let (a16, r24) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r23
+                      let i19 ← lift (core.num.U32.from_le_bytes a16)
+                      let (a17, r25) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r24
+                      let i20 ← lift (core.num.U32.from_le_bytes a17)
+                      let (a18, r26) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r25
+                      let i21 ← lift (core.num.U32.from_le_bytes a18)
+                      let (a19, r27) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r26
+                      let i22 ← lift (core.num.U32.from_le_bytes a19)
+                      let (a20, r28) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r27
+                      let i23 ← lift (core.num.U32.from_le_bytes a20)
+                      let (a21, r29) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r28
+                      let i24 ← lift (core.num.U32.from_le_bytes a21)
+                      let (a22, r30) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r29
+                      let i25 ← lift (core.num.U32.from_le_bytes a22)
+                      let (a23, r31) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r30
+                      let i26 ← lift (core.num.U32.from_le_bytes a23)
+                      let (a24, r32) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r31
+                      let i27 ← lift (core.num.U32.from_le_bytes a24)
+                      let (a25, r33) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r32
+                      let i28 ← lift (core.num.U32.from_le_bytes a25)
+                      let (a26, r34) ← Port5Q2_ReaderRaw.raw 4#usize (unwrap 4#usize) r33
+                      let i29 ← lift (core.num.U32.from_le_bytes a26)
+                      let r35 ←
+                        Port5Q2_ReaderValidate.validate
+                            (Array.make 22#usize
+                              [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25,
+                                i26, i27, i28, i29]
+                              ⋯)
+                      let cf5 ←
+                        match r35 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let r36 ← Port5Q2_ReaderSemantic.semantic (current unwrap) bytes r34.at
+                          let cf6 ←
+                            match r36 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf6 with
+                            | core.ops.control_flow.ControlFlow.Continue val5 => do
+                              let (r37, r38) ← current unwrap { bytes := r34.bytes, «at» := val5.2 }
+                              let cf7 ←
+                                match r37 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf7 with
+                                | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                  let (r39, r40) ← current unwrap r38
+                                  let cf8 ←
+                                    match r39 with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                  match cf8 with
+                                    | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                      let (r41, r42) ← current unwrap r40
+                                      let cf9 ←
+                                        match r41 with
+                                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                          | core.result.Result.Err e =>
+                                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                      match cf9 with
+                                        | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                          let (r43, r44) ← current unwrap r42
+                                          let cf10 ←
+                                            match r43 with
+                                              | core.result.Result.Ok v =>
+                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                              | core.result.Result.Err e =>
+                                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                          match cf10 with
+                                            | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                              let (r45, r46) ←
+                                                Port5Q2_ReaderScalar.readE (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                    Port5Q2_ReaderScalar.decodeE r44
+                                              let cf11 ←
+                                                match r45 with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e))
+                                              match cf11 with
+                                                | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                  let (r47, r48) ←
+                                                    Port5Q2_ReaderScalar.readE
+                                                        (fun N => Port5Q2_ReaderRaw.raw N (unwrap N))
+                                                        Port5Q2_ReaderScalar.decodeE r46
+                                                  let cf12 ←
+                                                    match r47 with
+                                                      | core.result.Result.Ok v =>
+                                                        ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                      | core.result.Result.Err e =>
+                                                        ok
+                                                          (core.ops.control_flow.ControlFlow.Break
+                                                            (core.result.Result.Err e))
+                                                  match cf12 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                      let (r49, r50) ← current unwrap r48
+                                                      let cf13 ←
+                                                        match r49 with
+                                                          | core.result.Result.Ok v =>
+                                                            ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                          | core.result.Result.Err e =>
+                                                            ok
+                                                              (core.ops.control_flow.ControlFlow.Break
+                                                                (core.result.Result.Err e))
+                                                      match cf13 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                          let i30 ← CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                          let q ← CheckpointBytes4Ops.zeroK
+                                                          let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                          let cf14 ←
+                                                            match r52 with
+                                                              | core.result.Result.Ok v =>
+                                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                              | core.result.Result.Err e =>
+                                                                ok
+                                                                  (core.ops.control_flow.ControlFlow.Break
+                                                                    (core.result.Result.Err e))
+                                                          match cf14 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                              let r53 ←
+                                                                Port5Q2_ReaderWeights.weights (current unwrap) bytes
+                                                                    r50.at val13
+                                                              let cf15 ←
+                                                                match r53 with
+                                                                  | core.result.Result.Ok v =>
+                                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                  | core.result.Result.Err e =>
+                                                                    ok
+                                                                      (core.ops.control_flow.ControlFlow.Break
+                                                                        (core.result.Result.Err e))
+                                                              match cf15 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                  if (val14.2 != end1) = true then
+                                                                    ok
+                                                                      (core.result.Result.Err verifier.Error.Checkpoint)
+                                                                  else do
+                                                                    let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          ({ variant := transport.Variant.S2,
+                                                                              roots :=
+                                                                                Array.make 2#usize [root0, root1] ⋯,
+                                                                              gamma := val, kappa := val1,
+                                                                              alpha :=
+                                                                                Array.make 2#usize [val2, val3] ⋯,
+                                                                              rho := val4,
+                                                                              queries :=
+                                                                                Array.make 22#usize
+                                                                                  [i8, i9, i10, i11, i12, i13, i14, i15,
+                                                                                    i16, i17, i18, i19, ⋯]
+                                                                                  ⋯,
+                                                                              semantic_alpha := val5.1,
+                                                                              z :=
+                                                                                Array.make 2#usize
+                                                                                  [{ x := val6, y := val7 },
+                                                                                    { x := val8, y := val9 }]
+                                                                                  ⋯,
+                                                                              claim := val10, state := state },
+                                                                            { weights := val14.1, rhs := val11,
+                                                                              power := val12, next := i31 }))
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+bound : ↑er0.at + 32 ≤ (↑er0.bytes).length
+⊢ (do
+      let (r5, r6) ← CheckpointBytes3Reader.readE er0
+      let cf1 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let (r7, r8) ← CheckpointBytes3Reader.readE r6
+          let cf2 ←
+            match r7 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let (r9, r10) ← CheckpointBytes3Reader.readE r8
+              let cf3 ←
+                match r9 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let (r11, r12) ← CheckpointBytes3Reader.readK r10
+                  let cf4 ←
+                    match r11 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                      let (a5, r13) ← CheckpointBytes3Reader.raw 4#usize r12
+                      let i8 ← lift (core.num.U32.from_le_bytes a5)
+                      let (a6, r14) ← CheckpointBytes3Reader.raw 4#usize r13
+                      let i9 ← lift (core.num.U32.from_le_bytes a6)
+                      let (a7, r15) ← CheckpointBytes3Reader.raw 4#usize r14
+                      let i10 ← lift (core.num.U32.from_le_bytes a7)
+                      let (a8, r16) ← CheckpointBytes3Reader.raw 4#usize r15
+                      let i11 ← lift (core.num.U32.from_le_bytes a8)
+                      let (a9, r17) ← CheckpointBytes3Reader.raw 4#usize r16
+                      let i12 ← lift (core.num.U32.from_le_bytes a9)
+                      let (a10, r18) ← CheckpointBytes3Reader.raw 4#usize r17
+                      let i13 ← lift (core.num.U32.from_le_bytes a10)
+                      let (a11, r19) ← CheckpointBytes3Reader.raw 4#usize r18
+                      let i14 ← lift (core.num.U32.from_le_bytes a11)
+                      let (a12, r20) ← CheckpointBytes3Reader.raw 4#usize r19
+                      let i15 ← lift (core.num.U32.from_le_bytes a12)
+                      let (a13, r21) ← CheckpointBytes3Reader.raw 4#usize r20
+                      let i16 ← lift (core.num.U32.from_le_bytes a13)
+                      let (a14, r22) ← CheckpointBytes3Reader.raw 4#usize r21
+                      let i17 ← lift (core.num.U32.from_le_bytes a14)
+                      let (a15, r23) ← CheckpointBytes3Reader.raw 4#usize r22
+                      let i18 ← lift (core.num.U32.from_le_bytes a15)
+                      let (a16, r24) ← CheckpointBytes3Reader.raw 4#usize r23
+                      let i19 ← lift (core.num.U32.from_le_bytes a16)
+                      let (a17, r25) ← CheckpointBytes3Reader.raw 4#usize r24
+                      let i20 ← lift (core.num.U32.from_le_bytes a17)
+                      let (a18, r26) ← CheckpointBytes3Reader.raw 4#usize r25
+                      let i21 ← lift (core.num.U32.from_le_bytes a18)
+                      let (a19, r27) ← CheckpointBytes3Reader.raw 4#usize r26
+                      let i22 ← lift (core.num.U32.from_le_bytes a19)
+                      let (a20, r28) ← CheckpointBytes3Reader.raw 4#usize r27
+                      let i23 ← lift (core.num.U32.from_le_bytes a20)
+                      let (a21, r29) ← CheckpointBytes3Reader.raw 4#usize r28
+                      let i24 ← lift (core.num.U32.from_le_bytes a21)
+                      let (a22, r30) ← CheckpointBytes3Reader.raw 4#usize r29
+                      let i25 ← lift (core.num.U32.from_le_bytes a22)
+                      let (a23, r31) ← CheckpointBytes3Reader.raw 4#usize r30
+                      let i26 ← lift (core.num.U32.from_le_bytes a23)
+                      let (a24, r32) ← CheckpointBytes3Reader.raw 4#usize r31
+                      let i27 ← lift (core.num.U32.from_le_bytes a24)
+                      let (a25, r33) ← CheckpointBytes3Reader.raw 4#usize r32
+                      let i28 ← lift (core.num.U32.from_le_bytes a25)
+                      let (a26, r34) ← CheckpointBytes3Reader.raw 4#usize r33
+                      let i29 ← lift (core.num.U32.from_le_bytes a26)
+                      let r35 ←
+                        CheckpointBytes4Ops.validate
+                            (Array.make 22#usize
+                              [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24, i25,
+                                i26, i27, i28, i29]
+                              ⋯)
+                      let cf5 ←
+                        match r35 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let r36 ← CheckpointBytes4Ops.readSemanticAlpha bytes r34.at
+                          let cf6 ←
+                            match r36 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf6 with
+                            | core.ops.control_flow.ControlFlow.Continue val5 => do
+                              let (r37, r38) ← CheckpointBytes3Reader.readK { bytes := r34.bytes, «at» := val5.2 }
+                              let cf7 ←
+                                match r37 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                              match cf7 with
+                                | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                  let (r39, r40) ← CheckpointBytes3Reader.readK r38
+                                  let cf8 ←
+                                    match r39 with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                  match cf8 with
+                                    | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                      let (r41, r42) ← CheckpointBytes3Reader.readK r40
+                                      let cf9 ←
+                                        match r41 with
+                                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                          | core.result.Result.Err e =>
+                                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                      match cf9 with
+                                        | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                          let (r43, r44) ← CheckpointBytes3Reader.readK r42
+                                          let cf10 ←
+                                            match r43 with
+                                              | core.result.Result.Ok v =>
+                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                              | core.result.Result.Err e =>
+                                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                          match cf10 with
+                                            | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                              let (r45, r46) ← CheckpointBytes3Reader.readE r44
+                                              let cf11 ←
+                                                match r45 with
+                                                  | core.result.Result.Ok v =>
+                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                  | core.result.Result.Err e =>
+                                                    ok
+                                                      (core.ops.control_flow.ControlFlow.Break
+                                                        (core.result.Result.Err e))
+                                              match cf11 with
+                                                | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                  let (r47, r48) ← CheckpointBytes3Reader.readE r46
+                                                  let cf12 ←
+                                                    match r47 with
+                                                      | core.result.Result.Ok v =>
+                                                        ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                      | core.result.Result.Err e =>
+                                                        ok
+                                                          (core.ops.control_flow.ControlFlow.Break
+                                                            (core.result.Result.Err e))
+                                                  match cf12 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                      let (r49, r50) ← CheckpointBytes3Reader.readK r48
+                                                      let cf13 ←
+                                                        match r49 with
+                                                          | core.result.Result.Ok v =>
+                                                            ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                          | core.result.Result.Err e =>
+                                                            ok
+                                                              (core.ops.control_flow.ControlFlow.Break
+                                                                (core.result.Result.Err e))
+                                                      match cf13 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                          let i30 ← CheckpointBytes4Ops.finalLen transport.Variant.S2
+                                                          let q ← CheckpointBytes4Ops.zeroK
+                                                          let r52 ← CheckpointBytes3Allocation.filled reserved i30 q
+                                                          let cf14 ←
+                                                            match r52 with
+                                                              | core.result.Result.Ok v =>
+                                                                ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                              | core.result.Result.Err e =>
+                                                                ok
+                                                                  (core.ops.control_flow.ControlFlow.Break
+                                                                    (core.result.Result.Err e))
+                                                          match cf14 with
+                                                            | core.ops.control_flow.ControlFlow.Continue val13 => do
+                                                              let r53 ←
+                                                                CheckpointBytes4Ops.readWeights bytes r50.at val13
+                                                              let cf15 ←
+                                                                match r53 with
+                                                                  | core.result.Result.Ok v =>
+                                                                    ok (core.ops.control_flow.ControlFlow.Continue v)
+                                                                  | core.result.Result.Err e =>
+                                                                    ok
+                                                                      (core.ops.control_flow.ControlFlow.Break
+                                                                        (core.result.Result.Err e))
+                                                              match cf15 with
+                                                                | core.ops.control_flow.ControlFlow.Continue val14 =>
+                                                                  if (val14.2 != end1) = true then
+                                                                    ok
+                                                                      (core.result.Result.Err verifier.Error.Checkpoint)
+                                                                  else do
+                                                                    let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                                                                    ok
+                                                                        (core.result.Result.Ok
+                                                                          ({ variant := transport.Variant.S2,
+                                                                              roots :=
+                                                                                Array.make 2#usize [root0, root1] ⋯,
+                                                                              gamma := e0, kappa := val1,
+                                                                              alpha :=
+                                                                                Array.make 2#usize [val2, val3] ⋯,
+                                                                              rho := val4,
+                                                                              queries :=
+                                                                                Array.make 22#usize
+                                                                                  [i8, i9, i10, i11, i12, i13, i14, i15,
+                                                                                    i16, i17, i18, i19, ⋯]
+                                                                                  ⋯,
+                                                                              semantic_alpha := val5.1,
+                                                                              z :=
+                                                                                Array.make 2#usize
+                                                                                  [{ x := val6, y := val7 },
+                                                                                    { x := val8, y := val9 }]
+                                                                                  ⋯,
+                                                                              claim := val10, state := state },
+                                                                            { weights := val14.1, rhs := val11,
+                                                                              power := val12, next := i31 }))
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (verifier.Prepared × verifier.Accumulator)
+                                                                    (core.convert.FromSame verifier.Error) residual
+                                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (verifier.Prepared × verifier.Accumulator)
+                                                                (core.convert.FromSame verifier.Error) residual
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (verifier.Prepared × verifier.Accumulator)
+                                                            (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (verifier.Prepared × verifier.Accumulator)
+                                                        (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (verifier.Prepared × verifier.Accumulator)
+                                                    (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (verifier.Prepared × verifier.Accumulator)
+                                                (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (verifier.Prepared × verifier.Accumulator)
+                                            (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (verifier.Prepared × verifier.Accumulator)
+                                        (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                    residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok (p, a))
+Port6CK_Tail.lean:91:8: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵]̲ ̲a̲t̲
+          c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵ a̵t̵ actual
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port6CK_Tail.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+{"attempt": "lean-039", "exit_status": 1, "wall_seconds": 3.3820562649925705, "peak_rss_kib": "4434948", "swaps": "0", "print_axioms": ["'AspisR1.Port6CK_Tail.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port6CK_Tail.lean:197:17: error: unknown tactic
+Port6CK_Tail.lean:196:16: error: Type mismatch
+  Port6CK_Suffix.accepted reserved unwrap unwrap_ok bytes length i4 end1
+has type
+  ∀ (state root0 root1 : Std.Array U8 32#usize) (e0 e1 e2 e3 : aspis_core.field.wide_exact.WideExact)
+    (rho : aspis_core.field.QM31) (queries : Std.Array U32 22#usize) (queriesReader : verifier.Reader),
+    ↑queriesReader.at = 408 →
+      queriesReader.bytes = bytes →
+        ∀ (p : verifier.Prepared) (a : verifier.Accumulator),
+          Port6CK_Factor.suffix (ops reserved unwrap) bytes transport.Variant.S2 i4 end1 state root0 root1 e0 e1 e2 e3
+                rho queries queriesReader =
+              ok (core.res
+...
+end1
+has type
+  ∀ (state root0 root1 : Std.Array U8 32#usize) (e0 e1 e2 e3 : aspis_core.field.wide_exact.WideExact)
+    (rho : aspis_core.field.QM31) (queries : Std.Array U32 22#usize) (queriesReader : verifier.Reader),
+    ↑queriesReader.at = 408 →
+      queriesReader.bytes = bytes →
+        ∀ (p : verifier.Prepared) (a : verifier.Accumulator),
+          Port6CK_Factor.suffix (ops reserved unwrap) bytes transport.Variant.S2 i4 end1 state root0 root1 e0 e1 e2 e3
+                rho queries queriesReader =
+              ok (core.result.Result.Ok (p, a)) →
+            Port6CK_Factor.suffix (CheckpointBytes4Ops.ops reserved) bytes transport.Variant.S2 i4 end1 state root0
+                root1 e0 e1 e2 e3 rho queries queriesReader =
+              ok (core.result.Result.Ok (p, a))
+but is expected to have type
+  Port6CK_Factor.suffix
+      { checkpointSize := CheckpointBytes4Ops.checkpointSize, tag := CheckpointBytes4Ops.tag,
+        finalLen := CheckpointBytes4Ops.finalLen, eq := fun {T U} {N} => CheckpointBytes4Ops.eq,
+        ne := fun {T U} {N} => CheckpointBytes4Ops.ne, headerAny := CheckpointBytes4Ops.headerAny,
+        raw := CheckpointBytes3Reader.raw, readE := CheckpointBytes3Reader.readE, readK := CheckpointBytes3Reader.readK,
+        validate := CheckpointBytes4Ops.validate, zeroK := CheckpointBytes4Ops.zeroK,
+        filled := CheckpointBytes3Allocation.filled reserved, readQueries := CheckpointBytes4Ops.queryUsing,
+        readSemanticAlpha := CheckpointBytes4Ops.readSemanticAlpha, readWeights := CheckpointBytes4Ops.readWeights }
+      bytes transport.Variant.S2 i4 end1 state root0 root1 e0 e1 e2 e3 rho queries queriesReader =
+    ok (core.result.Result.Ok (p, a))
+'AspisR1.Port6CK_Tail.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r774d62214eaf4741920ef41e92fd3f74.scope; invocation ID: 74abcb4a5bb04af5ae1c752c1a10436f
