@@ -14,7 +14,7 @@ for i,(n,tail) in enumerate(ts):ty+=f'abbrev {n} := @TypeLeaves.t{i} _\n'
 t=(G/'Types.lean').read_text().split('namespace '+N+'\n',1)[1].rsplit('end '+N,1)[0]
 # Discriminant attributes generate unqualified globals; the ADTs remain unchanged.
 t=re.sub(r'@\[discriminant isize,\s*', '@[',t).replace('@[discriminant isize]\n','')
-ty+=t+'attribute [discriminant isize] aspis_prover.state_only_hiding.StateOnlyMaskBuildError\nend '+N+'\n'
+ty+=t+'attribute [discriminant isize] aspis_prover.state_only_hiding.StateOnlyMaskBuildError\nattribute [discriminant isize] transport.Variant\nend '+N+'\n'
 fs=decls(G/'FunsExternal_Template.lean');le='import R1Z.ProverRwRngMaterialBodyTypes\n'+pre.split('\n',1)[1]+'variable [TypeLeaves]\n'
 # Same source-shaped map_err installation as accepted predecessor; no external hypothesis.
 le+='''def core.result.Result.map_err {T E F O : Type}
@@ -33,13 +33,14 @@ le+='variable [LocalLeaves]\n'
 for i,(n,tail) in enumerate(fs):le+=f'def {n} := @LocalLeaves.f{i} _ _\n'
 le+='end '+N+'\n'
 f=(G/'Funs.lean').read_text().split('namespace '+N+'\n',1)[1]
-f=f.replace('impl_def aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31','def aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31').replace('core.cmp.PartialEq.ne.trait_default\n    aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31','core.cmp.PartialEq.ne.default\n    aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq')
+for inst in ['aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31','transport.Variant.Insts.CoreCmpPartialEqVariant']:
+ f=f.replace('impl_def '+inst,'def '+inst).replace('core.cmp.PartialEq.ne.trait_default\n    '+inst,'core.cmp.PartialEq.ne.default\n    '+inst+'.eq')
 em='import R1Z.ProverRwRngMaterialBodyLeaves\n'+pre.split('\n',1)[1]+'variable [TypeLeaves] [LocalLeaves]\n'+f
 outputs={'ProverRwRngMaterialBodyTypes.lean':ty,'ProverRwRngMaterialBodyLeaves.lean':le,'ProverRwRngMaterialBodyEmission.lean':em}
 for n,s in outputs.items():
  if '--check' in sys.argv:assert (L/n).read_text()==s
  else:(L/n).write_text(s)
-record=dict(raw={p.name:sha(p.read_bytes()) for p in G.iterdir() if p.is_file()},outputs={n:sha(s.encode()) for n,s in outputs.items()},type_parameters=[dict(field='t'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(ts)],local_leaves=[dict(field='f'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(fs)],changes=['external type holes become explicit TypeLeaves fields, never installed native sorts','external function holes become explicit LocalLeaves fields, no whole-execution equality field','source-shaped Result.map_err branch installation reused','remove generated resource overrides; retain discriminant attribute only for the concrete mask-error equality consumer; other unused attributes removed to avoid global collisions','expand QM31 trait-default impl_def to its equivalent nonrecursive def using PartialEq.ne.default eq (raw macro failed kernel free-variable check); no source operation/control or backend change'],physical_zeroize='Explicit LocalLeaves field, no value-level zeroization or physical destruction claim',native_body='actual borrowed-store call emission returns (Result,Store); no FnMut body/owned-store substitution; native audit retained')
+record=dict(raw={p.name:sha(p.read_bytes()) for p in G.iterdir() if p.is_file()},outputs={n:sha(s.encode()) for n,s in outputs.items()},type_parameters=[dict(field='t'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(ts)],local_leaves=[dict(field='f'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(fs)],changes=['external type holes become explicit TypeLeaves fields, never installed native sorts','external function holes become explicit LocalLeaves fields, no whole-execution equality field','source-shaped Result.map_err branch installation reused','remove generated resource overrides; retain discriminant attributes for concrete mask-error and Variant equality consumers; other unused attributes removed to avoid global collisions','expand QM31 and Variant trait-default impl_def to its equivalent nonrecursive def using PartialEq.ne.default eq (raw macro failed kernel free-variable check); no source operation/control or backend change'],physical_zeroize='Explicit LocalLeaves field, no value-level zeroization or physical destruction claim',native_body='actual borrowed-store call emission returns (Result,Store); no FnMut body/owned-store substitution; native audit retained')
 p=D/'adaptation.json';s=json.dumps(record,indent=2)+'\n'
 if '--check' in sys.argv:assert p.read_text()==s
 else:p.write_text(s)

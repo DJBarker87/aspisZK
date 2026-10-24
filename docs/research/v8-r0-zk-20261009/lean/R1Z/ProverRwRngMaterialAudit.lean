@@ -1,0 +1,120 @@
+import R1Z.ProverRwRngMaterialLastAttempt
+import R1Z.ProverRwRngMaterialReservation
+import R1Z.ProverRwRngMaterialPreflight
+set_option autoImplicit false
+#check @R1Z.ProverRwRngMaterialCaller.selected_entry
+#print axioms R1Z.ProverRwRngMaterialCaller.selected_entry
+#check @R1Z.ProverRwRngMaterialCaller.cap_stop
+#print axioms R1Z.ProverRwRngMaterialCaller.cap_stop
+#check @R1Z.ProverRwRngMaterialCaller.callback_error
+#print axioms R1Z.ProverRwRngMaterialCaller.callback_error
+#check @R1Z.ProverRwRngMaterialCaller.body_fatal
+#print axioms R1Z.ProverRwRngMaterialCaller.body_fatal
+#check @R1Z.ProverRwRngMaterialCaller.body_rejected
+#print axioms R1Z.ProverRwRngMaterialCaller.body_rejected
+#check @R1Z.ProverRwRngMaterialCaller.body_success
+#print axioms R1Z.ProverRwRngMaterialCaller.body_success
+#check @R1Z.ProverRwRngMaterialCaller.selected_zero_fatal
+#print axioms R1Z.ProverRwRngMaterialCaller.selected_zero_fatal
+#check @R1Z.ProverRwRngMaterialCaller.selected_sampling_retry
+#print axioms R1Z.ProverRwRngMaterialCaller.selected_sampling_retry
+#check @R1Z.ProverRwRngMaterialControl.list_compare_self
+#print axioms R1Z.ProverRwRngMaterialControl.list_compare_self
+#check @R1Z.ProverRwRngMaterialControl.array_eq_self
+#print axioms R1Z.ProverRwRngMaterialControl.array_eq_self
+#check @R1Z.ProverRwRngMaterialControl.array_ne_self
+#print axioms R1Z.ProverRwRngMaterialControl.array_ne_self
+#check @R1Z.ProverRwRngMaterialControl.acknowledgment_fresh
+#print axioms R1Z.ProverRwRngMaterialControl.acknowledgment_fresh
+#check @R1Z.ProverRwRngMaterialControl.acknowledgment_used
+#print axioms R1Z.ProverRwRngMaterialControl.acknowledgment_used
+#check @R1Z.ProverRwRngMaterialControl.seed_zero
+#print axioms R1Z.ProverRwRngMaterialControl.seed_zero
+#check @R1Z.ProverRwRngMaterialControl.seed_derived
+#print axioms R1Z.ProverRwRngMaterialControl.seed_derived
+#check @R1Z.ProverRwRngMaterialControl.layout_zero_after_ack
+#print axioms R1Z.ProverRwRngMaterialControl.layout_zero_after_ack
+#check @R1Z.ProverRwRngMaterialFinish.reserve_success_from_producer
+#print axioms R1Z.ProverRwRngMaterialFinish.reserve_success_from_producer
+#check @R1Z.ProverRwRngMaterialFinish.reserve_sample_success
+#print axioms R1Z.ProverRwRngMaterialFinish.reserve_sample_success
+#check @R1Z.ProverRwRngMaterialInvariant.returns_bind
+#print axioms R1Z.ProverRwRngMaterialInvariant.returns_bind
+#check @R1Z.ProverRwRngMaterialInvariant.layout_post
+#print axioms R1Z.ProverRwRngMaterialInvariant.layout_post
+#check @R1Z.ProverRwRngMaterialInvariant.material_success_ack
+#print axioms R1Z.ProverRwRngMaterialInvariant.material_success_ack
+#check @R1Z.ProverRwRngMaterialLastAttempt.last_sampling_exhausted
+#print axioms R1Z.ProverRwRngMaterialLastAttempt.last_sampling_exhausted
+#check @R1Z.ProverRwRngMaterialPaths.material_reaches_layout
+#print axioms R1Z.ProverRwRngMaterialPaths.material_reaches_layout
+#check @R1Z.ProverRwRngMaterialPaths.material_zero_consumes
+#print axioms R1Z.ProverRwRngMaterialPaths.material_zero_consumes
+#check @R1Z.ProverRwRngMaterialPaths.layout_sample_error
+#print axioms R1Z.ProverRwRngMaterialPaths.layout_sample_error
+#check @R1Z.ProverRwRngMaterialPaths.layout_sample_success
+#print axioms R1Z.ProverRwRngMaterialPaths.layout_sample_success
+#check @R1Z.ProverRwRngMaterialPreflight.wrong_mask_keeps_ack
+#print axioms R1Z.ProverRwRngMaterialPreflight.wrong_mask_keeps_ack
+#check @R1Z.ProverRwRngMaterialPreflight.wrong_factor_keeps_ack
+#print axioms R1Z.ProverRwRngMaterialPreflight.wrong_factor_keeps_ack
+#check @R1Z.ProverRwRngMaterialPreflight.cells_error_keeps_ack
+#print axioms R1Z.ProverRwRngMaterialPreflight.cells_error_keeps_ack
+#check @R1Z.ProverRwRngMaterialPreflight.active_error_keeps_ack
+#print axioms R1Z.ProverRwRngMaterialPreflight.active_error_keeps_ack
+#check @R1Z.ProverRwRngMaterialPreflight.used_ack_rejected_before_entropy
+#print axioms R1Z.ProverRwRngMaterialPreflight.used_ack_rejected_before_entropy
+#check @R1Z.ProverRwRngMaterialProducer.mask_error_exact
+#print axioms R1Z.ProverRwRngMaterialProducer.mask_error_exact
+#check @R1Z.ProverRwRngMaterialProducer.body_reservation_error
+#print axioms R1Z.ProverRwRngMaterialProducer.body_reservation_error
+#check @R1Z.ProverRwRngMaterialProducer.reserve_material_error
+#print axioms R1Z.ProverRwRngMaterialProducer.reserve_material_error
+#check @R1Z.ProverRwRngMaterialProducer.selected_reservation_error
+#print axioms R1Z.ProverRwRngMaterialProducer.selected_reservation_error
+#check @R1Z.ProverRwRngMaterialProducer.selected_zero_entropy
+#print axioms R1Z.ProverRwRngMaterialProducer.selected_zero_entropy
+#check @R1Z.ProverRwRngMaterialProducer.selected_sampling_failure
+#print axioms R1Z.ProverRwRngMaterialProducer.selected_sampling_failure
+#check @R1Z.ProverRwRngMaterialReservation.reservation_invariant
+#print axioms R1Z.ProverRwRngMaterialReservation.reservation_invariant
+#print ProverRwRngMaterialBody.TypeLeaves
+#print ProverRwRngMaterialBody.LocalLeaves
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.SeedExpander
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.PreReservedNonce
+#print ProverRwRngMaterialBody.prover.MaskedFixtureAudit
+#print ProverRwRngMaterialBody.prover.RetriedProof
+#print ProverRwRngMaterialBody.aspis_core.state_only_hiding.StateOnlyHidingContext
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.derive_state_only_mask_seed_from_entropy_ref
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.build_mask_material_for_layout
+#print ProverRwRngMaterialBody.aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+#print ProverRwRngMaterialBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+#print ProverRwRngMaterialBody.prover.prove_masked_attempt
+#print ProverRwRngMaterialBody.prover.prove_masked_with_attempt
+#print ProverRwRngMaterialBody.prover.retry_attempt
+#print ProverRwRngMaterialBody.prover.prove_masked_retrying_with
+#print R1Z.ProverRwRngMaterialControl.LayoutOk
+#print R1Z.ProverRwRngMaterialControl.freshAck
+#print R1Z.ProverRwRngMaterialControl.usedAck
+#print R1Z.ProverRwRngMaterialControl.material
+#print R1Z.ProverRwRngMaterialControl.seedInput
+#print R1Z.ProverRwRngMaterialControl.derefEntropy
+#print R1Z.ProverRwRngMaterialInvariant.Returns
+#print R1Z.ProverRwRngMaterialInvariant.Post
+#print R1Z.ProverRwRngMaterialReservation.AfterReserve
+#print R1Z.ProverRwRngMaterialFinish.sourceSeedInput
+#print R1Z.ProverRwRngMaterialFinish.asrefEntropy
+#print R1Z.ProverRwRngMaterialFinish.wrapSeed
+#print R1Z.ProverRwRngMaterialFinish.clearEntropy
+#print R1Z.ProverRwRngMaterialProducer.statusFor
+#print R1Z.ProverRwRngMaterialProducer.contextFor
+#print R1Z.ProverRwRngMaterialProducer.privateDomain
+#print R1Z.ProverRwRngMaterialProducer.publicHashInput
+#print R1Z.ProverRwRngMaterialProducer.bindingInput
+#print R1Z.ProverRwRngMaterialCaller.Policy

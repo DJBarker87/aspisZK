@@ -1178,4 +1178,130 @@ def prover.prove_masked_attempt
         (core.convert.FromSame verifier.Error) residual
     ok (r2, nonce_store)
 
+/-- [aspis_r1_cost_probe::prover::ATTEMPT_CAP]
+    Source: 'crates/aspis-r1-cost-probe/src/prover.rs', lines 542:0-542:33
+    Visibility: public -/
+@[global_simps, irreducible] def prover.ATTEMPT_CAP : Std.Usize := 8#usize
+
+/-- [aspis_r1_cost_probe::transport::{impl core::cmp::PartialEq<aspis_r1_cost_probe::transport::Variant> for aspis_r1_cost_probe::transport::Variant}::eq]:
+    Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 2:26-2:35
+    Visibility: public -/
+def transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+  (self : transport.Variant) (other : transport.Variant) : Result Bool := do
+  let self1 := read_discriminant self
+  let other1 := read_discriminant other
+  ok (self1 = other1)
+
+/-- Trait implementation: [aspis_r1_cost_probe::transport::{impl core::cmp::PartialEq<aspis_r1_cost_probe::transport::Variant> for aspis_r1_cost_probe::transport::Variant}]
+    Source: 'crates/aspis-r1-cost-probe/src/transport.rs', lines 2:26-2:35 -/
+@[reducible]
+def transport.Variant.Insts.CoreCmpPartialEqVariant : core.cmp.PartialEq
+  transport.Variant transport.Variant := {
+  eq := transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+  ne := core.cmp.PartialEq.ne.default
+    transport.Variant.Insts.CoreCmpPartialEqVariant.eq
+}
+
+/-- [aspis_r1_cost_probe::prover::retry_attempt]:
+    Source: 'crates/aspis-r1-cost-probe/src/prover.rs', lines 623:0-639:1 -/
+def prover.retry_attempt
+  {T0 : Type}
+  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Std.Usize (core.result.Result
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled :
+  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : transport.Variant)
+  (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
+  (nonce_store :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (next_attempt : T0) (k : Std.Usize) :
+  Result ((core.result.Result prover.RetriedProof verifier.Error) ×
+    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  := do
+  if k >= prover.ATTEMPT_CAP
+  then
+    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
+  else
+    let (r, next_attempt1) ←
+      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut
+        next_attempt k
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let (r1, nonce_store1) ←
+        prover.prove_masked_attempt public1 compiled variant hash val
+          nonce_store
+      match r1 with
+      | core.result.Result.Ok p =>
+        let (proof, audit) := p
+        let i ← lift (Std.Usize.wrapping_add k 1#usize)
+        ok (core.result.Result.Ok { proof, audit, attempts := i },
+          nonce_store1)
+      | core.result.Result.Err e =>
+        match e with
+        | verifier.Error.Parse =>
+          ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+        | verifier.Error.Semantic =>
+          ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+        | verifier.Error.Transcript =>
+          ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+        | verifier.Error.Relation =>
+          ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+        | verifier.Error.Merkle =>
+          ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+        | verifier.Error.Query =>
+          ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+        | verifier.Error.Checkpoint =>
+          ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+        | verifier.Error.Allocation =>
+          ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+        | verifier.Error.Rejected =>
+          let i ← lift (Std.Usize.wrapping_add k 1#usize)
+          prover.retry_attempt
+            coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
+            public1 compiled variant hash nonce_store1 next_attempt1 i
+        | verifier.Error.AttemptsExhausted =>
+          ok (core.result.Result.Err verifier.Error.AttemptsExhausted,
+            nonce_store1)
+        | verifier.Error.Entropy =>
+          ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          prover.RetriedProof (core.convert.FromSame verifier.Error) residual
+      ok (r1, nonce_store)
+partial_fixpoint
+
+/-- [aspis_r1_cost_probe::prover::prove_masked_retrying_with]:
+    Source: 'crates/aspis-r1-cost-probe/src/prover.rs', lines 611:0-621:1
+    Visibility: public -/
+def prover.prove_masked_retrying_with
+  {T0 : Type}
+  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Std.Usize (core.result.Result
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled :
+  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : transport.Variant)
+  (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
+  (nonce_store :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (next_attempt : T0) :
+  Result ((core.result.Result prover.RetriedProof verifier.Error) ×
+    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  := do
+  let b ←
+    core.cmp.PartialEq.ne.trait_default
+      transport.Variant.Insts.CoreCmpPartialEqVariant variant
+      transport.Variant.S2
+  if b
+  then ok (core.result.Result.Err verifier.Error.Semantic, nonce_store)
+  else
+    prover.retry_attempt
+      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
+      public1 compiled variant hash nonce_store next_attempt 0#usize
+
 end ProverRwRngMaterialBody

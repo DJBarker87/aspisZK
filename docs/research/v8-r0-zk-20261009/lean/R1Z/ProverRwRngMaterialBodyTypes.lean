@@ -401,5 +401,14 @@ def prover.prove_masked_with_attempt.closure (T0 : Type) := Unit
 @[reducible]
 def prover.prove_masked_attempt.closure := Unit
 
+/-- [aspis_r1_cost_probe::prover::RetriedProof]
+    Source: 'crates/aspis-r1-cost-probe/src/prover.rs', lines 580:0-580:95
+    Visibility: public -/
+structure prover.RetriedProof where
+  proof : alloc.vec.Vec Std.U8
+  audit : prover.MaskedFixtureAudit
+  attempts : Std.Usize
+
 attribute [discriminant isize] aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+attribute [discriminant isize] transport.Variant
 end ProverRwRngMaterialBody

@@ -1,0 +1,23 @@
+reservation: populated 24 GiB + 7 GiB; window=0 (London 1406); env=J
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialLastAttempt.lean:34:102: error: Tactic `decide` failed for proposition
+  Usize.wrapping_add 7#usize 1#usize ≥ 8#usize
+because its `Decidable` instance
+  UScalarDecidableLE UScalarTy.Usize 8#usize (Usize.wrapping_add 7#usize 1#usize)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, `UScalarDecidableLE`, and `UScalar.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑8#usize).ble ↑(Usize.wrapping_add 7#usize 1#usize), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'R1Z.ProverRwRngMaterialLastAttempt.last_sampling_exhausted' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.08
+	Maximum resident set size (kbytes): 2625808
+	Swaps: 0
+	Exit status: 1

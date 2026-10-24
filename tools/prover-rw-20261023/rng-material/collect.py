@@ -12,6 +12,7 @@ env=json.loads((E.parent/'rng-caller/env-J.json').read_text());J='/home/dombarke
 rows=[]
 for p in sorted(E.glob('*-receipt.json')):
  r=json.loads(p.read_text());a=r['attempt'];assert 11524<=a<=11559
+ r['source_revision_full']=subprocess.check_output(['git','rev-parse',r['source_revision']],cwd=R,text=True).strip()
  r['effective_lean_command']=[env['LEAN'],'-j1','-M7000','-DElab.async=false','-R',J+'/sources','-o',J+'/objects/'+r['module']+'.olean',r['source_path']]
  r['effective_lean_path']=J+'/objects:'+env['LEAN_PATH']
  r['revision_assessment']='Continuation parent revision plus immutable WIP source/dependency hashes; source emission uses predecessor private host tree assessed by exact span checks'
