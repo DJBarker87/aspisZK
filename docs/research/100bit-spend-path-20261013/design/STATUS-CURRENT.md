@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 22:27 BST
+## Current coordinator checkpoint — 2026-10-24 22:34 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -32,8 +32,11 @@ content equality, all carriers/checked errors/frames. Native ordered effects,
 P6/R22/op6/release joins and residual budgets remain open. Current scalar MIR
 roles/flags/loans passed review after one1GiB ordinary compile; no native paired
 projection yet, Kani59/60 final slot reserved. PrivacyLean240/260,Rust2/3charges
-(actual builds1); known soundness347/368. SBFRECAPTUREPREP86302 prepares official archive/frozen source/released-cache
-checks with ZERO builds. Resource audit merged25b0b9df48 is NOT ADOPTED.
+(actual builds1); known soundness347/368. SBF preparation merged555248fcfe: all3,828 official archive members match
+current installation and all7,978 frozen source records materialized/verified.
+Cache export stopped before donor entry on Linux process permissions.
+SbfCachePrep94997 follows up with narrow read-only privileged metadata,
+private export/provenance/cold-guard preparation; ZERO builds/scopes. Resource audit merged25b0b9df48 is NOT ADOPTED.
 Latest complete capture denies all proposed sizes on a4KiB counter mismatch;
 ResourceStat full-charge/no-credit fallback reviewed and merged74d67bcc99.
 ResourceACTUAL91101 may run one prospective/actual-scope metadata-only
