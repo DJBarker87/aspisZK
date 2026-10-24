@@ -97,7 +97,7 @@ open unless actual ABI linkage is established; both security targets remain open
 One Kani invocation: Port22ARENA_selected_alloc_frame. Exact SDK struct/new/
 GlobalAlloc source copied byte-for-byte, supplied imports only. A 256-byte arena
 is embedded in 34 native usize words, guard words outside it. Arbitrary initial
-bytes, cursor zero OR start+offset (8<=offset<=256), arbitrary valid Layout size,
+bytes, cursor zero OR start+offset (8<=offset<=256), arbitrary nonzero valid Layout size,
 alignment4 OR8; arbitrary observed word index except cursor. Assert actual
 unsafe alloc preserves that word, actual returned pointer/null and actual cursor
 match the source arithmetic, successful range/alignment. Invalid Layout returns
@@ -105,3 +105,5 @@ before the call; null allocation is not excluded. This is a native Kani-model
 finite-arena check, not the deployed fixed-address 256KiB arena, no Vec/std
 extraction claim, no native oracle-trace or abort-handler theorem. Its actual
 integer/pointer support is tested, never replaced with assumed pointer laws.
+
+Native preflight correction: size=0 is outside GlobalAlloc::alloc safety contract; fresh Vec additional=0 skips allocation. Harness returns before that call, rather than interpreting UB. This is a reached primitive precondition, not successful-allocation conditioning.

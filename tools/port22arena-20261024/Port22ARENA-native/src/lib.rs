@@ -23,6 +23,7 @@ fn Port22ARENA_selected_alloc_frame() {
     let a=if kani::any::<bool>() {4} else {8};
     // Invalid Layout is a rejected input, not an assumed allocator success.
     let Ok(layout)=Layout::from_size_align(n,a) else {return};
+    if n==0 {return}; // GlobalAlloc requires nonzero size; fresh Vec n=0 skips allocate.
     let allocator=BumpAllocator{start,len:256};
     let initial=if cursor==0 {start+256} else {cursor};
     let candidate=initial.saturating_sub(n)& !(a.wrapping_sub(1));
