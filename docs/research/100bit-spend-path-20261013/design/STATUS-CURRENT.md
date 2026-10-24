@@ -1,5 +1,28 @@
 # Current status: 100-bit soundness and privacy (living page)
 
+## Current coordinator checkpoint — 2026-10-24 10:55
+
+Both deployed security targets are **not yet established**. This checkpoint
+supersedes the older progress descriptions below; their theorem statements
+remain historical evidence.
+
+Soundness: the owned adapter is proved to its named runtime/child boundary
+(`S2W_D189Consolidation.accepted_run`). The merged Q1 packet proves actual
+query/flush state correspondence to frozen2 conditionally; Q2 derives same-TX1
+checkpoint provenance and current reader-helper transports. Remaining lead
+work includes indexed authentication, native op18 and saved-to-resumed state,
+then enclosing oracle/runtime/artifact composition. Session A owns concrete
+prepare/op7, powers/op17, S3/S4/S5/S9 backends, S6 and S10 lowering.
+
+Privacy: current real-side endpoint is
+`PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`, against mathematical
+simE (D185); native simulator refinement is not required. The prover rewrite
+and CT v2 candidates remain unmerged. D190 records a proved obstruction to a
+pure randomness dictionary and authorizes an effect-aware proof repair.
+Real-run refinement, joint L1/L2 coupling, the client proof-account route,
+quiet-host under-15-second timing and final adoption/release audits remain open.
+
+
 Last updated 2026-10-22 02:05 by the lead. This page is the single current
 reference; dated notes keep the history.
 

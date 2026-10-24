@@ -9013,3 +9013,35 @@ state because the owned design passes children only owned values and never an
 `AccountInfo`. This is to be proved from the extracted signatures, not assumed. With these, the full
 `S2CallerFacts` theorem follows. No new assumption is introduced. These are the existing items,
 used for their stated purpose.
+
+
+## D190 (lead, 2026-10-24 10:55): entropy interpretation obstruction retained
+
+The unmerged prover candidate at `7db89a0216` proves
+`ProverRwEntropyIteration.no_retry_then_success`: a fixed pure external
+getrandom.fill dictionary cannot produce a retry followed by success on the
+same freshly zeroed buffer. Native E1 admits a zero draw followed by a nonzero
+draw. The lead inspected that theorem and `no_two_draw_dictionary`; this is a
+real obstruction to the proposed fixed-tape refinement, not a privacy attack.
+Do not hide the false equality inside PrefixContract or BodyContract.
+
+Authorize a proof/tooling-only effect-aware entropy interpretation carrying
+an explicit tape cursor/world state through the actual entropy and retry owner.
+Preserve every draw, errors, exhaustion, the unchanged bad-event probability
+law, and joint L1/L2 observations. A hand-written stateful model alone is not
+source refinement: connect it to the pinned source/emission with a checked
+transformation or a proved sufficient observational transport. No new extraction
+trust, RNG assumption, source change or security-contract change is authorized.
+If existing tools cannot support this without new trust, report the smallest
+concrete decision and its consequences. The zero-then-nonzero counterexample
+remains a regression obligation.
+
+The candidate's sampler/retry/salt helper results remain conditional on its
+uninstalled external dictionary (260 function entries and 28 type carriers).
+Audit 11261 passed in worker evidence: exit 0, 1.69 s, peak 4,266,180 KiB RSS,
+swap 0, source revision d735d8174e plus exact source hashes, standard axioms.
+This evidence is reused, not independently replayed; no candidate adoption or
+release proof is claimed. Stage-3 budget used 60/100 Lean and 42/60 Kani;
+continuation has 40 Lean and 18 Kani remaining, IDs beginning 11262 through
+11399 subject to collision checks. Absolute quiet-host timing remains open.
+See candidate `design/PROVER-RW-20261024-STAGE3-CONTINUATION.md`.
