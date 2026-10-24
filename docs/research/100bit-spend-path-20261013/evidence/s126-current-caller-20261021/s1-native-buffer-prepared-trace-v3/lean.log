@@ -1,0 +1,168 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:49:8: error(lean.unknownIdentifier): Unknown identifier `ClaimPowers.powers`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:116:49: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.S1` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `transport.Variant.S1`
+  [apply] `AspisR1FinishRelationCurrent.transport.Variant.S1`
+  [apply] `AspisR1PublicPreparation.transport.Variant.S1`
+  [apply] `AspisR1SelectedWideViewV1.transport.Variant.S1`
+  [apply] `AspisR1Stage2.transport.Variant.S1`
+  [apply] `AdapterRw.aspis_r1_cost_probe.transport.Variant.S1`
+  [apply] `AspisS2OwnedStage1.aspis_r1_cost_probe.transport.Variant.S1`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:116:62: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.S2` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `transport.Variant.S2`
+  [apply] `AspisR1FinishRelationCurrent.transport.Variant.S2`
+  [apply] `AspisR1PublicPreparation.transport.Variant.S2`
+  [apply] `AspisR1SelectedWideViewV1.transport.Variant.S2`
+  [apply] `AspisR1Stage2.transport.Variant.S2`
+  [apply] `AdapterRw.aspis_r1_cost_probe.transport.Variant.S2`
+  [apply] `AspisS2OwnedStage1.aspis_r1_cost_probe.transport.Variant.S2`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:116:74: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.D` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `transport.Variant.D`
+  [apply] `AspisR1FinishRelationCurrent.transport.Variant.D`
+  [apply] `AspisR1PublicPreparation.transport.Variant.D`
+  [apply] `AspisR1SelectedWideViewV1.transport.Variant.D`
+  [apply] `AspisR1Stage2.transport.Variant.D`
+  [apply] `Params.D`
+  [apply] `Std.Time.Modifier.D`
+  [apply] `AdapterRw.aspis_r1_cost_probe.transport.Variant.D`
+  [apply] `AspisS2OwnedStage1.aspis_r1_cost_probe.transport.Variant.D`
+  [apply] `TraitDefault.Test.Test2.Trait1.D`
+  [apply] `TraitDefault.Test.Test3.Trait1.D`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:121:8: error: Tactic `rfl` failed: The left-hand side
+  AspisR1PublicPreparation.transport.Variant.S2.folds
+is not definitionally equal to the right-hand side
+  ok 2#usize
+
+E M Cv : Type
+L : ℕ
+invalidAccountData : E
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+D : aspis_core.digest.Digest32 Unit
+p : Params M Cv L
+root : Std.Array U8 32#usize
+length : U32
+error : verifier.Error → Result E
+bytes proof : Slice U8
+k : Usize
+out : alloc.vec.Vec U8
+h :
+  FirstComposition.firstCurrent invalidAccountData
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B) D error bytes proof
+      k =
+    ok (core.result.Result.Ok out)
+s : AspisR1PublicPreparation.FirstCaller.DecoderStatement
+hd : AspisR1PublicPreparation.S6DecoderScopedReuseV1.decodeActual bytes = ok (core.result.Result.Ok s)
+hk : k = compact.SPLIT
+zero : aspis_core.field.wide_exact.WideExact
+semantic y1 : Slice U8
+sem : r1_semantic.Verified Unit
+oldv : AspisR1SelectedWideViewV1.verifier.View
+hr : AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = ok (core.result.Result.Ok oldv)
+hsem :
+  (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B).op9 D
+      (FirstComposition.toCurrentPublic (AspisR1PublicPreparation.PreparationBinding.preparationPublic s))
+      (selectedView oldv).semantic () none =
+    ok (core.result.Result.Ok sem)
+hview✝ :
+  (do
+      let r ← AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1
+      ok
+          (match r with
+          | core.result.Result.Ok v => core.result.Result.Ok (selectedView v)
+          | core.result.Result.Err e => core.result.Result.Err (selectedError e))) =
+    ok (core.result.Result.Ok (selectedView oldv))
+hview :
+  ok
+      (match core.result.Result.Ok oldv with
+      | core.result.Result.Ok v => core.result.Result.Ok (selectedView v)
+      | core.result.Result.Err e => core.result.Result.Err (selectedError e)) =
+    ok (core.result.Result.Ok (selectedView oldv))
+oldScratch : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+oldPrepared : AspisR1PublicPreparation.verifier.Prepared
+hbackend :
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+      (concreteBoundaries (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+      (retainedDigest D) (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView oldv) ()
+      (mapArray retainedE (Array.repeat 29#usize zero)) =
+    ok (core.result.Result.Ok oldPrepared, oldScratch)
+htail :
+  Tx1Reachability.afterPrepare
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B) D bytes proof k ()
+      none (currentPrepared oldPrepared) (mapArray currentE oldScratch) =
+    ok (core.result.Result.Ok out)
+hnew✝ :
+  (do
+      let (r, scratch) ←
+        AspisR1PublicPreparation.PreparedScratchModel.prepare
+            (concreteBoundaries
+              (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+            (retainedDigest D) (retainedSem sem) (retainedView (selectedView oldv)) ()
+            (mapArray retainedE (Array.repeat 29#usize zero))
+      ok
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+            mapArray currentE scratch)) =
+    ok (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch)
+hnew :
+  (let (r, scratch) := (core.result.Result.Ok oldPrepared, oldScratch)
+    ok
+      (match r with
+        | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+        | core.result.Result.Err e => core.result.Result.Err (currentError e),
+        mapArray currentE scratch)) =
+    ok (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch)
+heq :
+  (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch) =
+    (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch)
+calls :
+  (concreteBoundaries
+            (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed)).powers
+        29#usize oldPrepared.gamma =
+      ok oldScratch ∧
+    (concreteBoundaries
+            (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed)).claim
+        (retainedDigest D) (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView oldv).y1
+        (AspisR1SelectedWideViewV1.preparedView oldv).inactive oldScratch oldPrepared.kappa =
+      ok (core.result.Result.Ok oldPrepared.claim)
+early :
+  AspisR1CurrentPreparedClaim.ClaimPowers.powers 29#usize (toClaimE oldPrepared.gamma) =
+    ok (mapArray toClaimE oldScratch)
+borrowed :
+  claim (retainedDigest D) (retainedSem sem) oldv.y1 (AspisR1SelectedWideViewV1.prepCarrier oldv.inactive) oldScratch
+      oldPrepared.kappa =
+    ok (core.result.Result.Ok oldPrepared.claim)
+hinactive : Canonical (toClaimE (AspisR1SelectedWideViewV1.prepCarrier oldv.inactive))
+hcan : Canonical (toClaimE oldPrepared.gamma) ∧ Canonical (toClaimE oldPrepared.kappa)
+halpha : CanonicalAlphaPair oldPrepared
+hclaim :
+  OriginalPayloadClaimMeaning (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView oldv).y1
+    (toClaimE (AspisR1SelectedWideViewV1.preparedView oldv).inactive) (toClaimE oldPrepared.gamma)
+    (toClaimE oldPrepared.kappa) (toClaimE oldPrepared.claim) (mapArray toClaimE oldScratch)
+hpowers :
+  ∀ (i : Usize),
+    ↑i < 29 →
+      ∃ value,
+        (mapArray toClaimE oldScratch).index_usize i = ok value ∧
+          Canonical value ∧
+            AspisR1CurrentPreparedClaim.Concrete.decode value =
+              AspisR1CurrentPreparedClaim.Concrete.decode (toClaimE oldPrepared.gamma) ^ ↑i
+hrank :
+  JointRankTrace (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed (retainedDigest D) p bytes root
+    length (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView oldv) () oldPrepared oldScratch
+trace :
+  ExactSerializedRankTrace (retainedDigest D) p bytes root length (retainedSem sem)
+    (AspisR1SelectedWideViewV1.preparedView oldv) () oldPrepared oldScratch
+variant : oldv.variant = AspisR1SelectedWideViewV1.transport.Variant.S2
+mappedVariant : (AspisR1SelectedWideViewV1.preparedView oldv).variant = AspisR1PublicPreparation.transport.Variant.S2
+⊢ AspisR1PublicPreparation.transport.Variant.S2.folds = ok 2#usize
+'AspisS1NativeBufferClaimTrace.first_native_buffers_prepared_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

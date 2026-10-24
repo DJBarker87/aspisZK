@@ -1,0 +1,131 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1NativeBufferPreparedTraceV1.lean:86:6: error: Tactic `subst` failed: did not find equation for eliminating 'scratch'
+
+case Ok.Ok
+E M Cv : Type
+L : ℕ
+invalidAccountData : E
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+D : aspis_core.digest.Digest32 Unit
+p : Params M Cv L
+root : Std.Array U8 32#usize
+length : U32
+error : verifier.Error → Result E
+bytes proof : Slice U8
+k : Usize
+out : alloc.vec.Vec U8
+h :
+  FirstComposition.firstCurrent invalidAccountData
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B) D error bytes proof
+      k =
+    ok (core.result.Result.Ok out)
+s : AspisR1PublicPreparation.FirstCaller.DecoderStatement
+hd : AspisR1PublicPreparation.S6DecoderScopedReuseV1.decodeActual bytes = ok (core.result.Result.Ok s)
+hk : k = compact.SPLIT
+zero : aspis_core.field.wide_exact.WideExact
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+semantic y1 : Slice U8
+sem : r1_semantic.Verified Unit
+oldv : AspisR1SelectedWideViewV1.verifier.View
+hr : AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = ok (core.result.Result.Ok oldv)
+hsem :
+  (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B).op9 D
+      (FirstComposition.toCurrentPublic (AspisR1PublicPreparation.PreparationBinding.preparationPublic s))
+      (selectedView oldv).semantic () none =
+    ok (core.result.Result.Ok sem)
+hview✝ :
+  (do
+      let r ← AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1
+      ok
+          (match r with
+          | core.result.Result.Ok v => core.result.Result.Ok (selectedView v)
+          | core.result.Result.Err e => core.result.Result.Err (selectedError e))) =
+    ok (core.result.Result.Ok (selectedView oldv))
+hview :
+  ok
+      (match core.result.Result.Ok oldv with
+      | core.result.Result.Ok v => core.result.Result.Ok (selectedView v)
+      | core.result.Result.Err e => core.result.Result.Err (selectedError e)) =
+    ok (core.result.Result.Ok (selectedView oldv))
+oldScratch : Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize
+oldPrepared : AspisR1PublicPreparation.verifier.Prepared
+hbackend :
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+      (concreteBoundaries (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+      (retainedDigest D) (retainedSem sem) (retainedView (selectedView oldv)) ()
+      (mapArray retainedE (Array.repeat 29#usize zero)) =
+    ok (core.result.Result.Ok oldPrepared, oldScratch)
+htail :
+  Tx1Reachability.afterPrepare
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B) D bytes proof k ()
+      none (currentPrepared oldPrepared) scratch =
+    ok (core.result.Result.Ok out)
+hnew✝ :
+  (do
+      let (r, scratch) ←
+        AspisR1PublicPreparation.PreparedScratchModel.prepare
+            (concreteBoundaries
+              (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+            (retainedDigest D) (retainedSem sem) (retainedView (selectedView oldv)) ()
+            (mapArray retainedE (Array.repeat 29#usize zero))
+      ok
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (currentError e),
+            mapArray currentE scratch)) =
+    ok (core.result.Result.Ok (currentPrepared oldPrepared), scratch)
+hnew :
+  (let (r, scratch) := (core.result.Result.Ok oldPrepared, oldScratch)
+    ok
+      (match r with
+        | core.result.Result.Ok x => core.result.Result.Ok (currentPrepared x)
+        | core.result.Result.Err e => core.result.Result.Err (currentError e),
+        mapArray currentE scratch)) =
+    ok (core.result.Result.Ok (currentPrepared oldPrepared), scratch)
+heq :
+  (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch) =
+    (core.result.Result.Ok (currentPrepared oldPrepared), scratch)
+hg :
+  (core.result.Result.Ok (currentPrepared oldPrepared), mapArray currentE oldScratch).2 =
+    (core.result.Result.Ok (currentPrepared oldPrepared), scratch).2
+⊢ ∃ s,
+    AspisR1PublicPreparation.S6DecoderScopedReuseV1.decodeActual bytes = ok (core.result.Result.Ok s) ∧
+      k = compact.SPLIT ∧
+        ∃ zero semantic y1 v sem prepared scratch,
+          AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = ok (core.result.Result.Ok v) ∧
+            v.variant = AspisR1SelectedWideViewV1.transport.Variant.S2 ∧
+              (semanticBase ops B).op9 D
+                    (FirstComposition.toCurrentPublic (AspisR1PublicPreparation.PreparationBinding.preparationPublic s))
+                    v.semantic () none =
+                  ok (core.result.Result.Ok sem) ∧
+                AspisR1PublicPreparation.PreparedScratchModel.prepare
+                      (concreteBoundaries
+                        (installedBoundaries (withOriginalSerializer closedSampling) AspisS1M31Embedding.Total.embed))
+                      (retainedDigest D) (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView v) ()
+                      (mapArray retainedE (Array.repeat 29#usize zero)) =
+                    ok (core.result.Result.Ok prepared, scratch) ∧
+                  AspisS1SemanticArrayRanges.CurrentVerifiedNumeric sem ∧
+                    (Canonical (toClaimE prepared.gamma) ∧ Canonical (toClaimE prepared.kappa)) ∧
+                      OriginalPayloadClaimMeaning (retainedSem sem) v.y1
+                          (toClaimE (AspisR1SelectedWideViewV1.prepCarrier v.inactive)) (toClaimE prepared.gamma)
+                          (toClaimE prepared.kappa) (toClaimE prepared.claim) (mapArray toClaimE scratch) ∧
+                        (∀ (i : Usize),
+                            ↑i < 29 →
+                              ∃ value,
+                                (mapArray toClaimE scratch).index_usize i = ok value ∧
+                                  Canonical value ∧
+                                    AspisR1CurrentPreparedClaim.Concrete.decode value =
+                                      AspisR1CurrentPreparedClaim.Concrete.decode (toClaimE prepared.gamma) ^ ↑i) ∧
+                          ExactSerializedRankTrace (retainedDigest D) p bytes root length (retainedSem sem)
+                              (AspisR1SelectedWideViewV1.preparedView v) () prepared scratch ∧
+                            Row31QueryProgramMeaning (retainedDigest D) (AspisR1SelectedWideViewV1.preparedView v)
+                                prepared ∧
+                              Tx1Reachability.afterPrepare
+                                  (NativeBuffers.install (withValues ops) nativeValues
+                                    AspisS1ExtractedRoundChildren.children B)
+                                  D bytes proof k () none (currentPrepared prepared) (mapArray currentE scratch) =
+                                ok (core.result.Result.Ok out)
+'AspisS1NativeBufferClaimTrace.first_native_buffers_prepared_trace' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
