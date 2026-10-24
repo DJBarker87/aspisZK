@@ -91,3 +91,17 @@ lock and aggregate8GiB stop. No cold builds. At most13 Lean attempts,1 Kani,
 arithmetic proofs. Preserve failures. Exact commands, source/dependency/tool
 hashes, exits, wall/RSS/swap and full axioms in receipts. Native producer remains
 open unless actual ABI linkage is established; both security targets remain open.
+
+## Native focused check, statement frozen before execution
+
+One Kani invocation: Port22ARENA_selected_alloc_frame. Exact SDK struct/new/
+GlobalAlloc source copied byte-for-byte, supplied imports only. A 256-byte arena
+is embedded in 34 native usize words, guard words outside it. Arbitrary initial
+bytes, cursor zero OR start+offset (8<=offset<=256), arbitrary valid Layout size,
+alignment4 OR8; arbitrary observed word index except cursor. Assert actual
+unsafe alloc preserves that word, actual returned pointer/null and actual cursor
+match the source arithmetic, successful range/alignment. Invalid Layout returns
+before the call; null allocation is not excluded. This is a native Kani-model
+finite-arena check, not the deployed fixed-address 256KiB arena, no Vec/std
+extraction claim, no native oracle-trace or abort-handler theorem. Its actual
+integer/pointer support is tested, never replaced with assumed pointer laws.
