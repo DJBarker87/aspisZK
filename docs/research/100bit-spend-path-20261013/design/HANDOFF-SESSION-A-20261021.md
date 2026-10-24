@@ -383,3 +383,24 @@ The host had 40 GiB of populated capped-scope reservations, including background
 services and one current Lean scope, below the 55 GiB safe reservation ceiling.
 This solver prevents a quiet-host absolute prover timing gate. No processes,
 files or source candidates belonging to session A were changed.
+
+
+## Lead source-interface integration (2026-10-24 11:37 UK)
+
+Port6AUTH is reviewed/merged/pushed through b50ab72e92. The exact source query
+consumer is now Port6AUTH_Query.accepted: actual native batch returns feed
+indexed recovery on the literal first source annotation record, then Q1's
+saved-ten/continued-twelve accumulator conclusion. The compiler maps and both
+passes' word stability are derived. Existing prepare/root, primitive, domain
+and P6 boundaries remain explicit, with the same local ownership.
+
+Port6AUTH_Headline.final_soundness is an additive sufficient interface for the
+unchanged contract. It does not establish all-H AcceptedRunJoin. Its open
+CleanAcceptedModel requires actual terminal Checks and classifier no-hit;
+charged-prefix containment, source call cap1161 and runtime carrier instance
+also remain open. Collision is charged once and the exact full bound is
+preserved. Port7CLEAN now owns concrete driver terminal/no-hit composition and
+requisite source trace embeddings; Port6CK still owns native op18/checkpoint
+state. Neither worker duplicates your prepare/powers/primitive/S6/S10 rows.
+See evidence/port6auth-20261024/STAGE3.md for full before/after and retained
+premises. Both deployed targets remain not yet established.
