@@ -1,7 +1,9 @@
 import Port13GATE_Authenticated
 import Port11PROV_Authenticated
 
-set_option pp.width 100
+-- Printer settings only; no elaborator heartbeat or recursion limit changes.
+set_option pp.deepTerms true
+set_option pp.maxSteps 100000
 set_option pp.fullNames true
 set_option pp.universes true
 
@@ -14,6 +16,10 @@ set_option pp.universes true
 #print AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
 #print AspisR1.MultiproofConeP6Callbacks.ParentGate
 #print AspisR1.MultiproofConeP6Batch.LeafGate
+#print AspisR1.LiteralByteProtocol.Decoder
+#print AspisR1.Port1_StoredCarrier.ByteProver
+#print AdapterRw.Ops
+#print VTop_Stages.Ops
 #print AspisR1.Port1_Library.TrustedStd
 #print AspisR1.Port13GATE_Canonical.dictionary
 #print AspisR1.Port13GATE_Canonical.boundary
