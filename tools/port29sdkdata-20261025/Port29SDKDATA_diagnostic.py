@@ -63,6 +63,19 @@ def prepare():
   current_rules='NEW lead-supplied rules; original missing-file history preserved',
   indexing='Every part ConstantInfo/dependency/kind/metadata; full values retained in pinned raw objects; no environment insertion')
  write(E/'Port29SDKDATA_diagnostic-1-preparation.json',prep);print(json.dumps({k:prep[k] for k in ['directory','index_modules','comparison_batches','comparison_entries']}))
+def prepare2():
+ first=json.loads((E/'Port29SDKDATA_diagnostic-1-preparation.json').read_text())
+ out=Path('/private/tmp/Port29SDKDATA-diagnostic-'+uuid.uuid4().hex);out.mkdir(mode=0o700)
+ for n in ['Port29SDKDATA_index.tsv','Port29SDKDATA_compare.tsv','Port29SDKDATA_input-stat-baseline.json']:
+  (out/n).write_bytes((Path(first['directory'])/n).read_bytes())
+ (out/'Port29SDKDATA_export.tsv').write_text('')
+ x={**first,'directory':str(out),'source':pin(T/'Port29SDKDATA_Raw.lean'),
+  'inputs':[pin(p) for p in out.iterdir()]+[pin(T/'Port29SDKDATA_worklist.py')],
+  'runtime':[pin(p['path']) for p in first['runtime']],
+  'reason':'Changed source corrects non-Inhabited array access and record layout. Same invocation supplies previously missing extraction artifact through a bounded noncompiler worklist handshake.',
+  'failed_source':pin(T/'Port29SDKDATA_Raw-failed-diagnostic1.lean.txt'),
+  'processor':pin(T/'Port29SDKDATA_worklist.py')}
+ write(E/'Port29SDKDATA_diagnostic-2-preparation.json',x);print(json.dumps({'directory':str(out),'source':x['source']}))
 def run(number):
  assert number in [1,2]
  prep=json.loads((E/f'Port29SDKDATA_diagnostic-{number}-preparation.json').read_text());out=Path(prep['directory'])
@@ -77,27 +90,46 @@ def run(number):
   assert not subprocess.run(['pgrep','-x','lean'],capture_output=True,text=True).stdout.strip(),'Other local Lean running'
   lean=SYS/'bin/lean';cmd=['/usr/bin/time','-l',str(lean),'-j1','-M4400','-DElab.async=false','-R',str(T),str(T/'Port29SDKDATA_Raw.lean')]
   env=os.environ.copy();env['LEAN_PATH']=str(SYS/'lib/lean');env['PORT29_DATA']=str(out)
-  r=dict(schema='Port29SDKDATA-raw-diagnostic-receipt-v1',command=cmd,env={k:env[k] for k in ['LEAN_PATH','PORT29_DATA']},
+  if number==2:env['PORT29_INTERACTIVE']='1'
+  r=dict(schema='Port29SDKDATA-raw-diagnostic-receipt-v1',command=cmd,env={k:env[k] for k in ['LEAN_PATH','PORT29_DATA']+(['PORT29_INTERACTIVE'] if number==2 else [])},
    source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source=prep['source'],
    preparation=pin(E/f'Port29SDKDATA_diagnostic-{number}-preparation.json'),launcher=pin(__file__),
    lean_charged=1,job_cumulative_charged=number,global_actual_after_charge=349+number,global_ceiling=368,
    print_axioms='N/A: raw ConstantInfo IO diagnostic; no theorem/check/insertion',
    aggregate_child_hard_stop_bytes=8*1024**3,wall_bound_seconds=540,status='CHARGED before launch')
   write(receipt,r)
-  start=time.monotonic();peak=0;stop=None
+  start=time.monotonic();peak=0;stop=None;processor=None;processor_peak=0
   with (out/'Port29SDKDATA_stdout.log').open('xb') as log,(out/'Port29SDKDATA_time.log').open('xb') as tim:
    p=subprocess.Popen(cmd,cwd=T,env=env,stdout=log,stderr=tim,start_new_session=True)
+   if number==2:
+    proc_log=(out/'Port29SDKDATA_worklist-stdout.log').open('xb')
+    proc_time=(out/'Port29SDKDATA_worklist-time.log').open('xb')
+    processor=subprocess.Popen(['/usr/bin/time','-l',sys.executable,'-B',str(T/'Port29SDKDATA_worklist.py'),str(out)],stdout=proc_log,stderr=proc_time,start_new_session=True)
    while p.poll() is None:
     rows=[tuple(map(int,l.split())) for l in subprocess.check_output(['ps','-axo','pid=,ppid=,rss='],text=True).splitlines()];ids={p.pid}
     while True:
      nxt=ids|{pid for pid,ppid,rss in rows if ppid in ids}
      if nxt==ids:break
      ids=nxt
+    if processor is not None:
+     procs={processor.pid}
+     while True:
+      nxt=procs|{pid for pid,ppid,rss in rows if ppid in procs}
+      if nxt==procs:break
+      procs=nxt
+     prss=sum(rss*1024 for pid,ppid,rss in rows if pid in procs);processor_peak=max(processor_peak,prss)
+     ids.update(procs)
+     if prss>=512*1024**2 or processor.poll() not in [None,0]:
+      stop='bounded worklist processor failure/512MiB hard stop';os.killpg(p.pid,signal.SIGKILL);break
     rss=sum(rss*1024 for pid,ppid,rss in rows if pid in ids);peak=max(peak,rss)
     if rss>=8*1024**3 or time.monotonic()-start>=540:
      stop='aggregate 8GiB hard stop' if rss>=8*1024**3 else '540s deadline';os.killpg(p.pid,signal.SIGKILL);break
     time.sleep(.1)
    code=p.wait()
+   if processor is not None:
+    if processor.poll() is None:os.killpg(processor.pid,signal.SIGKILL)
+    r['processor_exit_status']=processor.wait();r['processor_aggregate_peak_rss_bytes']=processor_peak
+    proc_log.close();proc_time.close()
   r.update(exit_status=code,wall_seconds=time.monotonic()-start,aggregate_child_peak_rss_bytes=peak,stopped=stop)
   text=(out/'Port29SDKDATA_time.log').read_text()
   for suffix,key in [('maximum resident set size','peak_rss_bytes'),('swaps','swaps')]:
@@ -112,4 +144,5 @@ def run(number):
  finally:lock.rmdir()
 if __name__=='__main__':
  if sys.argv[1]=='prepare':prepare()
+ elif sys.argv[1]=='prepare2':prepare2()
  else:sys.exit(run(int(sys.argv[1])))

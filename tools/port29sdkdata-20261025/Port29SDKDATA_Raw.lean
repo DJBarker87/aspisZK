@@ -82,8 +82,8 @@ private def readParts (p : System.FilePath) : IO (Array (ModuleData × Compacted
   readModuleDataParts ps
 private unsafe def indexOne (h : IO.FS.Handle) (side origin m p : String) : IO Unit := do
   let loaded ← readParts p
-  for i in [:loaded.size] do
-    let data := loaded[i]!.1
+  let mut i := 0
+  for (data,_) in loaded do
     emit h (Json.mkObj [("tag",toJson "part"),("side",toJson side),("origin",toJson origin),
       ("module",toJson m),("path",toJson p),("part",toJson i),
       ("constants",toJson data.constants.size),("names",toJson data.constNames.size),
@@ -93,6 +93,7 @@ private unsafe def indexOne (h : IO.FS.Handle) (side origin m p : String) : IO U
     for c in data.constants do
       emit h (Json.mkObj [("tag",toJson "constant"),("side",toJson side),("origin",toJson origin),
         ("module",toJson m),("path",toJson p),("part",toJson i),("constant",record c)])
+    i := i + 1
   (loaded.map (·.2)).reverse.forM CompactedRegion.free
 private def rawCheck (d : ModuleData) : IO Unit := do
   unless d.imports.isEmpty && d.extraConstNames.isEmpty && d.entries.isEmpty &&
@@ -128,17 +129,31 @@ private unsafe def exportOne (h : IO.FS.Handle) (side origin m p dest : String) 
   let loaded ← readParts p
   let mut wanted : Std.HashSet String := {}
   for n in names do wanted := wanted.insert n
-  for i in [:loaded.size] do
-    let data := loaded[i]!.1
+  let mut i := 0
+  for (data,_) in loaded do
     let cs := data.constants.filter (fun c => wanted.contains (ns c.name))
     unless cs.isEmpty do
       let path : System.FilePath := dest ++ "-part-" ++ toString i ++ ".olean"
       IO.FS.createDirAll path.parent.get!
-      saveModuleData path m.toName { data with imports := #[],constants := cs,
-        constNames := cs.map (·.name),extraConstNames := #[],entries := #[] }
+      saveModuleData path m.toName { data with
+        imports := #[]
+        constants := cs
+        constNames := cs.map (·.name)
+        extraConstNames := #[]
+        entries := #[] }
+      -- New output audit, within the SAME diagnostic invocation: raw read only.
+      let (check,region) ← readModuleData path
+      rawCheck check
+      unless check.constants.size == cs.size do throw (IO.userError "export count mismatch")
+      for c in check.constants do
+        let some original := cs.find? (fun x => x.name == c.name)
+          | throw (IO.userError "export unexpected name")
+        unless sameDeclaration original c do throw (IO.userError "export declaration mismatch")
+      region.free
       emit h (Json.mkObj [("tag",toJson "transport"),("side",toJson side),("origin",toJson origin),
         ("module",toJson m),("source",toJson p),("path",toJson path.toString),("part",toJson i),
         ("names",toJson (cs.map (fun c => ns c.name)))])
+    i := i + 1
   (loaded.map (·.2)).reverse.forM CompactedRegion.free
 private unsafe def main : IO Unit := do
   let some dir ← IO.getEnv "PORT29_DATA" | throw (IO.userError "PORT29_DATA")
@@ -151,6 +166,15 @@ private unsafe def main : IO Unit := do
     if row.isEmpty then continue
     let tag::p::q::names := row.splitOn "\t" | throw (IO.userError "compare row")
     compareOne h tag p q names.toArray
+  h.flush
+  if (← IO.getEnv "PORT29_INTERACTIVE") == some "1" then
+    IO.FS.writeFile (dir ++ "/Port29SDKDATA_index-ready") "ready\n"
+    let ready : System.FilePath := dir ++ "/Port29SDKDATA_export-ready"
+    while !(← ready.pathExists) do IO.sleep 100
+    for row in ← IO.FS.lines (dir ++ "/Port29SDKDATA_extra-compare.tsv") do
+      if row.isEmpty then continue
+      let tag::p::q::names := row.splitOn "\t" | throw (IO.userError "extra compare row")
+      compareOne h tag p q names.toArray
   for row in ← IO.FS.lines (dir ++ "/Port29SDKDATA_export.tsv") do
     if row.isEmpty then continue
     let side::origin::m::p::dest::names := row.splitOn "\t" | throw (IO.userError "export row")
