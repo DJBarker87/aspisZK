@@ -1,0 +1,280 @@
+def AspisR1.CheckpointBytes5Inputs.Oracle : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun {Hash} D hash H =>
+  ∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+    D.digest hash parts = Aeneas.Std.Result.ok digest →
+      AspisR1.CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten parts)
+def AspisR1.Port9OR_Code.native : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+      AspisR1Stage2.aspis_core.digest.Digest32 Hash :=
+fun {Hash} D H =>
+  { coremarkerCopyInst := D.coremarkerCopyInst,
+    digest := fun hash parts =>
+      match D.digest hash parts with
+      | Aeneas.Std.Result.ok v =>
+        Aeneas.Std.Result.ok (AspisR1.Port9OR_Reply.digest (H (AspisR1DigestLogCarrier.flatten parts)))
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div }
+def AspisR1.Port9OR_Code.program : {A Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash →
+      AspisR1.CheckpointBytes5Effect.Code A →
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          (Aeneas.Std.Result A) :=
+fun {A Hash} D hash x => AspisR1.CheckpointBytes5Effect.Code.brecOn x (AspisR1.Port9OR_Code.program._f D hash)
+def AspisR1.Port9OR_Bodies.native : {Hash : Type} →
+  VTop_Stages.aspis_core.digest.Digest32 Hash →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → VTop_Stages.aspis_core.digest.Digest32 Hash :=
+fun {Hash} D H =>
+  { coremarkerCopyInst := D.coremarkerCopyInst,
+    digest := (AspisR1.Port9OR_Code.native (AspisR1.VTop_Checkpoint.digest D) H).digest }
+def AspisR1.Port9OR_Installed.implementation : VTop_Stages.Ops →
+  Bool →
+    AspisR1.Port6CK_Semantic.Unwrap → AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun ops reserved unwrap rest {A} =>
+  AspisR1.Port9OR_Bodies.implementation ops reserved unwrap fun {A} => AspisR1.Port9OR_Installed.other fun {A} => rest
+@AspisR1.Port9OR_Code.correspondence : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code) =
+    (AspisR1.CheckpointBytes5Inputs.observe (AspisR1.Port9OR_Code.trace (AspisR1.Port9OR_Code.native D H) hash code).1,
+      (AspisR1.Port9OR_Code.trace (AspisR1.Port9OR_Code.native D H) hash code).2)
+AspisR1.Port9OR_Bodies.reader_value : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub v hash)).2 =
+    AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D H) ck proof pub v hash
+AspisR1.Port9OR_Bodies.reader_effects : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub v hash) =
+    (AspisR1.CheckpointBytes5Inputs.observe
+        (AspisR1.Port9OR_Code.trace (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D H)) hash
+            (AspisR1.Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v)).1,
+      AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D H) ck proof pub v hash)
+AspisR1.Port9OR_Law.reader_lazy : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (f :
+    AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        (Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+            VTop_Stages.verifier.Error)) →
+      ℚ),
+  have p := AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub v hash;
+  have s := AspisV8R19.OracleFiniteSupport.support p;
+  AspisV8R19.MemoizedProgramLaw.lazyMean p FS.emptyTable f =
+    AspisV8R19.OracleResampling.mean fun H =>
+      have oracle := AspisV8R19.OracleFiniteSupport.extend s H default;
+      f
+        (AspisR1.CheckpointBytes5Inputs.observe
+            (AspisR1.Port9OR_Code.trace (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D oracle)) hash
+                (AspisR1.Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v)).1,
+          AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D oracle) ck proof pub v hash)
+AspisR1.Port9OR_Checksum.checksum_branches : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (matchReply otherReply : AspisV8R19.SourceDuplexStep.State),
+  matchReply ≠ otherReply →
+    (AspisR1.Port6CK_Ops.ops reserved unwrap).ne Aeneas.Std.core.cmp.PartialEqU8
+          (AspisR1.Port9OR_Checksum.suffix matchReply) (AspisR1.Port9OR_Reply.digest matchReply) =
+        Aeneas.Std.Result.ok false ∧
+      (AspisR1.Port6CK_Ops.ops reserved unwrap).ne Aeneas.Std.core.cmp.PartialEqU8
+          (AspisR1.Port9OR_Checksum.suffix matchReply) (AspisR1.Port9OR_Reply.digest otherReply) =
+        Aeneas.Std.Result.ok true
+AspisR1.Port9OR_Bridge.reader_inverse : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array Aeneas.Std.U8 N),
+      unwrap N (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b) →
+    ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (a : VTop_Stages.verifier.Accumulator) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2
+                hash)).2 =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+        ∃ after,
+          AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D H)) hash
+                (AspisR1.CheckpointBytes5Resume.program (AspisR1.Port6CK_Ops.ops reserved unwrap) ck proof pub
+                  AspisR1Stage2.transport.Variant.S2)
+                [] =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+            AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D H)) hash
+                  (AspisR1.CheckpointBytes5Resume.program (AspisR1.CheckpointBytes4Ops.ops reserved) ck proof pub
+                    AspisR1Stage2.transport.Variant.S2)
+                  [] =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+              AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2
+                    hash) =
+                (AspisR1.CheckpointBytes5Inputs.observe after,
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)))
+AspisR1.Port9OR_Budget.reader_count : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Bodies.reader reserved unwrap D ck proof pub v hash)).1.length ≤
+    3
+@AspisR1.Port9OR_P6Verify.source : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port9OR_P6Verify.code root s nodes) =
+    MultiproofConeRef.reference.verify_owned (AspisR1.Port9OR_P6Node.digest D) hash root s nodes
+AspisR1.Port9OR_Batch.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D E : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : AspisR1.CheckpointBytes5Effect.Digest) (which : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase E hash (AspisR1.Port9OR_Batch.code base D hash proof p folded which) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (AspisR1.Port9OR_BatchStep.ops base) E proof p folded
+      which hash
+@AspisR1.Port9OR_Installed.effects : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (which : Aeneas.Std.Usize)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Installed.batch D hash proof p folded which) =
+    (AspisR1.CheckpointBytes5Inputs.observe
+        (AspisR1.Port9OR_Code.trace (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D H)) hash
+            (AspisR1.Port9OR_Installed.code D hash proof p folded which)).1,
+      AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded which hash)
+AspisR1.Port9OR_FirstBatch.first_batch : ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder) (adapter : AdapterRw.Ops)
+  (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port6AUTH_Prefix.source decoder
+              (AspisR1.Port1_Driver.rust adapter
+                (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+              P)).2.2 =
+      true →
+    have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+    have rust := AspisR1.Port1_Driver.rust adapter (fun {A} => impl) D hash;
+    have input := (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1;
+    ∃ pub proof semantic saved p a g folded earlier later,
+      AspisR1.Port1_Driver.asSlice input.statement.pubBytes = some pub ∧
+        AspisR1.Port1_Driver.asSlice input.stored = some proof ∧
+          AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok (some semantic) ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                      (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash
+                        none))).2 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+              AspisR1.Port6CK_Reader.reader reserved unwrap (AspisR1.Port9OR_Bodies.native D H) saved.deref proof pub
+                    AspisR1Stage2.transport.Variant.S2 hash =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+                a.next = 10#usize ∧
+                  (AspisV8R19.MemoizedProgramLaw.eval H (rest (AspisR1.VTop_Trace.Call.op17 29#usize p.gamma))).2 =
+                      Aeneas.Std.Result.ok g ∧
+                    AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D H) proof p folded 1#usize hash =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                      (AspisV8R19.MemoizedProgramLaw.eval H (rust input)).1 =
+                        earlier ++
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.Port9OR_Installed.batch D hash proof p folded 1#usize)).1 ++
+                          later
+@AspisR1.Port9OR_BatchLaw.batch_lazy : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (which : Aeneas.Std.Usize)
+  (f :
+    AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        (Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error)) →
+      ℚ),
+  have program := AspisR1.Port9OR_Installed.batch D hash proof p folded which;
+  have s := AspisV8R19.OracleFiniteSupport.support program;
+  AspisV8R19.MemoizedProgramLaw.lazyMean program FS.emptyTable f =
+    AspisV8R19.OracleResampling.mean fun H =>
+      have oracle := AspisV8R19.OracleFiniteSupport.extend s H default;
+      f
+        (AspisR1.CheckpointBytes5Inputs.observe
+            (AspisR1.Port9OR_Code.trace (AspisR1.VTop_Checkpoint.digest (AspisR1.Port9OR_Bodies.native D oracle)) hash
+                (AspisR1.Port9OR_Installed.code D hash proof p folded which)).1,
+          AspisR1.Port4B_Install.batch (AspisR1.Port9OR_Bodies.native D oracle) proof p folded which hash)
+AspisR1.Port9OR_Rejection.no_sampler : ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder) (adapter : AdapterRw.Ops)
+  (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (rest : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (i : AspisR1.OraclePortStoredExperimentC4.Input) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port1_Driver.asSlice i.statement.pubBytes = some pub →
+    AspisR1.Port1_Driver.asSlice i.stored = some proof →
+      AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok none →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          ¬∀ (a : AspisV8R19.DuplexFrames.Bytes),
+              FS2.Duplex.Read
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.RawCutProverCompiler.verifier decoder (fun x x_1 => false) i.statement i.proof)).1
+                  a →
+                FS2.Duplex.Read
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.Port1_Driver.rust adapter
+                        (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash
+                        i)).1
+                  a
+'AspisR1.Port9OR_Batch.values_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Batch.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchLaw.batch_lazy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchLoop.body_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchProgress.advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchTree.source_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchTree.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.native_stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.reader_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.writer_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.reader_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.writer_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.installed_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bodies.installed_writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bridge.historical_at_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bridge.reader_at_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bridge.reader_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Bridge.reader_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Budget.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Budget.reader_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Budget.reader_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.list_compare' depends on axioms: [propext]
+'AspisR1.Port9OR_Checksum.compare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_branches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.discarded_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Code.trace_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Code.correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Code.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Code.oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.common_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.common_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.authenticated_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.powers_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Driver.first_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_FirstBatch.powers_logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_FirstBatch.first_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Installed.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Installed.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Installed.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Law.source_primitive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Law.reader_lazy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Levels.level_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Levels.level_preserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Levels.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Levels.eighteen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Node.parent_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Node.node_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Node.node_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Progress.totality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Progress.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Progress.node_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Rows.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Rows.preserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Verify.source_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_P6Verify.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.pure_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.after_powers' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Rejection.early' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Rejection.no_sampler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reply.state_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reply.digest_state' depends on axioms: [propext, Classical.choice, Quot.sound]

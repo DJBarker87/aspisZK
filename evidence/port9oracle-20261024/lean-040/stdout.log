@@ -1,0 +1,32 @@
+Port9OR_Installed.lean:30:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ←
+      Port3_NativeBatchBody.verifier.candidate.batch_merkle (Port9OR_BatchStep.ops Port4B_Install.leaves)
+          (Port9OR_Code.native (VTop_Checkpoint.digest D) H) proof p folded which hash
+    ok
+        (match a with
+        | core.result.Result.Ok a => core.result.Result.Ok a
+        | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))
+is not definitionally equal to the right-hand side
+  Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded which hash
+
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+p : verifier.Prepared
+folded : Std.Array U8 32#usize
+which : Usize
+H : Bytes → State
+⊢ (do
+      let a ←
+        Port3_NativeBatchBody.verifier.candidate.batch_merkle (Port9OR_BatchStep.ops Port4B_Install.leaves)
+            (Port9OR_Code.native (VTop_Checkpoint.digest D) H) proof p folded which hash
+      ok
+          (match a with
+          | core.result.Result.Ok a => core.result.Result.Ok a
+          | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded which hash
+'AspisR1.Port9OR_Installed.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Installed.effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Installed.installed' depends on axioms: [propext, Classical.choice, Quot.sound]

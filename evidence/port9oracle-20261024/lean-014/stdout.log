@@ -1,0 +1,45 @@
+Port9OR_Checksum.lean:29:48: error(lean.unknownIdentifier): Unknown constant `Bool.not_decide`
+Port9OR_Checksum.lean:29:2: error: unsolved goals
+case pos
+s : Slice U8
+a : CheckpointBytes5Effect.Digest
+h : (↑s).length = (↑a).length
+⊢ (ok !decide (↑s = ↑a)) = ok (decide (↑s ≠ ↑a))
+Port9OR_Checksum.lean:30:2: error: unsolved goals
+case neg
+s : Slice U8
+a : CheckpointBytes5Effect.Digest
+h : ¬(↑s).length = (↑a).length
+different : ↑s ≠ ↑a
+⊢ ok true = ok (decide (↑s ≠ ↑a))
+Port9OR_Checksum.lean:31:50: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]̵h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲i̲f̲f̲e̲r̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_Checksum.lean:31:62: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵]̵h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_Checksum.lean:54:111: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Port9OR_Reply.digest matchReply
+  has type
+    CheckpointBytes5Effect.Digest
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑(Port9OR_Reply.digest matchReply)
+'AspisR1.Port9OR_Checksum.list_compare' depends on axioms: [propext]
+'AspisR1.Port9OR_Checksum.compare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_branches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.discarded_reply' depends on axioms: [propext, Classical.choice, Quot.sound]

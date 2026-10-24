@@ -1,0 +1,47 @@
+Port9OR_Reached.lean:63:89: error: Application type mismatch: The argument
+  r3
+has type
+  (eval H
+        (interpret (fun {A} => impl)
+          (VTop_Trace.bind (Code.done option) fun o => do
+            let r1 ← VTop_Flow.traceEffects.op0 o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let i3 ← VTop_Flow.traceEffects.op15
+                let i4 ← VTop_Flow.traceEffects.op14
+                let s1 ←
+                  liftM
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i3, «end» := i4 })
+                let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                let folded_root ← VTop_Flow.traceEffects.unwrap32 r2
+                let r3 ← perform (Call.op5 D proof p folded_root 1#usize hash)
+                Port9OR_BatchCut.afterBatch D proof none p a i g val1 7527#usize i3 i4 r3
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)))).2 =
+    ok (core.result.Result.Ok ())
+but is expected to have type
+  (eval H (interpret (fun {A} => impl) (Code.call (Call.op0 option ?m.436) ?m.437))).2 = ok ?m.438
+in the application
+  Port9OR_Driver.head (fun {A} => impl) (Call.op0 option ?m.436) ?m.437 H ?m.438 r3
+Port9OR_Reached.lean:63:75: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Parse` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `AspisR1Stage2.verifier.Error.Parse`
+  [apply] `AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse`
+Port9OR_Reached.lean:65:13: error: Dependent elimination failed: Failed to solve equation
+  ok ?m.438 = (eval H (interpret (fun {A} => impl) (?m.437 (core.result.Result.Err e)))).2
+Port9OR_Reached.lean:67:73: error: Application type mismatch: The argument
+  r4
+has type
+  (eval H (interpret (fun {A} => impl) (?m.437 (core.result.Result.Ok inactive)))).2 = ok ?m.438
+but is expected to have type
+  (eval H (interpret (fun {A} => impl) (Code.call Call.op15 ?m.522))).2 = ok ?m.523
+in the application
+  Port9OR_Driver.head (fun {A} => impl) Call.op15 ?m.522 H ?m.523 r4
+'AspisR1.Port9OR_Reached.pure_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.after_powers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
