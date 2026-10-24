@@ -1,0 +1,50 @@
+{"attempt": "lean-053", "exit_status": 1, "wall_seconds": 2.0833120300085284, "peak_rss_kib": "4456848", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_FirstBatch.powers_logs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_FirstBatch.first_batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port9OR_FirstBatch.lean:78:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H
+      (Port1_Driver.rust adapter
+        (fun {A} {A} =>
+          Port9OR_Bodies.implementation ops reserved unwrap fun {A} => Port9OR_Installed.other fun {A} => rest)
+        D hash
+        (Port6AUTH_SourceCut.first
+              (Port1_Driver.rust adapter
+                (fun {A} {A} =>
+                  Port9OR_Bodies.implementation ops reserved unwrap fun {A} => Port9OR_Installed.other fun {A} => rest)
+                D hash)
+              P H).2.1)).1
+in the target expression
+  (eval H
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops 
+...
+ ++
+      (eval H
+          (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+            (Port9OR_BatchCut.afterBatch D proof none p a 10#usize g inactive 7527#usize 7751#usize 7783#usize
+              (core.result.Result.Ok ())))).1
+⊢ (eval H
+        (Port1_Driver.rust adapter (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          D hash
+          (Port6AUTH_SourceCut.first
+                (Port1_Driver.rust adapter
+                  (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash)
+                P H).2.1)).1 =
+    earlier ++ CheckpointBytes5Inputs.observe after ++ (eval H (rest (Call.op17 29#usize p.gamma))).1 ++
+        (eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1 ++
+      (eval H
+          (interpret (fun {A} => impl)
+            (Port9OR_BatchCut.afterBatch D proof none p a 10#usize g inactive 7527#usize 7751#usize 7783#usize
+              (core.result.Result.Ok ())))).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port9OR_FirstBatch.powers_logs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_FirstBatch.first_batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r66ec53cc4f2c4b01b2eb3814a5234245.scope; invocation ID: 4930e31628b2403486355ba4f5e79c68

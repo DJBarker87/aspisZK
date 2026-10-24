@@ -149,7 +149,7 @@ theorem first_reader (decoder : LiteralByteProtocol.Decoder)
     let impl : Implementation := Port9OR_Bodies.implementation ops reserved unwrap other
     let rust := Port1_Driver.rust adapter impl D hash
     let input := (Port6AUTH_SourceCut.first rust P H).2.1
-    ∃ pub proof semantic saved p a after earlier later,
+    ∃ pub proof semantic saved p a after earlier,
       Port1_Driver.asSlice input.statement.pubBytes=some pub ∧
       Port1_Driver.asSlice input.stored=some proof ∧
       Port1_Driver.decodeSemantic adapter pub=ok (some semantic) ∧
@@ -158,7 +158,8 @@ theorem first_reader (decoder : LiteralByteProtocol.Decoder)
       CheckpointBytes5Effect.run (VTop_Checkpoint.digest (Port9OR_Bodies.native D H)) hash
         (Port8EFF_Bodies.readerCode reserved unwrap saved.deref proof pub .S2) []=ok (.Ok (p,a),after) ∧
       (eval H (interpret impl (Port8EFF_Control.commonTail D pub proof hash none (.Ok (p,a))))).2=ok (.Ok ()) ∧
-      (eval H (rust input)).1=earlier ++ CheckpointBytes5Inputs.observe after ++ later := by
+      (eval H (rust input)).1=earlier ++ CheckpointBytes5Inputs.observe after ++
+        (eval H (interpret impl (Port8EFF_Control.commonTail D pub proof hash none (.Ok (p,a))))).1 := by
   let impl : Implementation := Port9OR_Bodies.implementation ops reserved unwrap other
   let rust := Port1_Driver.rust adapter impl D hash
   let input := (Port6AUTH_SourceCut.first rust P H).2.1
@@ -170,13 +171,11 @@ theorem first_reader (decoder : LiteralByteProtocol.Decoder)
   obtain ⟨p,a,after,resumed,ran,rest,commonLogs⟩ := common_reader ops reserved unwrap other D hash pub proof saved.deref H common
   refine ⟨pub,proof,semantic,saved,p,a,after,
     (eval H (interpret impl (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).1 ++ authEarlier,
-    (eval H (interpret impl (Port8EFF_Control.commonTail D pub proof hash none (.Ok (p,a))))).1,
     hpub,hproof,decoded,tx1,resumed,ran,rest,?_⟩
   change (eval H (Port1_Driver.rust adapter impl D hash input)).1=_
   simp only [Port1_Driver.rust,hpub,hproof,decoded]
   rw [stageLogs,authLogs,commonLogs]
   simp only [List.append_assoc]
-  rfl
 
 #print axioms first_reader
 #print axioms authenticated_common

@@ -36,3 +36,11 @@ with exact (Q+34)*B+kappa(Q+1161)+2^-126+2^-454. No-hit, source1161,
 StoredCarrierBinding, release artifact linkage and both security targets remain
 open. Neither local reader_lazy nor acceptance equivalence supplies this missing
 whole-source event transport.
+
+A further statement audit strengthened Port9OR_Driver.first_reader: before,
+its final clause quantified an unconstrained `later` list; after, `later` is
+replaced by the exact log of the actual accepted commonTail continuation.
+The premises and all earlier quantifiers are unchanged. This prevents a later
+batch embedding from relying on an arbitrary existential suffix. Receipt048
+validates that stronger statement;047's trailing no-goals elaboration failure
+is retained. Port8's historical statement is unchanged.

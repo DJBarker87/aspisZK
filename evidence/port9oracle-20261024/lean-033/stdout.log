@@ -1,0 +1,143 @@
+Port9OR_BatchStep.lean:35:55: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Port9OR_BatchStep.lean:198:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ← erase D hash (verify root idx val d value)
+    if a.1 = true then ok (done (a.2.1, a.2.2, some (core.result.Result.Ok ()))) else ok (done (a.2.1, a.2.2, none))
+is not definitionally equal to the right-hand side
+  do
+    let (b1, idx1, val2) ← (ops base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d value
+    if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ()))) else ok (done (idx1, val2, none))
+
+case isFalse.Continue.isFalse.isFalse
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+root : Digest
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+h✝² : ¬pos < n
+value✝¹⁰ : Slice U32
+success✝¹¹ :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+      { «end» := d } =
+    ok value✝¹⁰
+value✝⁹ : Option Usize
+success✝¹⁰ : (ops base).op11 Port3_NativeBatchBody.multiproof.Arity.Two value✝¹⁰ = ok value✝⁹
+value✝⁸ : core.result.Result Usize verifier.Error
+success✝⁹ : (ops base).op1 value✝⁹ verifier.Error.Merkle = ok value✝⁸
+value✝⁷ : Usize
+success✝⁸ : core.result.Result.Insts.CoreOpsTry.branch value✝⁸ = ok (core.ops.control_flow.ControlFlow.Continue value✝⁷)
+value✝⁶ : Slice U8
+success✝⁷ : (ops base).op3 proof slot = ok value✝⁶
+value✝⁵ : Std.Array Usize 6#usize
+success✝⁶ : (ops base).op12 = ok value✝⁵
+value✝⁴ : Usize
+success✝⁵ : value✝⁵.index_usize slot = ok value✝⁴
+h✝¹ : ¬value✝⁷ > value✝⁴
+value✝³ : Usize
+success✝⁴ : lift (Usize.wrapping_mul 32#usize value✝⁷) = ok value✝³
+value✝² : Slice U8
+success✝³ :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) value✝⁶ { start := value✝³ } =
+    ok value✝²
+value✝¹ : core.slice.iter.ChunksExact U8
+success✝² : core.slice.Slice.chunks_exact value✝² 8#usize = ok value✝¹
+fst✝ : Bool
+snd✝ : core.slice.iter.ChunksExact U8
+success✝¹ :
+  (ops base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (ops base) D)
+      value✝¹ () =
+    ok (false, snd✝)
+h✝ : ¬fst✝ = true
+value✝ : Usize
+success✝ : ok value✝³ = ok value✝
+value : Slice U8
+success :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) value✝⁶ { «end» := value✝ } = ok value
+⊢ (do
+      let a ← erase D hash (verify root idx val d value)
+      if a.1 = true then ok (done (a.2.1, a.2.2, some (core.result.Result.Ok ())))
+        else ok (done (a.2.1, a.2.2, none))) =
+    do
+    let (b1, idx1, val2) ← (ops base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d value
+    if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ()))) else ok (done (idx1, val2, none))
+Port9OR_BatchStep.lean:186:61: warning: This simp argument is unused:
+  verify_source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲b̲o̲d̲y̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲,̲ ̲p̲a̲i̲r̲_̲m̲a̲t̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:186:75: warning: This simp argument is unused:
+  pair_match
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲b̲o̲d̲y̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲,̲ ̲v̲e̲r̲i̲f̲y̲_̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:192:81: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲,̲ ̲v̲e̲r̲i̲f̲y̲_̲s̲o̲u̲r̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲a̲i̲r̲_̲m̲a̲t̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:192:109: warning: This simp argument is unused:
+  verify_source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲p̲a̲i̲r̲_̲m̲a̲t̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:192:123: warning: This simp argument is unused:
+  pair_match
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲ ̲v̲e̲r̲i̲f̲y̲_̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:196:37: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:196:45: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [if_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:197:60: warning: This simp argument is unused:
+  verify_source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲p̲a̲i̲r̲_̲m̲a̲t̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_BatchStep.lean:197:74: warning: This simp argument is unused:
+  pair_match
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵,̵p̵a̵i̵r̵_̵m̵a̵t̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲v̲e̲r̲i̲f̲y̲_̲s̲o̲u̲r̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
