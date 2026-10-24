@@ -62,3 +62,19 @@ Audit final source/manifest hashes without rereading live caches. Retain failure
 No theorem/native/current-SDK/whole-cone/release/security conclusion. Assumptions
 remain unchanged. Source-to-artifact association and future same-cut concrete
 consumer remain separate obligations. Both security targets not yet established.
+
+## Resume amendment (authoritative lead session, 2026-10-24)
+
+The exact SbfCachePrep94997 terminal output and signed-in-session release report
+are now observed and hashed in host-gate.json. The lead explicitly supersedes
+the historical start-identity requirement. No retrospective identity is invented.
+The coordination wait is resolved. Original source-only preflight remains reused
+PASS and is not rerun. Old audit/prepare outputs remain historical evidence.
+The retired audit's hardcoded blocked status must not be used for resume gates.
+
+Next operations: metadata-only donor path/owner/writer assessment, then copy
+bounded original S2W main/server/private parts to unique retained local storage
+with pre/copy/post hashes. No host Lean/build/scope, no A files, no keys.
+Inventory/header-graph expansion and the single local core diagnostic are
+conditional on verified inputs; unresolved data is recorded rather than compiled
+away. No source/model/trust/premise change.

@@ -19,6 +19,7 @@ def pin(p):
     return dict(path=str(p.relative_to(R)), sha256=hashlib.sha256(data).hexdigest(), bytes=len(data))
 
 def main():
+    raise SystemExit("Historical offline audit retired at resume: use released management gate and resumed acquisition audit; do not regenerate stale blocked state")
     ast.parse((T / 'Port28ROOTEXPORT_prepare.py').read_text())
     command = ['python3', '-B', 'tools/port28rootexport-20261024/Port28ROOTEXPORT_prepare.py']
     start = time.monotonic()
