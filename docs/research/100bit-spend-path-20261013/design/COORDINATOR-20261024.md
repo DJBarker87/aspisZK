@@ -43,3 +43,29 @@ gates; no source adoption without equivalence/performance gates; same execution
 and ordered oracle effects; retain failed evidence. Merge only reviewed scope,
 append ruling/status, push research, then remove only fully merged clean owned
 worktrees. Prover and CT candidates remain unmerged until all adoption gates.
+
+
+## Prover adoption source audit — 11:10 UK
+
+Read-only comparison at candidate 7db89a0216 found that research's approved
+H5 commit 60cb14bde2 is missing from the candidate. Its four source deltas are
+state_only_prefix.rs, fast_pairing.rs, weights.rs and r1_pool_adapter_owned.rs.
+The candidate's recorded complete ELF identities are d7d42f77…/2b2a9f0e…/
+121f3e29…, not current f8c0ec72…/63ad3e9c…/121f3e29…. Historical identity
+is therefore insufficient for adoption, as anticipated by the handoff.
+
+After the active entropy job commits and releases its worktree, integrate the
+already-approved H5 source revision into the candidate (no new protocol or
+verifier change is authorized). Assess exact affected proof/extraction
+closures, regenerate only affected targets, and rebuild all three ELFs against
+the current pins. Entropy source is outside H5's four-file delta, but full
+caller emission/external dictionary numbering may change: bind operations by
+qualified source name and exact body/signature hashes, never by an inherited
+op number alone. The old fixed-tape obstruction remains pinned evidence.
+
+Then run the candidate's fixed-coin differential and performance gates only
+where source/artifact changes invalidate old evidence. The under-15-second
+absolute gate must use a quiet build host; any >10% fixture slowdown is a stop
+for review. The ongoing entropy proof is not interrupted merely to rebase its
+source snapshot. Candidate adoption remains blocked on these concrete gates,
+real-prover refinement and the remaining side-channel obligations.
