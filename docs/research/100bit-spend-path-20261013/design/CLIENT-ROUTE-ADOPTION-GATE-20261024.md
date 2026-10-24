@@ -15,3 +15,6 @@ Inspection commands were rg -n for prove_for_proof_accounts/prove_masked_retryin
 - tools/r1-cost-probe/src/bin/devnet_spend/plan.rs: `b267904b985adf2d432be68a77e5b5a697f69ae7a92ddad3ff84c60bfae84b62`
 - crates/aspis-r1-cost-probe/src/RealR1_client.rs: `55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1`
 - crates/aspis-r1-cost-probe/src/prover.rs: `76aafd05e9b9459253f810be324b80fa5404449f93d03edb5697cddc669d2c42`
+
+
+Reviewed candidate: codex/cx-client64-20261024 at1dfbd5711684d73fc2ff664cfae9ae78f7dd34f8 supplies selected64planner/keymapping/inventorymigration with offlineRust/Pythonreceipts. D202recordsreviewandlimits. It remainsunmerged/unadoptedpendingfinalnativeprover/refinement/artifact/performancegates. The pinnedrootcalleraboveisunchanged;do notconfusecandidatebehaviorwithdeployedcoverage.
