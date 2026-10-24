@@ -37,7 +37,7 @@ def main():
  resource.setrlimit(resource.RLIMIT_AS,(LIMIT,LIMIT));os.umask(0o077)
  start=time.monotonic();receipt=dict(command=[sys.executable,'-B','-'],print_axioms='N/A: no theorem/compiler execution',address_space_limit_bytes=LIMIT)
  try:
-  req=json.loads(sys.stdin.readline());receipt.update(source_revision=req['revision'],helper_sha256=req['helper_sha256'],request_sha256=req['request_sha256'])
+  req=json.loads(sys.stdin.readline());receipt.update(source_revision=req['revision'],helper_sha256=req['helper_sha256'],request_sha256=req['request_sha256'],command=req['host_command'])
   no_links(STAGE);assert STAGE.resolve()==STAGE and STAGE.stat().st_uid==os.getuid()==1000 and stat.S_IMODE(STAGE.stat().st_mode)==0o700
   assert (STAGE/'OWNER').read_text()=='SbfRecapturePrep 20261024\n'
   pins={'source-inputs.json':'a84a528cfc4b294c603fe5381343cdaf9df0547467bcc94e61a67e5111adb9d1','src/Cargo.lock':'5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef','rustc-diagnostics.py':'fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84'}
@@ -52,7 +52,7 @@ def main():
   # Disjoint topmost finite populated cgroups: reservation observation only.
   reservations=[];cg=P('/sys/fs/cgroup')
   def visit(root):
-   events=dict(line.split() for line in (root/'cgroup.events').read_text().splitlines())
+   events={'populated':'1'} if root==cg else dict(line.split() for line in (root/'cgroup.events').read_text().splitlines())
    if events.get('populated')!='1':return
    cap=(root/'memory.max').read_text().strip() if (root/'memory.max').exists() else 'max'
    if cap!='max':

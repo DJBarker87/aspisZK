@@ -8,11 +8,10 @@ assert subprocess.check_output(['git','show',rev+':tools/sbf-inputs-20261024/'+h
 pk=(E/'packages.json').read_bytes()
 request=dict(revision=rev,helper_sha256=hashlib.sha256(body).hexdigest(),packages=json.loads(pk),request_sha256=hashlib.sha256(pk).hexdigest())
 # Helper reads exactly one following JSON line; exec code cannot consume package input.
-import base64
-bootstrap=b'exec('+repr(compile if False else body).encode()+b')\n' # literal bytes expression, no shell interpolation
 # stdin cannot supply both Python - program and data; use exact quoted -c program.
 import shlex
 cmd=['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10','dombarker@100.108.41.90','python3 -B -c '+shlex.quote(body.decode())]
+request['host_command']=['python3','-B','-c',body.decode()]
 r=subprocess.run(cmd,input=(json.dumps(request)+'\n').encode(),capture_output=True,timeout=180)
 assert len(r.stdout)<5_000_000 and len(r.stderr)<1_000_000
 (E/'prepare.stdout.json').write_bytes(r.stdout);(E/'prepare.stderr.txt').write_bytes(r.stderr)
