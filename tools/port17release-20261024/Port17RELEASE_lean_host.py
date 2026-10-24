@@ -18,13 +18,16 @@ for src in x['sources']:
  for line in (B/src).read_text().splitlines():
   if line.startswith('import '):
    for module in line[7:].split():visit(module)
+frozen=B/'frozen-full-objects.json'
+if frozen.exists():
+ seen['__frozen_full_import_graph']=dict(path=str(frozen),sha256=hashlib.sha256(frozen.read_bytes()).hexdigest(),bytes=frozen.stat().st_size)
 (B/'lakefile.toml').write_text('name = "s2w"\nversion = "0.1.0"\n');(B/'lean-toolchain').write_text('leanprover/lean4:v4.32.0\n')
 x['deps_fingerprint']['selected_objects']=seen
 x['deps_fingerprint']['lean_binary_sha256']=hashlib.sha256(Path('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean').read_bytes()).hexdigest()
 current_sources={src:hashlib.sha256((B/src).read_bytes()).hexdigest() for src in x['sources']}
 for previous in B.glob('lean-*/receipt.json'):
  old=json.loads(previous.read_text())
- if old.get('source_hashes')==current_sources and old.get('deps_fingerprint',{}).get('selected_objects')==seen:
+ if old.get('source_hashes')==current_sources and old.get('deps_fingerprint',{}).get('selected_objects')==seen and old.get('env')==x.get('env'):
   raise RuntimeError('Refusing unchanged source+dependencies: '+str(previous))
 c.write_text(json.dumps(x,indent=2)+'\n')
 r=subprocess.run([sys.executable,str(B/'Port17RELEASE_run_host.py'),sys.argv[1]]);sys.exit(r.returncode)

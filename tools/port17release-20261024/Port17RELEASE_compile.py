@@ -22,7 +22,8 @@ cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-ports2-20
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port6ck-20261024:/home/dombarker/project-offloads/codex-cx-port5q2-20261024:/home/dombarker/project-offloads/codex-cx-port7clean-20261024'
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port12count-20261024'
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port15driver-20261024:/home/dombarker/project-offloads/codex-cx-port16cut-20261024'
-cfg['env']['LEAN_PATH'] = REMOTE + ':' + REMOTE+'/dependency-objects:' + cfg['env']['LEAN_PATH']
+if module in ['Port17RELEASE_Prepare','Port17RELEASE_Driver','Port17RELEASE_Accounting','Port17RELEASE_Audit']:
+ cfg['env']['LEAN_PATH'] = REMOTE + ':' + REMOTE+'/dependency-objects:' + cfg['env']['LEAN_PATH']
 E.mkdir(exist_ok=True)
 cfg['deps_fingerprint']['direct_source_hashes']={}
 for line in source.read_text().splitlines():
