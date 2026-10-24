@@ -89,3 +89,37 @@ The existing checked one-step and Lean loop-induction results must be composed
 through an actual original-source execution boundary; a standalone loop model
 or independently successful reference is not a substitute. The whole-claim
 checks above must not be repeated unchanged with more memory or time.
+
+## Follow-up isolation and solver change
+
+The incremental source-only packet
+`evidence/s126-current-caller-20261021/s1-native-control-followup-20261024`
+retains four further terminal attempts, with the same 6/8 GiB scope cap and
+zero swap:
+
+| Attempt | Outcome | Wall seconds | Peak RSS KiB |
+|---|---|---:|---:|
+| outer-only loop contracts v4 | same Kani transformation panic | 0.237 | 158,996 |
+| same v4 source, MIR optimization level 1 | same transformation panic | 7.538 | 534,936 |
+| unchanged original only, ordered tape | timeout, exit 1 | 181.611 | 2,139,060 |
+| unchanged original/reference, CaDiCaL | timeout, exit 1 | 181.383 | 2,154,972 |
+
+The outer-only contract eliminates capture of the inner loop's `dot` by an
+inner invariant; this still does not avoid the compiler bug. MIR-level 1 was
+a source-preserving compiler configuration diagnostic, not a resource-limit
+increase. All flags and hashes are retained. The original-only harness removes
+the reference's second execution and checks the original's exact ordered
+normal-return contract. It also times out. Since the tape harness no longer
+uses uninterpreted C leaves, CaDiCaL is a valid solver alternative to Z3, but
+it did not close the check. The runner's inherited metadata text mentions
+SMT/UF; the recorded actual command explicitly selects `--solver cadical`.
+
+The first CaDiCaL admission was denied by the fresh aggregate-reservation gate;
+no compiler or proof ran under that name. Its admission snapshots are retained.
+The later `sat-v2` job was launched only after the original-only job had ended
+and a new admission passed. No unknown job or cgroup was stopped.
+
+These failures do not invalidate the checked owned-model theorems, but they
+provide no native claim connection. Source/SDK interpretation and actual
+arithmetic/abort transport remain open; no source decision or security metric
+has been silently changed.

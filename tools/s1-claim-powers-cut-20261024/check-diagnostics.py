@@ -5,7 +5,7 @@ import hashlib,json,re,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 count=0
-for name in ['s1-native-mir-20261024','s1-loop-contract-20261024']:
+for name in ['s1-native-mir-20261024','s1-loop-contract-20261024','s1-native-control-followup-20261024']:
  root=E/name;m=json.loads((root/'manifest.json').read_text());assert m['schema']=='focused-extractor-proof-packet-v1'
  for p,h in m['files'].items():
   f=root/p;assert f.resolve().is_relative_to(root.resolve()) and sha(f)==h
