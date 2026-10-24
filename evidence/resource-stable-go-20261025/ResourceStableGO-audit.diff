@@ -1,0 +1,37 @@
+--- f7b90c8230:ResourceAdmit_audit.py
++++ ResourceStableGO_audit.py
+@@ -15,10 +15,10 @@
+ from unittest.mock import patch
+ 
+ ROOT=Path(__file__).resolve().parents[2]
+-OUT=ROOT/'evidence/resource-admit-20261024/v2'
+-import ResourceAdmit_adapter as adapter
+-import ResourceAdmit_sources as sources
+-import ResourceAdmit_host as host
++OUT=ROOT/'evidence/resource-stable-go-20261025'
++import ResourceStableGO_adapter as adapter
++import ResourceStableGO_sources as sources
++import ResourceStableGO_host as host
+ 
+ 
+ def load(name):return json.loads((OUT/name).read_text())
+@@ -93,7 +93,7 @@
+     assert manifest['scope_argv']==host.scope_argv(manifest)
+     for name,pin in manifest['files'].items():
+         p=Path(__file__).with_name(name)
+-        raw=(json.dumps(sources.bundle(),sort_keys=True,indent=2)+chr(10)).encode() if name=='ResourceAdmit_reviewed.json' else p.read_bytes()
++        raw=(json.dumps(sources.bundle(),sort_keys=True,indent=2)+chr(10)).encode() if name=='ResourceStableGO_reviewed.json' else p.read_bytes()
+         assert pin==dict(sha256=hashlib.sha256(raw).hexdigest(),size=len(raw))
+     export=load('export-receipt.json')
+     for name,pin in export['host_files'].items():
+@@ -129,6 +129,10 @@
+             assert control['pid']==binding['pid'] and control['path']==binding['path']
+             assert {k:v for k,v in control['self_observation'].items() if k!='reads'}==binding
+         assert load('marker.json')['pid']==binding['pid']
++        marker=load('marker.json')
++        assert {k:v for k,v in marker['self_observation'].items() if k!='reads'}==binding
++        assert marker['go_report_pin']=={k:export['host_files']['inside-scope-report.json'][k] for k in ('sha256','size')}
++        assert marker['source_manifest_pin']==host.filepin(OUT/'manifest.json')
+         assert load('marker.json')['cgroup']=='0::'+binding['unified_path']+'\n'
+         assert load('go-exit.json')['terminal']=='GO_MARKER_PASS'
+         assert load('scope-child.json')['exit']==load('run-exit.json')['exit']==0
