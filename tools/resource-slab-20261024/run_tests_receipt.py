@@ -5,7 +5,7 @@ command=['python3','-B','-m','unittest','discover','-s','tools/resource-slab-202
 start=time.monotonic()
 p=subprocess.run(command,cwd=root,text=True,capture_output=True)
 usage=resource.getrusage(resource.RUSAGE_CHILDREN)
-evidence=root/'evidence/resource-slab-20261024'
+evidence=root/'evidence/resource-slab-20261024/threaded'
 (evidence/'tests.log').write_text(p.stdout+p.stderr)
 (evidence/'tests.json').write_text(json.dumps(dict(command=command,exit=p.returncode,
     wall_seconds=time.monotonic()-start,peak_rss_bytes=usage.ru_maxrss,swaps=usage.ru_nswap,

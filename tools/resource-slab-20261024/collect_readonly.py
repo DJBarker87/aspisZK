@@ -11,7 +11,7 @@ import subprocess
 import time
 
 HERE=pathlib.Path(__file__).resolve().parent
-OUT=HERE.parent.parent/'evidence/resource-slab-20261024'
+OUT=HERE.parent.parent/'evidence/resource-slab-20261024/threaded'
 HOST='dombarker@100.108.41.90'
 
 
@@ -28,13 +28,47 @@ def save(name, data):
     (OUT/name).write_bytes(raw)
 
 
+def save_reads(phase, attempts):
+    for i in range(0,len(attempts),100):
+        save(f'reads-{phase}-{i//100:04d}.json',attempts[i:i+100])
+
+
 def main():
     files=['reservation.py','reservation_base.py','resource_slab_candidate.py']
     hashes={f:digest(HERE/f) for f in files}
     sources={f:(HERE/f).read_text() for f in files}
     # Only __file__ reads / run_path of the immutable legacy helper are
     # virtualized. All sysfs/proc/service/process/Docker reads are unchanged.
-    payload='''import hashlib, json, pathlib, runpy\nSOURCES=REPLACE_SOURCES\nHASHES=REPLACE_HASHES\noriginal_read=pathlib.Path.read_bytes\ndef virtual_read(path):\n    if str(path).startswith('/resource-slab-virtual/'):\n        return SOURCES[path.name].encode()\n    return original_read(path)\npathlib.Path.read_bytes=virtual_read\ndef virtual_run(path):\n    name=pathlib.Path(path).name\n    ns={'__file__':'/resource-slab-virtual/'+name,'__name__':'resource_slab_virtual'}\n    exec(compile(SOURCES[name],ns['__file__'],'exec'),ns)\n    return ns\nrunpy.run_path=virtual_run\nlegacy=virtual_run('reservation.py')\ncandidate=virtual_run('resource_slab_candidate.py')\nprint(json.dumps(candidate['live'](legacy['admission'],HASHES)))\n'''.replace('REPLACE_SOURCES',repr(sources)).replace('REPLACE_HASHES',repr(hashes))
+    payload='''import hashlib, json, pathlib, runpy\nSOURCES=REPLACE_SOURCES\nHASHES=REPLACE_HASHES\noriginal_read=pathlib.Path.read_bytes\ndef virtual_read(path):\n    if str(path).startswith('/resource-slab-virtual/'):\n        return SOURCES[path.name].encode()\n    return original_read(path)\npathlib.Path.read_bytes=virtual_read\ndef virtual_run(path):\n    name=pathlib.Path(path).name\n    ns={'__file__':'/resource-slab-virtual/'+name,'__name__':'resource_slab_virtual'}\n    exec(compile(SOURCES[name],ns['__file__'],'exec'),ns)\n    return ns\nrunpy.run_path=virtual_run\nlegacy=virtual_run('reservation.py')\ncandidate=virtual_run('resource_slab_candidate.py')\nimport subprocess
+legacy_reads=[]
+original_text=pathlib.Path.read_text
+original_run=subprocess.run
+def recorded_text(path,*args,**kwargs):
+    try:
+        value=original_text(path,*args,**kwargs)
+    except OSError as exc:
+        legacy_reads.append(dict(path=str(path),errno=exc.errno,error=str(exc)))
+        raise
+    legacy_reads.append(dict(path=str(path),errno=0,content=value,sha256=hashlib.sha256(value.encode()).hexdigest()))
+    return value
+def recorded_run(args,*pos,**kwargs):
+    try:
+        result=original_run(args,*pos,**kwargs)
+    except Exception as exc:
+        legacy_reads.append(dict(command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),stdout=getattr(exc,'stdout',None),stderr=getattr(exc,'stderr',None)))
+        raise
+    legacy_reads.append(dict(command=args,exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
+    return result
+def recorded_admission(requested):
+    pathlib.Path.read_text=recorded_text
+    subprocess.run=recorded_run
+    try: return legacy['admission'](requested=requested)
+    finally:
+        pathlib.Path.read_text=original_text
+        subprocess.run=original_run
+report=candidate['live'](recorded_admission,HASHES)
+report['legacy_read_inputs']=legacy_reads
+print(json.dumps(report))\n'''.replace('REPLACE_SOURCES',repr(sources)).replace('REPLACE_HASHES',repr(hashes))
     command=['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10',HOST,'python3 -B -']
     start=time.monotonic()
     result=subprocess.run(command,input=payload,text=True,capture_output=True,timeout=120)
@@ -50,6 +84,7 @@ def main():
     if result.returncode:
         raise SystemExit(result.returncode)
     report=json.loads(result.stdout)
+    save_reads('legacy',report.pop('legacy_read_inputs'))
     snapshots=report.pop('snapshots')
     decisions=report.pop('decisions')
     original=report.pop('original_legacy')
@@ -57,11 +92,22 @@ def main():
     if partial:
         for i,(path,value) in enumerate(sorted(partial.items())):
             save(f'failed-input-{i:03d}.json', dict(path=path,content=value,sha256=hashlib.sha256(value.encode()).hexdigest()))
+    failures=report.pop('failures', {})
+    for phase,failure in failures.items():
+        attempts=failure.pop('read_attempts', None)
+        inputs=failure.pop('raw_inputs', None)
+        save('failure-'+phase+'.json',failure)
+        if attempts is not None:
+            save_reads(phase,attempts)
+        elif inputs is not None: save('partial-'+phase+'.json', inputs)
     save('live-summary.json',report)
     save('legacy-snapshot.json',original)
     for phase,snapshot in snapshots.items():
         if snapshot:
             raw=snapshot.pop('raw_inputs')
+            attempts=snapshot.pop('read_attempts')
+            # Keep every repeated read, its exact content, hash and errno.
+            save_reads(phase,attempts)
             # Shard raw interfaces by group: retain every exact source value.
             paths={}
             for path,value in raw.items(): paths.setdefault(str(pathlib.PurePosixPath(path).parent),{})[path]=value

@@ -14,6 +14,7 @@ import resource
 import subprocess
 import time
 
+LINUX_EOPNOTSUPP = 95  # target Linux ABI, independent of synthetic-test host
 GIB = 2**30
 LIMIT = 55 * GIB
 U64 = 2**64 - 1
@@ -58,29 +59,93 @@ def scan(root=Path('/sys/fs/cgroup')):
     """
     raw = {}
 
+    attempts = []
+
     def read(path):
-        content = path.read_text()
+        try:
+            content = path.read_text()
+        except OSError as exc:
+            attempts.append(dict(path=str(path), errno=exc.errno, error=str(exc)))
+            raise
         raw[str(path)] = content
+        attempts.append(dict(path=str(path), errno=0, content=content,
+                             sha256=hashlib.sha256(content.encode()).hexdigest()))
         return content
 
-    mem = {}
-    for line in read(Path('/proc/meminfo')).splitlines():
-        key, rest = line.split(':', 1)
-        if rest.strip().endswith(' kB'):
-            mem[key] = uint(parse_number(rest.split()[0]) * 1024)
-    rows = []
+    def ids(value):
+        result = [parse_number(x) for x in value.split()]
+        if any(x == 0 for x in result) or len(set(result)) != len(result):
+            raise ValueError('zero/duplicate membership identity')
+        return sorted(result)
 
-    def visit(path, enabled, owner, pids_enabled=False):
+    def tag(path):
+        try:
+            return read(path/'cgroup.type').strip()
+        except FileNotFoundError:
+            if path != root:
+                raise
+            return 'root-special-domain'  # documented absent root interface
+
+    rows = []
+    mem = {}
+
+    def visit(path, enabled, owner, pids_enabled=False, domain=None):
+        kind = tag(path)  # MUST precede procs; no inferred threaded tag
+        if kind not in ('domain', 'domain threaded', 'threaded', 'root-special-domain'):
+            raise ValueError('invalid/unknown cgroup.type: '+kind)
+        if path != root and kind == 'root-special-domain':
+            raise ValueError('nonroot special domain')
         with os.scandir(path) as entries:
             children = sorted(Path(e.path) for e in entries if e.is_dir(follow_symlinks=False))
         subtree = read(path/'cgroup.subtree_control').split()
-        # cgroup.procs is read even for root and disabled subtrees, without RSS
-        # summation (RSS double-counts shared pages and omits kernel charges).
-        procs = [parse_number(x) for x in read(path/'cgroup.procs').split()]
+        controllers = read(path/'cgroup.controllers').split()
+        if not set(subtree) <= set(controllers):
+            raise ValueError('delegation not available')
+        if kind == 'threaded':
+            if domain is None or enabled or 'memory' in subtree or 'memory' in controllers:
+                raise ValueError('threaded memory/domain owner mismatch')
+        else:
+            domain = str(path)
+        threads = ids(read(path/'cgroup.threads'))
+        procs_errno = 0
+        try:
+            procs = ids(read(path/'cgroup.procs'))
+            if kind == 'threaded':
+                raise ValueError('threaded procs unexpectedly readable/type race')
+        except OSError as exc:
+            if kind != 'threaded' or exc.errno != LINUX_EOPNOTSUPP:
+                raise
+            procs, procs_errno = [], exc.errno
+        identities = []
+        for tid in threads:
+            proc = Path('/proc')/str(tid)
+            first = read(proc/'stat')
+            status = read(proc/'status')
+            groups = read(proc/'cgroup')
+            second = read(proc/'stat')
+            def identity(value):
+                # comm can contain spaces and parentheses; field 22 starttime.
+                prefix, tail = value.rsplit(')', 1)
+                return (parse_number(prefix.split(' ', 1)[0]),
+                        parse_number(tail.split()[19]))
+            if identity(first) != identity(second) or identity(first)[0] != tid:
+                raise ValueError('thread identity changed')
+            fields = dict(line.split(':', 1) for line in status.splitlines())
+            tgid = parse_number(fields['Tgid'].strip())
+            if parse_number(fields['Pid'].strip()) != tid or not tgid:
+                raise ValueError('thread status identity mismatch')
+            expected = '/' if path == root else '/'+str(path.relative_to(root))
+            if [v[3:] for v in groups.splitlines() if v.startswith('0::')] != [expected]:
+                raise ValueError('thread unified membership changed')
+            identities.append(dict(tid=tid, tgid=tgid, starttime=identity(first)[1]))
         row = dict(path=str(path), parent=None if path == root else str(path.parent),
                    enabled=enabled, owner=owner, subtree_memory='memory' in subtree,
-                   procs=procs, root=path == root,
-                   pids_enabled=pids_enabled, subtree_pids='pids' in subtree)
+                   procs=procs, root=path == root, type=kind, domain=domain,
+                   threads=threads, identities=identities, procs_errno=procs_errno,
+                   controllers=controllers,
+                   pids_enabled=pids_enabled, subtree_pids='pids' in subtree,
+                   tasks_max=parse_number(read(path/'pids.max'), True) if pids_enabled else None,
+                   pids_current=parse_number(read(path/'pids.current')) if pids_enabled else None)
         if path != root:
             events = pairs(read(path/'cgroup.events'))
             if events.get('populated') not in (0, 1):
@@ -92,24 +157,85 @@ def scan(root=Path('/sys/fs/cgroup')):
                        high=parse_number(read(path/'memory.high'), True),
                        swap_max=parse_number(read(path/'memory.swap.max'), True),
                        swap_current=parse_number(read(path/'memory.swap.current')),
-                       tasks_max=parse_number(read(path/'pids.max'), True) if pids_enabled else None,
                        stat=pairs(read(path/'memory.stat')))
             owner = str(path)
         elif path != root and row['subtree_memory']:
             raise ValueError('memory enabled below disabled parent')
         rows.append(row)
         for child in children:
-            visit(child, row['subtree_memory'], owner, row['subtree_pids'])
+            visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+                  domain if path == root or kind in ('threaded', 'domain threaded') else None)
+        if tag(path) != kind:
+            raise ValueError('cgroup.type transition')
     try:
+        for line in read(Path('/proc/meminfo')).splitlines():
+            key, rest = line.split(':', 1)
+            if rest.strip().endswith(' kB'):
+                mem[key] = uint(parse_number(rest.split()[0]) * 1024)
         visit(root, False, str(root))
-    except (OSError, ValueError) as exc:
+        result = dict(rows=rows, meminfo=mem, raw_inputs=raw, read_attempts=attempts,
+                      raw_sha256={k: hashlib.sha256(v.encode()).hexdigest() for k, v in raw.items()})
+        validate_membership(result)
+        return result
+    except (OSError, ValueError, KeyError, IndexError) as exc:
         exc.partial_raw_inputs = raw
+        exc.read_attempts = attempts
         raise
-    return dict(rows=rows, meminfo=mem, raw_inputs=raw,
-                raw_sha256={k: hashlib.sha256(v.encode()).hexdigest() for k, v in raw.items()})
+
+
+def validate_membership(snapshot):
+    rows = snapshot['rows']
+    by = {r['path']: r for r in rows}
+    seen = set()
+    for r in rows:
+        kind = r['type']
+        if kind not in ('domain', 'domain threaded', 'threaded', 'root-special-domain'):
+            raise ValueError('unknown/invalid domain')
+        if (kind == 'root-special-domain' and not r['root']) or (r['root'] and kind == 'threaded'):
+            raise ValueError('root type mismatch')
+        parent = by[r['parent']] if not r['root'] else None
+        expected_domain = parent['domain'] if kind == 'threaded' else r['path']
+        if r['domain'] != expected_domain:
+            raise ValueError('incorrect threaded domain owner')
+        if kind == 'threaded':
+            if not parent['root'] and parent['type'] not in ('threaded', 'domain threaded'):
+                raise ValueError('invalid threaded parent')
+            if r['enabled'] or r['subtree_memory'] or 'memory' in r['controllers'] or r['procs_errno'] != LINUX_EOPNOTSUPP or r['procs']:
+                raise ValueError('invalid threaded memory/procs semantics')
+        elif r['procs_errno']:
+            raise ValueError('nonthreaded unsupported procs')
+        if parent and parent['type'] in ('threaded', 'domain threaded') and kind != 'threaded':
+            raise ValueError('domain below threaded parent')
+        if parent and r['pids_enabled'] != parent['subtree_pids']:
+            raise ValueError('pids delegation mismatch')
+        if r['pids_enabled']:
+            uint(r['pids_current'])
+            if r['tasks_max'] is not None:
+                uint(r['tasks_max'])
+                if r['pids_current'] > r['tasks_max']:
+                    raise ValueError('pids current exceeds finite cap')
+            count = sum(len(c['threads']) for c in rows if c['path'] == r['path'] or c['path'].startswith(r['path']+'/'))
+            if count != r['pids_current']:
+                raise ValueError('pids membership/current mismatch')
+        for i in r['identities']:
+            if not uint(i['tid']) or not uint(i['tgid']):
+                raise ValueError('zero thread/process identity')
+            uint(i['starttime'])
+        if r['threads'] != sorted(i['tid'] for i in r['identities']):
+            raise ValueError('incomplete thread identities')
+        if seen.intersection(r['threads']):
+            raise ValueError('duplicate thread across cgroups')
+        seen.update(r['threads'])
+        if not r['root'] and (r['threads'] or r['procs']) and not r['populated']:
+            raise ValueError('live membership in empty node')
+        if kind != 'threaded':
+            tgids = {i['tgid'] for c in rows if c['domain'] == r['path'] for i in c['identities']}
+            if tgids != set(r['procs']):
+                raise ValueError('incomplete domain process/thread membership')
 
 
 def accounting(snapshot):
+    validate_membership(snapshot)
     rows = snapshot['rows']
     by = {r['path']: r for r in rows}
     if len(by) != len(rows) or not rows or not rows[0]['root']:
@@ -197,7 +323,9 @@ def accounting(snapshot):
 def membership(snapshot):
     return [(r['path'], r['parent'], r['enabled'], r['owner'], r['subtree_memory'],
              r.get('populated'), r.get('cap'), r.get('high'), r.get('swap_max'),
-             r.get('tasks_max'), r.get('pids_enabled'), r.get('subtree_pids'), tuple(r['procs'])) for r in snapshot['rows']]
+             r.get('tasks_max'), r.get('pids_enabled'), r.get('subtree_pids'), tuple(r['procs']), r['type'], r['domain'], tuple(r['threads']),
+             tuple((i['tid'], i['tgid'], i['starttime']) for i in r['identities']),
+             r['procs_errno'], tuple(r['controllers'])) for r in snapshot['rows']]
 
 
 def propose(old, before, after, requested):
@@ -265,14 +393,23 @@ def live(legacy_admission, source_hashes):
     before = after = old = None
     error = None
     partial_raw = None
+    attempts = None
+    failures = {}
+    snapshots = {}
     try:
         old = legacy_admission(requested=4*GIB)
-        before = scan()
-        # Legacy helper supplies unchanged full process/service/Docker visibility.
-        after = scan()
     except (OSError, ValueError, subprocess.SubprocessError) as exc:
-        error = str(exc)
-        partial_raw = getattr(exc, 'partial_raw_inputs', None)
+        failures['legacy'] = dict(error=str(exc))
+    for phase in ('before', 'after'):
+        try:
+            snapshots[phase] = scan()
+        except (OSError, ValueError, KeyError, IndexError) as exc:
+            snapshots[phase] = None
+            failures[phase] = dict(error=str(exc), errno=getattr(exc, 'errno', None),
+                raw_inputs=getattr(exc, 'partial_raw_inputs', None),
+                read_attempts=getattr(exc, 'read_attempts', None))
+    before, after = snapshots['before'], snapshots['after']
+    error = '; '.join(phase+': '+value['error'] for phase,value in failures.items()) or None
     decisions = {}
     for size in (1, 2, 3, 4, 6, 7, 8):
         # Preserve the one measured legacy snapshot, algebraically re-evaluate
@@ -290,6 +427,6 @@ def live(legacy_admission, source_hashes):
                 source_hashes=source_hashes, uname=os.uname().release,
                 mode='READONLY PROPOSAL; no allocation, lock, consumer or adoption',
                 snapshots=dict(before=before, after=after), original_legacy=old,
-                decisions=decisions, collection_error=error, partial_raw_inputs=partial_raw,
+                decisions=decisions, collection_error=error, partial_raw_inputs=partial_raw, failed_read_attempts=attempts, failures=failures,
                 wall_seconds=time.monotonic()-start, peak_rss_kib=usage.ru_maxrss,
                 swaps=usage.ru_nswap, exit=0, print_axioms='N/A; formal budget ZERO')
