@@ -1,0 +1,23 @@
+#![no_std]
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum CodecError {
+    Length,
+    NonZeroHigh,
+    NonCanonical,
+}
+
+#[inline(always)]
+pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {
+    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {
+        return Err(CodecError::Length);
+    }
+    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {
+        o[..16].copy_from_slice(c);
+        o[16..].fill(0);
+    }
+    Ok(())
+}
+
+#[cfg(kani)]
+mod proofs;

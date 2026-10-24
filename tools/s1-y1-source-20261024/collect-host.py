@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess,sys,tarfile,tempfile,json
 R=Path(__file__).resolve().parents[2];E=R/'docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-y1-source'
 for name in sys.argv[1:]:
- assert name in ['native-v1','native-v2','native-v3','native-v4','native-v5','owned-extraction-v1','owned-extraction-v2','owned-extraction-v3']
+ assert name in ['native-v1','native-v2','native-v3','native-v4','native-v5','native-v6','owned-extraction-v1','owned-extraction-v2','owned-extraction-v3']
  remote='s1-y1-'+name+'-20261024';out=E/name;out.mkdir(parents=True,exist_ok=False)
  script='''from pathlib import Path
 import json,tarfile,sys,hashlib

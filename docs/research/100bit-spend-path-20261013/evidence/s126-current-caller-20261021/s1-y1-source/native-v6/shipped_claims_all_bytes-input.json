@@ -1,0 +1,55 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "command": [
+    "cargo",
+    "kani",
+    "--lib",
+    "--exact",
+    "--harness",
+    "proofs::shipped_claims_all_bytes",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "180",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "cwd": "/home/dombarker/project-offloads/s126-real-sdk-20261021/s1-y1-native-v6-20261024",
+  "files": {
+    "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+    "source-binding.json": "59b858c148b3970feb10ec398821337535430ebd4ce6d9f1c3ddc846db03823c",
+    "shipped_claims_all_bytes-admission.json": "c39af1be93bec1a01733874830b1bd1bbedd155f98b9d7bc4522a1664ae47d1a",
+    "shipped_claims_all_bytes-global-admission.json": "52979e3bacf380fe27b53c712b56859973e60f9cbbe02289678fd9d6362e3006",
+    "src/lib.rs": "b229f5d3f4654e1d4dbb365b07841f82c2de5deb00a2d593a47d02d19b3ac3bb",
+    "src/proofs.rs": "9d3fcefeb386ba2884213754a64bec3177245ef0665a373927fc2b2401b88f68"
+  },
+  "tools": {
+    "/home/dombarker/.cargo/bin/cargo-kani": "45c607cda6ed83414c0f7ff2c5f4cab8bda9d48031a035f9197d9ea16674f8f3",
+    "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler": "f74488368997b6b4e0b417a2f5a3c8e598eccc907288c1a7875d9866056e9ffc",
+    "/home/dombarker/.kani/kani-0.67.0/bin/cbmc": "decfbd8336c557f663d539b3bb4b12aac3396009d616810d325bcd8b42b8a973"
+  },
+  "runner_sha256": "d2baa11b9adac88db835cbdab91fccdda587e2ea2eaa5a98ed4775ef4f61fe81",
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+    "file": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+    "function": "pub fn expand_values(compact: &[u8], out: &mut [u8]) -> Result<(), CodecError> {\n    if compact.len() % 16 != 0 || out.len() != 2 * compact.len() {\n        return Err(CodecError::Length);\n    }\n    for (c, o) in compact.chunks_exact(16).zip(out.chunks_exact_mut(32)) {\n        o[..16].copy_from_slice(c);\n        o[16..].fill(0);\n    }\n    Ok(())\n}",
+    "function_sha256": "636009f9b16fcea3ca603f86318fdca99f660d541671e688ed3ea4d5e83daf21",
+    "error_enum": "pub enum CodecError {\n    Length,\n    NonZeroHigh,\n    NonCanonical,\n}",
+    "error_enum_sha256": "df9dc500c767b0dd77a74c350d496f34fcf9c8ed63e9ae0f6599097369e2deeb",
+    "files": {
+      "Cargo.toml": "cec8572fc67dd9d506f5f3da84c3cc2f467d6b7367ecbc6dfbf099f4ced4111c",
+      "src/lib.rs": "b229f5d3f4654e1d4dbb365b07841f82c2de5deb00a2d593a47d02d19b3ac3bb",
+      "src/proofs.rs": "9d3fcefeb386ba2884213754a64bec3177245ef0665a373927fc2b2401b88f68"
+    },
+    "scope": "Unchanged native claims-sized expansion, complete arbitrary buffers and every output byte via symbolic watch index. No reference execution, stubs, allocation claim or whole-caller transport. Complete reference content law must be proved separately in Lean."
+  },
+  "expected_time": "Small optimized source-cut compilation, then one named whole-Y1 CBMC gate; no finite-field elimination or whole-stage SDK check.",
+  "qualification": "Fixed Y1 native/owned-reference byte equality or bounded fixed-input error frame. Complete carriers; no stubs or universal native/caller/SDK closure.",
+  "print_axioms": "N/A: Rust/Kani gate"
+}
