@@ -107,3 +107,13 @@ deployed prover is the first step.
 2. One canonical frozen-manifest replay, once all cone joins are green
    (AGENTS.md cadence).
 3. The `#print axioms` audit on the final headlines.
+
+
+### Lead checkpoint — 2026-10-24, Port6AUTH reviewed
+
+Port6AUTH_Query.accepted and the sufficient unchanged-bound source headline are
+merged at915db3ef07. Full-driver CleanAcceptedModel, trace/count/runtime
+instances remain open; no all-H join or deployed closure claimed. Port7CLEAN
+is assigned concrete terminal Checks/no-hit composition. Port6CK remains on
+native checkpoint resume. Prover RNG preflight runs on H5-aligned candidate
+71100fccbd under D191; still unadopted. Both targets not yet established.

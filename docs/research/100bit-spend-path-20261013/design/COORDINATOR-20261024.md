@@ -13,16 +13,22 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
-| Entropy effects | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | Actual entropy/retry interpretation with changing state and preserved E1/L1/L2; retain counterexample | Remaining 40 Lean, 18 Kani; J 11262–11399, check unused IDs |
-| Checkpoint integration | .worktrees/cx-port6ck / codex/cx-port6ck-20261024 | Native op18 helper composition and same saved-to-resumed state for Q1/Q2 | 100 Lean, 40 Kani |
-| Authentication and security transport | .worktrees/cx-port6auth / codex/cx-port6auth-20261024 | Indexed recovery from actual batch/log; resolve clean-event versus all-oracle join mismatch without weakening the contract | 100 Lean, 20 Kani |
+| Explicit entropy preflight | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D191 host-only explicit entropy-state extraction and native caller coupling | Remaining16 Lean,18 Kani; J11289–11399, check unused IDs |
+| Checkpoint integration | .worktrees/cx-port6ck / codex/cx-port6ck-20261024 | Native op18 and saved-to-resumed state | 100 Lean,40 Kani |
+| Concrete clean-source driver | .worktrees/cx-port7clean / codex/cx-port7clean-20261024 | Terminal Checks/no-hit plus actual source trace embeddings | 100 Lean,20 Kani |
 
-All use gpt-6.1-sol, medium, codex-run.sh. Output names in the inherited
-scratchpad: codex-prover-effects-20261024.out, codex-port6ck-20261024.out,
-codex-port6auth-20261024.out. A terminal codex-exit marker triggers review.
-Prompts are preserved under evidence/coordinator-20261024 with hashes.
-Check terminal markers without reading long live outputs. Capacity errors:
-retain WIP, wait about a minute, resume with the same remaining budget.
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively33914,
+26182,35253. Scratch output names: codex-prover-rng-20261024.out,
+codex-port6ck-20261024.out,codex-port7clean-20261024.out. Only terminal markers
+or missing handles trigger reading the final ~40 lines. Prompts archived under
+evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
+
+Port6AUTH finished and was reviewed/merged at915db3ef07; C3-BIN has the exact
+conditional claim and receipt review. The pure entropy effects result remains
+on the unmerged prover candidate at748e710252; LOG D191 records the native-world
+binding gap. Research/H5 was merged into that candidate at71100fccbd before the
+new explicit-state preflight. Historical candidate ELF and timing evidence is
+not adoption evidence for the changed source.
 
 Critical interface finding: Q1 indexed authentication uses existing Merkle
 recovery outside the charged collision event; AcceptedVerifierJoin currently
