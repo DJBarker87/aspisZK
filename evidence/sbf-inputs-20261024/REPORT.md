@@ -79,3 +79,15 @@ targets NOT YET ESTABLISHED. Lean/Kani/Rust/compiler/Cargo/scope/Charon/Aeneas/
 backend/ELF/consumer/frozen-manifest budgets0. No keys/wallet/RPC/chain operations;
 no keys created/read/copied/deleted. Fixed ELF mismatch must STOP; frozen4bb does
 not gate later unmerged prover candidate source.
+
+Final focused offline audit:308 checks, exit0,0.282539s,28344320-byte process
+peak,swap0,source080c9e1630; exact command `python3 -B tools/sbf-inputs-20261024/SbfInputs_audit.py`.
+Full N/A axiom result and all audited file seals are in audit.json. First audit
+failed on absolute versus relative test-receipt lookup; source/failure retained
+as SbfInputs_audit_v1.py.txt and audit-failed-v1.json. Isolated first-failure wall/
+RSS/swap were not captured; the terminal wall also includes a preceding commit,
+so those fields are explicitly unavailable, not fabricated. The changed audit
+normalized keys and added failure telemetry. No host acquisition or full source/
+archive validation was repeated. This local consistency audit is not a release
+or security gate. Report-only additions follow the audit and do not change its
+measured helper inputs.
