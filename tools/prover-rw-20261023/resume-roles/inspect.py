@@ -1,0 +1,81 @@
+"""Concrete old054 successor/aggregate/cleanup inspection; no compiler/extractor."""
+from pathlib import Path
+import hashlib,json
+D=Path(__file__).resolve().parent
+ROOT=D.parents[2]
+E=ROOT/'docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+
+def walk(x,path='',unwind=False):
+    if isinstance(x,dict):
+        if 'id' in x and 'kind' in x: yield path,x,unwind
+        for k,v in x.items(): yield from walk(v,path+'/'+k,unwind or k=='on_unwind')
+    elif isinstance(x,list):
+        for i,v in enumerate(x): yield from walk(v,path+'/'+str(i),unwind)
+
+def inspect():
+    p=E/'factory-state/emission-audit.json';j=json.loads(p.read_text())
+    g=E/'resume-roles/reused-glue.json';glue=json.loads(g.read_text())
+    assert glue['input_sha256']==j['input']['sha256']
+    selected=D.parent/'resume-scalar/proof/selected.rs'
+    original=D.parent/'factory-state/preflight/lib.rs'
+    assert selected.read_text()==original.read_text().replace('ProverRwFactoryState','ProverRwResumeScalar')
+    r=j['selected_resume'];assert r['item_meta']['source_text'].replace('ProverRwFactoryState','ProverRwResumeScalar') in selected.read_text()
+    b=r['body']['Structured']['body']
+    root=b['statements'];assert root[8]['id']==601
+    arms=root[8]['kind']['Switch']['Match'][1]
+    assert arms[0][0]==[0] and arms[1][0]==[1]
+    ok=arms[0][1]['statements'];outer=ok[93]['kind']['Switch']['If']
+    assert ok[93]['id']==569 and outer[0]['Move']['kind']=={'Local':38}
+    seq=outer[1]['statements'];inner=seq[14]['kind']['Switch']['If']
+    assert seq[14]['id']==455 and inner[0]['Move']['kind']=={'Local':43}
+    assert inner[1]['statements']==[]
+    assert inner[2]['statements'][-1]['kind']=='Return'
+    assert outer[2]['statements'][-1]['kind']=='Return'
+    normal={s['id']:(path,s) for path,s,u in walk(b) if not u}
+    def assign(i): return normal[i][1]['kind']['Assign']
+    def move(i,dest,src):
+        a=assign(i);assert a[0]['kind']=={'Local':dest}
+        assert a[1]['Use'][0]['Move']['kind']=={'Local':src}
+    move(467,53,10);move(469,54,12)
+    a=assign(470);assert a[0]['kind']=={'Local':51}
+    tag,ops=a[1]['Aggregate'];assert tag['Adt'][0]['id']=={'Adt':7}
+    assert [x['Move']['kind'] for x in ops]==[{'Local':52},{'Local':53},{'Local':54}]
+    for i,dest,src in [(474,50,51),(476,49,50)]:
+        a=assign(i);assert a[0]['kind']=={'Local':dest}
+        assert a[1]['Aggregate'][1][0]['Move']['kind']=={'Local':src}
+    assert assign(478)[0]['kind']=={'Local':0}
+    assert [x['Move']['kind'] for x in assign(478)[1]['Aggregate'][1]]==[{'Local':48},{'Local':49}]
+    assert [f['name'] for f in j['types'][7]['kind']['Struct']]==['mask_nonce','field_mask_entropy','leaf_salt_seed']
+    assert [s['id'] for s in seq[15:] if isinstance(s['kind'],dict) and 'Drop' in s['kind']]==[]
+    assert [s['id'] for s in root[9:]]==[602,607,608,609,610,612,613]
+    assert root[-1]['kind']=='Return'
+    assert normal[607][1]['kind']['Drop']['place']['kind']=={'Local':3}
+    assert normal[484][1]['kind']=={'StorageDead':12} and normal[485][1]['kind']=={'StorageDead':10}
+    for branch,add,write,drops in [(inner[2],380,382,[430,441,448]),(outer[2],494,496,[544,555,562])]:
+        ids=[s['id'] for s in branch['statements']]
+        assert ids.index(add)<ids.index(write)<ids.index(drops[0])<ids.index(drops[1])<ids.index(drops[2])
+        assert [normal[i][1]['kind']['Drop']['place']['kind'] for i in drops]==[{'Local':12},{'Local':10},{'Local':3}]
+    funcs={f['def_id']:f for f in glue['functions']}
+    gb=funcs[12]['body']['Structured']['body'];gd=[s for _,s,u in walk(gb) if not u and isinstance(s['kind'],dict) and 'Drop' in s['kind']]
+    assert [s['kind']['Drop']['place']['kind']['Projection'][1]['Field'][1] for s in gd]==[1,2]
+    assert all(s['kind']['Drop']['fn_ptr']['kind']=={'Fun':{'Regular':15}} for s in gd)
+    # Exact whole bodies retained below, including all unwind branches. No flag reconstruction.
+    ids=[4,6,8,380,382,386,398,410,430,441,448,454,460,465,467,469,470,474,476,478,484,485,494,496,500,512,524,544,555,562,568,571,577,588,589,591,607,613]
+    out=dict(schema='ProverRwResumeRoles-inspection-v1',
+        input_sha256={str(x.relative_to(ROOT)):sha(x) for x in [p,g,selected,original,Path(__file__).resolve()]},
+        source_assessment='old054 full selected items identical under private prefix rename only; reused association, not a new native identity gate',
+        old_input=j['input'],complete_resume=r,types=j['types'][:9],
+        statements=[dict(path=normal[i][0],statement=normal[i][1]) for i in ids if i in normal],
+        correction='Empty true arm455 falls through enclosing block suffix465..478; rejecting false arm returns454. Outer false arm returns568. Success assigns return0 then shared bytes64 Drop607 and Return613.',
+        normal_owner_glue=gd,
+        raw_MIR_drop_flags='Unavailable: this is Charon structured post-drop-elaboration output. Precise moves/Drop/StorageDead are evidence; source-local boolean flags are not retained and are not invented.',
+        draw_and_run_MIR='Absent from old054 extraction; current scalar compile blocked by read-only admission',
+        new_compiler_invocations=0,new_extraction_invocations=0,Kani_invocations=0,
+        native_projection_proved=False,print_axioms='N/A: no Lean declarations')
+    return out
+
+if __name__=='__main__':
+    out=inspect();p=E/'resume-roles/association.json'
+    p.write_text(json.dumps(out,separators=(',',':'))+'\n');assert p.stat().st_size<=5_000_000
+    print('Concrete success successor, named moves, rejection ordering and owner field glue inspected; native projection remains unproved')
