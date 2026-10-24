@@ -1,0 +1,214 @@
+"""Metadata-only one-shot host runner. No compiler, consumer, or allocation probe."""
+import contextlib
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import runpy
+import shutil
+import signal
+import subprocess
+import sys
+import sysconfig
+import time
+
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0,str(HERE))
+import ResourceAdmit_adapter as adapter
+EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
+UNIT = 'resource-admit-20261024'
+LOCK = '/tmp/aspis-r0-lean.lock'
+MODE = 'limited ResourceAvailable policy; metadata-only; no consumer'
+ENV_KEYS = {'HOME','USER','LOGNAME','PATH','LANG','XDG_RUNTIME_DIR','DBUS_SESSION_BUS_ADDRESS'}
+
+
+def digest(data):
+    return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
+
+
+def filepin(path):
+    return digest(Path(path).read_bytes())
+
+
+def runtime_pins():
+    std = Path(sysconfig.get_path('stdlib')).resolve()
+    files = {}
+    for root, dirs, names in os.walk(std):
+        dirs[:] = sorted(d for d in dirs if d not in ('site-packages','dist-packages','__pycache__'))
+        for name in sorted(names):
+            if name.endswith(('.py','.so')):
+                p = Path(root)/name
+                files[str(p)] = filepin(p)
+    mapped = {}
+    for line in Path('/proc/self/maps').read_text().splitlines():
+        parts = line.split(None,5)
+        if len(parts)==6 and parts[5].startswith('/'):
+            p=parts[5]
+            mapped[p]=filepin(p)
+    tools = {name:dict(path=shutil.which(name), **filepin(shutil.which(name)))
+             for name in ('ps','systemctl','docker','systemd-run')}
+    return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable),
+                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools)
+
+
+def save(name, value):
+    # All raw captures stay intact on the host. Local export applies size policy.
+    p=HERE/'capture'/name
+    p.parent.mkdir(exist_ok=True)
+    with p.open('x') as out:
+        json.dump(value,out,sort_keys=True,indent=2)
+        out.write('\n')
+
+
+def verify(manifest):
+    actual={name:filepin(HERE/name) for name in manifest['files']}
+    if actual != manifest['files']:
+        raise ValueError('source drift')
+    runtime=runtime_pins()
+    if runtime != manifest['runtime']:
+        raise ValueError('runtime/dependency drift')
+    if set(os.environ) != ENV_KEYS or dict(os.environ) != manifest['env']:
+        raise ValueError('environment differs from allowlist pin')
+    return dict(files=actual,runtime=runtime,env=dict(os.environ),mode=MODE)
+
+
+def scope_argv():
+    return ['systemd-run','--user','--scope','--unit='+UNIT,
+            '-p','MemoryHigh=3G','-p','MemoryMax=4G','-p','MemorySwapMax=0','-p','TasksMax=64',
+            sys.executable,'-I','-B',str(HERE/'ResourceAdmit_host.py'),'go']
+
+
+def flow(prospective, launch):
+    report=prospective()
+    if report['decision']['allowed'] is not True:
+        return dict(terminal='PROSPECTIVE_DENY', prospective_exit=78, scope_created=False)
+    return launch()
+
+
+def go_flow(report, marker):
+    if report['decision']['allowed'] is not True:
+        return dict(terminal='GO_DENY', go_exit=78, marker_exit=None)
+    marker()
+    return dict(terminal='GO_MARKER_PASS', go_exit=0, marker_exit=0)
+
+
+def collect(phase):
+    """Record every ordered filesystem/command input without changing API logic."""
+    api=adapter.__dict__
+    events=[]
+    read=Path.read_text
+    execute=subprocess.run
+    scandir=os.scandir
+    def recorded_read(path,*args,**kwargs):
+        try:
+            content=read(path,*args,**kwargs)
+        except OSError as exc:
+            events.append(dict(kind='read',path=str(path),errno=exc.errno,error=str(exc)))
+            raise
+        events.append(dict(kind='read',path=str(path),content=content,errno=0,**digest(content.encode())))
+        return content
+    def recorded_run(args,*pos,**kwargs):
+        try:
+            result=execute(args,*pos,**kwargs)
+        except (OSError,subprocess.SubprocessError) as exc:
+            events.append(dict(kind='command',command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),
+                               stdout=getattr(exc,'stdout',None),stderr=getattr(exc,'stderr',None)))
+            raise
+        events.append(dict(kind='command',command=args,exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
+        return result
+    @contextlib.contextmanager
+    def recorded_scandir(path):
+        try:
+            with scandir(path) as entries:
+                entries=list(entries)
+                events.append(dict(kind='scandir',path=str(path),entries=[dict(name=e.name,path=e.path,is_dir=e.is_dir(follow_symlinks=False)) for e in entries]))
+                yield iter(entries)
+        except OSError as exc:
+            events.append(dict(kind='scandir',path=str(path),error=str(exc),errno=exc.errno))
+            raise
+    start=time.monotonic()
+    try:
+        Path.read_text=recorded_read
+        subprocess.run=recorded_run
+        os.scandir=recorded_scandir
+        report=api['read_only_admission'](phase=phase)
+    finally:
+        Path.read_text=read
+        subprocess.run=execute
+        os.scandir=scandir
+        save(phase+'-ordered.json',events)
+    save(phase+'-report.json',report)
+    save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
+        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+        swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+        aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3),
+        print_axioms='N/A'))
+    return report
+
+
+def controls():
+    observed=adapter.identity['self_observation']()
+    path=Path(observed['path'])
+    names=['memory.high','memory.max','memory.current','memory.peak','memory.swap.max','memory.swap.current',
+           'memory.events','pids.max','pids.current','cgroup.procs','cgroup.threads','cgroup.events']
+    result=dict(path=str(path),pid=os.getpid(),self_observation=observed,values={})
+    for name in names:
+        try:result['values'][name]=(path/name).read_text()
+        except OSError as exc:result['values'][name]=dict(error=str(exc),errno=exc.errno)
+    return result
+
+
+def main():
+    signal.alarm(115)  # metadata diagnostic deadline, including pinning
+    action=sys.argv[1]
+    if action=='inspect':
+        print(json.dumps(dict(runtime=runtime_pins(),uid=os.getuid(),stage_exists=HERE.exists(),
+                              environment=dict(os.environ))))
+        return 0
+    manifest=json.loads((HERE/'ResourceAdmit_manifest.json').read_text())
+    start=time.monotonic()
+    save(action+'-pre-pins.json',verify(manifest))
+    if action=='run':
+        with (HERE/'ResourceAdmit_ATTEMPTED').open('x') as sentinel:
+            sentinel.write('fixed Q4GiB; transport/observation failures terminal'+chr(10))
+    if action=='go':
+        save('go-controls-before.json',controls())
+        report=collect('inside-scope')
+        save('go-pins.json',verify(manifest))
+        def marker():
+            # No subprocess or workload: only actual identity, after GO.
+            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceAdmit metadata marker only'))
+        result=go_flow(report,marker)
+        save('go-controls-after.json',controls())
+        code=result['go_exit']
+    elif action=='run':
+        # One shared lock, same path/flock protocol as immutable manager launchers.
+        # Nonblocking: a busy lock is a terminal pre-capture blocker, never a retry.
+        with open(LOCK,'r') as lock:
+            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            save('lock.json',dict(path=LOCK,mode='LOCK_EX|LOCK_NB',held_through='prospective and scope exit',
+                                  inode=os.fstat(lock.fileno()).st_ino))
+            def launch():
+                argv=scope_argv()
+                save('scope-argv.json',argv)
+                child=subprocess.Popen(argv,stdout=(HERE/'capture/scope.stdout').open('x'),stderr=(HERE/'capture/scope.stderr').open('x'),env=manifest['env'])
+                _,status,usage=os.wait4(child.pid,0)
+                code=os.waitstatus_to_exitcode(status)
+                child.returncode=code
+                save('scope-child.json',dict(argv=argv,exit=code,peak_rss_bytes=usage.ru_maxrss*1024,swap=usage.ru_nswap))
+                return dict(terminal='SCOPE_EXIT',scope_created=True,scope_runner_exit=code,prospective_exit=0)
+            result=flow(lambda:collect('prospective'),launch)
+        code=0 if result.get('scope_runner_exit',78)==0 else 78
+    else:
+        raise ValueError('unknown action')
+    save(action+'-post-pins.json',verify(manifest))
+    save(action+'-exit.json',dict(**result,exit=code,wall_seconds=time.monotonic()-start,
+        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+        swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,print_axioms='N/A'))
+    return code
+
+if __name__=='__main__':
+    raise SystemExit(main())
