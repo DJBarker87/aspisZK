@@ -1,0 +1,12 @@
+Aeneas.Std.alloc.vec.Vec.index_RangeFrom_spec {α : Type} (v : alloc.vec.Vec α) (r : core.ops.range.RangeFrom Usize)
+  (h : ↑r.start ≤ v.length) :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeFromUsizeSlice α) v r ⦃ s1 =>
+    ↑s1 = List.drop ↑r.start ↑v ∧ s1.length = v.length - ↑r.start ⦄
+Aeneas.Std.alloc.vec.Vec.index_RangeTo_spec {α : Type} (v : alloc.vec.Vec α) (r : core.ops.range.RangeTo Usize)
+  (h : ↑r.end ≤ v.length) :
+  alloc.vec.Vec.index (core.slice.index.SliceIndexRangeToUsizeSlice α) v r ⦃ s1 =>
+    ↑s1 = List.slice 0 ↑r.end ↑v ∧ s1.length = ↑r.end ⦄
+List.drop_left.{u_1} {α : Type u_1} {l₁ l₂ : List α} : List.drop l₁.length (l₁ ++ l₂) = l₂
+List.drop_append_of_le_length.{u_1} {α : Type u_1} {l₁ l₂ : List α} {i : ℕ} (h : i ≤ l₁.length) :
+  List.drop i (l₁ ++ l₂) = List.drop i l₁ ++ l₂
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1Y1RecombineProbeV1.lean:7:7: error(lean.unknownIdentifier): Unknown constant `List.drop_length_append`
