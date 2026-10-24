@@ -14,12 +14,10 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
 | Explicit entropy preflight | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D191 host-only explicit entropy-state extraction and native caller coupling | Remaining16 Lean,18 Kani; J11289–11399, check unused IDs |
-| Checkpoint integration | .worktrees/cx-port6ck / codex/cx-port6ck-20261024 | Native op18 and saved-to-resumed state | 100 Lean,40 Kani |
 | Concrete clean-source driver | .worktrees/cx-port7clean / codex/cx-port7clean-20261024 | Terminal Checks/no-hit plus actual source trace embeddings | 100 Lean,20 Kani |
 
-All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively33914,
-26182,35253. Scratch output names: codex-prover-rng-20261024.out,
-codex-port6ck-20261024.out,codex-port7clean-20261024.out. Only terminal markers
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively33914,35253. Scratch output names:
+codex-prover-rng-20261024.out,codex-port7clean-20261024.out. Only terminal markers
 or missing handles trigger reading the final ~40 lines. Prompts archived under
 evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
 
@@ -84,3 +82,14 @@ PPID 1, ~4.7 GiB RSS in its 8 GiB no-swap scope. Exact owner/workspace and
 scope are recorded in HANDOFF-SESSION-A. The lead did not stop it. Obtain an
 owner resolution before calling the host quiet; ordinary capped focused proofs
 can continue within the 55 GiB aggregate reservation ceiling.
+
+
+## Checkpoint integration ready — 2026-10-24
+
+Port6CK is reviewed and merged. Its exact SourceJoin and Complete interfaces
+are recorded in C3-BIN and evidence/port6ck-20261024/HANDOFF.md. Port7CLEAN's
+active worktree predates this merge: integrate the packet after its current
+stage commits, then compose checkpoint/authentication in the concrete driver.
+No additional worker is launched on overlapping driver glue while it owns
+that path. The next independent job should follow the actual residuals in its
+handoff, not duplicate its optional source count/trace investigation.

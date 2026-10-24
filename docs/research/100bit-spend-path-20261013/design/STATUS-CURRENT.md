@@ -117,3 +117,13 @@ instances remain open; no all-H join or deployed closure claimed. Port7CLEAN
 is assigned concrete terminal Checks/no-hit composition. Port6CK remains on
 native checkpoint resume. Prover RNG preflight runs on H5-aligned candidate
 71100fccbd under D191; still unadopted. Both targets not yet established.
+
+
+### Lead checkpoint — Port6CK reviewed, 2026-10-24
+
+Actual saved-to-resumed equality and current reader ordered observations are
+proved under explicit local preparation/primitive/runtime interpretations.
+Port6CK_Complete.accepted consumes the actual returned state; the earlier
+literal same-state premise is removed. SourceJoin.source/provenance are ready
+for VTop reader_join/writer_join and Port7CLEAN composition. Authentication
+and source-driver obligations remain explicit. Both targets not yet established.

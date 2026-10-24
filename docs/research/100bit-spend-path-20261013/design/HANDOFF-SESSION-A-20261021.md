@@ -404,3 +404,16 @@ requisite source trace embeddings; Port6CK still owns native op18/checkpoint
 state. Neither worker duplicates your prepare/powers/primitive/S6/S10 rows.
 See evidence/port6auth-20261024/STAGE3.md for full before/after and retained
 premises. Both deployed targets remain not yet established.
+
+
+## Lead checkpoint closure at local boundary (2026-10-24)
+
+Port6CK_Complete.accepted now derives saved-to-resumed state equality from one
+actual TX1 and current op18 on its exact saved Vec, then advances its returned
+state through twelve actual calls. Port6CK_Ordered.accepted preserves the six
+ordered digest observations. SourceJoin.source/provenance are ready for
+VTop_Checkpoint.reader_join/writer_join. Your preparation/primitive/powers and
+runtime/artifact obligations remain explicit; no deployed closure is claimed.
+Port7CLEAN owns the enclosing driver composition; no duplicate session A work
+is assigned. Full assumptions and receipt review are in the latest C3-BIN
+addendum and evidence/port6ck-20261024/HANDOFF.md.
