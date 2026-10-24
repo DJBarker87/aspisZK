@@ -1,0 +1,51 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryModelContinuationV1.lean:53:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  oracleProgram (?p >>= ?k)
+in the target expression
+  (continueOracle (ok absorbed) fun a =>
+      oracleProgram do
+        let __x ← materialize effects D a.hash a.state
+        match __x with
+          | (blocks, advances) => finish B D a blocks advances) =
+    continueOracle (ok absorbed) fun absorbed =>
+      AspisV8R19.OracleProgramOps.bind (modelMaterialize p absorbed.state) fun r =>
+        continueOracle r fun pair => oracleProgram (finish B D absorbed pair.1 pair.2)
+
+case e_next.ok
+B : QueriesModel.Boundaries
+H M Cv : Type
+L : ℕ
+p : Params M Cv L
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+row : U8
+payload : Slice U8
+absorbed : transcript.Transcript H
+⊢ (continueOracle (ok absorbed) fun a =>
+      oracleProgram do
+        let __x ← materialize effects D a.hash a.state
+        match __x with
+          | (blocks, advances) => finish B D a blocks advances) =
+    continueOracle (ok absorbed) fun absorbed =>
+      AspisV8R19.OracleProgramOps.bind (modelMaterialize p absorbed.state) fun r =>
+        continueOracle r fun pair => oracleProgram (finish B D absorbed pair.1 pair.2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1PublicPreparation.PreparedQueryMaterialize.queries_code_eq_pairs' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedQueryMaterialize.queries_program_eq_model' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedQueryMaterialize.materialize_program_total' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

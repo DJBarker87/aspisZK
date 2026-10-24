@@ -1,0 +1,56 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedQueryPairsInstallationV1.lean:19:52: error: Application type mismatch: The argument
+  preparationEffects B Q
+has type
+  PreparedSourceEffects.Effects Code
+but is expected to have type
+  Type → Type
+in the application
+  @PreparedSourceEffects.Effects.queries (preparationEffects B Q)
+'AspisR1PublicPreparation.PreparedHashCode.pairedPreparationEffects_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.preparation_code_eq_pairs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PreparedQueryPairsInstallationV1.lean:60:105: error: unsolved goals
+H : Type
+D : aspis_core.digest.Digest32 H
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+⊢ (do
+      let __x ←
+        AspisR1PublicPreparation.PreparedSourceEffects.prepare
+            (preparationEffects closedHashBoundaries closedHashQueries) (InstalledPreparation.retainedDigest D)
+            (InstalledPreparation.retainedSem sem) (InstalledPreparation.retainedView view) hash
+            (mapArray InstalledPreparation.retainedE scratch)
+      match __x with
+        | (r, g) =>
+          pure
+            (match r with
+              | core.result.Result.Ok x => core.result.Result.Ok (InstalledPreparation.currentPrepared x)
+              | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+              mapArray InstalledPreparation.currentE g)) =
+    do
+    let __x ←
+      AspisR1PublicPreparation.PreparedSourceEffects.prepare (preparationEffects closedHashBoundaries closedHashQueries)
+          (InstalledPreparation.retainedDigest D) (InstalledPreparation.retainedSem sem)
+          (InstalledPreparation.retainedView view) hash (mapArray InstalledPreparation.retainedE scratch)
+    match __x with
+      | (r, g) =>
+        pure
+          (match r with
+            | core.result.Result.Ok x => core.result.Result.Ok (InstalledPreparation.currentPrepared x)
+            | core.result.Result.Err e => core.result.Result.Err (InstalledPreparation.currentError e),
+            mapArray InstalledPreparation.currentE g)
+'AspisR1CurrentCaller.BorrowedClaimPrepared.closedPreparationCode_eq_pairs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1CurrentCaller.BorrowedClaimPrepared.pairedCausalPreparationProgram_eq' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

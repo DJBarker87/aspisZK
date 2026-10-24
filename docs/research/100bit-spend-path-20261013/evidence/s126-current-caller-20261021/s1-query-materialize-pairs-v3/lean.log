@@ -1,0 +1,339 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryMaterializePairsV1.lean:81:70: error: unsolved goals
+case h_1
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+state : Bytes32
+x✝⁸ : Slice U8
+x✝⁷ : Slice (UScalar UScalarTy.U8)
+x✝⁶ : Slice (Slice U8)
+x✝⁵ : Std.Array U8 32#usize
+x✝⁴ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize ×
+    (Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize)
+fst✝¹ : Std.Array (UScalar UScalarTy.U8) 32#usize
+index_mut_back✝¹ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+x✝³ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize ×
+    (Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize)
+fst✝ : Std.Array (UScalar UScalarTy.U8) 32#usize
+index_mut_back✝ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+heq✝ : (fst✝¹, index_mut_back✝¹) = (fst✝, index_mut_back✝)
+x✝² : Slice U8
+x✝¹ : Slice (UScalar UScalarTy.U8)
+x✝ : Slice (Slice U8)
+x : Std.Array U8 32#usize
+⊢ (have blocks1 := index_mut_back✝¹ x;
+    do
+    let state ← liftM (blocks1.index_usize 0#usize)
+    let s6 ← liftM (lift state.to_slice)
+    let s7 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+    let a3 ← effects.digest D hash s8
+    have blocks2 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back✝¹ x✝⁵
+    let blocks3 ← liftM (blocks2.update 1#usize a3)
+    let s9 ← liftM (lift state.to_slice)
+    let s10 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s11 ← liftM (lift (Array.make 2#usize [s9, s10] ⋯).to_slice)
+    let a4 ← effects.digest D hash s11
+    let blocks4 ← liftM (blocks1.update 1#usize a4)
+    let state1 ← liftM (blocks4.index_usize 1#usize)
+    let s12 ← liftM (lift state1.to_slice)
+    let s13 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s14 ← liftM (lift (Array.make 2#usize [s12, s13] ⋯).to_slice)
+    let a5 ← effects.digest D hash s14
+    let blocks5 ← liftM (blocks3.update 2#usize a5)
+    let s15 ← liftM (lift state1.to_slice)
+    let s16 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s17 ← liftM (lift (Array.make 2#usize [s15, s16] ⋯).to_slice)
+    let a6 ← effects.digest D hash s17
+    let blocks6 ← liftM (blocks4.update 2#usize a6)
+    let state2 ← liftM (blocks6.index_usize 2#usize)
+    let s18 ← liftM (lift state2.to_slice)
+    let s19 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s20 ← liftM (lift (Array.make 2#usize [s18, s19] ⋯).to_slice)
+    let a7 ← effects.digest D hash s20
+    let blocks7 ← liftM (blocks5.update 3#usize a7)
+    let s21 ← liftM (lift state2.to_slice)
+    let s22 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s23 ← liftM (lift (Array.make 2#usize [s21, s22] ⋯).to_slice)
+    let a8 ← effects.digest D hash s23
+    let blocks8 ← liftM (blocks6.update 3#usize a8)
+    let state3 ← liftM (blocks8.index_usize 3#usize)
+    let s24 ← liftM (lift state3.to_slice)
+    let s25 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s26 ← liftM (lift (Array.make 2#usize [s24, s25] ⋯).to_slice)
+    let a9 ← effects.digest D hash s26
+    let blocks9 ← liftM (blocks7.update 4#usize a9)
+    let s27 ← liftM (lift state3.to_slice)
+    let s28 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s29 ← liftM (lift (Array.make 2#usize [s27, s28] ⋯).to_slice)
+    let a10 ← effects.digest D hash s29
+    let blocks10 ← liftM (blocks8.update 4#usize a10)
+    let state4 ← liftM (blocks10.index_usize 4#usize)
+    let s30 ← liftM (lift state4.to_slice)
+    let s31 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s32 ← liftM (lift (Array.make 2#usize [s30, s31] ⋯).to_slice)
+    let a11 ← effects.digest D hash s32
+    let blocks11 ← liftM (blocks9.update 5#usize a11)
+    let s33 ← liftM (lift state4.to_slice)
+    let s34 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s35 ← liftM (lift (Array.make 2#usize [s33, s34] ⋯).to_slice)
+    let a12 ← effects.digest D hash s35
+    let blocks12 ← liftM (blocks10.update 5#usize a12)
+    let state5 ← liftM (blocks12.index_usize 5#usize)
+    let s36 ← liftM (lift state5.to_slice)
+    let s37 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s38 ← liftM (lift (Array.make 2#usize [s36, s37] ⋯).to_slice)
+    let a13 ← effects.digest D hash s38
+    let blocks13 ← liftM (blocks11.update 6#usize a13)
+    let s39 ← liftM (lift state5.to_slice)
+    let s40 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s41 ← liftM (lift (Array.make 2#usize [s39, s40] ⋯).to_slice)
+    let a14 ← effects.digest D hash s41
+    let blocks14 ← liftM (blocks12.update 6#usize a14)
+    let state6 ← liftM (blocks14.index_usize 6#usize)
+    let s42 ← liftM (lift state6.to_slice)
+    let s43 ← liftM (lift (Array.make 1#usize [1#u8] materialize._proof_4).to_slice)
+    let s44 ← liftM (lift (Array.make 2#usize [s42, s43] ⋯).to_slice)
+    let a15 ← effects.digest D hash s44
+    let blocks15 ← liftM (blocks13.update 7#usize a15)
+    let s45 ← liftM (lift state6.to_slice)
+    let s46 ← liftM (lift (Array.make 1#usize [2#u8] materialize._proof_9).to_slice)
+    let s47 ← liftM (lift (Array.make 2#usize [s45, s46] ⋯).to_slice)
+    let a16 ← effects.digest D hash s47
+    let blocks16 ← liftM (blocks14.update 7#usize a16)
+    let _ ← liftM (blocks16.index_usize 7#usize)
+    pure (blocks15, blocks16)) =
+    have blocks1 := index_mut_back✝ x;
+    do
+    let state ← liftM (blocks1.index_usize 0#usize)
+    let a3 ←
+      do
+        let s ← liftM (lift state.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    have blocks2 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back✝ x✝⁵
+    let blocks3 ← liftM (blocks2.update 1#usize a3)
+    let a4 ←
+      do
+        let s ← liftM (lift state.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks4 ← liftM (blocks1.update 1#usize a4)
+    let state1 ← liftM (blocks4.index_usize 1#usize)
+    let a5 ←
+      do
+        let s ← liftM (lift state1.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks5 ← liftM (blocks3.update 2#usize a5)
+    let a6 ←
+      do
+        let s ← liftM (lift state1.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks6 ← liftM (blocks4.update 2#usize a6)
+    let state2 ← liftM (blocks6.index_usize 2#usize)
+    let a7 ←
+      do
+        let s ← liftM (lift state2.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks7 ← liftM (blocks5.update 3#usize a7)
+    let a8 ←
+      do
+        let s ← liftM (lift state2.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks8 ← liftM (blocks6.update 3#usize a8)
+    let state3 ← liftM (blocks8.index_usize 3#usize)
+    let a9 ←
+      do
+        let s ← liftM (lift state3.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks9 ← liftM (blocks7.update 4#usize a9)
+    let a10 ←
+      do
+        let s ← liftM (lift state3.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks10 ← liftM (blocks8.update 4#usize a10)
+    let state4 ← liftM (blocks10.index_usize 4#usize)
+    let a11 ←
+      do
+        let s ← liftM (lift state4.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks11 ← liftM (blocks9.update 5#usize a11)
+    let a12 ←
+      do
+        let s ← liftM (lift state4.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks12 ← liftM (blocks10.update 5#usize a12)
+    let state5 ← liftM (blocks12.index_usize 5#usize)
+    let a13 ←
+      do
+        let s ← liftM (lift state5.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks13 ← liftM (blocks11.update 6#usize a13)
+    let a14 ←
+      do
+        let s ← liftM (lift state5.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks14 ← liftM (blocks12.update 6#usize a14)
+    let state6 ← liftM (blocks14.index_usize 6#usize)
+    let a15 ←
+      do
+        let s ← liftM (lift state6.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [1#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks15 ← liftM (blocks13.update 7#usize a15)
+    let a16 ←
+      do
+        let s ← liftM (lift state6.to_slice)
+        let t ← liftM (lift (Array.make 1#usize [2#u8] ⋯).to_slice)
+        let parts ← liftM (lift (Array.make 2#usize [s, t] ⋯).to_slice)
+        effects.digest D hash parts
+    let blocks16 ← liftM (blocks14.update 7#usize a16)
+    let _ ← liftM (blocks16.index_usize 7#usize)
+    pure (blocks15, blocks16)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryMaterializePairsV1.lean:92:70: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+state : Bytes32
+x✝⁷ : QueryPair.Bytes32
+x✝⁶ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize ×
+    (Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize)
+x✝⁵ : QueryPair.Bytes32
+x✝⁴ : Std.Array (UScalar UScalarTy.U8) 32#usize
+x✝³ : QueryPair.Bytes32
+x✝² : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+x✝¹ : QueryPair.Bytes32
+x✝ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+x : Std.Array (UScalar UScalarTy.U8) 32#usize
+⊢ (do
+      let a5 ← QueryPair.readState D hash x 1#u8
+      let blocks5 ← liftM (x✝².update 2#usize a5)
+      let a6 ← QueryPair.readState D hash x 2#u8
+      let blocks6 ← liftM (x✝.update 2#usize a6)
+      let state2 ← liftM (blocks6.index_usize 2#usize)
+      let a7 ← QueryPair.readState D hash state2 1#u8
+      let blocks7 ← liftM (blocks5.update 3#usize a7)
+      let a8 ← QueryPair.readState D hash state2 2#u8
+      let blocks8 ← liftM (blocks6.update 3#usize a8)
+      let state3 ← liftM (blocks8.index_usize 3#usize)
+      let a9 ← QueryPair.readState D hash state3 1#u8
+      let blocks9 ← liftM (blocks7.update 4#usize a9)
+      let a10 ← QueryPair.readState D hash state3 2#u8
+      let blocks10 ← liftM (blocks8.update 4#usize a10)
+      let state4 ← liftM (blocks10.index_usize 4#usize)
+      let a11 ← QueryPair.readState D hash state4 1#u8
+      let blocks11 ← liftM (blocks9.update 5#usize a11)
+      let a12 ← QueryPair.readState D hash state4 2#u8
+      let blocks12 ← liftM (blocks10.update 5#usize a12)
+      let state5 ← liftM (blocks12.index_usize 5#usize)
+      let a13 ← QueryPair.readState D hash state5 1#u8
+      let blocks13 ← liftM (blocks11.update 6#usize a13)
+      let a14 ← QueryPair.readState D hash state5 2#u8
+      let blocks14 ← liftM (blocks12.update 6#usize a14)
+      let state6 ← liftM (blocks14.index_usize 6#usize)
+      let a15 ← QueryPair.readState D hash state6 1#u8
+      let blocks15 ← liftM (blocks13.update 7#usize a15)
+      let a16 ← QueryPair.readState D hash state6 2#u8
+      let blocks16 ← liftM (blocks14.update 7#usize a16)
+      let _ ← liftM (blocks16.index_usize 7#usize)
+      pure (blocks15, blocks16)) =
+    do
+    let __x ← pure (x, x✝², x✝)
+    match __x with
+      | (state1, blocks3, blocks4) => do
+        let __x ←
+          do
+            let b ← QueryPair.readState D hash state1 1#u8
+            let blocks1 ← liftM (Array.update blocks3 2#usize b)
+            let x ← QueryPair.readState D hash state1 2#u8
+            let advances1 ← liftM (Array.update blocks4 2#usize x)
+            let next ← liftM (advances1.index_usize 2#usize)
+            pure (next, blocks1, advances1)
+        match __x with
+          | (state2, blocks5, blocks6) => do
+            let __x ←
+              do
+                let b ← QueryPair.readState D hash state2 1#u8
+                let blocks1 ← liftM (Array.update blocks5 3#usize b)
+                let x ← QueryPair.readState D hash state2 2#u8
+                let advances1 ← liftM (Array.update blocks6 3#usize x)
+                let next ← liftM (advances1.index_usize 3#usize)
+                pure (next, blocks1, advances1)
+            match __x with
+              | (state3, blocks7, blocks8) => do
+                let __x ←
+                  do
+                    let b ← QueryPair.readState D hash state3 1#u8
+                    let blocks1 ← liftM (Array.update blocks7 4#usize b)
+                    let x ← QueryPair.readState D hash state3 2#u8
+                    let advances1 ← liftM (Array.update blocks8 4#usize x)
+                    let next ← liftM (advances1.index_usize 4#usize)
+                    pure (next, blocks1, advances1)
+                match __x with
+                  | (state4, blocks9, blocks10) => do
+                    let __x ←
+                      do
+                        let b ← QueryPair.readState D hash state4 1#u8
+                        let blocks1 ← liftM (Array.update blocks9 5#usize b)
+                        let x ← QueryPair.readState D hash state4 2#u8
+                        let advances1 ← liftM (Array.update blocks10 5#usize x)
+                        let next ← liftM (advances1.index_usize 5#usize)
+                        pure (next, blocks1, advances1)
+                    match __x with
+                      | (state5, blocks11, blocks12) => do
+                        let __x ←
+                          do
+                            let b ← QueryPair.readState D hash state5 1#u8
+                            let blocks1 ← liftM (Array.update blocks11 6#usize b)
+                            let x ← QueryPair.readState D hash state5 2#u8
+                            let advances1 ← liftM (Array.update blocks12 6#usize x)
+                            let next ← liftM (advances1.index_usize 6#usize)
+                            pure (next, blocks1, advances1)
+                        match __x with
+                          | (state6, blocks13, blocks14) => do
+                            let __x ←
+                              do
+                                let b ← QueryPair.readState D hash state6 1#u8
+                                let blocks1 ← liftM (Array.update blocks13 7#usize b)
+                                let x ← QueryPair.readState D hash state6 2#u8
+                                let advances1 ← liftM (Array.update blocks14 7#usize x)
+                                let next ← liftM (advances1.index_usize 7#usize)
+                                pure (next, blocks1, advances1)
+                            match __x with
+                              | (fst, blocks15, blocks16) => pure (blocks15, blocks16)
+'AspisR1PublicPreparation.PreparedQueryMaterialize.materialize_code_eq_reads' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedQueryMaterialize.materialize_code_eq_pairs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

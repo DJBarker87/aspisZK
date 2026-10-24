@@ -1,0 +1,49 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryReadPairProgramV1.lean:55:23: error: Application type mismatch: The argument
+  bound
+has type
+  ↑i < 8
+but is expected to have type
+  ↑?m.51 < ↑?m.49
+in the application
+  update_total ?m.50 ?m.51 ?m.52 bound
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryReadPairProgramV1.lean:55:45: error: Application type mismatch: The argument
+  bound
+has type
+  ↑i < 8
+but is expected to have type
+  ↑?m.51 < ↑?m.49
+in the application
+  index_set ?m.50 ?m.51 ?m.52 bound
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryReadPairProgramV1.lean:52:102: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+state : Bytes32
+blocks advances : Blocks8
+i : Usize
+bound : ↑i < 8
+⊢ (Program.ask (flatten (TranscriptStep.readParts state 1#u8)) fun a =>
+      match Array.update blocks i (encodeState a) with
+      | ok a =>
+        Program.ask (flatten (TranscriptStep.readParts state 2#u8)) fun a_1 =>
+          match Array.update advances i (encodeState a_1) with
+          | ok a_2 =>
+            match a_2.index_usize i with
+            | ok a_3 => Program.done (ok (a_3, a, a_2))
+            | fail e => Program.done (fail e)
+            | div => Program.done div
+          | fail e => Program.done (fail e)
+          | div => Program.done div
+      | fail e => Program.done (fail e)
+      | div => Program.done div) =
+    Program.ask (flatten (TranscriptStep.readParts state 1#u8)) fun b =>
+      Program.ask (flatten (TranscriptStep.readParts state 2#u8)) fun x =>
+        Program.done
+          (ok (encodeState x, Std.Array.set blocks i (encodeState b), Std.Array.set advances i (encodeState x)))
+'AspisR1PublicPreparation.PreparedHashCode.QueryPair.readState_program' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisR1PublicPreparation.PreparedHashCode.QueryPair.pairStep_program' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
