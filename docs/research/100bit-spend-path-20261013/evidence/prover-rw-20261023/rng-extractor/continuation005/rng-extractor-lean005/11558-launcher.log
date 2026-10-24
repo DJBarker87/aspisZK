@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 7 GiB; window=0 (London 1505); env=J
+  (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  ProverRwRngExtractorsynthetic.copy_error (R1Z.ProverRwRngExtractor005Operations.encodeSyn e) =
+    Aeneas.Std.Result.ok
+      (R1Z.ProverRwRngExtractor005Operations.encodeSyn e, R1Z.ProverRwRngExtractor005Operations.encodeSyn e) :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.synthetic_repeated : ProverRwRngExtractorsynthetic.repeated =
+  Aeneas.Std.Result.ok ProverRwRngExtractorsynthetic.EntropyError.RepeatedZeroBlock :=
+rfl
+theorem R1Z.ProverRwRngExtractor005Operations.synthetic_selected : ∀
+  (r : Aeneas.Std.core.result.Result Unit ProverRwRngExtractorsynthetic.getrandom.error.Error),
+  ProverRwRngExtractorsynthetic.selected r =
+    Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+      | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.core.result.Result.Err ()) :=
+fun r =>
+  Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+    r = t →
+      ProverRwRngExtractorsynthetic.selected r =
+        Aeneas.Std.Result.ok
+          (match r with
+          | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+          | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.core.result.Result.Err ()))
+    r (fun a h => Eq.symm h ▸ Eq.refl (ProverRwRngExtractorsynthetic.selected (Aeneas.Std.core.result.Result.Ok a)))
+    (fun a h => Eq.symm h ▸ Eq.refl (ProverRwRngExtractorsynthetic.selected (Aeneas.Std.core.result.Result.Err a)))
+    (Eq.refl r)
+theorem R1Z.ProverRwRngExtractor005Operations.boundary_validity : R1Z.ProverRwRngTransportValidity.Pattern
+    R1Z.ProverRwRngExtractor005Operations.minCode ∧
+  R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.negOneCode ∧
+    R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.oneCode ∧
+      R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.maxCode :=
+⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.minCode).mpr
+    (of_decide_eq_true (id (Eq.refl true))),
+  ⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.negOneCode).mpr
+      (of_decide_eq_true (id (Eq.refl true))),
+    ⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.oneCode).mpr
+        (of_decide_eq_true (id (Eq.refl true))),
+      (R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.maxCode).mpr
+        (of_decide_eq_true (id (Eq.refl true)))⟩⟩⟩
+theorem R1Z.ProverRwRngExtractor005Operations.zero_invalid : ∀ (x : Aeneas.Std.I32),
+  ↑x = 0 → ¬R1Z.ProverRwRngTransportValidity.Pattern x :=
+fun x h =>
+  Eq.mpr (id (congrArg (fun _a => ¬_a) (propext (R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero x))))
+    (Eq.mpr (id (congrArg (fun _a => ¬_a ≠ 0) h)) fun hn => hn rfl)
+'R1Z.ProverRwRngExtractor005Operations.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.arbitrary_error_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.arbitrary_error_code' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_from' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_disposal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_map_err' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_move' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.synthetic_copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_repeated' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.synthetic_selected' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.boundary_validity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.zero_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.07
+	Maximum resident set size (kbytes): 2622428
+	Swaps: 0
+	Exit status: 0

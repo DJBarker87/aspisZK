@@ -1,0 +1,194 @@
+structure R1Z.ProverRwRngExtractor005Operations.SourceInner : Type
+number of parameters: 0
+fields:
+  R1Z.ProverRwRngExtractor005Operations.SourceInner.value : R1Z.ProverRwRngTransportValidity.PatternValue
+constructor:
+  R1Z.ProverRwRngExtractor005Operations.SourceInner.mk (value : R1Z.ProverRwRngTransportValidity.PatternValue) :
+    R1Z.ProverRwRngExtractor005Operations.SourceInner
+structure R1Z.ProverRwRngExtractor005Operations.SourceNonZero : Type
+number of parameters: 0
+fields:
+  R1Z.ProverRwRngExtractor005Operations.SourceNonZero.inner : R1Z.ProverRwRngExtractor005Operations.SourceInner
+constructor:
+  R1Z.ProverRwRngExtractor005Operations.SourceNonZero.mk (inner : R1Z.ProverRwRngExtractor005Operations.SourceInner) :
+    R1Z.ProverRwRngExtractor005Operations.SourceNonZero
+structure R1Z.ProverRwRngExtractor005Operations.SourceError : Type
+number of parameters: 0
+fields:
+  R1Z.ProverRwRngExtractor005Operations.SourceError.nonzero : R1Z.ProverRwRngExtractor005Operations.SourceNonZero
+constructor:
+  R1Z.ProverRwRngExtractor005Operations.SourceError.mk (nonzero : R1Z.ProverRwRngExtractor005Operations.SourceNonZero) :
+    R1Z.ProverRwRngExtractor005Operations.SourceError
+def R1Z.ProverRwRngExtractor005Operations.encode : R1Z.ProverRwRngExtractor005Operations.SourceError →
+  ProverRwRngExtractorselected64.getrandom.error.Error :=
+fun e => { _0 := { _0 := { _0 := R1Z.ProverRwRngTransportValidity.toValid e.nonzero.inner.value } } }
+def R1Z.ProverRwRngExtractor005Operations.decode : ProverRwRngExtractorselected64.getrandom.error.Error →
+  R1Z.ProverRwRngExtractor005Operations.SourceError :=
+fun e => { nonzero := { inner := { value := R1Z.ProverRwRngTransportValidity.toPattern e._0._0._0 } } }
+def R1Z.ProverRwRngExtractor005Operations.encodeSyn : R1Z.ProverRwRngExtractor005Operations.SourceError →
+  ProverRwRngExtractorsynthetic.getrandom.error.Error :=
+fun e => { _0 := { _0 := { _0 := R1Z.ProverRwRngTransportValidity.toValid e.nonzero.inner.value } } }
+def R1Z.ProverRwRngExtractor005Operations.minCode : Aeneas.Std.I32 :=
+Aeneas.Std.IScalar.ofIntCore (-2147483648) R1Z.ProverRwRngExtractor005Operations.minCode._proof_1
+def R1Z.ProverRwRngExtractor005Operations.negOneCode : Aeneas.Std.I32 :=
+Aeneas.Std.IScalar.ofIntCore (-1) R1Z.ProverRwRngExtractor005Operations.negOneCode._proof_1
+def R1Z.ProverRwRngExtractor005Operations.oneCode : Aeneas.Std.I32 :=
+Aeneas.Std.IScalar.ofIntCore 1 R1Z.ProverRwRngExtractor005Operations.oneCode._proof_1
+def R1Z.ProverRwRngExtractor005Operations.maxCode : Aeneas.Std.I32 :=
+Aeneas.Std.IScalar.ofIntCore 2147483647 R1Z.ProverRwRngExtractor005Operations.maxCode._proof_1
+theorem R1Z.ProverRwRngExtractor005Operations.decode_encode : ∀ (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  R1Z.ProverRwRngExtractor005Operations.decode (R1Z.ProverRwRngExtractor005Operations.encode e) = e :=
+fun e =>
+  let ⟨nonzero✝⟩ := e
+  let ⟨inner✝⟩ := nonzero✝
+  let ⟨v⟩ := inner✝
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg R1Z.ProverRwRngExtractor005Operations.SourceError.mk
+            (congrArg R1Z.ProverRwRngExtractor005Operations.SourceNonZero.mk
+              (congrArg R1Z.ProverRwRngExtractor005Operations.SourceInner.mk
+                (R1Z.ProverRwRngTransportValidity.pattern_roundtrip v)))))
+        { nonzero := { inner := { value := v } } })
+      (eq_self { nonzero := { inner := { value := v } } }))
+theorem R1Z.ProverRwRngExtractor005Operations.encode_decode : ∀
+  (e : ProverRwRngExtractorselected64.getrandom.error.Error),
+  R1Z.ProverRwRngExtractor005Operations.encode (R1Z.ProverRwRngExtractor005Operations.decode e) = e :=
+fun e =>
+  let ⟨_0✝⟩ := e
+  let ⟨_0✝¹⟩ := _0✝
+  let ⟨v⟩ := _0✝¹
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg ProverRwRngExtractorselected64.getrandom.error.Error.mk
+            (congrArg ProverRwRngExtractorselected64.core.num.nonzero.NonZero.mk
+              (congrArg ProverRwRngExtractorselected64.core.num.niche_types.NonZeroI32Inner.mk
+                (R1Z.ProverRwRngTransportValidity.valid_roundtrip v)))))
+        { _0 := { _0 := { _0 := v } } })
+      (eq_self { _0 := { _0 := { _0 := v } } }))
+theorem R1Z.ProverRwRngExtractor005Operations.arbitrary_error_valid : ∀
+  (e : ProverRwRngExtractorselected64.getrandom.error.Error), R1Z.ProverRwRngTransportValidity.Pattern ↑e._0._0._0 :=
+fun e => (R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero ↑e._0._0._0).mpr e._0._0._0.property
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.arbitrary_error_code : ∀
+  (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  ↑(R1Z.ProverRwRngExtractor005Operations.encode e)._0._0._0 = ↑e.nonzero.inner.value :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.actual_from : ∀
+  (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  R1Z.ProverRwRngExtractor005Operations.fromError (R1Z.ProverRwRngExtractor005Operations.encode e) =
+    Aeneas.Std.Result.ok
+      (ProverRwRngExtractorselected64.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os
+        (R1Z.ProverRwRngExtractor005Operations.encode e)) :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.actual_disposal : ∀ {C : Type}
+  (inst : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (e : R1Z.ProverRwRngExtractor005Operations.Entropy),
+  R1Z.ProverRwRngExtractor005Operations.dispose inst () e =
+    Aeneas.Std.Result.ok ProverRwRngExtractorselected64.verifier.Error.Entropy :=
+fun {C} inst e => rfl
+theorem R1Z.ProverRwRngExtractor005Operations.actual_map_err : ∀ {C T : Type}
+  (inst : Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (r : Aeneas.Std.core.result.Result T R1Z.ProverRwRngExtractor005Operations.Entropy),
+  ProverRwRngExtractorselected64.core.result.Result.map_err (R1Z.ProverRwRngExtractor005Operations.disposeInst inst) r
+      () =
+    Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+      | Aeneas.Std.core.result.Result.Err a =>
+        Aeneas.Std.core.result.Result.Err ProverRwRngExtractorselected64.verifier.Error.Entropy) :=
+fun {C T} inst r =>
+  Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+    r = t →
+      ProverRwRngExtractorselected64.core.result.Result.map_err (R1Z.ProverRwRngExtractor005Operations.disposeInst inst)
+          r () =
+        Aeneas.Std.Result.ok
+          (match r with
+          | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+          | Aeneas.Std.core.result.Result.Err a =>
+            Aeneas.Std.core.result.Result.Err ProverRwRngExtractorselected64.verifier.Error.Entropy))
+    r
+    (fun a h =>
+      Eq.symm h ▸
+        Eq.refl
+          (ProverRwRngExtractorselected64.core.result.Result.map_err
+            (R1Z.ProverRwRngExtractor005Operations.disposeInst inst) (Aeneas.Std.core.result.Result.Ok a) ()))
+    (fun a h =>
+      Eq.symm h ▸
+        Eq.refl
+          (ProverRwRngExtractorselected64.core.result.Result.map_err
+            (R1Z.ProverRwRngExtractor005Operations.disposeInst inst) (Aeneas.Std.core.result.Result.Err a) ()))
+    (Eq.refl r)
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.synthetic_wrap : ∀
+  (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  ProverRwRngExtractorsynthetic.wrap (R1Z.ProverRwRngExtractor005Operations.encodeSyn e) =
+    Aeneas.Std.Result.ok
+      (ProverRwRngExtractorsynthetic.EntropyError.Os (R1Z.ProverRwRngExtractor005Operations.encodeSyn e)) :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.synthetic_move : ∀
+  (e : ProverRwRngExtractorsynthetic.EntropyError),
+  ProverRwRngExtractorsynthetic.move_value e = Aeneas.Std.Result.ok e :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.synthetic_copy : ∀
+  (e : R1Z.ProverRwRngExtractor005Operations.SourceError),
+  ProverRwRngExtractorsynthetic.copy_error (R1Z.ProverRwRngExtractor005Operations.encodeSyn e) =
+    Aeneas.Std.Result.ok
+      (R1Z.ProverRwRngExtractor005Operations.encodeSyn e, R1Z.ProverRwRngExtractor005Operations.encodeSyn e) :=
+fun e => rfl
+@[defeq] theorem R1Z.ProverRwRngExtractor005Operations.synthetic_repeated : ProverRwRngExtractorsynthetic.repeated =
+  Aeneas.Std.Result.ok ProverRwRngExtractorsynthetic.EntropyError.RepeatedZeroBlock :=
+rfl
+theorem R1Z.ProverRwRngExtractor005Operations.synthetic_selected : ∀
+  (r : Aeneas.Std.core.result.Result Unit ProverRwRngExtractorsynthetic.getrandom.error.Error),
+  ProverRwRngExtractorsynthetic.selected r =
+    Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+      | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.core.result.Result.Err ()) :=
+fun r =>
+  Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+    r = t →
+      ProverRwRngExtractorsynthetic.selected r =
+        Aeneas.Std.Result.ok
+          (match r with
+          | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.core.result.Result.Ok v
+          | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.core.result.Result.Err ()))
+    r (fun a h => Eq.symm h ▸ Eq.refl (ProverRwRngExtractorsynthetic.selected (Aeneas.Std.core.result.Result.Ok a)))
+    (fun a h => Eq.symm h ▸ Eq.refl (ProverRwRngExtractorsynthetic.selected (Aeneas.Std.core.result.Result.Err a)))
+    (Eq.refl r)
+theorem R1Z.ProverRwRngExtractor005Operations.boundary_validity : R1Z.ProverRwRngTransportValidity.Pattern
+    R1Z.ProverRwRngExtractor005Operations.minCode ∧
+  R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.negOneCode ∧
+    R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.oneCode ∧
+      R1Z.ProverRwRngTransportValidity.Pattern R1Z.ProverRwRngExtractor005Operations.maxCode :=
+⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.minCode).mpr
+    (of_decide_eq_true (id (Eq.refl true))),
+  ⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.negOneCode).mpr
+      (of_decide_eq_true (id (Eq.refl true))),
+    ⟨(R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.oneCode).mpr
+        (of_decide_eq_true (id (Eq.refl true))),
+      (R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero R1Z.ProverRwRngExtractor005Operations.maxCode).mpr
+        (of_decide_eq_true (id (Eq.refl true)))⟩⟩⟩
+theorem R1Z.ProverRwRngExtractor005Operations.zero_invalid : ∀ (x : Aeneas.Std.I32),
+  ↑x = 0 → ¬R1Z.ProverRwRngTransportValidity.Pattern x :=
+fun x h =>
+  Eq.mpr (id (congrArg (fun _a => ¬_a) (propext (R1Z.ProverRwRngTransportValidity.pattern_iff_nonzero x))))
+    (Eq.mpr (id (congrArg (fun _a => ¬_a ≠ 0) h)) fun hn => hn rfl)
+'R1Z.ProverRwRngExtractor005Operations.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.arbitrary_error_valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.arbitrary_error_code' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_from' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_disposal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.actual_map_err' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_move' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.synthetic_copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.synthetic_repeated' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.synthetic_selected' does not depend on any axioms
+'R1Z.ProverRwRngExtractor005Operations.boundary_validity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngExtractor005Operations.zero_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh

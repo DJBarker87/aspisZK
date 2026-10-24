@@ -4,9 +4,9 @@ import hashlib,json,subprocess,sys
 D=Path(__file__).resolve().parent
 kind=sys.argv[1]
 assert kind in ['synthetic','selected64']
-B=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/base/src/_build/default/main.exe')
+B=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/candidate-005/main.exe')
 inp=D/('ProverRwRngExtractor'+kind+'.llbc')
-dest=D/(kind+'-generated')
+dest=D/(kind+'-generated005')
 dest.mkdir(exist_ok=False)
 cmd=[str(B),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean',
     '-namespace','ProverRwRngExtractor'+kind,'-dest',str(dest),'-split-files','-emit-json',str(inp)]

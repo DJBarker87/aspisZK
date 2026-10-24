@@ -1,0 +1,105 @@
+import R1Z.ProverRwRngExtractor005Local
+import R1Z.ProverRwRngTransportValidity
+
+/- Local value/operation validation of exact emitted code, not native layout,
+whole callback, provider installation, or effect transport. No premise states
+an output-equivalence conclusion. -/
+set_option autoImplicit false
+open Aeneas Aeneas.Std
+namespace R1Z.ProverRwRngExtractor005Operations
+open ProverRwRngTransportValidity
+
+structure SourceInner where
+  value : PatternValue
+structure SourceNonZero where
+  inner : SourceInner
+structure SourceError where
+  nonzero : SourceNonZero
+
+def encode (e : SourceError) : ProverRwRngExtractorselected64.getrandom.error.Error :=
+  ⟨⟨⟨toValid e.nonzero.inner.value⟩⟩⟩
+def decode (e : ProverRwRngExtractorselected64.getrandom.error.Error) : SourceError :=
+  ⟨⟨⟨toPattern e._0._0._0⟩⟩⟩
+
+theorem decode_encode (e : SourceError) : decode (encode e) = e := by
+  rcases e with ⟨⟨⟨v⟩⟩⟩
+  simp only [decode, encode, pattern_roundtrip]
+theorem encode_decode (e : ProverRwRngExtractorselected64.getrandom.error.Error) : encode (decode e) = e := by
+  rcases e with ⟨⟨⟨v⟩⟩⟩
+  simp only [decode, encode, valid_roundtrip]
+
+/-- Every error from an arbitrary opaque producer has source pattern validity. -/
+theorem arbitrary_error_valid (e : ProverRwRngExtractorselected64.getrandom.error.Error) :
+    Pattern e._0._0._0.val :=
+  (pattern_iff_nonzero _).mpr e._0._0._0.property
+
+theorem arbitrary_error_code (e : SourceError) :
+    (encode e)._0._0._0.val = e.nonzero.inner.value.val := rfl
+
+abbrev Entropy := ProverRwRngExtractorselected64.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError
+abbrev fromError := ProverRwRngExtractorselected64.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError.from
+
+theorem actual_from (e : SourceError) :
+    fromError (encode e) = .ok (Entropy.Os (encode e)) := rfl
+
+abbrev dispose := ProverRwRngExtractorselected64.RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError.call_once
+abbrev disposeInst := ProverRwRngExtractorselected64.RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+
+/-- Exact actual inner closure, both variants, for every typed caller dictionary. -/
+theorem actual_disposal {C : Type}
+    (inst : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (e : Entropy) : dispose inst () e = .ok ProverRwRngExtractorselected64.verifier.Error.Entropy := rfl
+
+/-- Concrete emitted map_err plus actual disposal closure, arbitrary typed result. -/
+theorem actual_map_err {C T : Type}
+    (inst : core.ops.function.FnMut C Usize (Array U8 32#usize))
+    (r : core.result.Result T Entropy) :
+    ProverRwRngExtractorselected64.core.result.Result.map_err (disposeInst inst) r () =
+      .ok (match r with
+        | .Ok v => .Ok v
+        | .Err _ => .Err ProverRwRngExtractorselected64.verifier.Error.Entropy) := by
+  cases r <;> rfl
+
+def encodeSyn (e : SourceError) : ProverRwRngExtractorsynthetic.getrandom.error.Error :=
+  ⟨⟨⟨toValid e.nonzero.inner.value⟩⟩⟩
+
+theorem synthetic_wrap (e : SourceError) :
+    ProverRwRngExtractorsynthetic.wrap (encodeSyn e) = .ok (ProverRwRngExtractorsynthetic.EntropyError.Os (encodeSyn e)) := rfl
+theorem synthetic_move (e : ProverRwRngExtractorsynthetic.EntropyError) : ProverRwRngExtractorsynthetic.move_value e = .ok e := rfl
+theorem synthetic_copy (e : SourceError) :
+    ProverRwRngExtractorsynthetic.copy_error (encodeSyn e) = .ok (encodeSyn e, encodeSyn e) := rfl
+theorem synthetic_repeated : ProverRwRngExtractorsynthetic.repeated = .ok ProverRwRngExtractorsynthetic.EntropyError.RepeatedZeroBlock := rfl
+theorem synthetic_selected (r : core.result.Result Unit ProverRwRngExtractorsynthetic.getrandom.error.Error) :
+    ProverRwRngExtractorsynthetic.selected r = .ok (match r with | .Ok v => .Ok v | .Err _ => .Err ()) := by
+  cases r <;> rfl
+
+/-- Inclusive native I32 boundary values, using explicit checked I32 bounds. -/
+def minCode : I32 := IScalar.ofIntCore (-2147483648) (by decide)
+def negOneCode : I32 := IScalar.ofIntCore (-1) (by decide)
+def oneCode : I32 := IScalar.ofIntCore 1 (by decide)
+def maxCode : I32 := IScalar.ofIntCore 2147483647 (by decide)
+theorem boundary_validity :
+    Pattern minCode ∧ Pattern negOneCode ∧ Pattern oneCode ∧ Pattern maxCode := by
+  repeat' constructor
+  all_goals apply (pattern_iff_nonzero _).mpr
+  all_goals decide
+
+theorem zero_invalid (x : I32) (h : x.val = 0) : ¬ Pattern x := by
+  rw [pattern_iff_nonzero, h]
+  exact fun hn => hn rfl
+
+#print axioms decode_encode
+#print axioms encode_decode
+#print axioms arbitrary_error_valid
+#print axioms arbitrary_error_code
+#print axioms actual_from
+#print axioms actual_disposal
+#print axioms actual_map_err
+#print axioms synthetic_wrap
+#print axioms synthetic_move
+#print axioms synthetic_copy
+#print axioms synthetic_repeated
+#print axioms synthetic_selected
+#print axioms boundary_validity
+#print axioms zero_invalid
+end R1Z.ProverRwRngExtractor005Operations
