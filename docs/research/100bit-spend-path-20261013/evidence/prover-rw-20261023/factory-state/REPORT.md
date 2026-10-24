@@ -72,6 +72,14 @@ swap0. Shape audit passed exit0,0.05s,RSS34553856B,swap0. These are read-only
 source checks, not proof replays. Receipt metrics retain explicit N/A wherever
 not measured. Existing014 build receipt is REUSED, not rerun or newly accepted.
 
+Final focused packet-integrity audit passed exit0 at03299e5abe, wall0.23s,
+peak102105088B RSS, swap0, full axiomsN/A. It checks source association,
+unchanged crates/programs, exact snapshot/preflight/go/dependency hashes,
+fresh cap/reservation evidence, the static blocker and invocation ledger.
+Post054 object hashes/sizes are retained in runner-logs/outputs.json; no object
+bytes were copied or identified as verifier ELFs. This audit is new evidence
+consistency validation, not an unchanged full regression or proof replay.
+
 ## Budgets and next producer
 
 Extraction54/56 CHARGED: +053 input guard failure,+054 actual Charon. This step
