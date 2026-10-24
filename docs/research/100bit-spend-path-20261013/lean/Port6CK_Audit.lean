@@ -1,3 +1,4 @@
+import Port6CK_SourceJoin
 import Port6CK_Advance
 import Port6CK_ArrayRoundtrip
 import Port6CK_Binding
@@ -74,3 +75,7 @@ set_option autoImplicit false
 #print AspisR1.Port6CK_Owner.SessionAPrimitives
 #print AspisR1.Port6CK_Advance.ObservationBinding
 #print AspisR1.Port6CK_Ops.ops
+#print axioms AspisR1.Port6CK_SourceJoin.source
+#print axioms AspisR1.Port6CK_SourceJoin.provenance
+#check @AspisR1.Port6CK_SourceJoin.source
+#check @AspisR1.Port6CK_SourceJoin.provenance

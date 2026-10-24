@@ -1,0 +1,403 @@
+'AspisR1.Port6CK_Advance.advance_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Advance.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_ArrayRoundtrip.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Binding.from_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_BodySelf.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_BodyUnique.byte_injective' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port6CK_BodyUnique.map_injective' depends on axioms: [propext]
+'AspisR1.Port6CK_BodyUnique.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Checkpoint.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Complete.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Factor.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.tail_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.current_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.reference_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.size_s2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Header.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Ordered.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Ordered.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Owner.release_ports' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Owner.release_install' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Owner.geometry_install' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Prefix.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Queries.cps_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Queries.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_QueryFrame.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Reader.size_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Reader.source_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Reader.runs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Reader.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Roots.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Saved.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_ScalarRoundtrip.raw_k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_ScalarRoundtrip.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_ScalarRoundtrip.e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Semantic.withK_current' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Semantic.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Semantic.at408' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Suffix.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Tail.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Ten.initial_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Ten.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Weights.reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6CK_Weights.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port6CK_Checkpoint.accepted : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (panic : AspisR1.Port6CK_Checkpoint.Panic) (batch : AspisR1.Port3_NativeBatchBody.Ops)
+  (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.Port5Q2_Prepared.SessionAPrepare base →
+    AspisR1.Port4C_BasisOuter.SessionABasis queryOps →
+      AspisR1.Port4C_QueryArithmetic.SessionABackends queryOps →
+        (∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+            (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+            (inverses : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+            (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+            queryOps.op16 alpha values inverses = Aeneas.Std.Result.ok value →
+              AspisR1.Port4C_QueryArithmetic.CanonE value) →
+          ∀ {Hsh : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hsh) (hash : Hsh)
+            (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+            (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (stored publicBytes : AspisV8R19.DuplexFrames.Bytes)
+            (split : Aeneas.Std.Usize),
+            AspisR1.CheckpointBytes5Join.S2S10CallerBinding (AspisR1.VTop_Checkpoint.digest D) hash H proof pub stored
+                publicBytes →
+              ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p1 : VTop_Stages.verifier.Prepared)
+                (a1 : VTop_Stages.verifier.Accumulator),
+                VTop_Stages.verifier.candidate.tx1
+                      (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish) D
+                      semantic pub proof split hash none =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+                  (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish).op18 D
+                        (AspisR1.VTop_Checkpoint.checkpointSlice saved) proof pub AspisR1Stage2.transport.Variant.S2
+                        hash =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1)) →
+                    ∃ p a,
+                      ∃ (fields : AspisR1.Port5Q2_Prepared.PreparedFields p) (size : (↑a.weights).length = 64)
+                        (canonical :
+                        AspisR1.CheckpointBytesBlocks.CanonicalFields
+                          (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯)),
+                        AspisR1.VTop_Provenance.WriterPrefix
+                            (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish)
+                            D hash semantic proof split none p a ∧
+                          (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps
+                                    finish).op8
+                                D p a proof pub hash =
+                              Aeneas.Std.Result.ok saved ∧
+                            p1 = p ∧
+                              a1 = a ∧
+                                ↑a.next = 10 ∧
+                                  ↑split = 10 ∧
+                                    ∃ after,
+                                      AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                                            (AspisR1.CheckpointBytes5Join.stage reserved
+                                              (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+                                              (AspisR1.CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+                                            [] =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1), after) ∧
+                                        AspisR1.CheckpointBytes5Inputs.observe after =
+                                          AspisR1.CheckpointBytes5Join.six H stored publicBytes
+                                            (AspisR1.OraclePortPhysicalFrameDraft.domain ++
+                                              AspisR1.OraclePortCheckpointAbiC5.body
+                                                (AspisR1.CheckpointBytesBlocks.prepared
+                                                  (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯) canonical)
+                                                (AspisR1.CheckpointBytesBlocks.accumulator
+                                                  (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯) canonical)
+                                                (H stored) (H publicBytes))
+@AspisR1.Port6CK_Saved.accepted : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (panic : AspisR1.Port6CK_Checkpoint.Panic) (batch : AspisR1.Port3_NativeBatchBody.Ops)
+  (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.Port6CK_Owner.SessionAPrimitives queryOps geometryOps →
+    ∀ {Hsh : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hsh) (hash : Hsh)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (stored publicBytes : AspisV8R19.DuplexFrames.Bytes)
+      (split : Aeneas.Std.Usize) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+      (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix),
+      AspisR1.Port6CK_Owner.SessionAPrepare base D hash semantic proof i.data q
+          (AspisR1.SelectedChallengeMap.rhoOf i.rho) →
+        AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some i.data →
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            (↑proof).length = 57607 →
+              ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+                (∀ pos < 22,
+                    recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                      some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                  AspisR1.CheckpointBytes5Join.S2S10CallerBinding (AspisR1.VTop_Checkpoint.digest D) hash H proof pub
+                      stored publicBytes →
+                    ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p1 : VTop_Stages.verifier.Prepared)
+                      (a1 : VTop_Stages.verifier.Accumulator),
+                      VTop_Stages.verifier.candidate.tx1
+                            (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                              (AspisR1.Port5Q1_QueryPorts.install queryOps) finish)
+                            D semantic pub proof split hash none =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+                        (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                  (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op18
+                              D (AspisR1.VTop_Checkpoint.checkpointSlice saved) proof pub
+                              AspisR1Stage2.transport.Variant.S2 hash =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1)) →
+                          AspisR1.CheckpointBytes5Output.accumulator a1 =
+                              (AspisR1.OraclePortCheckpointStateC3.write
+                                  (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                    (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator ∧
+                            (↑a1.weights).length = 64 ∧
+                              ↑a1.next = 10 ∧
+                                AspisR1.Port4C_QueryArithmetic.CanonE a1.rhs ∧
+                                  AspisR1.Port3_FlushInstall.Canonical a1.power ∧
+                                    AspisR1.Port5Q1_QueryPorts.SessionAPrepare p1 i.data q
+                                      (AspisR1.SelectedChallengeMap.rhoOf i.rho)
+@AspisR1.Port6CK_Complete.accepted : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (panic : AspisR1.Port6CK_Checkpoint.Panic) (batch : AspisR1.Port3_NativeBatchBody.Ops)
+  (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.Port6CK_Owner.SessionAPrimitives queryOps geometryOps →
+    ∀ {Hsh : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hsh) (hash : Hsh)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+      (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (stored publicBytes : AspisV8R19.DuplexFrames.Bytes)
+      (split : Aeneas.Std.Usize) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs)
+      (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix),
+      AspisR1.Port6CK_Owner.SessionAPrepare base D hash semantic proof i.data q
+          (AspisR1.SelectedChallengeMap.rhoOf i.rho) →
+        AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some i.data →
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            (↑proof).length = 57607 →
+              ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+                (∀ pos < 22,
+                    recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                      some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                  AspisR1.CheckpointBytes5Join.S2S10CallerBinding (AspisR1.VTop_Checkpoint.digest D) hash H proof pub
+                      stored publicBytes →
+                    ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p1 : VTop_Stages.verifier.Prepared)
+                      (a1 : VTop_Stages.verifier.Accumulator),
+                      VTop_Stages.verifier.candidate.tx1
+                            (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                              (AspisR1.Port5Q1_QueryPorts.install queryOps) finish)
+                            D semantic pub proof split hash none =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+                        (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                  (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op18
+                              D (AspisR1.VTop_Checkpoint.checkpointSlice saved) proof pub
+                              AspisR1Stage2.transport.Variant.S2 hash =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1)) →
+                          ∀ (g2 : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+                            (geometry1 : VTop_Stages.verifier.QueryGeometry)
+                            (b1 b12 : VTop_Stages.verifier.BatchedWeights) (out22 : VTop_Stages.verifier.Accumulator)
+                            (flushed22 : Aeneas.Std.Slice VTop_Stages.aspis_core.field.QM31),
+                            (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                      (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op11
+                                  p1.queries 10#usize 22#usize =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry1) →
+                              (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                        (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op10
+                                    a1.weights.deref =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok b1) →
+                                (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                          (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op6
+                                      proof p1 a1 g2 none geometry1 b1 22#usize =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out22, b12)) →
+                                  (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps
+                                            (AspisR1.Port5Q1_QueryPorts.install queryOps) finish).op9
+                                        b12 out22.weights.deref =
+                                      Aeneas.Std.Result.ok flushed22 →
+                                    have model :=
+                                      AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                        (AspisR1.SelectedChallengeMap.rhoOf i.rho) q;
+                                    AspisR1.CheckpointBytes5Output.accumulator a1 =
+                                        (AspisR1.OraclePortCheckpointStateC3.write model).accumulator ∧
+                                      AspisR1.CheckpointBytes5Output.accumulator
+                                            (AspisR1.Port5Q1_Endpoint.materialize out22 flushed22) =
+                                          AspisR1.OraclePortCheckpointStateC3.advance model 12
+                                            (AspisR1.CheckpointBytes5Output.accumulator a1) ∧
+                                        AspisR1.CheckpointBytes5Output.accumulator
+                                              (AspisR1.Port5Q1_Endpoint.materialize out22 flushed22) =
+                                            AspisR1.OraclePortFrozen2.completeState i q ∧
+                                          (↑flushed22).length = 64 ∧ ↑out22.next = 22
+@AspisR1.Port6CK_Ordered.accepted : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (panic : AspisR1.Port6CK_Checkpoint.Panic) (batch : AspisR1.Port3_NativeBatchBody.Ops)
+  (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps W),
+  AspisR1.Port5Q2_Prepared.SessionAPrepare base →
+    AspisR1.Port4C_BasisOuter.SessionABasis queryOps →
+      AspisR1.Port4C_QueryArithmetic.SessionABackends queryOps →
+        (∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+            (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+            (inverses : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+            (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+            queryOps.op16 alpha values inverses = Aeneas.Std.Result.ok value →
+              AspisR1.Port4C_QueryArithmetic.CanonE value) →
+          ∀ {Hsh : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hsh) (hash : Hsh)
+            (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+            (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (stored publicBytes : AspisV8R19.DuplexFrames.Bytes)
+            (split : Aeneas.Std.Usize),
+            AspisR1.CheckpointBytes5Join.S2S10CallerBinding (AspisR1.VTop_Checkpoint.digest D) hash H proof pub stored
+                publicBytes →
+              ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (p1 : VTop_Stages.verifier.Prepared)
+                (a1 : VTop_Stages.verifier.Accumulator),
+                VTop_Stages.verifier.candidate.tx1
+                      (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish) D
+                      semantic pub proof split hash none =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+                  (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish).op18 D
+                        (AspisR1.VTop_Checkpoint.checkpointSlice saved) proof pub AspisR1Stage2.transport.Variant.S2
+                        hash =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1)) →
+                    ∃ p a,
+                      ∃ (fields : AspisR1.Port5Q2_Prepared.PreparedFields p) (size : (↑a.weights).length = 64)
+                        (canonical :
+                        AspisR1.CheckpointBytesBlocks.CanonicalFields
+                          (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯)),
+                        AspisR1.VTop_Provenance.WriterPrefix
+                            (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps finish)
+                            D hash semantic proof split none p a ∧
+                          (AspisR1.Port6CK_Checkpoint.installed base reserved panic batch geometryOps queryOps
+                                    finish).op8
+                                D p a proof pub hash =
+                              Aeneas.Std.Result.ok saved ∧
+                            p1 = p ∧
+                              a1 = a ∧
+                                ↑a.next = 10 ∧
+                                  ↑split = 10 ∧
+                                    ∃ after,
+                                      AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                                            (AspisR1.Port6CK_Ordered.stage reserved
+                                              (AspisR1.Port6CK_Checkpoint.unwrap panic)
+                                              (AspisR1.CheckpointBytes3Namespaces.toPrepared p)
+                                              (AspisR1.CheckpointBytes3Namespaces.toAccumulator a) proof pub)
+                                            [] =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, a1), after) ∧
+                                        AspisR1.CheckpointBytes5Inputs.observe after =
+                                          AspisR1.CheckpointBytes5Join.six H stored publicBytes
+                                            (AspisR1.OraclePortPhysicalFrameDraft.domain ++
+                                              AspisR1.OraclePortCheckpointAbiC5.body
+                                                (AspisR1.CheckpointBytesBlocks.prepared
+                                                  (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯) canonical)
+                                                (AspisR1.CheckpointBytesBlocks.accumulator
+                                                  (AspisR1.Port3_DecodeCoherence.inventory p a size ⋯) canonical)
+                                                (H stored) (H publicBytes))
+structure AspisR1.Port6CK_Owner.SessionAPrepare (base : VTop_Stages.Ops) {H : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 H) (hash : H)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+  (q : Fin 22 → Fin 262144) (rho : AspisR1.OraclePortCheckpointAbiC5.K) : Prop
+number of parameters: 9
+fields:
+  AspisR1.Port6CK_Owner.SessionAPrepare.canonical : AspisR1.Port5Q2_Prepared.SessionAPrepare base
+  AspisR1.Port6CK_Owner.SessionAPrepare.model : ∀ (zero : VTop_Stages.aspis_core.field.wide_exact.WideExact)
+      (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+      (p : VTop_Stages.verifier.Prepared),
+      base.op1 = Aeneas.Std.Result.ok zero →
+        base.op7 D semantic proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) →
+          AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho
+constructor:
+  AspisR1.Port6CK_Owner.SessionAPrepare.mk {base : VTop_Stages.Ops} {H : Type}
+    {D : VTop_Stages.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {proof : Aeneas.Std.Slice Aeneas.Std.U8} {data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E}
+    {q : Fin 22 → Fin 262144} {rho : AspisR1.OraclePortCheckpointAbiC5.K}
+    (canonical : AspisR1.Port5Q2_Prepared.SessionAPrepare base)
+    (model :
+      ∀ (zero : VTop_Stages.aspis_core.field.wide_exact.WideExact)
+        (g : Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)
+        (p : VTop_Stages.verifier.Prepared),
+        base.op1 = Aeneas.Std.Result.ok zero →
+          base.op7 D semantic proof hash none (Aeneas.Std.Array.repeat 29#usize zero) =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, g) →
+            AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho) :
+    AspisR1.Port6CK_Owner.SessionAPrepare base D hash semantic proof data q rho
+structure AspisR1.Port6CK_Owner.SessionAPrimitives {CoreError : Type} (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 3
+fields:
+  AspisR1.Port6CK_Owner.SessionAPrimitives.queryPrimitives : AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query
+  AspisR1.Port6CK_Owner.SessionAPrimitives.geometryPrimitives : AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives
+      geometry
+  AspisR1.Port6CK_Owner.SessionAPrimitives.domain : AspisR1.Port5Q1_Domain.SessionADomain geometry
+  AspisR1.Port6CK_Owner.SessionAPrimitives.multiply : geometry.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+  AspisR1.Port6CK_Owner.SessionAPrimitives.one : geometry.op7 = Aeneas.Std.Result.ok 1#u32
+  AspisR1.Port6CK_Owner.SessionAPrimitives.inverse : geometry.op11 = AspisR1.Port4C_InverseExecution.inverse_owned
+constructor:
+  AspisR1.Port6CK_Owner.SessionAPrimitives.mk {CoreError : Type} {query : AspisR1.Port3_NativeQueryBody.Ops}
+    {geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (queryPrimitives : AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query)
+    (geometryPrimitives : AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geometry)
+    (domain : AspisR1.Port5Q1_Domain.SessionADomain geometry)
+    (multiply : geometry.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul)
+    (one : geometry.op7 = Aeneas.Std.Result.ok 1#u32)
+    (inverse : geometry.op11 = AspisR1.Port4C_InverseExecution.inverse_owned) :
+    AspisR1.Port6CK_Owner.SessionAPrimitives query geometry
+structure AspisR1.Port6CK_Advance.ObservationBinding (ops : AspisR1.Port3_NativeQueryBody.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize)
+  (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+  (geometry : AspisR1Stage2.verifier.QueryGeometry)
+  (m : AspisR1.OraclePortCheckpointStateC3.Prepared AspisR1.Port4C_QueryState.FK AspisR1.Port4C_QueryState.FE)
+  (lower upper : ℕ) : Prop
+number of parameters: 9
+fields:
+  AspisR1.Port6CK_Advance.ObservationBinding.iota : m.iota = AspisR1.LiteralOpeningView.eK
+  AspisR1.Port6CK_Advance.ObservationBinding.rho : m.rho = AspisR1.CheckpointBytes5Output.ofK p.rho
+  AspisR1.Port6CK_Advance.ObservationBinding.value : ∀ (a out : AspisR1Stage2.verifier.Accumulator)
+      (b bout : AspisR1Stage2.verifier.BatchedWeights)
+      (o :
+        AspisR1.Port4C_QueryValues.Observation (AspisR1.Port4C_RowStd.install ops) proof p a out g obs geometry b bout),
+      lower ≤ ↑a.next →
+        ↑a.next < upper →
+          AspisR1.CheckpointBytes5Output.ofE o.value = AspisR1.QueryAccumulator.extend22 m.values ↑a.next
+  AspisR1.Port6CK_Advance.ObservationBinding.basis : ∀ (a out : AspisR1Stage2.verifier.Accumulator)
+      (b bout : AspisR1Stage2.verifier.BatchedWeights)
+      (o :
+        AspisR1.Port4C_QueryValues.Observation (AspisR1.Port4C_RowStd.install ops) proof p a out g obs geometry b bout)
+      (i : Fin 64),
+      lower ≤ ↑a.next →
+        ↑a.next < upper →
+          AspisR1.Port4C_SumField.scalar
+              (AspisCircleTensorBinding.naturalLineValue (AspisR1.S7JoinBasisMachine.decode o.node) ↑i) =
+            AspisR1.QueryAccumulator.extend22 m.basis (↑a.next) i
+constructor:
+  AspisR1.Port6CK_Advance.ObservationBinding.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    {proof : Aeneas.Std.Slice Aeneas.Std.U8} {p : AspisR1Stage2.verifier.Prepared}
+    {g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize}
+    {obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit)}
+    {geometry : AspisR1Stage2.verifier.QueryGeometry}
+    {m : AspisR1.OraclePortCheckpointStateC3.Prepared AspisR1.Port4C_QueryState.FK AspisR1.Port4C_QueryState.FE}
+    {lower upper : ℕ} (iota : m.iota = AspisR1.LiteralOpeningView.eK)
+    (rho : m.rho = AspisR1.CheckpointBytes5Output.ofK p.rho)
+    (value :
+      ∀ (a out : AspisR1Stage2.verifier.Accumulator) (b bout : AspisR1Stage2.verifier.BatchedWeights)
+        (o :
+          AspisR1.Port4C_QueryValues.Observation (AspisR1.Port4C_RowStd.install ops) proof p a out g obs geometry b
+            bout),
+        lower ≤ ↑a.next →
+          ↑a.next < upper →
+            AspisR1.CheckpointBytes5Output.ofE o.value = AspisR1.QueryAccumulator.extend22 m.values ↑a.next)
+    (basis :
+      ∀ (a out : AspisR1Stage2.verifier.Accumulator) (b bout : AspisR1Stage2.verifier.BatchedWeights)
+        (o :
+          AspisR1.Port4C_QueryValues.Observation (AspisR1.Port4C_RowStd.install ops) proof p a out g obs geometry b
+            bout)
+        (i : Fin 64),
+        lower ≤ ↑a.next →
+          ↑a.next < upper →
+            AspisR1.Port4C_SumField.scalar
+                (AspisCircleTensorBinding.naturalLineValue (AspisR1.S7JoinBasisMachine.decode o.node) ↑i) =
+              AspisR1.QueryAccumulator.extend22 m.basis (↑a.next) i) :
+    AspisR1.Port6CK_Advance.ObservationBinding ops proof p g obs geometry m lower upper
+def AspisR1.Port6CK_Ops.ops : Bool → AspisR1.Port6CK_Semantic.Unwrap → AspisR1Stage2.ResumeOps :=
+fun reserved unwrap =>
+  have __src := AspisR1.CheckpointBytes4Ops.ops reserved;
+  { checkpointSize := __src.checkpointSize, tag := __src.tag, finalLen := __src.finalLen,
+    eq := @AspisR1Stage2.ResumeOps.eq __src, ne := @AspisR1Stage2.ResumeOps.ne __src, headerAny := __src.headerAny,
+    raw := fun N => AspisR1.Port5Q2_ReaderRaw.raw N (unwrap N),
+    readE :=
+      AspisR1.Port5Q2_ReaderScalar.readE (fun N => AspisR1.Port5Q2_ReaderRaw.raw N (unwrap N))
+        AspisR1.Port5Q2_ReaderScalar.decodeE,
+    readK := AspisR1.Port6CK_Semantic.current unwrap, validate := AspisR1.Port5Q2_ReaderValidate.validate,
+    zeroK := __src.zeroK, filled := __src.filled, readQueries := __src.readQueries,
+    readSemanticAlpha := AspisR1.Port5Q2_ReaderSemantic.semantic (AspisR1.Port6CK_Semantic.current unwrap),
+    readWeights := AspisR1.Port5Q2_ReaderWeights.weights (AspisR1.Port6CK_Semantic.current unwrap) }
