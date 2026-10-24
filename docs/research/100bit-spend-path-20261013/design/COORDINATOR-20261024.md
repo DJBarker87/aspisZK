@@ -256,3 +256,8 @@ Budgetbackend12/12,extraction35/36,Lean230/260,Kani44/60. Leadallocates4backendb
 
 
 NativeDrop386 terminal reviewed; continuationABI PID6628 launched with D201budgets. Port15DRIVER3466 andClient642349 remaintheotheractivehandles. Promptarchived.
+
+
+## Client64 review requires inventory integration fix (lead, 2026-10-24)
+
+Unmergedclientcandidate4aac77a772 actualselected64caller/Rustpolicy/Pythonlifecycle inspected;noadoption. Realbug: newretainedattemptkeysunder*-client64-proof-private/ omittedbyr1_devnet_inventory.py'skeys/artifacts-onlyscan;newproof/note-recoverypathmissedbyflatglobandfixedlen2assert. Worker7779 fixesinventorydiscovery/reportwithofflinepublicfixturesonly,scopeexplicitlyexpandedtoinventoryscript;nochain/keycleanup/realkeyreads. Preservelegacy+partial+stagingandallrejected/unusedkeys,knownrootsscope,querydedup/batches,andfailclosedrequireddata. UsesONLYremaining4Pythonand2Rustslots,unchangedRustreceiptstobereused. OtheractivehandlesPort153466,NativeDropABI6628. Bothdeployedtargetsnotyetestablished.
