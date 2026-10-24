@@ -1,0 +1,93 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNonzero.lean:12:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngNonzero.index_repeat`:
+  [ErasureFns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ErasureFns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNonzero.lean:41:37: error: Tactic `decide` failed for proposition
+  32 ≤ Usize.max
+because its `Decidable` instance
+  Nat.decLe 32 Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 32 Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNonzero.lean:27:57: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵n̵t̵r̵o̵p̵y̵_̵n̵o̵n̵z̵e̵r̵o̵3̵2̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵s̵t̵o̵p̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲e̲n̲t̲r̲o̲p̲y̲_̲n̲o̲n̲z̲e̲r̲o̲3̲2̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲s̲t̲o̲p̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngNonzero.lean:63:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Usize.wrapping_add 0#usize 1#usize
+in the target expression
+  (do
+      let combined ←
+        match do
+            let i2 ← 0#usize + 1#usize
+            ok (cont (byte, i2)) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x =>
+                  if x.2 < 32#usize then do
+                    let i1 ← (Array.repeat 32#usize byte).index_usize x.2
+                    let i2 ← x.2 + 1#usize
+                    ok (cont (x.1 ||| i1, i2))
+                  else ok (done x.1))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok (combined != 0#u8)) =
+    ok (byte != 0#u8)
+
+inst✝ : ErasureFns
+byte : U8
+stable : byte ||| byte = byte
+initial : 0#u8 ||| byte = byte
+go : 0#usize < 32#usize
+add0 : Usize.wrapping_add 0#usize 1#usize = 1#usize
+⊢ (do
+      let combined ←
+        match do
+            let i2 ← 0#usize + 1#usize
+            ok (cont (byte, i2)) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x =>
+                  if x.2 < 32#usize then do
+                    let i1 ← (Array.repeat 32#usize byte).index_usize x.2
+                    let i2 ← x.2 + 1#usize
+                    ok (cont (x.1 ||| i1, i2))
+                  else ok (done x.1))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok (combined != 0#u8)) =
+    ok (byte != 0#u8)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwRngNonzero.index_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNonzero.scan_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNonzero.nonzero_repeat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

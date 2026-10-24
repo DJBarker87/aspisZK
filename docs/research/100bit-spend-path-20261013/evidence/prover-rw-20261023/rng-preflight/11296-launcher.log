@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1139); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    let ((after, result), a2) ← draw.fill p a1
+    match result with
+      | core.result.Result.Ok a =>
+        let (a5, deref_mut_back1) := (Array.repeat 32#usize 0#u8, id)
+        do
+        let (s, to_slice_mut_back) ← lift a5.to_slice_mut
+        let a6 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back a2)
+        let s1 ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a6
+              { «end» := 32#usize }
+        let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+        let (a8, deref_mut_back2) := (Array.repeat 32#usize 0#u8, id)
+          do
+          let (s3, to_slice_mut_back1) ← lift a8.to_slice_mut
+          let s4 ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a6
+                { start := 32#usize }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          let a10 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back s2))
+          let b ← entropy_nonzero32 a10
+          if b = true then do
+              let a11 ←
+                zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                    (deref_mut_back2 (to_slice_mut_back1 s5))
+              let b1 ← entropy_nonzero32 a11
+              if b1 = true then
+                  ok
+                    (done
+                      (after,
+                        core.result.Result.Ok
+                          { mask_nonce := nonce, field_mask_entropy := deref_mut_back1 (to_slice_mut_back s2),
+                            leaf_salt_seed := deref_mut_back2 (to_slice_mut_back1 s5) }))
+                else do
+                  let retry1 ← retry + 1#usize
+                  ok (cont (after, retry1))
+            else do
+              let retry1 ← retry + 1#usize
+              ok (cont (after, retry1))
+      | core.result.Result.Err e => ok (done (after, core.result.Result.Err (StateOnlyAttemptEntropyError.Os e)))) =
+    ok (done (after, core.result.Result.Err (StateOnlyAttemptEntropyError.Os error)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:50:70: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp only [below, ̲if_true, ̲zeroize.Zeroizing.new,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut, ̲bind_tc_ok,̵r̵e̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngControl.constant_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.error_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.cap_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.15
+	Maximum resident set size (kbytes): 3844624
+	Swaps: 0
+	Exit status: 1

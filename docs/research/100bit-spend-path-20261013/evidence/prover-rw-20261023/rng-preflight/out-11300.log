@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:26:64: error(lean.invalidField): Invalid field `length`: The environment does not contain `Subtype.length`, so it is not possible to project the field `length` from an expression
+  ⟨replies, bound⟩
+of type `{ l // l.length ≤ Usize.max }`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:20:93: error: unsolved goals
+inst✝ : ErasureFns
+replies : List Reply
+bound : replies.length ≤ Usize.max
+index : Usize
+inside : ↑index < replies.length
+input : Std.Array U8 64#usize
+go : index < alloc.vec.Vec.len ⟨replies, bound⟩
+hi : ↑index < sorry
+x : Reply
+hx : alloc.vec.Vec.index_usize ⟨replies, bound⟩ index = ok x
+hv : x = (↑⟨replies, bound⟩)[↑index]
+⊢ (let (block, result) := replies[↑index]
+    do
+    let i1 ← index + 1#usize
+    ok (({ replies := ⟨replies, bound⟩, used := i1 }, result), block)) =
+    do
+    let following ← index + 1#usize
+    ok (({ replies := ⟨replies, bound⟩, used := following }, replies[↑index].2), replies[↑index].1)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:46:13: error: Application type mismatch: The argument
+  ?m.126
+has type
+  UScalar UScalarTy.Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  0#usize + 1#usize = ?m.126
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:46:35: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:49:50: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl,i̵f̵_̵f̵ ̲al̵s̵e̵,̵a̵dd, ̲bind_tc_ok] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:49:63: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl, ̲if_false, ̲add,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngTape.fill_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

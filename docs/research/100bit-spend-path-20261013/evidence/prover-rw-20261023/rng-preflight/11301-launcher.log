@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1142); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:51:4: error: Tactic `rfl` failed: The left-hand side
+  ok (Usize.wrapping_add 0#usize 1#usize)
+is not definitionally equal to the right-hand side
+  ok 1#usize
+
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p0 p1 p2 : P
+nonce : Std.Array U8 32#usize
+first : draw.fill p0 (Array.repeat 64#usize 0#u8) = ok ((p1, core.result.Result.Ok ()), Array.repeat 64#usize 0#u8)
+second : draw.fill p1 (Array.repeat 64#usize 0#u8) = ok ((p2, core.result.Result.Ok ()), Array.repeat 64#usize 1#u8)
+zero :
+  body draw nonce 16#usize p0 0#usize =
+    if (0#u8 != 0#u8) = true then
+      ok
+        (done
+          (p1,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 0#u8,
+                leaf_salt_seed := Array.repeat 32#usize 0#u8 }))
+    else do
+      let nextRetry ← 0#usize + 1#usize
+      ok (cont (p1, nextRetry))
+one :
+  body draw nonce 16#usize p1 1#usize =
+    if (1#u8 != 0#u8) = true then
+      ok
+        (done
+          (p2,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 }))
+    else do
+      let nextRetry ← 1#usize + 1#usize
+      ok (cont (p2, nextRetry))
+⊢ ok (Usize.wrapping_add 0#usize 1#usize) = ok 1#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:60:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:52:50: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl,i̵f̵_̵f̵ ̲al̵s̵e̵,̵a̵dd, ̲bind_tc_ok] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngTape.fill_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.88
+	Maximum resident set size (kbytes): 3853636
+	Swaps: 0
+	Exit status: 1

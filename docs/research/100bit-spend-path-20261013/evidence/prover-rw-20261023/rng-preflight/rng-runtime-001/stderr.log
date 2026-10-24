@@ -1,0 +1,22 @@
+   Compiling zeroize v1.9.1
+   Compiling prover-rw-rng-preflight v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/rng-preflight/prototype)
+warning: type `Recorder` is more private than the item `runtime::<impl StateOnlyAttemptSecrets>::old`
+  --> runtime.rs:15:5
+   |
+15 | /     pub fn old(
+16 | |         mask_nonce: [u8; 32],
+17 | |         tape: &mut Recorder,
+18 | |     ) -> Result<Self, StateOnlyAttemptEntropyError> {
+   | |___________________________________________________^ associated function `runtime::<impl StateOnlyAttemptSecrets>::old` is reachable at visibility `pub`
+   |
+note: but type `Recorder` is only usable at visibility `pub(self)`
+  --> runtime.rs:3:1
+   |
+ 3 | struct Recorder { replies: Vec<([u8;64],Result<(),u8>)>, used: usize, inputs: Vec<[u8;64]> }
+   | ^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: `prover-rw-rng-preflight` (lib test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.53s
+     Running unittests lib.rs (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/target/release/deps/prover_rw_rng_preflight-d2b46e63b395891f)
+   Doc-tests prover_rw_rng_preflight

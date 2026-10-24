@@ -1,0 +1,132 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:32:22: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.done` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ForInStep.done`
+  [apply] `FS2.Sampler.done`
+  [apply] `Lean.Doc.done`
+  [apply] `Lean.TransformStep.done`
+  [apply] `ProofWidgets.CheckRequestResponse.done`
+  [apply] `Std.CancellationContext.done`
+  [apply] `Std.IterStep.done`
+  [apply] `Std.PlausibleIterStep.done`
+  [apply] `done`
+  [apply] `StepStar.TaskOrDone.done`
+  [apply] `AspisV8R19.MemoizedProgramLaw.Program.done`
+  [apply] `AspisV8R19.Q22SamplerProgram.SourceExec.done`
+  [apply] `ByteArray.utf8DecodeChar?.FirstByte.done`
+  [apply] `Lean.Elab.Tactic.done`
+  [apply] `Lean.Expr.FindStep.done`
+  [apply] `Lean.Parser.Tactic.done`
+  [apply] `Lean.PersistentHashMap.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.done`
+  [apply] `AspisV8R19.Q22SamplerProgram.SourceExec.below.done`
+  [apply] `Lean.Elab.Tactic.Grind.done`
+  [apply] `Lean.Meta.Grind.Action.done`
+  [apply] `Lean.Meta.Simp.Step.done`
+  [apply] `Lean.Meta.Simp.StepQ.done`
+  [apply] `Lean.Parser.Tactic.Grind.done`
+  [apply] `Std.DTreeMap.Internal.Zipper.done`
+  [apply] `Std.IterM.IsPlausibleNthOutputStep.below.done`
+  [apply] `Lean.Language.SnapshotTree.foldSnaps.Control.done`
+  [apply] `Std.Iterators.Types.Drop.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.DropWhile.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.FilterMap.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.Take.PlausibleStep.done`
+  [apply] `Std.Iterators.Types.TakeWhile.PlausibleStep.done`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:35:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ContinuousAlgHom.cont`
+  [apply] `ContinuousLinearMap.cont`
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:38:13: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.cont` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `ContinuousAlgHom.cont`
+  [apply] `ContinuousLinearMap.cont`
+  [apply] `cont`
+  [apply] `Lean.Meta.DeltaStepResult.cont`
+  [apply] `Std.Async.Selectable.cont`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:27:70: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp only [below, ̲if_true, ̲zeroize.Zeroizing.new,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut, ̲bind_tc_ok,̵r̵e̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:47:76: error: unsolved goals
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p after : P
+nonce : Std.Array U8 32#usize
+retry limit : Usize
+below : retry < limit
+written : Std.Array U8 64#usize
+error : U8
+reply : draw.fill p (Array.repeat 64#usize 0#u8) = ok ((after, core.result.Result.Err error), written)
+⊢ (let (a1, deref_mut_back) := (Array.repeat 64#usize 0#u8, id)
+    do
+    let ((after, result), a2) ← draw.fill p a1
+    match result with
+      | core.result.Result.Ok a =>
+        let (a5, deref_mut_back1) := (Array.repeat 32#usize 0#u8, id)
+        do
+        let (s, to_slice_mut_back) ← lift a5.to_slice_mut
+        let a6 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back a2)
+        let s1 ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a6
+              { «end» := 32#usize }
+        let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+        let (a8, deref_mut_back2) := (Array.repeat 32#usize 0#u8, id)
+          do
+          let (s3, to_slice_mut_back1) ← lift a8.to_slice_mut
+          let s4 ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a6
+                { start := 32#usize }
+          let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+          let a10 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back s2))
+          let b ← entropy_nonzero32 a10
+          if b = true then do
+              let a11 ←
+                zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                    (deref_mut_back2 (to_slice_mut_back1 s5))
+              let b1 ← entropy_nonzero32 a11
+              if b1 = true then
+                  ok
+                    (done
+                      (after,
+                        core.result.Result.Ok
+                          { mask_nonce := nonce, field_mask_entropy := deref_mut_back1 (to_slice_mut_back s2),
+                            leaf_salt_seed := deref_mut_back2 (to_slice_mut_back1 s5) }))
+                else do
+                  let retry1 ← retry + 1#usize
+                  ok (cont (after, retry1))
+            else do
+              let retry1 ← retry + 1#usize
+              ok (cont (after, retry1))
+      | core.result.Result.Err e => ok (done (after, core.result.Result.Err (StateOnlyAttemptEntropyError.Os e)))) =
+    ok (done (after, core.result.Result.Err (StateOnlyAttemptEntropyError.Os error)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngControl.lean:50:70: warning: This simp argument is unused:
+  reply
+
+Hint: Omit it from the simp argument list.
+  simp only [below, ̲if_true, ̲zeroize.Zeroizing.new,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut, ̲bind_tc_ok,̵r̵e̵p̵l̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngControl.constant_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.error_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.cap_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

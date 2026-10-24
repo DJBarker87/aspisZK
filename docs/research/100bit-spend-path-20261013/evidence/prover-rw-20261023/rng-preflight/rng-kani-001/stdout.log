@@ -1,0 +1,41 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: type `Recorder` is more private than the item `StateOnlyAttemptSecrets::old`
+  --> lib.rs:82:5
+   |
+82 | /     pub fn old(
+83 | |         mask_nonce: [u8; 32],
+84 | |         tape: &mut Recorder,
+85 | |     ) -> Result<Self, StateOnlyAttemptEntropyError> {
+   | |___________________________________________________^ associated function `StateOnlyAttemptSecrets::old` is reachable at visibility `pub`
+   |
+note: but type `Recorder` is only usable at visibility `pub(crate)`
+  --> lib.rs:74:1
+   |
+74 | struct Recorder {block:[u8;64], status:Result<(),u8>, draws:u16, input:[u8;64]}
+   | ^^^^^^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+Checking harness source_iteration_same_event...
+
+VERIFICATION RESULT:
+ ** 2 of 353 failed (351 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.1/src/lib.rs", line 357, in <std::slice::IterMut<'_, u8> as zeroize::Zeroize>::zeroize
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 10.030682s
+
+Manual Harness Summary:
+Verification failed for - source_iteration_same_event
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

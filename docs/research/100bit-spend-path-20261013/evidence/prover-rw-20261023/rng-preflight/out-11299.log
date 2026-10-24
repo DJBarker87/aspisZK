@@ -1,0 +1,99 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:20:94: error: unexpected identifier; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:18:85: error: unsupported `do` element (kind: Lean.Parser.Term.doReassign)
+   .ok ((tape replies bound following, (replies[index.val]).2), (replies[index.val]).1) := by
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:46:13: error: Application type mismatch: The argument
+  ?m.126
+has type
+  UScalar UScalarTy.Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  0#usize + 1#usize = ?m.126
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:46:35: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  UScalar UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:46:53: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p0 p1 p2 : P
+nonce : Std.Array U8 32#usize
+first : draw.fill p0 (Array.repeat 64#usize 0#u8) = ok ((p1, core.result.Result.Ok ()), Array.repeat 64#usize 0#u8)
+second : draw.fill p1 (Array.repeat 64#usize 0#u8) = ok ((p2, core.result.Result.Ok ()), Array.repeat 64#usize 1#u8)
+zero :
+  body draw nonce 16#usize p0 0#usize =
+    if (0#u8 != 0#u8) = true then
+      ok
+        (done
+          (p1,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 0#u8,
+                leaf_salt_seed := Array.repeat 32#usize 0#u8 }))
+    else do
+      let nextRetry ← 0#usize + 1#usize
+      ok (cont (p1, nextRetry))
+one :
+  body draw nonce 16#usize p1 1#usize =
+    if (1#u8 != 0#u8) = true then
+      ok
+        (done
+          (p2,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 }))
+    else do
+      let nextRetry ← 1#usize + 1#usize
+      ok (cont (p2, nextRetry))
+⊢ 0#usize + 1#usize = sorry
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:51:2: error: 'change' tactic failed, pattern
+  (do
+      let control ← body draw nonce 16#usize p0 0#usize
+      match control with
+        | done out => ok out
+        | cont nextState => loop (?m.199 control PUnit.unit nextState) nextState) =
+    ?m.153
+is not definitionally equal to target
+  (match
+      match (p0, 0#usize) with
+      | (provider1, retry1) => StateOnlyAttemptSecrets.generate_with_loop.body draw nonce 16#usize provider1 retry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (provider1, retry1) =>
+              StateOnlyAttemptSecrets.generate_with_loop.body draw nonce 16#usize provider1 retry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok
+      (p2,
+        core.result.Result.Ok
+          { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+            leaf_salt_seed := Array.repeat 32#usize 1#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:47:50: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl,i̵f̵_̵f̵ ̲al̵s̵e̵,̵a̵dd, ̲bind_tc_ok] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:47:63: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl, ̲if_false, ̲add,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngTape.fill_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

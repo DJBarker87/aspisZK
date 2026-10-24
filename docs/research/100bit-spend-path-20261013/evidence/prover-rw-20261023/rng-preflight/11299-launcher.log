@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1140); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+      ok (cont (p1, nextRetry))
+one :
+  body draw nonce 16#usize p1 1#usize =
+    if (1#u8 != 0#u8) = true then
+      ok
+        (done
+          (p2,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 }))
+    else do
+      let nextRetry ← 1#usize + 1#usize
+      ok (cont (p2, nextRetry))
+⊢ 0#usize + 1#usize = sorry
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:51:2: error: 'change' tactic failed, pattern
+  (do
+      let control ← body draw nonce 16#usize p0 0#usize
+      match control with
+        | done out => ok out
+        | cont nextState => loop (?m.199 control PUnit.unit nextState) nextState) =
+    ?m.153
+is not definitionally equal to target
+  (match
+      match (p0, 0#usize) with
+      | (provider1, retry1) => StateOnlyAttemptSecrets.generate_with_loop.body draw nonce 16#usize provider1 retry1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (provider1, retry1) =>
+              StateOnlyAttemptSecrets.generate_with_loop.body draw nonce 16#usize provider1 retry1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok
+      (p2,
+        core.result.Result.Ok
+          { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+            leaf_salt_seed := Array.repeat 32#usize 1#u8 })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:47:50: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl,i̵f̵_̵f̵ ̲al̵s̵e̵,̵a̵dd, ̲bind_tc_ok] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngTape.lean:47:63: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0#u8 != 0#u8) = false from rfl, ̲if_false, ̲add,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at zero
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngTape.fill_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.73
+	Maximum resident set size (kbytes): 3847644
+	Swaps: 0
+	Exit status: 1
