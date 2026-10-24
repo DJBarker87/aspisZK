@@ -15,3 +15,5 @@
 - lean-021: stock kernel replay succeeds, but newly added declarations live in the kernel map's second stage and are not available to same-file elaborator #print commands after Environment.ofKernelEnv. No field mutation or unchecked insertion is used. Replacement022 exports the already kernel-checked object, and the next normal import exposes declarations; the single focused audit runs after normal imports.
 - lean-024: stages theorem was not among snapshot seeds; its existing frozen driver object was retained in Port17 receipt018. Supplemental transport pins that exact object and source hash (including stages._proof_*), without source editing. Replacement025 succeeds.
 - lean-027: audit counter's implicit type was inferred as MessageData; explicit Nat annotation fixes it. Replacement028 passes full identity, types, hidden structure and axioms audit.
+
+- Final source-only receipt checker initially selected a helper receipt by filesystem iteration order. Replaced by the greatest attempt identifier; current-source hashes and accepted dependency objects pass. No Lean execution or new attempt charge.
