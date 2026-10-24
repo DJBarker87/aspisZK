@@ -1,0 +1,164 @@
+--- fbe04424e7553d9b0844ae19c2206b15cf3dd831:ResourceAvailable_go.py
++++ ResourceStability_evaluator.py
+@@ -1,64 +1,59 @@
+-"""Versioned offline API. Pure evaluate() has no provenance or live authority."""
++"""ResourceStability v1 OFFLINE counterfactual policy, never admission authority.
++
++Numerical evaluate body copied from pinned ResourceAvailable GO. Only explicit
++self, structural comparison, unit binding and diagnostic additions differ.
++"""
+ from pathlib import PurePosixPath
+-from ResourceAvailable_candidate import uint, add, GIB, LIMIT, membership, observe
++from ResourceStability_sources import c, go
+ 
+-def bind_scope(snapshot, expected):
+-    observe(snapshot)
+-    if set(expected) != {'high', 'cap', 'swap_max', 'tasks_max'}:
+-        raise ValueError('missing/unknown expected limits')
+-    for value in expected.values(): uint(value)
+-    if not (0 < expected['high'] <= expected['cap'] <= 8*GIB and
+-            expected['high'] <= 6*GIB and expected['swap_max'] == 0 and expected['tasks_max'] == 64):
+-        raise ValueError('invalid expected scope limits')
+-    identity = snapshot['self_observation']
+-    uint(identity['starttime'])
+-    unified = identity['unified_path']
+-    if not unified.startswith('/') or str(PurePosixPath(unified)) != unified or '..' in PurePosixPath(unified).parts:
+-        raise ValueError('noncanonical self cgroup path')
+-    path = identity['path']
+-    # Pure replay checks recorded procfs binding; public live entrypoint is disabled.
+-    expected_path = '/sys/fs/cgroup'+('' if identity['unified_path']=='/' else identity['unified_path'])
+-    if path != expected_path:
+-        raise ValueError('fake self cgroup path')
+-    by = {r['path']:r for r in snapshot['rows']}
+-    row = by[path]
+-    if row['root'] or not path.endswith('.scope') or row['type'] != 'domain' or not row['enabled'] or not row['populated'] or not row['pids_enabled']:
+-        raise ValueError('self is not a populated memory-enabled domain scope')
+-    observed = {key:row[key] for key in expected}
+-    if observed != expected:
+-        raise ValueError('actual scope controls differ from declared expectations')
+-    if row['swap_current'] != 0:
+-        raise ValueError('scope already uses swap')
+-    pid = uint(identity['pid'])
+-    if pid == 0 or pid not in row['procs'] or not any(
+-            i == dict(tid=pid, tgid=pid, starttime=identity['starttime']) for i in row['identities']):
+-        raise ValueError('own PID/starttime missing from actual scope membership')
+-    ancestors = []
+-    parent = row['parent']
+-    while parent is not None:
+-        ancestor = by[parent]
+-        if ancestor['enabled']:
+-            # memory.high also constrains actual operation; no weaker ancestor
+-            # than the declared scope limits is silently accepted.
+-            for key in ('cap', 'high'):
+-                limit = ancestor[key]
+-                if limit is not None and limit < expected[key]:
+-                    raise ValueError('effective ancestor '+key+' below expected limit')
+-            ancestors.append(dict(path=parent, cap=ancestor['cap'], high=ancestor['high']))
+-        if ancestor['pids_enabled'] and ancestor['tasks_max'] is not None and ancestor['tasks_max'] < expected['tasks_max']:
+-            raise ValueError('effective ancestor tasks cap below expected limit')
+-        parent = ancestor['parent']
+-    a = observe(snapshot)
+-    association = next(d['covered_by'] for d in a['diagnostics'] if d['path'] == path)
+-    if association is None or association not in a['frontier']:
+-        raise ValueError('actual scope absent from finite frontier coverage')
+-    return dict(self_identity={k:v for k,v in identity.items() if k != 'reads'},
+-                expected_limits=expected, observed_limits=observed,
+-                finite_frontier_association=association, ancestor_limits=ancestors)
++uint, add, GIB, LIMIT, observe = c.uint, c.add, c.GIB, c.LIMIT, c.observe
++bind_scope = go.bind_scope
++API_VERSION = 'ResourceStability20261025-v1'
++STRUCTURAL_FIELDS = (
++    'path', 'parent', 'root', 'enabled', 'owner', 'subtree_memory',
++    'type', 'domain', 'procs_errno', 'controllers', 'pids_enabled',
++    'subtree_pids', 'tasks_max',
++)
++MEMORY_FIELDS = ('populated', 'cap', 'high', 'swap_max')
+ 
+ 
+-def evaluate(old, before, after, requested, *, phase, expected=None):
+-    out = dict(schema='ResourceAvailable20261024-v1', phase=phase, additional_bytes=requested, expected_limits=expected, adopted=False,
++def structural(snapshot):
++    """Ordered full tree; conditional controls exactly mirror scanner fields.
++
++    pids.current is a checked observed count, not a control; its exact subtree
++    count is independently validated in observe. Nothing is removed from scan.
++    """
++    return [tuple(r[k] for k in STRUCTURAL_FIELDS) +
++            tuple(r.get(k) for k in MEMORY_FIELDS)
++            for r in snapshot['rows']]
++
++
++def collector(snapshot):
++    """Explicit self binding required even prospectively and in synthetic input."""
++    identity = snapshot['self_observation']
++    pid, start = uint(identity['pid']), uint(identity['starttime'])
++    unified, path = identity['unified_path'], identity['path']
++    if not unified.startswith('/') or str(PurePosixPath(unified)) != unified or '..' in PurePosixPath(unified).parts:
++        raise ValueError('noncanonical collector unified path')
++    if path != '/sys/fs/cgroup'+('' if unified == '/' else unified):
++        raise ValueError('collector path differs from unified path')
++    row = next(r for r in snapshot['rows'] if r['path'] == path)
++    if not pid or pid not in row['procs'] or dict(tid=pid, tgid=pid, starttime=start) not in row['identities']:
++        raise ValueError('collector PID/starttime absent from validated membership')
++    return dict(pid=pid, starttime=start, unified_path=unified, path=path)
++
++
++def differences(before, after):
++    """Preserve all raw membership and observed task-count deltas."""
++    keys = ('procs', 'threads', 'identities', 'pids_current')
++    return [dict(path=x['path'], fields={k: dict(before=x[k], after=y[k])
++                for k in keys if x[k] != y[k]})
++            for x, y in zip(before['rows'], after['rows'])
++            if any(x[k] != y[k] for k in keys)]
++
++
++def evaluate(old, before, after, requested, *, phase, expected=None, expected_unit=None):
++    out = dict(schema=API_VERSION, phase=phase, additional_bytes=requested, expected_limits=expected, adopted=False,
+                allowed=False, legacy=old, requested_bytes=requested,
+                os_control_bytes=7*GIB, safe_limit_bytes=LIMIT,
+                required_consumer_scope=dict(MemoryHigh='6G', MemoryMax='8G',
+@@ -68,7 +63,7 @@
+         uint(requested)
+         if phase not in ('prospective', 'inside-scope'):
+             raise ValueError('unknown phase')
+-        if phase == 'prospective' and (requested == 0 or expected is not None):
++        if phase == 'prospective' and (requested == 0 or expected is not None or expected_unit is not None):
+             raise ValueError('prospective requires positive additional reservation and no scope declaration')
+         if phase == 'inside-scope':
+             if requested != 0:
+@@ -77,6 +72,10 @@
+             second = bind_scope(after, expected)
+             if first != second:
+                 raise ValueError('self scope identity/control race')
++            if not isinstance(expected_unit, str) or not expected_unit.endswith('.scope') or PurePosixPath(expected_unit).name != expected_unit:
++                raise ValueError('missing/invalid expected scope unit')
++            if PurePosixPath(first['self_identity']['path']).name != expected_unit:
++                raise ValueError('self scope unit differs from explicit expectation')
+             out['scope_binding'] = first
+         if not isinstance(old, dict) or not old or old.get('error') or old.get('visibility_error'):
+             raise ValueError('legacy visibility error/missing')
+@@ -92,9 +91,14 @@
+             raise ValueError('invalid legacy visibility/decision types')
+         if before is None or after is None:
+             raise ValueError('missing hierarchy snapshot')
+-        if membership(before) != membership(after):
+-            raise ValueError('hierarchy/membership/control race')
+         a, b = observe(before), observe(after)
++        first_self, second_self = collector(before), collector(after)
++        if first_self != second_self:
++            raise ValueError('collector identity/membership race')
++        if structural(before) != structural(after):
++            raise ValueError('hierarchy/structural/control race')
++        out['collector_identity'] = first_self
++        out['membership_differences'] = differences(before, after)
+         old_frontier = [r['path'] for r in old['cgroups'] if r.get('charged_bytes', 0)]
+         if old_frontier != a['frontier'] or uint(old['projected_reserved_bytes']) != add((a['bounded_reserved_bytes'], requested)):
+             raise ValueError('legacy/frontier changed')
+@@ -122,5 +126,6 @@
+     return out
+ 
+ 
++
+ def read_only_admission(*, phase, additional_bytes, expected=None):
+-    raise RuntimeError('ResourceAvailable offline-only; live boundary DISABLED')
++    raise RuntimeError('ResourceStability offline-only; live boundary DISABLED')
