@@ -17,6 +17,8 @@ private def deps (c : ConstantInfo) : Array Name := Id.run do
   | .inductInfo v =>
     ds := ds ++ v.all.toArray ++ v.ctors.toArray
     for n in v.all do ds := ds.push (n.str "rec")
+  | .defnInfo v => ds := ds ++ v.all.toArray
+  | .opaqueInfo v => ds := ds ++ v.all.toArray
   | .ctorInfo v => ds := ds.push v.induct
   | .recInfo v =>
     ds := ds ++ v.all.toArray
@@ -50,12 +52,18 @@ private def select (origin m dest : String) (data : ModuleData)
         for d in ds do needed := needed.insert d
         emit "EDGE" (toJson (origin,m,n,ds))
   let cs := data.constants.filter (fun c => selected.contains (ns c.name))
+  for c in cs do
+    emit "SAFETY" (toJson (origin,m,ns c.name,c.isUnsafe,c.isPartial))
   unless cs.isEmpty do
     let p : System.FilePath := dest
     IO.FS.createDirAll p.parent.get!
     -- Full original ConstantInfo values/metadata, only transport fields cleared.
-    saveModuleData p m.toName { data with imports := #[], constants := cs,
-      constNames := cs.map (·.name), extraConstNames := #[], entries := #[] }
+    saveModuleData p m.toName { data with
+      imports := #[]
+      constants := cs
+      constNames := cs.map (·.name)
+      extraConstNames := #[]
+      entries := #[] }
     emit "TRANSPORT" (toJson (origin,m,dest,cs.map (fun c => ns c.name)))
   -- Only independent strings/sets escape the compacted-region callback.
   return (needed,cs.map (fun c => ns c.name))
@@ -66,14 +74,14 @@ private unsafe def scan (origin m p dest : String) (seeds : Array Name)
   emit "HEADER" (toJson (origin,m,data.imports.map (fun i => ns i.module)))
   let result ← select origin m dest data seeds needed
   -- Force ownership-sensitive work before releasing regions, as in Port18.
-  let size := result.2.foldl (fun k s => k+s.length) 0
+  let size := result.2.foldl (fun k s => k+s.length) (0 : Nat)
   if size > 100000000 then throw (IO.userError "name bound")
   (loaded.map (·.2)).reverse.forM CompactedRegion.free
   return result
 private unsafe def coreNames (p : String) (needed : Std.HashSet String) : IO (Array String) := do
   let (data,region) ← readModuleData p
   let names := data.constNames.filterMap (fun n => if needed.contains (ns n) then some (ns n) else none)
-  let size := names.foldl (fun k s => k+s.length) 0
+  let size := names.foldl (fun k s => k+s.length) (0 : Nat)
   if size > 100000000 then throw (IO.userError "name bound")
   region.free
   return names
