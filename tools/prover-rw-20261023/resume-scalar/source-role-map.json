@@ -1,0 +1,123 @@
+{
+  "schema": "ProverRwResumeScalar-role-v1",
+  "source_sha256": "e565ae2fe0831415569b7c03880433f90ec850ae625e75bba7df092aa1e10562",
+  "bindings": {
+    "draw-live64": {
+      "byte_start": 1511,
+      "byte_end": 1553,
+      "line": 57,
+      "text": "let mut bytes = Zeroizing::new([0u8; 64]);",
+      "sha256": "ee8069f99533b8262f7cd6b376f9f4b02253c7837e83c76367f9b33559beff22"
+    },
+    "draw-call": {
+      "byte_start": 1562,
+      "byte_end": 1608,
+      "line": 58,
+      "text": "let outcome = getrandom::fill(bytes.as_mut());",
+      "sha256": "6d32d3107413e5f9904b159ac4874a1b703a5e760a6b8dc08c6e36f94d4e1600"
+    },
+    "draw-move": {
+      "byte_start": 1617,
+      "byte_end": 1675,
+      "line": 59,
+      "text": "ProverRwResumeScalarDraw { request: self, bytes, outcome }",
+      "sha256": "3915e6212f2c2e4aed4ae0d717147be133a1151bf8a0a09cebf7d65b8acd2b0b"
+    },
+    "resume-move": {
+      "byte_start": 1874,
+      "byte_end": 1922,
+      "line": 68,
+      "text": "let Self { mut request, bytes, outcome } = self;",
+      "sha256": "1cf5d334ba887cd4908db08242357585ef054750cae9979e2b05c5db08d8c3e6"
+    },
+    "error-return": {
+      "byte_start": 2049,
+      "byte_end": 2096,
+      "line": 72,
+      "text": "Err(StateOnlyAttemptEntropyError::from(error)),",
+      "sha256": "13b419bee0ef0c7d5f2678d74c5ff7280106311f0764ad1ecfa86d7ae24b1e56"
+    },
+    "field-local": {
+      "byte_start": 2156,
+      "byte_end": 2211,
+      "line": 76,
+      "text": "let mut field_mask_entropy = Zeroizing::new([0u8; 32]);",
+      "sha256": "48d6df600a141cc24c535e7896342db1a996b3f0100f021d6c657ba03b7d078e"
+    },
+    "leaf-local": {
+      "byte_start": 2220,
+      "byte_end": 2271,
+      "line": 77,
+      "text": "let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);",
+      "sha256": "4dd6932de44742c0fbc1b50618b9a42c4edfc7e9a04fccec2143193eeef27205"
+    },
+    "field-copy": {
+      "byte_start": 2280,
+      "byte_end": 2329,
+      "line": 78,
+      "text": "field_mask_entropy.copy_from_slice(&bytes[..32]);",
+      "sha256": "749c4316df28eb717cafd1e0372415af3e6a0024504a9a04cc211613f27c703f"
+    },
+    "leaf-copy": {
+      "byte_start": 2338,
+      "byte_end": 2383,
+      "line": 79,
+      "text": "leaf_salt_seed.copy_from_slice(&bytes[32..]);",
+      "sha256": "eb64256cc4b66ea6b4432ba7213c502c09c8b323224889558ec85751c1f3bc16"
+    },
+    "accepted-move": {
+      "byte_start": 2562,
+      "byte_end": 2743,
+      "line": 83,
+      "text": "Ok(Some(StateOnlyAttemptSecrets {\n                    mask_nonce: request.mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                }))",
+      "sha256": "d859b57fe16d7036055e362aecc3ca7d15cda6020331240f7070c72ab97f9333"
+    },
+    "retry-before-drop": {
+      "byte_start": 2778,
+      "byte_end": 2797,
+      "line": 90,
+      "text": "request.retry += 1;",
+      "sha256": "ced927aa2b1cf745f7b1c3b1e13f73633409d6252b0efd3973bcb60a381eccb0"
+    },
+    "return-more": {
+      "byte_start": 2859,
+      "byte_end": 2913,
+      "line": 92,
+      "text": "(ProverRwResumeScalarControl::More(request), Ok(None))",
+      "sha256": "676171a12025deeb358f001f6d0bc264689b834ee84b8e7ca5ffd3033ef08624"
+    },
+    "field-declaration": {
+      "byte_start": 440,
+      "byte_end": 480,
+      "line": 19,
+      "text": "field_mask_entropy: Zeroizing<[u8; 32]>,",
+      "sha256": "d806429f018a6ac8c891a7e014944ae4e223651d1198379cb47548e2769fc17e"
+    },
+    "leaf-declaration": {
+      "byte_start": 485,
+      "byte_end": 521,
+      "line": 20,
+      "text": "leaf_salt_seed: Zeroizing<[u8; 32]>,",
+      "sha256": "d96e023a11f553a18cfbef2024127879ad309c82c75ea7d8d41739305cc3aaff"
+    }
+  },
+  "normal_paths": {
+    "Err": [
+      "bytes64"
+    ],
+    "Ok-accept-resume": [
+      "bytes64"
+    ],
+    "Ok-accept-later-disposal": [
+      "Secrets.field32",
+      "Secrets.leaf32"
+    ],
+    "Ok-reject": [
+      "leaf-local32",
+      "field-local32",
+      "bytes64"
+    ]
+  },
+  "identification": "source places, aggregate field moves and drop flags, never equal bytes or invocation ordinals",
+  "MIR_status": "separate optimized compile evidence; not an extraction or native refinement theorem"
+}

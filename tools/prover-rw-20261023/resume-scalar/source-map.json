@@ -1,0 +1,65 @@
+{
+  "schema": "ProverRwResumeScalar-source-v1",
+  "entry_revision": "7e900bb53455a1758fe24014d1987f08d6cbb242",
+  "source_before_sha256": "35cc2552da5e533facd16aeb5b9e7c3153257d10ec53aea1bc6246389c8af477",
+  "selected_sha256": "e565ae2fe0831415569b7c03880433f90ec850ae625e75bba7df092aa1e10562",
+  "rename": {
+    "before": "ProverRwFactoryState",
+    "after": "ProverRwResumeScalar"
+  },
+  "zeroize": {
+    "original_sha256": "9f59308c21265a2fb46935a6468d8bc2e86e4613c9a942fcfc91d61bec8cc878",
+    "instrumented_sha256": "e77e2b9013d3541f14139d0d99c714c05480bd733e7fa3315522a29c1b1d906c",
+    "patches": [
+      {
+        "label": "Zeroize typed observation default",
+        "before": "    fn zeroize(&mut self);",
+        "after": "    fn zeroize(&mut self);\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_observe(&self, _j: usize) -> ProverRwResumeScalar::Observation {\n        ProverRwResumeScalar::Observation { len: 0, low: 0, high: 0 }\n    }\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_byte(&self) -> Option<u8> { None }\n"
+      },
+      {
+        "label": "primitive observation default",
+        "before": "pub trait DefaultIsZeroes: Copy + Default + Sized {}",
+        "after": "pub trait DefaultIsZeroes: Copy + Default + Sized {\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_byte(&self) -> Option<u8> { None }\n}"
+      },
+      {
+        "label": "u8 explicit impl expansion",
+        "before": "    u8, u16, u32, u64, u128, usize",
+        "after": "    u16, u32, u64, u128, usize"
+      },
+      {
+        "label": "u8 typed safe observation",
+        "before": "/// `PhantomPinned` is zero sized",
+        "after": "impl DefaultIsZeroes for u8 {\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_byte(&self) -> Option<u8> { Some(*self) }\n}\n\n/// `PhantomPinned` is zero sized"
+      },
+      {
+        "label": "scalar typed observation",
+        "before": "        volatile_write(self, Z::default());\n        atomic_fence();\n    }\n}",
+        "after": "        volatile_write(self, Z::default());\n        atomic_fence();\n    }\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_byte(&self) -> Option<u8> {\n        <Z as DefaultIsZeroes>::prover_rw_resume_scalar_byte(self)\n    }\n}"
+      },
+      {
+        "label": "array typed observation",
+        "before": "impl<Z, const N: usize> Zeroize for [Z; N]\nwhere\n    Z: Zeroize,\n{\n    fn zeroize(&mut self) {\n        self.iter_mut().zeroize();\n    }\n}",
+        "after": "impl<Z, const N: usize> Zeroize for [Z; N]\nwhere\n    Z: Zeroize,\n{\n    fn zeroize(&mut self) {\n        self.iter_mut().zeroize();\n    }\n    #[cfg(any(kani, prover_rw_resume_scalar))]\n    fn prover_rw_resume_scalar_observe(&self, j: usize) -> ProverRwResumeScalar::Observation {\n        // Range guard precedes both typed indexing operations; no observation loop.\n        if (N != 32 && N != 64) || j >= 32 {\n            return ProverRwResumeScalar::Observation { len: 0, low: 0, high: 0 };\n        }\n        let low = match self[j].prover_rw_resume_scalar_byte() {\n            Some(byte) => byte,\n            None => return ProverRwResumeScalar::Observation { len: 0, low: 0, high: 0 },\n        };\n        let high = if N == 64 {\n            match self[j + 32].prover_rw_resume_scalar_byte() {\n                Some(byte) => byte,\n                None => return ProverRwResumeScalar::Observation { len: 0, low: 0, high: 0 },\n            }\n        } else { 0 };\n        ProverRwResumeScalar::Observation { len: N, low, high }\n    }\n}"
+      },
+      {
+        "label": "real Drop pre/post hooks",
+        "before": "impl<Z> Drop for Zeroizing<Z>\nwhere\n    Z: Zeroize,\n{\n    fn drop(&mut self) {\n        self.0.zeroize()\n    }\n}",
+        "after": "impl<Z> Drop for Zeroizing<Z>\nwhere\n    Z: Zeroize,\n{\n    fn drop(&mut self) {\n        #[cfg(any(kani, prover_rw_resume_scalar))]\n        let j=ProverRwResumeScalar::coordinate();\n        #[cfg(any(kani, prover_rw_resume_scalar))]\n        let before=self.0.prover_rw_resume_scalar_observe(j);\n        self.0.zeroize();\n        #[cfg(any(kani, prover_rw_resume_scalar))]\n        ProverRwResumeScalar::record(before, self.0.prover_rw_resume_scalar_observe(j));\n    }\n}"
+      },
+      {
+        "label": "metadata module",
+        "before": "/// Trait for securely erasing values from memory.",
+        "after": "// Job-only scalar ghost storage. No field is added to an owned source object.\n#[cfg(any(kani, prover_rw_resume_scalar))]\n#[allow(non_snake_case)]\npub mod ProverRwResumeScalar {\n    #[derive(Clone, Copy, Debug, PartialEq, Eq)]\n    pub struct Observation { pub len: usize, pub low: u8, pub high: u8 }\n    #[derive(Clone, Copy, Debug, PartialEq, Eq)]\n    pub struct Event { pub before: Observation, pub after: Observation }\n    const EMPTY: Observation = Observation { len: 0, low: 0, high: 0 };\n    const EMPTY_EVENT: Event = Event { before: EMPTY, after: EMPTY };\n    static mut J: usize = 0;\n    static mut COUNT: u8 = 0;\n    static mut OVERFLOW: bool = false;\n    static mut E0: Event = EMPTY_EVENT;\n    static mut E1: Event = EMPTY_EVENT;\n    static mut E2: Event = EMPTY_EVENT;\n    // Called exactly once at harness entry, before constructing source owners.\n    pub fn initialize(j: u8) {\n        unsafe { J = (j % 32) as usize; COUNT = 0; OVERFLOW = false;\n            E0 = EMPTY_EVENT; E1 = EMPTY_EVENT; E2 = EMPTY_EVENT; }\n    }\n    pub fn coordinate() -> usize { unsafe { J } }\n    pub fn record(before: Observation, after: Observation) {\n        let event = Event { before, after };\n        unsafe {\n            match COUNT {\n                0 => { E0 = event; COUNT = 1; }\n                1 => { E1 = event; COUNT = 2; }\n                2 => { E2 = event; COUNT = 3; }\n                _ => { OVERFLOW = true; }\n            }\n        }\n    }\n    pub fn events() -> (Event, Event, Event, u8, bool) {\n        unsafe { (E0, E1, E2, COUNT, OVERFLOW) }\n    }\n}\n\n/// Trait for securely erasing values from memory."
+      }
+    ]
+  },
+  "getrandom": {
+    "original_sha256": "43f4918d3c47d211d223543fa4b93074f883dcb7232b673b03c8b7fe19ef8e7a",
+    "instrumented_sha256": "21ff278511cc018bc106f0f692fa85dfb38ff7de603601dbe51f199b52dcdea8",
+    "before": "impl Error {",
+    "after": "impl Error {\n    #[cfg(all(kani, target_os=\"linux\", target_arch=\"x86_64\"))]\n    pub const fn prover_rw_resume_scalar_from_repr(code: core::num::NonZeroI32) -> Self {\n        Self(code)\n    }\n"
+  },
+  "semantic_erasure_proved": false,
+  "production_edited": false,
+  "print_axioms": "N/A: reversible source generation"
+}
