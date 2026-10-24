@@ -128,3 +128,18 @@ No whole-helper conclusion appears in a premise. Error mapping is the literal
 pinned Result::map_err match; a reserve error remains Allocation independently
 of resize. Full Clone source association is recorded separately; no new
 content wrapper will be presented as concrete native Vec progress.
+
+## Word-body bridge, statement before execution
+
+Add a separate source-word module: define the literal 64-bit initial cursor
+(if zero then wrapping start+len else cursor), saturating subtraction by branch,
+and bitwise AND with complement of wrapping align-1. Prove its toNat equals
+candidate start len cursor size align when all operands fit 64 bits, start+len
+fits, and 0<align. Prove the wrapping-complement equation independently first.
+This discharges the integer representation link; pointer casts/load/store and
+Vec shim remain different native obligations.
+
+Source detail correction: pinned host array specialization is on TrivialClone,
+not merely Copy. core::clone impl_clone explicitly includes u64 and gives both
+clone=*self and unsafe TrivialClone; specialized array clone uses ptr::read of
+the FULL [u64;4]. This still needs the selected native read interpretation.
