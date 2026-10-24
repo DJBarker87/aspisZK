@@ -1,0 +1,38 @@
+{"attempt": "lean-024", "exit_status": 0, "wall_seconds": 3.5002346980036236, "peak_rss_kib": "4397476", "swaps": "0", "print_axioms": ["'AspisR1.Port4A_Prefix.reached_calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_ReaderInstall.reference_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_ReaderInstall.accepted_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_CheckpointRows.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_CheckpointRows.fields_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_PhysicalReads.six_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_Parents.prefix_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_Variant.not_uniform_provenance' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_WriterObstruction.reached_tag_mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_PrepareCut.returned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_PrepareCut.variant_of_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Port4A_Prefix.reached_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.reference_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderInstall.accepted_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_CheckpointRows.combined_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_CheckpointRows.fields_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_PhysicalReads.six_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_Parents.prefix_iff' depends on axioms: [propext, Classical.choice,
+...
+in.stage reserved (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+          (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) proof pub)
+        before =
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Ok (p, a),
+          before ++
+            [(AspisR1Stage2.WireTx2.singletonParts proof, hp), (AspisR1Stage2.WireTx2.singletonParts pub, hu),
+              (AspisR1Stage2.WireTx2.checksumParts
+                  (AspisR1.CheckpointBytes5Writer.bodySlice (AspisR1.CheckpointBytes3Namespaces.toPrepared wp)
+                    (AspisR1.CheckpointBytes3Namespaces.toAccumulator wa) hp hu),
+                hc),
+              (c.proofParts, c.proofDigest), (c.publicParts, c.publicDigest), (c.checksumParts, c.checksumDigest)])
+AspisR1.Port4A_Variant.not_uniform_provenance {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (batch : AspisR1.Port3_NativeBatchBody.Ops) (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps W) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator)
+  (reached :
+    AspisR1.VTop_Provenance.WriterPrefix
+      (AspisR1.Port3_NativeWriterShape.installed base reserved batch geometryOps queryOps finish) D hash semantic proof
+      split none p a) :
+  ¬∀ (base' : VTop_Stages.Ops),
+      AspisR1.VTop_Checkpoint.WriterProvenance
+        (AspisR1.Port3_NativeWriterShape.installed base' reserved batch geometryOps queryOps finish) D hash semantic
+        proof split
+
+Running as unit: run-r6a28237adc15453db510d616fff65a56.scope; invocation ID: 85a540aa04fb462e8df887f38acafca5

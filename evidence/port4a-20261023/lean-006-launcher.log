@@ -1,0 +1,52 @@
+{"attempt": "lean-006", "exit_status": 1, "wall_seconds": 6.260493149005924, "peak_rss_kib": "4386208", "swaps": "0", "print_axioms": ["'AspisR1.Port4A_ReaderNormalize.checked_sub' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4A_ReaderNormalize.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port4A_ReaderNormalize.lean:46:2: error: unsolved goals
+case neg
+ops : ResumeOps
+sizeBound : ∀ (v : transport.Variant) (n : Usize), ops.checkpointSize v = ok n → 32 ≤ ↑n
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+bytes proof pub : Slice U8
+v : transport.Variant
+tailEq :
+  ∀ (i4 : U8) (end1 : Usize) (s6 : Slice U8) (a2 : Std.Array U8 32#usize),
+    Port4A_NativeReader.tail ops bytes v i4 end1 s6 a2 = CheckpointBytes5Resume.tail ops bytes v i4 end1 s6 a2
+size : Usize
+hsize : ops.checkpointSize v = ok size
+same : ¬bytes.len = size
+⊢ (if bytes.len ≠ size then ok (core.result.Result.Err verifier.Error.Checkpoint)
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.Sli
+...
+                                        CheckpointBytes5Resume.program._proof_33).to_slice
+                                  let a_17 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                        { «end» := a_6 }
+                                  let a_18 ← lift (Array.make 2#usize [a_16, a_17] ⋯).to_slice
+                                  let a_19 ← D.digest hash a_18
+                                  CheckpointBytes5Resume.tail ops bytes v a a_6 a_15 a_19
+Port4A_ReaderNormalize.lean:46:26: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp only [bne_iff_ne,s̵a̵m̵e̵,̵ ̲not_false_eq_true, ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4A_ReaderNormalize.lean:46:31: warning: This simp argument is unused:
+  not_false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵s̵a̵m̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲s̲a̲m̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port4A_ReaderNormalize.lean:46:49: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵n̵e̵_̵i̵f̵f̵_̵n̵e̵,̵s̵a̵m̵e̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲n̲e̲_̲i̲f̲f̲_̲n̲e̲,̲ ̲s̲a̲m̲e̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port4A_ReaderNormalize.checked_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port4A_ReaderNormalize.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5d4ecebd867c455395943e73ba72dfe1.scope; invocation ID: a42ccaf3264b4a2aa8f92f1f32d18fa9
