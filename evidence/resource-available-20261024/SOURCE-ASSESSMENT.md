@@ -32,3 +32,12 @@ inputs, receipt text, uint fields, identities and hashes. The original ordered
 The older 14,587-event audit/source assessments are reused without rerunning
 those gates. Their new-metric counterfactuals are all DENY. This demonstrates
 that the proposal does not preserve old estimates or imply blanket admission.
+
+Final source inspection found a further input-boundary obligation: pure replay
+rows may be supplied together with read receipts. The new observer now rejects
+unexpected recorded read failures and receipt hash mismatches even if supplied
+rows otherwise look valid. Only documented root cgroup.type ENOENT and threaded
+cgroup.procs EOPNOTSUPP are allowed. Self receipts never allow read errors.
+This does not change the estimator or relax source errors. Focused coverage was
+added; one final causal/source assessment is required for this changed observer,
+without running historical unchanged test suites.

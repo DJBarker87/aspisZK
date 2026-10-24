@@ -295,6 +295,21 @@ def observe(snapshot):
             for value in r['stat'].values(): uint(value)
         by[path] = r
     validate_membership(snapshot)
+    # Pure synthetic inputs may omit provenance. If receipts are supplied,
+    # unexpected read errors must not be hidden behind otherwise valid rows.
+    for event in snapshot.get('read_attempts', []):
+        errno = uint(event['errno'])
+        if errno:
+            root_absence = errno == 2 and event['path'] == root['path']+'/cgroup.type'
+            path = event['path'].removesuffix('/cgroup.procs')
+            threaded_procs = errno == LINUX_EOPNOTSUPP and event['path'].endswith('/cgroup.procs') and path in by and by[path]['type']=='threaded'
+            if not (root_absence or threaded_procs):
+                raise ValueError('unexpected observer read error')
+        elif hashlib.sha256(event['content'].encode()).hexdigest() != event['sha256']:
+            raise ValueError('observer receipt hash mismatch')
+    for event in snapshot.get('self_read_attempts', []):
+        if uint(event['errno']) or hashlib.sha256(event['content'].encode()).hexdigest() != event['sha256']:
+            raise ValueError('self observer read error/hash mismatch')
     frontier = []
     diagnostics = []
     for r in rows[1:]:

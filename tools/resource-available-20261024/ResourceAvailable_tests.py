@@ -206,6 +206,18 @@ class ResourceAvailableTests(unittest.TestCase):
             b=copy.deepcopy(s);b['rows'][0][key]=value
             self.assertIn('error',evaluate(b,old=lg))
 
+    def test_supplied_receipts_cannot_hide_read_errors(self):
+        s=fixture();lg=legacy(s,4*G)
+        for path,errno in (('/proc/meminfo',13),('/cg/a/cgroup.procs',95),('/cg/a/cgroup.type',2)):
+            b=copy.deepcopy(s);b['read_attempts']=[dict(path=path,errno=errno,error='recorded')]
+            self.assertIn('error',evaluate(b,old=lg))
+        b=copy.deepcopy(s);b['read_attempts']=[dict(path='/cg/cgroup.type',errno=2,error='expected root absence')]
+        self.assertTrue(evaluate(b)['allowed'])
+        b['read_attempts']=[dict(path='/proc/meminfo',errno=0,content='MemTotal: 1 kB',sha256='bad')]
+        self.assertIn('error',evaluate(b,old=lg))
+        b=copy.deepcopy(s);b['self_read_attempts']=[dict(path='/proc/self/stat',errno=13,error='denied')]
+        self.assertIn('error',evaluate(b,old=lg))
+
     def test_live_disabled_and_source_read_errors(self):
         self.assertRaises(RuntimeError,go.read_only_admission,phase='prospective',additional_bytes=G)
         for exc in (PermissionError(13,'denied'),FileNotFoundError(2,'missing')):
