@@ -16,6 +16,8 @@ def fixture(root,kernel=False,threads=1):
     (d/'cmdline').write_bytes(b'' if kernel else b'ordinary\0');(d/'cgroup').write_text('0::/synthetic\n')
     if not kernel:
         (d/'cwd').symlink_to('/');(d/'exe').symlink_to('/usr/bin/python3')
+    (d/'task').mkdir();(d/'task'/'42').symlink_to(d)
+    if threads>1:(d/'task'/'43').mkdir() # deliberately incomplete thread visibility
     return d
 check('stat parser handles comm parentheses',m.identity('42 (a ) b) '+' '.join(['S']+['0']*18+['99']))['starttime']==99)
 for kind in ('ordinary','kernel','threads','missing','donor-cwd','donor-fd','pid-change'):

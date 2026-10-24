@@ -45,10 +45,6 @@ def inspect(d):
             if len(flags)!=1:raise ValueError('missing fd flags')
             flag=int(flags[0],8)
             if member(target):row['matches'].append(dict(fd=int(fd.name),access_mode=flag & os.O_ACCMODE,donor=True))
-        # Thread-local cwd/fd tables are possible. Until separately observed,
-        # multi-threaded processes cannot certify a complete no-user claim.
-        row['thread_visibility_complete']=int(fields['Threads'])==1
-        if not row['thread_visibility_complete']:row['errors'].append('thread-local tables not inspected')
     except (OSError,ValueError,KeyError) as e:row['errors'].append(type(e).__name__)
     try:
         after=identity(bounded(d/'stat').decode());row['identity_stable']=before==after
@@ -63,7 +59,15 @@ def observe(proc):
     if len(initial)>20000:raise ValueError('process bound exceeded')
     rows=[]
     for pid in initial:
-        try:rows.append(inspect(proc/str(pid)))
+        try:
+            leader=proc/str(pid)
+            # Real proc has per-thread tables; fixture absence is not accepted.
+            tids=sorted(int(p.name) for p in (leader/'task').iterdir() if p.name.isdecimal())
+            if pid not in tids or len(rows)+len(tids)>20000:raise ValueError('thread set/bound')
+            for tid in tids:
+                row=inspect(leader/'task'/str(tid));row['tgid']=pid;rows.append(row)
+            after=sorted(int(p.name) for p in (leader/'task').iterdir() if p.name.isdecimal())
+            if tids!=after:rows.append(dict(pid=pid,errors=['thread-set-race'],identity_stable=False))
         except (OSError,ValueError) as e:rows.append(dict(pid=pid,errors=['vanished-or-unreadable-before:'+type(e).__name__],identity_stable=False))
     final=sorted(int(p.name) for p in proc.iterdir() if p.name.isdecimal())
     allowed=initial==final and all(r['identity_stable'] and not r['errors'] and not r.get('matches') for r in rows)
