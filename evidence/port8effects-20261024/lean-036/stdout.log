@@ -1,0 +1,358 @@
+AspisR1.Port8EFF_Bodies.reader_value : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash)).2 =
+    AspisR1.Port6CK_Reader.reader reserved unwrap D ck proof pub v hash
+'AspisR1.Port8EFF_Bodies.reader_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Bodies.writer_value : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_Bodies.writer D p a proof pub hash)).2 =
+    AspisR1.Port3_CheckpointInstall.writer D p a proof pub hash
+'AspisR1.Port8EFF_Bodies.writer_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Bodies.reader_effects : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    ∀
+      (out :
+        Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+          VTop_Stages.verifier.Error),
+      AspisR1.Port6CK_Reader.reader reserved unwrap D ck proof pub v hash = Aeneas.Std.Result.ok out →
+        ∃ after,
+          AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                (AspisR1.Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v) [] =
+              Aeneas.Std.Result.ok (out, after) ∧
+            AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash) =
+              (AspisR1.CheckpointBytes5Inputs.observe after, Aeneas.Std.Result.ok out)
+'AspisR1.Port8EFF_Bodies.reader_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Bodies.writer_effects : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      AspisR1.Port3_CheckpointInstall.writer D p a proof pub hash = Aeneas.Std.Result.ok saved →
+        ∃ after,
+          AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                (AspisR1.Port8EFF_Bodies.writerCode p a proof pub) [] =
+              Aeneas.Std.Result.ok (saved, after) ∧
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_Bodies.writer D p a proof pub hash) =
+              (AspisR1.CheckpointBytes5Inputs.observe after, Aeneas.Std.Result.ok saved)
+'AspisR1.Port8EFF_Bodies.writer_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Bodies.installed_reader : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash),
+  AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap (fun {A} => other)
+      (AspisR1.VTop_Trace.Call.op18 D ck proof pub v hash) =
+    AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash
+'AspisR1.Port8EFF_Bodies.installed_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Bodies.installed_writer : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (p : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator) (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash),
+  AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap (fun {A} => other)
+      (AspisR1.VTop_Trace.Call.op8 D p a proof pub hash) =
+    AspisR1.Port8EFF_Bodies.writer D p a proof pub hash
+'AspisR1.Port8EFF_Bodies.installed_writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Budget.count : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (n : ℕ),
+  AspisR1.Port8EFF_Budget.bounded n code →
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).1.length ≤ n
+'AspisR1.Port8EFF_Budget.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Budget.reader_bounded : ∀ (ops : AspisR1Stage2.ResumeOps)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.transport.Variant),
+  AspisR1.Port8EFF_Budget.bounded 3 (AspisR1.Port8EFF_NativeReader.program ops ck proof pub v)
+'AspisR1.Port8EFF_Budget.reader_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Budget.reader_count : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash)).1.length ≤
+    3
+'AspisR1.Port8EFF_Budget.reader_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_CheckpointCode.value : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).2 =
+    AspisR1.CheckpointBytes5Effect.erase D hash code
+'AspisR1.Port8EFF_CheckpointCode.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_CheckpointCode.effects : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (a : A) (before after : AspisR1.CheckpointBytes5Effect.Log),
+      AspisR1.CheckpointBytes5Effect.run D hash code before = Aeneas.Std.Result.ok (a, after) →
+        AspisR1.CheckpointBytes5Inputs.observe after =
+            AspisR1.CheckpointBytes5Inputs.observe before ++
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).1 ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).2 =
+            Aeneas.Std.Result.ok a
+'AspisR1.Port8EFF_CheckpointCode.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_CheckpointEffects.mapped : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (code : AspisR1.CheckpointBytes5Effect.Code A) (f : A → B)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.Port8EFF_CheckpointCode.program D hash
+        (AspisR1.CheckpointBytes5Effect.bind code fun a => AspisR1.CheckpointBytes5Effect.Code.done (f a))) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).1,
+      AspisR1.Port8EFF_CheckpointEffects.mapResult f
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_CheckpointCode.program D hash code)).2)
+'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_CheckpointEffects.reader : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap),
+  (∀ (N : Aeneas.Std.Usize) (b : Aeneas.Std.Array Aeneas.Std.U8 N),
+      unwrap N (Aeneas.Std.core.result.Result.Ok b) = Aeneas.Std.Result.ok b) →
+    ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (a : VTop_Stages.verifier.Accumulator) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2
+                  hash)).2 =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+          ∃ after,
+            AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                  (AspisR1.CheckpointBytes5Resume.program (AspisR1.Port6CK_Ops.ops reserved unwrap) ck proof pub
+                    AspisR1Stage2.transport.Variant.S2)
+                  [] =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+              AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                    (AspisR1.CheckpointBytes5Resume.program (AspisR1.CheckpointBytes4Ops.ops reserved) ck proof pub
+                      AspisR1Stage2.transport.Variant.S2)
+                    [] =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+                AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2
+                      hash) =
+                  (AspisR1.CheckpointBytes5Inputs.observe after,
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)))
+'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Control.common_ok : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+        (AspisR1.Port8EFF_Control.commonTail D pub proof hash none (Aeneas.Std.core.result.Result.Ok (p, a)))) =
+    AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+        (AspisR1.VTop_Trace.Code.call AspisR1.VTop_Trace.Call.op16
+          (AspisR1.Port8EFF_Control.afterSplit D proof hash none p a)))
+'AspisR1.Port8EFF_Control.common_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Control.common_source : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash),
+  AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none =
+    AspisR1.VTop_Trace.Code.call (AspisR1.VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+      (AspisR1.Port8EFF_Control.commonTail D pub proof hash none)
+'AspisR1.Port8EFF_Control.common_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Control.rejected : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+  (e : VTop_Stages.verifier.Error) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+        (AspisR1.Port8EFF_Control.commonTail D pub proof hash none (Aeneas.Std.core.result.Result.Err e))) =
+    ([], Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e))
+'AspisR1.Port8EFF_Control.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Driver.head : ∀ {A B : Type} (impl : AspisR1.VTop_OracleCode.Implementation)
+  (call : AspisR1.VTop_Trace.Call A) (k : A → AspisR1.VTop_Trace.Code B)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (out : B),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.VTop_OracleCode.interpret (fun {A} => impl) (AspisR1.VTop_Trace.Code.call call k))).2 =
+      Aeneas.Std.Result.ok out →
+    ∃ a,
+      (AspisV8R19.MemoizedProgramLaw.eval H (impl call)).2 = Aeneas.Std.Result.ok a ∧
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.VTop_OracleCode.interpret (fun {A} => impl) (k a))).2 =
+            Aeneas.Std.Result.ok out ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.VTop_OracleCode.interpret (fun {A} => impl) (AspisR1.VTop_Trace.Code.call call k))).1 =
+            (AspisV8R19.MemoizedProgramLaw.eval H (impl call)).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.VTop_OracleCode.interpret (fun {A} => impl) (k a))).1
+'AspisR1.Port8EFF_Driver.head' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Driver.common_shape : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∃ k,
+    AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none =
+      AspisR1.VTop_Trace.Code.call (AspisR1.VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+        k
+'AspisR1.Port8EFF_Driver.common_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Driver.common_reader : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.VTop_OracleCode.interpret
+              (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+              (AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+      ∃ p a after,
+        AspisR1.Port6CK_Reader.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+          AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                (AspisR1.Port8EFF_Bodies.readerCode reserved unwrap ck proof pub AspisR1Stage2.transport.Variant.S2)
+                [] =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.VTop_OracleCode.interpret
+                      (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                      (AspisR1.Port8EFF_Control.commonTail D pub proof hash none
+                        (Aeneas.Std.core.result.Result.Ok (p, a))))).2 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.VTop_OracleCode.interpret
+                      (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                      (AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).1 =
+                AspisR1.CheckpointBytes5Inputs.observe after ++
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.VTop_OracleCode.interpret
+                        (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                        (AspisR1.Port8EFF_Control.commonTail D pub proof hash none
+                          (Aeneas.Std.core.result.Result.Ok (p, a))))).1
+'AspisR1.Port8EFF_Driver.common_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Driver.authenticated_common : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.VTop_OracleCode.interpret
+            (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+            (AspisR1.VTop_Flow.tx2_authenticated AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.VTop_OracleCode.interpret
+              (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+              (AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+      ∃ earlier,
+        (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.VTop_OracleCode.interpret
+                (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                (AspisR1.VTop_Flow.tx2_authenticated AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).1 =
+          earlier ++
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.VTop_OracleCode.interpret
+                  (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                  (AspisR1.VTop_Flow.tx2_common AspisR1.VTop_Flow.traceEffects D pub proof ck hash none))).1
+'AspisR1.Port8EFF_Driver.authenticated_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Driver.powers_reached : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (pub proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.VTop_OracleCode.interpret
+            (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+            (AspisR1.Port8EFF_Control.commonTail D pub proof hash none (Aeneas.Std.core.result.Result.Ok (p, a))))).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    a.next = 10#usize ∧
+      ∃ g,
+        (AspisV8R19.MemoizedProgramLaw.eval H (other (AspisR1.VTop_Trace.Call.op17 29#usize p.gamma))).2 =
+            Aeneas.Std.Result.ok g ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.VTop_OracleCode.interpret
+                  (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                  (AspisR1.Port8EFF_Control.afterPowers D proof hash none p a 10#usize g))).2 =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port8EFF_Driver.powers_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_Driver.first_reader : ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder) (adapter : AdapterRw.Ops)
+  (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  (other : AspisR1.VTop_OracleCode.Implementation) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Port6AUTH_Prefix.source decoder
+                (AspisR1.Port1_Driver.rust adapter
+                  (fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other) D hash)
+                P)).2.2 =
+        true →
+      have impl := fun {A} => AspisR1.Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other;
+      have rust := AspisR1.Port1_Driver.rust adapter (fun {A} => impl) D hash;
+      have input := (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1;
+      ∃ pub proof semantic saved p a after earlier later,
+        AspisR1.Port1_Driver.asSlice input.statement.pubBytes = some pub ∧
+          AspisR1.Port1_Driver.asSlice input.stored = some proof ∧
+            AspisR1.Port1_Driver.decodeSemantic adapter pub = Aeneas.Std.Result.ok (some semantic) ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                        (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash
+                          none))).2 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                AspisR1.Port6CK_Reader.reader reserved unwrap D saved.deref proof pub AspisR1Stage2.transport.Variant.S2
+                      hash =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+                  AspisR1.CheckpointBytes5Effect.run (AspisR1.VTop_Checkpoint.digest D) hash
+                        (AspisR1.Port8EFF_Bodies.readerCode reserved unwrap saved.deref proof pub
+                          AspisR1Stage2.transport.Variant.S2)
+                        [] =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a), after) ∧
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+                              (AspisR1.Port8EFF_Control.commonTail D pub proof hash none
+                                (Aeneas.Std.core.result.Result.Ok (p, a))))).2 =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+                      (AspisV8R19.MemoizedProgramLaw.eval H (rust input)).1 =
+                        earlier ++ AspisR1.CheckpointBytes5Inputs.observe after ++ later
+'AspisR1.Port8EFF_Driver.first_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_NativeReader.source : ∀ (ops : AspisR1Stage2.ResumeOps) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (bytes proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (hash : Hash),
+  AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port8EFF_NativeReader.program ops bytes proof pub v) =
+    AspisR1.Port4A_NativeReader.resume ops D bytes proof pub v hash
+'AspisR1.Port8EFF_NativeReader.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_ReaderJoin.tail : ∀ (ops : AspisR1Stage2.ResumeOps) (ck : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : AspisR1Stage2.transport.Variant) (i4 : Aeneas.Std.U8) (end1 : Aeneas.Std.Usize)
+  (s6 : Aeneas.Std.Slice Aeneas.Std.U8) (a2 : AspisR1.CheckpointBytes5Effect.Digest),
+  AspisR1.Port4A_NativeReader.tail ops ck v i4 end1 s6 a2 = AspisR1.CheckpointBytes5Resume.tail ops ck v i4 end1 s6 a2
+'AspisR1.Port8EFF_ReaderJoin.tail' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_ReaderJoin.program : ∀ (ops : AspisR1Stage2.ResumeOps),
+  (∀ (v : AspisR1Stage2.transport.Variant) (n : Aeneas.Std.Usize),
+      ops.checkpointSize v = Aeneas.Std.Result.ok n → 32 ≤ ↑n) →
+    ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.transport.Variant),
+      AspisR1.Port8EFF_CheckpointCode.program D hash (AspisR1.Port8EFF_NativeReader.program ops ck proof pub v) =
+        AspisR1.Port8EFF_CheckpointCode.program D hash (AspisR1.CheckpointBytes5Resume.program ops ck proof pub v)
+'AspisR1.Port8EFF_ReaderJoin.program' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_ReaderSkeleton.native : ∀ (ops : AspisR1Stage2.ResumeOps)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.transport.Variant),
+  AspisR1.Port8EFF_NativeReader.program ops ck proof pub v =
+    AspisR1.Port8EFF_ReaderSkeleton.skeleton ops ck proof pub v (Aeneas.Std.lift (ck.len.wrapping_sub 32#usize))
+      (AspisR1.Port4A_NativeReader.tail ops ck v)
+'AspisR1.Port8EFF_ReaderSkeleton.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port8EFF_ReaderSkeleton.retained : ∀ (ops : AspisR1Stage2.ResumeOps)
+  (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (v : AspisR1Stage2.transport.Variant),
+  AspisR1.CheckpointBytes5Resume.program ops ck proof pub v =
+    AspisR1.Port8EFF_ReaderSkeleton.skeleton ops ck proof pub v (ck.len - 32#usize)
+      (AspisR1.CheckpointBytes5Resume.tail ops ck v)
+'AspisR1.Port8EFF_ReaderSkeleton.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CheckpointBytes5Inputs.Oracle : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun {Hash} D hash H =>
+  ∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+    D.digest hash parts = Aeneas.Std.Result.ok digest →
+      AspisR1.CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten parts)
+def AspisR1.Port8EFF_Bodies.body : Bool →
+  AspisR1.Port6CK_Semantic.Unwrap → AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun reserved unwrap other {A} call =>
+  match A, call with
+  | .(Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8), AspisR1.VTop_Trace.Call.op8 D p a proof pub hash =>
+    AspisR1.Port8EFF_Bodies.writer D p a proof pub hash
+  |
+  .(Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+        VTop_Stages.verifier.Error),
+    AspisR1.VTop_Trace.Call.op18 D ck proof pub v hash =>
+    AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash
+  | x, call => other call
+def AspisR1.Port8EFF_Bodies.implementation : VTop_Stages.Ops →
+  Bool →
+    AspisR1.Port6CK_Semantic.Unwrap → AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun ops reserved unwrap other {A} =>
+  AspisR1.Port1_Library.implementation ops fun {A} => AspisR1.Port8EFF_Bodies.body reserved unwrap fun {A} => other

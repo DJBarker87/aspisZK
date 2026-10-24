@@ -132,3 +132,22 @@ object-source-assessment.json; this does not certify historical source/object
 identity or reproduce an ELF gate. The inherited Port4A/Port6CK native codec and
 writer admission boundary remains unchanged. Both deployed targets are NOT
 established by this packet.
+
+The final independent source-effect audit undoes ONLY the lift constructors in
+Port8EFF_NativeReader:22 pure lifts and exactly the3 native digest instructions
+at s3,s5,s9. All remaining non-whitespace control/expression tokens equal the
+emitted Port4A_NativeReader.resume source, including every branch and the native
+tail. This separately checks the EFFECT schedule; the native-return theorem
+alone is not used as justification for inserting observations. The source
+transformation evidence is source-effect-audit.json. The first static tail
+substring check's failure and correction are retained separately. Existing
+extraction and leaf/ABI trust boundaries are unchanged.
+
+Final audit036 at source revision6fea68c8c8: exit0,wall1.947317826s,
+peak4448192KiB,swap0,27 full public theorem axiom reports, all standard.
+Private helper if_tail was separately audited in013 with no axioms.36/100 Lean,
+0/20 Kani. Static receipt/source/object/generator/scope audit passes. Every owned
+final dependency object matches the current isolated object inventory, and all
+available selected host source files match this worktree's corresponding source.
+Historical external object provenance remains reused evidence, not a coherent
+release identity claim. No active owned build remains and no full manifest ran.
