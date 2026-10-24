@@ -23,6 +23,7 @@ Newly merged51ff811857 adds conditional accepted-full-stored-run probability
 transport, keeps all-outcome query accounting separate, and recovers both native
 parent declarations in source extraction. It does not supply the concrete
 allocator/Vec frame/effect laws. Port22ARENA60355 is working on that boundary.
+Port23PUSH63286 separately connects actual mutable push to the owned row model.
 Privacy ResumeP6's two240s Kani checks timed out without proof/counterexample.
 ResumeScalar61137 now prepares scalar observation/source-role/erasure; the final
 privacy Kani slot remains reserved (59/60 used). No production adoption.
