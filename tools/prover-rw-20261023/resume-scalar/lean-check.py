@@ -21,9 +21,19 @@ def visit(m):
  deps[str(src)]=sha(src)
  for p in obj.parent.glob(obj.stem+'.olean*'):
   if p.is_file():deps[str(p)]=sha(p)
- clean=re.sub(r'/\-[\s\S]*?\-/','',src.read_text())
- for child in re.findall(r'^(?:public |private )?import\s+(\S+)',clean,re.M):visit(child)
-for m in re.findall(r'^import\s+(\S+)',source.read_text(),re.M):visit(m)
+ clean=[];depth=0;i=0;text=src.read_text()
+ while i<len(text):
+  pair=text[i:i+2]
+  if pair=='/-':depth+=1;i+=2;continue
+  if depth and pair=='-/':depth-=1;i+=2;continue
+  if depth:
+   if text[i]=='\n':clean.append('\n')
+   i+=1;continue
+  if pair=='--':
+   end=text.find('\n',i);i=len(text) if end<0 else end;continue
+  clean.append(text[i]);i+=1
+ for child in re.findall(r'^(?:public |private )?(?:meta )?import\s+(?:all\s+)?([A-Za-z_][A-Za-z0-9_.]*)',''.join(clean),re.M):visit(child)
+for m in re.findall(r'^import\s+(?:all\s+)?(\S+)',source.read_text(),re.M):visit(m)
 cmd=[str(T/'bin/lean'),'-j1','-M4400','-DElab.async=false','-o',str(objects/(module+'.olean')),str(source)]
 rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
 pre=dict(command=cmd,module=module,attempt=attempt,source_revision=rev,dirty_status=subprocess.check_output(['git','status','--short'],cwd=ROOT,text=True),source_sha256=sha(source),dependencies=deps,dependency_fingerprint=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest(),toolchain=str(T),compiler_sha256=sha(T/'bin/lean'),source_claim='coordinate/capacity lemmas only, no Rust refinement')
@@ -54,9 +64,9 @@ try:
 finally:lock.rmdir()
 log=(O/'stdout.log').read_text();tm=(O/'stderr.log').read_text()
 axioms=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",log)
-assert 'sorryAx' not in log
+# Failed elaborations retain generated sorryAx diagnostics; never accepted.
 r=re.search(r'(\d+)\s+maximum resident set size',tm);sw=re.search(r'(\d+)\s+swaps',tm)
-pre.update(exit_status=ex,wall_seconds=time.monotonic()-t,peak_rss_bytes=int(r[1]) if r else None,sampled_aggregate_peak_bytes=peak,swaps=int(sw[1]) if sw else None,print_axioms=axioms,source_unchanged=sha(source)==pre['source_sha256'],dependencies_unchanged=all(sha(Path(p))==h for p,h in deps.items()))
+pre.update(accepted=ex==0 and 'sorryAx' not in log,exit_status=ex,wall_seconds=time.monotonic()-t,peak_rss_bytes=int(r[1]) if r else None,sampled_aggregate_peak_bytes=peak,swaps=int(sw[1]) if sw else None,print_axioms=axioms,source_unchanged=sha(source)==pre['source_sha256'],dependencies_unchanged=all(sha(Path(p))==h for p,h in deps.items()))
 (O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n')
 print(json.dumps({k:pre[k] for k in ['module','exit_status','wall_seconds','peak_rss_bytes','swaps','print_axioms']}))
 raise SystemExit(ex)

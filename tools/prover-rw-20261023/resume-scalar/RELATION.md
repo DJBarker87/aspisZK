@@ -115,3 +115,31 @@ E1 remains literal contextual successful64; ledger stub NEXT/LEDGER is not an
 OS World. Native fill association/error transport, whole driver reachability,
 finite16, outer8 adaptive public policy/durable ledger/full transcript and
 L1/L2/L3 remain. Both deployed targets not yet established.
+
+## Observed evidence boundary after admission denial
+
+The one new MIR compile was denied before go/launch: finite reservations plus
+new8GiB were34762391552B (<55GiB), but uncapped resident31026192384B plus7GiB
+OS/control failed the physical-reserve gate. No retry is permitted this step.
+Thus no new MIR result, native compilation or harness typecheck exists here.
+The cfg(kani) harness is prepared source, unexecuted/unvalidated.
+
+Read-only inspection of old054 emission-audit.json binds request2, bytes3,
+field10, leaf12 and normal precise Drop sites430/441/448 and544/555/562 (leaf,
+field,64), with shared final64 site607. Retry add/write380/382 precede those
+rejection drops. Exact statements/spans/type/trait arguments are retained in
+reused-bindings.json. This is reused source assessment only, not a new identity
+gate. The complete metadata source_text matches selected resume under prefix
+rename. However its recorded accepted branch at the exact nested If/1 path is
+an EMPTY statements list. It does not supply the required success aggregate
+move/returned-field witness. We stop that reuse item; this observation does not
+claim the actual Rust success path is empty, impossible or verified. Native
+success/disposal role binding remains source-inspected only. The old014 projected
+trait Drop obstruction remains unchanged and is not retried.
+
+Coordinate/capacity Lean lemmas certify natural-number bounds and extensional
+coverage only. The source-role and stuttering argument above remains an inspected
+argument in the intended sequential typed-store semantics, not an implemented
+formal semantics or mechanized native projection theorem. No premise was
+removed. A concrete accepted producer for that semantic relation is an actual
+blocker before the final-slot result can establish the full native P6 contract.

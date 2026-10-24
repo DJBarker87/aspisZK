@@ -9,9 +9,9 @@ def nextCount (count : Nat) : Nat :=
 theorem normal_record_bound (count : Nat) (h : count < 3) :
     nextCount count = count + 1 ∧ nextCount count ≤ 3 := by
   match count with
-  | 0 => constructor <;> (first | rfl | omega)
-  | 1 => constructor <;> (first | rfl | omega)
-  | 2 => constructor <;> (first | rfl | omega)
+  | 0 => exact ⟨rfl, by change 1 ≤ 3; omega⟩
+  | 1 => exact ⟨rfl, by change 2 ≤ 3; omega⟩
+  | 2 => exact ⟨rfl, by change 3 ≤ 3; omega⟩
   | n + 3 => omega
 
 theorem saturated_no_arithmetic (count : Nat) (h : 3 ≤ count) :

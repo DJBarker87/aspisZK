@@ -94,6 +94,7 @@ mod checks {
         let original=Original::run(nonce,entry,j,original_phase);
         assert_eq!(original,instrumented);
         assert_eq!(Ghost::events(),ghost_after);
+        assert_eq!(Ghost::coordinate(),j);
         unsafe { let ledger=LEDGER; let calls=CALLS; assert_eq!(ledger,next); assert_eq!(calls,2); }
     }
 }

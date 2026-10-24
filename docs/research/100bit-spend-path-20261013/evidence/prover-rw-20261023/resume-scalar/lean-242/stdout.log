@@ -1,0 +1,32 @@
+theorem ProverRwResumeScalar.all_coordinates_equal : ∀ {α : Type} (a b : Fin 64 → α),
+  (∀ (j : Fin 32), a ⟨↑j, ⋯⟩ = b ⟨↑j, ⋯⟩ ∧ a ⟨↑j + 32, ⋯⟩ = b ⟨↑j + 32, ⋯⟩) → a = b :=
+fun {α} a b h =>
+  funext fun k =>
+    Exists.casesOn (ProverRwResumeScalar.coordinate_cover (↑k) k.isLt) fun j h_1 =>
+      And.casesOn h_1 fun hj right =>
+        Or.casesOn right
+          (fun hk =>
+            have he := Fin.ext hk;
+            Eq.mpr (id (congrArg (fun _a => a _a = b _a) he)) (h ⟨j, hj⟩).left)
+          fun hk =>
+          have he := Fin.ext hk;
+          Eq.mpr (id (congrArg (fun _a => a _a = b _a) he)) (h ⟨j, hj⟩).right
+theorem ProverRwResumeScalar.normal_record_bound : ∀ (count : Nat),
+  count < 3 → ProverRwResumeScalar.nextCount count = count + 1 ∧ ProverRwResumeScalar.nextCount count ≤ 3 :=
+fun count h =>
+  match count, h with
+  | 0, h => ⟨rfl, id (Decidable.byContradiction fun a => ProverRwResumeScalar.normal_record_bound._proof_1 a)⟩
+  | 1, h => ⟨rfl, id (Decidable.byContradiction fun a => ProverRwResumeScalar.normal_record_bound._proof_2 a)⟩
+  | 2, h => ⟨rfl, id (Decidable.byContradiction fun a => ProverRwResumeScalar.normal_record_bound._proof_3 a)⟩
+  | n.succ.succ.succ, h => Decidable.byContradiction fun a => ProverRwResumeScalar.normal_record_bound._proof_4 n h
+theorem ProverRwResumeScalar.entry_increment : ∀ (entry : Nat),
+  entry < 16 → entry + 1 ≤ 16 ∧ entry + 1 < 2 ^ 64 ∧ (entry + 1 < 16 ↔ entry < 15) :=
+fun entry h => Decidable.byContradiction fun a => ProverRwResumeScalar.entry_increment._proof_1 entry h a
+'ProverRwResumeScalar.coordinate_range' depends on axioms: [propext, Quot.sound]
+'ProverRwResumeScalar.observer_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ProverRwResumeScalar.coordinate_cover' depends on axioms: [propext, Quot.sound]
+'ProverRwResumeScalar.all_coordinates_equal' depends on axioms: [propext, Quot.sound]
+'ProverRwResumeScalar.normal_record_bound' depends on axioms: [propext, Quot.sound]
+'ProverRwResumeScalar.saturated_no_arithmetic' depends on axioms: [propext, Quot.sound]
+'ProverRwResumeScalar.normal_three_capacity' does not depend on any axioms
+'ProverRwResumeScalar.entry_increment' depends on axioms: [propext, Classical.choice, Quot.sound]

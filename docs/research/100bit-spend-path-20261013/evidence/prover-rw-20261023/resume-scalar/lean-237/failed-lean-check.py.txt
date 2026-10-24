@@ -1,0 +1,62 @@
+"""Warm pinned local focused Lean only, atomic lock and aggregate RSS guard."""
+from pathlib import Path
+import hashlib,json,os,re,subprocess,sys,time
+D=Path(__file__).resolve().parent;ROOT=D.parents[2]
+module=sys.argv[1];attempt=int(sys.argv[2]);assert module.startswith('ProverRwResumeScalar')
+assert 237<=attempt<=244
+E=ROOT/'docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/resume-scalar'
+O=E/f'lean-{attempt}';O.mkdir(exist_ok=False)
+T=Path('/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0')
+objects=Path('/tmp/cx-prover-rw-resume-scalar-objects');objects.mkdir(exist_ok=True)
+source=D/'lean'/(module+'.lean');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+deps={};seen=set()
+def visit(m):
+ if m in seen:return
+ seen.add(m);rel=m.replace('.','/')
+ local=D/'lean'/(rel+'.lean')
+ src=local if local.exists() else T/'src/lean'/(rel+'.lean')
+ obj=objects/(rel+'.olean') if local.exists() else T/'lib/lean'/(rel+'.olean')
+ assert src.exists() and obj.exists(),(src,obj)
+ # Pin full split-olean family and source; no dependence rebuild.
+ deps[str(src)]=sha(src)
+ for p in obj.parent.glob(obj.stem+'.olean*'):
+  if p.is_file():deps[str(p)]=sha(p)
+ clean=re.sub(r'/\-[\s\S]*?\-/','',src.read_text())
+ for child in re.findall(r'^(?:public |private )?import\s+(\S+)',clean,re.M):visit(child)
+for m in re.findall(r'^import\s+(\S+)',source.read_text(),re.M):visit(m)
+cmd=[str(T/'bin/lean'),'-j1','-M4400','-DElab.async=false','-o',str(objects/(module+'.olean')),str(source)]
+rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+pre=dict(command=cmd,module=module,attempt=attempt,source_revision=rev,dirty_status=subprocess.check_output(['git','status','--short'],cwd=ROOT,text=True),source_sha256=sha(source),dependencies=deps,dependency_fingerprint=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest(),toolchain=str(T),compiler_sha256=sha(T/'bin/lean'),source_claim='coordinate/capacity lemmas only, no Rust refinement')
+(O/'preflight.json').write_text(json.dumps(pre,indent=2)+'\n')
+lock=Path('/tmp/aspis-local-lean.lock.d')
+while True:
+ try:lock.mkdir();break
+ except FileExistsError:time.sleep(15)
+t=time.monotonic();peak=0
+try:
+ ps=subprocess.check_output(['ps','-axo','pid=,rss=,command='],text=True)
+ existing=[l for l in ps.splitlines() if re.search(r'/bin/lean\s',l)]
+ assert not existing,existing
+ (O/'gate.json').write_text(json.dumps(dict(existing_lean=existing,lock=str(lock),aggregate_limit_bytes=8*2**30))+'\n')
+ env=dict(os.environ,LEAN_PATH=str(objects))
+ with (O/'stdout.log').open('w') as out,(O/'stderr.log').open('w') as err:
+  proc=subprocess.Popen(['/usr/bin/time','-l',*cmd],cwd=D/'lean',env=env,stdout=out,stderr=err)
+  while proc.poll() is None:
+   rows=subprocess.check_output(['ps','-axo','pid=,ppid=,rss='],text=True)
+   rows=[tuple(map(int,l.split())) for l in rows.splitlines() if len(l.split())==3]
+   children={proc.pid};changed=True
+   while changed:
+    more={p for p,parent,rss in rows if parent in children};changed=not more<=children;children|=more
+   rss=sum(rss for p,parent,rss in rows if p in children)*1024;peak=max(peak,rss)
+   if rss>=8*2**30:proc.terminate();raise RuntimeError('aggregate8GiB guard stopped local compile; no unchanged retry')
+   time.sleep(.1)
+ ex=proc.wait()
+finally:lock.rmdir()
+log=(O/'stdout.log').read_text();tm=(O/'stderr.log').read_text()
+axioms=re.findall(r"'[^'\n]+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",log)
+assert 'sorryAx' not in log
+r=re.search(r'(\d+)\s+maximum resident set size',tm);sw=re.search(r'(\d+)\s+swaps',tm)
+pre.update(exit_status=ex,wall_seconds=time.monotonic()-t,peak_rss_bytes=int(r[1]) if r else None,sampled_aggregate_peak_bytes=peak,swaps=int(sw[1]) if sw else None,print_axioms=axioms,source_unchanged=sha(source)==pre['source_sha256'],dependencies_unchanged=all(sha(Path(p))==h for p,h in deps.items()))
+(O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n')
+print(json.dumps({k:pre[k] for k in ['module','exit_status','wall_seconds','peak_rss_bytes','swaps','print_axioms']}))
+raise SystemExit(ex)
