@@ -237,3 +237,8 @@ Port14LOCAL d297222029 reviewed: callbacks are proof-only comparison witnesses; 
 NEXT-PRODUCER.md identifies exact actual TX1/TX2 sites and weighted delegated bound:2*w3+w4+2*w6+w7+2*w9+2*w10+2*w11+w12+w17+w19<=115. Unrestrictedrest can issue1162asks at firstop3 and reject, so full1161 is false without localproducerbounds. Lead next owns proving actualdrivercontrolpartition/all-outcome composition from explicit per-op budget producers, using realreturned savedVec/Prepared and 477+3+3+563=1046, NOT checkpointChainprojection equality. SessionA retains concrete parser/prepare/powers/sampler/primitive bounds; no duplicate work. A conditional partition theorem will close only sourcecontrolcomposition, not concrete115orfullrelease. Budget219/240charged,21remain,Kani0/20; no newLean allocation.
 
 Client64 worker2349 now implements D162 caller migration separately on unmergedcandidate, tools/scripts only with offline mocks; no chain/key operations, crates/programs changes or nativeprivacy/adoptionclaim. NativeDrop386 remainsactive. Bothdeployedtargetsnotyetestablished.
+
+
+## Active concrete follow-ups — 2026-10-24
+
+Port14 audit merged and its clean owned worktree/branch removed. Port15DRIVER3466 now proves actualTX1/TX2 sourcecontrol partition and per-op weightedcount composition within remaining21/240Lean slots; no concrete115/full1161claim until actualproducerinstances. NativeDrop386 and Client642349 remainlive. Client64 budgets0Lean/Kani/extraction/backend,atmost4optimizedcargocommands+12focusedPythonchecks,tools/scripts-onlyunadoptedcandidate; nochain/keyoperations. All prompts archived; outsideLeanwindow sharedgloballockandfullhierarchyadmission apply. Bothdeployedtargetsnotyetestablished.
