@@ -41,9 +41,11 @@ zeroize32/64 component checks and the zero-nonce/first-fill-error factory paths
 have passed in their stated scopes. A one-draw candidate cut now passes exact
 owner/error/retry checks, but actual factory equivalence, finite16 composition
 and caller cleanup-event transport remain unproved. Actual-loop invariant
-attempts timed out and that method is stopped. FactorySource is assigned a
-narrow real host factoring under D187/D191, with source/effect proof and all3
-ELF gates required; no candidate adoption follows from the cut proof.
+attempts timed out and that method is stopped. FactoryState is assigned the
+actual owned-state/event interface under D187/D191 after prospective factoring
+stopped at resource admission. A smaller2GiB focused extraction is authorized
+with unchanged reserve checks; source/effect proof and all3 ELF gates remain
+required. No candidate adoption follows from the cut proof.
 
 Still required for privacy: actual complete selected64 owner/caller refinement,
 outer8 adaptive nonce policy and durable ledger, complete retry/error/cleanup
@@ -52,12 +54,12 @@ whole-prover identical-coin/differential gates, quiet-host median<15s and<=10%
 slowdown, final artifact audit and coherent replay. Existing fixture and
 component evidence cannot substitute for these obligations.
 
-Live managed tasks: Port18COHERENCE, FactorySource and Port19REST, each on its
+Live managed tasks: Port18COHERENCE, FactoryState and Port19REST, each on its
 isolated candidate branch with its archived hard budget and resource rules.
 Port19REST owns the remaining lead-operation source/effect budget producers;
 it does not duplicate A-owned parser/preparation/powers or Port18 cache repair.
 Detailed evidence, failures, assumptions and next producers are in the latest
-C3-BIN/LOG D205-D206 entries and `COORDINATOR-20261024.md`. The goal remains
+C3-BIN/LOG D205-D207 entries and `COORDINATOR-20261024.md`. The goal remains
 active. Final security closure has not been claimed.
 
 ## The contract
@@ -372,3 +374,16 @@ While Port18COHERENCE33570 reconciles imports and FactorySource38745 works the a
 A-owned parser3/scan4/powers17/prepare7/sampler/primitive/S1/S6/S10 remain untouched. New concrete local producers may reduce residual R, but no full1161 or deployed security claim follows while source/native associations and remaining rows stay open. If actual source/effect instances are missing, the worker must identify the exact missing declaration and stop that claim, rather than add another generic composition wrapper. Source-only inventory/design precedes compilation. No shipped source, Rust/Kani/backend/extraction or artifact changes in this job.
 
 Lead allocates12 NEW Lean attempts exclusively to Port19REST, including failures/preflight/dependency charges. Last reviewed275/276 (273actual+2preLean) is historical usage, not the live Port18 total. Port18 retains its81 reserved attempts through ceiling356; Port19 adds a separate12, combined soundness ceiling368. Privacy budgets are separate. Final usage will be reconciled from both terminal ledgers. Existing caps/global lock/window/all-scope admission and exact receipts apply; no full replay, source adoptions or raised limits. Prompt archived. Both deployed targets not yet established.
+
+
+## D207 — Prospective factoring retained; corrected smaller extraction admission and effect interface (lead, 2026-10-24)
+
+Reviewed unmergeddc26b384f5, full factory-source report/relation/proposed controller/helper and reservation/scope/runner/audit code. Prospective text calls the056 helper with a changed private visibility, but production source remains unchanged. No helper/controller equivalence, finite16 theorem, native effect relation or extraction was established. Existing pure (nonce,retry)->Result interpretation cannot represent repeated equal-input calls with different OS outcomes.056 still covers custom-u16 normal output/retry only; it supplies neither universal Error nor whole-helper event/frame/provenance semantics. No new trust or hidden whole-owner premise was accepted.
+
+All3 preflights050-052 denied BEFORE scope/compiler/extractor. Preserve3 charges and ZERO new actual invocations.050 double-counted hierarchical uncapped current;051 counted reclaimable build pagecache;052 corrected those extra-reserve errors and retained25065172992B resident reserve. Its mandatory finite reservations+requested8GiB were34762391552B<55GiB, but adding7GiB OS/control reserve exceeded host MemTotal by645095424B. This was an EXTRA reserve denial, not failure of the mandatory55GiB gate or proof focused extraction is impossible. Missing sysroot rlib preflight pins and untimed/unretained raw stderr remain explicit limits; no retroactive at-go gate exists.
+
+Lead reran the inspected read-only audit before relaunch: exact prospective/original/056 source identities,3 rejected admission receipts/fingerprints, archived source hashes and no compiled artifacts passed. No proof replay. Then a fresh read-only corrected scanner diagnostic at2026-10-24T17:50:24.218260Z for2GiB request returned allowed=true: finite26172456960B,projected28319940608B,uncapped resident25021128704B,OS/control reserve7516192768B,MemTotal66698661888B,MemAvailable55812419584B. This diagnostic is not a future launch barrier. Prior focused factory Charon049 peak198192KiB supports a smaller preflight rather than another8GiB reservation.
+
+FactoryState46554 continues the same branch. Explicitly authorize LOWER1536MiB/2GiB/noSwap/Tasks64 scopes ONLY for focused selected-item Charon/Aeneas preflights. Preserve both reservation/headroom gates, full hierarchy and fresh before/go, sysroot/library/tool pins and stderr/timing. Larger Rust/ELF jobs retain6G/8G limits and require their own allowed fresh gates. No service/cache/other-owner mutation, higher cap or historical resource repair. Read-only admission diagnostics should test scanner changes before compiler reservations; one correctly denied target should not trigger unchanged retries.
+
+Lead adds4 extraction reservations:52/52charged ->ceiling56,4available; last3 were pre-extraction denials. Backend15/16,Lean236/260,Kani57/60 unchanged;max2Kani this step. Source-step optimized Rust checks/tests0/3 and ELF-gate commands0/3 carry forward, no new Rust allowance. Under existing D187/D191, resolve the known pure-helper obstruction with a sufficient actual owned-state/event interface before spending extraction on that interpretation. Preserve Err advancement outside Result and distinguish native operational state from OS-world/freshness; a reset cursor/ghost counter is insufficient. Weakest sufficient event/primitive-outcome transport is permitted only with proof of experiment transport, not mere output equality. Literal E1 successful64 contextual law stays explicit; no new freshness/independence/trust. Narrow selected host factory/owner call-site rewrites remain gated; no protocol/verifier change or source adoption. All3 ELF, whole-prover fixedcoin1000, native/effect/client/E1/L1/L2/L3 and timing gates remain. Both deployed targets not yet established.
