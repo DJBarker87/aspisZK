@@ -1,0 +1,161 @@
+{
+  "command": [
+    "ssh",
+    "dombarker@100.108.41.90",
+    "python3",
+    "-"
+  ],
+  "script": "from pathlib import Path\nimport hashlib,json\nroot=Path('/home/dombarker/project-offloads/port22arena-20261024')\nrows=[]\nfor base in ['Port22ARENA-kani-target','Port22ARENA-native']:\n for p in (root/base).rglob('*'):\n  if p.is_file():rows.append(dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))\nprint(json.dumps(dict(artifacts=rows,scope='Job-owned post-run native objects, not committed binaries; no subsequent native run'),indent=2))\n",
+  "exit_status": 0,
+  "result": {
+    "artifacts": [
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/.rustc_info.json",
+        "sha256": "f499d72727ba7e9822417d56680fe3b8dd8d9fd9e88bcf46e41f535c92604300",
+        "bytes": 3035
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/CACHEDIR.TAG",
+        "sha256": "6d9d1d216e0f83abc5e5662ca62c92b4f23009466b54fa27321a69acdb778bb2",
+        "bytes": 177
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/CACHEDIR.TAG",
+        "sha256": "6d9d1d216e0f83abc5e5662ca62c92b4f23009466b54fa27321a69acdb778bb2",
+        "bytes": 177
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/debug/.cargo-lock",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.cargo-lock",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/libport22arena_native.d",
+        "sha256": "559236f543b97bda5774d49cfecee65543439867e33b694fe966cc997017744f",
+        "bytes": 327
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/libport22arena_native.rlib",
+        "sha256": "b8e320cbb36e6b83c4f32f46caa89f1141ad034d12a0ae498e3d569a879c1ee3",
+        "bytes": 15464
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47__RNvCs3IygpLFja1t_18port22arena_native32Port22ARENA_selected_alloc_frame.type_map.json",
+        "sha256": "019efd4de5e9a9f6af9e4f18bfb13442e45b5508d7df37097eb8754ca47bc85f",
+        "bytes": 2756
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/libport22arena_native-77b02f2828c87f47.rlib",
+        "sha256": "b8e320cbb36e6b83c4f32f46caa89f1141ad034d12a0ae498e3d569a879c1ee3",
+        "bytes": 15464
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47__RNvCs3IygpLFja1t_18port22arena_native32Port22ARENA_selected_alloc_frame.pretty_name_map.json",
+        "sha256": "f194c0746581e702b6f3644af0c59144ec12f787edb99434120ced78d3e60938",
+        "bytes": 53599
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47.kani-metadata.json",
+        "sha256": "a06995e08d9e7fc5ac93da1f2f25eb2bcfd43c7ad1df9761bc1d0f20495e155a",
+        "bytes": 844
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47__RNvCs3IygpLFja1t_18port22arena_native32Port22ARENA_selected_alloc_frame.out",
+        "sha256": "55910018410b0d9c3c0e6671d337e8f74d2a6cecdd08337a9ffbd4aec4736167",
+        "bytes": 188068
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/libport22arena_native-77b02f2828c87f47.rmeta",
+        "sha256": "44f60b846b98fc203b16954d03bdc19d09f0bfe7004d5e04273c4e338f57d2d8",
+        "bytes": 14761
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47__RNvCs3IygpLFja1t_18port22arena_native32Port22ARENA_selected_alloc_frame.symtab.out",
+        "sha256": "0c0d04400fe22358a00f56537f4d1bf9e71cbfd38ee4601d217b6e5a83e7e644",
+        "bytes": 148108
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/port22arena_native-77b02f2828c87f47.d",
+        "sha256": "63b4eedc6e8a915a22d9c329ae1efabfe4223e6bcddd29a8ecb5903bb5ef412b",
+        "bytes": 648
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint/port22arena-native-77b02f2828c87f47/lib-port22arena_native.json",
+        "sha256": "7325086ddeaf889fead6e2d8ec8ae3ea8f5f06710b37c4c25f7c5749d5e89120",
+        "bytes": 1094
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint/port22arena-native-77b02f2828c87f47/output-lib-port22arena_native",
+        "sha256": "617ff774013d2354d3876dcc09efadada9f77788b9dd529c16eb7b2aa56ae307",
+        "bytes": 3488
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint/port22arena-native-77b02f2828c87f47/invoked.timestamp",
+        "sha256": "5a109e6643e8d3e88642e3f35e85d2a83e639d07523aa6e99166c48178e965c3",
+        "bytes": 48
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint/port22arena-native-77b02f2828c87f47/lib-port22arena_native",
+        "sha256": "bf92b0e1513eaee048c3efefaa5cbc3626147dfedd3dda0a6678352926f6ecfc",
+        "bytes": 16
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/.fingerprint/port22arena-native-77b02f2828c87f47/dep-lib-port22arena_native",
+        "sha256": "ce0d10dd54d43deb1a3bcb71cfc55452d478b45501ece1e31195c9b62342a346",
+        "bytes": 63
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/incremental/port22arena_native-0npmq5vzpsm3h/s-hnioo78nnh-1eaaoiq.lock",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/incremental/port22arena_native-0npmq5vzpsm3h/s-hnioo78nnh-1eaaoiq-99gs2p6gf4ujarlofx5lzc4dl/query-cache.bin",
+        "sha256": "f1595e41f05b637db7921e5027c7329bcf83a525bf04ef950404a02e19a35d64",
+        "bytes": 65821
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/incremental/port22arena_native-0npmq5vzpsm3h/s-hnioo78nnh-1eaaoiq-99gs2p6gf4ujarlofx5lzc4dl/metadata.rmeta",
+        "sha256": "44f60b846b98fc203b16954d03bdc19d09f0bfe7004d5e04273c4e338f57d2d8",
+        "bytes": 14761
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/incremental/port22arena_native-0npmq5vzpsm3h/s-hnioo78nnh-1eaaoiq-99gs2p6gf4ujarlofx5lzc4dl/dep-graph.bin",
+        "sha256": "de57c781da929d1c3c8bb9acd76361ddd29b112c76dfef856b8e81919147f68b",
+        "bytes": 444891
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-kani-target/kani/x86_64-unknown-linux-gnu/debug/incremental/port22arena_native-0npmq5vzpsm3h/s-hnioo78nnh-1eaaoiq-99gs2p6gf4ujarlofx5lzc4dl/work-products.bin",
+        "sha256": "99678bd3c481f170e10b9c25dd0e381419a5cbff5e02b3e8e3d3d6c45d67701a",
+        "bytes": 108
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-native/Cargo.lock",
+        "sha256": "227239d01ac89baac6f3b77a0398bd5cbbf3d35910de73d505ce31d5eef7b170",
+        "bytes": 162
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-native/Cargo.toml",
+        "sha256": "47f9b8aa61f64cfc81ce5f866cb551909a991553d47cbf23a28802fafa4fd4e0",
+        "bytes": 227
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-native/src/Port22ARENA_selected.rs",
+        "sha256": "e4b56670e981526c9dcc7842762a1d6fcd5d48f1371ad1000cb1745c55deeaf2",
+        "bytes": 2679
+      },
+      {
+        "path": "/home/dombarker/project-offloads/port22arena-20261024/Port22ARENA-native/src/lib.rs",
+        "sha256": "5d7b57d8863f10c4effd7f37991c780b4c9289afce21e12e2e3cdb9a4160cbe9",
+        "bytes": 1608
+      }
+    ],
+    "scope": "Job-owned post-run native objects, not committed binaries; no subsequent native run"
+  },
+  "print_axioms": "N/A"
+}
