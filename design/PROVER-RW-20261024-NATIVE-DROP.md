@@ -67,3 +67,16 @@ Before/after statements: all existing mathematical and native-refinement
 statements remain identical; no premise is removed or added. The compliance
 change removes only Types' generated source limits, with fresh receipts11563/4.
 Current budgets: backend7/12, extraction24/36, Lean225/260, Kani44/60.
+
+## Prebuild source inspection correction
+
+The inherited filter_marker_traits also deletes Destruct's associated actual
+regular drop_glue body. Calling its id alone would leave a missing dependency.
+Candidate008 therefore retains directly Drop-referenced regular glue as a
+standalone item before marker filtering, preserving its id/body/signature and
+generic parameters. This metadata change is additional compiler work, distinct
+from refined-error behavior. The disposal uses normal StorageDead only for a
+local place; projections, implicit/generic glue and opaque bodies reject.
+Lowering occurs after ordinary storage filtering so synthetic lifetimes survive.
+This does not solve borrowed take/swap ABI or unwind; these remain acceptance
+blockers. Exact patch is retained as an unaccepted experiment.
