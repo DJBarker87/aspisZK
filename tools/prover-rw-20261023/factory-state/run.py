@@ -3,19 +3,19 @@ from pathlib import Path
 import hashlib,json,os,re,runpy,subprocess,sys,time,traceback
 D=Path(__file__).resolve().parent
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-a=int(sys.argv[1]);assert a in [53,54]
+a=int(sys.argv[1]);assert a in [54,55]
 O=D/'packet'/f'extraction{a:03d}';O.mkdir(parents=True)
 start=time.monotonic()
 charon=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon')
 B=D.parent/'native-drop-abi/backend'
 binary=B/'candidate-014/main.exe';br=B/'ProverRwNativeDropABI-build-014/receipt.json'
 llbc=D/'ProverRwFactoryState.llbc'
-if a==53:
+if a==54:
     cmd=[str(charon),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--precise-drops','--include','zeroize','--start-from','crate::ProverRwFactoryStateDraw::resume','--dest-file',str(llbc),'--','--manifest-path',str(D/'preflight/Cargo.toml'),'--offline','--locked','--release','--lib','--jobs','4']
     phase='optimized selected resume compilation and precise built-MIR extraction; actual Drop retained'
 else:
-    assert (D/'packet/extraction053/receipt.json').is_file()
-    previous=json.loads((D/'packet/extraction053/receipt.json').read_text())
+    assert (D/'packet/extraction054/receipt.json').is_file()
+    previous=json.loads((D/'packet/extraction054/receipt.json').read_text())
     assert previous['exit_status']==0 and previous['actual_target_invocations']==1
     assert previous['outputs'][0]['sha256']==sha(llbc)
     cmd=[str(binary),'-sequential','-eval-drops','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','ProverRwFactoryState','-dest',str(O/'raw-output'),'-split-files','-emit-json',str(llbc)]
@@ -28,7 +28,7 @@ code=1
 try:
     assert sha(binary)==json.loads(br.read_text())['versioned_binary']['sha256']
     def source_input(p):
-        return p.is_file() and not any(x in ['packet','target','__pycache__'] or x.startswith('diagnostics') for x in p.relative_to(D).parts)
+        return p.is_file() and not any(x in ['packet','target','__pycache__','runner-logs'] or x.startswith('diagnostics') for x in p.relative_to(D).parts)
     inputs=[p for p in D.rglob('*') if source_input(p)]
     originals=[D.parent/'factory-iteration/production-source.txt',D.parent/'factory-iteration/proof-cut/selected.rs',D.parent/'factory-iteration/RELATION.md',D.parent/'factory-source/RELATION.md']
     inputs += originals
@@ -38,12 +38,13 @@ try:
     tc=Path('/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu')
     assert tc.is_dir()
     # Includes ALL sysroot rlibs, shared libraries, compiler/tools and metadata.
-    inputs += [p for p in tc.rglob('*') if p.is_file()]
+    inputs += [p for sub in ['bin','lib','etc'] for p in (tc/sub).rglob('*') if p.is_file()]
+    inputs += [p for p in tc.iterdir() if p.is_file()]
     inputs += [charon,binary,br,B/'ProverRwNativeDropABI-build-014/Config.ml.txt',B/'ProverRwNativeDropABI-build-014/Main.ml.txt',Path('/usr/bin/time'),Path('/home/dombarker/.cargo/bin/rustup')]
     pins={str(p):sha(p) for p in sorted(set(inputs))}
     pre.update(source_sha256=pins,dependency_fingerprint=hashlib.sha256(json.dumps(pins,sort_keys=True).encode()).hexdigest(),sysroot_rlib_count=sum(p.suffix=='.rlib' and p.is_relative_to(tc) for p in set(inputs)))
     assert pre['sysroot_rlib_count']>0
-    if a==54:
+    if a==55:
         pre['drop_flags']=runpy.run_path(str(D/'drop_flags.py'))['assess'](cmd,B/'ProverRwNativeDropABI-build-014/Config.ml.txt',B/'ProverRwNativeDropABI-build-014/Main.ml.txt')
     (O/'preflight.json').write_text(json.dumps(pre,indent=2)+'\n')
     # Preserve originals before any compiler reservation.
@@ -70,7 +71,7 @@ finally:
     pre.update(exit_status=code,wall_seconds=time.monotonic()-start,
         peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),
         target_timing='measured in time.log' if s else 'N/A: target not launched; outer runner timed separately',
-        outputs=[dict(path=str(p),sha256=sha(p),size=p.stat().st_size) for p in ([llbc] if a==53 else list((O/'raw-output').rglob('*'))) if p.is_file()],
+        outputs=[dict(path=str(p),sha256=sha(p),size=p.stat().st_size) for p in ([llbc] if a==54 else list((O/'raw-output').rglob('*'))) if p.is_file()],
         postrun_changed_inputs=[p for p,h in pre.get('source_sha256',{}).items() if sha(p)!=h])
     (O/'stdout.log').touch(exist_ok=True)
     (O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n')
