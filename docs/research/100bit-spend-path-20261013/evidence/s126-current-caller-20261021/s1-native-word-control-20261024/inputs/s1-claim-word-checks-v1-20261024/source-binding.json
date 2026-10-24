@@ -1,0 +1,20 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+  "source_files": {
+    "verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "fast_pairing.rs": "2cb96261cecfd766b5e1b45a585b74c5f59c20c6be4f41e806239e2786ca7313",
+    "r1_semantic.rs": "c66eba53bc3cdf801466455089d7189c02a0bec858f407a5fc9db35d10b17013",
+    "r1_wire.rs": "7479389501c3d2510f639546e0d834dbc42e2bed33c6b5d38c89b8b6318ae3b8",
+    "weights.rs": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137",
+    "trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd"
+  },
+  "original_claim": "fn prepared_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error> {\n        let k=powers::<7>(kappa);\n        let mut parts=[E::ZERO;7];parts[0]=inactive;\n        for point in 0..6 {\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        }\n        let mut claim=E::ZERO;\n        for i in 0..7 {crate::trace::value(14,i,parts[i]);claim=claim.add(k[i].mul(parts[i]));}\n        crate::trace::value(14,7,claim);\n        Ok(claim)\n}",
+  "scalar_expression": "match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()}",
+  "original_statement": "let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};",
+  "selector": "fn scalar_helper<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],point:usize,l:usize)->K { match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()} }",
+  "steps": "fn original_step<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,dot:&mut crate::fast_pairing::EbyKDot)->Result<(),Error> {\nlet scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n Ok(())\n}\nfn helper_step<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,l:usize,dot:&mut crate::fast_pairing::EbyKDot)->Result<(),Error> {\n let scalar=scalar_helper(sem,y1,point,l);\n dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n Ok(())\n}\n",
+  "source_step_sha256": "2cd7cc6fadd2e980c6d4fe36281bb46fe625d96b89b86e916f19f705cf6d81e9",
+  "qualification": "Actual scalar selector/push source steps. No arithmetic stubs or reduced types.",
+  "remaining": "Step/fission loop composition and original parent/source correspondence. A successful step check alone is not whole S1 closure."
+}

@@ -1,0 +1,15 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+  "original_claim_sha256": "bea4efc48149314e4cc0b8d8867841db61b3ea23cd9c94bf7214ec735a8985fc",
+  "original_outer_body": "\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        ",
+  "old_step": "fn original_point_step<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,parts:&mut[E;7])->Result<(),Error> {\n\n            let mut dot=crate::fast_pairing::EbyKDot::new();\n            for l in 0..29 {\n                let scalar=match point {0..=2=>sem.claims[point][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>field(y1,l).c0()};\n                dot.push(g[l],scalar).map_err(|_|Error::Parse)?;\n            }\n            parts[point+1]=dot.finish();\n        \n Ok(())\n}\n",
+  "reference_step": "fn reference_point_step<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],g:&[E;29],point:usize,parts:&mut[E;7])->Result<(),Error> {\n parts[point+1]=prepared_claim_dot(sem,y1,g,point)?;\n Ok(())\n}\n",
+  "proof_only_alias": "\n#[cfg(kani)] pub use canonical::Q as ProofQ;\n",
+  "proof_only_visibility": "Q.raw private to public; executable body unchanged",
+  "qualification": "Exact original outer-loop body versus reference helper, on full actual types.\nOnly leaf calls are paired; source scalar checks, dot push, range and parts\nupdates remain actual Rust. No shipped source is edited.\n",
+  "source_sha256": "dd570b30695f89d7c6101949d8d4fa1e2e4030dc62295709a7a2a7e2c2f6b6cd",
+  "pairing_source_sha256": "27a225074a9957ed5ba069b365c519c8e50bf902b195caca9395eceebd13d504",
+  "proof_sha256": "f4766e9bc677725f3c87db66685b068129f2133d0ba2306c9da4efe72cafc87d",
+  "remaining": "Source/callee interpretation and whole original caller join are not assumed discharged by this paired-leaf certificate."
+}
