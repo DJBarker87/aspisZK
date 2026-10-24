@@ -1,0 +1,42 @@
+{
+  "inputs": {
+    "Types.lean": "05e6ee8d935bf002a50d2c778ea9074a021e8b1532d336004be51bfd3af21402",
+    "Funs.lean": "e19436e28d234bcfdfc2fd755ba662d520c4ffcf36f9d8b2152f9fc7d430e8c6",
+    "FunsExternal_Template.lean": "f518fa5d50a931d6b9fae25a8524987cd63b0ea0a6b51b9595a7c58e6acd0694"
+  },
+  "output": "docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRwRngEmission.lean",
+  "output_sha256": "36bced586c38389d5b105ad3363daf35ec814f5a42d41ef82725ed87bf3de5d9",
+  "external_bindings": [
+    {
+      "qualified_source": "zeroize::{impl zeroize::Zeroize for Z}::zeroize]:",
+      "template_signature": "zeroize.Zeroize.Blanket.zeroize\n  {Z : Type} (DefaultIsZeroesInst : zeroize.DefaultIsZeroes Z) : Z \u2192 Result Z",
+      "template_signature_sha256": "76b2af929cf18d2a3790eb903fb694cd1a257bd12883473a521b80dc7d39f946"
+    },
+    {
+      "qualified_source": "zeroize::{impl zeroize::Zeroize for [Z; N]}::zeroize]:",
+      "template_signature": "Array.Insts.ZeroizeZeroize.zeroize\n  {Z : Type} {N : Std.Usize} (ZeroizeInst : zeroize.Zeroize Z) :\n  (Array Z N) \u2192 Result (Array Z N)",
+      "template_signature_sha256": "7372f56a624ce7878de06e17fd3aa937bd034ed7686f6b560f23c9a8aa46074e"
+    },
+    {
+      "qualified_source": "zeroize::{zeroize::Zeroizing<Z>}::new]:",
+      "template_signature": "zeroize.Zeroizing.new\n  {Z : Type} (ZeroizeInst : zeroize.Zeroize Z) :\n  Z \u2192 Result (zeroize.Zeroizing Z)",
+      "template_signature_sha256": "650f2298ab8120c50b5d8c0d7c82cb130a19d989a15056f8e6734dc1b5a588f4"
+    },
+    {
+      "qualified_source": "zeroize::{impl core::ops::deref::Deref<Z> for zeroize::Zeroizing<Z>}::deref]:",
+      "template_signature": "zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref\n  {Z : Type} (ZeroizeInst : zeroize.Zeroize Z) :\n  (zeroize.Zeroizing Z) \u2192 Result Z",
+      "template_signature_sha256": "820327c075f979e841f43e2c7a3e095f0e16cb547890a41cb6264ff53ac7e014"
+    },
+    {
+      "qualified_source": "zeroize::{impl core::ops::deref::DerefMut<Z> for zeroize::Zeroizing<Z>}::deref_mut]:",
+      "template_signature": "zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut\n  {Z : Type} (ZeroizeInst : zeroize.Zeroize Z) :\n  (zeroize.Zeroizing Z) \u2192 Result (Z \u00d7 (Z \u2192 zeroize.Zeroizing Z))",
+      "template_signature_sha256": "694c0ed424230a9c816c6fa70dfe5f7d0d010d13bcf008f82dc454fc6130c9ee"
+    }
+  ],
+  "changes": [
+    "combine type/fun modules without rewriting emitted control",
+    "two unused erasure callbacks parameterized as ErasureFns",
+    "transparent value-level new/deref/deref_mut definitions; no native drop claim"
+  ],
+  "no_implicit_world": true
+}
