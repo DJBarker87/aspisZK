@@ -1,0 +1,338 @@
+theorem AspisR1.Port5Q1_Complete.accepted : ∀ {CoreError : Type} (base : VTop_Stages.Ops)
+  (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+      (a0 out10 out22 : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize)
+      (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+      (geometry0 geometry1 : AspisR1Stage2.verifier.QueryGeometry)
+      (b0 b10 b1 b12 : AspisR1Stage2.verifier.BatchedWeights)
+      (flushed10 flushed22 : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31)
+      (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+      AspisR1.Port5Q1_QueryPorts.SessionAPrepare p i.data q (AspisR1.SelectedChallengeMap.rhoOf i.rho) →
+        AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some i.data →
+          parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+            (↑proof).length = 57607 →
+              ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+                (∀ pos < 22,
+                    recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                      some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                  ∀ (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError),
+                    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geometryOps →
+                      AspisR1.Port5Q1_Domain.SessionADomain geometryOps →
+                        geometryOps.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                          geometryOps.op7 = Aeneas.Std.Result.ok 1#u32 →
+                            geometryOps.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                              AspisR1.Port3_GeometryStage.geometry
+                                    (AspisR1.Port5Q1_GeometryTerminal.install geometryOps) p.queries 0#usize 10#usize =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry0) →
+                                AspisR1.Port3_GeometryStage.geometry
+                                      (AspisR1.Port5Q1_GeometryTerminal.install geometryOps) p.queries 10#usize
+                                      22#usize =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok geometry1) →
+                                  ∀ (reserved : Bool),
+                                    AspisR1.Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a0) →
+                                      AspisR1.Port3_NativePendingInstall.source reserved a0.weights.deref =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok b0) →
+                                        AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop
+                                              (AspisR1.Port4C_RowStd.install (AspisR1.Port5Q1_QueryPorts.install ops))
+                                              proof p a0 g obs geometry0 b0 10#usize =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out10, b10)) →
+                                          AspisR1.Port3_FlushInstall.flush b10 out10.weights.deref =
+                                              Aeneas.Std.Result.ok flushed10 →
+                                            AspisR1.Port3_NativePendingInstall.source reserved
+                                                  (AspisR1.Port5Q1_Endpoint.materialize out10 flushed10).weights.deref =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok b1) →
+                                              AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop
+                                                    (AspisR1.Port4C_RowStd.install
+                                                      (AspisR1.Port5Q1_QueryPorts.install ops))
+                                                    proof p (AspisR1.Port5Q1_Endpoint.materialize out10 flushed10) g obs
+                                                    geometry1 b1 22#usize =
+                                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out22, b12)) →
+                                                AspisR1.Port3_FlushInstall.flush b12 out22.weights.deref =
+                                                    Aeneas.Std.Result.ok flushed22 →
+                                                  have model :=
+                                                    AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                                      (AspisR1.SelectedChallengeMap.rhoOf i.rho) q;
+                                                  AspisR1.CheckpointBytes5Output.accumulator
+                                                        (AspisR1.Port5Q1_Endpoint.materialize out10 flushed10) =
+                                                      (AspisR1.OraclePortCheckpointStateC3.write model).accumulator ∧
+                                                    AspisR1.CheckpointBytes5Output.accumulator
+                                                          (AspisR1.Port5Q1_Endpoint.materialize out22 flushed22) =
+                                                        AspisR1.OraclePortCheckpointStateC3.advance model 12
+                                                          (AspisR1.CheckpointBytes5Output.accumulator
+                                                            (AspisR1.Port5Q1_Endpoint.materialize out10 flushed10)) ∧
+                                                      AspisR1.CheckpointBytes5Output.accumulator
+                                                            (AspisR1.Port5Q1_Endpoint.materialize out22 flushed22) =
+                                                          AspisR1.OraclePortFrozen2.completeState i q ∧
+                                                        (↑flushed10).length = 64 ∧
+                                                          (↑flushed22).length = 64 ∧
+                                                            ↑out10.next = 10 ∧ ↑out22.next = 22 :=
+fun {CoreError} base ops ports proof p a0 out10 out22 g obs geometry0 geometry1 b0 b10 b1 b12 flushed10 flushed22 parsed
+    q tr i prepare read wire proofLength recovered authenticated geometryOps geometryCanonical domain multiply one
+    inverse geometryCall0 geometryCall1 reserved initial pending0 calls0 flush0 pending1 calls1 flush1 =>
+  have geo0 :=
+    AspisR1.Port5Q1_GeometryReads.accepted geometryOps geometryCanonical domain multiply one inverse p.queries 0#usize
+      10#usize geometry0 (of_decide_eq_true (id (Eq.refl true))) geometryCall0;
+  have geo1 :=
+    AspisR1.Port5Q1_GeometryReads.accepted geometryOps geometryCanonical domain multiply one inverse p.queries 10#usize
+      22#usize geometry1 (of_decide_eq_true (id (Eq.refl true))) geometryCall1;
+  AspisR1.Port5Q1_Frozen2.accepted base ops ports proof p a0 out10 out22 g obs geometry0 geometry1 b0 b10 b1 b12
+    flushed10 flushed22 parsed q tr i prepare read wire proofLength recovered authenticated geo0 geo1 reserved initial
+    pending0 calls0 flush0 pending1 calls1 flush1
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrepare (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE) (q : Fin 22 → Fin 262144)
+  (rho : AspisR1.Port5Q1_QueryPorts.FK) : Prop
+number of parameters: 4
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.queries : ∀ (i : ℕ) (hi : i < 22),
+      ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.alpha1 : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha → AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.mk {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE} {q : Fin 22 → Fin 262144}
+    {rho : AspisR1.Port5Q1_QueryPorts.FK}
+    (queries : ∀ (i : ℕ) (hi : i < 22), ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩))
+    (rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho)
+    (rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho)
+    (alpha1 :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha →
+          AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value =
+          AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+            (AspisR1.Port5Q1_OpeningValues.values values)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line_canonical : ∀
+      (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (basis : AspisR1.Port4C_BasisOuter.SessionABasis ops)
+    (arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops) (m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops)
+    (decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops)
+    (line :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+              (AspisR1.Port5Q1_OpeningValues.values values))
+    (line_canonical :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops
+structure AspisR1.Port5Q1_Domain.SessionADomain {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_Domain.SessionADomain.fibre : ∀ (u : Aeneas.Std.Usize)
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+      ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144
+  AspisR1.Port5Q1_Domain.SessionADomain.point : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.S7JoinBasisMachine.decode p.x =
+            AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+          AspisR1.S7JoinBasisMachine.decode p.y =
+            (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2
+  AspisR1.Port5Q1_Domain.SessionADomain.line : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x →
+        AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f)
+  AspisR1.Port5Q1_Domain.SessionADomain.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op9 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_Domain.SessionADomain.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op10 x = Aeneas.Std.Result.ok y →
+        AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_Domain.SessionADomain.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1
+  AspisR1.Port5Q1_Domain.SessionADomain.subtract : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y
+constructor:
+  AspisR1.Port5Q1_Domain.SessionADomain.mk {CoreError : Type} {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (fibre :
+      ∀ (u : Aeneas.Std.Usize) (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+        ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144)
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.S7JoinBasisMachine.decode p.x =
+              AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+            AspisR1.S7JoinBasisMachine.decode p.y =
+              (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x →
+          AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f))
+    (multiply :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op9 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y)
+    (double :
+      ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+        ops.op10 x = Aeneas.Std.Result.ok y →
+          AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op8 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_Domain.SessionADomain ops
+structure AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.point : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.line : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.multiply : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.double : ∀ (x : Aeneas.Std.U32)
+      (y : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.subtract : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+constructor:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.mk {CoreError : Type}
+    {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (multiply :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z)
+    (double :
+      ∀ (x : Aeneas.Std.U32) (y : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (subtract :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z) :
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives ops
+theorem AspisR1.Port5Q1_CircleParsed.folded : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port5Q1_OpeningValues.SessionAS3 ops →
+    AspisR1.Port5Q1_CircleObservation.SessionAComparison ops →
+      ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+        (a out : AspisR1Stage2.verifier.Accumulator) (g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize)
+        (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+        (geometry : AspisR1Stage2.verifier.QueryGeometry) (b bout : AspisR1Stage2.verifier.BatchedWeights)
+        (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+        (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+        (data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_CircleParsed.FE) (rho : AspisR1.Port5Q1_CircleParsed.FK),
+        AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho →
+          AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some data →
+            parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+              (↑proof).length = 57607 →
+                ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+                  (∀ pos < 22,
+                      recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                        some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                    ∀ (bound : ↑a.next < 22)
+                      (o :
+                        AspisR1.Port4C_QueryValues.Observation
+                          (AspisR1.Port4C_RowStd.install (AspisR1.Port5Q1_QueryPorts.install ops)) proof p a out g obs
+                          geometry b bout),
+                      AspisR1.CheckpointBytes5Output.ofE o.folded = data.V (q ⟨↑a.next, bound⟩) :=
+fun ops decoder comparison proof p a out g obs geometry b bout parsed q tr data rho prepare read wire proofLength
+    recovered authenticated bound o =>
+  let j := ⟨↑a.next, bound⟩;
+  have opening :=
+    AspisR1.Port5Q1_ObservedOpening.quartet ops decoder proof p a out g obs geometry b bout parsed q tr data read wire
+      proofLength recovered authenticated j rfl o;
+  let ⟨actual, h✝⟩ :=
+    Aeneas.Std.WP.spec_imp_exists
+      (Aeneas.Std.Array.index_usize_spec p.queries a.next
+        (id (Eq.mpr (id (congrArg (fun _a => ↑a.next < _a) p.queries.property)) bound)))
+  let ⟨run, contents⟩ := h✝
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm run) o.query_read);
+  have raw :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a.getD 0#u32 = o.query)
+            (List.getElem?_eq_getElem (Eq.mpr (id (congrArg (fun _a => ↑a.next < _a) p.queries.property)) bound))))
+        (Eq.mpr (id (congrArg (fun _a => _a = o.query) Option.getD_some)) (Eq.trans (Eq.symm contents) same)));
+  have installedComparison := { unequal := comparison.unequal };
+  AspisR1.Port5Q1_CircleObservation.selected (AspisR1.Port4C_RowStd.install (AspisR1.Port5Q1_QueryPorts.install ops))
+    installedComparison proof p a out g obs geometry b bout o (q j) data.V
+    (Eq.mpr (id (congrArg (fun _a => ↑_a = ↑(q j)) (Eq.symm raw))) (prepare.queries (↑a.next) bound)) opening.right
+'AspisR1.Port5Q1_GeometryModel.for_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_GeometryReads.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Observation.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Block.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_QueryBlock.materialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Ten.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Endpoint.ten_twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Frozen2.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_Complete.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_CircleParsed.folded' depends on axioms: [propext, Classical.choice, Quot.sound]
