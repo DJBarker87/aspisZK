@@ -80,3 +80,35 @@ local place; projections, implicit/generic glue and opaque bodies reject.
 Lowering occurs after ordinary storage filtering so synthetic lifetimes survive.
 This does not solve borrowed take/swap ABI or unwind; these remain acceptance
 blockers. Exact patch is retained as an unaccepted experiment.
+
+## Observed bounded outcome
+
+Build008 failed before go (owned host lacked reviewed docker_gate.py);009 failed
+OCaml record inference;010 built;011 failed constructor spelling;012 built.
+All five slots charged. In012 the preserved standalone glue name also removes
+only impl qualification referring to the erased marker impl. Exact source
+snapshots/hashes for every build are retained. No other compiler files changed.
+Default inspection matches pinned baseline Config.ml: drop_as_no_op is TRUE;
+`-eval-drops` clears it. Earlier baseline receipt labels false were unsupported
+by command lines020/022, which omit that switch. Static fn_ptr omission in the
+non-no-op interpreter branch remains a separate exact-source observation.
+
+Candidate012 with explicit -eval-drops translates the full minimal V5 input:
+real_drop now calls Guard.drop_glue and applies its backward function. Full
+Lean11566 FAILS at the borrowed swap pair/triple and generated `ok match`
+parsing/type boundary. This is unaccepted raw output, not a source proof.
+No handwritten repair, new ABI contract, or cleanup-equivalence premise was
+introduced. Backend allocation is exhausted; no complete Guard0->1 kernel
+regression exists. Accordingly Zeroizing/provider/source refinement work stops.
+
+NoDrop increment (same pinned V5 source, separately extracted) is byte-identical
+in its emitted declaration to the old baseline. Its complete Types/Funs closure
+and audit11567-11569 pass. Native fixture extraction034 first runs five release
+Rust tests: owned capture destruction, field moves, conditional initialization,
+recursive field order, and unwind writeback. Failed033 borrow-check scope is
+preserved. Combined escape/capture crate rejects035 with both escaping-output
+and unsupported-Drop errors before output; selected64 rejects030. Legacy
+mutated-input031 also rejects but is NOT an escaping-reference source test.
+Native fixture passes do not establish any backend order/unwind semantics.
+No supported destructor scope is claimed. Before/after theorem statements and
+all hypotheses remain unchanged; native/E1/adoption boundaries remain open.

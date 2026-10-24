@@ -24,7 +24,7 @@ let lower_precise_local_drops (crate : crate) (f : fun_decl) : fun_decl =
                 ({kind = FunId (FRegular _); _} as func), Precise, unwind) ->
             let borrowed = fresh (TRef (RErased, place.ty, RMut)) in
             let result = fresh mk_unit_ty in
-            let id p = match p.kind with PlaceLocal id -> id | _ -> assert false in
+            let id (p : place) = match p.kind with PlaceLocal id -> id | _ -> assert false in
             [mk (Assign (borrowed, RvRef (place, BMut, Constant mk_unit_const)));
              mk (Call ({func = FnOpRegular func; args = [Move borrowed]; dest = result}, unwind));
              mk (StorageDead (id result)); mk (StorageDead (id borrowed));
@@ -51,7 +51,8 @@ let retain_called_drop_glue (crate : crate) : crate =
   FunDeclId.Map.iter (fun _ (f : fun_decl) -> match f.body with
     | StructuredBody body -> visitor#visit_block () body.body | _ -> ()) crate.fun_decls;
   {crate with fun_decls = FunDeclId.Map.mapi (fun id (f : fun_decl) ->
-    if FunDeclId.Set.mem id !called then {f with src = TopLevelItem} else f) crate.fun_decls}
+    if FunDeclId.Set.mem id !called then {f with src = TopLevelItem; item_meta = {f.item_meta with name =
+      List.filter (function PeImpl _ -> false | _ -> true) f.item_meta.name}} else f) crate.fun_decls}
 
 '''
 s=s.replace(needle,addition+needle).replace('let crate = update_array_default crate in','let crate = retain_called_drop_glue crate in\n  let crate = update_array_default crate in').replace('("decompose_global_accesses", decompose_global_accesses);','("decompose_global_accesses", decompose_global_accesses);\n      ("lower_precise_local_drops", lower_precise_local_drops);')

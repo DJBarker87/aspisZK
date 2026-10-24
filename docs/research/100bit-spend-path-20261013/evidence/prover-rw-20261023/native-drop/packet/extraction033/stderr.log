@@ -1,0 +1,31 @@
+   Compiling prover-rw-native-drop-fixtures v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-drop/fixtures)
+error[E0503]: cannot use `a` because it was mutably borrowed
+  --> lib.rs:25:48
+   |
+23 |         let pair=Pair { first: Event {log:&mut a,digit:1}, second: Event {log:&mut b,digit:2} };
+   |                                           ------ `a` is borrowed here
+24 |         let Pair { first, second }=pair;
+25 |         drop(second); drop(first); assert_eq!((a,b),(1,2));
+   |                                                ^ use of borrowed `a`
+26 |     }
+   |     - borrow might be used here, when `pair` is dropped and runs the destructor for type `Pair<'_>`
+
+error[E0503]: cannot use `b` because it was mutably borrowed
+  --> lib.rs:25:50
+   |
+23 |         let pair=Pair { first: Event {log:&mut a,digit:1}, second: Event {log:&mut b,digit:2} };
+   |                                                                               ------ `b` is borrowed here
+24 |         let Pair { first, second }=pair;
+25 |         drop(second); drop(first); assert_eq!((a,b),(1,2));
+   |                                                  ^ use of borrowed `b`
+26 |     }
+   |     - borrow might be used here, when `pair` is dropped and runs the destructor for type `Pair<'_>`
+
+For more information about this error, try `rustc --explain E0503`.
+error: could not compile `prover-rw-native-drop-fixtures` (lib test) due to 2 previous errors
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-drop/fixture-extract.py", line 8, in <module>
+    subprocess.run(['cargo','test','--manifest-path',str(manifest),'--offline','--release','--jobs','4'],check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['cargo', 'test', '--manifest-path', '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-drop/fixtures/Cargo.toml', '--offline', '--release', '--jobs', '4']' returned non-zero exit status 101.

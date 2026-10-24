@@ -1,0 +1,53 @@
+//! Native reference cases. Backend support is not inferred from these tests.
+pub fn escape(counter: &mut u32) -> &mut u32 { counter }
+pub struct Event<'a> { pub log: &'a mut u32, pub digit: u32 }
+impl Drop for Event<'_> {
+    fn drop(&mut self) { *self.log = (*self.log).wrapping_mul(10).wrapping_add(self.digit); }
+}
+pub fn captured(log: &mut u32) {
+    let event = Event { log, digit: 7 };
+    let capture = move || { let _keep = &event; };
+    drop(capture);
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn capture_releases_owned_event() {
+        let mut log=0; captured(&mut log); assert_eq!(log,7);
+    }
+    struct Pair<'a> { first: Event<'a>, second: Event<'a> }
+    #[test]
+    fn recursive_fields_and_move_state() {
+        let (mut a,mut b)=(0,0);
+        let pair=Pair { first: Event {log:&mut a,digit:1}, second: Event {log:&mut b,digit:2} };
+        let Pair { first, second }=pair;
+        drop(second); drop(first); assert_eq!((a,b),(1,2));
+    }
+    #[test]
+    fn conditional_initialized_only() {
+        for enter in [false,true] {
+            let mut n=0;
+            if enter { let _event=Event {log:&mut n,digit:3}; }
+            assert_eq!(n,if enter {3} else {0});
+        }
+    }
+    #[test]
+    fn unwind_writes_back_before_catch() {
+        let mut n=0;
+        let r=std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+            let _event=Event {log:&mut n,digit:9}; panic!("fixture panic");
+        }));
+        assert!(r.is_err()); assert_eq!(n,9);
+    }
+    #[test]
+    fn field_order_is_observable() {
+        use std::cell::Cell;
+        struct Ordered<'a>(&'a Cell<u32>,u32);
+        impl Drop for Ordered<'_> { fn drop(&mut self) {self.0.set(self.0.get()*10+self.1);} }
+        struct Outer<'a> { first: Ordered<'a>, second: Ordered<'a> }
+        let log=Cell::new(0);
+        { let _outer=Outer {first:Ordered(&log,1),second:Ordered(&log,2)}; }
+        assert_eq!(log.get(),12);
+    }
+}

@@ -47,3 +47,13 @@ Next: real destructor/loan semantics with complete kernel-accepted counter0→1,
 then actual Zeroizing cleanup and selected path. Renew extraction budget before
 validation. Owned provider/event transport, complete owner and adoption gates
 remain open. Both deployed targets not yet established.
+
+## Subsequent source/command correction (native-drop continuation)
+
+The preserved commands020/022 omit -eval-drops. Newly inspected Config.ml,
+whose hash matches the reused baseline manifest, defaults drop_as_no_op=true.
+Their prior metadata labels false are unsupported. These commands do not
+establish that the drop_value branch ran. The static source branch ignoring
+fn_ptr and raw identity emissions remain exact observations, with the existing
+whole-output Lean failure boundary. See ../native-drop/default-assessment.json
+(in packet/) and ../native-drop/REPORT.md. Old receipts/ledger are unchanged.

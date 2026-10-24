@@ -1,0 +1,70 @@
+--- candidate007/PrePasses.ml
++++ candidate012/PrePasses.ml
+@@ -3276,8 +3276,59 @@
+           f
+       | _, _ -> f)
+ 
++(* ProverRwNativeDrop008: preserve and call actual regular precise glue.
++   This candidate is unaccepted until complete loan/ABI regressions pass. *)
++let lower_precise_local_drops (crate : crate) (f : fun_decl) : fun_decl =
++  match f.body with
++  | StructuredBody body ->
++      let added = ref [] in
++      let _, gen = LocalId.mk_stateful_generator_starting_at_id
++        (LocalId.of_int (List.length body.locals.locals)) in
++      let fresh ty =
++        let id = gen () in
++        added := { index = id; local_ty = ty; name = None;
++                   span = body.span } :: !added;
++        { kind = PlaceLocal id; ty } in
++      let lower (st : statement) =
++        let mk kind = { st with kind; statement_id = StatementId.zero } in
++        match st.kind with
++        | Drop (({kind = PlaceLocal original; _} as place),
++                ({kind = FunId (FRegular _); _} as func), Precise, unwind) ->
++            let borrowed = fresh (TRef (RErased, place.ty, RMut)) in
++            let result = fresh mk_unit_ty in
++            let id (p : place) = match p.kind with PlaceLocal id -> id | _ -> assert false in
++            [mk (Assign (borrowed, RvRef (place, BMut, Constant mk_unit_const)));
++             mk (Call ({func = FnOpRegular func; args = [Move borrowed]; dest = result}, unwind));
++             mk (StorageDead (id result)); mk (StorageDead (id borrowed));
++             mk (StorageDead original)]
++        | Drop _ -> [%craise] st.span "ProverRwNativeDrop008: unsupported Drop shape"
++        | _ -> [st] in
++      let rewritten = map_statement lower body.body in
++      {f with body = StructuredBody {body with body = rewritten;
++         locals = {body.locals with locals = body.locals.locals @ List.rev !added}}}
++  | _ -> f
++
++(* Direct regular glue is a standalone function after marker-trait erasure.
++   Retain its exact identity, body and signature; only detach item ownership. *)
++let retain_called_drop_glue (crate : crate) : crate =
++  let called = ref FunDeclId.Set.empty in
++  let visitor = object
++    inherit [_] iter_statement as super
++    method! visit_statement env st =
++      (match st.kind with
++       | Drop (_, {kind = FunId (FRegular id); _}, Precise, _) ->
++           called := FunDeclId.Set.add id !called
++       | _ -> ()); super#visit_statement env st
++  end in
++  FunDeclId.Map.iter (fun _ (f : fun_decl) -> match f.body with
++    | StructuredBody body -> visitor#visit_block () body.body | _ -> ()) crate.fun_decls;
++  {crate with fun_decls = FunDeclId.Map.mapi (fun id (f : fun_decl) ->
++    if FunDeclId.Set.mem id !called then {f with src = TopLevelItem; item_meta = {f.item_meta with name =
++      List.filter (function PeImpl _ -> false | _ -> true) f.item_meta.name}} else f) crate.fun_decls}
++
+ let apply_passes (crate : crate) : crate =
+   (* Passes that apply to the whole crate *)
++  let crate = retain_called_drop_glue crate in
+   let crate = update_array_default crate in
+   (* Passes that apply to individual function bodies *)
+   let function_passes =
+@@ -3297,6 +3348,7 @@
+       ("decompose_str_borrows", decompose_str_borrows);
+       ("simplify_panics", simplify_panics);
+       ("decompose_global_accesses", decompose_global_accesses);
++      ("lower_precise_local_drops", lower_precise_local_drops);
+       ("refresh_statement_ids", refresh_statement_ids);
+     ]
+   in

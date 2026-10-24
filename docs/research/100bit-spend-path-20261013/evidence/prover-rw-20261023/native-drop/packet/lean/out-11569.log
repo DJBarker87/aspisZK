@@ -1,0 +1,18 @@
+def ProverRwNativeDropnodrop.increment : U32 → Result U32 :=
+fun counter => Result.ok (core.num.U32.wrapping_add counter 1#u32)
+structure ProverRwNativeDropminimal.Guard : Type
+number of parameters: 0
+fields:
+  ProverRwNativeDropminimal.Guard.counter : Option U32
+constructor:
+  ProverRwNativeDropminimal.Guard.mk (counter : Option U32) : ProverRwNativeDropminimal.Guard
+def Aeneas.Std.core.mem.swap : {T : Type} → T → T → T × T :=
+fun {T} a b => (b, a)
+def Aeneas.Std.core.option.Option.take : {T : Type} → Option T → Option T × Option T :=
+fun {T} self => (self, none)
+'ProverRwNativeDropnodrop.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ProverRwNativeDropminimal.Guard' does not depend on any axioms
+'Aeneas.Std.core.mem.swap' does not depend on any axioms
+'Aeneas.Std.core.option.Option.take' does not depend on any axioms
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh

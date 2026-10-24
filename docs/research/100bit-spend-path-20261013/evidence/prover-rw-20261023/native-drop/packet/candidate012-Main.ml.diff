@@ -1,0 +1,25 @@
+--- candidate007/Main.ml
++++ candidate012/Main.ml
+@@ -738,7 +738,12 @@
+         inherit [_] iter_statement as super
+         method! visit_statement env st =
+           (match st.kind with
+-          | Drop _ -> unsupported := "structured Drop requires destructor semantics" :: !unsupported
++          | Drop ({kind = PlaceLocal _; _}, {kind = Types.FunId (Types.FRegular id); _}, Precise, _)
++              when not !Config.drop_as_no_op ->
++              (match FunDeclId.Map.find_opt id m.fun_decls with
++               | Some {body = StructuredBody _; _} -> ()
++               | _ -> unsupported := "Drop glue requires a concrete structured body" :: !unsupported)
++          | Drop _ -> unsupported := "unsupported Drop shape" :: !unsupported
+           | _ -> ());
+           super#visit_statement env st
+       end in
+@@ -757,7 +762,7 @@
+           | StructuredBody body -> drop_guard#visit_block () body.body
+           | _ -> ()) m.fun_decls;
+       if !unsupported <> [] then
+-        failwith ("ProverRwRngExtractor006: fail-closed preflight: " ^
++        failwith ("ProverRwNativeDrop008: fail-closed preflight: " ^
+           String.concat "; " (List.sort_uniq String.compare !unsupported));
+ 
+       (* Apply the pre-passes *)

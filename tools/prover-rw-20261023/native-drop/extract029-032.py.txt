@@ -1,0 +1,37 @@
+"""One charged extraction/translation with independent cgroup admission."""
+from pathlib import Path
+import datetime,hashlib,json,os,re,runpy,subprocess,sys,time
+H=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023')
+D=Path(__file__).resolve().parent
+E=H/'native-drop'
+a=int(sys.argv[1]);kind=sys.argv[2]
+assert 25<=a<=36
+O=E/f'extraction{a:03d}';O.mkdir()
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+binary=E/'backend/candidate-012/main.exe'
+receipt=E/'backend/prover-rw-native-drop-build-012/receipt.json'
+assert sha(binary)==json.loads(receipt.read_text())['versioned_binary']['sha256']
+if kind=='nodrop-charon':
+ charon=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon')
+ cmd=[str(charon),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--precise-drops','--start-from','crate::increment','--dest-file',str(E/'ProverRwNativeDropNoDrop.llbc'),'--','--manifest-path',str(D.parent/'native-entropy/drop-probe/Cargo.toml'),'--offline','--release','--lib','--jobs','4']
+ inputs=[charon,D.parent/'native-entropy/drop-probe/lib.rs',D.parent/'native-entropy/drop-probe/Cargo.toml',D.parent/'native-entropy/drop-probe/Cargo.lock']
+else:
+ assert kind in ['nodrop','minimal','selected64','escape']
+ inp={'nodrop':E/'ProverRwNativeDropNoDrop.llbc','minimal':D.parent/'native-entropy/ProverRwNativeEntropyDropV5.llbc','selected64':D.parent/'rng-extractor/ProverRwRngExtractorselected64.llbc','escape':D.parent/'rng-extractor/ProverRwRngExtractornegative007.llbc'}[kind]
+ cmd=[str(binary),'-sequential','-eval-drops','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','ProverRwNativeDrop'+kind,'-dest',str(O/'raw-output'),'-split-files','-emit-json',str(inp)]
+ inputs=[binary,receipt,inp]
+scanner=runpy.run_path(str(D.parent/'native-entropy/reservation.py'))
+before=scanner['admission']();(O/'admission-before.json').write_text(json.dumps(before,indent=2)+'\n')
+pre=dict(attempt=a,kind=kind,command=cmd,source_revision='c24fc5da9f+native-drop-candidate012',source_sha256={str(p):sha(p) for p in [Path(__file__),*inputs]},print_axioms='N/A: extraction, not a Lean proof',accepted_artifact=False)
+pre['dependency_fingerprint']=sha(receipt);(O/'preflight.json').write_text(json.dumps(pre,indent=2)+'\n')
+assert before['allowed']
+env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-06-01',CARGO_TARGET_DIR=str(H/'rng-charon-target'),PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin')
+scope=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(D/'scope.py'),str(O),*cmd]
+t=time.monotonic()
+with (O/'stdout.log').open('w') as out,(O/'stderr.log').open('w') as err:r=subprocess.run(scope,cwd=H/'src',env=env,stdout=out,stderr=err)
+metrics=(O/'time.log').read_text() if (O/'time.log').exists() else ''
+def metric(label):
+ m=re.search(re.escape(label)+r':\s*(\d+)',metrics);return int(m[1]) if m else None
+pre.update(exit_status=r.returncode,wall_seconds=time.monotonic()-t,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),scope_command=scope,time_log=metrics)
+(O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n');print(json.dumps({k:pre[k] for k in ['attempt','kind','exit_status','wall_seconds','peak_rss_kib','swaps']}))
+raise SystemExit(r.returncode)
