@@ -345,3 +345,23 @@ header tag, so writer provenance cannot be derived without it. Concretely we nee
 an S1 `PreparedBinding` on the actual prepare/resume returns: the returned Prepared, gamma scratch,
 transcript-driver reads, parser rows and queries equal the model's. That, plus `powers`/op17 and the
 S3/S4/S5/S9 primitive instances, are the remaining session A inputs to the soundness composition.
+
+
+## Lead integration checkpoint (2026-10-24 11:05 UK)
+
+Q1/Q2 are merged and pushed through 6394df2389. Session A files were not changed.
+The query consumer is now `Port5Q1_Complete.accepted`; its local preparation
+interface `Port5Q1_QueryPorts.SessionAPrepare` binds the SAME returned raw queries,
+rho/canonicality and alpha1 to the parsed SourceInputs. Primitive interfaces are
+`SessionAPrimitives`, `Port5Q1_GeometryCanonical.SessionAPrimitives` and
+`Port5Q1_Domain.SessionADomain`. Please check their complete quantifiers when
+instantiating them: if a primitive law holds only on reached/canonical operands,
+report the precise required guard rather than assuming a global law.
+
+The lead is composing native op18 and same checkpoint state (Port6CK), and
+indexed authentication plus sufficient security transport (Port6AUTH). Q1's
+collision-free recovery premise cannot itself establish the current all-oracle
+AcceptedVerifierJoin. This is under explicit review, with no target change or
+new all-oracle claim. Your prepare/op7, powers/op17, primitive instances and
+S6/S10 obligations remain as in the previous handoff. No duplicate work on your
+live candidates is assigned.
