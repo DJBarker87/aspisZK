@@ -1,0 +1,126 @@
+Port15DRIVER_TX1.lean:30:75: error: Ambiguous term
+  State
+Possible interpretations:
+  Meta.State : Type
+  
+  Tactic.State : Type
+  
+  AspisV8R19.SourceDuplexStep.State : Type
+Port15DRIVER_TX1.lean:32:98: error: unsolved goals
+case tail
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+w : ℕ → ℕ
+budgets : LocalBudgets (fun {A} => rest) w
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : Port1_Driver.Semantic
+pub proof : Slice U8
+H : Bytes → sorry
+b✝ : Usize
+⊢ Fits (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) sorry
+    (VTop_Trace.bind (Code.done b✝) fun i =>
+      if (10#usize != i) = true then pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+      else do
+        let r ← VTop_Flow.traceEffects.op3 proof
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let r1 ← VTop_Flow.traceEffects.op4 proof
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                let we ← VTop_Flow.traceEffects.op1
+                have g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize := Array.repeat 29#usize we
+                let __x ← VTop_Flow.traceEffects.op7 D semantic proof hash none g
+                match __x with
+                  | (r2, g1) => do
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val => do
+                        let r3 ← VTop_Flow.traceEffects.op12 AspisR1Stage2.transport.Variant.S2
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare
+                            let i1 ← VTop_Flow.traceEffects.op15
+                            let i2 ← VTop_Flow.traceEffects.op14
+                            let s ←
+                              liftM
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                    { start := i1, «end» := i2 })
+                            let r4 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s)
+                            let folded_root ← VTop_Flow.traceEffects.unwrap32 r4
+                            let r5 ← VTop_Flow.traceEffects.op5 D proof val folded_root 0#usize hash
+                            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                VTop_Flow.traceEffects.op13 none
+                                    (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 0#usize)
+                                let r6 ← VTop_Flow.traceEffects.op11 val.queries 0#usize 10#usize
+                                let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                match cf5 with
+                                  | core.ops.control_flow.ControlFlow.Continue val2 =>
+                                    have s1 := val1.weights.deref;
+                                    do
+                                    let r7 ← VTop_Flow.traceEffects.op10 s1
+                                    let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                    match cf6 with
+                                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                        let r8 ← VTop_Flow.traceEffects.op6 proof val val1 g1 none val2 val3 10#usize
+                                        let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r8)
+                                        match cf7 with
+                                          | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                            match val4 with
+                                            | (a, pending) => do
+                                              let __x ← liftM (lift a.weights.deref_mut)
+                                              match __x with
+                                                | (s2, deref_mut_back) => do
+                                                  let s3 ← VTop_Flow.traceEffects.op9 pending s2
+                                                  have v : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 :=
+                                                    deref_mut_back s3
+                                                  let bytes ←
+                                                    VTop_Flow.traceEffects.op8 D val
+                                                        { weights := v, rhs := a.rhs, power := a.power, next := a.next }
+                                                        proof pub hash
+                                                  VTop_Flow.traceEffects.op13 none
+                                                      AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointWrite
+                                                  pure (core.result.Result.Ok bytes)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))
+    [w 3, w 4, 0, 0, w 7, w 12, 0, 0, 0, 0, 477, 0, w 11, w 10, w 6, w 9, 3, 0]
+'AspisR1.Port15DRIVER_TX1.tx1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
