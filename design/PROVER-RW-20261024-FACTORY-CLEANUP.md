@@ -88,3 +88,15 @@ runner/scope/harness. Timeout GNU time underreports killed grandchildren RSS;
 052's exact process-tree peak is unavailable (observed CBMC1991040KiB at221s).
 For053 add capped-scope aggregate RSS sampling and kernel memory.peak recording.
 Kernel memory peak is not RSS; report both honestly. Do not raise time/memory.
+
+## Last focused check
+
+If053 also times out, stop the monolithic item. Reserve054 for a distinct
+first-draw-Err path lemma on the real factory: arbitrary nonce, arbitrary64
+postbuffer, arbitrary custom-u16 error and arbitrary advanced state token. Zero
+nonce still has no draw; nonzero nonce makes exactly one fresh-zero64 draw and
+returns identical wrapped error. ONLY fill is specialized to this named error
+case; no successful/nonzero draw is forced, no destructor stub or cleanup claim.
+This is an explicitly scoped hypothesis on the first result, not the desired
+all-outcome theorem. Full retry/success/returned-seed relation remains unproved
+if052/053 time out. Retain full failures and exact scoped claim separately.

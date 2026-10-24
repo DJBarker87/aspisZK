@@ -41,6 +41,46 @@ mod ProverRwFactoryCleanup {
             }
             if failed {Err(error)} else {Ok(())}
         }
+        // Focused path lemma: no successful draw is assumed or manufactured.
+        // Arbitrary initialized postbuffer includes every possible partial write
+        // from the fresh zero64 prebuffer. Error representation is custom-u16.
+        fn partial_error_fill(dest: &mut [u8]) -> Result<(),getrandom::Error> {
+            assert_eq!(dest.len(),64);
+            unsafe { assert_eq!(CALLS,0); }
+            for i in 0..64 {assert_eq!(dest[i],0);}
+            let post=kani::any::<[u8;64]>();
+            let error=getrandom::Error::new_custom(kani::any());
+            let state=kani::any::<u64>();
+            dest.copy_from_slice(&post);
+            unsafe {
+                CALLS=1; LAST_ERROR=Some(error);
+                PROVIDER_STATE=state; LAST_STATE=state;
+            }
+            Err(error)
+        }
+        #[kani::proof]
+        #[kani::unwind(66)]
+        #[kani::stub(getrandom::fill, partial_error_fill)]
+        fn partial_error() {
+            let nonce=kani::any::<[u8;32]>();
+            let initial_state=kani::any::<u64>();
+            unsafe {PROVIDER_STATE=initial_state;}
+            let result=StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce);
+            unsafe {
+                if nonce==[0;32] {
+                    assert_eq!(CALLS,0);
+                    assert_eq!(PROVIDER_STATE,initial_state);
+                    assert!(matches!(result,Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+                } else {
+                    assert_eq!(CALLS,1);
+                    assert_eq!(PROVIDER_STATE,LAST_STATE);
+                    match result {
+                        Err(StateOnlyAttemptEntropyError::Os(error))=>assert_eq!(LAST_ERROR,Some(error)),
+                        _=>assert!(false),
+                    }
+                }
+            }
+        }
         #[kani::proof]
         #[kani::unwind(66)]
         #[kani::stub(getrandom::fill, fill_stub)]

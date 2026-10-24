@@ -5,9 +5,9 @@ D=Path(__file__).resolve().parent
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 a=int(sys.argv[1]);target=sys.argv[2]
 assert 51<=a<=54
-assert target in ['zero_nonce','all_outcomes']
+assert target in ['zero_nonce','all_outcomes','partial_error']
 cmd=['/usr/bin/timeout','240','/home/dombarker/.cargo/bin/cargo','kani','--manifest-path',str(D/'proof/Cargo.toml'),'--lib','--exact','--harness','ProverRwFactoryCleanup::checks::'+target,'--solver','kissat','--output-format','terse','-j','1','-Z','unstable-options','-Z','stubbing','--extra-pointer-checks','--cbmc-args','--unwinding-assertions']
-if a>=53:
+if a>=53 and target=='all_outcomes':
     # Exact source retry loop: at most16 entries; assertion17 checks back-edge
     # completion rather than truncating a feasible trace. All other loops66.
     loop='_RNvMs_NtCsiAUeGDGq3lA_25prover_rw_factory_cleanup22ProverRwFactoryCleanupNtB4_23StateOnlyAttemptSecrets23generate_for_mask_nonce.0'
