@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0921); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:17:6: error: Type mismatch: After simplification, term
+  have this :=
+    have hp :=
+      pow_pos
+        (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2)) (Eq.refl (Nat.ble 1 2)))
+        Usize.numBits;
+    Decidable.byContradiction fun a =>
+      add_exact._proof_1 x y (Eq.mp (congrArg (fun _a => ↑x + ↑y ≤ _a) Usize.max_def) h) z hv hp a;
+  this
+ has type
+  ↑x + ↑y < 2 ^ Usize.numBits
+but is expected to have type
+  ↑x + ↑y < 2 ^ System.Platform.numBits
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:31:6: error: Type mismatch: After simplification, term
+  have this :=
+    have hp :=
+      pow_pos
+        (Mathlib.Meta.Positivity.pos_of_isNat (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2)) (Eq.refl (Nat.ble 1 2)))
+        Usize.numBits;
+    Decidable.byContradiction fun a =>
+      mul_exact._proof_1 x y (Eq.mp (congrArg (fun _a => ↑x * ↑y ≤ _a) Usize.max_def) h) z hv hp a;
+  this
+ has type
+  ↑x * ↑y < 2 ^ Usize.numBits
+but is expected to have type
+  ↑x * ↑y < 2 ^ System.Platform.numBits
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:45:45: error: Type mismatch
+  BitVec.isLt x.bv
+has type
+  x.bv.toNat < 2 ^ System.Platform.numBits
+but is expected to have type
+  ↑x < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:46:45: error: Type mismatch
+  BitVec.isLt y.bv
+has type
+  y.bv.toNat < 2 ^ System.Platform.numBits
+but is expected to have type
+  ↑y < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:50:4: error: Type mismatch
+  hv
+has type
+  ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x
+but is expected to have type
+  ↑z = ↑x - ↑y
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:60:6: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:54:53: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'R1Z.ProverRwSamplerArithmetic.add_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.mul_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.sub_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.shift_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:09.93
+	Maximum resident set size (kbytes): 3839428
+	Swaps: 0
+	Exit status: 1

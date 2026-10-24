@@ -1,0 +1,52 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:16:56: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x y : Usize
+h : ↑x + ↑y ≤ Usize.max
+z : UScalar UScalarTy.Usize
+hz : x + y = ok z
+hv : ↑z = ↑x + ↑y
+⊢ ↑x + ↑y < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:25:56: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x y : Usize
+h : ↑x * ↑y ≤ Usize.max
+z : UScalar UScalarTy.Usize
+hz : x * y = ok z
+hv : ↑z = ↑x * ↑y
+⊢ ↑x * ↑y < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:35:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ -1
+  a ≥ 0
+  a + b ≥ 0
+where
+ a := ↑↑y
+ b := ↑(↑x - ↑y)
+ c := ↑(↑x + (UScalar.size UScalarTy.Usize - ↑y)) % ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSamplerArithmetic.lean:45:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m.67 <<< ?m.66).toNat
+in the target expression
+  ↑s = (r.bv.shiftLeft 32).toNat
+
+r : U64
+s : UScalar UScalarTy.U64
+hs : r <<< 32#i32 = ok s
+hv : ↑s = ↑r <<< 32#i32.toNat % U64.size
+right✝ : s.bv = r.bv <<< 32#i32.toNat
+⊢ ↑s = (r.bv.shiftLeft 32).toNat
+'R1Z.ProverRwSamplerArithmetic.add_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.mul_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.sub_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.shift_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

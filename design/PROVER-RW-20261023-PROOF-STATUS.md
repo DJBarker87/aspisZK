@@ -1,6 +1,7 @@
 # Prover rewrite proof boundary
 
-This adoption candidate has no new checked Lean theorem. The security target
+This adoption candidate now has a checked selected-sampler refinement (see
+[Stage 3](PROVER-RW-20261023-STAGE3.md)). The security target
 and the first conjunct of `ProverCommitDeployedFuel22.RustProverRefinement`
 remain unestablished. This file records the actual source/model boundary;
 it does not replace any required gate.
@@ -39,7 +40,13 @@ and observer decisions. Equal final proof bytes alone do not transfer an
 adaptive oracle experiment. The old fixed bad events, query loss and security
 bound must be preserved.
 
-The common operating rules require all Lean compiles to use the existing
-host launcher and an assigned env J range. A range has been requested but
-none is assigned in this session. No compile number is invented; usage is
-0/100. Independent extraction, source audits and native gates continue.
+The continuation assigns env J 11200–11399. Attempts 11200–11211 use the
+existing host launcher with the assigned range and task cap adapted in a
+private copy. Usage is 12/100 Lean compiles, Kani remains 42/60.
+`ProverRwSemanticSampler.sample_total_semChal` proves the selected normalized
+sampler equals the existing semantic challenge component for every block,
+with success and canonicality proved. This closes the retained sampler
+wrapping/checked transport delta, not the full caller external binding or
+per-attempt equation. The unmodified emitted sampler Funs fails its signed
+shift-count API check; the explicit one-literal compatibility adaptation and
+all failed/successful receipts are retained under `stage3/`.

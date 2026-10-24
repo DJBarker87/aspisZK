@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 0927); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    ProverRwSampler.sampler.qm31_sample block = Aeneas.Std.Result.ok q ∧
+      AspisR1.ExtractedQM31SamplerCarrier.CurrentCanonicalQM
+          (AspisR1.ExtractedQM31SamplerCarrier.toCurrent (R1Z.ProverRwSamplerModel.toOld q)) ∧
+        AspisR1.ExtractedQM31SamplerCorrect.coordinates (R1Z.ProverRwSamplerModel.toOld q) =
+          AspisR1.SamplerNatModel.qm31Digits (AspisR1.SourceSamplerByteRank.rank block) :=
+fun block =>
+  let ⟨q, h✝⟩ := AspisR1.ExtractedQM31SamplerCorrect.sample_total block
+  let ⟨hq, right✝⟩ := h✝
+  let ⟨hc, hv⟩ := right✝
+  Exists.intro (R1Z.ProverRwSamplerModel.fromOld q)
+    ⟨Eq.mpr
+        (id
+          (congrArg (fun _a => _a = Aeneas.Std.Result.ok (R1Z.ProverRwSamplerModel.fromOld q))
+            (R1Z.ProverRwSamplerModel.sample_exact block)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let q ← _a
+                    Aeneas.Std.Result.ok (R1Z.ProverRwSamplerModel.fromOld q)) =
+                  Aeneas.Std.Result.ok (R1Z.ProverRwSamplerModel.fromOld q))
+              hq))
+          (Eq.refl do
+            let q ← Aeneas.Std.Result.ok q
+            Aeneas.Std.Result.ok (R1Z.ProverRwSamplerModel.fromOld q))),
+      ⟨Eq.mpr
+          (id
+            (congrArg AspisR1.ExtractedQM31SamplerCarrier.CurrentCanonicalQM
+              (congrArg AspisR1.ExtractedQM31SamplerCarrier.toCurrent (R1Z.ProverRwSamplerModel.toOld_fromOld q))))
+          hc,
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congrArg AspisR1.ExtractedQM31SamplerCorrect.coordinates (R1Z.ProverRwSamplerModel.toOld_fromOld q)))
+              (AspisR1.SamplerNatModel.qm31Digits (AspisR1.SourceSamplerByteRank.rank block))))
+          hv⟩⟩
+'R1Z.ProverRwSamplerArithmetic.add_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.mul_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.sub_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerArithmetic.shift_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.div_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.div_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.div_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.byte_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.byte_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.digit_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.digit_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerTransport.digits_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerModel.toOld_fromOld' does not depend on any axioms
+'R1Z.ProverRwSamplerModel.index_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerModel.sample_of_digits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerModel.sample_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSamplerModel.sample_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSemanticSampler.sample_qm31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSemanticSampler.sample_semChal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSemanticSampler.sample_total_semChal' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.70
+	Maximum resident set size (kbytes): 4062488
+	Swaps: 0
+	Exit status: 0

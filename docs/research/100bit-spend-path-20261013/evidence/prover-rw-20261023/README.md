@@ -581,3 +581,24 @@ and explicit remaining obligations are in external-obligations-caller005.json,
 sampler-lowering-delta.json and design/PROVER-RW-20261023-PROOF-STATUS.md.
 Conjunct 1 and the security target are not yet established. No push or merge
 is performed, and retained keys and host evidence are preserved.
+
+### Stage 3 continuation: sampler component checked, whole attempt open
+
+Env J 11200–11399 is now assigned. Attempts 11200–11211 check the selected
+QM31 sampler against the retained checked sampler and existing semantic
+challenge model: `R1Z.ProverRwSemanticSampler.sample_total_semChal` is total
+for every block, with no assumed success or model equation. The raw emitted
+Funs fails the signed shift-count backend API check (11201); the explicit
+one-literal normalization and checked wrapping/checked transport are retained.
+This does not install the full caller dictionary or prove per-attempt equality.
+
+See `stage3/summary.json`, `stage3/sampler-normalization.json` and
+`stage3/environment-audit.json`; the exact scope, failures, theorem chain and
+remaining conjunct-1 obligations are in
+[the Stage 3 handoff](../../../../../design/PROVER-RW-20261023-STAGE3.md).
+Final focused audit 11211: exit 0, 1.70 s, 4,062,488 KiB peak RSS, zero swap,
+all twenty theorem axioms standard or empty. Seven successes and five retained
+elaboration failures use 12/100 Lean compiles; Kani remains 42/60. Next 11212.
+Two peer capped jobs are populated at load 1.37/1.20/1.18: no absolute timing.
+No native source, verifier artifact, key or existing shared proof is changed.
+Full per-attempt equality, conjunct 1 and the security target remain open.
