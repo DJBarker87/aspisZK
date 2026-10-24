@@ -162,3 +162,8 @@ Reviewed Port9OR e45800d44e merged f8c9814c28. C3/STATUS and session A handoff r
 ## Native reservation review; material generator next — 2026-10-24
 
 D195 retains candidate dbc123fdc8 at conditional emitted-source scope. Dependency pin resolved; actual borrowedproducer/nativeaudit errors and post-reservationstate are proved under exact localreplies; filesystemimplementation and nativeentropy/cap8/runtimeclosure remainopen. Independentbindings/sourcehash/receiptchecks pass; no merge/adoption. Materialworker67242 uses36remaining Leanonly,cumulative184/220,Kani44/60. Port10AUTH63880 remainslive. Both deployedtargets notyetestablished.
+
+
+## Material/caller review and secure callback transport preflight — 2026-10-24
+
+D196 records reviewed conditional source packet067e1ddd1e. Actual acknowledgment/material failure paths and borrowedcap8 retry compose without oldBody/audit placeholders. Native securecallback transport is stillmissing. Worker74207 uses9remaining Leanonly (211/220used;Kani44/60), tasked with precise source-validity/error/drop transport or reviewable minimal extractor proposal. No newtrust/backendchange/sourceadoption. Port10AUTH63880 remainslive. Bothdeployedtargets notyetestablished.
