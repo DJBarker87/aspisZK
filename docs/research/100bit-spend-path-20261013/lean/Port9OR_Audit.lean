@@ -24,7 +24,7 @@ import Port9OR_Rejection
 import Port9OR_Reply
 
 set_option autoImplicit false
-#print CheckpointBytes5Inputs.Oracle
+#print AspisR1.CheckpointBytes5Inputs.Oracle
 #print AspisR1.Port9OR_Code.native
 #print AspisR1.Port9OR_Code.program
 #print AspisR1.Port9OR_Bodies.native

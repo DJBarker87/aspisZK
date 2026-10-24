@@ -41,3 +41,19 @@ cached objects are reused explicitly; these focused checks are not a coherent
 frozen release replay. source-assessment.json pins current sources and ELF
 references without claiming a new identity gate. effect-source-audit.json is
 an independent inverse-lift control/effect audit, supplemental to semantics.
+
+Final focused audit: Port9OR_Audit, receipt lean-060, source revision c4c08b5c81c6169cb08505f0cf0084591482b82d,
+exit 0, wall 1.917377429s, peak 4459028 KiB RSS, swaps 0.
+All69 full axiom reports are standard only.059's print namespace typo and
+changed-source correction060 are retained; no unchanged audit replay occurred.
+All25 owned final sources are green against the recorded cached dependencies.
+Static receipt/hash/caps/aggregate/scope checks and generator checks pass; owned
+output objects and all24 selected available imported sources match. No owned
+Lean/lake job remains active. Historical external cache provenance and ELF
+correspondence remain explicitly reused/unproved. No full manifest ran.
+
+Final budget:36 inherited +60 new =96/100 Lean;4 remaining.0/20 Kani.
+Stopping at the demonstrated source-composition/ownership frontier, not claiming
+that the budget is exhausted. The next accepted-source event transport needs
+Session A's effectful prepare7 sampler producer and local primitive instances;
+this worker did not cross that ownership boundary. Both targets remain open.
