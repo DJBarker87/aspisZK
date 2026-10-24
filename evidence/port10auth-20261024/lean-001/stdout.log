@@ -1,0 +1,248 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port10AUTH_Trace.lean:19:25: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.82 → (?m.82 → Code ?m.83) → Code ?m.83
+  
+  Std.bind : Result ?m.82 → (?m.82 → Result ?m.83) → Result ?m.83
+Port10AUTH_Trace.lean:19:11: error: unsolved goals
+case done
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+a : A
+⊢ trace D hash (Code.done a >>= k) = ((trace D hash (k a)).1, (trace D hash (k a)).2)
+Port10AUTH_Trace.lean:20:42: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.127 → (?m.127 → Code ?m.128) → Code ?m.128
+  
+  Std.bind : Result ?m.127 → (?m.127 → Result ?m.128) → Result ?m.128
+  
+  Bind.bind : ?m.127 ?m.129 → (?m.129 → ?m.127 ?m.130) → ?m.127 ?m.130
+Port10AUTH_Trace.lean:20:42: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.128 → (?m.128 → Code ?m.129) → Code ?m.129
+  
+  Std.bind : Result ?m.128 → (?m.128 → Result ?m.129) → Result ?m.129
+  
+  Bind.bind : ?m.128 ?m.130 → (?m.130 → ?m.128 ?m.131) → ?m.128 ?m.131
+Port10AUTH_Trace.lean:20:42: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.129 → (?m.129 → Code ?m.130) → Code ?m.130
+  
+  Std.bind : Result ?m.129 → (?m.129 → Result ?m.130) → Result ?m.130
+  
+  Bind.bind : ?m.129 ?m.131 → (?m.131 → ?m.129 ?m.132) → ?m.129 ?m.132
+Port10AUTH_Trace.lean:20:16: error: unsolved goals
+case step.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : B✝
+⊢ trace D hash (Code.step (ok v✝) c >>= k) =
+    match trace D hash (c v✝) with
+    | (before, ok a) => (before ++ (trace D hash (k a)).1, (trace D hash (k a)).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+
+case step.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+e✝ : Error
+⊢ trace D hash (Code.step (fail e✝) c >>= k) = ([], fail e✝)
+
+case step.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+⊢ trace D hash (Code.step div c >>= k) = ([], div)
+Port10AUTH_Trace.lean:22:52: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.184 → (?m.184 → Code ?m.185) → Code ?m.185
+  
+  Std.bind : Result ?m.184 → (?m.184 → Result ?m.185) → Result ?m.185
+  
+  Bind.bind : ?m.184 ?m.186 → (?m.186 → ?m.184 ?m.187) → ?m.184 ?m.187
+Port10AUTH_Trace.lean:22:52: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.185 → (?m.185 → Code ?m.186) → Code ?m.186
+  
+  Std.bind : Result ?m.185 → (?m.185 → Result ?m.186) → Result ?m.186
+  
+  Bind.bind : ?m.185 ?m.187 → (?m.187 → ?m.185 ?m.188) → ?m.185 ?m.188
+Port10AUTH_Trace.lean:22:52: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind : Code ?m.186 → (?m.186 → Code ?m.187) → Code ?m.187
+  
+  Std.bind : Result ?m.186 → (?m.186 → Result ?m.187) → Result ?m.187
+  
+  Bind.bind : ?m.186 ?m.188 → (?m.188 → ?m.186 ?m.189) → ?m.186 ?m.189
+Port10AUTH_Trace.lean:24:23: error: unsolved goals
+case read.ok.mk.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝¹ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝¹
+before : Log
+v✝ : A
+h : trace D hash (c v✝¹) = (before, ok v✝)
+⊢ trace D hash (Code.read parts c >>= k) =
+    ((parts, v✝¹) :: (before ++ (trace D hash (k v✝)).1), (trace D hash (k v✝)).2)
+
+case read.ok.mk.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝
+before : Log
+e✝ : Error
+h : trace D hash (c v✝) = (before, fail e✝)
+⊢ trace D hash (Code.read parts c >>= k) = ((parts, v✝) :: before, fail e✝)
+
+case read.ok.mk.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝
+before : Log
+h : trace D hash (c v✝) = (before, div)
+⊢ trace D hash (Code.read parts c >>= k) = ((parts, v✝) :: before, div)
+Port10AUTH_Trace.lean:21:20: error: unsolved goals
+case read.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+e✝ : Error
+call : D.digest hash parts = fail e✝
+⊢ trace D hash (Code.read parts c >>= k) = ([], fail e✝)
+
+case read.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+call : D.digest hash parts = div
+⊢ trace D hash (Code.read parts c >>= k) = ([], div)
+Port10AUTH_Trace.lean:20:53: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [bind, ̲trace,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:22:68: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [bind, ̲trace, ̲call,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]

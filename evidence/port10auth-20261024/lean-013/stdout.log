@@ -1,0 +1,68 @@
+Port10AUTH_Selected.lean:49:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  flatten (Port4B_LeafCode.input kind view)
+in the target expression
+  CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten (Port4B_LeafCode.input kind view))
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle D hash H
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+q : Fin 22 → Fin 262144
+batch selected : ℕ
+kind lo n slot pos : Usize
+root : Digest
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+mem : selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind
+loValue : ↑lo = if batch = 0 then 0 else 10
+more : pos < n
+room : ↑s.n < 16
+keyRead : keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected)
+out : ControlFlow Port9OR_BatchStep.Next Port9OR_BatchStep.Out
+accepted : erase D hash (Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val s.n pos) = ok out
+member : selected ∈ OraclePortSelectedDraft.batchPositions batch
+decoded :
+  ↑(decodedIndex (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+      OraclePortSelectedDraft.index q (↑kind) selected ∧
+    ↑(openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) = selected
+rebased :
+  ↑(openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    (if batch = 0 then 0 else 10) + ↑(MultiproofConeSortOrder.packed q batch (↑kind) selected) % 256
+view : Slice U8
+read :
+  Port4B_Opening.opening proof (openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) = ok view
+size : (↑view).length = 832
+content : bytesOf ↑view = OraclePortSelectedDraft.opening parsed selected
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+    ok view
+address : flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected
+digest : Std.Array U8 32#usize
+hashed : D.digest hash (Port4B_LeafCode.input kind view) = ok digest
+postRun :
+  post s.idx s.val s.n (decodedIndex (MultiproofConeSortOrder.packed q batch (↑kind) selected)) digest
+      (pos.wrapping_add 1#usize) =
+    ok out
+trace :
+  Port9OR_Code.trace D hash (Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val s.n pos) =
+    ([(Port4B_LeafCode.input kind view, digest)], ok out)
+decodedDigest :
+  CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten (Port4B_LeafCode.input kind view))
+⊢ ∃ view,
+    (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+        ok view ∧
+      flatten (Port4B_LeafCode.input kind view) = OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+        Port9OR_Code.trace D hash
+            (Port9OR_BatchStep.body base D proof root kind hash lo n slot keys s.idx s.val s.n pos) =
+          ([(Port4B_LeafCode.input kind view, encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))],
+            ok
+              (project s (pos.wrapping_add 1#usize)
+                (MultiproofConeLeafContent.next s (MultiproofConeLeafFold.key q (↑kind) selected)
+                  (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) room)))
+'AspisR1.Port10AUTH_Selected.iteration' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

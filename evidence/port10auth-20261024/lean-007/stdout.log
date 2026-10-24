@@ -1,0 +1,1053 @@
+Port10AUTH_Leaf.lean:46:16: error: Tactic `rfl` failed: The left-hand side
+  match (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) with
+  | ok a =>
+    match Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a) with
+    | (before, ok a) =>
+      (before ++
+          (Port9OR_Code.trace D hash
+              (if d > 0#usize then do
+                let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                let b ←
+                  liftResult
+                      ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                if b = true then do
+                    let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                    let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                    if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                      else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                  else do
+                    let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                    let val1 ← liftResult (Array.update val d a)
+                    let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                    pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+              else do
+                let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                let val1 ← liftResult (Array.update val d a)
+                let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).1,
+        (Port9OR_Code.trace D hash
+            (if d > 0#usize then do
+              let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+              let b ←
+                liftResult
+                    ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+              if b = true then do
+                  let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                  let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                  if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                    else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                else do
+                  let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  let val1 ← liftResult (Array.update val d a)
+                  let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                  pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+            else do
+              let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+              let val1 ← liftResult (Array.update val d a)
+              let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+              pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+  | fail e => ([], fail e)
+  | div => ([], div)
+is not definitionally equal to the right-hand side
+  match (log, fail e) with
+  | (before, ok a) =>
+    (before ++
+        (Port9OR_Code.trace D hash
+            (liftResult
+              (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).1,
+      (Port9OR_Code.trace D hash
+          (liftResult
+            (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).2)
+  | (before, fail e) => (before, fail e)
+  | (before, div) => (before, div)
+
+case mk.fail
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+e : Error
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, fail e)
+⊢ (match (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) with
+    | ok a =>
+      match Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a) with
+      | (before, ok a) =>
+        (before ++
+            (Port9OR_Code.trace D hash
+                (if d > 0#usize then do
+                  let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                  let b ←
+                    liftResult
+                        ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  if b = true then do
+                      let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                      let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                      if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                        else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                    else do
+                      let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                      let val1 ← liftResult (Array.update val d a)
+                      let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                      pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+                else do
+                  let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  let val1 ← liftResult (Array.update val d a)
+                  let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                  pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).1,
+          (Port9OR_Code.trace D hash
+              (if d > 0#usize then do
+                let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                let b ←
+                  liftResult
+                      ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                if b = true then do
+                    let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                    let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                    if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                      else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                  else do
+                    let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                    let val1 ← liftResult (Array.update val d a)
+                    let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                    pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+              else do
+                let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                let val1 ← liftResult (Array.update val d a)
+                let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+    | fail e => ([], fail e)
+    | div => ([], div)) =
+    match (log, fail e) with
+    | (before, ok a) =>
+      (before ++
+          (Port9OR_Code.trace D hash
+              (liftResult
+                (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).1,
+        (Port9OR_Code.trace D hash
+            (liftResult
+              (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+Port10AUTH_Leaf.lean:47:13: error: Tactic `rfl` failed: The left-hand side
+  match (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) with
+  | ok a =>
+    match Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a) with
+    | (before, ok a) =>
+      (before ++
+          (Port9OR_Code.trace D hash
+              (if d > 0#usize then do
+                let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                let b ←
+                  liftResult
+                      ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                if b = true then do
+                    let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                    let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                    if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                      else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                  else do
+                    let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                    let val1 ← liftResult (Array.update val d a)
+                    let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                    pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+              else do
+                let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                let val1 ← liftResult (Array.update val d a)
+                let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).1,
+        (Port9OR_Code.trace D hash
+            (if d > 0#usize then do
+              let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+              let b ←
+                liftResult
+                    ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+              if b = true then do
+                  let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                  let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                  if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                    else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                else do
+                  let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  let val1 ← liftResult (Array.update val d a)
+                  let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                  pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+            else do
+              let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+              let val1 ← liftResult (Array.update val d a)
+              let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+              pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+  | fail e => ([], fail e)
+  | div => ([], div)
+is not definitionally equal to the right-hand side
+  match (log, div) with
+  | (before, ok a) =>
+    (before ++
+        (Port9OR_Code.trace D hash
+            (liftResult
+              (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).1,
+      (Port9OR_Code.trace D hash
+          (liftResult
+            (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).2)
+  | (before, fail e) => (before, fail e)
+  | (before, div) => (before, div)
+
+case mk.div
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, div)
+⊢ (match (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) with
+    | ok a =>
+      match Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a) with
+      | (before, ok a) =>
+        (before ++
+            (Port9OR_Code.trace D hash
+                (if d > 0#usize then do
+                  let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                  let b ←
+                    liftResult
+                        ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  if b = true then do
+                      let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                      let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                      if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                        else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                    else do
+                      let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                      let val1 ← liftResult (Array.update val d a)
+                      let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                      pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+                else do
+                  let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                  let val1 ← liftResult (Array.update val d a)
+                  let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                  pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).1,
+          (Port9OR_Code.trace D hash
+              (if d > 0#usize then do
+                let i4 ← liftResult (ok (d.wrapping_sub 1#usize))
+                let b ←
+                  liftResult
+                      ((Port9OR_BatchStep.ops base).op8 idx i4 (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                if b = true then do
+                    let i5 ← liftResult (ok (d.wrapping_sub 1#usize))
+                    let b1 ← liftResult ((Port9OR_BatchStep.ops base).op7 val i5 a)
+                    if b1 = true then pure (cont (idx, val, d, pos.wrapping_add 1#usize))
+                      else pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                  else do
+                    let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                    let val1 ← liftResult (Array.update val d a)
+                    let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                    pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))
+              else do
+                let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+                let val1 ← liftResult (Array.update val d a)
+                let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+                pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize)))).2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+    | fail e => ([], fail e)
+    | div => ([], div)) =
+    match (log, div) with
+    | (before, ok a) =>
+      (before ++
+          (Port9OR_Code.trace D hash
+              (liftResult
+                (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).1,
+        (Port9OR_Code.trace D hash
+            (liftResult
+              (post idx val d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) a (pos.wrapping_add 1#usize)))).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ = log
+is not definitionally equal to the right-hand side
+  ok (cont (idx, val, d, pos.wrapping_add 1#usize)) = do
+    let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_1.isTrue
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝² : Result (Slice U8)
+a✝³ : Slice U8
+heq✝³ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝³
+x✝ : Log × Result Digest
+before✝ : Log
+a✝² : Digest
+heq✝² : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝³) = (before✝, ok a✝²)
+h✝² : d > 0#usize
+r✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝¹ : a✝¹ = true
+r✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) a✝² = ok true
+h✝ : a✝ = true
+⊢ before✝ = log ∧
+    ok (cont (idx, val, d, pos.wrapping_add 1#usize)) = do
+      let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++
+      (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).2 = do
+    let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_1.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝² : Result (Slice U8)
+a✝³ : Slice U8
+heq✝³ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝³
+x✝ : Log × Result Digest
+before✝ : Log
+a✝² : Digest
+heq✝² : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝³) = (before✝, ok a✝²)
+h✝² : d > 0#usize
+r✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝¹ : a✝¹ = true
+r✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) a✝² = ok false
+h✝ : ¬a✝ = true
+⊢ before✝ ++
+        (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).2 = do
+      let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++ [] = log
+is not definitionally equal to the right-hand side
+  fail e✝ = do
+    let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝³ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝²
+x✝ : Log × Result Digest
+before✝ : Log
+a✝¹ : Digest
+heq✝² : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝²) = (before✝, ok a✝¹)
+h✝¹ : d > 0#usize
+r✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝ : a✝ = true
+r✝ : Result Bool
+e✝ : Error
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) a✝¹ = fail e✝
+⊢ before✝ ++ [] = log ∧
+    fail e✝ = do
+      let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++ [] = log
+is not definitionally equal to the right-hand side
+  div = do
+    let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝² : Result (Slice U8)
+a✝² : Slice U8
+heq✝³ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝²
+x✝ : Log × Result Digest
+before✝ : Log
+a✝¹ : Digest
+heq✝² : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝²) = (before✝, ok a✝¹)
+h✝¹ : d > 0#usize
+r✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝ : a✝ = true
+r✝ : Result Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) a✝¹ = div
+⊢ before✝ ++ [] = log ∧
+    div = do
+      let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++
+      (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d a✝¹)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash do
+        let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+        let val1 ← liftResult (Array.update val d a✝¹)
+        let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+    do
+    let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+    let val1 ← Array.update val d leaf
+    ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_1.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝¹ : Result (Slice U8)
+a✝² : Slice U8
+heq✝² :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝²
+x✝ : Log × Result Digest
+before✝ : Log
+a✝¹ : Digest
+heq✝¹ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝²) = (before✝, ok a✝¹)
+h✝¹ : d > 0#usize
+r✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok false
+h✝ : ¬a✝ = true
+⊢ before✝ ++
+        (Port9OR_Code.trace D hash do
+            let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+            let val1 ← liftResult (Array.update val d a✝¹)
+            let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d a✝¹)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+      do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++ [] = log
+is not definitionally equal to the right-hand side
+  fail e✝ = do
+    let same ← fail e✝
+    if same = true then do
+        let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+        if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+          else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝² :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝¹
+x✝ : Log × Result Digest
+before✝ : Log
+a✝ : Digest
+heq✝¹ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝¹) = (before✝, ok a✝)
+h✝ : d > 0#usize
+r✝ : Result Bool
+e✝ : Error
+heq✝ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = fail e✝
+⊢ before✝ ++ [] = log ∧
+    fail e✝ = do
+      let same ← fail e✝
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++ [] = log
+is not definitionally equal to the right-hand side
+  div = do
+    let same ← div
+    if same = true then do
+        let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+        if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+          else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝¹ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝² :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝¹
+x✝ : Log × Result Digest
+before✝ : Log
+a✝ : Digest
+heq✝¹ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝¹) = (before✝, ok a✝)
+h✝ : d > 0#usize
+r✝ : Result Bool
+heq✝ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = div
+⊢ before✝ ++ [] = log ∧
+    div = do
+      let same ← div
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ ++
+      (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d a✝)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash do
+        let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+        let val1 ← liftResult (Array.update val d a✝)
+        let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+    do
+    let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+    let val1 ← Array.update val d leaf
+    ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_1.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝ : Result (Slice U8)
+a✝¹ : Slice U8
+heq✝¹ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝¹
+x✝ : Log × Result Digest
+before✝ : Log
+a✝ : Digest
+heq✝ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝¹) = (before✝, ok a✝)
+h✝ : ¬d > 0#usize
+⊢ before✝ ++
+        (Port9OR_Code.trace D hash do
+            let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+            let val1 ← liftResult (Array.update val d a✝)
+            let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d a✝)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+      do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ = log
+is not definitionally equal to the right-hand side
+  fail e✝ =
+    if d > 0#usize then do
+      let same ←
+        Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+    else do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝ : Result (Slice U8)
+a✝ : Slice U8
+heq✝¹ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝
+x✝ : Log × Result Digest
+before✝ : Log
+e✝ : Error
+heq✝ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝) = (before✝, fail e✝)
+⊢ before✝ = log ∧
+    fail e✝ =
+      if d > 0#usize then do
+        let same ←
+          Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        if same = true then do
+            let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+            if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+            let val1 ← Array.update val d leaf
+            ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  before✝ = log
+is not definitionally equal to the right-hand side
+  div =
+    if d > 0#usize then do
+      let same ←
+        Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+    else do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝ : Result (Slice U8)
+a✝ : Slice U8
+heq✝¹ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    ok a✝
+x✝ : Log × Result Digest
+before✝ : Log
+heq✝ : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind a✝) = (before✝, div)
+⊢ before✝ = log ∧
+    div =
+      if d > 0#usize then do
+        let same ←
+          Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        if same = true then do
+            let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+            if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+            let val1 ← Array.update val d leaf
+            ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  [] = log
+is not definitionally equal to the right-hand side
+  fail e✝ =
+    if d > 0#usize then do
+      let same ←
+        Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+    else do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝ : Result (Slice U8)
+e✝ : Error
+heq✝ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) =
+    fail e✝
+⊢ [] = log ∧
+    fail e✝ =
+      if d > 0#usize then do
+        let same ←
+          Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        if same = true then do
+            let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+            if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+            let val1 ← Array.update val d leaf
+            ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:58:16: error: Tactic `rfl` failed: The left-hand side
+  [] = log
+is not definitionally equal to the right-hand side
+  div =
+    if d > 0#usize then do
+      let same ←
+        Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+    else do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead : (Port9OR_BatchStep.ops base).op2 proof (openingIndex lo key) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+r✝ : Result (Slice U8)
+heq✝ :
+  (Port4B_VerifyInstall.install base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = div
+⊢ [] = log ∧
+    div =
+      if d > 0#usize then do
+        let same ←
+          Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        if same = true then do
+            let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+            if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+            let val1 ← Array.update val d leaf
+            ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:41:31: warning: This simp argument is unused:
+  viewRead
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵k̵r̵,̵l̵i̵f̵t̵,̵v̵i̵e̵w̵R̵e̵a̵d̵,̵o̵p̵e̵n̵i̵n̵g̵I̵n̵d̵e̵x̵,̵d̵e̵c̵o̵d̵e̵d̵I̵n̵d̵e̵x̵]̵[̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲k̲r̲,̲ ̲l̲i̲f̲t̲,̲ ̲o̲p̲e̲n̲i̲n̲g̲I̲n̲d̲e̲x̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲I̲n̲d̲e̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:41:40: warning: This simp argument is unused:
+  openingIndex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵k̵r̵,̵l̵i̵f̵t̵,̵v̵i̵e̵w̵R̵e̵a̵d̵,̵o̵p̵e̵n̵i̵n̵g̵I̵n̵d̵e̵x̵,̵d̵e̵c̵o̵d̵e̵d̵I̵n̵d̵e̵x̵]̵[̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲k̲r̲,̲ ̲l̲i̲f̲t̲,̲ ̲v̲i̲e̲w̲R̲e̲a̲d̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲I̲n̲d̲e̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:56:28: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵p̵u̵r̵e̵_̵t̵r̵a̵c̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲p̲u̲r̲e̲_̲t̲r̲a̲c̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:57:55: warning: This simp argument is unused:
+  Result.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵,̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲P̲r̲o̲d̲.̲m̲k̲.̲i̲n̲j̲E̲q̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:57:71: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Prod.mk.injEq, ̲Result.ok.injEq, ̲if_t̵r̵u̵e̵,̵i̵f_̵f̵alse]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:57:79: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Prod.mk.injEq, ̲Result.ok.injEq, ̲if_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_Leaf.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
