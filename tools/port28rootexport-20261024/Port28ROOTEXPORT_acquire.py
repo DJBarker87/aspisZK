@@ -7,7 +7,7 @@ E=T.parents[1]/'evidence/port28rootexport-20261024'
 SSH=['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10','dombarker@100.108.41.90']
 def sha(b): return hashlib.sha256(b).hexdigest()
 def observe(label):
-    body=(T/'Port28ROOTEXPORT_proc-all.py').read_bytes(); start=time.monotonic()
+    body=(T/'Port28ROOTEXPORT_proc-all-v2.py').read_bytes(); start=time.monotonic()
     cmd=SSH+['sudo -n python3 -']; p=subprocess.run(cmd,input=body,capture_output=True,timeout=55)
     (E/f'Port28ROOTEXPORT_{label}.json').write_bytes(p.stdout)
     (E/f'Port28ROOTEXPORT_{label}.stderr.txt').write_bytes(p.stderr)
@@ -26,14 +26,14 @@ def main():
     assert label=='copy'
     gate=json.loads((E/'Port28ROOTEXPORT_host-gate.json').read_text())
     assert gate['host_gate'].startswith('RELEASED')
-    observe('copy-pre')
+    observe('copy-pre-v2')
     plan=json.loads((E/'Port28ROOTEXPORT_seed-plan.json').read_text())
     roots=list(dict.fromkeys(plan['ordered_original_lean_path']))
     graph=json.loads((E/'Port28ROOTEXPORT_source-import-plan.json').read_text())
     # Project modules only. No package-wide/sysroot content sweep. Missing header
     # and ConstantInfo dependencies remain explicit diagnostic gaps.
     modules=sorted(graph['modules'])
-    request=dict(roots=roots,modules=modules,historical=plan['historical_direct_object_pins'],observer=(T/'Port28ROOTEXPORT_proc-all.py').read_text())
+    request=dict(roots=roots,modules=modules,historical=plan['historical_direct_object_pins'],observer=(T/'Port28ROOTEXPORT_proc-all-v2.py').read_text())
     remote=(T/'Port28ROOTEXPORT_read.py').read_text()
     body=('REQUEST='+repr(request)+'\n'+remote).encode(); ast.parse(body)
     retained=Path('/private/tmp')/('port28rootexport-20261024-'+uuid.uuid4().hex)
