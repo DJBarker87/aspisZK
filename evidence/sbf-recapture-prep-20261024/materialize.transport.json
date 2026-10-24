@@ -1,0 +1,286 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=15",
+    "dombarker@100.108.41.90",
+    "python3 -c '\nimport sys,json,base64,pathlib,os,hashlib,resource,time\nresource.setrlimit(resource.RLIMIT_AS,(512*1024**2,512*1024**2))\ns=time.monotonic();root=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024'\"'\"')\nassert root.stat().st_uid==os.getuid() and not root.is_symlink() and (root/'\"'\"'OWNER'\"'\"').read_text()=='\"'\"'SbfRecapturePrep 20261024\\n'\"'\"'\nassert not (root/'\"'\"'src'\"'\"').exists()\nrows=[]\nfor line in sys.stdin.buffer:\n r=json.loads(line);rel=pathlib.PurePosixPath(r['\"'\"'path'\"'\"']);assert not rel.is_absolute() and '\"'\"'..'\"'\"' not in rel.parts\n p=root/rel\n for parent in p.parents:\n  if parent==root:break\n  assert not parent.is_symlink()\n p.parent.mkdir(parents=True,exist_ok=True)\n b=base64.b64decode(r['\"'\"'data'\"'\"'],validate=True);assert len(b)==r['\"'\"'bytes'\"'\"'] and hashlib.sha256(b).hexdigest()==r['\"'\"'sha256'\"'\"']\n with p.open('\"'\"'xb'\"'\"') as f:f.write(b)\n os.chmod(p,r['\"'\"'mode'\"'\"']);assert p.stat().st_size==r['\"'\"'bytes'\"'\"'] and hashlib.sha256(p.read_bytes()).hexdigest()==r['\"'\"'sha256'\"'\"']\n rows.append({k:v for k,v in r.items() if k!='\"'\"'data'\"'\"'})\nexpected={r['\"'\"'path'\"'\"'] for r in rows if r['\"'\"'path'\"'\"'].startswith('\"'\"'src/'\"'\"')}\nactual={'\"'\"'src/'\"'\"'+str(p.relative_to(root/'\"'\"'src'\"'\"')) for p in (root/'\"'\"'src'\"'\"').rglob('\"'\"'*'\"'\"') if p.is_file()}\nassert expected==actual\nraw=root/'\"'\"'materialized-files.json'\"'\"';raw.write_text(json.dumps(rows,indent=2)+'\"'\"'\\n'\"'\"')\nu=resource.getrusage(0)\nprint(json.dumps(dict(source_files=len(expected),files=len(rows),bytes=sum(r['\"'\"'bytes'\"'\"'] for r in rows),entire_materialization_verified=True,raw_manifest_sha256=hashlib.sha256(raw.read_bytes()).hexdigest(),raw_manifest_bytes=raw.stat().st_size,wall_seconds=time.monotonic()-s,peak_rss_kib=u.ru_maxrss,swaps=u.ru_nswap,print_axioms='\"'\"'N/A'\"'\"')))\n'"
+  ],
+  "exit": 0,
+  "wall_seconds": 112.82356508309022,
+  "peak_rss_bytes": 209092608,
+  "children_peak_rss_bytes": 99450880,
+  "swaps": 0,
+  "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "job_revision": "4474a0056c968c1f2dd16f957cbfeba019d6c9b6",
+  "script_sha256": "9853670fab3eb04e3d3006153ddde7381a717ac3b1da87f450fd61bee9589bc7",
+  "inputs": {
+    "rustc-diagnostics.py": {
+      "sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84",
+      "bytes": 1279
+    },
+    "source-inputs.json": {
+      "sha256": "a84a528cfc4b294c603fe5381343cdaf9df0547467bcc94e61a67e5111adb9d1",
+      "bytes": 3047214
+    },
+    "snapshot-exclusions.json": {
+      "sha256": "c5eea50a7514ae03ac08bb642f2d636baf66fc6fdbbc534a0af0c665d12cf507",
+      "bytes": 2789
+    },
+    "platform-release.txt": {
+      "sha256": "9c562e3b98a0b16007feda1a140d597595e6a3ac38fcebbdb32bc5ecde4219a2",
+      "bytes": 10404
+    }
+  },
+  "manifest_sha256": "a84a528cfc4b294c603fe5381343cdaf9df0547467bcc94e61a67e5111adb9d1",
+  "key_name_classification": [
+    {
+      "path": "crates/aspis-pool-wallet-v1/Cargo.lock",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/Cargo.toml",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/INDEXER.md",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/README.md",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/examples/tx_v1_devnet_probe.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/examples/tx_v1_simulation_request.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/durable_state.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/durable_witness_state.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/finalized_indexer.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_checkpoint_operator_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_client_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_durable_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_rpc_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_transaction_v1.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_tx_v1_simulation_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lane_forest_wallet_txn_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/lib.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/live_pool_witness_adapter_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/note_store_crypto.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/operator_execution.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/operator_startup.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/pool_transport.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/registry_transaction_builder.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_execution_journal.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_execution_port.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_finality_join.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_finalized_evidence.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_https_rpc.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_rpc_composition.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_rpc_json.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_rpc_quorum.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_rpc_request_id.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_transaction.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/relayer_unix_signer.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/rpc_adapter.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/rpc_https_transport.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/rpc_json.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/rpc_json_quorum.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/rpc_wire.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/scan_state.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/transaction_builder.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/tx_v1_ciphertext_carrier_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/tx_v1_finalized_rpc_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/v7_relayer_finality_replay_tests.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/verifier_transaction_builder.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_monotonic_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_populated_migration_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_store_migration_v2.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_transition.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_v2_activation.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/wallet_v2_runtime.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/src/witness_state.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_cross_store_atomicity_integration.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_cross_store_atomicity_model.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_empty_finalized_block.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_note_store_adversarial.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_populated_wallet_migration.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "crates/aspis-pool-wallet-v1/tests/v7_scanner_durable_restart.rs",
+      "classification": "source/config/document name; no key material file"
+    },
+    {
+      "path": "tools/v7-live-pool-proof/src/bin/create_live_operation_secrets.rs",
+      "classification": "source/config/document name; no key material file"
+    }
+  ],
+  "blocked": [],
+  "print_axioms": "N/A"
+}
