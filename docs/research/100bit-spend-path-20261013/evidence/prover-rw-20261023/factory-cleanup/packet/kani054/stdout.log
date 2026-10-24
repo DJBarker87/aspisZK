@@ -1,0 +1,36 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: function `fill_stub` is never used
+  --> lib.rs:20:12
+   |
+20 |         fn fill_stub(dest: &mut [u8]) -> Result<(),getrandom::Error> {
+   |            ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `partial_error_fill` is never used
+  --> lib.rs:47:12
+   |
+47 |         fn partial_error_fill(dest: &mut [u8]) -> Result<(),getrandom::Error> {
+   |            ^^^^^^^^^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_singlethreadfence (1)
+         
+
+Checking harness ProverRwFactoryCleanup::checks::partial_error...
+
+VERIFICATION RESULT:
+ ** 0 of 408 failed (5 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 16.615255s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

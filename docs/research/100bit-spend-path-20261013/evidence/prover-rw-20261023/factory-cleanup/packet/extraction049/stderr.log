@@ -1,0 +1,56 @@
+   Compiling libc v0.2.186
+   Compiling getrandom v0.3.4
+   Compiling cfg-if v1.0.4
+   Compiling zeroize v1.8.1
+   Compiling prover-rw-factory-cleanup v0.1.0 (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/factory-cleanup/proof)
+warning: unexpected `cfg` condition name: `kani`
+ --> lib.rs:5:11
+  |
+5 |     #[cfg(kani)]
+  |           ^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: constant `ENTROPY_RETRY_LIMIT` is never used
+ --> selected.rs:3:7
+  |
+3 | const ENTROPY_RETRY_LIMIT: usize = 16;
+  |       ^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: enum `StateOnlyAttemptEntropyError` is never used
+ --> selected.rs:6:10
+  |
+6 | pub enum StateOnlyAttemptEntropyError {
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `StateOnlyAttemptSecrets` is never constructed
+  --> selected.rs:17:12
+   |
+17 | pub struct StateOnlyAttemptSecrets {
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `entropy_nonzero32` is never used
+  --> selected.rs:24:4
+   |
+24 | fn entropy_nonzero32(bytes:&[u8;32])->bool {
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: associated function `generate_for_mask_nonce` is never used
+  --> selected.rs:31:12
+   |
+30 | impl StateOnlyAttemptSecrets {
+   | ---------------------------- associated function in this implementation
+31 |     pub fn generate_for_mask_nonce(
+   |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `prover-rw-factory-cleanup` (lib) generated 6 warnings
+    Finished `release` profile [optimized] target(s) in 0.75s
