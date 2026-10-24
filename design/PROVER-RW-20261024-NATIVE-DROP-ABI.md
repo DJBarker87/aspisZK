@@ -101,3 +101,18 @@ belong in receipts. No current check repairs historical incomplete evidence.
 
 Before/after: existing native/refinement/E1 theorem statements identical;
 no assumptions added, discharged or concealed. Candidate is unmerged.
+
+## Bounded outcome (supersedes proposal status, not prior receipts)
+
+The ordinary-move source route was tried in013 and failed actual V5 at
+InterpPaths:492 (borrow read). It is stopped/unaccepted. Structural helper
+lemmas do not prove its source/loan relation.014 instead compiles a rejecting
+nested builtin guard;015 is a separately unaccepted printer-only diagnostic.
+On actual Guard, printer repair removes three11566 errors;11574 still fails
+at the original nested swap pair/triple. Independent noDrop borrowed probes
+also fail copying mutable borrows before printer output. No complete typed
+ABI, actual Guard theorem, Drop support or native premise closure follows.
+All failures retained; see native-drop-abi/REPORT.md and ledger.json.
+All nine available extractions are charged (44/44); backend15/16, Lean236/260,
+Kani44/60. No further source work justified a build or extraction. NoZeroizing
+or provider work, no full manifest, no adoption, no new trust assumptions.
