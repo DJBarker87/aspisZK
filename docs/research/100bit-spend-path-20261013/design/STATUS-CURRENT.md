@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 20:08 BST
+## Current coordinator checkpoint — 2026-10-24 20:32 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -19,14 +19,21 @@ not certify external textual-module provenance, IR/native or release identity.
 Residual other-operation budgets and concrete native/source/artifact joins
 remain open.
 
-Newly merged51ff811857 adds conditional accepted-full-stored-run probability
-transport, keeps all-outcome query accounting separate, and recovers both native
-parent declarations in source extraction. It does not supply the concrete
-allocator/Vec frame/effect laws. Port22ARENA60355 is working on that boundary.
-Port23PUSH63286 separately connects actual mutable push to the owned row model.
-Privacy ResumeP6's two240s Kani checks timed out without proof/counterexample.
-ResumeScalar61137 now prepares scalar observation/source-role/erasure; the final
-privacy Kani slot remains reserved (59/60 used). No production adoption.
+Merged51ff811857 adds conditional accepted-full-stored-run probability
+transport and recovers native parent declarations; all-outcome query charges
+remain separate. Merged438cd6f576 adds allocator word/byte-frame lemmas and
+84 finite-arena Kani checks; deployed SBF/RawVec/shim linkage remains open.
+Port24SBFMAP67250 now follows that exact artifact/source boundary. Port23's
+actual mutable-push outer frame is reviewed but unmerged; Port25ARRAY68143
+resolves its explicit array iterator ABI and row sequencing. Privacy scalar
+observer payload384->12 is reviewed as structural reduction only; native
+erasure/roles/world remain open. ResumeRoles66304 obtains concrete success
+moves/disposal/source projection. Privacy Kani59/60, final slot reserved;
+privacy Lean240/260; known soundness332/368 before new job usage. No adoption.
+
+New Session A640d3ebcf6 caller-range report has been read; its five new proof
+sources and receipts still await full independent review. It is not silently
+attributed to the older merged logical closure.
 
 Session A's committed packets through `19b60f915262fb3c7f64656b6826fc8429e30d91`
 have been reviewed from immutable Git objects. They establish accepted
