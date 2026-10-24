@@ -66,3 +66,12 @@ Expected time in optimized compilation then named symbolic factory verification,
 not arithmetic elimination. Preserve failures; review ten minutes without target.
 Record command/flags, exact revision/source/dependency/binary hashes, exit,
 wall/RSS/swap and full axioms or N/A. Derived JSON>5MB hash+size only.
+
+## Focused invocation observation plan
+
+After the two control harness reservations, spend extraction049 on Charon built
+MIR with precise drops rooted at this tiny exact-item crate, including unchanged
+zeroize bodies. This is source/glue observation only, not monomorphization,
+accepted Aeneas emission or a P6 caller theorem. Keep output on host if>5MB;
+retain hashes/size and a compact expanded-type/normal-path drop audit. No backend
+or printer experiment. Existing generic iterator/Drop barriers remain open.
