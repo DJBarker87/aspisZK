@@ -8,5 +8,5 @@ assert (old==new)==m['byte_identical_to_inspected_067']
 def branch(b):
  a=b.index(b'FieldsShape::Primitive =>');z=b.index(b'FieldsShape::Array',a);return b[a:z]
 assert branch(old)==branch(new) and b'FieldsShape::Primitive with a different ABI than ValueAbi::Scalar' in branch(new)
-expected=''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='Kani0.67/ty_layout.rs',tofile='Kani0.68/ty_layout.rs'));assert (P/'upstream-068-layout.diff').read_text()==expected
+expected=''.join(difflib.unified_diff(old.decode().splitlines(True),new.decode().splitlines(True),fromfile='Kani0.67/ty_layout.rs',tofile='Kani0.68/ty_layout.rs',n=0));assert (P/'upstream-068-layout.diff').read_text()==expected
 print(json.dumps(dict(status='PASS',kind='upstream-source-comparison-only',layout_file_identical=False,failing_primitive_branch_identical=True,native_type_identified=False,native_initializedness_proved=False,compiler_or_solver_launched=False)))
