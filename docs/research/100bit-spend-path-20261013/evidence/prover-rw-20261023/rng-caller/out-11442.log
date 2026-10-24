@@ -1,0 +1,110 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:14:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngCallerControl.native_from`:
+  [ErasureFns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ErasureFns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:40:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:17: error: Application type mismatch: The argument
+  ?m.40
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.40
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:67:88: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L B : Type
+policy : Policy N
+body : Body B L
+p p' : Tape
+n n' : N
+l l' : L
+b b' : B
+k next : Usize
+below : ¬k ≥ 8#usize
+a : StateOnlyAttemptSecrets
+callback : selected_callback policy p n k = ok (p', n', core.result.Result.Ok a)
+hbody : body.call_mut b (a, l) = ok ((l', core.result.Result.Err Error.Rejected), b')
+increment : k + 1#usize = sorry
+⊢ (do
+      let i ← sorry
+      retry_attempt policy body p' n' l' b' i) =
+    retry_attempt policy body p' n' l' b' next
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:17: error: Application type mismatch: The argument
+  ?m.42
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.42
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:79:62: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L B : Type
+policy : Policy N
+body : Body B L
+p p' : Tape
+n n' : N
+l l' : L
+b b' : B
+k next : Usize
+below : ¬k ≥ 8#usize
+a : StateOnlyAttemptSecrets
+proof : alloc.vec.Vec U8
+audit : U64
+callback : selected_callback policy p n k = ok (p', n', core.result.Result.Ok a)
+hbody : body.call_mut b (a, l) = ok ((l', core.result.Result.Ok (proof, audit)), b')
+increment : k + 1#usize = sorry
+⊢ (do
+      let i ← sorry
+      ok (p', n', l', b', core.result.Result.Ok { proof := proof, audit := audit, attempts := i })) =
+    ok (p', n', l', b', core.result.Result.Ok { proof := proof, audit := audit, attempts := next })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:20: error: Application type mismatch: The argument
+  ?m.11
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.11
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:34: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:34: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+'R1Z.ProverRwRngCallerControl.native_from' does not depend on any axioms
+'R1Z.ProverRwRngCallerControl.callback_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.variant_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.cap_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.callback_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_fatal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.increment_safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

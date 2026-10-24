@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:15:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngCallerEntropy.scan_same`:
+  [NativeTypes]
+  [ErasureFns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [NativeTypes] [ErasureFns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:43:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ProverRwRng.ErasureFns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:28:42: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p after : P
+nonce : Std.Array U8 32#usize
+retry limit : Usize
+below : retry < limit
+byte : U8
+stable : byte ||| byte = byte
+initial : 0#u8 ||| byte = byte
+reply : draw.fill p (Array.repeat 64#usize 0#u8) = ok ((after, core.result.Result.Ok ()), Array.repeat 64#usize byte)
+⊢ (do
+      let b ← ProverRwRng.entropy_nonzero32 (Array.repeat 32#usize byte)
+      if b = true then do
+          let b1 ← ProverRwRng.entropy_nonzero32 (Array.repeat 32#usize byte)
+          if b1 = true then
+              ok
+                (done
+                  (after,
+                    core.result.Result.Ok
+                      { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize byte,
+                        leaf_salt_seed := Array.repeat 32#usize byte }))
+            else do
+              let nextRetry ← retry + 1#usize
+              ok (cont (after, nextRetry))
+        else do
+          let nextRetry ← retry + 1#usize
+          ok (cont (after, nextRetry))) =
+    if (byte != 0#u8) = true then
+      ok
+        (done
+          (after,
+            core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize byte,
+                leaf_salt_seed := Array.repeat 32#usize byte }))
+    else do
+      let nextRetry ← retry + 1#usize
+      ok (cont (after, nextRetry))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:86:23: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵z̵e̵r̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:88:13: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵o̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲n̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:88:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵o̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngCallerEntropy.scan_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.constant_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.error_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.cap_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.zero_then_one_owner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

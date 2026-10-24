@@ -1,0 +1,165 @@
+// Source-derived extraction prototype; not a native provider installation.
+use zeroize::Zeroizing;
+const ENTROPY_RETRY_LIMIT: usize = 16;
+#[derive(Debug, PartialEq, Eq)]
+pub enum StateOnlyAttemptEntropyError { Os(getrandom::Error), RepeatedZeroBlock }
+pub struct StateOnlyAttemptSecrets {
+    pub mask_nonce: [u8;32],
+    pub field_mask_entropy: Zeroizing<[u8;32]>,
+    pub leaf_salt_seed: Zeroizing<[u8;32]>,
+}
+pub trait Draw64: Sized {
+    fn fill(self, bytes: &mut [u8;64]) -> (Self, Result<(),getrandom::Error>);
+}
+// Finite tape consumption is explicit, also on OS error with partial writes.
+pub struct Tape { pub replies: Vec<([u8;64], Result<(),getrandom::Error>)>, pub used: usize }
+impl Draw64 for Tape {
+    fn fill(mut self, bytes: &mut [u8;64]) -> (Self, Result<(),getrandom::Error>) {
+        assert!(self.used < self.replies.len()); // tape exhaustion is outside admitted executions
+        let (block, result) = self.replies[self.used];
+        self.used += 1;
+        *bytes = block;
+        (self, result)
+    }
+}
+pub fn owner(nonce: [u8;32], tape: Tape) -> (Tape, Result<StateOnlyAttemptSecrets,StateOnlyAttemptEntropyError>) {
+    StateOnlyAttemptSecrets::generate_with(nonce, tape)
+}
+#[inline(always)]
+fn entropy_nonzero32(bytes:&[u8;32])->bool {
+    let mut combined=0u8;let mut i=0;
+    while i<32 {combined|=bytes[i];i+=1;}
+    combined!=0
+}
+
+impl StateOnlyAttemptSecrets {
+    pub fn generate_with<P: Draw64>(
+        mask_nonce: [u8; 32],
+        mut provider: P,
+    ) -> (P, Result<Self, StateOnlyAttemptEntropyError>) {
+        let limit=ENTROPY_RETRY_LIMIT;
+
+        if !entropy_nonzero32(&mask_nonce) {
+            return (provider, Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock));
+        }
+        let mut retry=0;
+        while retry<limit {
+            let mut bytes = Zeroizing::new([0u8; 64]);
+            let (after, result) = provider.fill(&mut bytes);
+            provider = after;
+            if let Err(e) = result { return (provider, Err(StateOnlyAttemptEntropyError::from(e))); }
+
+            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);
+            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);
+            field_mask_entropy.copy_from_slice(&bytes[..32]);
+            leaf_salt_seed.copy_from_slice(&bytes[32..]);
+            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {
+                return (provider, Ok(Self {
+                    mask_nonce,
+                    field_mask_entropy,
+                    leaf_salt_seed,
+                }));
+            }
+            retry+=1;
+        }
+        (provider, Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock))
+    }
+
+}
+
+impl From<getrandom::Error> for StateOnlyAttemptEntropyError {
+    fn from(value: getrandom::Error) -> Self { Self::Os(value) }
+}
+#[derive(Debug,Clone,Copy,PartialEq,Eq)]
+pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,
+    Rejected,AttemptsExhausted,Entropy }
+pub struct RetriedProof { pub proof:Vec<u8>, pub audit:u64, pub attempts:usize }
+pub const ATTEMPT_CAP:usize=8;
+// The actual body and durable store remain a local interface, not a refinement premise.
+pub fn selected_callback<N: FnMut(usize)->[u8;32]>(
+    tape:Tape, mut proof_account:N, k:usize,
+)->(Tape,N,Result<StateOnlyAttemptSecrets,Error>) {
+    let nonce=proof_account(k);
+    let (tape,status)=StateOnlyAttemptSecrets::generate_with(nonce,tape);
+    (tape,proof_account,status.map_err(|_|Error::Entropy))
+}
+pub fn retry_attempt<N,L,B>(tape:Tape, proof_account:N, mut nonce_store:L, mut body:B,k:usize)
+ ->(Tape,N,L,B,Result<RetriedProof,Error>)
+ where N:FnMut(usize)->[u8;32],
+ B:FnMut(StateOnlyAttemptSecrets,L)->(L,Result<(Vec<u8>,u64),Error>) {
+    if k>=ATTEMPT_CAP { return (tape,proof_account,nonce_store,body,Err(Error::AttemptsExhausted)); }
+    let (tape,proof_account,status)=selected_callback(tape,proof_account,k);
+    let attempt=match status {Ok(a)=>a,Err(e)=>return (tape,proof_account,nonce_store,body,Err(e))};
+    let (after_store,result)=body(attempt,nonce_store);
+    nonce_store=after_store;
+    match result {
+        Ok((proof,audit))=>(tape,proof_account,nonce_store,body,Ok(RetriedProof{proof,audit,attempts:k+1})),
+        Err(Error::Rejected)=>retry_attempt(tape,proof_account,nonce_store,body,k+1),
+        Err(e)=>(tape,proof_account,nonce_store,body,Err(e)),
+    }
+}
+pub fn prove_masked_retrying_with<N,L,B>(is_s2:bool,tape:Tape,proof_account:N,nonce_store:L,body:B)
+ ->(Tape,N,L,B,Result<RetriedProof,Error>)
+ where N:FnMut(usize)->[u8;32],
+ B:FnMut(StateOnlyAttemptSecrets,L)->(L,Result<(Vec<u8>,u64),Error>) {
+    if !is_s2 { return (tape,proof_account,nonce_store,body,Err(Error::Semantic)); }
+    retry_attempt(tape,proof_account,nonce_store,body,0)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    fn policy() -> impl FnMut(usize)->[u8;32] {
+        let mut calls=0u8;
+        move |k| {calls+=1; let mut n=[calls;32]; n[31]=k as u8; n}
+    }
+    fn tape(blocks:Vec<([u8;64],Result<(),getrandom::Error>)>)->Tape {Tape{replies:blocks,used:0}}
+    #[test]
+    fn changing_draws_rejected_body_then_success() {
+        let body=|s:StateOnlyAttemptSecrets,mut ledger:Vec<[u8;32]>| {
+            ledger.push(s.mask_nonce);
+            let r=if ledger.len()==1 {Err(Error::Rejected)} else {Ok((vec![42],9))};
+            (ledger,r)
+        };
+        let (p,mut n,ledger,_,r)=prove_masked_retrying_with(true,
+            tape(vec![([0;64],Ok(())),([1;64],Ok(())),([2;64],Ok(()))]),policy(),vec![],body);
+        assert_eq!(p.used,3); assert_eq!(ledger.len(),2);
+        assert_eq!(ledger[0][0],1); assert_eq!(ledger[1][0],2);
+        let r=r.unwrap();assert_eq!(r.attempts,2);assert_eq!(r.proof,vec![42]);
+        assert_eq!(n(2)[0],3);
+    }
+    #[test]
+    fn native_error_and_policy_state_survive() {
+        let error=getrandom::Error::new_custom(1234);
+        match StateOnlyAttemptEntropyError::from(error) {
+            StateOnlyAttemptEntropyError::Os(e)=>assert_eq!(e,error), _=>panic!(),
+        }
+        let body=|_:StateOnlyAttemptSecrets,l:Vec<[u8;32]>| (l,Err(Error::Rejected));
+        let (p,mut n,l,_,r)=prove_masked_retrying_with(true,tape(vec![([7;64],Err(error))]),policy(),vec![],body);
+        assert_eq!(p.used,1);assert!(l.is_empty());assert!(matches!(r,Err(Error::Entropy)));
+        assert_eq!(n(1)[0],2);
+    }
+    #[test]
+    fn duplicate_is_fatal_and_preserves_advanced_state() {
+        let body=|s:StateOnlyAttemptSecrets,mut ledger:Vec<[u8;32]>| {
+            let r=if ledger.contains(&s.mask_nonce) {Err(Error::Semantic)}
+            else {ledger.push(s.mask_nonce);Err(Error::Rejected)};
+            (ledger,r)
+        };
+        let n=|_|[1;32];
+        let (p,_,l,_,r)=prove_masked_retrying_with(true,
+            tape(vec![([1;64],Ok(())),([2;64],Ok(())),([3;64],Ok(()))]),n,vec![],body);
+        assert_eq!(p.used,2);assert_eq!(l.len(),1);assert!(matches!(r,Err(Error::Semantic)));
+    }
+    #[test]
+    fn cap8_and_variant_guards_preserve_policy() {
+        let body=|_:StateOnlyAttemptSecrets,l:usize| (l+1,Err(Error::Rejected));
+        let (p,mut n,l,_,r)=prove_masked_retrying_with(true,
+            tape(vec![([1;64],Ok(()));8]),policy(),0,body);
+        assert_eq!(p.used,8);assert_eq!(l,8);assert!(matches!(r,Err(Error::AttemptsExhausted)));
+        assert_eq!(n(8)[0],9);
+        let (p,mut n,l,_,r)=prove_masked_retrying_with(false,tape(vec![]),policy(),0,body);
+        assert_eq!(p.used,0);assert_eq!(l,0);assert!(matches!(r,Err(Error::Semantic)));
+        assert_eq!(n(0)[0],1);
+    }
+}

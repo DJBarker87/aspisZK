@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1247); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize byte,
+                leaf_salt_seed := Array.repeat 32#usize byte }))
+    else do
+      let nextRetry ← retry + 1#usize
+      ok (cont (after, nextRetry))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:51:4: error: don't know how to synthesize implicit argument `P`
+  @body inst✝¹ (?m.44 draw p after nonce retry limit below written error reply) P draw nonce limit p retry
+context:
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p after : P
+nonce : Std.Array U8 32#usize
+retry limit : Usize
+below : retry < limit
+written : Std.Array U8 64#usize
+error : getrandom.error.Error
+reply : draw.fill p (Array.repeat 64#usize 0#u8) = ok ((after, core.result.Result.Err error), written)
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:58:4: error: don't know how to synthesize implicit argument `P`
+  @body inst✝¹ (?m.21 draw p nonce retry limit stop) P draw nonce limit p retry
+context:
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p : P
+nonce : Std.Array U8 32#usize
+retry limit : Usize
+stop : ¬retry < limit
+⊢ Type
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:69:15: error(lean.unknownIdentifier): Unknown identifier `constant_step`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:68:84: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+P : Type
+draw : Draw64 P
+p0 p1 p2 : P
+nonce : Std.Array U8 32#usize
+first : draw.fill p0 (Array.repeat 64#usize 0#u8) = ok ((p1, core.result.Result.Ok ()), Array.repeat 64#usize 0#u8)
+second : draw.fill p1 (Array.repeat 64#usize 0#u8) = ok ((p2, core.result.Result.Ok ()), Array.repeat 64#usize 1#u8)
+⊢ StateOnlyAttemptSecrets.generate_with_loop draw nonce p0 16#usize 0#usize =
+    ok
+      (p2,
+        core.result.Result.Ok
+          { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+            leaf_salt_seed := Array.repeat 32#usize 1#u8 })
+'R1Z.ProverRwRngCallerEntropy.scan_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:105:14: error(lean.unknownIdentifier): Unknown constant `constant_step`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:106:14: error(lean.unknownIdentifier): Unknown constant `error_state`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerEntropy.lean:107:14: error(lean.unknownIdentifier): Unknown constant `cap_state`
+'R1Z.ProverRwRngCallerEntropy.zero_then_one_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerEntropy.zero_then_one_owner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.80
+	Maximum resident set size (kbytes): 3844336
+	Swaps: 0
+	Exit status: 1

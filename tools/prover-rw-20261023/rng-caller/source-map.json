@@ -1,0 +1,6075 @@
+{
+  "schema": "rng-caller-source-map-v1",
+  "base": "03444c5e5e",
+  "native": [
+    {
+      "qualified": "RealR1_client::prove_for_proof_accounts",
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "span": [
+        20,
+        30
+      ],
+      "file": {
+        "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+        "bytes": 1633
+      },
+      "signature": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> ",
+      "signature_sha256": "ff4e4b648bf3c21b83fd4439f14dc3977affc69eaae52ed695ba2a219bccbc6e",
+      "body_sha256": "5c13b2e36dd5d36e03c3208d4e91dc11bdcc4faddcca163ea31224c8b9946da0",
+      "text": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> {\n    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {\n        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)\n    })\n}"
+    },
+    {
+      "qualified": "prover::prove_masked_retrying_with",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "span": [
+        611,
+        621
+      ],
+      "file": {
+        "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+        "bytes": 34067
+      },
+      "signature": "pub fn prove_masked_retrying_with(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n)->Result<RetriedProof,Error> ",
+      "signature_sha256": "d7f5c2a5997042a446b1b8196fe599c86ef9b3dbc6919226e6cc8cefc3d4aad9",
+      "body_sha256": "0430b12236c6eec9617fa2b4a3456a82a63d572b0793f645933bd53117e11dfe",
+      "text": "pub fn prove_masked_retrying_with(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n)->Result<RetriedProof,Error> {\n    if variant!=Variant::S2 { return Err(Error::Semantic); }\n    retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,0)\n}"
+    },
+    {
+      "qualified": "prover::retry_attempt",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "span": [
+        623,
+        639
+      ],
+      "file": {
+        "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+        "bytes": 34067
+      },
+      "signature": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> ",
+      "signature_sha256": "3d87899d4b30e2800bf48c27d8629c4954d42053750262584c3f0feea736d68f",
+      "body_sha256": "a6b2b0041a47e6bc1c804b5dcf7dcd22115f3e41379448b31af8075d4cce9127",
+      "text": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> {\n    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }\n    let attempt=next_attempt(k)?;\n    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),\n        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),\n        Err(e)=>Err(e),\n    }\n}"
+    },
+    {
+      "qualified": "prover::prove_masked_attempt",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "span": [
+        167,
+        179
+      ],
+      "file": {
+        "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+        "bytes": 34067
+      },
+      "signature": "pub fn prove_masked_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> ",
+      "signature_sha256": "b5093d8662f2c6e5b3971cc36dcf417e3fd095801057fdf826a60bffc54e17b0",
+      "body_sha256": "04311680bf14b0d996563baadcb5a33fbbb1b8f576f8670a243b7299ad373fff",
+      "text": "pub fn prove_masked_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {\n    let public_bytes=public.public_bytes().map_err(|_|Error::Semantic)?;\n    let context=StateOnlyHidingContext::pool_v1_pair_forest_v1(hash(&[&public_bytes]),attempt.mask_nonce());\n    let binding=hash(&[b\"UNPROVED:R1:P3:PRIVATE-ATTEMPT\",&public_bytes,&[variant.tag()],&context.encode()]);\n    prove_masked_with_attempt(public,compiled,variant,hash,context,binding,attempt,nonce_store)\n}"
+    },
+    {
+      "qualified": "prover::prove_masked_with_attempt",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "span": [
+        181,
+        218
+      ],
+      "file": {
+        "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+        "bytes": 34067
+      },
+      "signature": "fn prove_masked_with_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    context:StateOnlyHidingContext,\n    binding:[u8;32],\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut impl StateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> ",
+      "signature_sha256": "bb71f377c40935526431f18af60a2a7e97684431576707419ab90eca1f512a1f",
+      "body_sha256": "1d4d7561b5745f2fdcc5ed0a70330e33e00332e37240805c6cead9fcf0eb3cae",
+      "text": "fn prove_masked_with_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    context:StateOnlyHidingContext,\n    binding:[u8;32],\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut impl StateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {\n    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;\n    #[cfg(all(test,feature=\"r1p-check\"))]\n    if test_hooks::forced_exhaustion(reserved.mask_nonce()) { return Err(mask_error(StateOnlyMaskBuildError::MaskSampleExhausted)); }\n    let mut noised_c1=compiled.semantic_c1.clone();\n    let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;\n    let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;\n    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;\n    if applied.g.len()!=1024 || applied.h1_padding.len()!=1024 { return Err(Error::Semantic); }\n    let g=fixed_k_column(&applied.g);\n    let h1_padding=fixed_k_column(&applied.h1_padding);\n    let audit=audit_masks(&noised_c1.c1,&applied.mask_only_c1,&d,&g,&h1_padding,&masks);\n    if audit.c1_columns_inactive_balanced!=16\n        || audit.mask_only_columns_inactive_balanced!=10\n        || !audit.d_inactive_balanced\n        || !audit.g_inactive_balanced\n        || !audit.h1_padding_inactive_balanced\n    { return Err(Error::Semantic); }\n    let (c1_salts,c2_salts)=(Some(derive_private_salts(&reserved,context,hash,merkle::C1_TAG)?),Some(derive_private_salts(&reserved,context,hash,merkle::C2_TAG)?));\n    #[cfg(all(test,feature=\"r1p-check\"))]\n    test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));\n    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};\n    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;\n    let h1_total_balanced=aspis_statement::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);\n    if !h1_total_balanced { return Err(Error::Semantic); }\n    let audit=MaskedFixtureAudit{h1_total_balanced,..audit};\n    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;\n    Ok((proof,audit))\n}"
+    },
+    {
+      "qualified": "prover::mask_error",
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "span": [
+        256,
+        261
+      ],
+      "file": {
+        "sha256": "ec93e05da16f97724340c17f2b15aee03e0bbf118321f503d13912f758737a4e",
+        "bytes": 34067
+      },
+      "signature": "fn mask_error(e:StateOnlyMaskBuildError)->Error ",
+      "signature_sha256": "c8b1d29bf958a693416355ba952ad3c2d88c08d4415b7fd92e2ff72d707413fb",
+      "body_sha256": "28d35c3315c63146dbc3fc1c34f8f7b55886c707d7e655b93bc687f48cff3cca",
+      "text": "fn mask_error(e:StateOnlyMaskBuildError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==StateOnlyMaskBuildError::MaskSampleExhausted { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+    },
+    {
+      "qualified": "verifier::Error",
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "span": [
+        20,
+        27
+      ],
+      "file": {
+        "sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+        "bytes": 25102
+      },
+      "signature": "pub enum Error ",
+      "signature_sha256": "2c2aa2a5013daa0142ec729d5cabb931414ce51da72974985d26fceb6c65da27",
+      "body_sha256": "5b1475bdaeb679affe5640d9b7240d8c76dbcb8414bacf1a8ce236e76d1c2e94",
+      "text": "pub enum Error { Parse,Semantic,Transcript,Relation,Merkle,Query,Checkpoint,Allocation,\n    /// Host prover only (LOG D38.3): this attempt's challenges fail the public\n    /// P_R1 check. Carries no challenge and no conjunct.\n    #[cfg(feature=\"prover\")] Rejected,\n    /// Host prover only (D38.3): all N = 8 attempts were rejected; nothing is published.\n    #[cfg(feature=\"prover\")] AttemptsExhausted,\n    /// Host prover only: the operating-system entropy source failed.\n    #[cfg(feature=\"prover\")] Entropy }"
+    },
+    {
+      "qualified": "state_only_entropy::StateOnlyAttemptEntropyError",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "span": [
+        71,
+        74
+      ],
+      "file": {
+        "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+        "bytes": 62542
+      },
+      "signature": "pub enum StateOnlyAttemptEntropyError ",
+      "signature_sha256": "43ff7d378f381c23a5edb5d2d0656a6646bb944b2d4d37823b5d13ea33d9aaa4",
+      "body_sha256": "ee46fa52851c10776da106051c1cdc069d9254c68ab51e66651a91cabb14e52b",
+      "text": "pub enum StateOnlyAttemptEntropyError {\n    Os(getrandom::Error),\n    RepeatedZeroBlock,\n}"
+    },
+    {
+      "qualified": "state_only_entropy::From<getrandom::Error>",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "span": [
+        76,
+        80
+      ],
+      "file": {
+        "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+        "bytes": 62542
+      },
+      "signature": "impl From<getrandom::Error> for StateOnlyAttemptEntropyError ",
+      "signature_sha256": "57be4884c16eb7c5221bf4799ba5d195f942f89a25b1af7da2b9b6f41112156f",
+      "body_sha256": "b252c0d75ec86445f97e3e4ffb044bbc100c4c05a29e30b94d50a085f4830e84",
+      "text": "impl From<getrandom::Error> for StateOnlyAttemptEntropyError {\n    fn from(value: getrandom::Error) -> Self {\n        Self::Os(value)\n    }\n}"
+    },
+    {
+      "qualified": "state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "span": [
+        211,
+        238
+      ],
+      "file": {
+        "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+        "bytes": 62542
+      },
+      "signature": "    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> ",
+      "signature_sha256": "0983a01e6950b5e7dea740e14a7facf6435b6d3fba3f78c3200a6f09f5377ac6",
+      "body_sha256": "1cd877319f835ccd3151b2e6a1b8fc1c3ca298629779d2b089e8ba83105be45a",
+      "text": "    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }"
+    },
+    {
+      "qualified": "state_only_entropy::StateOnlyAttemptSecrets::reserve_and_build_pool_v1_pair_forest_mask_material_v1",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "span": [
+        405,
+        456
+      ],
+      "file": {
+        "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+        "bytes": 62542
+      },
+      "signature": "    pub fn reserve_and_build_pool_v1_pair_forest_mask_material_v1(\n        mut self,\n        hash: HashFn,\n        precommit_binding: [u8; 32],\n        context: StateOnlyHidingContext,\n        nonce_store: &mut impl StateOnlyMaskNonceStore,\n    ) -> Result<(ReservedStateOnlyAttemptSecrets, StateOnlyMaskMaterial), StateOnlyMaskBuildError>\n    ",
+      "signature_sha256": "33924ab55c26f98d8f1100e0f732c3a386221df1f72733cbc410b9361853c48e",
+      "body_sha256": "0714392df1aa2fc49950ff0dd11f2e31be20b91fe27c6e4d11d6a913477b98cc",
+      "text": "    pub fn reserve_and_build_pool_v1_pair_forest_mask_material_v1(\n        mut self,\n        hash: HashFn,\n        precommit_binding: [u8; 32],\n        context: StateOnlyHidingContext,\n        nonce_store: &mut impl StateOnlyMaskNonceStore,\n    ) -> Result<(ReservedStateOnlyAttemptSecrets, StateOnlyMaskMaterial), StateOnlyMaskBuildError>\n    {\n        if context.mask_nonce != self.mask_nonce\n            || context.mask_layout_fingerprint\n                != PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1\n            || context.layout_factor_fingerprint\n                != PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1\n        {\n            return Err(StateOnlyMaskBuildError::Layout);\n        }\n        if !nonce_store.reserve(context.statement_digest, context.mask_nonce) {\n            return Err(StateOnlyMaskBuildError::ReusedMaskNonce);\n        }\n        let mut pre_reserved = PreReservedNonce {\n            statement_digest: context.statement_digest,\n            mask_nonce: context.mask_nonce,\n            consumed: false,\n        };\n        let material = build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref(\n            hash,\n            precommit_binding,\n            context,\n            &self.field_mask_entropy,\n            &mut pre_reserved,\n        )?;\n        if !pre_reserved.consumed {\n            return Err(StateOnlyMaskBuildError::ReusedMaskNonce);\n        }\n        let source_mask_seed = Zeroizing::new(hash(&[\n            POOL_V1_SOURCE_SEED_DOMAIN,\n            &precommit_binding,\n            &context.encode(),\n            self.field_mask_entropy.as_ref(),\n        ]));\n        self.field_mask_entropy.zeroize();\n        Ok((\n            ReservedStateOnlyAttemptSecrets {\n                mask_nonce: self.mask_nonce,\n                precommit_binding,\n                reserved_context: context,\n                leaf_salt_seed: self.leaf_salt_seed,\n                source_mask_seed,\n            },\n            material,\n        ))\n    }"
+    },
+    {
+      "qualified": "state_only_entropy::PreReservedNonce::reserve",
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "span": [
+        465,
+        476
+      ],
+      "file": {
+        "sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+        "bytes": 62542
+      },
+      "signature": "impl StateOnlyMaskNonceStore for PreReservedNonce ",
+      "signature_sha256": "3c3c91e7811c5e92826caf413225f7952c60ecf660fa871590eb8a15024a55c6",
+      "body_sha256": "f5be39b38fb79ccba9957f685564ab42cd74cb65f0fda9390359c12cf618db39",
+      "text": "impl StateOnlyMaskNonceStore for PreReservedNonce {\n    fn reserve(&mut self, statement_digest: [u8; 32], mask_nonce: [u8; 32]) -> bool {\n        if self.consumed\n            || statement_digest != self.statement_digest\n            || mask_nonce != self.mask_nonce\n        {\n            return false;\n        }\n        self.consumed = true;\n        true\n    }\n}"
+    }
+  ],
+  "prototype": {
+    "sha256": "36ffbbc0d09a9701df71609ed1d399eda59e99b8769dcb6c53ad2e8db40c95da",
+    "bytes": 4776
+  },
+  "llbc": {
+    "sha256": "878f8e6d29a4643826ca1283aea74eaf4ed7f48148396eb56e77c9b6f3ab03b2",
+    "bytes": 1840237
+  },
+  "embedded_source_matches": true,
+  "emitted": [
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "prove_masked_retrying_with",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 101,
+            "col": 0
+          },
+          "end": {
+            "line": 107,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "71674774e02a4e4415df4f3a40fd84f92bea0c7f943a6323e7f0c00c90220e14",
+      "signature_sha256": "c99177550a4d153b6f194e39a9e9beb662ee61cf293372b8d4f43f51667c48a3",
+      "body_sha256": "eec6f77781ce15bcbbbf50170fd588fda72012259bbd7768a20774a6c21e60fe"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "retry_attempt",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 86,
+            "col": 0
+          },
+          "end": {
+            "line": 100,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "1b69f05dc21c58d3a760aba79e89caacd9376473556ddb718c67be0a2470daf0",
+      "signature_sha256": "e736e3800227b51b482533622595d932cd242bbe8bb91e3b01c047e68ac4838b",
+      "body_sha256": "860d14395e32ee152eee0e998829ec2f7e8efac7f5e10800844706be003b58bb"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 79,
+            "col": 0
+          },
+          "end": {
+            "line": 85,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "332ddc54ce84f55b37a65f4cd6b9c359dee5ac14125f984d8d95dbf4b76bc35e",
+      "signature_sha256": "5f4f3de719588797055e6a06fbf6d07977e7e35b5885daa7f4fc66c0dab7fafe",
+      "body_sha256": "86cdf65e7da6396603c4c55b647eace2620929e37082f1ff2f75ac9ff6fcdc5b"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "result",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Result",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 0
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 4,
+          "beg": {
+            "line": 557,
+            "col": 0
+          },
+          "end": {
+            "line": 557,
+            "col": 21
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "90d2206bc787945d03a098b6178fbcfc5a28598ffe1a94db0fba074e9d9b295c",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Tape",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 1
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 15,
+            "col": 0
+          },
+          "end": {
+            "line": 15,
+            "col": 93
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "76cf137f461d31321e67d935ac7fd3e9dc9f94678db55c8988ba078dd94ad192",
+      "signature_sha256": "f3c0a5e5f8bbc2522bc55f40c02666c06ac2abf6c95cbc28b1452d3dc3d4c676",
+      "body_sha256": "2a6c2e9923e9671a4546d3323b7db44bc495e5dcceed5ec37d655c5bd4fd08aa"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 2
+          }
+        },
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 344,
+            "col": 4
+          },
+          "end": {
+            "line": 344,
+            "col": 25
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "86c030e2e33c8578ed4b48f0f40eb7f832a9a47bc7078e8fc465d701865f2711",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 3
+          }
+        },
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 274,
+            "col": 4
+          },
+          "end": {
+            "line": 274,
+            "col": 25
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "37378b26e134506c72e046253f6e25e28ecb0797f6713612122380d057cdd836",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ATTEMPT_CAP",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 77,
+            "col": 0
+          },
+          "end": {
+            "line": 77,
+            "col": 30
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "60ec11079f5d1e6db5a731fcab9f9e3eb3e1053d3caabaace93b1fdadd9b0e88",
+      "signature_sha256": "46e42d443a9d1e0fc9fac7918d1e20a9839e9f278d4cde4b58e6ce75902c21bf",
+      "body_sha256": "bc9add150fe68551ec5dc22c3293a14fc0c25ff59ac2343c07515432048a8494"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 478
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "generate_with",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 36,
+            "col": 4
+          },
+          "end": {
+            "line": 66,
+            "col": 5
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "537d9f0a4466aa3d0f9fa584b5d5a900a13d5b65d8149afd9eeb08e51a80386d",
+      "signature_sha256": "b0212661ec1e5b8e533554dc29bef6f4e3c03d25c24d560f967d40a73c2f5d63",
+      "body_sha256": "3f5088cff4b4fa09ac2b144eb262a569460e8ddd54e7eeead928b5bdef845a6a"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "result",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [
+                  {
+                    "index": 0,
+                    "name": "T"
+                  },
+                  {
+                    "index": 1,
+                    "name": "E"
+                  }
+                ],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 851
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "map_err",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 4,
+          "beg": {
+            "line": 962,
+            "col": 4
+          },
+          "end": {
+            "line": 964,
+            "col": 53
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "9855bb2e9aea700d66ce730cf8017c5e8d6ea40a2937565a61960919b551aa76",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "<tuple_3>",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 5
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 1,
+            "col": 0
+          },
+          "end": {
+            "line": 1,
+            "col": 0
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "3ffb7eb92ecfbe1607e27f331e03f2747bd1a162aefba32531774cc4b79c5775",
+      "body_sha256": "e987c848f1c8d4af10924108c2bad67d4c05cf529183a113413b2364fc226e17"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "StateOnlyAttemptSecrets",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 6
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 6,
+            "col": 0
+          },
+          "end": {
+            "line": 10,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "30d63c74a088bee508bee753ef3e942b97ee9c4ccf1919f18414f3dc2222addc",
+      "signature_sha256": "d8ac4ba4b7868e937e7f2133d34a96075d0e90e2d48391c213eae6ac174ea218",
+      "body_sha256": "f89498432253860ea09dfb4944d66584f7146ad77acab2ca4b19ea7f4a6b44eb"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "<tuple_2>",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 7
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 1,
+            "col": 0
+          },
+          "end": {
+            "line": 1,
+            "col": 0
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "f0cd0926d572d8053771cc9b1c4ab7405e72a1d0542e18f824c19b58ea03059a",
+      "body_sha256": "107d4d708b175cd16b768202dba6110a13bd2c3ce9696adc5946553a808e49fe"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Vec",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 8
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 438,
+            "col": 0
+          },
+          "end": {
+            "line": 438,
+            "col": 96
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "2bff82e50ba667754f526b90e4a7c38636ee96e7718e28e56be5fae18379c9db",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "RetriedProof",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 9
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 76,
+            "col": 0
+          },
+          "end": {
+            "line": 76,
+            "col": 80
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "b3ff025ff1f673196b8d76152da9412b41f2967b8011f55663a76dad57a9baa0",
+      "signature_sha256": "b07ba1777571549c4b4edbf89a739a673355a00d98dad53fb86ce753130ab808",
+      "body_sha256": "20e8ca60cc931774bcc9d8b4e770e362e3a8151dc201b4516701280136262d9d"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "default",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 11
+          }
+        },
+        {
+          "Ident": [
+            "default",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 12,
+          "beg": {
+            "line": 157,
+            "col": 12
+          },
+          "end": {
+            "line": 157,
+            "col": 30
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "89daf7f01ad42d6290f80c043ab4e965f1ef3a795c9cbbb68f2c25815bfa5a98",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 13
+          }
+        },
+        {
+          "Ident": [
+            "call_once",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 84,
+            "col": 39
+          },
+          "end": {
+            "line": 84,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "5c0d1a5d19b13136ce73b920a8c26f8c49c84a56662d0aa61553523042469ea6",
+      "signature_sha256": "bdb0789e9d5b81ca4a1d3736fb96b1807626c8027c8f81123c1a3cece4d11278",
+      "body_sha256": "11bec54f948a2654fa0fbc76f5a728e9fcc8d72e6c440b81c4e6d0ddc3aa26ed"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "entropy_nonzero32",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 29,
+            "col": 0
+          },
+          "end": {
+            "line": 33,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "2acb078997fd88d55a9a95e298dbf3bc0c86c9b1c0b68236a64149c1785ad07b",
+      "signature_sha256": "31bc2f9c2b0efe515eb07fec5f4c5bb6765102debdacc56518c49afbb099e7a1",
+      "body_sha256": "9564af2c0e2c9d58e62f2f8b193ab779ed4e562f384419190d97e1c956a0c225"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [
+                  {
+                    "index": 0,
+                    "name": "Z"
+                  }
+                ],
+                "const_generics": [],
+                "trait_clauses": [
+                  {
+                    "clause_id": 0,
+                    "span": {
+                      "data": {
+                        "file_id": 9,
+                        "beg": {
+                          "line": 609,
+                          "col": 7
+                        },
+                        "end": {
+                          "line": 609,
+                          "col": 14
+                        }
+                      },
+                      "generated_from_span": null
+                    },
+                    "origin": "WhereClauseOnImpl",
+                    "trait_": {
+                      "regions": [],
+                      "skip_binder": {
+                        "id": 3,
+                        "generics": {
+                          "regions": [],
+                          "types": [
+                            {
+                              "Deduplicated": 440
+                            }
+                          ],
+                          "const_generics": [],
+                          "trait_refs": []
+                        }
+                      }
+                    }
+                  }
+                ],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "HashConsedValue": [
+                  2938,
+                  {
+                    "Adt": {
+                      "id": {
+                        "Adt": 9
+                      },
+                      "generics": {
+                        "regions": [],
+                        "types": [
+                          {
+                            "Deduplicated": 628
+                          }
+                        ],
+                        "const_generics": [],
+                        "trait_refs": []
+                      }
+                    }
+                  }
+                ]
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "new",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 614,
+            "col": 4
+          },
+          "end": {
+            "line": 614,
+            "col": 32
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "14a0a20a740d4083f6af6d8283a215b35496b67aab5e1a7947e27d85d3cd615d",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 20
+          }
+        },
+        {
+          "Ident": [
+            "deref_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 659,
+            "col": 4
+          },
+          "end": {
+            "line": 659,
+            "col": 37
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "f259a2666d66b9e7579bb0897b3d691710a51bf288e35bfdc08b4584da2b0d0e",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 22
+          }
+        },
+        {
+          "Ident": [
+            "from",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 71,
+            "col": 4
+          },
+          "end": {
+            "line": 71,
+            "col": 64
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "a67cd0a7c62e0e9d273b3b2a6524df824a87e2302d1bedeafe75603433c4fcc4",
+      "signature_sha256": "4e1fa7ad8929631e6af8142c7874fc0a209fa6974068b656a945f6b4229e604d",
+      "body_sha256": "74301db2e170855e6150b62ec9a8f706e2731f397348c2e661e09f50ec4fd55c"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 23
+          }
+        },
+        {
+          "Ident": [
+            "deref",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 649,
+            "col": 4
+          },
+          "end": {
+            "line": 649,
+            "col": 25
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "8757ffdaf965978a5ecc9596ddd6f3a3ca73a2ad491ee614c260dec1c2356d78",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "array",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 24
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 19,
+          "beg": {
+            "line": 390,
+            "col": 4
+          },
+          "end": {
+            "line": 390,
+            "col": 46
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "3e59caaf82c37592cb6008eecedeb6f6466c03c3d2f3e33e79863ae2ef63e931",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [
+                  {
+                    "index": 0,
+                    "name": "T"
+                  }
+                ],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 1725
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "copy_from_slice",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 22,
+          "beg": {
+            "line": 4321,
+            "col": 4
+          },
+          "end": {
+            "line": 4323,
+            "col": 16
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "3548806b0b53f2509e3e5e3aa7f7e35445928f47516daa4594168f642a634fc7",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 14
+          }
+        },
+        {
+          "Ident": [
+            "fill",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 17,
+            "col": 4
+          },
+          "end": {
+            "line": 23,
+            "col": 5
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "d2566a84ff43effed355f15a15c3ee1efa7fa242cb1031d44de8b2fd1ada8177",
+      "signature_sha256": "d177e1328dc872ce9059c0a534b76709a47d6582410839d12046d69374468c14",
+      "body_sha256": "e7c604598f4999a59934978b0934112273129891074a16213ff257c302414ec9"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "closure",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 15
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 84,
+            "col": 39
+          },
+          "end": {
+            "line": 84,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "5c0d1a5d19b13136ce73b920a8c26f8c49c84a56662d0aa61553523042469ea6",
+      "signature_sha256": "0bd88cabdb5011422f16fca3f420b86bd3382cd700d8e166d83ceb9e3f746c80",
+      "body_sha256": "79ae0edada9f72ee6c0bd4b96a797acb71559a356231231322312b665eb8af96"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "impls",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 16
+          }
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 16,
+          "beg": {
+            "line": 698,
+            "col": 20
+          },
+          "end": {
+            "line": 698,
+            "col": 43
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "e0c7fb0c0049a0e20ae328aaf829fedd7c9c4c23b951414446cbb9ddab7c273e",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ENTROPY_RETRY_LIMIT",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 3,
+            "col": 0
+          },
+          "end": {
+            "line": 3,
+            "col": 38
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "8a67a22b38388fbcbdf1d76fb5ff2fb7fb3c0ecaffcd88bd84d28eae4d6f4c29",
+      "signature_sha256": "46e42d443a9d1e0fc9fac7918d1e20a9839e9f278d4cde4b58e6ce75902c21bf",
+      "body_sha256": "68bdd3f4e66d61b2f16dc155202f6ed49c36b80d6ec7f12be621fba049bde6cb"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Zeroizing",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 21
+          }
+        },
+        {
+          "Ident": [
+            "drop_glue",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 599,
+            "col": 0
+          },
+          "end": {
+            "line": 599,
+            "col": 41
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "885517b0452d3ada9df2f280dbc44fe50db5e9c81dae7cb0cc50cf497fb6da55",
+      "body_sha256": "a43939a94173090879d1008908af35f80638870c6dd1bbe32c548b55ddeed69c"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 25
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 18,
+            "col": 4
+          },
+          "end": {
+            "line": 18,
+            "col": 43
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "7b91392f90f1c3a79da8c9d93b832157f13aac332f4bb23f2ce02d4be0160c41",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "get",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 506,
+            "col": 4
+          },
+          "end": {
+            "line": 506,
+            "col": 45
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "8897e128d11e784c44e60115dcd91ad4bd6c2438cc098028803c77aff24fdfb7",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "get_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 511,
+            "col": 4
+          },
+          "end": {
+            "line": 511,
+            "col": 57
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9478f9e35f55baa3b5926bdeecebb11d79ebbf6a639e4673c12d6ca33a6cb1e",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 516,
+            "col": 4
+          },
+          "end": {
+            "line": 516,
+            "col": 66
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "43a07c5f8c10c2d6bd5373b3a6fb7e6fd413a35dcb1d795e08cce25631caaf2b",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 522,
+            "col": 4
+          },
+          "end": {
+            "line": 522,
+            "col": 66
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "913b8ca35e8bd14fe6ba4666df111061bcdcafe50e844452a73561a899d231cc",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 528,
+            "col": 4
+          },
+          "end": {
+            "line": 528,
+            "col": 39
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "3afc11a21cd4b12a0a8dd72a107100bb88f4483c423c25d4d63f3f1d56589b19",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        },
+        {
+          "Ident": [
+            "index_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 533,
+            "col": 4
+          },
+          "end": {
+            "line": 533,
+            "col": 51
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "a6330c723570a849a0f216a59bb1f891f0f055836331e606df538ac2bd963c8f",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "get",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 545,
+            "col": 4
+          },
+          "end": {
+            "line": 545,
+            "col": 45
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "04d68151cb7718c70ff945a81ad3bf6611dc088d38d8f11d1d80fdce4eb00f1f",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "get_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 550,
+            "col": 4
+          },
+          "end": {
+            "line": 550,
+            "col": 57
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "0ab6833e4540fc8a0cda22b706a956fea67b9986e8c821cd8899e4e032ad7ef2",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 555,
+            "col": 4
+          },
+          "end": {
+            "line": 555,
+            "col": 66
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c605ae79f59ee424fef0500cf473f94095dfe6834a9103be0ae9b6c4527d7c44",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 561,
+            "col": 4
+          },
+          "end": {
+            "line": 561,
+            "col": 66
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "15684d5824a970212056aa386e049ee2c0b72c3c48c2c0a3fd71923647c56daf",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 567,
+            "col": 4
+          },
+          "end": {
+            "line": 567,
+            "col": 39
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "ce0f36f506b2bdb9ed1dac019d42ae4c08e33c775fd5c677053e6c2ae49b039a",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        },
+        {
+          "Ident": [
+            "index_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 579,
+            "col": 4
+          },
+          "end": {
+            "line": 579,
+            "col": 51
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "fae925bc1b53c077eba7804dc3e876efaaaf160c36c12ffd1f11235829958a8d",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Ty": {
+              "params": {
+                "regions": [],
+                "types": [
+                  {
+                    "index": 0,
+                    "name": "T"
+                  },
+                  {
+                    "index": 1,
+                    "name": "A"
+                  }
+                ],
+                "const_generics": [],
+                "trait_clauses": [],
+                "regions_outlive": [],
+                "types_outlive": [],
+                "trait_type_constraints": []
+              },
+              "skip_binder": {
+                "Deduplicated": 2996
+              },
+              "kind": "InherentImplBlock"
+            }
+          }
+        },
+        {
+          "Ident": [
+            "len",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 3060,
+            "col": 4
+          },
+          "end": {
+            "line": 3060,
+            "col": 36
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "491e1d384cfe92a715031599ff8e93e7f9a7f46e3ea4fddfa1f013f9cbcc03f6",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 32
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 3870,
+            "col": 4
+          },
+          "end": {
+            "line": 3870,
+            "col": 46
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "f1414c5af82368f6d1bb55aa437b8aaeefd31ab652cb648b6057b74ea3fa249b",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "impls",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 28
+          }
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 16,
+          "beg": {
+            "line": 698,
+            "col": 20
+          },
+          "end": {
+            "line": 698,
+            "col": 43
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "7f99face3793ab7631375081ef1148e672b839027b433f1261a651858ca8862e",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "niche_types",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 29
+          }
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 17,
+          "beg": {
+            "line": 17,
+            "col": 17
+          },
+          "end": {
+            "line": 17,
+            "col": 22
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "40d07ac2c1fa056756ca1d06bedb8e93c9800e2e9b28635bfc226209350b3c81",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 34
+          }
+        },
+        {
+          "Ident": [
+            "drop",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 701,
+            "col": 4
+          },
+          "end": {
+            "line": 701,
+            "col": 22
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "bf2d1e52c8524b9308c323cb56f59c50576345c6867cd530734ef49fe0012ba0",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "get",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 218,
+            "col": 4
+          },
+          "end": {
+            "line": 218,
+            "col": 43
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "7e0dbb5978362624692d38b5a3513b09f9676c22b9f296ede2d9838efa770d08",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "get_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 228,
+            "col": 4
+          },
+          "end": {
+            "line": 228,
+            "col": 55
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "5ebd681586eb3198bd38df6ec1c3c1e15c974600a1605748dceee23620b6a5d5",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 239,
+            "col": 4
+          },
+          "end": {
+            "line": 239,
+            "col": 64
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "5bc5c328d9da082ef9f1fee2ee3a53183ba328ee01dc5c2093e54e76eef291cb",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "get_unchecked_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 259,
+            "col": 4
+          },
+          "end": {
+            "line": 259,
+            "col": 64
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "1be3b7fea3541d0bb5552afea37f597b8ffe05e6340b5394bd5ad12a1e0e2dfd",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 270,
+            "col": 4
+          },
+          "end": {
+            "line": 270,
+            "col": 37
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eb5367f29b00b5a511d4f5f24ebd8382b2556d481e7c2ca30bad624e808dfd77",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        },
+        {
+          "Ident": [
+            "index_mut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 276,
+            "col": 4
+          },
+          "end": {
+            "line": 276,
+            "col": 49
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "cd7036c5c8968165a67b0bae2bfac2814af070aee0d99b458a8edecf0e41522f",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "fun_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "drop",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Drop",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "drop",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 27,
+          "beg": {
+            "line": 243,
+            "col": 4
+          },
+          "end": {
+            "line": 243,
+            "col": 22
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "7c9b3082540c0949f4a9dc1cb767160b64957380238b930f2406fbef06b66062",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "StateOnlyAttemptSecrets",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 6,
+            "col": 0
+          },
+          "end": {
+            "line": 10,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "30d63c74a088bee508bee753ef3e942b97ee9c4ccf1919f18414f3dc2222addc",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "4fe09da51a18451ce6b42360d4cb87539da4f45c65972539c32338f6cfddbd1b"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "result",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Result",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 4,
+          "beg": {
+            "line": 557,
+            "col": 0
+          },
+          "end": {
+            "line": 557,
+            "col": 21
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "49627a48728c5182342f0ab8f7a16661212826444f64654e2e30e10cc066c9ec",
+      "body_sha256": "cb9fc00a83219fccf299b70032c94ee672fd037efac214406bde1b6d970454a7"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Vec",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 438,
+            "col": 0
+          },
+          "end": {
+            "line": 438,
+            "col": 96
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9a6e513eb0948550d668cef5584e587aaa3f1b7ea8cee41ae7f283f98667e50",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Global",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 7,
+          "beg": {
+            "line": 58,
+            "col": 0
+          },
+          "end": {
+            "line": 58,
+            "col": 17
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "91d686790542438e2dcae97dc43541eb083bec074a6035add3fbb9832159e50c"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Error",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 74,
+            "col": 0
+          },
+          "end": {
+            "line": 75,
+            "col": 40
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "2ae32ba3f3cae4828451987923b05915a008087cc89c763669a0c211d00aecab",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "6385c228a4a613aa61fcfa6f44e424d07c80707e020f993630b53837bb86e261"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Tape",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 15,
+            "col": 0
+          },
+          "end": {
+            "line": 15,
+            "col": 93
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "76cf137f461d31321e67d935ac7fd3e9dc9f94678db55c8988ba078dd94ad192",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "38c111d7a0319eb22d3ac35e17f171db6b11aa8b22d633c92259e23b0c2aebb3"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "RetriedProof",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 76,
+            "col": 0
+          },
+          "end": {
+            "line": 76,
+            "col": 80
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "b3ff025ff1f673196b8d76152da9412b41f2967b8011f55663a76dad57a9baa0",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "c98cdc7d13c6600cc8e4270831b1108d87e3570efab3f8c7c149f77e488552b6"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Zeroizing",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 599,
+            "col": 0
+          },
+          "end": {
+            "line": 599,
+            "col": 41
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "d4169c0eb1c2acf28f0ad6623cc3615571d1af5a583b5ea33fcd228b74fd806a",
+      "body_sha256": "a730fbbba04e21b4d0617199373551b3b34ef91178ca4bd4727ff57e2c2772c4"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "getrandom",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "error",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Error",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 10,
+          "beg": {
+            "line": 36,
+            "col": 0
+          },
+          "end": {
+            "line": 36,
+            "col": 16
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "94b14064cda643eb21df9050d5dd33a616e30cbdd7148fc1285e21a114c75988"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "nonzero",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "NonZero",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 13,
+          "beg": {
+            "line": 128,
+            "col": 0
+          },
+          "end": {
+            "line": 128,
+            "col": 40
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "3907e3d6b51159ee672e122e3bbeef67bf9fe014e56d69986e90414bd96f6d1e",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "StateOnlyAttemptEntropyError",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 5,
+            "col": 0
+          },
+          "end": {
+            "line": 5,
+            "col": 81
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "be2f9c729095b1d9ea6885529cc414580c9be8baace08bbca08bb071a1debf9e",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "8e4d019e104ac0e72b77293f89d803bc8a1e0d6ebdf5a1fc09464d61fa43b879"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "closure",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 84,
+            "col": 39
+          },
+          "end": {
+            "line": 84,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "5c0d1a5d19b13136ce73b920a8c26f8c49c84a56662d0aa61553523042469ea6",
+      "signature_sha256": "c7c5d04c045178db936fc828e05e6c8a8e3bf20387886949c2a6cb30ee78dd0e",
+      "body_sha256": "91d686790542438e2dcae97dc43541eb083bec074a6035add3fbb9832159e50c"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "niche_types",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "NonZeroI32Inner",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 17,
+          "beg": {
+            "line": 20,
+            "col": 8
+          },
+          "end": {
+            "line": 20,
+            "col": 55
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "range",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "RangeTo",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 18,
+          "beg": {
+            "line": 281,
+            "col": 0
+          },
+          "end": {
+            "line": 281,
+            "col": 23
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "4d455c4743da2cd42488d785b95fe0f37c2ceb264f96f94cc00d97712f0dccb8",
+      "body_sha256": "69447f37f4692cc4b5ca7e958ec1576be599756e18fb89e60ee843270e22f7a8"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "range",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "RangeFrom",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 18,
+          "beg": {
+            "line": 197,
+            "col": 0
+          },
+          "end": {
+            "line": 197,
+            "col": 25
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "4d455c4743da2cd42488d785b95fe0f37c2ceb264f96f94cc00d97712f0dccb8",
+      "body_sha256": "86c4f9a86980bda323973b12174041cf0399d53e76e9c9e81013fc74cd3e8f0a"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "option",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Option",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 25,
+          "beg": {
+            "line": 597,
+            "col": 0
+          },
+          "end": {
+            "line": 597,
+            "col": 18
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9a6e513eb0948550d668cef5584e587aaa3f1b7ea8cee41ae7f283f98667e50",
+      "body_sha256": "8c7bb5c821aabaf8239d901d7c8ab6f12e151d30ffca96610964be6d2c7f6351"
+    },
+    {
+      "group": "type_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "pin",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Pin",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 28,
+          "beg": {
+            "line": 1092,
+            "col": 0
+          },
+          "end": {
+            "line": 1092,
+            "col": 19
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "78958946bf548d8e88235aa0c713e01dd4e15b05c87653eb7df2988a3a0ca32a",
+      "body_sha256": "b7f7e6dd45056dade06dc7d99eaaef5fbb386c3dd8cbd7f4a3669a1ef87545d0"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "function",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "FnMut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 1,
+          "beg": {
+            "line": 163,
+            "col": 0
+          },
+          "end": {
+            "line": 163,
+            "col": 48
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "bd2966b46b7136d69375e2dc0df817268b6d38ae06c8e7853369371823ac7870",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "function",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "FnOnce",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 1,
+          "beg": {
+            "line": 242,
+            "col": 0
+          },
+          "end": {
+            "line": 242,
+            "col": 35
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "a20c67a0c1e4ca9a70f04b581ec5043fc706c9d713cd722ec11274eedccfd0a4",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "marker",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Destruct",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 8,
+          "beg": {
+            "line": 1062,
+            "col": 0
+          },
+          "end": {
+            "line": 1062,
+            "col": 38
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Zeroize",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 245,
+            "col": 0
+          },
+          "end": {
+            "line": 245,
+            "col": 17
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "DefaultIsZeroes",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 255,
+            "col": 0
+          },
+          "end": {
+            "line": 255,
+            "col": 49
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "marker",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Copy",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 8,
+          "beg": {
+            "line": 454,
+            "col": 0
+          },
+          "end": {
+            "line": 454,
+            "col": 21
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "default",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Default",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 12,
+          "beg": {
+            "line": 107,
+            "col": 0
+          },
+          "end": {
+            "line": 107,
+            "col": 30
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "nonzero",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ZeroablePrimitive",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 13,
+          "beg": {
+            "line": 34,
+            "col": 0
+          },
+          "end": {
+            "line": 34,
+            "col": 66
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "fa781f7c65b9ffd65619578889d80bdb65b8a0ba9218f6dbba0561f313f40e99",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Draw64",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 11,
+            "col": 0
+          },
+          "end": {
+            "line": 13,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "a8eb3df56d1f7a96d1ed7c980dcf92fbe834416e173862917c368b503bafd567",
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Clone",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 16,
+          "beg": {
+            "line": 194,
+            "col": 0
+          },
+          "end": {
+            "line": 194,
+            "col": 28
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "nonzero",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "private",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Sealed",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 13,
+          "beg": {
+            "line": 47,
+            "col": 12
+          },
+          "end": {
+            "line": 47,
+            "col": 28
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Index",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 20,
+          "beg": {
+            "line": 59,
+            "col": 0
+          },
+          "end": {
+            "line": 59,
+            "col": 34
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "fb4fcf230b9e02940173d0562aab2f8b9e74fc8d5d6a241e55c5b4a011903088",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "SliceIndex",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 163,
+            "col": 0
+          },
+          "end": {
+            "line": 163,
+            "col": 73
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "69d023e74eb36b897b8f9928510c7d275e9f4ffcf02f5f84c24e1cde10f0b9b6",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "deref",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "DerefMut",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 23,
+          "beg": {
+            "line": 270,
+            "col": 0
+          },
+          "end": {
+            "line": 270,
+            "col": 54
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "604669a2d7cc9d9a6d6ab6068806435fd4d402ddeba74e3124279a91b88f70d1",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "deref",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Deref",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 23,
+          "beg": {
+            "line": 139,
+            "col": 0
+          },
+          "end": {
+            "line": 139,
+            "col": 35
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "5325f2388fbbdd8a2b18f9d39fad46f73203e30f90f48d7d2ae27c3137233696",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "convert",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "From",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 24,
+          "beg": {
+            "line": 587,
+            "col": 0
+          },
+          "end": {
+            "line": 587,
+            "col": 30
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "4586464795d9c6655ae1edc3431d82cd654a0b726953d832674e24f135c10604",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "private_slice_index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Sealed",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 109,
+            "col": 4
+          },
+          "end": {
+            "line": 109,
+            "col": 20
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ops",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "drop",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Drop",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 27,
+          "beg": {
+            "line": 209,
+            "col": 0
+          },
+          "end": {
+            "line": 209,
+            "col": 20
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "eaedc332e4fcd0875799ba6330bc87da9911b437eaba8b5563fbecdd7f3dc933",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "result",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Result",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 0
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 4,
+          "beg": {
+            "line": 557,
+            "col": 0
+          },
+          "end": {
+            "line": 557,
+            "col": 21
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "49627a48728c5182342f0ab8f7a16661212826444f64654e2e30e10cc066c9ec",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Tape",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 1
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 15,
+            "col": 0
+          },
+          "end": {
+            "line": 15,
+            "col": 93
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "76cf137f461d31321e67d935ac7fd3e9dc9f94678db55c8988ba078dd94ad192",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 2
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 340,
+            "col": 0
+          },
+          "end": {
+            "line": 342,
+            "col": 15
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "30ffd9087ad400091485fe91c2ac88a6c3c3fafbdca369cfadf63d26fe69adc1",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 3
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 270,
+            "col": 0
+          },
+          "end": {
+            "line": 272,
+            "col": 23
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "b7b7ea94617099ec9f7216c27dd1b0a402f3312c3d23baea1da111d2fb354bf4",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 4
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 281,
+            "col": 10
+          },
+          "end": {
+            "line": 281,
+            "col": 40
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "<tuple_3>",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 5
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 1,
+            "col": 0
+          },
+          "end": {
+            "line": 1,
+            "col": 0
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "614a6b119104ec6eabc3d5e75d1f7001946180dccd07692a3670c189f094a470",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "StateOnlyAttemptSecrets",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 6
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 6,
+            "col": 0
+          },
+          "end": {
+            "line": 10,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "30d63c74a088bee508bee753ef3e942b97ee9c4ccf1919f18414f3dc2222addc",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "<tuple_2>",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 7
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 1,
+            "col": 0
+          },
+          "end": {
+            "line": 1,
+            "col": 0
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "62bc076afd3b76806b272522808883fdc3a2744edf7920a328d28124a290ba51",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Vec",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 8
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 438,
+            "col": 0
+          },
+          "end": {
+            "line": 438,
+            "col": 96
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "000965e733fdd457bdacf11c86bd2207a480dadfa16c87f9914be6442d5ad9d4",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "RetriedProof",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 9
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 76,
+            "col": 0
+          },
+          "end": {
+            "line": 76,
+            "col": 80
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "b3ff025ff1f673196b8d76152da9412b41f2967b8011f55663a76dad57a9baa0",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "marker",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 10
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 8,
+          "beg": {
+            "line": 57,
+            "col": 25
+          },
+          "end": {
+            "line": 57,
+            "col": 62
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "default",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 11
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 12,
+          "beg": {
+            "line": 154,
+            "col": 8
+          },
+          "end": {
+            "line": 154,
+            "col": 33
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "nonzero",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 12
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 13,
+          "beg": {
+            "line": 63,
+            "col": 12
+          },
+          "end": {
+            "line": 63,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 13
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 84,
+            "col": 39
+          },
+          "end": {
+            "line": 84,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "5c0d1a5d19b13136ce73b920a8c26f8c49c84a56662d0aa61553523042469ea6",
+      "signature_sha256": "558798456ec1208bb5d6ad2133e4c3cb07f69d68c79f7ba8d04b3b662d62a4b3",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 14
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 16,
+            "col": 0
+          },
+          "end": {
+            "line": 24,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "337e6634664b8005afc826d4beeb6e8c0ed918751d1ff2d1f95a8c0bf277f834",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "selected_callback",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "closure",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 15
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 84,
+            "col": 39
+          },
+          "end": {
+            "line": 84,
+            "col": 56
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "5c0d1a5d19b13136ce73b920a8c26f8c49c84a56662d0aa61553523042469ea6",
+      "signature_sha256": "558798456ec1208bb5d6ad2133e4c3cb07f69d68c79f7ba8d04b3b662d62a4b3",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "impls",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 16
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 16,
+          "beg": {
+            "line": 696,
+            "col": 16
+          },
+          "end": {
+            "line": 696,
+            "col": 39
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "marker",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 17
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 8,
+          "beg": {
+            "line": 57,
+            "col": 25
+          },
+          "end": {
+            "line": 57,
+            "col": 62
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "nonzero",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 18
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 13,
+          "beg": {
+            "line": 56,
+            "col": 12
+          },
+          "end": {
+            "line": 56,
+            "col": 47
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "niche_types",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 19
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 17,
+          "beg": {
+            "line": 17,
+            "col": 24
+          },
+          "end": {
+            "line": 17,
+            "col": 28
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 20
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 654,
+            "col": 0
+          },
+          "end": {
+            "line": 656,
+            "col": 24
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "3bc417b43bf5f50f8709a0cf2e816e16a5361362e7201d77fe0cc29cb7343249",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "Zeroizing",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 21
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 599,
+            "col": 0
+          },
+          "end": {
+            "line": 599,
+            "col": 41
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Transparent",
+      "source_sha256": null,
+      "signature_sha256": "d2dd1a87700e0870160c2daa11f8ce84ac65ff1a755a168649535a5626d8cd15",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 22
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 70,
+            "col": 0
+          },
+          "end": {
+            "line": 72,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "07b6c24dc9764e361ac8a0c77d0b4542c07f36354ba703c6a78584d01eedfa54",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 23
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 642,
+            "col": 0
+          },
+          "end": {
+            "line": 644,
+            "col": 24
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "e3a40b87dd9813bffeb7d5af42d4cc88f1db7cddd0dfc26f42c043be7fd95e8b",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "array",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 24
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 19,
+          "beg": {
+            "line": 383,
+            "col": 0
+          },
+          "end": {
+            "line": 385,
+            "col": 26
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "31795c993a4db15dfaf851fb60a2d5282b15272b4ffbbc9369c62bdc904e7845",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 25
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 11,
+            "col": 0
+          },
+          "end": {
+            "line": 13,
+            "col": 31
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c0f4f6f77889eb019852c8c33e14052789e7c1bbedda8cfbf38af7ad08a5e7ee",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 26
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 502,
+            "col": 0
+          },
+          "end": {
+            "line": 502,
+            "col": 60
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9a6e513eb0948550d668cef5584e587aaa3f1b7ea8cee41ae7f283f98667e50",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 27
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 541,
+            "col": 0
+          },
+          "end": {
+            "line": 541,
+            "col": 62
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9a6e513eb0948550d668cef5584e587aaa3f1b7ea8cee41ae7f283f98667e50",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "clone",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "impls",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 28
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 16,
+          "beg": {
+            "line": 696,
+            "col": 16
+          },
+          "end": {
+            "line": 696,
+            "col": 39
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "num",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "niche_types",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 29
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 17,
+          "beg": {
+            "line": 17,
+            "col": 17
+          },
+          "end": {
+            "line": 17,
+            "col": 22
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "private_slice_index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 30
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 116,
+            "col": 4
+          },
+          "end": {
+            "line": 116,
+            "col": 39
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "private_slice_index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 31
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 118,
+            "col": 4
+          },
+          "end": {
+            "line": 118,
+            "col": 41
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "alloc",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "vec",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 32
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 5,
+          "beg": {
+            "line": 3866,
+            "col": 0
+          },
+          "end": {
+            "line": 3866,
+            "col": 78
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c748166b9aac9d01f020de69054e5a0f5d23defd838e6c0ce9170bea95192666",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 33
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 214,
+            "col": 0
+          },
+          "end": {
+            "line": 214,
+            "col": 46
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "c9a6e513eb0948550d668cef5584e587aaa3f1b7ea8cee41ae7f283f98667e50",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "zeroize",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 34
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 697,
+            "col": 0
+          },
+          "end": {
+            "line": 699,
+            "col": 24
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "6ee120818c44f8d6a40bf2cd3750b3c24051da807dc7ed3aaebe45c22b8a9c40",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "trait_impls",
+      "qualified": [
+        {
+          "Ident": [
+            "core",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "slice",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "index",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "private_slice_index",
+            0
+          ]
+        },
+        {
+          "Impl": {
+            "Trait": 35
+          }
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 21,
+          "beg": {
+            "line": 112,
+            "col": 4
+          },
+          "end": {
+            "line": 112,
+            "col": 25
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": false,
+      "opacity": "Foreign",
+      "source_sha256": null,
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "global_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ATTEMPT_CAP",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 77,
+            "col": 0
+          },
+          "end": {
+            "line": 77,
+            "col": 30
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "60ec11079f5d1e6db5a731fcab9f9e3eb3e1053d3caabaace93b1fdadd9b0e88",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "group": "global_decls",
+      "qualified": [
+        {
+          "Ident": [
+            "prover_rw_rng_caller",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "ENTROPY_RETRY_LIMIT",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 0,
+          "beg": {
+            "line": 3,
+            "col": 0
+          },
+          "end": {
+            "line": 3,
+            "col": 38
+          }
+        },
+        "generated_from_span": null
+      },
+      "local": true,
+      "opacity": "Transparent",
+      "source_sha256": "8a67a22b38388fbcbdf1d76fb5ff2fb7fb3c0ecaffcd88bd84d28eae4d6f4c29",
+      "signature_sha256": "770978b9e437f7043001fcf939b9f89adeea09bfeebc4407443a2dcce092313f",
+      "body_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    }
+  ],
+  "substitutions": [
+    "Prior cap16 owned prototype u8 error positions become actual getrandom::Error dependency 0.3.4; Os conversion calls actual source-shaped From; byte arrays unchanged. No checked universal cap16 carrier transport is claimed.",
+    "Native selected closure expression proof_account(k) then generate_for_mask_nonce(...).map_err(|_|Error::Entropy) becomes split locals; owned provider and returned FnMut policy state outside Result.",
+    "Native public/compiled/hash parameters and actual prove_masked_attempt are cut at Body interface; generic L store and B mutable body state returned outside Result; no equation associating Body with native producer is assumed.",
+    "Native MaskedFixtureAudit payload becomes u64 placeholder; no native payload relation is asserted. Proof bytes remain Vec<u8>. Error variants copied in full for prover/r1p-check configuration.",
+    "Variant!=S2 guard becomes !is_s2; actual selected callback always selects S2; native Variant-to-bool projection is not a compiled whole-native refinement.",
+    "Actual retry cap8, callback failure, success count k+1, only Rejected recursion, and fatal branches copied; recursive ownership moves preserve returned provider/policy/store/body.",
+    "Native Zeroizing new/deref and existing cap16 value installation preserved; physical Drop/zeroization remains unproved.",
+    "Borrowed FnMut body return emission is ill-typed under pinned FnMut.call_mut pair signature. Owned L->(L,Result) cut is explicit replacement, not a proof of native body/reservation.",
+    "Native Error extraction retained transparent getrandom Error=core NonZero<I32,NonZeroI32Inner>; core types are uninstalled NativeTypes parameters due unsupported TPattern range validity. No u8 tag or native layout association.",
+    "Reservation/layout/atomic durable filesystem/pre-reserved acknowledgment source only pinned and printed; not extracted into proved Body. Mock ledger tests do not establish native ledger closure."
+  ],
+  "native_changes": false
+}

@@ -1,0 +1,400 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:14:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngCallerControl.native_from`:
+  [ErasureFns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ErasureFns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce p
+in the target expression
+  (let (nonce, proof_account1) := (nonce, n')
+    do
+    let (tape1, status) ← StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce p
+    let r ←
+      core.result.Result.map_err
+          (selected_callback.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError policy) status ()
+    ok (tape1, proof_account1, r)) =
+    ok (p', n', mapped r)
+
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N : Type
+policy : Policy N
+p p' : Tape
+n n' : N
+k : Usize
+nonce : Std.Array U8 32#usize
+r : core.result.Result StateOnlyAttemptSecrets StateOnlyAttemptEntropyError
+hpolicy : policy.call_mut n k = ok (nonce, n')
+hentropy : StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce p = ok (p', r)
+⊢ (let (nonce, proof_account1) := (nonce, n')
+    do
+    let (tape1, status) ← StateOnlyAttemptSecrets.generate_with Tape.Insts.Prover_rw_rng_callerDraw64 nonce p
+    let r ←
+      core.result.Result.map_err
+          (selected_callback.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError policy) status ()
+    ok (tape1, proof_account1, r)) =
+    ok (p', n', mapped r)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:40:2: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:46:68: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L B : Type
+policy : Policy N
+body : Body B L
+p p' : Tape
+n n' : N
+l : L
+b : B
+k : Usize
+below : ¬k ≥ 8#usize
+e : ProverRwRngCaller.Error
+callback : selected_callback policy p n k = ok (p', n', core.result.Result.Err e)
+⊢ (let (tape1, proof_account1, status) := (p', n', core.result.Result.Err e)
+    match status with
+    | core.result.Result.Ok a => do
+      let ((after_store, result), body1) ← body.call_mut b (a, l)
+      match result with
+        | core.result.Result.Ok p =>
+          let (proof, audit) := p
+          do
+          let i ← k + 1#usize
+          ok
+              (tape1, proof_account1, after_store, body1,
+                core.result.Result.Ok { proof := proof, audit := audit, attempts := i })
+        | core.result.Result.Err e =>
+          match e with
+          | Error.Parse => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Parse)
+          | Error.Semantic => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Semantic)
+          | Error.Transcript => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Transcript)
+          | Error.Relation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Relation)
+          | Error.Merkle => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Merkle)
+          | Error.Query => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Query)
+          | Error.Checkpoint => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Checkpoint)
+          | Error.Allocation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Allocation)
+          | Error.Rejected => do
+            let i ← k + 1#usize
+            retry_attempt policy body tape1 proof_account1 after_store body1 i
+          | Error.AttemptsExhausted =>
+            ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.AttemptsExhausted)
+          | Error.Entropy => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Entropy)
+    | core.result.Result.Err e => ok (tape1, proof_account1, l, b, core.result.Result.Err e)) =
+    ok (p', n', l, b, core.result.Result.Err e)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Parse = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Semantic = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Transcript = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Relation = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Merkle = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Query = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Checkpoint = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.212 = ?m.212
+but is expected to have type
+  Error.Allocation = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.215 = ?m.215
+but is expected to have type
+  Error.AttemptsExhausted = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:59:52: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.215 = ?m.215
+but is expected to have type
+  Error.Entropy = Error.Rejected
+in the application
+  fatal rfl
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:58:58: warning: This simp argument is unused:
+  hbody
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵T̵T̵E̵M̵P̵T̵_̵C̵A̵P̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵e̵l̵o̵w̵,̵c̵a̵l̵l̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵b̵o̵d̵y̵]̵[̲A̲T̲T̲E̲M̲P̲T̲_̲C̲A̲P̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲e̲l̲o̲w̲,̲ ̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:17: error: Application type mismatch: The argument
+  ?m.40
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.40
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:66:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:67:88: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L B : Type
+policy : Policy N
+body : Body B L
+p p' : Tape
+n n' : N
+l l' : L
+b b' : B
+k next : Usize
+below : ¬k ≥ 8#usize
+a : StateOnlyAttemptSecrets
+callback : selected_callback policy p n k = ok (p', n', core.result.Result.Ok a)
+hbody : body.call_mut b (a, l) = ok ((l', core.result.Result.Err Error.Rejected), b')
+increment : k + 1#usize = sorry
+⊢ (let (tape1, proof_account1, status) := (p', n', core.result.Result.Ok a)
+    match status with
+    | core.result.Result.Ok a => do
+      let ((after_store, result), body1) ← body.call_mut b (a, l)
+      match result with
+        | core.result.Result.Ok p =>
+          let (proof, audit) := p
+          do
+          let i ← sorry
+          ok
+              (tape1, proof_account1, after_store, body1,
+                core.result.Result.Ok { proof := proof, audit := audit, attempts := i })
+        | core.result.Result.Err e =>
+          match e with
+          | Error.Parse => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Parse)
+          | Error.Semantic => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Semantic)
+          | Error.Transcript => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Transcript)
+          | Error.Relation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Relation)
+          | Error.Merkle => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Merkle)
+          | Error.Query => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Query)
+          | Error.Checkpoint => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Checkpoint)
+          | Error.Allocation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Allocation)
+          | Error.Rejected => do
+            let i ← sorry
+            retry_attempt policy body tape1 proof_account1 after_store body1 i
+          | Error.AttemptsExhausted =>
+            ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.AttemptsExhausted)
+          | Error.Entropy => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Entropy)
+    | core.result.Result.Err e => ok (tape1, proof_account1, l, b, core.result.Result.Err e)) =
+    retry_attempt policy body p' n' l' b' next
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:69:58: warning: This simp argument is unused:
+  hbody
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵T̵T̵E̵M̵P̵T̵_̵C̵A̵P̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵e̵l̵o̵w̵,̵c̵a̵l̵l̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵b̵o̵d̵y̵,̵i̵n̵c̵r̵e̵m̵e̵n̵t̵]̵[̲A̲T̲T̲E̲M̲P̲T̲_̲C̲A̲P̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲e̲l̲o̲w̲,̲ ̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲n̲c̲r̲e̲m̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:17: error: Application type mismatch: The argument
+  ?m.42
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.42
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:77:31: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:79:62: error: unsolved goals
+inst✝¹ : NativeTypes
+inst✝ : ErasureFns
+N L B : Type
+policy : Policy N
+body : Body B L
+p p' : Tape
+n n' : N
+l l' : L
+b b' : B
+k next : Usize
+below : ¬k ≥ 8#usize
+a : StateOnlyAttemptSecrets
+proof : alloc.vec.Vec U8
+audit : U64
+callback : selected_callback policy p n k = ok (p', n', core.result.Result.Ok a)
+hbody : body.call_mut b (a, l) = ok ((l', core.result.Result.Ok (proof, audit)), b')
+increment : k + 1#usize = sorry
+⊢ (let (tape1, proof_account1, status) := (p', n', core.result.Result.Ok a)
+    match status with
+    | core.result.Result.Ok a => do
+      let ((after_store, result), body1) ← body.call_mut b (a, l)
+      match result with
+        | core.result.Result.Ok p =>
+          let (proof, audit) := p
+          do
+          let i ← sorry
+          ok
+              (tape1, proof_account1, after_store, body1,
+                core.result.Result.Ok { proof := proof, audit := audit, attempts := i })
+        | core.result.Result.Err e =>
+          match e with
+          | Error.Parse => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Parse)
+          | Error.Semantic => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Semantic)
+          | Error.Transcript => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Transcript)
+          | Error.Relation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Relation)
+          | Error.Merkle => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Merkle)
+          | Error.Query => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Query)
+          | Error.Checkpoint => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Checkpoint)
+          | Error.Allocation => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Allocation)
+          | Error.Rejected => do
+            let i ← sorry
+            retry_attempt policy body tape1 proof_account1 after_store body1 i
+          | Error.AttemptsExhausted =>
+            ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.AttemptsExhausted)
+          | Error.Entropy => ok (tape1, proof_account1, after_store, body1, core.result.Result.Err Error.Entropy)
+    | core.result.Result.Err e => ok (tape1, proof_account1, l, b, core.result.Result.Err e)) =
+    ok (p', n', l', b', core.result.Result.Ok { proof := proof, audit := audit, attempts := next })
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:81:58: warning: This simp argument is unused:
+  hbody
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵T̵T̵E̵M̵P̵T̵_̵C̵A̵P̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵e̵l̵o̵w̵,̵c̵a̵l̵l̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵b̵o̵d̵y̵,̵i̵n̵c̵r̵e̵m̵e̵n̵t̵]̵[̲A̲T̲T̲E̲M̲P̲T̲_̲C̲A̲P̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲e̲l̲o̲w̲,̲ ̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲n̲c̲r̲e̲m̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:12: error: Application type mismatch: The argument
+  ?m.12
+has type
+  Usize
+but is expected to have type
+  Result (UScalar UScalarTy.Usize)
+in the application
+  k + 1#usize = ?m.12
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:26: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ok`
+
+Note: Inferred this name from the expected resulting type of `.ok`:
+  Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngCallerControl.lean:84:37: error(lean.invalidField): Invalid field notation: Type of
+  next
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageClass.val`
+  • `LLVM.IntPredicate.val`
+  • `LLVM.Linkage.val`
+  • `LLVM.Visibility.val`
+  • `Lean.ElabBlock.val`
+  • `Lean.ElabInline.val`
+  • `Lean.ExprStructEq.val`
+  • `OrderHom.Subtype.val`
+  • `ST.Out.val`
+  • `Vector.Mem.val`
+  • `IScalar.val`
+  • `UScalar.val`
+  • `Do.Tests.ExBox.val`
+  • `Lean.Doc.Parser.val`
+  • `Lean.Doc.WithSyntax.val`
+  • `Lean.Elab.FieldInfo.val`
+  • `Lean.Language.DynamicSnapshot.val`
+  • `Lean.Language.SyntaxGuarded.val`
+  • `Lean.Meta.InstanceEntry.val`
+  • `Lean.Meta.UnificationHintEntry.val`
+  • `Lean.Server.WithRpcRef.val`
+  • `Std.Time.Timestamp.val`
+  • `Std.Time.WallTime.val`
+  • `Step.Test.U8.val`
+  • `Batteries.BinomialHeap.Imp.FindMin.val`
+  • `Lean.Elab.ComputedFields.Context.val`
+  • `Lean.Elab.Term.LetRecToLift.val`
+  • `Lean.Elab.Term.NamedArg.val`
+  • `Lean.Meta.Match.Example.val`
+  • `Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+'R1Z.ProverRwRngCallerControl.native_from' does not depend on any axioms
+'R1Z.ProverRwRngCallerControl.callback_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.variant_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.cap_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.callback_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_fatal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.body_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngCallerControl.increment_safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
