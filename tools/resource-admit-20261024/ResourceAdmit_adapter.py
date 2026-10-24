@@ -1,5 +1,6 @@
 """Job-only metadata live boundary. Pure reviewed evaluator remains unchanged."""
 import json
+import os
 from pathlib import Path
 import subprocess
 from ResourceAdmit_sources import load
@@ -26,8 +27,28 @@ def visibility(requested):
         state=json.loads(run(['docker','inspect','--format','{{json .State}}',cid]))
         config=json.loads(run(['docker','inspect','--format','{{json .HostConfig}}',cid]))
         if not isinstance(state,dict) or not isinstance(config,dict):raise ValueError('invalid Docker metadata')
+        if type(state.get('Running')) is not bool or state['Running'] is not True or not c.uint(state['Pid']):
+            raise ValueError('invalid/racing Docker process state')
+        for key in ('Memory','MemorySwap'):
+            value=config[key]
+            if type(value) is not int or value < (-1 if key=='MemorySwap' else 0) or value>c.U64:
+                raise ValueError('invalid Docker resource metadata')
         containers.append(dict(state,id=cid,host_config=config))
-    if not processes.strip():raise ValueError('missing process visibility')
+    lines=processes.splitlines()
+    if not lines or lines[0].split() != ['PID','PPID','RSS','COMMAND','CGROUP']:
+        raise ValueError('malformed process visibility header')
+    pids=set()
+    for line in lines[1:]:
+        words=line.split(None,3)
+        if len(words)!=4:raise ValueError('malformed process visibility row')
+        pid,ppid,rss=(c.parse_number(v) for v in words[:3])
+        if not pid or pid in pids:raise ValueError('duplicate/zero process visibility PID')
+        pids.add(pid)
+    if not pids:raise ValueError('missing process visibility')
+    for line in services.splitlines():
+        words=line.split()
+        if len(words)<4 or not words[0].endswith('.service') or words[2:4]!=['active','running']:
+            raise ValueError('malformed/racing service visibility')
     return dict(schema='ResourceAdmit-visibility-v1',cgroups=rows,
         bounded_reserved_bytes=reserved,projected_reserved_bytes=c.add((reserved,requested)),
         process_visibility=processes,service_visibility=services,docker_visibility=containers,
@@ -56,5 +77,5 @@ def read_only_admission(*,phase):
         if Path(path).name!=UNIT+'.scope':
             failures['unit']=dict(error='actual own scope unit differs from preregistration')
     if failures:decision.update(allowed=False,collection_failures=failures)
-    return dict(api_version='ResourceAdmit20261024-v1',decision=decision,
+    return dict(api_version='ResourceAdmit20261024-v1',collector_pid=os.getpid(),decision=decision,
                 snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')

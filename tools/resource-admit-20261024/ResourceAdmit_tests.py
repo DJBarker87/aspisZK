@@ -141,16 +141,25 @@ class ResourceAdmitTests(unittest.TestCase):
 
     def test_source_env_runtime_drift(self):
         with tempfile.TemporaryDirectory() as t,patch.object(h,'HERE',Path(t)):
-            p=Path(t)/'x';p.write_text('old');pins=dict(files={'x':h.filepin(p)},runtime={},env={})
+            p=Path(t)/'x';p.write_text('old');pins=dict(files={'x':h.filepin(p)},runtime={},env={},mode=h.MODE)
             p.write_text('new')
             with self.assertRaisesRegex(ValueError,'source drift'):h.verify(pins)
             p.unlink()
             with self.assertRaises(FileNotFoundError):h.verify(pins)
-        pins=dict(files={},runtime={'old':1},env={})
+        pins=dict(files={},runtime={'old':1},env={},mode=h.MODE)
         with patch.object(h,'runtime_pins',return_value={}):
             with self.assertRaisesRegex(ValueError,'runtime/dependency drift'):h.verify(pins)
             pins['runtime']={}
             with self.assertRaisesRegex(ValueError,'environment'):h.verify(pins)
+
+    def test_malformed_visibility_and_mode_pin(self):
+        for target,output in [(a.COMMANDS[0],'malformed'),(a.COMMANDS[1],'malformed'),(a.COMMANDS[2],'not-a-container')]:
+            _,_,_,run=virtual(fixture())
+            def malformed(argv,*args,**kwargs):
+                return subprocess.CompletedProcess(argv,0,output,'') if argv==target else run(argv,*args,**kwargs)
+            with kernel(fixture()),patch.object(subprocess,'run',malformed):r=a.read_only_admission(phase='prospective')
+            self.assertFalse(r['decision']['allowed'])
+        with self.assertRaisesRegex(ValueError,'mode pin drift'):h.verify(dict(mode='other'))
 
     def test_ordered_full_new_trace_replay_hash_and_tamper(self):
         for phase in ('prospective','inside-scope'):
@@ -163,6 +172,34 @@ class ResourceAdmitTests(unittest.TestCase):
                 events=json.loads((cap/(phase+'-ordered.json')).read_text());events[0]['path']='/fake'
                 (cap/(phase+'-ordered.json')).write_text(json.dumps(events))
                 with patch.object(audit,'OUT',cap),self.assertRaises(AssertionError):audit.replay(phase)
+
+    def test_scope_peak_swap_pressure_and_missing_controls(self):
+        values={'memory.high':str(h.EXPECTED['high']),'memory.max':str(h.EXPECTED['cap']),
+                'memory.swap.max':'0','memory.swap.current':'0','pids.max':'64',
+                'pids.current':'1','memory.current':'100','memory.peak':'200',
+                'memory.events':'low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\n'}
+        self.assertTrue(h.check_controls(dict(values=values)))
+        for name in values:
+            bad=dict(values);del bad[name]
+            with self.assertRaises((KeyError,TypeError,ValueError)):h.check_controls(dict(values=bad))
+        for name,value in [('memory.swap.current','1'),('memory.peak',str(5*a.c.GIB)),('memory.events',values['memory.events'].replace('high 0','high 1'))]:
+            with self.assertRaises(ValueError):h.check_controls(dict(values=dict(values,**{name:value})))
+
+    def test_denied_raw_and_command_trace_replay(self):
+        for fault in ('read','stat','command','scandir'):
+            with tempfile.TemporaryDirectory() as t,patch.object(h,'HERE',Path(t)):
+                with kernel(fixture()) as files:
+                    if fault=='read':files['/proc/self/status']=PermissionError(13,'synthetic denied')
+                    if fault=='stat':files['/proc/self/stat']=PermissionError(13,'synthetic stat denied')
+                    if fault=='command':
+                        with patch.object(subprocess,'run',side_effect=subprocess.CalledProcessError(2,a.COMMANDS[0],output='',stderr='denied')):r=h.collect('prospective')
+                    elif fault=='scandir':
+                        with patch.object(os,'scandir',side_effect=PermissionError(13,'synthetic scandir denied')):r=h.collect('prospective')
+                    else:r=h.collect('prospective')
+                self.assertFalse(r['decision']['allowed'])
+                cap=Path(t)/'capture';pins={p.name:dict(name=p.name,**h.filepin(p)) for p in cap.iterdir()}
+                (cap/'export-receipt.json').write_text(json.dumps(dict(host_files=pins)))
+                with patch.object(audit,'OUT',cap):self.assertFalse(audit.replay('prospective')['allowed'])
 
     def test_coordination_never_reads_live_output(self):
         result=subprocess.CompletedProcess([],0,'7112 '+local.COORD_START+' sh codex-run.sh','')

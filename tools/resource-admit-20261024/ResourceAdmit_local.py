@@ -65,7 +65,11 @@ def ssh_python(payload, label, environment=None, data=None):
     command=SSH+[shlex.join((['env','-i']+[k+'='+v for k,v in sorted(environment.items())] if environment else [])+
                            ['/usr/bin/python3','-I','-B','-c',payload])]
     start=time.monotonic()
-    result=subprocess.run(command,input=data,text=True,capture_output=True,timeout=120)
+    try:
+        result=subprocess.run(command,input=data,text=True,capture_output=True,timeout=120)
+    except (OSError,subprocess.SubprocessError) as exc:
+        save(label+'-transport.json',dict(command=command,stdin_pin=host.digest((data or '').encode()),exit=None,error=str(exc),wall_seconds=time.monotonic()-start,source_revision=revision(),print_axioms='N/A',stdout_base64=base64.b64encode((getattr(exc,'stdout',None) or b'') if isinstance(getattr(exc,'stdout',None),bytes) else (getattr(exc,'stdout',None) or '').encode()).decode(),stderr_base64=base64.b64encode((getattr(exc,'stderr',None) or b'') if isinstance(getattr(exc,'stderr',None),bytes) else (getattr(exc,'stderr',None) or '').encode()).decode()))
+        raise
     save(label+'-transport.json',dict(command=command,stdin_pin=host.digest((data or '').encode()),
         exit=result.returncode,wall_seconds=time.monotonic()-start,stdout=result.stdout,stderr=result.stderr,
         source_revision=revision(),print_axioms='N/A'))
@@ -83,7 +87,7 @@ def tests():
         code=os.waitstatus_to_exitcode(status);child.returncode=code
     save(label+'-receipt.json',dict(command=command,exit=code,wall_seconds=time.monotonic()-start,
         peak_rss_bytes=usage.ru_maxrss if platform.system()=='Darwin' else usage.ru_maxrss*1024,swap=usage.ru_nswap,
-        source_revision=revision(),sources={str(p.relative_to(ROOT)):host.filepin(p) for p in sorted(HERE.glob('*.py'))},
+        source_revision=revision(),interpreter=dict(path=sys.executable,version=sys.version,**host.filepin(Path(sys.executable).resolve())),sources={str(p.relative_to(ROOT)):host.filepin(p) for p in sorted(HERE.glob('*.py'))},
         reviewed_operational={name:{k:v[k] for k in ('revision','path','sha256','size')} for name,v in bundle().items()},
         log_pin=host.filepin(OUT/(label+'.log')),print_axioms='N/A',mode='offline synthetic only'))
     return code
@@ -145,7 +149,11 @@ def run():
     command=SSH+[shlex.join(['env','-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+
                            ['/usr/bin/python3','-I','-B',REMOTE+'/ResourceAdmit_host.py','run'])]
     start=time.monotonic()
-    r=subprocess.run(command,text=True,capture_output=True,timeout=120)
+    try:
+        r=subprocess.run(command,text=True,capture_output=True,timeout=120)
+    except (OSError,subprocess.SubprocessError) as exc:
+        save('run-transport.json',dict(command=command,exit=None,error=str(exc),wall_seconds=time.monotonic()-start,source_revision=revision(),manifest_pin=host.filepin(OUT/'manifest.json'),print_axioms='N/A',stdout_base64=base64.b64encode((getattr(exc,'stdout',None) or b'') if isinstance(getattr(exc,'stdout',None),bytes) else (getattr(exc,'stdout',None) or '').encode()).decode(),stderr_base64=base64.b64encode((getattr(exc,'stderr',None) or b'') if isinstance(getattr(exc,'stderr',None),bytes) else (getattr(exc,'stderr',None) or '').encode()).decode()))
+        raise
     save('run-transport.json',dict(command=command,exit=r.returncode,wall_seconds=time.monotonic()-start,
         stdout=r.stdout,stderr=r.stderr,source_revision=revision(),manifest_pin=host.filepin(OUT/'manifest.json'),
         env_pin=host.digest(json.dumps(manifest['env'],sort_keys=True).encode()),mode_pin=host.digest(host.MODE.encode()),print_axioms='N/A'))

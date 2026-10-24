@@ -35,3 +35,13 @@ No premise about protocol/security is discharged or added. Current ELF pins
 devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548)
 are supplied context only, not newly validated artifact gates.
+
+New adapter hardening after the first successful fixture run: malformed process
+headers/rows/PIDs, service rows, Docker state/PID/resource metadata deny; no UID
+or service exclusions. Mode pin checked explicitly. Actual scope pressure,
+peak/current, swap and task counter metadata is checked separately before the
+marker; unreadable controls deny that marker. The reviewed quantitative
+predicate is unchanged. New report collector_pid permits exact offline replay
+even when the first proc-self read fails; it is obtained by os.getpid(), never
+accepted as a caller binding. All transport failures consume the sentinel and
+retain their output bytes. Local synthetic RSS now uses Darwin byte units.

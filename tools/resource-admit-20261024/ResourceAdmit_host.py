@@ -64,6 +64,7 @@ def save(name, value):
 
 
 def verify(manifest):
+    if manifest.get('mode') != MODE:raise ValueError('mode pin drift')
     actual={name:filepin(HERE/name) for name in manifest['files']}
     if actual != manifest['files']:
         raise ValueError('source drift')
@@ -142,7 +143,7 @@ def collect(phase):
         save(phase+'-ordered.json',events)
     save(phase+'-report.json',report)
     save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
-        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
         aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3),
         print_axioms='N/A'))
@@ -161,13 +162,25 @@ def controls():
     return result
 
 
+def check_controls(receipt):
+    values=receipt['values']
+    for name in ('memory.high','memory.max','memory.swap.max','memory.swap.current','pids.max','memory.peak','memory.current','pids.current','memory.events'):
+        if not isinstance(values[name],str):raise ValueError('unreadable scope control: '+name)
+    for name,expected in [('memory.high',EXPECTED['high']),('memory.max',EXPECTED['cap']),
+                          ('memory.swap.max',0),('memory.swap.current',0),('pids.max',64)]:
+        if adapter.c.parse_number(values[name])!=expected:raise ValueError('scope control drift: '+name)
+    if adapter.c.parse_number(values['memory.peak'])>EXPECTED['cap']:raise ValueError('scope peak exceeds cap')
+    if adapter.c.parse_number(values['memory.current'])>EXPECTED['cap']:raise ValueError('scope current exceeds cap')
+    if adapter.c.parse_number(values['pids.current'])>64:raise ValueError('scope task cap exceeded')
+    events=adapter.c.pairs(values['memory.events'])
+    for key in ('high','max','oom','oom_kill','oom_group_kill'):
+        if events[key]!=0:raise ValueError('scope pressure event: '+key)
+    return True
+
+
 def main():
     signal.alarm(115)  # metadata diagnostic deadline, including pinning
     action=sys.argv[1]
-    if action=='inspect':
-        print(json.dumps(dict(runtime=runtime_pins(),uid=os.getuid(),stage_exists=HERE.exists(),
-                              environment=dict(os.environ))))
-        return 0
     manifest=json.loads((HERE/'ResourceAdmit_manifest.json').read_text())
     start=time.monotonic()
     save(action+'-pre-pins.json',verify(manifest))
@@ -175,13 +188,23 @@ def main():
         with (HERE/'ResourceAdmit_ATTEMPTED').open('x') as sentinel:
             sentinel.write('fixed Q4GiB; transport/observation failures terminal'+chr(10))
     if action=='go':
-        save('go-controls-before.json',controls())
+        before_controls=controls()
+        save('go-controls-before.json',before_controls)
         report=collect('inside-scope')
         save('go-pins.json',verify(manifest))
         def marker():
             # No subprocess or workload: only actual identity, after GO.
             save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceAdmit metadata marker only'))
-        result=go_flow(report,marker)
+        after_controls=controls()
+        save('go-controls-after-scan.json',after_controls)
+        gated=report
+        try:
+            check_controls(before_controls);check_controls(after_controls)
+            save('go-control-check.json',dict(allowed=True))
+        except (KeyError,TypeError,ValueError) as exc:
+            save('go-control-check.json',dict(allowed=False,error=str(exc)))
+            gated=dict(decision=dict(allowed=False))
+        result=go_flow(gated,marker)
         save('go-controls-after.json',controls())
         code=result['go_exit']
     elif action=='run':
@@ -206,7 +229,7 @@ def main():
         raise ValueError('unknown action')
     save(action+'-post-pins.json',verify(manifest))
     save(action+'-exit.json',dict(**result,exit=code,wall_seconds=time.monotonic()-start,
-        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,print_axioms='N/A'))
     return code
 

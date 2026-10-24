@@ -64,8 +64,8 @@ def replay(phase):
             if e.get('exit') is not None:raise subprocess.CalledProcessError(e['exit'],args,output=e['stdout'],stderr=e['stderr'])
             raise subprocess.TimeoutExpired(args,k.get('timeout'),output=e.get('stdout'),stderr=e.get('stderr'))
         return subprocess.CompletedProcess(args,e['exit'],e['stdout'],e['stderr'])
-    first=next(e for e in events if e.get('path')=='/proc/self/stat' and not e.get('errno'))
-    pid=int(first['content'].split(' ',1)[0])
+    pid=report['collector_pid']
+    assert type(pid) is int and pid>0
     with patch.object(Path,'read_text',read),patch.object(os,'scandir',scan),patch.object(os,'getpid',return_value=pid),patch.object(subprocess,'run',execute):
         actual=api['read_only_admission'](phase=phase)
     assert position==len(events),('unconsumed inputs',position,len(events))
