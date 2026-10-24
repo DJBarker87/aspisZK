@@ -182,3 +182,8 @@ Port10AUTH d1069e1971 reviewed and merged7b887b23ac. Independent static checks p
 ## Bounded extractor repair — 2026-10-24
 
 D198 reviews candidate003 translation probe and candidate004 IDmatch failure; all7 receipts pinned. Worker85279 uses4additional backendbuild attempts (ceiling8), original9extractions/7Lean remaining for retainedrecord/operation checks and selected64translation. No sharedtool adoption/nativeclosure. Provenance worker78498 remainslive. Both targets notyetestablished.
+
+
+## Checkpoint provenance integrated; physical counts next — 2026-10-24
+
+Reviewed Port11PROV2ab0c21054 and merged431346f953. C3/STATUS/A handoff record exact raw checkpoint preservation and indexed recovery under retained initial parser/prepare/P6/Std/frame/budget/no-hit gates. Independent checks pass13final modules,25receipts and standardaxioms. Worker87723 now uses ONLY35remaining Lean (185/220used,Kani0/20) for concrete physical row/level read-potential and installed batch counts.1040/1161 audit arithmetic remains TO PROVE; unrestricted rest has no fullsource cap. Prompt archived evidence/coordinator-20261024/prompt-port12count-20261024.txt. Extractorrepair85279 remainslive. Both deployedtargets notyetestablished.
