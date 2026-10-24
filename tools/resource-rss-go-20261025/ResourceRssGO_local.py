@@ -83,19 +83,25 @@ def tests():
     return code
 
 
-def inspect():
-    charge()
+def inspection_payload():
     # No stage creation or scope. Exact runner source is hashed in transport argv.
     # Inspect only the exact runtime pin function from immutable reviewed runner;
     # no main/import of old runner and no stage is created.
     import ast
     tree=ast.parse((HERE/'ResourceRssGO_host.py').read_text())
     selected=[n for n in tree.body if isinstance(n,(ast.Import,ast.ImportFrom)) and
+              not (isinstance(n,ast.ImportFrom) and (n.module or '').startswith('ResourceRssGO')) and
               not any(a.name.startswith('ResourceRssGO') for a in n.names)]
     selected += [n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in ('digest','filepin','runtime_pins')]
     payload=ast.unparse(ast.Module(body=selected,type_ignores=[]))
     payload += '\n' + (HERE/'ResourceRssGO_guard.py').read_text().split('class Proc:')[0]
     bootstrap=payload+"\np=Path("+repr(REMOTE)+"); parent=p.parent; assert parent.resolve()==parent; print(json.dumps(dict(runtime=runtime_pins(),inherited_limits=inherited_limits(),uid=os.getuid(),stage_exists=p.exists(),parent_uid=parent.stat().st_uid,parent_mode=oct(parent.stat().st_mode & 0o777),parent_resolved=str(parent.resolve()),lock_exists=Path('/tmp/aspis-r0-lean.lock').exists())))"
+    return bootstrap
+
+
+def inspect():
+    charge()
+    bootstrap=inspection_payload()
     r=ssh_python(bootstrap,'inspect')
     if r.returncode:raise RuntimeError('metadata inspection failed')
     info=json.loads(r.stdout)
