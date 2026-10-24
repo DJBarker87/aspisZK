@@ -9,7 +9,7 @@ cannot repair the before anon -14,086,144. The old rule correctly rejected it.
 
 Local attempt `python3 -B tools/resource-hierarchy-20261024/ResourceHierarchy_receipt.py audit-first`
 failed before audit child execution: macOS rejected setting RLIMIT_RSS in
-preexec_fn. Parent shell exit 1, wall 0.000003125s as reported by tool (not a
+preexec_fn. Parent shell exit 1, wall 0.000003333s as reported by tool (not a
 meaningful child time); child wall/RSS/swap N/A, no child was executed. Source
 revision 0ae9700792; failed wrapper source hash was not captured before removal
 of the unusable preexec block. Empty audit-first.json/log retained. This was
@@ -40,3 +40,14 @@ without running those suites. Existing source/runtime/env/ELF pin assessments
 remain historical, not a new identity gate. New synthetic GO checks do not
 validate a fresh real scope or future consumer. Half-slab/reclaim estimates and
 unseen/asynchronous memory behavior remain unproved.
+
+The separately timed `primary-sources` refresh failed with HTTP 429 (4.371529375s,
+37,191,680 B RSS, swap 0, exit 1); no retry. The script buffers its result until
+completion, so partial successes and the failing URL are unknown. Retain the
+receipt/log; do not claim a successful five-reference refresh. The earlier inline
+inspection did successfully match all three exact-Ubuntu hashes and inspect the
+named symbols (tool wall 2.7042145s, exit 0); peak RSS/swap and inline-source
+receipt were not captured. That is a source-inspection provenance limitation,
+not a new metered host or kernel-identity result. Reused exact-source pins and
+assessment remain labelled as reused. Final measured offline audit is independent
+of this network refresh and passed with unchanged original input/report hashes.
