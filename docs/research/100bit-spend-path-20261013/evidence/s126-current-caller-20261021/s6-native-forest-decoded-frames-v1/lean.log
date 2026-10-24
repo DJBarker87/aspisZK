@@ -1,0 +1,379 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6NativeForestDecodedFramesV1.lean:32:104: error: unsolved goals
+bytes : Slice U8
+i1 : Usize
+_✝¹⁵ : [> let i1 ← POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1880
+h✝⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝¹⁴ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝¹³ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize }
+      POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 4 - 0
+b : Bool
+_✝¹² : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+b_post : b = true ↔ s ≠ s1
+h✝⁷ : ¬b = true
+i2 : U8
+_✝¹¹ : [> let i2 ← bytes.index_usize 4#usize <]
+i2_post : i2 = (↑bytes)[4]
+h✝⁶ : ¬(i2 != POOL_V1_PAIR_FOREST_TERMINAL_VERSION) = true
+i3 : U8
+_✝¹⁰ : [> let i3 ← bytes.index_usize 5#usize <]
+i3_post : i3 = (↑bytes)[5]
+r : core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind PoolV1PairForestTerminalFormatErrorV1
+_✝⁹ : [> let r ← transition_kind i3 <]
+r_post :
+  ∀ (kind : pool_v1.historical_anchor.PoolV1TransitionKind),
+    r = core.result.Result.Ok kind → read_discriminant kind = i3
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    pool_v1.historical_anchor.PoolV1TransitionKind
+_✝⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post :
+  ∀ (value : pool_v1.historical_anchor.PoolV1TransitionKind),
+    cf = core.ops.control_flow.ControlFlow.Continue value → r = core.result.Result.Ok value
+val : pool_v1.historical_anchor.PoolV1TransitionKind
+h✝⁵ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁷ : [> let i4 ← bytes.index_usize 6#usize <]
+i4_post : i4 = (↑bytes)[6]
+h✝⁴ : ¬(i4 != pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true
+r1 : core.result.Result PoolV1PairForestTerminalCommonV1 PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ : [> let r1 ← decode_terminal_common_boxed_v1 bytes <]
+r1_post : ∀ (common : PoolV1PairForestTerminalCommonV1), r1 = core.result.Result.Ok common → common_frame bytes common
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalCommonV1
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post :
+  ∀ (value : PoolV1PairForestTerminalCommonV1),
+    cf1 = core.ops.control_flow.ControlFlow.Continue value → r1 = core.result.Result.Ok value
+val1 : PoolV1PairForestTerminalCommonV1
+h✝³ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+h✝² : val = pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer
+i5 : Usize
+_✝⁴ : [> let i5 ← PAYMENT_STATEMENT_OFFSET <]
+i5_post : ↑i5 = 1664
+s2 : Slice U8
+_✝³ : [> let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i5 } bytes <]
+s2_post1 : ↑s2 = List.drop ↑i5 ↑bytes
+s2_post2 : s2.length = bytes.length - ↑i5
+r2 : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1
+_✝² : [> let r2 ← decode_transfer_statement_boxed_v1 val1 s2 <]
+r2_post :
+  ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    r2 = core.result.Result.Ok statement →
+      ∃ value,
+        statement = PoolV1PairForestTerminalStatementV1.PrivateTransfer val1 value ∧
+          pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1 s2 = ok (core.result.Result.Ok value)
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalStatementV1
+_✝¹ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post :
+  ∀ (value : PoolV1PairForestTerminalStatementV1),
+    cf2 = core.ops.control_flow.ControlFlow.Continue value → r2 = core.result.Result.Ok value
+val2 : PoolV1PairForestTerminalStatementV1
+h✝¹ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+r3 : core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1
+_✝ : [> let r3 ← validate_pool_v1_pair_forest_terminal_statement_v1 val2 <]
+r3_post : validate_pool_v1_pair_forest_terminal_statement_v1 val2 = ok r3
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    Unit
+_ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : ∀ (value : Unit), cf3 = core.ops.control_flow.ControlFlow.Continue value → r3 = core.result.Result.Ok value
+a✝ : Unit
+h✝ : cf3 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    core.result.Result.Ok val2 = core.result.Result.Ok statement → full_frame bytes statement
+
+bytes : Slice U8
+i1 : Usize
+_✝¹⁵ : [> let i1 ← POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1880
+h✝⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝¹⁴ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝¹³ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize }
+      POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 4 - 0
+b : Bool
+_✝¹² : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+b_post : b = true ↔ s ≠ s1
+h✝⁷ : ¬b = true
+i2 : U8
+_✝¹¹ : [> let i2 ← bytes.index_usize 4#usize <]
+i2_post : i2 = (↑bytes)[4]
+h✝⁶ : ¬(i2 != POOL_V1_PAIR_FOREST_TERMINAL_VERSION) = true
+i3 : U8
+_✝¹⁰ : [> let i3 ← bytes.index_usize 5#usize <]
+i3_post : i3 = (↑bytes)[5]
+r : core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind PoolV1PairForestTerminalFormatErrorV1
+_✝⁹ : [> let r ← transition_kind i3 <]
+r_post :
+  ∀ (kind : pool_v1.historical_anchor.PoolV1TransitionKind),
+    r = core.result.Result.Ok kind → read_discriminant kind = i3
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    pool_v1.historical_anchor.PoolV1TransitionKind
+_✝⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post :
+  ∀ (value : pool_v1.historical_anchor.PoolV1TransitionKind),
+    cf = core.ops.control_flow.ControlFlow.Continue value → r = core.result.Result.Ok value
+val : pool_v1.historical_anchor.PoolV1TransitionKind
+h✝⁵ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁷ : [> let i4 ← bytes.index_usize 6#usize <]
+i4_post : i4 = (↑bytes)[6]
+h✝⁴ : ¬(i4 != pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true
+r1 : core.result.Result PoolV1PairForestTerminalCommonV1 PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ : [> let r1 ← decode_terminal_common_boxed_v1 bytes <]
+r1_post : ∀ (common : PoolV1PairForestTerminalCommonV1), r1 = core.result.Result.Ok common → common_frame bytes common
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalCommonV1
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post :
+  ∀ (value : PoolV1PairForestTerminalCommonV1),
+    cf1 = core.ops.control_flow.ControlFlow.Continue value → r1 = core.result.Result.Ok value
+val1 : PoolV1PairForestTerminalCommonV1
+h✝³ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+h✝² : val = pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal
+i5 : Usize
+_✝⁴ : [> let i5 ← PAYMENT_STATEMENT_OFFSET <]
+i5_post : ↑i5 = 1664
+s2 : Slice U8
+_✝³ : [> let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i5 } bytes <]
+s2_post1 : ↑s2 = List.drop ↑i5 ↑bytes
+s2_post2 : s2.length = bytes.length - ↑i5
+r2 : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1
+_✝² : [> let r2 ← decode_withdrawal_statement_boxed_v1 val1 s2 <]
+r2_post :
+  ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    r2 = core.result.Result.Ok statement →
+      ∃ value,
+        statement = PoolV1PairForestTerminalStatementV1.Withdrawal val1 value ∧
+          pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1 s2 = ok (core.result.Result.Ok value)
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalStatementV1
+_✝¹ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post :
+  ∀ (value : PoolV1PairForestTerminalStatementV1),
+    cf2 = core.ops.control_flow.ControlFlow.Continue value → r2 = core.result.Result.Ok value
+val2 : PoolV1PairForestTerminalStatementV1
+h✝¹ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+r3 : core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1
+_✝ : [> let r3 ← validate_pool_v1_pair_forest_terminal_statement_v1 val2 <]
+r3_post : validate_pool_v1_pair_forest_terminal_statement_v1 val2 = ok r3
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    Unit
+_ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : ∀ (value : Unit), cf3 = core.ops.control_flow.ControlFlow.Continue value → r3 = core.result.Result.Ok value
+a✝ : Unit
+h✝ : cf3 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    core.result.Result.Ok val2 = core.result.Result.Ok statement → full_frame bytes statement
+bytes : Slice U8
+i1 : Usize
+_✝¹⁵ : [> let i1 ← POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1880
+h✝⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝¹⁴ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝¹³ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize }
+      POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 4 - 0
+b : Bool
+_✝¹² : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+b_post : b = true ↔ s ≠ s1
+h✝⁷ : ¬b = true
+i2 : U8
+_✝¹¹ : [> let i2 ← bytes.index_usize 4#usize <]
+i2_post : i2 = (↑bytes)[4]
+h✝⁶ : ¬(i2 != POOL_V1_PAIR_FOREST_TERMINAL_VERSION) = true
+i3 : U8
+_✝¹⁰ : [> let i3 ← bytes.index_usize 5#usize <]
+i3_post : i3 = (↑bytes)[5]
+r : core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind PoolV1PairForestTerminalFormatErrorV1
+_✝⁹ : [> let r ← transition_kind i3 <]
+r_post :
+  ∀ (kind : pool_v1.historical_anchor.PoolV1TransitionKind),
+    r = core.result.Result.Ok kind → read_discriminant kind = i3
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    pool_v1.historical_anchor.PoolV1TransitionKind
+_✝⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post :
+  ∀ (value : pool_v1.historical_anchor.PoolV1TransitionKind),
+    cf = core.ops.control_flow.ControlFlow.Continue value → r = core.result.Result.Ok value
+val : pool_v1.historical_anchor.PoolV1TransitionKind
+h✝⁵ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁷ : [> let i4 ← bytes.index_usize 6#usize <]
+i4_post : i4 = (↑bytes)[6]
+h✝⁴ : ¬(i4 != pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true
+r1 : core.result.Result PoolV1PairForestTerminalCommonV1 PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ : [> let r1 ← decode_terminal_common_boxed_v1 bytes <]
+r1_post : ∀ (common : PoolV1PairForestTerminalCommonV1), r1 = core.result.Result.Ok common → common_frame bytes common
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalCommonV1
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post :
+  ∀ (value : PoolV1PairForestTerminalCommonV1),
+    cf1 = core.ops.control_flow.ControlFlow.Continue value → r1 = core.result.Result.Ok value
+val1 : PoolV1PairForestTerminalCommonV1
+h✝³ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+h✝² : val = pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer
+i5 : Usize
+_✝⁴ : [> let i5 ← PAYMENT_STATEMENT_OFFSET <]
+i5_post : ↑i5 = 1664
+s2 : Slice U8
+_✝³ : [> let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i5 } bytes <]
+s2_post1 : ↑s2 = List.drop ↑i5 ↑bytes
+s2_post2 : s2.length = bytes.length - ↑i5
+r2 : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1
+_✝² : [> let r2 ← decode_transfer_statement_boxed_v1 val1 s2 <]
+r2_post :
+  ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    r2 = core.result.Result.Ok statement →
+      ∃ value,
+        statement = PoolV1PairForestTerminalStatementV1.PrivateTransfer val1 value ∧
+          pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1 s2 = ok (core.result.Result.Ok value)
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalStatementV1
+_✝¹ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post :
+  ∀ (value : PoolV1PairForestTerminalStatementV1),
+    cf2 = core.ops.control_flow.ControlFlow.Continue value → r2 = core.result.Result.Ok value
+val2 : PoolV1PairForestTerminalStatementV1
+h✝¹ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+r3 : core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1
+_✝ : [> let r3 ← validate_pool_v1_pair_forest_terminal_statement_v1 val2 <]
+r3_post : validate_pool_v1_pair_forest_terminal_statement_v1 val2 = ok r3
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    Unit
+_ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : ∀ (value : Unit), cf3 = core.ops.control_flow.ControlFlow.Continue value → r3 = core.result.Result.Ok value
+a✝ : Unit
+h✝ : cf3 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    core.result.Result.Ok val2 = core.result.Result.Ok statement → full_frame bytes statement
+bytes : Slice U8
+i1 : Usize
+_✝¹⁵ : [> let i1 ← POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES <]
+i1_post : ↑i1 = 1880
+h✝⁸ : ¬(bytes.len != i1) = true
+s : Slice U8
+_✝¹⁴ : [> let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 4#usize } bytes <]
+s_post1 : ↑s = List.slice 0 4 ↑bytes
+s_post2 : s.length = 4
+s1 : Slice U8
+_✝¹³ :
+  [> let s1 ←
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize }
+      POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice <]
+s1_post1 : ↑s1 = List.slice 0 4 ↑POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.to_slice
+s1_post2 : s1.length = 4 - 0
+b : Bool
+_✝¹² : [> let b ← core.cmp.PartialEq.ne.default (core.slice.cmp.PartialEqSlice.eq core.cmp.PartialEqU8) s s1 <]
+b_post : b = true ↔ s ≠ s1
+h✝⁷ : ¬b = true
+i2 : U8
+_✝¹¹ : [> let i2 ← bytes.index_usize 4#usize <]
+i2_post : i2 = (↑bytes)[4]
+h✝⁶ : ¬(i2 != POOL_V1_PAIR_FOREST_TERMINAL_VERSION) = true
+i3 : U8
+_✝¹⁰ : [> let i3 ← bytes.index_usize 5#usize <]
+i3_post : i3 = (↑bytes)[5]
+r : core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind PoolV1PairForestTerminalFormatErrorV1
+_✝⁹ : [> let r ← transition_kind i3 <]
+r_post :
+  ∀ (kind : pool_v1.historical_anchor.PoolV1TransitionKind),
+    r = core.result.Result.Ok kind → read_discriminant kind = i3
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    pool_v1.historical_anchor.PoolV1TransitionKind
+_✝⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch r <]
+cf_post :
+  ∀ (value : pool_v1.historical_anchor.PoolV1TransitionKind),
+    cf = core.ops.control_flow.ControlFlow.Continue value → r = core.result.Result.Ok value
+val : pool_v1.historical_anchor.PoolV1TransitionKind
+h✝⁵ : cf = core.ops.control_flow.ControlFlow.Continue val
+i4 : U8
+_✝⁷ : [> let i4 ← bytes.index_usize 6#usize <]
+i4_post : i4 = (↑bytes)[6]
+h✝⁴ : ¬(i4 != pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true
+r1 : core.result.Result PoolV1PairForestTerminalCommonV1 PoolV1PairForestTerminalFormatErrorV1
+_✝⁶ : [> let r1 ← decode_terminal_common_boxed_v1 bytes <]
+r1_post : ∀ (common : PoolV1PairForestTerminalCommonV1), r1 = core.result.Result.Ok common → common_frame bytes common
+cf1 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalCommonV1
+_✝⁵ : [> let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1 <]
+cf1_post :
+  ∀ (value : PoolV1PairForestTerminalCommonV1),
+    cf1 = core.ops.control_flow.ControlFlow.Continue value → r1 = core.result.Result.Ok value
+val1 : PoolV1PairForestTerminalCommonV1
+h✝³ : cf1 = core.ops.control_flow.ControlFlow.Continue val1
+h✝² : val = pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal
+i5 : Usize
+_✝⁴ : [> let i5 ← PAYMENT_STATEMENT_OFFSET <]
+i5_post : ↑i5 = 1664
+s2 : Slice U8
+_✝³ : [> let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i5 } bytes <]
+s2_post1 : ↑s2 = List.drop ↑i5 ↑bytes
+s2_post2 : s2.length = bytes.length - ↑i5
+r2 : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1
+_✝² : [> let r2 ← decode_withdrawal_statement_boxed_v1 val1 s2 <]
+r2_post :
+  ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    r2 = core.result.Result.Ok statement →
+      ∃ value,
+        statement = PoolV1PairForestTerminalStatementV1.Withdrawal val1 value ∧
+          pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1 s2 = ok (core.result.Result.Ok value)
+cf2 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    PoolV1PairForestTerminalStatementV1
+_✝¹ : [> let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2 <]
+cf2_post :
+  ∀ (value : PoolV1PairForestTerminalStatementV1),
+    cf2 = core.ops.control_flow.ControlFlow.Continue value → r2 = core.result.Result.Ok value
+val2 : PoolV1PairForestTerminalStatementV1
+h✝¹ : cf2 = core.ops.control_flow.ControlFlow.Continue val2
+r3 : core.result.Result Unit PoolV1PairForestTerminalFormatErrorV1
+_✝ : [> let r3 ← validate_pool_v1_pair_forest_terminal_statement_v1 val2 <]
+r3_post : validate_pool_v1_pair_forest_terminal_statement_v1 val2 = ok r3
+cf3 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible PoolV1PairForestTerminalFormatErrorV1)
+    Unit
+_ : [> let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3 <]
+cf3_post : ∀ (value : Unit), cf3 = core.ops.control_flow.ControlFlow.Continue value → r3 = core.result.Result.Ok value
+a✝ : Unit
+h✝ : cf3 = core.ops.control_flow.ControlFlow.Continue a✝
+⊢ ∀ (statement : PoolV1PairForestTerminalStatementV1),
+    core.result.Result.Ok val2 = core.result.Result.Ok statement → full_frame bytes statement
+'AspisS6NativeForestDecode.decode_frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
