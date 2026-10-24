@@ -333,3 +333,15 @@ adapter plus H5; release pins default `f8c0ec72…`, devnet `63ad3e9c…`):
   factored identities): complete parent-body instances with reached operand bounds.
 - S6 first-decoded/semantic/public input transport, plus `FullForestAcceptedRoundtrip` (the
   1,880-byte public encoding round trip).
+
+## Critical path now runs through your `prepare` row (lead, 2026-10-24 09:20)
+
+Overnight port jobs closed or nearly closed the lead rows. Proved: flush and finish (accepted
+finish equals Frozen2 on the same returned 12-step state); batch accepted-only transport for both
+transactions; geometry, pending and query observations; checkpoint writer/reader cuts. Two lead
+rows (checkpoint writer provenance and batch) are now blocked only on **your** `prepare`/op7
+port. A proved counterexample shows that leaving the preparation child unbound allows a wrong
+header tag, so writer provenance cannot be derived without it. Concretely we need
+an S1 `PreparedBinding` on the actual prepare/resume returns: the returned Prepared, gamma scratch,
+transcript-driver reads, parser rows and queries equal the model's. That, plus `powers`/op17 and the
+S3/S4/S5/S9 primitive instances, are the remaining session A inputs to the soundness composition.
