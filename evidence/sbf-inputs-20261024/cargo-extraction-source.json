@@ -1,0 +1,310 @@
+{
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/rust-lang/cargo/ca74c32f0ac6d99000858dcae9b0931ef76a8f43/src/cargo/sources/registry/mod.rs",
+      "status": 200,
+      "sha256": "6f3b62a08c8a39a92d596cd040203564c9025bfc362844dff119bfa250305d2d",
+      "bytes": 44766,
+      "selected": [
+        {
+          "line": 143,
+          "context": "//!\n//! To accomplish this, [`RegistryData::download`] will \"make\" an HTTP request\n//! per-package requested to download tarballs into a local cache. These\n//! tarballs will then be unpacked into a destination folder.\n//!\n//! Note that because versions uploaded to the registry are frozen forever that\n//! the HTTP download and unpacking can all be skipped if the version has\n//! already been downloaded and unpacked. This caching allows us to only\n//! download a package when absolutely necessary.\n//!\n//! # Filesystem Hierarchy"
+        },
+        {
+          "line": 146,
+          "context": "//! tarballs will then be unpacked into a destination folder.\n//!\n//! Note that because versions uploaded to the registry are frozen forever that\n//! the HTTP download and unpacking can all be skipped if the version has\n//! already been downloaded and unpacked. This caching allows us to only\n//! download a package when absolutely necessary.\n//!\n//! # Filesystem Hierarchy\n//!\n//! Overall, the `$HOME/.cargo` looks like this when talking about the registry\n//! (remote registries, specifically):"
+        },
+        {
+          "line": 147,
+          "context": "//!\n//! Note that because versions uploaded to the registry are frozen forever that\n//! the HTTP download and unpacking can all be skipped if the version has\n//! already been downloaded and unpacked. This caching allows us to only\n//! download a package when absolutely necessary.\n//!\n//! # Filesystem Hierarchy\n//!\n//! Overall, the `$HOME/.cargo` looks like this when talking about the registry\n//! (remote registries, specifically):\n//!"
+        },
+        {
+          "line": 175,
+          "context": "//!         registry1-<hash>/<pkg>-<version>.crate\n//!         ...\n//!\n//!     # Location in which all tarballs are unpacked. Each tarball is known to\n//!     # be frozen after downloading, so transitively this folder is also\n//!     # frozen once its unpacked (it's never unpacked again)\n//!     # CAVEAT: They are not read-only. See rust-lang/cargo#9455.\n//!     src/\n//!         registry1-<hash>/<pkg>-<version>/...\n//!         ...\n//! ```"
+        },
+        {
+          "line": 177,
+          "context": "//!\n//!     # Location in which all tarballs are unpacked. Each tarball is known to\n//!     # be frozen after downloading, so transitively this folder is also\n//!     # frozen once its unpacked (it's never unpacked again)\n//!     # CAVEAT: They are not read-only. See rust-lang/cargo#9455.\n//!     src/\n//!         registry1-<hash>/<pkg>-<version>/...\n//!         ...\n//! ```\n//!\n//! [`IndexPackage`]: index::IndexPackage"
+        },
+        {
+          "line": 216,
+          "context": "use crate::util::{hex, VersionExt};\nuse crate::util::{restricted_names, CargoResult, Filesystem, GlobalContext, LimitErrorReader};\n\n/// The `.cargo-ok` file is used to track if the source is already unpacked.\n/// See [`RegistrySource::unpack_package`] for more.\n///\n/// Not to be confused with `.cargo-ok` file in git sources.\nconst PACKAGE_SOURCE_LOCK: &str = \".cargo-ok\";\n\npub const CRATES_IO_INDEX: &str = \"https://github.com/rust-lang/crates.io-index\";\npub const CRATES_IO_HTTP_INDEX: &str = \"sparse+https://index.crates.io/\";"
+        },
+        {
+          "line": 217,
+          "context": "use crate::util::{restricted_names, CargoResult, Filesystem, GlobalContext, LimitErrorReader};\n\n/// The `.cargo-ok` file is used to track if the source is already unpacked.\n/// See [`RegistrySource::unpack_package`] for more.\n///\n/// Not to be confused with `.cargo-ok` file in git sources.\nconst PACKAGE_SOURCE_LOCK: &str = \".cargo-ok\";\n\npub const CRATES_IO_INDEX: &str = \"https://github.com/rust-lang/crates.io-index\";\npub const CRATES_IO_HTTP_INDEX: &str = \"sparse+https://index.crates.io/\";\npub const CRATES_IO_REGISTRY: &str = \"crates-io\";"
+        },
+        {
+          "line": 219,
+          "context": "/// The `.cargo-ok` file is used to track if the source is already unpacked.\n/// See [`RegistrySource::unpack_package`] for more.\n///\n/// Not to be confused with `.cargo-ok` file in git sources.\nconst PACKAGE_SOURCE_LOCK: &str = \".cargo-ok\";\n\npub const CRATES_IO_INDEX: &str = \"https://github.com/rust-lang/crates.io-index\";\npub const CRATES_IO_HTTP_INDEX: &str = \"sparse+https://index.crates.io/\";\npub const CRATES_IO_REGISTRY: &str = \"crates-io\";\npub const CRATES_IO_DOMAIN: &str = \"crates.io\";\n"
+        },
+        {
+          "line": 220,
+          "context": "/// See [`RegistrySource::unpack_package`] for more.\n///\n/// Not to be confused with `.cargo-ok` file in git sources.\nconst PACKAGE_SOURCE_LOCK: &str = \".cargo-ok\";\n\npub const CRATES_IO_INDEX: &str = \"https://github.com/rust-lang/crates.io-index\";\npub const CRATES_IO_HTTP_INDEX: &str = \"sparse+https://index.crates.io/\";\npub const CRATES_IO_REGISTRY: &str = \"crates-io\";\npub const CRATES_IO_DOMAIN: &str = \"crates.io\";\n\n/// The content inside `.cargo-ok`."
+        },
+        {
+          "line": 227,
+          "context": "pub const CRATES_IO_REGISTRY: &str = \"crates-io\";\npub const CRATES_IO_DOMAIN: &str = \"crates.io\";\n\n/// The content inside `.cargo-ok`.\n/// See [`RegistrySource::unpack_package`] for more.\n#[derive(Deserialize, Serialize)]\n#[serde(rename_all = \"kebab-case\")]\nstruct LockMetadata {\n    /// The version of `.cargo-ok` file\n    v: u32,\n}"
+        },
+        {
+          "line": 228,
+          "context": "pub const CRATES_IO_DOMAIN: &str = \"crates.io\";\n\n/// The content inside `.cargo-ok`.\n/// See [`RegistrySource::unpack_package`] for more.\n#[derive(Deserialize, Serialize)]\n#[serde(rename_all = \"kebab-case\")]\nstruct LockMetadata {\n    /// The version of `.cargo-ok` file\n    v: u32,\n}\n"
+        },
+        {
+          "line": 232,
+          "context": "#[derive(Deserialize, Serialize)]\n#[serde(rename_all = \"kebab-case\")]\nstruct LockMetadata {\n    /// The version of `.cargo-ok` file\n    v: u32,\n}\n\n/// A [`Source`] implementation for a local or a remote registry.\n///\n/// This contains common functionality that is shared between each registry\n/// kind, with the registry-specific logic implemented as part of the"
+        },
+        {
+          "line": 250,
+          "context": "    /// The unique identifier of this source.\n    source_id: SourceId,\n    /// The path where crate files are extracted (`$CARGO_HOME/registry/src/$REG-HASH`).\n    src_path: Filesystem,\n    /// Path to the cache of `.crate` files (`$CARGO_HOME/registry/cache/$REG-HASH`).\n    cache_path: Filesystem,\n    /// Local reference to [`GlobalContext`] for convenience.\n    gctx: &'gctx GlobalContext,\n    /// Abstraction for interfacing to the different registry kinds.\n    ops: Box<dyn RegistryData + 'gctx>,\n    /// Interface for managing the on-disk index."
+        },
+        {
+          "line": 252,
+          "context": "    /// The path where crate files are extracted (`$CARGO_HOME/registry/src/$REG-HASH`).\n    src_path: Filesystem,\n    /// Path to the cache of `.crate` files (`$CARGO_HOME/registry/cache/$REG-HASH`).\n    cache_path: Filesystem,\n    /// Local reference to [`GlobalContext`] for convenience.\n    gctx: &'gctx GlobalContext,\n    /// Abstraction for interfacing to the different registry kinds.\n    ops: Box<dyn RegistryData + 'gctx>,\n    /// Interface for managing the on-disk index.\n    index: index::RegistryIndex<'gctx>,\n    /// A set of packages that should be allowed to be used, even if they are"
+        },
+        {
+          "line": 536,
+          "context": "    ) -> RegistrySource<'gctx> {\n        RegistrySource {\n            name: name.into(),\n            src_path: gctx.registry_source_path().join(name),\n            cache_path: gctx.registry_cache_path().join(name),\n            gctx,\n            source_id,\n            index: index::RegistryIndex::new(source_id, ops.index_path(), gctx),\n            yanked_whitelist: yanked_whitelist.clone(),\n            ops,\n            selected_precise_yanked: HashSet::new(),"
+        },
+        {
+          "line": 537,
+          "context": "        RegistrySource {\n            name: name.into(),\n            src_path: gctx.registry_source_path().join(name),\n            cache_path: gctx.registry_cache_path().join(name),\n            gctx,\n            source_id,\n            index: index::RegistryIndex::new(source_id, ops.index_path(), gctx),\n            yanked_whitelist: yanked_whitelist.clone(),\n            ops,\n            selected_precise_yanked: HashSet::new(),\n        }"
+        },
+        {
+          "line": 557,
+          "context": "    /// Unpacks a downloaded package into a location where it's ready to be\n    /// compiled.\n    ///\n    /// No action is taken if the source looks like it's already unpacked.\n    ///\n    /// # History of interruption detection with `.cargo-ok` file\n    ///\n    /// Cargo has always included a `.cargo-ok` file ([`PACKAGE_SOURCE_LOCK`])\n    /// to detect if extraction was interrupted, but it was originally empty.\n    ///\n    /// In 1.34, Cargo was changed to create the `.cargo-ok` file before it"
+        },
+        {
+          "line": 559,
+          "context": "    ///\n    /// No action is taken if the source looks like it's already unpacked.\n    ///\n    /// # History of interruption detection with `.cargo-ok` file\n    ///\n    /// Cargo has always included a `.cargo-ok` file ([`PACKAGE_SOURCE_LOCK`])\n    /// to detect if extraction was interrupted, but it was originally empty.\n    ///\n    /// In 1.34, Cargo was changed to create the `.cargo-ok` file before it\n    /// started extraction to implement fine-grained locking. After it was\n    /// finished extracting, it wrote two bytes to indicate it was complete."
+        },
+        {
+          "line": 561,
+          "context": "    ///\n    /// # History of interruption detection with `.cargo-ok` file\n    ///\n    /// Cargo has always included a `.cargo-ok` file ([`PACKAGE_SOURCE_LOCK`])\n    /// to detect if extraction was interrupted, but it was originally empty.\n    ///\n    /// In 1.34, Cargo was changed to create the `.cargo-ok` file before it\n    /// started extraction to implement fine-grained locking. After it was\n    /// finished extracting, it wrote two bytes to indicate it was complete.\n    /// It would use the length check to detect if it was possibly interrupted.\n    ///"
+        },
+        {
+          "line": 564,
+          "context": "    /// Cargo has always included a `.cargo-ok` file ([`PACKAGE_SOURCE_LOCK`])\n    /// to detect if extraction was interrupted, but it was originally empty.\n    ///\n    /// In 1.34, Cargo was changed to create the `.cargo-ok` file before it\n    /// started extraction to implement fine-grained locking. After it was\n    /// finished extracting, it wrote two bytes to indicate it was complete.\n    /// It would use the length check to detect if it was possibly interrupted.\n    ///\n    /// In 1.36, Cargo changed to not use fine-grained locking, and instead used\n    /// a global lock. The use of `.cargo-ok` was no longer needed for locking\n    /// purposes, but was kept to detect when extraction was interrupted."
+        },
+        {
+          "line": 570,
+          "context": "    /// It would use the length check to detect if it was possibly interrupted.\n    ///\n    /// In 1.36, Cargo changed to not use fine-grained locking, and instead used\n    /// a global lock. The use of `.cargo-ok` was no longer needed for locking\n    /// purposes, but was kept to detect when extraction was interrupted.\n    ///\n    /// In 1.49, Cargo changed to not create the `.cargo-ok` file before it\n    /// started extraction to deal with `.crate` files that inexplicably had\n    /// a `.cargo-ok` file in them.\n    ///\n    /// In 1.64, Cargo changed to detect `.crate` files with `.cargo-ok` files"
+        },
+        {
+          "line": 573,
+          "context": "    /// a global lock. The use of `.cargo-ok` was no longer needed for locking\n    /// purposes, but was kept to detect when extraction was interrupted.\n    ///\n    /// In 1.49, Cargo changed to not create the `.cargo-ok` file before it\n    /// started extraction to deal with `.crate` files that inexplicably had\n    /// a `.cargo-ok` file in them.\n    ///\n    /// In 1.64, Cargo changed to detect `.crate` files with `.cargo-ok` files\n    /// in them in response to [CVE-2022-36113], which dealt with malicious\n    /// `.crate` files making `.cargo-ok` a symlink causing cargo to write \"ok\"\n    /// to any arbitrary file on the filesystem it has permission to."
+        },
+        {
+          "line": 575,
+          "context": "    ///\n    /// In 1.49, Cargo changed to not create the `.cargo-ok` file before it\n    /// started extraction to deal with `.crate` files that inexplicably had\n    /// a `.cargo-ok` file in them.\n    ///\n    /// In 1.64, Cargo changed to detect `.crate` files with `.cargo-ok` files\n    /// in them in response to [CVE-2022-36113], which dealt with malicious\n    /// `.crate` files making `.cargo-ok` a symlink causing cargo to write \"ok\"\n    /// to any arbitrary file on the filesystem it has permission to.\n    ///\n    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate"
+        },
+        {
+          "line": 577,
+          "context": "    /// started extraction to deal with `.crate` files that inexplicably had\n    /// a `.cargo-ok` file in them.\n    ///\n    /// In 1.64, Cargo changed to detect `.crate` files with `.cargo-ok` files\n    /// in them in response to [CVE-2022-36113], which dealt with malicious\n    /// `.crate` files making `.cargo-ok` a symlink causing cargo to write \"ok\"\n    /// to any arbitrary file on the filesystem it has permission to.\n    ///\n    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate\n    /// the version of it. A failure of parsing will result in a heavy-hammer\n    /// approach that unpacks the `.crate` file again. This is in response to a"
+        },
+        {
+          "line": 579,
+          "context": "    ///\n    /// In 1.64, Cargo changed to detect `.crate` files with `.cargo-ok` files\n    /// in them in response to [CVE-2022-36113], which dealt with malicious\n    /// `.crate` files making `.cargo-ok` a symlink causing cargo to write \"ok\"\n    /// to any arbitrary file on the filesystem it has permission to.\n    ///\n    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate\n    /// the version of it. A failure of parsing will result in a heavy-hammer\n    /// approach that unpacks the `.crate` file again. This is in response to a\n    /// security issue that the unpacking didn't respect umask on Unix systems.\n    ///"
+        },
+        {
+          "line": 582,
+          "context": "    /// `.crate` files making `.cargo-ok` a symlink causing cargo to write \"ok\"\n    /// to any arbitrary file on the filesystem it has permission to.\n    ///\n    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate\n    /// the version of it. A failure of parsing will result in a heavy-hammer\n    /// approach that unpacks the `.crate` file again. This is in response to a\n    /// security issue that the unpacking didn't respect umask on Unix systems.\n    ///\n    /// This is all a long-winded way of explaining the circumstances that might\n    /// cause a directory to contain a `.cargo-ok` file that is empty or\n    /// otherwise corrupted. Either this was extracted by a version of Rust"
+        },
+        {
+          "line": 584,
+          "context": "    ///\n    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate\n    /// the version of it. A failure of parsing will result in a heavy-hammer\n    /// approach that unpacks the `.crate` file again. This is in response to a\n    /// security issue that the unpacking didn't respect umask on Unix systems.\n    ///\n    /// This is all a long-winded way of explaining the circumstances that might\n    /// cause a directory to contain a `.cargo-ok` file that is empty or\n    /// otherwise corrupted. Either this was extracted by a version of Rust\n    /// before 1.34, in which case everything should be fine. However, an empty\n    /// file created by versions 1.36 to 1.49 indicates that the extraction was"
+        },
+        {
+          "line": 585,
+          "context": "    /// In 1.71, `.cargo-ok` changed to contain a JSON `{ v: 1 }` to indicate\n    /// the version of it. A failure of parsing will result in a heavy-hammer\n    /// approach that unpacks the `.crate` file again. This is in response to a\n    /// security issue that the unpacking didn't respect umask on Unix systems.\n    ///\n    /// This is all a long-winded way of explaining the circumstances that might\n    /// cause a directory to contain a `.cargo-ok` file that is empty or\n    /// otherwise corrupted. Either this was extracted by a version of Rust\n    /// before 1.34, in which case everything should be fine. However, an empty\n    /// file created by versions 1.36 to 1.49 indicates that the extraction was\n    /// interrupted and that we need to start again."
+        },
+        {
+          "line": 588,
+          "context": "    /// security issue that the unpacking didn't respect umask on Unix systems.\n    ///\n    /// This is all a long-winded way of explaining the circumstances that might\n    /// cause a directory to contain a `.cargo-ok` file that is empty or\n    /// otherwise corrupted. Either this was extracted by a version of Rust\n    /// before 1.34, in which case everything should be fine. However, an empty\n    /// file created by versions 1.36 to 1.49 indicates that the extraction was\n    /// interrupted and that we need to start again.\n    ///\n    /// Another possibility is that the filesystem is simply corrupted, in\n    /// which case deleting the directory might be the safe thing to do. That"
+        },
+        {
+          "line": 599,
+          "context": "    /// is probably unlikely, though.\n    ///\n    /// To be safe, we deletes the directory and starts over again if an empty\n    /// `.cargo-ok` file is found.\n    ///\n    /// [CVE-2022-36113]: https://blog.rust-lang.org/2022/09/14/cargo-cves.html#arbitrary-file-corruption-cve-2022-36113\n    fn unpack_package(&self, pkg: PackageId, tarball: &File) -> CargoResult<PathBuf> {\n        let package_dir = format!(\"{}-{}\", pkg.name(), pkg.version());\n        let dst = self.src_path.join(&package_dir);\n        let path = dst.join(PACKAGE_SOURCE_LOCK);\n        let path = self"
+        },
+        {
+          "line": 602,
+          "context": "    /// `.cargo-ok` file is found.\n    ///\n    /// [CVE-2022-36113]: https://blog.rust-lang.org/2022/09/14/cargo-cves.html#arbitrary-file-corruption-cve-2022-36113\n    fn unpack_package(&self, pkg: PackageId, tarball: &File) -> CargoResult<PathBuf> {\n        let package_dir = format!(\"{}-{}\", pkg.name(), pkg.version());\n        let dst = self.src_path.join(&package_dir);\n        let path = dst.join(PACKAGE_SOURCE_LOCK);\n        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let unpack_dir = path.parent().unwrap();"
+        },
+        {
+          "line": 604,
+          "context": "    /// [CVE-2022-36113]: https://blog.rust-lang.org/2022/09/14/cargo-cves.html#arbitrary-file-corruption-cve-2022-36113\n    fn unpack_package(&self, pkg: PackageId, tarball: &File) -> CargoResult<PathBuf> {\n        let package_dir = format!(\"{}-{}\", pkg.name(), pkg.version());\n        let dst = self.src_path.join(&package_dir);\n        let path = dst.join(PACKAGE_SOURCE_LOCK);\n        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let unpack_dir = path.parent().unwrap();\n        match fs::read_to_string(path) {\n            Ok(ok) => match serde_json::from_str::<LockMetadata>(&ok) {"
+        },
+        {
+          "line": 609,
+          "context": "        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let unpack_dir = path.parent().unwrap();\n        match fs::read_to_string(path) {\n            Ok(ok) => match serde_json::from_str::<LockMetadata>(&ok) {\n                Ok(lock_meta) if lock_meta.v == 1 => {\n                    self.gctx\n                        .deferred_global_last_use()?\n                        .mark_registry_src_used(global_cache_tracker::RegistrySrc {\n                            encoded_registry_name: self.name,"
+        },
+        {
+          "line": 620,
+          "context": "                            package_dir: package_dir.into(),\n                            size: None,\n                        });\n                    return Ok(unpack_dir.to_path_buf());\n                }\n                _ => {\n                    if ok == \"ok\" {\n                        tracing::debug!(\"old `ok` content found, clearing cache\");\n                    } else {\n                        tracing::warn!(\"unrecognized .cargo-ok content, clearing cache: {ok}\");\n                    }"
+        },
+        {
+          "line": 626,
+          "context": "                    if ok == \"ok\" {\n                        tracing::debug!(\"old `ok` content found, clearing cache\");\n                    } else {\n                        tracing::warn!(\"unrecognized .cargo-ok content, clearing cache: {ok}\");\n                    }\n                    // See comment of `unpack_package` about why removing all stuff.\n                    paths::remove_dir_all(dst.as_path_unlocked())?;\n                }\n            },\n            Err(e) if e.kind() == io::ErrorKind::NotFound => {}\n            Err(e) => anyhow::bail!(\"unable to read .cargo-ok file at {path:?}: {e}\"),"
+        },
+        {
+          "line": 628,
+          "context": "                    } else {\n                        tracing::warn!(\"unrecognized .cargo-ok content, clearing cache: {ok}\");\n                    }\n                    // See comment of `unpack_package` about why removing all stuff.\n                    paths::remove_dir_all(dst.as_path_unlocked())?;\n                }\n            },\n            Err(e) if e.kind() == io::ErrorKind::NotFound => {}\n            Err(e) => anyhow::bail!(\"unable to read .cargo-ok file at {path:?}: {e}\"),\n        }\n        dst.create_dir()?;"
+        },
+        {
+          "line": 633,
+          "context": "                }\n            },\n            Err(e) if e.kind() == io::ErrorKind::NotFound => {}\n            Err(e) => anyhow::bail!(\"unable to read .cargo-ok file at {path:?}: {e}\"),\n        }\n        dst.create_dir()?;\n\n        let bytes_written = unpack(self.gctx, tarball, unpack_dir, &|_| true)?;\n\n        // Now that we've finished unpacking, create and write to the lock file to indicate that\n        // unpacking was successful."
+        },
+        {
+          "line": 637,
+          "context": "        }\n        dst.create_dir()?;\n\n        let bytes_written = unpack(self.gctx, tarball, unpack_dir, &|_| true)?;\n\n        // Now that we've finished unpacking, create and write to the lock file to indicate that\n        // unpacking was successful.\n        let mut ok = OpenOptions::new()\n            .create_new(true)\n            .read(true)\n            .write(true)"
+        },
+        {
+          "line": 639,
+          "context": "\n        let bytes_written = unpack(self.gctx, tarball, unpack_dir, &|_| true)?;\n\n        // Now that we've finished unpacking, create and write to the lock file to indicate that\n        // unpacking was successful.\n        let mut ok = OpenOptions::new()\n            .create_new(true)\n            .read(true)\n            .write(true)\n            .open(&path)\n            .with_context(|| format!(\"failed to open `{}`\", path.display()))?;"
+        },
+        {
+          "line": 640,
+          "context": "        let bytes_written = unpack(self.gctx, tarball, unpack_dir, &|_| true)?;\n\n        // Now that we've finished unpacking, create and write to the lock file to indicate that\n        // unpacking was successful.\n        let mut ok = OpenOptions::new()\n            .create_new(true)\n            .read(true)\n            .write(true)\n            .open(&path)\n            .with_context(|| format!(\"failed to open `{}`\", path.display()))?;\n"
+        },
+        {
+          "line": 659,
+          "context": "                size: Some(bytes_written),\n            });\n\n        Ok(unpack_dir.to_path_buf())\n    }\n\n    /// Unpacks the `.crate` tarball of the package in a given directory.\n    ///\n    /// Returns the path to the crate tarball directory,\n    /// whch is always `<unpack_dir>/<pkg>-<version>`.\n    ///"
+        },
+        {
+          "line": 665,
+          "context": "    /// Unpacks the `.crate` tarball of the package in a given directory.\n    ///\n    /// Returns the path to the crate tarball directory,\n    /// whch is always `<unpack_dir>/<pkg>-<version>`.\n    ///\n    /// This holds an assumption that the associated tarball already exists.\n    pub fn unpack_package_in(\n        &self,\n        pkg: &PackageId,\n        unpack_dir: &Path,\n        include: &dyn Fn(&Path) -> bool,"
+        },
+        {
+          "line": 668,
+          "context": "    /// whch is always `<unpack_dir>/<pkg>-<version>`.\n    ///\n    /// This holds an assumption that the associated tarball already exists.\n    pub fn unpack_package_in(\n        &self,\n        pkg: &PackageId,\n        unpack_dir: &Path,\n        include: &dyn Fn(&Path) -> bool,\n    ) -> CargoResult<PathBuf> {\n        let path = self.cache_path.join(pkg.tarball_name());\n        let path = self"
+        },
+        {
+          "line": 671,
+          "context": "    pub fn unpack_package_in(\n        &self,\n        pkg: &PackageId,\n        unpack_dir: &Path,\n        include: &dyn Fn(&Path) -> bool,\n    ) -> CargoResult<PathBuf> {\n        let path = self.cache_path.join(pkg.tarball_name());\n        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let dst = unpack_dir.join(format!(\"{}-{}\", pkg.name(), pkg.version()));"
+        },
+        {
+          "line": 674,
+          "context": "        unpack_dir: &Path,\n        include: &dyn Fn(&Path) -> bool,\n    ) -> CargoResult<PathBuf> {\n        let path = self.cache_path.join(pkg.tarball_name());\n        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let dst = unpack_dir.join(format!(\"{}-{}\", pkg.name(), pkg.version()));\n        let tarball =\n            File::open(path).with_context(|| format!(\"failed to open {}\", path.display()))?;\n        unpack(self.gctx, &tarball, &dst, include)?;"
+        },
+        {
+          "line": 678,
+          "context": "        let path = self\n            .gctx\n            .assert_package_cache_locked(CacheLockMode::DownloadExclusive, &path);\n        let dst = unpack_dir.join(format!(\"{}-{}\", pkg.name(), pkg.version()));\n        let tarball =\n            File::open(path).with_context(|| format!(\"failed to open {}\", path.display()))?;\n        unpack(self.gctx, &tarball, &dst, include)?;\n        Ok(dst)\n    }\n\n    /// Turns the downloaded `.crate` tarball file into a [`Package`]."
+        },
+        {
+          "line": 681,
+          "context": "        let dst = unpack_dir.join(format!(\"{}-{}\", pkg.name(), pkg.version()));\n        let tarball =\n            File::open(path).with_context(|| format!(\"failed to open {}\", path.display()))?;\n        unpack(self.gctx, &tarball, &dst, include)?;\n        Ok(dst)\n    }\n\n    /// Turns the downloaded `.crate` tarball file into a [`Package`].\n    ///\n    /// This unconditionally sets checksum for the returned package, so it\n    /// should only be called after doing integrity check. That is to say,"
+        },
+        {
+          "line": 693,
+          "context": "    /// [`RegistryData::finish_download`] before calling this method.\n    fn get_pkg(&mut self, package: PackageId, path: &File) -> CargoResult<Package> {\n        let path = self\n            .unpack_package(package, path)\n            .with_context(|| format!(\"failed to unpack package `{}`\", package))?;\n        let mut src = PathSource::new(&path, self.source_id, self.gctx);\n        src.load()?;\n        let mut pkg = match src.download(package)? {\n            MaybePackage::Ready(pkg) => pkg,\n            MaybePackage::Download { .. } => unreachable!(),\n        };"
+        },
+        {
+          "line": 694,
+          "context": "    fn get_pkg(&mut self, package: PackageId, path: &File) -> CargoResult<Package> {\n        let path = self\n            .unpack_package(package, path)\n            .with_context(|| format!(\"failed to unpack package `{}`\", package))?;\n        let mut src = PathSource::new(&path, self.source_id, self.gctx);\n        src.load()?;\n        let mut pkg = match src.download(package)? {\n            MaybePackage::Ready(pkg) => pkg,\n            MaybePackage::Download { .. } => unreachable!(),\n        };\n"
+        },
+        {
+          "line": 965,
+          "context": "    const NAME: &'static str = \"config.json\";\n}\n\n/// Get the maximum unpack size that Cargo permits\n/// based on a given `size` of your compressed file.\n///\n/// Returns the larger one between `size * max compression ratio`\n/// and a fixed max unpacked size.\n///\n/// In reality, the compression ratio usually falls in the range of 2:1 to 10:1.\n/// We choose 20:1 to cover almost all possible cases hopefully."
+        },
+        {
+          "line": 969,
+          "context": "/// based on a given `size` of your compressed file.\n///\n/// Returns the larger one between `size * max compression ratio`\n/// and a fixed max unpacked size.\n///\n/// In reality, the compression ratio usually falls in the range of 2:1 to 10:1.\n/// We choose 20:1 to cover almost all possible cases hopefully.\n/// Any ratio higher than this is considered as a zip bomb.\n///\n/// In the future we might want to introduce a configurable size.\n///"
+        },
+        {
+          "line": 983,
+          "context": "/// * <https://cran.r-project.org/web/packages/brotli/vignettes/brotli-2015-09-22.pdf>\n/// * <https://blog.cloudflare.com/results-experimenting-brotli/>\n/// * <https://tukaani.org/lzma/benchmarks.html>\nfn max_unpack_size(gctx: &GlobalContext, size: u64) -> u64 {\n    const SIZE_VAR: &str = \"__CARGO_TEST_MAX_UNPACK_SIZE\";\n    const RATIO_VAR: &str = \"__CARGO_TEST_MAX_UNPACK_RATIO\";\n    const MAX_UNPACK_SIZE: u64 = 512 * 1024 * 1024; // 512 MiB\n    const MAX_COMPRESSION_RATIO: usize = 20; // 20:1\n\n    let max_unpack_size = if cfg!(debug_assertions) && gctx.get_env(SIZE_VAR).is_ok() {\n        // For integration test only."
+        },
+        {
+          "line": 989,
+          "context": "    const MAX_UNPACK_SIZE: u64 = 512 * 1024 * 1024; // 512 MiB\n    const MAX_COMPRESSION_RATIO: usize = 20; // 20:1\n\n    let max_unpack_size = if cfg!(debug_assertions) && gctx.get_env(SIZE_VAR).is_ok() {\n        // For integration test only.\n        gctx.get_env(SIZE_VAR)\n            .unwrap()\n            .parse()\n            .expect(\"a max unpack size in bytes\")\n    } else {\n        MAX_UNPACK_SIZE"
+        },
+        {
+          "line": 994,
+          "context": "        gctx.get_env(SIZE_VAR)\n            .unwrap()\n            .parse()\n            .expect(\"a max unpack size in bytes\")\n    } else {\n        MAX_UNPACK_SIZE\n    };\n    let max_compression_ratio = if cfg!(debug_assertions) && gctx.get_env(RATIO_VAR).is_ok() {\n        // For integration test only.\n        gctx.get_env(RATIO_VAR)\n            .unwrap()"
+        },
+        {
+          "line": 1008,
+          "context": "        MAX_COMPRESSION_RATIO\n    };\n\n    u64::max(max_unpack_size, size * max_compression_ratio as u64)\n}\n\n/// Set the current [`umask`] value for the given tarball. No-op on non-Unix\n/// platforms.\n///\n/// On Windows, tar only looks at user permissions and tries to set the \"read\n/// only\" attribute, so no-op as well."
+        },
+        {
+          "line": 1025,
+          "context": "}\n\n/// Unpack a tarball with zip bomb and overwrite protections.\nfn unpack(\n    gctx: &GlobalContext,\n    tarball: &File,\n    unpack_dir: &Path,\n    include: &dyn Fn(&Path) -> bool,\n) -> CargoResult<u64> {\n    let mut tar = {\n        let size_limit = max_unpack_size(gctx, tarball.metadata()?.len());"
+        },
+        {
+          "line": 1028,
+          "context": "fn unpack(\n    gctx: &GlobalContext,\n    tarball: &File,\n    unpack_dir: &Path,\n    include: &dyn Fn(&Path) -> bool,\n) -> CargoResult<u64> {\n    let mut tar = {\n        let size_limit = max_unpack_size(gctx, tarball.metadata()?.len());\n        let gz = GzDecoder::new(tarball);\n        let gz = LimitErrorReader::new(gz, size_limit);\n        let mut tar = Archive::new(gz);"
+        },
+        {
+          "line": 1032,
+          "context": "    include: &dyn Fn(&Path) -> bool,\n) -> CargoResult<u64> {\n    let mut tar = {\n        let size_limit = max_unpack_size(gctx, tarball.metadata()?.len());\n        let gz = GzDecoder::new(tarball);\n        let gz = LimitErrorReader::new(gz, size_limit);\n        let mut tar = Archive::new(gz);\n        set_mask(&mut tar);\n        tar\n    };\n    let mut bytes_written = 0;"
+        },
+        {
+          "line": 1040,
+          "context": "        tar\n    };\n    let mut bytes_written = 0;\n    let prefix = unpack_dir.file_name().unwrap();\n    let parent = unpack_dir.parent().unwrap();\n    for entry in tar.entries()? {\n        let mut entry = entry.context(\"failed to iterate over archive\")?;\n        let entry_path = entry\n            .path()\n            .context(\"failed to read entry path\")?\n            .into_owned();"
+        },
+        {
+          "line": 1041,
+          "context": "    };\n    let mut bytes_written = 0;\n    let prefix = unpack_dir.file_name().unwrap();\n    let parent = unpack_dir.parent().unwrap();\n    for entry in tar.entries()? {\n        let mut entry = entry.context(\"failed to iterate over archive\")?;\n        let entry_path = entry\n            .path()\n            .context(\"failed to read entry path\")?\n            .into_owned();\n"
+        },
+        {
+          "line": 1054,
+          "context": "                continue;\n            }\n        } else {\n            // We're going to unpack this tarball into the global source\n            // directory, but we want to make sure that it doesn't accidentally\n            // (or maliciously) overwrite source code from other crates. Cargo\n            // itself should never generate a tarball that hits this error, and\n            // crates.io should also block uploads with these sorts of tarballs,\n            // but be extra sure by adding a check here as well.\n            anyhow::bail!(\n                \"invalid tarball downloaded, contains \\"
+        },
+        {
+          "line": 1066,
+          "context": "            )\n        }\n\n        // Prevent unpacking the lockfile from the crate itself.\n        if entry_path\n            .file_name()\n            .map_or(false, |p| p == PACKAGE_SOURCE_LOCK)\n        {\n            continue;\n        }\n        // Unpacking failed"
+        },
+        {
+          "line": 1075,
+          "context": "        }\n        // Unpacking failed\n        bytes_written += entry.size();\n        let mut result = entry.unpack_in(parent).map_err(anyhow::Error::from);\n        if cfg!(windows) && restricted_names::is_windows_reserved_path(&entry_path) {\n            result = result.with_context(|| {\n                format!(\n                    \"`{}` appears to contain a reserved Windows path, \\\n                        it cannot be extracted on Windows\",\n                    entry_path.display()\n                )"
+        },
+        {
+          "line": 1085,
+          "context": "                )\n            });\n        }\n        result.with_context(|| format!(\"failed to unpack entry at `{}`\", entry_path.display()))?;\n    }\n\n    Ok(bytes_written)\n}"
+        }
+      ]
+    },
+    {
+      "url": "https://raw.githubusercontent.com/rust-lang/cargo/ca74c32f0ac6d99000858dcae9b0931ef76a8f43/src/cargo/sources/registry/local.rs",
+      "status": 200,
+      "sha256": "3c1000f1c0079cbb9e444ff1bcb871973a959aebb619652c2fc501e5f44560b7",
+      "bytes": 7256,
+      "selected": [
+        {
+          "line": 23,
+          "context": "/// When a local registry is requested for a package, it simply looks into what\n/// its index has under the `index` directory. When [`LocalRegistry::download`]\n/// is called, a local registry verifies the checksum of the requested `.crate`\n/// tarball and then unpacks it to `$CARGO_HOME/.registry/src`.\n///\n/// > Note that there is a third-party subcommand [`cargo-local-registry`],\n/// > which happened to be developed by a former Cargo team member when local\n/// > registry was introduced. The tool is to ease the burden of maintaining\n/// > local registries. However, in general the Cargo team avoids recommending\n/// > any specific third-party crate. Just FYI.\n///"
+        },
+        {
+          "line": 64,
+          "context": "    /// Root path of this local registry.\n    root: Filesystem,\n    /// Path where this local registry extract `.crate` tarballs to.\n    src_path: Filesystem,\n    gctx: &'gctx GlobalContext,\n    /// Whether this source has updated all package information it may contain.\n    updated: bool,\n    /// Disables status messages.\n    quiet: bool,\n}\n"
+        },
+        {
+          "line": 79,
+          "context": "    ///   Expect to be unique.\n    pub fn new(root: &Path, gctx: &'gctx GlobalContext, name: &str) -> LocalRegistry<'gctx> {\n        LocalRegistry {\n            src_path: gctx.registry_source_path().join(name),\n            index_path: Filesystem::new(root.join(\"index\")),\n            root: Filesystem::new(root.to_path_buf()),\n            gctx,\n            updated: false,\n            quiet: false,\n        }\n    }"
+        },
+        {
+          "line": 176,
+          "context": "        let path = self.root.join(&pkg.tarball_name()).into_path_unlocked();\n        let mut crate_file = paths::open(&path)?;\n\n        // If we've already got an unpacked version of this crate, then skip the\n        // checksum below as it is in theory already verified.\n        let dst = path.file_stem().unwrap();\n        if self.src_path.join(dst).into_path_unlocked().exists() {\n            return Ok(MaybeLock::Ready(crate_file));\n        }\n\n        if !self.quiet {"
+        },
+        {
+          "line": 179,
+          "context": "        // If we've already got an unpacked version of this crate, then skip the\n        // checksum below as it is in theory already verified.\n        let dst = path.file_stem().unwrap();\n        if self.src_path.join(dst).into_path_unlocked().exists() {\n            return Ok(MaybeLock::Ready(crate_file));\n        }\n\n        if !self.quiet {\n            self.gctx.shell().status(\"Unpacking\", pkg)?;\n        }\n"
+        }
+      ]
+    }
+  ],
+  "receipt": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "-B",
+      "/Users/dominic/ZK/.worktrees/cx-sbf-inputs/tools/sbf-inputs-20261024/SbfInputs_research.py"
+    ],
+    "source_revision": "4fef4c203ca8c69b82a4219272e31c600503b195",
+    "script_sha256": "1ace77d72f1a7aad2f7d613235ebf15e2dfdaaf8693474b453b71203a70c12d5",
+    "exit": 0,
+    "wall_seconds": 0.7469533327966928,
+    "peak_rss_bytes": 30310400,
+    "swap": 0,
+    "print_axioms": "N/A"
+  }
+}
