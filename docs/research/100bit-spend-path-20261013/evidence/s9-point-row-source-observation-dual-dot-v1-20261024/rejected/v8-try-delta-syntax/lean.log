@@ -1,0 +1,31 @@
+/private/tmp/a3-s9-point-row-dot-v8-goal-delta-check-20261024/sources/S9PointRowDualFoldModelV1.lean:19:78: error: unsolved goals
+model : Table
+k : ℕ
+a0 a1 : E
+f : Slice U8
+hd :
+  RoundPairing.dot (fun i => fieldValue f (finIndex ⋯ i))
+      (RoundPairing.dualFold a1 (RoundPairing.dualFold a0 fun j => embedQ (rawRow model k j))) =
+    factorPolynomial a0 (model k 0) * factorPolynomial a1 (model k 1) *
+      ∑ i, fieldValue f (finIndex ⋯ i) * embedQ (highProduct (model k) ↑i)
+hs :
+  factorPolynomial a0 (model k 0) * factorPolynomial a1 (model k 1) *
+      ∑ i, fieldValue f (finIndex ⋯ i) * embedQ (highProduct (model k) ↑i) =
+    factorPolynomial a0 (model k 0) * factorPolynomial a1 (model k 1) *
+      ∑ i, fieldValue f (finIndex ⋯ i) * embedQ (highProduct (model k) ↑i)
+hc :
+  factorPolynomial a0 (model k 0) * factorPolynomial a1 (model k 1) *
+      ∑ i, fieldValue f (finIndex ⋯ i) * embedQ (highProduct (model k) ↑i) =
+    RoundPairing.dot (fun i => fieldValue f (finIndex ⋯ i))
+      (RoundPairing.dualFold a1 (RoundPairing.dualFold a0 fun j => embedQ (rawRow model k j)))
+⊢ factorPolynomial a0 (model k 0) * factorPolynomial a1 (model k 1) *
+      ∑ i,
+        fieldValue f (finIndex rowValue._proof_1 i) *
+          embedQ (AspisR1S9ConstructorTableNativeTensorV1.highProduct (model k) ↑i) =
+    RoundPairing.dot (fun i => fieldValue f (finIndex ⋯ i))
+      (RoundPairing.dualFold a1 (RoundPairing.dualFold a0 fun j => embedQ (rawRow model k j)))
+/private/tmp/a3-s9-point-row-dot-v8-goal-delta-check-20261024/sources/S9PointRowDualFoldModelV1.lean:44:4: error: unexpected identifier; expected command
+'AspisR1S9PointRowDualFoldModelV1.rowValue_eq_two_dual_dot' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

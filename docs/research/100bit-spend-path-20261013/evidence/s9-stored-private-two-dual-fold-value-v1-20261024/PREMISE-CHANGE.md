@@ -1,0 +1,3 @@
+Before: source parts4 was known as the existing ORIGINAL four-term sum, with selected helper Base/Quarter definitions and its SAME strict input stream. Generic folding math independently gave the first56 seed-power raw-row pairing.
+
+After: pointwise SAME powers4 observations and proved quarter/operator transports connect the exact helper functions and source finite sum to that generic pairing. No new semantic, seed, vector, child-success, quarter or desired-output premise is introduced. The helper still consumes the already-proved operational ActiveRowStored output and strict alpha canonicality; its caller derivation remains explicit upstream. Actual alpha/extra reads and coefficient success are preserved, not hidden or replaced.

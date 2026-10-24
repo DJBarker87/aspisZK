@@ -1,0 +1,3 @@
+Before: actual low producer supplied expectedLow of its actual powers arrays; generic raw-row math supplied lowWeight of arbitrary decoded challenges. Their powers, PERM, quarter and concrete/generic operations were unjoined.
+
+After: SAME actual powers4 source successes derive every power observation; existing actual low Prefix supplies every output cell. Bounded source PERM and proved operation/quarter bridges identify those exact values with lowWeight. No new semantic, quarter or desired-array premise is introduced. Canonical source inputs and accepted source events remain genuine execution inputs to this helper; concrete caller discharge is separate and already available upstream.
