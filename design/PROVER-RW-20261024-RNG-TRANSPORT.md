@@ -119,11 +119,21 @@ Required semantics and validation:
    and destination initialization state, Bottom, no live loans, no user Drop,
    and preservation of all other locals. Inspect the *actual* emitted
    StateOnlyAttemptEntropyError disposal, not merely the prototype closure.
-3. Extract actual prover::prove_masked_retrying and its anonymous factory,
-   StateOnlyAttemptSecrets::generate, From, and the selected map_err closure.
-   This actual factory calls generate() with a fresh **96-byte** buffer; it
-   must not be replaced by the 64-byte preselected-public-nonce prototype.
-   A later generate_for_mask_nonce caller requires a separate 64-byte binding.
+3. **Corrected by the lead continuation after a684b31c35:** extract actual
+   `RealR1_client::prove_for_proof_accounts` (RealR1_client.rs:20–29), its
+   anonymous factory calling `generate_for_mask_nonce(proof_account(k))`
+   (line 28), From, and that factory's actual map_err closure, feeding
+   `prover::prove_masked_retrying_with` (prover.rs:611 onward). Retain the
+   arbitrary mutable proof_account policy and its adaptive public nonce.
+   `generate_for_mask_nonce` (state_only_entropy.rs:211–242) initializes a
+   fresh **64-byte** buffer for each entered OS fill, with a 16-fill cap.
+   D152 explicitly forbids switching to the 96-byte generate adapter.
+   Historical erroneous requirement: “Extract actual
+   prover::prove_masked_retrying ... StateOnlyAttemptSecrets::generate ...
+   fresh 96-byte buffer ... A later generate_for_mask_nonce caller requires
+   a separate 64-byte binding.” That selection was wrong and is superseded;
+   the generic 96-byte API is historical comparison only. E1 remains the
+   literal conditional 64-byte law, not an established OS randomness law.
 4. At the existing OS primitive boundary retain each fill's input zero buffer,
    returned partial/full buffer, advanced provider state and ordered event,
    with separate source Ok/Err and extraction failure/divergence. On fill
