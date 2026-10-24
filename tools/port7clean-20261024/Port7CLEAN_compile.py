@@ -17,6 +17,13 @@ cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-port4c-20
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-ports3-20261023:/home/dombarker/project-offloads/codex-cx-ports3-20261023/retained-cache'
 cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-ports2-20261023:/home/dombarker/project-offloads/codex-cx-ports2-20261023/parser-cache'
 E.mkdir(exist_ok=True)
+cfg['deps_fingerprint']['direct_source_hashes']={}
+for line in source.read_text().splitlines():
+ if line.startswith('import '):
+  for imported in line[7:].split():
+   dependency=source.parent/(imported.replace('.','/')+'.lean')
+   if dependency.is_file():
+    cfg['deps_fingerprint']['direct_source_hashes'][imported]=hashlib.sha256(dependency.read_bytes()).hexdigest()
 c=TOOLS/f'{attempt}.json'
 # Reserve before any remote work; an in-flight receipt is not yet present.
 with c.open('x') as handle: handle.write(json.dumps(cfg,indent=2)+'\n')

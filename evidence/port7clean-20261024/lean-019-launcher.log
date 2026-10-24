@@ -1,0 +1,60 @@
+{"attempt": "lean-019", "exit_status": 1, "wall_seconds": 2.124184307991527, "peak_rss_kib": "4350296", "swaps": "0", "print_axioms": ["'AspisR1.Port7CLEAN_Extractor.fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port7CLEAN_Extractor.lean:42:33: error: Tactic `rfl` failed: The left-hand side
+  RawCutTranscriptRun.proof (build D (view before)) (RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof)
+    row
+is not definitionally equal to the right-hand side
+  RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof row
+
+case initial
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : ByteProver
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+parsed : OraclePortCompactDraft.parse (first rust P H).2.1.stored = some p
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (RawCutProverCompiler.verifier D (fun x x_1 => false) (first rust P H).2.1.statement
+             
+...
+teralTranscript.C2Word
+⊢ RawCutTranscriptRun.proof (build D (view before)) (RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof)
+      row =
+    RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof row
+Port7CLEAN_Extractor.lean:42:33: error: Tactic `rfl` failed: The left-hand side
+  RawCutTranscriptRun.proof (build D (view before)) (RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof)
+    row
+is not definitionally equal to the right-hand side
+  RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof row
+
+case second
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : ByteProver
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+parsed : OraclePortCompactDraft.parse (first rust P H).2.1.stored = some p
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (RawCutProverCompiler.verifier D (fun x x_1 => false) (first rust P H).2.1.statement
+              (first rust P H).2.1.proof)).1
+        a →
+      Read (first rust P H).1 a
+before : View Bytes State (Input × Bool) := first rust P H
+run : View Bytes State ((LiteralTranscript.Public × (ℕ → LiteralTranscript.Message)) × Bool) := eval H (source D rust P)
+pf : run.2.1.2 = RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof
+valid : RawCutWordsFromRunExecutableBin.ValidPrefix run
+words : RawCutWordsFromRunExecutableBin.wordsFromRun run = build D (view before)
+row : ℕ
+bytes✝ : LiteralTranscript.BytesMessage
+word✝ : LiteralTranscript.VWord
+⊢ RawCutTranscriptRun.proof (build D (view before)) (RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof)
+      row =
+    RawCutTranscriptRun.proof (build D (view before)) before.2.1.proof row
+'AspisR1.Port7CLEAN_Extractor.fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc1bcc741e68547fda6934d187a0f1541.scope; invocation ID: 5c3fe63bb9424f77a097200634b8f800

@@ -8,9 +8,26 @@ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 open OraclePortStoredExperimentC4 OraclePortStoredAdmissionC4 OraclePortRuntimeBindingC7
 open Port1_StoredCarrier Port6AUTH_SourceCut Port6AUTH_Prefix
+theorem transcript_statement (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof) (n : Nat) :
+    ((LiteralByteProtocol.protocol D).transcript H pub pf n).statement=pub := by
+  induction n with
+  | zero => rfl
+  | succ n ih => exact ih
+
 attribute [local irreducible] LiteralByteProtocol.protocol FS2.Protocol.transcript
   OraclePortStoredDecisionDraftC4.typedRows BinCompiledRunWordStability.wordsFromRun
   originalWith canon lift source
+
+
+theorem erased_statement (pr : LiteralTranscript.Prefix) :
+    (LiteralTranscript.erasePrefix pr).statement=pr.statement := rfl
+
+theorem reached_statement (D : LiteralByteProtocol.Decoder) (H : Bytes → State)
+    (pub : LiteralTranscript.Public) (pf : LiteralProtocol.Proof) :
+    (Port6AUTH_Frames.reached D H pub pf).statement=pub :=
+  (erased_statement _).trans (transcript_statement D H pub pf 33)
+
 
 theorem parsed_valid (p : OraclePortCompactDraft.Parsed) (row : Nat) (bound : row<33) :
     LiteralTranscript.valid row (parsedProof p row) := by
@@ -73,6 +90,31 @@ theorem rows (D : LiteralByteProtocol.Decoder) (rust : Verifier) (P : ByteProver
   rw [pub,pf,RawCutTranscriptRun.transcript_eq]
   rfl
 
+/-- Transport terminal checks through the actual two-pass carrier. Named to
+keep large native-call compositions from reducing concrete transcript33. -/
+theorem checks_to_source (D : LiteralByteProtocol.Decoder) (rust : Verifier) (P : ByteProver)
+    (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+    (parsed : OraclePortCompactDraft.parse (first rust P H).2.1.stored=some p)
+    (checked : Nonempty (LiteralAcceptanceTerminal.Checks
+      (first rust P H).2.1.statement
+      (OraclePortReaderPlumbingC6.reword (build D (view (first rust P H)))
+        (OraclePortStoredDecisionDraftC4.typedRows p q
+          (Port6AUTH_Frames.reached D H (first rust P H).2.1.statement (first rust P H).2.1.proof))))) :
+    Nonempty (LiteralAcceptanceTerminal.Checks (eval H (source D rust P)).2.1.1
+      ((LiteralByteProtocol.protocol D).transcript H (eval H (source D rust P)).2.1.1
+        (eval H (source D rust P)).2.1.2 33).rounds) := by
+  have rowEq := rows D rust P H p q parsed
+  rw [rowEq] at checked
+  have pub : (eval H (source D rust P)).2.1.1=(first rust P H).2.1.statement := by
+    simp only [source_eval,OraclePortFrozen2Join.annotatedWith_eval,view,enrich]
+  rw [pub] at checked ⊢
+  exact checked
+
+#print axioms erased_statement
+#print axioms reached_statement
+#print axioms checks_to_source
+
+#print axioms transcript_statement
 #print axioms parsed_valid
 #print axioms canon_parsed
 #print axioms first_proof
