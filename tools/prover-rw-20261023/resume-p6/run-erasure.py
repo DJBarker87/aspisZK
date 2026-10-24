@@ -1,3 +1,4 @@
+raise SystemExit("UNEXECUTED: paired check superseded; Kani059 charged to compact event check; new lead budget required")
 """One new bounded Kani contract; admission denial is final for this step."""
 from pathlib import Path
 import hashlib,json,os,re,runpy,subprocess,time

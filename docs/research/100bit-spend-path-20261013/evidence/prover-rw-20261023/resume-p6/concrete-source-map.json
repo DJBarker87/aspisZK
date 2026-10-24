@@ -1,0 +1,55 @@
+{
+  "schema": "ProverRwResumeP6-concrete-source-map-v1",
+  "source_sha256": "c897e9970a22badba06a1a44e18993b2f29695735cf76f04dea7270c436825c0",
+  "spans": {
+    "carriers": {
+      "byte_start": 755,
+      "byte_end_exclusive": 1060,
+      "line_start": 31,
+      "line_end": 47,
+      "sha256": "3228b0ac88b552b9bfccf20241f698c5526a00fc8a8cfbdcedc3b382359a44a5",
+      "source": "struct ProverRwResumeP6Request {\n    mask_nonce: [u8; 32],\n    retry: usize,\n}\n\nstruct ProverRwResumeP6Draw {\n    request: ProverRwResumeP6Request,\n    bytes: Zeroizing<[u8; 64]>,\n    outcome: Result<(), getrandom::Error>,\n}\n\nenum ProverRwResumeP6Control {\n    More(ProverRwResumeP6Request),\n    Done,\n}\n\n"
+    },
+    "start": {
+      "byte_start": 1091,
+      "byte_end_exclusive": 1351,
+      "line_start": 48,
+      "line_end": 55,
+      "sha256": "a31f3f32e4f7066ac6bab735e0d50484f21a1bc9d0157116c16afc44f4cd757c",
+      "source": "    fn start(mask_nonce: [u8; 32]) -> Result<Self, StateOnlyAttemptEntropyError> {\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        Ok(Self { mask_nonce, retry: 0 })\n    }\n\n"
+    },
+    "draw": {
+      "byte_start": 1351,
+      "byte_end_exclusive": 1653,
+      "line_start": 55,
+      "line_end": 63,
+      "sha256": "9ffcb7b16697ff3af73a5670a541fd8a44cd6d2aff61c61c1752c833f0783774",
+      "source": "    // Native effect producer. Never interpret this as a fixed pure dictionary.\n    fn draw(self) -> ProverRwResumeP6Draw {\n        let mut bytes = Zeroizing::new([0u8; 64]);\n        let outcome = getrandom::fill(bytes.as_mut());\n        ProverRwResumeP6Draw { request: self, bytes, outcome }\n    }\n}\n\n"
+    },
+    "resume": {
+      "byte_start": 1653,
+      "byte_end_exclusive": 3043,
+      "line_start": 63,
+      "line_end": 102,
+      "sha256": "98c12e16eb74eaa1510ed7fd7e7104b8bbd5b6ab2d2e292e088c18a89bdba616",
+      "source": "impl ProverRwResumeP6Draw {\n    fn resume(self) -> (\n        ProverRwResumeP6Control,\n        Result<Option<StateOnlyAttemptSecrets>, StateOnlyAttemptEntropyError>,\n    ) {\n        let Self { mut request, bytes, outcome } = self;\n        match outcome {\n            Err(error) => return (\n                ProverRwResumeP6Control::Done,\n                Err(StateOnlyAttemptEntropyError::from(error)),\n            ),\n            Ok(()) => (),\n        }\n        let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n        let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n        field_mask_entropy.copy_from_slice(&bytes[..32]);\n        leaf_salt_seed.copy_from_slice(&bytes[32..]);\n        if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n            return (\n                ProverRwResumeP6Control::Done,\n                Ok(Some(StateOnlyAttemptSecrets {\n                    mask_nonce: request.mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                })),\n            );\n        }\n        request.retry += 1;\n        if request.retry < ENTROPY_RETRY_LIMIT {\n            (ProverRwResumeP6Control::More(request), Ok(None))\n        } else {\n            (\n                ProverRwResumeP6Control::Done,\n                Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock),\n            )\n        }\n    }\n}\n\n"
+    },
+    "driver": {
+      "byte_start": 3043,
+      "byte_end_exclusive": 3802,
+      "line_start": 102,
+      "line_end": 122,
+      "sha256": "ba94e79b091c6a2b0b47b3aa3461d8a416f8f0fe62392450a7e3b81fefc9fbd2",
+      "source": "impl StateOnlyAttemptSecrets {\n    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let mut request = ProverRwResumeP6Request::start(mask_nonce)?;\n        loop {\n            let (control, result) = request.draw().resume();\n            match result {\n                Err(error) => return Err(error),\n                Ok(Some(owner)) => return Ok(owner),\n                Ok(None) => match control {\n                    ProverRwResumeP6Control::More(next) => request = next,\n                    ProverRwResumeP6Control::Done => {\n                        return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n                    }\n                },\n            }\n        }\n    }\n}\n"
+    }
+  },
+  "representation": "getrandom::Error(NonZeroI32) on host x86_64 Linux; original zeroize carrier layout retained",
+  "reused_source_assessment": {
+    "path": "docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/native-owned-drop/zeroize-1.8.1-index.crates.io-1949cf8c6b5b557f.rs.txt",
+    "sha256": "9f59308c21265a2fb46935a6468d8bc2e86e4613c9a942fcfc91d61bec8cc878",
+    "identical": true,
+    "scope": "D204 unchanged zeroize leaf source only; no new identity gate or caller theorem"
+  },
+  "statement_status": "concrete prospective proof target; no native/P6/semantic-erasure theorem",
+  "print_axioms": "N/A: read-only source association"
+}
