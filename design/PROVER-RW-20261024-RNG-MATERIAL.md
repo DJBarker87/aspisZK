@@ -19,7 +19,7 @@ of those material-stage failures and is not rolled back by them.
 
 ## Validation and boundaries
 
-Work in progress. Evidence lives under rng-material/; old ledgers remain intact.
+Completed conditional source-control packet. Evidence lives under rng-material/; old ledgers remain intact.
 36 actual Lean launches available at entry (184/220 already used); Kani 44/60.
 No full manifest or runtime/ELF/timing gate is authorized or claimed.
 
