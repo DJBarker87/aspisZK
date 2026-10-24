@@ -24,7 +24,7 @@ x['deps_fingerprint']['lean_binary_sha256']=hashlib.sha256(Path('/home/dombarker
 current_sources={src:hashlib.sha256((B/src).read_bytes()).hexdigest() for src in x['sources']}
 for previous in B.glob('lean-*/receipt.json'):
  old=json.loads(previous.read_text())
- if old.get('source_hashes')==current_sources and old.get('deps_fingerprint',{}).get('selected_objects')==seen:
+ if old.get('env',{}).get('LEAN_PATH')==x['env']['LEAN_PATH'] and old.get('source_hashes')==current_sources and old.get('deps_fingerprint',{}).get('selected_objects')==seen:
   raise RuntimeError('Refusing unchanged source+dependencies: '+str(previous))
 c.write_text(json.dumps(x,indent=2)+'\n')
 from datetime import datetime

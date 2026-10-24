@@ -17,3 +17,16 @@ lean-005, exit0, wall2.328647s, peak4426112KiB, swap0. Cap unchanged.
 All three printed axiom sets are standard. Each attempt directory retains
 exact command, revision, source snapshot/hash, selected imported object hashes,
 wall/RSS/swap, full stdout and axioms. No full manifest replay or Kani ran.
+
+Checked additional source progress: exact state/root prefix; all22 CURRENT raw
+query reads with full Result transport and the SAME reader cursor/backing;
+literal current parent decomposition; bounded CURRENT mutable weight helper
+with no independently successful reference read. See INTERFACE.md for the
+checked reached-observation quantifier correction and actual-ten induction.
+
+Failed whole-tail composition attempts013/030 and broad source normalization020
+are retained. Decomposition into a named source suffix is the replacement; no
+cap was raised. Attempts008/016 never entered Lean (missing owned dependency
+and unchanged-source guard respectively). Attempt014's missing import path was
+corrected by adding the pinned parent Port4B object path; runner now includes
+LEAN_PATH in unchanged-input detection because environment changes are inputs.
