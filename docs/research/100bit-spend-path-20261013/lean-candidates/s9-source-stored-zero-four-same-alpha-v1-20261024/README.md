@@ -1,0 +1,5 @@
+# UNCOMPILED source StoredRows/same-alpha adapter candidate
+
+Source SHA9900880468b68d414dc9a7672c8868b920ee8672f85365ab533396ab55dece06. The pure predecessor bf486663 is checked; this adapter is NOT compiled, NOT proved and NOT accepted. It branches on the SAME supplied StoredRows and applies the pure paired output theorem. A second candidate entry reuses strict_source_stored_row_guards to derive canonical alpha from SAME strict resume/constructor/selection events, retaining actual extra reads.
+
+Header-only preflight8062 modules/missing[]; namespace-closed selected project owner2388 modules/276 companions, no libraries. Round import-only alias SHA186ca7e3 is first; current QMSub cbafe is preserved. Complete profile /tmp/factor-source-same-alpha-selected-profile-v1-20261024/closed-profile.txt and namespace pins are copied here. No compiler receipt exists for this candidate. USER STOP arrived before Root's intended local check, so it remains unfinished with no further proof work. Root owns original caller/Trace/parts/k/compared-kappa integration and all commits.
