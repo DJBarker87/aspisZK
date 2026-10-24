@@ -10,11 +10,13 @@ Soundness: the actual two-transaction source-model driver has an all-outcome
 control bound with explicit delegated-operation budgets. The release-call
 invariant removes obligations for observer values that the unchanged flow
 never uses. Concrete preparation supplies its <=115 read bound, but the
-composed preparation/driver/accounting claims on branch
-`codex/cx-port17release-20261024` remain **withheld** because root/A imported
-declarations differ. Port18COHERENCE is reconciling those dependencies; a
-standard-axiom audit alone does not establish their compatibility. Residual
-other-operation budgets and concrete native/source/artifact joins remain open.
+original mixed-cache evidence on branch `codex/cx-port17release-20261024`
+remains **withheld**. A new kernel-checked logical reconstruction preserves the
+selected preparation/driver/accounting terms; it has passed initial source and
+receipt review and is undergoing final rejection-probe validation. This does
+not certify external textual-module provenance, IR/native or release identity.
+Residual other-operation budgets and concrete native/source/artifact joins
+remain open.
 
 Session A's committed packets through `9bda7d8595753da5f0d33807b043723282a34967`
 have been reviewed from immutable Git objects. They establish accepted
@@ -54,10 +56,10 @@ whole-prover identical-coin/differential gates, quiet-host median<15s and<=10%
 slowdown, final artifact audit and coherent replay. Existing fixture and
 component evidence cannot substitute for these obligations.
 
-Live managed tasks: Port18COHERENCE, FactoryState and Port19REST, each on its
+Live managed tasks: Port18VALIDATE, FactoryState and Port20ALLOC, each on its
 isolated candidate branch with its archived hard budget and resource rules.
-Port19REST owns the remaining lead-operation source/effect budget producers;
-it does not duplicate A-owned parser/preparation/powers or Port18 cache repair.
+Port20ALLOC follows the reviewed Port19 inventory at the actual heap-filled
+call-site association; it does not duplicate A-owned parser/preparation/powers.
 Detailed evidence, failures, assumptions and next producers are in the latest
 C3-BIN/LOG D205-D207 entries and `COORDINATOR-20261024.md`. The goal remains
 active. Final security closure has not been claimed.
@@ -387,3 +389,27 @@ Lead reran the inspected read-only audit before relaunch: exact prospective/orig
 FactoryState46554 continues the same branch. Explicitly authorize LOWER1536MiB/2GiB/noSwap/Tasks64 scopes ONLY for focused selected-item Charon/Aeneas preflights. Preserve both reservation/headroom gates, full hierarchy and fresh before/go, sysroot/library/tool pins and stderr/timing. Larger Rust/ELF jobs retain6G/8G limits and require their own allowed fresh gates. No service/cache/other-owner mutation, higher cap or historical resource repair. Read-only admission diagnostics should test scanner changes before compiler reservations; one correctly denied target should not trigger unchanged retries.
 
 Lead adds4 extraction reservations:52/52charged ->ceiling56,4available; last3 were pre-extraction denials. Backend15/16,Lean236/260,Kani57/60 unchanged;max2Kani this step. Source-step optimized Rust checks/tests0/3 and ELF-gate commands0/3 carry forward, no new Rust allowance. Under existing D187/D191, resolve the known pure-helper obstruction with a sufficient actual owned-state/event interface before spending extraction on that interpretation. Preserve Err advancement outside Result and distinguish native operational state from OS-world/freshness; a reset cursor/ghost counter is insufficient. Weakest sufficient event/primitive-outcome transport is permitted only with proof of experiment transport, not mere output equality. Literal E1 successful64 contextual law stays explicit; no new freshness/independence/trust. Narrow selected host factory/owner call-site rewrites remain gated; no protocol/verifier change or source adoption. All3 ELF, whole-prover fixedcoin1000, native/effect/client/E1/L1/L2/L3 and timing gates remain. Both deployed targets not yet established.
+
+
+## Addendum (lead, 2026-10-24): rest inventory reviewed; actual allocation call-site next
+
+Reviewed unmerged Port19REST17d459f032/e4752170bf. No native/source producer, budget or assumption was discharged. Six actual parent spans,5 retained emissions,39 complete interfaces and1149 stable ROOT source hashes were inventoried. Lead read the complete report/script and relevant source interfaces, and independently reran the source-only inventory with exactly2 evidence writes suppressed. No compiler/object/native/artifact revalidation occurred. No generic Result-lift/no-read wrapper was added. Shared Port18 coherence repair was untouched.
+
+Smallest concrete gap: row12 Accumulator::new and row10 BatchedWeights::new call actual heap::filled with full QM31/four-U64 carriers. Existing OraclePortStdAllocation has content/error semantics, but actual call-site association must derive its reservation Bool from the actual try_reserve_exact result and preserve Copy/Clone, errors and private allocation state/effects. D157's pure-std standing rule explicitly excludes allocation failure; it cannot be silently extended to supply this instance. Existing approved specific allocation/SDK/runtime interpretations can be used for their stated scope, or a small native P6 source bridge must be supplied. Physical capacity/Drop/allocation are not certified by the content model.
+
+Port20ALLOC48595 continues this staged branch with actual row12/10 helper association as its sole target. Its12 unused Lean slots carry forward; combined soundness ceiling368 unchanged and Port18's separate reservation untouched. At most4 of existing soundness Kani0/20,2 NEW focused helper extractions and2 optimized Rust checks are allocated; no backend or shipped-source change. Lower1536MiB/2GiB/noSwap/Tasks64 focused native-helper scopes are authorized with full fresh admission/reserve checks; larger/higher-cap retries are not. Full source outcomes and arbitrary inputs/H remain; if only S2 is proved the actual reached-site invariant must justify that interface. No new allocator trust/whole-output/log assumption, native RO absence from a Result type, or full1161 claim while residualR remains. Other query/flush/geometry/finish child/effect boundaries stay open. Both deployed targets not yet established.
+
+
+## Addendum (lead, 2026-10-24): coherent logical reconstruction reviewed, final validation assigned
+
+Port18COHERENCE1e2b6fe7e9/63204ebb6d establishes a separately kernel-checked logical declaration closure for the pinned root/A preparation, same Flow10/None, saved Vec, effects and conditional accounting. The original Port17 mixed-cache evidence remains WITHHELD. Lead read the entire Kernel/CompatibilityLoad/Checked stages/Audit, full source/selection/failure reports and actual pinned Lean4.32 Replay/FoldConsts definitions. The adapter uses Kernel.Environment.addDeclCore, regenerates/compares constructors and recursors, includes theorem/opaque bodies in reachability, rejects project axioms/unsafe/partial declarations, and checks pre-existing selected declarations for exact matching. No unchecked environment insertion, program renaming, compatibility premise or new trust is used.
+
+The selected root protocol/Decoder/frame definitions remain intact, including the original extractor parameter. The one differing frame_length proof has the same complete proposition and is itself kernel checked. A's full preparation closure does not use the root protocol/frame modules. A's Formatter definitionUnit is selected rather than adding the unused root Formatter axiom; native interpretation remains open. Full final declaration comparison covers15241 selected constants;10375 project declarations are freshly checked, with standard sysroot terms reused only after matching. These counts describe validation scope, not additional security obligations closed.
+
+Independent read-only final checker passed current source/accepted dependency-object hashes,5 successful stages and17 standard-only axiom reports, with its sole source-check.json write suppressed. Canonical manifest SHA8a7cd63e201485f2128ce2edb8194f630588994b1b600d94fa269f71428e9bb3 records888 side/module origins, including632 external-module source-provenance limitations. No external whole textual-module replay, elaborator/IR/native execution or frozen artifact identity is certified. Source/native/SDK/abort/StoredCarrierBinding/NativeBindings/release joins and residual OtherBudgets remain open. Bounds stay1161+R,firstreadsQ+1161+R,totalQ+2322+2R. Both deployed targets remain not yet established.
+
+Focused audit028 exit0,10.443298916798085s,RSS1503920128B,aggregate1555267584B,swap0. Largest accepted stage025 RSS1649213440B,aggregate1649459200B. Exact commands/source+dependency/tool/object hashes/revision labels/full types/axioms are retained. Exit0-with-PANIC019 is explicitly rejected. OOM diagnostic003/004 was replaced by region-releasing traversal, never retried at a higher cap. Original-object inventory029 is post-snapshot evidence only. No full frozen replay/new ELF gate ran.
+
+Current reviewed Port18 budget304/356charged=299actualLean+5preLean;52available. Port20's separate12 remains additional, combined ceiling368. Port18VALIDATE50727 now uses at most8 of those52 for final review fixes: restore upstream copied Lean.Replay copyright/license notice, retain exact old snapshots, and add a focused kernel-orchestration rejection probe (ill-typed declaration/self-reference/project axiom/unsafe input cannot pass; valid declaration does). Refresh only source/dependency-affected checked targets and one focused final audit. No changed mathematical selections, new axioms, native or release claim. Branch stays staged/unmerged until that validation review. Prompt archived; no new allocation.
+
+A-owned parser3/scan4/powers17 source/effect/count producers remain needed at the actual local boundary, with complete arguments/results/rejected prefixes and allH. Lead owns the separate6/9/10/11/12/19 producers and actual caller integration; Port20 targets12/10 first. No new A proof is assumed absent without checking committed objects; latest reviewed A remains9bda7d8595753da5f0d33807b043723282a34967. No A live file changed.
