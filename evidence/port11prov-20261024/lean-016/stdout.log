@@ -1,0 +1,149 @@
+Port11PROV_WriterRoots.lean:14:30: error: Type mismatch: After simplification, term
+  j.isLt
+ has type
+  @LT.lt ℕ instLTNat (↑j) 32
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑j ↑32#usize
+Port11PROV_WriterRoots.lean:18:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  32 ≤ f ≤ 1736
+  e ≥ 0
+  e ≥ 33
+where
+ e := ↑↑32#usize
+ f := ↑(1736 - offset)
+Port11PROV_WriterRoots.lean:20:28: error: Type mismatch: After simplification, term
+  hk
+ has type
+  @LT.lt ℕ instLTNat j ↑32#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat j 32
+Port11PROV_WriterRoots.lean:43:76: error: unsolved goals
+case this
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+p : verifier.Prepared
+a : verifier.Accumulator
+proof pub : Slice U8
+ck : alloc.vec.Vec U8
+success : Port3_CheckpointInstall.writer D p a proof pub hash = ok ck
+after : Log
+ran :
+  run (VTop_Checkpoint.digest D) hash (CheckpointBytes5Writer.writer (toPrepared p) (toAccumulator a) proof pub) [] =
+    ok (VTop_Checkpoint.checkpointSlice ck, after)
+erased :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof)
+      let a_2 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_3 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) a_1 a_2))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) a_1 a_2 a_3)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hp : Digest
+hpCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof) = ok hp
+tail✝¹ :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_2 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp a_1))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp a_1 a_2)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hu : Digest
+huCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub) = ok hu
+tail✝ :
+  (do
+      let a_1 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp hu))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu a_1)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hc : Digest
+hcCall :
+  (VTop_Checkpoint.digest D).digest hash
+      (AspisR1Stage2.WireTx2.checksumParts (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp hu)) =
+    ok hc
+tail :
+  ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu hc) = ok (VTop_Checkpoint.checkpointSlice ck)
+ckEq : CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu hc = VTop_Checkpoint.checkpointSlice ck
+content : sourceBody (toPrepared p) (toAccumulator a) hp hu ++ bytes (CheckpointBytesDigest.stateOf hc) = bytesOf ↑ck
+length : (↑ck).length = 1768
+roots :
+  slice (sourceBody (toPrepared p) (toAccumulator a) hp hu) 112 32 = bytesOf ↑(Port3_BatchStage.root0 p) ∧
+    slice (sourceBody (toPrepared p) (toAccumulator a) hp hu) 144 32 = bytesOf ↑(Port3_BatchStage.root1 p)
+⊢ ?m.185
+
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+p : verifier.Prepared
+a : verifier.Accumulator
+proof pub : Slice U8
+ck : alloc.vec.Vec U8
+success : Port3_CheckpointInstall.writer D p a proof pub hash = ok ck
+after : Log
+ran :
+  run (VTop_Checkpoint.digest D) hash (CheckpointBytes5Writer.writer (toPrepared p) (toAccumulator a) proof pub) [] =
+    ok (VTop_Checkpoint.checkpointSlice ck, after)
+erased :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof)
+      let a_2 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_3 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) a_1 a_2))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) a_1 a_2 a_3)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hp : Digest
+hpCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts proof) = ok hp
+tail✝¹ :
+  (do
+      let a_1 ← (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub)
+      let a_2 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp a_1))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp a_1 a_2)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hu : Digest
+huCall : (VTop_Checkpoint.digest D).digest hash (AspisR1Stage2.WireTx2.singletonParts pub) = ok hu
+tail✝ :
+  (do
+      let a_1 ←
+        (VTop_Checkpoint.digest D).digest hash
+            (AspisR1Stage2.WireTx2.checksumParts
+              (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp hu))
+      ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu a_1)) =
+    ok (VTop_Checkpoint.checkpointSlice ck)
+hc : Digest
+hcCall :
+  (VTop_Checkpoint.digest D).digest hash
+      (AspisR1Stage2.WireTx2.checksumParts (CheckpointBytes5Writer.bodySlice (toPrepared p) (toAccumulator a) hp hu)) =
+    ok hc
+tail :
+  ok (CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu hc) = ok (VTop_Checkpoint.checkpointSlice ck)
+ckEq : CheckpointBytes5Writer.finish (toPrepared p) (toAccumulator a) hp hu hc = VTop_Checkpoint.checkpointSlice ck
+content : sourceBody (toPrepared p) (toAccumulator a) hp hu ++ bytes (CheckpointBytesDigest.stateOf hc) = bytesOf ↑ck
+length : (↑ck).length = 1768
+roots :
+  slice (sourceBody (toPrepared p) (toAccumulator a) hp hu) 112 32 = bytesOf ↑(Port3_BatchStage.root0 p) ∧
+    slice (sourceBody (toPrepared p) (toAccumulator a) hp hu) 144 32 = bytesOf ↑(Port3_BatchStage.root1 p)
+this : ?m.185
+⊢ (↑ck).length = 1768 ∧
+    slice (bytesOf ↑ck) 112 32 = bytesOf ↑(Port3_BatchStage.root0 p) ∧
+      slice (bytesOf ↑ck) 144 32 = bytesOf ↑(Port3_BatchStage.root1 p)
+Port11PROV_WriterRoots.lean:59:15: error: unexpected token '∀'; expected prec
+Port11PROV_WriterRoots.lean:66:23: error: unexpected token; expected ':'
+Port11PROV_WriterRoots.lean:66:62: error: unexpected token; expected ':'
+'_private.Port11PROV_WriterRoots.0.AspisR1.Port11PROV_WriterRoots.body_slice' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Port11PROV_WriterRoots.root_slices' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_WriterRoots.saved' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

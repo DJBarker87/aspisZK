@@ -1,0 +1,87 @@
+Port11PROV_SourceCount.lean:16:14: error: Type mismatch
+  hk a
+has type
+  bounded m (k a)
+but is expected to have type
+  bounded (n + m) (Code.done a >>= k)
+Port11PROV_SourceCount.lean:19:41: error: Ambiguous term
+  bind
+Possible interpretations:
+  CheckpointBytes5Effect.bind (c b) k : Code B
+  
+  c b >>= k : Code B
+Port11PROV_SourceCount.lean:49:55: error: Tactic `assumption` failed
+
+case zero.isFalse
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+h✝ : ¬i ≥ s.n
+⊢ bounded 0 (liftResult div)
+Port11PROV_SourceCount.lean:54:6: error: Tactic `apply` failed: could not unify the conclusion of `bind_bound (Port9OR_P6Node.node s physical i w) ?m.55 1 fuel
+  (node_bound s physical i w)`
+  bounded (1 + fuel) (Port9OR_P6Node.node s physical i w >>= ?m.55)
+with the goal
+  bounded (fuel + 1) do
+    let out ← Port9OR_P6Node.node s physical i w
+    match out with
+      | reference.Row.Stop stopped => pure (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw => Port9OR_P6Rows.rows fuel next physical ni nw
+
+Note: The full type of `bind_bound (Port9OR_P6Node.node s physical i w) ?m.55 1 fuel (node_bound s physical i w)` is
+  (∀ (a : reference.Row), bounded fuel (?m.55 a)) → bounded (1 + fuel) (Port9OR_P6Node.node s physical i w >>= ?m.55)
+
+case succ.isFalse
+physical : Slice U8
+fuel : ℕ
+ih : ∀ (s : reference.Scratch) (i w : Usize), bounded fuel (Port9OR_P6Rows.rows fuel s physical i w)
+s : reference.Scratch
+i w : Usize
+h✝ : ¬i ≥ s.n
+⊢ bounded (fuel + 1) do
+    let out ← Port9OR_P6Node.node s physical i w
+    match out with
+      | reference.Row.Stop stopped => pure (reference.Level.Stop stopped)
+      | reference.Row.Next next ni nw => Port9OR_P6Rows.rows fuel next physical ni nw
+Port11PROV_SourceCount.lean:65:44: warning: This simp argument is unused:
+  liftResult
+
+Hint: Omit it from the simp argument list.
+  simp only [bounded,̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port11PROV_SourceCount.lean:69:2: warning: 'all_goals omega' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Port11PROV_SourceCount.lean:69:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Port11PROV_SourceCount.lean:74:70: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.5 ?m.6 ?m.7 → (?m.7 → Program ?m.5 ?m.6 ?m.8) → Program ?m.5 ?m.6 ?m.8
+  
+  CheckpointBytes5Effect.bind : Code ?m.5 → (?m.5 → Code ?m.6) → Code ?m.6
+  
+  Std.bind : Result ?m.5 → (?m.5 → Result ?m.6) → Result ?m.6
+Port11PROV_SourceCount.lean:74:75: error: Ambiguous term
+  read
+Possible interpretations:
+  CheckpointBytes5Effect.read : Parts → Code Digest
+  
+  MonadReader.read : ?m.6 ?m.5
+Port11PROV_SourceCount.lean:74:80: warning: This simp argument is unused:
+  bounded
+
+Hint: Omit it from the simp argument list.
+  simp only [Port8EFF_Bodies.writerCode, ̲CheckpointBytes5Writer.writer, ̲bind, ̲read,̵b̵o̵u̵n̵d̵e̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port11PROV_SourceCount.bind_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.parent_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.node_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.rows_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.leaf_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.writer_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.writer_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_SourceCount.rows_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
