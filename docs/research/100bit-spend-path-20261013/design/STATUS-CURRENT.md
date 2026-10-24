@@ -138,3 +138,14 @@ body instance. Port8EFF owns actual batch/checkpoint effect installation and
 reached-call embeddings; Session A op7 must supply ordered sampler effects.
 The current worktree includes reviewed Port6CK for saved/resumed integration.
 Source1161, runtime binding and release replay remain open; targets not established.
+
+
+### Lead checkpoint — conditional checkpoint effects, 2026-10-24
+
+Port8EFF installs actual checkpoint Code and proves conditional ordered effects,
+first-source reader provenance and all-outcome reader count<=3. Its Program
+currently ignores oracle replies after recording them and retains fixed-native
+Oracle agreement. It is NOT yet a fixed adaptive source probability experiment.
+Port9OR must repair/justify reply-driven interpretation before op5 expansion.
+Batch/sampler/no-hit/source1161/runtime/artifact obligations remain open.
+Both targets not yet established; no conditional merge is deployed closure.

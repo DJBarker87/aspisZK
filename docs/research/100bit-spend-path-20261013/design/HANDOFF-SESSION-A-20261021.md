@@ -452,3 +452,21 @@ failure or cancellation. This removes the previously observed solver load,
 but does not itself establish a quiet timing interval. A focused Lean process
 was live during the check. Recheck all host activity/reservations immediately
 before any later absolute prover timing gate; no timing result is claimed.
+
+
+## Oracle-response interface qualification (2026-10-24)
+
+Port8EFF checkpoint effects are merged as CONDITIONAL trace evidence. Lead found
+CheckpointCode.program obtains fixed D.digest then `.ask ... (fun _ => ...)`,
+discarding H's reply. Its Oracle D hash H assumption explains the local trace
+theorem, but this does not yet supply a fixed adaptive source probability
+experiment. Port9OR now owns the reply-driven checkpoint repair and subsequent
+physical op5 lift under the remaining64/100 Lean allocation.
+
+Your effectful prepare7 producer likewise needs actual oracle replies to drive
+transcript continuations; native value equations plus recorded asks are not
+sufficient by themselves. Separate per-H native interpretation from a fixed
+Program sampled under the oracle law; do not assume all-H agreement with one
+fixed native digest or condition the oracle. Existing source/trust/ownership
+boundaries remain; no protocol/security change is proposed. Prepare sampler
+history and rejected prefixes remain your local source deliverable.

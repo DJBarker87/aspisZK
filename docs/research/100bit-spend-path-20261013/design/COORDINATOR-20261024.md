@@ -14,10 +14,10 @@ conditional claims and validation; LOG D190 records the entropy obstruction.
 | Active worker | Worktree / branch | Deliverable | Hard budget |
 |---|---|---|---|
 | Actual entropy callback preflight | .worktrees/cx-prover-rw / codex/cx-prover-rw-20261023 | D193 native error carrier and actual selected callback/cap8 source-derived state transport | Remaining20/60 Lean; old100 exhausted;16 Kani remain; J11440–11499 after collision checks |
-| Effectful driver instance | .worktrees/cx-port8effects / codex/cx-port8effects-20261024 | Actual batch/checkpoint effects and driver read embeddings, with explicit Session A op7 frontier | 100 Lean,20 Kani |
+| Reply-driven source interpretation | .worktrees/cx-port9oracle / codex/cx-port9oracle-20261024 | Fixed response-dependent checkpoint Program, then physical batch op5 | Remaining64/100 Lean,20 Kani; old36 used |
 
-All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively50535,41663. Scratch output names:
-codex-prover-rng-caller-20261024.out,codex-port8effects-20261024.out. Only terminal markers
+All use gpt-6.1-sol medium via codex-run.sh. Launch PIDs respectively50535,51800. Scratch output names:
+codex-prover-rng-caller-20261024.out,codex-port9oracle-20261024.out. Only terminal markers
 or missing handles trigger reading the final ~40 lines. Prompts archived under
 evidence/coordinator-20261024; capacity/error resumes preserve remaining budget.
 
@@ -136,3 +136,14 @@ source-binding audit. Native getrandom error/E1/cleanup and callback/cap8/ledger
 and joint L1/L2 remain open. The next worker consumes only20 remaining Lean
 and16 Kani, with old100 and current40/60 ledgers preserved. No source adoption
 or native artifact/timing gate claimed. Driver-effect worker41663 is still live.
+
+
+## Reply-dependent source interpretation next — 2026-10-24
+
+Port8EFF finished and is merged7360bbe22c at CONDITIONAL local trace scope.
+Lead found fixed-native digest continuation discards the .ask reply; Oracle
+agreement remains a premise. The next Port9OR stage must define/justify a FIXED
+response-driven experiment, separating per-H native interpretation and proving
+source value/effect transport before expanding physical op5. See latest C3-BIN
+and session A handoff. Preserve cumulative36/100 Lean and use remaining64 only.
+This is source/probability refinement, not new trust or a changed contract.
