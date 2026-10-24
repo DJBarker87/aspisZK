@@ -1,13 +1,13 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
   "status": "Conditional actual-source authentication; both deployed targets not established",
-  "revision": "431346f95327cbda7d7d8ec5c80f881165f162a9",
+  "revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
   "inherited_lean_attempts": 185,
-  "new_lean_attempts": 11,
-  "actual_lean_receipts": 10,
-  "cumulative_lean_attempts": 196,
+  "new_lean_attempts": 28,
+  "actual_lean_receipts": 27,
+  "cumulative_lean_attempts": 213,
   "lean_limit": 220,
-  "remaining_lean_attempts": 24,
+  "remaining_lean_attempts": 7,
   "kani_runs": 0,
   "kani_limit": 20,
   "prior_ledger": {
@@ -30,6 +30,34 @@
     "Port12COUNT_Verify.lean": {
       "sha256": "003a9fd45292d77e9835f9a5d2a7d7be20879acfad94f4f48532a2bb7df7869f",
       "attempt": "lean-011"
+    },
+    "Port12COUNT_BatchLeaf.lean": {
+      "sha256": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f",
+      "attempt": "lean-012"
+    },
+    "Port12COUNT_BatchTail.lean": {
+      "sha256": "1b94f9a309c3fc598a71f05bcdf2c833b5cbd9239fe847d6fd5bf98855a3e512",
+      "attempt": "lean-017"
+    },
+    "Port12COUNT_BatchLoop.lean": {
+      "sha256": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7",
+      "attempt": "lean-019"
+    },
+    "Port12COUNT_BatchTree.lean": {
+      "sha256": "95cd97ba5c6af7287aa6ad9fbdfa2a1555c38322d2c38f9c5e3fa4c0fe6ed90b",
+      "attempt": "lean-023"
+    },
+    "Port12COUNT_Batch.lean": {
+      "sha256": "3305d7815e8214d2fa200ccbdae1a17a17336c40bc474cf174cb829e2ef8ecf3",
+      "attempt": "lean-024"
+    },
+    "Port12COUNT_Installed.lean": {
+      "sha256": "d8de2cd24d888ba76ffad2a085450084d4f8e7eaa8dd0a7dd662ebdc4aad9bd9",
+      "attempt": "lean-026"
+    },
+    "Port12COUNT_FirstReads.lean": {
+      "sha256": "af515550b6c4f5f3c1dfb080cfd42363e2c82408bfe2c3c4391fee872d726d47",
+      "attempt": "lean-028"
     }
   },
   "attempts": [
@@ -484,6 +512,740 @@
         "'AspisR1.Port12COUNT_Verify.eval_lift_join' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.Port12COUNT_Verify.bind_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.Port12COUNT_Verify.count' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-012",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchLeaf.olean",
+        "Port12COUNT_BatchLeaf.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchLeaf.lean": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_Verify": "003a9fd45292d77e9835f9a5d2a7d7be20879acfad94f4f48532a2bb7df7869f",
+          "Port9OR_Batch": "c6efbb47f39d9210ad716ddf03b1fbc42f07931a661d49b991bee625a7861e09"
+        },
+        "selected_objects": {
+          "Port12COUNT_Verify.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_Verify.olean",
+            "sha256": "e1865171a322f00ffad8fdbfb3b331c3024e281f1bedd9d160598258db62e6a3",
+            "bytes": 199632
+          },
+          "Port9OR_Batch.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port9oracle-20261024/Port9OR_Batch.olean",
+            "sha256": "89bae00cb5dda3d4ef0d7c582bcd0325bb397c920f9eacf16162dcc748209bd6",
+            "bytes": 169016
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 3.3417694109957665,
+      "peak_rss_kib": "4451464",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchLeaf.lift_cap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLeaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchLeaf.cont_shape' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-013",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTail.olean",
+        "Port12COUNT_BatchTail.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTail.lean": "b59e0f005ad2a4b3fed16ccb37b897ae4e2194f8055393f06141c627b279392f"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLeaf": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLeaf.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLeaf.olean",
+            "sha256": "c13e494a196be4ef7722f2313cd0d6afe0f20429a293941796d7be65a9c4d662",
+            "bytes": 538936
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 2.5490078879811335,
+      "peak_rss_kib": "4424764",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, sorryAx, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-014",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTail.olean",
+        "Port12COUNT_BatchTail.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTail.lean": "6a5b68aefb1ef5d39bcaec99b6b63a666eb1213c833cdf75d57dd107375ea5fa"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLeaf": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLeaf.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLeaf.olean",
+            "sha256": "c13e494a196be4ef7722f2313cd0d6afe0f20429a293941796d7be65a9c4d662",
+            "bytes": 538936
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 2.4635746039857622,
+      "peak_rss_kib": "4424504",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, sorryAx, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-015",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTail.olean",
+        "Port12COUNT_BatchTail.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTail.lean": "109cdf02cd6a3d22c602b93a66ab32436ae10081bc80873d084dbe9affffd612"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLeaf": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLeaf.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLeaf.olean",
+            "sha256": "c13e494a196be4ef7722f2313cd0d6afe0f20429a293941796d7be65a9c4d662",
+            "bytes": 538936
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 2.453452083020238,
+      "peak_rss_kib": "4424312",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-016",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTail.olean",
+        "Port12COUNT_BatchTail.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTail.lean": "ff63829df528c5acd5578750590ba41b6174b2651e04625e43b4955c92ccc98c"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLeaf": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLeaf.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLeaf.olean",
+            "sha256": "c13e494a196be4ef7722f2313cd0d6afe0f20429a293941796d7be65a9c4d662",
+            "bytes": 538936
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 2.588301017007325,
+      "peak_rss_kib": "4427196",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-017",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTail.olean",
+        "Port12COUNT_BatchTail.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTail.lean": "1b94f9a309c3fc598a71f05bcdf2c833b5cbd9239fe847d6fd5bf98855a3e512"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLeaf": "20d25b326489c74613be60d6d5154d885b188e94325e594a504fe01e9387461f"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLeaf.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLeaf.olean",
+            "sha256": "c13e494a196be4ef7722f2313cd0d6afe0f20429a293941796d7be65a9c4d662",
+            "bytes": 538936
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.7044452000118326,
+      "peak_rss_kib": "4448260",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.verify_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-018",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchLoop.olean",
+        "Port12COUNT_BatchLoop.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchLoop.lean": "7397b46bce0046067442a3dcd5ade54879f09e41b5a15d592fca6e2ca72c750e"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchTail": "1b94f9a309c3fc598a71f05bcdf2c833b5cbd9239fe847d6fd5bf98855a3e512"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchTail.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchTail.olean",
+            "sha256": "a217d5cb2bfdb90d37aad6926c8d9ec10d92a7676397ed46fb0cf4ad571297e5",
+            "bytes": 419592
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 2.065486150997458,
+      "peak_rss_kib": "4428468",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchLoop.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-019",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchLoop.olean",
+        "Port12COUNT_BatchLoop.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchLoop.lean": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchTail": "1b94f9a309c3fc598a71f05bcdf2c833b5cbd9239fe847d6fd5bf98855a3e512"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchTail.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchTail.olean",
+            "sha256": "a217d5cb2bfdb90d37aad6926c8d9ec10d92a7676397ed46fb0cf4ad571297e5",
+            "bytes": 419592
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.2482340190035757,
+      "peak_rss_kib": "4449684",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchLoop.count' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-020",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTree.olean",
+        "Port12COUNT_BatchTree.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTree.lean": "a458a4d81205aa17c40c7be4db7d4ce731eacadf960fa2126720235b1444a6b1"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLoop": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLoop.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLoop.olean",
+            "sha256": "ffd275afbf93ea8385722748809db2baed36495de6cc9e87235994b6077a147e",
+            "bytes": 373776
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 4.333367184008239,
+      "peak_rss_kib": "4426248",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-021",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTree.olean",
+        "Port12COUNT_BatchTree.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTree.lean": "1767d258d4580f7665493baf35f4691f870f8296011cb4e05791b34fbc689f93"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLoop": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLoop.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLoop.olean",
+            "sha256": "ffd275afbf93ea8385722748809db2baed36495de6cc9e87235994b6077a147e",
+            "bytes": 373776
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 3.922776713006897,
+      "peak_rss_kib": "4431144",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-022",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTree.olean",
+        "Port12COUNT_BatchTree.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTree.lean": "be49d32f6be3f5d37a81c7896b3861643178f295e122881ff828c4b9f2dd526c"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLoop": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLoop.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLoop.olean",
+            "sha256": "ffd275afbf93ea8385722748809db2baed36495de6cc9e87235994b6077a147e",
+            "bytes": 373776
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 3.3745102910033893,
+      "peak_rss_kib": "4431648",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-023",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_BatchTree.olean",
+        "Port12COUNT_BatchTree.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_BatchTree.lean": "95cd97ba5c6af7287aa6ad9fbdfa2a1555c38322d2c38f9c5e3fa4c0fe6ed90b"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchLoop": "104d3ec7d062265b68ffe6489a76bb74d5367622c4209a626aad4b47ca64c6b7"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchLoop.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchLoop.olean",
+            "sha256": "ffd275afbf93ea8385722748809db2baed36495de6cc9e87235994b6077a147e",
+            "bytes": 373776
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 3.4881587589916307,
+      "peak_rss_kib": "4453576",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-024",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_Batch.olean",
+        "Port12COUNT_Batch.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_Batch.lean": "3305d7815e8214d2fa200ccbdae1a17a17336c40bc474cf174cb829e2ef8ecf3"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_BatchTree": "95cd97ba5c6af7287aa6ad9fbdfa2a1555c38322d2c38f9c5e3fa4c0fe6ed90b"
+        },
+        "selected_objects": {
+          "Port12COUNT_BatchTree.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_BatchTree.olean",
+            "sha256": "40fa8012e9bf3cb8080049fe15263a1c5ae5ba514232854249e7762cee648993",
+            "bytes": 219200
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.088445920002414,
+      "peak_rss_kib": "4436808",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_Batch.pure_cap' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.values0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.values1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Batch.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-025",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_Installed.olean",
+        "Port12COUNT_Installed.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_Installed.lean": "72e20b337b6d6c5cb3c98eaccd01c5d4e4c48c8dde487dce0095b9e2766cebcf"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_Batch": "3305d7815e8214d2fa200ccbdae1a17a17336c40bc474cf174cb829e2ef8ecf3",
+          "Port9OR_Installed": "93cb37dee4b9d65abf898802059c090a8540742bbd6f1bb8e0dce9953fb27edc"
+        },
+        "selected_objects": {
+          "Port12COUNT_Batch.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_Batch.olean",
+            "sha256": "46a39269628681f8a9ae25a0008c58db334d2b583d7b354788a924eb1bbb6a27",
+            "bytes": 142968
+          },
+          "Port9OR_Installed.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port9oracle-20261024/Port9OR_Installed.olean",
+            "sha256": "07346b9597bc31f8815009dbdc2e806b562174d00c72af04511e483c81b5d164",
+            "bytes": 113480
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 3.9688245189900044,
+      "peak_rss_kib": "4414900",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-026",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_Installed.olean",
+        "Port12COUNT_Installed.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_Installed.lean": "d8de2cd24d888ba76ffad2a085450084d4f8e7eaa8dd0a7dd662ebdc4aad9bd9"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_Batch": "3305d7815e8214d2fa200ccbdae1a17a17336c40bc474cf174cb829e2ef8ecf3",
+          "Port9OR_Installed": "93cb37dee4b9d65abf898802059c090a8540742bbd6f1bb8e0dce9953fb27edc"
+        },
+        "selected_objects": {
+          "Port12COUNT_Batch.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_Batch.olean",
+            "sha256": "46a39269628681f8a9ae25a0008c58db334d2b583d7b354788a924eb1bbb6a27",
+            "bytes": 142968
+          },
+          "Port9OR_Installed.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port9oracle-20261024/Port9OR_Installed.olean",
+            "sha256": "07346b9597bc31f8815009dbdc2e806b562174d00c72af04511e483c81b5d164",
+            "bytes": 113480
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.356994500005385,
+      "peak_rss_kib": "4437700",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]",
+        "'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-027",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_FirstReads.olean",
+        "Port12COUNT_FirstReads.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_FirstReads.lean": "7db797c2bbee7dec165945e06c2d2ef18cc7f258f8a352044654494ffc6bb888"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_Installed": "d8de2cd24d888ba76ffad2a085450084d4f8e7eaa8dd0a7dd662ebdc4aad9bd9"
+        },
+        "selected_objects": {
+          "Port12COUNT_Installed.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_Installed.olean",
+            "sha256": "56c7b12537d7a3e7a1adcb0c42938e9c5a31566eb5749009c1fb4035396864b4",
+            "bytes": 162168
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 1,
+      "wall_seconds": 1.9622885639837477,
+      "peak_rss_kib": "4408288",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-028",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port12COUNT_FirstReads.olean",
+        "Port12COUNT_FirstReads.lean"
+      ],
+      "source_revision": "2a46fcb1c30f25608c06da879137c5e0e8672846",
+      "source_hashes": {
+        "Port12COUNT_FirstReads.lean": "af515550b6c4f5f3c1dfb080cfd42363e2c82408bfe2c3c4391fee872d726d47"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port12COUNT_Installed": "d8de2cd24d888ba76ffad2a085450084d4f8e7eaa8dd0a7dd662ebdc4aad9bd9"
+        },
+        "selected_objects": {
+          "Port12COUNT_Installed.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port12count-20261024/Port12COUNT_Installed.olean",
+            "sha256": "56c7b12537d7a3e7a1adcb0c42938e9c5a31566eb5749009c1fb4035396864b4",
+            "bytes": 162168
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.085199361987179,
+      "peak_rss_kib": "4431228",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
       ]
     }
   ]

@@ -1,0 +1,52 @@
+{"attempt": "lean-025", "exit_status": 1, "wall_seconds": 3.9688245189900044, "peak_rss_kib": "4414900", "swaps": "0", "print_axioms": ["'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext,\n sorryAx,\n Classical.choice,\n Quot.sound]"]}
+Port12COUNT_Installed.lean:16:48: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+Port12COUNT_Installed.lean:16:66: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+Port12COUNT_Installed.lean:12:85: error: unsolved goals
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+proof : Slice U8
+p : verifier.Prepared
+folded : Std.Array U8 32#usize
+⊢ (
+...
+with
+                | core.result.Result.Ok a => core.result.Result.Ok a
+                | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e)))).1.length ≤
+    563
+Port12COUNT_Installed.lean:39:18: error: Application type mismatch: The argument
+  VTop_Trace.Call.op8 D p0 written proof pub hash
+has type
+  VTop_Trace.Call (alloc.vec.Vec U8)
+but is expected to have type
+  VTop_Trace.Call (core.result.Result Unit verifier.Error)
+in the application
+  impl (VTop_Trace.Call.op8 D p0 written proof pub hash)
+Port12COUNT_Installed.lean:40:18: error: Application type mismatch: The argument
+  VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash
+has type
+  VTop_Trace.Call (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)
+but is expected to have type
+  VTop_Trace.Call (core.result.Result Unit verifier.Error)
+in the application
+  impl (VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+Port12COUNT_Installed.lean:91:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+
+Running as unit: run-r977f265943f1492799a06697047a58bb.scope; invocation ID: 22ecbb1b562c4d50acc875f431130af3
