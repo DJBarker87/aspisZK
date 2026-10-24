@@ -78,3 +78,27 @@ AS-failed filenames. This was not an RSS exhaustion or Lean attempt. The
 replacement changes resource enforcement to aggregate local self/descendant RSS
 monitoring, stopping at448MiB with64MiB headroom. The new run used about25MB,
 zero swaps, and passed. No failed operation was retried unchanged.
+
+## Resume status and new diagnostic
+
+The prior coordination blocker above is historical and superseded by the
+lead release in host-gate.json. The source audit remains frozen PASS. No
+retrospective start identity is required or represented.
+
+Raw exporter now uses full type/allowOpaque-value edges, inductive mutual and
+constructor groups, constructor parent, mutual recursor names, recursor rule
+constructors/RHS, and source-root prefix families on actual emitted names.
+privateToUserName is used ONLY for selection association; exported names/terms
+are unchanged. Each origin is independently transported on each fixed-point
+round; no global done-set suppresses another origin. Last-round transports are
+the final per-origin selections; earlier rounds stay retained. Same-name origin
+comparison remains a separate exact full-declaration check, not first-wins.
+Standard local core leaves are explicitly mapped to pinned core object parts.
+Unresolved noncore names, unavailable regular-file origins, and any unassociated
+generated declarations remain gaps. No project object is a trusted import.
+
+Static core-parser prototype treated `import all` and imports in documentation
+as module names (all/is/{/*); its output is preserved as local-core-parser-failed
+JSON. The corrected new-input preflight strips comments/strings and handles
+import-all syntax. It passes with2270 warm core modules,7295 pinned core parts,
+and no missing seed modules. This was not a Lean invocation or source audit rerun.

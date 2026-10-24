@@ -40,6 +40,7 @@ def standard(lines):
         assert m and set(m[1].replace(' ', '').split(',')) <= {'propext', 'Classical.choice', 'Quot.sound'}, line
 
 def main():
+    raise SystemExit("Historical source preparation is frozen and already PASS; use resumed acquisition evidence, never regenerate its stale blocked status")
     ap = argparse.ArgumentParser()
     ap.add_argument('--write', action='store_true')
     args = ap.parse_args()
