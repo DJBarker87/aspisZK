@@ -3,7 +3,7 @@
 import hashlib,json,os,pathlib,re,resource,shutil,stat,sys,tarfile,time,tomllib,traceback
 P=pathlib.Path
 STAGE=P('/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024')
-OUT=STAGE/'SbfInputs-20261024'
+OUT=STAGE/'SbfInputs-20261024-v3'
 LIMIT=512*1024**2
 
 def digest(p):
@@ -18,7 +18,7 @@ def member_path(m,crate):
  assert s and not p.is_absolute() and '..' not in p.parts and '\\' not in s
  assert p.parts[0]==crate and str(p)==s.rstrip('/'),s
  assert m.isfile() or m.isdir(),'link/special member: '+s
- assert not m.mode & ~0o777,'special mode: '+s
+ assert (m.mode & ~0o777) in (0,stat.S_IFREG if m.isfile() else stat.S_IFDIR),'special mode: '+s
  assert m.size>=0 and m.size<=128*1024**2
  assert p.name not in ('.cargo-ok','.cargo-checksum.json'),'unexpected generated metadata'
  assert not (re.search(r'(keypair|private.?key|mnemonic|credential|secret|\.pem$|\.key$|\.env(?:\.|$)|id_rsa)',p.name,re.I) and p.suffix not in ('.rs','.toml','.md','.txt')),'possible key filename'
@@ -94,11 +94,11 @@ def main():
       h=hashlib.sha256();n=0
       with tar.extractfile(m) as f,p.open('xb') as w:
        while b:=f.read(1024**2):w.write(b);h.update(b);n+=len(b)
-      assert n==m.size;os.chmod(p,m.mode);assert digest(p)==h.hexdigest();expected.add(str(rel))
+      assert n==m.size;os.chmod(p,m.mode & 0o777);assert digest(p)==h.hexdigest();expected.add(str(rel))
       record(p,'regular',bytes=n,sha256=h.hexdigest(),archive_mode=oct(m.mode))
      # Published directory modes, if present, applied after descendants exist.
      for m in members:
-      if m.isdir():os.chmod(src/str(pathlib.PurePosixPath(m.name).relative_to(crate)),m.mode)
+      if m.isdir():os.chmod(src/str(pathlib.PurePosixPath(m.name).relative_to(crate)),m.mode & 0o777)
     # Selected official Cargo 1.89 registry/mod.rs LockMetadata v1 completion only.
     marker=src/'.cargo-ok';marker.write_bytes(b'{"v":1}');os.chmod(marker,0o600)
     record(marker,'regular',bytes=7,sha256=digest(marker),generated='Cargo registry completion metadata v1; not a checksum claim')

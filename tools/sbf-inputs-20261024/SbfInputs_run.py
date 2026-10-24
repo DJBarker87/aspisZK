@@ -18,4 +18,4 @@ assert len(r.stdout)<5_000_000 and len(r.stderr)<1_000_000
 u=resource.getrusage(0);c=resource.getrusage(resource.RUSAGE_CHILDREN)
 receipt=dict(command=cmd,exit=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_bytes=u.ru_maxrss,children_peak_rss_bytes=c.ru_maxrss,swap=u.ru_nswap+c.ru_nswap,source_revision=rev,helper_sha256=hashlib.sha256(body).hexdigest(),script_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest(),packages_sha256=hashlib.sha256(pk).hexdigest(),request_sha256=hashlib.sha256((json.dumps(request)+'\n').encode()).hexdigest(),stdout_sha256=hashlib.sha256(r.stdout).hexdigest(),stderr_sha256=hashlib.sha256(r.stderr).hexdigest(),print_axioms='N/A')
 with (E/'prepare.transport.json').open('x') as f:json.dump(receipt,f,indent=2);f.write('\n')
-print(r.stdout.decode());print(r.stderr.decode(),file=sys.stderr);sys.exit(r.returncode)
+print(json.dumps({k:v for k,v in json.loads(r.stdout).items() if k!='command'},indent=2));print(r.stderr.decode(),file=sys.stderr);sys.exit(r.returncode)
