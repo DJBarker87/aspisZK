@@ -54,7 +54,8 @@ snapshots are unchanged. Exact statements are in the committed Lean sources.
   concrete factored control. The world carries the unconsumed suffix and the
   complete ordered `(input, reply)` history. An unavailable tape reply remains
   a suspended request, not an invented native entropy error; interpreter fuel
-  exhaustion remains a retry boundary. `EffectControl` proves source-specific
+  exhaustion remains a retry boundary. The internal read log is ghost evidence,
+  not a public transcript or a replacement L1/L2 observer. `EffectControl` proves source-specific
   cap/OS-error laws and retains failed/divergent reads.
 - `EffectNonzero.scan_fixed` proves the actual emitted OR scan symbolically;
   no concrete 32-iteration normalization is used. `EffectPrefix.install`
@@ -119,3 +120,32 @@ none is accepted evidence. Existing runtime/ELF evidence is reused with its
 original source assessment, not promoted to a new artifact identity gate.
 No frozen manifest or native/runtime gate was run. Quiet-host timing is skipped
 while peer capped workloads remain populated.
+
+## Final focused evidence and budget
+
+Proof-stage commit: `45e27024aa`. Audit **11288** compiles
+`R1Z.ProverRwEffectAudit`: exit 0, wall 1.80 s, peak RSS 4,264,628 KiB,
+swaps 0. All 29 new theorem axiom reports, plus both retained obstruction
+reports, use only `[propext, Classical.choice, Quot.sound]`. Exact commands,
+source revision/hashes, dependency fingerprints, raw timing, full axiom text,
+failed source snapshots and launcher reservations are in `effect/`.
+`final-environment.json` checks the final audit objects without replaying Lean.
+The proof source hash snapshots are the identity for pre-commit attempts;
+11288 records the full proof-stage commit revision.
+
+There were **24 actual new Lean launches**, including all failed compiles:
+Stage 3 is now **84/100 used, 16 remaining**. Kani remains **42/60 used,
+18 remaining**, no new runs. IDs 11277, 11279, 11281 never launched (dependency
+preflight/short-circuit); they are recorded, not counted. Next unused ID 11289.
+No resource failure, cap increase or unchanged failed-resource rerun occurred.
+Existing `-M7000`, 5G/7G scopes, zero swap, TasksMax=64 and runner locks were
+preserved; observed launch reservations were 24/26 GiB plus 7 GiB, below 55 GiB.
+Only this job's new effect module names were written to the host; old project
+modules/objects and retained obstruction snapshots were not rewritten.
+
+The current manager's f8c0/63ad/121f ELF pins are recorded in the summary as
+required targets, with **no new identity verification**. The quiet preflight
+found a populated peer 8-GiB scope and exited 78; timing was skipped immediately.
+Adoption remains gated on native effect/experiment closure, current artifact
+identity, <15 s quiet-host absolute timing and <=10% slowdown. No adoption,
+release proof, privacy closure or new native extraction is claimed.

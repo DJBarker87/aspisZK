@@ -1,0 +1,103 @@
+'R1Z.ProverRwEffectCallback.callback_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectCallback.callback_dictionary_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.after_os_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.at_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.failed_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.diverged_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.os_error_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectNonzero.index_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectNonzero.scan_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectNonzero.nonzero_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.pure_owner_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.rejected_nonce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.owner_tape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.owner_zero_then_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectPrefix.fresh_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectPrefix.request' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.constant_after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.after_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.after_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.add_zero_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.zero_then_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRetry.entropy_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRetry.client_retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectSource.staged_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.pure_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.step_tape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.run_tape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.step_served' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.zero_then_nonzero_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyObstruction.no_two_draw_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyIteration.no_retry_then_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+inductive R1Z.ProverRwEffectTape.Call : [ProverRwFull.ExternalTypes] → Type
+number of parameters: 1
+constructors:
+R1Z.ProverRwEffectTape.Call.stop : [inst : ProverRwFull.ExternalTypes] →
+  Aeneas.Std.Result R1Z.ProverRwEffectSource.Outcome → R1Z.ProverRwEffectTape.Call
+R1Z.ProverRwEffectTape.Call.read : [inst : ProverRwFull.ExternalTypes] →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    (R1Z.ProverRwEffectSource.Reply → Aeneas.Std.Result R1Z.ProverRwEffectSource.Outcome) → R1Z.ProverRwEffectTape.Call
+structure R1Z.ProverRwEffectTape.World [ProverRwFull.ExternalTypes] : Type
+number of parameters: 1
+fields:
+  R1Z.ProverRwEffectTape.World.tape : List (Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply)
+  R1Z.ProverRwEffectTape.World.reads : List
+      (Aeneas.Std.Slice Aeneas.Std.U8 × Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply)
+constructor:
+  R1Z.ProverRwEffectTape.World.mk [ProverRwFull.ExternalTypes]
+    (tape : List (Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply))
+    (reads : List (Aeneas.Std.Slice Aeneas.Std.U8 × Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply)) :
+    R1Z.ProverRwEffectTape.World
+inductive R1Z.ProverRwEffectTape.Boundary : [ProverRwFull.ExternalTypes] → Type
+number of parameters: 1
+constructors:
+R1Z.ProverRwEffectTape.Boundary.returned : [inst : ProverRwFull.ExternalTypes] →
+  Aeneas.Std.Result R1Z.ProverRwEffectSource.Status → R1Z.ProverRwEffectTape.Boundary
+R1Z.ProverRwEffectTape.Boundary.request : [inst : ProverRwFull.ExternalTypes] →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    (R1Z.ProverRwEffectSource.Reply → Aeneas.Std.Result R1Z.ProverRwEffectSource.Outcome) →
+      R1Z.ProverRwEffectTape.Boundary
+R1Z.ProverRwEffectTape.Boundary.retry : [inst : ProverRwFull.ExternalTypes] →
+  Aeneas.Std.Usize → R1Z.ProverRwEffectTape.Boundary
+structure R1Z.ProverRwEffectTape.Execution [ProverRwFull.ExternalTypes] : Type
+number of parameters: 1
+fields:
+  R1Z.ProverRwEffectTape.Execution.boundary : R1Z.ProverRwEffectTape.Boundary
+  R1Z.ProverRwEffectTape.Execution.world : R1Z.ProverRwEffectTape.World
+constructor:
+  R1Z.ProverRwEffectTape.Execution.mk [ProverRwFull.ExternalTypes] (boundary : R1Z.ProverRwEffectTape.Boundary)
+    (world : R1Z.ProverRwEffectTape.World) : R1Z.ProverRwEffectTape.Execution
+R1Z.ProverRwEffectOwner.pure_owner_eq [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  R1Z.ProverRwEffectOwner.pureOwner nonce =
+    ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce
+R1Z.ProverRwEffectOwner.owner_zero_then_one [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (ops : ProverRwFull.ExternalFuns) (rest : List (Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply))
+  (reads : List (Aeneas.Std.Slice Aeneas.Std.U8 × Aeneas.Std.Result R1Z.ProverRwEffectSource.Reply)) :
+  have nonce := Aeneas.Std.Array.repeat 32#usize 1#u8;
+  have zero := R1Z.ProverRwEntropyObstruction.zeroInput;
+  have one := R1Z.ProverRwEntropyObstruction.oneOutput;
+  have r0 := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), zero);
+  have r1 := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), one);
+  R1Z.ProverRwEffectOwner.worldOwner nonce { tape := r0 :: r1 :: rest, reads := reads } =
+    {
+      boundary :=
+        R1Z.ProverRwEffectTape.Boundary.returned
+          (Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Aeneas.Std.Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Aeneas.Std.Array.repeat 32#usize 1#u8 })),
+      world := { tape := rest, reads := reads ++ [(zero, r0), (zero, r1)] } }
+R1Z.ProverRwEffectRetry.client_retry [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns) {C : Type}
+  (account : R1Z.ProverRwEffectCallback.Account C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (hash : R1Z.ProverRwRetryModel.Hash)
+  (store : R1Z.ProverRwRetryModel.Store) (state : C) :
+  R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.sourceOutput
+      (ProverRwFull.RealR1_client.prove_for_proof_accounts account pub compiled hash store state) =
+    R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.drop
+      (R1Z.ProverCommitRetry34.eight
+        (R1Z.ProverRwRetryModel.attempt (R1Z.ProverRwEffectRetry.entropy account) pub compiled
+          ProverRwFull.transport.Variant.S2 hash)
+        (state, store))
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

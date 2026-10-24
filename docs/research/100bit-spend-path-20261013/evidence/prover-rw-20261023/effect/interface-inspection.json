@@ -1,6 +1,37 @@
 {
+  "charon_binary": {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+    "bytes": 14041040
+  },
+  "charon_cached_version": {
+    "command": [
+      "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+      "version"
+    ],
+    "exit": 0,
+    "stdout": "0.1.223\n",
+    "stderr": ""
+  },
+  "charon_extraction_receipt": {
+    "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/receipts/extract-caller-005/receipt.json",
+    "sha256": "1257440d1d394dfd6eea02def9e2e1e5f512d992c3723e950555c58d2083421f",
+    "bytes": 94674
+  },
+  "charon_extraction_entry": [
+    "python3",
+    "tools/prover-rw-20261023/extract-opening.py",
+    "--caller"
+  ],
+  "charon_driver": {
+    "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/extract-opening.py",
+    "sha256": "7e2f2dd1d0c5f3fa0e691ffeb60521334fcd4b5b1be455c26142f9e37e7b7bb8",
+    "bytes": 4594
+  },
+  "charon_driver_text": "#!/usr/bin/env python3\n\"\"\"Extract actual opening/publication control; arithmetic callees stay opaque.\"\"\"\nfrom pathlib import Path\nimport subprocess,os,sys\ncaller=\"--caller\" in sys.argv\nfull=\"--attempt\" in sys.argv or caller\nR=Path(__file__).resolve().parents[2]\ncmd=['/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon','cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','crate','--opaque','aspis_core','--opaque','aspis_prover','--opaque','aspis_statement','--start-from','crate::RealR1_client::prove_for_proof_accounts' if caller else ('crate::prover::prove_masked_with_attempt' if full else 'crate::prover::prove_from_semantics')]\nfunctions=['prove_from_semantics','prepare_opening','finish_opening','publish_compact','encoded_slice','folded_leaves','publication_indices','round','fold','fold_cell','derive_private_salts','derive_private_salt_step','public_check','append_node_slots','append_node_slot','append_query_openings','append_opening_values','opening_coefficients','opening_claim_bytes','opening_row','opening_batch','opening_inactive']\nfor f in functions:cmd+=['--include','crate::prover::'+f]\nfor t in ['crate::prover::Backend','crate::prover::PreparedOpening','crate::prover::Publication','crate::host_semantic::BuiltSemantics','aspis_core::field::P','aspis_core::state_only_hiding::STATE_ONLY_HIDING_C1_COLUMNS','aspis_core::state_only_hiding::STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS','aspis_statement::state_only_poseidon::STATE_ONLY_POSEIDON_TRACE_ROWS','crate::compact::SPLIT','crate::compact::SEMANTIC_ROWS','aspis_core::r0::FIBRE_COUNT','aspis_core::r0::WORD_LEN','aspis_core::r0::domain::FibreIndex','aspis_core::r0::domain::{FibreIndex}::new','aspis_core::r0::domain::{FibreIndex}::get','aspis_core::field::{M31}::ZERO','aspis_core::field::{M31}::ONE','aspis_core::field::{QM31}::ZERO','aspis_core::field::{QM31}::ONE','aspis_core::field::wide_exact::{WideExact}::ZERO','aspis_core::field::wide_exact::{WideExact}::ONE','aspis_core::r0::wire::FibreOpening','aspis_core::digest::LegacyHashFn','crate::host_commitment','crate::host_commitment::PrivateSalts','crate::host_commitment::EncodingDomain','crate::host_commitment::Commitment','crate::host_commitment::CommitmentTime','crate::host_commitment::Word','crate::host_tree','crate::host_transcript','crate::compact::CodecError','aspis_core::r0_transcript::CircleRow','crate::host_wire','crate::host_compact','crate::r1_wire::row_shape','crate::r1_wire::statement_points','crate::r1_wire::Challenges','crate::r1_wire::Error','crate::transport::Variant','crate::verifier::Error','crate::weights::PERM','crate::weights::QUARTER','aspis_core::field::wide_exact::WideExact','aspis_core::field::QM31','aspis_core::field::CM31','aspis_core::field::M31','aspis_core::r0::domain::Point','aspis_core::circle::SecureCirclePoint']:\n cmd+=['--include',t]\nif caller:cmd+=['--include','crate::RealR1_client']\nif full:\n for name in ['crate::prover','crate::host_semantic','crate::host_sumcheck','aspis_prover::state_only_entropy','aspis_prover::state_only_hiding','aspis_core::state_only_hiding::StateOnlyHidingContext','aspis_statement::state_only_trace::StateOnlyTraceFoundation','aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestMergedC1CompilationV1','aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public','zeroize::Zeroizing','aspis_core::r0::Error','aspis_core::state_only_prefix::r0::Challenges','aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1','aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1','aspis_statement::trace_v4::TraceCell','aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1','aspis_statement::pool_v1::pair_trace::PoolV1PairCopyLinkV1','aspis_statement::pool_v1::pair_trace::PoolV1PairCopyTupleV1','aspis_statement::pool_v1::pair_trace::PoolV1PairTupleLimbV1','aspis_statement::pool_v1::pair_trace::PoolV1PairTraceCellV1','aspis_statement::pool_v1::pair_trace::PoolV1PairTraceBankV1']:\n  cmd+=['--include',name]\ncmd+=['--opaque','crate::host_commitment::clear_private_salt','--opaque','aspis_prover::state_only_hiding::volatile_clear_cell']\ncmd+=['--dest-file',str(R/('ProverRwCaller.llbc' if caller else ('ProverRwAttempt.llbc' if full else 'ProverRwOpening.llbc'))),'--','--manifest-path',str(R/'crates/aspis-r1-cost-probe/Cargo.toml'),'--features','optimized-terminal,ct-host-prover','--offline','--release','--lib','--jobs','1']\nraise SystemExit(subprocess.run(cmd,cwd=R,env=dict(os.environ,CARGO_TARGET_DIR=str(R.parent/'charon-target'))).returncode)\n",
+  "charon_driver_matches_retained_extraction": true,
   "schema": "prover-rw-effect-interface-inspection-v1",
-  "utc": "2026-10-24T10:03:19.283041+00:00",
+  "utc": "2026-10-24T10:24:45.622180+00:00",
   "source_revision": "7db89a0216818294add9efa77101568aed1a3629",
   "mode": "read-only source inspection; no Lean/Kani/extraction launches",
   "caller005_receipt": {
