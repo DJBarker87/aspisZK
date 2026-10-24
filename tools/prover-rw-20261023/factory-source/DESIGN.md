@@ -75,3 +75,16 @@ wall,RSS,cgroup peaks,swap,revision and full axioms (N/A for extraction).
 Budgets at entry: backend15/16, extraction49/52, Lean236/260, Kani57/60.
 At most2 Kani this step, reserve last1; none justified by extraction failure.
 No frozen manifest. Both deployed targets not yet established.
+
+## Admission correction before extraction
+
+Attempt050 did not launch a scope/compiler/extractor: the added reserve check
+incorrectly summed hierarchical uncapped memory.current at every ancestor,
+reporting132GB on a62GiB host. Retain its before/preflight data and charge it
+conservatively as extraction050. Correct accounting subtracts direct child
+current from each uncapped group before summing; finite-covered descendants
+remain charged once by MemoryMax. Negative/racing data denies. This corrects
+double-counting, not a cap increase or resource-failure replay. The planned
+commands move to051 (Charon) and052 (Aeneas), using all remaining extraction
+allocation; no fourth command is authorized. Two actual extractions remain
+planned, three total preflight slots charged including the failed admission.

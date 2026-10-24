@@ -4,14 +4,14 @@ import hashlib,json,os,re,runpy,subprocess,sys,time
 D=Path(__file__).resolve().parent
 H=D.parent
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
-a=int(sys.argv[1]);assert a in (50,51)
+a=int(sys.argv[1]);assert a in (51,52)
 O=D/'packet'/f'extraction{a:03d}';O.mkdir(parents=True)
 charon=Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon')
 B=H/'native-drop-abi/backend'
 binary=B/'candidate-014/main.exe';receipt=B/'ProverRwNativeDropABI-build-014/receipt.json'
 assert sha(binary)==json.loads(receipt.read_text())['versioned_binary']['sha256']
 llbc=D/'ProverRwFactorySource.llbc'
-if a==50:
+if a==51:
  cmd=[str(charon),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--precise-drops','--start-from','crate','--opaque','crate::StateOnlyAttemptSecrets::one_draw','--dest-file',str(llbc),'--','--manifest-path',str(D/'preflight/Cargo.toml'),'--offline','--locked','--release','--lib','--jobs','4']
  phase='optimized compilation and precise built-MIR extraction of prospective controller, opaque one_draw; no proof generation'
  flags={'effective_drop_as_no_op':None,'assessment':'Charon precise-drops, no evaluation claim'}
@@ -41,7 +41,7 @@ metrics=(O/'time.log').read_text() if (O/'time.log').exists() else ''
 def metric(label):
  m=re.search(re.escape(label)+r':\s*(\d+)',metrics);return int(m[1]) if m else None
 pre.update(exit_status=r.returncode,wall_seconds=time.monotonic()-t,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),scope_command=scope,time_log=metrics)
-pre['outputs']=[dict(path=str(p),sha256=sha(p),size=p.stat().st_size) for p in ([llbc] if a==50 else list((O/'raw-output').rglob('*'))) if p.is_file()]
+pre['outputs']=[dict(path=str(p),sha256=sha(p),size=p.stat().st_size) for p in ([llbc] if a==51 else list((O/'raw-output').rglob('*'))) if p.is_file()]
 pre['postrun_changed_inputs']=[p for p,h in pins.items() if sha(p)!=h]
 (O/'receipt.json').write_text(json.dumps(pre,indent=2)+'\n')
 print(json.dumps({k:pre[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','postrun_changed_inputs']}))
