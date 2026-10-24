@@ -1,0 +1,3 @@
+Proves generic seven-row polynomial-to-pairing assembly and concrete WideExact polynomial operator transport on opaque arguments, reusing retained linearity and existing operator bridges. No concrete caller or public-layout closure is claimed. Focused check completed before the requested pause; the dependent concrete kappa consumer remains uncompiled.
+
+Focused Lean check: 38.904 seconds; peak aggregate RSS 2966847488 bytes; zero swap. Exact revision, source/object hashes, command, profile and axiom output are retained. No compiled artifacts included. This packet alone closes neither S9 nor the 100-bit release claim.
