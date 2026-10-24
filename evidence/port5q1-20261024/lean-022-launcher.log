@@ -1,0 +1,54 @@
+{"attempt": "lean-022", "exit_status": 1, "wall_seconds": 2.1975412990141194, "peak_rss_kib": "4396016", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q1_GeometryCells.line_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port5Q1_GeometryCells.inverse_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q1_GeometryCells.lean:20:105: error: unsolved goals
+queries : Std.Array U32 22#usize
+start end1 : Usize
+out : verifier.QueryGeometry
+order : ↑start ≤ ↑end1
+bound : ↑end1 ≤ 22
+lineMeaning :
+  List.map S7JoinBasisMachine.decode ↑out.line_z =
+    List.map (fun q => Port5Q1_Domain.lineZ ↑q) (List.take (↑end1 - ↑start) (List.drop ↑start ↑queries))
+selected : List U32 := Port5Q1_SelectedCells.selected queries start end1
+selectedLen : selected.length = ↑end1 - ↑start
+i : ℕ
+hi : i < ↑end1 - ↑start
+⊢ selected[i]?.getD 0#u32 = queryAt queries (↑start + i)
+Port5Q1_GeometryCells.lean:22:51: error(lean.unknownIdentifier): Unknown identifier `i`
+Port5Q1_GeometryCells.lean:22:53: error(lean.unknownIde
+...
+rt ↑queries))
+selected : List U32 := Port5Q1_SelectedCells.selected queries start end1
+selectedLen : selected.length = ↑end1 - ↑start
+i : ℕ
+hi : i < ↑end1 - ↑start
+⊢ selected[i]?.getD 0#u32 = queryAt queries (↑start + i)
+Port5Q1_GeometryCells.lean:57:51: error(lean.unknownIdentifier): Unknown identifier `i`
+Port5Q1_GeometryCells.lean:57:53: error(lean.unknownIdentifier): Unknown identifier `hi`
+Port5Q1_GeometryCells.lean:51:89: error: unsolved goals
+queries : Std.Array U32 22#usize
+start end1 : Usize
+out : verifier.QueryGeometry
+order : ↑start ≤ ↑end1
+bound : ↑end1 ≤ 22
+flat inverse : alloc.vec.Vec U32
+flatlen : (↑flat).length = 5 * (↑end1 - ↑start)
+values :
+  ∀ j < (↑flat).length,
+    S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑inverse) j) =
+      (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑flat) j))⁻¹
+groups : ↑out.inverses = List.map (Port4C_CollectLoop.record inverse) (List.range (↑end1 - ↑start))
+flatMeaning :
+  List.map S7JoinBasisMachine.decode ↑flat =
+    List.flatMap (fun q => Port5Q1_Domain.words ↑q) (List.take (↑end1 - ↑start) (List.drop ↑start ↑queries))
+selected : List U32 := Port5Q1_SelectedCells.selected queries start end1
+selectedLen : selected.length = ↑end1 - ↑start
+selectedAt : ∀ i < ↑end1 - ↑start, selected[i]?.getD 0#u32 = queryAt queries (↑start + i)
+⊢ ∀ i < ↑end1 - ↑start,
+    ∀ (j : Fin 5),
+      S7JoinBasisMachine.decode
+          (lane ((↑out.inverses)[i]?.getD (Array.make 5#usize [0#u32, 0#u32, 0#u32, 0#u32, 0#u32] ⋯)) j) =
+        ((Port5Q1_Domain.words ↑(queryAt queries (↑start + i)))[↑j]?.getD 0)⁻¹
+'AspisR1.Port5Q1_GeometryCells.line_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port5Q1_GeometryCells.inverse_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfcaf85537d3047ce808e205aef592b8d.scope; invocation ID: 96f59391fbae4d8c949f7abc380c7e4b
