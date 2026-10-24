@@ -1,0 +1,22 @@
+// Job-owned metadata only. Actual payload reads use valid shared borrows.
+#[cfg(kani)]
+#[allow(non_snake_case)]
+pub mod ProverRwResumeP6 {
+    #[derive(Clone, Copy, Debug)]
+    pub struct Snapshot { pub bytes: [u8;64], pub len: usize }
+    #[derive(Clone, Copy, Debug)]
+    pub struct Event { pub ordinal: usize, pub before: Snapshot, pub after: Snapshot }
+    const EMPTY: Snapshot=Snapshot {bytes:[0;64],len:0};
+    static mut EVENTS: [Event;3]=[Event {ordinal:0,before:EMPTY,after:EMPTY};3];
+    static mut COUNT: usize=0;
+    pub fn record(before: Option<Snapshot>, after: Option<Snapshot>) {
+        let before=before.expect("supported owned byte-array class");
+        let after=after.expect("supported owned byte-array class");
+        unsafe {
+            assert!(COUNT<3);
+            EVENTS[COUNT]=Event {ordinal:COUNT,before,after};
+            COUNT+=1;
+        }
+    }
+    pub fn events() -> ([Event;3],usize) { unsafe { (EVENTS,COUNT) } }
+}
