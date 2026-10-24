@@ -1,0 +1,47 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: constant `ENTROPY_RETRY_LIMIT` is never used
+ --> selected.rs:3:7
+  |
+3 | const ENTROPY_RETRY_LIMIT: usize = 16;
+  |       ^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variant `RepeatedZeroBlock` is never constructed
+ --> selected.rs:8:5
+  |
+6 | pub enum StateOnlyAttemptEntropyError {
+  |          ---------------------------- variant in this enum
+7 |     Os(getrandom::Error),
+8 |     RepeatedZeroBlock,
+  |     ^^^^^^^^^^^^^^^^^
+  |
+  = note: `StateOnlyAttemptEntropyError` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: function `fill_stub` is never used
+  --> lib.rs:19:12
+   |
+19 |         fn fill_stub(dest: &mut [u8])->Result<(),getrandom::Error> {
+   |            ^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_singlethreadfence (1)
+         
+
+Checking harness ProverRwFactoryIterationCut::checks::one_draw_relation...
+
+VERIFICATION RESULT:
+ ** 0 of 462 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 29.629251s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
