@@ -1,0 +1,657 @@
+{
+  "assumptions": "No theorem or premise changes. No new trust. Preparation only; source/model/native/Std/P7/extraction/effect/release joins open; both security targets NOT YET ESTABLISHED.",
+  "blockers": [
+    "Unprivileged namespace probe denied; reviewed separately authorized privileged setup or different already-supported isolation is needed; no security changes now.",
+    "Exact host tool/loader/native/SDK runtime allowlist, immutable/read-only view and same-uid writer/TOU exclusion not complete.",
+    "123 historical consumed packages and index files do not prove whole-workspace offline resolver completeness; no Cargo resolution was run. Missing input must fail offline, never download or add unreviewed packages.",
+    "Actual process/file trace join/parser and output/cache postvalidation not implemented or tested with compiler.",
+    "Separate lead allocation/resource-policy review/prospective+actual GO inside exact capped scope absent. Cold peak and build-script optimized-profile issue require review."
+  ],
+  "budgets": {
+    "Aeneas": 0,
+    "Cargo": 0,
+    "Charon": 0,
+    "ELF": 0,
+    "Kani": 0,
+    "Lean": 0,
+    "Rust": 0,
+    "backend": 0,
+    "compiler": 0,
+    "consumer": 0,
+    "frozen_manifest": 0,
+    "scope": 0
+  },
+  "builds": [
+    {
+      "cache": "initial empty target",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+      "environment": {
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL": "3",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "environment_before": {
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "exact_clean_inner_command": [
+        "/usr/bin/env",
+        "-i",
+        "CARGO_HOME=/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE=true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS=-C link-arg=--threads=4",
+        "HOME=/home/dombarker",
+        "LC_ALL=C",
+        "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME=/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/diagnostics",
+        "TMPDIR=/tmp",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_bytes": 1563728,
+      "expected_sha256": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+      "freshness": "record actual compiler/build-script executions and generated outputs; explicitly label any legitimately cached selected diagnostics",
+      "mode": "default",
+      "status": "REVIEW PROPOSAL ONLY; NO EXECUTION AUTHORITY",
+      "unset_by_clean_environment": [
+        "RUSTFLAGS",
+        "ASPIS_R1_POOL_PROGRAM_ID",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID"
+      ]
+    },
+    {
+      "cache": "same newly validated default target",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+      "environment": {
+        "ASPIS_R1_POOL_PROGRAM_ID": "BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID": "9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL": "3",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "environment_before": {
+        "ASPIS_R1_POOL_PROGRAM_ID": "BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID": "9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "exact_clean_inner_command": [
+        "/usr/bin/env",
+        "-i",
+        "ASPIS_R1_POOL_PROGRAM_ID=BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID=9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q",
+        "CARGO_HOME=/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE=true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS=-C link-arg=--threads=4",
+        "HOME=/home/dombarker",
+        "LC_ALL=C",
+        "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME=/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/diagnostics",
+        "TMPDIR=/tmp",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_bytes": 1563728,
+      "expected_sha256": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+      "freshness": "record actual compiler/build-script executions and generated outputs; explicitly label any legitimately cached selected diagnostics",
+      "mode": "devnet",
+      "status": "REVIEW PROPOSAL ONLY; NO EXECUTION AUTHORITY",
+      "unset_by_clean_environment": [
+        "RUSTFLAGS"
+      ]
+    },
+    {
+      "cache": "separate initially empty Pool target; optional normal copy of validated NEW dependencies only",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+      "environment": {
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL": "3",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-pool",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "environment_before": {
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true",
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-pool",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "HOME": "/home/dombarker",
+        "LC_ALL": "C",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME": "/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/diagnostics",
+        "TMPDIR": "/tmp"
+      },
+      "exact_clean_inner_command": [
+        "/usr/bin/env",
+        "-i",
+        "CARGO_HOME=/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE=true",
+        "CARGO_PROFILE_RELEASE_BUILD_OVERRIDE_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-pool",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS=-C link-arg=--threads=4",
+        "HOME=/home/dombarker",
+        "LC_ALL=C",
+        "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "RUSTC_WRAPPER=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+        "RUSTUP_HOME=/home/dombarker/.rustup",
+        "S10_DIAGNOSTICS=/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/diagnostics",
+        "TMPDIR=/tmp",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_bytes": 605704,
+      "expected_sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+      "freshness": "record actual compiler/build-script executions and generated outputs; explicitly label any legitimately cached selected diagnostics",
+      "mode": "pool",
+      "status": "REVIEW PROPOSAL ONLY; NO EXECUTION AUTHORITY",
+      "unset_by_clean_environment": [
+        "RUSTFLAGS",
+        "ASPIS_R1_POOL_PROGRAM_ID",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID"
+      ]
+    }
+  ],
+  "cache_policy": "Never use historical snapshot. Default starts empty; seal trace/input/output/OUT_DIR associations before cache reuse. Devnet same target, legitimate env rebuilds. Pool distinct original logical target; copy/reflink only newly validated dependency outputs when compatible, ordinary preservation of actual metadata, no fingerprint/source/mtime fabrication. If Cargo legitimately rebuilds, allow within separate authorized gate; no forced warmth.",
+  "claim": "Input/execution preparation only; no native/Std/P7/extraction/effect/security closure",
+  "elf_policy": "All three fixed pins unchanged. Any future mismatch record cause/diff and STOP; no pin adoption. Frozen4bb capture does not gate later unmerged prover candidate.",
+  "environment_differences": "Restores ORIGINAL S10 logical paths from historical command JSON instead of relocated recapture paths. Feature/argv/-j4/linker flags/wrapper bytes unchanged. HOME/RUSTUP_HOME/LC_ALL/TMPDIR clean allowlist explicit new proposal; PATH/CARGO_HOME/offline inherited from recapture plan. Historical command receipt env is partial, no equality to complete old env claimed. No new RUSTC_WORKSPACE_WRAPPER, remap-path-prefix or profile override.",
+  "keys": "Future umask077. Newly generated output keypairs retained securely0600; no existing keys mounted/read/copied/deleted. No keys created by preparation.",
+  "mappings": [
+    {
+      "identity": "reused 7978-file frozen manifest; recheck at future seal",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+      "mode": "ro",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src"
+    },
+    {
+      "identity": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/rustc-diagnostics.py",
+      "mode": "ro",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/rustc-diagnostics.py"
+    },
+    {
+      "identity": "new empty; default then devnet",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/target-verifier"
+    },
+    {
+      "identity": "new empty; no historic OUT_DIR",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-pool",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/target-pool"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/artifacts",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/default/artifacts"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/diagnostics",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/default/diagnostics"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/artifacts",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/devnet/artifacts"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/diagnostics",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/devnet/diagnostics"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/artifacts",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/pool/artifacts"
+    },
+    {
+      "identity": "new own outputs; directories to create only after allocation",
+      "logical": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/diagnostics",
+      "mode": "rw",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/captures/pool/diagnostics"
+    },
+    {
+      "identity": "new manifest + sparse-index receipt; package universe 123, offline resolver completeness unproved",
+      "logical": "/home/dombarker/.cargo/registry/src",
+      "mode": "ro",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/cargo/registry/src"
+    },
+    {
+      "identity": "new manifest + sparse-index receipt; package universe 123, offline resolver completeness unproved",
+      "logical": "/home/dombarker/.cargo/registry/cache",
+      "mode": "ro",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/cargo/registry/cache"
+    },
+    {
+      "identity": "new manifest + sparse-index receipt; package universe 123, offline resolver completeness unproved",
+      "logical": "/home/dombarker/.cargo/registry/index",
+      "mode": "ro",
+      "physical": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfInputs-20261024-v3/cargo/registry/index"
+    }
+  ],
+  "namespace": {
+    "child_gid": 1000,
+    "child_uid": 1000,
+    "evidence": "finish.stdout.json",
+    "host_pid_gate": "trusted outer parent does prospective + actual ResourceGO using host PID/starttime/cgroup; guests remain same cgroup; guest PID never authorizes host identity",
+    "mounts_tested": false,
+    "observation": "unshare installed, bwrap absent; unprivileged tiny probe denied uid_map with EPERM",
+    "privileged_setup_run": false,
+    "setup_proposal": "NAMESPACE.md; no broad root or /usr bind; exact missing host file allowlist must be resolved before setup helper can be reviewed"
+  },
+  "optimization": "SBF release command retained. Frozen aspis-core/build.rs generates circle_tables.rs from log12/14/15/18/19 domains and split windows, writes only OUT_DIR; must freshly capture. Workspace has no release.build-override opt-level. Cargo may compile build scripts at opt0: if this is a heavy arithmetic step, STOP and review explicit optimized build-override proposal before execution, rather than silently run debug arithmetic or alter profile. No Rust ran here.",
+  "optimization_review": "EXPLICIT proposed build override opt3: host build scripts/proc-macros/dependencies. Actual aspis-core/build.rs is heavy (626480 inverses plus point powers). Official Cargo1.89 precedence confirmation pending; no opt0 heavy comparison. New host fingerprints required; before/after env retained. Target argv/features/wrapper and all3 ELF pins unchanged. circle_tables byte identity and ALL3 fixed ELF gates mandatory; mismatch STOP.",
+  "original_commands": {
+    "docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/build-default-v1/command.json": {
+      "bytes": 1130,
+      "sha256": "ae423697b12b67b63d986a8633bbe9fa8a762476495cede6da39613090455e39"
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/build-devnet-v1/command.json": {
+      "bytes": 1292,
+      "sha256": "d3c027be0a9ac695c57322ee5cb4ddd2709e9c4896f6bf7f79ca70a191e1dc71"
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/s10-repin3-20261023/build-pool-v1/command.json": {
+      "bytes": 1182,
+      "sha256": "fe67c4ef3737ded8de826f3560f52557aed3bb618b8caca7803085a54ae2c313"
+    }
+  },
+  "resources": {
+    "MemoryHigh": "3G",
+    "MemoryMax": "4G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64,
+    "admission": "fresh prospective and inside exact scope actual GO after separate lead allocation/review. disjoint populated MemoryMax incl proposed scope strictly <55GiB; retain 7GiB OS/control reserve; unknown/raced/unbounded writers deny; ResourceAvailable OFFLINE and not adopted.",
+    "assessment": "four Cargo jobs may overlap rustc/build-script/native children; wrapper + linker add tasks. Tasks64/4GiB feasibility UNKNOWN for cold. Historical31-33s/~1.18GB warm does not bound cold peak. No larger cap/retry authorized.",
+    "cargo_jobs": 4,
+    "linker_threads": 4,
+    "parallel_build_scopes": 1,
+    "proposal_only": true,
+    "watch": "count own full allocated cap once in reservation sum. For incremental physical headroom use max(0, own cap - own current) rather than adding full cap to current process residency again; other unconsumed reservations also require disjoint treatment. No monitor implementation/adoption here. Review at10min without new compiled target; stop on pressure/failure, no cap raise or unchanged retry."
+  },
+  "schema": "SbfClosure-future-v1",
+  "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "status": "BLOCKED: partial finite input set, no literal runtime pins, no privileged feasibility probe, no offline resolver/trace execution",
+  "tool_mapping_requirements": [
+    "Expose only pinned Solana3.1.13 driver/SDK public file set at exact existing absolute paths; do not expose whole .local or HOME.",
+    "Expose current validated platform-tools public file set read-only at /home/dombarker/.cache/solana/v1.52/platform-tools. Preserve SDK dependencies/platform-tools link and .rustup/toolchains/1.89.0-sbpf-solana-v1.52 -> SDK rust link. No installation/link mutation in global trees.",
+    "Selected outer stable Cargo/rustc and rustup proxy bytes/paths from reused pins; synthesize private rustup settings from reviewed pinned public text, never copy actual HOME config/credentials. Keep binaries read-only; driver rustup writes, if any, private only.",
+    "Host loader, compiler DSOs, native cc/gcc/as/ar/ld, Python stdlib/native modules, locale/NSS and SDK scripts require exact public file/type/mode/link manifests. Python loaded DSO receipt is not compiler DSO closure. Missing host-native/runtime closure blocks setup."
+  ],
+  "tool_pin_references": [
+    {
+      "bytes": 996920,
+      "path": "evidence/sbf-identity-20261024/current-content.json",
+      "revision": "ed3227f4dae529ed61d7f63c9dbd5adb8028e953",
+      "sha256": "bb4df9dca99f97b72193741438ccf690100b2ff02dd3ec07484192f5ae2f89c2",
+      "status": "REUSED current observation at its original time, not historical or TOU identity"
+    },
+    {
+      "bytes": 5089,
+      "path": "evidence/sbf-identity-20261024/current-global.json",
+      "revision": "ed3227f4dae529ed61d7f63c9dbd5adb8028e953",
+      "sha256": "c4feed4596f2f4eb9a9caf87eb4d9a9ce29b69b6e55017b09c6f1aaeb4722210",
+      "status": "REUSED current observation at its original time, not historical or TOU identity"
+    },
+    {
+      "bytes": 4644,
+      "path": "evidence/sbf-identity-20261024/current-drivers.json",
+      "revision": "ed3227f4dae529ed61d7f63c9dbd5adb8028e953",
+      "sha256": "d390f41da7bbd226f9d3cb17ed49a1e9765005e2c27b6d45618b4249113de3f3",
+      "status": "REUSED current observation at its original time, not historical or TOU identity"
+    },
+    {
+      "bytes": 27950,
+      "path": "evidence/sbf-identity-20261024/complete-source-comparison.json",
+      "revision": "ed3227f4dae529ed61d7f63c9dbd5adb8028e953",
+      "sha256": "a626a407053b7e32c3e0fba95498a8477048b9ae256eabfa22118de3f90d419b",
+      "status": "REUSED current observation at its original time, not historical or TOU identity"
+    }
+  ],
+  "tool_pins_reused": {
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin/ld.lld": {
+      "bytes": 88536728,
+      "mode": "0o755",
+      "mtime_ns": 1761844678000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/llvm/bin/lld",
+      "sha256": "384b5aebae8bc709bc61ed558ea68eaa29731a54d0682180f9f26b26b769edbf"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/cargo": {
+      "bytes": 39749936,
+      "mode": "0o755",
+      "mtime_ns": 1761844676000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/cargo",
+      "sha256": "b4171a5b807c0d54cd02fe2ca2ae9505d6bd1c9c8d1d8b23e5189de9abdd4f98"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/rustc": {
+      "bytes": 16160,
+      "mode": "0o755",
+      "mtime_ns": 1761844676000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/rustc",
+      "sha256": "d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/librustc_driver-26fee09958747c28.so": {
+      "bytes": 218706352,
+      "mode": "0o755",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/librustc_driver-26fee09958747c28.so",
+      "sha256": "3b1ea655c8f47c30490b07740a872974e34747ab7ba39c56ae20fba044bd0dae"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/liballoc-91c82d13bc4939af.rlib": {
+      "bytes": 6749424,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/liballoc-91c82d13bc4939af.rlib",
+      "sha256": "6a7f83ac4e22637de88c8b8919a0ac59c54b8c433a233eb435298d2aa72b9531"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/libcore-673053c840437f62.rlib": {
+      "bytes": 37557376,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/libcore-673053c840437f62.rlib",
+      "sha256": "a1f52278d174e0741f3b6269254cad81b6a1e2ecb1a7ce7f2460429d28dae09b"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_literal_escaper-db35c7a26fca298a.rlib": {
+      "bytes": 91864,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_literal_escaper-db35c7a26fca298a.rlib",
+      "sha256": "5e5814160ae599bdb382d5e5ddfe9c371ef2fd5a3fe153b02972d5406b09e024"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_alloc-c4aca4230e3ed9f1.rlib": {
+      "bytes": 5156,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_alloc-c4aca4230e3ed9f1.rlib",
+      "sha256": "beb2371cf4046ad134a879ed6b188bdcf70921ff757391b748f27a0d3d9bd302"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_core-96fd80a5ad74863d.rlib": {
+      "bytes": 8562,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_core-96fd80a5ad74863d.rlib",
+      "sha256": "225dd42f146ef2a4d9a6a72e7521d9617e8c8250e174a8127942391dea2a555c"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_std-9b2c8600170aa85e.rlib": {
+      "bytes": 9464,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/sbpf-solana-solana/lib/librustc_std_workspace_std-9b2c8600170aa85e.rlib",
+      "sha256": "a6f7ec1f46a206e9f346f72d6d27cd118c43633ccf63301518548d36f30d7636"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-alloc/Cargo.toml": {
+      "bytes": 243,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-alloc/Cargo.toml",
+      "sha256": "a78d5697cabb2756f007a1d10c92587524f6cae7cec840b9e693f86e8043943a"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-alloc/lib.rs": {
+      "bytes": 214,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-alloc/lib.rs",
+      "sha256": "f8d4d0b0bb76359da5b14b5badc497adc461f1e34c05380d0d6368b79fadf7d0"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/Cargo.toml": {
+      "bytes": 346,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/Cargo.toml",
+      "sha256": "8a52b90e2e18dbe77cb6e956072442dca211b0e2e51aaaf2b320a26dc707a44e"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/README.md": {
+      "bytes": 1277,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/README.md",
+      "sha256": "f8f84f44bf75cf827c60ce3855e4a6e7ab25dfc5a953a58ad50790e783608221"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/lib.rs": {
+      "bytes": 209,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-core/lib.rs",
+      "sha256": "6e011f4fb187509bfc0728a12685dcca772954ba3f50c013d1c630d77773b7bc"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/Cargo.toml": {
+      "bytes": 237,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/Cargo.toml",
+      "sha256": "4539f959d0ca9c4551a86a07596e037fa3f596e5d2cd5732b80269d86ae0790d"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/README.md": {
+      "bytes": 99,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/README.md",
+      "sha256": "e60f35fff217f34bf887251f5042cea716ee1920a91406488b5769d76cb6d263"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/lib.rs": {
+      "bytes": 44,
+      "mode": "0o644",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/src/rust/library/rustc-std-workspace-std/lib.rs",
+      "sha256": "c7f165b14eb545b5d93d0f018cb82d7e40781eac659da33472785032eb4a6eb5"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld/ld.lld": {
+      "bytes": 393984,
+      "mode": "0o755",
+      "mtime_ns": 1761844677000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld/ld.lld",
+      "sha256": "2369c7b51282613ad9daf98d1c467c8cbef3b468e826c592e442b1d96958472b"
+    },
+    "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld": {
+      "bytes": 88536728,
+      "mode": "0o755",
+      "mtime_ns": 1761844676000000000,
+      "resolved": "/home/dombarker/.cache/solana/v1.52/platform-tools/rust/lib/rustlib/x86_64-unknown-linux-gnu/bin/rust-lld",
+      "sha256": "793012f6ce8d4142bcba6a6fbdbfe4b862c81ab529bf862bc8f2f607f369681a"
+    },
+    "/home/dombarker/.cargo/bin/cargo": {
+      "bytes": 21113232,
+      "mode": "0o755",
+      "mtime_ns": 1792525554122072136,
+      "resolved": "/home/dombarker/.cargo/bin/rustup",
+      "sha256": "dda7234360b7f578ca8b0ddcb80145646fa61a67c1720a5abc7051b35c9fcb71"
+    },
+    "/home/dombarker/.cargo/bin/rustc": {
+      "bytes": 21113232,
+      "mode": "0o755",
+      "mtime_ns": 1792525554122072136,
+      "resolved": "/home/dombarker/.cargo/bin/rustup",
+      "sha256": "dda7234360b7f578ca8b0ddcb80145646fa61a67c1720a5abc7051b35c9fcb71"
+    },
+    "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf": {
+      "bytes": 19193168,
+      "mode": "0o755",
+      "mtime_ns": 1775843211000000000,
+      "resolved": "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+      "sha256": "46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892622e1ea59445d6c"
+    },
+    "/home/dombarker/.rustup/settings.toml": {
+      "bytes": 102,
+      "mode": "0o664",
+      "mtime_ns": 1774306053392448053,
+      "resolved": "/home/dombarker/.rustup/settings.toml",
+      "sha256": "46d451a6b8ea2bed375971c34fee742235e1cd143e34368c6f9211802126de45",
+      "text": "version = \"12\"\ndefault_toolchain = \"stable-x86_64-unknown-linux-gnu\"\nprofile = \"default\"\n\n[overrides]\n"
+    },
+    "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo": {
+      "bytes": 41666064,
+      "mode": "0o755",
+      "mtime_ns": 1775889736694300828,
+      "resolved": "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo",
+      "sha256": "b7561ebe947acf816451536f19871ea4810f6be3f82fd252feab6ca7be8396f5"
+    },
+    "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc": {
+      "bytes": 655616,
+      "mode": "0o755",
+      "mtime_ns": 1775889743282241704,
+      "resolved": "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc",
+      "sha256": "ef6d716e5d1c6c93def277c0afa037c21e7a74f7de3aed4ee0700646c3301b1d"
+    }
+  },
+  "trace": {
+    "gate": "Capture all descendant exec and file paths from driver through Cargo, build scripts/native children and loader. Reconcile namespace paths/cwd/dirfds/process lineage/inherited fd closure and input identities. Any unknown, truncation, lost descendant, mutable/unsealed input or unresolved join blocks release. strace observes, does not provide pre-exec denial; cold dependency compile now intended.",
+    "no": [
+      "-v",
+      "-e read=",
+      "-e write=",
+      "environment dump",
+      "privileged inherited sockets"
+    ],
+    "proposed_options": [
+      "-f",
+      "-qq",
+      "-ttt",
+      "-s",
+      "65535",
+      "-e",
+      "trace=%file,%process",
+      "-o",
+      "PRIVATE_PER_MODE_PATH"
+    ],
+    "sha256": "28f957c227012de0b18d1bd7fff2d396cb693ea60ed8013be68de071e84b5001",
+    "status": "available/pinned only; no compiler tracing test, descendant coverage/parser/TOU validation unimplemented",
+    "tool": "/usr/bin/strace"
+  }
+}
