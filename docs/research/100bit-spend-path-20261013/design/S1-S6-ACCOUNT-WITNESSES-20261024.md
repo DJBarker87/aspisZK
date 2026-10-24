@@ -123,3 +123,11 @@ Source-only focused-extractor-proof-packet-v1 evidence:
 ```
 python3 tools/s6-sdk-first-20261024/check.py
 ```
+
+## Later same-day addendum
+
+The local SDK import obstruction has been bypassed by a literal declaration
+factor, and both the SDK/S6 bridge and its S1 caller consumer now compile.
+See S1-S6-SDK-BINDING-20261024.md for the exact checked statements, unchanged
+standing boundaries, source-factor correspondence and remaining coherent
+ALL14/release re-pin. The failed original receipts above remain rejected.
