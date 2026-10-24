@@ -52,8 +52,10 @@ whole-prover identical-coin/differential gates, quiet-host median<15s and<=10%
 slowdown, final artifact audit and coherent replay. Existing fixture and
 component evidence cannot substitute for these obligations.
 
-Live managed tasks: Port18COHERENCE and FactorySource, each on its retained
+Live managed tasks: Port18COHERENCE, FactorySource and Port19REST, each on its
 isolated candidate branch with its archived hard budget and resource rules.
+Port19REST owns the remaining lead-operation source/effect budget producers;
+it does not duplicate A-owned parser/preparation/powers or Port18 cache repair.
 Detailed evidence, failures, assumptions and next producers are in the latest
 C3-BIN/LOG D205-D206 entries and `COORDINATOR-20261024.md`. The goal remains
 active. Final security closure has not been claimed.
@@ -361,3 +363,12 @@ Kani055 actual loop invariant and057 explicit-frame variant both timed out240s; 
 Budgets now backend15/16,extraction49/52,Lean236/260,Kani57/60. FactorySource worker38745 continues the same candidate with at most2 of3 remaining Kani,3 remaining extractions and24 remaining Lean. Under existing D187/D191 authority, its explicitly expanded scope permits a narrow ACTUAL host fission in state_only_entropy.rs after committed design and extraction preflight. The goal is an actual called helper/controller association, rather than another duplicate proof-only cut. Preserve original public API, guards/errors/draw order/retry-before-drop order/moves and16/outer8 behavior; no new trust, backend adoption, protocol/verifier or E1 change. Source/native equivalence remains required, and unsupported extraction/Drop semantics must fail closed.
 
 New per-step optimized Rust allowance: at most3 focused checks/tests plus3 all-three-ELF build/gate commands. Any crate edit requires all3 current ELF identities after final source; absence of a gate keeps the candidate unadopted. Factory>=1000 small differential cases, if run, cannot replace D187's whole-prover identical-coin proof bytes/1000 comparisons. Native/effect/refinement, actual selected client, E1/L1/L2/L3, quiet median<15s and<=10% slowdown remain adoption gates. No unchanged full-BMC retry, higher cap or generic Guard/backend campaign is authorized. Both deployed targets remain not yet established. Port18COHERENCE33570 remains live on its own previously pinned branch/budget.
+
+
+## Addendum (lead, 2026-10-24): concrete remaining delegated source producers assigned
+
+While Port18COHERENCE33570 reconciles imports and FactorySource38745 works the actual entropy helper/controller, Port19REST41863 now owns a separate stable-root source/effect task. Own worktree/branch cx-port19rest/codex/cx-port19rest-20261024 at3d18d36112. Scope is lead-owned operation IDs6(query),9(flush),10(pending),11(geometry),12(initial),19(finish). It must locate actual selected frozen/extracted bodies and concrete dictionaries, then establish all-input/all-H/all-outcome local read bounds with complete result/state/error/prefix preservation. Native no-read behavior cannot be inferred from callback types, absence of a Digest argument, pure Result lifting or successful output equality. No arbitrary always-reject/zero-read implementation, hidden whole-budget/log premise, new NoHash assumption wrapper, primitive re-proof or common-cache repair is authorized.
+
+A-owned parser3/scan4/powers17/prepare7/sampler/primitive/S1/S6/S10 remain untouched. New concrete local producers may reduce residual R, but no full1161 or deployed security claim follows while source/native associations and remaining rows stay open. If actual source/effect instances are missing, the worker must identify the exact missing declaration and stop that claim, rather than add another generic composition wrapper. Source-only inventory/design precedes compilation. No shipped source, Rust/Kani/backend/extraction or artifact changes in this job.
+
+Lead allocates12 NEW Lean attempts exclusively to Port19REST, including failures/preflight/dependency charges. Last reviewed275/276 (273actual+2preLean) is historical usage, not the live Port18 total. Port18 retains its81 reserved attempts through ceiling356; Port19 adds a separate12, combined soundness ceiling368. Privacy budgets are separate. Final usage will be reconciled from both terminal ledgers. Existing caps/global lock/window/all-scope admission and exact receipts apply; no full replay, source adoptions or raised limits. Prompt archived. Both deployed targets not yet established.
