@@ -124,3 +124,10 @@ full frozen manifest0, backend0. #print axioms is N/A for every new result;
 no theorem or axiom was added. All changes are new files under the two allowed
 job directories. No merge/push, key/service/cache/chain mutation or shipped
 source/protocol/wire/feature/security-contract change.
+
+Retained audit failure: `failed-audit-v1.json` and the exact failed checker
+source record an offline checker bug: a flattened recursive Git tree was hashed
+as one tree object. The checker now hashes immediate children only. This was
+not a source discrepancy or build/resource failure; no claim relies on that
+failed audit. Its exact wall/RSS/swap were unavailable because assertion exit
+preceded receipt emission; this limitation is explicit rather than invented.
