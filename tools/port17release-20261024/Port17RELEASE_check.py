@@ -9,6 +9,10 @@ inv=json.loads((E/'dependency-inventory.json').read_text());assert inv['all_sele
 for n,x in inv['selected'].items():
  if 'source_path' in x:
   p=E/'dependency-source'/(n.replace('.','/')+'.lean');assert sha(p)==x['source_sha256'],n
+local_manifest=Path('/tmp/port17release-local-dependencies.json')
+if local_manifest.exists():
+ for name,row in json.loads(local_manifest.read_text()).items():
+  assert sha(Path(row['path']))==row['sha256'],('frozen local import changed',name)
 accepted={};failed=[]
 for c in configs:
  cfg=json.loads(c.read_text());a=cfg['attempt'];p=E/a/'receipt.json'
@@ -38,5 +42,5 @@ changed=subprocess.check_output(['git','diff','--name-only',base],cwd=R,text=Tru
 for p in changed:
  assert p.startswith(('tools/port17release-20261024/','evidence/port17release-20261024/','docs/research/100bit-spend-path-20261013/lean/Port17RELEASE_')),p
 for p in E.rglob('*.json'):assert p.stat().st_size<=5_000_000,('derived JSON exceeds delivery policy',p)
-report={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'inherited_charged':250,'new_charged':len(configs),'soundness_charged':250+len(configs),'ceiling':276,'kani_new':0,'heavy_rust_backend_extraction_new':0,'current_accepted_targets':accepted,'failed_or_preflight_charges':failed,'full_frozen_manifest_replay':False,'whole_driver_1161_without_residual_premises':False,'native_or_deployed_security_target_established':False}
-(E/'manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'accepted_current':len(accepted),'charged':len(configs),'failed_or_preflight':len(failed),'standard_axioms_only':True}))
+report={'schema':'focused-extractor-proof-packet-v1','source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'inherited_charged':250,'new_charged':len(configs),'soundness_charged':250+len(configs),'ceiling':276,'kani_new':0,'heavy_rust_backend_extraction_new':0,'current_compiled_targets':accepted,'current_accepted_root_targets':{k:v for k,v in accepted.items() if k not in ['Port17RELEASE_Prepare','Port17RELEASE_Effects','Port17RELEASE_Driver','Port17RELEASE_Accounting','Port17RELEASE_Audit']},'provisional_mixed_cache_targets':[k for k in accepted if k in ['Port17RELEASE_Prepare','Port17RELEASE_Effects','Port17RELEASE_Driver','Port17RELEASE_Accounting','Port17RELEASE_Audit']],'composition_status':'WITHHELD: cached source/declaration compatibility unresolved; see compatibility.json','failed_or_preflight_charges':failed,'full_frozen_manifest_replay':False,'whole_driver_1161_without_residual_premises':False,'native_or_deployed_security_target_established':False}
+(E/'manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps({'compiled_current':len(accepted),'composition_accepted':False,'charged':len(configs),'failed_or_preflight':len(failed),'standard_axioms_only':True}))
