@@ -70,11 +70,14 @@ def main():
         obj=tomllib.loads(read(p,SRC).decode());manifests[p]=obj
         def visit(x):
             if isinstance(x,dict):
-                if 'path' in x and isinstance(x['path'],str):
-                    q=posixpath.normpath(posixpath.join(posixpath.dirname(p),x['path'],'Cargo.toml'))
-                    if q.startswith('../') or q.startswith('/'):raise ValueError('external path dependency '+q)
-                    if q not in manifests:pending.append(q)
-                for value in x.values():visit(value)
+                for key,value in x.items():
+                    if key in ('dependencies','dev-dependencies','build-dependencies') and isinstance(value,dict):
+                        for spec in value.values():
+                            if isinstance(spec,dict) and isinstance(spec.get('path'),str):
+                                q=posixpath.normpath(posixpath.join(posixpath.dirname(p),spec['path'],'Cargo.toml'))
+                                if q.startswith('../') or q.startswith('/'):raise ValueError('external path dependency '+q)
+                                if q not in manifests:pending.append(q)
+                    else:visit(value)
             elif isinstance(x,list):
                 for value in x:visit(value)
         visit(obj)
