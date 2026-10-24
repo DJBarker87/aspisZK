@@ -36,3 +36,21 @@ Port4C's rhs/power/weights with the SAME preparation. Concrete Session A instanc
 remain unproved in this packet. Accepted lean006: exit0,2.392939557s,4434952KiB,
 swap0; standard axioms only. Earlier parser/map/coordinate elaboration errors are
 retained and excluded. No timeout,memory kill,cap increase or unchanged replay.
+
+Stage 2: Port5Q2_Advance.calls proves exact arithmetic advance by induction over
+actual source Calls, carrying its own push trace and canonicality. ObservationBinding
+is a clearly labelled LOCAL value/basis frontier, not an assumed loop result.
+Port5Q2_Ten.reached chooses the SAME prefix's g and geometry and proves decoded
+physical accumulator = write(m).accumulator after the actual flush, conditional
+only on that local binding and the named owner/primitive contracts. No alternate
+query/flush exists. Accepted lean007/011, standard axioms only, all exact receipt
+fields retained. The frozen2 instance of ObservationBinding is NOT proved here;
+the concrete opening/fold/geometry instance remains the next owner integration.
+
+Inventory correction: the LATER Port3 continuation already has production-buffer
+writer kani001 (57607/1880), successful all-byte/ordered-read verification. Its173
+source snapshot pins exactly match this worktree, including the full dependency
+sources. Earlier statements about3/5 apply to the original abi2 root, not the later
+production writer. Reader kani005/008 timed out and remain excluded. No unchanged
+native job will be repeated. Reader helper extraction will isolate current helpers
+instead of rerunning either timed-out whole reader.

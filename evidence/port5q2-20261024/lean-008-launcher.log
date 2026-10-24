@@ -1,0 +1,51 @@
+{"attempt": "lean-008", "exit_status": 1, "wall_seconds": 2.401834368996788, "peak_rss_kib": "4405100", "swaps": "0", "print_axioms": ["'AspisR1.Port5Q2_Ten.initial_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port5Q2_Ten.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port5Q2_Ten.lean:22:60: error: Tactic `rfl` failed: The left-hand side
+  Port4C_SumField.weight (S7Kani3CallerTrace.initialSum ⟨List.map Port3_FlushInstall.toOwned ↑a.weights.deref, ⋯⟩) ↑i
+is not definitionally equal to the right-hand side
+  ofK (CheckpointBytes4ReaderFields.sourceK 0)
+
+case e_weights.none
+a : verifier.Accumulator
+i : Fin 64
+h : (↑a.weights)[↑i]? = none
+⊢ Port4C_SumField.weight (S7Kani3CallerTrace.initialSum ⟨List.map Port3_FlushInstall.toOwned ↑a.weights.deref, ⋯⟩) ↑i =
+    ofK (CheckpointBytes4ReaderFields.sourceK 0)
+Port5Q2_Ten.lean:23:62: error: Tactic `rfl` failed: The left-hand side
+  Port4C_SumField.weight (S7Kani3CallerTrace.initialSum ⟨List.map Port3_FlushInstall.to
+...
+Ops)
+arithmetic1 : Port4C_QueryArithmetic.SessionABackends (Port3_QueryStage.release queryOps)
+binding :
+  Port5Q2_Advance.ObservationBinding (Port3_QueryStage.release queryOps) proof p g (Port3_QueryInstall.observer none)
+    geometry m
+trace :
+  S7Kani3CallerTrace.PushTrace (Port3_PendingInstall.owned initial.weights.deref) (Port3_RowsInstall.toBW returned.2)
+    sumOut
+progress : S7JoinRowsTrace.Progress (0 + ↑sv) 0 (Port3_RowsInstall.toBW returned.2)
+meaning :
+  state returned.1 sumOut =
+    OraclePortCheckpointStateC3.advance m (↑sv)
+      (state initial (S7Kani3CallerTrace.initialSum (Port3_PendingInstall.owned initial.weights.deref)))
+weights : returned.1.weights = initial.weights
+exactFlush :
+  CheckpointBytes5Output.accumulator
+      { weights := ⟨↑flushed, ⋯⟩, rhs := returned.1.rhs, power := returned.1.power, next := returned.1.next } =
+    OraclePortCheckpointStateC3.advance m (↑sv)
+      (state initial (S7Kani3CallerTrace.initialSum (Port3_PendingInstall.owned initial.weights.deref)))
+hw : ↑weights✝¹ = ↑flushed
+hr : rhs✝¹ = returned.1.rhs
+hp : power✝¹ = returned.1.power
+hn : next✝¹ = returned.1.next
+⊢ { weights := weights✝¹, rhs := returned.1.rhs, power := returned.1.power, next := returned.1.next } =
+    { weights := ⟨↑flushed, ⋯⟩, rhs := rhs✝, power := power✝, next := next✝ }
+Port5Q2_Ten.lean:118:49: warning: This simp argument is unused:
+  Subtype.ext_iff
+
+Hint: Omit it from the simp argument list.
+  simp_all only [verifier.Accumulator.mk.injEq,̵S̵u̵b̵t̵y̵p̵e̵.̵e̵x̵t̵_̵i̵f̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port5Q2_Ten.initial_state' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port5Q2_Ten.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raeb1cfb3572b49a0a8ba497edad7af5b.scope; invocation ID: 74a6b422ad55461387928e8105796f33
