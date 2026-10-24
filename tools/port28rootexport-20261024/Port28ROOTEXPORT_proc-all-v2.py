@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""Port28 ROOT: adapted from immutable SbfCachePrep111f2e6a2c. Read-only privileged proc metadata. No subprocesses, donor opens or writes."""
+import hashlib,json,os,pathlib,resource,sys,time
+ROOTS=('/home/dombarker/project-offloads/codex-cx-s2w-20261023', '/home/dombarker/project-offloads/codex-cx-s2w-20261023/history-cache', '/home/dombarker/project-offloads/codex-cx-s2y-20261023', '/home/dombarker/project-offloads/codex-cx-s2y-20261023/parser-cache', '/home/dombarker/project-offloads/codex-cx-s2z-20261023', '/home/dombarker/project-offloads/codex-cx-s2x-20261023', '/home/dombarker/project-offloads/codex-cx-adapter-rw-20261023', '/home/dombarker/project-offloads/codex-cx-s2i-20261023/merged-objects', '/home/dombarker/project-offloads/codex-cx-s2i-20261023', '/home/dombarker/project-offloads/codex-cx-import-union-20261022/objects', '/home/dombarker/project-offloads/codex-cx-s2e-20261023', '/home/dombarker/project-offloads/codex-cx-s2e-20261023/generated', '/home/dombarker/project-offloads/codex-cx-s2a-20261023/S2A-cache', '/home/dombarker/project-offloads/codex-cx-s2a-20261023', '/home/dombarker/project-offloads/codex-cx-s2c-20261023', '/home/dombarker/project-offloads/codex-cx-s2d-20261023/objects', '/home/dombarker/project-offloads/codex-cx-import-union-20261022/retained-objects', '/home/dombarker/project-offloads/aspis-joint-20261019/objects', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Cli/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/batteries/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/Qq/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/aesop/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/proofwidgets/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/importGraph/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/LeanSearchClient/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/plausible/.lake/build/lib/lean', '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib/.lake/build/lib/lean', '/home/dombarker/project-offloads/aspis-r1-j17-port-20261015/backend/.lake/build/lib/lean', '/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean', '/home/dombarker/project-offloads/codex-cx-s2b-20261023/lead-overlay', '/home/dombarker/project-offloads/codex-cx-s2b-20261023/objects', '/home/dombarker/project-offloads/codex-cx-s2g-20261023', '/home/dombarker/project-offloads/codex-cx-s2f-20261023')
+LIMIT=1024*1024
+
+def member(s):
+    # Deleted fd links still retain their path; cmdline match is conservative.
+    return any(r in s for r in ROOTS)
+
+def identity(raw):
+    # comm may itself contain spaces and parentheses. Fields after final ')'.
+    tail=raw.rsplit(')',1)[1].split()
+    return dict(pid=int(raw.split(' ',1)[0]),state=tail[0],flags=int(tail[6]),starttime=int(tail[19]))
+
+def bounded(path):
+    with path.open('rb') as f:
+        b=f.read(LIMIT+1)
+    if len(b)>LIMIT:raise ValueError('metadata exceeds bound')
+    return b
+
+def inspect(d):
+    before=identity(bounded(d/'stat').decode());row=dict(identity=before,errors=[],matches=[])
+    try:
+        status=bounded(d/'status').decode();fields=dict(line.split(':',1) for line in status.splitlines() if ':' in line)
+        row['status']={k:fields[k].strip() for k in ('State','Tgid','Pid','PPid','Uid','Gid','Threads')}
+        cmd=bounded(d/'cmdline');row['cmdline_sha256']=hashlib.sha256(cmd).hexdigest();row['cmdline_bytes']=len(cmd)
+        row['cgroup_sha256']=hashlib.sha256(bounded(d/'cgroup')).hexdigest()
+        kernel=bool(before['flags'] & 0x200000) and not cmd and int(fields['Pid'])==before['pid']
+        row['classification']='kernel-thread' if kernel else 'userspace'
+        if member(cmd.decode(errors='replace')):row['matches'].append('cmdline')
+        for name in ('cwd','exe'):
+            try:
+                target=os.readlink(d/name)
+                if member(target):row['matches'].append(name)
+            except FileNotFoundError:
+                if not kernel:raise
+        row['fd_count']=0
+        # Keep directory stream open while inspecting its entries. Materializing
+        # then closing it makes our own /proc fd entry disappear artificially.
+        with os.scandir(d/'fd') as entries:
+            for entry in entries:
+                row['fd_count']+=1
+                if row['fd_count']>20000:raise ValueError('fd bound exceeded')
+                fd=pathlib.Path(entry.path);target=os.readlink(fd)
+                info=bounded(d/'fdinfo'/fd.name).decode()
+                flags=[line.split(':',1)[1].strip() for line in info.splitlines() if line.startswith('flags:')]
+                if len(flags)!=1:raise ValueError('missing fd flags')
+                flag=int(flags[0],8)
+                if member(target):row['matches'].append(dict(fd=int(fd.name),access_mode=flag & os.O_ACCMODE,donor=True))
+    except (OSError,ValueError,KeyError) as e:row['errors'].append(type(e).__name__)
+    try:
+        after=identity(bounded(d/'stat').decode());row['identity_stable']=before==after
+        # State may change normally, but PID/starttime/flags identity must agree.
+        row['identity_stable']=all(before[k]==after[k] for k in ('pid','starttime','flags'))
+    except (OSError,ValueError) as e:
+        row['identity_stable']=False;row['errors'].append('vanished-or-unreadable-after:'+type(e).__name__)
+    return row
+
+def observe(proc):
+    # Admission is a complete current observation, not retrospective process
+    # immobility. Reobserve transient failures; confirm vanished tasks absent.
+    initial=sorted(int(p.name) for p in proc.iterdir() if p.name.isdecimal())
+    observations={};terminal=[];pending=set(initial);rounds=0
+    while pending and rounds<4:
+        rounds+=1
+        for pid in sorted(pending):
+            leader=proc/str(pid)
+            try:
+                tids=sorted(int(p.name) for p in (leader/'task').iterdir() if p.name.isdecimal())
+                if pid not in tids or len(tids)>20000:raise ValueError('thread set/bound')
+                rows=[]
+                for tid in tids:
+                    d=leader/'task'/str(tid);row=inspect(d);row['tgid']=pid
+                    # A transient fd/task lifetime is reobserved rather than
+                    # excused. Retain the failed row for explicit limitations.
+                    if row['errors'] or not row['identity_stable']:
+                        old=row
+                        if d.exists():
+                            row=inspect(d);row['tgid']=pid;row['prior_transient_observation']=old
+                        if not d.exists():
+                            terminal.append(dict(tgid=pid,tid=tid,confirmed_absent=True,prior_observation=row));continue
+                    rows.append(row)
+                after=sorted(int(p.name) for p in (leader/'task').iterdir() if p.name.isdecimal())
+                if any(t not in tids for t in after):raise ValueError('new unobserved thread')
+                observations[pid]=rows
+            except (OSError,ValueError) as e:
+                if not leader.exists():
+                    terminal.append(dict(pid=pid,confirmed_absent=True,error=type(e).__name__))
+                    observations.pop(pid,None)
+                else:observations[pid]=[dict(pid=pid,errors=[type(e).__name__],identity_stable=False)]
+        final=sorted(int(p.name) for p in proc.iterdir() if p.name.isdecimal())
+        pending=set(final)-set(observations)
+        pending.update(pid for pid,rs in observations.items() if pid in final and any(r['errors'] or not r['identity_stable'] for r in rs))
+        if len(final)>20000:raise ValueError('process bound exceeded')
+    final=sorted(int(p.name) for p in proc.iterdir() if p.name.isdecimal())
+    rows=[r for pid,rs in observations.items() if pid in final for r in rs]
+    allowed=not pending and set(final)<=set(observations) and all(r['identity_stable'] and not r['errors'] and not r.get('matches') for r in rows)
+    return dict(allowed_to_enter=allowed,processes=rows,terminal_observations=terminal,rounds=rounds,initial_pids=initial,final_pids=final,process_set_stable=initial==final,cache_hash_or_copy_run=False,limitation='Sequential complete observations and confirmed exits; no exclusion against future exec/open, no atomic snapshot or TOU proof')
+
+def main():
+    resource.setrlimit(resource.RLIMIT_AS,(512*1024**2,512*1024**2));start=time.monotonic()
+    try:
+        r=observe(pathlib.Path('/proc'));exit_code=0
+    except Exception as e:r=dict(allowed_to_enter=False,error=type(e).__name__);exit_code=1
+    u=resource.getrusage(0)
+    r['observer_pid']=os.getpid()
+    r['receipt']=dict(command=['sudo','-n','python3','-'],exit=exit_code,wall_seconds=time.monotonic()-start,peak_rss_kib=u.ru_maxrss,swaps=u.ru_nswap,print_axioms='N/A',runtime=sys.version)
+    output=json.dumps(r,sort_keys=True)
+    if len(output)>16*1024**2:output=json.dumps(dict(allowed_to_enter=False,error='output bound exceeded'));exit_code=1
+    print(output);return exit_code
+if __name__=='__main__':sys.exit(main())
