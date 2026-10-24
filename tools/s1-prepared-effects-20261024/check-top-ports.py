@@ -42,5 +42,12 @@ writer=(S/'S1TopWriterVariantV1.lean').read_text()
 assert 'Port4A_PrepareCut.variant_of_prepare' in writer and 'prepare_variant sourceOps D semantic proof hash' in writer
 assert '(prepareVariant :' not in writer
 assert m['enclosing_writer_variant_law_discharged_for_source_body_installation']
+ranges=(S/'S1TopWriterRangesV1.lean').read_text()
+assert 'Port4A_PrepareCut.returned' in ranges and 'prepare_scratch_exact' in ranges
+assert '(canonical :' not in ranges and '(powers :' not in ranges
+resume=(S/'S1TopResumePowersV1.lean').read_text()
+assert 'CheckpointBytes4Ops.successful_fields' in resume and 'CheckpointBytes4SavedFields.body_matches' in resume
+assert '(encoding :' in resume and '(canonical :' not in resume
+for gate in ['enclosing_writer_gamma_kappa_ranges_derived','enclosing_writer_same_scratch_powers_derived','concrete_resume_range_premise_removed']:assert m[gate]
 for gate in ['native_prepare_binding','full_prepared_binding','whole_s1_closed','whole_s6_closed']:assert not m[gate]
 print(json.dumps(dict(targets=len(m['targets']),wall_seconds=wall,peak_rss_bytes=rss,swaps=0,standard_or_empty_axiom_reports=reports,whole_s1_closed=False,whole_s6_closed=False)))

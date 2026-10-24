@@ -55,6 +55,27 @@ SemanticHit import-join packet and the newer S2Y/lead RawCutLiteral objects
 resolved them; no theorem or Rust source was changed to make the imports pass.
 The accepted receipt pins the selected cache closure.
 
+`S1ClosedPrepareRangesV1.closed_prepare_ranges` and
+`S1TopPrepareRangesV1.prepare_gamma_kappa_canonical/prepare_scratch_exact`
+derive canonical gamma, kappa and the SAME returned 29-cell gamma powers from
+the complete preparation. The original carrier witness also retains both
+canonical alpha entries. `S1TopWriterRangesV1.writer_ranges` composes these facts
+with the lead's exact writer prefix, eliminating independent gamma/kappa range,
+powers-success, scratch-selection and variant-law premises for the source-body
+installation. Its execution premise remains that full reached writer prefix;
+other source operation/native child bindings remain explicit.
+
+`S1TopResumePowersV1.checkpoint_sourceE_canonical` derives all eight machine-word
+bounds from the checkpoint decoder's exact field carrier. Its
+`concrete_resume_powers_total_exact` consumes the SAME successful concrete
+`resumeWithOps (CheckpointBytes4Ops.ops reserved)` call. It derives the complete
+saved-field relation, then gamma canonicality and all 29 exact/canonical powers.
+It retains checkpoint input provenance
+`bytesOf ck.val = encode H stored pub pm am`; it does not assume independently
+successful readers, BodyMatches, powers success or a gamma range. This closes
+that range/totality obligation at the concrete reader/source-candidate boundary,
+not actual native op18/op17 installation or checkpoint authenticity.
+
 The stronger `Port4B_StageRows.PreparedBinding` remains OPEN. Besides S2 it
 requires every Prepared field to correspond to canonical model fields and both
 roots to equal the parsed commitments. Static equality to the returned semantic
@@ -74,8 +95,8 @@ not been modified.
 The source-only `focused-extractor-proof-packet-v1` packet is
 `evidence/s126-current-caller-20261021/s1-top-ports-targets.json` with per-target
 source snapshots, commands, tool/import hashes, exit codes, timing, peak RSS,
-swaps and printed axioms. Seven smallest changed targets passed: 250.343125 seconds
-aggregate wall time, maximum process RSS 3,877,945,344 bytes, zero swaps, sixteen
+swaps and printed axioms. Eleven smallest changed targets passed: 441.704516 seconds
+aggregate wall time, maximum process RSS 4,471,537,664 bytes, zero swaps, twenty-three
 standard-only or empty axiom reports (`propext`, `Classical.choice`, `Quot.sound`).
 Each local invocation used the atomic local lock and `-j1 -M4400`. No unchanged
 full replay was run. `tools/s1-prepared-effects-20261024/check-top-ports.py` checks
