@@ -25,3 +25,14 @@ pins f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4,
 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 remain
 inherited evidence, not new artifact measurements. Exact per-attempt section6
 fields (target,source revision/hash,deps,exit,wall,RSS,swap,axioms) are retained.
+
+Stage 1: Port5Q2_Prepared.reached now derives the complete CanonicalFields
+inventory, S2 variant, query bounds,size64,next10,split10 and reservation success
+from ONE Port4C_Installed prefix. SessionAPrepare is one explicit op7 contract
+for immutable fields only; SessionABasis/SessionABackends and line canonicality
+remain named local dependencies. It does not assume the writer result or a model
+accumulator. It discharges rhoCanonical as a separate caller premise and combines
+Port4C's rhs/power/weights with the SAME preparation. Concrete Session A instances
+remain unproved in this packet. Accepted lean006: exit0,2.392939557s,4434952KiB,
+swap0; standard axioms only. Earlier parser/map/coordinate elaboration errors are
+retained and excluded. No timeout,memory kill,cap increase or unchanged replay.
