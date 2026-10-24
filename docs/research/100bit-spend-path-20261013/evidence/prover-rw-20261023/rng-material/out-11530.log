@@ -1,0 +1,70 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialProducer.lean:30:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngMaterialProducer.mask_error_exact`:
+  [TypeLeaves]
+  [LocalLeaves]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [TypeLeaves] [LocalLeaves] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialProducer.lean:94:2: error: Type mismatch
+  body
+has type
+  prover.prove_masked_with_attempt durableStore public1 compiled transport.Variant.S2 hash
+      (contextFor digest a.mask_nonce) binding a s =
+    ok
+      (core.result.Result.Err
+          (match e, reservation with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+          | x, reservation => verifier.Error.Semantic),
+        after)
+but is expected to have type
+  prover.prove_masked_with_attempt durableStore public1 compiled transport.Variant.S2 hash
+      (contextFor digest a.mask_nonce) binding a s =
+    ok
+      (core.result.Result.Err
+          (match e, reservation with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+          | x, reservation => verifier.Error.Semantic),
+        after)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialProducer.lean:83:64: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵u̵b̵l̵i̵c̵_̵b̵y̵t̵e̵s̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲p̲u̲b̲l̲i̲c̲_̲b̲y̲t̲e̲s̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwRngMaterialProducer.lean:145:2: error: Type mismatch
+  selected_reservation_error public1 compiled a hash s after bytes digest binding encoded public_bytes public_hash
+    encode binding_hash e reservation
+has type
+  prover.prove_masked_attempt public1 compiled transport.Variant.S2 hash a s =
+    ok
+      (core.result.Result.Err
+          (match e, reservation with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, reservation => verifier.Error.Rejected
+          | x, reservation => verifier.Error.Semantic),
+        after)
+but is expected to have type
+  prover.prove_masked_attempt public1 compiled transport.Variant.S2 hash a s =
+    ok
+      (core.result.Result.Err
+          (match e, nonzero, sample with
+          | StateOnlyMaskBuildError.MaskSampleExhausted, nonzero, sample => verifier.Error.Rejected
+          | x, nonzero, sample => verifier.Error.Semantic),
+        after)
+'R1Z.ProverRwRngMaterialProducer.mask_error_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialProducer.body_reservation_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialProducer.reserve_material_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngMaterialProducer.selected_reservation_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngMaterialProducer.selected_zero_entropy' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwRngMaterialProducer.selected_sampling_failure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
