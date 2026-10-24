@@ -1,0 +1,1105 @@
+AspisR1.Port6AUTH_Recovery.batches : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (p : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.OraclePortCompactDraft.parse stored = some p →
+    ∀ (q : Fin 22 → Fin 262144)
+      (log0 log1 log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+      AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0) =
+          (log0, true) →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1) =
+            (log1, true) →
+          (∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read log0 a → FS2.Duplex.Read log a) →
+            (∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read log1 a → FS2.Duplex.Read log a) →
+              (∀ a ∈ log, a.2 = H a.1) →
+                FS.firstReads FS.emptyTable log ≤ Q →
+                  ¬FS.hitsBad
+                        (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                          AspisR1.BinRawByteCollisionTargets.pred Q)
+                        FS.emptyTable log →
+                    ∀ kind < 3,
+                      ∀ (frame : AspisV8R19.DuplexFrames.Bytes) (j : Fin 5),
+                        FS2.Duplex.Read log frame →
+                          AspisR1.BinRawByteCollisionTargets.pred j frame =
+                              some (AspisR1.OraclePortBatchDraft.committedRoot p kind) →
+                            ∀ pos < 22,
+                              AspisR1.OraclePortAllSelectedRecoveryC6.recovered log frame p kind
+                                  (AspisR1.OraclePortSelectedDraft.index q kind pos) =
+                                some (AspisR1.OraclePortPackedChoiceC4.payload p kind pos)
+'AspisR1.Port6AUTH_Recovery.batches' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Recovery.repeated : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (p : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.OraclePortCompactDraft.parse stored = some p →
+    ∀ (q : Fin 22 → Fin 262144)
+      (log0 log1 log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+      AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0) =
+          (log0, true) →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1) =
+            (log1, true) →
+          (∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read log0 a → FS2.Duplex.Read log a) →
+            (∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read log1 a → FS2.Duplex.Read log a) →
+              (∀ a ∈ log, a.2 = H a.1) →
+                FS.firstReads FS.emptyTable log ≤ Q →
+                  ¬FS.hitsBad
+                        (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                          AspisR1.BinRawByteCollisionTargets.pred Q)
+                        FS.emptyTable log →
+                    ∀ (frame : AspisV8R19.DuplexFrames.Bytes) (j : Fin 5),
+                      FS2.Duplex.Read log frame →
+                        AspisR1.BinRawByteCollisionTargets.pred j frame =
+                            some (AspisR1.OraclePortBatchDraft.committedRoot p 2) →
+                          ∀ (a b : Fin 22),
+                            AspisR1.OraclePortSelectedDraft.index q 2 ↑a =
+                                AspisR1.OraclePortSelectedDraft.index q 2 ↑b →
+                              AspisR1.OraclePortPackedChoiceC4.payload p 2 ↑a =
+                                AspisR1.OraclePortPackedChoiceC4.payload p 2 ↑b
+'AspisR1.Port6AUTH_Recovery.repeated' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port6AUTH_Native.authenticated : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub saved : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub saved parsed →
+    parsed.wire = stored →
+      AspisR1.OraclePortCompactDraft.parse stored = some parsed →
+        ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+          (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+          AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+              (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling
+              leaf →
+            ∀ (p : Fin 2 → VTop_Stages.verifier.Prepared) (a : Fin 2 → AspisR1Stage2.verifier.Accumulator)
+              (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+              (am :
+                Fin 2 →
+                  AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K
+                    AspisR1.OraclePortCheckpointAbiC5.E),
+              (∀ (b : Fin 2), AspisR1.CheckpointBytes4SavedFields.BodyMatches (p b) (a b) pm (am b)) →
+                (∀ (k : Fin 2), pm.roots k = AspisR1.OraclePortBatchDraft.committedRoot parsed ↑k) →
+                  ∀ (folded : Fin 2 → Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                    (∀ (b : Fin 2),
+                        AspisR1.MultiproofConeCanonical.bytesOf ↑(folded b) =
+                          AspisV8R19.SourceDuplexStep.bytes (AspisR1.OraclePortBatchDraft.committedRoot parsed 2)) →
+                      (∀ (b : Fin 2), c.reached (AspisR1.Port4B_CallerJoin.site (↑b)#usize)) →
+                        (∀ (b : Fin 2),
+                            AspisR1.Port4B_Install.batch D (c.proof (AspisR1.Port4B_CallerJoin.site (↑b)#usize)) (p b)
+                                (folded b) (↑b)#usize hash =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) →
+                          ∀ (log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+                            (∀ (b : Fin 2) (x : AspisV8R19.DuplexFrames.Bytes),
+                                FS2.Duplex.Read
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed
+                                          pm.queries c.nodes (↑b) AspisR1.Port4B_BatchJoin.initial)).1
+                                    x →
+                                  FS2.Duplex.Read log x) →
+                              (∀ x ∈ log, x.2 = H x.1) →
+                                FS.firstReads FS.emptyTable log ≤ Q →
+                                  ¬FS.hitsBad
+                                        (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                                          AspisR1.BinRawByteCollisionTargets.pred Q)
+                                        FS.emptyTable log →
+                                    ∀ (frames : Fin 3 → AspisV8R19.DuplexFrames.Bytes) (selectors : Fin 3 → Fin 5),
+                                      (∀ (k : Fin 3), FS2.Duplex.Read log (frames k)) →
+                                        (∀ (k : Fin 3),
+                                            AspisR1.BinRawByteCollisionTargets.pred (selectors k) (frames k) =
+                                              some (AspisR1.OraclePortBatchDraft.committedRoot parsed ↑k)) →
+                                          ∀ (k : Fin 3),
+                                            ∀ pos < 22,
+                                              AspisR1.OraclePortAllSelectedRecoveryC6.recovered log (frames k) parsed
+                                                  (↑k) (AspisR1.OraclePortSelectedDraft.index pm.queries (↑k) pos) =
+                                                some (AspisR1.OraclePortPackedChoiceC4.payload parsed (↑k) pos)
+'AspisR1.Port6AUTH_Native.authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Frames.erased_index : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (pub : AspisR1.LiteralTranscript.Public)
+  (pf : AspisR1.LiteralProtocol.Proof),
+  ∀ row < 33,
+    ∃ c, (AspisR1.Port6AUTH_Frames.reached D H pub pf).rounds[row]? = some (AspisR1.LiteralTranscript.erase (pf row), c)
+'AspisR1.Port6AUTH_Frames.erased_index' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Frames.targets : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (pub : AspisR1.LiteralTranscript.Public)
+  (pf : AspisR1.LiteralProtocol.Proof) (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (data : AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E),
+  AspisR1.LiteralMatchingData.read
+        (AspisR1.OraclePortStoredDecisionDraftC4.typedRows p q (AspisR1.Port6AUTH_Frames.reached D H pub pf)) =
+      some data →
+    AspisR1.OraclePortCompactDraft.Aligned p (AspisR1.Port6AUTH_Frames.reached D H pub pf) →
+      ∀ (k : Fin 3),
+        AspisR1.BinRawByteCollisionTargets.pred (AspisR1.Port6AUTH_Frames.selectors k)
+            (AspisR1.Port6AUTH_Frames.frames D H pub pf k) =
+          some (AspisR1.OraclePortBatchDraft.committedRoot p ↑k)
+'AspisR1.Port6AUTH_Frames.targets' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Frames.read : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (pub : AspisR1.LiteralTranscript.Public)
+  (pf : AspisR1.LiteralProtocol.Proof) (log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  (∀ (a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.RawCutProverCompiler.verifier D (fun x x_1 => false) pub pf)).1
+          a →
+        FS2.Duplex.Read log a) →
+    ∀ (k : Fin 3), FS2.Duplex.Read log (AspisR1.Port6AUTH_Frames.frames D H pub pf k)
+'AspisR1.Port6AUTH_Frames.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port6AUTH_Query.accepted : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub saved : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub saved parsed →
+    ∀ (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf),
+      AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+          (AspisR1.Port4B_VerifyInstall.digest (AspisR1.VTop_Checkpoint.digest D)) hash H binary occupied sibling leaf →
+        ∀ (batchPrepared : Fin 2 → VTop_Stages.verifier.Prepared)
+          (batchAccumulator : Fin 2 → AspisR1Stage2.verifier.Accumulator)
+          (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+          (am :
+            Fin 2 →
+              AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+          (∀ (b : Fin 2),
+              AspisR1.CheckpointBytes4SavedFields.BodyMatches (batchPrepared b) (batchAccumulator b) pm (am b)) →
+            (∀ (k : Fin 2), pm.roots k = AspisR1.OraclePortBatchDraft.committedRoot parsed ↑k) →
+              ∀ (folded : Fin 2 → Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                (∀ (b : Fin 2),
+                    AspisR1.MultiproofConeCanonical.bytesOf ↑(folded b) =
+                      AspisV8R19.SourceDuplexStep.bytes (AspisR1.OraclePortBatchDraft.committedRoot parsed 2)) →
+                  (∀ (b : Fin 2), c.reached (AspisR1.Port4B_CallerJoin.site (↑b)#usize)) →
+                    (∀ (b : Fin 2),
+                        AspisR1.Port4B_Install.batch D (c.proof (AspisR1.Port4B_CallerJoin.site (↑b)#usize))
+                            (batchPrepared b) (folded b) (↑b)#usize hash =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) →
+                      ∀ (decoder : AspisR1.LiteralByteProtocol.Decoder)
+                        (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier)
+                        (adversary : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+                        (∀ (oracle : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                            (AspisV8R19.MemoizedProgramLaw.eval oracle adversary).1.length ≤ Q) →
+                          AspisR1.Port1_StoredCarrier.Physical rust →
+                            (∀ (oracle : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+                                (input : AspisR1.OraclePortStoredExperimentC4.Input),
+                                (AspisV8R19.MemoizedProgramLaw.eval oracle (rust input)).1.length ≤ 1161) →
+                              (∀ (b : Fin 2) (x : AspisV8R19.DuplexFrames.Bytes),
+                                  FS2.Duplex.Read
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed
+                                            pm.queries c.nodes (↑b) AspisR1.Port4B_BatchJoin.initial)).1
+                                      x →
+                                    FS2.Duplex.Read
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.Port6AUTH_Prefix.source decoder rust adversary)).1
+                                      x) →
+                                ¬FS.hitsBad
+                                      (AspisR1.AllAddressCollision.bad AspisR1.SelectedTranscriptParams.params.iv
+                                        AspisR1.BinRawByteCollisionTargets.pred (Q + 1161))
+                                      FS.emptyTable
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.Port6AUTH_Prefix.source decoder rust adversary)).1 →
+                                  ∀ {CoreError : Type} (base : VTop_Stages.Ops)
+                                    (ops : AspisR1.Port3_NativeQueryBody.Ops),
+                                    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops →
+                                      ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+                                        (a0 out10 out22 : AspisR1Stage2.verifier.Accumulator)
+                                        (g : Aeneas.Std.Array AspisR1Stage2.Stage2E 29#usize)
+                                        (obs : Option (AspisR1Stage2.verifier.Phase → Aeneas.Std.Result Unit))
+                                        (geometry0 geometry1 : AspisR1Stage2.verifier.QueryGeometry)
+                                        (b0 b10 b1 b12 : AspisR1Stage2.verifier.BatchedWeights)
+                                        (flushed10 flushed22 : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31)
+                                        (q : Fin 22 → Fin 262144) (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+                                        (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+                                        AspisR1.Port5Q1_QueryPorts.SessionAPrepare p i.data q
+                                            (AspisR1.SelectedChallengeMap.rhoOf i.rho) →
+                                          AspisR1.LiteralMatchingData.read
+                                                (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                                              some i.data →
+                                            parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                                              (↑proof).length = 57607 →
+                                                ∀ (geometryOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError),
+                                                  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geometryOps → ⋯
+'AspisR1.Port6AUTH_Query.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Challenge.frontier_independent : ∀ (z : AspisV8R19.SourceDuplexStep.State)
+  (p p' : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (ps : List ℕ)
+  (rev : AspisR1.OraclePortFrozenOrder.Live),
+  (AspisV8R19.MemoizedProgramLaw.eval (fun x => z) (AspisR1.OraclePortFrozenOrder.hashLeaves p q kind ps rev)).2 =
+    (AspisV8R19.MemoizedProgramLaw.eval (fun x => z) (AspisR1.OraclePortFrozenOrder.hashLeaves p' q kind ps rev)).2
+'AspisR1.Port6AUTH_Challenge.frontier_independent' depends on axioms: [propext, Quot.sound]
+AspisR1.Port6AUTH_Challenge.both_batches : ∀ (z : AspisV8R19.SourceDuplexStep.State)
+  (p p' : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (b : Fin 2),
+  (AspisV8R19.MemoizedProgramLaw.eval (fun x => z)
+        (AspisR1.OraclePortFrozenOrder.hashLeaves p q 2 (AspisR1.OraclePortFrozenOrder.sortedPositions q (↑b) 2)
+          [])).2 =
+    (AspisV8R19.MemoizedProgramLaw.eval (fun x => z)
+        (AspisR1.OraclePortFrozenOrder.hashLeaves p' q 2 (AspisR1.OraclePortFrozenOrder.sortedPositions q (↑b) 2) [])).2
+'AspisR1.Port6AUTH_Challenge.both_batches' depends on axioms: [propext, Quot.sound]
+AspisR1.Port6AUTH_Prefix.source_eval : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P) =
+    AspisR1.OraclePortStoredExperimentC4.view
+      (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust
+          (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))))
+'AspisR1.Port6AUTH_Prefix.source_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Prefix.recovered : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+          a →
+        FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.Frozen2StartChargePrefix.recovered D (AspisR1.Port1_StoredCarrier.lift P)
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))
+'AspisR1.Port6AUTH_Prefix.recovered' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Prefix.hit_mass : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+          a →
+        FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+    (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.Port6AUTH_Prefix.source D rust P) FS.emptyTable fun run =>
+        AspisV8R19.CausalFirstHitUnionBound.indicator (AspisR1.Port6AUTH_Prefix.prefixHit D P run)) =
+      AspisV8R19.MemoizedProgramLaw.lazyMean
+        (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P)) FS.emptyTable fun run =>
+        AspisV8R19.CausalFirstHitUnionBound.indicator
+          (R0C.V3.hitsChain3 AspisR1.RecordedBinaryExperimentBin.dec AspisR1.RawAdaptiveClassifierHitDensity.classifier
+            FS.emptyTable run.1)
+'AspisR1.Port6AUTH_Prefix.hit_mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Prefix.prefix_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+            a →
+          FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+      (AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.Port6AUTH_Prefix.source D rust P) FS.emptyTable fun run =>
+          AspisV8R19.CausalFirstHitUnionBound.indicator (AspisR1.Port6AUTH_Prefix.prefixHit D P run)) ≤
+        ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B
+'AspisR1.Port6AUTH_Prefix.prefix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Probability.failure_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+            a →
+          FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 ≤
+            Q + 1161) →
+        AspisR1.RawRecordedOracleExtractionMassBin.CleanAcceptedModel D (AspisR1.Port6AUTH_Prefix.source D rust P)
+            (AspisR1.Port6AUTH_Prefix.bad D P Q) →
+          AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.Port6AUTH_Prefix.source D rust P) FS.emptyTable
+              AspisR1.RawRecordedOracleExtractionMassBin.failureMass ≤
+            AspisR1.BinCombinedMerkleCollision.kappa (Q + 1161) + ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B + 1 / 2 ^ 126
+'AspisR1.Port6AUTH_Probability.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Probability.runtime_transport : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+  AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P) runtime →
+    AspisR1.OraclePortRuntimeBindingC7.deployedFailure runtime ≤
+      AspisV8R19.MemoizedProgramLaw.lazyMean (AspisR1.Port6AUTH_Prefix.source D rust P) FS.emptyTable
+        AspisR1.RawRecordedOracleExtractionMassBin.failureMass
+'AspisR1.Port6AUTH_Probability.runtime_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Accounting.first_reads : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver),
+  AspisR1.Port1_StoredCarrier.Physical rust →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 =
+        FS.firstReads FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortRuntimeBindingC7.originalWith rust
+                (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)))).1
+'AspisR1.Port6AUTH_Accounting.first_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Accounting.budget : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    AspisR1.Port1_StoredCarrier.Physical rust →
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+          (i : AspisR1.OraclePortStoredExperimentC4.Input),
+          (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 ≤
+            Q + 1161
+'AspisR1.Port6AUTH_Accounting.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Accounting.log_length : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+        (i : AspisR1.OraclePortStoredExperimentC4.Input),
+        (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+      ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1.length ≤ Q + 2322
+'AspisR1.Port6AUTH_Accounting.log_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Accounting.extractor_cost : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+        (i : AspisR1.OraclePortStoredExperimentC4.Input),
+        (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+      ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).2.2 = true →
+          (AspisV8R19.OracleResampling.mean fun coins =>
+              ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P))
+                      coins).2.total) ≤
+            ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget
+'AspisR1.Port6AUTH_Accounting.extractor_cost' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Headline.final_soundness : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+            a →
+          FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+      AspisR1.Port1_StoredCarrier.Physical rust →
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (i : AspisR1.OraclePortStoredExperimentC4.Input),
+            (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+          AspisR1.RawRecordedOracleExtractionMassBin.CleanAcceptedModel D (AspisR1.Port6AUTH_Prefix.source D rust P)
+              (AspisR1.Port6AUTH_Prefix.bad D P Q) →
+            ∀ (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+              AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P)
+                  runtime →
+                AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D (AspisR1.Port1_StoredCarrier.lift P) Q runtime
+'AspisR1.Port6AUTH_Headline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Headline.failure_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+            a →
+          FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+      AspisR1.Port1_StoredCarrier.Physical rust →
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (i : AspisR1.OraclePortStoredExperimentC4.Input),
+            (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+          AspisR1.RawRecordedOracleExtractionMassBin.CleanAcceptedModel D (AspisR1.Port6AUTH_Prefix.source D rust P)
+              (AspisR1.Port6AUTH_Prefix.bad D P Q) →
+            ∀ (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+              AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P)
+                  runtime →
+                AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+                  ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B + AspisR1.BinCombinedMerkleCollision.kappa (Q + 1161) +
+                      1 / 2 ^ 126 +
+                    1 / 2 ^ 454
+'AspisR1.Port6AUTH_Headline.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port6AUTH_Headline.zero_queries : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ 0) →
+    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (a : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Frozen2StartChargePrefix.charged D (AspisR1.Port1_StoredCarrier.lift P))).1
+            a →
+          FS2.Duplex.Read (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 a) →
+      AspisR1.Port1_StoredCarrier.Physical rust →
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+            (i : AspisR1.OraclePortStoredExperimentC4.Input),
+            (AspisV8R19.MemoizedProgramLaw.eval H (rust i)).1.length ≤ 1161) →
+          AspisR1.RawRecordedOracleExtractionMassBin.CleanAcceptedModel D (AspisR1.Port6AUTH_Prefix.source D rust P)
+              (AspisR1.Port6AUTH_Prefix.bad D P 0) →
+            ∀ (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+              AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust (AspisR1.Port1_StoredCarrier.lift P)
+                  runtime →
+                AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ 1 / 2 ^ 100
+'AspisR1.Port6AUTH_Headline.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin : AspisR1.OraclePortRuntimeBindingC7.Verifier →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun source model =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (i : AspisR1.OraclePortStoredExperimentC4.Input),
+    (AspisV8R19.MemoizedProgramLaw.eval H (source i)).2 = true →
+      AspisV8R19.MemoizedProgramLaw.eval H (source i) = AspisV8R19.MemoizedProgramLaw.eval H (model i)
+structure AspisR1.OraclePortFrozen2Join.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.verifier : AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+      (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2)
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 = true →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.OraclePortFrozen2Join.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier :
+      AspisR1.OraclePortFrozen2Join.AcceptedVerifierJoin rust
+        (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2))
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 = true →
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust
+def AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier → Prop :=
+fun D rust =>
+  ∀ (s : AspisR1.Port1_StoredCarrier.Submission)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s))).2 = true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.Port1_StoredCarrier.input s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.OraclePortStoredExperimentC4.verifier D AspisR1.OraclePortFrozen2.dV_frozen2
+            (AspisR1.Port1_StoredCarrier.input s))
+structure AspisR1.Port1_CanonicalJoin.AcceptedRunJoin (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.annotated : ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+              true →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)
+constructor:
+  AspisR1.Port1_CanonicalJoin.AcceptedRunJoin.mk {D : AspisR1.LiteralByteProtocol.Decoder}
+    {rust : AspisR1.OraclePortRuntimeBindingC7.Verifier}
+    (verifier : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D rust)
+    (annotated :
+      ∀ (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+        (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            AspisR1.Port1_StoredCarrier.Carried (AspisV8R19.MemoizedProgramLaw.eval H P).2) →
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P)).2.2 =
+                true →
+              AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust P) =
+                AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.annotated D AspisR1.OraclePortFrozen2.dV_frozen2 P)) :
+    AspisR1.Port1_CanonicalJoin.AcceptedRunJoin D rust
+structure AspisR1.CheckpointBytes4SavedFields.BodyMatches (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator) (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of parameters: 4
+fields:
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.variant : p.variant = AspisR1Stage2.transport.Variant.S2
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.state : AspisR1.MultiproofConeCanonical.bytesOf ↑p.state =
+      AspisV8R19.SourceDuplexStep.bytes pm.state
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.roots : List.map (fun b => AspisR1.MultiproofConeCanonical.bytesOf ↑b)
+        ↑p.roots =
+      [AspisV8R19.SourceDuplexStep.bytes (pm.roots 0), AspisV8R19.SourceDuplexStep.bytes (pm.roots 1)]
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.gamma : p.gamma =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.gamma
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.kappa : p.kappa =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.kappa
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.alpha : ↑p.alpha =
+      [AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 0),
+        AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 1)]
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.rho : p.rho = AspisR1.CheckpointBytes4ReaderFields.sourceK pm.rho
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.queries : List.map Aeneas.Std.UScalar.val ↑p.queries =
+      List.ofFn fun j => ↑(pm.queries j)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.semantic : ↑p.semantic_alpha =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.semanticAlpha)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.coordinates : List.flatMap (fun z => [z.x, z.y]) ↑p.z =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.coordinates)
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.claim : p.claim =
+      AspisR1.CheckpointBytes4ReaderFields.sourceE pm.claim
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.rhs : a.rhs = AspisR1.CheckpointBytes4ReaderFields.sourceE am.rhs
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.power : a.power =
+      AspisR1.CheckpointBytes4ReaderFields.sourceK am.power
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.weights : ↑a.weights =
+      List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn am.weights)
+constructor:
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches.mk {p : AspisR1Stage2.verifier.Prepared}
+    {a : AspisR1Stage2.verifier.Accumulator} {pm : AspisR1.OraclePortCheckpointAbiC5.Prepared}
+    {am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E}
+    (variant : p.variant = AspisR1Stage2.transport.Variant.S2)
+    (state : AspisR1.MultiproofConeCanonical.bytesOf ↑p.state = AspisV8R19.SourceDuplexStep.bytes pm.state)
+    (roots :
+      List.map (fun b => AspisR1.MultiproofConeCanonical.bytesOf ↑b) ↑p.roots =
+        [AspisV8R19.SourceDuplexStep.bytes (pm.roots 0), AspisV8R19.SourceDuplexStep.bytes (pm.roots 1)])
+    (gamma : p.gamma = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.gamma)
+    (kappa : p.kappa = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.kappa)
+    (alpha :
+      ↑p.alpha =
+        [AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 0),
+          AspisR1.CheckpointBytes4ReaderFields.sourceE (pm.alpha 1)])
+    (rho : p.rho = AspisR1.CheckpointBytes4ReaderFields.sourceK pm.rho)
+    (queries : List.map Aeneas.Std.UScalar.val ↑p.queries = List.ofFn fun j => ↑(pm.queries j))
+    (semantic : ↑p.semantic_alpha = List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.semanticAlpha))
+    (coordinates :
+      List.flatMap (fun z => [z.x, z.y]) ↑p.z =
+        List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn pm.coordinates))
+    (claim : p.claim = AspisR1.CheckpointBytes4ReaderFields.sourceE pm.claim)
+    (rhs : a.rhs = AspisR1.CheckpointBytes4ReaderFields.sourceE am.rhs)
+    (power : a.power = AspisR1.CheckpointBytes4ReaderFields.sourceK am.power)
+    (weights : ↑a.weights = List.map AspisR1.CheckpointBytes4ReaderFields.sourceK (List.ofFn am.weights)) :
+    AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am
+structure AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary {X : Type}
+  (D : MultiproofConeRef.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent)
+  (leafSource : AspisR1.MultiproofConeP6Batch.Leaf) : Prop
+number of parameters: 8
+fields:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.oracle : ∀
+      (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.binary_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.occupied_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.sibling_parent : AspisR1.MultiproofConeP6Callbacks.ParentGate
+      (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource
+constructor:
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary.mk {X : Type} {D : MultiproofConeRef.aspis_core.digest.Digest32 X}
+    {hash : X} {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {binary occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent}
+    {leafSource : AspisR1.MultiproofConeP6Batch.Leaf}
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input))
+    (binary_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) binary)
+    (occupied_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) occupied)
+    (sibling_parent :
+      AspisR1.MultiproofConeP6Callbacks.ParentGate (AspisR1.MultiproofConePhysicalTransport.rawOracle H) sibling)
+    (leaf : AspisR1.MultiproofConeP6Batch.LeafGate H leafSource) :
+    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary D hash H binary occupied sibling leafSource
+def AspisR1.MultiproofConeP6Callbacks.ParentGate : (AspisR1.MultiproofConePhysicalProgram.Address →
+    AspisR1.MultiproofConePhysicalProgram.Digest) →
+  AspisR1.MultiproofConeP6Callbacks.Parent → Prop :=
+fun H callback =>
+  ∀ (left right : AspisR1.MultiproofConePhysicalProgram.Digest),
+    AspisV8R19.MemoizedProgramLaw.eval H (callback left right) =
+      ([(AspisR1.MultiproofConePhysicalDigest.parts left right,
+            H (AspisR1.MultiproofConePhysicalDigest.parts left right))],
+        H (AspisR1.MultiproofConePhysicalDigest.parts left right))
+def AspisR1.MultiproofConeP6Batch.LeafGate : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  AspisR1.MultiproofConeP6Batch.Leaf → Prop :=
+fun H source =>
+  ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind pos : ℕ)
+    (s : MultiproofConeRef.reference.Scratch),
+    ↑s.n < 16 →
+      AspisV8R19.MemoizedProgramLaw.eval H (source p q kind pos s) =
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeP6Batch.referenceLeaf p q kind pos s)
+structure AspisR1.S2LeadInterface.S2CallerFacts {Observer Hash : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored pub savedBytes : AspisV8R19.DuplexFrames.Bytes) (parsed : AspisR1.OraclePortCompactDraft.Parsed) : Prop
+number of parameters: 10
+fields:
+  AspisR1.S2LeadInterface.S2CallerFacts.proofBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.proof s) = stored
+  AspisR1.S2LeadInterface.S2CallerFacts.publicBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.publicInput s) = pub
+  AspisR1.S2LeadInterface.S2CallerFacts.proofSuffix : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s →
+        s = AspisR1.S2LeadInterface.Site.tx1 ∨ s = AspisR1.S2LeadInterface.Site.tx2 →
+          c.proofAccount s = List.take 688 (c.proofAccount s) ++ stored
+  AspisR1.S2LeadInterface.S2CallerFacts.proofLength : List.length stored = 57607
+  AspisR1.S2LeadInterface.S2CallerFacts.checkpointBytes : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s →
+        s = AspisR1.S2LeadInterface.Site.save ∨
+            s = AspisR1.S2LeadInterface.Site.tx2 ∨ s = AspisR1.S2LeadInterface.Site.resume →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(c.checkpoint s) = savedBytes
+  AspisR1.S2LeadInterface.S2CallerFacts.checkpointLength : List.length savedBytes = 1768
+  AspisR1.S2LeadInterface.S2CallerFacts.nodeViews : ∀ (b k : ℕ),
+      b < 2 →
+        k < 3 →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+            AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+              (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))
+  AspisR1.S2LeadInterface.S2CallerFacts.y1Input : c.reached AspisR1.S2LeadInterface.Site.tx1 →
+      c.y1 = AspisR1.S8JoinFrozenScan.segment (c.proof AspisR1.S2LeadInterface.Site.tx1) 7031 464
+  AspisR1.S2LeadInterface.S2CallerFacts.observerNone : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → c.observer s = none
+  AspisR1.S2LeadInterface.S2CallerFacts.reachedPrefix : ∀ (s t : AspisR1.S2LeadInterface.Site),
+      s.rank < t.rank → c.reached t → c.reached s
+  AspisR1.S2LeadInterface.S2CallerFacts.callOrder : ∀ (s t : AspisR1.S2LeadInterface.Site),
+      s.rank < t.rank → c.reached s → c.reached t → c.clock s < c.clock t
+  AspisR1.S2LeadInterface.S2CallerFacts.accountFrame : ∀ (s : AspisR1.S2LeadInterface.Site),
+      c.reached s → ∀ (a : ℕ), AspisR1.S2LeadInterface.dataWrite s a = false → c.after s a = c.before s a
+  AspisR1.S2LeadInterface.S2CallerFacts.writtenMetadata : c.reached AspisR1.S2LeadInterface.Site.tx1 →
+      (let __src := c.after AspisR1.S2LeadInterface.Site.tx1 2;
+        { key := __src.key, owner := __src.owner, lamports := __src.lamports,
+          data := (c.before AspisR1.S2LeadInterface.Site.tx1 2).data, signer := __src.signer,
+          writable := __src.writable, executable := __src.executable, rentEpoch := __src.rentEpoch }) =
+        c.before AspisR1.S2LeadInterface.Site.tx1 2
+  AspisR1.S2LeadInterface.S2CallerFacts.oracle : ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)
+constructor:
+  AspisR1.S2LeadInterface.S2CallerFacts.mk {Observer Hash : Type} {c : AspisR1.S2LeadInterface.Inputs Observer}
+    {D : AspisR1Stage2.aspis_core.digest.Digest32 Hash} {hash : Hash}
+    {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {stored pub savedBytes : AspisV8R19.DuplexFrames.Bytes} {parsed : AspisR1.OraclePortCompactDraft.Parsed}
+    (proofBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site), c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.proof s) = stored)
+    (publicBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s → AspisR1.MultiproofConeCanonical.bytesOf ↑(c.publicInput s) = pub)
+    (proofSuffix :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s →
+          s = AspisR1.S2LeadInterface.Site.tx1 ∨ s = AspisR1.S2LeadInterface.Site.tx2 →
+            c.proofAccount s = List.take 688 (c.proofAccount s) ++ stored)
+    (proofLength : List.length stored = 57607)
+    (checkpointBytes :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s →
+          s = AspisR1.S2LeadInterface.Site.save ∨
+              s = AspisR1.S2LeadInterface.Site.tx2 ∨ s = AspisR1.S2LeadInterface.Site.resume →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.checkpoint s) = savedBytes)
+    (checkpointLength : List.length savedBytes = 1768)
+    (nodeViews :
+      ∀ (b k : ℕ),
+        b < 2 →
+          k < 3 →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑(c.nodes b k) =
+              AspisR1.OraclePortCompactDraft.slice parsed.wire (AspisR1.OraclePortSelectedDraft.slotStart (3 * b + k))
+                (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k)))
+    (y1Input :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        c.y1 = AspisR1.S8JoinFrozenScan.segment (c.proof AspisR1.S2LeadInterface.Site.tx1) 7031 464)
+    (observerNone : ∀ (s : AspisR1.S2LeadInterface.Site), c.reached s → c.observer s = none)
+    (reachedPrefix : ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached t → c.reached s)
+    (callOrder :
+      ∀ (s t : AspisR1.S2LeadInterface.Site), s.rank < t.rank → c.reached s → c.reached t → c.clock s < c.clock t)
+    (accountFrame :
+      ∀ (s : AspisR1.S2LeadInterface.Site),
+        c.reached s → ∀ (a : ℕ), AspisR1.S2LeadInterface.dataWrite s a = false → c.after s a = c.before s a)
+    (writtenMetadata :
+      c.reached AspisR1.S2LeadInterface.Site.tx1 →
+        (let __src := c.after AspisR1.S2LeadInterface.Site.tx1 2;
+          { key := __src.key, owner := __src.owner, lamports := __src.lamports,
+            data := (c.before AspisR1.S2LeadInterface.Site.tx1 2).data, signer := __src.signer,
+            writable := __src.writable, executable := __src.executable, rentEpoch := __src.rentEpoch }) =
+          c.before AspisR1.S2LeadInterface.Site.tx1 2)
+    (oracle :
+      ∀ (input : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        D.digest hash input = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H input)) :
+    AspisR1.S2LeadInterface.S2CallerFacts c D hash H stored pub savedBytes parsed
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrepare (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE) (q : Fin 22 → Fin 262144)
+  (rho : AspisR1.Port5Q1_QueryPorts.FK) : Prop
+number of parameters: 4
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.queries : ∀ (i : ℕ) (hi : i < 22),
+      ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.alpha1 : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha → AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.mk {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE} {q : Fin 22 → Fin 262144}
+    {rho : AspisR1.Port5Q1_QueryPorts.FK}
+    (queries : ∀ (i : ℕ) (hi : i < 22), ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩))
+    (rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho)
+    (rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho)
+    (alpha1 :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha →
+          AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.basis : AspisR1.Port4C_BasisOuter.SessionABasis ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+        AspisR1.CheckpointBytes5Output.ofE value =
+          AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+            ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+              (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+            (AspisR1.Port5Q1_OpeningValues.values values)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.line_canonical : ∀
+      (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+      (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (basis : AspisR1.Port4C_BasisOuter.SessionABasis ops)
+    (arithmetic : AspisR1.Port4C_QueryArithmetic.SessionABackends ops) (m31 : AspisR1.Port5Q1_NodeModel.SessionAM31 ops)
+    (decoder : AspisR1.Port5Q1_OpeningValues.SessionAS3 ops)
+    (line :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value →
+          AspisR1.CheckpointBytes5Output.ofE value =
+            AspisR1.FoldRuntimeAlgebra.lineWithInverses (AspisR1.CheckpointBytes5Output.ofE alpha)
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 2)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 3)))
+              ((algebraMap AspisR1.Port5Q1_QueryPorts.FP AspisR1.Port5Q1_QueryPorts.FE)
+                (AspisR1.S7JoinBasisMachine.decode (AspisR1.Port5Q1_GeometryBinding.lane inverse 4)))
+              (AspisR1.Port5Q1_OpeningValues.values values))
+    (line_canonical :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok value → AspisR1.Port4C_QueryArithmetic.CanonE value) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops
+structure AspisR1.Port4C_BasisOuter.SessionABasis (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_double : ops.op8 = S7Kani3BasisOuter.double
+  AspisR1.Port4C_BasisOuter.SessionABasis.zero : ops.op4 = Aeneas.Std.Result.ok 0#u32
+  AspisR1.Port4C_BasisOuter.SessionABasis.one : ops.op5 = Aeneas.Std.Result.ok 1#u32
+constructor:
+  AspisR1.Port4C_BasisOuter.SessionABasis.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul)
+    (s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub) (s3_s4_double : ops.op8 = S7Kani3BasisOuter.double)
+    (zero : ops.op4 = Aeneas.Std.Result.ok 0#u32) (one : ops.op5 = Aeneas.Std.Result.ok 1#u32) :
+    AspisR1.Port4C_BasisOuter.SessionABasis ops
+structure AspisR1.Port4C_QueryArithmetic.SessionABackends (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s5_mulE : ∀ (value : AspisR1.Port4C_QueryValues.E)
+      (power : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      AspisR1.Port4C_QueryArithmetic.CanonE value →
+        AspisR1.Port3_FlushInstall.Canonical power →
+          ops.op3 value power = Aeneas.Std.Result.ok product →
+            AspisR1.CheckpointBytes5Output.ofE product =
+                AspisR1.CheckpointBytes5Output.ofE value *
+                  AspisR1.LiteralOpeningView.eK (AspisR1.CheckpointBytes5Output.ofK power) ∧
+              AspisR1.Port4C_QueryArithmetic.CanonE product
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s5_addE : ∀ (left right : AspisR1.Port4C_QueryValues.E)
+      (sum : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      AspisR1.Port4C_QueryArithmetic.CanonE left →
+        AspisR1.Port4C_QueryArithmetic.CanonE right →
+          ops.op2 left right = Aeneas.Std.Result.ok sum →
+            AspisR1.CheckpointBytes5Output.ofE sum =
+                AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+              AspisR1.Port4C_QueryArithmetic.CanonE sum
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.s3_s4_s9_mulK : ∀ (left right : AspisR1.Port3_FlushInstall.K)
+      (product : AspisR1Stage2.aspis_core.field.QM31),
+      AspisR1.Port3_FlushInstall.Canonical left →
+        AspisR1.Port3_FlushInstall.Canonical right →
+          ops.op9 left right = Aeneas.Std.Result.ok product →
+            AspisR1.CheckpointBytes5Output.ofK product =
+                AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+              AspisR1.Port3_FlushInstall.Canonical product
+constructor:
+  AspisR1.Port4C_QueryArithmetic.SessionABackends.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (s3_s4_s5_mulE :
+      ∀ (value : AspisR1.Port4C_QueryValues.E) (power : AspisR1.Port3_FlushInstall.K)
+        (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE value →
+          AspisR1.Port3_FlushInstall.Canonical power →
+            ops.op3 value power = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofE product =
+                  AspisR1.CheckpointBytes5Output.ofE value *
+                    AspisR1.LiteralOpeningView.eK (AspisR1.CheckpointBytes5Output.ofK power) ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE product)
+    (s3_s4_s5_addE :
+      ∀ (left right : AspisR1.Port4C_QueryValues.E) (sum : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE left →
+          AspisR1.Port4C_QueryArithmetic.CanonE right →
+            ops.op2 left right = Aeneas.Std.Result.ok sum →
+              AspisR1.CheckpointBytes5Output.ofE sum =
+                  AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE sum)
+    (s3_s4_s9_mulK :
+      ∀ (left right : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.QM31),
+        AspisR1.Port3_FlushInstall.Canonical left →
+          AspisR1.Port3_FlushInstall.Canonical right →
+            ops.op9 left right = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofK product =
+                  AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+                AspisR1.Port3_FlushInstall.Canonical product) :
+    AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+structure AspisR1.Port5Q1_NodeModel.SessionAM31 (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_NodeModel.SessionAM31.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_NodeModel.SessionAM31.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x = Aeneas.Std.Result.ok y → AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_NodeModel.SessionAM31.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op5 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1
+  AspisR1.Port5Q1_NodeModel.SessionAM31.subtract : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op6 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y
+constructor:
+  AspisR1.Port5Q1_NodeModel.SessionAM31.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (multiply :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y)
+    (double :
+      ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+        ops.op8 x = Aeneas.Std.Result.ok y →
+          AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op5 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op6 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+structure AspisR1.Port5Q1_OpeningValues.SessionAS3 (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_OpeningValues.SessionAS3.decode : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ↑i < 4 →
+        (↑bytes).length = 128 →
+          ops.op21 bytes i = Aeneas.Std.Result.ok value →
+            AspisR1.FoldedLeafCodec.decodeWide
+                (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes) (32 * ↑i) 32) =
+              some (AspisR1.CheckpointBytes5Output.ofE value)
+constructor:
+  AspisR1.Port5Q1_OpeningValues.SessionAS3.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (decode :
+      ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ↑i < 4 →
+          (↑bytes).length = 128 →
+            ops.op21 bytes i = Aeneas.Std.Result.ok value →
+              AspisR1.FoldedLeafCodec.decodeWide
+                  (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes) (32 * ↑i) 32) =
+                some (AspisR1.CheckpointBytes5Output.ofE value)) :
+    AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+structure AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.point : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.line : ∀
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.multiply : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.double : ∀ (x : Aeneas.Std.U32)
+      (y : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.subtract : ∀ (x y : Aeneas.Std.U32)
+      (z : AspisR1Stage2.aspis_core.field.M31),
+      AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+        AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+          ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z
+constructor:
+  AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives.mk {CoreError : Type}
+    {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical p.x ∧ AspisR1.Port5Q1_GeometryCanonical.Canonical p.y)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (multiply :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op9 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z)
+    (double :
+      ∀ (x : Aeneas.Std.U32) (y : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          ops.op10 x = Aeneas.Std.Result.ok y → AspisR1.Port5Q1_GeometryCanonical.Canonical y)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.Port5Q1_GeometryCanonical.Canonical x)
+    (subtract :
+      ∀ (x y : Aeneas.Std.U32) (z : AspisR1Stage2.aspis_core.field.M31),
+        AspisR1.Port5Q1_GeometryCanonical.Canonical x →
+          AspisR1.Port5Q1_GeometryCanonical.Canonical y →
+            ops.op8 x y = Aeneas.Std.Result.ok z → AspisR1.Port5Q1_GeometryCanonical.Canonical z) :
+    AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives ops
+structure AspisR1.Port5Q1_Domain.SessionADomain {CoreError : Type}
+  (ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError) : Prop
+number of parameters: 2
+fields:
+  AspisR1.Port5Q1_Domain.SessionADomain.fibre : ∀ (u : Aeneas.Std.Usize)
+      (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+      ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144
+  AspisR1.Port5Q1_Domain.SessionADomain.point : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+      ops.op15 f = Aeneas.Std.Result.ok p →
+        AspisR1.S7JoinBasisMachine.decode p.x =
+            AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+          AspisR1.S7JoinBasisMachine.decode p.y =
+            (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2
+  AspisR1.Port5Q1_Domain.SessionADomain.line : ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+      (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op14 f = Aeneas.Std.Result.ok x →
+        AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f)
+  AspisR1.Port5Q1_Domain.SessionADomain.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op9 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_Domain.SessionADomain.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op10 x = Aeneas.Std.Result.ok y →
+        AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_Domain.SessionADomain.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1
+  AspisR1.Port5Q1_Domain.SessionADomain.subtract : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y
+constructor:
+  AspisR1.Port5Q1_Domain.SessionADomain.mk {CoreError : Type} {ops : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+    (fibre :
+      ∀ (u : Aeneas.Std.Usize) (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex),
+        ops.op12 u = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok f) → f = u ∧ ↑f < 262144)
+    (point :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex)
+        (p : AspisR1Stage2.aspis_core.r0.domain.Point AspisR1Stage2.aspis_core.field.M31),
+        ops.op15 f = Aeneas.Std.Result.ok p →
+          AspisR1.S7JoinBasisMachine.decode p.x =
+              AspisCircleGroupOrder.X (AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f)) ∧
+            AspisR1.S7JoinBasisMachine.decode p.y =
+              (↑(AspisR1.FoldStoredGeometry.sourceFibre (AspisR1.Port5Q1_Domain.index ↑f))).2)
+    (line :
+      ∀ (f : AspisR1.Port3_NativeGeometryBody.aspis_core.r0.domain.FibreIndex) (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op14 f = Aeneas.Std.Result.ok x →
+          AspisR1.S7JoinBasisMachine.decode x = AspisR1.FoldStoredGeometry.sourceX18 (AspisR1.Port5Q1_Domain.index ↑f))
+    (multiply :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op9 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y)
+    (double :
+      ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+        ops.op10 x = Aeneas.Std.Result.ok y →
+          AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op7 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op8 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_Domain.SessionADomain ops
+def AspisR1.RawRecordedOracleExtractionMassBin.CleanAcceptedModel : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.RawRecordedOracleExtractionMassBin.Experiment → (AspisR1.RawCutProverCompiler.RunView → Prop) → Prop :=
+fun decoder exp hit =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    have run := AspisV8R19.MemoizedProgramLaw.eval H exp;
+    run.2.2 = true →
+      ¬hit run →
+        ∃ _checks,
+          ¬AspisR1.GenericNoHit.hitFrom AspisR1.LiteralClassifier.bad run.2.1.1 []
+              ((AspisR1.LiteralByteProtocol.protocol decoder).transcript H run.2.1.1
+                  (AspisR1.RawCutTranscriptRun.proof (AspisR1.RawCutWordsFromRunExecutableBin.wordsFromRun run)
+                    run.2.1.2)
+                  33).rounds
+def AspisR1.Port6AUTH_Prefix.source : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.Port1_StoredCarrier.ByteProver → AspisR1.RawRecordedOracleExtractionMassBin.Experiment :=
+fun D rust P =>
+  AspisV8R19.OracleProgramOps.bind
+    (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust
+      (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)))
+    fun v => AspisV8R19.MemoizedProgramLaw.Program.done ((v.1.statement, v.1.proof), v.2)
+def AspisR1.Port6AUTH_Prefix.bad : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.Port1_StoredCarrier.ByteProver → ℕ → AspisR1.RawCutProverCompiler.RunView → Prop :=
+fun D P Q run =>
+  AspisR1.RecordedBinaryExperimentBin.binaryCollision (Q + 1161) run ∨ AspisR1.Port6AUTH_Prefix.prefixHit D P run
+def AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortRuntimeBindingC7.Verifier →
+    AspisR1.OraclePortStoredExperimentC4.Prover → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (run : AspisR1.OraclePortStoredExperimentC4.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run →
+      run.2.2 = true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust (AspisR1.OraclePortStoredAdmissionC4.canon P))
+def AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims : AspisR1.LiteralByteProtocol.Decoder →
+  AspisR1.OraclePortStoredExperimentC4.Prover → ℕ → AspisR1.OraclePortRuntimeBindingC7.Runtime → Prop :=
+fun D P Q runtime =>
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P)).2.2 = true →
+        (AspisV8R19.OracleResampling.mean fun coins =>
+            ↑(AspisR1.ActualCostedExtractorM10.extractor.eval
+                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortHeadlineFrozen2.projected_frozen D P))
+                    coins).2.total) ≤
+          ↑(AspisR1.CostedAllocationLedgerM10.params (Q + 1161)).attemptBudget) ∧
+    (∀ (run : AspisR1.RawCutProverCompiler.RunView) (coins : AspisR1.RawExtractorCostComposedV2.Coins)
+        (w : AspisR1.SpendRelation.Wspend),
+        (AspisR1.ActualCostedExtractorM10.extractor.eval run coins).1 = some w →
+          AspisR1.LiteralProtocol.relation run.2.1.1 w) ∧
+      1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+        AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.totalBound Q ∧
+          (Q ≤ AspisR1.OraclePortHeadlineFrozen2PerAttempt.Qmax →
+            AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ (↑Q + 1) * (1 / 2 ^ 100))
+theorem AspisR1.OraclePortFrozen2Probability.first_reads : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2Consumer.projected D P)).1 ≤
+        Q + 1161 :=
+⋯
+theorem AspisR1.OraclePortHeadlineFrozen2PerAttempt.failure_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+            ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B + AspisR1.BinCombinedMerkleCollision.kappa (Q + 1161) +
+                1 / 2 ^ 126 +
+              1 / 2 ^ 454 :=
+⋯
+theorem AspisR1.OraclePortHeadlineFrozen2PerAttempt.zero_queries : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ 0) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ 1 / 2 ^ 100 :=
+⋯

@@ -1,0 +1,65 @@
+Port6AUTH_SourceCut.lean:57:89: error: Application type mismatch: The argument
+  bound
+has type
+  row ≤ 33
+but is expected to have type
+  row ≤ (LiteralByteProtocol.protocol D).r
+in the application
+  OracleProgramReplay.transcript_eq_of_agrees (LiteralByteProtocol.protocol D)
+    (RawCutTranscriptRun.decisionOnBytes fun x x_1 => false) H (OracleProgramReplay.oracleOf (first rust P H).1)
+    (first rust P H).2.1.statement (first rust P H).2.1.proof
+    (fun a ha =>
+      OracleProgramReplay.oracleOf_eq H (eval H (originalWith rust (canon (lift P)))).1
+        (eval_consistent H (originalWith rust (canon (lift P)))) a (contains a ha))
+    row bound
+Port6AUTH_SourceCut.lean:59:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (LiteralByteProtocol.protocol D).transcript (OracleProgramReplay.oracleOf (first rust P H).1)
+    (first rust P H).2.1.statement (first rust P H).2.1.proof row
+in the target expression
+  (firstCell
+          ((LiteralByteProtocol.protocol D).samp row
+            ((LiteralByteProtocol.protocol D).transcript (OracleProgramReplay.oracleOf (view (first rust P H)).1)
+              (view (first rust P H)).2.1.1 (view (first rust P H)).2.1.2 row)
+            ((LiteralByteProtocol.protocol D).msg (view (first rust P H)).2.1.2 row))).getD
+      [] =
+    (firstCell
+          ((LiteralByteProtocol.protocol D).samp row
+            ((LiteralByteProtocol.protocol D).transcript H (first rust P H).2.1.statement (first rust P H).2.1.proof
+              row)
+            ((LiteralByteProtocol.protocol D).msg (first rust P H).2.1.proof row))).getD
+      []
+
+D : LiteralByteProtocol.Decoder
+rust : Verifier
+P : ByteProver
+H : Bytes → State
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (RawCutProverCompiler.verifier D (fun x x_1 => false) (first rust P H).2.1.statement
+              (first rust P H).2.1.proof)).1
+        a →
+      Read (first rust P H).1 a
+row : ℕ
+bound : row ≤ 33
+transcript :
+  (LiteralByteProtocol.protocol D).transcript (OracleProgramReplay.oracleOf (first rust P H).1)
+      (first rust P H).2.1.statement (first rust P H).2.1.proof row =
+    (LiteralByteProtocol.protocol D).transcript H (first rust P H).2.1.statement (first rust P H).2.1.proof row
+⊢ (firstCell
+          ((LiteralByteProtocol.protocol D).samp row
+            ((LiteralByteProtocol.protocol D).transcript (OracleProgramReplay.oracleOf (view (first rust P H)).1)
+              (view (first rust P H)).2.1.1 (view (first rust P H)).2.1.2 row)
+            ((LiteralByteProtocol.protocol D).msg (view (first rust P H)).2.1.2 row))).getD
+      [] =
+    (firstCell
+          ((LiteralByteProtocol.protocol D).samp row
+            ((LiteralByteProtocol.protocol D).transcript H (first rust P H).2.1.statement (first rust P H).2.1.proof
+              row)
+            ((LiteralByteProtocol.protocol D).msg (first rust P H).2.1.proof row))).getD
+      []
+'AspisR1.Port6AUTH_SourceCut.first_pass_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_SourceCut.clean_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_SourceCut.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port6AUTH_SourceCut.frame_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
