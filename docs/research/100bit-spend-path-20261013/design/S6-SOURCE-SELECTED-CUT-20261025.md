@@ -38,3 +38,7 @@ python3 tools/s6-sdk-selected-cut-20261025/check.py
 ```
 
 The immutable raw release in103484b3c8 covers the PRIOR six enclosing-cut modules and SDK preparation/challenge-range theorem. These three NEW source-selected-cut modules are not silently attributed to it; a subsequent incremental data overlay or coherent replay is required to consume this stronger endpoint in the lead's kernel join. The original/current ALL14/child/event/mark/source/artifact integration and final coherent release replay remain open. The 100-bit target is not yet established.
+
+## Data handoff follow-up
+
+The three new modules now have the second incremental untrusted raw-data release `/private/tmp/s126-sdk-selected-cut-release-20261025-v1`, manifest `3af7fd6e890416e849dc952a5ad13466dddf88148acced8c3ea23e9bc8c5224f`. See SDK-SOURCE-SELECTED-TRANSPORT-20261025.md for exact-name validation, reuse of both earlier bases and remaining kernel/source/release obligations. This supersedes only the earlier statement that these new terms were not yet exported; it does not promote data closure to kernel or native closure.

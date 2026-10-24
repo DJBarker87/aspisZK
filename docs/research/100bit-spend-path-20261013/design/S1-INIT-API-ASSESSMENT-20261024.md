@@ -11,3 +11,9 @@ Primary pinned sources: [mem.rs](https://github.com/model-checking/kani/blob/4fe
 Read-only audit: `python3 tools/s1-init-api-20261024/check.py`.
 
 Next native deliverable still needs a validated initializedness/source route, shipped allocation/error/drop/full-loop association and composition into the enclosing Claims implementation instance. The new source-bound SDK preparation/claim/challenge theorems do not discharge these. Heavy jobs still require fresh reviewed admission; none is inferred from an offline resource candidate or historical cap. S1/S6 and <=2^-100 per-attempt soundness remain OPEN.
+
+## Upstream 0.68 source comparison, 2026-10-25
+
+Read-only inspection of official tag kani-0.68.0 at0d2328a93f0e0ff66132d6bfa1a7d884877cf862 retains the SAME failing FieldsShape::Primitive branch byte for byte. The full file differs in enum-offset and ScalarPair API handling; its source/diff/hash are retained, so it is not falsely labelled unchanged. This comparison does not prove whole-compiler behavior, identify the offending type or show that a new binary would fail identically. It supplies no directly observed fix for this layout branch and does not justify a version-only proof rerun. No binary download, tool upgrade, compiler/solver or host scope occurred. Audit: `python3 tools/s1-init-api-20261024/check-upstream.py`.
+
+Next diagnostic must identify the ACTUAL offending native type/layout (not guess it is an Infallible/never/union case), then change the smallest relevant source/tool probe with full correspondence pins. The existing missing type detail and fresh reviewed host-admission requirement remain explicit. Default-check output/word equality and hand-maintained shadow flags must not be used as an initializedness theorem.
