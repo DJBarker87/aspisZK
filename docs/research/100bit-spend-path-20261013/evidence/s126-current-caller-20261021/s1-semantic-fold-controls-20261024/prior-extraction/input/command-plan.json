@@ -1,0 +1,99 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/bin/aeneas",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "AspisR1SemanticCallExtraction",
+    "-dest",
+    "/tmp/aspis-r1-semantic-calls-root-v5/generated",
+    "-subdir",
+    "AspisR1SemanticCallExtraction",
+    "-split-files",
+    "-emit-json",
+    "/tmp/aspis-r1-semantic-calls-root-v5/SemanticCalls.llbc"
+  ],
+  "charon_command": [
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::result::_::map_err",
+    "--start-from",
+    "crate::r1_semantic::semantic_boundary_entry",
+    "--start-from",
+    "crate::r1_semantic::semantic_value_entry",
+    "--dest-file",
+    "/tmp/aspis-r1-semantic-calls-root-v5/SemanticCalls.llbc",
+    "--",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--no-default-features",
+    "--jobs",
+    "1"
+  ],
+  "kit_dir": "/tmp/semantic-round-call-extraction-20261019-v5-index-loops",
+  "runner_requirements": {
+    "expected_function_roots": [
+      "semantic_boundary_entry",
+      "semantic_value_entry"
+    ],
+    "expected_outputs": [
+      "SemanticCalls.llbc",
+      "generated/AspisR1SemanticCallExtraction/Types.lean",
+      "generated/AspisR1SemanticCallExtraction/Funs.lean",
+      "translation.json",
+      "time logs",
+      "receipt.json"
+    ],
+    "if_aeneas_fails": [
+      "preserve exact attempt/log",
+      "do not retry unchanged",
+      "isolate the failing selected function before editing source"
+    ],
+    "memory_high_bytes": 6442450944,
+    "memory_max_bytes": 8589934592,
+    "memory_swap_max_bytes": 0,
+    "no_cold_dependencies": true,
+    "scope": "dedicated cgroup/systemd scope per root invocation; fresh admission before each extraction stage",
+    "timeout_seconds_per_stage": 180,
+    "verify_before_launch": [
+      "source-pins.json git revision and full file hashes",
+      "every kit file hash",
+      "tool binary hashes",
+      "rustup toolchain",
+      "current aggregate cap admission"
+    ],
+    "candidate_source_change": {
+      "kind": "explicit indexed loops replace unsupported Iterator::fold/Iterator::rev translation",
+      "proof_status": "must be proved equivalent to pinned production function spans before any production claim"
+    },
+    "excluded_from_this_attempt": {
+      "root": "crate::r1_wire::decode_k_entry",
+      "reason": "same Aeneas Iterator trait-method signature assertion persists with semantic roots only; this attempt isolates explicit-loop semantic candidates."
+    }
+  },
+  "source_revision": "efa2ddcecdb76c8633b1dbbd40a6e8fe2348308a",
+  "tools": {
+    "aeneas": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/bin/aeneas",
+    "aeneas_sha256": "959659a6aafc6a6a975b4dc67ee9d779a269b988bd44b3b31a77cf023b1709e3",
+    "charon": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "charon_driver_sha256": "efdbe5b86c9f5f70c93810af08f358d4ecbaecf6f3e87517b1176689a8c28c45",
+    "charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8",
+    "rustup_toolchain": "nightly-2026-06-01"
+  }
+}
