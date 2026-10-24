@@ -538,3 +538,46 @@ The 6 GiB soft-limit events reflect the retained oracle-log cache; the
 original 6G/8G/no-swap/64-task limits remain. See
 corpus-1000-002/resource-review-midpoint.json. This is a partial checkpoint,
 not a completed differential or absolute timing gate.
+
+### Final 1000-pair differential gate: passed
+
+corpus-1000-002 completes all 1000 pairs on production source
+9c131667ca00f4daae78da6299b09a9fe0d00da9, exit 0: 600 successful
+proof pairs (100 after a rejected prefix) and 400 error-path pairs, with exactly
+100 cases in each tape class. Every complete returned record, actual L1
+ledger record/event stream and public worker event stream matches. All
+public/proof byte files match literally; four selected complete supplied
+oracle streams also match literally. Successful outputs pass strict tx1/tx2
+verification. Scope wall 14050.833 s, GNU time peak RSS 619596 KiB, swap 0;
+aggregate cgroup peak 6443712512 bytes, pids peak 37, no max/OOM events.
+The soft-limit events include retained oracle-log page cache, as reviewed
+at the midpoint. differential-1000-final.json is the concise release-gate
+summary; the 1000 individual comparison files and full receipt are retained.
+This is empirical equivalence on those cases, not universal model refinement.
+
+### Final quiet-host check: blocked, absolute timing unmeasured
+
+The post-corpus check finds one populated 8 GiB peer scope:
+run-r398b48eab4d44c4295b8e78a9cd95da9.scope. It belongs to
+s126-real-sdk-20261021, original_point_matches_fission with solver Z3.
+Its orphaned Z3 PID 2095724 has parent 1, about 22 h 43 min elapsed and
+99.9% CPU at inspection. Load is 4.47 7.29 8.16. The peer process is not
+killed, and no absolute timing sample is launched. quiet-final-preflight.json
+retains the inventory. Once the lead coordinates a quiet host, run the
+already prepared absolute-timing.py pipeline-003 under the capped runner,
+without repeating the unchanged 1000-pair corpus.
+
+### Handoff boundary
+
+The candidate remains unadopted and unmerged. Stage 2 still needs the quiet
+absolute gate and the complete per-leaf contract/binding audit. Stage 3 has
+translation evidence but no new checked per-attempt/model theorem. The
+required assigned env J range has not been supplied; Lean use remains 0/100,
+Kani 42/60 (27 passes, ten timeouts, three compilation failures, one CLI
+rejection and one rejected draft contract). No source/model, RunJoin, E1/E2
+distribution, L1/L2 joint coupling, observer/oracle transport or compiler/native
+experiment instance is silently assumed closed. The exact external inventory
+and explicit remaining obligations are in external-obligations-caller005.json,
+sampler-lowering-delta.json and design/PROVER-RW-20261023-PROOF-STATUS.md.
+Conjunct 1 and the security target are not yet established. No push or merge
+is performed, and retained keys and host evidence are preserved.
