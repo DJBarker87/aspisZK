@@ -1,0 +1,100 @@
+pub struct Zeroizing<Z: Zeroize>(Z);
+
+impl<Z> Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    /// Move value inside a `Zeroizing` wrapper which ensures it will be
+    /// zeroized when it's dropped.
+    #[inline(always)]
+    pub fn new(value: Z) -> Self {
+        Self(value)
+    }
+}
+
+impl<Z: Zeroize + Clone> Clone for Zeroizing<Z> {
+    #[inline(always)]
+    fn clone(&self) -> Self {
+        Self(self.0.clone())
+    }
+
+    #[inline(always)]
+    fn clone_from(&mut self, source: &Self) {
+        self.0.zeroize();
+        self.0.clone_from(&source.0);
+    }
+}
+
+impl<Z> From<Z> for Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    #[inline(always)]
+    fn from(value: Z) -> Zeroizing<Z> {
+        Zeroizing(value)
+    }
+}
+
+impl<Z> ops::Deref for Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    type Target = Z;
+
+    #[inline(always)]
+    fn deref(&self) -> &Z {
+        &self.0
+    }
+}
+
+impl<Z> ops::DerefMut for Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    #[inline(always)]
+    fn deref_mut(&mut self) -> &mut Z {
+        &mut self.0
+    }
+}
+
+impl<T, Z> AsRef<T> for Zeroizing<Z>
+where
+    T: ?Sized,
+    Z: AsRef<T> + Zeroize,
+{
+    #[inline(always)]
+    fn as_ref(&self) -> &T {
+        self.0.as_ref()
+    }
+}
+
+impl<T, Z> AsMut<T> for Zeroizing<Z>
+where
+    T: ?Sized,
+    Z: AsMut<T> + Zeroize,
+{
+    #[inline(always)]
+    fn as_mut(&mut self) -> &mut T {
+        self.0.as_mut()
+    }
+}
+
+impl<Z> Zeroize for Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    fn zeroize(&mut self) {
+        self.0.zeroize();
+    }
+}
+
+impl<Z> ZeroizeOnDrop for Zeroizing<Z> where Z: Zeroize {}
+
+impl<Z> Drop for Zeroizing<Z>
+where
+    Z: Zeroize,
+{
+    fn drop(&mut self) {
+        self.0.zeroize()
+    }
+}

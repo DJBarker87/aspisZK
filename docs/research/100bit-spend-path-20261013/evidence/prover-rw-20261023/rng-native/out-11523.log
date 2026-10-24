@@ -1,0 +1,1224 @@
+R1Z.ProverRwRngNativeReserve.mask_error_exact : ∀ (e : R1Z.ProverRwRngNativeReserve.BuildError),
+  ProverRwRngNativeBody.prover.mask_error e =
+    Aeneas.Std.Result.ok
+      (match e with
+      | ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted =>
+        ProverRwRngNativeBody.verifier.Error.Rejected
+      | x => ProverRwRngNativeBody.verifier.Error.Semantic)
+'R1Z.ProverRwRngNativeReserve.mask_error_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.ProverRwRngNativeReserve.acknowledgment_single_use : ∀
+  (p : ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce)
+  (statement nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  p.consumed = true → R1Z.ProverRwRngNativeReserve.acknowledge p statement nonce = Aeneas.Std.Result.ok (false, p)
+'R1Z.ProverRwRngNativeReserve.acknowledgment_single_use' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.ProverRwRngNativeReserve.byte_ne_self : ∀ (x : Aeneas.Std.U8),
+  Aeneas.Std.core.cmp.PartialEqU8.ne x x = Aeneas.Std.Result.ok false
+'R1Z.ProverRwRngNativeReserve.byte_ne_self' depends on axioms: [propext]
+R1Z.ProverRwRngNativeReserve.list_compare_self : ∀ (xs : List Aeneas.Std.U8),
+  List.allM (fun xy => Aeneas.Std.Result.ok (decide ¬Aeneas.Std.core.cmp.impls.PartialEqU8.ne xy.1 xy.2 = true))
+      (xs.zip xs) =
+    Aeneas.Std.Result.ok true
+'R1Z.ProverRwRngNativeReserve.list_compare_self' depends on axioms: [propext, Quot.sound]
+@R1Z.ProverRwRngNativeReserve.array_ne_self : ∀ {N : Aeneas.Std.Usize} (a : Aeneas.Std.Array Aeneas.Std.U8 N),
+  Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 a a = Aeneas.Std.Result.ok false
+'R1Z.ProverRwRngNativeReserve.array_ne_self' depends on axioms: [propext, Quot.sound]
+R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh : ∀ (statement nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  R1Z.ProverRwRngNativeReserve.acknowledge { statement_digest := statement, mask_nonce := nonce, consumed := false }
+      statement nonce =
+    Aeneas.Std.Result.ok (true, { statement_digest := statement, mask_nonce := nonce, consumed := true })
+'R1Z.ProverRwRngNativeBuildControl.acknowledgment_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildControl.reservation_false : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (a : R1Z.ProverRwRngNativeReserve.Secrets) (hash : R1Z.ProverRwRngNativeReserve.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S),
+  R1Z.ProverRwRngNativeBuildControl.LayoutOk a c →
+    store.reserve s c.statement_digest c.mask_nonce = Aeneas.Std.Result.ok (false, after) →
+      R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+              ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+            after)
+'R1Z.ProverRwRngNativeBuildControl.reservation_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildControl.body_reservation_error : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (public1 : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwRngNativeBody.transport.Variant) (a : R1Z.ProverRwRngNativeReserve.Secrets)
+  (hash : R1Z.ProverRwRngNativeReserve.Hash) (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S) (e : R1Z.ProverRwRngNativeReserve.BuildError)
+  (reservation :
+    R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, after)),
+  ProverRwRngNativeBody.prover.prove_masked_with_attempt store public1 compiled variant hash c binding a s =
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+          (match e, reservation with
+          | ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted,
+            reservation => ProverRwRngNativeBody.verifier.Error.Rejected
+          | x, reservation => ProverRwRngNativeBody.verifier.Error.Semantic),
+        after)
+'R1Z.ProverRwRngNativeBuildControl.body_reservation_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildControl.duplicate_fatal : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (public1 : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwRngNativeBody.transport.Variant) (a : R1Z.ProverRwRngNativeReserve.Secrets)
+  (hash : R1Z.ProverRwRngNativeReserve.Hash) (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S),
+  R1Z.ProverRwRngNativeBuildControl.LayoutOk a c →
+    store.reserve s c.statement_digest c.mask_nonce = Aeneas.Std.Result.ok (false, after) →
+      ProverRwRngNativeBody.prover.prove_masked_with_attempt store public1 compiled variant hash c binding a s =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic, after)
+'R1Z.ProverRwRngNativeBuildControl.duplicate_fatal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildPaths.layout_mask_rejected : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (a : R1Z.ProverRwRngNativeReserve.Secrets) (hash : R1Z.ProverRwRngNativeReserve.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (c : R1Z.ProverRwRngNativeReserve.Context) (s : S),
+  c.mask_nonce = a.mask_nonce →
+    c.mask_layout_fingerprint ≠
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1 →
+      R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+              ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout,
+            s)
+'R1Z.ProverRwRngNativeBuildPaths.layout_mask_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildPaths.missing_ack : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (a : R1Z.ProverRwRngNativeReserve.Secrets) (hash : R1Z.ProverRwRngNativeReserve.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S)
+  (entropy : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (material : ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+  (ack : ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce),
+  R1Z.ProverRwRngNativeBuildControl.LayoutOk a c →
+    store.reserve s c.statement_digest c.mask_nonce = Aeneas.Std.Result.ok (true, after) →
+      R1Z.ProverRwRngNativeBuildPaths.derefEntropy a = Aeneas.Std.Result.ok entropy →
+        R1Z.ProverRwRngNativeBuildPaths.buildMaterial hash binding c entropy =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok material, ack) →
+          ack.consumed = false →
+            R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                    ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                  after)
+'R1Z.ProverRwRngNativeBuildPaths.missing_ack' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeBuildPaths.material_error : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (a : R1Z.ProverRwRngNativeReserve.Secrets) (hash : R1Z.ProverRwRngNativeReserve.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S)
+  (entropy : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (ack : ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce)
+  (e : R1Z.ProverRwRngNativeReserve.BuildError),
+  R1Z.ProverRwRngNativeBuildControl.LayoutOk a c →
+    store.reserve s c.statement_digest c.mask_nonce = Aeneas.Std.Result.ok (true, after) →
+      R1Z.ProverRwRngNativeBuildPaths.derefEntropy a = Aeneas.Std.Result.ok entropy →
+        R1Z.ProverRwRngNativeBuildPaths.buildMaterial hash binding c entropy =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, ack) →
+          R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, after)
+'R1Z.ProverRwRngNativeBuildPaths.material_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeReservationInvariant.returns_bind : ∀ {A B : Type} (p : B → Prop) (r : Aeneas.Std.Result A)
+  (f : A → Aeneas.Std.Result B),
+  (∀ (a : A), r = Aeneas.Std.Result.ok a → R1Z.ProverRwRngNativeReservationInvariant.Returns p (f a)) →
+    R1Z.ProverRwRngNativeReservationInvariant.Returns p (r >>= f)
+'R1Z.ProverRwRngNativeReservationInvariant.returns_bind' does not depend on any axioms
+@R1Z.ProverRwRngNativeReservationInvariant.reservation_invariant : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] {S : Type} (store : R1Z.ProverRwRngNativeReserve.Store S)
+  (a : R1Z.ProverRwRngNativeReserve.Secrets) (hash : R1Z.ProverRwRngNativeReserve.Hash)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (c : R1Z.ProverRwRngNativeReserve.Context) (s after : S),
+  R1Z.ProverRwRngNativeBuildControl.LayoutOk a c →
+    store.reserve s c.statement_digest c.mask_nonce = Aeneas.Std.Result.ok (true, after) →
+      R1Z.ProverRwRngNativeReservationInvariant.Returns (R1Z.ProverRwRngNativeReservationInvariant.AfterReserve a after)
+        (R1Z.ProverRwRngNativeReserve.reserveBuild store a hash binding c s)
+'R1Z.ProverRwRngNativeReservationInvariant.reservation_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+@R1Z.ProverRwRngNativeProducer.durable_duplicate : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] (s after : R1Z.ProverRwRngNativeProducer.Durable)
+  (digest nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible s digest nonce =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok false, after) →
+    R1Z.ProverRwRngNativeProducer.durableStore.reserve s digest nonce = Aeneas.Std.Result.ok (false, after)
+'R1Z.ProverRwRngNativeProducer.durable_duplicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeProducer.durable_failure : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] (s after : R1Z.ProverRwRngNativeProducer.Durable)
+  (digest nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (error : ProverRwRngNativeBody.std.io.error.Error)
+  (kind : ProverRwRngNativeBody.core.io.error.ErrorKind),
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible s digest nonce =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, after) →
+    error.kind = Aeneas.Std.Result.ok kind →
+      R1Z.ProverRwRngNativeProducer.durableStore.reserve s digest nonce =
+        Aeneas.Std.Result.ok (false, { directory := after.directory, last_error := some kind })
+'R1Z.ProverRwRngNativeProducer.durable_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeProducer.selected_reservation_false : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] (public1 : R1Z.ProverRwRngNativeProducer.Public)
+  (compiled : R1Z.ProverRwRngNativeProducer.Compiled) (a : R1Z.ProverRwRngNativeReserve.Secrets)
+  (hash : R1Z.ProverRwRngNativeReserve.Hash) (s after : R1Z.ProverRwRngNativeProducer.Durable)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (digest binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (encoded : Aeneas.Std.Array Aeneas.Std.U8 81#usize),
+  ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes public1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    hash (R1Z.ProverRwRngNativeProducer.publicHashInput bytes) = Aeneas.Std.Result.ok digest →
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.encode
+            (R1Z.ProverRwRngNativeProducer.contextFor digest a.mask_nonce) =
+          Aeneas.Std.Result.ok encoded →
+        hash (R1Z.ProverRwRngNativeProducer.bindingInput bytes encoded) = Aeneas.Std.Result.ok binding →
+          R1Z.ProverRwRngNativeProducer.durableStore.reserve s digest a.mask_nonce =
+              Aeneas.Std.Result.ok (false, after) →
+            ProverRwRngNativeBody.prover.prove_masked_attempt public1 compiled
+                ProverRwRngNativeBody.transport.Variant.S2 hash a s =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic, after)
+'R1Z.ProverRwRngNativeProducer.selected_reservation_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeProducer.selected_duplicate_fatal : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] (public1 : R1Z.ProverRwRngNativeProducer.Public)
+  (compiled : R1Z.ProverRwRngNativeProducer.Compiled) (a : R1Z.ProverRwRngNativeReserve.Secrets)
+  (hash : R1Z.ProverRwRngNativeReserve.Hash) (s after : R1Z.ProverRwRngNativeProducer.Durable)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (digest binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (encoded : Aeneas.Std.Array Aeneas.Std.U8 81#usize),
+  ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes public1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    hash (R1Z.ProverRwRngNativeProducer.publicHashInput bytes) = Aeneas.Std.Result.ok digest →
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.encode
+            (R1Z.ProverRwRngNativeProducer.contextFor digest a.mask_nonce) =
+          Aeneas.Std.Result.ok encoded →
+        hash (R1Z.ProverRwRngNativeProducer.bindingInput bytes encoded) = Aeneas.Std.Result.ok binding →
+          ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible s digest
+                a.mask_nonce =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok false, after) →
+            ProverRwRngNativeBody.prover.prove_masked_attempt public1 compiled
+                ProverRwRngNativeBody.transport.Variant.S2 hash a s =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic, after)
+'R1Z.ProverRwRngNativeProducer.selected_duplicate_fatal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwRngNativeProducer.selected_io_failure : ∀ [inst : ProverRwRngNativeBody.TypeLeaves]
+  [inst_1 : ProverRwRngNativeBody.LocalLeaves] (public1 : R1Z.ProverRwRngNativeProducer.Public)
+  (compiled : R1Z.ProverRwRngNativeProducer.Compiled) (a : R1Z.ProverRwRngNativeReserve.Secrets)
+  (hash : R1Z.ProverRwRngNativeReserve.Hash) (s after : R1Z.ProverRwRngNativeProducer.Durable)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (digest binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (encoded : Aeneas.Std.Array Aeneas.Std.U8 81#usize) (error : ProverRwRngNativeBody.std.io.error.Error)
+  (kind : ProverRwRngNativeBody.core.io.error.ErrorKind),
+  ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes public1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok bytes) →
+    hash (R1Z.ProverRwRngNativeProducer.publicHashInput bytes) = Aeneas.Std.Result.ok digest →
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.encode
+            (R1Z.ProverRwRngNativeProducer.contextFor digest a.mask_nonce) =
+          Aeneas.Std.Result.ok encoded →
+        hash (R1Z.ProverRwRngNativeProducer.bindingInput bytes encoded) = Aeneas.Std.Result.ok binding →
+          ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible s digest
+                a.mask_nonce =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, after) →
+            error.kind = Aeneas.Std.Result.ok kind →
+              ProverRwRngNativeBody.prover.prove_masked_attempt public1 compiled
+                  ProverRwRngNativeBody.transport.Variant.S2 hash a s =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                    { directory := after.directory, last_error := some kind })
+'R1Z.ProverRwRngNativeProducer.selected_io_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+class ProverRwRngNative.NativeTypes : Type 1
+number of parameters: 0
+fields:
+  ProverRwRngNative.NativeTypes.inner : Type
+  ProverRwRngNative.NativeTypes.nonzero : Type → Type → Type
+constructor:
+  ProverRwRngNative.NativeTypes.mk (inner : Type) (nonzero : Type → Type → Type) : ProverRwRngNative.NativeTypes
+class ProverRwRngNative.ErasureFns : Type 1
+number of parameters: 0
+fields:
+  ProverRwRngNative.ErasureFns.scalar : {Z : Type} →
+      ProverRwRngNative.zeroize.DefaultIsZeroes Z → Z → Aeneas.Std.Result Z
+  ProverRwRngNative.ErasureFns.array : {Z : Type} →
+      {N : Aeneas.Std.Usize} →
+        ProverRwRngNative.zeroize.Zeroize Z → Aeneas.Std.Array Z N → Aeneas.Std.Result (Aeneas.Std.Array Z N)
+constructor:
+  ProverRwRngNative.ErasureFns.mk
+    (scalar : {Z : Type} → ProverRwRngNative.zeroize.DefaultIsZeroes Z → Z → Aeneas.Std.Result Z)
+    (array :
+      {Z : Type} →
+        {N : Aeneas.Std.Usize} →
+          ProverRwRngNative.zeroize.Zeroize Z → Aeneas.Std.Array Z N → Aeneas.Std.Result (Aeneas.Std.Array Z N)) :
+    ProverRwRngNative.ErasureFns
+class ProverRwRngNativeBody.TypeLeaves : Type 1
+number of parameters: 0
+fields:
+  ProverRwRngNativeBody.TypeLeaves.t0 : Type
+  ProverRwRngNativeBody.TypeLeaves.t1 : Type
+  ProverRwRngNativeBody.TypeLeaves.t2 : Type
+  ProverRwRngNativeBody.TypeLeaves.t3 : Type
+  ProverRwRngNativeBody.TypeLeaves.t4 : Type
+  ProverRwRngNativeBody.TypeLeaves.t5 : Type
+  ProverRwRngNativeBody.TypeLeaves.t6 : Type
+  ProverRwRngNativeBody.TypeLeaves.t7 : Type
+  ProverRwRngNativeBody.TypeLeaves.t8 : Type
+  ProverRwRngNativeBody.TypeLeaves.t9 : Type
+  ProverRwRngNativeBody.TypeLeaves.t10 : Type
+  ProverRwRngNativeBody.TypeLeaves.t11 : Type
+  ProverRwRngNativeBody.TypeLeaves.t12 : Type
+  ProverRwRngNativeBody.TypeLeaves.t13 : Type
+  ProverRwRngNativeBody.TypeLeaves.t14 : Type
+  ProverRwRngNativeBody.TypeLeaves.t15 : Type → Type
+constructor:
+  ProverRwRngNativeBody.TypeLeaves.mk (t0 t1 t2 t3 t4 t5 t6 t7 t8 t9 t10 t11 t12 t13 t14 : Type) (t15 : Type → Type) :
+    ProverRwRngNativeBody.TypeLeaves
+class ProverRwRngNativeBody.LocalLeaves [ProverRwRngNativeBody.TypeLeaves] : Type 1
+number of parameters: 1
+fields:
+  ProverRwRngNativeBody.LocalLeaves.f0 : {T : Type} →
+      Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bool
+  ProverRwRngNativeBody.LocalLeaves.f1 : ProverRwRngNativeBody.std.io.error.Error →
+      Aeneas.Std.Result ProverRwRngNativeBody.core.io.error.ErrorKind
+  ProverRwRngNativeBody.LocalLeaves.f2 : {T : Type} →
+      Type →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.alloc.vec.Vec T →
+            Aeneas.Std.Result (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) (Aeneas.Std.alloc.vec.Vec T))
+  ProverRwRngNativeBody.LocalLeaves.f3 : ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+      Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn
+  ProverRwRngNativeBody.LocalLeaves.f4 : ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+      Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  ProverRwRngNativeBody.LocalLeaves.f5 : ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact →
+      Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact
+  ProverRwRngNativeBody.LocalLeaves.f6 : Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact
+  ProverRwRngNativeBody.LocalLeaves.f7 : ProverRwRngNativeBody.aspis_core.field.QM31 →
+      ProverRwRngNativeBody.aspis_core.field.QM31 → Aeneas.Std.Result Bool
+  ProverRwRngNativeBody.LocalLeaves.f8 : Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.QM31
+  ProverRwRngNativeBody.LocalLeaves.f9 : Aeneas.Std.Result Aeneas.Std.U8
+  ProverRwRngNativeBody.LocalLeaves.f10 : Aeneas.Std.Result Aeneas.Std.U8
+  ProverRwRngNativeBody.LocalLeaves.f11 : Aeneas.Std.Result Aeneas.Std.U8
+  ProverRwRngNativeBody.LocalLeaves.f12 : {Z : Type} →
+      {N : Aeneas.Std.Usize} →
+        ProverRwRngNativeBody.zeroize.Zeroize Z → Aeneas.Std.Array Z N → Aeneas.Std.Result (Aeneas.Std.Array Z N)
+  ProverRwRngNativeBody.LocalLeaves.f13 : {Z : Type} →
+      ProverRwRngNativeBody.zeroize.DefaultIsZeroes Z → Z → Aeneas.Std.Result Z
+  ProverRwRngNativeBody.LocalLeaves.f14 : {Z : Type} →
+      ProverRwRngNativeBody.zeroize.Zeroize Z →
+        ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result (ProverRwRngNativeBody.zeroize.Zeroizing Z)
+  ProverRwRngNativeBody.LocalLeaves.f15 : {T Z : Type} →
+      Aeneas.Std.core.convert.AsRef Z T →
+        ProverRwRngNativeBody.zeroize.Zeroize Z → ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result T
+  ProverRwRngNativeBody.LocalLeaves.f16 : {Z : Type} →
+      ProverRwRngNativeBody.zeroize.Zeroize Z → ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result Z
+  ProverRwRngNativeBody.LocalLeaves.f17 : {Z : Type} →
+      ProverRwRngNativeBody.zeroize.Zeroize Z → Z → Aeneas.Std.Result (ProverRwRngNativeBody.zeroize.Zeroizing Z)
+  ProverRwRngNativeBody.LocalLeaves.f18 : {T0 : Type} →
+      ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0 →
+        (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+            Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                T0 →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result
+                        ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial
+                        ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError ×
+                      T0)
+  ProverRwRngNativeBody.LocalLeaves.f19 : ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets →
+      (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+          Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.QM31)
+              ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError)
+  ProverRwRngNativeBody.LocalLeaves.f20 : ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result Bool ProverRwRngNativeBody.std.io.error.Error ×
+              ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  ProverRwRngNativeBody.LocalLeaves.f21 : ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+      ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result ProverRwRngNativeBody.aspis_prover.state_only_hiding.AppliedStateOnlyMasks
+              ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError ×
+            ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation)
+  ProverRwRngNativeBody.LocalLeaves.f22 : Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U16 64#usize)
+        ProverRwRngNativeBody.aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1)
+  ProverRwRngNativeBody.LocalLeaves.f23 : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          ProverRwRngNativeBody.aspis_core.state_only_prefix.r0.Error)
+  ProverRwRngNativeBody.LocalLeaves.f24 : Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+      Aeneas.Std.Result (Option ProverRwRngNativeBody.aspis_core.field.QM31)
+  ProverRwRngNativeBody.LocalLeaves.f25 : ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+      Aeneas.Std.Result ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation
+  ProverRwRngNativeBody.LocalLeaves.f26 : Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result ProverRwRngNativeBody.host_commitment.EncodingDomain
+        ProverRwRngNativeBody.aspis_core.r0.Error)
+  ProverRwRngNativeBody.LocalLeaves.f27 : {H T1 : Type} →
+      ProverRwRngNativeBody.aspis_core.digest.Digest32 H →
+        ProverRwRngNativeBody.host_semantic.Commitments T1 →
+          ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+              ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+                Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 10#usize →
+                  Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                    Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                      Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                        T1 →
+                          H →
+                            ProverRwRngNativeBody.transport.Variant →
+                              Aeneas.Std.Result
+                                (Aeneas.Std.core.result.Result (ProverRwRngNativeBody.host_semantic.BuiltSemantics H)
+                                    ProverRwRngNativeBody.r1_wire.Error ×
+                                  T1)
+  ProverRwRngNativeBody.LocalLeaves.f28 : ProverRwRngNativeBody.prover.Backend →
+      Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+        Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                ProverRwRngNativeBody.r1_wire.Error ×
+              ProverRwRngNativeBody.prover.Backend)
+  ProverRwRngNativeBody.LocalLeaves.f29 : ProverRwRngNativeBody.prover.Backend →
+      Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 26#usize →
+        Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                ProverRwRngNativeBody.r1_wire.Error ×
+              ProverRwRngNativeBody.prover.Backend)
+  ProverRwRngNativeBody.LocalLeaves.f30 : ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      ProverRwRngNativeBody.transport.Variant →
+        (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+            Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+          ProverRwRngNativeBody.prover.Backend →
+            ProverRwRngNativeBody.host_semantic.BuiltSemantics ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+              ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                    ProverRwRngNativeBody.verifier.Error)
+  ProverRwRngNativeBody.LocalLeaves.f31 : ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets →
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+        (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+            Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+          Aeneas.Std.U8 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result ProverRwRngNativeBody.host_commitment.PrivateSalts
+                ProverRwRngNativeBody.verifier.Error)
+  ProverRwRngNativeBody.LocalLeaves.f32 : ProverRwRngNativeBody.r1_wire.Error →
+      Aeneas.Std.Result ProverRwRngNativeBody.verifier.Error
+  ProverRwRngNativeBody.LocalLeaves.f33 : Aeneas.Std.Slice
+        (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) →
+      Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 10#usize →
+        Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+          Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+            Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+              Aeneas.Std.Array Aeneas.Std.U16 64#usize →
+                Aeneas.Std.Result ProverRwRngNativeBody.prover.MaskedFixtureAudit
+  ProverRwRngNativeBody.LocalLeaves.f34 : Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+      Aeneas.Std.Result (Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize)
+constructor:
+  ProverRwRngNativeBody.LocalLeaves.mk [ProverRwRngNativeBody.TypeLeaves]
+    (f0 : {T : Type} → Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bool)
+    (f1 : ProverRwRngNativeBody.std.io.error.Error → Aeneas.Std.Result ProverRwRngNativeBody.core.io.error.ErrorKind)
+    (f2 :
+      {T : Type} →
+        Type →
+          (N : Aeneas.Std.Usize) →
+            Aeneas.Std.alloc.vec.Vec T →
+              Aeneas.Std.Result (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) (Aeneas.Std.alloc.vec.Vec T)))
+    (f3 :
+      ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+        Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn)
+    (f4 :
+      ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+        Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (f5 :
+      ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact →
+        Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact)
+    (f6 : Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact)
+    (f7 :
+      ProverRwRngNativeBody.aspis_core.field.QM31 →
+        ProverRwRngNativeBody.aspis_core.field.QM31 → Aeneas.Std.Result Bool)
+    (f8 : Aeneas.Std.Result ProverRwRngNativeBody.aspis_core.field.QM31) (f9 f10 f11 : Aeneas.Std.Result Aeneas.Std.U8)
+    (f12 :
+      {Z : Type} →
+        {N : Aeneas.Std.Usize} →
+          ProverRwRngNativeBody.zeroize.Zeroize Z → Aeneas.Std.Array Z N → Aeneas.Std.Result (Aeneas.Std.Array Z N))
+    (f13 : {Z : Type} → ProverRwRngNativeBody.zeroize.DefaultIsZeroes Z → Z → Aeneas.Std.Result Z)
+    (f14 :
+      {Z : Type} →
+        ProverRwRngNativeBody.zeroize.Zeroize Z →
+          ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result (ProverRwRngNativeBody.zeroize.Zeroizing Z))
+    (f15 :
+      {T Z : Type} →
+        Aeneas.Std.core.convert.AsRef Z T →
+          ProverRwRngNativeBody.zeroize.Zeroize Z → ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result T)
+    (f16 :
+      {Z : Type} →
+        ProverRwRngNativeBody.zeroize.Zeroize Z → ProverRwRngNativeBody.zeroize.Zeroizing Z → Aeneas.Std.Result Z)
+    (f17 :
+      {Z : Type} →
+        ProverRwRngNativeBody.zeroize.Zeroize Z → Z → Aeneas.Std.Result (ProverRwRngNativeBody.zeroize.Zeroizing Z))
+    (f18 :
+      {T0 : Type} →
+        ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0 →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+                Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                  T0 →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError ×
+                        T0))
+    (f19 :
+      ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets →
+        (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+            Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+          ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.QM31)
+                ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError))
+    (f20 :
+      ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Bool ProverRwRngNativeBody.std.io.error.Error ×
+                ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore))
+    (f21 :
+      ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+        ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result ProverRwRngNativeBody.aspis_prover.state_only_hiding.AppliedStateOnlyMasks
+                ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError ×
+              ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation))
+    (f22 :
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U16 64#usize)
+          ProverRwRngNativeBody.aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1))
+    (f23 :
+      ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+            ProverRwRngNativeBody.aspis_core.state_only_prefix.r0.Error))
+    (f24 :
+      Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Option ProverRwRngNativeBody.aspis_core.field.QM31))
+    (f25 :
+      ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+        Aeneas.Std.Result ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation)
+    (f26 :
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result ProverRwRngNativeBody.host_commitment.EncodingDomain
+          ProverRwRngNativeBody.aspis_core.r0.Error))
+    (f27 :
+      {H T1 : Type} →
+        ProverRwRngNativeBody.aspis_core.digest.Digest32 H →
+          ProverRwRngNativeBody.host_semantic.Commitments T1 →
+            ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+              ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+                ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation →
+                  Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 10#usize →
+                    Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                      Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                        Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                          T1 →
+                            H →
+                              ProverRwRngNativeBody.transport.Variant →
+                                Aeneas.Std.Result
+                                  (Aeneas.Std.core.result.Result (ProverRwRngNativeBody.host_semantic.BuiltSemantics H)
+                                      ProverRwRngNativeBody.r1_wire.Error ×
+                                    T1))
+    (f28 :
+      ProverRwRngNativeBody.prover.Backend →
+        Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+          Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                  ProverRwRngNativeBody.r1_wire.Error ×
+                ProverRwRngNativeBody.prover.Backend))
+    (f29 :
+      ProverRwRngNativeBody.prover.Backend →
+        Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 26#usize →
+          Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+                  ProverRwRngNativeBody.r1_wire.Error ×
+                ProverRwRngNativeBody.prover.Backend))
+    (f30 :
+      ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        ProverRwRngNativeBody.transport.Variant →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            ProverRwRngNativeBody.prover.Backend →
+              ProverRwRngNativeBody.host_semantic.BuiltSemantics ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn →
+                ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                    ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                      ProverRwRngNativeBody.verifier.Error))
+    (f31 :
+      ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets →
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            Aeneas.Std.U8 →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result ProverRwRngNativeBody.host_commitment.PrivateSalts
+                  ProverRwRngNativeBody.verifier.Error))
+    (f32 : ProverRwRngNativeBody.r1_wire.Error → Aeneas.Std.Result ProverRwRngNativeBody.verifier.Error)
+    (f33 :
+      Aeneas.Std.Slice (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) →
+        Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwRngNativeBody.aspis_core.field.M31) 10#usize →
+          Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+            Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+              Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize →
+                Aeneas.Std.Array Aeneas.Std.U16 64#usize →
+                  Aeneas.Std.Result ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+    (f34 :
+      Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Aeneas.Std.Array ProverRwRngNativeBody.aspis_core.field.QM31 1024#usize)) :
+    ProverRwRngNativeBody.LocalLeaves
+structure ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore (Self : Type) : Type
+number of parameters: 1
+fields:
+  ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.reserve : Self →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result (Bool × Self)
+constructor:
+  ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore.mk {Self : Type}
+    (reserve :
+      Self →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result (Bool × Self)) :
+    ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore Self
+structure ProverRwRngNativeBody.prover.MaskedFixtureAudit : Type
+number of parameters: 0
+fields:
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.c1_columns_inactive_balanced : Aeneas.Std.Usize
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.mask_only_columns_inactive_balanced : Aeneas.Std.Usize
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.d_inactive_balanced : Bool
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.g_inactive_balanced : Bool
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.h1_padding_inactive_balanced : Bool
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.h1_total_balanced : Bool
+constructor:
+  ProverRwRngNativeBody.prover.MaskedFixtureAudit.mk
+    (c1_columns_inactive_balanced mask_only_columns_inactive_balanced : Aeneas.Std.Usize)
+    (d_inactive_balanced g_inactive_balanced h1_padding_inactive_balanced h1_total_balanced : Bool) :
+    ProverRwRngNativeBody.prover.MaskedFixtureAudit
+structure ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext : Type
+number of parameters: 0
+fields:
+  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.statement_digest : Aeneas.Std.Array
+      Aeneas.Std.U8 32#usize
+  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.mask_nonce : Aeneas.Std.Array Aeneas.Std.U8
+      32#usize
+  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.mask_layout_fingerprint : Aeneas.Std.U64
+  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.layout_factor_fingerprint : Aeneas.Std.U64
+constructor:
+  ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.mk
+    (statement_digest mask_nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (mask_layout_fingerprint layout_factor_fingerprint : Aeneas.Std.U64) :
+    ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext
+structure ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets : Type
+number of parameters: 0
+fields:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.mask_nonce : Aeneas.Std.Array
+      Aeneas.Std.U8 32#usize
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.field_mask_entropy : ProverRwRngNativeBody.zeroize.Zeroizing
+      (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.leaf_salt_seed : ProverRwRngNativeBody.zeroize.Zeroizing
+      (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+constructor:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.mk
+    (mask_nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (field_mask_entropy leaf_salt_seed :
+      ProverRwRngNativeBody.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :
+    ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+structure ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets : Type
+number of parameters: 0
+fields:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.mask_nonce : Aeneas.Std.Array
+      Aeneas.Std.U8 32#usize
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.precommit_binding : Aeneas.Std.Array
+      Aeneas.Std.U8 32#usize
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.reserved_context : ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.leaf_salt_seed : ProverRwRngNativeBody.zeroize.Zeroizing
+      (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.source_mask_seed : ProverRwRngNativeBody.zeroize.Zeroizing
+      (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+constructor:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets.mk
+    (mask_nonce precommit_binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (reserved_context : ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext)
+    (leaf_salt_seed source_mask_seed :
+      ProverRwRngNativeBody.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :
+    ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+structure ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+  [ProverRwRngNativeBody.TypeLeaves] : Type
+number of parameters: 1
+fields:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory : ProverRwRngNativeBody.std.path.PathBuf
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.last_error : Option
+      ProverRwRngNativeBody.core.io.error.ErrorKind
+constructor:
+  ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.mk
+    [ProverRwRngNativeBody.TypeLeaves] (directory : ProverRwRngNativeBody.std.path.PathBuf)
+    (last_error : Option ProverRwRngNativeBody.core.io.error.ErrorKind) :
+    ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+def R1Z.ProverRwRngNativeBuildControl.LayoutOk : R1Z.ProverRwRngNativeReserve.Secrets →
+  R1Z.ProverRwRngNativeReserve.Context → Prop :=
+fun a c =>
+  c.mask_nonce = a.mask_nonce ∧
+    c.mask_layout_fingerprint =
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1 ∧
+      c.layout_factor_fingerprint =
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1
+def R1Z.ProverRwRngNativeReservationInvariant.Returns : {T : Type} → (T → Prop) → Aeneas.Std.Result T → Prop :=
+fun {T} p r => ∀ (out : T), r = Aeneas.Std.Result.ok out → p out
+def R1Z.ProverRwRngNativeReservationInvariant.AfterReserve : [inst : ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    {S : Type} →
+      R1Z.ProverRwRngNativeReserve.Secrets → S → R1Z.ProverRwRngNativeReservationInvariant.Status × S → Prop :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] {S} a after out =>
+  out.2 = after ∧
+    ∀
+      (material :
+        ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial),
+      out.1 = Aeneas.Std.core.result.Result.Ok material →
+        ∃ cleared, R1Z.ProverRwRngNativeReservationInvariant.clearEntropy a = Aeneas.Std.Result.ok cleared
+@[reducible] def R1Z.ProverRwRngNativeReservationInvariant.clearEntropy : [inst : ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    R1Z.ProverRwRngNativeReserve.Secrets →
+      Aeneas.Std.Result (ProverRwRngNativeBody.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] a =>
+  ProverRwRngNativeBody.zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+    (ProverRwRngNativeBody.Array.Insts.ZeroizeZeroize 32#usize
+      (ProverRwRngNativeBody.zeroize.Zeroize.Blanket ProverRwRngNativeBody.U8.Insts.ZeroizeDefaultIsZeroes))
+    a.field_mask_entropy
+def R1Z.ProverRwRngNativeProducer.contextFor : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Array Aeneas.Std.U8 32#usize → R1Z.ProverRwRngNativeReserve.Context :=
+fun digest nonce =>
+  { statement_digest := digest, mask_nonce := nonce,
+    mask_layout_fingerprint :=
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1,
+    layout_factor_fingerprint :=
+      ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1 }
+def R1Z.ProverRwRngNativeProducer.privateDomain : Aeneas.Std.Array Aeneas.Std.U8 30#usize :=
+Aeneas.Std.Array.make 30#usize
+  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 51#u8, 58#u8, 80#u8,
+    82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8, 80#u8, 84#u8]
+  R1Z.ProverRwRngNativeProducer.privateDomain._proof_18
+def R1Z.ProverRwRngNativeProducer.publicHashInput : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+  Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun bytes => (Aeneas.Std.Array.make 1#usize [bytes.deref] ⋯).to_slice
+def R1Z.ProverRwRngNativeProducer.bindingInput : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+  Aeneas.Std.Array Aeneas.Std.U8 81#usize → Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun bytes encoded =>
+  (Aeneas.Std.Array.make 4#usize
+      [R1Z.ProverRwRngNativeProducer.privateDomain.to_slice, bytes.deref,
+        (Aeneas.Std.Array.make 1#usize [2#u8] R1Z.ProverRwRngNativeProducer.bindingInput._proof_4).to_slice,
+        encoded.to_slice]
+      ⋯).to_slice
+def ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve : ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce →
+  Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Result (Bool × ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce) :=
+fun self statement_digest mask_nonce =>
+  if self.consumed = true then Aeneas.Std.Result.ok (false, self)
+  else do
+    let b ←
+      Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 statement_digest
+          self.statement_digest
+    if b = true then Aeneas.Std.Result.ok (false, self)
+      else do
+        let b1 ←
+          Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 mask_nonce self.mask_nonce
+        if b1 = true then Aeneas.Std.Result.ok (false, self)
+          else
+            Aeneas.Std.Result.ok
+              (true, { statement_digest := self.statement_digest, mask_nonce := self.mask_nonce, consumed := true })
+def ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1 : [inst :
+    ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    {T0 : Type} →
+      ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0 →
+        ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+                T0 →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result
+                        (ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                        ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError ×
+                      T0) :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] {T0}
+    state_only_hidingStateOnlyMaskNonceStoreInst self hash precommit_binding context nonce_store =>
+  do
+  let b ←
+    Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 context.mask_nonce self.mask_nonce
+  if b = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+            ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout,
+          nonce_store)
+    else
+      if
+          (context.mask_layout_fingerprint !=
+              ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1) =
+            true then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+              ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout,
+            nonce_store)
+      else
+        if
+            (context.layout_factor_fingerprint !=
+                ProverRwRngNativeBody.aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1) =
+              true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+                ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout,
+              nonce_store)
+        else do
+          let (b1, nonce_store1) ←
+            state_only_hidingStateOnlyMaskNonceStoreInst.reserve nonce_store context.statement_digest context.mask_nonce
+          if b1 = true then do
+              let a ←
+                ProverRwRngNativeBody.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                    (ProverRwRngNativeBody.Array.Insts.ZeroizeZeroize 32#usize
+                      (ProverRwRngNativeBody.zeroize.Zeroize.Blanket
+                        ProverRwRngNativeBody.U8.Insts.ZeroizeDefaultIsZeroes))
+                    self.field_mask_entropy
+              let (r, pre_reserved) ←
+                ProverRwRngNativeBody.aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+                    ProverRwRngNativeBody.aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                    hash precommit_binding context a
+                    { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce,
+                      consumed := false }
+              let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                  if pre_reserved.consumed = true then do
+                    let s ← Aeneas.Std.lift precommit_binding.to_slice
+                    let a1 ← context.encode
+                    let s1 ← Aeneas.Std.lift a1.to_slice
+                    let s2 ←
+                      ProverRwRngNativeBody.zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref
+                          (Aeneas.Std.Array.Insts.CoreConvertAsRefSlice Aeneas.Std.U8 32#usize)
+                          (ProverRwRngNativeBody.Array.Insts.ZeroizeZeroize 32#usize
+                            (ProverRwRngNativeBody.zeroize.Zeroize.Blanket
+                              ProverRwRngNativeBody.U8.Insts.ZeroizeDefaultIsZeroes))
+                          self.field_mask_entropy
+                    let s3 ←
+                      Aeneas.Std.lift
+                          (Aeneas.Std.Array.make 4#usize
+                              [ProverRwRngNativeBody.aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1,
+                                s2]
+                              ⋯).to_slice
+                    let a2 ← hash s3
+                    let source_mask_seed ←
+                      ProverRwRngNativeBody.zeroize.Zeroizing.new
+                          (ProverRwRngNativeBody.Array.Insts.ZeroizeZeroize 32#usize
+                            (ProverRwRngNativeBody.zeroize.Zeroize.Blanket
+                              ProverRwRngNativeBody.U8.Insts.ZeroizeDefaultIsZeroes))
+                          a2
+                    let _ ←
+                      ProverRwRngNativeBody.zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                          (ProverRwRngNativeBody.Array.Insts.ZeroizeZeroize 32#usize
+                            (ProverRwRngNativeBody.zeroize.Zeroize.Blanket
+                              ProverRwRngNativeBody.U8.Insts.ZeroizeDefaultIsZeroes))
+                          self.field_mask_entropy
+                    Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Ok
+                            ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                                reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                                source_mask_seed := source_mask_seed },
+                              val),
+                          nonce_store1)
+                  else
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                        nonce_store1)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (ProverRwRngNativeBody.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                        (Aeneas.Std.core.convert.FromSame
+                          ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError)
+                        residual
+                  Aeneas.Std.Result.ok (r1, nonce_store1)
+            else
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                    ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                  nonce_store1)
+def ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve : [inst :
+    ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Result
+            (Bool × ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] self statement_digest mask_nonce => do
+  let (r, self1) ← self.reserve_fallible statement_digest mask_nonce
+  match r with
+    | Aeneas.Std.core.result.Result.Ok reserved => Aeneas.Std.Result.ok (reserved, self1)
+    | Aeneas.Std.core.result.Result.Err error => do
+      let ek ← error.kind
+      Aeneas.Std.Result.ok (false, { directory := self1.directory, last_error := some ek })
+def ProverRwRngNativeBody.prover.prove_masked_with_attempt : [inst : ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    {T0 : Type} →
+      ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0 →
+        ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+            ProverRwRngNativeBody.transport.Variant →
+              (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+                  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+                ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext →
+                  Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                    ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets →
+                      T0 →
+                        Aeneas.Std.Result
+                          (Aeneas.Std.core.result.Result
+                              (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                              ProverRwRngNativeBody.verifier.Error ×
+                            T0) :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] {T0}
+    aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt
+    nonce_store =>
+  do
+  let (r, nonce_store1) ←
+    ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+        aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst attempt hash binding context nonce_store
+  let r1 ←
+    ProverRwRngNativeBody.core.result.Result.map_err
+        (Aeneas.Std.BuiltinFnOnce ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+          ProverRwRngNativeBody.verifier.Error)
+        r ProverRwRngNativeBody.prover.mask_error
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      let (reserved, material) := val
+      do
+      let noised_c1 ←
+        ProverRwRngNativeBody.aspis_statement.state_only_trace.StateOnlyTraceFoundation.Insts.CoreCloneClone.clone
+            compiled.semantic_c1
+      let (r2, noised_c11) ←
+        ProverRwRngNativeBody.aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1 noised_c1
+            material
+      let r3 ←
+        ProverRwRngNativeBody.core.result.Result.map_err
+            (ProverRwRngNativeBody.prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+              aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst)
+            r2 ()
+      let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf1 with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+          let r4 ←
+            ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
+          let r5 ←
+            ProverRwRngNativeBody.core.result.Result.map_err
+                (ProverRwRngNativeBody.prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
+                  aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst)
+                r4 ()
+          let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf2 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+              let r6 ← reserved.derive_pool_v1_pair_forest_zero_factor_d hash context
+              let r7 ←
+                ProverRwRngNativeBody.core.result.Result.map_err
+                    (Aeneas.Std.BuiltinFnOnce
+                      ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+                      ProverRwRngNativeBody.verifier.Error)
+                    r6 ProverRwRngNativeBody.prover.mask_error
+              let cf3 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7
+              match cf3 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let r8 ←
+                    ProverRwRngNativeBody.Array.Insts.CoreConvertTryFromVecVec.try_from Aeneas.Std.Global 1024#usize
+                        val3
+                  let r9 ←
+                    ProverRwRngNativeBody.core.result.Result.map_err
+                        (ProverRwRngNativeBody.prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
+                          aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst)
+                        r8 ()
+                  let cf4 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+                  match cf4 with
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 =>
+                      have i := val1.g.len;
+                      if (i != 1024#usize) = true then
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                            nonce_store1)
+                      else
+                        have i1 := val1.h1_padding.len;
+                        if (i1 != 1024#usize) = true then
+                          Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                              nonce_store1)
+                        else
+                          have s := val1.g.deref;
+                          do
+                          let g ← ProverRwRngNativeBody.prover.fixed_k_column s
+                          have s1 : Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 :=
+                            val1.h1_padding.deref
+                          let h1_padding ← ProverRwRngNativeBody.prover.fixed_k_column s1
+                          let s2 ← Aeneas.Std.lift noised_c11.c1.to_slice
+                          let audit ←
+                            ProverRwRngNativeBody.prover.audit_masks s2 val1.mask_only_c1 val4 g h1_padding val2
+                          if (audit.c1_columns_inactive_balanced != 16#usize) = true then
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                                  nonce_store1)
+                            else
+                              if (audit.mask_only_columns_inactive_balanced != 10#usize) = true then
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                                    nonce_store1)
+                              else
+                                if audit.d_inactive_balanced = true then
+                                  if audit.g_inactive_balanced = true then
+                                    if audit.h1_padding_inactive_balanced = true then do
+                                      let i2 ← ProverRwRngNativeBody.aspis_core.r0.merkle.C1_TAG
+                                      let r10 ←
+                                        ProverRwRngNativeBody.prover.derive_private_salts reserved context hash i2
+                                      let cf5 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r10
+                                      match cf5 with
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                          let i3 ← ProverRwRngNativeBody.aspis_core.r0.merkle.C2_TAG
+                                          let r11 ←
+                                            ProverRwRngNativeBody.prover.derive_private_salts reserved context hash i3
+                                          let cf6 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r11
+                                          match cf6 with
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val6 => do
+                                              let r12 ← ProverRwRngNativeBody.host_commitment.EncodingDomain.new
+                                              let r13 ←
+                                                ProverRwRngNativeBody.core.result.Result.map_err
+                                                    (ProverRwRngNativeBody.prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                      aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst)
+                                                    r12 ()
+                                              let cf7 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r13
+                                              match cf7 with
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val7 => do
+                                                  let we ←
+                                                    ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact.ZERO
+                                                  have a :
+                                                    Aeneas.Std.Array
+                                                      ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact
+                                                      1024#usize :=
+                                                    Aeneas.Std.Array.repeat 1024#usize we
+                                                  let v ←
+                                                    Aeneas.Std.alloc.vec.from_elem
+                                                        (Aeneas.Std.core.clone.CloneArray 1024#usize
+                                                          ProverRwRngNativeBody.aspis_core.field.wide_exact.WideExact.Insts.CoreCloneClone)
+                                                        a 29#usize
+                                                  let (r14, backend) ←
+                                                    ProverRwRngNativeBody.host_semantic.build_with_material
+                                                        ProverRwRngNativeBody.aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                                                        ProverRwRngNativeBody.prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
+                                                        public1 compiled noised_c11 val1.mask_only_c1 val4 g h1_padding
+                                                        { hash := hash, variant := variant, domain := val7,
+                                                          messages := v, c1 := none, c2 := none, c1_salts := some val5,
+                                                          c2_salts := some val6 }
+                                                        hash variant
+                                                  let r15 ←
+                                                    ProverRwRngNativeBody.core.result.Result.map_err
+                                                        (Aeneas.Std.BuiltinFnOnce ProverRwRngNativeBody.r1_wire.Error
+                                                          ProverRwRngNativeBody.verifier.Error)
+                                                        r14 ProverRwRngNativeBody.prover.semantic_error
+                                                  let cf8 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r15
+                                                  match cf8 with
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                      let v1 ← val8.columns.index_usize 26#usize
+                                                      have s3 :
+                                                        Aeneas.Std.Slice ProverRwRngNativeBody.aspis_core.field.QM31 :=
+                                                        v1.deref
+                                                      let o ←
+                                                        ProverRwRngNativeBody.aspis_statement.state_only_semantic.state_only_copy_helper_sum
+                                                            s3
+                                                      let q ← ProverRwRngNativeBody.aspis_core.field.QM31.ZERO
+                                                      let h1_total_balanced ←
+                                                        ProverRwRngNativeBody.core.option.Option.Insts.CoreCmpPartialEqOption.eq
+                                                            ProverRwRngNativeBody.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                                                            o (some q)
+                                                      if h1_total_balanced = true then do
+                                                          let r16 ←
+                                                            ProverRwRngNativeBody.prover.prove_from_semantics public1
+                                                                variant hash backend val8 (reserved, context)
+                                                          let cf9 ←
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r16
+                                                          match cf9 with
+                                                            |
+                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                val9 =>
+                                                              Aeneas.Std.Result.ok
+                                                                (Aeneas.Std.core.result.Result.Ok
+                                                                    (val9,
+                                                                      {
+                                                                        c1_columns_inactive_balanced :=
+                                                                          audit.c1_columns_inactive_balanced,
+                                                                        mask_only_columns_inactive_balanced :=
+                                                                          audit.mask_only_columns_inactive_balanced,
+                                                                        d_inactive_balanced :=
+                                                                          audit.d_inactive_balanced,
+                                                                        g_inactive_balanced :=
+                                                                          audit.g_inactive_balanced,
+                                                                        h1_padding_inactive_balanced :=
+                                                                          audit.h1_padding_inactive_balanced,
+                                                                        h1_total_balanced := true }),
+                                                                  nonce_store1)
+                                                            |
+                                                            Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                residual =>
+                                                              do
+                                                              let r17 ←
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                                                                      ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                                                                    (Aeneas.Std.core.convert.FromSame
+                                                                      ProverRwRngNativeBody.verifier.Error)
+                                                                    residual
+                                                              Aeneas.Std.Result.ok (r17, nonce_store1)
+                                                        else
+                                                          Aeneas.Std.Result.ok
+                                                            (Aeneas.Std.core.result.Result.Err
+                                                                ProverRwRngNativeBody.verifier.Error.Semantic,
+                                                              nonce_store1)
+                                                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r16 ←
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                                                              ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                                                            (Aeneas.Std.core.convert.FromSame
+                                                              ProverRwRngNativeBody.verifier.Error)
+                                                            residual
+                                                      Aeneas.Std.Result.ok (r16, nonce_store1)
+                                                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r14 ←
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                                                          ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                                                        (Aeneas.Std.core.convert.FromSame
+                                                          ProverRwRngNativeBody.verifier.Error)
+                                                        residual
+                                                  Aeneas.Std.Result.ok (r14, nonce_store1)
+                                            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r12 ←
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                                                      ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                                                    (Aeneas.Std.core.convert.FromSame
+                                                      ProverRwRngNativeBody.verifier.Error)
+                                                    residual
+                                              Aeneas.Std.Result.ok (r12, nonce_store1)
+                                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r11 ←
+                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 ×
+                                                  ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                                                (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error)
+                                                residual
+                                          Aeneas.Std.Result.ok (r11, nonce_store1)
+                                    else
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.result.Result.Err
+                                            ProverRwRngNativeBody.verifier.Error.Semantic,
+                                          nonce_store1)
+                                  else
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                                        nonce_store1)
+                                else
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.core.result.Result.Err ProverRwRngNativeBody.verifier.Error.Semantic,
+                                      nonce_store1)
+                    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                      let r10 ←
+                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                            (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+                      Aeneas.Std.Result.ok (r10, nonce_store1)
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                  let r8 ←
+                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                        (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+                  Aeneas.Std.Result.ok (r8, nonce_store1)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                    (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+              Aeneas.Std.Result.ok (r6, nonce_store1)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r4 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+          Aeneas.Std.Result.ok (r4, nonce_store1)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+            (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, nonce_store1)
+def ProverRwRngNativeBody.prover.prove_masked_attempt : [inst : ProverRwRngNativeBody.TypeLeaves] →
+  [ProverRwRngNativeBody.LocalLeaves] →
+    ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      ProverRwRngNativeBody.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 →
+        ProverRwRngNativeBody.transport.Variant →
+          (Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+              Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) →
+            ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets →
+              ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result
+                      (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+                      ProverRwRngNativeBody.verifier.Error ×
+                    ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) :=
+fun [ProverRwRngNativeBody.TypeLeaves] [ProverRwRngNativeBody.LocalLeaves] public1 compiled variant hash attempt
+    nonce_store =>
+  do
+  let r ← public1.public_bytes
+  let r1 ←
+    ProverRwRngNativeBody.core.result.Result.map_err
+        ProverRwRngNativeBody.prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      let s := val.deref;
+      do
+      let s1 ← Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [s] ⋯).to_slice
+      let a ← hash s1
+      let a1 ← ProverRwRngNativeBody.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce attempt
+      let context ←
+        ProverRwRngNativeBody.aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a a1
+      let s2 ←
+        Aeneas.Std.lift
+            (Aeneas.Std.Array.make 30#usize
+                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 51#u8,
+                  58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8,
+                  80#u8, 84#u8]
+                ProverRwRngNativeBody.prover.prove_masked_attempt._proof_16).to_slice
+      let s3 : Aeneas.Std.Slice Aeneas.Std.U8 := val.deref
+      let i ← variant.tag
+      let s4 ← Aeneas.Std.lift (Aeneas.Std.Array.make 1#usize [i] ⋯).to_slice
+      let a2 ← context.encode
+      let s5 ← Aeneas.Std.lift a2.to_slice
+      let s6 ← Aeneas.Std.lift (Aeneas.Std.Array.make 4#usize [s2, s3, s4, s5] ⋯).to_slice
+      let binding ← hash s6
+      ProverRwRngNativeBody.prover.prove_masked_with_attempt
+          ProverRwRngNativeBody.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+          public1 compiled variant hash context binding attempt nonce_store
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+      let r2 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × ProverRwRngNativeBody.prover.MaskedFixtureAudit)
+            (Aeneas.Std.core.convert.FromSame ProverRwRngNativeBody.verifier.Error) residual
+      Aeneas.Std.Result.ok (r2, nonce_store)
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

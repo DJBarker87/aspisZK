@@ -131,3 +131,29 @@ successful bytes/context-to-Raw, L1/L2 and full ordered event correspondence
 remain open. No shipped architecture change has been shown necessary or made.
 Later adoption still needs all3 current ELF pins, native event/status gates,
 H5 interleaved slowdown<=10% and quiet-host<15s; none ran here.
+
+## Focused validation and allocation
+
+Proof revision `5296e55148dcf6687afaef878a5ef9e872b9a160` is audited by11523:
+`R1Z/ProverRwRngNativeAudit`, exit0, wall1.26s, peak RSS2,631,692KiB,
+swap0;19 complete theorem signatures/axioms reports, all standard axioms
+(one needs none). The audit prints both parameter interfaces and the complete
+native producer/reservation bodies. Exact command, source/dependency hashes,
+full output and time are retained under `evidence/prover-rw-20261023/rng-native/`.
+
+New allocation:24/60 actual Lean launches (13 green,11 failed), IDs11500–11523;
+36 remain. Original stage3=100/100 and owner/caller=60/60 are untouched;
+cumulative184/220. Kani44/60 unchanged,16 remain. No full manifest or repeated
+finite fixture/runtime test. Five optimized Charon and five capped Aeneas
+attempts, plus dependency resolution, are retained. Every launch checked
+populated reservations below55GiB and kept Lean5G/7G or Rust6G/8G caps,
+MemorySwapMax0/TasksMax64. No cap change, heartbeat/recursion override or
+resource-failure rerun. Source map and adaptation `--check` pass.
+
+`reserve_fallible` is explicitly a filesystem **component cut**, including
+reservation-path hash/allocation, create_new, writes and file/directory sync;
+none of that durable implementation is proved by the adapter/control theorem.
+Successful native body/audit association and installation of its opaque sorts
+remain open. The prototype zeroize dependency pin is resolved; physical
+zeroization and native entropy-error transport are not. Target not yet
+established.
