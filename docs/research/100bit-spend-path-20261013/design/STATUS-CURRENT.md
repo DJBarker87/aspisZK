@@ -1,6 +1,6 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Current coordinator checkpoint — 2026-10-24 18:39 BST
+## Current coordinator checkpoint — 2026-10-24 19:23 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
 supersedes the older status tables and dated progress entries below. The
@@ -13,7 +13,8 @@ never uses. Concrete preparation supplies its <=115 read bound, but the
 original mixed-cache evidence on branch `codex/cx-port17release-20261024`
 remains **withheld**. A new kernel-checked logical reconstruction preserves the
 selected preparation/driver/accounting terms; it has passed initial source and
-receipt review and is undergoing final rejection-probe validation. This does
+receipt review; rejection probes passed, and the final audit against refreshed
+dependency objects is pending. This does
 not certify external textual-module provenance, IR/native or release identity.
 Residual other-operation budgets and concrete native/source/artifact joins
 remain open.
@@ -57,7 +58,7 @@ whole-prover identical-coin/differential gates, quiet-host median<15s and<=10%
 slowdown, final artifact audit and coherent replay. Existing fixture and
 component evidence cannot substitute for these obligations.
 
-Live managed tasks: Port18VALIDATE, ResumeP6 and Port20ALLOC, each on its
+Live managed tasks: Port18FINAL, ResumeP6 and Port20ALLOC, each on its
 isolated candidate branch with its archived hard budget and resource rules.
 Port20ALLOC follows the reviewed Port19 inventory at the actual heap-filled
 call-site association; it does not duplicate A-owned parser/preparation/powers.
@@ -427,3 +428,12 @@ Optimized Charon054 actually passed atb2fdc3463b6ebabc24e1dcbef4644a750a9ea6ee: 
 Budgets now extraction54/56charged,2remaining; this step1guard+1actualCharon,0Aeneas. Backend15/16,Lean236/260,Kani57/60 remain. Rust checks/tests0/3,ELFcommands0/3 carry. ResumeP6 worker52487 now targets the concrete prospective resume/native-driver contract with every valid host NonZeroI32 getrandom error, exact live returned owners/control and real Drop events/order/frame. Reuse old zeroize proofs in their limited scopes; no Drop replacement, ghost-token-as-OS-world, source-erasure-by-assertion or generic Guard/backend campaign. If proof instrumentation is needed it must preserve actual destructor execution and justify erasure/noninterference/admissibility, lifetime/provenance limits explicit.
 
 At most2 of3 remaining Kani; existing2 extraction/24Lean slots and old Rust/ELF allowances only, no new formal allocation. Focused extraction keeps2GiB. NEW resume/event Kani scope may use LOWER3GiB/4GiB/noSwap/Tasks64, justified by056's2259732KiB aggregate predecessor;2GiB is too small for this class. This is a new contract, not a higher-cap OOM retry. Full fresh reservation+resident+7GiB reserve remains mandatory, no higher cap after failure. Native/world source/effect association, original factory equivalence/finite16, outer8/adaptive public policy/ledger, E1/L1/L2/L3/client, all3 ELF/whole-prover differential and performance/adoption gates remain open. Both deployed targets not yet established.
+
+
+## Addendum (lead, 2026-10-24): reconstruction rejection probes pass; fresh final audit pending
+
+Reviewed Port18VALIDATE01f9c7adf8/7cec03eac4/efaba1b848 handoff and complete rejection source. The same minimal imported baseline now rejects ill-typed False:=True.intro, a fresh self-reference, fresh two-name cycle, project axiom, unsafe/partial inputs and mismatched pre-existing declaration. Every expected rejection fails the test if accepted. An exact True.intro declaration and dependent consumer succeed in disposable environments; no probe theorem is installed/exported or leaked. The actual sameDeclaration guard is exercised. This validates orchestration of the existing kernel checker, not new mathematical trust.
+
+Upstream Lean.Replay notice/license/author attribution and exact source/version/hash/adapter diff are restored. The logical adapter body/program selections remain unchanged; old snapshots/logs are byte-identical. Helper/rejection and4 dependency-affected stages passed with zero swap; two compile failures are retained. The fresh final normal-import/17-axiom audit was not run because the8-slot continuation allowance was exhausted. Historical audit028 is explicitly reused old evidence, not current-dependency validation. No final merge/release acceptance yet.
+
+Reviewed cumulative usage312/356charged=307actualLean+5preLean,44available; Port20's separate12 remains additional/combined368. Port18FINAL53566 is now authorized AT MOST2 of those44 solely for current-dependency CheckedAudit and honest final manifest/source checking. No new global allocation, Kani/Rust/backend/extraction, proof/program selection changes or broad replay. Old mixed-cache evidence remains WITHHELD; logical bounds retainR and all native/source/SDK/artifact associations. Both deployed targets not yet established. Prompt archived.
