@@ -26,14 +26,15 @@ remain separate. Merged438cd6f576 adds allocator word/byte-frame lemmas and
 Port24's current all-three SBF artifact/source association is now reviewed and
 merged cb75d4d9ab; contemporaneous sysroot declaration identity and native
 primitive laws remain open. Default/devnet uses256KiB; Pool uses32KiB.
-Port23/25 mutable-push candidate remains unmerged: array continuation/scalar
-lemmas passed, final loop audit failed. Port26ROW71812 continues the actual
-row/Vec proof with8 newly assigned slots inside the same overall ceiling.
-Privacy scalar observer payload384->12 is structural evidence only; reused
-success-move association is recovered, current hook/draw/disposal native
-projection is open. ResumeMIR70362 has one ordinary compile attempt at1GiB
-with fresh gates; Kani59/60 final slot remains reserved. PrivacyLean240/260;
-known soundness339/368 before current jobs' usage. No adoption.
+Merged3e9998bbfc closes complete actual mutable-row versus owned Vec source
+content equality, all carriers/checked errors/frames. Native ordered effects,
+P6/R22/op6/release joins and residual budgets remain open. Current scalar MIR
+roles/flags/loans passed review after one1GiB ordinary compile; no native paired
+projection yet, Kani59/60 final slot reserved. PrivacyLean240/260,Rust2/3charges
+(actual builds1); known soundness347/368. SBFIDENTITY74948 investigates exact
+historical versus current toolchain provenance. ResourceTHREADS76108 reviews
+threaded/full uncovered resource accounting; half-slab proposal NOT adopted.
+No production adoption.
 
 Session A640d3ebcf6 caller-range packet is now reviewed: five source modules,
 selected receipts and immutable import/source metadata pass independent audit.
