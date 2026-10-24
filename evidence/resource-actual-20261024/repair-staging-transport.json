@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import hashlib,json,os,pathlib,sys\nroot=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-actual-20261024'\"'\"')\nmanifest=json.load(sys.stdin)\np=root/'\"'\"'manifest.json'\"'\"'; raw=p.read_bytes()\nexpected=json.dumps(manifest,sort_keys=True,indent=2).encode()\nassert raw==expected+bytes([92,110]), '\"'\"'not the recorded staging failure'\"'\"'\nbackup=root/'\"'\"'staging-malformed-manifest.raw'\"'\"'\nwith backup.open('\"'\"'xb'\"'\"') as f:f.write(raw)\nbackup.chmod(0o444)\np.chmod(0o600)\np.write_bytes(expected+bytes([10]))\np.chmod(0o444)\nassert json.loads(p.read_text())==manifest\nns={'\"'\"'__file__'\"'\"':str(root/'\"'\"'ResourceActual_host.py'\"'\"'),'\"'\"'__name__'\"'\"':'\"'\"'repair_preflight'\"'\"'}\nexec(compile((root/'\"'\"'ResourceActual_host.py'\"'\"').read_text(),ns['\"'\"'__file__'\"'\"'],'\"'\"'exec'\"'\"'),ns)\npins=ns['\"'\"'verify'\"'\"'](manifest)\nprint(json.dumps(dict(original_pin=ns['\"'\"'digest'\"'\"'](raw),corrected_pin=ns['\"'\"'filepin'\"'\"'](p),preflight=pins)))\n'"
+  ],
+  "exit": 1,
+  "print_axioms": "N/A",
+  "source_revision": "4d8529707a69fa60dd236c55c5ea49054d4c6361",
+  "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 6, in <module>\nAssertionError: not the recorded staging failure\n",
+  "stdin_pin": {
+    "sha256": "5fb9b779bbdf638b3031c29c48d006acccdbc0698f895fa18f3c6a6f418de740",
+    "size": 91264
+  },
+  "stdout": "",
+  "wall_seconds": 0.8969590421766043
+}
