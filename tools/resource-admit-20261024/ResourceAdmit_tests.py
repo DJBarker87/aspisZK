@@ -43,7 +43,7 @@ def virtual(s):
         if row['enabled']:
             for field,name in [('current','memory.current'),('cap','memory.max'),('high','memory.high'),('swap_max','memory.swap.max'),('swap_current','memory.swap.current')]:vals[name]='max' if row[field] is None else row[field]
             vals['memory.stat']=''.join(f'{k} {v}\n' for k,v in row['stat'].items())
-        for name,val in vals.items():files[p+'/'+name]=str(val)+'\n'
+        for name,val in vals.items():files[p+'/'+name]=str(val).rstrip('\n')+'\n'
         for i in row['identities']:
             prefix='/proc/'+str(i['tid']);pid=i['tid']
             files[prefix+'/stat']=f'{pid} (ResourceAdmit synthetic) '+' '.join(['S']+['0']*18+[str(i['starttime'])])+'\n'

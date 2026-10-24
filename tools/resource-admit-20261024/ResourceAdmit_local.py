@@ -73,17 +73,19 @@ def ssh_python(payload, label, environment=None, data=None):
 
 
 def tests():
+    label=sys.argv[2] if len(sys.argv)>2 else 'tests'
+    if not label.replace('-','').isalnum():raise ValueError('invalid receipt label')
     command=[sys.executable,'-B',str(HERE/'ResourceAdmit_tests.py')]
     start=time.monotonic()
-    with (OUT/'tests.log').open('x') as f:
+    with (OUT/(label+'.log')).open('x') as f:
         child=subprocess.Popen(command,stdout=f,stderr=subprocess.STDOUT)
         _,status,usage=os.wait4(child.pid,0)
         code=os.waitstatus_to_exitcode(status);child.returncode=code
-    save('tests-receipt.json',dict(command=command,exit=code,wall_seconds=time.monotonic()-start,
+    save(label+'-receipt.json',dict(command=command,exit=code,wall_seconds=time.monotonic()-start,
         peak_rss_bytes=usage.ru_maxrss if platform.system()=='Darwin' else usage.ru_maxrss*1024,swap=usage.ru_nswap,
         source_revision=revision(),sources={str(p.relative_to(ROOT)):host.filepin(p) for p in sorted(HERE.glob('*.py'))},
         reviewed_operational={name:{k:v[k] for k in ('revision','path','sha256','size')} for name,v in bundle().items()},
-        log_pin=host.filepin(OUT/'tests.log'),print_axioms='N/A',mode='offline synthetic only'))
+        log_pin=host.filepin(OUT/(label+'.log')),print_axioms='N/A',mode='offline synthetic only'))
     return code
 
 
