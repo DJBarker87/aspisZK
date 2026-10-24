@@ -54,3 +54,22 @@ sources. Earlier statements about3/5 apply to the original abi2 root, not the la
 production writer. Reader kani005/008 timed out and remain excluded. No unchanged
 native job will be repeated. Reader helper extraction will isolate current helpers
 instead of rerunning either timed-out whole reader.
+
+Stage 3: Port5Q2_Provenance.reached constructs S1S7S8StateProvenance with
+SAME raw Prepared inventory and SAME physical accumulator, conditional on the
+local ObservationBinding. The ten-step state is derived, not supplied as a
+provenance hypothesis. Accepted lean012: exit0,2.168861091s,4418988KiB,swap0,
+standard axioms. Preparing the expected frozen2 Context/Data Prepared still needs
+Session A's semantic port; merely naming PreparedFields does not prove that port.
+
+Port5Q2_writer_audit.py revalidates the successful production writer AND encode_k
+contract without rerunning either. It matches all173 shipped/dependency snapshot
+pins. The first collector invocation correctly rejected a whole harness file
+hash mismatch: later Port3 had APPENDED an independent production_reader module.
+The corrected collector checks the exact successful retained source/hash and
+proves it is a byte prefix of the current harness, retaining this distinction.
+No theorem/proof was run to repair the collector. writer-admission.json records
+exact inherited target/exit/wall/RSS/swap/revision and domain. This admits the
+certificate on the reached S2/64/next10 raw domain under the existing native/P6
+carrier boundary and exact caller lengths, not a new whole-op equality axiom.
+No native-to-ELF or soundness closure is claimed.
