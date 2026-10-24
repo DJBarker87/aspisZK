@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectOwner.lean:73:2: error: 'change' tactic failed, pattern
+  run (Array.repeat 32#usize 1#u8) 16#usize 17 0#usize ?m.140 = ?m.142
+is not definitionally equal to target
+  (match ok (1#u8 != 0#u8) with
+    | fail e =>
+      { boundary := Boundary.returned (fail e),
+        world :=
+          {
+            tape :=
+              ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput) ::
+                ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput) :: rest,
+            reads := reads } }
+    | div =>
+      { boundary := Boundary.returned div,
+        world :=
+          {
+            tape :=
+              ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput) ::
+                ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput) :: rest,
+            reads := reads } }
+    | ok false =>
+      {
+        boundary :=
+          Boundary.returned
+            (ok
+              (core.result.Result.Err aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)),
+        world :=
+          {
+            tape :=
+              ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput) ::
+                ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput) :: rest,
+            reads := reads } }
+    | ok true =>
+      run (Array.repeat 32#usize 1#u8) aspis_prover.state_only_entropy.ENTROPY_RETRY_LIMIT 17 0#usize
+        {
+          tape :=
+            ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput) ::
+              ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput) :: rest,
+          reads := reads }) =
+    {
+      boundary :=
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := Array.repeat 32#usize 1#u8, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 })),
+      world :=
+        { tape := rest,
+          reads :=
+            reads ++
+              [(ProverRwEntropyObstruction.zeroInput,
+                  ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput)),
+                (ProverRwEntropyObstruction.zeroInput,
+                  ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput))] } }
+'R1Z.ProverRwEffectOwner.pure_owner_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.rejected_nonce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.owner_tape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectOwner.owner_zero_then_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

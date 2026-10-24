@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1105); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+        let s6 ←
+          core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+              { start := 32#usize }
+        let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+        let a8 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back (to_slice_mut_back s4))
+        let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+        if b = true then do
+            let a9 ←
+              zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (deref_mut_back1 (to_slice_mut_back1 s7))
+            let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+            if b1 = true then
+                ok
+                  (done
+                    (core.result.Result.Ok
+                      { mask_nonce := nonce, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                        leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+              else do
+                let retry1 ← lift (retry.wrapping_add 1#usize)
+                ok (cont retry1)
+          else do
+            let retry1 ← lift (retry.wrapping_add 1#usize)
+            ok (cont retry1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          match residual with
+            | core.result.Result.Ok x =>
+              core.convert.Infallible.rec
+                (fun x =>
+                  Result
+                    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                      aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError))
+                x
+            | core.result.Result.Err e =>
+              ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os e))
+        ok (done r1)) =
+    ok (done (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectControl.lean:15:4: warning: This simp argument is unused:
+  aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵f̵t̵e̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲a̲f̲t̲e̲r̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      a̵s̵p̵i̵s̵_̵p̵r̵o̵v̵e̵r̵.̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵e̵n̵t̵r̵o̵p̵y̵.̵S̵t̵a̵t̵e̵O̵n̵l̵y̵A̵t̵t̵e̵m̵p̵t̵E̵n̵t̵r̵o̵p̵y̵E̵r̵r̵o̵r̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵o̵n̵v̵e̵r̵t̵F̵r̵o̵m̵E̵r̵r̵o̵r̵,̵aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError.from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectControl.lean:47:5: error: unexpected token 'prefix'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectControl.lean:47:13: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectControl.lean:54:40: error: unexpected token ']'; expected ':'
+'R1Z.ProverRwEffectControl.after_os_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.at_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.failed_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectControl.diverged_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectControl.lean:62:14: error(lean.unknownIdentifier): Unknown constant `os_error_read`
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.57
+	Maximum resident set size (kbytes): 4085820
+	Swaps: 0
+	Exit status: 1

@@ -1,0 +1,1329 @@
+{
+  "schema": "prover-rw-effect-interface-inspection-v1",
+  "utc": "2026-10-24T10:03:19.283041+00:00",
+  "source_revision": "7db89a0216818294add9efa77101568aed1a3629",
+  "mode": "read-only source inspection; no Lean/Kani/extraction launches",
+  "caller005_receipt": {
+    "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/receipts/aeneas-caller-005/receipt.json",
+    "sha256": "85bedc465fb1285d5dca49eec2768361856dada4eeb577967920e077da6370d2",
+    "bytes": 101562
+  },
+  "exact_command": [
+    "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-log-debug",
+    "Translate",
+    "-backend",
+    "lean",
+    "-namespace",
+    "ProverRwCaller",
+    "-dest",
+    "generated-caller-005",
+    "-split-files",
+    "-emit-json",
+    "ProverRwCaller.llbc"
+  ],
+  "backend_binary": {
+    "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+    "sha256": "4632746db1bf6c3953f2971078965a2a5a8ad6cf5f75636b46b397bc50c550b5",
+    "bytes": 49419624
+  },
+  "backend_source_revision": "b59d5188c082f704a418c7cb4e52ad69328002d1",
+  "backend_source_dirty": " M backends/lean/Aeneas/Tactic/Simproc/ReduceZMod/ReduceZMod.lean\n M backends/lean/Aeneas/Tactic/Step/Step.lean\n M backends/lean/AeneasMeta/BvEnumToBitVec.lean\n M backends/lean/AeneasMeta/Simp/Simp.lean\n M backends/lean/lake-manifest.json\n M backends/lean/lakefile.lean\n M backends/lean/lean-toolchain\n M src/PrePasses.ml\n M src/extract/Extract.ml\n M src/extract/ExtractBuiltinLean.ml\n M src/extract/ExtractTypes.ml\n M src/interp/Interp.ml\n M src/interp/InterpAbs.ml\n M src/interp/InterpAbs.mli\n M src/interp/InterpBorrows.ml\n M src/interp/InterpBorrowsCore.ml\n M src/interp/InterpExpansion.ml\n M src/interp/InterpExpressions.ml\n M src/interp/InterpExpressions.mli\n M src/interp/InterpJoin.ml\n M src/interp/InterpJoinCore.ml\n M src/interp/InterpLoops.ml\n M src/interp/InterpLoopsFixedPoint.ml\n M src/interp/InterpMatchCtxs.ml\n M src/interp/InterpMatchCtxs.mli\n M src/interp/InterpProjectors.ml\n M src/interp/InterpReduceCollapse.ml\n M src/interp/InterpReduceCollapse.mli\n M src/interp/InterpStatements.ml\n M src/interp/Invariants.ml\n M src/llbc/RegionsHierarchy.ml\n M src/llbc/TypesAnalysis.ml\n M src/llbc/TypesUtils.ml\n M src/symbolic/PrintSymbolicAst.ml\n M src/symbolic/SymbolicAst.ml\n M src/symbolic/SymbolicToPureAbs.ml\n M src/symbolic/SymbolicToPureExpressions.ml\n M src/symbolic/SymbolicToPureTypes.ml\n M src/symbolic/SynthesizeSymbolic.ml\n?? backends/lean/.lake.bad-lock-20260830/\n?? backends/lean/lake-manifest.json.bad-lock-20260830\n",
+  "inspected_sources": [
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/Config.ml",
+      "sha256": "81dd9fdb863e2c5e05407991f680a1a3c33eb01c289bf309a67a6f50fa66b35d",
+      "bytes": 21148,
+      "state_related_lines": []
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/Main.ml",
+      "sha256": "b268d72e877bd3e409e78e149445ab96e43fa3e107f2adb9491578b9e6627d24",
+      "bytes": 30859,
+      "state_related_lines": []
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/llbc/FunsAnalysis.ml",
+      "sha256": "bb46649cb8466a7bf028df8f0baa6af1367e900d6cff0ad4157cab30085fe580",
+      "bytes": 12979,
+      "state_related_lines": [
+        {
+          "line": 3,
+          "text": "      a function which can fail - this is false for globals)"
+        },
+        {
+          "line": 4,
+          "text": "    - can a function diverge (by being recursive, containing a loop or"
+        },
+        {
+          "line": 5,
+          "text": "      transitively calling a function which can diverge)"
+        },
+        {
+          "line": 6,
+          "text": "    - does a function perform stateful operations (i.e., do we need a state to"
+        },
+        {
+          "line": 7,
+          "text": "      translate it) *)"
+        },
+        {
+          "line": 8,
+          "text": ""
+        },
+        {
+          "line": 9,
+          "text": "open LlbcAst"
+        },
+        {
+          "line": 10,
+          "text": "open ExpressionsUtils"
+        },
+        {
+          "line": 11,
+          "text": "open Charon.GAstUtils"
+        },
+        {
+          "line": 12,
+          "text": "open Errors"
+        },
+        {
+          "line": 13,
+          "text": ""
+        },
+        {
+          "line": 14,
+          "text": "let log = Logging.funs_analysis_log"
+        },
+        {
+          "line": 20,
+          "text": "type fun_info = {"
+        },
+        {
+          "line": 21,
+          "text": "  can_fail : bool;"
+        },
+        {
+          "line": 22,
+          "text": "      (* Not used yet: all the extracted functions use an error monad *)"
+        },
+        {
+          "line": 23,
+          "text": "  stateful : bool;"
+        },
+        {
+          "line": 24,
+          "text": "  can_diverge : bool;"
+        },
+        {
+          "line": 25,
+          "text": "  (* The function can diverge if:"
+        },
+        {
+          "line": 26,
+          "text": "     - it is recursive"
+        },
+        {
+          "line": 27,
+          "text": "     - it contains a loop"
+        },
+        {
+          "line": 28,
+          "text": "     - it calls a functions which can diverge"
+        },
+        {
+          "line": 29,
+          "text": "  *)"
+        },
+        {
+          "line": 30,
+          "text": "  is_rec : bool;"
+        },
+        {
+          "line": 31,
+          "text": "      (* [true] if the function is recursive (or in a mutually recursive group) *)"
+        },
+        {
+          "line": 70,
+          "text": "      (method_id : Types.TraitMethodId.id) : unit ="
+        },
+        {
+          "line": 71,
+          "text": "    register_info"
+        },
+        {
+          "line": 72,
+          "text": "      (FunOrMethodId.Method (trait_decl_id, method_id))"
+        },
+        {
+          "line": 73,
+          "text": "      { can_fail = true; stateful = false; can_diverge = false; is_rec = false }"
+        },
+        {
+          "line": 74,
+          "text": "  in"
+        },
+        {
+          "line": 75,
+          "text": ""
+        },
+        {
+          "line": 76,
+          "text": "  TraitDeclId.Map.iter"
+        },
+        {
+          "line": 77,
+          "text": "    (fun trait_decl_id (trait_decl : trait_decl) ->"
+        },
+        {
+          "line": 78,
+          "text": "      Types.TraitMethodId.Map.iter"
+        },
+        {
+          "line": 79,
+          "text": "        (fun method_id _ -> register_trait_method_info trait_decl_id method_id)"
+        },
+        {
+          "line": 80,
+          "text": "        trait_decl.methods)"
+        },
+        {
+          "line": 81,
+          "text": "    m.trait_decls;"
+        },
+        {
+          "line": 92,
+          "text": "  let analyze_fun_decls (fun_ids : FunDeclId.Set.t) (d : fun_decl list) :"
+        },
+        {
+          "line": 93,
+          "text": "      fun_info ="
+        },
+        {
+          "line": 94,
+          "text": "    let can_fail = ref false in"
+        },
+        {
+          "line": 95,
+          "text": "    let stateful = ref false in"
+        },
+        {
+          "line": 96,
+          "text": "    let can_diverge = ref false in"
+        },
+        {
+          "line": 97,
+          "text": "    let is_rec = ref false in"
+        },
+        {
+          "line": 98,
+          "text": "    let group_has_builtin_info = ref false in"
+        },
+        {
+          "line": 99,
+          "text": "    let name_matcher_ctx : Charon.NameMatcher.ctx ="
+        },
+        {
+          "line": 100,
+          "text": "      Charon.NameMatcher.ctx_from_crate m"
+        },
+        {
+          "line": 101,
+          "text": "    in"
+        },
+        {
+          "line": 102,
+          "text": ""
+        },
+        {
+          "line": 103,
+          "text": "    (* We have some specialized knowledge of some library functions; we don't"
+        },
+        {
+          "line": 120,
+          "text": "        object (self)"
+        },
+        {
+          "line": 121,
+          "text": "          inherit [_] iter_statement as super"
+        },
+        {
+          "line": 122,
+          "text": "          method may_fail b = can_fail := !can_fail || b"
+        },
+        {
+          "line": 123,
+          "text": "          method maybe_stateful b = stateful := !stateful || b"
+        },
+        {
+          "line": 124,
+          "text": "          method! visit_statement _ st = super#visit_statement st.span st"
+        },
+        {
+          "line": 125,
+          "text": ""
+        },
+        {
+          "line": 126,
+          "text": "          (* Custom function called by hand, this isn't visit_fun_decl_id! *)"
+        },
+        {
+          "line": 127,
+          "text": "          method visit_fid span id ="
+        },
+        {
+          "line": 128,
+          "text": "            if FunDeclId.Set.mem id fun_ids then ("
+        },
+        {
+          "line": 129,
+          "text": "              can_diverge := true;"
+        },
+        {
+          "line": 130,
+          "text": "              is_rec := true)"
+        },
+        {
+          "line": 131,
+          "text": "            else"
+        },
+        {
+          "line": 137,
+          "text": "                   use of --exclude)\""
+        },
+        {
+          "line": 138,
+          "text": "              in"
+        },
+        {
+          "line": 139,
+          "text": "              self#may_fail info.can_fail;"
+        },
+        {
+          "line": 140,
+          "text": "              stateful := !stateful || info.stateful;"
+        },
+        {
+          "line": 141,
+          "text": "              can_diverge := !can_diverge || info.can_diverge"
+        },
+        {
+          "line": 142,
+          "text": ""
+        },
+        {
+          "line": 143,
+          "text": "          method! visit_Assert env a ="
+        },
+        {
+          "line": 144,
+          "text": "            self#may_fail true;"
+        },
+        {
+          "line": 145,
+          "text": "            super#visit_Assert env a"
+        },
+        {
+          "line": 146,
+          "text": ""
+        },
+        {
+          "line": 147,
+          "text": "          method! visit_rvalue env rv ="
+        },
+        {
+          "line": 148,
+          "text": "            match rv with"
+        },
+        {
+          "line": 188,
+          "text": "                match func.kind with"
+        },
+        {
+          "line": 189,
+          "text": "                | FunId (FRegular id) -> self#visit_fid env id"
+        },
+        {
+          "line": 190,
+          "text": "                | FunId (FBuiltin id) ->"
+        },
+        {
+          "line": 191,
+          "text": "                    (* None of the builtin functions can diverge nor are considered stateful *)"
+        },
+        {
+          "line": 192,
+          "text": "                    can_fail := !can_fail || Builtin.builtin_fun_can_fail id"
+        },
+        {
+          "line": 193,
+          "text": "                | TraitMethod _ ->"
+        },
+        {
+          "line": 194,
+          "text": "                    (* We consider trait functions can fail, but can not diverge and are not stateful."
+        },
+        {
+          "line": 195,
+          "text": "                       TODO: this may cause issues if we use use a fuel parameter."
+        },
+        {
+          "line": 196,
+          "text": "                    *)"
+        },
+        {
+          "line": 197,
+          "text": "                    can_fail := true));"
+        },
+        {
+          "line": 198,
+          "text": "            super#visit_Call env call on_unwind"
+        },
+        {
+          "line": 199,
+          "text": ""
+        },
+        {
+          "line": 200,
+          "text": "          method! visit_Panic env ="
+        },
+        {
+          "line": 201,
+          "text": "            self#may_fail true;"
+        },
+        {
+          "line": 202,
+          "text": "            super#visit_Panic env"
+        },
+        {
+          "line": 206,
+          "text": "            super#visit_Loop env loop"
+        },
+        {
+          "line": 207,
+          "text": "        end"
+        },
+        {
+          "line": 208,
+          "text": "      in"
+        },
+        {
+          "line": 209,
+          "text": "      (* Sanity check: global bodies don't contain stateful calls *)"
+        },
+        {
+          "line": 210,
+          "text": "      [%cassert] f.item_meta.span"
+        },
+        {
+          "line": 211,
+          "text": "        (Option.is_none f.is_global_initializer || not !stateful)"
+        },
+        {
+          "line": 212,
+          "text": "        \"Global definition containing a stateful call in its body\";"
+        },
+        {
+          "line": 213,
+          "text": "      let builtin_info = get_builtin_info f in"
+        },
+        {
+          "line": 214,
+          "text": "      let has_builtin_info = builtin_info <> None in"
+        },
+        {
+          "line": 215,
+          "text": "      group_has_builtin_info := !group_has_builtin_info || has_builtin_info;"
+        },
+        {
+          "line": 216,
+          "text": "      match f.body with"
+        },
+        {
+          "line": 217,
+          "text": "      | StructuredBody body -> obj#visit_block body.body.span body.body"
+        },
+        {
+          "line": 218,
+          "text": "      | TargetDispatchBody targets ->"
+        },
+        {
+          "line": 219,
+          "text": "          (* get_target can fail, and so can each target function *)"
+        },
+        {
+          "line": 220,
+          "text": "          obj#may_fail true;"
+        },
+        {
+          "line": 256,
+          "text": "      else true;"
+        },
+        {
+          "line": 257,
+          "text": "    {"
+        },
+        {
+          "line": 258,
+          "text": "      can_fail = !can_fail;"
+        },
+        {
+          "line": 259,
+          "text": "      stateful = !stateful;"
+        },
+        {
+          "line": 260,
+          "text": "      can_diverge = !can_diverge;"
+        },
+        {
+          "line": 261,
+          "text": "      is_rec = !is_rec;"
+        },
+        {
+          "line": 262,
+          "text": "    }"
+        },
+        {
+          "line": 263,
+          "text": "  in"
+        },
+        {
+          "line": 264,
+          "text": ""
+        },
+        {
+          "line": 265,
+          "text": "  let analyze_fun_decl_group (funs : fun_decl_id list) : unit ="
+        },
+        {
+          "line": 266,
+          "text": "    (* Retrieve the function declarations *)"
+        },
+        {
+          "line": 267,
+          "text": "    let funs ="
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/symbolic/SymbolicToPureTypes.ml",
+      "sha256": "b648cbedebdd3a5932f6f88a07a306d9d5b41e0d9fce3f627394d34b08420c97",
+      "bytes": 54269,
+      "state_related_lines": [
+        {
+          "line": 753,
+          "text": "  else translate_back_ty_aux span decls_ctx get_region_group gid level ty"
+        },
+        {
+          "line": 754,
+          "text": ""
+        },
+        {
+          "line": 755,
+          "text": "(** Small utility. *)"
+        },
+        {
+          "line": 756,
+          "text": "and compute_raw_fun_effect_info (span : Meta.span option)"
+        },
+        {
+          "line": 757,
+          "text": "    (fun_infos : FunsAnalysis.modules_funs_info) (fun_id : fn_ptr_kind)"
+        },
+        {
+          "line": 758,
+          "text": "    (gid : T.RegionGroupId.id option) : fun_effect_info ="
+        },
+        {
+          "line": 759,
+          "text": "  match fun_id with"
+        },
+        {
+          "line": 760,
+          "text": "  | TraitMethod _ | FunId (FRegular _) ->"
+        },
+        {
+          "line": 761,
+          "text": "      let info ="
+        },
+        {
+          "line": 762,
+          "text": "        [%silent_unwrap_opt_span] span"
+        },
+        {
+          "line": 763,
+          "text": "          (lookup_pure_fn_ptr_info fun_infos fun_id)"
+        },
+        {
+          "line": 764,
+          "text": "      in"
+        },
+        {
+          "line": 822,
+          "text": "     refer to the types associated to a trait ref, but where the trait ref"
+        },
+        {
+          "line": 823,
+          "text": "     is a known impl). *)"
+        },
+        {
+          "line": 824,
+          "text": ""
+        },
+        {
+          "line": 825,
+          "text": "  (* Is the forward function stateful, and can it fail? *)"
+        },
+        {
+          "line": 826,
+          "text": "  let fwd_effect_info ="
+        },
+        {
+          "line": 827,
+          "text": "    compute_raw_fun_effect_info span fun_infos fun_id None"
+        },
+        {
+          "line": 828,
+          "text": "  in"
+        },
+        {
+          "line": 829,
+          "text": "  (* Compute the forward inputs *)"
+        },
+        {
+          "line": 830,
+          "text": "  let fwd_inputs = List.map (translate_fwd_ty span decls_ctx) sg.inputs in"
+        },
+        {
+          "line": 831,
+          "text": "  (* Compute the backward output, without the effect information *)"
+        },
+        {
+          "line": 832,
+          "text": "  let fwd_output = translate_fwd_ty span decls_ctx sg.output in"
+        },
+        {
+          "line": 833,
+          "text": ""
+        },
+        {
+          "line": 834,
+          "text": "  (* Compute the map from region id to region group id *)"
+        },
+        {
+          "line": 835,
+          "text": "  let rg_to_gr_id ="
+        },
+        {
+          "line": 975,
+          "text": "      RegionGroupId.id * back_sg_info ="
+        },
+        {
+          "line": 976,
+          "text": "    let gid = rg.id in"
+        },
+        {
+          "line": 977,
+          "text": "    let back_effect_info ="
+        },
+        {
+          "line": 978,
+          "text": "      compute_raw_fun_effect_info span fun_infos fun_id (Some gid)"
+        },
+        {
+          "line": 979,
+          "text": "    in"
+        },
+        {
+          "line": 980,
+          "text": "    let inputs = translate_back_inputs_for_gid gid in"
+        },
+        {
+          "line": 981,
+          "text": "    (* We consider a backward function as stateful and potentially failing"
+        },
+        {
+          "line": 982,
+          "text": "       **only if it has inputs** (for the \"potentially failing\": if it has"
+        },
+        {
+          "line": 983,
+          "text": "       not inputs, we directly evaluate it in the body of the forward function)."
+        },
+        {
+          "line": 984,
+          "text": ""
+        },
+        {
+          "line": 985,
+          "text": "       For instance, we do the following:"
+        },
+        {
+          "line": 986,
+          "text": "       {["
+        },
+        {
+          "line": 987,
+          "text": "         // Rust"
+        },
+        {
+          "line": 988,
+          "text": "         fn push<T, 'a>(v : &mut Vec<T>, x : T) { ... }"
+        },
+        {
+          "line": 989,
+          "text": ""
+        },
+        {
+          "line": 1046,
+          "text": "       higher-order iterator call. They do not add a runtime argument to the"
+        },
+        {
+          "line": 1047,
+          "text": "       translated pure signature. *)"
+        },
+        {
+          "line": 1048,
+          "text": ""
+        },
+        {
+          "line": 1049,
+          "text": "    let _, fresh_abs_id = V.AbsId.fresh_stateful_generator () in"
+        },
+        {
+          "line": 1050,
+          "text": "    let region_gr_id_abs_id_list ="
+        },
+        {
+          "line": 1051,
+          "text": "      List.map"
+        },
+        {
+          "line": 1052,
+          "text": "        (fun (rg : T.region_var_group) -> (rg.id, fresh_abs_id ()))"
+        },
+        {
+          "line": 1053,
+          "text": "        regions_hierarchy"
+        },
+        {
+          "line": 1054,
+          "text": "    in"
+        },
+        {
+          "line": 1055,
+          "text": "    let region_gr_id_to_abs ="
+        },
+        {
+          "line": 1056,
+          "text": "      RegionGroupId.Map.of_list region_gr_id_abs_id_list"
+        },
+        {
+          "line": 1057,
+          "text": "    in"
+        },
+        {
+          "line": 1299,
+          "text": "      in"
+        },
+        {
+          "line": 1300,
+          "text": "      { info with is_rec = info.is_rec && gid = None }"
+        },
+        {
+          "line": 1301,
+          "text": "  | FunId (FBuiltin _) ->"
+        },
+        {
+          "line": 1302,
+          "text": "      compute_raw_fun_effect_info (Some ctx.span) ctx.fun_ctx.fun_infos fun_id"
+        },
+        {
+          "line": 1303,
+          "text": "        gid"
+        },
+        {
+          "line": 1304,
+          "text": ""
+        },
+        {
+          "line": 1305,
+          "text": "(** Simply calls [translate_fwd_ty] *)"
+        },
+        {
+          "line": 1306,
+          "text": "let ctx_translate_fwd_ty (ctx : bs_ctx) (ty : T.ty) : ty ="
+        },
+        {
+          "line": 1307,
+          "text": "  translate_fwd_ty (Some ctx.span) ctx.decls_ctx ty"
+        },
+        {
+          "line": 1308,
+          "text": ""
+        },
+        {
+          "line": 1309,
+          "text": "(** Simply calls [translate_fwd_generic_args] *)"
+        },
+        {
+          "line": 1310,
+          "text": "let ctx_translate_fwd_generic_args (ctx : bs_ctx) (generics : T.generic_args) :"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/aeneas-full/src/pure/Pure.ml",
+      "sha256": "c5c071781cdf67dc338554a72d4005e3a66f689c42ff10cd1efd03fc291b4a1b",
+      "bytes": 68997,
+      "state_related_lines": [
+        {
+          "line": 198,
+          "text": "  keep_trait_clauses : bool list option;"
+        },
+        {
+          "line": 199,
+          "text": "  extract_name : string;"
+        },
+        {
+          "line": 200,
+          "text": "  can_fail : bool;"
+        },
+        {
+          "line": 201,
+          "text": "  stateful : bool;"
+        },
+        {
+          "line": 202,
+          "text": "  lift : bool;"
+        },
+        {
+          "line": 203,
+          "text": "      (** If the function can not fail, should we still lift it to the [Result]"
+        },
+        {
+          "line": 204,
+          "text": "          monad? This can make reasonings easier, as we can then use [progress]"
+        },
+        {
+          "line": 205,
+          "text": "          to do proofs in a Hoare-Logic style, rather than doing equational"
+        },
+        {
+          "line": 206,
+          "text": "          reasonings. *)"
+        },
+        {
+          "line": 207,
+          "text": "  has_default : bool;"
+        },
+        {
+          "line": 208,
+          "text": "      (** If this is a trait method: does this method have a default"
+        },
+        {
+          "line": 209,
+          "text": "          implementation? If yes, we might want to register it as well. *)"
+        },
+        {
+          "line": 233,
+          "text": ""
+        },
+        {
+          "line": 234,
+          "text": "(* TODO: we should never directly manipulate [Return] and [Fail], but rather"
+        },
+        {
+          "line": 235,
+          "text": " * the monadic functions [return] and [fail] (makes treatment of error and"
+        },
+        {
+          "line": 236,
+          "text": " * state-error monads more uniform) *)"
+        },
+        {
+          "line": 237,
+          "text": "let result_ok_id = VariantId.of_int 0"
+        },
+        {
+          "line": 238,
+          "text": "let result_fail_id = VariantId.of_int 1"
+        },
+        {
+          "line": 239,
+          "text": "let option_some_id = T.option_some_id"
+        },
+        {
+          "line": 240,
+          "text": "let option_none_id = T.option_none_id"
+        },
+        {
+          "line": 241,
+          "text": "let sum_left_id = VariantId.of_int 0"
+        },
+        {
+          "line": 242,
+          "text": "let sum_right_id = VariantId.of_int 1"
+        },
+        {
+          "line": 243,
+          "text": "let loop_result_continue_id = VariantId.of_int 0"
+        },
+        {
+          "line": 244,
+          "text": "let loop_result_break_id = VariantId.of_int 1"
+        },
+        {
+          "line": 1362,
+          "text": "      (** Let binding."
+        },
+        {
+          "line": 1363,
+          "text": ""
+        },
+        {
+          "line": 1364,
+          "text": "          TODO: the boolean should be replaced by an enum: sometimes we use the"
+        },
+        {
+          "line": 1365,
+          "text": "          error-monad, sometimes we use the state-error monad (and we should do"
+        },
+        {
+          "line": 1366,
+          "text": "          this an a per-function basis! For instance, arithmetic functions are"
+        },
+        {
+          "line": 1367,
+          "text": "          always in the error monad, they shouldn't use the state-error monad)."
+        },
+        {
+          "line": 1368,
+          "text": ""
+        },
+        {
+          "line": 1369,
+          "text": "          The boolean controls whether the let is monadic or not. For instance,"
+        },
+        {
+          "line": 1370,
+          "text": "          in F*:"
+        },
+        {
+          "line": 1371,
+          "text": "          - non-monadic: [let x = ... in ...]"
+        },
+        {
+          "line": 1372,
+          "text": "          - monadic: [x <-- ...; ...]"
+        },
+        {
+          "line": 1373,
+          "text": ""
+        },
+        {
+          "line": 1374,
+          "text": "          Note that we are quite general for the left-value on purpose; this is"
+        },
+        {
+          "line": 1375,
+          "text": "          used in several situations:"
+        },
+        {
+          "line": 1629,
+          "text": "          - forward function: [[T]]"
+        },
+        {
+          "line": 1630,
+          "text": "          - backward function: [[T; T]] (for \"x\" and \"y\")"
+        },
+        {
+          "line": 1631,
+          "text": ""
+        },
+        {
+          "line": 1632,
+          "text": "          Non-decomposed ouputs (if the function can fail, but is not stateful):"
+        },
+        {
+          "line": 1633,
+          "text": "          - [result T]"
+        },
+        {
+          "line": 1634,
+          "text": "          - [[result (T * T)]] *)"
+        },
+        {
+          "line": 1635,
+          "text": "  effect_info : fun_effect_info;"
+        },
+        {
+          "line": 1636,
+          "text": "  filter : bool;  (** Should we filter this backward function? *)"
+        },
+        {
+          "line": 1637,
+          "text": "}"
+        },
+        {
+          "line": 1638,
+          "text": "[@@deriving show]"
+        },
+        {
+          "line": 1639,
+          "text": ""
+        },
+        {
+          "line": 1640,
+          "text": "(** A *decomposed* function type (without parameters)."
+        },
+        {
+          "line": 1646,
+          "text": ""
+        },
+        {
+          "line": 1647,
+          "text": "          Note that those input types take include the [fuel] parameter, if the"
+        },
+        {
+          "line": 1648,
+          "text": "          function uses fuel for termination, and the [state] parameter, if the"
+        },
+        {
+          "line": 1649,
+          "text": "          function is stateful."
+        },
+        {
+          "line": 1650,
+          "text": ""
+        },
+        {
+          "line": 1651,
+          "text": "          For instance, if we have the following Rust function:"
+        },
+        {
+          "line": 1652,
+          "text": "          {["
+        },
+        {
+          "line": 1653,
+          "text": "            fn f (x : int)"
+        },
+        {
+          "line": 1654,
+          "text": "          ]}"
+        },
+        {
+          "line": 1655,
+          "text": ""
+        },
+        {
+          "line": 1656,
+          "text": "          If we translate it to a stateful function which uses fuel we get:"
+        },
+        {
+          "line": 1657,
+          "text": "          {["
+        },
+        {
+          "line": 1658,
+          "text": "            val f : nat -> int -> state -> result (state * unit);"
+        },
+        {
+          "line": 1659,
+          "text": "          ]}"
+        },
+        {
+          "line": 1660,
+          "text": ""
+        },
+        {
+          "line": 1661,
+          "text": "          In particular, the list of input types is: [[nat; int; state]]. *)"
+        },
+        {
+          "line": 1662,
+          "text": "  fwd_output : ty;"
+        },
+        {
+          "line": 1663,
+          "text": "      (** The \"pure\" output type of the forward function."
+        },
+        {
+          "line": 1664,
+          "text": ""
+        },
+        {
+          "line": 1665,
+          "text": "          Note that this type doesn't contain the \"effect\" of the function"
+        },
+        {
+          "line": 1666,
+          "text": "          (i.e., we haven't added the [state] if it is a stateful function and"
+        },
+        {
+          "line": 1667,
+          "text": "          haven't wrapped the type in a [result]). Also, this output type is"
+        },
+        {
+          "line": 1668,
+          "text": "          only about the forward function (it doesn't contain the type of the"
+        },
+        {
+          "line": 1669,
+          "text": "          closures we return for the backward functions, in case we merge the"
+        },
+        {
+          "line": 1670,
+          "text": "          forward and backward functions). *)"
+        },
+        {
+          "line": 1671,
+          "text": "  back_sg : back_sg_info RegionGroupId.Map.t;"
+        },
+        {
+          "line": 1672,
+          "text": "      (** Information about the backward functions *)"
+        },
+        {
+          "line": 1673,
+          "text": "  fwd_info : fun_sig_info;"
+        },
+        {
+          "line": 1674,
+          "text": "      (** Additional information about the forward function *)"
+        },
+        {
+          "line": 1698,
+          "text": "    We have the following cases:"
+        },
+        {
+          "line": 1699,
+          "text": "    - forward function: [in_ty0 -> ... -> in_tyn -> out_ty] (* pure function *)"
+        },
+        {
+          "line": 1700,
+          "text": "      [in_ty0 -> ... -> in_tyn -> result out_ty] (* error-monad *)"
+        },
+        {
+          "line": 1701,
+          "text": "      [in_ty0 -> ... -> in_tyn -> state -> result (state & out_ty)] (*"
+        },
+        {
+          "line": 1702,
+          "text": "      state-error *)"
+        },
+        {
+          "line": 1703,
+          "text": "    - backward function:"
+        },
+        {
+          "line": 1704,
+          "text": "      [in_ty0 -> ... -> in_tyn -> back_in0 -> ... back_inm -> (back_out0 & ... &"
+        },
+        {
+          "line": 1705,
+          "text": "       back_outp)] (* pure function *)"
+        },
+        {
+          "line": 1706,
+          "text": "      [in_ty0 -> ... -> in_tyn -> back_in0 -> ... back_inm -> result (back_out0"
+        },
+        {
+          "line": 1707,
+          "text": "       & ... & back_outp)] (* error-monad *)"
+        },
+        {
+          "line": 1708,
+          "text": "      [in_ty0 -> ... -> in_tyn -> state -> back_in0 -> ... back_inm -> state ->"
+        },
+        {
+          "line": 1709,
+          "text": "       result (state & (back_out0 & ... & back_outp))] (* state-error *)"
+        },
+        {
+          "line": 1710,
+          "text": ""
+        },
+        {
+          "line": 1711,
+          "text": "    Note that a stateful backward function may take two states as inputs: the"
+        },
+        {
+          "line": 1712,
+          "text": "    state received by the associated forward function, and the state at which"
+        },
+        {
+          "line": 1713,
+          "text": "    the backward is called. This leads to code of the following shape:"
+        },
+        {
+          "line": 1714,
+          "text": ""
+        },
+        {
+          "line": 1715,
+          "text": "    {["
+        },
+        {
+          "line": 1716,
+          "text": "      (st1, y)  <-- f_fwd x st0; // st0 is the state upon calling f_fwd"
+        },
+        {
+          "line": 1717,
+          "text": "      ... // the state may be updated"
+        },
+        {
+          "line": 1718,
+          "text": "      (st3, x') <-- f_back x st0 y' st2; // st2 is the state upon calling f_back"
+        },
+        {
+          "line": 1719,
+          "text": "    ]}"
+        },
+        {
+          "line": 1745,
+          "text": ""
+        },
+        {
+          "line": 1746,
+          "text": "          Note that those input types take into account the [fuel] parameter, if"
+        },
+        {
+          "line": 1747,
+          "text": "          the function uses fuel for termination, and the [state] parameter, if"
+        },
+        {
+          "line": 1748,
+          "text": "          the function is stateful."
+        },
+        {
+          "line": 1749,
+          "text": ""
+        },
+        {
+          "line": 1750,
+          "text": "          For instance, if we have the following Rust function:"
+        },
+        {
+          "line": 1751,
+          "text": "          {["
+        },
+        {
+          "line": 1752,
+          "text": "            fn f (x : int)"
+        },
+        {
+          "line": 1753,
+          "text": "          ]}"
+        },
+        {
+          "line": 1754,
+          "text": ""
+        },
+        {
+          "line": 1755,
+          "text": "          If we translate it to a stateful function which uses fuel we get:"
+        },
+        {
+          "line": 1756,
+          "text": "          {["
+        },
+        {
+          "line": 1757,
+          "text": "            val f : nat -> int -> state -> result (state * unit);"
+        },
+        {
+          "line": 1758,
+          "text": "          ]}"
+        },
+        {
+          "line": 1759,
+          "text": ""
+        },
+        {
+          "line": 1760,
+          "text": "          In particular, the list of input types is: [[nat; int; state]]."
+        },
+        {
+          "line": 1761,
+          "text": ""
+        },
+        {
+          "line": 1762,
+          "text": "          *Remark*: the fuel and state parameters are introduced during a micro"
+        },
+        {
+          "line": 1763,
+          "text": "          pass, so if we use fuel and state the signature evolves during the"
+        },
+        {
+          "line": 1764,
+          "text": "          compilation. *)"
+        },
+        {
+          "line": 1765,
+          "text": "  output : ty;"
+        },
+        {
+          "line": 1767,
+          "text": ""
+        },
+        {
+          "line": 1768,
+          "text": "          Note that this type contains the \"effect\" of the function (i.e., it is"
+        },
+        {
+          "line": 1769,
+          "text": "          not just a purification of the Rust return type). For instance, it"
+        },
+        {
+          "line": 1770,
+          "text": "          will be a tuple with a [state] if the function is stateful, and will"
+        },
+        {
+          "line": 1771,
+          "text": "          be wrapped in a [result] if the function can fail. *)"
+        },
+        {
+          "line": 1772,
+          "text": "  fwd_info : fun_sig_info;"
+        },
+        {
+          "line": 1773,
+          "text": "      (** Additional information about the forward function. *)"
+        },
+        {
+          "line": 1774,
+          "text": "  back_effect_info : fun_effect_info RegionGroupId.Map.t;"
+        },
+        {
+          "line": 1775,
+          "text": "}"
+        },
+        {
+          "line": 1776,
+          "text": "[@@deriving show]"
+        },
+        {
+          "line": 1777,
+          "text": ""
+        },
+        {
+          "line": 1778,
+          "text": "(** An instantiated function signature. See {!fun_sig} *)"
+        }
+      ]
+    }
+  ],
+  "llbc": {
+    "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/ProverRwCaller.llbc",
+    "sha256": "4c8ccdd05650fdfa28280fae443328f1ae20d91f6a52b6c5dc735e70b99b31af",
+    "bytes": 29627844
+  },
+  "assessment": "No usable implicit world-state extraction interface: stateful analysis field is not part of translated fun_effect_info; no Config/Main state switch. Commented state-error examples are not an implementation. Existing pure extraction does not justify arbitrary stateful specialization.",
+  "new_trust_used": false
+}

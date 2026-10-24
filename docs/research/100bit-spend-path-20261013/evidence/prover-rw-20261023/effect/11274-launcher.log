@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1109); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  simp_all only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectRegression.lean:29:46: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectRegression.lean:42:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwEffectRegression.add_zero_one`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectRegression.lean:59:50: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+nonce : Std.Array U8 32#usize
+rest : List (Result Reply)
+reads : List (Slice U8 × Result Reply)
+this : ExternalFuns := install ops
+⊢ {
+      boundary :=
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 })),
+      world :=
+        { tape := rest,
+          reads :=
+            reads ++
+              ([(ProverRwEntropyObstruction.zeroInput,
+                    ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput))] ++
+                [(ProverRwEntropyObstruction.zeroInput,
+                    ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput))]) } } =
+    {
+      boundary :=
+        Boundary.returned
+          (ok
+            (core.result.Result.Ok
+              { mask_nonce := nonce, field_mask_entropy := Array.repeat 32#usize 1#u8,
+                leaf_salt_seed := Array.repeat 32#usize 1#u8 })),
+      world :=
+        { tape := rest,
+          reads :=
+            reads ++
+              [(ProverRwEntropyObstruction.zeroInput,
+                  ok (core.result.Result.Ok (), ProverRwEntropyObstruction.zeroInput)),
+                (ProverRwEntropyObstruction.zeroInput,
+                  ok (core.result.Result.Ok (), ProverRwEntropyObstruction.oneOutput))] } }
+'R1Z.ProverRwEffectRegression.constant_after' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.after_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.after_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.add_zero_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectRegression.zero_then_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.38
+	Maximum resident set size (kbytes): 4097864
+	Swaps: 0
+	Exit status: 1

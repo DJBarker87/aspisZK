@@ -1,0 +1,66 @@
+reservation: populated 26 GiB + 7 GiB; window=1 (London 1102); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+            | [] => { boundary := Boundary.request input resume, world := world }
+            | reply :: rest =>
+              { boundary := finish (resumeResult resume reply),
+                world := advance input reply rest world }).world.reads ++
+    (match Call.read input resume with
+        | Call.stop out => { boundary := finish out, world := world }
+        | Call.read input resume =>
+          match [] with
+          | [] => { boundary := Boundary.request input resume, world := world }
+          | reply :: rest =>
+            { boundary := finish (resumeResult resume reply), world := advance input reply rest world }).world.tape
+is not definitionally equal to the right-hand side
+  List.map Prod.snd world.reads ++ []
+
+case read.nil
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+world : World
+input : Slice U8
+resume : Reply → Result Outcome
+h : world.tape = []
+⊢ List.map Prod.snd
+        (match Call.read input resume with
+            | Call.stop out => { boundary := finish out, world := world }
+            | Call.read input resume =>
+              match [] with
+              | [] => { boundary := Boundary.request input resume, world := world }
+              | reply :: rest =>
+                { boundary := finish (resumeResult resume reply),
+                  world := advance input reply rest world }).world.reads ++
+      (match Call.read input resume with
+          | Call.stop out => { boundary := finish out, world := world }
+          | Call.read input resume =>
+            match [] with
+            | [] => { boundary := Boundary.request input resume, world := world }
+            | reply :: rest =>
+              { boundary := finish (resumeResult resume reply), world := advance input reply rest world }).world.tape =
+    List.map Prod.snd world.reads ++ []
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectTape.lean:97:76: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [advance, List.map_append, List.append_assoc,̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectTape.lean:125:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwEffectTape.zero_then_nonzero_reads`:
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.ProverRwEffectTape.pure_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.step_tape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.run_tape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.step_served' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectTape.zero_then_nonzero_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.91
+	Maximum resident set size (kbytes): 4106644
+	Swaps: 0
+	Exit status: 1

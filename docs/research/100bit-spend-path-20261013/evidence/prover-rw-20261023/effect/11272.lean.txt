@@ -1,0 +1,32 @@
+import R1Z.ProverRwEffectPrefix
+import R1Z.ProverRwEffectNonzero
+
+/-! Regression on the actual factored source continuation, with four explicit
+transparent-wrapper entries installed. This is not native effect adequacy. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEffectRegression
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRwEffectSource ProverRwEffectTape ProverRwEffectPrefix
+variable [ExternalTypes]
+
+theorem constant_after (ops : ExternalFuns) (nonce : Array U8 32#usize) (retry : Usize)
+    (byte : U8) (stable : byte ||| byte = byte) (initial : (0#u8) ||| byte = byte) :
+    @after _ (install ops) nonce retry back
+      (.Ok (),Array.to_slice (Array.repeat 64#usize byte)) =
+      if byte != 0#u8 then .ok (.done (.Ok ⟨nonce,Array.repeat 32#usize byte,Array.repeat 32#usize byte⟩))
+      else .ok (.cont (Usize.wrapping_add retry 1#usize)) := by
+  letI : ExternalFuns := install ops
+  change (do
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 (Array.repeat 32#usize byte)
+    if b then do
+      let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 (Array.repeat 32#usize byte)
+      if b1 then .ok (.done (.Ok ⟨nonce,Array.repeat 32#usize byte,Array.repeat 32#usize byte⟩))
+      else .ok (.cont (Usize.wrapping_add retry 1#usize))
+    else .ok (.cont (Usize.wrapping_add retry 1#usize))) = _
+  rw [ProverRwEffectNonzero.nonzero_repeat byte stable initial]
+  simp only [bind_tc_ok]
+  split <;> simp_all only [bind_tc_ok,if_true,if_false]
+
+#print axioms constant_after
+end R1Z.ProverRwEffectRegression

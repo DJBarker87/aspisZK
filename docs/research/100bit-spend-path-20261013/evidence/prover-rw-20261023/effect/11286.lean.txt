@@ -1,0 +1,49 @@
+import R1Z.ProverRwEffectCallback
+import R1Z.ProverRwCallerBinding
+
+/-! The actual RealR1 proof-account caller consumes the factored pure entropy
+owner through its actual callback and retry owner. Arbitrary-world adequacy is
+not inferred from this pure specialization. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEffectRetry
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRwEffectCallback ProverRwEffectOwner ProverRwRetryModel
+open ProverCommitSemanticTransport26
+variable [ExternalTypes]
+
+def entropy [ExternalFuns] {C : Type} (account : Account C) :
+    Entropy (RealR1_client.prove_for_proof_accounts.closure C) :=
+  { RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError account with
+    call_mut := fun state k => do
+      let (out,next,back) ← callback account pureOwner state k
+      .ok (out,back next) }
+
+theorem entropy_eq [ExternalFuns] {C : Type} (account : Account C) :
+    entropy account =
+      RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError account := by
+  unfold entropy
+  simp only [callback_eq]
+  rfl
+
+theorem client_retry (ops : ExternalFuns) {C : Type} (account : Account C)
+    (pub : Pub) (compiled : Compiled) (hash : Hash) (store : Store) (state : C) :
+    letI : ExternalFuns := ProverRwCallerBinding.install ops
+    mapR sourceOutput (RealR1_client.prove_for_proof_accounts account pub compiled hash store state) =
+      mapR drop (ProverCommitRetry34.eight (attempt (entropy account) pub compiled .S2 hash) (state,store)) := by
+  letI : ExternalFuns := ProverRwCallerBinding.install ops
+  rw [entropy_eq]
+  have call : RealR1_client.prove_for_proof_accounts account pub compiled hash store state =
+      prover.prove_masked_retrying_with
+        (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError account)
+        pub compiled .S2 hash store state := by
+    unfold RealR1_client.prove_for_proof_accounts
+    cases prover.prove_masked_retrying_with
+      (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError account)
+      pub compiled .S2 hash store state <;> rfl
+  rw [call]
+  exact ProverRwCallerBinding.eight ops _ pub compiled hash store state
+
+#print axioms entropy_eq
+#print axioms client_retry
+end R1Z.ProverRwEffectRetry

@@ -1,0 +1,56 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1107); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectNonzero.lean:16:2: error: Type mismatch: After simplification, term
+  Eq.trans hx (congrArg ok hv)
+ has type
+  (Array.repeat 32#usize byte).index_usize i =
+    ok
+      [byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte,
+          byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte, byte][↑i]
+but is expected to have type
+  (Array.repeat 32#usize byte).index_usize i = ok byte
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectNonzero.lean:34:47: error: Tactic `decide` failed for proposition
+  32 < UScalar.size UScalarTy.Usize
+because its `Decidable` instance
+  Nat.decLt 32 (UScalar.size UScalarTy.Usize)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match (Nat.succ 32).ble (UScalar.size UScalarTy.Usize), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectNonzero.lean:26:89: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_prover.state_only_entropy.entropy_nonzero32_loop.body, ̲stop, ̲if_false,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEffectNonzero.lean:52:2: error: 'change' tactic failed, pattern
+  (do
+      let combined ← scan (Array.repeat 32#usize byte) byte 1#usize
+      ok (combined != 0#u8)) =
+    ?m.62
+is not definitionally equal to target
+  (do
+      let combined ←
+        loop
+            (fun x =>
+              if x.2 < 32#usize then do
+                let i1 ← (Array.repeat 32#usize byte).index_usize x.2
+                ok (cont (x.1 ||| i1, x.2.wrapping_add 1#usize))
+              else ok (done x.1))
+            (byte, Usize.wrapping_add 0#usize 1#usize)
+      ok (combined != 0#u8)) =
+    ok (byte != 0#u8)
+'R1Z.ProverRwEffectNonzero.index_repeat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectNonzero.scan_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEffectNonzero.nonzero_repeat' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.90
+	Maximum resident set size (kbytes): 4090428
+	Swaps: 0
+	Exit status: 1
