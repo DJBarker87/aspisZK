@@ -129,3 +129,38 @@ remain unestablished. No freshness, retry-uniformity, independent coins,
 probability association, new trust, ELF, runtime, performance or adoption gate.
 Current ELF pins and later H5/quiet-host gates remain those in the manager
 packet; older evidence is not a new identity gate.
+
+## Final focused evidence
+
+Proof source revision c88daf1e50bec23f1d1425b33a4820ce963ddc7d is audited by
+11550, R1Z/ProverRwRngMaterialAudit: exit0, wall1.42s, peak RSS2,631,356KiB,
+swap0. All38 full theorem signatures/axiom reports are standard only (one
+requires no axioms). Complete TypeLeaves/LocalLeaves, material/expander/ack,
+nonce-store, audit, status carrier and actual body/caller definitions are printed.
+The receipt retains the exact target/command, source/dependency hashes and
+revision; summary.json validates all13 current sources against final green
+receipts and every recorded dependency object against the read-only current
+hash inventory. Imported cached Aeneas evidence is reused, not a full manifest
+or coherent release rebuild claim. The expanded caller extraction is append-only
+for prior emitted bodies, and all external interface signatures are identical.
+
+The source binding and adaptation --check pass:164 declarations/30files. Every
+used span matches the current worktree. The host's unrelated state_only_prefix
+loop spelling difference is assessed using the retained predecessor source;
+this source reuse is not a new native identity gate. Full per-attempt source
+hashes identify the private host tree despite its older revision label.
+
+Continuation Lean launches11524–11550:27 total,23green/4failed; native allocation
+51/60, cumulative211/220,9remain. Prior ledgers are unmodified and linked by
+hash. Kani44/60 unchanged,16remain. Failed11527 (comparison/abbreviation
+elaboration),11530 (dependent status match),11547/11548 (opaque wrapping-add
+reduction/tactic failure) remain with exact inputs/logs. Extraction001 failed
+before extraction due to PATH; its immutable preflight/time/error logs recover
+its receipt (resource peak from ended cgroup unavailable, explicitly recorded).
+Corrected extraction002 and expanded003, Aeneas001/002 and read-only hash
+inventory have capped receipts. No resource failure or unchanged build retry.
+
+Every Lean attempt kept5G/7G, Rust/translation6G/8G, no swap/Tasks64, populated
+reservations below55GiB; after14:00London Lean used the shared global lock.
+No full frozen manifest, security-contract change, runtime/performance/ELF
+claim, key operation, merge or push. Both deployed targets not yet established.
