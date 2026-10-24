@@ -26,3 +26,34 @@ is retained verbatim. Authentication is not discharged by this job.
 
 This establishes the local observation-to-ten induction path, not an
 instantiated native op18, whole-TX agreement or a release result.
+
+# Final saved/resumed statement audit
+
+Before (`Port5Q1_Complete.accepted`): both source blocks share one literal `p`;
+the second pending/query calls take exactly `materialize out10 flushed10`.
+The same saved-to-resumed physical state is therefore a caller obligation.
+
+After (`Port6CK_Complete.accepted`): ONE actual installed TX1 returns `saved`;
+CURRENT op18 consumes `checkpointSlice saved` and returns `(p1,a1)`. Second
+geometry/pending/query/flush cuts use those exact returned fields. There is no
+first-loop argument and no cross-TX equality or independent retained-reader
+success premise. `Checkpoint.accepted` derives p1=pSaved/a1=aSaved from the
+actual writer input and complete canonical physical roundtrip. `Saved.accepted`
+derives its ten-step model state from THAT writer prefix and the reached Q1
+observations. The second source block advances THAT returned a1 by12 and
+materializes `OraclePortFrozen2.completeState i q`.
+
+The first g is the actual op7 return selected by the prefix. The second g2 is
+an explicit actual resumed query operand (upstream powers/op17 remains owned
+by Session A). They are not freely selected model accumulators. The SourceInputs,
+parsed proof bytes, literal matching read, rho and q are shared exactly.
+Q1's authentication quantifier is unchanged. Preparation now has ONE named
+`Port6CK_Owner.SessionAPrepare`: canonical immutable fields plus SAME-input
+query/rho/alpha1 semantic bindings. ONE named primitive interface retains Q1's
+query/basis/decoder/arithmetic, geometry and domain interpretations. Neither
+interface contains checkpoint/loop/output agreement or a model accumulator.
+
+`Port6CK_Ordered.accepted` transports the complete checkpoint six-read result
+to the CURRENT reader program itself, not just the retained reader's effect
+program. `combined_run` reconstructs the SAME writer-before/reader-after log;
+the accepted reference run's determinism identifies the final log literally.

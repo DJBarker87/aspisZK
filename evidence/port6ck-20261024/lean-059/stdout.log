@@ -1,0 +1,102 @@
+Port6CK_Complete.lean:88:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytes5Output.accumulator
+    { weights := ⟨↑flushed22, ⋯⟩, rhs := out22.rhs, power := out22.power, next := out22.next }
+in the target expression
+  CheckpointBytes5Output.accumulator (Port5Q1_Endpoint.materialize out22 flushed22) =
+    QueryAccumulator.run22 (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).iota
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).rho
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).values
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).basis
+
+CoreError W : Type
+base : Ops
+reserved : Bool
+panic : Port6CK_Checkpoint.Panic
+batch : Port3_NativeBatchBody.Ops
+geometryOps : Port3_NativeGeometryBody.Ops CoreError
+queryOps : Port3_NativeQueryBody.Ops
+finish : AspisR1Stage2.Stage2Finish.FinishOps W
+ports : Port6CK_Owner.SessionAPrimitives queryOps geometryOps
+Hsh : Type
+D : aspis_core.digest.Digest32 Hsh
+hash : Hsh
+H : Bytes → State
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof pub : Slice U8
+stored publicBytes : Bytes
+split : Usize
+i : RecordedBinaryExperimentBin.SourceInputs
+parsed : Parsed
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+prepare : Port6CK_Owner.SessionAPrepare base D hash semantic proof i.data q (SelectedChallengeMap.rhoOf i.rho)
+read : LiteralMatchingData.read (typedRows parsed q tr) = some i.data
+wire : parsed.wire = bytesOf ↑proof
+proofLength : (↑proof).length = 57607
+recovered : ℕ → Option Bytes
+authenticated : ∀ pos < 22, recovered (index q 2 pos) = some (OraclePortPackedChoiceC4.payload parsed 2 pos)
+caller : CheckpointBytes5Join.S2S10CallerBinding (VTop_Checkpoint.digest D) hash H proof pub stored publicBytes
+saved : alloc.vec.Vec U8
+p1 : verifier.Prepared
+a1 : verifier.Accumulator
+tx1 :
+  verifier.candidate.tx1 (Port6CK_Checkpoint.installed base reserved panic batch geometryOps (install queryOps) finish)
+      D semantic pub proof split hash none =
+    ok (core.result.Result.Ok saved)
+resumed :
+  (Port6CK_Checkpoint.installed base reserved panic batch geometryOps (install queryOps) finish).op18 D
+      (VTop_Checkpoint.checkpointSlice saved) proof pub AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p1, a1))
+g2 : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+geometry1 : verifier.QueryGeometry
+b1 b12 : verifier.BatchedWeights
+out22 : verifier.Accumulator
+flushed22 : Slice aspis_core.field.QM31
+pending1 :
+  (Port6CK_Checkpoint.installed base reserved panic batch geometryOps (install queryOps) finish).op10 a1.weights.deref =
+    ok (core.result.Result.Ok b1)
+flush1 :
+  (Port6CK_Checkpoint.installed base reserved panic batch geometryOps (install queryOps) finish).op9 b12
+      out22.weights.deref =
+    ok flushed22
+savedTen :
+  CheckpointBytes5Output.accumulator a1 =
+      (OraclePortCheckpointStateC3.write
+          (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator ∧
+    (↑a1.weights).length = 64 ∧
+      ↑a1.next = 10 ∧
+        Port4C_QueryArithmetic.CanonE a1.rhs ∧
+          Port3_FlushInstall.Canonical a1.power ∧ SessionAPrepare p1 i.data q (SelectedChallengeMap.rhoOf i.rho)
+geometryCall1 :
+  Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geometryOps) p1.queries 10#usize 22#usize =
+    ok (core.result.Result.Ok geometry1)
+geo1 : Port5Q1_GeometryBinding.Binding p1.queries 10#usize 22#usize geometry1
+calls1 :
+  Port3_QueryInstall.result
+      (Port3_NativeQueryBody.verifier.candidate.query_loop
+        (Port3_QueryStage.release (Port4C_RowStd.install (install queryOps))) proof p1 a1 g2
+        (Port3_QueryInstall.observer none) geometry1 b1 22#usize) =
+    ok (core.result.Result.Ok (out22, b12))
+native :
+  Port3_NativeQueryBody.verifier.candidate.query_loop
+      (Port4C_RowStd.install (install (Port3_QueryStage.release queryOps))) proof p1 a1 g2
+      (Port3_QueryInstall.observer none) geometry1 b1 22#usize =
+    ok (core.result.Result.Ok (out22, b12))
+commute :
+  Port3_QueryStage.release (Port4C_RowStd.install (install queryOps)) =
+    Port4C_RowStd.install (Port3_QueryStage.release (install queryOps))
+releasePorts : SessionAPrimitives (Port3_QueryStage.release queryOps)
+second :
+  CheckpointBytes5Output.accumulator
+        { weights := ⟨↑flushed22, ⋯⟩, rhs := out22.rhs, power := out22.power, next := out22.next } =
+      OraclePortCheckpointStateC3.advance
+        (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q) (↑22#usize - ↑10#usize)
+        (CheckpointBytes5Output.accumulator a1) ∧
+    (↑flushed22).length = 64 ∧
+      ↑out22.next = ↑22#usize ∧ Port4C_QueryArithmetic.CanonE out22.rhs ∧ Port3_FlushInstall.Canonical out22.power
+⊢ CheckpointBytes5Output.accumulator (Port5Q1_Endpoint.materialize out22 flushed22) =
+    QueryAccumulator.run22 (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).iota
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).rho
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).values
+      (OraclePortCheckpointResumeC5.model i.data (SelectedChallengeMap.rhoOf i.rho) q).basis
+'AspisR1.Port6CK_Complete.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
