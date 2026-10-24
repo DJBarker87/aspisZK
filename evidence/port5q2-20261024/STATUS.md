@@ -129,3 +129,30 @@ value/basis binding. Model Prepared is still the decoded immutable inventory;
 identification with frozen2's Context/Data Prepared is NOT inferred. Checkpoint8
 remains the reference selector with the separately pinned native domain admission.
 This is a concrete conditional row improvement, not deployed S2 closure.
+
+Stage 6: Port5Q2_ReaderWeights.loop_exact/exact now prove the CURRENT mutable
+weight helper's complete Result against its explicit fixed-backing read sequence
+and deferred backwrite model. Every error/short circuit is retained; all Vec
+backwrites come from the actual emitted next/back closure, with the explicit
+TrustedStd into_iter content ABI. write_shape proves its final bytes/field list
+symbolically for arbitrary lengths rather than enumerating64 cells.
+Accepted045, standard axioms only. Port5Q2_ReaderFrame derives unchanged backing
+from successful raw/readK, including field rejection, accepted046.
+
+Port5Q2_ReaderWeightJoin.accepted (049) derives the source readList success FROM
+the SAME native helper acceptance, then proves retained readWeights returns the
+SAME Vec and cursor. No second successful read/decoder or output equality is a
+premise. The callback remains the retained scalar content interpretation whose
+CURRENT bounded helper bridge is Port5Q2_ReaderScalar.current_k. Source-native
+codec and runtime/heap/iterator instantiation remain independent P6/TrustedStd
+boundaries; there is no blanket whole-op18 equality claim. The initial native
+loop proof attempts039–042 were parser/do-reduction errors and were replaced by
+an explicit result split and factored continuation; no resource failure/cap rise.
+
+Remaining concrete gates: instantiate Session A's immutable preparation semantics
+with frozen2's Context/Data Prepared; bind the actual opening/folds/geometry nodes
+to that SAME frozen2 values/basis in ObservationBinding; compose bounded current
+scalar/helper substitutions at every reached op18 call under concrete native
+codec/allocator/Std/runtime admission. The production writer certificate is valid
+on its exact domain, but no whole native dictionary or source/ELF refinement is
+created by a certificate-admission audit. S2 target not yet established.

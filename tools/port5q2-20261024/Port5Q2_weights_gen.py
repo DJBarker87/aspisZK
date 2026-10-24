@@ -52,37 +52,85 @@ theorem loop_exact (read : CheckpointBytes4Sections.ReadK) (bytes : Slice U8)
             ok (.Ok (⟨final.slice.val,final.slice.property⟩,last))) := by
   induction n generalizing it back at1 with
   | zero =>
-    have inactive : ¬it.i<it.slice.len := by change ¬it.i<it.slice.val.length; omega
+    have inactive : ¬ it.i < it.slice.len := by change ¬ it.i < it.slice.val.length; omega
     unfold weights_loop
     rw [Aeneas.Std.loop.eq_def]
     simp only [weights_loop.body,core.slice.iter.IteratorIterMut.next,dif_neg inactive,
       bind_tc_ok,Aeneas.Std.uncurry,reads,finish,write,Nat.add_zero]
   | succ n ih =>
-    have active : it.i<it.slice.len := by change it.i<it.slice.val.length; omega
+    have active : it.i < it.slice.len := by change it.i < it.slice.val.length; omega
     unfold weights_loop
     rw [Aeneas.Std.loop.eq_def]
     simp only [weights_loop.body,core.slice.iter.IteratorIterMut.next,dif_pos active,
       bind_tc_ok,Aeneas.Std.uncurry,reads,bind_assoc_eq]
-    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-    intro pair called
-    rcases pair with ⟨value,out⟩
-    cases value with
-    | Err e => rfl
-    | Ok x =>
-      dsimp only
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,bind_assoc_eq]
-      rw [ih _ _ out.at (by change it.i+1+n=it.slice.val.length; omega)]
-      apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-      intro rest decoded
-      cases rest with
+    generalize called : read ⟨bytes,at1⟩=result
+    cases result with
+    | fail e => rfl
+    | div => rfl
+    | ok pair =>
+      rcases pair with ⟨value,out⟩
+      cases value with
       | Err e => rfl
-      | Ok pair =>
-        rcases pair with ⟨xs,last⟩
-        simp only [bind_tc_ok,write]
-        have count : it.i+1+n=it.i+(n+1) := by omega
-        rw [count]
+      | Ok x =>
+        try dsimp only
+        simp only [Aeneas.Std.uncurry,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,bind_assoc_eq]
+        let it1 : Iter := ⟨it.slice,it.i+1⟩
+        let back1 : Iter → Iter := fun im => back {im with slice:=im.slice.setAtNat it.i x}
+        change (do let r ← weights_loop read it1 back1 bytes out.at; finish r)=_
+        rw [ih it1 back1 out.at (by change it.i+1+n=it.slice.val.length; omega)]
+        apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+        intro rest decoded
+        cases rest with
+        | Err e => rfl
+        | Ok pair =>
+          rcases pair with ⟨xs,last⟩
+          simp only [bind_tc_ok,write]
+          have count : it.i+1+n=it.i+(n+1) := by omega
+          rw [count]
+
+/-- Complete CURRENT helper Result through the actual Vec iterator ABI. -/
+theorem exact (read : CheckpointBytes4Sections.ReadK) (bytes : Slice U8)
+    (start : Usize) (v : alloc.vec.Vec K) :
+    weights read bytes start v =
+      (do let r ← reads read bytes v.val.length start
+          match r with
+          | .Err e => ok (.Err e)
+          | .Ok (xs,last) =>
+            let final := write v.deref 0 xs
+            ok (.Ok (⟨final.val,final.property⟩,last))) := by
+  unfold weights intoIter
+  simp only [bind_tc_ok,Aeneas.Std.uncurry]
+  change (do let r ← weights_loop read ⟨v.deref,0⟩ (fun im => im) bytes start; finish r)=_
+  rw [loop_exact read bytes v.val.length ⟨v.deref,0⟩ (fun im => im) start (by change 0+v.val.length=v.val.length; omega)]
+
+theorem write_shape (pre old xs : List K)
+    (bound : (pre++old).length≤Usize.max) (size : xs.length=old.length) :
+    (write ⟨pre++old,bound⟩ pre.length xs).val=pre++xs := by
+  induction old generalizing pre xs with
+  | nil =>
+    have empty : xs=[] := List.length_eq_zero_iff.mp size
+    subst xs
+    rfl
+  | cons y old ih =>
+    cases xs with
+    | nil => simp at size
+    | cons x xs =>
+      have tailSize : xs.length=old.length := by simpa using size
+      have bound1 : ((pre++[y])++old).length≤Usize.max := by
+        simpa only [List.append_assoc,List.singleton_append] using bound
+      have recursive := ih (pre++[y]) xs bound1 tailSize
+      have bound2 : (pre++y::xs).length≤Usize.max := by
+        simpa only [List.length_append,List.length_cons,tailSize] using bound
+      have same : write ⟨pre++y::old,bound⟩ (pre.length+1) xs=⟨pre++y::xs,bound2⟩ := by
+        apply Subtype.ext
+        simpa only [List.append_assoc,List.singleton_append,List.length_append,List.length_singleton] using recursive
+      simp only [write,same]
+      have replaced := CheckpointBytes4Weights.replace_slot pre xs [] y x (by simpa using bound2)
+      simpa only [List.append_nil,List.append_assoc,List.singleton_append] using congrArg Subtype.val replaced
 
 #print axioms loop_exact
+#print axioms exact
+#print axioms write_shape
 end AspisR1.Port5Q2_ReaderWeights
 end
 '''

@@ -1,0 +1,179 @@
+Port5Q2_ReaderWeights.lean:136:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let r ← weights_loop read ?m.251 ?m.252 bytes out.at
+    finish r
+in the target expression
+  (do
+      let r ←
+        match
+            let (r, reader) := (core.result.Result.Ok x, out)
+            do
+            let cf ←
+              match r with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                ok
+                  (cont
+                    ({ slice := it.slice, i := it.i + 1 }, fun im =>
+                      back { slice := im.slice.setAtNat it.i val, i := im.i }, reader.at))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error) residual
+                ok (done (at1, some r1, back { slice := it.slice.setAtNat it.i it.slice[it.i], i := it.i + 1 })) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1, next_back) ←
+                    if h : x.1.i < ↑x.1.slice.len then
+                        ok
+                          (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                            match x_1 with
+                            | none => it'
+                            | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                      else ok (none, x.1, fun it x => it)
+                  match o with
+                    | none => ok (done (x.2.2, none, x.2.1 (next_back iter1 none)))
+                    | some val => do
+                      let (r, reader) ← read { bytes := bytes, «at» := x.2.2 }
+                      let cf ←
+                        match r with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          ok (cont (iter1, fun im => x.2.1 (next_back im (some val)), reader.at))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x_1 ← reads read bytes n out.at
+    let r ←
+      match x_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+
+case succ.ok.Ok
+read : CheckpointBytes4Sections.ReadK
+bytes : Slice U8
+n : ℕ
+ih :
+  ∀ (it : Iter) (back : Iter → Iter) (at1 : Usize),
+    it.i + n = (↑it.slice).length →
+      (do
+          let r ← weights_loop read it back bytes at1
+          finish r) =
+        do
+        let r ← reads read bytes n at1
+        match r with
+          | core.result.Result.Err e => ok (core.result.Result.Err e)
+          | core.result.Result.Ok (xs, last) =>
+            let final := back { slice := write it.slice it.i xs, i := it.i + n };
+            ok (core.result.Result.Ok (⟨↑final.slice, ⋯⟩, last))
+it : Iter
+back : Iter → Iter
+at1 : Usize
+remaining : it.i + (n + 1) = (↑it.slice).length
+active : it.i < ↑it.slice.len
+out : verifier.Reader
+x : CheckpointBytes4Sections.K
+called : read { bytes := bytes, «at» := at1 } = ok (core.result.Result.Ok x, out)
+⊢ (do
+      let r ←
+        match
+            let (r, reader) := (core.result.Result.Ok x, out)
+            do
+            let cf ←
+              match r with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                ok
+                  (cont
+                    ({ slice := it.slice, i := it.i + 1 }, fun im =>
+                      back { slice := im.slice.setAtNat it.i val, i := im.i }, reader.at))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error) residual
+                ok (done (at1, some r1, back { slice := it.slice.setAtNat it.i it.slice[it.i], i := it.i + 1 })) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => do
+                  let (o, iter1, next_back) ←
+                    if h : x.1.i < ↑x.1.slice.len then
+                        ok
+                          (some x.1.slice[x.1.i], { slice := x.1.slice, i := x.1.i + 1 }, fun it' x_1 =>
+                            match x_1 with
+                            | none => it'
+                            | some x_2 => { slice := it'.slice.setAtNat x.1.i x_2, i := it'.i })
+                      else ok (none, x.1, fun it x => it)
+                  match o with
+                    | none => ok (done (x.2.2, none, x.2.1 (next_back iter1 none)))
+                    | some val => do
+                      let (r, reader) ← read { bytes := bytes, «at» := x.2.2 }
+                      let cf ←
+                        match r with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          ok (cont (iter1, fun im => x.2.1 (next_back im (some val)), reader.at))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec aspis_core.field.QM31 × Usize) (core.convert.FromSame verifier.Error)
+                                residual
+                          ok (done (x.2.2, some r1, x.2.1 (next_back iter1 o))))
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      finish r) =
+    do
+    let x_1 ← reads read bytes n out.at
+    let r ←
+      match x_1 with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (xs, last) =>
+        ok (core.result.Result.Ok (⟨↑(back { slice := write it.slice it.i xs, i := it.i + (n + 1) }).slice, ⋯⟩, last))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+Port5Q2_ReaderWeights.lean:136:30: error: 'change' tactic failed, pattern
+  it.i + 1 + n = (↑it.slice).length
+is not definitionally equal to target
+  core.slice.iter.IterMut.i ?m.251 + n = (↑(core.slice.iter.IterMut.slice ?m.251)).length
+'AspisR1.Port5Q2_ReaderWeights.loop_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
