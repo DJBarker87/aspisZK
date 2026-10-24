@@ -1,0 +1,50 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SemanticCodeCircleValidatedExactV1.lean:15:94: error: unsolved goals
+case h_1
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+record1 : r1_wire.ValidatedRecord
+row✝¹ row✝ : U8
+x✝¹ : 25#8#uscalar = 25#8#uscalar → False
+x✝ : 25#8#uscalar = 26#8#uscalar → False
+⊢ erase (pure (core.result.Result.Err r1_wire.Error.InvalidRow, self)) = do
+    let s ← r1_wire.ValidatedRecord.impl.framed record1
+    let (r, self1) ← r1_wire.SemanticTranscript.sample_block_validated D self 25#u8 s
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let scp ← B.circle val FinishModel.CircleRow.First
+        ok (core.result.Result.Ok scp, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)
+
+case h_2
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+self : r1_wire.SemanticTranscript H
+record1 : r1_wire.ValidatedRecord
+row✝¹ row✝ : U8
+x✝¹ : 26#8#uscalar = 25#8#uscalar → False
+x✝ : 26#8#uscalar = 26#8#uscalar → False
+⊢ erase (pure (core.result.Result.Err r1_wire.Error.InvalidRow, self)) = do
+    let s ← r1_wire.ValidatedRecord.impl.framed record1
+    let (r, self1) ← r1_wire.SemanticTranscript.sample_block_validated D self 26#u8 s
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let scp ← B.circle val FinishModel.CircleRow.Second
+        ok (core.result.Result.Ok scp, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)
+'AspisR1PublicPreparation.S1SemanticCode.circleValidated_erasure' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
