@@ -1,0 +1,217 @@
+Port5Q1_Domain.lean:15:48: error(lean.unknownIdentifier): Unknown identifier `Y`
+Port5Q1_Domain.lean:24:34: error(lean.unknownIdentifier): Unknown identifier `Y`
+
+Note: It is not possible to treat `Y` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+Port5Q1_Domain.lean:54:75: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+CoreError : Type
+ops : Ops CoreError
+leaves : SessionADomain ops
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u v left right fibre fleft fright : Usize
+point : aspis_core.r0.domain.Point Port4C_GeometryGather.M
+square doubled one : Port4C_GeometryGather.M
+left✝¹ : iterOut = iter1
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+new : ops.op12 u = ok (core.result.Result.Ok fibre)
+pointRun : ops.op15 fibre = ok point
+div : u / 4#usize = ok v
+leftEq : left = v.wrapping_mul 4#usize
+newLeft : ops.op12 left = ok (core.result.Result.Ok fleft)
+lineX : ops.op14 fleft = ok r.lineX
+rightEq : right = left.wrapping_add 3#usize
+newRight : ops.op12 right = ok (core.result.Result.Ok fright)
+lineY : ops.op14 fright = ok r.lineY
+hx : r.x = point.x
+hy : r.y = point.y
+mul : ops.op9 r.lineX r.lineX = ok square
+dbl : ops.op10 square = ok doubled
+unit : ops.op7 = ok one
+sub : ops.op8 doubled one = ok r.lineZ
+left✝ : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+line : ↑zsOut = ↑zs ++ [r.lineZ]
+fi : fibre = u ∧ ↑fibre < 262144
+fl : fleft = left ∧ ↑fleft < 262144
+fr : fright = right ∧ ↑fright < 262144
+castEq : u = UScalar.cast UScalarTy.Usize query
+limit : ↑query < 4294967296
+⊢ 4294967296 < 2 ^ UScalarTy.Usize.numBits
+Port5Q1_Domain.lean:55:29: error: Application type mismatch: The argument
+  cap
+has type
+  4294967296 < UScalar.size UScalarTy.Usize
+but is expected to have type
+  4294967296 < 2 ^ UScalarTy.Usize.numBits
+in the application
+  Nat.lt_trans limit cap
+Port5Q1_Domain.lean:57:33: error: Application type mismatch: The argument
+  4#usize
+has type
+  UScalar UScalarTy.Usize
+of sort `Type` but is expected to have type
+  ↑?m.356 ≠ 0
+of sort `Prop` in the application
+  UScalar.div_spec u 4#usize
+Port5Q1_Domain.lean:64:57: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 4097
+  j ≥ 0
+  i ≥ 0
+  0 ≤ i - 4*j ≤ 3
+  0 ≤ h ≤ 262143
+  0 ≤ f ≤ 262143
+  0 ≤ e ≤ 262143
+where
+ e := ↑↑fibre
+ f := ↑↑fleft
+ h := ↑↑fright
+ i := ↑↑query
+ j := ↑↑u / 4
+ k := ↑(↑u / 4) * ↑↑4#usize
+Port5Q1_Domain.lean:67:93: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  k ≥ 0
+  j ≥ 0
+  j ≥ 0
+  4*j + k ≥ 4097
+  0 ≤ i ≤ 262143
+  0 ≤ i - 4*j ≤ 3
+  0 ≤ h ≤ 262143
+  0 ≤ f ≤ 262143
+  0 ≤ e ≤ 262143
+where
+ e := ↑↑fibre
+ f := ↑↑fleft
+ h := ↑↑fright
+ i := ↑↑query
+ j := ↑↑u / 4
+ k := ↑↑3#usize
+Port5Q1_Domain.lean:74:72: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+leaves : SessionADomain ops
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u v left right fibre fleft fright : Usize
+point : aspis_core.r0.domain.Point Port4C_GeometryGather.M
+square doubled one : Port4C_GeometryGather.M
+left✝¹ : iterOut = iter1
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+new : ops.op12 u = ok (core.result.Result.Ok fibre)
+pointRun : ops.op15 fibre = ok point
+div : u / 4#usize = ok v
+leftEq : left = v.wrapping_mul 4#usize
+newLeft : ops.op12 left = ok (core.result.Result.Ok fleft)
+lineX : ops.op14 fleft = ok r.lineX
+rightEq : right = left.wrapping_add 3#usize
+newRight : ops.op12 right = ok (core.result.Result.Ok fright)
+lineY : ops.op14 fright = ok r.lineY
+hx : r.x = point.x
+hy : r.y = point.y
+mul : ops.op9 r.lineX r.lineX = ok square
+dbl : ops.op10 square = ok doubled
+unit : ops.op7 = ok one
+sub : ops.op8 doubled one = ok r.lineZ
+left✝ : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+line : ↑zsOut = ↑zs ++ [r.lineZ]
+fi : fibre = u ∧ ↑fibre < 262144
+fl : fleft = left ∧ ↑fleft < 262144
+fr : fright = right ∧ ↑fright < 262144
+castEq : u = UScalar.cast UScalarTy.Usize query
+uv : ↑u = ↑query
+vb : ↑v = ↑u / 4
+lv : ↑left = ↑v * 4
+rv : ↑right = ↑left + 3
+bound : ↑query < 262144
+p0 : index ↑fleft = childIndex (parent ↑query) 0
+⊢ ↑query / 4 * 4 + 3 = 4 * (↑query / 4) + ↑3
+Port5Q1_Domain.lean:90:4: error: No goals to be solved
+Port5Q1_Domain.lean:92:70: error: unsolved goals
+CoreError : Type
+ops : Ops CoreError
+leaves : SessionADomain ops
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install ops) start iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u v left right fibre fleft fright : Usize
+point : aspis_core.r0.domain.Point Port4C_GeometryGather.M
+square doubled one : Port4C_GeometryGather.M
+left✝¹ : iterOut = iter1
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+new : ops.op12 u = ok (core.result.Result.Ok fibre)
+pointRun : ops.op15 fibre = ok point
+div : u / 4#usize = ok v
+leftEq : left = v.wrapping_mul 4#usize
+newLeft : ops.op12 left = ok (core.result.Result.Ok fleft)
+lineX : ops.op14 fleft = ok r.lineX
+rightEq : right = left.wrapping_add 3#usize
+newRight : ops.op12 right = ok (core.result.Result.Ok fright)
+lineY : ops.op14 fright = ok r.lineY
+hx : r.x = point.x
+hy : r.y = point.y
+mul : ops.op9 r.lineX r.lineX = ok square
+dbl : ops.op10 square = ok doubled
+unit : ops.op7 = ok one
+sub : ops.op8 doubled one = ok r.lineZ
+left✝ : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+line : ↑zsOut = ↑zs ++ [r.lineZ]
+fi : fibre = u ∧ ↑fibre < 262144
+fl : fleft = left ∧ ↑fleft < 262144
+fr : fright = right ∧ ↑fright < 262144
+castEq : u = UScalar.cast UScalarTy.Usize query
+uv : ↑u = ↑query
+vb : ↑v = ↑u / 4
+lv : ↑left = ↑v * 4
+rv : ↑right = ↑left + 3
+bound : ↑query < 262144
+p0 : index ↑fleft = childIndex (parent ↑query) 0
+p3 : index ↑fright = childIndex (parent ↑query) 3
+cp :
+  S7JoinBasisMachine.decode point.x = X (FoldStoredGeometry.sourceFibre (index ↑fibre)) ∧
+    S7JoinBasisMachine.decode point.y = sorry
+cx : S7JoinBasisMachine.decode r.lineX = FoldGeometryBridge.lx (parent ↑query)
+cy : S7JoinBasisMachine.decode r.lineY = FoldGeometryBridge.ly (parent ↑query)
+cz : S7JoinBasisMachine.decode r.lineZ = lineZ ↑query
+pointIndex : index ↑fibre = index ↑query
+⊢ [S7JoinBasisMachine.decode point.x, S7JoinBasisMachine.decode point.y, FoldGeometryBridge.lx (parent ↑query),
+      FoldGeometryBridge.ly (parent ↑query), lineZ ↑query] =
+    [X (FoldStoredGeometry.sourceFibre (index ↑query)), sorry, FoldGeometryBridge.lx (parent ↑query),
+      FoldGeometryBridge.ly (parent ↑query), lineZ ↑query]
+Port5Q1_Domain.lean:93:96: warning: This simp argument is unused:
+  pointIndex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵4̵C̵_̵G̵e̵o̵m̵e̵t̵r̵y̵G̵a̵t̵h̵e̵r̵.̵R̵o̵w̵.̵w̵o̵r̵d̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵w̵o̵r̵d̵s̵,̵h̵x̵,̵h̵y̵,̵c̵p̵.̵1̵,̵c̵p̵.̵2̵,̵p̵o̵i̵n̵t̵I̵n̵d̵e̵x̵,̵c̵x̵,̵c̵y̵,̵c̵z̵]̵[̲P̲o̲r̲t̲4̲C̲_̲G̲e̲o̲m̲e̲t̲r̲y̲G̲a̲t̲h̲e̲r̲.̲R̲o̲w̲.̲w̲o̲r̲d̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲w̲o̲r̲d̲s̲,̲ ̲h̲x̲,̲ ̲h̲y̲,̲ ̲c̲p̲.̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲p̲.̲2̲,̲ ̲c̲x̲,̲ ̲c̲y̲,̲ ̲c̲z̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port5Q1_Domain.lean:93:74: warning: declaration uses `sorry`
+'AspisR1.Port5Q1_Domain.gathered_row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
