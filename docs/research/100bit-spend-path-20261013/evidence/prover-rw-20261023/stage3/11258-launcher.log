@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1034); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                    (deref_mut_back1 (a6.to_slice_mut.2 s7))
+              let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+              if b1 = true then
+                  ok
+                    (done
+                      (core.result.Result.Ok
+                        { mask_nonce := nonce, field_mask_entropy := deref_mut_back (a3.to_slice_mut.2 s4),
+                          leaf_salt_seed := deref_mut_back1 (a6.to_slice_mut.2 s7) }))
+                else ok (cont (second.wrapping_add 1#usize))
+            else ok (cont (second.wrapping_add 1#usize))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError residual
+          ok (done r1)
+    ok
+        (match value with
+        | cont v => none
+        | done result => some result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:45: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok, ̲lift, ̲bind_tc_ok, ̲outcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:52: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if,m̵a̵p̵_̵o̵k̵,̵ ̲lift, ̲bind_tc_ok, ̲outcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:75: warning: This simp argument is unused:
+  outcome
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok, ̲lift, ̲bind_tc_ok,̵o̵u̵t̵c̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:42:30: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [mapR, ̲outcome,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:42:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵,̵o̵u̵t̵c̵o̵m̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲m̲a̲p̲R̲,̲ ̲o̲u̲t̲c̲o̲m̲e̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwEntropyIteration.same_iteration_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyIteration.no_retry_then_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.09
+	Maximum resident set size (kbytes): 4095664
+	Swaps: 0
+	Exit status: 1

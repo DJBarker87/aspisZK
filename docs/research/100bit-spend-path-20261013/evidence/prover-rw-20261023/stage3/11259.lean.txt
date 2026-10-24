@@ -1,0 +1,107 @@
+import R1Z.ProverRwFullFuns
+import R1Z.ProverRwSamplerArithmetic
+
+/-! Symbolic finite refinement of the rewritten private-salt owner. No concrete
+64-cell evaluation, assumed success, or leaf-kernel correctness is used. -/
+set_option autoImplicit false
+namespace R1Z.ProverRwSaltLoop
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+variable [ExternalTypes] [ExternalFuns]
+abbrev Reserved := aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+abbrev Context := aspis_core.state_only_hiding.StateOnlyHidingContext
+abbrev Hash := Slice (Slice U8) → Result (Array U8 32#usize)
+abbrev Salts := alloc.vec.Vec (Array U8 32#usize)
+abbrev Status := core.result.Result Salts verifier.Error
+
+def step (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8)
+    (result : Status) (index : Usize) : Result Status :=
+  match result with
+  | .Ok salts => prover.derive_private_salt_step reserved context hash tag (UScalar.cast .U32 index) salts
+  | .Err _ => ok result
+
+def finite (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8) :
+    Nat → Status → Usize → Result Status
+  | 0,result,_ => ok result
+  | n+1,result,index => do
+    let next ← step reserved context hash tag result index
+    finite reserved context hash tag n next (Usize.wrapping_add index 1#usize)
+
+theorem loop_finite (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8)
+    (count index : Usize) (n : Nat) (result : Status) (bound : index.val+n=count.val) :
+    prover.derive_private_salts_loop reserved context hash tag count result index =
+      finite reserved context hash tag n result index := by
+  unfold prover.derive_private_salts_loop
+  induction n generalizing result index with
+  | zero =>
+    have stop : ¬ index < count := by change ¬ index.val < count.val; omega
+    rw [loop]
+    simp only [prover.derive_private_salts_loop.body,stop,if_false,bind_tc_ok,finite]
+  | succ n ih =>
+    have go : index < count := by change index.val < count.val;omega
+    have add : (Usize.wrapping_add index 1#usize).val = index.val+1 := by
+      rw [Usize.wrapping_add_val_eq]
+      have one : (1#usize).val = 1 := rfl
+      rw [one,Nat.mod_eq_of_lt]
+      have hc := count.hSize
+      change count.val < UScalar.size .Usize at hc
+      omega
+    have next : (Usize.wrapping_add index 1#usize).val+n=count.val := by omega
+    rw [loop]
+    simp only [prover.derive_private_salts_loop.body,go,if_true,finite]
+    cases result with
+    | Err error =>
+      simp only [step,lift,bind_tc_ok]
+      exact ih (Usize.wrapping_add index 1#usize) (.Err error) next
+    | Ok salts =>
+      simp only [step,lift,bind_tc_ok]
+      cases called : prover.derive_private_salt_step reserved context hash tag
+          (UScalar.cast .U32 index) salts with
+      | fail e => rfl
+      | div => rfl
+      | ok after =>
+        simp only [bind_tc_ok]
+        exact ih (Usize.wrapping_add index 1#usize) after next
+
+theorem error_suffix (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8)
+    (n : Nat) (error : verifier.Error) (index : Usize) :
+    finite reserved context hash tag n (.Err error) index = ok (.Err error) := by
+  induction n generalizing index with
+  | zero => rfl
+  | succ n ih => simp only [finite,step,bind_tc_ok]; exact ih _
+
+/-- The model stops immediately on an inner error. The source performs only
+pure counter steps after that error; no further derivation callback is called. -/
+def eager (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8) :
+    Nat → Status → Usize → Result Status
+  | 0,result,_ => ok result
+  | _+1,.Err error,_ => ok (.Err error)
+  | n+1,.Ok salts,index => do
+    let next ← step reserved context hash tag (.Ok salts) index
+    eager reserved context hash tag n next (Usize.wrapping_add index 1#usize)
+
+theorem finite_eager (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8)
+    (n : Nat) (result : Status) (index : Usize) :
+    finite reserved context hash tag n result index =
+      eager reserved context hash tag n result index := by
+  induction n generalizing result index with
+  | zero => rfl
+  | succ n ih =>
+    cases result with
+    | Err error => exact error_suffix reserved context hash tag _ error index
+    | Ok salts =>
+      simp only [finite,eager]
+      apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro after called
+      exact ih after _
+
+theorem loop_eager (reserved : Reserved) (context : Context) (hash : Hash) (tag : U8)
+    (count index : Usize) (n : Nat) (result : Status) (bound : index.val+n=count.val) :
+    prover.derive_private_salts_loop reserved context hash tag count result index =
+      eager reserved context hash tag n result index := by
+  rw [loop_finite reserved context hash tag count index n result bound,finite_eager]
+
+#print axioms loop_finite
+#print axioms error_suffix
+#print axioms finite_eager
+#print axioms loop_eager
+end R1Z.ProverRwSaltLoop

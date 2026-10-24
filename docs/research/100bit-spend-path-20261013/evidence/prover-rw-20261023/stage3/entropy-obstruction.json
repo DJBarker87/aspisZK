@@ -1,0 +1,40 @@
+{
+  "qualification": "Native source inspection and source-control tape example; not an actual OS call, compiler theorem or probability/experiment closure",
+  "native_source": "crates/aspis-prover/src/state_only_entropy.rs",
+  "native_file_sha256": "1d48a26ba021dae55242f005bf45f4cea311d89fa32bbb064975991b6efbd57d",
+  "native_function_sha256": "8870bfcde4ea61be338237ff07226337bb892fc29ad182efa5854210019eee81",
+  "native_function": "    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }\n",
+  "raw_emitted_body_sha256": "3795752f375bae203ebcd0198dc87d8c3ab5369a282921fd389bc2b2e8ce36e7",
+  "normalized_body_sha256": "c468efce0d55d8540a47929c4e253c9095bb97019d7382ce9aa9b73bb33a1c9b",
+  "entropy_body_unchanged_except_lift_qualification": true,
+  "external_signature": "getrandom.fill : Slice U8 -> Result ((core.result.Result Unit getrandom.error.Error) * Slice U8)",
+  "dictionary_field": "ExternalFuns.op129",
+  "tape_example": [
+    {
+      "cursor": 0,
+      "input_buffer": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "output_block": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "result": "retry"
+    },
+    {
+      "cursor": 1,
+      "input_buffer": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "output_block": "01010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101",
+      "result": "success"
+    }
+  ],
+  "formal_obstruction": "R1Z.ProverRwEntropyIteration.no_retry_then_success",
+  "primitive_obstruction": "R1Z.ProverRwEntropyObstruction.no_two_draw_dictionary",
+  "accepted_attempts": [
+    11255,
+    11260,
+    11261
+  ],
+  "false_claim": "A fixed pure external dictionary faithfully represents every native E1 iteration and ordered fill-result history for every admitted fixed coin tape.",
+  "not_refuted": [
+    "Native Rust correctness",
+    "Privacy",
+    "Conjunct 1 with an effect-aware or proved observational transport"
+  ],
+  "required_repair": "Thread explicit RNG/oracle/IO state through the extraction interpretation, or prove an observational transport that preserves the unchanged realBad, realSeedQueries and joint L1/L2 law. A pure dictionary plus opaque contracts cannot prove the contradicted stronger iteration equation."
+}

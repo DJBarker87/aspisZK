@@ -1,0 +1,35 @@
+@R1Z.ProverRwCallerBinding.eight : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns) {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (hash : R1Z.ProverRwRetryModel.Hash)
+  (store : R1Z.ProverRwRetryModel.Store) (callback : C),
+  R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.sourceOutput
+      (ProverRwFull.prover.prove_masked_retrying_with entropy pub compiled ProverRwFull.transport.Variant.S2 hash store
+        callback) =
+    R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.drop
+      (R1Z.ProverCommitRetry34.eight
+        (R1Z.ProverRwRetryModel.attempt entropy pub compiled ProverRwFull.transport.Variant.S2 hash) (callback, store))
+@R1Z.ProverRwEntropyIteration.no_retry_then_success : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwFull.ExternalFuns] (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (limit first second after : Aeneas.Std.Usize),
+  first < limit →
+    second < limit →
+      ∀ (secret : R1Z.ProverRwEntropyIteration.Secret),
+        ¬(R1Z.ProverRwEntropyIteration.Body nonce limit first =
+              Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont after) ∧
+            R1Z.ProverRwEntropyIteration.Body nonce limit second =
+              Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (Aeneas.Std.core.result.Result.Ok secret)))
+'R1Z.ProverRwCallerBinding.variant_exact' depends on axioms: [propext]
+'R1Z.ProverRwCallerBinding.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwCallerBinding.rejected_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwCallerBinding.eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSaltLoop.loop_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSaltLoop.error_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSaltLoop.finite_eager' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSaltLoop.loop_eager' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyObstruction.distinct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyObstruction.no_two_draw_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyObstruction.effectful_two_draws' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyIteration.same_iteration_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyIteration.no_retry_then_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

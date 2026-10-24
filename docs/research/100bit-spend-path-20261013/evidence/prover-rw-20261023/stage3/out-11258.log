@@ -1,0 +1,199 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:22:17: error: failed to set `[local irreducible]`, `zeroize.Zeroizing.new` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:22:17: error: failed to set `[local irreducible]`, `zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:22:17: error: failed to set `[local irreducible]`, `zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:22:17: error: failed to set `[local irreducible]`, `zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:22:17: error: failed to set `[local irreducible]`, `getrandom.fill` is currently `[reducible]`, `[semireducible]` nor `[implicit_reducible]` expected
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:32:86: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+nonce : Std.Array U8 32#usize
+limit first second : Usize
+hfirst : first < limit
+hsecond : second < limit
+value : zeroize.Zeroizing (Std.Array U8 64#usize)
+called✝¹ :
+  zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+      (Array.repeat 64#usize 0#u8) =
+    ok value
+value1✝ : Slice U8
+value2✝ : Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)
+called✝ :
+  zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut (Array.Insts.CoreConvertAsMutSlice U8 64#usize)
+      (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) value =
+    ok (value1✝, value2✝)
+value1 : core.result.Result Unit getrandom.error.Error
+value2 : Slice U8
+called : getrandom.fill value1✝ = ok (value1, value2)
+⊢ (do
+      let a ← core.result.Result.Insts.CoreOpsTry.branch value1
+      let value ←
+        match a with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let field_mask_entropy ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (Array.repeat 32#usize 0#u8)
+            let leaf_salt_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (Array.repeat 32#usize 0#u8)
+            let (a3, deref_mut_back) ←
+              zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  field_mask_entropy
+            let a4 ←
+              zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (value2✝ value2)
+            let s3 ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+                  { «end» := 32#usize }
+            let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a3.to_slice_mut.1 s3
+            let (a6, deref_mut_back1) ←
+              zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  leaf_salt_seed
+            let s6 ←
+              core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+                  { start := 32#usize }
+            let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a6.to_slice_mut.1 s6
+            let a8 ←
+              zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (deref_mut_back (a3.to_slice_mut.2 s4))
+            let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+            if b = true then do
+                let a9 ←
+                  zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      (deref_mut_back1 (a6.to_slice_mut.2 s7))
+                let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+                if b1 = true then
+                    ok
+                      (done
+                        (core.result.Result.Ok
+                          { mask_nonce := nonce, field_mask_entropy := deref_mut_back (a3.to_slice_mut.2 s4),
+                            leaf_salt_seed := deref_mut_back1 (a6.to_slice_mut.2 s7) }))
+                  else ok (cont (first.wrapping_add 1#usize))
+              else ok (cont (first.wrapping_add 1#usize))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                  aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError residual
+            ok (done r1)
+      ok
+          (match value with
+          | cont v => none
+          | done result => some result)) =
+    do
+    let a ← core.result.Result.Insts.CoreOpsTry.branch value1
+    let value ←
+      match a with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let field_mask_entropy ←
+            zeroize.Zeroizing.new
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (Array.repeat 32#usize 0#u8)
+          let leaf_salt_seed ←
+            zeroize.Zeroizing.new
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (Array.repeat 32#usize 0#u8)
+          let (a3, deref_mut_back) ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                field_mask_entropy
+          let a4 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (value2✝ value2)
+          let s3 ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+                { «end» := 32#usize }
+          let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a3.to_slice_mut.1 s3
+          let (a6, deref_mut_back1) ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                leaf_salt_seed
+          let s6 ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+                { start := 32#usize }
+          let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a6.to_slice_mut.1 s6
+          let a8 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back (a3.to_slice_mut.2 s4))
+          let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+          if b = true then do
+              let a9 ←
+                zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                    (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                    (deref_mut_back1 (a6.to_slice_mut.2 s7))
+              let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+              if b1 = true then
+                  ok
+                    (done
+                      (core.result.Result.Ok
+                        { mask_nonce := nonce, field_mask_entropy := deref_mut_back (a3.to_slice_mut.2 s4),
+                          leaf_salt_seed := deref_mut_back1 (a6.to_slice_mut.2 s7) }))
+                else ok (cont (second.wrapping_add 1#usize))
+            else ok (cont (second.wrapping_add 1#usize))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError residual
+          ok (done r1)
+    ok
+        (match value with
+        | cont v => none
+        | done result => some result)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:45: warning: This simp argument is unused:
+  map_if
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_i̵f̵,̵m̵a̵p̵_̵ok, ̲lift, ̲bind_tc_ok, ̲outcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:52: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if,m̵a̵p̵_̵o̵k̵,̵ ̲lift, ̲bind_tc_ok, ̲outcome]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:40:75: warning: This simp argument is unused:
+  outcome
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry, ̲map_bind, ̲map_if, ̲map_ok, ̲lift, ̲bind_tc_ok,̵o̵u̵t̵c̵o̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:42:30: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [mapR, ̲outcome,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyIteration.lean:42:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵,̵o̵u̵t̵c̵o̵m̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲m̲a̲p̲R̲,̲ ̲o̲u̲t̲c̲o̲m̲e̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwEntropyIteration.same_iteration_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyIteration.no_retry_then_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

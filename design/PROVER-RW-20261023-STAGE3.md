@@ -122,3 +122,12 @@ This supersedes the earlier statement that no full Funs proof build was attempte
 It does not supply the remaining native dictionary instances or conjunct 1.
 See `design/PROVER-RW-20261024-STAGE3-CONTINUATION.md` for exact claims,
 backend adaptations, rejected audits and the remaining obligations.
+
+The continuation stops on a proved false unrestricted pure-dictionary E1
+refinement: the actual emitted entropy iteration cannot retry then succeed
+below the limit under any fixed pure dictionary, whereas a native zero block
+followed by a nonzero block does so. See the continuation's second checkpoint
+and `ProverRwEntropyIteration.no_retry_then_success`. This does not refute
+privacy; the next required interface must carry effects or have a proved
+observational transport. Final audit 11261 is standard-axiom-only. Next ID
+11262; 60/100 Stage 3 Lean compiles and 42/60 Kani runs used.
