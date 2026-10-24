@@ -167,3 +167,13 @@ D195 retains candidate dbc123fdc8 at conditional emitted-source scope. Dependenc
 ## Material/caller review and secure callback transport preflight — 2026-10-24
 
 D196 records reviewed conditional source packet067e1ddd1e. Actual acknowledgment/material failure paths and borrowedcap8 retry compose without oldBody/audit placeholders. Native securecallback transport is stillmissing. Worker74207 uses9remaining Leanonly (211/220used;Kani44/60), tasked with precise source-validity/error/drop transport or reviewable minimal extractor proposal. No newtrust/backendchange/sourceadoption. Port10AUTH63880 remainslive. Bothdeployedtargets notyetestablished.
+
+
+## Secure callback target correction and isolated tool candidate — 2026-10-24
+
+D197 records mathematical validity packet review and corrects alternate96-byte factory selection: actual release adapter remains selected64-byte RealR1_client/public proof-account nonce per D152. Worker77049 now implements bounded isolated refined-I32 extractor candidate, with7Lean remaining and explicit operational budgets; no shared tool adoption/newtrust/shippedsource change. Port10AUTH has finished and awaits lead review. Both deployedtargets remain notyetestablished.
+
+
+## Both batch traces reviewed; provenance instantiation next — 2026-10-24
+
+Port10AUTH d1069e1971 reviewed and merged7b887b23ac. Independent static checks passed23 final sources, dependency/source hashes,five generators,resource receipts and41standard reports. C3/STATUS/session A handoff retain exact provenance/P6/primitive boundaries. Explicit new60 Lean allocation (old160exhausted, new ceiling220);Kani0/20 unchanged. Worker78498 on codex/cx-port11prov-20261024 now owns actual wire/query/root/node-view/checkpoint provenance instantiation at both reached witnesses and Port6AUTH composition. If shared A boundary blocks that item, audit/prove owned physical source counts instead; no invented source1161 claim. Prompt archived evidence/coordinator-20261024/prompt-port11prov-20261024.txt. Extractor candidate77049 remains live on selected64-byte privacy adapter. Both deployed targets not yet established.

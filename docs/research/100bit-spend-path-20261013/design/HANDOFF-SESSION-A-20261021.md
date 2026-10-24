@@ -475,3 +475,8 @@ history and rejected prefixes remain your local source deliverable.
 ## Reply-driven source effects ready (2026-10-24)
 
 Port9OR now merged: Code.correspondence separates fixed response-driven Program from per-H native interpretation; actual reader branches consume replies. Installed.effects covers physical batch op5 (duplicate hashing before compare, rejection suffixes and scratch), plus8/18. FirstBatch.first_batch supplies accepted-source batch1 chronology. See evidence/port9oracle-20261024/README.md/STAGE1-3. Your prepare7/powers17/primitive frontier is unchanged. Lead next owns physical-to-canonical batch read containment for Port6AUTH contains; no duplicate sampler work. Full-source accepted-failure domination, source1161 and StoredCarrierBinding remain open. Both targets not yet established.
+
+
+## Both physical batch authentication traces ready (2026-10-24)
+
+Port10AUTH now reviewed/merged. Installed.accepted proves complete accepted physical op5 observation equals canonical sourceBatch log; FirstBoth.accepted embeds both batches in the same first accepted source record. Retains exact wire/query/root/node-view provenance at actual Prepared witnesses, existing ParentGate/LeafGate and P6 lowering. Lead next owns instantiating those provenance equations and feeding Port6AUTH, without duplicating your prepare7/sampler/powers17/primitive work. Full-source domination/no-hit, source1161, StoredCarrierBinding and release identity remain open. See evidence/port10auth-20261024/README.md/STAGE3. Both deployed targets not yet established.
