@@ -1,0 +1,169 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:11:21: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:13:31: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:26:42: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:26:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 15
+  a - b ≥ 0
+where
+ a := ↑↑i
+ b := ↑↑29#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:31:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑claims)[0].index_usize i
+in the target expression
+  (do
+      let q ← (↑claims)[↑0#usize].index_usize i
+      ok (q, claims)) =
+    ok (cell claims ↑i, claims)
+
+H : Type
+D : aspis_core.Digest32 H
+claims : Claims
+i : Usize
+hi : ↑i < 16
+row : Array.index_usize claims 0#usize = ok (↑claims)[↑0#usize]
+col : (↑claims)[0].index_usize i = ok (↑(↑claims)[0])[↑i]
+⊢ (do
+      let q ← (↑claims)[↑0#usize].index_usize i
+      ok (q, claims)) =
+    ok (cell claims ↑i, claims)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    claims
+  has type
+    Claims
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑claims
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:41:42: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:41:74: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  16 ≤ a ≤ 25
+  a - b ≥ 0
+where
+ a := ↑↑j
+ b := ↑↑29#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:47:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑claims)[0].index_usize j
+in the target expression
+  (do
+      let q ← (↑claims)[↑0#usize].index_usize j
+      ok (q, claims)) =
+    ok (cell claims (16 + ↑i), claims)
+
+H : Type
+D : aspis_core.Digest32 H
+claims : Claims
+i : Usize
+hi : ↑i < 10
+j : UScalar UScalarTy.Usize
+add : 16#usize + i = ok j
+hj : ↑j = ↑16#usize + ↑i
+jval : ↑j = 16 + ↑i
+row : Array.index_usize claims 0#usize = ok (↑claims)[↑0#usize]
+col : (↑claims)[0].index_usize j = ok (↑(↑claims)[0])[↑j]
+⊢ (do
+      let q ← (↑claims)[↑0#usize].index_usize j
+      ok (q, claims)) =
+    ok (cell claims (16 + ↑i), claims)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    claims
+  has type
+    Claims
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑claims
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:65:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1SelectedMaskProbe.arrayFromFnLoop 16#usize (FinishModel.closureFn9 D) (16 + 1) 0#usize claims []
+in the target expression
+  (match h :
+      AspisR1SelectedMaskProbe.arrayFromFnLoop 16#usize (FinishModel.closureFn9 D) (↑16#usize + 1) 0#usize claims
+        [] with
+    | ok (values, snd) => ok ⟨values, ⋯⟩
+    | fail error => fail error
+    | div => div) =
+    ok out
+
+H : Type
+D : aspis_core.Digest32 H
+claims : Claims
+run :
+  AspisR1SelectedMaskProbe.arrayFromFnLoop 16#usize (FinishModel.closureFn9 D) (16 + 1) 0#usize claims [] =
+    ok (List.map (cell claims) (List.range ↑16#usize), claims)
+out : Std.Array Q 16#usize := ⟨List.map (cell claims) (List.range 16), ⋯⟩
+⊢ (match h :
+      AspisR1SelectedMaskProbe.arrayFromFnLoop 16#usize (FinishModel.closureFn9 D) (↑16#usize + 1) 0#usize claims
+        [] with
+    | ok (values, snd) => ok ⟨values, ⋯⟩
+    | fail error => fail error
+    | div => div) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1FinishSelectorsV1.lean:78:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1SelectedMaskProbe.arrayFromFnLoop 10#usize (FinishModel.closureFn5 D) (10 + 1) 0#usize claims []
+in the target expression
+  (match h :
+      AspisR1SelectedMaskProbe.arrayFromFnLoop 10#usize (FinishModel.closureFn5 D) (↑10#usize + 1) 0#usize claims
+        [] with
+    | ok (values, snd) => ok ⟨values, ⋯⟩
+    | fail error => fail error
+    | div => div) =
+    ok out
+
+H : Type
+D : aspis_core.Digest32 H
+claims : Claims
+run :
+  AspisR1SelectedMaskProbe.arrayFromFnLoop 10#usize (FinishModel.closureFn5 D) (10 + 1) 0#usize claims [] =
+    ok (List.map (fun i => cell claims (16 + i)) (List.range ↑10#usize), claims)
+out : Std.Array Q 10#usize := ⟨List.map (fun i => cell claims (16 + i)) (List.range 10), ⋯⟩
+⊢ (match h :
+      AspisR1SelectedMaskProbe.arrayFromFnLoop 10#usize (FinishModel.closureFn5 D) (↑10#usize + 1) 0#usize claims
+        [] with
+    | ok (values, snd) => ok ⟨values, ⋯⟩
+    | fail error => fail error
+    | div => div) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisS1FinishSelectors.first_callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1FinishSelectors.second_callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1FinishSelectors.first_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1FinishSelectors.second_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

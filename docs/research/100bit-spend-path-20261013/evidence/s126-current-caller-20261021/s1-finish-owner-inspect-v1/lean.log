@@ -1,0 +1,71 @@
+@[irreducible] def AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS : Aeneas.Std.Usize :=
+10#usize
+@[irreducible] def AspisR1SelectedMaskProbe.state_only_hiding.FACTOR_EXPONENTS : Aeneas.Std.Array Aeneas.Std.U8
+  16#usize :=
+Aeneas.Std.Array.make 16#usize
+  [0#u8, 2#u8, 4#u8, 6#u8, 8#u8, 10#u8, 12#u8, 14#u8, 16#u8, 18#u8, 20#u8, 22#u8, 24#u8, 26#u8, 13#u8, 25#u8]
+  AspisR1SelectedMaskProbe.state_only_hiding.FACTOR_EXPONENTS._proof_18
+def AspisR1SelectedMaskProbe.state_only_hiding.selected_mask_linears : Aeneas.Std.Array
+    AspisR1SelectedMaskProbe.field.QM31 10#usize →
+  Aeneas.Std.Result (AspisR1SelectedMaskProbe.field.QM31 × AspisR1SelectedMaskProbe.field.QM31) :=
+fun point => do
+  let iter ←
+    Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default
+        (Aeneas.Std.core.iter.traits.iterator.IteratorRange Aeneas.Std.core.iter.range.StepUsize)
+        (Aeneas.Std.core.ops.range.Range.Insts.DoubleEndedIterator Aeneas.Std.core.iter.range.StepUsize)
+        { start := 0#usize, «end» := AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS }
+  let __x ←
+    AspisR1SelectedMaskProbe.state_only_hiding.selected_mask_linears_loop iter point
+        AspisR1SelectedMaskProbe.field.QM31.ZERO AspisR1SelectedMaskProbe.field.QM31.ZERO
+  match __x with
+    | (suffix, weighted) => do
+      let q ← suffix.mul_m31 3#u32
+      let q1 ← weighted.mul_m31 22#u32
+      let q2 ← q.add q1
+      let q3 ← suffix.mul_m31 275#u32
+      let q4 ← weighted.mul_m31 150#u32
+      let q5 ← q3.add q4
+      Aeneas.Std.Result.ok (q2, q5)
+def AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value : Aeneas.Std.Array
+    AspisR1SelectedMaskProbe.field.QM31 16#usize →
+  Aeneas.Std.Array AspisR1SelectedMaskProbe.field.QM31 10#usize →
+    AspisR1SelectedMaskProbe.field.QM31 →
+      Aeneas.Std.Array AspisR1SelectedMaskProbe.field.QM31 10#usize →
+        Aeneas.Std.Result AspisR1SelectedMaskProbe.field.QM31 :=
+fun c1 mask_only_c1 explicit_g point => do
+  let __x ← AspisR1SelectedMaskProbe.state_only_hiding.selected_mask_linears point
+  match __x with
+    | (linear, explicit_linear) =>
+      have coefficients := Aeneas.Std.Array.repeat 27#usize AspisR1SelectedMaskProbe.field.QM31.ZERO;
+      do
+      let coefficients1 ←
+        AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value_loop0
+            { start := 0#usize, «end» := AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_C1_COLUMNS } c1
+            coefficients
+      let coefficients2 ←
+        AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value_loop1
+            { start := 0#usize,
+              «end» := AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS }
+            mask_only_c1 coefficients1
+      let prepared_linear ← AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new linear
+      let shared ← coefficients2.index_usize AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
+      let iter ←
+        Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default
+            (Aeneas.Std.core.iter.traits.iterator.IteratorRange Aeneas.Std.core.iter.range.StepUsize)
+            (Aeneas.Std.core.ops.range.Range.Insts.DoubleEndedIterator Aeneas.Std.core.iter.range.StepUsize)
+            { start := 0#usize, «end» := AspisR1SelectedMaskProbe.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE }
+      let shared1 ←
+        AspisR1SelectedMaskProbe.state_only_hiding.state_only_selected_mask_value_loop2 iter coefficients2
+            prepared_linear shared
+      let q ← AspisR1SelectedMaskProbe.state_only_hiding.mask_power_26 explicit_linear
+      let q1 ← AspisR1SelectedMaskProbe.field.QM31.ONE.add q
+      let q2 ← q1.mul explicit_g
+      shared1.add q2
+def AspisR1SelectedMaskProbe.core.array.from_fn : {T F : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N) :=
+fun {T F} N callback f =>
+  match h : AspisR1SelectedMaskProbe.arrayFromFnLoop N callback (↑N + 1) 0#usize f [] with
+  | Aeneas.Std.Result.ok (values, snd) => Aeneas.Std.Result.ok ⟨values, ⋯⟩
+  | Aeneas.Std.Result.fail error => Aeneas.Std.Result.fail error
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
