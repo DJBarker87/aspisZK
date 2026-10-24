@@ -36,15 +36,15 @@ theorem packed_at (parsed : Parsed) (q : Fin 22 → Fin 262144)
     (recovered : Nat → Option Bytes)
     (authenticated : ∀ pos, pos<22 → recovered (index q 2 pos)=
       some (OraclePortPackedChoiceC4.payload parsed 2 pos)) (j : Fin 22) :
-    packed parsed q 2 (AspisR1.parentIndex (q j)).val=
+    packed parsed q 2 (AspisR1.parentIndex (n:=65536) (q j)).val=
       some (slice (opening parsed j.val) 672 128) := by
-  have at := OraclePortPackedChoiceC4.packed_agrees parsed q 2 recovered authenticated j.val j.isLt
-  rw [authenticated j.val j.isLt] at at
-  have idx : index q 2 j.val=(AspisR1.parentIndex (q j)).val := by
+  have agrees := OraclePortPackedChoiceC4.packed_agrees parsed q 2 recovered authenticated j.val j.isLt
+  rw [authenticated j.val j.isLt] at agrees
+  have idx : index q 2 j.val=(AspisR1.parentIndex (n:=65536) (q j)).val := by
     have jmod : (⟨j.val%22,Nat.mod_lt _ (by decide)⟩ : Fin 22)=j := Fin.ext (Nat.mod_eq_of_lt j.isLt)
     simp only [index,jmod,ite_true,AspisR1.parentIndex]
   simpa only [idx,OraclePortPackedChoiceC4.payload,show (2:Nat)≠0 by decide,
-    show (2:Nat)≠1 by decide,if_false] using at
+    show (2:Nat)≠1 by decide,if_false] using agrees
 
 #print axioms data_word
 #print axioms packed_at
