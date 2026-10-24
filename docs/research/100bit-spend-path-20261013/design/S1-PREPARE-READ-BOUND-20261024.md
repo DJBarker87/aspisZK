@@ -114,3 +114,13 @@ Audit without Lean replay:
 ```
 python3 tools/s1-prepare-count-20261024/check.py
 ```
+
+## Powers source-authority correction (same day)
+
+The powers-adoption wording in the remaining-work paragraph above is stale:
+the adopted29cb/25866 overlay already contains the early-return helper.
+S1-POWERS-CALLBACK-SCRATCH-20261024.md records its byte-identical re-pin to the
+checked early owner, unchanged full arithmetic files, and separate historical
+from_fn evidence. No new powers adoption decision is required. Native Std/
+runtime, actual installed source/SDK and release joins remain open; the count
+proof and its parameters are unchanged.

@@ -1,0 +1,65 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "native_source_pin_reuse": {
+    "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+    "selected_original_powers_body": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }",
+    "separate_source_pins": {
+      "b2727acd3abf79315d18b754a260f58f4b1c6326": {
+        "whole_weights_sha256": "30e8f10fa7f0adfe2101bb5df8bdfe0876ee70b35349ab886ab4dc30a0d16cca",
+        "powers_sha256": "3919d83b539f8819c40251a84625b582ac88338fed2fa14b18951a69c0e1d018",
+        "kind": "historical_from_fn",
+        "body": "pub fn powers<const N:usize>(x:E)->[E;N] { let mut p=E::ONE;core::array::from_fn(|_| {let a=p;p=p.mul(x);a}) }"
+      },
+      "29cbab431742f7e899870595167efa193a379f0a": {
+        "whole_weights_sha256": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137",
+        "powers_sha256": "79c059dd574e3b0dac53ca40f02072d473466dc58ab231f23636f94285b12a22",
+        "kind": "adopted_early_return",
+        "body": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  i+=1;\n  if i==N { return out; }\n  p=p.mul(x);\n }\n out\n}"
+      },
+      "25866ec331cc7ce27dd9956609c11d32fa8fa58a": {
+        "whole_weights_sha256": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137",
+        "powers_sha256": "79c059dd574e3b0dac53ca40f02072d473466dc58ab231f23636f94285b12a22",
+        "kind": "adopted_early_return",
+        "body": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  i+=1;\n  if i==N { return out; }\n  p=p.mul(x);\n }\n out\n}"
+      }
+    },
+    "arithmetic_files_byte_identical": {
+      "crates/aspis-core/src/field.rs": {
+        "b2727acd3abf79315d18b754a260f58f4b1c6326": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+        "29cbab431742f7e899870595167efa193a379f0a": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+        "25866ec331cc7ce27dd9956609c11d32fa8fa58a": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+      },
+      "crates/aspis-core/src/field/wide_exact.rs": {
+        "b2727acd3abf79315d18b754a260f58f4b1c6326": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+        "29cbab431742f7e899870595167efa193a379f0a": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+        "25866ec331cc7ce27dd9956609c11d32fa8fa58a": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+      }
+    },
+    "current_adopted_overlay": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+    "adoption_revision": "29cbab431742f7e899870595167efa193a379f0a",
+    "new_source_adoption": false
+  },
+  "reused_source_evidence": {
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/sources/powers-control-v1/src/lib.rs": "252cb7f241b176f0ceca4cdc64fe680d23e0003f914e7f885f78afa00245f7c9",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/sources/powers-control-v1/source-cut.json": "3efd72fa25a35f37c54a4784f22addc53361f03c4da642803c7c0cb3e2e84b2f",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/sources/powers-control-v1/Cargo.toml": "21f8eae1d08b58321b5ddf1085b6c2cbc1396d82a494e0e7243d14bcf6273cff",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/sources/powers-control-v1/Cargo.lock": "bb3f1aa0d9ad3f689d723c5df6c49e3ba1097354d757844557dda225e3d273c9",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/std/kani-library-pins.json": "8a3e21787a38fa2f884d4db34880f457a7f81ecca5813e2ee6d840e7aa61213c",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/std/kani-contract-source-pins.json": "04d4e4ae23f215fc56e71c70566a6c6232c2a0fbe3f49072f9fb6f4b9d02cc18",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-native-word-control-source-pins.json": "696b1c45f23f21c66ca01590a8591f42c07ac171bba11ced613e06a847488345",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/s1-early-return-powers-proved-candidate-20261020/manifest.json": "e7d6eacb851e0f447a906fd2045ae28bf322befe2911a8318e2733e2191b00ba",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/s1-early-return-powers-proved-candidate-20261020/extraction-input/source-pins.json": "ac7f9d83eb804a9b27906a8108d5ef16477837fa103a4522819e9a400ad6550f",
+    "docs/research/100bit-spend-path-20261013/evidence/s1-current-wide-exact-field-20261020/manifest.json": "49317241da4fc5c627c188a61025e576ea60539d99b18470952a244b417d5c7b",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/s1-claim-parser-and-inner-trace-20261020/sources/CurrentClaimPowersInstance.lean": "083f42ed38f40a6f04ed2590124beaea1cca306f369046667ba87c645d2a0ae1",
+    "docs/research/100bit-spend-path-20261013/lean-candidates/s1-early-return-powers-proved-candidate-20261020/check-source-model.py": "b52d72ad3e2228f22ea1cb2597a216f2b593a706fb9a47358ad2a3981779ff87",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers7-control-v1/receipt.json": "0b51c19c0a38dc7c33dab538ccaeb696da04be6bbc43804fba7784a0ad952e08",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers7-control-v1/stdout.log": "2a0819c965501330b2754d3642a06b1ac913b8fb214f8f71534129fb98ef030b",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers7-control-v1/stderr.log": "31cf79d95abda221d3ab94d163417f51d6b6ebe5d6da0188d56d454a8d0556c9",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers7-control-v1/time.log": "78f72431b2049d84b712272453a614edd80507a948e208f1035919d854822c20",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers29-control-v1/receipt.json": "4171c224cd414638eca0a174188174209fe9a45a7336e54f09291d0a0802fdee",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers29-control-v1/stdout.log": "74103ba6aec049a8d6c5045ff7d0628a69946c6e9ad8ff29ceb09dfea4367cbf",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers29-control-v1/stderr.log": "de537db7f9bac0ef4282671b4d220d44a9f2cf1451c4c0232f3dacb7b98065d7",
+    "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/modular-host/receipts/powers29-control-v1/time.log": "768003e70384275aa63dc377ece5c5cf9ae462a399294cb7074c3fb96a9e6784"
+  },
+  "qualification": "Current adopted powers body is byte-identical to the checked early-return reference, and complete field files are unchanged. Historical fixed N7/N29 from_fn/candidate normal-return comparison is REUSED ONLY as historical evidence. No new adoption or ELF rebuild; source helper re-pin does not close native Std/SDK/artifact or unconditional R22. Historical host-wide aggregate accounting remains unverified as corrected separately."
+}

@@ -1,0 +1,107 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PowersCallbackChainV1.lean:52:75: error: don't know how to synthesize implicit argument `b`
+  @And.intro (Canonical p) (?m.246 = ?m.246) hp rfl
+context:
+N : Usize
+x : E
+hx : Canonical x
+i : Usize
+indices : List Usize
+ih :
+  ∀ (p : E),
+    Canonical p →
+      ∃ values last,
+        execute N (p, x) indices = ok (values, last, x) ∧
+          values.length = indices.length ∧
+            Canonical last ∧
+              decode last = decode p * decode x ^ indices.length ∧
+                ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode p * decode x ^ j
+p : E
+hp : Canonical p
+next : CallbackWide
+hnext : Canonical next
+hproduct : decode next = decode p * decode x
+hcall :
+  AspisR1CurrentPowers.weights.powers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeWideExact.call_once sourceMul (p, x)
+      i =
+    ok (p, next, x)
+values : List E
+last : E
+hrun : execute N (next, x) indices = ok (values, last, x)
+hlen : values.length = indices.length
+hlast : Canonical last
+hlastProduct : decode last = decode next * decode x ^ indices.length
+hcells : ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode next * decode x ^ j
+hj : 0 < (p :: values).length
+⊢ Prop
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PowersCallbackChainV1.lean:52:88: error: don't know how to synthesize implicit argument `a`
+  @rfl ?m.245 ?m.246
+context:
+N : Usize
+x : E
+hx : Canonical x
+i : Usize
+indices : List Usize
+ih :
+  ∀ (p : E),
+    Canonical p →
+      ∃ values last,
+        execute N (p, x) indices = ok (values, last, x) ∧
+          values.length = indices.length ∧
+            Canonical last ∧
+              decode last = decode p * decode x ^ indices.length ∧
+                ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode p * decode x ^ j
+p : E
+hp : Canonical p
+next : CallbackWide
+hnext : Canonical next
+hproduct : decode next = decode p * decode x
+hcall :
+  AspisR1CurrentPowers.weights.powers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeWideExact.call_once sourceMul (p, x)
+      i =
+    ok (p, next, x)
+values : List E
+last : E
+hrun : execute N (next, x) indices = ok (values, last, x)
+hlen : values.length = indices.length
+hlast : Canonical last
+hlastProduct : decode last = decode next * decode x ^ indices.length
+hcells : ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode next * decode x ^ j
+hj : 0 < (p :: values).length
+⊢ ?m.245
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1PowersCallbackChainV1.lean:52:88: error: don't know how to synthesize implicit argument `α`
+  @rfl ?m.245 ?m.246
+context:
+N : Usize
+x : E
+hx : Canonical x
+i : Usize
+indices : List Usize
+ih :
+  ∀ (p : E),
+    Canonical p →
+      ∃ values last,
+        execute N (p, x) indices = ok (values, last, x) ∧
+          values.length = indices.length ∧
+            Canonical last ∧
+              decode last = decode p * decode x ^ indices.length ∧
+                ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode p * decode x ^ j
+p : E
+hp : Canonical p
+next : CallbackWide
+hnext : Canonical next
+hproduct : decode next = decode p * decode x
+hcall :
+  AspisR1CurrentPowers.weights.powers.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeWideExact.call_once sourceMul (p, x)
+      i =
+    ok (p, next, x)
+values : List E
+last : E
+hrun : execute N (next, x) indices = ok (values, last, x)
+hlen : values.length = indices.length
+hlast : Canonical last
+hlastProduct : decode last = decode next * decode x ^ indices.length
+hcells : ∀ (j : ℕ) (hj : j < values.length), Canonical values[j] ∧ decode values[j] = decode next * decode x ^ j
+hj : 0 < (p :: values).length
+⊢ Sort ?u.100
+'AspisS1PowersCallbackChain.execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1PowersCallbackChain.total_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
