@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "/usr/bin/env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,runpy; from pathlib import Path; ns=runpy.run_path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2/ResourceAdmit_host.py'\"'\"'); m=json.loads((Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'\"'\"')/'\"'\"'ResourceAdmit_manifest.json'\"'\"').read_text()); p=ns['\"'\"'verify'\"'\"'](m); assert not (Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'\"'\"')/'\"'\"'ResourceAdmit_ATTEMPTED'\"'\"').exists(); assert not (Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'\"'\"')/'\"'\"'capture'\"'\"').exists(); print(json.dumps(dict(verified=True,epoch=m['\"'\"'epoch'\"'\"'],scope_argv=m['\"'\"'scope_argv'\"'\"'],files=p['\"'\"'files'\"'\"'],env_pin=ns['\"'\"'digest'\"'\"'](json.dumps(m['\"'\"'env'\"'\"'],sort_keys=True).encode()))))'"
+  ],
+  "exit": 0,
+  "print_axioms": "N/A",
+  "source_revision": "48ae0c6804f802ae920aec995d61a9de7318ecf0",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0
+  },
+  "stdout": "{\"verified\": true, \"epoch\": \"ResourceAdmit-20261025-v2\", \"scope_argv\": [\"/usr/bin/systemd-run\", \"--user\", \"--scope\", \"--unit=resource-admit-20261025-v2\", \"-p\", \"MemoryHigh=3G\", \"-p\", \"MemoryMax=4G\", \"-p\", \"MemorySwapMax=0\", \"-p\", \"TasksMax=64\", \"/usr/bin/env\", \"-i\", \"DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus\", \"HOME=/home/dombarker\", \"LANG=C.UTF-8\", \"LOGNAME=dombarker\", \"PATH=/usr/bin:/bin\", \"USER=dombarker\", \"XDG_RUNTIME_DIR=/run/user/1000\", \"/usr/bin/python3\", \"-I\", \"-B\", \"/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2/ResourceAdmit_host.py\", \"go\"], \"files\": {\"ResourceAdmit_adapter.py\": {\"sha256\": \"20ba7f302947ad38f997513f1f6807a08d6804b226894effb2da0c485f54e884\", \"size\": 4858}, \"ResourceAdmit_audit.py\": {\"sha256\": \"71bd71ca75873af2151de40d71874e375aa307e212a560af583049feae3694ef\", \"size\": 7488}, \"ResourceAdmit_coordination.py\": {\"sha256\": \"0f9aa41ec12c275debd178928316c4dc25a473b6cb6a20093a16e1c7d16ddf6b\", \"size\": 2616}, \"ResourceAdmit_host.py\": {\"sha256\": \"154748f9fcf6f1381df547e60c4aa28b14b5810b7e38b3b1325f5ba5d8c2efc8\", \"size\": 13799}, \"ResourceAdmit_local.py\": {\"sha256\": \"adca267d92719874c2a112a344e205197a2f0de2d4aaacabc7bf890fa077ef58\", \"size\": 11186}, \"ResourceAdmit_receipt.py\": {\"sha256\": \"fcf6fb8f70b2826ae98929a9063e10a5ad22503c3651503ee0bead9bfc0bed62\", \"size\": 1818}, \"ResourceAdmit_reviewed.json\": {\"sha256\": \"a1977025895c9ef1ae65148973f09c2c0cea0fc896ed4b770ddc16673e49feb9\", \"size\": 61415}, \"ResourceAdmit_sources.py\": {\"sha256\": \"1962e47c11eff8cf663f6e13bfe85ca7e320cd7a778790693f94512b58f13b90\", \"size\": 3071}, \"ResourceAdmit_tests.py\": {\"sha256\": \"19f71c4720a6ef091cbc85fd17c1272a75acbc41f36d552731d05e2e4a8a9f91\", \"size\": 15880}, \"ResourceAdmit_tests_v2.py\": {\"sha256\": \"921d65ef1cf6f2e68321d9e0fa764dfe16a198c26ba5df6c9ae2d04de3fa01a3\", \"size\": 5542}}, \"env_pin\": {\"sha256\": \"f4c604a561da39c4c2d1b94942e9f1c1153a9b4e3c2b82d1a790bd19cc88c948\", \"size\": 213}}\n",
+  "wall_seconds": 0.80741525022313
+}
