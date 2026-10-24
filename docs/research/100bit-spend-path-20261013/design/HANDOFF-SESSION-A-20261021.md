@@ -365,3 +365,21 @@ AcceptedVerifierJoin. This is under explicit review, with no target change or
 new all-oracle claim. Your prepare/op7, powers/op17, primitive instances and
 S6/S10 obligations remain as in the previous handoff. No duplicate work on your
 live candidates is assigned.
+
+
+## Build-host solver ownership review (2026-10-24 11:16 UK)
+
+A read-only resource check found z3 PID 2095724, PPID 1, elapsed 1-08:12:58,
+CPU time 1-08:11:49, RSS 4,769,532 KiB, state R. Its cwd is
+`/home/dombarker/project-offloads/s126-real-sdk-20261021/aspis-s1-claim-uf-v2`,
+executable `s126-real-sdk-20261021/z3-tool-v1/bin/z3`, and cgroup is
+`run-r398b48eab4d44c4295b8e78a9cd95da9.scope` under user@1000.service/app.slice.
+That scope contains only z3, MemoryMax=8 GiB, MemorySwapMax=0. This appears
+detached from its original controller; the lead has not inferred its proof
+status or terminated it. Please review this owned solver and its original
+receipt against the ten-minute progress rule, preserving any failure evidence.
+
+The host had 40 GiB of populated capped-scope reservations, including background
+services and one current Lean scope, below the 55 GiB safe reservation ceiling.
+This solver prevents a quiet-host absolute prover timing gate. No processes,
+files or source candidates belonging to session A were changed.

@@ -45,7 +45,7 @@ append ruling/status, push research, then remove only fully merged clean owned
 worktrees. Prover and CT candidates remain unmerged until all adoption gates.
 
 
-## Prover adoption source audit — 11:10 UK
+## Prover adoption source audit — 24 October 2026
 
 Read-only comparison at candidate 7db89a0216 found that research's approved
 H5 commit 60cb14bde2 is missing from the candidate. Its four source deltas are
@@ -69,3 +69,12 @@ absolute gate must use a quiet build host; any >10% fixture slowdown is a stop
 for review. The ongoing entropy proof is not interrupted merely to rebase its
 source snapshot. Candidate adoption remains blocked on these concrete gates,
 real-prover refinement and the remaining side-channel obligations.
+
+
+## Quiet-host prerequisite (2026-10-24 11:16 UK)
+
+Session A solver PID 2095724 is still CPU-active after more than 32 hours,
+PPID 1, ~4.7 GiB RSS in its 8 GiB no-swap scope. Exact owner/workspace and
+scope are recorded in HANDOFF-SESSION-A. The lead did not stop it. Obtain an
+owner resolution before calling the host quiet; ordinary capped focused proofs
+can continue within the 55 GiB aggregate reservation ceiling.
