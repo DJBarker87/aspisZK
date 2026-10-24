@@ -88,4 +88,10 @@ end
 '''
 imports='import Port11PROV_FirstBoth\nimport Port11PROV_Parser\nimport Port6AUTH_Recovery\n'+s[s.index('set_option'):start].replace('Port11PROV_FirstBoth','Port11PROV_Authenticated')
 imports += 'open AspisV8R19.AdaptiveFirstReadLaw\n'
-(L/'Port11PROV_Authenticated.lean').write_text(imports+header+tail)
+target=L/'Port11PROV_Authenticated.lean'
+expected=imports+header+tail
+if '--check' in __import__('sys').argv:
+ assert target.read_text()==expected, 'Generated consumer drift'
+ print('Consumer generator matches current source')
+else:
+ target.write_text(expected)

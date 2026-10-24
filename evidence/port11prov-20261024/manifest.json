@@ -1,13 +1,13 @@
 {
   "schema": "focused-extractor-proof-packet-v1",
   "status": "Conditional actual-source authentication; both deployed targets not established",
-  "revision": "7b887b23ac6e1fc5db1a30ff64fad11125935275",
+  "revision": "4f4f0fd5cf3c54ed73cc9db36ec757366cea5479",
   "inherited_lean_attempts": 160,
-  "new_lean_attempts": 24,
-  "actual_lean_receipts": 24,
-  "cumulative_lean_attempts": 184,
+  "new_lean_attempts": 25,
+  "actual_lean_receipts": 25,
+  "cumulative_lean_attempts": 185,
   "lean_limit": 220,
-  "remaining_lean_attempts": 36,
+  "remaining_lean_attempts": 35,
   "kani_runs": 0,
   "kani_limit": 20,
   "prior_ledger": {
@@ -62,6 +62,10 @@
     "Port11PROV_SourceCount.lean": {
       "sha256": "1cefd61498c174a4ff3ab8e864deeb31bdade6e224c4f85b0696166ec5c5e041",
       "attempt": "lean-024"
+    },
+    "Port11PROV_Audit.lean": {
+      "sha256": "5a62dd4d34d30a7dff028b87fc52858ff8fb3fafa709a4f3935893c9cae1056b",
+      "attempt": "lean-025"
     }
   },
   "attempts": [
@@ -1200,6 +1204,104 @@
         "'AspisR1.Port11PROV_SourceCount.rows_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.Port11PROV_SourceCount.node_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
         "'AspisR1.Port11PROV_SourceCount.leaf_count' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "attempt": "lean-025",
+      "command": [
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+        "env",
+        "lean",
+        "-j1",
+        "-M4400",
+        "-DElab.async=false",
+        "-o",
+        "Port11PROV_Audit.olean",
+        "Port11PROV_Audit.lean"
+      ],
+      "source_revision": "4f4f0fd5cf3c54ed73cc9db36ec757366cea5479",
+      "source_hashes": {
+        "Port11PROV_Audit.lean": "5a62dd4d34d30a7dff028b87fc52858ff8fb3fafa709a4f3935893c9cae1056b"
+      },
+      "deps_fingerprint": {
+        "inherited_receipt_sha256": "edd442a199709763780415ec25415a45b8443b0394e82e005fdb150a0f43dd61",
+        "scope": "Selected direct objects pinned; AdapterRw stage3 inherited closure reused",
+        "direct_source_hashes": {
+          "Port11PROV_Authenticated": "6e7eb5326ed89c4fa5c940a3ff590331a4701a6bf4e27a70a74c54022974c8f9",
+          "Port11PROV_SourceCount": "1cefd61498c174a4ff3ab8e864deeb31bdade6e224c4f85b0696166ec5c5e041",
+          "Port4B_StageRows": "b5dc24cfc1054f5ab04d0af60fe9cc430608502a615ff8d88d1e5b106f5ce33b",
+          "Port6AUTH_Query": "90ca648e703f53f0f91cef138154efa922ed820f9f134d956a2a13575644fa87",
+          "Port7CLEAN_Accepted": "324d6f2ca1b82cd60d4151c6e69d8b8b1749345a1b015db53c4b26971e852f18",
+          "Port6CK_Complete": "b092d2664e2dffe7ff044000db30a140a8ea84b79e2be2264c43e79a26f7887d"
+        },
+        "selected_objects": {
+          "Port11PROV_Authenticated.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port11prov-20261024/Port11PROV_Authenticated.olean",
+            "sha256": "491aa6ef3caf9fc54baab72c2b0def468f774edffe9e3b7dfe9dfc14fbe9f36a",
+            "bytes": 1119192
+          },
+          "Port11PROV_SourceCount.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port11prov-20261024/Port11PROV_SourceCount.olean",
+            "sha256": "0c103cf49e4428123b8ee5471c97475a147e0c46272f6f5d1030a7c84493e6a0",
+            "bytes": 240888
+          },
+          "Port4B_StageRows.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port4b-20261023/Port4B_StageRows.olean",
+            "sha256": "c57afc415eef7357281dfdf1a62ac5bcc031b11355b41f979fedbca7759d8e71",
+            "bytes": 144200
+          },
+          "Port6AUTH_Query.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port6auth-20261024/Port6AUTH_Query.olean",
+            "sha256": "770a86fad17d23bdfad36101be14fa3fc70d1090c1888284d3f3683d532e825b",
+            "bytes": 166352
+          },
+          "Port7CLEAN_Accepted.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port7clean-20261024/Port7CLEAN_Accepted.olean",
+            "sha256": "78e5abdca15c34156954f871991d11c8fe05860de42e9a19b3dc2f7b0f3f4997",
+            "bytes": 227824
+          },
+          "Port6CK_Complete.olean": {
+            "path": "/home/dombarker/project-offloads/codex-cx-port6ck-20261024/Port6CK_Complete.olean",
+            "sha256": "c526e93a528f2755513ef0a359426c46594da09663b98bceb88a2aada7c0530c",
+            "bytes": 96080
+          }
+        },
+        "lean_binary_sha256": "e8baaa71855a616dc351028f3ad2200051b0671f423a1696a100e809302d5550"
+      },
+      "exit_status": 0,
+      "wall_seconds": 2.2349480139964726,
+      "peak_rss_kib": "4476128",
+      "swaps": "0",
+      "print_axioms": [
+        "'AspisR1.Port11PROV_Authenticated.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_BatchOne.reached' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_CheckpointQueries.query_slice' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_CheckpointQueries.saved' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_CheckpointQueries.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_CheckpointRoots.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_FirstBoth.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_FirstOne.first_logs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_FirstOne.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_Parser.length_wire' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_Parser.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.mono' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.bind_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.parent_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.node_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.rows_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.leaf_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.writer_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.writer_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.rows_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.node_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_SourceCount.leaf_count' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_TX1Reached.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_Views.node_call' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_Views.node_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_Views.folded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_WriterReached.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_WriterRoots.root_slices' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'AspisR1.Port11PROV_WriterRoots.saved' depends on axioms: [propext, Classical.choice, Quot.sound]"
       ]
     }
   ]
