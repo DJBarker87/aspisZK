@@ -1,0 +1,63 @@
+{"attempt": "lean-034", "exit_status": 1, "wall_seconds": 2.0869443700066768, "peak_rss_kib": "4420228", "swaps": "0", "print_axioms": ["'AspisR1.Port10AUTH_TerminalCut.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_TerminalCut.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port10AUTH_TerminalCut.lean:87:13: error: unsolved goals
+case mk.ok.false
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot : Usize
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+outIdx : Indices
+outVal : Values
+success :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port9OR_BatchStep.ops base) D proof root kind hash lo n
+      slot keys s.idx s.val s.n n =
+    ok (done (outIdx, outVal, some (core.result.Result.Ok ())))
+front : Slice U32
+count cap : Usize
+nodes padding supplied : Slice U8
+ce after : core.slice.iter.ChunksExact U8
+frontRead :
+  core.array.Array.index (core.ops
+...
+ll base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n
+      supplied =
+    ok (true, outIdx, outVal)
+cr : (Port9OR_BatchStep.ops base).op11 Port3_NativeBatchBody.multiproof.Arity.Two front = ok (some count)
+nr : (Port9OR_BatchStep.ops base).op3 proof slot = ok nodes
+log : Log
+idx : Indices
+val : Values
+h : Port9OR_Code.trace D hash (Port9OR_BatchStep.verify root s.idx s.val s.n supplied) = (log, ok (true, idx, val))
+⊢ log ++
+      (Port9OR_Code.trace D hash
+          (if True then pure (done (idx, val, some (core.result.Result.Ok ()))) else pure (done (idx, val, none)))).1 =
+    log
+Port10AUTH_TerminalCut.lean:75:13: warning: This simp argument is unused:
+  Port9OR_BatchStep.ops
+
+Hint: Omit it from the simp argument list.
+  simp only [Port9̵O̵R̵_̵B̵a̵t̵c̵h̵S̵t̵e̵p̵.̵o̵p̵s̵,̵P̵o̵r̵t̵3_BatchStd.install] at scanRead
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_TerminalCut.lean:89:29: warning: This simp argument is unused:
+  Port10AUTH_Leaf.pure_trace
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵p̵u̵r̵e̵_̵t̵r̵a̵c̵e̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_TerminalCut.lean:89:56: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [Port10AUTH_Leaf.pure_trace,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_TerminalCut.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_TerminalCut.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra18f2f5d5a084a1c8f746976b1c00cad.scope; invocation ID: 015cdd9c2e974a6bad07c77ca257b9bf

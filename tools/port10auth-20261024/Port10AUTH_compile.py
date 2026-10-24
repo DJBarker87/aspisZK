@@ -7,7 +7,7 @@ HOST='dombarker@100.108.41.90'; REMOTE='/home/dombarker/project-offloads/codex-c
 module=sys.argv[1]; assert module.startswith('Port10AUTH_')
 source=ROOT/'docs/research/100bit-spend-path-20261013/lean'/f'{module}.lean'
 number=1+max((int(p.stem.split('-')[1]) for p in TOOLS.glob('lean-*.json')),default=0)
-assert len(list(E.glob("lean-*/receipt.json"))) < 64, "Continuation budget exhausted (96 inherited + 64 new)"
+assert len(list(TOOLS.glob("lean-*.json"))) < 64, "Continuation budget exhausted (96 inherited + 64 new)"
 attempt=f'lean-{number:03d}'
 base=ROOT/'docs/research/100bit-spend-path-20261013/evidence/adapter-rw-20261023/lean-048/receipt.json'
 inherited=json.loads(base.read_text())
