@@ -1,0 +1,70 @@
+--- f7b90c8230:ResourceAdmit_host.py
++++ ResourceStableGO_host.py
+@@ -18,15 +18,17 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ sys.path.insert(0,str(HERE))
+-import ResourceAdmit_adapter as adapter
++if sys.platform == 'linux':
++    resource.setrlimit(resource.RLIMIT_AS,(512*2**20,512*2**20))
++import ResourceStableGO_adapter as adapter
+ EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
+-UNIT = 'resource-admit-20261025-v2'
+-EPOCH = 'ResourceAdmit-20261025-v2'
+-STAGE = '/home/dombarker/project-offloads/codex-cx-resource-admit-20261025-v2'
++UNIT = 'resource-stable-go-20261025'
++EPOCH = 'ResourceStableGO-20261025-epoch1'
++STAGE = '/home/dombarker/project-offloads/codex-cx-resource-stable-go-20261025'
+ ENV_BINARY = '/usr/bin/env'
+ PYTHON_BINARY = '/usr/bin/python3'
+ LOCK = '/tmp/aspis-r0-lean.lock'
+-MODE = 'limited ResourceAvailable policy; metadata-only; no consumer'
++MODE = 'limited ResourceStability20261025-v1 policy; one metadata epoch only; no consumer'
+ ENV_KEYS = {'HOME','USER','LOGNAME','PATH','LANG','XDG_RUNTIME_DIR','DBUS_SESSION_BUS_ADDRESS'}
+ 
+ 
+@@ -124,7 +126,7 @@
+     return ['/usr/bin/systemd-run','--user','--scope','--unit='+UNIT,
+             '-p','MemoryHigh=3G','-p','MemoryMax=4G','-p','MemorySwapMax=0','-p','TasksMax=64',
+             ENV_BINARY,'-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+[
+-            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceAdmit_host.py','go']
++            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceStableGO_host.py','go']
+ 
+ 
+ def flow(prospective, launch):
+@@ -226,12 +228,12 @@
+ def main():
+     signal.alarm(115)  # metadata diagnostic deadline, including pinning
+     action=sys.argv[1]
+-    manifest=json.loads((HERE/'ResourceAdmit_manifest.json').read_text())
++    manifest=json.loads((HERE/'ResourceStableGO_manifest.json').read_text())
+     start=time.monotonic()
+     save(action+'-pre-pins.json',verify(manifest))
+     if action=='run':
+-        with (HERE/'ResourceAdmit_ATTEMPTED').open('x') as sentinel:
+-            sentinel.write(EPOCH+'; epoch 2/2; fixed Q4GiB; transport/observation failures terminal'+chr(10))
++        with (HERE/'ResourceStableGO_ATTEMPTED').open('x') as sentinel:
++            sentinel.write(EPOCH+'; new epoch 1/1; prior two epochs remain charged failures; fixed Q4GiB; transport/observation failures terminal'+chr(10))
+     if action=='go':
+         before_controls=controls()
+         save('go-controls-before.json',before_controls)
+@@ -239,7 +241,7 @@
+         save('go-pins.json',verify(manifest))
+         def marker():
+             # No subprocess or workload: only actual identity, after GO.
+-            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceAdmit metadata marker only'))
++            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceStableGO metadata marker only',self_observation=adapter.identity['self_observation'](),go_report_pin=filepin(HERE/'capture/inside-scope-report.json'),source_manifest_pin=filepin(HERE/'ResourceStableGO_manifest.json')))
+         after_controls=controls()
+         save('go-controls-after-scan.json',after_controls)
+         gated=report
+@@ -254,7 +256,9 @@
+             save('go-control-check.json',dict(allowed=False,error=str(exc)))
+             gated=dict(decision=dict(allowed=False))
+         result=go_flow(gated,marker)
+-        save('go-controls-after.json',controls())
++        final_controls=controls()
++        save('go-controls-after.json',final_controls)
++        check_controls(final_controls)
+         code=result['go_exit']
+     elif action=='run':
+         # One shared lock, same path/flock protocol as immutable manager launchers.
