@@ -9143,3 +9143,14 @@ mutable provider/nonce-policy state and failed/rejected effects. It may use only
 100 exhausted and cumulative usage140/160. No budget reset, new trust, contract
 change or native adoption. Archived prompt is
  evidence/coordinator-20261024/prompt-prover-rng-caller-20261024.txt.
+
+
+## D194 — Callback/cap8 prototype review and native producer continuation (2026-10-24)
+
+Candidate abbee7673d remains unmerged/unadopted. ProverRwRngCallerReplay.replay_complete/replay_sound and cap8 establish concrete emitted retry-step execution and at most8 callbacks for admitted prototype runs; Events.callback_invocation preserves actual mutable policy state and ordered_indices fixes trace indices. Composition.zero_reject_fatal connects three fresh zero64 fills through entropy rejection, body rejection, then fatal Semantic, retaining advanced provider/policy/store/body state. These local premises are exact policy/fill/body calls, not whole-owner equivalence.
+
+Lead inspected complete Replay/composition and hidden NativeTypes/Body boundaries described in design/PROVER-RW-20261024-RNG-CALLER.md. Independent bind.py --check passed (source map SHA256910680a1d6733b7faa3a5631910de8a384d81e0395ca7850a087a6c065345842); step-cut.py passed (96ef867805cc7d0941a0964e3ab070218ed6e32df47bb3a425b25ebde492d7a5). All8 final module source hashes match accepted receipts; final audit11459 on f3e9539784e1ec5fb2606db12fdd4564cc13d80e recorded exit0,2.68s,RSS3846700KiB,swap0,27 standard-axiom reports. Lead reused compilation evidence, no replay.20/20 new launches consumed; prior100/100 and owner60/60 exhausted, cumulative160. Kani44/60 unchanged.
+
+Native closure is NOT established: core nonzero-I32 TPattern extraction fails; NativeTypes remains uninstalled; universal native-error cap16 transport is missing. Body is an owned-store abstraction after borrowed FnMut emission mismatch; u64 audit substitutes for MaskedFixtureAudit. Actual reservation/build producer, exact native input/status/events, physical cleanup, bytes/context-to-Raw and L1/L2 remain open. Prototype zeroize1.9.1 differs from native1.8.1. E1 is unchanged. No native source delta, ELF or performance gate.
+
+Lead explicitly allocates new60 Lean attempts (cumulative ceiling220, prior160 retained), with only16 remaining Kani, to ProverRwRngNative. First align dependencies and prove sufficient source error abstraction at selected map_err, without new trust/backend changes; then bind actual reservation/build and audit/control producer. No shipped-source changes authorized in this stage. Full task archived evidence/coordinator-20261024/prompt-prover-rng-native-20261024.txt. Worker PID57141; exact output in scratchpad codex-prover-rng-native-20261024.out. Target not yet established.

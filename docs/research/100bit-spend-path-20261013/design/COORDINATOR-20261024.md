@@ -147,3 +147,8 @@ response-driven experiment, separating per-H native interpretation and proving
 source value/effect transport before expanding physical op5. See latest C3-BIN
 and session A handoff. Preserve cumulative36/100 Lean and use remaining64 only.
 This is source/probability refinement, not new trust or a changed contract.
+
+
+## Callback review and native source producer — 2026-10-24
+
+D194 records reviewed candidate abbee7673d at prototype scope only. Independent source-map/step-cut checks and8 final source hashes passed; compiled audit reused. Native error carrier/body/audit/cleanup/event correspondence remains open. Explicit new60 Lean allocation preserves old160 consumed (ceiling220), Kani44/60 unchanged. RNG-native worker57141 now owns same unmerged candidate, prototype-only source correspondence stage; archived prompt in evidence/coordinator-20261024. Port9OR worker51800 remains live with its existing64 remaining allocation, no duplicate effect worker. Both deployed targets remain not yet established.
