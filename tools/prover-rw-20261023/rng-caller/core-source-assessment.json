@@ -1,0 +1,35 @@
+{
+  "assessment": "Installed rust-src matches emitted source locations and native map_err body. This records source-shape installation only; unsupported NonZero validity representation and runtime layout remain uninstalled.",
+  "sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "sha256": "09a569f9ed39e2ec809fa28701e64652887a94e0814996b13dc24f370c8f1933",
+      "bytes": 73869,
+      "span": [
+        962,
+        971
+      ],
+      "text": "    pub const fn map_err<F, O>(self, op: O) -> Result<T, F>\n    where\n        O: [const] FnOnce(E) -> F + [const] Destruct,\n    {\n        match self {\n            Ok(t) => Ok(t),\n            Err(e) => Err(op(e)),\n        }\n    }\n"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/nonzero.rs",
+      "sha256": "15cd2f2e2dcdd808bd75ebb4ebd14f6264db8ac6e191175478751329d6b76b83",
+      "bytes": 101896,
+      "span": [
+        128,
+        128
+      ],
+      "text": "pub struct NonZero<T: ZeroablePrimitive>(T::NonZeroInner);"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/niche_types.rs",
+      "sha256": "1a74080c73dd7687b08e667d5611d4068a1b7556311f0b58e44edadb17d0a160",
+      "bytes": 5171,
+      "span": [
+        124,
+        124
+      ],
+      "text": "    pub struct NonZeroI32Inner(i32 is ..0 | 1..);"
+    }
+  ]
+}
