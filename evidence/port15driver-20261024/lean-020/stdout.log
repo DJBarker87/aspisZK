@@ -1,0 +1,84 @@
+Port15DRIVER_Driver.lean:38:73: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port15DRIVER_Driver.lean:64:56: error: unsolved goals
+case h_1
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+w : ℕ → ℕ
+budgets : LocalBudgets (fun {A} => rest) w
+adapter : AdapterRw.Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+i : OraclePortStoredExperimentC4.Input
+x✝² x✝¹ : Option (Slice U8)
+pub✝ proof✝ : Slice U8
+heq✝² : Port1_Driver.asSlice i.statement.pubBytes = some pub✝
+heq✝¹ : Port1_Driver.asSlice i.stored = some proof✝
+x✝ : Result (Option Port1_Driver.Semantic)
+semantic✝ : Port1_Driver.Semantic
+heq✝ : Port1_Driver.decodeSemantic adapter pub✝ = ok (some semantic✝)
+⊢ (eval H
+          (Port1_Driver.stages (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D
+            hash semantic✝ pub✝ proof✝)).1.length ≤
+    1046 + delegatedWeight w
+'AspisR1.Port15DRIVER_Driver.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+Port15DRIVER_Driver.lean:82:14: error(lean.unknownIdentifier): Unknown constant `stages`
+'AspisR1.Port15DRIVER_Driver.rust' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port15DRIVER_Driver.rust1161' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.Port15DRIVER_Driver.rust1161 : ∀ (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+  (rest : Implementation) (w : ℕ → ℕ),
+  LocalBudgets (fun {A} => rest) w →
+    LE.le.{0} (delegatedWeight w) 115 →
+      ∀ (adapter : AdapterRw.Ops) {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (H : Bytes → State)
+        (i : OraclePortStoredExperimentC4.Input),
+        LE.le.{0}
+          (List.length.{0}
+            (eval H
+                (Port1_Driver.rust adapter
+                  (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash i)).1)
+          1161 :=
+fun ops reserved unwrap rest w budgets weighted adapter {Hash} D hash H i =>
+  have bounded := rust ops reserved unwrap (fun {A} => rest) w (fun {A} => budgets) adapter D hash H i;
+  Decidable.byContradiction fun a => rust1161._proof_1 ops reserved unwrap rest w weighted adapter D hash H i bounded a
+def AspisR1.Port15DRIVER_Local.LocalBudgets : Implementation → (ℕ → ℕ) → Prop :=
+fun rest w =>
+  ∀ {A : Type} (op : Call A) (H : Bytes → State),
+    operationId op ∈ delegatedIds → (eval H (rest op)).1.length ≤ w (operationId op)
+def AspisR1.Port15DRIVER_Local.delegatedIds : List ℕ :=
+[3, 4, 6, 7, 9, 10, 11, 12, 17, 19]
+def AspisR1.Port15DRIVER_Driver.delegatedWeight : (ℕ → ℕ) → ℕ :=
+fun w => 2 * w 3 + w 4 + 2 * w 6 + w 7 + 2 * w 9 + 2 * w 10 + 2 * w 11 + w 12 + w 17 + w 19
+def AspisR1.Port15DRIVER_TX1.sites : (ℕ → ℕ) → List ℕ :=
+fun w => [0, w 3, w 4, 0, 0, w 7, w 12, 0, 0, 0, 0, 477, 0, w 11, w 10, w 6, w 9, 3, 0]
+def AspisR1.Port15DRIVER_Driver.sites : (ℕ → ℕ) → List ℕ :=
+fun w => [w 3, 0, 3, 0, w 17, 0, 0, 0, 0, 0, 0, 0, 0, 563, 0, w 11, w 10, w 6, w 9, 0, 0, w 19]
+def AspisR1.Port1_Driver.stages : Implementation →
+  {Hash : Type} →
+    aspis_core.digest.Digest32 Hash → Hash → Port1_Driver.Semantic → Slice U8 → Slice U8 → Program Bytes State Bool :=
+fun impl {Hash} D hash semantic pub proof =>
+  AspisV8R19.OracleProgramOps.bind
+    (interpret (fun {A} => impl) (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))
+    fun first =>
+    match first with
+    | ok (core.result.Result.Ok saved) =>
+      AspisV8R19.OracleProgramOps.bind
+        (interpret (fun {A} => impl)
+          (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))
+        fun second => Program.done (Port1_Driver.verdict second)
+    | x => Program.done false
+def AspisR1.Port1_Driver.rust : AdapterRw.Ops →
+  Implementation → {Hash : Type} → aspis_core.digest.Digest32 Hash → Hash → OraclePortRuntimeBindingC7.Verifier :=
+fun adapter impl {Hash} D hash i =>
+  match Port1_Driver.asSlice i.statement.pubBytes, Port1_Driver.asSlice i.stored with
+  | some pub, some proof =>
+    match Port1_Driver.decodeSemantic adapter pub with
+    | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+    | x => Program.done false
+  | x, x_1 => Program.done false

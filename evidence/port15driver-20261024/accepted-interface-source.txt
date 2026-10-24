@@ -1,0 +1,706 @@
+SOURCE Port15DRIVER_Cost
+import Port12COUNT_Installed
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port15DRIVER_Cost
+open Aeneas Aeneas.Std Result VTop_Stages VTop_Trace VTop_OracleCode
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+/-- A list of per-site allowances, consumed in actual source order. -/
+def Fits (impl : Implementation) (H : Bytes → State) {A : Type}
+    (tree : Code A) (sites : List Nat) : Prop :=
+  (eval H (interpret impl tree)).1.length ≤ sites.sum
+
+theorem done {A : Type} (impl : Implementation) (H : Bytes → State)
+    (a : A) (sites : List Nat) : Fits impl H (.done a) sites := Nat.zero_le _
+
+theorem step {A B : Type} (impl : Implementation) (H : Bytes → State)
+    (r : Result B) (k : B → Code A) (sites : List Nat)
+    (tail : ∀ b, Fits impl H (k b) sites) : Fits impl H (.step r k) sites := by
+  cases r with
+  | fail e => exact Nat.zero_le _
+  | div => exact Nat.zero_le _
+  | ok b => exact tail b
+
+theorem call {A B : Type} (impl : Implementation) (H : Bytes → State)
+    (op : Call B) (k : B → Code A) (n : Nat) (sites : List Nat)
+    (localCost : (eval H (impl op)).1.length ≤ n)
+    (tail : ∀ b, Fits impl H (k b) sites) : Fits impl H (.call op k) (n::sites) := by
+  unfold Fits
+  simp only [interpret, eval_bind, List.length_append, List.sum_cons]
+  have remaining : (eval H (continueWith (eval H (impl op)).2
+      (fun a => interpret impl (k a)))).1.length ≤ sites.sum := by
+    cases (eval H (impl op)).2 with
+    | fail e => exact Nat.zero_le _
+    | div => exact Nat.zero_le _
+    | ok b => exact tail b
+  omega
+
+#print axioms done
+#print axioms step
+#print axioms call
+end AspisR1.Port15DRIVER_Cost
+end
+
+
+SOURCE Port15DRIVER_Local
+import Port15DRIVER_Cost
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port15DRIVER_Local
+open Aeneas Aeneas.Std Result VTop_Stages VTop_Trace VTop_OracleCode
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+def delegatedIds : List Nat := [3,4,6,7,9,10,11,12,17,19]
+/-- Only individual delegated calls, on every argument and outcome. -/
+def LocalBudgets (rest : Implementation) (w : Nat → Nat) : Prop :=
+  ∀ {A : Type} (op : Call A) (H : Bytes → State),
+    operationId op ∈ delegatedIds → (eval H (rest op)).1.length ≤ w (operationId op)
+
+theorem delegated (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (rest : Implementation) (w : Nat → Nat) (budgets : LocalBudgets rest w)
+    {A : Type} (op : Call A) (H : Bytes → State)
+    (member : operationId op ∈ delegatedIds) :
+    (eval H (Port9OR_Installed.implementation ops reserved unwrap rest op)).1.length ≤ w (operationId op) := by
+  have same : Port9OR_Installed.implementation ops reserved unwrap rest op = rest op := by
+    cases op <;> simp_all only [operationId, delegatedIds, List.mem_cons,
+      List.not_mem_nil, or_false, Nat.reduceEqDiff, or_self]
+    all_goals rfl
+  rw [same]
+  exact budgets op H member
+
+theorem library (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (rest : Implementation) {A : Type} (op : Call A) (H : Bytes → State)
+    (member : operationId op ∈ VTop_OracleStages.libraryIds) :
+    (eval H (Port9OR_Installed.implementation ops reserved unwrap rest op)).1.length ≤ 0 := by
+  rw [Port9OR_Installed.implementation, Port9OR_Bodies.implementation,
+    Port1_Library.library_no_read _ _ _ member]
+  exact Nat.zero_le _
+
+#print axioms delegated
+#print axioms library
+end AspisR1.Port15DRIVER_Local
+end
+
+
+SOURCE Port15DRIVER_TX1
+import Port15DRIVER_Local
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port15DRIVER_TX1
+open Aeneas Aeneas.Std Result VTop_Stages VTop_Trace VTop_OracleCode
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open Port15DRIVER_Local Port15DRIVER_Cost
+
+open Lean Elab Tactic Meta
+elab "control_node" : tactic => withMainContext do
+  try evalTactic (← `(tactic| dsimp only [VTop_Trace.bind])) catch _ => pure ()
+  try
+    evalTactic (← `(tactic| split))
+  catch _ =>
+    let target ← getMainTarget
+    unless target.isAppOf ``Fits do throwError "not a source tree"
+    let args := target.getAppArgs
+    let tree ← whnf args[3]!
+    let goal ← (← getMainGoal).change (mkAppN target.getAppFn (args.set! 3 tree))
+    replaceMainGoal [goal]
+    match tree.getAppFn.constName? with
+    | some ``Code.done => evalTactic (← `(tactic| apply Port15DRIVER_Cost.done))
+    | some ``Code.step => evalTactic (← `(tactic| apply Port15DRIVER_Cost.step))
+    | some ``Code.call => evalTactic (← `(tactic| apply Port15DRIVER_Cost.call))
+    | _ => throwError "source head is not a control constructor"
+
+def sites (w : Nat → Nat) : List Nat :=
+  [0,w 3,w 4,0,0,w 7,w 12,0,0,0,0,477,0,w 11,w 10,w 6,w 9,3,0]
+
+theorem tx1 (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (rest : Implementation) (w : Nat → Nat) (budgets : LocalBudgets rest w)
+    {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (semantic : Port1_Driver.Semantic) (pub proof : Slice U8) (H : Bytes → AspisV8R19.SourceDuplexStep.State) :
+    Fits (Port9OR_Installed.implementation ops reserved unwrap rest) H
+      (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none) (sites w) := by
+  unfold sites
+  repeat' first
+    | control_node
+    | (apply Port15DRIVER_Local.library; simp [operationId, delegatedIds, VTop_OracleStages.libraryIds])
+    | (refine Nat.le_trans (Port15DRIVER_Local.delegated ops reserved unwrap rest w budgets _ _ ?_) ?_
+       · simp [operationId, delegatedIds]
+       · exact Nat.le_refl _)
+    | exact Port12COUNT_Installed.batch0 _ _ _ _ _ _
+    | exact Port11PROV_SourceCount.writer_count _ _ _ _ _ _ _
+    | (intro)
+  all_goals first
+    | exact Port15DRIVER_Local.delegated ops reserved unwrap rest w budgets _ _ (by simp [operationId, delegatedIds])
+    | exact Port15DRIVER_Local.delegated ops reserved unwrap rest w budgets (.op12 .S2) H (by simp [operationId, delegatedIds])
+
+#print axioms tx1
+end AspisR1.Port15DRIVER_TX1
+end
+
+
+SOURCE VTop_Trace
+import VTop_Model
+/-! Typed operation syntax for the adopted dictionary. No argument is serialized,
+hashed or replaced by an identifier: Call retains the original typed values.
+Only successful external returns append; inner Rust Err is an ordinary value. -/
+set_option autoImplicit false
+set_option linter.unusedVariables false
+namespace AspisR1.VTop_Trace
+open Aeneas Aeneas.Std Result VTop_Stages
+universe u v
+inductive Call : Type → Type 1 where
+  | op0 {T : Type} {E : Type} (a0 : (Option T)) (a1 : E) : Call (core.result.Result T E)
+  | op1 : Call aspis_core.field.wide_exact.WideExact
+  | op2 (a0 : (Slice Std.U8)) : Call (Option aspis_core.field.wide_exact.WideExact)
+  | op3 (a0 : (Slice Std.U8)) : Call (core.result.Result transport.Variant verifier.Error)
+  | op4 (a0 : (Slice Std.U8)) : Call (core.result.Result Unit verifier.Error)
+  | op5 {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : (Slice Std.U8)) (a1 : verifier.Prepared) (a2 : (Array Std.U8 32#usize)) (a3 : Std.Usize) (a4 : H) : Call (core.result.Result Unit verifier.Error)
+  | op6 (a0 : (Slice Std.U8)) (a1 : verifier.Prepared) (a2 : verifier.Accumulator) (a3 : (Array aspis_core.field.wide_exact.WideExact 29#usize)) (a4 : (Option (verifier.Phase → Result Unit))) (a5 : verifier.QueryGeometry) (a6 : verifier.BatchedWeights) (a7 : Std.Usize) : Call (core.result.Result (verifier.Accumulator × verifier.BatchedWeights) verifier.Error)
+  | op7 {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (a1 : (Slice Std.U8)) (a2 : H) (a3 : (Option (verifier.Phase → Result Unit))) (a4 : (Array aspis_core.field.wide_exact.WideExact 29#usize)) : Call ((core.result.Result verifier.Prepared verifier.Error) × (Array aspis_core.field.wide_exact.WideExact 29#usize))
+  | op8 {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : verifier.Prepared) (a1 : verifier.Accumulator) (a2 : (Slice Std.U8)) (a3 : (Slice Std.U8)) (a4 : H) : Call (alloc.vec.Vec Std.U8)
+  | op9 (a0 : verifier.BatchedWeights) (a1 : (Slice aspis_core.field.QM31)) : Call (Slice aspis_core.field.QM31)
+  | op10 (a0 : (Slice aspis_core.field.QM31)) : Call (core.result.Result verifier.BatchedWeights verifier.Error)
+  | op11 (a0 : (Array Std.U32 22#usize)) (a1 : Std.Usize) (a2 : Std.Usize) : Call (core.result.Result verifier.QueryGeometry verifier.Error)
+  | op12 (a0 : transport.Variant) : Call (core.result.Result verifier.Accumulator verifier.Error)
+  | op13 (a0 : (Option (verifier.Phase → Result Unit))) (a1 : verifier.Phase) : Call Unit
+  | op14 : Call Std.Usize
+  | op15 : Call Std.Usize
+  | op16 : Call Std.Usize
+  | op17 (N : Std.Usize) (a0 : aspis_core.field.wide_exact.WideExact) : Call (Array aspis_core.field.wide_exact.WideExact N)
+  | op18 {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) (a0 : (Slice Std.U8)) (a1 : (Slice Std.U8)) (a2 : (Slice Std.U8)) (a3 : transport.Variant) (a4 : H) : Call (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)
+  | op19 (a0 : verifier.View) (a1 : verifier.Prepared) (a2 : verifier.Accumulator) (a3 : (Option (verifier.Phase → Result Unit))) : Call (core.result.Result Unit verifier.Error)
+  | op20 : Call Std.Usize
+  | op21 : Call Std.Usize
+  | op22 : Call Std.Usize
+  | op23 : Call Std.Usize
+  | unwrap32 (a0 : core.result.Result (Array Std.U8 32#usize) core.array.TryFromSliceError) : Call (Array Std.U8 32#usize)
+
+def invoke (ops : VTop_Stages.Ops) {A : Type} : Call A → Result A
+  | @Call.op0 T E a0 a1 => ops.op0 (T := T) (E := E) a0 a1
+  | .op1 => ops.op1
+  | .op2 a0 => ops.op2 a0
+  | .op3 a0 => ops.op3 a0
+  | .op4 a0 => ops.op4 a0
+  | @Call.op5 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => ops.op5 (H := H) aspis_coredigestDigest32Inst a0 a1 a2 a3 a4
+  | .op6 a0 a1 a2 a3 a4 a5 a6 a7 => ops.op6 a0 a1 a2 a3 a4 a5 a6 a7
+  | @Call.op7 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => ops.op7 (H := H) aspis_coredigestDigest32Inst a0 a1 a2 a3 a4
+  | @Call.op8 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => ops.op8 (H := H) aspis_coredigestDigest32Inst a0 a1 a2 a3 a4
+  | .op9 a0 a1 => ops.op9 a0 a1
+  | .op10 a0 => ops.op10 a0
+  | .op11 a0 a1 a2 => ops.op11 a0 a1 a2
+  | .op12 a0 => ops.op12 a0
+  | .op13 a0 a1 => ops.op13 a0 a1
+  | .op14 => ops.op14
+  | .op15 => ops.op15
+  | .op16 => ops.op16
+  | @Call.op17 N a0 => ops.op17 N a0
+  | @Call.op18 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => ops.op18 (H := H) aspis_coredigestDigest32Inst a0 a1 a2 a3 a4
+  | .op19 a0 a1 a2 a3 => ops.op19 a0 a1 a2 a3
+  | .op20 => ops.op20
+  | .op21 => ops.op21
+  | .op22 => ops.op22
+  | .op23 => ops.op23
+  | .unwrap32 a0 => ops.unwrap32 a0
+
+def operationId {A : Type} : Call A → Nat
+  | @Call.op0 T E a0 a1 => 0
+  | .op1 => 1
+  | .op2 a0 => 2
+  | .op3 a0 => 3
+  | .op4 a0 => 4
+  | @Call.op5 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => 5
+  | .op6 a0 a1 a2 a3 a4 a5 a6 a7 => 6
+  | @Call.op7 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => 7
+  | @Call.op8 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => 8
+  | .op9 a0 a1 => 9
+  | .op10 a0 => 10
+  | .op11 a0 a1 a2 => 11
+  | .op12 a0 => 12
+  | .op13 a0 a1 => 13
+  | .op14 => 14
+  | .op15 => 15
+  | .op16 => 16
+  | @Call.op17 N a0 => 17
+  | @Call.op18 H aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 => 18
+  | .op19 a0 a1 a2 a3 => 19
+  | .op20 => 20
+  | .op21 => 21
+  | .op22 => 22
+  | .op23 => 23
+  | .unwrap32 a0 => 24
+
+inductive Event : Type 1 where
+  | returned {A : Type} : Call A → A → Event
+abbrev Log := List Event
+inductive Code (A : Type) : Type 1 where
+  | done : A → Code A
+  | step {B : Type} : Result B → (B → Code A) → Code A
+  | call {B : Type} : Call B → (B → Code A) → Code A
+
+def bind {A B : Type} : Code A → (A → Code B) → Code B
+  | .done a, k => k a
+  | .step r c, k => .step r (fun b => bind (c b) k)
+  | .call op c, k => .call op (fun b => bind (c b) k)
+instance : Monad Code where
+  pure := Code.done
+  bind := bind
+
+def liftResult {A : Type} (r : Result A) : Code A := .step r .done
+instance : MonadLift Result Code where
+  monadLift := liftResult
+
+def perform {A : Type} (op : Call A) : Code A := .call op .done
+
+def erase (ops : VTop_Stages.Ops) {A : Type} : Code A → Result A
+  | .done a => ok a
+  | .step r k => do let b ← r; erase ops (k b)
+  | .call op k => do let b ← invoke ops op; erase ops (k b)
+
+def thenResult {A : Type u} {B : Type v} (r : Result A) (k : A → Result B) : Result B :=
+  match r with
+  | .ok a => k a
+  | .fail e => .fail e
+  | .div => .div
+
+def forget {A : Type} (r : Result (A × Log)) : Result A :=
+  thenResult r (fun x => ok x.1)
+
+def run (ops : VTop_Stages.Ops) {A : Type} : Code A → Log → Result (A × Log)
+  | .done a, log => ok (a,log)
+  | .step r k, log => thenResult r (fun b => run ops (k b) log)
+  | .call op k, log => thenResult (invoke ops op) (fun b =>
+      run ops (k b) (log ++ [.returned op b]))
+
+theorem erase_run (ops : VTop_Stages.Ops) {A : Type} (p : Code A) (log : Log) :
+    forget (run ops p log) = erase ops p := by
+  induction p generalizing log with
+  | done a => rfl
+  | step r k ih =>
+    cases r with
+    | fail e => rfl
+    | div => rfl
+    | ok b => exact ih b log
+  | call op k ih =>
+    cases h : invoke ops op with
+    | fail e => simp only [run,thenResult,forget,erase,h,bind_tc_fail]
+    | div => simp only [run,thenResult,forget,erase,h,bind_tc_div]
+    | ok b => simpa only [run,thenResult,erase,h,bind_tc_ok] using ih b (log ++ [.returned op b])
+
+theorem run_prefix (ops : VTop_Stages.Ops) {A : Type} (p : Code A)
+    (before after : Log) (a : A) (success : run ops p before = ok (a,after)) :
+    ∃ suffix, after = before ++ suffix := by
+  induction p generalizing before after with
+  | done b =>
+    have eq := Result.ok.inj success
+    exact ⟨[], by simpa using congrArg Prod.snd eq.symm⟩
+  | step r k ih =>
+    cases r with
+    | fail e => cases success
+    | div => cases success
+    | ok b => exact ih b before after success
+  | call op k ih =>
+    cases h : invoke ops op with
+    | fail e => simp only [run,thenResult,h]  at success; cases success
+    | div => simp only [run,thenResult,h]  at success; cases success
+    | ok b =>
+      simp only [run,thenResult,h] at success
+      obtain ⟨suffix,hs⟩ := ih b _ after success
+      exact ⟨.returned op b :: suffix, by simpa only [List.append_assoc,List.singleton_append] using hs⟩
+
+theorem erase_perform (ops : VTop_Stages.Ops) {A : Type} (op : Call A) :
+    erase ops (perform op) = invoke ops op := by
+  cases h : invoke ops op <;> simp only [perform,erase,h,bind_tc_ok,bind_tc_fail,bind_tc_div]
+
+theorem erase_lift (ops : VTop_Stages.Ops) {A : Type} (r : Result A) :
+    erase ops (liftResult r) = r := by cases r <;> rfl
+
+theorem erase_bind (ops : VTop_Stages.Ops) {A B : Type} (p : Code A) (k : A → Code B) :
+    erase ops (p >>= k) = (do let a ← erase ops p; erase ops (k a)) := by
+  induction p with
+  | done a => rfl
+  | step r c ih =>
+    change (do let b ← r; erase ops (bind (c b) k)) = _
+    have h : ∀ b, erase ops (bind (c b) k) =
+      (do let a ← erase ops (c b); erase ops (k a)) := ih
+    simp only [h,erase]
+    cases r <;> rfl
+  | call op c ih =>
+    change (do let b ← invoke ops op; erase ops (bind (c b) k)) = _
+    have h : ∀ b, erase ops (bind (c b) k) =
+      (do let a ← erase ops (c b); erase ops (k a)) := ih
+    simp only [h,erase]
+    cases invoke ops op <;> rfl
+
+#print axioms erase_run
+#print axioms run_prefix
+#print axioms erase_perform
+#print axioms erase_lift
+#print axioms erase_bind
+end AspisR1.VTop_Trace
+
+
+SOURCE VTop_OracleCode
+import VTop_Trace
+import OraclePortFrozen2Join
+
+/-! Oracle interpretation of the extracted typed call tree. All call arguments
+and returned mutable state are retained. No identification with dV is assumed
+or claimed. Ordinary inner Rust Err is a value of the dependent result type. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.VTop_OracleCode
+open Aeneas Aeneas.Std Result VTop_Trace
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+abbrev Implementation := {A : Type} → Call A → Program Bytes State (Result A)
+
+def continueWith {A B : Type} (r : Result A)
+    (k : A → Program Bytes State (Result B)) : Program Bytes State (Result B) :=
+  match r with
+  | .ok a => k a
+  | .fail e => .done (.fail e)
+  | .div => .done .div
+
+def interpret (impl : Implementation) {A : Type} : Code A → Program Bytes State (Result A)
+  | .done a => .done (.ok a)
+  | .step r k => continueWith r (fun a => interpret impl (k a))
+  | .call op k => bind (impl op) (fun r => continueWith r (fun a => interpret impl (k a)))
+
+/-- A local call law: complete ordered reads and the complete dependent return
+are equal whenever that source call returns. This does not bind an arbitrary
+Verifier to the tree, and does not identify a model implementation with dV. -/
+def CallJoin (source model : Implementation) : Prop :=
+  ∀ {A : Type} (call : Call A) (H : Bytes → State) (value : A),
+    (eval H (source call)).2 = .ok value →
+      eval H (source call) = eval H (model call)
+
+/-- Symbolic substitution through the actual typed syntax, retaining source
+branch selection and concatenation order. No large stage reduction is needed. -/
+theorem accepted_interpret_eq (source model : Implementation) (joins : CallJoin source model)
+    {A : Type} (tree : Code A) (H : Bytes → State) (value : A)
+    (accepted : (eval H (interpret source tree)).2 = .ok value) :
+    eval H (interpret source tree) = eval H (interpret model tree) := by
+  induction tree with
+  | done a => rfl
+  | step r k ih =>
+    cases r with
+    | fail e => cases accepted
+    | div => cases accepted
+    | ok a => exact ih a accepted
+  | call op k ih =>
+    simp only [interpret, eval_bind] at accepted ⊢
+    cases returned : (eval H (source op)).2 with
+    | fail e => simp only [returned, continueWith, eval] at accepted; cases accepted
+    | div => simp only [returned, continueWith, eval] at accepted; cases accepted
+    | ok a =>
+      have localJoin := joins op H a returned
+      rw [← localJoin]
+      simp only [returned, continueWith] at accepted ⊢
+      rw [ih a accepted]
+
+#print axioms accepted_interpret_eq
+end AspisR1.VTop_OracleCode
+end
+
+
+SOURCE Port9OR_Installed
+import Port9OR_Batch
+import Port9OR_Bodies
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port9OR_Installed
+open Aeneas Aeneas.Std Result VTop_Stages
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+def code {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (proof : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (which : Usize) :
+    CheckpointBytes5Effect.Code (core.result.Result Unit verifier.Error) := do
+  let out ← Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p folded which
+  pure (match out with | .Ok a => .Ok a | .Err e => .Err (Port3_CheckpointInstall.error e))
+
+def batch {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (proof : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (which : Usize) :=
+  Port9OR_Code.program (VTop_Checkpoint.digest D) hash (code D hash proof p folded which)
+
+/-- The physical source definition is fixed independently of Parsed/q/nodes.
+Its source return is instantiated pointwise, not installed using H. -/
+theorem value {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (proof : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (which : Usize)
+    (H : Bytes → State) :
+    (eval H (batch D hash proof p folded which)).2=
+      Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded which hash := by
+  rw [batch,Port9OR_Code.value]
+  simp only [code,CheckpointBytes5Effect.erase_bind,CheckpointBytes5Effect.erase_pure,Port9OR_Batch.source]
+  unfold Port4B_Install.batch Port3_BatchStage.batch Port3_QueryInstall.result
+  have same : Port9OR_BatchStep.ops Port4B_Install.leaves=Port3_BatchStd.install Port4B_Install.leaves := rfl
+  rw [same]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro out _
+  cases out <;> rfl
+
+/-- Complete source observation, including duplicate hash-before-compare,
+count/padding rejection and prefixes before outer errors. -/
+theorem effects {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (proof : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (which : Usize)
+    (H : Bytes → State) :
+    eval H (batch D hash proof p folded which)=
+      (CheckpointBytes5Inputs.observe (Port9OR_Code.trace
+        (VTop_Checkpoint.digest (Port9OR_Bodies.native D H)) hash (code D hash proof p folded which)).1,
+        Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded which hash) := by
+  apply Prod.ext
+  · have h := congrArg Prod.fst (Port9OR_Code.correspondence (VTop_Checkpoint.digest D) hash
+      (code D hash proof p folded which) H)
+    exact h
+  · exact value D hash proof p folded which H
+
+def other (rest : VTop_OracleCode.Implementation) : VTop_OracleCode.Implementation := fun call =>
+  match call with
+  | .op5 D proof p folded which hash => batch D hash proof p folded which
+  | call => rest call
+
+def implementation (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (rest : VTop_OracleCode.Implementation) : VTop_OracleCode.Implementation :=
+  Port9OR_Bodies.implementation ops reserved unwrap (other rest)
+
+theorem installed (ops : Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (rest : VTop_OracleCode.Implementation) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (proof : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (which : Usize) :
+    implementation ops reserved unwrap rest (.op5 D proof p folded which hash)=batch D hash proof p folded which := rfl
+
+#print axioms value
+#print axioms effects
+#print axioms installed
+end AspisR1.Port9OR_Installed
+end
+
+
+SOURCE Port9OR_Bodies
+import Port9OR_Code
+import Port8EFF_Bodies
+import Port8EFF_Budget
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port9OR_Bodies
+open Aeneas Aeneas.Std Result VTop_Stages
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open Port6CK_Semantic (Unwrap)
+
+/-- Pointwise native primitive interpretation at the CONCRETE source type.
+Only successful hashv bytes change; Copy and existing fail/div cases remain. -/
+def native {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (H : Bytes → State) :
+    aspis_core.digest.Digest32 Hash :=
+  { D with digest := (Port9OR_Code.native (VTop_Checkpoint.digest D) H).digest }
+
+theorem native_stage {Hash : Type} (D : aspis_core.digest.Digest32 Hash) (H : Bytes → State) :
+    VTop_Checkpoint.digest (native D H)=Port9OR_Code.native (VTop_Checkpoint.digest D) H := rfl
+
+def reader (reserved : Bool) (unwrap : Unwrap) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (ck proof pub : Slice U8)
+    (v : transport.Variant) (hash : Hash) :=
+  Port9OR_Code.program (VTop_Checkpoint.digest D) hash
+    (Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v)
+
+def writer {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (proof pub : Slice U8) (hash : Hash) :=
+  Port9OR_Code.program (VTop_Checkpoint.digest D) hash (Port8EFF_Bodies.writerCode p a proof pub)
+
+/-- ALL inputs/outcomes. H occurs only in the pointwise native environment on
+RHS, never as a parameter of the Program that is evaluated on LHS. -/
+theorem reader_value (reserved : Bool) (unwrap : Unwrap) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (ck proof pub : Slice U8)
+    (v : transport.Variant) (hash : Hash) (H : Bytes → State) :
+    (eval H (reader reserved unwrap D ck proof pub v hash)).2 =
+      Port6CK_Reader.reader reserved unwrap (native D H) ck proof pub v hash := by
+  rw [reader,Port9OR_Code.value,← native_stage]
+  simp only [Port8EFF_Bodies.readerCode,CheckpointBytes5Effect.erase_bind,CheckpointBytes5Effect.erase_pure]
+  rw [Port8EFF_NativeReader.source]
+  unfold Port6CK_Reader.reader
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro out _
+  cases out <;> rfl
+
+theorem writer_value {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (proof pub : Slice U8)
+    (hash : Hash) (H : Bytes → State) :
+    (eval H (writer D p a proof pub hash)).2 =
+      Port3_CheckpointInstall.writer (native D H) p a proof pub hash := by
+  rw [writer,Port9OR_Code.value,← native_stage]
+  simp only [Port8EFF_Bodies.writerCode,CheckpointBytes5Effect.erase_bind,CheckpointBytes5Effect.erase_pure]
+  rfl
+
+/-- Complete native reader correspondence, including malformed, rejected and
+outer-failed suffixes, with no independently selected pair or successful map. -/
+theorem reader_effects (reserved : Bool) (unwrap : Unwrap) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (ck proof pub : Slice U8)
+    (v : transport.Variant) (hash : Hash) (H : Bytes → State) :
+    eval H (reader reserved unwrap D ck proof pub v hash)=
+      (CheckpointBytes5Inputs.observe (Port9OR_Code.trace (VTop_Checkpoint.digest (native D H)) hash
+        (Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v)).1,
+        Port6CK_Reader.reader reserved unwrap (native D H) ck proof pub v hash) := by
+  apply Prod.ext
+  · have h := congrArg Prod.fst (Port9OR_Code.correspondence (VTop_Checkpoint.digest D) hash
+      (Port8EFF_Bodies.readerCode reserved unwrap ck proof pub v) H)
+    exact h
+  · exact reader_value reserved unwrap D ck proof pub v hash H
+
+theorem writer_effects {Hash : Type} (D : aspis_core.digest.Digest32 Hash)
+    (p : verifier.Prepared) (a : verifier.Accumulator) (proof pub : Slice U8)
+    (hash : Hash) (H : Bytes → State) :
+    eval H (writer D p a proof pub hash)=
+      (CheckpointBytes5Inputs.observe (Port9OR_Code.trace (VTop_Checkpoint.digest (native D H)) hash
+        (Port8EFF_Bodies.writerCode p a proof pub)).1,
+        Port3_CheckpointInstall.writer (native D H) p a proof pub hash) := by
+  apply Prod.ext
+  · have h := congrArg Prod.fst (Port9OR_Code.correspondence (VTop_Checkpoint.digest D) hash
+      (Port8EFF_Bodies.writerCode p a proof pub) H)
+    exact h
+  · exact writer_value D p a proof pub hash H
+
+/-- Only owned op8/18 installed; all other source bodies remain explicit. -/
+def body (reserved : Bool) (unwrap : Unwrap) (other : VTop_OracleCode.Implementation) :
+    VTop_OracleCode.Implementation := fun call => match call with
+  | .op8 D p a proof pub hash => writer D p a proof pub hash
+  | .op18 D ck proof pub v hash => reader reserved unwrap D ck proof pub v hash
+  | call => other call
+
+def implementation (ops : Ops) (reserved : Bool) (unwrap : Unwrap)
+    (other : VTop_OracleCode.Implementation) : VTop_OracleCode.Implementation :=
+  Port1_Library.implementation ops (body reserved unwrap other)
+
+theorem installed_reader (ops : Ops) (reserved : Bool) (unwrap : Unwrap)
+    (other : VTop_OracleCode.Implementation) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (ck proof pub : Slice U8)
+    (v : transport.Variant) (hash : Hash) :
+    implementation ops reserved unwrap other (.op18 D ck proof pub v hash)=
+      reader reserved unwrap D ck proof pub v hash := rfl
+
+theorem installed_writer (ops : Ops) (reserved : Bool) (unwrap : Unwrap)
+    (other : VTop_OracleCode.Implementation) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (proof pub : Slice U8) (hash : Hash) :
+    implementation ops reserved unwrap other (.op8 D p a proof pub hash)=
+      writer D p a proof pub hash := rfl
+
+#print axioms native_stage
+#print axioms reader_value
+#print axioms writer_value
+#print axioms reader_effects
+#print axioms writer_effects
+#print axioms installed_reader
+#print axioms installed_writer
+end AspisR1.Port9OR_Bodies
+end
+
+
+SOURCE Port1_Driver
+import Port1_Library
+import AdapterRwModel
+
+/-! Natural two-stage source lift on the actual extracted carriers. Decode
+uses adapter op47, validation op21 and the extracted semantic-public getter.
+The physical source reads stored/public bytes; its preparation body owns its
+transcript effects. A separate logical proof field is not a Rust argument.
+This module deliberately does not claim the frozen2 model-order identity. -/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Port1_Driver
+open Aeneas Aeneas.Std Result VTop_Stages VTop_Trace VTop_OracleCode
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortStoredExperimentC4 OraclePortRuntimeBindingC7
+abbrev Semantic := aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+
+def asSlice (bytes : Bytes) : Option (Slice U8) :=
+  if h : bytes.length ≤ Usize.max then
+    some ⟨bytes.map (fun b => (UScalar.ofNatCore b.val b.isLt : U8)), by simpa using h⟩
+  else none
+
+/-- Complete success/error selection at the extracted decoder/validator cuts.
+Their concrete implementations remain their existing source ports. -/
+def decodeSemantic (adapter : AdapterRw.Ops) (pub : Slice U8) : Result (Option Semantic) := do
+  let decoded ← adapter.op47 pub
+  match decoded with
+  | .Err _ => .ok none
+  | .Ok statement =>
+    let checked ← adapter.op21 statement
+    match checked with
+    | .Err _ => .ok none
+    | .Ok () =>
+      let semantic ← AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public statement
+      .ok (some semantic)
+
+def verdict (result : Result (core.result.Result Unit verifier.Error)) : Bool :=
+  match result with | .ok (.Ok ()) => true | _ => false
+
+/-- TX2 consumes precisely the checkpoint returned by this TX1, with the same
+public/proof slices and None observer in both calls. -/
+def stages (impl : Implementation) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : Semantic)
+    (pub proof : Slice U8) : Program Bytes State Bool :=
+  bind (interpret impl (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))
+    fun first => match first with
+    | .ok (.Ok saved) =>
+      bind (interpret impl (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))
+        fun second => .done (verdict second)
+    | _ => .done false
+
+/-- Explicit headline-typed lift, with no invented logical-proof reads.
+This remains a source interpretation under the supplied body/decoder ports,
+not a deployed account/runtime binding. -/
+def rust (adapter : AdapterRw.Ops) (impl : Implementation) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) : Verifier := fun i =>
+  match asSlice i.statement.pubBytes, asSlice i.stored with
+  | some pub, some proof =>
+    match decodeSemantic adapter pub with
+    | .ok (some semantic) => stages impl D hash semantic pub proof
+    | _ => .done false
+  | _, _ => .done false
+
+/-- Source/model stage substitution now composes both entries with the same
+returned checkpoint, rather than independent stage runs. -/
+theorem stages_substitute (source model : Implementation)
+    (joins : VTop_OracleStages.ConeJoins source model) {Hash : Type}
+    (D : aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : Semantic)
+    (pub proof : Slice U8) (H : Bytes → State)
+    (accepted : (eval H (stages source D hash semantic pub proof)).2 = true) :
+    eval H (stages source D hash semantic pub proof) =
+      eval H (stages model D hash semantic pub proof) := by
+  unfold stages at accepted ⊢
+  simp only [eval_bind] at accepted ⊢
+  cases first : (eval H (interpret source
+    (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).2 with
+  | fail e => simp only [first, eval, Bool.false_eq_true] at accepted
+  | div => simp only [first, eval, Bool.false_eq_true] at accepted
+  | ok result =>
+    cases result with
+    | Err e => simp only [first, eval, Bool.false_eq_true] at accepted
+    | Ok saved =>
+      have one := VTop_OracleStages.accepted_tx1 source model joins D hash semantic pub proof 10#usize saved H first
+      rw [← one]
+      simp only [first] at accepted ⊢
+      simp only [eval_bind, eval, List.append_nil] at accepted ⊢
+      cases second : (eval H (interpret source
+        (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).2 with
+      | fail e => simp only [second, verdict, Bool.false_eq_true] at accepted
+      | div => simp only [second, verdict, Bool.false_eq_true] at accepted
+      | ok result =>
+        cases result with
+        | Err e => simp only [second, verdict, Bool.false_eq_true] at accepted
+        | Ok unit =>
+          cases unit
+          have two := VTop_OracleStages.accepted_tx2_authenticated source model joins D hash pub proof saved.deref H second
+          rw [← two, second]
+
+#print axioms decodeSemantic
+#print axioms stages_substitute
+end AspisR1.Port1_Driver
+end
