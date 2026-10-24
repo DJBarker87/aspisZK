@@ -56,7 +56,9 @@ for the old pure emitted interface. All8 local translated declarations are
 transparent. The LLBC embedded source equals the prototype; LLBC hash is
 `cfb6f9bec8a6d002ed6f1e141649334256af3d17d7837b27cbd811ddeedc364d`
 (558149 bytes). The borrowed From/draw/body/loop/owner emission is retained
-verbatim. All13 shared emitted declarations match after removing only
+verbatim. The read-only event-source binding checks both actual guard/zero64/identity-
+borrow prefixes and exactly one primitive call per active body; the full
+source bodies are printed in audit11439. All13 shared emitted declarations match after removing only
 comments/attributes/whitespace. The actual source-derived new and old body
 are concretely instantiated in `body_same`, then `loops_same`, the replay,
 and `universal_cap16`. `draw_factor` checks the mechanically selected full
@@ -90,14 +92,18 @@ Emission, Nonzero, Control and Tape were rebuilt in that order under default
 options (11400–11403). Only the changed Emission and its affected closure
 were rebuilt. New job modules were compiled individually, each after its
 smallest required predecessor. The final source certificate passed11438;
-a single focused final audit follows the committed source, never a full
-frozen manifest. Every launch, including failed attempts, has an immutable
+the single focused final audit11439 passes against committed proof source
+`ad9e91a840067eae7a44e8ab7f103b0e59b24698`, never a full frozen manifest.
+It prints all22 new theorem axiom reports (only propext, Classical.choice,
+Quot.sound) and the complete source/hidden-structure statements. Exit0,
+wall1.79s, peak RSS3,847,484KiB, swap0. Every launch, including failed attempts, has an immutable
 source/dependency receipt and full diagnostic/axiom output in `rng-owner/`.
 
 The exhausted stage3 remains100/100 Lean. At the source-certificate stage,
 this **new** ledger used39/60 actual Lean launches, cumulative139/160.
-No new Kani run: cumulative44/60, all16 unused runs retained. The final audit
-updates only the new ledger. Lean scopes preserve5G/7G, Rust/extraction
+No new Kani run: cumulative44/60, all16 unused runs retained. Final audit11439 adds one: new40/60, remaining20; cumulative140/160 Lean.
+Kani remains44/60, remaining16. There were14 successful and26 failed new
+Lean launches, all retained. Lean scopes preserve5G/7G, Rust/extraction
 6G/8G, zero swap, TasksMax64; launch reservations stay below55GiB. No memory
 failure, cap increase, full-manifest launch, native gate or timing run.
 
@@ -198,3 +204,13 @@ They were not rebuilt or newly verified: no native source changed. Historical
 artifact evidence is reused only under its original identity. Native adoption
 still needs all current artifact/runtime/event gates, H5-aligned slowdown
 <=10%, and quiet-host absolute time<15s. Peer jobs preclude a timing claim.
+
+Canonical packet: `docs/research/100bit-spend-path-20261013/evidence/
+prover-rw-20261023/rng-owner/summary.json`. Full source/dependency hashes and
+commands are indexed there; every result retains exact raw receipts. Audit
+log SHA256: `661b315ce63f9e8e5dea8b2ad707dd1a50c0cbcfc7db45c5835ab47a9c88b6e7`.
+Summary SHA256: `d80161cb5833bfe0c36d29b6d70115e591baf6680d892ecfe2ffd272525ae7df`.
+`artifact-hashes.json` inventories all evidence sizes/hashes. Generators were
+rerun locally as normalization checks: all three checked emission/cut outputs
+reproduced exact hashes, so no unchanged Lean replay followed. Derived JSON
+files are each below5MB; no binaries or objects are committed.

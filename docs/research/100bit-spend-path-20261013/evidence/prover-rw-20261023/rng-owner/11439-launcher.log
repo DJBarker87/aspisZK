@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1229); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+    let ⟨oldPath, newPath⟩ := h✝
+    Exists.intro states
+      ⟨oldPath,
+        ⟨newPath,
+          Or.casesOn newPath
+            (fun rejected =>
+              let ⟨scan, right✝⟩ := rejected
+              let ⟨empty, final⟩ := right✝
+              let ⟨⟩ :=
+                (p, Aeneas.Std.core.result.Result.Err ProverRwRng.StateOnlyAttemptEntropyError.RepeatedZeroBlock)
+              final)
+            fun entered =>
+            let ⟨scan, right✝¹⟩ := entered
+            let ⟨raw, h✝¹⟩ := right✝¹
+            let ⟨replay, final⟩ := h✝¹
+            id
+              (fun final =>
+                Eq.ndrec (motive := fun raw =>
+                  R1Z.ProverRwRngOwnerEvents.Replay (R1Z.ProverRwRngOwnerEvents.newBody nonce) (p, 0#usize) states raw →
+                    after.replies = p.replies ∧
+                      ↑after.used = ↑p.used + R1Z.ProverRwRngOwnerInventory.drawCount states ∧
+                        R1Z.ProverRwRngOwnerInventory.drawCount states ≤ 16 ∧
+                          R1Z.ProverRwRngOwnerInventory.events states =
+                              List.map
+                                (fun index => (Aeneas.Std.Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+                                (List.range' (↑p.used) (R1Z.ProverRwRngOwnerInventory.drawCount states)) ∧
+                            (∀ event ∈ R1Z.ProverRwRngOwnerInventory.events states, event.2.2.isSome = true) ∧
+                              List.drop ↑after.used ↑after.replies =
+                                List.drop (↑p.used + R1Z.ProverRwRngOwnerInventory.drawCount states) ↑p.replies)
+                  (fun replay =>
+                    let ⟨replies, right✝²⟩ := R1Z.ProverRwRngOwnerInventory.replay_inventory nonce replay
+                    let ⟨cursor, bounded⟩ := right✝²
+                    have cap := LE.le.trans bounded (Nat.sub_le 16 ↑(p, 0#usize).2);
+                    ⟨replies,
+                      ⟨cursor,
+                        ⟨cap,
+                          ⟨R1Z.ProverRwRngOwnerInventory.replay_events nonce replay,
+                            ⟨R1Z.ProverRwRngOwnerInventory.replay_available nonce replay,
+                              Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      List.drop ↑after.used ↑_a =
+                                        List.drop (↑p.used + R1Z.ProverRwRngOwnerInventory.drawCount states) ↑p.replies)
+                                    replies))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        List.drop _a ↑(p, 0#usize).1.replies =
+                                          List.drop (↑p.used + R1Z.ProverRwRngOwnerInventory.drawCount states)
+                                            ↑p.replies)
+                                      cursor))
+                                  (Eq.refl
+                                    (List.drop (↑(p, 0#usize).1.used + R1Z.ProverRwRngOwnerInventory.drawCount states)
+                                      ↑(p, 0#usize).1.replies)))⟩⟩⟩⟩⟩)
+                  (Eq.symm final) replay)
+              final⟩⟩⟩
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.79
+	Maximum resident set size (kbytes): 3847484
+	Swaps: 0
+	Exit status: 0
