@@ -1,0 +1,910 @@
+'AspisR1.Par_Parameters.address_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Parameters.encoder_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Parameters.decoder_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Parameters.parameter_nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Parameters.input_map_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Parameters.input_map_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Public.input_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Public.accepted_public_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_NativePair.accepted_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Headline.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Par_Transcript.accepted_initFits' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.DrvC_NativePair.accepted_pair_driver : ∀ {W A M Cv F CoreError : Type} {N : Nat}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (c : AspisR1.DrvC_Installation.Configuration F CoreError) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (prepareOwner :
+    AspisR1.WAdm_Domain.SessionAPrepare
+      (@AspisR1.Tx1Q_Execution.actual CoreError
+        (AspisR1.Op5T_Concrete.current
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+  (primitiveOwner :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives
+      (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+        (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps
+        (@AspisR1.Tx2I_Install.install F
+          (@AspisR1.DrvC_Installation.Configuration.adapter F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (AspisR1.Op5T_Concrete.stage
+            (@AspisR1.Tx2N_Execution.control CoreError
+              (AspisR1.AuS1_Install.base
+                (@AspisR1.DrvC_Installation.Configuration.stageBase F CoreError
+                  (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+              (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+          (@AspisR1.DrvC_Installation.Configuration.finish F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.Uni_Install.current CoreError
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 program data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 program data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (p : FS2.Duplex.Params M Cv N)
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true)))))
+  (length : Aeneas.Std.U32),
+  @Exists.{1} AspisR1.S2W_NativeConsolidation.FirstCut fun (f : AspisR1.S2W_NativeConsolidation.FirstCut) =>
+    @Exists.{1} AspisR1.S2W_NativeConsolidation.SecondCut fun (s : AspisR1.S2W_NativeConsolidation.SecondCut) =>
+      And
+        (AspisR1.S2W_NativeConsolidation.SourceCuts
+          (@AspisR1.DrvC_Installation.sdk F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (AspisR1.S2W_D189Entry.Entry.first e1)
+          (AspisR1.S2W_D189Entry.Entry.second e2 AspisR1.S2W_D189Wrappers.secondSizes) saved f s)
+        (And
+          (@Eq.{1} (Aeneas.Std.Result.{0} (Option.{0} AspisR1.Port1_Driver.Semantic))
+            (AspisR1.Port1_Driver.decodeSemantic
+              (@AspisR1.DrvC_Installation.sdk F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))
+            (@Aeneas.Std.Result.ok.{0} (Option.{0} AspisR1.AdapterRw.LeadInputs.Public)
+              (@Option.some.{0} AspisR1.AdapterRw.LeadInputs.Public
+                (AspisR1.S2W_NativeConsolidation.FirstCut.semantic f))))
+          (∀
+            (history :
+              AspisR1.S2X.CheckpointVersionBinding
+                (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                  (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                    (@Prod.fst.{0, 0} Nat Nat
+                      (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                        (AspisR1.S2W_D189Entry.Entry.heap e1)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                (AspisR1.MultiproofConeCanonical.bytesOf
+                  (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                    (fun (l : List.{0} Aeneas.Std.U8) =>
+                      @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                    (AspisR1.S2W_NativeConsolidation.SecondCut.checkpoint s))))
+            (p2prime :
+              AspisR1.S2W_AuthenticatedInputs.P2Prime H (AspisR1.S2W_NativeConsolidation.FirstCut.proof f)
+                (AspisR1.S2W_NativeConsolidation.FirstCut.pub f) (AspisR1.S2W_NativeConsolidation.SecondCut.proof s)
+                (AspisR1.S2W_NativeConsolidation.SecondCut.pub s))
+            (i : AspisR1.OraclePortStoredExperimentC4.Input),
+            @Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                  (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+                (AspisR1.MultiproofConeCanonical.bytesOf
+                  (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                    (fun (l : List.{0} Aeneas.Std.U8) =>
+                      @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                    (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))) →
+              @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortStoredExperimentC4.Input.stored i)
+                  (AspisR1.MultiproofConeCanonical.bytesOf
+                    (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                      (fun (l : List.{0} Aeneas.Std.U8) =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                      (AspisR1.S2W_NativeConsolidation.FirstCut.proof f))) →
+                @Eq.{1} Bool
+                  (@Prod.snd.{0, 0}
+                    (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)) Bool
+                    (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                      Bool H
+                      (@AspisR1.DrvC_Implementation.driver F CoreError
+                        (@AspisR1.DrvC_FirstConstants.configuration F CoreError c) i)))
+                  Bool.true))
+@AspisR1.Par_NativePair.accepted_pair : ∀ {W A F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (c : AspisR1.DrvC_Installation.Configuration F CoreError) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (prepareOwner :
+    AspisR1.WAdm_Domain.SessionAPrepare
+      (@AspisR1.Tx1Q_Execution.actual CoreError
+        (AspisR1.Op5T_Concrete.current
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+  (primitiveOwner :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives
+      (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+        (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps
+        (@AspisR1.Tx2I_Install.install F
+          (@AspisR1.DrvC_Installation.Configuration.adapter F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (AspisR1.Op5T_Concrete.stage
+            (@AspisR1.Tx2N_Execution.control CoreError
+              (AspisR1.AuS1_Install.base
+                (@AspisR1.DrvC_Installation.Configuration.stageBase F CoreError
+                  (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+              (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+          (@AspisR1.DrvC_Installation.Configuration.finish F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.Uni_Install.current CoreError
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 program data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 program data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true)))))
+  (length : Aeneas.Std.U32),
+  @Exists.{1} AspisR1.S2W_NativeConsolidation.FirstCut fun (f : AspisR1.S2W_NativeConsolidation.FirstCut) =>
+    @Exists.{1} AspisR1.S2W_NativeConsolidation.SecondCut fun (s : AspisR1.S2W_NativeConsolidation.SecondCut) =>
+      @Exists.{1} AspisR1.OraclePortStoredExperimentC4.Input fun (i : AspisR1.OraclePortStoredExperimentC4.Input) =>
+        And
+          (AspisR1.S2W_NativeConsolidation.SourceCuts
+            (@AspisR1.DrvC_Installation.sdk F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+            (AspisR1.S2W_D189Entry.Entry.first e1)
+            (AspisR1.S2W_D189Entry.Entry.second e2 AspisR1.S2W_D189Wrappers.secondSizes) saved f s)
+          (And
+            (@Eq.{1} (Aeneas.Std.Result.{0} (Option.{0} AspisR1.Port1_Driver.Semantic))
+              (AspisR1.Port1_Driver.decodeSemantic
+                (@AspisR1.DrvC_Installation.sdk F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+                (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))
+              (@Aeneas.Std.Result.ok.{0} (Option.{0} AspisR1.AdapterRw.LeadInputs.Public)
+                (@Option.some.{0} AspisR1.AdapterRw.LeadInputs.Public
+                  (AspisR1.S2W_NativeConsolidation.FirstCut.semantic f))))
+            (And
+              (@Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                  (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+                (AspisR1.MultiproofConeCanonical.bytesOf
+                  (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                    (fun (l : List.{0} Aeneas.Std.U8) =>
+                      @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                    (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))))
+              (And
+                (@Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortStoredExperimentC4.Input.stored i)
+                  (AspisR1.MultiproofConeCanonical.bytesOf
+                    (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                      (fun (l : List.{0} Aeneas.Std.U8) =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                      (AspisR1.S2W_NativeConsolidation.FirstCut.proof f))))
+                (And
+                  (@Eq.{1} AspisV8R19.DuplexFrames.Byte
+                    (@AspisR1.UnifiedSampler.Public.tag AspisR1.SelectedTranscriptParams.L
+                      (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+                    (@OfNat.ofNat.{0} AspisV8R19.DuplexFrames.Byte (nat_lit 2)
+                      (SimplexCategory.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                        (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255))))
+                        (nat_lit 2))))
+                  (And
+                    (@Eq.{1} Nat
+                      (@List.length.{0} AspisV8R19.DuplexFrames.Byte
+                        (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                          (AspisR1.OraclePortStoredExperimentC4.Input.statement i)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 1880) (instOfNatNat (nat_lit 1880))))
+                    (And
+                      (@LE.le.{0} Nat instLENat
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 75) (instOfNatNat (nat_lit 75)))
+                          (@List.length.{0} AspisV8R19.DuplexFrames.Byte
+                            (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                              (AspisR1.OraclePortStoredExperimentC4.Input.statement i))))
+                        AspisR1.SelectedTranscriptParams.L)
+                      (∀
+                        (history :
+                          AspisR1.S2X.CheckpointVersionBinding
+                            (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                              (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                                (@Prod.fst.{0, 0} Nat Nat
+                                  (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                                    (AspisR1.S2W_D189Entry.Entry.heap e1)
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                            (AspisR1.MultiproofConeCanonical.bytesOf
+                              (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                                (fun (l : List.{0} Aeneas.Std.U8) =>
+                                  @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                                (AspisR1.S2W_NativeConsolidation.SecondCut.checkpoint s))))
+                        (p2prime :
+                          AspisR1.S2W_AuthenticatedInputs.P2Prime H (AspisR1.S2W_NativeConsolidation.FirstCut.proof f)
+                            (AspisR1.S2W_NativeConsolidation.FirstCut.pub f)
+                            (AspisR1.S2W_NativeConsolidation.SecondCut.proof s)
+                            (AspisR1.S2W_NativeConsolidation.SecondCut.pub s)),
+                        And
+                          (@Eq.{1} Bool
+                            (@Prod.snd.{0, 0}
+                              (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                              Bool
+                              (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes
+                                AspisV8R19.SourceDuplexStep.State Bool H
+                                (@AspisR1.DrvC_Implementation.driver F CoreError
+                                  (@AspisR1.DrvC_FirstConstants.configuration F CoreError c) i)))
+                            Bool.true)
+                          (Not
+                            (∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                              @Eq.{1} Bool
+                                (@Prod.snd.{0, 0}
+                                  (List.{0}
+                                    (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                                  Bool
+                                  (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Bool H
+                                    (@AspisR1.DrvC_Implementation.driver F CoreError
+                                      (@AspisR1.DrvC_FirstConstants.configuration F CoreError c) j)))
+                                Bool.false)))))))))
+@AspisR1.DrvC_Headline.deployed_headline_installed : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q0 Q1 : Nat)
+  (hqueries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+  (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime)
+  (raw : AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D (@AspisR1.DrvC_Implementation.driver F C c))
+  (binding :
+    AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D (@AspisR1.DrvC_Implementation.driver F C c)
+      (AspisR1.Port1_StoredCarrier.lift P) runtime)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result.{0} AspisR1.SdkC_Source.Digest)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      AspisR1.GExp_Experiment.FirstInputs)
+  (chooseSecond :
+    AspisR1.GExp_Experiment.FirstInputs →
+      Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8 →
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          AspisR1.GExp_Experiment.SecondInputs)
+  (prefixBound :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.GExp_Experiment.FirstInputs
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.GExp_Experiment.FirstInputs H adversary)))
+        Q0)
+  (choiceBound :
+    ∀ (input : AspisR1.GExp_Experiment.FirstInputs) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.GExp_Experiment.SecondInputs
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.GExp_Experiment.SecondInputs H (chooseSecond input saved))))
+        Q1)
+  (project :
+    AspisR1.GExp_Experiment.Outcome →
+      Prod.{0, 0} AspisR1.OraclePortCompactDraft.Parsed
+        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+          Fin (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))),
+  have source :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      AspisR1.GExp_Experiment.Outcome :=
+    AspisR1.GExp_Experiment.program
+      (@AspisR1.GExp_FirstPair.base C (@AspisR1.DrvC_Installation.Configuration.currentBase F C c)
+        (@AspisR1.DrvC_Installation.Configuration.reserved F C c) (@AspisR1.DrvC_Installation.Configuration.query F C c)
+        (@AspisR1.DrvC_Installation.Configuration.geometry F C c))
+      (@AspisR1.DrvC_Installation.stage F C c) (@AspisR1.DrvC_Installation.Configuration.reserved F C c)
+      (@AspisR1.DrvC_Installation.Configuration.boundaries F C c) (@AspisR1.DrvC_Installation.Configuration.std F C c)
+      hashv (@AspisR1.DrvC_Installation.currentDigest F C c) (@AspisR1.DrvC_Installation.digest F C c) adversary
+      chooseSecond;
+  And
+    (AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D (AspisR1.Port1_StoredCarrier.lift P)
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) runtime)
+    (And
+      (@LE.le.{0} Rat Rat.instLE
+        (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+          (AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime)
+          (@AspisR1.EndP_AuthMass.mass AspisR1.GExp_Experiment.Outcome source project))
+        (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+              (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                (@Nat.cast.{0} Rat Rat.instNatCast
+                  (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                    (@OfNat.ofNat.{0} Nat (nat_lit 34) (instOfNatNat (nat_lit 34)))))
+                AspisR1.PerAttemptEnvelope.B)
+              (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                  (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                    (@OfNat.ofNat.{0} Rat (nat_lit 6) (@Rat.instOfNat (nat_lit 6)))
+                    (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                      (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                      (@Nat.cast.{0} Rat Rat.instNatCast
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161)))))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                    (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                    (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))))
+                (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                  (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                    (@OfNat.ofNat.{0} Rat (nat_lit 6) (@Rat.instOfNat (nat_lit 6)))
+                    (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                      (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                      (@Nat.cast.{0} Rat Rat.instNatCast
+                        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                          (@OfNat.ofNat.{0} Nat (nat_lit 23625) (instOfNatNat (nat_lit 23625)))))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                  (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                    (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                    (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))))))
+            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 126) (instOfNatNat (nat_lit 126))))))
+          (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+              (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+              (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 454) (instOfNatNat (nat_lit 454)))))))
+      (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+          (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+        @LE.le.{0} Rat Rat.instLE
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+            (AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime)
+            (@AspisR1.EndP_AuthMass.mass AspisR1.GExp_Experiment.Outcome source project))
+          (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+            (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+              (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+              (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100)))))))
+@AspisR1.Par_Headline.deployed : ∀ {W A F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (Nat → AspisR1.S2W_D189Entry.Record))
+  (sdk : @AspisR1.S2Trust.S2TrustedSdkBorrow W (Nat → AspisR1.S2W_D189Entry.Record) L)
+  (copy :
+    AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record) →
+      Nat → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (Nat → AspisR1.S2W_D189Entry.Record))
+  (std : @AspisR1.S2W_TrustedStd.TrustedStd (Nat → AspisR1.S2W_D189Entry.Record) copy)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e1 w1
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (admission2 :
+    @AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission W L e2 w2
+      (@OfNat.ofNat.{0} Nat (nat_lit 7) (instOfNatNat (nat_lit 7))))
+  (c : AspisR1.DrvC_Installation.Configuration F CoreError) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (prepareOwner :
+    AspisR1.WAdm_Domain.SessionAPrepare
+      (@AspisR1.Tx1Q_Execution.actual CoreError
+        (AspisR1.Op5T_Concrete.current
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+  (primitiveOwner :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrimitives
+      (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+        (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result.{0} AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps
+        (@AspisR1.Tx2I_Install.install F
+          (@AspisR1.DrvC_Installation.Configuration.adapter F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (AspisR1.Op5T_Concrete.stage
+            (@AspisR1.Tx2N_Execution.control CoreError
+              (AspisR1.AuS1_Install.base
+                (@AspisR1.DrvC_Installation.Configuration.stageBase F CoreError
+                  (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+              (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+                (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))))
+          (@AspisR1.DrvC_Installation.Configuration.finish F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.Uni_Install.current CoreError
+          (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.query F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+          (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError
+            (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError
+          (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.first A native1 copy allocator e1 program data1 state1)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A))
+          AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+            (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) saved
+            (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post1 final1)))))
+  (accepted2 :
+    @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE))
+      (@AspisR1.S2W_D189Wrappers.second A native2 allocator e2 program data2 slot state2)
+      (@Aeneas.Std.Result.ok.{0}
+        (Aeneas.Std.core.result.Result.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE)
+        (@Aeneas.Std.core.result.Result.Ok.{0, 0}
+          (Prod.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A) AspisR1.AdapterRw.Cuts.PE
+          (@Prod.mk.{0, 0} (AspisR1.S2Trust.Heap (Nat → AspisR1.S2W_D189Entry.Record)) A post2 final2))))
+  (root :
+    Aeneas.Std.Array.{0} Aeneas.Std.U8
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+        (@of_decide_eq_true
+          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+          (@id.{0}
+            (@Eq.{1} Bool
+              (@Decidable.decide
+                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))
+                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32)))
+                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))
+              Bool.true)
+            (@Eq.refl.{1} Bool Bool.true)))))
+  (length : Aeneas.Std.U32) (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (Q0 Q1 : Nat)
+  (hqueries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.Port1_StoredCarrier.Submission
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.Port1_StoredCarrier.Submission H P)))
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1))
+  (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime)
+  (raw :
+    AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D
+      (@AspisR1.DrvC_Implementation.driver F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c)))
+  (binding :
+    AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D
+      (@AspisR1.DrvC_Implementation.driver F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+      (AspisR1.Port1_StoredCarrier.lift P) runtime)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      AspisR1.GExp_Experiment.FirstInputs)
+  (chooseSecond :
+    AspisR1.GExp_Experiment.FirstInputs →
+      Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8 →
+        AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+          AspisR1.GExp_Experiment.SecondInputs)
+  (prefixBound :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.GExp_Experiment.FirstInputs
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.GExp_Experiment.FirstInputs H adversary)))
+        Q0)
+  (choiceBound :
+    ∀ (input : AspisR1.GExp_Experiment.FirstInputs) (saved : Aeneas.Std.alloc.vec.Vec.{0} Aeneas.Std.U8)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)
+          (@Prod.fst.{0, 0} (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+            AspisR1.GExp_Experiment.SecondInputs
+            (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              AspisR1.GExp_Experiment.SecondInputs H (chooseSecond input saved))))
+        Q1)
+  (project :
+    AspisR1.GExp_Experiment.Outcome →
+      Prod.{0, 0} AspisR1.OraclePortCompactDraft.Parsed
+        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+          Fin (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))),
+  And
+    (@Exists.{1} AspisR1.S2W_NativeConsolidation.FirstCut fun (f : AspisR1.S2W_NativeConsolidation.FirstCut) =>
+      @Exists.{1} AspisR1.S2W_NativeConsolidation.SecondCut fun (s : AspisR1.S2W_NativeConsolidation.SecondCut) =>
+        @Exists.{1} AspisR1.OraclePortStoredExperimentC4.Input fun (i : AspisR1.OraclePortStoredExperimentC4.Input) =>
+          And
+            (AspisR1.S2W_NativeConsolidation.SourceCuts
+              (@AspisR1.DrvC_Installation.sdk F CoreError (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+              (AspisR1.S2W_D189Entry.Entry.first e1)
+              (AspisR1.S2W_D189Entry.Entry.second e2 AspisR1.S2W_D189Wrappers.secondSizes) saved f s)
+            (And
+              (@Eq.{1} (Aeneas.Std.Result.{0} (Option.{0} AspisR1.Port1_Driver.Semantic))
+                (AspisR1.Port1_Driver.decodeSemantic
+                  (@AspisR1.DrvC_Installation.sdk F CoreError
+                    (@AspisR1.DrvC_FirstConstants.configuration F CoreError c))
+                  (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))
+                (@Aeneas.Std.Result.ok.{0} (Option.{0} AspisR1.AdapterRw.LeadInputs.Public)
+                  (@Option.some.{0} AspisR1.AdapterRw.LeadInputs.Public
+                    (AspisR1.S2W_NativeConsolidation.FirstCut.semantic f))))
+              (And
+                (@Eq.{1} AspisV8R19.DuplexFrames.Bytes
+                  (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                    (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+                  (AspisR1.MultiproofConeCanonical.bytesOf
+                    (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                      (fun (l : List.{0} Aeneas.Std.U8) =>
+                        @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                      (AspisR1.S2W_NativeConsolidation.FirstCut.pub f))))
+                (And
+                  (@Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortStoredExperimentC4.Input.stored i)
+                    (AspisR1.MultiproofConeCanonical.bytesOf
+                      (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                        (fun (l : List.{0} Aeneas.Std.U8) =>
+                          @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                        (AspisR1.S2W_NativeConsolidation.FirstCut.proof f))))
+                  (And
+                    (@Eq.{1} AspisV8R19.DuplexFrames.Byte
+                      (@AspisR1.UnifiedSampler.Public.tag AspisR1.SelectedTranscriptParams.L
+                        (AspisR1.OraclePortStoredExperimentC4.Input.statement i))
+                      (@OfNat.ofNat.{0} AspisV8R19.DuplexFrames.Byte (nat_lit 2)
+                        (SimplexCategory.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                          (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 255) (instOfNatNat (nat_lit 255))))
+                          (nat_lit 2))))
+                    (And
+                      (@Eq.{1} Nat
+                        (@List.length.{0} AspisV8R19.DuplexFrames.Byte
+                          (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                            (AspisR1.OraclePortStoredExperimentC4.Input.statement i)))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 1880) (instOfNatNat (nat_lit 1880))))
+                      (And
+                        (@LE.le.{0} Nat instLENat
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 75) (instOfNatNat (nat_lit 75)))
+                            (@List.length.{0} AspisV8R19.DuplexFrames.Byte
+                              (@AspisR1.UnifiedSampler.Public.pubBytes AspisR1.SelectedTranscriptParams.L
+                                (AspisR1.OraclePortStoredExperimentC4.Input.statement i))))
+                          AspisR1.SelectedTranscriptParams.L)
+                        (∀
+                          (history :
+                            AspisR1.S2X.CheckpointVersionBinding
+                              (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                                (@AspisR1.S2Trust.Heap.payload (Nat → AspisR1.S2W_D189Entry.Record) post1
+                                  (@Prod.fst.{0, 0} Nat Nat
+                                    (@AspisR1.S2Trust.Heap.accounts (Nat → AspisR1.S2W_D189Entry.Record)
+                                      (AspisR1.S2W_D189Entry.Entry.heap e1)
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1768) (instOfNatNat (nat_lit 1768))))
+                              (AspisR1.MultiproofConeCanonical.bytesOf
+                                (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+                                  (fun (l : List.{0} Aeneas.Std.U8) =>
+                                    @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+                                  (AspisR1.S2W_NativeConsolidation.SecondCut.checkpoint s))))
+                          (p2prime :
+                            AspisR1.S2W_AuthenticatedInputs.P2Prime H (AspisR1.S2W_NativeConsolidation.FirstCut.proof f)
+                              (AspisR1.S2W_NativeConsolidation.FirstCut.pub f)
+                              (AspisR1.S2W_NativeConsolidation.SecondCut.proof s)
+                              (AspisR1.S2W_NativeConsolidation.SecondCut.pub s)),
+                          And
+                            (@Eq.{1} Bool
+                              (@Prod.snd.{0, 0}
+                                (List.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                                Bool
+                                (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes
+                                  AspisV8R19.SourceDuplexStep.State Bool H
+                                  (@AspisR1.DrvC_Implementation.driver F CoreError
+                                    (@AspisR1.DrvC_FirstConstants.configuration F CoreError c) i)))
+                              Bool.true)
+                            (Not
+                              (∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                                @Eq.{1} Bool
+                                  (@Prod.snd.{0, 0}
+                                    (List.{0}
+                                      (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State))
+                                    Bool
+                                    (@AspisV8R19.MemoizedProgramLaw.eval AspisV8R19.DuplexFrames.Bytes
+                                      AspisV8R19.SourceDuplexStep.State Bool H
+                                      (@AspisR1.DrvC_Implementation.driver F CoreError
+                                        (@AspisR1.DrvC_FirstConstants.configuration F CoreError c) j)))
+                                  Bool.false))))))))))
+    (have r : AspisR1.DrvC_Installation.Configuration F CoreError :=
+      @AspisR1.DrvC_FirstConstants.configuration F CoreError c;
+    have source :
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+        AspisR1.GExp_Experiment.Outcome :=
+      AspisR1.GExp_Experiment.program
+        (@AspisR1.GExp_FirstPair.base CoreError (@AspisR1.DrvC_Installation.Configuration.currentBase F CoreError r)
+          (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError r)
+          (@AspisR1.DrvC_Installation.Configuration.query F CoreError r)
+          (@AspisR1.DrvC_Installation.Configuration.geometry F CoreError r))
+        (@AspisR1.DrvC_Installation.stage F CoreError r)
+        (@AspisR1.DrvC_Installation.Configuration.reserved F CoreError r)
+        (@AspisR1.DrvC_Installation.Configuration.boundaries F CoreError r)
+        (@AspisR1.DrvC_Installation.Configuration.std F CoreError r) hashv
+        (@AspisR1.DrvC_Installation.currentDigest F CoreError r) (@AspisR1.DrvC_Installation.digest F CoreError r)
+        adversary chooseSecond;
+    And
+      (AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D (AspisR1.Port1_StoredCarrier.lift P)
+        (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1) runtime)
+      (And
+        (@LE.le.{0} Rat Rat.instLE
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+            (AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime)
+            (@AspisR1.EndP_AuthMass.mass AspisR1.GExp_Experiment.Outcome source project))
+          (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+              (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                  (@Nat.cast.{0} Rat Rat.instNatCast
+                    (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 34) (instOfNatNat (nat_lit 34)))))
+                  AspisR1.PerAttemptEnvelope.B)
+                (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+                  (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                    (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                      (@OfNat.ofNat.{0} Rat (nat_lit 6) (@Rat.instOfNat (nat_lit 6)))
+                      (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                        (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                        (@Nat.cast.{0} Rat Rat.instNatCast
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1161) (instOfNatNat (nat_lit 1161)))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                    (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                      (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                      (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))))
+                  (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                    (@HMul.hMul.{0, 0, 0} Rat Rat Rat (@instHMul.{0} Rat Rat.instMul)
+                      (@OfNat.ofNat.{0} Rat (nat_lit 6) (@Rat.instOfNat (nat_lit 6)))
+                      (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                        (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                        (@Nat.cast.{0} Rat Rat.instNatCast
+                          (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat)
+                            (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+                            (@OfNat.ofNat.{0} Nat (nat_lit 23625) (instOfNatNat (nat_lit 23625)))))
+                        (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+                    (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                      (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                      (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 256) (instOfNatNat (nat_lit 256)))))))
+              (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+                (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+                (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                  (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                  (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                  (@OfNat.ofNat.{0} Nat (nat_lit 126) (instOfNatNat (nat_lit 126))))))
+            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 454) (instOfNatNat (nat_lit 454)))))))
+        (@Eq.{1} Nat (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) Q0 Q1)
+            (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+          @LE.le.{0} Rat Rat.instLE
+            (@HAdd.hAdd.{0, 0, 0} Rat Rat Rat (@instHAdd.{0} Rat Rat.instAdd)
+              (AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime)
+              (@AspisR1.EndP_AuthMass.mass AspisR1.GExp_Experiment.Outcome source project))
+            (@HDiv.hDiv.{0, 0, 0} Rat Rat Rat (@instHDiv.{0} Rat Rat.instDiv)
+              (@OfNat.ofNat.{0} Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+              (@HPow.hPow.{0, 0, 0} Rat Nat Rat
+                (@instHPow.{0, 0} Rat Nat (@NPow.toPow.{0} Rat (@Monoid.toNPow.{0} Rat Rat.monoid)))
+                (@OfNat.ofNat.{0} Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2)))
+                (@OfNat.ofNat.{0} Nat (nat_lit 100) (instOfNatNat (nat_lit 100))))))))
