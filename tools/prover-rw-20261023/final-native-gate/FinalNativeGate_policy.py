@@ -8,10 +8,10 @@ import types
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
-REVISIONS = {'pid':'fe3e1689179edb7d1e8a9aa847aa97a3b3202360','stability':'f7b90c82300c8a2409625fefb5dc529db6547f9c','available':'fbe04424e7553d9b0844ae19c2206b15cf3dd831',
+REVISIONS = {'pid':'9fe9f199d1e52e3dcf4b355dff57330e5019a220','stability':'f7b90c82300c8a2409625fefb5dc529db6547f9c','available':'fbe04424e7553d9b0844ae19c2206b15cf3dd831',
              'actual':'5756082d85e4d6784de4566059d6a9845604342a'}
 SPECS = {
-    'candidate':('pid','tools/port36transport-20261025/linux367/Port36LINUX_pid_candidate.py'),
+    'candidate':('pid','tools/resource-snapshot-20261025/ResourceSnapshot_candidate.py'),
     'go':('available','tools/resource-available-20261024/ResourceAvailable_go.py'),
     'identity':('actual','tools/resource-stat-20261024/ResourceStat_go.py'),
     'inventory':('actual','tools/resource-stat-20261024/baseline/reservation_base.py'),
@@ -72,7 +72,7 @@ def load(data=None):
         else:sys.modules['ResourceStability_sources']=previous
     return candidate,go,identity,inventory,policy
 
-PINS = {'candidate': {'sha256': '98382278ab4de78f16f68a178e1d231790a3d52797e5129f3819b237d1b29d32', 'size': 18304}, 'go': {'sha256': '1f207247cdf947ec6c1d0a9b6fbf8126caae1f9b0373915b1d11df537199a574', 'size': 7675}, 'identity': {'sha256': '0ff959fd4e01414fa7748c2598a19cdb34dd24b38ba14ac85e2294f282429000', 'size': 15649}, 'inventory': {'sha256': 'a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2', 'size': 4713}, 'fixtures': {'sha256': 'c453bc3ea9423de7054b36f196805196c0f149c09a9c99212f2e8bd9b618621e', 'size': 12809}, 'policy': {'sha256': '8dfffb421e33df0cfd43e0b3c43112f5d9ea34a65bf83da8e60adff82ab73813', 'size': 7448}}
+PINS = {'candidate': {'sha256': '276812f07f621ed3413a839cce737fd6ecd3a6d914a130a7eb64ef6f62386226', 'size': 17798}, 'go': {'sha256': '1f207247cdf947ec6c1d0a9b6fbf8126caae1f9b0373915b1d11df537199a574', 'size': 7675}, 'identity': {'sha256': '0ff959fd4e01414fa7748c2598a19cdb34dd24b38ba14ac85e2294f282429000', 'size': 15649}, 'inventory': {'sha256': 'a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2', 'size': 4713}, 'fixtures': {'sha256': 'c453bc3ea9423de7054b36f196805196c0f149c09a9c99212f2e8bd9b618621e', 'size': 12809}, 'policy': {'sha256': '8dfffb421e33df0cfd43e0b3c43112f5d9ea34a65bf83da8e60adff82ab73813', 'size': 7448}}
 
 def validate_bundle(data):
     if set(data)!=set(SPECS):raise ValueError('reviewed source set drift')

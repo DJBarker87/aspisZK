@@ -10,7 +10,7 @@ import subprocess
 import sys
 import time
 
-STAGE='/home/dombarker/final-native-gate-v7-20261025'
+STAGE='/home/dombarker/final-native-gate-v8-20261025'
 FILES=__FILES_LITERAL__
 TRANSFER_ROOT_SHA256=__ROOT_LITERAL__
 COUNT_LIMIT=128
@@ -64,7 +64,7 @@ def verify(rows):
 
 
 def install():
-    if STAGE!='/home/dombarker/final-native-gate-v7-20261025':raise ValueError('fixed v6 stage/leaf mismatch')
+    if STAGE!='/home/dombarker/final-native-gate-v8-20261025':raise ValueError('fixed v6 stage/leaf mismatch')
     rows=decoded();verify(rows)
     held=[];ancestors=[]
     try:
@@ -78,8 +78,8 @@ def install():
         if os.fstat(fd).st_uid!=os.getuid():raise ValueError('transfer parent must be user owned')
         # No preexisting leaf adoption, including dangling aliases. Retain any
         # newly created partial leaf on ALL failures. Never delete/chown.
-        os.mkdir('final-native-gate-v7-20261025',mode=0o700,dir_fd=fd)
-        leaf=os.open('final-native-gate-v7-20261025',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(leaf)
+        os.mkdir('final-native-gate-v8-20261025',mode=0o700,dir_fd=fd)
+        leaf=os.open('final-native-gate-v8-20261025',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(leaf)
         owned=os.fstat(leaf)
         if owned.st_uid!=os.getuid() or stat.S_IMODE(owned.st_mode)!=0o700:raise ValueError('transfer leaf0700')
         leaf_id=identity(owned)
@@ -112,7 +112,7 @@ def install():
         os.fsync(leaf);os.fsync(fd)
         for parent,name,expected in ancestors:
             if identity(os.stat(name,dir_fd=parent,follow_symlinks=False))!=expected:raise ValueError('transfer final ancestry drift')
-        if identity(os.stat('final-native-gate-v7-20261025',dir_fd=fd,follow_symlinks=False))!=leaf_id:raise ValueError('transfer leaf replaced')
+        if identity(os.stat('final-native-gate-v8-20261025',dir_fd=fd,follow_symlinks=False))!=leaf_id:raise ValueError('transfer leaf replaced')
         return dict(status='FIXED_DATA_SOURCE_TRANSFERRED',files=len(rows),bytes=sum(map(len,rows.values())),root=TRANSFER_ROOT_SHA256,execution_authority=False,print_axioms='N/A')
     finally:
         for fd in reversed(held):os.close(fd)

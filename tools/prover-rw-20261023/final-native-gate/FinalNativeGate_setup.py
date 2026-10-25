@@ -9,7 +9,7 @@ import stat
 import time
 
 HERE=Path(__file__).resolve().parent
-STAGE=Path('/home/dombarker/final-native-gate-v7-20261025')
+STAGE=Path('/home/dombarker/final-native-gate-v8-20261025')
 PACKET=STAGE/'FinalNativeGate-setup-packet'
 UNIT='FinalNativeGate-pin-setup'
 TRANSPORT_SECONDS=120
