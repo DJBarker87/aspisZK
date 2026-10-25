@@ -1,0 +1,88 @@
+Hir_BirthSuffix.lean:44:8: error: Type mismatch: After simplification, term
+  trace
+ has type
+  Trace ops id (commit store (call.layout.handles 2).1 saved)
+    (Hir_Schedule.run native1 native2 copy allocator id H (commit store (call.layout.handles 2).1 saved)
+          (k (Sum.inl (ok (core.result.Result.Ok (saved, post, final)))))).2.1
+    (Hir_Schedule.run native1 native2 copy allocator id H (commit store (call.layout.handles 2).1 saved)
+        (k (Sum.inl (ok (core.result.Result.Ok (saved, post, final)))))).1
+but is expected to have type
+  Trace ops id (commit store key saved)
+    (Hir_Schedule.run native1 native2 copy allocator id H (commit store (call.layout.handles 2).1 saved)
+          (k (Sum.inl (ok (core.result.Result.Ok (saved, post, final)))))).2.1
+    (Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).1
+Hir_BirthSuffix.lean:45:19: error: Ambiguous term
+  run
+Possible interpretations:
+  Hir_Schedule.run : S2W_ExtractionBoundary.First →
+    S2W_ExtractionBoundary.Second →
+      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+        Allocator ?m.258 →
+          S2W_ExtractionBoundary.Program → (Bytes → State) → Store → Schedule ?m.258 ?m.259 → Output ?m.259
+  
+  S2Trust.run : Heap ?m.258 → Op → Heap ?m.258 × S2Trust.Reply
+Hir_BirthSuffix.lean:45:6: error: unsolved goals
+case invoke.inl.refine_2
+A B : Type
+ops : AdapterRw.Ops
+law : ops.op36 = Hist_Authority.keyEq
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+source :
+  ∀ (id : AdapterRw.solana_pubkey.Pubkey) (accounts : Slice AdapterRw.r1_pool_adapter.owned.OwnedAccount)
+    (data : Slice U8), AdapterRw.r1_pool_adapter.owned.stage1_owned ops id accounts data = native1 id accounts data
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+trustedCopy : S2W_TrustedStd.TrustedStd copy
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+H : Bytes → State
+key : ℕ
+data : Slice U8
+call : Call A
+k : Hir_Call.Reply A → Schedule A B
+store : Store
+head : Effect A := native native1 native2 copy allocator id store call
+ih :
+  ∀ (a : Hir_Call.Reply A) (store_1 : Store),
+    { before := store, call := call } ∈ Hir_ProvenanceModel.calls native1 native2 copy allocator id H store_1 (k a) →
+      ∃ saved post final front events,
+        first native1 copy allocator
+              (load { before := store, call := call }.before { before := store, call := call }.call.layout) id
+              { before := store, call := call }.call.data { before := store, call := call }.call.state =
+            ok (core.result.Result.Ok (saved, post, final)) ∧
+          data = saved.deref ∧
+            Trace ops id (commit { before := store, call := call }.before key saved) events
+                (Hir_Schedule.run native1 native2 copy allocator id H store_1 (k a)).1 ∧
+              (Hir_Schedule.run native1 native2 copy allocator id H store_1 (k a)).2.1 =
+                front ++ S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑saved) :: events
+member :
+  { before := store, call := call } ∈
+    Hir_ProvenanceModel.calls native1 native2 copy allocator id H store (Schedule.invoke call k)
+route : Hiq_ReleaseRoute.route { before := store, call := call }.call.data = Hiq_ReleaseRoute.Route.first
+keyEq : ({ before := store, call := call }.call.layout.handles 2).1 = key
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+accepted :
+  first native1 copy allocator
+      (load { before := store, call := call }.before { before := store, call := call }.call.layout) id
+      { before := store, call := call }.call.data { before := store, call := call }.call.state =
+    ok (core.result.Result.Ok (saved, post, final))
+dataEq : data = saved.deref
+effect :
+  native native1 native2 copy allocator id store call =
+    (commit store (call.layout.handles 2).1 saved,
+      S2X.AccountEvent.committedWrite (call.layout.handles 2).1 (MultiproofConeCanonical.bytesOf ↑saved),
+      Sum.inl (ok (core.result.Result.Ok (saved, post, final))))
+⊢ (Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).2.1 =
+    S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑saved) ::
+      (Hir_Schedule.run native1 native2 copy allocator id H (commit store (call.layout.handles 2).1 saved)
+            (k (Sum.inl (ok (core.result.Result.Ok (saved, post, final)))))).2.1
+Hir_BirthSuffix.lean:45:35: warning: This simp argument is unused:
+  keyEq
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲head, ̲effect,k̵e̵y̵E̵q̵,̵ ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hir_BirthSuffix.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
