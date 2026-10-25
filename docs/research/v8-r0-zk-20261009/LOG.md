@@ -9468,3 +9468,8 @@ D226 continuation: separate soundness raw361 PASS5exports/88strictreadbacks, ind
 
 
 D226 continuation: SbfRuntimeFinish source-only9e48 reviewed/independent35fixtures+98pathliteralplan/fullguard+payloadassembly PASS1.109512750s/58458112B/swap0, mergedea31c002c2/cleaned. NEW SbfRuntimeAcquire ONE finite metadata SSH executesexactreviewed145492B payload only,115s/120s/512MiBguard/4MiBoutput; noactualtracer/tracee/root/ns/backend/native/compiler/probe/ELF/privatebudget. Nohostretry/retraceoroldGO. Unused fixed_backend_body gate distinguishedfromactualproducer_fixed_body path; missingapprovalruntimepin/disabledentries/adoptiongate remain. Bothsecuritytargetsnotyetestablished; allnative-world/E1/drop/controller/transcript/L1L2L3/client/performance/artifact/source/refinementgapsretain.
+
+
+## D227 — Separate final private Kani admission from privileged SBF validation (lead, 2026-10-25)
+
+MIRcurrentdcc packet/FINAL-SLOT rereviewed: paired_coordinate_native_resume remains actualnextcomponentgate, Kani59/60final1reserved; ordinaryMIRcfgexcludedharness. FinalNativeGate SOURCEONLY ownparkedproverbranch prepares concretefixeduser-level freshfulladmission plusliteralKani producer, disabledentry, no abstractGOcallback. No rule requiresprivilegedSBFrootfs forordinaryuserKani; full3G4G/Swap0/Tasks64/55reserve7guard2/rawvisibility/source-tool-identity-control policy remainsunchanged. ALLactualhost/compiler/Kani/Rust/Lean/extraction/backend/native/root/ELFbudgets0 inthispreparation; lastslotnotspent. Pendingtypednativeeffect/world/E1/controller/Claims/Terminal/transcript/L1L2L3/client/performance/equivalence/artifact/adoption/release gaps unchanged. Bothsecuritytargetsnotyetestablished.
