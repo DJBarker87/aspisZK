@@ -17,8 +17,13 @@ namespace Op4P_Extract
 /-- [op4p_scan::Op4P_reference::Error]
     Source: 'src/Op4P_reference.rs', lines 40:0-40:24
     Visibility: public -/
-@[discriminant isize]
 inductive Op4P_reference.Error where
 | Parse : Op4P_reference.Error
+
+-- Naming-only expansion of Aeneas's discriminant attribute, as in Op3I_Source.
+def Op4P_reference.Error.read_discriminant (_ : Op4P_reference.Error) : Isize := 0#isize
+instance _root_.Op4P_Extract.Op4P_reference.Error.jointDiscriminant :
+    Aeneas.Std.Discriminant Op4P_reference.Error Isize where
+  read_discriminant := Op4P_reference.Error.read_discriminant
 
 end Op4P_Extract
