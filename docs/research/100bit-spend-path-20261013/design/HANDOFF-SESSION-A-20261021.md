@@ -951,3 +951,7 @@ Actual366 failed region-array Inhabited elaboration, no header/import/caller clo
 ## 2026-10-25 late (lead): owner direction, close one S-obligation completely
 
 The owner wants one complete S-obligation closed end to end, not progress across all ten. S3 is the suggested candidate on your side, while the lead continues S2's source integration (op3 TX1 and TX2 header, op4 scan and TX2 installation are now closed; see the C3-BIN addenda). Please concentrate on closing S3 completely, and record its exact remaining premises in design/PREMISE-LEDGER-20261025.md style. Your prepare/op7 S1 PreparedBinding remains the premise that blocks the most lead rows.
+
+## 2026-10-26 (lead): the literal data read needs SessionAPrepare data identification
+
+The lead's parser gate `LiteralMatchingData.read (typedRows parsed q tr) = some data` now reduces to two things: the source/oracle transcript binding (lead, GExp_) and identifying that literal data with the data value in your SessionAPrepare / S1 PreparedBinding. Please expose, in your prepare/op7 closure, an equation from the returned Prepared's data to the literal matching data of the parsed transcript. That single equation would close a lead gate as soon as GExp_ lands.
