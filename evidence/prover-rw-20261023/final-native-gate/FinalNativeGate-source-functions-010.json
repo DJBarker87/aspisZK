@@ -1,0 +1,23 @@
+{
+  "base": "b5b4339499",
+  "changes": {
+    "FinalNativeGate_setup.py": {
+      "after_pin": {
+        "sha256": "83439c69bb20333315bece3e821463fd0392d89eadef637814db915be1e6410d",
+        "size": 15775
+      },
+      "before_pin": {
+        "sha256": "8350fbf686ea291016e6e8bfd8d5cc5d92af3a919ea841f617e1e955def63e1b",
+        "size": 13456
+      },
+      "complete_changed_functions": {
+        "_publish": {
+          "after": "def _publish(name,value):\n    # Exclusive relative publication in the existing private packet. Never repair,\n    # adopt, unlink, rename or chmod an existing or partially written entry.\n    if not isinstance(name,str) or not name or name in ('.','..') or '/' in name or '\\x00' in name:\n        raise ValueError('publication basename required')\n    def stamp(s):\n        return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_nlink,\n                s.st_size,s.st_mtime_ns,s.st_ctime_ns)\n    def private_file(s):\n        if not stat.S_ISREG(s.st_mode) or s.st_uid!=os.getuid() or s.st_nlink!=1 or stat.S_IMODE(s.st_mode)!=0o600:\n            raise ValueError('new publication must be current-owner single-link regular0600')\n    owned=PACKET.lstat()\n    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or stat.S_IMODE(owned.st_mode)!=0o700:\n        raise ValueError('owned private setup packet0700 required')\n    directory=os.open(PACKET,os.O_DIRECTORY|os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)\n    writer=None\n    try:\n        if stamp(os.fstat(directory))!=stamp(owned):raise ValueError('packet open identity drift')\n        writer=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=directory)\n        initial=os.fstat(writer);private_file(initial)\n        h=hashlib.sha256();size=0\n        for piece in json.JSONEncoder(sort_keys=True,allow_nan=False).iterencode(value):\n            for offset in range(0,len(piece),16384):\n                raw=piece[offset:offset+16384].encode();size+=len(raw)\n                if size>512*2**20:raise ValueError('metadata record512MiB ceiling')\n                view=memoryview(raw)\n                while view:\n                    count=os.write(writer,view)\n                    if count<=0:raise OSError('publication short write')\n                    view=view[count:]\n                h.update(raw)\n        os.fsync(writer)\n        final=os.fstat(writer);private_file(final)\n        if (initial.st_dev,initial.st_ino)!=(final.st_dev,final.st_ino) or final.st_size!=size:\n            raise ValueError('publication writer identity/size drift')\n        if stamp(os.stat(name,dir_fd=directory,follow_symlinks=False))!=stamp(final):\n            raise ValueError('publication entry identity drift')\n        closing=writer;writer=None;os.close(closing)\n        if stamp(os.stat(name,dir_fd=directory,follow_symlinks=False))!=stamp(final):\n            raise ValueError('publication closed entry drift')\n        # Directory size/times/link count may change from our own new entry\n        # (APFS counts files). File nlink remains strictly one above.\n        current=os.fstat(directory);entry=PACKET.lstat()\n        for s in (current,entry):\n            if (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid)!=(owned.st_dev,owned.st_ino,owned.st_mode,owned.st_uid,owned.st_gid):\n                raise ValueError('publication packet identity drift')\n        os.fsync(directory)\n        return dict(name=name,size=size,sha256=h.hexdigest())\n    finally:\n        try:\n            if writer is not None:os.close(writer)\n        finally:os.close(directory)",
+          "before": "def _publish(name,value):\n    # Fixed exclusive own packet, bounded streaming JSON, durable data only.\n    owned=PACKET.lstat()\n    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or owned.st_mode&0o077:raise ValueError('owned private setup packet required')\n    path=PACKET/name;h=hashlib.sha256();size=0\n    with path.open('xb') as out:\n        for piece in json.JSONEncoder(sort_keys=True).iterencode(value):\n            raw=piece.encode();size+=len(raw)\n            if size>512*2**20:raise ValueError('metadata record512MiB ceiling')\n            out.write(raw);h.update(raw)\n        out.flush();os.fsync(out.fileno())\n    fd=os.open(PACKET,os.O_DIRECTORY|os.O_RDONLY|os.O_NOFOLLOW)\n    try:os.fsync(fd)\n    finally:os.close(fd)\n    return dict(name=name,size=size,sha256=h.hexdigest())"
+        }
+      }
+    }
+  },
+  "claim": "Private filesystem publication only; no output/security equivalence theorem",
+  "theorem_premise_changes": "N/A: no theorem changes"
+}
