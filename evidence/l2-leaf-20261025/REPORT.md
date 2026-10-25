@@ -49,3 +49,42 @@ No launcher was changed or copied. Lead was asked for a configured launcher.
 A local `lake env lean --version` in AspisFormal started a cold mathlib clone;
 it was immediately interrupted before any build. Focused Init-only modules can
 use the installed 4.32 toolchain from the worktree root without that package.
+
+## Stage 2: checked model results
+
+`lean/R1Z/L2Leaf_Trace.lean` supplies executable reference observations for
+zero/nonzero short-circuit comparisons, seed-pair validation, expander refill
+and bounded rejection, division operands, gamma carry, sparse suffix/row
+selection, QueryScan duplicate search/block control, and binary sibling
+sharing. Circle arithmetic and whole P_R1 remain explicit semantics parameters;
+they are not discharged implementations. Collection events do not describe
+stdlib internal cost. Weight arithmetic, hashing, validation, sorting,
+node_count and allocation-failure behavior need their own joins. Consequently
+these are **partial reference traces**, not full native source observations.
+
+Checked counterexamples: `nonzero_verdict_not_trace` and
+`accepted_value_not_trace`. Both refute replacing trace-input equality by
+success/output equality. These are concrete leaf-model counterexamples to a
+proof inference, not witness-dependent valid-spend attacks.
+
+`L2Leaf_JointCount.joint_trace_count_bound` proves the finite event-count
+coupling bound for the published view paired with arbitrary trace
+postprocessing. Both inequalities use the same bad-event count once.
+`joint_trace_count_exact` proves exact joint event-count equality if both
+view and full input agree. Dividing by the nonempty equiprobable carrier's
+size gives the corresponding probability inequalities. No concrete raw-input
+agreement, uniformity, native refinement, or R1 epsilon bound was discharged.
+No new probability assumption was added, and no old assumption was removed.
+
+Both new modules compile with installed Lean 4.32 and Std only, from the
+worktree root using `elan run leanprover/lean4:v4.32.0 lake env lean -M7000`.
+This is focused local model evidence, not the coherent env-J release replay.
+Every theorem has a printed axioms result; accepted sets are subsets of
+{propext, Classical.choice, Quot.sound}. Final local module receipts include
+wall, RSS and swaps. The first unsuccessful trace compile was not timed;
+its missing metrics are recorded explicitly rather than reconstructed.
+
+Host launch is independently confirmed blocked: `sh .../tools/run-joint.sh
+11400 R1Z/L2Leaf_Trace J 7000 8` exits 64, “attempt 11400 outside 5000-9999”.
+Calling the script directly also exits 126 because it is not executable.
+No infrastructure repair was attempted. No env-J Lean compiler ran.
