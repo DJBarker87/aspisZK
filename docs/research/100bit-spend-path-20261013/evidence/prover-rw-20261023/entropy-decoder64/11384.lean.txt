@@ -1,0 +1,44 @@
+import R1Z.ProverRwEntropyHalves
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyResume64
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRwEffectSource ProverRwEffectPrefix ProverRwEntropyHalves ProverCommitOwnerZero42
+variable [ExternalTypes]
+attribute [local instance] Classical.propDecidable
+
+omit [ExternalTypes] in
+theorem from_slice_half (dest source : Bytes) :
+    Array.from_slice dest (Array.to_slice source) = source := by
+  simp [Array.from_slice,Array.to_slice,source.property]
+
+/-- All successful full replies, not only constant buffers. The four explicit
+wrapper interpretations are inherited from install; no native Drop, provider
+or OS-law assertion is introduced by this source-continuation equation. -/
+theorem after_join (ops : ExternalFuns) (nonce : Bytes) (retry : Usize)
+    (field leaf : Bytes) :
+    letI : ExternalFuns := install ops
+    after nonce retry back (.Ok (),Array.to_slice (join field leaf)) =
+      if ProverCommitOwnerBytes42.block field = 0 ∨ ProverCommitOwnerBytes42.block leaf = 0 then
+        .ok (.cont (Usize.wrapping_add retry 1#usize))
+      else .ok (.done (.Ok ⟨nonce,field,leaf⟩)) := by
+  letI : ExternalFuns := install ops
+  change @after _ (install ops) nonce retry back (.Ok (),Array.to_slice (join field leaf)) = _
+  unfold after
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
+    zeroize.Zeroizing.new,zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+    zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref,install,
+    Array.to_slice_mut,lift,bind_tc_ok,Aeneas.Std.uncurry,
+    back_join,first_half,second_half,copy_half,from_slice_half]
+  rw [nonzero_block field]
+  by_cases hf : ProverCommitOwnerBytes42.block field = 0
+  · simp only [hf,decide_true,Bool.not_true,Bool.false_eq_true,if_false,true_or,if_true,lift,bind_tc_ok]
+  · simp only [hf,decide_false,Bool.not_false,if_true,false_or]
+    rw [nonzero_block leaf]
+    by_cases hl : ProverCommitOwnerBytes42.block leaf = 0 <;>
+      simp only [hl,decide_true,decide_false,Bool.not_true,Bool.not_false,
+        Bool.false_eq_true,if_false,if_true,lift,bind_tc_ok]
+
+#print axioms from_slice_half
+#print axioms after_join
+end R1Z.ProverRwEntropyResume64

@@ -1,0 +1,77 @@
+import R1Z.ProverRwEntropyByteOr
+import R1Z.ProverCommitOwnerZero42
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyZero32
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull ProverRwEntropyByteOr
+open ProverCommitOwnerZero42
+variable [ExternalTypes] [ExternalFuns]
+attribute [local instance] Classical.propDecidable
+
+omit [ExternalTypes] [ExternalFuns] in
+theorem read_value (bytes : Bytes) (index : Usize) (bound : index.val < 32) :
+    Array.index_usize bytes index = .ok (bytes.val[index.val]?.getD 0#u8) := by
+  have inside : index.val < bytes.val.length := by simpa [bytes.property] using bound
+  rw [ProverCommitArrayIndex25.array_index_usize_ok bytes index bound,
+    List.getElem?_eq_getElem inside]
+  rfl
+
+theorem scan_finite (bytes : Bytes) (combined : U8) (index : Usize)
+    (fuel : Nat) (count : index.val+fuel=32) :
+    aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined index =
+      .ok (chain bytes.val index.val fuel combined) := by
+  induction fuel generalizing index combined with
+  | zero =>
+    have stop : ¬ index < 32#usize := by change ¬ index.val < 32; omega
+    unfold aspis_prover.state_only_entropy.entropy_nonzero32_loop
+    rw [loop]
+    simp only [aspis_prover.state_only_entropy.entropy_nonzero32_loop.body,stop,if_false,
+      bind_tc_ok,chain]
+  | succ fuel ih =>
+    have go : index < 32#usize := by change index.val < 32; omega
+    have add : (Usize.wrapping_add index 1#usize).val = index.val+1 := by
+      rw [Usize.wrapping_add_val_eq]
+      change (index.val+1) % UScalar.size .Usize = index.val+1
+      exact Nat.mod_eq_of_lt (by have big := (32#usize).hSize; change 32 < UScalar.size .Usize at big; omega)
+    conv_lhs => unfold aspis_prover.state_only_entropy.entropy_nonzero32_loop
+    rw [loop]
+    simp only [aspis_prover.state_only_entropy.entropy_nonzero32_loop.body,go,if_true,
+      read_value bytes index go,bind_tc_ok,lift,bind_tc_ok]
+    change aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes
+      (combined ||| bytes.val[index.val]?.getD 0#u8) (Usize.wrapping_add index 1#usize) = _
+    rw [ih _ _ (by omega),chain,add]
+
+omit [ExternalTypes] [ExternalFuns] in
+theorem chain_zero (bytes : Bytes) :
+    chain bytes.val 0 32 0#u8 = 0#u8 ↔ ∀ j, getByte bytes j = 0#u8 := by
+  rw [chain_zero_iff]
+  constructor
+  · rintro ⟨_,all⟩ j
+    have inside : j.val < bytes.val.length := by simpa [bytes.property] using j.isLt
+    have h := all j.val (Nat.zero_le _) j.isLt
+    simpa only [getByte,List.getElem?_eq_getElem inside,Option.getD_some] using h
+  · intro all
+    refine ⟨rfl,?_⟩
+    intro j lo hi
+    have inside : j < bytes.val.length := by simpa [bytes.property] using hi
+    simpa only [getByte,List.getElem?_eq_getElem inside,Option.getD_some] using all ⟨j,hi⟩
+
+/-- Actual OR-scan equals the existing owner zero predicate on every array,
+with no supplied successful-read premise and no constant-buffer restriction. -/
+theorem nonzero_correct (bytes : Bytes) :
+    aspis_prover.state_only_entropy.entropy_nonzero32 bytes =
+      .ok (!(decide (∀ j, getByte bytes j = 0#u8))) := by
+  unfold aspis_prover.state_only_entropy.entropy_nonzero32
+  rw [scan_finite bytes 0#u8 0#usize 32 (by rfl)]
+  simp only [bind_tc_ok]
+  by_cases hz : ∀ j, getByte bytes j = 0#u8
+  · have h := (chain_zero bytes).mpr hz
+    simp [h,hz]
+  · have h : chain bytes.val 0 32 0#u8 ≠ 0#u8 := (chain_zero bytes).not.mpr hz
+    simp [h,hz]
+
+#print axioms read_value
+#print axioms scan_finite
+#print axioms chain_zero
+#print axioms nonzero_correct
+end R1Z.ProverRwEntropyZero32

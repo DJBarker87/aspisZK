@@ -1,0 +1,59 @@
+import R1Z.ProverRwEntropyZero32
+import R1Z.ProverRwEffectPrefix
+import R1Z.ProverCommitOwnerBytes42
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyHalves
+open Aeneas Aeneas.Std Result ProverRwFull ProverCommitOwnerZero42
+
+def join (field leaf : Bytes) : Array U8 64#usize :=
+  ⟨field.val ++ leaf.val,by simp [field.property,leaf.property]⟩
+
+theorem first_half (field leaf : Bytes) :
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeToUsizeSlice U8)) (join field leaf) ⟨32#usize⟩ =
+      .ok (Array.to_slice field) := by
+  simp [core.array.Array.index,core.ops.index.IndexSlice,
+    core.slice.index.SliceIndexRangeToUsizeSlice,
+    core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    join,Array.to_slice,field.property,leaf.property]
+
+theorem second_half (field leaf : Bytes) :
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) (join field leaf) ⟨32#usize⟩ =
+      .ok (Array.to_slice leaf) := by
+  simp [core.array.Array.index,core.ops.index.IndexSlice,
+    core.slice.index.SliceIndexRangeFromUsizeSlice,
+    core.slice.index.SliceIndexRangeFromUsizeSlice.index,
+    join,Array.to_slice,Slice.drop,field.property,leaf.property]
+
+theorem back_join (field leaf : Bytes) :
+    ProverRwEffectPrefix.back (Array.to_slice (join field leaf)) = join field leaf := by
+  unfold ProverRwEffectPrefix.back
+  have length : (Array.to_slice (join field leaf)).length = (64#usize).val := by
+    simp [join,Array.to_slice,field.property,leaf.property]
+  rw [dif_pos length]
+  rfl
+
+theorem copy_half (dest source : Bytes) :
+    core.slice.Slice.copy_from_slice core.marker.CopyU8
+      (Array.to_slice dest) (Array.to_slice source) = .ok (Array.to_slice source) := by
+  unfold core.slice.Slice.copy_from_slice
+  have length : (Array.to_slice dest).len = (Array.to_slice source).len := by
+    apply UScalar.eq_of_val_eq
+    simp [Array.to_slice,dest.property,source.property]
+  rw [if_pos length]
+
+variable [ExternalTypes] [ExternalFuns]
+theorem nonzero_block (bytes : Bytes) :
+    aspis_prover.state_only_entropy.entropy_nonzero32 bytes =
+      .ok (!(decide (ProverCommitOwnerBytes42.block bytes = 0))) := by
+  rw [ProverRwEntropyZero32.nonzero_correct]
+  simp only [ProverCommitOwnerBytes42.block_zero]
+
+#print axioms first_half
+#print axioms second_half
+#print axioms back_join
+#print axioms copy_half
+#print axioms nonzero_block
+end R1Z.ProverRwEntropyHalves

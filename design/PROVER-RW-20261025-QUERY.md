@@ -365,3 +365,33 @@ its earlier source base plus exhaustion WIP; actual committed base was already
 5e09dd95d4. Snapshot/hash evidence is authoritative. Existing limits unchanged.
 Receipts are in `evidence/prover-rw-20261023/outer-prefix`. New budget9/100
 Lean,0/20 Kani. No frozen implementation, trust item or top premise changed.
+
+## Arbitrary successful entropy replies (11377–11388)
+
+`ProverRwEntropyZero32.nonzero_correct` proves the actual emitted OR-scan
+agrees with the existing owner zero predicate on every32-byte array. All32
+reads and index increments are total by symbolic induction. This removes the
+previous constant-buffer restriction; no successful-read premise is supplied.
+`ProverRwEntropyHalves` checks the actual two slice reads,32-byte copies and
+backwards updates. `ProverRwEntropyDecode64.after_full` now identifies the
+actual emitted successful64-byte continuation with
+`ProverCommitPublicNonce40.decode` for arbitrary full buffers: exact two
+returned seed arrays, zero rejection, or retry advancement. The source allows
+equal nonzero halves. No independence is introduced.
+
+The continuation theorem uses the **existing** explicit transparent-wrapper
+install(op125/126/127/128); it does not prove their native physical-drop or
+provider-state interpretation. No new native dictionary field is installed.
+OS-error/partial-buffer and extraction failure/divergence controls remain the
+accepted `ProverRwEffectControl` facts; no output-equivalence premise replaces
+the new success proof. This closes the arbitrary-buffer decoding subcomponent,
+not native effect adequacy, callback probability law or either outer contract.
+
+Twelve focused compiles:5pass,7changed elaboration failures; no resource
+failure.11388 exit0,1.75s,4,273,864KiB RSS,swap0. All16 accepted new reports
+use standard axioms. Raw snapshots, dependency fingerprints, errors and times
+are in `evidence/prover-rw-20261023/entropy-decoder64`. New budget21/100
+Lean,0/20Kani. No max-depth/heartbeat change, Rust, extraction, native,
+three-ELF, performance or manifest replay. The next native consuming obligation
+is still the effect/extraction association of the actual fill and factory;
+it is not discharged by specializing this source equation.

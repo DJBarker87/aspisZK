@@ -1,0 +1,59 @@
+import R1Z.ProverRwEntropyHalves
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyResume64
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
+open ProverRwEffectSource ProverRwEffectPrefix ProverRwEntropyHalves ProverCommitOwnerZero42
+variable [ExternalTypes]
+attribute [local instance] Classical.propDecidable
+
+omit [ExternalTypes] in
+theorem from_slice_half (dest source : Bytes) :
+    Array.from_slice dest (Array.to_slice source) = source := by
+  simp [Array.from_slice,Array.to_slice,source.property]
+
+/-- All successful full replies, not only constant buffers. The four explicit
+wrapper interpretations are inherited from install; no native Drop, provider
+or OS-law assertion is introduced by this source-continuation equation. -/
+theorem after_join (ops : ExternalFuns) (nonce : Bytes) (retry : Usize)
+    (field leaf : Bytes) :
+    letI : ExternalFuns := install ops
+    after nonce retry back (.Ok (),Array.to_slice (join field leaf)) =
+      if ProverCommitOwnerBytes42.block field = 0 ∨ ProverCommitOwnerBytes42.block leaf = 0 then
+        .ok (.cont (Usize.wrapping_add retry 1#usize))
+      else .ok (.done (.Ok ⟨nonce,field,leaf⟩)) := by
+  letI : ExternalFuns := install ops
+  change @after _ (install ops) nonce retry back (.Ok (),Array.to_slice (join field leaf)) = _
+  unfold after
+  dsimp only [Aeneas.Std.uncurry,install]
+  simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,back_join]
+  change (do
+    let first ← core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeToUsizeSlice U8)) (join field leaf) ⟨32#usize⟩
+    let copiedFirst ← core.slice.Slice.copy_from_slice core.marker.CopyU8
+      (Array.to_slice (Array.repeat 32#usize 0#u8)) first
+    let firstArray := Array.from_slice (Array.repeat 32#usize 0#u8) copiedFirst
+    let second ← core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) (join field leaf) ⟨32#usize⟩
+    let copiedSecond ← core.slice.Slice.copy_from_slice core.marker.CopyU8
+      (Array.to_slice (Array.repeat 32#usize 0#u8)) second
+    let secondArray := Array.from_slice (Array.repeat 32#usize 0#u8) copiedSecond
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 firstArray
+    if b then do
+      let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 secondArray
+      if b1 then .ok (.done (.Ok ⟨nonce,firstArray,secondArray⟩))
+      else .ok (.cont (Usize.wrapping_add retry 1#usize))
+    else .ok (.cont (Usize.wrapping_add retry 1#usize)) : Result Outcome) = _
+  simp only [first_half,second_half,copy_half,from_slice_half,bind_tc_ok]
+  rw [nonzero_block field]
+  by_cases hf : ProverCommitOwnerBytes42.block field = 0
+  · simp only [hf,decide_true,Bool.not_true,Bool.false_eq_true,if_false,true_or,if_true,lift,bind_tc_ok]
+  · simp only [hf,decide_false,Bool.not_false,if_true,false_or]
+    rw [nonzero_block leaf]
+    by_cases hl : ProverCommitOwnerBytes42.block leaf = 0 <;>
+      simp only [hl,decide_true,decide_false,Bool.not_true,Bool.not_false,
+        Bool.false_eq_true,if_false,if_true,lift,bind_tc_ok]
+
+#print axioms from_slice_half
+#print axioms after_join
+end R1Z.ProverRwEntropyResume64

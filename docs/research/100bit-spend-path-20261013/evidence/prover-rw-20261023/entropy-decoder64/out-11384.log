@@ -1,0 +1,192 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_prover.state_only_entropy.entropy_nonzero32 field
+in the target expression
+  (do
+      let field_mask_entropy ←
+        ExternalFuns.op128
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let leaf_salt_seed ←
+        ExternalFuns.op128
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (a3, deref_mut_back) ←
+        ExternalFuns.op126
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            field_mask_entropy
+      let a4 ←
+        ExternalFuns.op127
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (join field leaf)
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a3.to_slice s3
+      let (a6, deref_mut_back1) ←
+        ExternalFuns.op126
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            leaf_salt_seed
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a6.to_slice s6
+      let a8 ←
+        ExternalFuns.op127
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (a3.from_slice s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            ExternalFuns.op127
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (a6.from_slice s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := nonce, field_mask_entropy := deref_mut_back (a3.from_slice s4),
+                      leaf_salt_seed := deref_mut_back1 (a6.from_slice s7) }))
+            else ok (cont (retry.wrapping_add 1#usize))
+        else ok (cont (retry.wrapping_add 1#usize))) =
+    if ProverCommitOwnerBytes42.block field = 0 ∨ ProverCommitOwnerBytes42.block leaf = 0 then
+      ok (cont (retry.wrapping_add 1#usize))
+    else ok (done (core.result.Result.Ok { mask_nonce := nonce, field_mask_entropy := field, leaf_salt_seed := leaf }))
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+nonce : Bytes
+retry : Usize
+field leaf : Bytes
+this : ExternalFuns := install ops
+⊢ (do
+      let field_mask_entropy ←
+        ExternalFuns.op128
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let leaf_salt_seed ←
+        ExternalFuns.op128
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (a3, deref_mut_back) ←
+        ExternalFuns.op126
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            field_mask_entropy
+      let a4 ←
+        ExternalFuns.op127
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (join field leaf)
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a3.to_slice s3
+      let (a6, deref_mut_back1) ←
+        ExternalFuns.op126
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            leaf_salt_seed
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 a6.to_slice s6
+      let a8 ←
+        ExternalFuns.op127
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (a3.from_slice s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            ExternalFuns.op127
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (a6.from_slice s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := nonce, field_mask_entropy := deref_mut_back (a3.from_slice s4),
+                      leaf_salt_seed := deref_mut_back1 (a6.from_slice s7) }))
+            else ok (cont (retry.wrapping_add 1#usize))
+        else ok (cont (retry.wrapping_add 1#usize))) =
+    if ProverCommitOwnerBytes42.block field = 0 ∨ ProverCommitOwnerBytes42.block leaf = 0 then
+      ok (cont (retry.wrapping_add 1#usize))
+    else ok (done (core.result.Result.Ok { mask_nonce := nonce, field_mask_entropy := field, leaf_salt_seed := leaf }))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:30:52: warning: This simp argument is unused:
+  install
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵zeroize.Zeroizing.new,
+  ̲ ̲ ̲ ̲ ̲zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref,i̵n̵s̵t̵a̵l̵l̵,̵
+  ̵  ̵ ̵ ̵Array.to_slice_mut, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵back_join, ̲first_half, ̲second_half, ̲copy_half, ̲from_slice_half]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:32:14: warning: This simp argument is unused:
+  first_half
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵zeroize.Zeroizing.new,
+  ̲ ̲ ̲ ̲ ̲zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref, ̲install,
+  ̵  ̵ ̵ ̵Array.to_slice_mut, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵back_join,f̵i̵r̵ ̲st̵_̵h̵a̵l̵f̵,̵s̵econd_half, ̲copy_half, ̲from_slice_half]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:32:25: warning: This simp argument is unused:
+  second_half
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵zeroize.Zeroizing.new,
+  ̲ ̲ ̲ ̲ ̲zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref, ̲install,
+  ̵  ̵ ̵ ̵Array.to_slice_mut, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵back_join, ̲first_half,s̵e̵ ̲con̵d̵_̵h̵a̵l̵f̵,̵c̵o̵py_half, ̲from_slice_half]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:32:37: warning: This simp argument is unused:
+  copy_half
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵zeroize.Zeroizing.new,
+  ̲ ̲ ̲ ̲ ̲zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref, ̲install,
+  ̵  ̵ ̵ ̵Array.to_slice_mut, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵back_join, ̲first_half, ̲second_half,c̵o̵p̵y̵_̵h̵a̵l̵ ̲f,̵f̵rom_slice_half]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwEntropyResume64.lean:32:47: warning: This simp argument is unused:
+  from_slice_half
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵zeroize.Zeroizing.new,
+  ̲ ̲ ̲ ̲ ̲zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut,
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref, ̲install,
+  ̵  ̵ ̵ ̵Array.to_slice_mut, ̲lift, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,
+  ̵  ̵ ̵ ̵back_join, ̲first_half, ̲second_half, ̲copy_half,̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵_̵h̵a̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwEntropyResume64.from_slice_half' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwEntropyResume64.after_join' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
