@@ -7,3 +7,15 @@ extern crate alloc;
 #[cfg(kani)] mod NP6_proofs;
 
 #[cfg(kani)] mod NP6_construction;
+
+#[cfg(kani)] mod NP6_success;
+
+#[cfg(kani)] mod NP6_straight;
+
+#[cfg(kani)] mod NP6_lengths;
+
+#[cfg(kani)] mod NP6_steps;
+
+#[cfg(kani)] mod NP6_characterization;
+
+#[cfg(kani)] mod NP6_scalars;

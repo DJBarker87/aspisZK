@@ -851,5 +851,5 @@ pub mod fields29 {
 
 #[cfg(kani)]
 pub(crate) fn np6_prefix<'a>(root: &'a [u8;32], framed: &'a [u8]) -> Prefix<'a> {
- Prefix {c1_root:root,records:[framed;27]}
+ Prefix {c1_root:root,records:[framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed,framed]}
 }
