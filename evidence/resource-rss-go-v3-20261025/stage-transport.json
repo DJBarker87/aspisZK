@@ -1,0 +1,23 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "/usr/bin/env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,os,pathlib,sys,hashlib\nx=json.load(sys.stdin); root=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-rss-go-v3-20261025'\"'\"')\nassert not root.exists(), '\"'\"'existing stage: conflicting writer or prior attempt'\"'\"'\nassert root.parent.resolve()==root.parent\nassert root.parent.stat().st_uid==os.getuid()\nassert str(root.parent.resolve())==x['\"'\"'manifest'\"'\"']['\"'\"'parent_resolved'\"'\"']\nroot.mkdir(mode=0o700)\nfor name,source in x['\"'\"'files'\"'\"'].items():\n p=root/name; p.parent.mkdir(mode=0o700,parents=True,exist_ok=True)\n with p.open('\"'\"'x'\"'\"') as f:f.write(source)\n p.chmod(0o444)\n assert hashlib.sha256(p.read_bytes()).hexdigest()==x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'][name]['\"'\"'sha256'\"'\"']\nwith (root/'\"'\"'ResourceRssGOv3_manifest.json'\"'\"').open('\"'\"'x'\"'\"') as f:json.dump(x['\"'\"'manifest'\"'\"'],f,sort_keys=True,indent=2); f.write(chr(10))\n(root/'\"'\"'ResourceRssGOv3_manifest.json'\"'\"').chmod(0o444)\nassert json.loads((root/'\"'\"'ResourceRssGOv3_manifest.json'\"'\"').read_text())==x['\"'\"'manifest'\"'\"']\nassert root.resolve()==root and root.stat().st_uid==os.getuid() and (root.stat().st_mode & 0o777)==0o700\nprint(json.dumps(dict(stage=str(root),uid=os.getuid(),files=x['\"'\"'manifest'\"'\"']['\"'\"'files'\"'\"'])))\n'"
+  ],
+  "exit": 0,
+  "peak_rss_bytes": "N/A unmeasured SSH transport",
+  "print_axioms": "N/A",
+  "source_revision": "a2d8b486f29fe0f408baea948bc197242c3dd31a",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "1080be55b91968b5fd9a9ff399f665c0ee2b5c630579a77abc6ced7f3c946afc",
+    "size": 234917
+  },
+  "stdout": "{\"stage\": \"/home/dombarker/project-offloads/codex-cx-resource-rss-go-v3-20261025\", \"uid\": 1000, \"files\": {\"ResourceRssGOv3_adapter.py\": {\"sha256\": \"1e47c024d2e3f97ada4c445cc3f0f0722b94592a8a6f923505b445349f6f5225\", \"size\": 4553}, \"ResourceRssGOv3_audit.py\": {\"sha256\": \"4cc62e0e36f3cfc25778b3b5f88213d3e8089b0e6c8e9ae3b9fd3540e59ee4a9\", \"size\": 7825}, \"ResourceRssGOv3_focused.py\": {\"sha256\": \"dacea6a93ccd64e6541b45c48fe630996857068b8d6c47bd78d67517f0b03b34\", \"size\": 7384}, \"ResourceRssGOv3_guard.py\": {\"sha256\": \"d1ab4b55a831687eb5e6f256d80ca19b6b1739e1468a8109b35a2769c6882834\", \"size\": 8427}, \"ResourceRssGOv3_host.py\": {\"sha256\": \"2e96642a56ae176a2232c7d4b17a9df716e339b1764ebe28fc77a1e2819c8796\", \"size\": 15692}, \"ResourceRssGOv3_local.py\": {\"sha256\": \"ffa56f955a1b8082b4d5b1e684800cd788f8623b5d071961b933be0069ea7327\", \"size\": 14050}, \"ResourceRssGOv3_receipt.py\": {\"sha256\": \"c3ed435bfc0289675219b319e4fbf01b15528be86f5a896f8bffc66126c0c6bb\", \"size\": 2202}, \"ResourceRssGOv3_source_seal.py\": {\"sha256\": \"c6f084f4f136f58830807457a4f96c147f71669ff0f5f04da3885d5dc08842a0\", \"size\": 3594}, \"ResourceRssGOv3_sources.py\": {\"sha256\": \"19f39555373b53dab62d8d9a6776918e6200dc3bac267c95799cb21d7a6c1a0a\", \"size\": 4893}, \"ResourceRssGOv3_reviewed.json\": {\"sha256\": \"ce3415ad130a35de66ee29820326fe385daa99ab593f063b95e5efe442d5acaf\", \"size\": 69294}}}\n",
+  "swap": "N/A unmeasured SSH transport",
+  "wall_seconds": 1.1012169579043984
+}

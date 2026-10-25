@@ -1,0 +1,102 @@
+import contextlib
+import datetime
+import fcntl
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import runpy
+import shutil
+import signal
+import subprocess
+import struct
+import sys
+import sysconfig
+import time
+
+def digest(data):
+    return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
+
+def filepin(path):
+    return digest(Path(path).read_bytes())
+
+def runtime_pins():
+    raw = Path('/usr/bin/env').read_bytes()
+    if raw[:6] != b'\x7fELF\x02\x01' or struct.unpack_from('<H', raw, 18)[0] != 62:
+        raise ValueError('env ELF ABI drift')
+    phoff, shoff = struct.unpack_from('<QQ', raw, 32)
+    phsize, phnum, shsize, shnum = struct.unpack_from('<HHHH', raw, 54)
+    interp = []
+    for i in range(phnum):
+        ph = struct.unpack_from('<IIQQQQQQ', raw, phoff + i * phsize)
+        if ph[0] == 3:
+            interp.append(raw[ph[2]:ph[2] + ph[5]].rstrip(b'\x00').decode())
+    sections = [struct.unpack_from('<IIQQQQIIQQ', raw, shoff + i * shsize) for i in range(shnum)]
+    needed = []
+    for section in sections:
+        if section[1] != 6:
+            continue
+        strings = sections[section[6]]
+        table = raw[strings[4]:strings[4] + strings[5]]
+        for off in range(section[4], section[4] + section[5], section[9]):
+            tag, value = struct.unpack_from('<qQ', raw, off)
+            if tag == 1:
+                needed.append(table[value:].split(b'\x00', 1)[0].decode())
+            if tag in (15, 29):
+                raise ValueError('env ELF search path drift')
+    if interp != ['/lib64/ld-linux-x86-64.so.2'] or needed != ['libc.so.6']:
+        raise ValueError('env ELF runtime dependency drift')
+    std = Path(sysconfig.get_path('stdlib')).resolve()
+    files = {}
+    for root, dirs, names in os.walk(std):
+        dirs[:] = sorted((d for d in dirs if d not in ('site-packages', 'dist-packages', '__pycache__')))
+        for name in sorted(names):
+            if name.endswith(('.py', '.so')):
+                p = Path(root) / name
+                files[str(p)] = filepin(p)
+    mapped = {}
+    for line in Path('/proc/self/maps').read_text().splitlines():
+        parts = line.split(None, 5)
+        if len(parts) == 6 and parts[5].startswith('/'):
+            p = parts[5]
+            mapped[p] = filepin(p)
+    tools = {name: dict(path=shutil.which(name), **filepin(shutil.which(name))) for name in ('ps', 'systemctl', 'docker', 'systemd-run')}
+    return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable), version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools, env_binary=dict(path='/usr/bin/env', **filepin('/usr/bin/env')), env_elf_contract=dict(interpreter=interp, needed=needed), env_dependencies={p: filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})
+"""Sampled metadata-only RSS watchdog. No subprocesses, rlimits or VSize cap.
+
+Not a continuous physical-memory theorem. Cgroup controls remain authoritative.
+The one persistent thread exists before and throughout both collector snapshots.
+"""
+import os
+import resource
+import signal
+import threading
+import time
+
+BUDGET = 512 * 2**20
+INTERVAL = 0.02
+MAX_SAMPLES = 8192
+MAX_LINEAGE = 256
+
+class GuardError(RuntimeError):
+    pass
+
+
+def inherited_limits():
+    return {name:list(resource.getrlimit(getattr(resource, name))) for name in
+            sorted(dir(resource)) if name.startswith('RLIMIT_')}
+
+
+def check_limits(limits, expected=None):
+    if expected is not None and limits != expected:
+        raise GuardError('inherited resource limits changed; no bypass')
+    for name in ('RLIMIT_AS', 'RLIMIT_DATA'):
+        if limits.get(name) != [resource.RLIM_INFINITY, resource.RLIM_INFINITY]:
+            raise GuardError('unexpected inherited restriction: '+name)
+
+
+
+if sys.platform != 'linux' or type(resource.RLIM_INFINITY) is not int or resource.RLIM_INFINITY != -1: raise GuardError('unsupported remote Linux resource platform')
+limits=inherited_limits(); check_limits(limits)
+p=Path('/home/dombarker/project-offloads/codex-cx-resource-rss-go-v3-20261025'); parent=p.parent; assert parent.resolve()==parent; print(json.dumps(dict(runtime=runtime_pins(),inherited_limits=limits,limit_platform=dict(platform=sys.platform,rlim_infinity=resource.RLIM_INFINITY),uid=os.getuid(),stage_exists=p.exists(),parent_uid=parent.stat().st_uid,parent_mode=oct(parent.stat().st_mode & 0o777),parent_resolved=str(parent.resolve()),lock_exists=Path('/tmp/aspis-r0-lean.lock').exists())))
