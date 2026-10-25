@@ -1,0 +1,234 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockBodyV1.lean:84:14: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (a, len, draws, i) with
+    | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let cf ← fail e
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+
+case fail
+a : Std.Array U32 22#usize
+len draws : Usize
+block : Std.Array U8 32#usize
+i : Usize
+e : Error
+h : owned_block_loop.body block a len draws i = fail e
+⊢ (match
+      match (a, len, draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let cf ← fail e
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockBodyV1.lean:85:11: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (a, len, draws, i) with
+    | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let cf ← div
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+
+case div
+a : Std.Array U32 22#usize
+len draws : Usize
+block : Std.Array U8 32#usize
+i : Usize
+h : owned_block_loop.body block a len draws i = div
+⊢ (match
+      match (a, len, draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let cf ← div
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockBodyV1.lean:88:18: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (a, len, draws, i) with
+    | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let cf ← ok (done out)
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+
+case ok.done
+a : Std.Array U32 22#usize
+len draws : Usize
+block : Std.Array U8 32#usize
+i : Usize
+out : Std.Array U32 22#usize × Usize × Usize × Option (Std.Array U32 22#usize × Usize × Usize × Bool)
+h : owned_block_loop.body block a len draws i = ok (done out)
+⊢ (match
+      match (a, len, draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let cf ← ok (done out)
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockBodyV1.lean:89:49: error: Tactic `rfl` failed: The left-hand side
+  match
+    match (a, len, draws, i) with
+    | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+  | ok r =>
+    match r with
+    | cont x =>
+      loop
+        (fun x =>
+          match x with
+          | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+        x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let cf ← ok (cont (a', n, d, j))
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+
+case ok.cont
+a : Std.Array U32 22#usize
+len draws : Usize
+block : Std.Array U8 32#usize
+i : Usize
+a' : Std.Array U32 22#usize
+n d j : Usize
+h : owned_block_loop.body block a len draws i = ok (cont (a', n, d, j))
+⊢ (match
+      match (a, len, draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let cf ← ok (cont (a', n, d, j))
+    match cf with
+      | done out => ok out
+      | cont (a', n, d, j) =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          (a', n, d, j)
+'AspisS1OwnedQueryBlock.Meaning.loop_unroll' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.body_active' depends on axioms: [propext, Classical.choice, Quot.sound]

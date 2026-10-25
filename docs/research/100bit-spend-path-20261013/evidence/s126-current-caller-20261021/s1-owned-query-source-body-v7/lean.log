@@ -1,0 +1,151 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:51:29: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵d̵W̵o̵r̵d̵,̵b̵o̵d̵y̵O̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵n̵e̵g̵ ̵f̵u̵l̵l̵,̵i̵f̵_̵n̵e̵g̵[̲s̲t̲d̲W̲o̲r̲d̲,̲ ̲b̲o̲d̲y̲O̲n̲e̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲f̲u̲l̲l̲,̲ ̲i̲f̲_̲n̲e̲g̲ exhausted, bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:93:48: error: unsolved goals
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+empty : ∀ (sf : Query31ExplicitScanBody.CurrentScan), scanListLoop [] sf = ok (sf, some false)
+⊢ (match bodyOne ([candidate], s).2 candidate with
+    | ok r =>
+      match r with
+      | cont x => loop (fun p => body (stdOps listNext) p.1 p.2) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let cf ← bodyOne s candidate
+    match cf with
+      | done out => ok out
+      | cont (xs, sf) => loop (fun p => body (stdOps listNext) p.1 p.2) (xs, sf)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:100:2: error: unsolved goals
+case pos
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+empty : ∀ (sf : Query31ExplicitScanBody.CurrentScan), scanListLoop [] sf = ok (sf, some false)
+one :
+  scanListLoop [candidate] s = do
+    let cf ← bodyOne s candidate
+    match cf with
+      | done out => ok out
+      | cont (xs, sf) => scanListLoop xs sf
+full : s.accepted_len = 22#usize
+⊢ ok (pack s true) =
+    let (sf, pending) := (s, none)
+    ok
+      (pack sf
+        (match pending with
+        | none => true
+        | some b => b))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:102:2: error: unsolved goals
+case pos
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+empty : ∀ (sf : Query31ExplicitScanBody.CurrentScan), scanListLoop [] sf = ok (sf, some false)
+one :
+  scanListLoop [candidate] s = do
+    let cf ← bodyOne s candidate
+    match cf with
+      | done out => ok out
+      | cont (xs, sf) => scanListLoop xs sf
+full : ¬s.accepted_len = 22#usize
+exhausted : s.draws = 64#usize
+⊢ ok (pack s true) =
+    let (sf, pending) := (s, none)
+    ok
+      (pack sf
+        (match pending with
+        | none => true
+        | some b => b))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:111:52: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cf ←
+      if True then ok (cont ([], { accepted := s.accepted, accepted_len := s.accepted_len, draws := d }))
+        else do
+          let updated ← s.accepted.update s.accepted_len candidate
+          let n ← s.accepted_len + 1#usize
+          ok (cont ([], { accepted := updated, accepted_len := n, draws := d }))
+    match cf with
+      | cont (fst, after) => ok (pack after false)
+      | done (after, snd) => ok (pack after true)
+is not definitionally equal to the right-hand side
+  do
+    let x ←
+      if True then ok (cont ([], { accepted := s.accepted, accepted_len := s.accepted_len, draws := d }))
+        else do
+          let updated ← s.accepted.update s.accepted_len candidate
+          let n ← s.accepted_len + 1#usize
+          ok (cont ([], { accepted := updated, accepted_len := n, draws := d }))
+    let (sf, pending) ←
+      match x with
+        | done out => ok out
+        | cont (xs, sf) => scanListLoop xs sf
+    ok
+        (pack sf
+          (match pending with
+          | none => true
+          | some b => b))
+
+case neg.true
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+empty : ∀ (sf : Query31ExplicitScanBody.CurrentScan), scanListLoop [] sf = ok (sf, some false)
+one :
+  scanListLoop [candidate] s = do
+    let cf ← bodyOne s candidate
+    match cf with
+      | done out => ok out
+      | cont (xs, sf) => scanListLoop xs sf
+full : ¬s.accepted_len = 22#usize
+exhausted : ¬s.draws = 64#usize
+d : UScalar UScalarTy.Usize
+sl : Slice U32
+⊢ (do
+      let cf ←
+        if True then ok (cont ([], { accepted := s.accepted, accepted_len := s.accepted_len, draws := d }))
+          else do
+            let updated ← s.accepted.update s.accepted_len candidate
+            let n ← s.accepted_len + 1#usize
+            ok (cont ([], { accepted := updated, accepted_len := n, draws := d }))
+      match cf with
+        | cont (fst, after) => ok (pack after false)
+        | done (after, snd) => ok (pack after true)) =
+    do
+    let x ←
+      if True then ok (cont ([], { accepted := s.accepted, accepted_len := s.accepted_len, draws := d }))
+        else do
+          let updated ← s.accepted.update s.accepted_len candidate
+          let n ← s.accepted_len + 1#usize
+          ok (cont ([], { accepted := updated, accepted_len := n, draws := d }))
+    let (sf, pending) ←
+      match x with
+        | done out => ok out
+        | cont (xs, sf) => scanListLoop xs sf
+    ok
+        (pack sf
+          (match pending with
+          | none => true
+          | some b => b))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:111:23: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵m̵p̵t̵y̵,̵o̵p̵t̵i̵o̵n̵S̵t̵o̵p̵]̵[̲e̲m̲p̲t̲y̲,̲ ̲o̲p̲t̲i̲o̲n̲S̲t̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:111:34: warning: This simp argument is unused:
+  empty
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵m̵p̵t̵y̵,̵o̵p̵t̵i̵o̵n̵S̵t̵o̵p̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲o̲p̲t̲i̲o̲n̲S̲t̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Meaning.sourceWord_eq_scanOne' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.stdWord_eq_sourceWord' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.owned_step_eq_sourceWord' depends on axioms: [propext, Classical.choice, Quot.sound]

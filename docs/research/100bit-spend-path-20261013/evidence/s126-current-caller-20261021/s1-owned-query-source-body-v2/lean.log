@@ -1,0 +1,118 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:26:2: error: unsolved goals
+case pos
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+full : s.accepted_len = 22#usize
+⊢ ok (s.accepted, s.accepted_len, s.draws, true) = do
+    let cf ←
+      let (o, iter1) := (some candidate, [])
+        match o with
+        | none => ok (done (s, some false))
+        | some candidate => ok (done (s, none))
+    match cf with
+      | cont (fst, after) => ok (after.accepted, after.accepted_len, after.draws, false)
+      | done (after, snd) => ok (after.accepted, after.accepted_len, after.draws, true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:28:2: error: unsolved goals
+case pos
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+full : ¬s.accepted_len = 22#usize
+exhausted : s.draws = 64#usize
+⊢ ok (s.accepted, s.accepted_len, s.draws, true) = do
+    let cf ←
+      let (o, iter1) := (some candidate, [])
+        match o with
+        | none => ok (done (s, some false))
+        | some candidate => ok (done (s, none))
+    match cf with
+      | cont (fst, after) => ok (after.accepted, after.accepted_len, after.draws, false)
+      | done (after, snd) => ok (after.accepted, after.accepted_len, after.draws, true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:31:2: error: Tactic `apply` failed: could not unify the conclusion of `@bind_congr`
+  ?x >>= ?f = ?x >>= ?g
+with the goal
+  (do
+      let d ← s.draws + 1#usize
+      let sl ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) s.accepted
+            { «end» := s.accepted_len }
+      let found ← core.slice.Slice.contains core.cmp.PartialEqU32 sl candidate
+      if found = true then ok (s.accepted, s.accepted_len, d, false)
+        else do
+          let updated ← s.accepted.update s.accepted_len candidate
+          let n ← s.accepted_len + 1#usize
+          ok (updated, n, d, false)) =
+    do
+    let cf ←
+      let (o, iter1) := (some candidate, [])
+        match o with
+        | none => ok (done (s, some false))
+        | some candidate => do
+          let i ← s.draws + 1#usize
+          let sl ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                s.accepted { «end» := s.accepted_len }
+          let b ← core.slice.Slice.contains core.cmp.PartialEqU32 sl candidate
+          if b = true then ok (cont (iter1, { accepted := s.accepted, accepted_len := s.accepted_len, draws := i }))
+            else do
+              let a ← s.accepted.update s.accepted_len candidate
+              let i1 ← s.accepted_len + 1#usize
+              ok (cont (iter1, { accepted := a, accepted_len := i1, draws := i }))
+    match cf with
+      | cont (fst, after) => ok (pack after false)
+      | done (after, snd) => ok (pack after true)
+
+Note: The full type of `@bind_congr` is
+  ∀ {m : Type ?u.24 → Type ?u.23} {α β : Type ?u.24} [inst : Bind m] {x : m α} {f g : α → m β},
+    (∀ (a : α), f a = g a) → x >>= f = x >>= g
+
+case neg
+s : Query31ExplicitScanBody.CurrentScan
+candidate : U32
+full : ¬s.accepted_len = 22#usize
+exhausted : ¬s.draws = 64#usize
+⊢ (do
+      let d ← s.draws + 1#usize
+      let sl ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) s.accepted
+            { «end» := s.accepted_len }
+      let found ← core.slice.Slice.contains core.cmp.PartialEqU32 sl candidate
+      if found = true then ok (s.accepted, s.accepted_len, d, false)
+        else do
+          let updated ← s.accepted.update s.accepted_len candidate
+          let n ← s.accepted_len + 1#usize
+          ok (updated, n, d, false)) =
+    do
+    let cf ←
+      let (o, iter1) := (some candidate, [])
+        match o with
+        | none => ok (done (s, some false))
+        | some candidate => do
+          let i ← s.draws + 1#usize
+          let sl ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                s.accepted { «end» := s.accepted_len }
+          let b ← core.slice.Slice.contains core.cmp.PartialEqU32 sl candidate
+          if b = true then ok (cont (iter1, { accepted := s.accepted, accepted_len := s.accepted_len, draws := i }))
+            else do
+              let a ← s.accepted.update s.accepted_len candidate
+              let i1 ← s.accepted_len + 1#usize
+              ok (cont (iter1, { accepted := a, accepted_len := i1, draws := i }))
+    match cf with
+      | cont (fst, after) => ok (pack after false)
+      | done (after, snd) => ok (pack after true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQuerySourceBodyV1.lean:30:4: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵d̵W̵o̵r̵d̵,̵s̵o̵u̵r̵c̵e̵W̵o̵r̵d̵,̵b̵o̵d̵y̵,̵s̵t̵d̵O̵p̵s̵,̵l̵i̵s̵t̵N̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵n̵e̵g̵ ̵f̵u̵l̵l̵,̵i̵f̵_̵n̵e̵g̵ ̵e̵x̵h̵a̵u̵s̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲s̲t̲d̲W̲o̲r̲d̲,̲ ̲s̲o̲u̲r̲c̲e̲W̲o̲r̲d̲,̲ ̲b̲o̲d̲y̲,̲ ̲s̲t̲d̲O̲p̲s̲,̲ ̲l̲i̲s̲t̲N̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲f̲u̲l̲l̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲e̲x̲h̲a̲u̲s̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Meaning.stdWord_eq_sourceWord' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.owned_step_eq_sourceWord' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

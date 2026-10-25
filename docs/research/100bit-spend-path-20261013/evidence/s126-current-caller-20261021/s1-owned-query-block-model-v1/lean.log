@@ -1,0 +1,154 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockModelV1.lean:65:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  owned_block_loop.body block s.accepted s.accepted_len s.draws i
+in the target expression
+  (match
+      match (s.accepted, s.accepted_len, s.draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (s1.accepted, s1.accepted_len, s1.draws, if true = true then some (pack s1 true) else none)
+
+case succ.true.refine_1
+block : Std.Array U8 32#usize
+fuel : ℕ
+ih :
+  ∀ (s : CurrentScan) (i : Usize),
+    ↑s.accepted_len ≤ 22 →
+      ↑s.draws ≤ 64 →
+        ↑i ≤ 8 →
+          8 - ↑i = fuel →
+            ∃ sf stop,
+              owned_block_loop s.accepted s.accepted_len s.draws block i =
+                  ok (sf.accepted, sf.accepted_len, sf.draws, if stop = true then some (pack sf true) else none) ∧
+                scan (q22StateOf s) (wordValuesFrom block ↑i) = (q22StateOf sf, stop) ∧
+                  Query31ExplicitListLoop.validState sf
+s : CurrentScan
+i : Usize
+hlen : ↑s.accepted_len ≤ 22
+hd : ↑s.draws ≤ 64
+hi : ↑i ≤ 8
+hf : 8 - ↑i = fuel + 1
+active : ↑i < 8
+s1 : CurrentScan
+valid1 : Query31ExplicitListLoop.validState s1
+called : owned_step s.accepted s.accepted_len s.draws (sampleWord block ↑i) = ok (pack s1 true)
+wordModel : scan (q22StateOf s) [↑(sampleWord block ↑i)] = (q22StateOf s1, true)
+first : owned_block_loop.body block s.accepted s.accepted_len s.draws i = afterWord i (pack s1 true)
+⊢ (match
+      match (s.accepted, s.accepted_len, s.draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (s1.accepted, s1.accepted_len, s1.draws, if true = true then some (pack s1 true) else none)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockModelV1.lean:80:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  owned_block_loop.body block s.accepted s.accepted_len s.draws i
+in the target expression
+  (match
+      match (s.accepted, s.accepted_len, s.draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (sf.accepted, sf.accepted_len, sf.draws, if last = true then some (pack sf true) else none)
+
+case succ.false.refine_1
+block : Std.Array U8 32#usize
+fuel : ℕ
+ih :
+  ∀ (s : CurrentScan) (i : Usize),
+    ↑s.accepted_len ≤ 22 →
+      ↑s.draws ≤ 64 →
+        ↑i ≤ 8 →
+          8 - ↑i = fuel →
+            ∃ sf stop,
+              owned_block_loop s.accepted s.accepted_len s.draws block i =
+                  ok (sf.accepted, sf.accepted_len, sf.draws, if stop = true then some (pack sf true) else none) ∧
+                scan (q22StateOf s) (wordValuesFrom block ↑i) = (q22StateOf sf, stop) ∧
+                  Query31ExplicitListLoop.validState sf
+s : CurrentScan
+i : Usize
+hlen : ↑s.accepted_len ≤ 22
+hd : ↑s.draws ≤ 64
+hi : ↑i ≤ 8
+hf : 8 - ↑i = fuel + 1
+active : ↑i < 8
+s1 : CurrentScan
+valid1 : Query31ExplicitListLoop.validState s1
+called : owned_step s.accepted s.accepted_len s.draws (sampleWord block ↑i) = ok (pack s1 false)
+wordModel : scan (q22StateOf s) [↑(sampleWord block ↑i)] = (q22StateOf s1, false)
+first : owned_block_loop.body block s.accepted s.accepted_len s.draws i = afterWord i (pack s1 false)
+next : Usize := Usize.ofNatCore (↑i + 1) ⋯
+nv : ↑next = ↑i + 1
+add : i + 1#usize = ok next
+sf : CurrentScan
+last : Bool
+tailCall :
+  owned_block_loop s1.accepted s1.accepted_len s1.draws block next =
+    ok (sf.accepted, sf.accepted_len, sf.draws, if last = true then some (pack sf true) else none)
+tailModel : scan (q22StateOf s1) (wordValuesFrom block ↑next) = (q22StateOf sf, last)
+validFinal : Query31ExplicitListLoop.validState sf
+⊢ (match
+      match (s.accepted, s.accepted_len, s.draws, i) with
+      | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (accepted1, len1, draws1, i1) => owned_block_loop.body block accepted1 len1 draws1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (sf.accepted, sf.accepted_len, sf.draws, if last = true then some (pack sf true) else none)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisS1OwnedQueryBlock.Meaning.block_loop_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.block_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

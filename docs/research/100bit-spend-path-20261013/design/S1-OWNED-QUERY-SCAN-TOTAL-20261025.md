@@ -145,3 +145,49 @@ The raw evidence logs and frozen generated top_overflow.rs snapshots retain
 upstream trailing whitespace verbatim to preserve their recorded hashes;
 the unrestricted evidence-inclusive whitespace check reports those existing
 bytes. No retained evidence or frozen source was reformatted.
+
+## Checked extracted block to fixed Q22 model
+
+The follow-on source/model composition is now checked, rather than a free
+single-word or scanner-law hypothesis:
+
+- S1OwnedQuerySourceBodyV1 proves full Result equality to the retained emitted
+  source-shaped scanner body with its concrete Std operations, then connects
+  the same word to the complete one-word source loop. No range/success premise
+  is needed for that full Result equality.
+- S1OwnedQueryWordModelV1.owned_step_model reuses scanListLoop_q22 and returns
+  the SAME actual owned word call, full returned state and exact Q22 transition.
+  The returned numeric invariant is derived from that call's totality; it is
+  not an additional parent premise.
+- S1OwnedQueryBlockBodyV1.body_active discharges every byte index, checked
+  offset, LE conversion and literal 18-bit mask in the actual emitted owned
+  block-loop body. loop_unroll preserves every Result branch and the complete
+  tuple-state loop, without introducing an operation dictionary.
+- S1OwnedQueryBlockModelV1.block_loop_model inducts over the remaining source
+  cursor budget and composes those SAME calls. It retains the full returned
+  buffer/counters and exact pending-return representation. block_model is
+  TOTAL on len<=22/draws<=64, including early stops; no source/model scanner law
+  or successful-block hypothesis is assumed.
+- S1OwnedQueryBlockFixedModelV1.block_fixed_model identifies the source words
+  with SamplerWords.words18 of the SAME decoded byte block, reusing the checked
+  LE/mask theorem. Its conclusion is the complete owned return plus the exact
+  projected Q22 state and stop result. It does not equate unused buffer suffixes
+  with a mathematical state that does not contain them.
+
+All five smallest changed targets and affected local dependencies passed;
+standard-only audits and zero swaps. Final source-body14.141103250s/RSS
+2,262,024,192B; word-model2.011714042s/RSS2,246,459,392B; block-body5.314430917s/RSS
+3,814,359,040B; block-model26.920334750s/RSS3,803,103,232B; fixed-block-model
+25.344616458s/RSS3,776,299,008B. Each receipt records full source/tool/import pins
+and the exact attempt. Failed elaborations are retained and excluded. No
+resource-option override, cold dependency build or unchanged package replay
+was used.
+
+The original frozen scanner's generated array-iterator owner and complete
+native/effect/runtime installation are still separate from the list/source
+interpretation. The old R4 word/array visit order and finish contracts are
+available to reuse for that connection. Native per-prefix word checks plus
+this induction are concrete pieces of the intended composition; they are not
+silently promoted to a proof of the full original scanner or SDK. S1/S6 and
+both release targets remain OPEN. No enclosing SDK/caller premise is claimed
+removed by this follow-on packet.

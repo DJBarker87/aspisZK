@@ -1,0 +1,61 @@
+import S1OwnedQueryWordStdV1
+import Query31ExplicitListLoop
+set_option autoImplicit false
+namespace AspisS1OwnedQueryBlock.Meaning
+open Aeneas Aeneas.Std Result ControlFlow
+open Query31ExplicitScanBody Query31ExplicitListLoop
+
+def pack (s : Query31ExplicitScanBody.CurrentScan) (stop : Bool) : AspisS1OwnedQueryBlock.Total.Output :=
+  (s.accepted,s.accepted_len,s.draws,stop)
+
+/-- Complete retained emitted scanner-body sequence with the concrete Std
+operations and one available iterator word. The native iterator is not replaced
+or claimed installed by this definition. -/
+def sourceWord (s : Query31ExplicitScanBody.CurrentScan) (candidate : U32) :
+    Result AspisS1OwnedQueryBlock.Total.Output := do
+  let cf ← body (stdOps listNext) [candidate] s
+  match cf with
+  | .cont (_,after) => ok (pack after false)
+  | .done (after,_) => ok (pack after true)
+
+/-- Exact full Result equality to the existing source-body interpretation.
+No successful read/add/update/contains hypothesis or range premise is added. -/
+theorem stdWord_eq_sourceWord (s : Query31ExplicitScanBody.CurrentScan) (candidate : U32) :
+    stdWord s.accepted s.accepted_len s.draws candidate=sourceWord s candidate := by
+  by_cases full : s.accepted_len=22#usize
+  · simp only [stdWord,sourceWord,body,stdOps,listNext,bind_tc_ok,if_pos full,pack]
+    rfl
+  by_cases exhausted : s.draws=64#usize
+  · simp only [stdWord,sourceWord,body,stdOps,listNext,bind_tc_ok,if_neg full,if_pos exhausted,pack]
+    rfl
+  simp only [stdWord,sourceWord,body,stdOps,listNext,bind_tc_ok,if_neg full,if_neg exhausted,
+    bind_assoc_eq]
+  dsimp only
+  simp only [bind_assoc_eq]
+  apply bind_congr
+  intro d
+  apply bind_congr
+  intro sl
+  apply bind_congr
+  intro found
+  cases found with
+  | true => rfl
+  | false =>
+    simp only [Bool.false_eq_true,if_false,bind_assoc_eq]
+    apply bind_congr
+    intro updated
+    apply bind_congr
+    intro n
+    rfl
+
+/-- The same original scanner-body word uses the checked extracted owned step.
+The only domain premise is its actual bounded prefix, not a caller law. -/
+theorem owned_step_eq_sourceWord (s : Query31ExplicitScanBody.CurrentScan) (candidate : U32)
+    (hlen : s.accepted_len.val≤22) :
+    owned_step s.accepted s.accepted_len s.draws candidate=sourceWord s candidate :=
+  (owned_step_eq_stdWord s.accepted s.accepted_len s.draws candidate hlen).trans
+    (stdWord_eq_sourceWord s candidate)
+
+#print axioms stdWord_eq_sourceWord
+#print axioms owned_step_eq_sourceWord
+end AspisS1OwnedQueryBlock.Meaning
