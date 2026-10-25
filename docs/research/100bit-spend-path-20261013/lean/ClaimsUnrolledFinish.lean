@@ -30,30 +30,30 @@ structure StdCalls where
   intoBox : {T : Type} → (A : Type) → alloc.vec.Vec T → Result (Slice T)
 
 def fromMainError : MainError → ParentError
-  | .Allocation  => .Allocation 
+  | .Allocation  => .Allocation
   | .RowOrder a b => .RowOrder a b
-  | .InvalidRow  => .InvalidRow 
+  | .InvalidRow  => .InvalidRow
   | .Tag row => .Tag row
   | .Length row => .Length row
   | .NonCanonical row offset => .NonCanonical row offset
   | .Boundary round => .Boundary round
-  | .Terminal  => .Terminal 
-  | .EqualCirclePoints  => .EqualCirclePoints 
-  | .TrailingBytes  => .TrailingBytes 
-  | .Public  => .Public 
+  | .Terminal  => .Terminal
+  | .EqualCirclePoints  => .EqualCirclePoints
+  | .TrailingBytes  => .TrailingBytes
+  | .Public  => .Public
 
 def toMainError : ParentError → MainError
-  | .Allocation  => .Allocation 
+  | .Allocation  => .Allocation
   | .RowOrder a b => .RowOrder a b
-  | .InvalidRow  => .InvalidRow 
+  | .InvalidRow  => .InvalidRow
   | .Tag row => .Tag row
   | .Length row => .Length row
   | .NonCanonical row offset => .NonCanonical row offset
   | .Boundary round => .Boundary round
-  | .Terminal  => .Terminal 
-  | .EqualCirclePoints  => .EqualCirclePoints 
-  | .TrailingBytes  => .TrailingBytes 
-  | .Public  => .Public 
+  | .Terminal  => .Terminal
+  | .EqualCirclePoints  => .EqualCirclePoints
+  | .TrailingBytes  => .TrailingBytes
+  | .Public  => .Public
 
 def fromMainQM (q : MainQM) : ParentQM := ⟨⟨q.c0.a,q.c0.b⟩,⟨q.c1.a,q.c1.b⟩⟩
 def toMainQM (q : ParentQM) : MainQM := ⟨⟨q.c0.a,q.c0.b⟩,⟨q.c1.a,q.c1.b⟩⟩
