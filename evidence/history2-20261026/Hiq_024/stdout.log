@@ -1,0 +1,76 @@
+Hiq_DrvAccountInputs.lean:73:6: error: Type mismatch: After simplification, term
+  cuts
+ has type
+  SourceCuts
+    (GExq_Caller.sdk c.adapter c.currentBase (AuS1_Install.base c.stageBase) c.finish c.reserved c.query c.geometry
+      c.boundaries c.std)
+    (Hist_RuntimeEntry.load initial l1).first ((Hist_RuntimeEntry.load final l2).second secondSizes) saved f s
+but is expected to have type
+  SourceCuts (sdk c) (Hist_RuntimeEntry.load initial l1).first ((Hist_RuntimeEntry.load final l2).second secondSizes)
+    saved f s
+'AspisR1.Hiq_DrvAccountInputs.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.Hiq_DrvAccountInputs.accepted : ∀ {A F C : Type} (c : Configuration F C)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (id : S2W_ExtractionBoundary.Program) (adversary : Program Bytes State (FirstInputs A))
+  (chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (ℕ → Record) → A → Program Bytes State (SecondInputs A)),
+  (sdk c).op36 = Hist_Authority.keyEq →
+    WAdm_Domain.SessionAPrepare
+        (Tx1Q_Execution.actual (Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry c.boundaries c.std) →
+      Port5Q1_QueryPorts.SessionAPrimitives c.query →
+        ∀ (Q0 Q1 : ℕ),
+          (∀ (H : Bytes → State), (eval H adversary).1.length ≤ Q0) →
+            (∀ (input : FirstInputs A) (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A)
+                (H : Bytes → State), (eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+              S2W_TrustedStd.TrustedStd copy →
+                ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second),
+                  S2W_DigestExtraction.AeneasExtraction (sdk c) native1 native2 hashv →
+                    ∀ (sha256 H : Bytes → State),
+                      S2W_ExtractionBoundary.P1 sha256 H →
+                        S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                          ∀ (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A),
+                            (have input := (eval H adversary).2;
+                              first native1 copy allocator input.entry id input.data input.state =
+                                ok (core.result.Result.Ok (saved, post1, final1))) →
+                              (have input := (eval H adversary).2;
+                                have next := (eval H (chooseSecond input saved post1 final1)).2;
+                                second native2 allocator next.entry id next.data next.slot next.state =
+                                  ok (core.result.Result.Ok (post2, final2))) →
+                                ∀ (initial final : Hist_Store.Store) (l1 l2 : Hist_RuntimeEntry.Layout),
+                                  (eval H adversary).2.entry = Hist_RuntimeEntry.load initial l1 →
+                                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.entry =
+                                        Hist_RuntimeEntry.load final l2 →
+                                      ∀ (events : List S2X.AccountEvent),
+                                        Hist_Store.Trace (sdk c) id
+                                            (Hist_RuntimeEntry.commit initial (l1.handles 2).1 saved) events final →
+                                          (l2.handles 6).1 = (l1.handles 2).1 →
+                                            ∀
+                                              (project :
+                                                Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                                              have input := (eval H adversary).2;
+                                              have next := (eval H (chooseSecond input saved post1 final1)).2;
+                                              ∃ f s v,
+                                                SourceCuts (sdk c) input.entry.first (next.entry.second secondSizes)
+                                                    saved f s ∧
+                                                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                        f.statement =
+                                                      ok f.semantic ∧
+                                                    AdapterRw.r1_pool_adapter.owned.validate_asq8 (sdk c) id
+                                                          (next.entry.second secondSizes) next.data next.slot =
+                                                        ok (core.result.Result.Ok v) ∧
+                                                      (sdk c).op22 v.statement = ok (core.result.Result.Ok s.encoded) ∧
+                                                        Hiq_ByteSelection.select (sdk c) id
+                                                              (eval H
+                                                                  (Hiq_DrvExperiment.source c hashv copy allocator id
+                                                                    adversary chooseSecond)).2 =
+                                                            Hist_PairExperiment.select { first := f, second := s } ∧
+                                                          (BinRawByteCollisionTargets.event
+                                                              SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                              (eval H
+                                                                (Hiq_DrvExperiment.joint c hashv copy allocator id
+                                                                  adversary chooseSecond project)) ∨
+                                                            bytesOf ↑s.proof = bytesOf ↑f.proof ∧
+                                                              bytesOf ↑s.pub = bytesOf ↑f.pub ∧
+                                                                bytesOf ↑s.checkpoint = bytesOf ↑saved ∧
+                                                                  (↑saved).length = 1768) :=
+⋯

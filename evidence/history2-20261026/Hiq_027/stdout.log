@@ -1,0 +1,131 @@
+Hiq_RuntimeAction.lean:38:15: error: Type mismatch
+  Hiq_RuntimeWriter.classified ops keyLaw id store layout data
+has type
+  Step ops id store (Hiq_RuntimeWriter.apply ops id store layout data).2
+    (Hiq_RuntimeWriter.apply ops id store layout data).1
+but is expected to have type
+  Step ops id store
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).2
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).1
+Hiq_RuntimeAction.lean:39:16: error: Type mismatch
+  Step.rollback store
+has type
+  Step ?m.68 ?m.69 store S2X.AccountEvent.rollback store
+but is expected to have type
+  Step ops id store
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).2
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).1
+Hiq_RuntimeAction.lean:40:16: error: Type mismatch
+  Step.rollback store
+has type
+  Step ?m.77 ?m.78 store S2X.AccountEvent.rollback store
+but is expected to have type
+  Step ops id store
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).2
+    (match Action.invoke layout data with
+      | Action.rollback => (store, S2X.AccountEvent.rollback)
+      | Action.invoke layout data =>
+        match Hiq_ReleaseRoute.route data with
+        | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout data
+        | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+        | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)
+      | Action.foreign caller key value =>
+        if caller ≠ id ∧ (store key).owner = caller then
+          (put store key value, S2X.AccountEvent.committedWrite key (MultiproofConeCanonical.bytesOf ↑value.data))
+        else (store, S2X.AccountEvent.rollback)).1
+Hiq_RuntimeAction.lean:45:48: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  h
+has type
+  Action.foreign caller key value = Action.rollback
+which has no fields.
+Hiq_RuntimeAction.lean:45:52: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  h
+has type
+  Action.foreign caller key value = Action.rollback
+which has no fields.
+Hiq_RuntimeAction.lean:46:6: error: Type mismatch
+  Step.rollback store
+has type
+  Step ?m.144 ?m.145 store S2X.AccountEvent.rollback store
+but is expected to have type
+  Step ops id store
+    (match Hiq_ReleaseRoute.route data✝ with
+      | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout✝ data✝
+      | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+      | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)).2
+    (match Hiq_ReleaseRoute.route data✝ with
+      | Hiq_ReleaseRoute.Route.first => Hiq_RuntimeWriter.apply ops id store layout✝ data✝
+      | Hiq_ReleaseRoute.Route.second => (store, S2X.AccountEvent.rollback)
+      | Hiq_ReleaseRoute.Route.reject => (store, S2X.AccountEvent.rollback)).1
+Hiq_RuntimeAction.lean:41:29: error: unsolved goals
+case h_3
+ops : AdapterRw.Ops
+keyLaw : ops.op36 = Hist_Authority.keyEq
+id : S2W_ExtractionBoundary.Program
+store : Store
+caller : S2W_ExtractionBoundary.Program
+key : ℕ
+value : Cell
+x✝ : Action
+caller✝ : S2W_ExtractionBoundary.Program
+key✝ : ℕ
+value✝ : Cell
+heq✝ : Action.foreign caller key value = Action.foreign caller✝ key✝ value✝
+⊢ Step ops id store
+    (if caller✝ ≠ id ∧ (store key✝).owner = caller✝ then
+        (put store key✝ value✝, S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+      else (store, S2X.AccountEvent.rollback)).2
+    (if caller✝ ≠ id ∧ (store key✝).owner = caller✝ then
+        (put store key✝ value✝, S2X.AccountEvent.committedWrite key✝ (MultiproofConeCanonical.bytesOf ↑value✝.data))
+      else (store, S2X.AccountEvent.rollback)).1
+'AspisR1.Hiq_RuntimeAction.classified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

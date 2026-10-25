@@ -1,0 +1,88 @@
+import Hiq_DrvAccountInputs
+import DrvC_Nonvacuity
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.Hiq_DrvAccountDriver
+open Aeneas Aeneas.Std Result GExq_AccountExperiment S2Trust S2W_D189Entry S2W_D189Wrappers
+open FS FS2 FS2.Duplex DrvC_Installation S2W_NativeConsolidation MultiproofConeCanonical
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+variable {A F C : Type} (c : Configuration F C)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) (id : S2W_ExtractionBoundary.Program)
+    (adversary : Program Bytes State (FirstInputs A))
+    (chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A → Program Bytes State (SecondInputs A))
+
+local notation "r" => (DrvC_FirstConstants.configuration c)
+
+theorem accepted
+    (keyLaw : (sdk r).op36 = Hist_Authority.keyEq)
+    (owner : WAdm_Domain.SessionAPrepare
+      (Tx1Q_Execution.actual (Op5T_Concrete.current (r).currentBase) (r).reserved (r).query (r).geometry (r).boundaries (r).std))
+    (ports : Port5Q1_QueryPorts.SessionAPrimitives (r).query)
+    (Q0 Q1 : Nat) (prefixBound : ∀ H, (eval H adversary).1.length ≤ Q0)
+    (choiceBound : ∀ input saved post final H, (eval H (chooseSecond input saved post final)).1.length ≤ Q1)
+    (trustedCopy : S2W_TrustedStd.TrustedStd copy)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (extraction : S2W_DigestExtraction.AeneasExtraction (sdk r) native1 native2 hashv)
+    (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
+    (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record)) (final1 final2 : A)
+    (accepted1 : let input := (eval H adversary).2
+      first native1 copy allocator input.entry id input.data input.state = ok (.Ok (saved,post1,final1)))
+    (accepted2 : let input := (eval H adversary).2
+      let next := (eval H (chooseSecond input saved post1 final1)).2
+      second native2 allocator next.entry id next.data next.slot next.state = ok (.Ok (post2,final2)))
+    (initial final : Hist_Store.Store) (l1 l2 : Hist_RuntimeEntry.Layout)
+    (load1 : (eval H adversary).2.entry = Hist_RuntimeEntry.load initial l1)
+    (load2 : (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.entry = Hist_RuntimeEntry.load final l2)
+    (events : List S2X.AccountEvent)
+    (trace : Hist_Store.Trace (sdk r) id (Hist_RuntimeEntry.commit initial (l1.handles 2).1 saved) events final)
+    (sameKey : (l2.handles 6).1 = (l1.handles 2).1)
+    (project : GExq_AccountExperiment.Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) :
+    let input := (eval H adversary).2
+    let next := (eval H (chooseSecond input saved post1 final1)).2
+    ∃ f s v, SourceCuts (sdk r) input.entry.first (next.entry.second secondSizes) saved f s ∧
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+        f.statement = ok f.semantic ∧
+      AdapterRw.r1_pool_adapter.owned.validate_asq8 (sdk r) id (next.entry.second secondSizes)
+        next.data next.slot = ok (.Ok v) ∧
+      (sdk r).op22 v.statement = ok (.Ok s.encoded) ∧
+      Hiq_ByteSelection.select (sdk r) id (eval H (Hiq_DrvExperiment.source r hashv copy allocator id adversary chooseSecond)).2 =
+        Hist_PairExperiment.select ⟨f,s⟩ ∧
+      (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+        (eval H (Hiq_DrvExperiment.joint r hashv copy allocator id adversary chooseSecond project)) ∨
+        ∃ i : OraclePortStoredExperimentC4.Input,
+          i.statement.pubBytes = bytesOf f.pub.val ∧ i.stored = bytesOf f.proof.val ∧
+          (eval H (DrvC_Implementation.driver r i)).2 = true ∧
+          ¬ (∀ j, (eval H (DrvC_Implementation.driver r j)).2 = false)) := by
+  let input := (eval H adversary).2
+  let next := (eval H (chooseSecond input saved post1 final1)).2
+  obtain ⟨f,s,v,cuts,get,validate,encode,associated,binding⟩ :=
+    Hiq_DrvAccountInputs.accepted r hashv copy allocator id adversary chooseSecond keyLaw owner ports
+      Q0 Q1 prefixBound choiceBound trustedCopy native1 native2 extraction sha256 H p1 syscall
+      saved post1 post2 final1 final2 accepted1 accepted2 initial final l1 l2 load1 load2 events trace sameKey project
+  refine ⟨f,s,v,cuts,get,validate,encode,associated,?_⟩
+  rcases binding with bad | ⟨proof,pub,checkpoint,size⟩
+  · exact Or.inl bad
+  · right
+    have native := (first_accepted native1 copy trustedCopy allocator input.entry id input.data input.state final1 saved post1 accepted1).1
+    have source := (extraction.stage1 id input.entry.first input.data).symm.trans native
+    obtain ⟨semantic,decoded,newcuts⟩ := DrvC_DecodeCut.same_cut r id input.entry.first
+      (next.entry.second secondSizes) input.data saved f s source cuts
+    have fit := DrvC_PublicCarrier.fits f.pub (DrvC_PublicCarrier.public_length r _ _ saved f s cuts)
+    let i := DrvC_PublicCarrier.input f.pub f.proof fit
+    have yes := DrvC_CutAcceptance.driver_accepts c native1 native2 hashv extraction sha256 H p1 syscall
+      input.entry.first (next.entry.second secondSizes) saved {f with semantic := semantic} s newcuts decoded
+      proof pub checkpoint i rfl rfl
+    refine ⟨i,rfl,rfl,yes,?_⟩
+    intro rejects
+    have no := (rejects i).symm.trans yes
+    cases no
+
+#print axioms accepted
+set_option pp.proofs false in
+#print accepted
+end AspisR1.Hiq_DrvAccountDriver
+end
