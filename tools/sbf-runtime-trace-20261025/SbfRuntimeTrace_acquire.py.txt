@@ -1,0 +1,192 @@
+# Data-only collector, appended after exact reviewed guard and new helpers.
+START = time.monotonic()
+INITIAL_LIMITS = inherited_limits()
+check_limits(INITIAL_LIMITS)
+def interrupted(signum, frame):
+    raise GuardError('deadline or resident guard failed')
+signal.signal(signal.SIGUSR1, interrupted)
+signal.signal(signal.SIGALRM, interrupted)
+signal.alarm(115)
+MONITOR = Guard()
+MONITOR.start()
+import hashlib
+import json
+import selectors
+import struct
+import subprocess
+import sys
+SBF_RUNTIME_INPUTS = None
+TRACEE_SOURCE = None
+ATTEMPTS = []
+FILES = {}
+TOTAL = 0
+ELFS = 0
+RESULT = dict(status='UNKNOWN', runtime_approval=None, producer_assembly=None, axioms='N/A',
+              source_inputs=SBF_RUNTIME_INPUTS, argv_source='sys.orig_argv' if hasattr(sys,'orig_argv') else 'sys.argv',
+              argv=getattr(sys,'orig_argv',sys.argv))
+RAW = dict(trace=bytearray(), stdout=bytearray(), stderr=bytearray())
+FAILED = True
+CHILD = None
+def require_data(ok, message):
+    if not ok: raise GuardError(message)
+
+def source_path(path):
+    physical, s, row = walk(path, ATTEMPTS)
+    return physical, row['components'], row['symlinks'], s
+
+def pin_file(path, reason):
+    global TOTAL
+    MONITOR.check()
+    physical, chain, links, s = source_path(path)
+    require_data(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'not regular single-link input: '+physical)
+    if physical in FILES:
+        require_data(FILES[physical]['identity'] == list(identity(s)), 'repeated input drift')
+        FILES[physical]['reasons'].append(reason)
+        return physical
+    require_data(len(FILES)<512 and s.st_size<=16*2**20 and TOTAL+s.st_size<=128*2**20, 'pin bounds')
+    d=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        for part in physical.split('/')[1:-1]:
+            child=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=d)
+            t=os.fstat(child)
+            require_data(t.st_uid==0 and not t.st_mode&0o022,'opened ancestry mode')
+            os.close(d);d=child
+        f=os.open(physical.split('/')[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,dir_fd=d)
+    finally: os.close(d)
+    try:
+        require_data(identity(os.fstat(f))==identity(s),'source drift before read')
+        chunks=[]; count=0
+        while True:
+            data=os.read(f,min(65536,s.st_size-count+1))
+            if not data: break
+            count+=len(data);require_data(count<=s.st_size,'source growth')
+            chunks.append(data)
+        require_data(count==s.st_size and identity(os.fstat(f))==identity(s),'source drift during read')
+        raw=b''.join(chunks)
+        row=dict(size=count,sha256=hashlib.sha256(raw).hexdigest(),identity=list(identity(s)),
+                 chain=chain,symlinks=links,reasons=[reason],elf=parse_elf(raw),stable_fd=True)
+        if physical.endswith('.pyc'):
+            require_data(len(raw)>=16,'short cache header')
+            row['pyc']=dict(header_hex=raw[:16].hex(),flags=int.from_bytes(raw[4:8],'little'),
+                            executed_body_binding='OPEN; no unmarshal or execution to assert source equality')
+        FILES[physical]=row;TOTAL+=count
+        return physical
+    finally: os.close(f)
+
+def fresh_recheck(path, expected):
+    global TOTAL
+    # Fresh bytes and chain, not a cached pin result.
+    physical, chain, links, s=source_path(path)
+    saved=FILES.pop(physical)
+    TOTAL-=saved['size']
+    try:
+        observed=pin_file(path,'fresh post-trace provenance')
+        require_data(FILES[observed]['sha256']==saved['sha256'] and
+                     FILES[observed]['identity']==saved['identity'],'strace provenance drift')
+        return dict(physical=observed,sha256=FILES[observed]['sha256'],size=FILES[observed]['size'],chain=chain)
+    except BaseException:
+        FILES.setdefault(physical,saved)
+        raise
+
+try:
+    tracer=pin_file('/usr/bin/strace','required prelaunch installed tracer provenance')
+    RESULT['tracer_before']=dict(physical=tracer,**FILES[tracer])
+    python=pin_file('/usr/bin/python3','actual tracee interpreter entry')
+    RESULT['python_entry']=python
+    for path in FILES[python]['elf']['interpreter']:
+        pin_file(path,'actual PT_INTERP before launch')
+    # Dedicated inherited output pipe avoids host staging files and symlinks.
+    readfd,writefd=os.pipe2(os.O_CLOEXEC)
+    argv=['/usr/bin/strace','-f','-ttt','-yy','-s','4096','-e',
+          'trace=%file,%process,close,dup,dup2,dup3,fcntl,mmap,munmap',
+          '-o','/proc/self/fd/'+str(writefd),'/usr/bin/python3','-I','-S','-B','-c',TRACEE_SOURCE]
+    RESULT['controlled_argv']=argv
+    CHILD=subprocess.Popen(argv,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                           pass_fds=(writefd,),env={'HOME':'/probe','LC_ALL':'C','PATH':'/usr/bin','TMPDIR':'/tmp'})
+    os.close(writefd)
+    selector=selectors.DefaultSelector()
+    trace_stream=os.fdopen(readfd,'rb',buffering=0)
+    for stream,kind in ((trace_stream,'trace'),(CHILD.stdout,'stdout'),(CHILD.stderr,'stderr')):
+        os.set_blocking(stream.fileno(),False);selector.register(stream,selectors.EVENT_READ,kind)
+    ready_pid=None;released=False
+    try:
+        while selector.get_map():
+            MONITOR.check()
+            for key,mask in selector.select(.02):
+                b=os.read(key.fileobj.fileno(),65536)
+                if not b:
+                    selector.unregister(key.fileobj);key.fileobj.close();continue
+                RAW[key.data].extend(b)
+                require_data(len(RAW['trace'])<=16*2**20,'raw trace exceeds 16MiB; not complete')
+                require_data(sum(len(v) for v in RAW.values())<=3*2**20,'raw export reserve exceeds 3MiB; not complete')
+            if ready_pid is None and b'\n' in RAW['stdout']:
+                line=bytes(RAW['stdout']).split(b'\n',1)[0]
+                require_data(line.startswith(b'SbfRuntimeTrace_READY '),'unexpected tracee protocol')
+                ready_pid=int(line.split()[1]);RESULT['tracee_pid']=ready_pid
+            if ready_pid is not None and not released:
+                # Both live TGIDs must occur together in an original guard sample.
+                if any({os.getpid(),CHILD.pid,ready_pid}<=set(s['processes']) for s in MONITOR.samples):
+                    require_data(set(MONITOR.owned)=={os.getpid(),CHILD.pid,ready_pid},'unexpected owned worker')
+                    CHILD.stdin.write(b'G');CHILD.stdin.flush();CHILD.stdin.close();released=True
+            if CHILD.poll() is not None and not selector.get_map(): break
+        code=CHILD.wait()
+    finally: selector.close()
+    RESULT.update(trace_exit=code,handshake_released=released,tracer_pid=CHILD.pid)
+    RESULT['tracer_after']=fresh_recheck('/usr/bin/strace',RESULT['tracer_before'])
+    require_data(code==0 and released,'terminal strace/tracee failure')
+    require_data(set(MONITOR.owned)=={os.getpid(),CHILD.pid,ready_pid},'unexpected owned worker')
+    lines=bytes(RAW['stdout']).split(b'\n',1)
+    metadata=json.loads(lines[1]);RESULT['tracee_metadata']=metadata
+    require_data(metadata['pid']==ready_pid and metadata['threads']==1,'tracee identity/thread count')
+    parsed=parse(bytes(RAW['trace']).decode('ascii'),expected_pid=ready_pid)
+    # Full parser runs locally as well; host summary avoids duplicating raw trace.
+    RESULT['parser_summary']={k:v for k,v in parsed.items() if k!='events'}
+    observed={o['path'] for o in parsed['opens']}
+    RESULT['unapproved_positive_paths']=[]
+    for path in sorted(observed):
+        if path=='/proc/self/maps': continue  # explicit controlled own metadata
+        if not (under(path,PUBLIC+ALIASES) or path in CONFIG):
+            RESULT['unapproved_positive_paths'].append(path);continue
+        try:
+            physical,s,row=walk(path,ATTEMPTS)
+            if stat.S_ISREG(s.st_mode): pin_file(path,'successful controlled trace open; inode binding OPEN')
+        except FileNotFoundError:
+            RESULT.setdefault('open_missing_at_pin',[]).append(path)
+    # Separately record source/cache metadata. Only trace-observed paths are read.
+    positive={p['path'] for p in parsed['positive_paths']}
+    for name,module in sorted(metadata['modules'].items()):
+        for kind in ('file','cached'):
+            path=module.get(kind)
+            if path in positive and path not in observed and (under(path,PUBLIC+ALIASES) or path in CONFIG):
+                try: pin_file(path,'trace-observed module '+kind+' '+name)
+                except FileNotFoundError: module[kind+'_missing_at_pin']=True
+    # Every newly observed native input is parsed; exact PT_INTERP only, no guesses.
+    for row in list(FILES.values()):
+        if row['elf']:
+            for path in row['elf']['interpreter']: pin_file(path,'observed native PT_INTERP')
+    check_limits(inherited_limits(),INITIAL_LIMITS)
+    MONITOR.check()
+    RESULT['status']='PARTIAL_UNAPPROVED_OBSERVATION'
+    FAILED=False
+except BaseException as exc:
+    RESULT['error']=dict(type=type(exc).__name__,message=str(exc),errno=getattr(exc,'errno',None))
+finally:
+    signal.signal(signal.SIGUSR1,signal.SIG_IGN)
+    guard=MONITOR.finish(failed=FAILED)
+    RESULT.update(guard=guard,files=FILES,path_attempts=ATTEMPTS,unique_hashed_bytes=TOTAL,elf_count=ELFS,
+                  raw={k:bytes(v).decode('ascii',errors='backslashreplace') for k,v in RAW.items()},
+                  raw_pins={k:dict(size=len(v),sha256=hashlib.sha256(v).hexdigest()) for k,v in RAW.items()},
+                  wall_seconds=time.monotonic()-START,
+                  process_peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+                  child_peak_rss_bytes=resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss*1024,
+                  swap_operations=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+                  inherited_limits_before=INITIAL_LIMITS,inherited_limits_after=inherited_limits(),
+                  cgroup_pressure_reservations='UNOBSERVED; focused metadata exception, no GO/admission authority',
+                  completeness='OPEN; host fixture only, inode association/cache bodies/conditional imports/private runtime unproved')
+    if guard['error']: FAILED=True;RESULT['status']='UNKNOWN'
+    raw=json.dumps(RESULT,sort_keys=True,separators=(',',':')).encode()+b'\n'
+    if len(raw)>4*2**20:
+        raise GuardError('serialized export exceeds 4MiB; no completeness claim')
+    sys.stdout.buffer.write(raw);sys.stdout.buffer.flush()
+    signal.alarm(0)
+raise SystemExit(78 if FAILED else 0)

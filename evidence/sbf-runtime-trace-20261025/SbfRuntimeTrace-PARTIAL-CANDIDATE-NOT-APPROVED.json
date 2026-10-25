@@ -1,0 +1,386 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import errno,json,os,resource,stat\ndef SbfSeal_fds(os_api):\n names=os_api.listdir('/proc/self/fd')\n if len(names)>4096: raise RuntimeError('FD inventory bound')\n result=[]\n for name in names:\n  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')\n  fd=int(name)\n  try: os_api.fstat(fd)\n  except OSError as e:\n   if e.errno!=errno.EBADF: raise\n  else: result.append(fd)\n return sorted(result)\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nassert SbfSeal_fds(os)==[0,1,2]\nassert stat.S_ISCHR(os.fstat(0).st_mode)\nassert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)\nfor fd in (1,2):\n t=os.fstat(fd)\n assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1\n assert stat.S_IMODE(t.st_mode)==0o600\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nassert os.getpid()==1\nassert os.stat('/proc/1/ns/pid').st_ino==os.stat('/proc/self/ns/pid').st_ino\nassert os.stat('/').st_ino==os.stat('.').st_ino\nwith open('/proc/self/status',encoding='ascii') as f:\n q=dict(line.split(':',1) for line in f if ':' in line)\nassert q['Threads'].strip()=='1'\nwith open('/proc/self/cgroup',encoding='ascii') as f:\n cg=f.read()\nassert cg.startswith('0::/') and cg.count('\\n')==1\nassert os.statvfs('/').f_flag & os.ST_RDONLY\nassert os.statvfs('/proc').f_flag & os.ST_RDONLY\nassert not os.statvfs('/tmp').f_flag & os.ST_RDONLY\nassert os.listdir('/dev')==[]\nv=os.statvfs('/tmp')\nassert v.f_blocks*v.f_frsize<=1048576 and v.f_files<=64\nassert stat.S_IMODE(os.stat('/tmp').st_mode)==0o1777 and os.stat('/tmp').st_uid==0\nwith open('/proc/self/mountinfo',encoding='ascii') as f:\n rows=[line.split() for line in f]\nassert {r[4] for r in rows}=={'/','/tmp','/proc'} and len(rows)==3\nfor r in rows:\n sep=r.index('-')\n assert not any(x.startswith(('shared:','master:','propagate_from:')) for x in r[6:sep])\n needed={'nosuid','nodev'} | ({'rw','noexec'} if r[4]=='/tmp' else {'ro'})\n if r[4]=='/proc': needed.add('noexec')\n assert needed<=set(r[5].split(','))\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"
+  ],
+  "env": {
+    "HOME": "/probe",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin",
+    "TMPDIR": "/tmp"
+  },
+  "files": [
+    {
+      "logical": "/etc/ld.so.cache",
+      "mode": 292,
+      "physical": "/etc/ld.so.cache",
+      "sha256": "12c351f6808a6a38ffbc36afea52791dd8a2d358ad9a4ea7a9cc52284ae61d02",
+      "size": 42867
+    },
+    {
+      "logical": "/etc/localtime",
+      "mode": 292,
+      "physical": "/usr/share/zoneinfo/Etc/UTC",
+      "sha256": "8b85846791ab2c8a5463c83a5be3c043e2570d7448434d41398969ed47e3e6f2",
+      "size": 114
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libc.so.6",
+      "mode": 365,
+      "physical": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+      "size": 2129424
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a",
+      "size": 5309400
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libexpat.so.1",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d",
+      "size": 186624
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libffi.so.8",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153",
+      "size": 47672
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libm.so.6",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+      "size": 952616
+    },
+    {
+      "logical": "/lib/x86_64-linux-gnu/libz.so.1",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242",
+      "size": 113000
+    },
+    {
+      "logical": "/lib64/ld-linux-x86-64.so.2",
+      "mode": 365,
+      "physical": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da",
+      "size": 236616
+    },
+    {
+      "logical": "/usr/bin/python3",
+      "mode": 365,
+      "physical": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+      "size": 8020928
+    },
+    {
+      "logical": "/usr/bin/python3.12",
+      "mode": 365,
+      "physical": "/usr/bin/python3.12",
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+      "size": 8020928
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc",
+      "sha256": "df29445e1dc662eb6d6cfa4432ad8908e452bd29e8c54687d7103bf599d94a36",
+      "size": 11751
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc",
+      "sha256": "57d508d756385d7e5fd85b4cb31a7e5f92cace2a289789b18d5401999a639bf3",
+      "size": 7414
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/enum.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/enum.cpython-312.pyc",
+      "sha256": "bc788b9ee5c315cce928b93f9893441babad4b516a989b8c4d009512d8e57b9b",
+      "size": 80708
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/functools.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/functools.cpython-312.pyc",
+      "sha256": "94518b56bf294cfe53c3aad9b0fffc00c9b4c552cccf324bd359e1c4997a82b2",
+      "size": 40506
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/hashlib.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/hashlib.cpython-312.pyc",
+      "sha256": "3dc801740aa60d230e0dc5763efb8e91641b1a65f6d6cd310fce63e41a583a13",
+      "size": 8087
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc",
+      "sha256": "a7198c5b71ffd719308fe066b89cc98bbbc48bc6574ab879a5866626b184572b",
+      "size": 1041
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/operator.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/operator.cpython-312.pyc",
+      "sha256": "2d9b59f83698f6db890176d5b6a512a0fbcec615ab9beb25b40759711e706ea7",
+      "size": 17364
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/platform.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/platform.cpython-312.pyc",
+      "sha256": "ef152e74c5c1da54ae384c456ba2d71a603423892ec29ad91ffe7caf535bcf96",
+      "size": 41600
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc",
+      "sha256": "58a389f9c7b10ec4d9a88283aa1e051f7ba1d8a6f5ca489cb7dee5d9adb2b6ff",
+      "size": 9909
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/signal.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/signal.cpython-312.pyc",
+      "sha256": "54808b67661ce4f592ce2789288276808a30992932ab1a3674340831522eabeb",
+      "size": 4448
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/struct.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/struct.cpython-312.pyc",
+      "sha256": "f0cc87ea2a221b5316238b69404c430e5aa2ebe89dd68b7dc11474cce8158359",
+      "size": 325
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/threading.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/threading.cpython-312.pyc",
+      "sha256": "8e8f323ad7643cb4671f460b77dafca43c243ad545a40bb6759314b504b8dc3b",
+      "size": 65346
+    },
+    {
+      "logical": "/usr/lib/python3.12/__pycache__/types.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/__pycache__/types.cpython-312.pyc",
+      "sha256": "b7f2eb13f227d3731278f2e33fe5a3e447cb988852a43f053d5447485e199cab",
+      "size": 14939
+    },
+    {
+      "logical": "/usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "efe104840c7b718e97185b155f875e330f6bc67687182e7322fae642d6f7f39e",
+      "size": 73089
+    },
+    {
+      "logical": "/usr/lib/python3.12/ctypes/__pycache__/__init__.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/ctypes/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "32e41a1b3a44485da8bd026ea8b5b44cd2f963103f76f4093578d39471f04371",
+      "size": 23449
+    },
+    {
+      "logical": "/usr/lib/python3.12/ctypes/__pycache__/_endian.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/ctypes/__pycache__/_endian.cpython-312.pyc",
+      "sha256": "242c2cfc68dbd7404be9f5ad404c4fbdebf99a747cf2ade36694c2f362f332b1",
+      "size": 3380
+    },
+    {
+      "logical": "/usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "18d8731b4d889615980443d2e9bdb10fb0a34381f83e4ed0c66538753fcab5e5",
+      "size": 5790
+    },
+    {
+      "logical": "/usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc",
+      "sha256": "43acf0e938ff18d8a0c661a66176f7ee6fb92b148b8b5deabc629245eaaeff52",
+      "size": 12408
+    },
+    {
+      "logical": "/usr/lib/python3.12/encodings/__pycache__/ascii.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/encodings/__pycache__/ascii.cpython-312.pyc",
+      "sha256": "f8bb0fa57b43c1ca09b04bdcabe075024524a7ae240f6d23de9f337e5f82ecfc",
+      "size": 2515
+    },
+    {
+      "logical": "/usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc",
+      "sha256": "7ee12571aca7bbdad4c746390eb9bf97207b602be09cb8646a4421957e71f08a",
+      "size": 2147
+    },
+    {
+      "logical": "/usr/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "609186801a9f5bfcd98edc1f1889bcc09ea27c80bee5c05ba616a144a516386c",
+      "size": 13620
+    },
+    {
+      "logical": "/usr/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc",
+      "sha256": "2a395b844d38720fa81e3bb9a2339216b0a73b1a953d77f60e268b54d2a1942b",
+      "size": 13825
+    },
+    {
+      "logical": "/usr/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc",
+      "sha256": "624944282c63628b98740f780feb8c80313159d097b078397c7f48e0aaad7cef",
+      "size": 15098
+    },
+    {
+      "logical": "/usr/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc",
+      "sha256": "3022d00d435a2050180413b9e5545f8a4bc18b167c1d204d188d86da3ad3f598",
+      "size": 3321
+    },
+    {
+      "logical": "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "aad3e24f186e6c0a1c7efa8f16004f951f527db86f6451d30118657384a456c1",
+      "size": 137968
+    },
+    {
+      "logical": "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "8dc6cda6dd9495b95a2bfb5b26e8cf06b72f36dc0213d958b9277a958287f0fe",
+      "size": 64368
+    },
+    {
+      "logical": "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "ca8e35c58f7bc8e27258c4af43651c941413bc6318903621253485b0395758a3",
+      "size": 48952
+    },
+    {
+      "logical": "/usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so",
+      "sha256": "c8cc35580b497bf128cf8bb0e25efc36573a4f21a1c6877a91737fcd52e24907",
+      "size": 19432
+    },
+    {
+      "logical": "/usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc",
+      "sha256": "b232ef42dd5d80b09ab397af6404026058d8cc97cca5b365b3391d8d1ab7f403",
+      "size": 17938
+    },
+    {
+      "logical": "/usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc",
+      "sha256": "85b48befe0a5e98154845fb0fb3b756725b93396d228de31a08a3114ebd67d98",
+      "size": 1816
+    },
+    {
+      "logical": "/usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc",
+      "sha256": "e05c7e067749d8d0337f675399d00f65ecf7370c5379ef6673969233df211fab",
+      "size": 26516
+    },
+    {
+      "logical": "/usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc",
+      "sha256": "62c9814158634a6fc6c59a3d20b27c2555ca18fea2ba79e0ffe6df89ac5beff3",
+      "size": 5296
+    },
+    {
+      "logical": "/usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc",
+      "mode": 292,
+      "physical": "/usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc",
+      "sha256": "44a9d0f2b4cd55fcac2012c2c0fad2b5457fa0e56cd12b12276921ab85c05f59",
+      "size": 42007
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "mode": 365,
+      "physical": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da",
+      "size": 236616
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "mode": 365,
+      "physical": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf",
+      "size": 2129424
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libcrypto.so.3",
+      "sha256": "6866ed711dab8927e1bf82bf1cd30e828bdfc34f3cc1e83b1c9eb01ce6c37d9a",
+      "size": 5309400
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1",
+      "sha256": "286682ecbc5e59a638963b1a4e6351e65eb32fcf4bdcb9cb7569b6a61fe06a8d",
+      "size": 186624
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libffi.so.8.1.4",
+      "sha256": "00f593fe192f2851b8ce23b25cec2488d769beb5a8f63e8c9e563071e1075153",
+      "size": 47672
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0",
+      "size": 952616
+    },
+    {
+      "logical": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "mode": 292,
+      "physical": "/usr/lib/x86_64-linux-gnu/libz.so.1.3",
+      "sha256": "f61677c7bdb7c2aa2a243ea781bfd16afcb361cede7b4ef76127a9d8eb9a5242",
+      "size": 113000
+    },
+    {
+      "logical": "/usr/share/zoneinfo/Etc/UTC",
+      "mode": 292,
+      "physical": "/usr/share/zoneinfo/Etc/UTC",
+      "sha256": "8b85846791ab2c8a5463c83a5be3c043e2570d7448434d41398969ed47e3e6f2",
+      "size": 114
+    }
+  ],
+  "gid": 1000,
+  "root": "/var/lib/SbfSeal-20261025-v1/rootfs",
+  "uid": 1000,
+  "version": "SbfLinux-tiny-v1"
+}

@@ -1,0 +1,20 @@
+import os,sys
+os.write(1,('SbfRuntimeTrace_READY '+str(os.getpid())+'\n').encode('ascii'))
+if os.read(0,1)!=b'G': raise RuntimeError('missing collector release')
+import ctypes
+import errno
+import fcntl
+import hashlib
+import json
+import os
+import platform
+import resource
+import signal
+import stat
+import threading
+import time
+modules={n:dict(file=getattr(m,'__file__',None),cached=getattr(m,'__cached__',None)) for n,m in sorted(list(sys.modules.items())) if m is not None}
+with open('/proc/self/maps','r',encoding='ascii') as stream:
+ maps=stream.read(1048577)
+if len(maps)>1048576: raise RuntimeError('maps bound')
+print(json.dumps(dict(pid=os.getpid(),threads=threading.active_count(),modules=modules,maps=maps,version=sys.version,argv=getattr(sys,'orig_argv',sys.argv),argv_source='sys.orig_argv' if hasattr(sys,'orig_argv') else 'sys.argv'),sort_keys=True))
