@@ -1,0 +1,43 @@
+'AspisR1.DrvI_Audit.nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.call_results' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.call_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.silent_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.queried_stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.stages_differ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Counterexample.no_universal_identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Installation.same_batch_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Installation.installed_split' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Installation.silent_not_installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_Installation.installed_call_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_SourceCounterexample.silent_driver' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_SourceCounterexample.accepting_source_differs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvI_SourceCounterexample.physical_counterinstance' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.DrvI_Audit.nonvacuity : ∀ (adapter : AdapterRw.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (i : OraclePortStoredExperimentC4.Input)
+  (H : Bytes → State),
+  (Port1_StoredCarrier.Physical fun x => Program.done true) ∧
+    Port1_StoredCarrier.Physical (Port1_Driver.rust adapter (fun {A} => DrvI_Counterexample.silent) D hash) ∧
+      (eval H (Program.done true)).2 = true ∧
+        Program.done true ≠ Port1_Driver.rust adapter (fun {A} => DrvI_Counterexample.silent) D hash i :=
+fun adapter {Hash} D hash i H =>
+  ⟨fun x x_1 x_2 x_3 => rfl,
+    ⟨DrvI_SourceCounterexample.physical_counterinstance adapter D hash,
+      ⟨rfl, DrvI_SourceCounterexample.accepting_source_differs adapter D hash (fun x => Program.done true) i H rfl⟩⟩⟩
+theorem AspisR1.DrvI_Counterexample.no_universal_identification : ∀ {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (source : Program Bytes State Bool) (H : Bytes → State),
+  ¬∀ (impl : VTop_OracleCode.Implementation),
+      eval H (Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof) = eval H source :=
+fun {Hash} D hash semantic pub proof source H all =>
+  DrvI_Counterexample.stages_differ D hash semantic pub proof H
+    (Eq.trans (all fun {A} => DrvI_Counterexample.silent) (Eq.symm (all fun {A} => DrvI_Counterexample.queried)))
+theorem AspisR1.DrvI_SourceCounterexample.accepting_source_differs : ∀ (adapter : AdapterRw.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (source : Verifier)
+  (i : OraclePortStoredExperimentC4.Input) (H : Bytes → State),
+  (eval H (source i)).2 = true →
+    source i ≠ Port1_Driver.rust adapter (fun {A} => DrvI_Counterexample.silent) D hash i :=
+fun adapter {Hash} D hash source i H accepted =>
+  Eq.mpr (id (congrArg (fun _a => source i ≠ _a) (DrvI_SourceCounterexample.silent_driver adapter D hash i)))
+    fun equal =>
+    let ⟨⟩ := true
+    Eq.mp (congrArg (fun _a => (eval H _a).2 = true) equal) accepted
