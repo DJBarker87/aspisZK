@@ -1,0 +1,32 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 2319); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterBytes.lean:13:63: error: unsolved goals
+c : Context
+hd : (↑c.statement_digest).length = 32
+hn : (↑c.mask_nonce).length = 32
+hm : (↑(core.num.U64.to_le_bytes c.mask_layout_fingerprint)).length = 8
+hf : (↑(core.num.U64.to_le_bytes c.layout_factor_fingerprint)).length = 8
+⊢ List.take 72 (List.take 64 (List.take 32 ↑c.statement_digest)) ++
+      (List.take 40 (List.take 32 ↑c.mask_nonce) ++
+        (List.take 8 ↑(core.num.U64.to_le_bytes c.mask_layout_fingerprint) ++
+          List.take 8 ↑(core.num.U64.to_le_bytes c.layout_factor_fingerprint))) =
+    ↑c.statement_digest ++
+      (↑c.mask_nonce ++
+        (↑(core.num.U64.to_le_bytes c.mask_layout_fingerprint) ++
+          ↑(core.num.U64.to_le_bytes c.layout_factor_fingerprint)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterBytes.lean:20:26: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵[̵v̵a̵l̵u̵e̵,̵p̵u̵t̵,̵i̵n̵i̵t̵i̵a̵l̵,̵A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵h̵d̵,̵h̵n̵,̵h̵m̵,̵h̵f̵,̵L̵i̵s̵t̵.̵t̵a̵k̵e̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵]̵s̲i̲m̲p̲ ̲[̲v̲a̲l̲u̲e̲,̲ ̲p̲u̲t̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲b̲y̲t̲e̲s̲,̲ ̲h̲d̲,̲ ̲h̲n̲,̲ ̲h̲m̲,̲ ̲h̲f̲,̲ ̲L̲i̲s̲t̲.̲t̲a̲k̲e̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwOuterBytes.value_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.78
+	Maximum resident set size (kbytes): 4073100
+	Swaps: 0
+	Exit status: 1

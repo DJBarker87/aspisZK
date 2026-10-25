@@ -1,0 +1,173 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:30:32: error(lean.invalidField): Invalid field `len`: The environment does not contain `Subtype.len`, so it is not possible to project the field `len` from an expression
+  ⟨List.slice ↑start ↑stop ↑dest, ?m.59⟩
+of type `{ l // l.length ≤ Usize.max }`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:29:37: error: Application type mismatch: The argument
+  ↑dest
+has type
+  List U8
+but is expected to have type
+  ℕ
+in the application
+  List.slice_length_le ↑dest
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:27:42: error: unsolved goals
+N M : Usize
+dest : Std.Array U8 N
+start stop : Usize
+src : Std.Array U8 M
+ordered : ↑start ≤ ↑stop
+bound : ↑stop ≤ ↑N
+size : ↑stop - ↑start = ↑M
+inside : start ≤ stop ∧ ↑stop ≤ dest.to_slice.length
+this : (↑dest.to_slice).length ≤ Usize.max
+⊢ (List.slice ↑start ↑stop ↑dest).length ≤ Usize.max
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:38:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (s, back) ←
+      do
+        let __x ←
+          core.slice.index.Slice.index_mut
+              { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+                get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+                get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+                get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+                get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+                index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+                index_mut := fun r s =>
+                  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+                    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+                  else fail Error.panic }
+              ⟨↑dest, ⋯⟩ { start := start, «end» := stop }
+        ok (__x.1, fun o => if h : (↑(__x.2 o)).length = ↑N then ⟨↑(__x.2 o), ⋯⟩ else dest)
+    let copied ← if s.len = Slice.len ⟨↑src, ⋯⟩ then ok ⟨↑src, ⋯⟩ else fail Error.panic
+    ok (back copied)
+is not definitionally equal to the right-hand side
+  ok (put dest start src)
+
+N M : Usize
+dest : Std.Array U8 N
+start stop : Usize
+src : Std.Array U8 M
+ordered : ↑start ≤ ↑stop
+bound : ↑stop ≤ ↑N
+size : ↑stop - ↑start = ↑M
+inside : start ≤ stop ∧ ↑stop ≤ dest.to_slice.length
+length : sorry = src.to_slice.len
+⊢ (do
+      let (s, back) ←
+        do
+          let __x ←
+            core.slice.index.Slice.index_mut
+                { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+                  get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+                  get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+                  get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+                  get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+                  index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+                  index_mut := fun r s =>
+                    if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+                      ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+                    else fail Error.panic }
+                ⟨↑dest, ⋯⟩ { start := start, «end» := stop }
+          ok (__x.1, fun o => if h : (↑(__x.2 o)).length = ↑N then ⟨↑(__x.2 o), ⋯⟩ else dest)
+      let copied ← if s.len = Slice.len ⟨↑src, ⋯⟩ then ok ⟨↑src, ⋯⟩ else fail Error.panic
+      ok (back copied)) =
+    ok (put dest start src)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:25:13: warning: This simp argument is unused:
+  inside
+
+Hint: Omit it from the simp argument list.
+  simp only [in̵s̵i̵d̵e̵,̵i̵f_true, ̲bind_tc_ok, ̲lift, ̲Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:25:20: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [inside,i̵f̵_̵t̵r̵u̵e̵,̵ ̲bind_tc_ok, ̲lift, ̲Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:25:44: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵s̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲i̲n̲s̲i̲d̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:32:57: warning: This simp argument is unused:
+  List.slice
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.len_val, ̲Slice.length, ̲Array.to_slice, ̲List.s̵li̵c̵e,̵L̵i̵s̵t̵.̵l̵e̵ngth_take, ̲List.length_drop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:32:68: warning: This simp argument is unused:
+  List.length_take
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵_̵v̵a̵l̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵d̵r̵o̵p̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲_̲v̲a̲l̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲d̲r̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:32:85: warning: This simp argument is unused:
+  List.length_drop
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵_̵v̵a̵l̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵d̵r̵o̵p̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲_̲v̲a̲l̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:36:46: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲d̲e̲s̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:36:53: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲d̲e̲s̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:36:61: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲d̲e̲s̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:37:36: warning: This simp argument is unused:
+  List.length_setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲d̲e̲s̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:37:58: warning: This simp argument is unused:
+  dest.property
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲i̲f̲_̲p̲o̲s̲ rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterWrite.lean:37:72: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵l̵e̵n̵g̵t̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵d̵e̵s̵t̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲d̲e̲s̲t̲.̲p̲r̲o̲p̲e̲r̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwOuterWrite.write_exact' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

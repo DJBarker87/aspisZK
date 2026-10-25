@@ -395,3 +395,30 @@ Lean,0/20Kani. No max-depth/heartbeat change, Rust, extraction, native,
 three-ELF, performance or manifest replay. The next native consuming obligation
 is still the effect/extraction association of the actual fill and factory;
 it is not discharged by specializing this source equation.
+
+## Concrete context operations and import obstruction (11389–11398)
+
+`ProverRwOuterContext` reuses the retained actual-body context constructor and
+encoder. `outer-context.py --check` pins the emitted encode declaration and
+existing Rust version constant1. `encode_source` proves exact equality to the
+retained native-body source with only that constant leaf installed; all other
+LocalLeaves fields are unused. The full caller's op115/op116 can be replaced
+by these concrete source operations. `ProverRwOuterEncode.encode_total` proves
+all four slices/copies succeed for every context; `ProverRwOuterBytes.value_bytes`
+proves exact concatenation of version,digest,nonce and both little-endian
+fingerprints. No successful-encoding premise or native OS/ROM assumption.
+
+Ten compiles:4passes,6failures (four local elaborations, two import collisions).
+11396 passes2.07s/4,092,432KiB/swap0; standard axioms. All nine accepted
+reports are standard. Evidence in `evidence/prover-rw-20261023/outer-context`.
+The model-byte and actual-retry installation attempts11397/11398 both fail
+because `AspisR1ProverCommit.Types` and retained `ProverRwRngNativeBodyTypes`
+introduce the same global `instDiscriminantStateOnlyMaskBuildErrorIsize`.
+Proposed modules are archived text, not accepted Lean. Neither outer contract
+is closed. New budget31/100 Lean,0/20Kani; no resource failures or cap changes.
+
+The next repair is a trivial qualified instance-name fix, permitted explicitly
+by local-lean rule1, preserving all enum codes and source operations. Its
+needed dependent closure must be rebuilt before composing these operations
+with the model or installing them in the actual query/retry caller. No native
+code, source-to-Lean trust boundary, artifact or security contract changed.
