@@ -1,16 +1,16 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Lead checkpoint — 2026-10-25
+## Lead checkpoint — 2026-10-25, updated after actual capture review
 
-Both deployed targets remain **not yet established**. The accepted original SDK byte flow/source-selected S1 preparation, ranges and joint trace remain conditional at their checked model boundary. Coherent enclosing import/re-pin, ALL14/event/mark/native effects, release artifacts and final replay remain open.
+Both deployed targets remain **not yet established**. One accepted wrapper execution supplies the original public account bytes, decoded-public reuse, checkpoint write and public-account frame; selected S1 carries those bytes into preparation, ranges and joint trace. SDK/std/runtime/allocator/extraction boundaries remain explicit. The enclosing import/re-pin and caller join are still open.
 
-Port30JOIN concrete accepted_original_sdk_s2_s1 candidate reviewed/merged66dec5b4d8; independent20policycases+expectedreject pass. It preserves actual D189witnesses and rebuilds conditional facts for selectedsemantic. UNCOMPILED; allkernel/replay gates disabled. RawPort29 data merged d344572f1b,36presentation gaps/13definitionconflicts/45representation differences retained. NoexactName/kernelclosureyet.
+Port30JOIN accepted_original_sdk_s2_s1 is reviewed/merged66dec5b4d8 but UNCOMPILED. Port31 attempt353 proves a new namespaced Bool case lemma with no axioms; it is not historical helper identity. Raw diagnostic354 failed export syntax; partial observations and binaries remain unaccepted/quarantined. Corrected worker47730 has ONE data-only attempt355, adding the omitted original87 Root fragments, grouped Core bodies and full43 duplicate guards. Actual354/368 before launch;14 remain=1unassigned+1pending355+5reserved kernel consumers+7carry. All5 consumer slots untouched.13 definition conflicts/45 representation differences retained; no exact-Name/kernel closure yet.
 
-Lead recovered regular closed S8Types/Funs with matching904historicalmainpins, explicitreadonlyrelease17219a7477…; bodyinventorypending. Port31DATA38921 allocatedMAX2localattempts fromunassigned: knownactualbefore352/368,2unassigned+2pending+5reservedkernelconsumer+7carry=16. Atmost354afterboth; all5reservedconsumersuntouched. TinyBoolcompatibilityproofwillbeNEWre-pin, nothistoricalbodyidentity.
+SbfSeal disabled fd-anchored setup/bounded output source independently reviewed and merged9f48e742a9;32 tests/895 checks pass. SbfLinux44932 prepares concrete Linux backend source with ZERO actual host/root/ns/probe/compiler authority. Full immutable runtime/trace/cache/native/artifact gates remain.
 
-SbfResolve reviewed/independent8362audit+34guard+9fixturecasespass, merged50ab99cfbf/cleaned. Exactmetadata357graph/344registry,428privatepackagessuperset, no actualbuild. Immutableexecution/fullruntime/trace/cache/artifactgatesopen. SbfSeal37015source-onlyhardensdisabledsetup; ZEROhost/root/ns/compilerauthority.
+Resourcev3 capture independently replayed29595 events and merged7f6719926f. Prospective passed; actual GO denied552960B reserve shortfall, controls passed, marker explicitly absent. All six metadata epochs remain charged/failed; this is not supported evidence of Mac port hardening. ResourceMeta1G48717 SOURCE ONLY prepares tighter768M/1G metadata scope without weakening policy or authorizing larger consumers. No fresh host epoch yet. Final Kani59/60 remains reserved.
 
-Resourcev2failedlocalMac/Linuxinfinityrepresentationcheckbeforestage/prospective/GO. Minimalportabilityfixabcdreviewed/independent6groupspass, mergedb8fcc2dad5/cleaned; wholemaps/env/controls/policy/guardunchanged. Fivepriorfailedmetadataepochsretained. Resourcev340856ONEfreshmetadataepoch6 only, no native/solver/compiler, onlyif4GiBprospectivepasses3G/4G/Swap0/Tasks64GO+marker. PublicAPIsdisabled; privateKani59/60finalreserved. E1/world/L1/L2/L3/client/equivalence/threeELF/timing/release gatesremainopen.
+Private Lean240/260,Rust2/3charges(actual ordinary builds1),extraction54/56,backend15/16,ELF0/3 unchanged. Native E1/world/errors/drop/controller/Claims/Terminal/L1/L2/L3/client/equivalence/timing/artifact/replay obligations remain. Frozen security contract and all three ELF pins unchanged.
 
 ## Current coordinator checkpoint — 2026-10-24 22:44 BST
 
