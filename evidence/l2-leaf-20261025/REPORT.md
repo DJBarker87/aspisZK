@@ -121,11 +121,51 @@ memcmp unwind bound and was replaced with explicit scalar equality. No
 unchanged failed job was rerun with more memory or a longer timeout.
 
 Every Kani job ran in its own systemd scope with MemoryHigh=6G,
-MemoryMax=8G, MemorySwapMax=0, TasksMax=64. No more than three of these jobs
-were concurrently populated (24 GiB total caps); process inspection showed no
+MemoryMax=8G, MemorySwapMax=0, TasksMax=64. No more than four of these jobs
+were concurrently populated (32 GiB total caps); process inspection showed no
 other Lean/Kani/Rust build process. This work is symbolic bounded checking,
 not dense finite-field elimination, a debug Cargo build or a release arithmetic
 gate. There is no Cargo target directory. Timed-out GNU time wrappers report
 only 2112 KiB for the timeout process; those values are NOT asserted to be
 aggregate child peaks. Their true peak is unavailable; the 8 GiB cgroup cap
 and zero-swap policy remained enforced. Failed checks are not release evidence.
+
+## Final per-kernel status and handoff
+
+**Full L2 simulatable trace: OPEN for every kernel below.** “Proved” in this
+report applies only to the exact model lemmas or small Kani scopes above.
+
+| Kernel | Proved local result | Remaining before kernel closure |
+|---|---|---|
+| SeedExpander/Profile21 m31 | reference trace; cap-16 raw-word determinism check | actual hash/refill/cursor, qm31 failure prefixes, whole mask request schedule and joint raw-word law |
+| two-seed nonzero | logical 32-byte comparison erasure/determinism; counterexample to verdict⇒trace inference | full 16-draw source/OS-status join and seed-namespace coupling preserving byte-position trace jointly with publication |
+| sampler division/gamma/circle | reference division/gamma observations; one division-limb check | all pass/carry/circle/inversion/field traces, arithmetic refinement and raw-FS-block coupling |
+| sparse_eq_weights | partial row/index reference; one coordinate Boolean/trace check | native full suffix, multiplication/equality internals, caller point derivation and collection costs |
+| QueryScan duplicates | one-block reference and single comparison check | full 22-entry/64-draw relation, eight hashed pairs/extra-block state, exhaustion and raw-block coupling |
+| multiproof sharing/sort/dedup | sibling reference, one binary-group check with different payloads | native full 16-query/18-level relation, node_count, actual sorting/dedup/Vec costs and failure paths |
+| P_R1 elimination/pivots | pivot-decision microcheck; parameterized trace interpreter | complete emit/convert/check trace semantics, challenge-to-matrix refinement, transport/TLS initial state, collections and panic paths |
+
+No direct witness-value control was found inside the listed leaf source
+bodies. This is a source review result, not a whole-program noninterference
+proof. Witness-bearing callers, invocation prefixes and F1/F2/F4 remain outside
+this local result; no shipped code was fixed. No timings are interpreted as a
+privacy proof and no L3 result is claimed.
+
+The central missing deliverable is a concrete joint coupling of the retained
+public/history view **and full raw trace inputs**, outside the already charged
+bad events. The current privacy model's published-view/quotient completion
+statements do not furnish that hypothesis. This task establishes no identical
+joint trace law and no epsilon bound for deployed execution.
+
+Next: lead supplies the configured env-J launcher, then compile an explicit
+privacy-model bridge with the stronger joint-input agreement premise clearly
+visible, and discharge that premise (not simply rename it a coupling record).
+Independently, replace the partial trace references with complete source
+semantics and compose the small checks with loop/source refinements. Do not
+rerun the recorded larger failures unchanged.
+
+Budget charged: 5 local Lean compiler invocations / 100; 0 env-J compiler
+invocations (launcher rejected J11400); 14 Kani attempts / 60, 7 passing.
+No full manifest replay was run because the source/refinement/coupling cone
+is incomplete and the assigned host range is unavailable. No pushes, merges,
+crate edits, binaries or key cleanup. Stage commits are plain and local.
