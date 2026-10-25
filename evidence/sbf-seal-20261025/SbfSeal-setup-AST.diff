@@ -370,7 +370,7 @@
          Expr(
            value=Call(
              func=Name(id='require', ctx=Load()),
-@@ -337,1120 +113,1224 @@
+@@ -337,1120 +113,1231 @@
                  values=[
                    Compare(
                      left=Call(
@@ -589,8 +589,15 @@
 +          ctx=Load()))),
 +    Assign(
 +      targets=[
-+        Name(id='ROOT', ctx=Store())],
++        Name(id='OWN', ctx=Store())],
 +      value=Constant(value='/var/lib/SbfSeal-20261025-v1')),
++    Assign(
++      targets=[
++        Name(id='ROOT', ctx=Store())],
++      value=BinOp(
++        left=Name(id='OWN', ctx=Load()),
++        op=Add(),
++        right=Constant(value='/rootfs'))),
 +    Assign(
 +      targets=[
 +        Name(id='UID', ctx=Store()),
@@ -2684,7 +2691,7 @@
                  keywords=[])),
              Expr(
                value=Call(
-@@ -1461,76 +1341,97 @@
+@@ -1461,76 +1348,97 @@
                      values=[
                        Call(
                          func=Attribute(
@@ -2842,7 +2849,7 @@
                body=[
                  Expr(
                    value=Call(
-@@ -1538,408 +1439,250 @@
+@@ -1538,408 +1446,250 @@
                      args=[
                        Compare(
                          left=Call(
@@ -3479,7 +3486,7 @@
                  Assign(
                    targets=[
                      Name(id='s', ctx=Store())],
-@@ -1949,7 +1692,655 @@
+@@ -1949,7 +1699,655 @@
                        attr='fstat',
                        ctx=Load()),
                      args=[
@@ -4136,7 +4143,7 @@
                      keywords=[])),
                  Expr(
                    value=Call(
-@@ -1978,145 +2369,308 @@
+@@ -1978,145 +2376,308 @@
                                Eq()],
                              comparators=[
                                Constant(value=1)])]),
@@ -4559,7 +4566,7 @@
              Expr(
                value=Call(
                  func=Name(id='require', ctx=Load()),
-@@ -2124,21 +2678,38 @@
+@@ -2124,21 +2685,38 @@
                    BoolOp(
                      op=And(),
                      values=[
@@ -4606,7 +4613,7 @@
                        Compare(
                          left=Call(
                            func=Attribute(
-@@ -2147,1165 +2718,616 @@
+@@ -2147,1165 +2725,616 @@
                              ctx=Load()),
                            args=[
                              Attribute(
@@ -6297,7 +6304,7 @@
                        body=[
                          Expr(
                            value=Call(
-@@ -3314,344 +3336,268 @@
+@@ -3314,344 +3343,268 @@
                                attr='close',
                                ctx=Load()),
                              args=[
@@ -6890,7 +6897,7 @@
            body=[
              Expr(
                value=Call(
-@@ -3662,269 +3608,262 @@
+@@ -3662,269 +3615,262 @@
                      values=[
                        Compare(
                          left=Call(
@@ -7398,7 +7405,7 @@
        decorator_list=[],
        type_params=[]),
      If(
-@@ -3939,7 +3878,7 @@
+@@ -3939,7 +3885,7 @@
            exc=Call(
              func=Name(id='SystemExit', ctx=Load()),
              args=[

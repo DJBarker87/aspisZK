@@ -136,6 +136,9 @@ Commands all `python3 -B tools/sbf-seal-20261025/SbfSeal_receipt.py <label>`:
 | SbfSeal-v2-review | 0 | refreshed source/argv packet | .503414833 | 35373056 | 0 | df6ac01292 |
 | SbfSeal-v3-tests | 0 | 31 | .099721416 | 30769152 | 0 | df6ac01292 |
 | SbfSeal-final-audit | 0 | 895 | .285036791 | 28180480 | 0 | df6ac01292 |
+| SbfSeal-v4-root-tests | 0 | 1 focused mocked layout/root check | .057295459 | 32096256 | 0 | 8f60a287e9 |
+| SbfSeal-v3-review | 0 | packet root/source refresh | .476937625 | 33914880 | 0 | 8f60a287e9 |
+| SbfSeal-v2-final-audit | 0 | 895 | .345511875 | 30162944 | 0 | 8f60a287e9 |
 
 Per-label receipts retain full exact argv, revision, tool/dependency/runtime
 hashes, log hash, exit, wall, RSS, swaps and axioms=N/A. RSS is getrusage peak
@@ -145,6 +148,13 @@ are observed local runtime inputs, NOT complete loader/bytecode/runtime closure.
 All local work <512MiB; no Linux scope/limit enforcement claim. No derived JSON
 >5MB committed. Private large manifest remains hash+size only. Failures, first
 sources in8a9c33dd39 and superseded bounded-FD approach remain in Git/evidence.
+
+Final cross-file consistency review corrected only the setup constants from
+ROOT=owned-parent to OWN=owned-parent, ROOT=OWN+'/rootfs' (8f60a287e9). A new
+focused mocked-layout check verifies actual planned creation sequence and root
+mapping. Prior31-method ordinary/synthetic suite is reused for unchanged path/
+output/FD logic; no unchanged full rerun. Packet and source audit refreshed for
+this exact changed source. Full source/AST diff and history retain both variants.
 
 Tests establish actual ordinary nofollow/exclusive/rename-replacement/hardlink/
 source mutation/destination sealing/public-output bounds behavior. Metadata,
