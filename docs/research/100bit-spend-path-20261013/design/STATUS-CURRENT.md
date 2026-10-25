@@ -1,65 +1,78 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Concrete Claims parent connection — 2026-10-25
+## Concrete Claims parent and SDK connection — 2026-10-25
 
-The bounded implementation step reuses the successful finite Claims extraction
-at worker revision `6eec87d293` (run8), rather than retrying native union or
-iterator translation. `ClaimsUnrolledParentSource` retains the complete emitted
-function body with explicit primitive operation parameters and nominal carrier
-relocation. No external axiom templates are imported. The pure `mapError` and
-`boxArray` definitions are **value models**; their native std/ownership/error/
-cleanup/abort/effect correspondence remains unproved.
+The bounded step reuses the worker's successful finite Claims extraction at
+`6eec87d293` (run8), rather than retrying native union/iterator translation.
+`ClaimsUnrolledParentSource` retains the complete emitted body, including
+setter closures and rejected branches, with explicit primitive operations
+and nominal carrier relocation. No external axiom templates are imported.
+Pure `mapError`/`boxArray` are **value models**, whose native std/ownership/
+error/cleanup/abort/effect correspondence remains open.
 
-**Checked:** `AspisR1ClaimsUnrolledParent.claims_value` proves all-outcome
-complete-parent **value** refinement, including delayed setter closures and
-decoder error/fail/div branches. The returned rows come from the same record
-at offsets 0/29/58. No allocator zero-content/frame, canonicality, decoder
-success or independently selected returned rows are premises. This extends
-the older owned-step result to the emitted finite parent; it does not prove
-native initializedness or ordered oracle effects.
+**Checked source/model connection:**
+`AspisR1ClaimsUnrolledParent.claims_value` normalizes all outcomes of the
+complete emitted finite parent to three ordered decodes on the same record,
+at offsets 0/29/58. No initial zero-content/frame, canonicality, decoder-success
+or chosen-row premise is needed. `AspisR1.ClaimsUnrolledFinish.getter_exact`
+and `decode_exact` bind its carriers to the actual selected S1 getter and
+full indexed decoder for every prefix/record/offset/length/outcome, preserving
+all four raw U32 words. `finish_claims` obtains Claims from the SAME accepted
+complete S1 finish, without a separately assumed successful Claims call.
 
-`AspisR1.ClaimsUnrolledFinish.getter_exact` and `decode_exact` connect the
-nominal carriers to the actual selected S1 getter and full indexed decoder,
-for every prefix/record/offset/array length and all value/error/fail/div
-outcomes, preserving all four raw U32 words without a canonicality restriction.
-`ClaimsUnrolledFinish.install` fixes only the Claims callback; other finish
-fields remain explicit. `AspisR1.ClaimsUnrolledFinish.finish_claims` derives
-the normalized Claims return from the SAME accepted complete
-`FinishModel.finish`, with no separate accepted Claims run premise.
+**Checked downstream consumer:**
+`AspisR1.ClaimsUnrolledSdk.semantic_claims` obtains parser/transcript/begin/
+finish and normalized Claims from that SAME selected semantic call.
+`candidate_sdk_selected_semantic_trace` installs this concrete candidate
+Claims value body in the original accepted SDK/S1 theorem. It retains all
+original public/checkpoint/preparation/challenge/claim/rank/query conclusions
+and adds the parsed prefix and normalized Claims return of that same semantic
+result. Its existing native extraction boundary is still explicit and **not
+instantiated for the frozen source or candidate**. This is a conditional
+source/model integration result, not native Claims or security closure.
 
-The final changed chain was checked against the existing S1 dependency
-selection with `lake env lean -j1 -M4400 -DElab.async=false`:
-parent refinement exit0, 2.0111s, peak2,262,417,408B; actual finish consumer
-exit0, 7.3791s, peak3,294,117,888B; getter/decoder adapters and consumer axioms
-exit0, 2.2323s, peak3,288,498,176B. All swap0; reported theorem axioms are
-only propext/Classical.choice/Quot.sound. Source snapshots/hashes, commands,
-reused dependency selection, prior failures and resource receipts are in
+The namespace-only instance fix failed. The existing closed-isize
+`ImportUnionNamedDiscriminant` adapter was then reused from its already checked
+source/cache; it invokes the same pinned reader generator and changes only
+the anonymous instance name. No new transport framework or trust item was
+introduced. The final changed chain passed, in source dependency order, with
+`lake env lean -j1 -M4400 -DElab.async=false`. Actual finish: exit0,7.6969s,
+peak3,283,910,656B; semantic consumer: exit0,4.9652s,peak3,862,790,144B;
+SDK consumer: exit0,2.7491s,peak3,886,923,776B. All swap0; theorem audits use
+only propext/Classical.choice/Quot.sound. Exact sources, commands, failures,
+resource measurements and reused source/dependency pins are retained in
 `evidence/claims-unrolled-parent-20261025/`. This is focused cached checking,
 not a coherent frozen release rebuild.
 
-**Failed enclosing check:** the original accepted SDK/S1 theorem specialized
-to this installed candidate does not import: generated global declaration
-`instDiscriminantErrorIsize` collides with `AspisR1FinishRelationCurrent.Types`.
-Reusing the worker's explicit enum namespace recipe did not remove it.
-Final attempt exit1, 3.8260s, peak2,837,725,184B, swap0; no SDK theorem was
-checked. The exact attempted source is retained as
-`ClaimsUnrolledSdk.unchecked.lean.txt`, outside the formal source tree.
-There is no higher-cap retry, new declaration-transport layer or claimed
-SDK/S2 closure. The next bounded repair is to qualify the generated instance
-names while preserving their exact carriers and constructor tags, then check
-this exact enclosing consumer. No operator approval is needed for that source
-repair; no guard may be bypassed to perform it.
+**Direct same-witness D189 composition did not compile.** The attempted
+`accepted_pair_claims` reuses `S2W_D189Consolidation.accepted_run` and retains
+its complete fourteen-field caller conclusion; it feeds that theorem's exact
+f,s to the checked SDK consumer, with no new SourceCuts premise. After the
+missing full D189 import was added, checking failed because
+`MultiproofConeCanonical.bytesOf` is declared by both the original module
+and `S6SdkDependencyFactorV1`: exit1,16.2477s,peak5,156,159,488B,swap0.
+The exact failed source is `ClaimsUnrolledAccepted.unchecked.lean.txt`, outside
+the formal tree. No theorem, source-cut discharge or D189 closure is claimed.
+No cap increase, second dependency framework, compatibility axiom or full
+replay is selected. The minimum next deliverable is a coherent selected
+D189/S6 closure with one declaration owner, then this exact consumer check.
 
-Remaining native obligations include actual reserve/boxing operations and
-explicit std value-model correspondence, initializedness, cleanup/abort,
-ordered effects, frozen-to-safe/unrolled equivalence, CU/stack and affected
-artifact checks. The two operational placeholders are not two discharged
-native proofs. Candidate adoption still requires those checks. Claims/Terminal
-cryptographic interfaces, same-run `CleanAcceptedModel`/no-hit, probability-law
-transport, and real-prover privacy remain open. **No top-level security premise
-was eliminated.** No shipped Rust source, security contract, authority or key
-changed. The candidate is unadopted; implementation-linked soundness and
-real-prover privacy are not established.
+New worker evidence at `1b94856af9` was inspected, not duplicated: the original
+raw-store loop's native arbitrary-cell initializedness and byte/range model
+are checked. They do NOT cover Box projection/ownership transfer, actual
+fallible allocation, decoder interleaving/errors or SBF association. Route A
+therefore has useful native leaves but still lacks a supported complete Box/
+decoder composition. Route B now has the finite parent and conditional SDK
+value connection; it still requires frozen/safe/unrolled equivalence,
+allocation-error and cleanup/abort refinement, native std/effects, CU/stack
+and affected artifact checks before any explicit adoption. The safe candidate
+remains **unadopted**; neither route is a complete Claims proof.
+
+Other finish children/Terminal, same-run `CleanAcceptedModel`/no-hit, ordered
+oracle effects/probability-law transport, and real-prover privacy remain open.
+**No top-level security premise was eliminated.** No shipped Rust source,
+security contract, authority or key changed. Implementation-linked soundness
+and real-prover privacy are **not established**.
 
 ## Programme reset — 2026-10-25
 
@@ -84,14 +97,14 @@ and the current SDK/S1 worker statements. In particular, D189's actual `f,s`
 witnesses must feed the selected semantic cut, not an independently selected
 tuple. Its conditional child boundary is reused; SDK internals and outer S2
 are not restarted. The worker branch examined is
-`codex/s126-caller-20261021` at `d4ea499fdb`; the active transport branch
-`codex/cx-port36-transport-20261025` supplies no checked integration theorem.
+`codex/s126-caller-20261021` through `1b94856af9`; the active transport branch
+`codex/cx-port36-transport-20261025` at `2642b6ba35` still supplies no checked integration theorem.
 
 | Kind | Exact boundary or open obligation | Concrete consumer | Next check that can close it |
 |---|---|---|---|
 | Approved external/platform, only at the existing scope | P1 ideal hash; `S2TrustedSdkBorrow`, `S2W_TrustedStd.TrustedStd`, D189 entry interpretation, P2/P2-prime/P3/P4 runtime premises | `S2W_D189Consolidation.accepted_run`, checkpoint authentication | Retain their complete statements; instantiate source refinements separately. Extraction/native/artifact correspondence is not an external cryptographic assumption. |
-| Aspis implementation | `S1FinishChildren.install`: Claims and Terminal still arbitrary complete functions; other finish source/model operations and round children have checked implementations, with native std/extraction/allocator/abort correspondence still open | `S1SdkSelectedSemanticTrace.original_sdk_selected_semantic_trace`; then the selected D189 `SourceCuts` | Check `ConcreteSdkFinishTrace.original_sdk_selected_semantic_trace` with those exact source/model operations in the original accepted SDK call; subsequently supply complete Claims/Terminal source refinements. |
-| Integration | D189 `accepted_run` witnesses, selected semantic cut, S1 prepared/challenge/claim facts, checkpoint reader/writer and query arithmetic must describe one accepted execution | `S2W_InputSchedule.input_schedule`, `S2CallerFacts`, `Port7CLEAN_Accepted.terminal_from_calls` | Kernel-check the enclosing same-cut consumer against one coherent dependency selection. Port30's source candidate and Port32's failed replay are not such evidence. |
+| Aspis implementation | `ClaimsUnrolledFinish.install` now fixes Claims to the complete emitted finite value body with actual selected getter/decoder; Terminal and native std/extraction/allocator/abort/effect and frozen-source correspondence remain open | Checked `ClaimsUnrolledSdk.candidate_sdk_selected_semantic_trace`; then actual D189 f,s | Reuse the checked original raw-loop leaf at `1b94856af9` for the remaining Box/decoder/error composition, or qualify the safe candidate through the explicit adoption gates. Do not count the conditional SDK value instance as native closure. |
+| Integration | D189 `accepted_run` witnesses must feed the checked candidate SDK/S1 consumer; direct `ClaimsUnrolledAccepted.accepted_pair_claims` attempt is blocked by duplicate `MultiproofConeCanonical.bytesOf` ownership with `S6SdkDependencyFactorV1` | Actual same-run `S2CallerFacts`, then `Port7CLEAN_Accepted.terminal_from_calls` | Supply one coherent D189/S6 selected dependency closure with a single declaration owner, then check the retained exact same-witness consumer; no outer S2 reproving or compatibility assumption. |
 | Aspis implementation/cryptography | Actual reached terminal Checks plus classifier no-hit: `CleanAcceptedModel`; actual prefix containment; ordered child effects | `Port6AUTH_Probability.failure_bound` / `Port6AUTH_Headline.final_soundness` | Feed the same execution's preparation, both authenticated batches, checkpoint and arithmetic into Checks/no-hit and prefix replay. Acceptance equality alone cannot discharge this. |
 | Aspis implementation | `Port17RELEASE_Prepare.OtherBudgets` for ids 3,4,6,9,10,11,12,17,19; native source/effect instances | `Port17RELEASE_Driver.rust`, `Port17RELEASE_Accounting.budget/log_length`; ultimately the source collision bound | Reuse checked op7 <=115 and driver bounds <=1161+R. Prove residual operations' actual ordered all-outcome effects/budgets; retain rejected prefixes and repeats. No no-read inference from `Result` or function arguments. |
 | Aspis privacy | Full real selected prover refinement, E1/sampler law, joint adaptive L1/L2 transcript/retry/error/cleanup transport; L3 at its named scope | `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` | Complete actual real-run refinement to mathematical simE (D185). Fixed-query rank and component fixtures are insufficient; no simulator implementation campaign is required here. |
@@ -115,7 +128,8 @@ conservative residual budget must be propagated through the collision,
 extractor and safe-range theorems before adoption; a source driver bound of
 1161+R is not a proof of the existing 1161 premise.
 
-The principal SDK/S1 finish integration check is **blocked**, not proved.
+The earlier **six-operation** SDK/S1 finish integration check is **blocked**,
+not proved; it is separate from the now checked Claims-only SDK instance above.
 The first compile omitted `S2W_SnapshotFacts`; the single cache-path repair
 freshly verified the retained SDK cache's 25 module/source pins, then aborted
 at Lean's unchanged memory limit (exit134, 54.2464s, peak5,046,943,744B,
