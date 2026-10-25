@@ -1,0 +1,95 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1SdkMaskInputRangesV1.lean:99:9: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  ok (core.result.Result.Ok out) =
+    match
+      (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B).op20
+        transport.Variant.S2 with
+    | ok v =>
+      (fun r3 => do
+          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              verifier.mark none verifier.Phase.Prepare
+              let i ←
+                compact.OFF_FOLDED_ROOT
+                    (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B)
+              let i1 ←
+                compact.OFF_ROUND1
+                    (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B)
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) f.proof
+                    { start := i, «end» := i1 }
+              let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+              let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+              let r5 ←
+                (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B).op6
+                    (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues
+                      AspisS1ExtractedRoundChildren.children B)
+                    f.proof (currentPrepared prepared) folded_root 0#usize ()
+              let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf4 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  verifier.mark none (verifier.Phase.Merkle 0#usize)
+                  let r6 ←
+                    (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B).op19
+                        (currentPrepared prepared).queries 0#usize f.split
+                  let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                  match cf5 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      have s1 := val1.weights.deref;
+                      do
+                      let r7 ←
+                        (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children
+                                B).op18
+                            s1
+                      let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                      match cf6 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          let r8 ←
+                            (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children
+                                    B).op7
+                                f.proof (currentPrepared prepared) val1 (mapArray currentE scratch) none val2 val3
+                                f.split
+                          let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                          match cf7 with
+                            | core.ops.control_flow.ControlFlow.Continue val4 =>
+                              let (a, pending) := val4
+                              do
+                              let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                              let s3 ←
+                                (NativeBuffers.install (withValues ops) nativeValues
+                                        AspisS1ExtractedRoundChildren.children B).op17
+                                    pending s2
+                              have v : alloc.vec.Vec aspis_core.field.QM31 := deref_mut_back s3
+                              let bytes ←
+                                (NativeBuffers.install (withValues ops) nativeValues
+                                        AspisS1ExtractedRoundChildren.children B).op16
+                                    (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues
+                                      AspisS1ExtractedRoundChildren.children B)
+                                    (currentPrepared prepared)
+                                    { weights := v, rhs := a.rhs, power := a.power, next := a.next } f.proof f.pub ()
+                              verifier.mark none verifier.Phase.CheckpointWrite
+                              ok (core.result.Result.Ok bytes)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual)
+        v
+    | fail v => fail v
+    | div => div
+at case `Eq.refl`
+'AspisS1SdkMaskInputRanges.original_sdk_selected_mask_input_ranges' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
