@@ -22,3 +22,17 @@ Limits: at most 80 Lean attempts including dependency builds, 40 Kani;
 -M7000, 6G high/8G max/swap0/tasks64, no package replay, no unchanged timeout
 or memory-kill retry. Existing S2W launchers and coherent SInt2 objects only.
 No source/ELF/key changes are planned. Only Tx1Q_ new modules are allowed.
+
+Stage 2 checked: reversible CurrentCaller/Stage2 carrier maps; exact installed
+query/flush/writer slots and restored other fields; source initial/pending/geometry
+choices; Q1 total query installation compatibility; suffix inversion; witness
+construction from ONE accepted source call and from Op4P's SAME SourceCuts.
+No equality of arbitrary dictionaries is assumed. Source/P6 adoption boundaries
+are retained; in particular the writer is still explicitly the selector reference.
+
+Host reuse: coherent SInt2 and Op4P paths precede the unchanged Q1/Port4 cached
+objects in LEAN_PATH. Direct selected objects are hashed in every receipt. This
+successful combined import is a focused cached check, not a coherent release
+rebuild. Rebuilding 84 missing Q1 dependency modules from scratch would exceed
+this task's 80-attempt limit; no such rebuild was launched. No cache object or
+existing source was overwritten. The inherited S2W launchers are unchanged.
