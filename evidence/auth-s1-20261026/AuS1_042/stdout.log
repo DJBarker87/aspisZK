@@ -1,0 +1,30 @@
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : U8 → U8 :=
+fun x => x
+@[reducible] def Aeneas.Std.liftFun1.{u_1, u_2} : {α : Sort u_1} → {β : Type u_2} → (α → β) → α → Result β :=
+fun {α} {β} f x => ok (f x)
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.result.Result.unwrap : {T E : Type} → core.fmt.Debug E → core.result.Result T E → Result T :=
+fun {T E} x e =>
+  match e with
+  | core.result.Result.Ok x => ok x
+  | core.result.Result.Err a => fail Error.panic
+@[reducible] def Aeneas.Std.core.fmt.DebugTryFromSliceError : core.fmt.Debug core.array.TryFromSliceError :=
+{ fmt := core.array.DebugTryFromSliceError.fmt }
+@[irreducible] def AspisR1SelectedWideViewV1.compact.OFF_FOLDED_ROOT : Result Usize :=
+do
+  let i ← AspisR1SelectedWideViewV1.compact.OFF_ROUND0
+  i + 224#usize
+@[irreducible] def AspisR1SelectedWideViewV1.compact.OFF_ROUND1 : Result Usize :=
+do
+  let i ← AspisR1SelectedWideViewV1.compact.OFF_FOLDED_ROOT
+  i + 32#usize
+@[irreducible] def AspisR1SelectedWideViewV1.compact.OFF_FINAL : Result Usize :=
+do
+  let i ← AspisR1SelectedWideViewV1.compact.OFF_ROUND1
+  i + 224#usize

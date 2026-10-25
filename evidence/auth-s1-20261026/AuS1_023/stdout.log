@@ -1,0 +1,16 @@
+AuS1_Absorb.lean:21:87: error: unexpected identifier; expected ')', ',' or ':'
+AuS1_Absorb.lean:35:6: error(lean.unknownIdentifier): Unknown identifier `code`
+AuS1_Absorb.lean:33:54: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+self after : transcript.Transcript H
+row tag : U8
+payload : Slice U8
+len : U32
+tag_eq : 160#u8 + row = ok tag
+len_eq : UScalar.cast UScalarTy.U32 payload.len = len
+success : (run (PreparedHashEffects.absorb effects D self row payload)).2 = ok after
+⊢ Read (observe (run (PreparedHashEffects.absorb effects D self row payload)).1)
+    (flatten (parts self.state tag len payload))
+AuS1_Absorb.lean:45:14: error(lean.unknownIdentifier): Unknown constant `code`
+'AspisR1.AuS1_Absorb.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

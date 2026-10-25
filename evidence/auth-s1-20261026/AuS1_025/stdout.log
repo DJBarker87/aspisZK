@@ -1,0 +1,143 @@
+AuS1_Observe.lean:31:13: error: unsolved goals
+case digest.fail
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+A H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    Uniform hashv (next a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.readLog (SdkC_Source.run hashv (SdkD_PrepareLower.lower (next a)) before).2 =
+          SdkC_Source.readLog before ++ observe (run (next a)).1
+association : Uniform hashv (Code.digest D hash parts next)
+before : SdkC_Source.Log
+e : Error
+reply : hashv parts = fail e
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest =>
+          some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+        | x => none)
+      (before ++ [{ parts := parts, returned := fail e }]) =
+    List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest =>
+          some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+        | x => none)
+      before
+AuS1_Observe.lean:35:10: error: unsolved goals
+case digest.div
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+A H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    Uniform hashv (next a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.readLog (SdkC_Source.run hashv (SdkD_PrepareLower.lower (next a)) before).2 =
+          SdkC_Source.readLog before ++ observe (run (next a)).1
+association : Uniform hashv (Code.digest D hash parts next)
+before : SdkC_Source.Log
+reply : hashv parts = div
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest =>
+          some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+        | x => none)
+      (before ++ [{ parts := parts, returned := div }]) =
+    List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest =>
+          some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+        | x => none)
+      before
+AuS1_Observe.lean:32:81: warning: This simp argument is unused:
+  append
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1,a̵p̵p̵e̵n̵d̵,̵
+          SdkC_Source.readLog, ̲List.filterMap_cons, ̲List.filterMap_nil, ̲observe, ̲List.flatMap_cons,
+          List.flatMap_nil, ̲List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:33:28: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵r̵e̵p̵l̵y̵,̵r̵u̵n̵,̵a̵s̵s̵o̵c̵i̵a̵t̵i̵o̵n̵.̵1̵,̵a̵p̵p̵e̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲r̲u̲n̲,̲ ̲a̲s̲s̲o̲c̲i̲a̲t̲i̲o̲n̲.̲1̲,̲ ̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:33:48: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1, ̲append,
+          SdkC_Source.readLog, ̲List.filterMap_cons,L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵ ̲observe, ̲List.flatMap_cons,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵List.flatMap_nil,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:34:41: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1, ̲append,
+          SdkC_Source.readLog, ̲List.filterMap_cons, ̲List.filterMap_nil, ̲observe, ̲List.flatMap_cons,
+          List.flatMap_nil, ̲List.append_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵_̲n̲i̲l̲]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:36:81: warning: This simp argument is unused:
+  append
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1,a̵p̵p̵e̵n̵d̵,̵
+          SdkC_Source.readLog, ̲List.filterMap_cons, ̲List.filterMap_nil, ̲observe, ̲List.flatMap_cons,
+          List.flatMap_nil, ̲List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:37:28: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵r̵e̵p̵l̵y̵,̵r̵u̵n̵,̵a̵s̵s̵o̵c̵i̵a̵t̵i̵o̵n̵.̵1̵,̵a̵p̵p̵e̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲r̲u̲n̲,̲ ̲a̲s̲s̲o̲c̲i̲a̲t̲i̲o̲n̲.̲1̲,̲ ̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:37:48: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1, ̲append,
+          SdkC_Source.readLog, ̲List.filterMap_cons,L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵ ̲observe, ̲List.flatMap_cons,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵List.flatMap_nil,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Observe.lean:38:41: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲reply, ̲run, ̲association.1, ̲append,
+          SdkC_Source.readLog, ̲List.filterMap_cons, ̲List.filterMap_nil, ̲observe, ̲List.flatMap_cons,
+          List.flatMap_nil, ̲List.append_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵_̲n̲i̲l̲]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_Observe.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Observe.lower' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
