@@ -4,7 +4,7 @@ MAX_JSON=16*1024*1024
 class Reject(ValueError): pass
 
 def exact_name(x,depth=0):
-    if depth>256 or not isinstance(x,list): raise Reject('invalid Name depth/shape')
+    if depth>=256 or not isinstance(x,list): raise Reject('invalid Name depth/shape')
     if x==['anon']: return ('anon',)
     if len(x)!=3 or x[0] not in ('str','num') or not isinstance(x[2],str):
         raise Reject('invalid exact Name constructor')

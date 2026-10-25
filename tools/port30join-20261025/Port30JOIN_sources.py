@@ -7,13 +7,15 @@ groups=[(A,P+'lean-candidates/s126-caller-boundary-20261021/',[
 'S1SdkSelectedSemanticTraceV1','S6SdkSelectedSemanticCallerV1','S6SdkSelectedSemanticCutV1',
 'S6SdkSourceCutTypesV1','S6SdkOriginalObjectCallerV1','S6SdkFirstObjectEquivalenceV1',
 'S6SdkSourceCutReuseV1','S6SdkEnclosingCutsV1','S1SdkPreparedChallengeRangesV1',
-'S1SemanticFinishModelV1','S1NativePrepareBuffersV1','S6SdkDependencyFactorV1']),
+'S1SemanticFinishModelV1','S1NativePrepareBuffersV1','S6SdkDependencyFactorV1',
+'CurrentCompactCallerModelV1','AdapterRwModel','S6CurrentFirstInstallationV1','S6CurrentVerifierCarrierV1','S6CurrentCodecInstallationV1']),
 ('904745b496',P+'lean/',[
 'S2W_D189Consolidation','S2W_D189Wrappers','S2W_D189Entry','S2W_TrustedStd',
 'S2W_ExtractionBoundary','S2W_DigestExtraction','S2W_NativeConsolidation',
 'S2TrustedSdkBorrow','S2W_ExpandedChildren','S2W_ScheduledConsolidation',
 'S2W_TraceSplice','OraclePortCompactDraft','S2W_FirstOccurrence','S2W_OuterOccurrences','ImportUnionNamedDiscriminant',
 'S2W_InputSchedule','S2W_AuthenticatedInputs','S2W_ChildJoins',
+'AdapterRwRuntimeAdmission','S2Y_OwnedChildren','S2Z_Oracle',
 'S8OwnedP6/Types','S8OwnedP6/Funs'])]
 rows=[]
 for rev,base,names in groups:

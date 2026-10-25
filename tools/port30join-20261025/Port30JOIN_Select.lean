@@ -128,42 +128,61 @@ def select (session : RawSession) (choices : Array Choice) (seeds : Array Name)
   pure selected
 /-- Must run before replay, in addition to transitive expression closure.
 Reject incomplete or mismatched mutual/constructor/recursor groups. -/
-def validateGroups (selected : Std.HashMap Name ConstantInfo) : IO Unit := do
+def validateGroups (selected : Std.HashMap Name ConstantInfo) (core : Environment) : IO Unit := do
+  let find := fun n => (selected[n]?).orElse (fun _ => core.toKernelEnv.find? n)
   for (n,c) in selected.toList do
     unless c.name == n do throw (IO.userError "map key/name mismatch")
     match c with
     | .inductInfo v =>
       unless v.all.contains n do throw (IO.userError "inductive missing self")
       for m in v.all do
-        let some (.inductInfo w) := selected[m]?
+        let some (.inductInfo w) := find m
           | throw (IO.userError s!"missing mutual inductive {m}")
         unless w.all == v.all && w.levelParams == v.levelParams && w.numParams == v.numParams do
           throw (IO.userError "inconsistent inductive group header")
         for ctor in w.ctors do
-          let some (.ctorInfo x) := selected[ctor]?
+          let some (.ctorInfo x) := find ctor
             | throw (IO.userError s!"missing constructor {ctor}")
           unless x.induct == m && x.levelParams == w.levelParams && x.numParams == w.numParams do
             throw (IO.userError "constructor group mismatch")
         let recName := m.str "rec"
-        let some (.recInfo r) := selected[recName]?
+        let some (.recInfo r) := find recName
           | throw (IO.userError s!"missing recursor {recName}")
         unless r.all == v.all do throw (IO.userError "recursor group mismatch")
     | .ctorInfo v =>
-      let some (.inductInfo i) := selected[v.induct]?
+      let some (.inductInfo i) := find v.induct
         | throw (IO.userError "orphan constructor")
       unless i.ctors.contains n do throw (IO.userError "unlisted constructor")
     | .recInfo v =>
       for m in v.all do
-        let some (.inductInfo _) := selected[m]?
+        let some (.inductInfo _) := find m
           | throw (IO.userError "orphan recursor")
     | .defnInfo v =>
       for m in v.all do
-        unless selected.contains m do throw (IO.userError "incomplete definition group")
+        unless (find m).isSome do throw (IO.userError "incomplete definition group")
     | .thmInfo v =>
       for m in v.all do
-        unless selected.contains m do throw (IO.userError "incomplete theorem group")
+        unless (find m).isSome do throw (IO.userError "incomplete theorem group")
     | .opaqueInfo v =>
       for m in v.all do
-        unless selected.contains m do throw (IO.userError "incomplete opaque group")
+        unless (find m).isSome do throw (IO.userError "incomplete opaque group")
     | _ => pure ()
+/-- Reachable checked-core axioms are audited too: a missing raw sorryAx cannot
+silently become an admitted core leaf. This audit is data inspection only. -/
+def auditCoreLeaves (selected : Std.HashMap Name ConstantInfo) (core : Environment) : IO Unit := do
+  let mut todo := selected.toList.flatMap (fun (_,c) => (dependencies c).toList)
+  let mut seen : NameSet := {}
+  while !todo.isEmpty do
+    let n := todo.head!
+    todo := todo.tail!
+    if selected.contains n || seen.contains n then continue
+    seen := seen.insert n
+    let some c := core.toKernelEnv.find? n
+      | throw (IO.userError s!"missing core leaf {n}")
+    if c.isAxiom then
+      unless n == `propext || n == `Classical.choice || n == `Quot.sound do
+        throw (IO.userError s!"nonstandard reachable axiom {n}")
+    else
+      if c.isUnsafe || c.isPartial then throw (IO.userError s!"unsafe core leaf {n}")
+      todo := (dependencies c).toList ++ todo
 end Port30JOIN_Select

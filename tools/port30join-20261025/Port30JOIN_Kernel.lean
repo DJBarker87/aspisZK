@@ -44,6 +44,7 @@ def throwKernelException (ex : Kernel.Exception) : M Unit := do
 
 /-- Add a declaration, possibly throwing a `Kernel.Exception`. -/
 def addDecl (d : Declaration) : M Unit := do
+  throw (IO.userError "Port30JOIN kernel insertion disabled")
   match (← get).env.addDeclCore (Core.getMaxHeartbeats {}).toUSize d (cancelTk? := none) with
   | .ok env => modify fun s => { s with env := env }
   | .error ex => throwKernelException ex

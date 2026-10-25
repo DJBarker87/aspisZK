@@ -13,6 +13,10 @@ class PolicyTests(unittest.TestCase):
   self.assertNotEqual(exact_name(N),exact_name(['num',str_name('A'),'1']))
  def test_atomic_dot_is_distinct(self):
   self.assertNotEqual(exact_name(str_name('A.B')),exact_name(str_name('A','B')))
+ def test_depth_limit_matches_lean_fuel(self):
+  n=['anon']
+  for _ in range(256):n=['str',n,'x']
+  with self.assertRaises(Reject):exact_name(n)
  def test_roundtrip(self):
   for n in [N,['anon'],['num',N,'0'],str_name('_private','M','7','x')]:
    self.assertEqual(encode_name(exact_name(n)),n)
@@ -31,6 +35,14 @@ class PolicyTests(unittest.TestCase):
  def test_unsafe(self):self.reject(lambda d:d['choices'][0]['variants'][0].update(unsafe=True))
  def test_partial(self):self.reject(lambda d:d['choices'][0]['variants'][0].update(partial=True))
  def test_duplicate_choice(self):self.reject(lambda d:d['choices'].append(copy.deepcopy(d['choices'][0])))
+ def test_explicit_repin_remains_unchecked(self):
+  d=copy.deepcopy(BASE);d['choices'][0].update(mode='recheck-current',review_reason='fixture explicit selection')
+  d['choices'][0]['variants'].append(dict(origin='current',kind='theorem',unsafe=False,partial=False))
+  self.assertIn('policy-shape-only',policy(d)['status'])
+ def test_unselected_unsafe_is_only_data(self):
+  d=copy.deepcopy(BASE);d['choices'][0].update(mode='recheck-current',review_reason='fixture')
+  d['choices'][0]['variants'].append(dict(origin='raw-unsafe',kind='definition',unsafe=True,partial=False))
+  self.assertIn('kernel disabled',policy(d)['status'])
  def test_symlink_no_dereference(self):
   with tempfile.TemporaryDirectory(dir='tools/port30join-20261025') as t:
    p=pathlib.Path(t);(p/'regular').write_text('{}');(p/'link').symlink_to('regular')

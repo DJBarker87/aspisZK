@@ -9,6 +9,7 @@ s=s.replace('private def strictDeclaration','def strictDeclaration')
 s+='\nend Port30JOIN_Literal\n'
 (D/'Port30JOIN_Literal.lean').write_text('/- Uncompiled Port30JOIN data comparator, copied from immutable Port29 strict-v3. -/\n'+s)
 s=blob('904745b496','evidence/port18validate-20261024/lean-002/sources/Port18COHERENCE_Kernel.lean')
+s=s.replace('def addDecl (d : Declaration) : M Unit := do', 'def addDecl (d : Declaration) : M Unit := do\n  throw (IO.userError \"Port30JOIN kernel insertion disabled\")')
 s=s.replace('import Lean','import Lean\nimport Port30JOIN_Literal').replace('Port18COHERENCE_Kernel','Port30JOIN_Kernel')
 a=s.index('          -- Ignore duplicate theorems.')
 b=s.index('          addDecl (Declaration.thmDecl',a)
