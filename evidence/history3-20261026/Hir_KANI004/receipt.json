@@ -1,0 +1,68 @@
+{
+  "attempt": "Hir_KANI004",
+  "kind": "kani",
+  "source_revision": "2da5d3fc5ccbd5de4962311b485515785469c791",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "Hir_encoded_checkpoint_cannot_reinitialize",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "Hir_pool_harness.rs",
+    "Hir_PoolPins.json",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs",
+    "Hir_close_harness.rs",
+    "Hir_src/programs/aspis-pool/src/processor.rs",
+    "Hir_encoded_harness.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual full checkpoint encoder and borrowed zero/fresh guards; no stubs,192-byte full image. Does not prove full dispatcher or writer reachability."
+  },
+  "expected_time": "One optimized actual checkpoint encoder plus both freshness guards. All checkpoint fields arbitrary; first-byte marker should prune occupied guard scans.",
+  "exit_status": 0,
+  "wall_seconds": 53.17715068400139,
+  "peak_rss_kib": "1587452",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/Hir_KANI004.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1805611008",
+  "source_hashes": {
+    "Hir_pool_harness.rs": "edb6bd386863bfb58135950c42040588334320fc4ade55804d0741a13ba21e53",
+    "Hir_PoolPins.json": "c032af190eddb91855c9f0ba9d64c338bf19500563a497d8ec81cf96a64ad009",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs": "b08292af9101a11a5d701df79546505c8b836d321e591ba965b6e91a25e13f1d",
+    "Hir_close_harness.rs": "6bdb3d8ee8f30b6e5e051c8bd08f88dfd4a821b437b216b05d62e2ca5ef92801",
+    "Hir_src/programs/aspis-pool/src/processor.rs": "822b697aef8619a8212b14cd97dfeaeb9797593c59f468ea9cc1826fcc9655de",
+    "Hir_encoded_harness.rs": "cf43bb64fcef2526098a32eb45bae42fa78a93855909a4318c44fc780fbd7791"
+  },
+  "print_axioms": "N/A: kani"
+}

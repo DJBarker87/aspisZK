@@ -1,0 +1,47 @@
+{
+  "attempt": "Hir_KANI004",
+  "kind": "kani",
+  "source_revision": "2da5d3fc5ccbd5de4962311b485515785469c791",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "Hir_encoded_checkpoint_cannot_reinitialize",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "Hir_pool_harness.rs",
+    "Hir_PoolPins.json",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs",
+    "Hir_close_harness.rs",
+    "Hir_src/programs/aspis-pool/src/processor.rs",
+    "Hir_encoded_harness.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual full checkpoint encoder and borrowed zero/fresh guards; no stubs,192-byte full image. Does not prove full dispatcher or writer reachability."
+  },
+  "expected_time": "One optimized actual checkpoint encoder plus both freshness guards. All checkpoint fields arbitrary; first-byte marker should prune occupied guard scans."
+}
