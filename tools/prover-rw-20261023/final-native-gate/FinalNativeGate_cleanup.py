@@ -3,15 +3,17 @@ import os
 import time
 
 
-def cleanup(child,fd,identity,guard,cancel):
-    errors=[]; usage=None; monitor=None
+def cleanup(child,fd,identity,guard,cancel,scope=None,*,outer=False):
+    errors=[]; usage=None; monitor=None; direct=None; scope_cancel=None; scope_result=None
     def attempt(label,action):
         try:return action()
         except BaseException as exc:
             errors.append(label+': '+repr(exc));return None
+    if scope is not None:
+        scope_cancel=attempt('scope-wide cancellation',scope.cancel_owned)
     if child is not None and child.returncode is None:
         if fd is not None and identity is not None:
-            attempt('direct cancellation',lambda:cancel(child,fd,identity))
+            direct=attempt('direct cancellation',lambda:cancel(child,fd,identity))
         else:errors.append('direct cancellation: missing stable handle/identity')
     # Always attempt descendants, including after direct child has exited.
     attempt('descendant cancellation',guard.cancel_owned)
@@ -33,8 +35,12 @@ def cleanup(child,fd,identity,guard,cancel):
         for row in monitor.get('cancellations',[]):
             if row['outcome'] not in ('disappeared','verified-owned-signalled'):
                 errors.append('descendant unresolved: '+repr(row))
-    # A pidfd/lineage shutdown cannot certify no future or reparented children.
-    # Until the outer bound-cgroup shutdown interface is reviewed, deny closure.
-    unresolved=child is not None
-    if unresolved:errors.append('SCOPE_UNRESOLVED: bound outer cgroup shutdown not implemented; retain packet/control path')
-    return dict(errors=errors,usage=usage,monitor=monitor,unresolved=unresolved)
+    if scope is not None:
+        scope_result=attempt('scope terminal verification',scope.finish)
+    unresolved=bool(child is not None and outer and
+                    (scope_result is None or scope_result.get('unresolved',True)))
+    if unresolved:errors.append('SCOPE_UNRESOLVED: retain packet/control path; no finite kernel termination promise')
+    if scope is not None and not unresolved:attempt('scope descriptor close',scope.close)
+    return dict(errors=errors,usage=usage,monitor=monitor,unresolved=unresolved,
+                direct_cancel_outcome=direct,scope_cancel_outcome=scope_cancel,scope=scope_result,
+                scope_assessment='outer verified' if outer else 'deferred to outer bound scope')

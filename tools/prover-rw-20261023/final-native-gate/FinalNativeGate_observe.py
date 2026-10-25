@@ -1,5 +1,5 @@
 """Reviewed observation functions; concrete collector, no marker/GO callback."""
-import contextlib, hashlib, json, os, resource, shutil, struct, subprocess, sys, sysconfig, time
+import contextlib, hashlib, json, os, resource, shutil, stat, struct, subprocess, sys, sysconfig, time
 from pathlib import Path
 import FinalNativeGate_adapter as adapter
 HERE=Path(__file__).resolve().parent
@@ -7,13 +7,22 @@ EXPECTED=dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
 ACTIVE_GUARD=None
 
 def save(name,value):
-    # One-shot fixed packet. Durable, exclusive, no overwrite or caller directory.
-    path=HERE/'FinalNativeGate-packet' / name
-    with path.open('x') as out:
-        json.dump(value,out,sort_keys=True,indent=2);out.write('\n');out.flush();os.fsync(out.fileno())
-    fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY)
+    # Fixed exclusive own packet. Large derived JSON stays external; receipts
+    # carry size/hash only. Streaming serialization has a64MiB disk ceiling.
+    packet=HERE/'FinalNativeGate-packet'
+    owned=packet.lstat()
+    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or owned.st_mode&0o077:raise ValueError('private owned packet required')
+    h=hashlib.sha256();size=0
+    with (packet/name).open('xb') as out:
+        for piece in json.JSONEncoder(sort_keys=True).iterencode(value):
+            raw=piece.encode();size+=len(raw)
+            if size>64*2**20:raise ValueError('raw derived JSON64MiB disk bound')
+            out.write(raw);h.update(raw)
+        out.flush();os.fsync(out.fileno())
+    fd=os.open(packet,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
     try:os.fsync(fd)
     finally:os.close(fd)
+    return dict(name=name,size=size,sha256=h.hexdigest())
 
 def digest(data):
     return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
@@ -51,37 +60,50 @@ def runtime_pins(catalog):
 def collect(phase):
     """Record every ordered filesystem/command input without changing API logic."""
     api=adapter.__dict__
-    events=[]
+    events=[];raw_bytes=0;event_limit=32768;raw_limit=16*2**20
+    def append(event):
+        nonlocal raw_bytes
+        raw_bytes+=len(json.dumps(event).encode())
+        if len(events)>=event_limit or raw_bytes>raw_limit:raise ValueError('raw visibility32768 event/16MiB bound')
+        events.append(event)
     read=Path.read_text
     execute=subprocess.run
     scandir=os.scandir
     def recorded_read(path,*args,**kwargs):
         try:
-            content=read(path,*args,**kwargs)
+            # Kernel pseudo-files have no useful stat size; finite streaming read.
+            with path.open('r',*args,**kwargs) as stream:content=stream.read(4*2**20+1)
+            if len(content)>4*2**20:raise ValueError('raw visibility per-read4MiB bound')
         except OSError as exc:
-            events.append(dict(kind='read',path=str(path),errno=exc.errno,error=str(exc)))
+            append(dict(kind='read',path=str(path),errno=exc.errno,error=str(exc)))
             raise
-        events.append(dict(kind='read',path=str(path),content=content,errno=0,**digest(content.encode())))
+        append(dict(kind='read',path=str(path),content=content,errno=0,**digest(content.encode())))
         return content
     def recorded_run(args,*pos,**kwargs):
         if ACTIVE_GUARD: ACTIVE_GUARD.check()
         try:
-            result=execute(args,*pos,**kwargs)
-        except (OSError,subprocess.SubprocessError) as exc:
-            events.append(dict(kind='command',command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),
+            from FinalNativeGate_scope import command
+            if pos or kwargs.get('input') is not None:raise ValueError('unexpected metadata command input')
+            result=command(args,timeout=kwargs.get('timeout',15),limit=4*2**20,record=True)
+        except (OSError,ValueError,subprocess.SubprocessError) as exc:
+            append(dict(kind='command',command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),
                                stdout=getattr(exc,'stdout',None),stderr=getattr(exc,'stderr',None)))
             raise
-        events.append(dict(kind='command',command=args,exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
+        append(dict(kind='command',command=args,exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
         return result
     @contextlib.contextmanager
     def recorded_scandir(path):
         try:
             with scandir(path) as entries:
-                entries=list(entries)
-                events.append(dict(kind='scandir',path=str(path),entries=[dict(name=e.name,path=e.path,is_dir=e.is_dir(follow_symlinks=False)) for e in entries]))
+                bounded_entries=[]
+                for entry in entries:
+                    if len(bounded_entries)>=32768:raise ValueError('raw scandir entry bound')
+                    bounded_entries.append(entry)
+                entries=bounded_entries
+                append(dict(kind='scandir',path=str(path),entries=[dict(name=e.name,path=e.path,is_dir=e.is_dir(follow_symlinks=False)) for e in entries]))
                 yield iter(entries)
         except OSError as exc:
-            events.append(dict(kind='scandir',path=str(path),error=str(exc),errno=exc.errno))
+            append(dict(kind='scandir',path=str(path),error=str(exc),errno=exc.errno))
             raise
     start=time.monotonic()
     try:
@@ -93,13 +115,15 @@ def collect(phase):
         Path.read_text=read
         subprocess.run=execute
         os.scandir=scandir
-        save(phase+'-ordered.json',events)
-    save(phase+'-report.json',report)
-    save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
+        ordered=save(phase+'-ordered.json',events)
+    report['raw_receipts']=[ordered]
+    report_receipt=save(phase+'-report.json',report)
+    metrics_receipt=save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
         peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
         aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3) if report.get('original_legacy') else 'N/A visibility unavailable; not peak',
         print_axioms='N/A'))
+    report['raw_receipts'].extend([report_receipt,metrics_receipt])
     return report
 
 def controls():

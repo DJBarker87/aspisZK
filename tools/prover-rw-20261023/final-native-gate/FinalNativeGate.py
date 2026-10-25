@@ -57,6 +57,7 @@ def _plan():
         raise Denied('bootstrap seal source drift')
     with (HERE/'FinalNativeGate-plan.json').open('rb') as stream:
         before=os.fstat(stream.fileno())
+        if before.st_size>4*2**20:raise Denied('plan stat bound')
         raw=stream.read(4*2**20+1)
         if len(raw)>4*2**20 or before!=os.fstat(stream.fileno()):raise Denied('plan size/identity drift')
     if hashlib.sha256(raw).hexdigest()!=PLAN_SHA256:
@@ -215,6 +216,7 @@ def _execute():
         _save('FinalNativeGate-terminal.json',dict(schema='FinalNativeGate-terminal-v1',
               terminal='COMMAND_EXIT_ZERO_PENDING_PROOF_REVIEW' if not failed else 'FAILED',
               actual_command_exit=code,child_spawned=proc is not None,
+              direct_cancel_outcome=closure['direct_cancel_outcome'],scope_assessment=closure['scope_assessment'],
               charged=(PACKET/'FinalNativeGate-Kani060-CHARGED.json').exists(),
               wall_seconds=time.monotonic()-start,errors=errors,
               peak_rss_kib=None if usage is None else usage.ru_maxrss,
@@ -270,15 +272,19 @@ def _prospective():
              held=not (hm>='2230' or hm<'1400'),inode=os.fstat(lock.fileno()).st_ino))
         guard=Guard();o.ACTIVE_GUARD=guard
         signal.signal(signal.SIGUSR1,lambda *_: (_ for _ in ()).throw(Denied('prospective guard failed')))
+        from FinalNativeGate_scope import FixedScope
+        scope=FixedScope('final')
         child=None;fd=None;ident=None;failed=True
         try:
             guard.start();parent_pre=_pins();_save('FinalNativeGate-prospective-pins.json',parent_pre)
             _admit('prospective');guard.check()
-            argv=_scope_argv();_save('FinalNativeGate-scope-argv.json',argv)
+            scope.preflight()
+            argv=scope.argv(p['environment']);_save('FinalNativeGate-scope-argv.json',argv)
             with (PACKET/'FinalNativeGate-scope.stdout').open('xb') as out,(PACKET/'FinalNativeGate-scope.stderr').open('xb') as err:
                 child=subprocess.Popen(argv,env=p['environment'],cwd=STAGE,stdout=out,stderr=err)
                 fd=os.pidfd_open(child.pid);ident=_modules()[4]().identity(child.pid)
                 guard.remember(ident,os.getpid())
+                scope.bind_release(child,ident,guard)
                 deadline=time.monotonic()+360
                 while True:
                     guard.check()
@@ -300,12 +306,14 @@ def _prospective():
         finally:
             signal.signal(signal.SIGUSR1,signal.SIG_IGN)
             from FinalNativeGate_cleanup import cleanup
-            closure=cleanup(child,fd,ident,guard,_cancel_child)
+            closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True)
             if closure['errors'] or closure['unresolved']:failed=True
             o.ACTIVE_GUARD=None
             # A record-write error must not skip another terminal write attempt.
             for name,value in [('FinalNativeGate-parent-cleanup.json',dict(
                     errors=closure['errors'],unresolved=closure['unresolved'],
+                    direct_cancel_outcome=closure['direct_cancel_outcome'],scope=closure['scope'],
+                    scope_cancel_outcome=closure['scope_cancel_outcome'],
                     reaped=child is not None and child.returncode is not None)),
                     ('FinalNativeGate-parent-guard.json',closure['monitor'])]:
                 try:_save(name,value)

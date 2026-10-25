@@ -35,6 +35,8 @@ class Reader:
 
     def assess(self,path,s):
         self.tick(); e=self.entries[path]
+        if 'stamp' in e and list(stamp(s))!=e['stamp']:
+            raise CatalogError('full-interval metadata drift: '+path)
         kind='dir' if stat.S_ISDIR(s.st_mode) else 'file' if stat.S_ISREG(s.st_mode) else 'link' if stat.S_ISLNK(s.st_mode) else 'unknown'
         if kind!=e['kind'] or any(getattr(s,'st_'+k)!=e[k] for k in ('uid','gid','mode')):
             raise CatalogError('entry type/owner/group/mode drift: '+path)

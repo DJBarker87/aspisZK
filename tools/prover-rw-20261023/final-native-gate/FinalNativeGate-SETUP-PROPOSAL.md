@@ -1,69 +1,70 @@
-# Future metadata source proposal — NOT ALLOCATED, NOT RUN
+# Source candidate for separately allocated DATA collection
 
-FinalNativeGate_setup.py now supplies private no-argument prospective and
-inside collection bodies. Both public setup entries return78 unconditionally.
-The existing activation patch remains UNAPPLIED; it does not activate setup.
-Source is an incomplete candidate requiring lead review, not an executable plan.
+All four public entries still return78 unconditionally. No activation patch
+was applied; no host, setup, native/compiler, Kani, Lean or ELF gate was run.
+This supersedes the previous incomplete-source proposal; historical receipts
+and failures remain in evidence. Lead source review is the next gate.
 
-Future fixed outer profile: FinalNativeGate-pin-setup, MemoryHigh768M,
-MemoryMax1G, MemorySwapMax0, TasksMax64. Fixed transport120s; inside alarm115s;
-persistent sampled aggregate RSS guard512MiB,20ms,6000 samples (120/.02).
-No RLIMIT/VSize alteration. Setup adapter copies every original collector and
-policy function; its sole integration delta is expected unit/high/max and
-prospective requested1G. Inside requested0 counts its actual1G cap once. Full
-strict55GiB reservation/raw7GiB reserve/2GiB guard, both scans and visibility/
-error policy remain. This is separate from the unchanged4G producer adapter.
+Fixed scopes are FinalNativeGate-060 (3G/4G) and FinalNativeGate-pin-setup
+(768M/1G), each swap0/tasks64. Outer remains outside workload. A private inside
+body writes ready pid/start/membership and waits20seconds. Only the concrete
+outer FixedScope binding writes the durable release after checking fixed
+systemctl invocation/start/control path, retained cgroup inode/owner/control,
+actual ready child and wrapper lineage, and repeated identity. Fast wrapper
+exit cannot pass. Explicit fixed-source import bootstrap supports isolated
+Python; public main functions do not call the private bodies.
 
-Private prospective orchestration makes one exclusive0700 setup-packet, holds
-the shared lock outside22:30–14:00 London, starts the512MiB guard, calls the
-actual full prospective1G collector, then would launch the fixed1G scope. The
-inside body calls full inside/GO collectors, actual unit/control checks, finite
-catalog discovery, stable FD hashing and ELF64LE metadata parsing, and publishes
-candidate DATA and a <=4MiB summary. It neither seals nor updates the plan,
-creates/copies caches, activates entries, nor grants4G/Kani execution authority.
-No command here has been run. No compiler/ldd/help/version/native target probe.
+Cleanup independently requests scope-wide cgroup.kill through the retained
+verified descriptor, guard descendant cancellation, actual direct pidfd cancel
+(telemetry retained), reap, guard finish/check, and terminal scope verification.
+No unit-name kill, numeric PID kill or self-unit shutdown. Replacement refuses
+cancellation. Twice-observed empty populated/tasks, or removed retained inode
+with absent/same-inactive invocation and absent path, can resolve. Unreadable
+metadata, replacement ambiguity, permissions, D-state or failed reaping remain
+failed/unresolved and retain packet/binding/control evidence. No finite kernel
+termination guarantee. Inner receipts defer scope assessment to outer closure.
 
-Finite discovery has an entry ceiling derived from historical50077 plus the
-explicit source/root count, not a new arbitrary forest allowance. It reads only
-fixed proposed roots. Every unknown link/type/writable entry is reported and
-never followed. Exact stat sizes define candidate hash-byte bounds before any
-content read; hashes stream64KiB, FD/entry metadata checked before/after. ELF
-metadata has a separate per-file read budget of one exact file size,4KiB name
-limit (Linux path bound), finite header/table bounds and deadline. Unsupported
-ELF/script/search/path mappings stay UNREADY, with exact dependency names and
-configured finite search-path proposals. No claim of complete native closure.
+Setup uses a concrete clean HOME/USER/LOGNAME/PATH/locale proposal; current UID
+forms the candidate user runtime/bus paths. Their complete component metadata
+is DATA, not a fresh pin required before collection. Setup environment never
+authorizes final Kani. Final opt3 proposal remains unchanged; cache remains null.
 
-Concrete gaps before metadata allocation:
+Independent bootstrap manifest pins finite local transferred source, plan and
+plan seal. It excludes itself and bootstrap seal. Bootstrap seal pins manifest;
+the external source manifest independently pins both root seals. At runtime,
+manifest/seal metadata/content and the finite transferred source are checked
+before and after the full collection. No circular self-hash is used. This is
+operational source pinning under existing Python/bootstrap trust boundaries,
+not an executed-bytecode or compiler-semantics proof.
 
-- The fresh canonical alias/component catalog, Python stdlib/mapping/tool roles,
-  UID/GID/mode assessments, setup clean environment and source bootstrap chain
-  have not been observed. setup_deferred records these gaps; actual data cannot
-  silently clear them or activate anything. The partial catalog producer can
-  discover data for review, but current setup_environment is null and denies.
-- The outer verified fixed-scope shutdown interface is not implemented. Both
-  wrappers conservatively report SCOPE_UNRESOLVED after any child spawn; they
-  cannot produce a successful execution receipt. Required design: outer retain
-  actual fixed systemd user-unit invocation/start and cgroup inode/owner binding,
-  bind launched scope child by proc start identity and membership, hold a stable
-  cgroup FD, recheck before any fixed-unit kill, and observe populated/tasks
-  afterward. No caller PID/path, numeric kill, root/sudo/ns, or assumed wrapper
-  kill implication. Refused permission, D-state or unreadable/changed identity
-  stays UNRESOLVED with the durable packet/control path; no finite kernel reap
-  promise. This needs a source implementation and explicit orphan/race mocks.
-- Catalog discovery does not yet independently seal its source bootstrap or
-  compare all source/native metadata across its full collection interval.
-  Reader snapshots are individually stable; this is not whole-run stability.
-- Copied raw visibility/control collectors retain their existing observation
-  limits; a512MiB sampled guard/1GiB cgroup does not prove each raw read bounded.
+Acquisition selects exact planned source files, fixed native/tool/sysroot roots,
+observed Python executable/stdlib/mapped files and explicit ELF loader/library
+proposals. Every component has uid/gid/mode/inode/size/times; aliases record
+literal target and expand at most32 links only inside fixed admitted roots.
+Directory links below selected roots are recorded without forest recursion.
+Unsafe/unknown roles are metadata only; they are never silently hashed/certified.
+Stat ceilings32768 components,256MiB/file and2GiB total precede hashes; hashing
+streams64KiB under the115second total alarm. Full snapshots compare hashes,
+metadata and chains across both admission collections and data assembly.
+File-backed mapping rows must stay stable; anonymous heap growth is raw DATA.
+ELF metadata parsing does not execute ldd/compiler/help/version/native tools.
 
-Operational pinsets/missing inputs are finite data. Universal Rust/OS/compiler
-semantics is not a prerequisite to admission and is not proved by it. OS,
-compiler, Kani and trusted policy boundaries remain. Historical50077 records and
-059 are provenance only. Cache choice remains null pending the concrete profile
-assessment and fresh fixed cache inventory. No new empty cache default.
+Selected cache metadata is limited to059 debug and MIR release target directory
+metadata and their .fingerprint subtrees. No50077-file dump/target scan, cache
+copy/create/delete/adoption or compatibility claim. Source/tool hash failures
+remain COLLECTION_FAILED with partial evidence; honest unknown native/cache/
+runtime roles return DATA_WITH_UNRESOLVED_ROLES and execution_authority=false.
 
-After these source gaps and lead review, a separately allocated metadata action
-may publish candidate data only. Lead reviews fresh data, source/package pins,
-plan seal and activation separately. Any final Kani allocation still requires
-fresh4G prospective/inside/GO checks and durable59->60 charge before its single
-Popen. All actual budgets here are ZERO; final59/60 remains reserved.
+Both full policy scans, strict55/7/2 accounting and visibility remain; setup's
+actual1G cap is counted once. Raw visibility is bounded to32768 events/16MiB,
+4MiB/read or command,32768 directory entries; fixed metadata systemctl is5s/
+64KiB, other visibility commands at most15s/4MiB.120second transport includes
+handshake;115second alarm spans collection/publication.512MiB sampled resident
+guard,1G scope, no rlimit/VSize bypass; exclusive owned0700 durable packet;
+4MiB summary; derived JSON above5MB is external hash+size only.
+
+Fresh host data, role review, resource availability, transfer/source-seal review
+and a separate allocation are still missing. Existing OS/systemd/procfs/Python,
+compiler/Kani and trusted policy boundaries remain. Privileged SBF is separate.
+Both security targets NOT ESTABLISHED. Final59->60 charge and single fixed Kani
+Popen remain reserved and unchanged.

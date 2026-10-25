@@ -8,9 +8,9 @@ from FinalNativeGate_policy import load
 c, go, identity, inventory, policy = load()
 EXPECTED=dict(high=768*2**20,cap=c.GIB,swap_max=0,tasks_max=64)
 UNIT='FinalNativeGate-pin-setup'
-COMMANDS=[['ps','-e','-o','pid,ppid,rss,comm,cgroup'],
-          ['systemctl','list-units','--type=service','--state=running','--no-pager','--no-legend'],
-          ['docker','ps','-q']]
+COMMANDS=[['/usr/bin/ps','-e','-o','pid,ppid,rss,comm,cgroup'],
+          ['/usr/bin/systemctl','list-units','--type=service','--state=running','--no-pager','--no-legend'],
+          ['/usr/bin/docker','ps','-q']]
 
 def visibility(requested):
     """Legacy independent frontier and commands, without obsolete accounting."""
@@ -24,8 +24,8 @@ def visibility(requested):
         raise ValueError('invalid/duplicate Docker identity')
     containers=[]
     for cid in ids:
-        state=json.loads(run(['docker','inspect','--format','{{json .State}}',cid]))
-        config=json.loads(run(['docker','inspect','--format','{{json .HostConfig}}',cid]))
+        state=json.loads(run(['/usr/bin/docker','inspect','--format','{{json .State}}',cid]))
+        config=json.loads(run(['/usr/bin/docker','inspect','--format','{{json .HostConfig}}',cid]))
         if not isinstance(state,dict) or not isinstance(config,dict):raise ValueError('invalid Docker metadata')
         if type(state.get('Running')) is not bool or state['Running'] is not True or not c.uint(state['Pid']):
             raise ValueError('invalid/racing Docker process state')
