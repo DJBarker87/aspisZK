@@ -3,8 +3,9 @@
 from pathlib import Path
 import os,sys,json,hashlib,subprocess,time,signal,resource
 W=Path(__file__).resolve().parent
+BUILD=Path(json.loads((W/'plan.json').read_text()).get('build_directory',str(W)))
 G=2**30;CAP=6*G;HIGH=4*G
-UNIT='aspis-s126-claims-extract-20261025-r4'
+UNIT='aspis-s126-claims-extract-20261025-r5'
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def save(name,value):(W/name).write_text(json.dumps(value,indent=2)+'\n')
@@ -46,7 +47,7 @@ def inventory():
 def source_pins():
  plan=json.loads((W/'plan.json').read_text());pins={}
  for row in plan['source_files']:
-  p=W/row['path'];assert p.is_file()and not p.is_symlink();h=sha(p);assert h==row['sha256'],str(p);pins[row['path']]=h
+  p=BUILD/row['path'];assert p.is_file()and not p.is_symlink();h=sha(p);assert h==row['sha256'],str(p);pins[row['path']]=h
  return pins
 def tool_pins():
  paths=[Path('/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'),
@@ -93,10 +94,11 @@ try:
  sources=source_pins();tools=tool_pins();plan=json.loads((W/'plan.json').read_text())
  save('pins-before.json',dict(sources=sources,tools=tools,cgroup=str(cg),runner_sha256=sha(W/'run.py')))
  env=dict(os.environ);env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',
- CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(W/'target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='',LD_LIBRARY_PATH=str(next(Path(p)for p in tools if Path(p).name=='rustc').parent.parent/'lib'))
+ CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(BUILD/'target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='',LD_LIBRARY_PATH=str(next(Path(p)for p in tools if Path(p).name=='rustc').parent.parent/'lib'))
  for key in ['RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS']:env.pop(key,None)
  # New private target, only two local packages; no another-session cache writes.
  old=plan['host_directory'];commands=[[a.replace(old,str(W))for a in plan[k]]for k in ['charon_command','aeneas_command']]
+ commands[0][commands[0].index('--manifest-path')+1]=str(BUILD/'reference/Cargo.toml')
  completed=[]
  for phase,cmd in zip(['charon','aeneas'],commands):
   inv=inventory();save(phase+'-admission.json',inv);assert inv['admitted']and inv['own_scope_included']
@@ -107,11 +109,11 @@ try:
   save(phase+'-input.json',dict(command=cmd,executed_command=timed,environment={k:env[k]for k in ['RUSTUP_TOOLCHAIN','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS','RUSTFLAGS','LD_LIBRARY_PATH']},source_pins=sources,tool_pins=tools,expected_time='Focused optimized two-local-package extraction/translation; no certificates/SBF/SAT; stop after540s for review',print_axioms='N/A: source extraction, no theorem yet'))
   start=time.monotonic()
   with (W/(phase+'-stdout.log')).open('wb')as out,(W/(phase+'-stderr.log')).open('wb')as err:
-   child=subprocess.Popen(timed,cwd=W/'reference',env=env,stdout=out,stderr=err,start_new_session=True)
+   child=subprocess.Popen(timed,cwd=BUILD/'reference',env=env,stdout=out,stderr=err,start_new_session=True)
    status=child.wait();child=None
   record=dict(exit_status=status,wall_seconds=time.monotonic()-start,command=cmd,
    source_unchanged=source_pins()==sources,tools_unchanged=tool_pins()==tools,
-   cgroup_values={k:(cg/k).read_text().strip()for k in ['memory.max','memory.high','memory.swap.max','memory.peak','memory.events']},
+   cgroup_values={k:(cg/k).read_text().strip()for k in ['memory.max','memory.high','memory.swap.max','memory.oom.group','memory.peak','memory.events']},
    print_axioms='N/A: source extraction only')
   save(phase+'-receipt.json',record);completed.append(phase)
   assert record['source_unchanged']and record['tools_unchanged']
@@ -131,3 +133,5 @@ finally:
    child.wait(timeout=3)
  if child is None or child.poll()is not None:
   (lock/'owner.json').unlink();lock.rmdir()
+
+raise SystemExit(status)
