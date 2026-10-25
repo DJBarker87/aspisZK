@@ -1,0 +1,1433 @@
+'AspisR1.FinT_Comparisons.canonical_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Comparisons.pairing_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Algebra.quarter_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Algebra.pairing_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Returned.returned_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Pairing.gates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FinT_Model.finish_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.FinT_Model.finish_value : ∀ {W : Type} (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a saved : AspisR1Stage2.verifier.Accumulator)
+  (alpha0 alpha1 : AspisR1Stage2.Stage2Finish.E)
+  (r0 : AspisR1.RowFinish_Control.RoundValues ops v.round0 alpha0 p.claim)
+  (r1 : AspisR1.RowFinish_Control.RoundValues ops v.round1 alpha1 r0.value) (weights : W)
+  (alphas : Aeneas.Std.Slice AspisR1Stage2.Stage2Finish.E) (pair dot : AspisR1Stage2.Stage2Finish.E),
+  p.variant = AspisR1Stage2.transport.Variant.S2 →
+    p.alpha.index_usize 0#usize = Aeneas.Std.Result.ok alpha0 →
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha1 →
+        ops.newWeights p.variant p.semantic_alpha p.z =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok weights) →
+          Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                p.alpha { «end» := 2#usize } =
+              Aeneas.Std.Result.ok alphas →
+            ops.pair weights alphas v.final_message p.kappa =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pair) →
+              ops.dot v.final_message a.weights.deref = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok dot) →
+                ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+                  (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+                  AspisR1.OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+                    AspisR1.OraclePortSelectedDraft.queries tr = some q →
+                      AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                          some i.data →
+                        AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                          AspisR1.Port4D_Pairing.PairingLaws (AspisR1.Port3_FinishStage.release ops)
+                              AspisR1.CheckpointBytes5Output.ofE v p i.data →
+                            (∀ (j : Fin 22), AspisR1.MatchingSupport.match0 i.data (q j)) →
+                              AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                  (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data →
+                                AspisR1.CheckpointBytes5Output.ofE dot =
+                                    ∑ l,
+                                      i.data.f l *
+                                        AspisR1.LiteralOpeningView.eK
+                                          ((AspisR1.CheckpointBytes5Output.accumulator a).weights l) →
+                                  (∀ x ∈ [r0.lhs, r0.rhs, r1.lhs, r1.rhs, pair, r1.value, dot, a.rhs],
+                                      AspisR1.CheckpointBytes4ReaderFields.sourceE
+                                          (AspisR1.CheckpointBytes5Output.ofE x) =
+                                        x) →
+                                    AspisR1.CheckpointBytes5Output.accumulator saved =
+                                        (AspisR1.OraclePortCheckpointStateC3.write
+                                            (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                              (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                                      AspisR1.CheckpointBytes5Output.accumulator a =
+                                          AspisR1.OraclePortCheckpointStateC3.advance
+                                            (AspisR1.OraclePortCheckpointResumeC5.model i.data
+                                              (AspisR1.SelectedChallengeMap.rhoOf i.rho) q)
+                                            12 (AspisR1.CheckpointBytes5Output.accumulator saved) →
+                                        decide
+                                              (AspisR1.Port3_NativeFinishBody.verifier.finish_relation
+                                                  (AspisR1.Port4D_Round.native ops) v p a none =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                            AspisR1.OraclePortFrozen2.finish parsed q tr i
+                                              (AspisR1.CheckpointBytes5Output.accumulator a) ∧
+                                          decide
+                                              (AspisR1.Port4D_FinishInstall.finish ops v p a none =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                                            AspisR1.D0TypedChecks.verify
+                                              (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i :=
+fun {W} ops v p a saved alpha0 alpha1 r0 r1 weights alphas pair dot s2 ha0 ha1 hw has hp hd parsed q tr i hi hq read
+    decoded pairing_S3_S5_S9 matches_S4_S7 semantic_S3_S9 dot_S5 canonical_S3_S4_S5_S9 saved_ten twelve =>
+  let decode := AspisR1.CheckpointBytes5Output.ofE;
+  have returned := AspisR1.FinT_Returned.returned_state i q saved a saved_ten twelve;
+  have nextVal :=
+    have h := congrArg AspisR1.QueryAccumulator.State.next returned;
+    Eq.mp
+      (congrArg (Eq ↑a.next)
+        (AspisR1.QueryAccumulator.run22_next AspisR1.LiteralOpeningView.eK (AspisR1.SelectedChallengeMap.rhoOf i.rho)
+          (AspisR1.QueryResidualBridge.values i.data q) (AspisR1.QueryResidualBridge.basis q)))
+      h;
+  have next := Aeneas.Std.UScalar.eq_of_val_eq nextVal;
+  have strict := fun x y hx hy =>
+    AspisR1.FinT_Comparisons.canonical_eq x y (canonical_S3_S4_S5_S9 x hx) (canonical_S3_S4_S5_S9 y hy);
+  have gates :=
+    have pg :=
+      AspisR1.FinT_Pairing.gates AspisR1.CheckpointBytes5Output.ofE AspisR1.CheckpointBytes4ReaderFields.sourceE ops v p
+        alpha0 alpha1 r0 r1 weights alphas pair s2 ha0 ha1 hw has hp i.data pairing_S3_S5_S9
+        (canonical_S3_S4_S5_S9 r0.lhs
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congr (congrArg Or (eq_self r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (congrArg (Or (r0.lhs = r0.rhs))
+                      (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                        (congrArg (Or (r0.lhs = r1.lhs))
+                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                            (congrArg (Or (r0.lhs = r1.rhs))
+                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                (congrArg (Or (r0.lhs = pair))
+                                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                    (congrArg (Or (r0.lhs = r1.value))
+                                      (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                        (congrArg (Or (r0.lhs = dot))
+                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                            (Eq.trans
+                                              (congrArg (Or (r0.lhs = a.rhs)) AspisR1.FinT_Model.finish_value._simp_2)
+                                              (or_false (r0.lhs = a.rhs)))))))))))))))))
+                (true_or
+                  (r0.lhs = r0.rhs ∨
+                    r0.lhs = r1.lhs ∨
+                      r0.lhs = r1.rhs ∨ r0.lhs = pair ∨ r0.lhs = r1.value ∨ r0.lhs = dot ∨ r0.lhs = a.rhs))))))
+        (canonical_S3_S4_S5_S9 r0.rhs
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congrArg (Or (r0.rhs = r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (Eq.trans
+                      (congr (congrArg Or (eq_self r0.rhs))
+                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                          (congrArg (Or (r0.rhs = r1.lhs))
+                            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                              (congrArg (Or (r0.rhs = r1.rhs))
+                                (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                  (congrArg (Or (r0.rhs = pair))
+                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                      (congrArg (Or (r0.rhs = r1.value))
+                                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                          (congrArg (Or (r0.rhs = dot))
+                                            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                              (Eq.trans
+                                                (congrArg (Or (r0.rhs = a.rhs)) AspisR1.FinT_Model.finish_value._simp_2)
+                                                (or_false (r0.rhs = a.rhs)))))))))))))))
+                      (true_or
+                        (r0.rhs = r1.lhs ∨
+                          r0.rhs = r1.rhs ∨ r0.rhs = pair ∨ r0.rhs = r1.value ∨ r0.rhs = dot ∨ r0.rhs = a.rhs)))))
+                (or_true (r0.rhs = r0.lhs))))))
+        (canonical_S3_S4_S5_S9 r1.lhs
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congrArg (Or (r1.lhs = r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (Eq.trans
+                      (congrArg (Or (r1.lhs = r0.rhs))
+                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                          (Eq.trans
+                            (congr (congrArg Or (eq_self r1.lhs))
+                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                (congrArg (Or (r1.lhs = r1.rhs))
+                                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                    (congrArg (Or (r1.lhs = pair))
+                                      (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                        (congrArg (Or (r1.lhs = r1.value))
+                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                            (congrArg (Or (r1.lhs = dot))
+                                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                (Eq.trans
+                                                  (congrArg (Or (r1.lhs = a.rhs))
+                                                    AspisR1.FinT_Model.finish_value._simp_2)
+                                                  (or_false (r1.lhs = a.rhs)))))))))))))
+                            (true_or
+                              (r1.lhs = r1.rhs ∨ r1.lhs = pair ∨ r1.lhs = r1.value ∨ r1.lhs = dot ∨ r1.lhs = a.rhs)))))
+                      (or_true (r1.lhs = r0.rhs)))))
+                (or_true (r1.lhs = r0.lhs))))))
+        (canonical_S3_S4_S5_S9 r1.rhs
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congrArg (Or (r1.rhs = r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (Eq.trans
+                      (congrArg (Or (r1.rhs = r0.rhs))
+                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                          (Eq.trans
+                            (congrArg (Or (r1.rhs = r1.lhs))
+                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                (Eq.trans
+                                  (congr (congrArg Or (eq_self r1.rhs))
+                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                      (congrArg (Or (r1.rhs = pair))
+                                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                          (congrArg (Or (r1.rhs = r1.value))
+                                            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                              (congrArg (Or (r1.rhs = dot))
+                                                (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                  (Eq.trans
+                                                    (congrArg (Or (r1.rhs = a.rhs))
+                                                      AspisR1.FinT_Model.finish_value._simp_2)
+                                                    (or_false (r1.rhs = a.rhs)))))))))))
+                                  (true_or (r1.rhs = pair ∨ r1.rhs = r1.value ∨ r1.rhs = dot ∨ r1.rhs = a.rhs)))))
+                            (or_true (r1.rhs = r1.lhs)))))
+                      (or_true (r1.rhs = r0.rhs)))))
+                (or_true (r1.rhs = r0.lhs))))))
+        (canonical_S3_S4_S5_S9 pair
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congrArg (Or (pair = r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (Eq.trans
+                      (congrArg (Or (pair = r0.rhs))
+                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                          (Eq.trans
+                            (congrArg (Or (pair = r1.lhs))
+                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                (Eq.trans
+                                  (congrArg (Or (pair = r1.rhs))
+                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                      (Eq.trans
+                                        (congr (congrArg Or (eq_self pair))
+                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                            (congrArg (Or (pair = r1.value))
+                                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                (congrArg (Or (pair = dot))
+                                                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                    (Eq.trans
+                                                      (congrArg (Or (pair = a.rhs))
+                                                        AspisR1.FinT_Model.finish_value._simp_2)
+                                                      (or_false (pair = a.rhs)))))))))
+                                        (true_or (pair = r1.value ∨ pair = dot ∨ pair = a.rhs)))))
+                                  (or_true (pair = r1.rhs)))))
+                            (or_true (pair = r1.lhs)))))
+                      (or_true (pair = r0.rhs)))))
+                (or_true (pair = r0.lhs))))))
+        (canonical_S3_S4_S5_S9 r1.value
+          (of_eq_true
+            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+              (Eq.trans
+                (congrArg (Or (r1.value = r0.lhs))
+                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                    (Eq.trans
+                      (congrArg (Or (r1.value = r0.rhs))
+                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                          (Eq.trans
+                            (congrArg (Or (r1.value = r1.lhs))
+                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                (Eq.trans
+                                  (congrArg (Or (r1.value = r1.rhs))
+                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                      (Eq.trans
+                                        (congrArg (Or (r1.value = pair))
+                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                            (Eq.trans
+                                              (congr (congrArg Or (eq_self r1.value))
+                                                (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                  (congrArg (Or (r1.value = dot))
+                                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                      (Eq.trans
+                                                        (congrArg (Or (r1.value = a.rhs))
+                                                          AspisR1.FinT_Model.finish_value._simp_2)
+                                                        (or_false (r1.value = a.rhs)))))))
+                                              (true_or (r1.value = dot ∨ r1.value = a.rhs)))))
+                                        (or_true (r1.value = pair)))))
+                                  (or_true (r1.value = r1.rhs)))))
+                            (or_true (r1.value = r1.lhs)))))
+                      (or_true (r1.value = r0.rhs)))))
+                (or_true (r1.value = r0.lhs))))));
+    Iff.trans pg
+      (AspisR1.LiteralPairingChecks.acceptedPairing_iff_checks
+        (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data read);
+  have dotGate :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a ↔
+              AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+          (propext
+            (strict dot a.rhs
+              (of_eq_true
+                (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                  (Eq.trans
+                    (congrArg (Or (dot = r0.lhs))
+                      (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                        (Eq.trans
+                          (congrArg (Or (dot = r0.rhs))
+                            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                              (Eq.trans
+                                (congrArg (Or (dot = r1.lhs))
+                                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                    (Eq.trans
+                                      (congrArg (Or (dot = r1.rhs))
+                                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                          (Eq.trans
+                                            (congrArg (Or (dot = pair))
+                                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                (Eq.trans
+                                                  (congrArg (Or (dot = r1.value))
+                                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                      (Eq.trans
+                                                        (congr (congrArg Or (eq_self dot))
+                                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                            (Eq.trans
+                                                              (congrArg (Or (dot = a.rhs))
+                                                                AspisR1.FinT_Model.finish_value._simp_2)
+                                                              (or_false (dot = a.rhs)))))
+                                                        (true_or (dot = a.rhs)))))
+                                                  (or_true (dot = r1.value)))))
+                                            (or_true (dot = pair)))))
+                                      (or_true (dot = r1.rhs)))))
+                                (or_true (dot = r1.lhs)))))
+                          (or_true (dot = r0.rhs)))))
+                    (or_true (dot = r0.lhs)))))
+              (of_eq_true
+                (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                  (Eq.trans
+                    (congrArg (Or (a.rhs = r0.lhs))
+                      (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                        (Eq.trans
+                          (congrArg (Or (a.rhs = r0.rhs))
+                            (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                              (Eq.trans
+                                (congrArg (Or (a.rhs = r1.lhs))
+                                  (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                    (Eq.trans
+                                      (congrArg (Or (a.rhs = r1.rhs))
+                                        (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                          (Eq.trans
+                                            (congrArg (Or (a.rhs = pair))
+                                              (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                (Eq.trans
+                                                  (congrArg (Or (a.rhs = r1.value))
+                                                    (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                      (Eq.trans
+                                                        (congrArg (Or (a.rhs = dot))
+                                                          (Eq.trans AspisR1.FinT_Model.finish_value._simp_1
+                                                            (Eq.trans
+                                                              (congr (congrArg Or (eq_self a.rhs))
+                                                                AspisR1.FinT_Model.finish_value._simp_2)
+                                                              (or_false True))))
+                                                        (or_true (a.rhs = dot)))))
+                                                  (or_true (a.rhs = r1.value)))))
+                                            (or_true (a.rhs = pair)))))
+                                      (or_true (a.rhs = r1.rhs)))))
+                                (or_true (a.rhs = r1.lhs)))))
+                          (or_true (a.rhs = r0.rhs)))))
+                    (or_true (a.rhs = r0.lhs)))))))))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a = (AspisR1.CheckpointBytes5Output.accumulator a).rhs ↔
+                  AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                    (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+              dot_S5))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ∑ l, i.data.f l * AspisR1.LiteralOpeningView.eK (_a.weights l) = _a.rhs ↔
+                    AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                      (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+                returned))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Iff
+                    (congr
+                      (congrArg Eq
+                        (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                          congrArg (HMul.hMul (i.data.f x))
+                            (congrArg (⇑AspisR1.LiteralOpeningView.eK)
+                              (AspisR1.QueryAccumulator.run22_weights AspisR1.LiteralOpeningView.eK
+                                (AspisR1.SelectedChallengeMap.rhoOf i.rho) (AspisR1.QueryResidualBridge.values i.data q)
+                                (AspisR1.QueryResidualBridge.basis q) x))))
+                      (AspisR1.QueryAccumulator.run22_rhs AspisR1.LiteralOpeningView.eK
+                        (AspisR1.SelectedChallengeMap.rhoOf i.rho) (AspisR1.QueryResidualBridge.values i.data q)
+                        (AspisR1.QueryResidualBridge.basis q))))
+                  (∑ l,
+                      i.data.f l *
+                        AspisR1.LiteralOpeningView.eK
+                          (∑ j,
+                            AspisR1.SelectedChallengeMap.rhoOf i.rho ^ ↑j * AspisR1.QueryResidualBridge.basis q j l) =
+                    ∑ j,
+                      AspisR1.LiteralOpeningView.eK (AspisR1.SelectedChallengeMap.rhoOf i.rho) ^ ↑j *
+                        AspisR1.QueryResidualBridge.values i.data q j))
+                (iff_self
+                  (∑ x,
+                      i.data.f x *
+                        AspisR1.LiteralOpeningView.eK
+                          (∑ i_1,
+                            AspisR1.SelectedChallengeMap.rhoOf i.rho ^ ↑i_1 *
+                              AspisR1.QueryResidualBridge.basis q i_1 x) =
+                    ∑ i_1,
+                      AspisR1.LiteralOpeningView.eK (AspisR1.SelectedChallengeMap.rhoOf i.rho) ^ ↑i_1 *
+                        AspisR1.QueryResidualBridge.values i.data q i_1)))))));
+  have normal :=
+    AspisR1.RowFinish_Control.parent_value ops v p a alpha0 alpha1 r0 r1 weights alphas pair dot s2 ha0 ha1 hw has hp
+      hd;
+  have control :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ↔
+              (r0.lhs = r0.rhs ∧ r1.lhs = r1.rhs ∧ pair = r1.value) ∧ dot = a.rhs)
+          normal))
+      (if e0 : r0.lhs = r0.rhs then
+        if e1 : r1.lhs = r1.rhs then
+          if ep : pair = r1.value then
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (congrArg Aeneas.Std.Result.ok
+                              (Eq.trans
+                                (ite_cond_eq_false
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                    (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e1) r1.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r1.rhs)) not_true_eq_false)))
+                                  (Eq.trans
+                                    (ite_cond_eq_false
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrFun' (congrArg Ne ep) r1.value)
+                                        (Eq.trans (congrArg Not (eq_self r1.value)) not_true_eq_false)))
+                                    (Eq.trans
+                                      (ite_cond_eq_false
+                                        (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                                        (if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                        (Eq.trans (congrFun' (congrArg Ne next) 22#usize)
+                                          (Eq.trans (congrArg Not (eq_self 22#usize)) not_true_eq_false)))
+                                      (ite_cond_eq_false
+                                        (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                                        (Aeneas.Std.core.result.Result.Ok ())
+                                        (Eq.trans (congrFun' (congrArg Ne ed) a.rhs)
+                                          (Eq.trans (congrArg Not (eq_self a.rhs)) not_true_eq_false)))))))))
+                          (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_self (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_self True)))
+                            (and_self True)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_self True)))
+                  (iff_self True))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (Eq.trans
+                                    (ite_cond_eq_false
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrFun' (congrArg Ne e1) r1.rhs)
+                                        (Eq.trans (congrArg Not (eq_self r1.rhs)) not_true_eq_false)))
+                                    (Eq.trans
+                                      (ite_cond_eq_false
+                                        (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                        (if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                        (Eq.trans (congrFun' (congrArg Ne ep) r1.value)
+                                          (Eq.trans (congrArg Not (eq_self r1.value)) not_true_eq_false)))
+                                      (Eq.trans
+                                        (ite_cond_eq_false
+                                          (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                                          (if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                          (Eq.trans (congrFun' (congrArg Ne next) 22#usize)
+                                            (Eq.trans (congrArg Not (eq_self 22#usize)) not_true_eq_false)))
+                                        (ite_cond_eq_true
+                                          (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                                          (Aeneas.Std.core.result.Result.Ok ())
+                                          (Eq.trans (congrArg Not (eq_false ed)) not_false_eq_true))))))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_self True)))
+                            (and_self True)))
+                        (eq_false ed))
+                      (and_false True)))
+                  (iff_self False))
+          else
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (Eq.trans
+                                    (ite_cond_eq_false
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrFun' (congrArg Ne e1) r1.rhs)
+                                        (Eq.trans (congrArg Not (eq_self r1.rhs)) not_true_eq_false)))
+                                    (ite_cond_eq_true
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrArg Not (eq_false ep)) not_false_eq_true))))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (eq_false ep))
+                                (and_false True)))
+                            (and_false True)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (Eq.trans
+                                    (ite_cond_eq_false
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrFun' (congrArg Ne e1) r1.rhs)
+                                        (Eq.trans (congrArg Not (eq_self r1.rhs)) not_true_eq_false)))
+                                    (ite_cond_eq_true
+                                      (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                      (if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                      (Eq.trans (congrArg Not (eq_false ep)) not_false_eq_true))))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (eq_false ep))
+                                (and_false True)))
+                            (and_false True)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+        else
+          if ep : pair = r1.value then
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (ite_cond_eq_true
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrArg Not (eq_false e1)) not_false_eq_true)))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (eq_false e1))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_true False)))
+                            (and_false True)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (ite_cond_eq_true
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrArg Not (eq_false e1)) not_false_eq_true)))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans
+                                (congr (congrArg And (eq_false e1))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_true False)))
+                            (and_false True)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+          else
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (ite_cond_eq_true
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrArg Not (eq_false e1)) not_false_eq_true)))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans (congr (congrArg And (eq_false e1)) (eq_false ep)) (and_self False)))
+                            (and_false True)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (Eq.trans
+                                  (ite_cond_eq_false
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if r1.lhs ≠ r1.rhs then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if pair ≠ r1.value then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                      else
+                                        if a.next ≠ 22#usize then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else
+                                          if dot ≠ a.rhs then
+                                            Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                          else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrFun' (congrArg Ne e0) r0.rhs)
+                                      (Eq.trans (congrArg Not (eq_self r0.rhs)) not_true_eq_false)))
+                                  (ite_cond_eq_true
+                                    (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                    (if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                    (Eq.trans (congrArg Not (eq_false e1)) not_false_eq_true)))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e0) r0.rhs) (eq_self r0.rhs)))
+                              (Eq.trans (congr (congrArg And (eq_false e1)) (eq_false ep)) (and_self False)))
+                            (and_false True)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+      else
+        if e1 : r1.lhs = r1.rhs then
+          if ep : pair = r1.value then
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_self True)))
+                            (and_true False)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_self True)))
+                            (and_true False)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+          else
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (eq_false ep))
+                                (and_false True)))
+                            (and_self False)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (Eq.trans (congrFun' (congrArg Eq e1) r1.rhs) (eq_self r1.rhs)))
+                                  (eq_false ep))
+                                (and_false True)))
+                            (and_self False)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+        else
+          if ep : pair = r1.value then
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (eq_false e1))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_true False)))
+                            (and_self False)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans
+                                (congr (congrArg And (eq_false e1))
+                                  (Eq.trans (congrFun' (congrArg Eq ep) r1.value) (eq_self r1.value)))
+                                (and_true False)))
+                            (and_self False)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False))
+          else
+            if ed : dot = a.rhs then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans (congr (congrArg And (eq_false e1)) (eq_false ep)) (and_self False)))
+                            (and_self False)))
+                        (Eq.trans (congrFun' (congrArg Eq ed) a.rhs) (eq_self a.rhs)))
+                      (and_true False)))
+                  (iff_self False))
+            else
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Aeneas.Std.Result.ok
+                                (ite_cond_eq_true
+                                  (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                                  (if r1.lhs ≠ r1.rhs then
+                                    Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                  else
+                                    if pair ≠ r1.value then
+                                      Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation
+                                    else
+                                      if a.next ≠ 22#usize then
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                      else
+                                        if dot ≠ a.rhs then
+                                          Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Query
+                                        else Aeneas.Std.core.result.Result.Ok ())
+                                  (Eq.trans (congrArg Not (eq_false e0)) not_false_eq_true))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())))
+                          (Aeneas.Std.Result.ok.injEq
+                            (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Relation)
+                            (Aeneas.Std.core.result.Result.Ok ())))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.core.result.Result.ctorIdx h))))
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congr (congrArg And (eq_false e0))
+                              (Eq.trans (congr (congrArg And (eq_false e1)) (eq_false ep)) (and_self False)))
+                            (and_self False)))
+                        (eq_false ed))
+                      (and_self False)))
+                  (iff_self False)));
+  have query := AspisR1.Port4D_FinishFrozen.query_decision i q decoded matches_S4_S7;
+  have checks :=
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congrArg
+                (fun x =>
+                  match x with
+                  | none => false
+                  | some data =>
+                    decide
+                      (data = i.data ∧
+                        AspisR1.LiteralPairingChecks.checks
+                            (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+                          AspisR1.R16DecisionQueryModel.verify data i.queryBytes = true ∧
+                            AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) data ∧
+                              ∀ (q : Fin 22 → Fin 262144),
+                                AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                                  AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK data q
+                                    (AspisR1.SelectedChallengeMap.rhoOf i.rho)))
+                read)
+              (Decidable.decide.congr_simp
+                (i.data = i.data ∧
+                  AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+                    AspisR1.R16DecisionQueryModel.verify i.data i.queryBytes = true ∧
+                      AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data ∧
+                        ∀ (q : Fin 22 → Fin 262144),
+                          AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                            AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                              (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+                (True ∧
+                  AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+                    AspisR1.R16DecisionQueryModel.verify i.data i.queryBytes = true ∧
+                      AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data ∧
+                        ∀ (q : Fin 22 → Fin 262144),
+                          AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                            AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                              (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+                (congrFun' (congrArg And (eq_self i.data))
+                  (AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+                    AspisR1.R16DecisionQueryModel.verify i.data i.queryBytes = true ∧
+                      AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data ∧
+                        ∀ (q : Fin 22 → Fin 262144),
+                          AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                            AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                              (AspisR1.SelectedChallengeMap.rhoOf i.rho))))))
+          (decide
+            (AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+              AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                (AspisR1.SelectedChallengeMap.rhoOf i.rho)))))
+      ((fun p p_1 e_p =>
+          @Eq.rec Prop p (fun p_2 e_p => ∀ {h : Decidable p} {h_1 : Decidable p_2}, decide p = decide p_2)
+            (fun {h h_1} => Subsingleton.elim h h_1 ▸ Eq.refl (decide p)) p_1 e_p)
+        (True ∧
+          AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+            AspisR1.R16DecisionQueryModel.verify i.data i.queryBytes = true ∧
+              AspisR1.R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                  (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data ∧
+                ∀ (q : Fin 22 → Fin 262144),
+                  AspisR1.LiteralQueryRead.decode i.queryBytes = some q →
+                    AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+                      (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+        (AspisR1.LiteralPairingChecks.checks (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) ∧
+          AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q
+            (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+        (propext
+          { mp := fun h => ⟨h.right.left, h.right.right.right.right q decoded⟩,
+            mpr := fun a =>
+              let ⟨pairing, closed⟩ := a
+              ⟨True.intro,
+                ⟨pairing,
+                  ⟨query,
+                    ⟨semantic_S3_S9, fun q' hq' =>
+                      have eq := Option.some.inj (Eq.trans (Eq.symm hq') decoded);
+                      Eq.ndrec (motive := fun q' =>
+                        AspisR1.LiteralQueryRead.decode i.queryBytes = some q' →
+                          AspisR1.HchecksAccumulator.ClosedSum AspisR1.LiteralOpeningView.eK i.data q'
+                            (AspisR1.SelectedChallengeMap.rhoOf i.rho))
+                        (fun hq' => closed) (Eq.symm eq) hq'⟩⟩⟩⟩ }));
+  have sourceValue :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            decide
+                (AspisR1.Port3_NativeFinishBody.verifier.finish_relation (AspisR1.Port4D_Round.native ops) v p a none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+              _a)
+          checks))
+      (Bool.eq_iff_iff.mpr
+        (Eq.mpr (id (congr (congrArg Iff decide_eq_true_eq) decide_eq_true_eq))
+          (Iff.trans control (and_congr gates dotGate))));
+  ⟨Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            decide
+                (AspisR1.Port3_NativeFinishBody.verifier.finish_relation (AspisR1.Port4D_Round.native ops) v p a none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+              AspisR1.OraclePortFrozen2.finish parsed q tr i _a)
+          returned))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              decide
+                  (AspisR1.Port3_NativeFinishBody.verifier.finish_relation (AspisR1.Port4D_Round.native ops) v p a
+                      none =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) =
+                _a)
+            (AspisR1.OraclePortFrozen2.finish_value parsed q tr i hi hq)))
+        sourceValue),
+    have iff :=
+      AspisR1.Port3_QueryInstall.success_iff
+        (AspisR1.Port3_NativeFinishBody.verifier.finish_relation (AspisR1.Port4D_Round.native ops) v p a none) ();
+    id (Eq.trans (congrArg (fun p => decide p) (propext iff)) sourceValue)⟩
+AspisR1CurrentCaller.Ops.op19 : AspisR1CurrentCaller.Ops →
+  Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+            AspisR1CurrentCaller.verifier.Error)
+FinT_Audit.lean:13:8: error(lean.unknownIdentifier): Unknown identifier `AspisR1.VTop_Stages.Ops.op19`
+structure AspisR1.S2W_DigestExtraction.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.digestSource : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+      ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts
+constructor:
+  AspisR1.S2W_DigestExtraction.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2W_DigestExtraction.Parts → Aeneas.Std.Result AspisR1.S2W_DigestExtraction.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digestSource :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = AspisR1.S2W_DigestExtraction.digest hashv self parts) :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv
