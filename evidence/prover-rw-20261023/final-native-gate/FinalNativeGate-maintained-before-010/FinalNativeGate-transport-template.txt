@@ -1,0 +1,66 @@
+"""Prospective ONLY: one fixed SSH DATA action after lead review/new allocation.
+Never a final charge grant. This file is prepared, not executed by the worker.
+"""
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import selectors
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+
+RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v4/FinalNativeGate-data-transfer.py')
+PIN=__RECEIVER_PIN__
+ARGV=['/usr/bin/ssh','-T','-oBatchMode=yes','-oConnectTimeout=10','-oStrictHostKeyChecking=yes','-oClearAllForwardings=yes','-oForwardAgent=no','dombarker@100.108.41.90','/usr/bin/python3 -I -B -']
+LIMIT=4*2**20
+
+
+def source_stamp(s):
+    return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
+
+
+def main():
+    if len(sys.argv)!=1:raise ValueError('no transport arguments')
+    packet=Path(tempfile.mkdtemp(prefix='FinalNativeGate-future-data-transport-',dir='/private/tmp'))
+    start=time.monotonic();child=None;errors=[];total=0;exit_code=78
+    fd=os.open(RECEIVER,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+    with os.fdopen(fd,'rb') as source,(packet/'stdout').open('xb') as out,(packet/'stderr').open('xb') as err:
+        before=os.fstat(source.fileno())
+        if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_size!=PIN['size'] or before.st_size>LIMIT:raise ValueError('fixed receiver source shape')
+        if hashlib.sha256(source.read(LIMIT+1)).hexdigest()!=PIN['sha256']:raise ValueError('fixed receiver source pin')
+        source.seek(0)
+        try:
+            child=subprocess.Popen(ARGV,stdin=source,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                env=dict(HOME='/Users/dominic',PATH='/usr/bin:/bin',LANG='C.UTF-8'),close_fds=True)
+            with selectors.DefaultSelector() as sel:
+                for stream,dest in ((child.stdout,out),(child.stderr,err)):sel.register(stream,selectors.EVENT_READ,dest)
+                while sel.get_map():
+                    if time.monotonic()-start>120:raise TimeoutError('fixed outer SSH DATA120s deadline')
+                    for key,_ in sel.select(.05):
+                        raw=os.read(key.fileobj.fileno(),65536)
+                        if not raw:sel.unregister(key.fileobj);continue
+                        total+=len(raw)
+                        if total>LIMIT:raise ValueError('combined public summary4MiB bound')
+                        key.data.write(raw)
+                exit_code=child.wait(timeout=max(.001,120-(time.monotonic()-start)))
+            if source_stamp(before)!=source_stamp(os.fstat(source.fileno())):raise ValueError('receiver source interval drift')
+        except BaseException as exc:errors.append(repr(exc));exit_code=78
+        finally:
+            if child is not None:
+                if child.poll() is None:child.kill()
+                child.wait();child.stdout.close();child.stderr.close()
+            for stream in (out,err):stream.flush();os.fsync(stream.fileno())
+    u=resource.getrusage(resource.RUSAGE_SELF)
+    receipt=dict(argv=ARGV,exit=exit_code,errors=errors,wall_seconds=time.monotonic()-start,
+        peak_rss_bytes=u.ru_maxrss*(1 if sys.platform=='darwin' else 1024),swap=u.ru_nswap,
+        receiver=PIN,transport_actions=1,print_axioms='N/A',no_final_charge_authority=True,
+        remote_cleanup='UNRESOLVED on timeout/disconnection; local SSH exit does not prove remote scope empty')
+    with (packet/'receipt.json').open('x') as f:json.dump(receipt,f,sort_keys=True,indent=2)
+    print(json.dumps(dict(packet=str(packet),exit=exit_code,public_bytes=total,no_final_charge_authority=True)))
+    return exit_code
+
+if __name__=='__main__':raise SystemExit(main())
