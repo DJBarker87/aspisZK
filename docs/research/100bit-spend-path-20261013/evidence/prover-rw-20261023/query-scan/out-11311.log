@@ -1,0 +1,57 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTransition.lean:73:93: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTransition.lean:76:59: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  @LT.lt ℕ instLTNat (↑s.accepted_len) 22
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑s.accepted_len ↑22#usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTransition.lean:81:4: error: unsolved goals
+case neg.refine_1
+s : CurrentScan
+candidate : U32
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+active : (q22StateOf s).accepted.length < 22 ∧ (q22StateOf s).draws < 64
+hd : ↑(s.draws.wrapping_add 1#usize) = ↑s.draws + 1
+member : ↑candidate ∉ acceptedPrefix s
+hi : ↑s.accepted_len < s.accepted.length
+updated : Std.Array U32 22#usize
+hu : s.accepted.update s.accepted_len candidate = ok updated
+right✝ : updated = s.accepted.set s.accepted_len candidate
+hn : ↑(s.accepted_len.wrapping_add 1#usize) = ↑s.accepted_len + 1
+next : CurrentScan :=
+  { accepted := updated, accepted_len := s.accepted_len.wrapping_add 1#usize, draws := s.draws.wrapping_add 1#usize }
+⊢ ok
+      { accepted := updated, accepted_len := s.accepted_len.wrapping_add 1#usize,
+        draws := s.draws.wrapping_add 1#usize } =
+    ok next
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTransition.lean:82:4: error: unsolved goals
+case neg.refine_2
+s : CurrentScan
+candidate : U32
+hlen : ↑s.accepted_len < 22
+hdraw : ↑s.draws < 64
+active : (q22StateOf s).accepted.length < 22 ∧ (q22StateOf s).draws < 64
+hd : ↑(s.draws.wrapping_add 1#usize) = ↑s.draws + 1
+member : ↑candidate ∉ acceptedPrefix s
+hi : ↑s.accepted_len < s.accepted.length
+updated : Std.Array U32 22#usize
+hu : s.accepted.update s.accepted_len candidate = ok updated
+right✝ : updated = s.accepted.set s.accepted_len candidate
+hn : ↑(s.accepted_len.wrapping_add 1#usize) = ↑s.accepted_len + 1
+next : CurrentScan :=
+  { accepted := updated, accepted_len := s.accepted_len.wrapping_add 1#usize, draws := s.draws.wrapping_add 1#usize }
+shape :
+  q22StateOf
+      { accepted := updated, accepted_len := s.accepted_len.wrapping_add 1#usize,
+        draws := s.draws.wrapping_add 1#usize } =
+    { accepted := acceptedPrefix s ++ [↑candidate], draws := ↑s.draws + 1 }
+⊢ ({ accepted := (q22StateOf s).accepted ++ [↑candidate], draws := (q22StateOf s).draws + 1 }, false) =
+    ({ accepted := acceptedPrefix s ++ [↑candidate], draws := ↑s.draws + 1 }, false)
+'R1Z.ProverRwQueryTransition.mem_take_iff' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverRwQueryTransition.mem_val_iff' depends on axioms: [propext, Quot.sound]
+'R1Z.ProverRwQueryTransition.contains_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTransition.wrapping_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTransition.advance_q22' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -38,3 +38,46 @@ selected advance state. Full external dictionary, effect-aware entropy/retry
 adequacy, remaining per-attempt components, actual PrefixContract/BodyContract,
 E1/E2 and joint observer/oracle RunJoin remain open. Conjunct1 and the security
 target are not established. Existing theorem premises remain unchanged.
+
+## Composed source result and stopped caller factorization
+
+`ProverRwQueryTransition.advance_q22` identifies the real duplicate/fresh update
+with the retained `AspisV8R19.Q22WordScan.scan` one-word transition. Its membership
+law is proved from the actual emitted loop. `ProverRwQueryWord.source_factored`
+checks the exact byte-reader/update factoring against the emitted recursion.
+`ProverRwQueryWordTotal.read_total` proves all selected byte reads succeed for
+any blocks and valid block index; arithmetic is symbolic, including wrapping
+bounds. No native external dictionary entry is used by this component.
+
+`ProverRwQueryExecution.queries_execute` proves total execution on all block and
+advance arrays, retaining the ordered decoded-word chain and terminal state.
+`ProverRwQueryModelChain.queries_model` composes those transitions into the
+existing Q22 mathematical scan, with duplicate-free accepted prefix and at most
+64 consumed words. `ProverRwQueryResult.queries_characterization` adds the exact
+returned status, accepted array and selected advance state. The selected index
+is min(7,draws/8), preserving the pre-word stop boundary when count22 is reached
+on a block's final word. Exhaustion returns Transcript unless count22 is full.
+These conclusions have no supplied success/output-equivalence hypotheses.
+
+This closes the rewritten ordered word-owner's finite control, totality,
+Q22 per-word composition and final-state selection. It does not identify its
+word chain with `ProverCommitQuery26.policy`'s grouped `actualQueryWords` driver,
+nor supply the complete source.real query component or adaptive ROM view.
+
+Attempts11321–11324 fail the proposed full Transcript.queries factoring during
+elaboration of the monadic prefix/tuple-let join. No timeout or false-statement
+claim is made. All source revisions and sorryAx diagnostics are retained and
+rejected. The proposed file is archived as text only and is not an accepted Lean
+module. Its ordinary/digest/trace dictionary premises therefore discharge
+nothing. The next proof should split the 17-digest materialization at smaller
+named continuations, then connect grouped decoding and selected advance-state
+publication. Trace failure/divergence and the actual ordered shared oracle view
+must still be preserved; final proof-byte equality would not supply that join.
+
+Before the final audit, this continuation used19 compiles (9 passes,10 failed
+elaborations), reaching259/260. No resource-limit change or failed-resource
+rerun occurred. Full-caller external/native contracts, effect-aware entropy and
+retry/caller adequacy, other pipeline components, PrefixContract/BodyContract,
+E1/E2, joint L1/L2 observations, RunJoin, adoption/timing and artifact gates remain
+open and unchanged. Kani59/60 remains with its historically reserved last slot;
+no unrelated native gate is repeated for these Lean-only changes.

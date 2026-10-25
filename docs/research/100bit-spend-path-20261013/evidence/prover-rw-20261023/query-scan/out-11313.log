@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryWord.lean:57:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let accepted1 ←
+      Array.update accepted n (core.num.U32.from_le_bytes (Array.make 4#usize [v✝⁴, v✝³, v✝², v✝¹] ⋯) &&& 262143#u32)
+    recur accepted1 (n.wrapping_add 1#usize) (draws.wrapping_add 1#usize)
+is not definitionally equal to the right-hand side
+  do
+    let next ←
+      do
+        let updated ←
+          Array.update accepted n
+              (core.num.U32.from_le_bytes (Array.make 4#usize [v✝⁴, v✝³, v✝², v✝¹] ⋯) &&& 262143#u32)
+        ok { accepted := updated, accepted_len := n.wrapping_add 1#usize, draws := draws.wrapping_add 1#usize }
+    recur next.accepted next.accepted_len next.draws
+
+case isFalse.isFalse.isFalse
+recur : Queries → Usize → Usize → Result Output
+blocks advances : Blocks
+accepted : Queries
+n draws : Usize
+h✝² : ¬draws = 64#usize
+k : UScalar UScalarTy.Usize
+hk : draws / 8#usize = ok k
+h✝¹ : ¬n = 22#usize
+v✝⁶ : UScalar UScalarTy.Usize
+a✝⁶ : draws % 8#usize = ok v✝⁶
+v✝⁵ : Std.Array U8 32#usize
+a✝⁵ : Array.index_usize blocks k = ok v✝⁵
+v✝⁴ : U8
+a✝⁴ : v✝⁵.index_usize (Usize.wrapping_mul 4#usize v✝⁶) = ok v✝⁴
+v✝³ : U8
+a✝³ : v✝⁵.index_usize ((Usize.wrapping_mul 4#usize v✝⁶).wrapping_add 1#usize) = ok v✝³
+v✝² : U8
+a✝² : v✝⁵.index_usize ((Usize.wrapping_mul 4#usize v✝⁶).wrapping_add 2#usize) = ok v✝²
+v✝¹ : U8
+a✝¹ : v✝⁵.index_usize ((Usize.wrapping_mul 4#usize v✝⁶).wrapping_add 3#usize) = ok v✝¹
+v✝ : Bool
+a✝ :
+  host_transcript.query_contains accepted n
+      (core.num.U32.from_le_bytes (Array.make 4#usize [v✝⁴, v✝³, v✝², v✝¹] ⋯) &&& 262143#u32) =
+    ok v✝
+h✝ : ¬v✝ = true
+⊢ (do
+      let accepted1 ←
+        Array.update accepted n (core.num.U32.from_le_bytes (Array.make 4#usize [v✝⁴, v✝³, v✝², v✝¹] ⋯) &&& 262143#u32)
+      recur accepted1 (n.wrapping_add 1#usize) (draws.wrapping_add 1#usize)) =
+    do
+    let next ←
+      do
+        let updated ←
+          Array.update accepted n
+              (core.num.U32.from_le_bytes (Array.make 4#usize [v✝⁴, v✝³, v✝², v✝¹] ⋯) &&& 262143#u32)
+        ok { accepted := updated, accepted_len := n.wrapping_add 1#usize, draws := draws.wrapping_add 1#usize }
+    recur next.accepted next.accepted_len next.draws
+'R1Z.ProverRwQueryWord.dispatch_factored' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryWord.source_factored' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

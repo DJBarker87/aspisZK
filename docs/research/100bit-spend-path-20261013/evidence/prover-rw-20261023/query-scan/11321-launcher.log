@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1321); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+  host_transcript.queries_from_pairs blocks advances =
+    if final.accepted_len = 22#usize then
+      ok (core.result.Result.Ok (final.accepted, ProverRwQueryResult.selected advances final))
+    else ok (core.result.Result.Err verifier.Error.Transcript)
+h✝ : final.accepted_len = 22#usize
+⊢ (let (absorbed, blocks, advances) := (absorbed, blocks, advances)
+    do
+    let result ← host_transcript.queries_from_pairs blocks advances
+    publish absorbed result) =
+    publish absorbed (core.result.Result.Ok (final.accepted, ProverRwQueryResult.selected advances final))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCaller.lean:144:12: error: Tactic `rfl` failed: The left-hand side
+  let (absorbed, blocks, advances) := (absorbed, blocks, advances)
+  do
+  let result ← host_transcript.queries_from_pairs blocks advances
+  publish absorbed result
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Transcript, absorbed)
+
+case isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H : Type
+hash : aspis_core.digest.Digest32 H
+self absorbed : host_transcript.Transcript H
+row : U8
+payload : Slice U8
+blocks advances : Blocks
+read : materialize hash self row payload = ok (absorbed, blocks, advances)
+words : List U32
+final : Query31ExplicitScanBody.CurrentScan
+hc :
+  ProverRwQueryExecution.Chain blocks
+    { accepted := Array.repeat 22#usize 0#u32, accepted_len := 0#usize, draws := 0#usize } words final
+hm :
+  AspisV8R19.Q22WordScan.scan { accepted := [], draws := 0 } (List.map UScalar.val words) =
+    (Query31ExplicitScanBody.q22StateOf final, false)
+hl : words.length ≤ 64
+hn : (Query31ExplicitScanBody.acceptedPrefix final).Nodup
+hq :
+  host_transcript.queries_from_pairs blocks advances =
+    if final.accepted_len = 22#usize then
+      ok (core.result.Result.Ok (final.accepted, ProverRwQueryResult.selected advances final))
+    else ok (core.result.Result.Err verifier.Error.Transcript)
+h✝ : ¬final.accepted_len = 22#usize
+⊢ (let (absorbed, blocks, advances) := (absorbed, blocks, advances)
+    do
+    let result ← host_transcript.queries_from_pairs blocks advances
+    publish absorbed result) =
+    ok (core.result.Result.Err verifier.Error.Transcript, absorbed)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCaller.lean:143:24: warning: This simp argument is unused:
+  hq
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵h̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwQueryCaller.queries_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryCaller.from_materialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.25
+	Maximum resident set size (kbytes): 3879884
+	Swaps: 0
+	Exit status: 1
