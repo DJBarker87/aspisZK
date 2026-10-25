@@ -1,0 +1,15 @@
+WAdm_Fold.lean:44:6: error: 'change' tactic failed, pattern
+  (do
+      let mid ← append out x
+      loop (body append) (xs, mid)) =
+    ok after
+is not definitionally equal to target
+  (match body append (x :: xs, out) with
+    | ok r =>
+      match r with
+      | cont x => loop (body append) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+'AspisR1.WAdm_Fold.contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

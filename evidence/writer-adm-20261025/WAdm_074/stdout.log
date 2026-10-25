@@ -1,0 +1,25 @@
+WAdm_WeightsHelpers.lean:37:6: error: 'change' tactic failed, pattern
+  (match WAdm_weights_loop.body ⟨x :: xs, property⟩ out with
+    | ok (cont state) => WAdm_weights_loop state.1 state.2
+    | ok (done value) => ok value
+    | fail error => fail error
+    | div => div) =
+    ok after
+is not definitionally equal to target
+  (match
+      match (⟨x :: xs, property⟩, out) with
+      | (iter1, out1) => WAdm_weights_loop.body iter1 out1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1) => WAdm_weights_loop.body iter1 out1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+'AspisR1.WAdm_WeightsHelpers.loop_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_WeightsHelpers.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,57 @@
+WAdm_EmittedScalars.lean:5:17: error: failed to set `[local reducible]` for `Std.Array`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+WAdm_EmittedScalars.lean:5:17: error: failed to set `[local reducible]` for `Slice`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+WAdm_EmittedScalars.lean:5:17: error: failed to set `[local reducible]` for `alloc.vec.Vec`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+WAdm_EmittedScalars.lean:49:82: error: unsolved goals
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k x = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes x
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+⊢ (let (s, to_slice_mut_back) := (⟨↑(Array.repeat 16#usize 0#u8), ⋯⟩, (Array.repeat 16#usize 0#u8).from_slice)
+    do
+    let s1 ← OraclePortCkptAbi2Extracted.aspis_core.field.QM31.write_le_bytes x s
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out ⟨↑(to_slice_mut_back s1), ⋯⟩) =
+    do
+    let encoded ←
+      let (s, to_slice_mut_back) := (⟨↑(Array.repeat 16#usize 0#u8), ⋯⟩, (Array.repeat 16#usize 0#u8).from_slice)
+        do
+        let s1 ← OraclePortCkptAbi2Extracted.aspis_core.field.QM31.write_le_bytes x s
+        ok (to_slice_mut_back s1)
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out ⟨↑encoded, ⋯⟩
+WAdm_EmittedScalars.lean:44:96: error: unsolved goals
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k x = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes x
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+eq :
+  WAdm_putK out x = do
+    let encoded ← encode_k x
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+⊢ ∃ after,
+    (do
+          let encoded ← ok encoded
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice) =
+        ok after ∧
+      ↑after = ↑out ++ CheckpointP6EncodeK.bytes x
+WAdm_EmittedScalars.lean:52:56: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [WAdm_Fissioned.aspis_core.field.QM31.write_le_bytes, A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.WAdm_EmittedScalars.put_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

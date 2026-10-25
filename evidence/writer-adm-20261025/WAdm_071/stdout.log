@@ -1,0 +1,46 @@
+WAdm_WeightsHelpers.lean:33:6: error: Type mismatch
+  tail
+has type
+  WAdm_weights_loop ⟨xs, restProperty⟩ mid = ok after
+but is expected to have type
+  (match
+      let (o, iter1) := (some x, ⟨xs, ⋯⟩)
+      match o with
+      | none => ok (done out)
+      | some x => do
+        let out1 ← WAdm_putK out x
+        ok (cont (iter1, out1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ←
+              match x.1 with
+                | ⟨[], property⟩ => ok (none, x.1)
+                | ⟨hd :: tl, property⟩ => ok (some hd, ⟨tl, ⋯⟩)
+            match o with
+              | none => ok (done x.2)
+              | some x_1 => do
+                let out1 ← WAdm_putK x.2 x_1
+                ok (cont (iter1, out1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+WAdm_WeightsHelpers.lean:32:82: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [WAdm_weights_loop.body, ̲alloc.vec.into_iter.IteratorIntoIter.next,c̵a̵l̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+WAdm_WeightsHelpers.lean:40:2: error: Type mismatch: After simplification, term
+  loop_list (↑xs) xs.property out bound
+ has type
+  ∃ after, WAdm_weights_loop ⟨↑xs, ⋯⟩ out = ok after ∧ ↑after = ↑out ++ List.flatMap CheckpointP6EncodeK.bytes ↑xs
+but is expected to have type
+  ∃ after, WAdm_weights_loop xs out = ok after ∧ ↑after = ↑out ++ List.flatMap CheckpointP6EncodeK.bytes ↑xs
+'AspisR1.WAdm_WeightsHelpers.loop_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_WeightsHelpers.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

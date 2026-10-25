@@ -1,0 +1,38 @@
+WAdm_EmittedScalars.lean:49:4: error: Tactic `rfl` failed: The left-hand side
+  WAdm_putK out x
+is not definitionally equal to the right-hand side
+  do
+    let encoded ← encode_k x
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k x = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes x
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+⊢ WAdm_putK out x = do
+    let encoded ← encode_k x
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+WAdm_EmittedScalars.lean:43:96: error: unsolved goals
+out : alloc.vec.Vec U8
+x : K
+bound : (↑out).length + 16 ≤ Usize.max
+encoded : Std.Array U8 16#usize
+call : encode_k x = ok encoded
+layout : ↑encoded = CheckpointP6EncodeK.bytes x
+hb : (↑out).length + (↑encoded).length ≤ Usize.max
+eq :
+  WAdm_putK out x = do
+    let encoded ← encode_k x
+    alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice
+⊢ ∃ after,
+    (do
+          let encoded ← ok encoded
+          alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out encoded.to_slice) =
+        ok after ∧
+      ↑after = ↑out ++ CheckpointP6EncodeK.bytes x
+'AspisR1.WAdm_EmittedScalars.put_e' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_EmittedScalars.put_k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
