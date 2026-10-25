@@ -1,0 +1,295 @@
+SdkD_Accepted.lean:188:59: error: Application type mismatch: The argument
+  tx2
+has type
+  Tx2I_Install.shape s.proof = ok (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2) ∧
+    Op3I_Install.sourceBody s.proof = ok (core.result.Result.Ok transport.Variant.S2) ∧
+      OraclePortHeader.accepts (bytesOf ↑s.proof) = true ∧
+        ∃ p saved g geometry pending returned after flushed back v,
+          (Tx2N_Execution.control stageBase reserved queryOps geoOps).op18
+                (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                  (sdkOps
+                    (Tx2I_Install.install adapterOps
+                      (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps)
+                    (Uni_Install.current ops reserved queryOps geoOps) B claimsStd))
+                s.checkpoint s.proof s.pub AspisR1Stage2.transport.Variant.S2 () =
+              ok (core.result.Result.Ok (p, saved)) ∧
+            (Tx2N_Execution.control stageBase reserved queryOps geoOps).op6 s.proof p saved g none geometry pending
+                  22#usize =
+                ok (core.result.Result.Ok (returned, after)) ∧
+              returned.weights.deref_mut = (returned.weights.deref, back) ∧
+                (Tx2N_Execution.control stageBase reserved queryOps geoOps).op9 after returned.weights.deref =
+                    ok flushed ∧
+                  have a :=
+                    { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next };
+                  (Tx2I_Install.stage (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                            finishOps).op19
+                        v p a none =
+                      ok (core.result.Result.Ok ()) ∧
+                    Port4D_FinishInstall.finish finishOps v p a none = ok (core.result.Result.Ok ()) ∧
+                      ∀ (alpha0 alpha1 : AspisR1Stage2.Stage2Finish.E)
+                        (r0 : RowFinish_Control.RoundValues finishOps v.round0 alpha0 p.claim)
+                        (r1 : RowFinish_Control.RoundValues finishOps v.round1 alpha1 r0.value) (weights : F)
+                        (alphas : Slice AspisR1Stage2.Stage2Finish.E) (pair dot : AspisR1Stage2.Stage2Finish.E),
+                        p.variant = AspisR1Stage2.transport.Variant.S2 →
+                          p.alpha.index_usize 0#usize = ok alpha0 →
+                            p.alpha.index_usize 1#usize = ok alpha1 →
+                              finishOps.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights) →
+                                core.array.Array.index
+                                      (core.ops.index.IndexSlice
+                                        (core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                                      p.alpha { «end» := 2#usize } =
+                                    ok alphas →
+                                  finishOps.pair weights alphas v.final_message p.kappa =
+                                      ok (core.result.Result.Ok pair) →
+                                    finishOps.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot) →
+                                      ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                                        (tr : RawCutTranscriptRun.ErasedPrefix)
+                                        (i : RecordedBinaryExperimentBin.SourceInputs),
+                                        OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+                                          OraclePortSelectedDraft.queries tr = some q →
+                                            LiteralMatchingData.read
+                                                  (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                                                some i.data →
+                                              LiteralQueryRead.decode i.queryBytes = some q →
+                                                Port4D_Pairing.PairingLaws (Port3_FinishStage.release finishOps)
+                                                    CheckpointBytes5Output.ofE v p i.data →
+                                                  (∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)) →
+                                                    R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                                        (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data →
+                                                      CheckpointBytes5Output.ofE dot =
+                                                          ∑ l,
+                                                            i.data.f l *
+                                                              LiteralOpeningView.eK
+                                                                ((CheckpointBytes5Output.accumulator a).weights l) →
+                                                        (∀ x ∈ [r0.lhs, r0.rhs, ⋯],
+                                                            CheckpointBytes4ReaderFields.sourceE
+                                                                (CheckpointBytes5Output.ofE x) =
+                                                              x) →
+                                                          CheckpointBytes5Output.accumulator saved =
+                                                              (OraclePortCheckpointStateC3.write
+                                                                  (OraclePortCheckpointResumeC5.model i.data
+                                                                    (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                                                            CheckpointBytes5Output.accumulator a =
+                                                                OraclePortCheckpointStateC3.advance
+                                                                  (OraclePortCheckpointResumeC5.model i.data
+                                                                    (SelectedChallengeMap.rhoOf i.rho) q)
+                                                                  12 (CheckpointBytes5Output.accumulator saved) →
+                                                              decide
+                                                                    (Port3_NativeFinishBody.verifier.finish_relation
+                                                                        (Port4D_Round.native finishOps) v p a none =
+                                                                      ok (core.result.Result.Ok ())) =
+                                                                  OraclePortFrozen2.finish parsed q tr i
+                                                                    (CheckpointBytes5Output.accumulator a) ∧
+                                                                decide
+                                                                    (Port4D_FinishInstall.finish finishOps v p a none =
+                                                                      ok (core.result.Result.Ok ())) =
+                                                                  D0TypedChecks.verify
+                                                                    (OraclePortStoredDecisionDraftC4.typedRows parsed q
+                                                                      tr)
+                                                                    i
+but is expected to have type
+  Tx2I_Install.shape s.proof = ok (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2) ∧
+    Op3I_Install.sourceBody s.proof = ok (core.result.Result.Ok transport.Variant.S2) ∧
+      OraclePortHeader.accepts (bytesOf ↑s.proof) = true ∧
+        ∃ p saved g geometry pending returned after flushed back v,
+          stageBase.op18
+                (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+                  (sdkOps
+                    (Tx2I_Install.install adapterOps
+                      (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps)
+                    (Uni_Install.current ops reserved queryOps geoOps) B claimsStd))
+                s.checkpoint s.proof s.pub AspisR1Stage2.transport.Variant.S2 () =
+              ok (core.result.Result.Ok (p, saved)) ∧
+            stageBase.op6 s.proof p saved g none geometry pending 22#usize =
+                ok (core.result.Result.Ok (returned, after)) ∧
+              returned.weights.deref_mut = (returned.weights.deref, back) ∧
+                stageBase.op9 after returned.weights.deref = ok flushed ∧
+                  let a :=
+                    { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next };
+                  (Tx2I_Install.stage (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                            finishOps).op19
+                        v p a none =
+                      ok (core.result.Result.Ok ()) ∧
+                    Port4D_FinishInstall.finish finishOps v p a none = ok (core.result.Result.Ok ()) ∧
+                      ∀ (alpha0 alpha1 : AspisR1Stage2.Stage2Finish.E)
+                        (r0 : RowFinish_Control.RoundValues finishOps v.round0 alpha0 p.claim)
+                        (r1 : RowFinish_Control.RoundValues finishOps v.round1 alpha1 r0.value) (weights : F)
+                        (alphas : Slice AspisR1Stage2.Stage2Finish.E) (pair dot : AspisR1Stage2.Stage2Finish.E),
+                        p.variant = AspisR1Stage2.transport.Variant.S2 →
+                          p.alpha.index_usize 0#usize = ok alpha0 →
+                            p.alpha.index_usize 1#usize = ok alpha1 →
+                              finishOps.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights) →
+                                core.array.Array.index
+                                      (core.ops.index.IndexSlice
+                                        (core.slice.index.SliceIndexRangeToUsizeSlice AspisR1Stage2.Stage2Finish.E))
+                                      p.alpha { «end» := 2#usize } =
+                                    ok alphas →
+                                  finishOps.pair weights alphas v.final_message p.kappa =
+                                      ok (core.result.Result.Ok pair) →
+                                    finishOps.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot) →
+                                      ∀ (parsed : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                                        (tr : RawCutTranscriptRun.ErasedPrefix)
+                                        (i : RecordedBinaryExperimentBin.SourceInputs),
+                                        OraclePortStoredDecisionDraftC4.input parsed q tr = some i →
+                                          OraclePortSelectedDraft.queries tr = some q →
+                                            LiteralMatchingData.read
+                                                  (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                                                some i.data →
+                                              LiteralQueryRead.decode i.queryBytes = some q →
+                                                Port4D_Pairing.PairingLaws (Port3_FinishStage.release finishOps)
+                                                    CheckpointBytes5Output.ofE v p i.data →
+                                                  (∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)) →
+                                                    R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                                        (OraclePortStoredDecisionDraftC4.typedRows parsed q tr) i.data →
+                                                      CheckpointBytes5Output.ofE dot =
+                                                          ∑ l,
+                                                            i.data.f l *
+                                                              LiteralOpeningView.eK
+                                                                ((CheckpointBytes5Output.accumulator a).weights l) →
+                                                        (∀ x ∈ [r0.lhs, r0.rhs, ⋯],
+                                                            CheckpointBytes4ReaderFields.sourceE
+                                                                (CheckpointBytes5Output.ofE x) =
+                                                              x) →
+                                                          CheckpointBytes5Output.accumulator saved =
+                                                              (OraclePortCheckpointStateC3.write
+                                                                  (OraclePortCheckpointResumeC5.model i.data
+                                                                    (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                                                            CheckpointBytes5Output.accumulator a =
+                                                                OraclePortCheckpointStateC3.advance
+                                                                  (OraclePortCheckpointResumeC5.model i.data
+                                                                    (SelectedChallengeMap.rhoOf i.rho) q)
+                                                                  12 (CheckpointBytes5Output.accumulator saved) →
+                                                              decide
+                                                                    (Port3_NativeFinishBody.verifier.finish_relation
+                                                                        (Port4D_Round.native finishOps) v p a none =
+                                                                      ok (core.result.Result.Ok ())) =
+                                                                  OraclePortFrozen2.finish parsed q tr i
+                                                                    (CheckpointBytes5Output.accumulator a) ∧
+                                                                decide
+                                                                    (Port4D_FinishInstall.finish finishOps v p a none =
+                                                                      ok (core.result.Result.Ok ())) =
+                                                                  D0TypedChecks.verify
+                                                                    (OraclePortStoredDecisionDraftC4.typedRows parsed q
+                                                                      tr)
+                                                                    i
+in the application
+  And.intro tx2
+'AspisR1.SdkD_Accepted.accepted_pair_unified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.SdkD_Accepted.accepted_pair_unified : ∀ {W A M Cv F CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops)
+                (geoOps : Port3_NativeGeometryBody.Ops CoreError) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (sdkOps
+                      (Tx2I_Install.install adapterOps
+                        (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps)
+                      (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32),
+                                have port :=
+                                  SdkD_Child.port adapterOps (Uni_Install.current ops reserved queryOps geoOps)
+                                    (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                    finishOps B claimsStd;
+                                ∃ f s outer pre middle fs ss,
+                                  SourceCuts
+                                      (sdkOps
+                                        (Tx2I_Install.install adapterOps
+                                          (Op5T_Concrete.stage
+                                            (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                          finishOps)
+                                        (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                                      e1.first (e2.second secondSizes) saved f s ∧
+                                    ((RowShape_InstalledSlots.verifierOps
+                                                (Uni_Install.current ops reserved queryOps geoOps) B claimsStd).op4
+                                            f.proof =
+                                          ok (core.result.Result.Ok ()) ∧
+                                        Op4P_Install.sourceBody f.proof = ok (core.result.Result.Ok ()) ∧
+                                          OraclePortCompactDraft.scan (bytesOf ↑f.proof)) ∧
+                                      (∃ run, reserved = true ∧ ⋯) ∧
+                                        (have sdk :=
+                                            Op5T_SamePair.dictionary adapterOps
+                                              (Uni_Install.base ops reserved queryOps geoOps)
+                                              (Tx2N_Execution.control stageBase reserved queryOps geoOps) finishOps B
+                                              claimsStd;
+                                          ⋯) ∧
+                                          ⋯ ∧ ⋯ :=
+fun {W A M Cv F CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops reserved
+    queryOps geoOps stageBase finishOps B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1
+    data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length =>
+  let ⟨f, h✝⟩ :=
+    SdkD_Uni.accepted_pair_unified L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops reserved
+      queryOps geoOps (Tx2N_Execution.control stageBase reserved queryOps geoOps) finishOps B claimsStd native1 native2
+      hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2
+      accepted1 accepted2 p root length
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨scan, right✝¹⟩ := right✝
+  let ⟨tx1, right✝²⟩ := right✝¹
+  let ⟨batches, right✝³⟩ := right✝²
+  let ⟨tx2, right✝⁴⟩ := right✝³
+  let ⟨first, right✝⁵⟩ := right✝⁴
+  let ⟨expanded, right✝⁶⟩ := right✝⁵
+  let ⟨owned, right✝⁷⟩ := right✝⁶
+  let ⟨layout, right✝⁸⟩ := right✝⁷
+  let ⟨unchanged, right✝⁹⟩ := right✝⁸
+  let ⟨before1, right✝¹⁰⟩ := right✝⁹
+  let ⟨before2, right✝¹¹⟩ := right✝¹⁰
+  let ⟨claims, caller⟩ := right✝¹¹
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro outer
+        (Exists.intro pre
+          (Exists.intro middle
+            (Exists.intro fs
+              (Exists.intro ss
+                ⟨cuts,
+                  ⟨scan,
+                    ⟨tx1,
+                      ⟨batches,
+                        ⟨sorry,
+                          ⟨first,
+                            ⟨expanded,
+                              ⟨owned,
+                                ⟨layout,
+                                  ⟨unchanged,
+                                    ⟨before1,
+                                      ⟨before2,
+                                        ⟨claims,
+                                          fun decode nodes y1 writer reader runtime p2prime entry multiproof scanJoin =>
+                                          let ⟨parsed, h✝⁷⟩ :=
+                                            caller decode nodes y1 writer reader runtime p2prime entry multiproof
+                                              scanJoin
+                                          let ⟨facts, sites⟩ := h✝⁷
+                                          Exists.intro parsed
+                                            ⟨facts,
+                                              ⟨sites, fun queryLeaves geoLeaves domain multiply one inverse =>
+                                                SdkD_Inner.same_pair copy std allocator e1 e2 adapterOps ops stageBase
+                                                  finishOps reserved queryOps geoOps B claimsStd native1 native2 hashv
+                                                  extraction program data1 state1 final1 saved post1 accepted1 f s cuts
+                                                  decode H writer reader runtime p2prime queryLeaves geoLeaves domain
+                                                  multiply one inverse⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))))))
