@@ -1,0 +1,29 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "freeze": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+  "weights_sha256": "e91506302ad63dabd1c3c190e563b1da17ea1b4ebbeb4d21d25f3d921cc4c1c3",
+  "previous_proof_sha256": "68c7c3c169fa5bc49c5fc4050ea004ffee75214443d8d26b7a72040bfa56f7f8",
+  "change": "Execute complete frozen Transcript::new/scalar/queries/scalar_k/absorb/block and frozen powers inside native Prepared::new. Check all33 digest preimage calls including all16 prefetched query reads on failure. Replace transcript method cuts by gamma/ordinary/qm sampler and queries_from_pairs cuts; scripted Digest32 implementation checks ordered source call frame.",
+  "remaining": "Gamma/ordinary/QM31 samplers, queries_from_pairs, primitive multiplication, prepared_claim normal returns, scripted digest outputs; concrete oracle determinism/law, initialization/allocator, SDK/extraction/native/SBF correspondence remain explicit.",
+  "resource": "New focused target at 4GiB sampled aggregate RSS and 180s; previous distinct whole-helper-cut target peaked 1947516928 bytes; no memory-failure retry.",
+  "weights_file_is_factored": true,
+  "frozen_weights_whole_sha256": "28b558ffa9f5b004188c7f50b1597fe681186f54fb4d52a3bd125df4f2481137",
+  "exact_frozen_powers_body": "pub fn powers<const N:usize>(x:E)->[E;N]{\n let mut out=[E::ZERO;N];\n let mut p=E::ONE;\n let mut i=0usize;\n while i<N {\n  out[i]=p;\n  i+=1;\n  if i==N { return out; }\n  p=p.mul(x);\n }\n out\n}",
+  "exact_frozen_powers_body_sha256": "79c059dd574e3b0dac53ca40f02072d473466dc58ab231f23636f94285b12a22",
+  "unchanged_native_modules": {
+    "r1_semantic.rs": "3e98d5cd12f63163ebe4c59fd1465786c518136cc32ec4b8dce9fdda36d31449",
+    "r1_wire.rs": "54db68fb0556a1dc33f9bb1e23c02037bebc8223389a885780b19d00f1e86098",
+    "transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+    "transcript.rs": "a4cf5f6a0e0d4caada2bab6901d2ee025af6c1000d41e0bd3f592dd68363f0ac",
+    "fast_pairing.rs": "2cb96261cecfd766b5e1b45a585b74c5f59c20c6be4f41e806239e2786ca7313",
+    "trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+    "verifier.rs": "45c11c8112f22c8ed04c7092ea5976e7b899f25321e7d6f6f48a9401945d8d4f",
+    "weights.rs": "e91506302ad63dabd1c3c190e563b1da17ea1b4ebbeb4d21d25f3d921cc4c1c3"
+  },
+  "frozen_verified_declaration": "pub struct Verified<H: Digest32> {\n    pub roots: [[u8; 32]; 2],\n    pub challenges: Challenges,\n    pub alpha: [QM31; 10],\n    pub claims: Box<[[QM31; 29]; 3]>,\n    pub extra: [QM31; 29],\n    pub before_z1: [QM31; 29],\n    pub state_before_z0: [u8; 32],\n    pub z: [SecureCirclePoint; 2],\n    pub transcript: SemanticTranscript<H>,\n    #[cfg(feature = \"prover\")]\n    pub round_checks: [[QM31; 3]; 10],\n    #[cfg(feature = \"prover\")]\n    pub terminal: QM31,\n    #[cfg(feature = \"prover\")]\n    pub masked_terminal: QM31,\n}",
+  "release_carrier_audit": "round_checks, terminal, masked_terminal are prover-only cfg fields; nine native release fields retained exactly from accepted v6 source.",
+  "previous_powers_binding_sha256": "5e36237caeecebe11fa954ec20ff4abe3100b0a596056072083b4379aaf65533",
+  "states": "Scalar states derived from same33-call reply tape; chosen query state is one of eight same actual advances, selected symbolically. Fixed S2 frame lengths retained. Digest reply tape permits inconsistent replies to repeated preimages: control theorem only, not oracle correspondence or probability transport.",
+  "whole_transcript_frozen_sha256": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+  "queries_materialization": "actual frozen transcript prefetches eight block/advance pairs; native sampler returns Transcript on any pair-scan error and no rho digest occurs on that path"
+}
