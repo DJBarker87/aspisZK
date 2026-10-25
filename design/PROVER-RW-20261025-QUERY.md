@@ -152,3 +152,32 @@ No prior shared module/object overwritten. The source revisions are the prior
 stage commits (11333 predates the stage1 commit); snapshots pin every input.
 The new 100-attempt budget has used24 Lean compiles, no Kani runs. Conjunct1,
 full materialization/publication correspondence and native ROM effects remain.
+
+## Materialisation and native publication (11350–11359)
+
+`ProverRwQueryComplete.queries_complete` proves the full source query caller
+is the existing `ProverCommitQuery26.materialize` with the identical digest
+callback, followed by its installed grouped policy, followed by the exact
+finite native publication continuation. There is no supplied successful
+materialization or output equality. `materialize_transport` includes absorb,
+all16 following digests, array updates and the final read. It erases only the
+model materializer's inert trace field; it does not erase any actual trace call.
+`ProverRwQueryTrace.trace_finite` retains all22 ordered from_m31/trace.value
+steps, including failure/divergence. `publish_finite` preserves rejection state
+and only publishes the selected state after the native trace succeeds.
+
+This removes the source query-caller materialisation, grouped scan and finite
+publication control obligations. It does not equate a native TLS trace with
+the model's Vec trace, instantiate op110/op247, or establish adaptive ROM
+observations. Those concrete effect/representation interpretations belong to
+the still-open experiment/observer transport; no new hypothesis hides them.
+The source statement quantifies over the existing ExternalTypes/ExternalFuns
+parameters, as before. No full native dictionary entry is newly installed.
+
+Ten compiles: three pass, seven retained elaboration failures. A premature
+Complete dependency preflight rejected the absent Trace object without a Lean
+launch;11357 was used for the changed Trace source. No resource failures.
+Final11359: exit0,1.75s,4,095,144KiB RSS,swaps0,three standard-axiom reports.
+All new top theorems have accepted axiom reports in `query-complete`.
+New budget34/100 Lean,0/20 Kani. Existing stricter scopes unchanged; no native
+Rust/artifact/runtime/performance gate or full manifest was rerun.

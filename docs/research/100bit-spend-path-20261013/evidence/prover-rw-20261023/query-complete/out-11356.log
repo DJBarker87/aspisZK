@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTrace.lean:15:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwQueryTrace.loop_bind`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTrace.lean:39:4: error: Type mismatch
+  ih (i.wrapping_add 1#usize) (Decidable.byContradiction fun a => loop_finite._proof_7 fuel i bound add a)
+has type
+  loop (fun i1 => host_transcript.trace_queries_loop.body q i1) (i.wrapping_add 1#usize) =
+    finite q fuel (i.wrapping_add 1#usize)
+but is expected to have type
+  loop
+      (fun i1 =>
+        if i1 < 22#usize then do
+          let i1_1 ← Array.index_usize q i1
+          let we ← aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 i1_1
+          trace.value 5#u16 i1 we
+          ok (ControlFlow.cont (i1.wrapping_add 1#usize))
+        else ok (ControlFlow.done ()))
+      v =
+    finite q fuel v
+'R1Z.ProverRwQueryTrace.loop_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.loop_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.trace_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

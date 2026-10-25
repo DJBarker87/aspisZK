@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTrace.lean:30:4: error: Type mismatch
+  ih (i.wrapping_add 1#usize) (Decidable.byContradiction fun a => loop_finite._proof_7 fuel i bound add a)
+has type
+  loop (fun i1 => host_transcript.trace_queries_loop.body q i1) (i.wrapping_add 1#usize) =
+    finite q fuel (i.wrapping_add 1#usize)
+but is expected to have type
+  (match do
+      let i1 ← Array.index_usize q i
+      let we ← aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 i1
+      trace.value 5#u16 i we
+      ok (ControlFlow.cont (i.wrapping_add 1#usize)) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun i1 =>
+            if i1 < 22#usize then do
+              let i1_1 ← Array.index_usize q i1
+              let we ← aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 i1_1
+              trace.value 5#u16 i1 we
+              ok (ControlFlow.cont (i1.wrapping_add 1#usize))
+            else ok (ControlFlow.done ()))
+          x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let u ← Array.index_usize q i
+    let we ← aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31 u
+    trace.value 5#u16 i we
+    finite q fuel (i.wrapping_add 1#usize)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTrace.lean:22:69: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [host_transcript.trace_queries_loop.body, ̲stop, ̲if_false,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲finite]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryTrace.lean:27:73: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵o̵s̵t̵_̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵t̵r̵a̵c̵e̵_̵q̵u̵e̵r̵i̵e̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵g̵o̵,̵i̵f̵_̵t̵r̵u̵e̵,̵f̵i̵n̵i̵t̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵[̲h̲o̲s̲t̲_̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲t̲r̲a̲c̲e̲_̲q̲u̲e̲r̲i̲e̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲g̲o̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲n̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwQueryTrace.loop_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.trace_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
