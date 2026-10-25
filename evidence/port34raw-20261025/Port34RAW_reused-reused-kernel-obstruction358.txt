@@ -1,0 +1,284 @@
+(kernel) application type mismatch
+  @Exists.casesOn (AspisR1PublicPreparation.transcript.Transcript H)
+    (fun absorbed =>
+      ∃ blocks advances selected pairs,
+        AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+            @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+          AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+              @Aeneas.Std.Result.ok
+                (@Aeneas.Std.core.result.Result
+                  (@Aeneas.Std.Array Aeneas.Std.U32
+                      (Aeneas.Std.Usize.ofNat 22 (of_decide_eq_true (id (Eq.refl true)))) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 (of_decide_eq_true (id (Eq.refl true)))))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                (@Aeneas.Std.core.result.Result.Ok
+                  (@Aeneas.Std.Array Aeneas.Std.U32
+                      (Aeneas.Std.Usize.ofNat 22 (of_decide_eq_true (id (Eq.refl true)))) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 (of_decide_eq_true (id (Eq.refl true)))))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+            after =
+                AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+              pairs.length = 8 ∧
+                (∃ first rest,
+                    pairs = first :: rest ∧
+                      AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                        AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                  AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                    AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances)
+    (fun x =>
+      ∃ absorbed blocks advances selected pairs,
+        AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+            @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+          AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+              @Aeneas.Std.Result.ok
+                (@Aeneas.Std.core.result.Result
+                  (@Aeneas.Std.Array Aeneas.Std.U32
+                      (Aeneas.Std.Usize.ofNat 22 (of_decide_eq_true (id (Eq.refl true)))) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 (of_decide_eq_true (id (Eq.refl true)))))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                (@Aeneas.Std.core.result.Result.Ok
+                  (@Aeneas.Std.Array Aeneas.Std.U32
+                      (Aeneas.Std.Usize.ofNat 22 (of_decide_eq_true (id (Eq.refl true)))) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 (of_decide_eq_true (id (Eq.refl true)))))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+            after =
+                AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+              pairs.length = 8 ∧
+                (∃ first rest,
+                    pairs = first :: rest ∧
+                      AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                        AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                  AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                    (∀
+                        (pair :
+                          AspisR1PublicPreparation.Query31SourceSchedule.DigestPair H D
+                            (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)),
+                        pair ∈ pairs →
+                          AspisV8R19.SqueezeOracleBridge.decodeState
+                                (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                  (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.squeeze H D
+                                    (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                              AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root length
+                                (FS2.Duplex.squeezeA M Cv L p
+                                  (AspisV8R19.SqueezeOracleBridge.decodeState
+                                    (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair))) ∧
+                            AspisV8R19.SqueezeOracleBridge.decodeState
+                                (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                  (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.advance H D
+                                    (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                              AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root length
+                                (FS2.Duplex.advanceA M Cv L p
+                                  (AspisV8R19.SqueezeOracleBridge.decodeState
+                                    (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)))) ∧
+                      AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances)
+    (AspisR1PublicPreparation.Query31SourceSchedule.queries_success_with_digest_pairs_full H B D self after row payload
+      out h)
+argument has type
+  ∃ absorbed blocks advances selected pairs,
+    AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+        @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+      AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+          @Aeneas.Std.Result.ok
+            (@Aeneas.Std.core.result.Result
+              (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+              AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+            (@Aeneas.Std.core.result.Result.Ok
+              (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+              AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+        after =
+            AspisR1PublicPreparation.transcript.Transcript.mk H selected
+              (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+          pairs.length = 8 ∧
+            AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+              AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances
+but function has type
+  ∀
+    (t :
+      ∃ absorbed blocks advances selected pairs,
+        AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+            @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+          AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+              @Aeneas.Std.Result.ok
+                (@Aeneas.Std.core.result.Result
+                  (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                (@Aeneas.Std.core.result.Result.Ok
+                  (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                    @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                  AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+            after =
+                AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+              pairs.length = 8 ∧
+                (∃ first rest,
+                    pairs = first :: rest ∧
+                      AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                        AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                  AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                    AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances),
+    (∀ (w : AspisR1PublicPreparation.transcript.Transcript H)
+        (h :
+          (@fun absorbed =>
+              ∃ blocks advances selected pairs,
+                AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+                    @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+                  AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+                      @Aeneas.Std.Result.ok
+                        (@Aeneas.Std.core.result.Result
+                          (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                            @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                          AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                        (@Aeneas.Std.core.result.Result.Ok
+                          (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                            @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                          AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+                    after =
+                        AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+                      pairs.length = 8 ∧
+                        (∃ first rest,
+                            pairs = first :: rest ∧
+                              AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                                AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                          AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                              (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                            AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                              (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances)
+            w),
+        (fun x =>
+            ∃ absorbed blocks advances selected pairs,
+              AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+                  @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+                AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+                    @Aeneas.Std.Result.ok
+                      (@Aeneas.Std.core.result.Result
+                        (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                          @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                        AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                      (@Aeneas.Std.core.result.Result.Ok
+                        (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                          @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                        AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+                  after =
+                      AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+                    pairs.length = 8 ∧
+                      (∃ first rest,
+                          pairs = first :: rest ∧
+                            AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                              AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                        AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                            (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                          (∀
+                              (pair :
+                                AspisR1PublicPreparation.Query31SourceSchedule.DigestPair H D
+                                  (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)),
+                              pair ∈ pairs →
+                                AspisV8R19.SqueezeOracleBridge.decodeState
+                                      (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                        (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.squeeze H D
+                                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                                    AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root
+                                      length
+                                      (FS2.Duplex.squeezeA M Cv L p
+                                        (AspisV8R19.SqueezeOracleBridge.decodeState
+                                          (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                            (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair))) ∧
+                                  AspisV8R19.SqueezeOracleBridge.decodeState
+                                      (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                        (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.advance H D
+                                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                                    AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root
+                                      length
+                                      (FS2.Duplex.advanceA M Cv L p
+                                        (AspisV8R19.SqueezeOracleBridge.decodeState
+                                          (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                            (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)))) ∧
+                            AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                              (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances)
+          ⋯) →
+      (fun x =>
+          ∃ absorbed blocks advances selected pairs,
+            AspisR1PublicPreparation.transcript.Transcript.absorb H D self row payload =
+                @Aeneas.Std.Result.ok (AspisR1PublicPreparation.transcript.Transcript H) absorbed ∧
+              AspisR1PublicPreparation.QueriesModel.Boundaries.decode B blocks advances =
+                  @Aeneas.Std.Result.ok
+                    (@Aeneas.Std.core.result.Result
+                      (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                        @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                      AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError)
+                    (@Aeneas.Std.core.result.Result.Ok
+                      (@Aeneas.Std.Array Aeneas.Std.U32 (Aeneas.Std.Usize.ofNat 22 ⋯) ×
+                        @Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯))
+                      AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError (out, selected)) ∧
+                after =
+                    AspisR1PublicPreparation.transcript.Transcript.mk H selected
+                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) ∧
+                  pairs.length = 8 ∧
+                    (∃ first rest,
+                        pairs = first :: rest ∧
+                          AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                              (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) first =
+                            AspisR1PublicPreparation.transcript.Transcript.state H absorbed) ∧
+                      AspisR1PublicPreparation.Query31SourceSchedule.stateChain H D
+                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs ∧
+                        (∀
+                            (pair :
+                              AspisR1PublicPreparation.Query31SourceSchedule.DigestPair H D
+                                (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)),
+                            pair ∈ pairs →
+                              AspisV8R19.SqueezeOracleBridge.decodeState
+                                    (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                      (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.squeeze H D
+                                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                                  AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                    (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root
+                                    length
+                                    (FS2.Duplex.squeezeA M Cv L p
+                                      (AspisV8R19.SqueezeOracleBridge.decodeState
+                                        (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair))) ∧
+                                AspisV8R19.SqueezeOracleBridge.decodeState
+                                    (AspisR1PublicPreparation.Query31SourceSchedule.DigestCall.output H D
+                                      (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed)
+                                      (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.advance H D
+                                        (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)) =
+                                  AspisR1PublicPreparation.SourceDigestOracle.oracle H L D
+                                    (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pubInput root
+                                    length
+                                    (FS2.Duplex.advanceA M Cv L p
+                                      (AspisV8R19.SqueezeOracleBridge.decodeState
+                                        (AspisR1PublicPreparation.Query31SourceSchedule.DigestPair.state H D
+                                          (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pair)))) ∧
+                          AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs H D
+                            (AspisR1PublicPreparation.transcript.Transcript.hash H absorbed) pairs blocks advances)
+        t
