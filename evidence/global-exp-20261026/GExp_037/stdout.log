@@ -1,0 +1,51 @@
+GExp_FirstErasure.lean:24:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (SdkC_Source.dictionary hashv) ()
+    (SdkD_PrepareLower.lower (S1PrepareCode.prepare ?m.18 ?m.19 ?m.20 D pub proof () g))
+in the target expression
+  erase (SdkC_Source.dictionary hashv) ()
+      (SdkD_PrepareLower.lower
+        (SdkD_PrepareSource.code
+          (Op5T_Concrete.current
+            { op0 := base.op0, op1 := @Ops.op1 base, op2 := base.op2, op3 := base.op3, op4 := base.op4, op5 := base.op5,
+              op6 := @Ops.op6 base, op7 := base.op7, op8 := @Ops.op8 base, op9 := @Ops.op9 base, op10 := base.op10,
+              op11 := base.op11, op12 := base.op12, op13 := base.op13, op14 := base.op14, op15 := base.op15,
+              op16 := fun {H} => Tx1Q_Install.writer, op17 := base.op17, op18 := base.op18, op19 := base.op19,
+              op20 := base.op20, op21 := base.op21 })
+          B std D pub proof () g)) =
+    verifier.candidate.prepare (installed base B std) D pub proof () none g
+
+base : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Unit
+law : ∀ (parts : Slice (Slice U8)), D.digest () parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+⊢ erase (SdkC_Source.dictionary hashv) ()
+      (SdkD_PrepareLower.lower
+        (SdkD_PrepareSource.code
+          (Op5T_Concrete.current
+            { op0 := base.op0, op1 := @Ops.op1 base, op2 := base.op2, op3 := base.op3, op4 := base.op4, op5 := base.op5,
+              op6 := @Ops.op6 base, op7 := base.op7, op8 := @Ops.op8 base, op9 := @Ops.op9 base, op10 := base.op10,
+              op11 := base.op11, op12 := base.op12, op13 := base.op13, op14 := base.op14, op15 := base.op15,
+              op16 := fun {H} => Tx1Q_Install.writer, op17 := base.op17, op18 := base.op18, op19 := base.op19,
+              op20 := base.op20, op21 := base.op21 })
+          B std D pub proof () g)) =
+    verifier.candidate.prepare (installed base B std) D pub proof () none g
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.GExp_FirstErasure.erase_liftM' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_FirstErasure.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExp_FirstErasure.batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_FirstErasure.writer' depends on axioms: [propext, Classical.choice, Quot.sound]

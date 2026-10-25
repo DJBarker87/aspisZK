@@ -1,0 +1,35 @@
+GExp_BatchBudget.lean:34:18: error: unexpected identifier; expected numeral
+GExp_BatchBudget.lean:32:78: error: unsolved goals
+case covered
+Err : Type
+f : AspisR1Stage2.verifier.Error → Err
+p : Code (core.result.Result Unit AspisR1Stage2.verifier.Error)
+n : ℕ
+bound : count n p
+⊢ 0 ≤ n
+
+case hp
+Err : Type
+f : AspisR1Stage2.verifier.Error → Err
+p : Code (core.result.Result Unit AspisR1Stage2.verifier.Error)
+n : ℕ
+bound : count n p
+⊢ count 0 p
+
+case hk
+Err : Type
+f : AspisR1Stage2.verifier.Error → Err
+p : Code (core.result.Result Unit AspisR1Stage2.verifier.Error)
+n : ℕ
+bound : count n p
+⊢ ∀ (a : core.result.Result Unit AspisR1Stage2.verifier.Error),
+    count (n - 0)
+      (pure
+        (match a with
+        | core.result.Result.Ok x => core.result.Result.Ok x
+        | core.result.Result.Err e => core.result.Result.Err (f e)))
+'AspisR1.GExp_BatchBudget.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_BatchBudget.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_BatchBudget.map' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExp_BatchBudget.current' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExp_BatchBudget.stage' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
