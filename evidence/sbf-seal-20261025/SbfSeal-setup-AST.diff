@@ -370,7 +370,7 @@
          Expr(
            value=Call(
              func=Name(id='require', ctx=Load()),
-@@ -337,1120 +113,1214 @@
+@@ -337,1120 +113,1224 @@
                  values=[
                    Compare(
                      left=Call(
@@ -640,8 +640,18 @@
 +          Constant(value='/tmp')])),
 +    Assign(
 +      targets=[
++        Name(id='FD_AUDIT_TEXT', ctx=Store())],
++      value=Constant(value="def SbfSeal_fds(os_api):\n names=os_api.listdir('/proc/self/fd')\n if len(names)>4096: raise RuntimeError('FD inventory bound')\n result=[]\n for name in names:\n  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')\n  fd=int(name)\n  try: os_api.fstat(fd)\n  except OSError as e:\n   if e.errno!=errno.EBADF: raise\n  else: result.append(fd)\n return sorted(result)\n")),
++    Assign(
++      targets=[
 +        Name(id='PROBE_TEXT', ctx=Store())],
-+      value=Constant(value='import errno,json,os,resource\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nfor fd in range(3,256):\n try: os.fstat(fd)\n except OSError as e:\n  if e.errno!=errno.EBADF: raise\n else: raise RuntimeError("surviving descriptor")\nwith open(\'/proc/self/status\',encoding=\'ascii\') as f:\n s=dict(line.split(\':\',1) for line in f if \':\' in line)\nassert all(int(s[k],16)==0 for k in (\'CapInh\',\'CapPrm\',\'CapEff\',\'CapBnd\',\'CapAmb\'))\nassert s[\'NoNewPrivs\'].strip()==\'1\'\nprint(json.dumps({\'SbfSeal\':\'tiny-public-v1\',\'uid\':1000,\'gid\':1000,\'fds\':[0,1,2]},sort_keys=True))\n')),
++      value=BinOp(
++        left=BinOp(
++          left=Constant(value='import errno,json,os,resource,stat\n'),
++          op=Add(),
++          right=Name(id='FD_AUDIT_TEXT', ctx=Load())),
++        op=Add(),
++        right=Constant(value="assert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nassert SbfSeal_fds(os)==[0,1,2]\nassert stat.S_ISCHR(os.fstat(0).st_mode)\nassert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)\nfor fd in (1,2):\n t=os.fstat(fd)\n assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1\n assert stat.S_IMODE(t.st_mode)==0o600\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"))),
 +    Assign(
 +      targets=[
 +        Name(id='PROBE', ctx=Store())],
@@ -2674,7 +2684,7 @@
                  keywords=[])),
              Expr(
                value=Call(
-@@ -1461,76 +1331,97 @@
+@@ -1461,76 +1341,97 @@
                      values=[
                        Call(
                          func=Attribute(
@@ -2832,7 +2842,7 @@
                body=[
                  Expr(
                    value=Call(
-@@ -1538,408 +1429,250 @@
+@@ -1538,408 +1439,250 @@
                      args=[
                        Compare(
                          left=Call(
@@ -3469,7 +3479,7 @@
                  Assign(
                    targets=[
                      Name(id='s', ctx=Store())],
-@@ -1949,7 +1682,655 @@
+@@ -1949,7 +1692,655 @@
                        attr='fstat',
                        ctx=Load()),
                      args=[
@@ -4126,7 +4136,7 @@
                      keywords=[])),
                  Expr(
                    value=Call(
-@@ -1978,145 +2359,308 @@
+@@ -1978,145 +2369,308 @@
                                Eq()],
                              comparators=[
                                Constant(value=1)])]),
@@ -4549,7 +4559,7 @@
              Expr(
                value=Call(
                  func=Name(id='require', ctx=Load()),
-@@ -2124,21 +2668,38 @@
+@@ -2124,21 +2678,38 @@
                    BoolOp(
                      op=And(),
                      values=[
@@ -4596,7 +4606,7 @@
                        Compare(
                          left=Call(
                            func=Attribute(
-@@ -2147,1165 +2708,616 @@
+@@ -2147,1165 +2718,616 @@
                              ctx=Load()),
                            args=[
                              Attribute(
@@ -6287,7 +6297,7 @@
                        body=[
                          Expr(
                            value=Call(
-@@ -3314,344 +3326,268 @@
+@@ -3314,344 +3336,268 @@
                                attr='close',
                                ctx=Load()),
                              args=[
@@ -6880,7 +6890,7 @@
            body=[
              Expr(
                value=Call(
-@@ -3662,269 +3598,262 @@
+@@ -3662,269 +3608,262 @@
                      values=[
                        Compare(
                          left=Call(
@@ -7388,7 +7398,7 @@
        decorator_list=[],
        type_params=[]),
      If(
-@@ -3939,7 +3868,7 @@
+@@ -3939,7 +3878,7 @@
            exc=Call(
              func=Name(id='SystemExit', ctx=Load()),
              args=[
