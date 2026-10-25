@@ -1,0 +1,26 @@
+--- disabled/FinalNativeGate_setup.py
++++ prospective-DATA/FinalNativeGate_setup.py
+@@ -17,8 +17,10 @@
+ 
+ 
+ def main():
+-    print('FinalNativeGate setup source-only: disabled; review and new allocation required')
+-    return 78
++    import sys
++    if HERE!=STAGE:raise ValueError('wrong fixed DATA stage')
++    sys.path.insert(0,str(STAGE))
++    return _prospective()
+ 
+ 
+ def _inputs():
+--- disabled/FinalNativeGate_setup_inside.py
++++ prospective-DATA/FinalNativeGate_setup_inside.py
+@@ -1,7 +1,6 @@
+ """Disabled future fixed setup scope entry; no activation applied."""
+ def main():
+-    print('FinalNativeGate setup inside source-only: disabled')
+-    return 78
++    return _bound_body()
+ 
+ def _bound_body():
+     import sys

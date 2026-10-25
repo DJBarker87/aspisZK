@@ -47,10 +47,36 @@ def runtime_pins(catalog):
 
 
 def collect(phase,admission=None):
+    """At most three complete fresh pairs under one lifetime/deadline.
+
+    Aggregate retained JSON is at most 3x the existing per-attempt artifact
+    bounds (three 64MiB publishers each); events/reads retain their old bounds.
+    Only compact receipts survive between attempts, never failed report trees.
+    """
+    deadline=time.monotonic()+30
+    for attempt in range(1,4):
+        if ACTIVE_GUARD:ACTIVE_GUARD.check()
+        if time.monotonic()>=deadline:raise TimeoutError('collect30s deadline')
+        report=_collect_once(phase,admission,artifactprefix='attempt'+str(attempt)+'-',deadline=deadline)
+        decision=report.get('decision',{})
+        retry=(decision.get('allowed') is False and
+               decision.get('error')=='ValueError: hierarchy/structural/control race' and
+               not decision.get('collection_failures'))
+        if not retry or attempt==3:return report
+        del decision,report
+
+
+def _collect_once(phase,admission=None,artifactprefix='',*,deadline=None):
     """Record every ordered filesystem/command input without changing API logic."""
     from FinalNativeGate_compact import project,unknown,receipt
     record=unknown(phase)
     if admission is not None:admission.append(record)
+    if deadline is None:deadline=time.monotonic()+30
+    def remaining():
+        if ACTIVE_GUARD:ACTIVE_GUARD.check()
+        left=deadline-time.monotonic()
+        if left<=0:raise TimeoutError('collect30s deadline')
+        return left
     api=adapter.__dict__
     events=[];raw_bytes=0;event_limit=32768;raw_limit=16*2**20
     def append(event):
@@ -62,6 +88,7 @@ def collect(phase,admission=None):
     execute=subprocess.run
     scandir=os.scandir
     def recorded_read(path,*args,**kwargs):
+        remaining()
         try:
             # Kernel pseudo-files have no useful stat size; finite streaming read.
             with path.open('r',*args,**kwargs) as stream:content=stream.read(4*2**20+1)
@@ -76,7 +103,7 @@ def collect(phase,admission=None):
         try:
             from FinalNativeGate_scope import command
             if pos or kwargs.get('input') is not None:raise ValueError('unexpected metadata command input')
-            result=command(args,timeout=kwargs.get('timeout',15),limit=4*2**20,record=True)
+            result=command(args,timeout=min(kwargs.get('timeout',15),remaining()),limit=4*2**20,record=True)
         except (OSError,ValueError,subprocess.SubprocessError) as exc:
             append(dict(kind='command',command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),
                                stdout=getattr(exc,'stdout',None),stderr=getattr(exc,'stderr',None)))
@@ -85,6 +112,7 @@ def collect(phase,admission=None):
         return result
     @contextlib.contextmanager
     def recorded_scandir(path):
+        remaining()
         try:
             with scandir(path) as entries:
                 bounded_entries=[]
@@ -97,7 +125,7 @@ def collect(phase,admission=None):
         except OSError as exc:
             append(dict(kind='scandir',path=str(path),error=str(exc),errno=exc.errno))
             raise
-    start=time.monotonic()
+    start=time.monotonic();failure=None;report={}
     try:
         Path.read_text=recorded_read
         subprocess.run=recorded_run
@@ -105,20 +133,25 @@ def collect(phase,admission=None):
         report=api['read_only_admission'](phase='inside-scope' if phase=='go' else phase)
         projected=project(phase,report)
         record.clear();record.update(projected)
+    except BaseException as exc:
+        failure=exc
+        report=dict(collection_exception=type(exc).__name__+': '+str(exc),print_axioms='N/A')
     finally:
         Path.read_text=read
         subprocess.run=execute
         os.scandir=scandir
-        ordered=save(phase+'-ordered.json',events)
+        ordered=save(artifactprefix+phase+'-ordered.json',events)
     report['raw_receipts']=[ordered]
-    report_receipt=save(phase+'-report.json',report)
-    metrics_receipt=save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
+    report_receipt=save(artifactprefix+phase+'-report.json',report)
+    metrics_receipt=save(artifactprefix+phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
         peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
         aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3) if report.get('original_legacy') else 'N/A visibility unavailable; not peak',
         print_axioms='N/A'))
     report['raw_receipts'].extend([report_receipt,metrics_receipt])
     receipt(record,report['raw_receipts'])
+    if failure is not None:raise failure
+    remaining()
     if record['reporting_failed']:raise ValueError('compact admission reporting failure')
     return report
 
