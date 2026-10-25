@@ -1,0 +1,125 @@
+DrvC_NativePair.lean:50:9: warning: Variable name `history` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+DrvC_NativePair.lean:52:9: warning: Variable name `p2prime` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.DrvC_NativePair.accepted_pair_driver' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.DrvC_NativePair.accepted_pair_driver : ∀ {W A M Cv F CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : Configuration F CoreError) (native1 : S2W_ExtractionBoundary.First)
+                (native2 : S2W_ExtractionBoundary.Second),
+                WAdm_Domain.SessionAPrepare
+                    (Tx1Q_Execution.actual (Op5T_Concrete.current (DrvC_FirstConstants.configuration c).currentBase)
+                      (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+                      (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).boundaries
+                      (DrvC_FirstConstants.configuration c).std) →
+                  Port5Q1_QueryPorts.SessionAPrimitives (DrvC_FirstConstants.configuration c).query →
+                    ∀ (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                      S2W_DigestExtraction.AeneasExtraction
+                          (sdkOps
+                            (Tx2I_Install.install (DrvC_FirstConstants.configuration c).adapter
+                              (Op5T_Concrete.stage
+                                (Tx2N_Execution.control
+                                  (AuS1_Install.base (DrvC_FirstConstants.configuration c).stageBase)
+                                  (DrvC_FirstConstants.configuration c).reserved
+                                  (DrvC_FirstConstants.configuration c).query
+                                  (DrvC_FirstConstants.configuration c).geometry))
+                              (DrvC_FirstConstants.configuration c).finish)
+                            (Uni_Install.current (DrvC_FirstConstants.configuration c).currentBase
+                              (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+                              (DrvC_FirstConstants.configuration c).geometry)
+                            (DrvC_FirstConstants.configuration c).boundaries (DrvC_FirstConstants.configuration c).std)
+                          native1 native2 hashv →
+                        ∀ (sha256 H : Bytes → State),
+                          S2W_ExtractionBoundary.P1 sha256 H →
+                            S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                              ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                                (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                                (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                                first native1 copy allocator e1 program data1 state1 =
+                                    ok (core.result.Result.Ok (saved, post1, final1)) →
+                                  second native2 allocator e2 program data2 slot state2 =
+                                      ok (core.result.Result.Ok (post2, final2)) →
+                                    ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32),
+                                      ∃ f s,
+                                        SourceCuts (DrvC_Installation.sdk (DrvC_FirstConstants.configuration c))
+                                            e1.first (e2.second secondSizes) saved f s ∧
+                                          Port1_Driver.decodeSemantic
+                                                (DrvC_Installation.sdk (DrvC_FirstConstants.configuration c)) f.pub =
+                                              ok (some f.semantic) ∧
+                                            ∀
+                                              (history :
+                                                S2X.CheckpointVersionBinding
+                                                  (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+                                                  (bytesOf ↑s.checkpoint)),
+                                              P2Prime H f.proof f.pub s.proof s.pub →
+                                                ∀ (i : OraclePortStoredExperimentC4.Input),
+                                                  i.statement.pubBytes = bytesOf ↑f.pub →
+                                                    i.stored = bytesOf ↑f.proof →
+                                                      (eval H
+                                                            (DrvC_Implementation.driver
+                                                              (DrvC_FirstConstants.configuration c) i)).2 =
+                                                        true :=
+fun {W A M Cv F CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c native1 native2 prepareOwner
+    primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1
+    post2 accepted1 accepted2 p root length =>
+  let r := DrvC_FirstConstants.configuration c;
+  let ⟨f, h✝⟩ :=
+    CPhy_Physical.accepted_pair_unified L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 r.adapter
+      r.currentBase r.reserved r.query r.geometry (AuS1_Install.base r.stageBase) r.finish r.boundaries r.std native1
+      native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot state1 state2
+      final1 final2 saved post1 post2 accepted1 accepted2 p root length
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨outer, h✝²⟩ := h✝¹
+  let ⟨pre, h✝³⟩ := h✝²
+  let ⟨middle, h✝⁴⟩ := h✝³
+  let ⟨fs, h✝⁵⟩ := h✝⁴
+  let ⟨ss, h✝⁶⟩ := h✝⁵
+  let ⟨cuts, right✝⟩ := h✝⁶
+  let ⟨writer, right✝¹⟩ := right✝
+  let ⟨reader, rest⟩ := right✝¹
+  let ⟨owned1, written⟩ :=
+    first_accepted native1 copy std allocator e1 program data1 state1 final1 saved post1 accepted1
+  have source1 := Eq.trans (Eq.symm (extraction.stage1 program e1.first data1)) owned1;
+  let ⟨semantic, h✝⁷⟩ := DrvC_DecodeCut.same_cut r program e1.first (e2.second secondSizes) data1 saved f s source1 cuts
+  let ⟨decoded, newcuts⟩ := h✝⁷
+  Exists.intro
+    { proofAccount := f.proofAccount, publicAccount := f.publicAccount, raw := f.raw, pub := f.pub,
+      statement := f.statement, semantic := semantic, proof := f.proof, split := f.split }
+    (Exists.intro s
+      ⟨newcuts,
+        ⟨decoded, fun history p2prime i publicCarrier proofCarrier =>
+          have destinationSize := checkpoint_size e1 (DrvC_Installation.sdk r) program data1 saved source1;
+          have versionAtWrite :=
+            (id
+                  (congrArg
+                    (fun _a =>
+                      S2X.CheckpointVersionBinding (payloadBytes encode (_a.payload (e1.heap.accounts 2).1) 1768)
+                        (bytesOf ↑s.checkpoint))
+                    (Eq.symm written))).mpr
+              history;
+          let ⟨left✝, right✝²⟩ :=
+            returned_committed e1.heap 2 0 0 saved (bytesOf ↑s.checkpoint) rfl rfl destinationSize
+              (writer.size saved cuts.first) versionAtWrite
+          let ⟨version⟩ := right✝²
+          let ⟨sameProof, right✝³⟩ :=
+            authenticated_inputs (DrvC_Installation.sdk r) CPhy_Header.decode H f.semantic f.pub f.proof s.pub s.proof
+              s.checkpoint f.split saved cuts.first cuts.second writer reader version p2prime
+          let ⟨samePub, right✝⁴⟩ := right✝³
+          let ⟨sameCheckpoint, size⟩ := right✝⁴
+          DrvC_CutAcceptance.driver_accepts c native1 native2 hashv extraction sha256 H p1 syscall e1.first
+            (e2.second secondSizes) saved
+            { proofAccount := f.proofAccount, publicAccount := f.publicAccount, raw := f.raw, pub := f.pub,
+              statement := f.statement, semantic := semantic, proof := f.proof, split := f.split }
+            s newcuts decoded sameProof samePub sameCheckpoint i publicCarrier proofCarrier⟩⟩)

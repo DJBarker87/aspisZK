@@ -1,0 +1,313 @@
+'AspisR1.DrvC_SourceEntry.same_program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvC_SourceEntry.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvC_SourceEntry.aus1_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.DrvC_SourceEntry.same_program : ∀ {F C : Type} (c : Configuration F C)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest),
+  DrvC_Implementation.driver (DrvC_FirstConstants.configuration c) =
+    source (DrvC_FirstConstants.configuration c) hashv :=
+fun {F C} c hashv =>
+  funext fun i =>
+    id
+      (id
+        (id
+          (Option.casesOn (motive := fun t =>
+            Port1_Driver.asSlice i.statement.pubBytes = t →
+              (match Port1_Driver.asSlice i.statement.pubBytes, Port1_Driver.asSlice i.stored with
+                | some pub, some proof =>
+                  match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                  | ok (some semantic) =>
+                    Port1_Driver.stages
+                      (fun {A} {A} => DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                      (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                  | x => Program.done false
+                | x, x_1 => Program.done false) =
+                match Port1_Driver.asSlice i.statement.pubBytes, Port1_Driver.asSlice i.stored with
+                | some pub, some proof =>
+                  match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                  | ok (some semantic) =>
+                    DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                  | x => Program.done false
+                | x, x_1 => Program.done false)
+            (Port1_Driver.asSlice i.statement.pubBytes)
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                Port1_Driver.asSlice i.statement.pubBytes = x →
+                  (match x, Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                      | ok (some semantic) =>
+                        Port1_Driver.stages
+                          (fun {A} {A} => DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                      | x => Program.done false
+                    | x, x_1 => Program.done false) =
+                    match x, Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                      | ok (some semantic) =>
+                        DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                      | x => Program.done false
+                    | x, x_1 => Program.done false)
+                (fun hp =>
+                  Eq.refl
+                    (match none, Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                      | ok (some semantic) =>
+                        Port1_Driver.stages
+                          (fun {A} {A} => DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                      | x => Program.done false
+                    | x, x_1 => Program.done false))
+                (Eq.symm h) (Eq.refl (Port1_Driver.asSlice i.statement.pubBytes)))
+            (fun pub h =>
+              Eq.ndrec (motive := fun x =>
+                Port1_Driver.asSlice i.statement.pubBytes = x →
+                  (match x, Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                      | ok (some semantic) =>
+                        Port1_Driver.stages
+                          (fun {A} {A} => DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                      | x => Program.done false
+                    | x, x_1 => Program.done false) =
+                    match x, Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                      | ok (some semantic) =>
+                        DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                      | x => Program.done false
+                    | x, x_1 => Program.done false)
+                (fun hp =>
+                  Option.casesOn (motive := fun t =>
+                    Port1_Driver.asSlice i.stored = t →
+                      (match some pub, Port1_Driver.asSlice i.stored with
+                        | some pub, some proof =>
+                          match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                          | ok (some semantic) =>
+                            Port1_Driver.stages
+                              (fun {A} {A} => DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                              (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                          | x => Program.done false
+                        | x, x_1 => Program.done false) =
+                        match some pub, Port1_Driver.asSlice i.stored with
+                        | some pub, some proof =>
+                          match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                          | ok (some semantic) =>
+                            DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                          | x => Program.done false
+                        | x, x_1 => Program.done false)
+                    (Port1_Driver.asSlice i.stored)
+                    (fun h =>
+                      Eq.ndrec (motive := fun x =>
+                        Port1_Driver.asSlice i.stored = x →
+                          (match some pub, x with
+                            | some pub, some proof =>
+                              match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                              | ok (some semantic) =>
+                                Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                              | x => Program.done false
+                            | x, x_1 => Program.done false) =
+                            match some pub, x with
+                            | some pub, some proof =>
+                              match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                              | ok (some semantic) =>
+                                DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                              | x => Program.done false
+                            | x, x_1 => Program.done false)
+                        (fun hs =>
+                          Eq.refl
+                            (match some pub, none with
+                            | some pub, some proof =>
+                              match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                              | ok (some semantic) =>
+                                Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                              | x => Program.done false
+                            | x, x_1 => Program.done false))
+                        (Eq.symm h) (Eq.refl (Port1_Driver.asSlice i.stored)))
+                    (fun proof h =>
+                      Eq.ndrec (motive := fun x =>
+                        Port1_Driver.asSlice i.stored = x →
+                          (match some pub, x with
+                            | some pub, some proof =>
+                              match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                              | ok (some semantic) =>
+                                Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                              | x => Program.done false
+                            | x, x_1 => Program.done false) =
+                            match some pub, x with
+                            | some pub, some proof =>
+                              match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                              | ok (some semantic) =>
+                                DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                              | x => Program.done false
+                            | x, x_1 => Program.done false)
+                        (fun hs =>
+                          id
+                            (casesOn (motive := fun t =>
+                              Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub = t →
+                                (match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                                  | ok (some semantic) =>
+                                    Port1_Driver.stages
+                                      (fun {A} =>
+                                        DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                      (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                  | x => Program.done false) =
+                                  match Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub with
+                                  | ok (some semantic) =>
+                                    DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub
+                                      proof
+                                  | x => Program.done false)
+                              (Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub)
+                              (fun semantic h =>
+                                Eq.ndrec (motive := fun x =>
+                                  Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub = x →
+                                    (match x with
+                                      | ok (some semantic) =>
+                                        Port1_Driver.stages
+                                          (fun {A} =>
+                                            DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                      | x => Program.done false) =
+                                      match x with
+                                      | ok (some semantic) =>
+                                        DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub
+                                          proof
+                                      | x => Program.done false)
+                                  (fun hd =>
+                                    Option.casesOn (motive := fun t =>
+                                      semantic = t →
+                                        (match ok semantic with
+                                          | ok (some semantic) =>
+                                            Port1_Driver.stages
+                                              (fun {A} =>
+                                                DrvC_Implementation.implementation
+                                                  (DrvC_FirstConstants.configuration c))
+                                              (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                          | x => Program.done false) =
+                                          match ok semantic with
+                                          | ok (some semantic) =>
+                                            DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic
+                                              pub proof
+                                          | x => Program.done false)
+                                      semantic
+                                      (fun h =>
+                                        Eq.ndrec (motive := fun semantic =>
+                                          Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub =
+                                              ok semantic →
+                                            (match ok semantic with
+                                              | ok (some semantic) =>
+                                                Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    DrvC_Implementation.implementation
+                                                      (DrvC_FirstConstants.configuration c))
+                                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                              | x => Program.done false) =
+                                              match ok semantic with
+                                              | ok (some semantic) =>
+                                                DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv
+                                                  semantic pub proof
+                                              | x => Program.done false)
+                                          (fun hd =>
+                                            Eq.refl
+                                              (match ok none with
+                                              | ok (some semantic) =>
+                                                Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    DrvC_Implementation.implementation
+                                                      (DrvC_FirstConstants.configuration c))
+                                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                              | x => Program.done false))
+                                          (Eq.symm h) hd)
+                                      (fun semantic_1 h =>
+                                        Eq.ndrec (motive := fun semantic =>
+                                          Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub =
+                                              ok semantic →
+                                            (match ok semantic with
+                                              | ok (some semantic) =>
+                                                Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    DrvC_Implementation.implementation
+                                                      (DrvC_FirstConstants.configuration c))
+                                                  (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                              | x => Program.done false) =
+                                              match ok semantic with
+                                              | ok (some semantic) =>
+                                                DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv
+                                                  semantic pub proof
+                                              | x => Program.done false)
+                                          (fun hd => DrvC_PairProgram.stages c hashv semantic_1 pub proof) (Eq.symm h)
+                                          hd)
+                                      (Eq.refl semantic))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub)))
+                              (fun e h =>
+                                Eq.ndrec (motive := fun x =>
+                                  Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub = x →
+                                    (match x with
+                                      | ok (some semantic) =>
+                                        Port1_Driver.stages
+                                          (fun {A} =>
+                                            DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                      | x => Program.done false) =
+                                      match x with
+                                      | ok (some semantic) =>
+                                        DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub
+                                          proof
+                                      | x => Program.done false)
+                                  (fun hd =>
+                                    Eq.refl
+                                      (match fail e with
+                                      | ok (some semantic) =>
+                                        Port1_Driver.stages
+                                          (fun {A} =>
+                                            DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                      | x => Program.done false))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub)))
+                              (fun h =>
+                                Eq.ndrec (motive := fun x =>
+                                  Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub = x →
+                                    (match x with
+                                      | ok (some semantic) =>
+                                        Port1_Driver.stages
+                                          (fun {A} =>
+                                            DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                      | x => Program.done false) =
+                                      match x with
+                                      | ok (some semantic) =>
+                                        DrvC_PairProgram.source (DrvC_FirstConstants.configuration c) hashv semantic pub
+                                          proof
+                                      | x => Program.done false)
+                                  (fun hd =>
+                                    Eq.refl
+                                      (match div with
+                                      | ok (some semantic) =>
+                                        Port1_Driver.stages
+                                          (fun {A} =>
+                                            DrvC_Implementation.implementation (DrvC_FirstConstants.configuration c))
+                                          (digest (DrvC_FirstConstants.configuration c)) () semantic pub proof
+                                      | x => Program.done false))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub)))
+                              (Eq.refl (Port1_Driver.decodeSemantic (sdk (DrvC_FirstConstants.configuration c)) pub))))
+                        (Eq.symm h) (Eq.refl (Port1_Driver.asSlice i.stored)))
+                    (Eq.refl (Port1_Driver.asSlice i.stored)))
+                (Eq.symm h) (Eq.refl (Port1_Driver.asSlice i.statement.pubBytes)))
+            (Eq.refl (Port1_Driver.asSlice i.statement.pubBytes)))))
