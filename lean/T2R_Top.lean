@@ -8,7 +8,7 @@ import Cons_Continuation
 import Cons_Base
 import Cons_Caller
 import Cons_Result
-import T2R_ResultSource
+import T2R_FullResult
 import T2R_Pair
 import Par_Headline
 import Par_Transcript
@@ -102,12 +102,13 @@ theorem deployed {W A F CoreError : Type}
        6*((Q0+Q1+23625 : Nat) : Rat)^2/(2:Rat)^256) +
       1/(2:Rat)^126 + 1/(2:Rat)^454) ∧
     (Q0+Q1 = 0 → failureModel runtime + EndP_AuthMass.mass source project ≤ 1/(2:Rat)^100)) ∧
-    (T2R_ResultSource.Outcome L e1 e2 w1 w2 (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).stageBase (DrvC_FirstConstants.configuration c).finish (DrvC_FirstConstants.configuration c).boundaries (DrvC_FirstConstants.configuration c).std program data1 data2 slot saved post1 post2 H prior) := by
+    (T2R_FullResult.Outcome L e1 e2 w1 w2 (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).stageBase (DrvC_FirstConstants.configuration c).finish (DrvC_FirstConstants.configuration c).boundaries (DrvC_FirstConstants.configuration c).std program data1 data2 slot saved post1 post2 H (DrvC_Implementation.driver (DrvC_FirstConstants.configuration c)) prior) := by
   refine ⟨DrvC_SourceEntry.same_program c hashv,
     DrvC_Installation.aus1_dictionary (DrvC_FirstConstants.configuration c),?_,?_⟩
   · exact DrvC_SourceHeadline.deployed_headline_source c D P Q0 Q1 hqueries hashv runtime raw binding
       adversary chooseSecond prefixBound choiceBound project
-  · exact T2R_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+  · obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,caller⟩ :=
+      T2R_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase
       (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
       (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).stageBase
@@ -115,6 +116,14 @@ theorem deployed {W A F CoreError : Type}
       (DrvC_FirstConstants.configuration c).std native1 native2 prepareOwner primitiveOwner hashv extraction
       prior sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2
       saved post1 post2 accepted1 accepted2 Par_Parameters.deployed root length
+
+    have ⟨cuts,writer,reader,multiproof,scanY,checkY,scanned,tx1,batches,header2,header1,rest⟩ := base
+    have sourceFacts := T2R_Parser.on_run _ _ _ _ _ _ _ _ _ _ _ _ _ run header1.2.2.1 scanned.2.2
+    refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,sourceFacts,?_,caller⟩
+    exact T2R_Nonvacuity.same_cuts L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+      c native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
+      program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
+      f s cuts writer reader
 
 #print axioms deployed
 end AspisR1.T2R_Top
