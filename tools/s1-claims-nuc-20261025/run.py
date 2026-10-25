@@ -5,7 +5,7 @@ import os,sys,json,hashlib,subprocess,time,signal,resource
 W=Path(__file__).resolve().parent
 BUILD=Path(json.loads((W/'plan.json').read_text()).get('build_directory',str(W)))
 G=2**30;CAP=6*G;HIGH=4*G
-UNIT='aspis-s126-claims-extract-20261025-r6'
+UNIT='aspis-s126-claims-extract-20261025-r7'
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def save(name,value):(W/name).write_text(json.dumps(value,indent=2)+'\n')
