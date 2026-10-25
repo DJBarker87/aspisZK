@@ -1,0 +1,1393 @@
+DrvC_SecondFlow.lean:16:28: warning: This simp argument is unused:
+  lower_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx2_common, ̲VTop_Flow.traceEffects, ̲effects,
+  ̵  ̵ ̵ ̵lower_bindM, ̲lower_liftM,
+  ̲ ̲ ̲ ̲ ̲lower_pu̵r̵e,̵l̵o̵w̵e̵r_̵p̵e̵r̵form, ̲lower_if]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:16:53: warning: This simp argument is unused:
+  lower_if
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx2_common, ̲VTop_Flow.traceEffects, ̲effects,
+  ̵  ̵ ̵ ̵lower_bindM, ̲lower_liftM,
+  ̲ ̲ ̲ ̲ ̲lower_pure, ̲lower_perform,̵l̵o̵w̵e̵r̵_̵i̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:28:81: error: unsolved goals
+case h_1
+F C H : Type
+c : Configuration F C
+D : aspis_core.digest.Digest32 H
+hash : H
+pub proof checkpoint : Slice U8
+obs : Option (verifier.Phase → Result Unit)
+x✝¹ : core.result.Result transport.Variant verifier.Error
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) transport.Variant
+a✝ : transport.Variant
+x✝ : Unit
+x : core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error
+⊢ DrvC_CallCode.lower c
+      ((fun b =>
+          VTop_Trace.bind (VTop_Trace.Code.done b) fun r => do
+            let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val =>
+                match val with
+                | (p, a) => do
+                  let i ←
+                    { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                          op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                          op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                          op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                          op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                          op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                            VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                          op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                          op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                          op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                          op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                          op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                          op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                          op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                          op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                          op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                          op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                          op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                          op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                          op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                          op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                          unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op16
+                  if (a.next != i) = true then
+                      pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+                    else do
+                      let g ←
+                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op17
+                            29#usize p.gamma
+                      { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                              op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                              op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                              op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                              op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                              op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                              op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                              op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                              op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                              op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                              op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                              op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                              op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                              op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                              op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                              op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                              op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                              op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                              op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                              op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                              unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op13
+                          obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+                      let i1 ←
+                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                              op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                              op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                              op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                              op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                              op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                              op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                              op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                              op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                              op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                              op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                              op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                              op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                              op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                              op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                              op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                              op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                              op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                              op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                              op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                              unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op23
+                      let i2 ←
+                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                              op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                              op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                              op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                              op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                              op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                              op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                              op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                              op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                              op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                              op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                              op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                              op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                              op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                              op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                              op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                              op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                              op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                              op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                              op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                              unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op22
+                      let s ←
+                        liftM
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                              { start := i1, «end» := i2 })
+                      let o ←
+                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op2
+                            s
+                      let r1 ←
+                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  VTop_Trace.perform (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op0
+                            o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let i3 ←
+                            { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                  op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                  op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                  op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                  op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                  op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                    VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                  op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                  op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                  op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                  op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                  op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                  op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                  op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                  op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                  op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                  op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                  op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                  op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                  op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                  op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                  unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op15
+                          let i4 ←
+                            { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                  op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                  op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                  op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                  op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                  op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                    VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                  op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                  op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                  op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                  op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                  op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                  op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                  op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                  op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                  op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                  op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                    VTop_Trace.perform
+                                      (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                  op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                  op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                  op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                  op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                  op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                  unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op14
+                          let s1 ←
+                            liftM
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                  { start := i3, «end» := i4 })
+                          let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                          let folded_root ←
+                            { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                    op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                    op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                    op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                    op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                    op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                      VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                    op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                    op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                    op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                    op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                    op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                    op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                    op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                    op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                    op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                    op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                    op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                    op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                    op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                    op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                    unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.unwrap32
+                                r2
+                          let r3 ←
+                            { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                    op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                    op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                    op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                    op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                    op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                      VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                    op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                    op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                    op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                    op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                    op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                    op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                    op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                    op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                    op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                    op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      VTop_Trace.perform
+                                        (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                    op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                    op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                    op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                    op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                    unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op5
+                                D proof p folded_root 1#usize hash
+                          let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                              { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                      op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                      op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                      op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                      op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                      op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                        VTop_Trace.perform
+                                          (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                      op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                        VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                      op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                        VTop_Trace.perform
+                                          (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                      op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                        VTop_Trace.perform
+                                          (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                      op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                      op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                      op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                      op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                      op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                      op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                      op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                      op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                      op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                      op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                        VTop_Trace.perform
+                                          (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                      op19 := fun a0 a1 a2 a3 => VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                      op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                      op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                      op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                      op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                      unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op13
+                                  obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle i)
+                              let r4 ←
+                                { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                        op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                        op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                        op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                        op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          VTop_Trace.perform
+                                            (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                          VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          VTop_Trace.perform
+                                            (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          VTop_Trace.perform
+                                            (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                        op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                        op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                        op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                        op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                        op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                        op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                        op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                        op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          VTop_Trace.perform
+                                            (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op19 := fun a0 a1 a2 a3 =>
+                                          VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                        op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                        op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                        op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                        op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                        unwrap32 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op11
+                                    p.queries a.next 22#usize
+                              let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                              match cf3 with
+                                | core.ops.control_flow.ControlFlow.Continue val2 =>
+                                  have s2 := a.weights.deref;
+                                  do
+                                  let r5 ←
+                                    { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                            op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                            op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                            op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                            op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                            op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                              VTop_Trace.perform
+                                                (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                            op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                              VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                            op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                              VTop_Trace.perform
+                                                (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                            op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                              VTop_Trace.perform
+                                                (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                            op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                            op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                            op11 := fun a0 a1 a2 => VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                            op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                            op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                            op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                            op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                            op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                            op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                            op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                              VTop_Trace.perform
+                                                (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                            op19 := fun a0 a1 a2 a3 =>
+                                              VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                            op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                            op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                            op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                            op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                            unwrap32 := fun a0 =>
+                                              VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op10
+                                        s2
+                                  let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                                  match cf4 with
+                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                      let r6 ←
+                                        { op0 := fun {T E} a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                                op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                                op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                                op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                                op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                                op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                  VTop_Trace.perform
+                                                    (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                                op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                                  VTop_Trace.perform (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                                op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                  VTop_Trace.perform
+                                                    (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                                op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                  VTop_Trace.perform
+                                                    (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                                op9 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                                op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                                op11 := fun a0 a1 a2 =>
+                                                  VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                                op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                                op13 := fun a0 a1 => VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                                op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                                op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                                op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                                op17 := fun N a0 => VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                                op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                  VTop_Trace.perform
+                                                    (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                                op19 := fun a0 a1 a2 a3 =>
+                                                  VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                                op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                                op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                                op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                                op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                                unwrap32 := fun a0 =>
+                                                  VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op6
+                                            proof p a g obs val2 val3 22#usize
+                                      let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                      match cf5 with
+                                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                          match val4 with
+                                          | (a1, pending) => do
+                                            let __x ← liftM (lift a1.weights.deref_mut)
+                                            match __x with
+                                              | (s3, deref_mut_back) => do
+                                                let s4 ←
+                                                  {
+                                                          op0 := fun {T E} a0 a1 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                                          op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                                          op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                                          op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                                          op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                                          op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                            VTop_Trace.perform
+                                                              (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2
+                                                                a3 a4),
+                                                          op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                                            VTop_Trace.perform
+                                                              (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                                          op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                            VTop_Trace.perform
+                                                              (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2
+                                                                a3 a4),
+                                                          op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                            VTop_Trace.perform
+                                                              (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2
+                                                                a3 a4),
+                                                          op9 := fun a0 a1 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                                          op10 := fun a0 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                                          op11 := fun a0 a1 a2 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                                          op12 := fun a0 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                                          op13 := fun a0 a1 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                                          op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                                          op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                                          op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                                          op17 := fun N a0 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                                          op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                            VTop_Trace.perform
+                                                              (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1
+                                                                a2 a3 a4),
+                                                          op19 := fun a0 a1 a2 a3 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                                          op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                                          op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                                          op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                                          op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                                          unwrap32 := fun a0 =>
+                                                            VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op9
+                                                      pending s3
+                                                have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 :=
+                                                  deref_mut_back s4
+                                                let s5 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                                let s6 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                                let s7 ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i2, «end» := i3 })
+                                                let i5 ←
+                                                  {
+                                                        op0 := fun {T E} a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                                        op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                                        op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                                        op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                                        op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op9 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                                        op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                                        op11 := fun a0 a1 a2 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                                        op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                                        op13 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                                        op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                                        op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                                        op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                                        op17 := fun N a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op19 := fun a0 a1 a2 a3 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                                        op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                                        op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                                        op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                                        op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                                        unwrap32 := fun a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op21
+                                                let s8 ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i4, «end» := i5 })
+                                                let i6 ←
+                                                  {
+                                                        op0 := fun {T E} a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                                        op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                                        op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                                        op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                                        op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op9 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                                        op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                                        op11 := fun a0 a1 a2 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                                        op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                                        op13 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                                        op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                                        op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                                        op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                                        op17 := fun N a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op19 := fun a0 a1 a2 a3 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                                        op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                                        op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                                        op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                                        op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                                        unwrap32 := fun a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op20
+                                                let s9 ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i5, «end» := i6 })
+                                                let s10 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                                {
+                                                        op0 := fun {T E} a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op0 a0 a1),
+                                                        op1 := VTop_Trace.perform VTop_Trace.Call.op1,
+                                                        op2 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op2 a0),
+                                                        op3 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op3 a0),
+                                                        op4 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op4 a0),
+                                                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op9 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op9 a0 a1),
+                                                        op10 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op10 a0),
+                                                        op11 := fun a0 a1 a2 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op11 a0 a1 a2),
+                                                        op12 := fun a0 => VTop_Trace.perform (VTop_Trace.Call.op12 a0),
+                                                        op13 := fun a0 a1 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op13 a0 a1),
+                                                        op14 := VTop_Trace.perform VTop_Trace.Call.op14,
+                                                        op15 := VTop_Trace.perform VTop_Trace.Call.op15,
+                                                        op16 := VTop_Trace.perform VTop_Trace.Call.op16,
+                                                        op17 := fun N a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op17 N a0),
+                                                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                                          VTop_Trace.perform
+                                                            (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2
+                                                              a3 a4),
+                                                        op19 := fun a0 a1 a2 a3 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                                        op20 := VTop_Trace.perform VTop_Trace.Call.op20,
+                                                        op21 := VTop_Trace.perform VTop_Trace.Call.op21,
+                                                        op22 := VTop_Trace.perform VTop_Trace.Call.op22,
+                                                        op23 := VTop_Trace.perform VTop_Trace.Call.op23,
+                                                        unwrap32 := fun a0 =>
+                                                          VTop_Trace.perform (VTop_Trace.Call.unwrap32 a0) }.op19
+                                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                      y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                      round1 := s8, final_message := s9, query_bytes := s10 }
+                                                    p
+                                                    { weights := weights, rhs := a1.rhs, power := a1.power,
+                                                      next := a1.next }
+                                                    obs
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          liftM
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual)
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual))
+        x) =
+    do
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch x)
+    match cf with
+      | ⋯ =>
+        match val with
+        | ⋯ => do
+          let i ←
+            { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                  op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                  op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                  op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                  op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                  op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                    DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                  op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                    DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                  op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                    DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                  op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                    DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                  op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                  op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                  op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                  op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                  op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                  op14 := DrvC_CallCode.code c VTop_Trace.Call.op14, op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                  op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                  op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                  op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                    DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                  op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                  op20 := DrvC_CallCode.code c VTop_Trace.Call.op20, op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                  op22 := DrvC_CallCode.code c VTop_Trace.Call.op22, op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                  unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op16
+          if (a.next != i) = true then
+              pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let g ←
+                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                        op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                        op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                        op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                        op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                        op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                        op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                        op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                        op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                        op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                        op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                        op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                        op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                        op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                        op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                        op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                        op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                        unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op17
+                    29#usize p.gamma
+              { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                      op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                      op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                      op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                      op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                      op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                      op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                      op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                      op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                      op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                      op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                      op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                      op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                      op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                      op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                      op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                      op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                      op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                      op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                      op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                      unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op13
+                  obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+              let i1 ←
+                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                      op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                      op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                      op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                      op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                      op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                      op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                      op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                      op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                      op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                      op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                      op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                      op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                      op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                      op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                      op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                      op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                      op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                      op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                      op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                      unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op23
+              let i2 ←
+                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                      op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                      op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                      op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                      op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                      op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                      op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                      op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                      op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                      op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                      op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                      op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                      op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                      op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                      op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                      op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                        DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                      op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                      op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                      op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                      op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                      op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                      unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op22
+              let s ←
+                liftM
+                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                      { start := i1, «end» := i2 })
+              let o ←
+                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                        op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                        op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                        op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                        op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                        op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                        op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                        op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                        op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                        op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                        op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                        op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                        op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                        op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                        op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                        op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                        op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                        unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op2
+                    s
+              let r1 ←
+                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                        op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                        op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                        op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                        op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                        op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                        op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                        op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                        op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                        op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                        op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                        op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                        op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                        op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                          DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                        op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                        op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                        op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                        op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                        op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                        unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op0
+                    o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | ⋯ => do
+                  let i3 ←
+                    { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                          op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                          op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                          op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                          op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                          op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                          op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                          op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                          op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                          op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                          op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                          op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                          op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                          op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                          op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                          op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                          op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                          op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                          op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                          op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                          unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op15
+                  let i4 ←
+                    { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                          op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                          op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                          op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                          op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                          op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                          op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                          op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                          op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                          op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                          op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                          op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                          op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                          op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                          op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                          op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                            DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                          op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                          op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                          op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                          op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                          op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                          unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op14
+                  let s1 ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := i3, «end» := i4 })
+                  let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                  let folded_root ←
+                    { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                            op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                            op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                            op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                            op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                            op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                            op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                            op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                            op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                            op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                            op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                            op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                            op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                            op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                            op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                            op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                            op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                            op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                            op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                            op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                            unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.unwrap32
+                        r2
+                  let r3 ←
+                    { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                            op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                            op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                            op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                            op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                            op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                            op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                            op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                            op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                            op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                            op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                            op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                            op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                            op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                            op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                            op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                              DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                            op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                            op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                            op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                            op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                            op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                            unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op5
+                        D proof p folded_root 1#usize hash
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                  match cf2 with
+                    | ⋯ => do
+                      { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                              op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                              op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                              op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                              op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                              op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                DrvC_CallCode.code c (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                              op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                DrvC_CallCode.code c (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                DrvC_CallCode.code c (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                              op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                              op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                              op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                              op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                              op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                              op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                              op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                              op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                              op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                DrvC_CallCode.code c (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                              op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                              op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                              op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                              op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                              op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                              unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op13
+                          obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle i)
+                      let r4 ←
+                        { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                                op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                                op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                                op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                                op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                                op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  DrvC_CallCode.code c
+                                    (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                  DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  DrvC_CallCode.code c
+                                    (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  DrvC_CallCode.code c
+                                    (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                                op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                                op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                                op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                                op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                                op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                                op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                                op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                                op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                                op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                  DrvC_CallCode.code c
+                                    (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                                op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                                op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                                op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                                unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op11
+                            p.queries a.next 22#usize
+                      let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                      match cf3 with
+                        | ⋯ =>
+                          have s2 := a.weights.deref;
+                          do
+                          let r5 ←
+                            { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                                    op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                                    op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                                    op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                                    op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                                    op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      DrvC_CallCode.code c
+                                        (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                      DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                    op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      DrvC_CallCode.code c
+                                        (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      DrvC_CallCode.code c
+                                        (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                                    op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                                    op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                                    op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                                    op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                                    op14 := DrvC_CallCode.code c VTop_Trace.Call.op14,
+                                    op15 := DrvC_CallCode.code c VTop_Trace.Call.op15,
+                                    op16 := DrvC_CallCode.code c VTop_Trace.Call.op16,
+                                    op17 := fun N a0 => DrvC_CallCode.code c (VTop_Trace.Call.op17 N a0),
+                                    op18 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                      DrvC_CallCode.code c
+                                        (VTop_Trace.Call.op18 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                    op19 := fun a0 a1 a2 a3 => DrvC_CallCode.code c (VTop_Trace.Call.op19 a0 a1 a2 a3),
+                                    op20 := DrvC_CallCode.code c VTop_Trace.Call.op20,
+                                    op21 := DrvC_CallCode.code c VTop_Trace.Call.op21,
+                                    op22 := DrvC_CallCode.code c VTop_Trace.Call.op22,
+                                    op23 := DrvC_CallCode.code c VTop_Trace.Call.op23,
+                                    unwrap32 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.unwrap32 a0) }.op10
+                                s2
+                          let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                          match cf4 with
+                            | ⋯ => do
+                              let r6 ←
+                                { op0 := fun {T E} a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op0 a0 a1),
+                                        op1 := DrvC_CallCode.code c VTop_Trace.Call.op1,
+                                        op2 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op2 a0),
+                                        op3 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op3 a0),
+                                        op4 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op4 a0),
+                                        op5 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          DrvC_CallCode.code c
+                                            (VTop_Trace.Call.op5 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op6 := fun a0 a1 a2 a3 a4 a5 a6 a7 =>
+                                          DrvC_CallCode.code c (VTop_Trace.Call.op6 a0 a1 a2 a3 a4 a5 a6 a7),
+                                        op7 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          DrvC_CallCode.code c
+                                            (VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op8 := fun {H} aspis_coredigestDigest32Inst a0 a1 a2 a3 a4 =>
+                                          DrvC_CallCode.code c
+                                            (VTop_Trace.Call.op8 aspis_coredigestDigest32Inst a0 a1 a2 a3 a4),
+                                        op9 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op9 a0 a1),
+                                        op10 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op10 a0),
+                                        op11 := fun a0 a1 a2 => DrvC_CallCode.code c (VTop_Trace.Call.op11 a0 a1 a2),
+                                        op12 := fun a0 => DrvC_CallCode.code c (VTop_Trace.Call.op12 a0),
+                                        op13 := fun a0 a1 => DrvC_CallCode.code c (VTop_Trace.Call.op13 a0 a1),
+                                        op14 := DrvC_CallCode.code ⋯ ⋯, op15 := ⋯, op16 := ⋯, op17 := ⋯, op18 := ⋯,
+                                        op19 := ⋯, op20 := ⋯, op21 := ⋯, op22 := ⋯, op23 := ⋯, unwrap32 := ⋯ }.op6
+                                    ⋯ ⋯ ⋯ ⋯ ⋯ ⋯ ⋯ ⋯
+                              let cf5 ← ⋯
+                              ⋯
+                            | ⋯ => ⋯
+                        | ⋯ => ⋯
+                    | ⋯ => ⋯
+                | ⋯ => ⋯
+      | ⋯ => ⋯
+DrvC_SecondFlow.lean:30:28: warning: This simp argument is unused:
+  lower_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx2_authenticated, ̲VTop_Flow.traceEffects, ̲effects,
+  ̵  ̵ ̵ ̵lower_bindM, ̲lower_liftM,
+  ̲ ̲ ̲ ̲ ̲lower_pu̵r̵e,̵l̵o̵w̵e̵r_̵p̵e̵r̵form, ̲lower_if, ̲tx2_common]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:30:53: warning: This simp argument is unused:
+  lower_if
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx2_authenticated, ̲VTop_Flow.traceEffects, ̲effects,
+  ̵  ̵ ̵ ̵lower_bindM, ̲lower_liftM,
+  ̲ ̲ ̲ ̲ ̲lower_pure, ̲lower_perform,l̵o̵w̵e̵r̵_̵i̵f̵,̵ ̲tx2_common]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:30:62: warning: This simp argument is unused:
+  tx2_common
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Flow.tx2_authenticated, ̲VTop_Flow.traceEffects, ̲effects,
+  ̵  ̵ ̵ ̵lower_bindM, ̲lower_liftM,
+  ̲ ̲ ̲ ̲ ̲lower_pure, ̲lower_perform, ̲lower_if,̵t̵x̵2̵_̵c̵o̵m̵m̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:33:66: warning: This simp argument is unused:
+  lower_pure
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵l̵o̵w̵e̵r̵_̵b̵i̵n̵d̵M̵,̵l̵o̵w̵e̵r̵_̵l̵i̵f̵t̵M̵,̵l̵o̵w̵e̵r̵_̵p̵u̵r̵e̵,̵l̵o̵w̵e̵r̵_̵p̵e̵r̵f̵o̵r̵m̵,̵l̵o̵w̵e̵r̵_̵i̵f̵,̵t̵x̵2̵_̵c̵o̵m̵m̵o̵n̵]̵[̲l̲o̲w̲e̲r̲_̲b̲i̲n̲d̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲l̲i̲f̲t̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲p̲e̲r̲f̲o̲r̲m̲,̲ ̲l̲o̲w̲e̲r̲_̲i̲f̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲x̲2̲_̲c̲o̲m̲m̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:33:91: warning: This simp argument is unused:
+  lower_if
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵l̵o̵w̵e̵r̵_̵b̵i̵n̵d̵M̵,̵l̵o̵w̵e̵r̵_̵l̵i̵f̵t̵M̵,̵l̵o̵w̵e̵r̵_̵p̵u̵r̵e̵,̵l̵o̵w̵e̵r̵_̵p̵e̵r̵f̵o̵r̵m̵,̵l̵o̵w̵e̵r̵_̵i̵f̵,̵t̵x̵2̵_̵c̵o̵m̵m̵o̵n̵]̵[̲l̲o̲w̲e̲r̲_̲b̲i̲n̲d̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲l̲i̲f̲t̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲p̲u̲r̲e̲,̲ ̲l̲o̲w̲e̲r̲_̲p̲e̲r̲f̲o̲r̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲x̲2̲_̲c̲o̲m̲m̲o̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+DrvC_SecondFlow.lean:33:100: warning: This simp argument is unused:
+  tx2_common
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵l̵o̵w̵e̵r̵_̵b̵i̵n̵d̵M̵,̵l̵o̵w̵e̵r̵_̵l̵i̵f̵t̵M̵,̵l̵o̵w̵e̵r̵_̵p̵u̵r̵e̵,̵l̵o̵w̵e̵r̵_̵p̵e̵r̵f̵o̵r̵m̵,̵l̵o̵w̵e̵r̵_̵i̵f̵,̵t̵x̵2̵_̵c̵o̵m̵m̵o̵n̵]̵[̲l̲o̲w̲e̲r̲_̲b̲i̲n̲d̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲l̲i̲f̲t̲M̲,̲ ̲l̲o̲w̲e̲r̲_̲p̲u̲r̲e̲,̲ ̲l̲o̲w̲e̲r̲_̲p̲e̲r̲f̲o̲r̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲o̲w̲e̲r̲_̲i̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.DrvC_SecondFlow.tx2_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.DrvC_SecondFlow.tx2_authenticated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
