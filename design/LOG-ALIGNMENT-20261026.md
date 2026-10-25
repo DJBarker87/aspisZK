@@ -272,3 +272,244 @@ memoized oracle law and its existing bad-event accounting. “Domain-separated
 extra queries have independent answers” is valid only for distinct fresh cells
 under a proved coupling, not from these local tag facts alone.
 
+## What the adopted security proof actually needs from order
+
+`OraclePortHeadlineFrozen2PerAttempt.final_soundness` delegates the extractor
+cost/relation claims to `OraclePortHeadlineFrozen2.final_soundness`, then uses
+`Frozen2StartChargeProbability.failure_bound` and
+`OraclePortFrozen2Join.runtime_transport`. Its hypotheses remain
+`AcceptedRunJoin D rust` **and** `StoredCarrierBinding D rust P runtime`.
+The former requires exact accepted verifier views AND exact accepted annotated
+two-pass views, including logs. The latter binds the runtime carrier. None is
+instantiated by this report.
+
+The extractor does not intrinsically consume the entire log as an opaque ordered
+sequence. `RawCutWordsFromRunExecutableBin.wordsFromRun` replays commitment
+frames0,2,30, recovers maps at their **first-read cuts**, and produces29 initial
+words and a folded final word. `RawCutWordsFromRunPublicValidBin.runDecodedPublic`
+parses the semantic public. `OraclePortRefineJoin.RecoveredInputAgreement`
+requires precisely decoded-public equality, initial-word equality and final-word
+equality; `extractor_eq_of_recovered_inputs` proves this suffices for equal
+extractions for every coin tape. It does not derive these equalities from
+permutation, acceptance or equal roots. A leaf moved across a commitment's first
+read can alter the available recovery table even when all final answers agree.
+The actual costed extractor also needs its log/cut traversal cost budget; value
+equality alone is not the inherited concrete cost theorem.
+
+The probability proof uses the memoized shared-oracle experiment, not independent
+per-call coins. `Frozen2StartChargePrefix.chronological_prefix` shows that the
+prover plus followed sampler is an actual prefix of the full recorded run.
+`first_start_before_terminal` preserves the earliest index of already followed
+starts; `transcript_start_read` puts every submitted chain start in that prefix.
+These feed the **Q+34** restricted start bound and the clean-acceptance argument.
+Collisions are still charged over **Q+1161** distinct reads, including terminal
+Merkle/checkpoint calls. Annotation's second pass introduces repeated issued
+calls but no new oracle cells (`OraclePortStoredExperimentC4.first_reads`).
+Canonical/enriched row metadata preserves the submitted bytes and sampler,
+but its recovered words must still correspond to the actual source log.
+
+The endpoint's explicit bound is
+
+    failure <= (Q+34)*B + kappa(Q+1161) + 2^-126 + 2^-454,
+
+with the stated Qmax range yielding `(Q+1)*2^-100`. The exponent claim is
+conditional on the endpoint's source/runtime joins. The 2^-126 term covers
+the retained extractor bank-abort allowance; 2^-454 covers query-scan exhaustion.
+Do not turn the model's115 prefix calls into115 newly chargeable starts:
+its decoder-start count is34, and the first-read/injection proof is material.
+Do not replace the actual1921 source accounting with1161 without a proof.
+
+A sufficient weaker future transport could use event domination plus recovered
+input agreement and a proved cost bound, under the actual oracle law, rather
+than strict whole-log equality. Section4 of AGENTS permits the weakest adequate
+refinement; it does not permit assuming that such a transport exists.
+
+## Options, size and risks
+
+Estimates below are **engineering estimates of additional focused targets and
+worker-days**, not measured compile time or delivery promises. They cover the
+alignment/model portion only; all existing SDK/runtime/caller/child, source-to-ELF
+and other soundness-cone obligations remain. No transport or frozen3 is built.
+
+### A — source-program transport to the existing frozen2
+
+Target the **complete verifier**, not bare dV. Derive its sampler and batch
+inputs from the exact RawJ native pair; preserve all first-read commitment cuts
+and recovered words; account for the physical public hash and changed checksum
+addresses. Construct a coupling/simulation with a shared memo table on arbitrary
+byte addresses and prequeries. Preserve accepted failure and extractor outputs,
+prove the cost allowance, then lift through the two-pass compiler and runtime.
+Domain-separated extra cells can receive independent answers only when fresh;
+existing answers and rejected prefixes must be preserved. No actual reordering
+is needed in the inspected full schedule. If a different extraction order is
+chosen, use the dependency table; moving batches before sampling is adaptive.
+
+Estimated20–40 small targets,10–20 worker-days, high variance. The apparently
+simple first-head fix is not the difficult part; the oracle-dependent checkpoint
+map and first-read recovery are. A universal injection on all shared addresses
+has not been supplied and semantic projection is not injective on full carriers.
+A transport theorem may be harder to maintain than a small exact model change.
+
+Explicit loss accounting must take the form
+
+    failure_source(Q) <= (Q+c_start)*B
+      + kappa(Q+c_distinct) + 2^-126 + 2^-454 + delta_transport,
+
+with a justified valid range and extractor-cost parameter, not silently inherited
+constants. If source and model share all other addresses and fields, their
+single-pass union adds at most two potentially fresh cells to the model log:
+H(P) and the source checksum (each repeated at resume). Thus1163 is a **candidate
+union budget**, not a checked source bound. H(U) and model checksum also need to
+be simulated when starting from the source. Whether these cells add classifier
+starts, collision cross-events or alter cuts must be proved; delta is not set
+to zero here. In the general unresolved source-refinement class, use the retained
+1921 source envelope rather than that conditional count. Recheck the100-bit
+inequality and Qmax if any constant/loss changes. No independence assumption or
+new cryptographic trust item is authorized.
+
+### B — frozen3 in exact source order and carriers (recommended)
+
+Keep frozen2's **full** sampler-first schedule, including all eight query pairs,
+then batch0, write/read checkpoint, batch1 and finish. Add an explicit physical
+public carrier alongside semantic public U, connect it to the original ASF8
+statement/reconstructed TX2 bytes, and pass it to checkpoint write/resume.
+Keep the two public carriers distinct at the types/interface level. Retain error
+prefixes, duplicate digest handling and source-native checkpoint provenance.
+The model change must be followed by an actual-source join; it is not closure
+by model editing.
+
+Estimated8–16 model/probability targets,4–8 worker-days, plus the independent
+source-join work common to A/B (roughly another10–25 focused integration targets,
+1–3 weeks, depending on concurrent child deliveries). These figures are not a
+resource request. Build a tiny composed prototype before broad rollout.
+
+Reusable mathematical pieces: semantic/folding/accumulator relations and density
+bounds, literal sampler/decoders, byte/Merkle collision lemmas, frozen binary slot
+runner and its resource/path recovery proofs, checkpoint body serializer and
+write/resume laws **already parameterized by arbitrary pub bytes**, concrete
+GS extractor/relation/cost ledger machinery. Re-prove the decision wrapper,
+accepted checks and recovered-input agreement, annotated carrier/projection
+laws, and the runtime join on the new carrier. Re-establish Q+34 charged-prefix
+and Q+1161/2322 budgets for the exact new experiment; use their current proofs as
+templates, not theorem-name-based attribution. Physical P may itself be an
+adversary-prequeried address, so both collision accounting and extractor cut
+stability still need an explicit proof. Costed extraction must use the actual
+log bound.
+
+The likely call-count constants stay unchanged because P replaces U at the
+same call sites, with the same three checkpoint calls. That is an architectural
+expectation, **not** a proved security bound or proof that arbitrary-address
+cross-collisions are unchanged. Frozen3 must close the source carrier mismatch
+and then compose, without silently assuming a physical-to-semantic equality.
+No verifier/prover byte or CU change is needed for this option.
+
+### C — change verifier/protocol bytes to match frozen2
+
+A pure “put batch0 first” edit is infeasible with the same protocol: q and its
+sorting are not available until Fiat–Shamir sampling completes. Accepting an
+unbound prover-supplied q would change the security experiment. Computing the
+transcript early and hiding its hash calls does not change real query order.
+Changing commitment/challenge order, messages, domains or sampling changes
+Fiat–Shamir challenges and entails prover changes, new proof fixtures and a
+new soundness analysis. This is not a source-order optimization.
+
+The narrow useful C variant would keep the current full order and change
+checkpointing from H(P) to H(U), with explicit semantic serialization at TX2.
+That changes checkpoint bytes and drops direct binding of the extra physical
+public metadata; caller/account binding must replace whatever protection is
+lost. The source and model would still need their complete source join.
+If only that checkpoint hash input changes, Fiat–Shamir challenges need not
+change (they already use U), but checkpoint producers/consumers and prover/test
+harnesses that run them must change together. If the transcript itself changes,
+prover challenge derivation must change too. These are distinct variants.
+
+Estimated12–25 source/model/integration targets,1–3 weeks for the narrow variant;
+true challenge-order redesign is a new protocol campaign with no defensible
+small estimate. Source change invalidates the covered Kani/Aeneas/source-helper
+and checkpoint/binary equivalence evidence; reproduce all three ELFs and replace
+the pins only after owner adoption and relevant gates. The frozen pin values
+cannot be carried across different verifier bytes.
+
+CU: no measured delta is claimed. A same-multiset reordering changes zero hash
+call counts but can change allocation/borrow/lifetime costs. P->U keeps call
+counts/checksum lengths but hashes425 or453 fewer public bytes at each of two
+checkpoint public calls (850/906 fewer bytes per pair); producing/decoding U at
+resume costs work and may outweigh that reduction. Revised Fiat–Shamir designs
+could require extra hashing/state retention. Benchmark the exact adopted ELF;
+byte counts are not a CU estimate or formal cost theorem.
+
+### Owner decision and first deliverable
+
+Recommend B's explicit two-public-carrier model. It corrects a concrete execution
+mismatch with no protocol byte change, while preserving the existing sampler's
+causal prefix. It follows AGENTS §4 (actual query behavior, weakest sufficient
+refinement with proved experiment/extractor correspondence) and §6 (frozen
+source/artifacts unchanged, feasible proof-friendly architecture, candidate
+separate until gates pass). The100-bit target remains fixed.
+
+Next concrete deliverable: a separately prefixed frozen3 candidate with the
+physical public carrier, one checked checkpoint write/resume schedule theorem,
+and a small accepted same-native-pair composition into the complete verifier
+interface. Then rebuild its probability/extractor dependency closure under the
+same caps. Stop before more wrapper work if the exact carrier join cannot be
+inhabited. No owner adoption is implied by this recommendation.
+
+## Validation, freeze and handoff
+
+Four new modules only: [LogA_Tags](../lean/LogA_Tags.lean),
+[LogA_Dependencies](../lean/LogA_Dependencies.lean),
+[LogA_PublicBytes](../lean/LogA_PublicBytes.lean), and
+[LogA_Audit](../lean/LogA_Audit.lean). Twelve local mathematical facts are
+checked; the schedule inventory, alignment classification, size estimates and
+recommendation are source analysis, not a proved transport.
+
+Successful focused attempts004/006/008 compile the exact committed theorem
+sources. Final009 imports them and prints all twelve axioms reports. Every
+accepted report is a subset of `{propext, Classical.choice, Quot.sound}` (one
+requires none). Attempts001/002/003/005/007 are excluded elaboration/syntax
+failures; their complete errors and source snapshots remain in the packet.
+Recovery `sorryAx` lines in failed elaborations are not accepted evidence.
+Budget: **9/40 Lean attempts,0/0 Kani**. No timeout/memory kill/cap raise,
+unchanged resource-failure rerun, arithmetic release gate or package replay.
+
+| Accepted target | Attempt | Exit | Wall seconds | Peak RSS KiB | Swap |
+|---|---|---:|---:|---:|---:|
+| LogA_Tags.lean | 004 | 0 | 2.127608 | 5209472 | 0 |
+| LogA_Dependencies.lean | 006 | 0 | 1.946957 | 5205776 | 0 |
+| LogA_PublicBytes.lean | 008 | 0 | 2.088834 | 5204448 | 0 |
+| LogA_Audit.lean | 009 | 0 | 1.775738 | 5183240 | 0 |
+
+All attempts used the unchanged S2W launchers in the coherent workspace
+`/home/dombarker/project-offloads/codex-cx-sound-int2-20261025`, Lean4.32.0,
+`lake env lean -j1 -M7000 -DElab.async=false`, one module in its own
+MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64 scope. Initial inventory
+showed only init.scope; jobs here were sequential. Final scope inventory is
+retained. No build/launcher/monitor infrastructure changed.
+
+Revision anchor is `5a46a7e2392ce5dbdddce172d3fe513a3690479b` on
+`codex/cx-log-align-20261026`; theorem development receipts anchor stage0
+`f28b617117`, final audit anchors stage1 `0c706a021e`, each with dirty new
+source snapshots and exact source SHA. Every attempt's exact command, target,
+source hash/revision, direct dependency object/sidecar fingerprint, exit,
+wall/RSS/swap, cgroup limits, full stdout and axioms are in
+[evidence/log-align-20261026](../evidence/log-align-20261026/).
+[LogA_attempts.jsonl](../evidence/log-align-20261026/LogA_attempts.jsonl)
+consolidates receipts. [Source pins](../evidence/log-align-20261026/LogA_source-pins.json)
+cover the inspected runtime/model/log sources.125 reused RawJ_/RawK_/SdkD_
+host source hashes match this worktree; inherited SInt2 object/cache provenance
+is reused. This is focused verification, not a coherent frozen release rebuild.
+
+No shipped file or cfg(kani) harness changed; no Rust/SBF/ELF rebuild trigger
+fired. Default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`,
+devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
+and Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`
+are inherited pins, not reproduced or newly validated. Private-leaf-salts P3,
+S2 variant/tag02,33 transcript rows,22 queries, split10/12, binary height18,
+proof57607/checkpoint1768 and existing wire/features remain unchanged.
+
+No assumptions discharged from the release ledger; no security/crypto/trust
+assumption added. SDK/std/runtime/extraction/source-helper/child laws and
+same-account/checkpoint history provenance stay retained. Native accepted-pair
+source/model refinement, probability/cost transport, source-to-release-artifact
+composition and the100-bit conclusion remain open. No session A worktree,
+other worker prefix, key or fund was modified. Stage commits are local; no push.
