@@ -1,5 +1,7 @@
 # S1 preparation, reused scratch and joint trace on original SDK cuts
 
+> Comparison qualification (2026-10-25): historical sameDeclaration / Expr-BEq comparisons below ignore binder names and annotations. “Strict”, “identical” and “same type” based only on that helper mean full recorded metadata plus alpha expression equality, not binder-sensitive literal equality. See [SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md](SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md). Raw terms/hashes, exact source copies and ordinary kernel-checked results are separate preserved evidence. Historical receipts/releases are unchanged.
+
 Status: checked ACCEPTED-ONLY source/caller composition; full S1/S6 and the <=2^-100 per-attempt target remain OPEN. S2 is transferred. No production, protocol or artifact change.
 
 ## Enclosing premise removal

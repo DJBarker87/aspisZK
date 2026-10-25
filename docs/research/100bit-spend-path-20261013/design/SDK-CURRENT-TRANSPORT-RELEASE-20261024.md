@@ -1,5 +1,7 @@
 # Current SDK declaration transport released with explicit proof refresh
 
+> Comparison qualification (2026-10-25): historical sameDeclaration / Expr-BEq comparisons below ignore binder names and annotations. “Strict”, “identical” and “same type” based only on that helper mean full recorded metadata plus alpha expression equality, not binder-sensitive literal equality. See [SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md](SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md). Raw terms/hashes, exact source copies and ordinary kernel-checked results are separate preserved evidence. Historical receipts/releases are unchanged.
+
 For the lead's Port27 request at93de4606f3, the owning source session has released
 CURRENT-side raw untrusted declarations at:
 

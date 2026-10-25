@@ -1,5 +1,7 @@
 # Source-selected S1/S6 caller data release, 2026-10-25
 
+> Comparison qualification (2026-10-25): historical sameDeclaration / Expr-BEq comparisons below ignore binder names and annotations. “Strict”, “identical” and “same type” based only on that helper mean full recorded metadata plus alpha expression equality, not binder-sensitive literal equality. See [SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md](SDK-EXPR-COMPARISON-QUALIFICATION-20261025.md). Raw terms/hashes, exact source copies and ordinary kernel-checked results are separate preserved evidence. Historical receipts/releases are unchanged.
+
 Status: the three checked source-selected caller modules from acee18588f now have a closed incremental raw-data export. Whole S1/S6 and the <=2^-100 per-attempt target remain OPEN. No production/source adoption/artifact change; no host compiler/solver or lead reserved attempt used.
 
 ## Immutable additional data
