@@ -4,7 +4,7 @@ from pathlib import Path
 import os,sys,json,hashlib,subprocess,time,signal,resource
 W=Path(__file__).resolve().parent
 G=2**30;CAP=6*G;HIGH=4*G
-UNIT='aspis-s126-claims-extract-20261025-r2'
+UNIT='aspis-s126-claims-extract-20261025-r3'
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def save(name,value):(W/name).write_text(json.dumps(value,indent=2)+'\n')
@@ -72,7 +72,7 @@ if '--inside' not in sys.argv:
  if not before['admitted']:raise SystemExit('Fresh admission denied; no scope/compiler launched')
  signal.alarm(0);resource.setrlimit(resource.RLIMIT_AS,original_limit)
  cmd=['systemd-run','--user','--scope','--unit='+UNIT,'--property=MemoryHigh=4G','--property=MemoryMax=6G',
- '--property=MemorySwapMax=0','--property=MemoryOOMGroup=yes','--property=RuntimeMaxSec=600',
+ '--property=MemorySwapMax=0','--property=RuntimeMaxSec=600',
  '--property=TasksMax=64','/usr/bin/python3','-I','-S','-B',str(W/'run.py'),'--inside']
  save('launch.json',dict(command=cmd,runner_sha256=sha(W/'run.py'),time=time.time(),address_limit_at_launch=resource.getrlimit(resource.RLIMIT_AS)))
  raise SystemExit(subprocess.call(cmd))
@@ -88,6 +88,8 @@ try:
  assert (cg/'memory.max').read_text().strip()==str(CAP)
  assert (cg/'memory.high').read_text().strip()==str(HIGH)
  assert (cg/'memory.swap.max').read_text().strip()=='0'
+ (cg/'memory.oom.group').write_text('1')
+ assert (cg/'memory.oom.group').read_text().strip()=='1'
  sources=source_pins();tools=tool_pins();plan=json.loads((W/'plan.json').read_text())
  save('pins-before.json',dict(sources=sources,tools=tools,cgroup=str(cg),runner_sha256=sha(W/'run.py')))
  env=dict(os.environ);env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',
