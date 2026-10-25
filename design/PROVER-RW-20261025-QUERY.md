@@ -341,3 +341,27 @@ intermediate bounds and passes in1.67s/4,251,076KiB/swap0. Limits unchanged;
 all four accepted top reports use standard axioms. Receipts/snapshots are in
 `evidence/prover-rw-20261023/entropy-exhaust64`. New budget7/100 Lean,0/20
 Kani. Neither outer contract nor conjunct1 is instantiated by these laws.
+
+## Concrete public-prefix source cut (11375–11376)
+
+`ProverRwOuterPrefix.attempt_factor` factors the actual emitted
+`prover.prove_masked_attempt` through `prepare`, whose only inputs are the
+serialized public bytes, variant, hash callback and public account nonce.
+It retains both ordered hashes, context construction/encoding, every source
+error/divergence and the unchanged real body continuation. No private seed
+occurs in `prepare`'s interface. `outer-prefix.py --check` reproduces the cut
+from the frozen full source; no success or output-equality premise is used.
+
+This closes source-prefix factoring only. The actual PrefixContract additionally
+needs constructor/encoding interpretation (op115/op116), public serialization,
+variant tag, exact reservation path and native ordered hash/ROM effects in
+Extra. BodyContract still needs the remaining whole post-reservation body,
+state representations and all proof/audit/error observations. Neither can be
+installed by substituting this source cut for those missing instances.
+
+11375 failed elaboration at final definitional closure; changed11376 passes
+in1.79s/4,097,448KiB/swap0, standard axioms. The11375 revision label describes
+its earlier source base plus exhaustion WIP; actual committed base was already
+5e09dd95d4. Snapshot/hash evidence is authoritative. Existing limits unchanged.
+Receipts are in `evidence/prover-rw-20261023/outer-prefix`. New budget9/100
+Lean,0/20 Kani. No frozen implementation, trust item or top premise changed.

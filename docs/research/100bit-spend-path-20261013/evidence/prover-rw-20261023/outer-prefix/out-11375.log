@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterPrefix.lean:79:56: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+⊢ (do
+      let r ← pub.public_bytes
+      let r1 ←
+        core.result.Result.map_err prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ← lift (Array.make 1#usize [val.deref] ⋯).to_slice
+          let a ← hash s1
+          let context ← aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 a attempt.mask_nonce
+          let s2 ←
+            lift
+                (Array.make 30#usize
+                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 51#u8,
+                      58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8,
+                      80#u8, 84#u8]
+                    prover.prove_masked_attempt._proof_3).to_slice
+          let i ← variant.tag
+          let s4 ← lift (Array.make 1#usize [i] ⋯).to_slice
+          let a2 ← context.encode
+          let s5 ← lift a2.to_slice
+          let s6 ← lift (Array.make 4#usize [s2, val.deref, s4, s5] ⋯).to_slice
+          let binding ← hash s6
+          prover.prove_masked_with_attempt
+              aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+              pub compiled variant hash context binding attempt store
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+          ok (r2, store)) =
+    do
+    let r ← pub.public_bytes
+    let r1 ←
+      core.result.Result.map_err prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let x ← lift (Array.make 1#usize [val.deref] ⋯).to_slice
+        let x ← hash x
+        let x ← aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1 x attempt.mask_nonce
+        let x_1 ←
+          lift
+              (Array.make 30#usize
+                  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 51#u8,
+                    58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8,
+                    80#u8, 84#u8]
+                  prepare._proof_21).to_slice
+        let x_2 ← variant.tag
+        let x_3 ← lift (Array.make 1#usize [x_2] ⋯).to_slice
+        let x_4 ← x.encode
+        let x_5 ← lift x_4.to_slice
+        let x_6 ← lift (Array.make 4#usize [x_1, val.deref, x_3, x_5] ⋯).to_slice
+        let x_7 ← hash x_6
+        prover.prove_masked_with_attempt
+            aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            pub compiled variant hash x x_7 attempt store
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r2 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r2, store)
+'R1Z.ProverRwOuterPrefix.attempt_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
