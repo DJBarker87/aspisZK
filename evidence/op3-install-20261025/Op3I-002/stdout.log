@@ -1,0 +1,27 @@
+Op3I_Std.lean:14:4: error: fail to show termination for
+  Op3I_Std.anyList
+with errors
+failed to infer structural recursion:
+Not considering parameter T of Op3I_Std.anyList:
+  it is unchanged in the recursive calls
+Not considering parameter F of Op3I_Std.anyList:
+  it is unchanged in the recursive calls
+Not considering parameter f of Op3I_Std.anyList:
+  it is unchanged in the recursive calls
+Not considering parameter #5 of Op3I_Std.anyList:
+  its type is not an inductive
+Cannot use parameter #4:
+  (kernel) declaration has free variables 'Op3I_Std.anyList._f', expression: 
+    fun {T F} f x f_1 x_1 =>
+      @anyList.match_1 T F (fun x x_2 => List.below (motive := fun x => F → Result (Bool × ℕ)) x → Result (Bool × ℕ)) x
+        x_1 (fun x x_2 => ok (false, 0))
+        (fun x xs state x_2 => do
+          let (b, state') ← f.call_mut state x
+          if _fvar.1039 = true then ok (true, 1)
+            else do
+              let (b, n) ← x_2.1 state'
+              ok (b, n + 1))
+        f_1
+
+
+unknown free variable `_fvar.1039`
