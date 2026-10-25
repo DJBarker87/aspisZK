@@ -1,37 +1,69 @@
-# Separate future setup allocation proposal (NOT AUTHORIZED / NOT RUN)
+# Future metadata source proposal — NOT ALLOCATED, NOT RUN
 
-The execution producer is source-prepared but cannot pass _plan: five explicit
-fresh-host fields are null. This job has zero host/metadata/setup allocation.
-Do not execute a command to fill them, and do not reinterpret historical epoch7.
+FinalNativeGate_setup.py now supplies private no-argument prospective and
+inside collection bodies. Both public setup entries return78 unconditionally.
+The existing activation patch remains UNAPPLIED; it does not activate setup.
+Source is an incomplete candidate requiring lead review, not an executable plan.
 
-Exact proposed future bounded setup shape, requiring separate lead allocation:
+Future fixed outer profile: FinalNativeGate-pin-setup, MemoryHigh768M,
+MemoryMax1G, MemorySwapMax0, TasksMax64. Fixed transport120s; inside alarm115s;
+persistent sampled aggregate RSS guard512MiB,20ms,6000 samples (120/.02).
+No RLIMIT/VSize alteration. Setup adapter copies every original collector and
+policy function; its sole integration delta is expected unit/high/max and
+prospective requested1G. Inside requested0 counts its actual1G cap once. Full
+strict55GiB reservation/raw7GiB reserve/2GiB guard, both scans and visibility/
+error policy remain. This is separate from the unchanged4G producer adapter.
 
-```
-/usr/bin/systemd-run --user --scope --unit=FinalNativeGate-pin-setup -p MemoryHigh=768M -p MemoryMax=1G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/timeout 115 /usr/bin/python3 -I -B /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
-```
+Private prospective orchestration makes one exclusive0700 setup-packet, holds
+the shared lock outside22:30–14:00 London, starts the512MiB guard, calls the
+actual full prospective1G collector, then would launch the fixed1G scope. The
+inside body calls full inside/GO collectors, actual unit/control checks, finite
+catalog discovery, stable FD hashing and ELF64LE metadata parsing, and publishes
+candidate DATA and a <=4MiB summary. It neither seals nor updates the plan,
+creates/copies caches, activates entries, nor grants4G/Kani execution authority.
+No command here has been run. No compiler/ldd/help/version/native target probe.
 
-FinalNativeGate_setup.py is NOT supplied or claimed runnable in this step. That
-is the exact next metadata-source deliverable for lead review, before allocating
-this separate setup action. It must use a persistent512MiB metadata guard,
-fixed clean environment, source/tool/rlimit/control/identity pins, full concrete
-prospective1GiB admission and inside-scope Q0 bound to its actual768M/1G scope,
-unchanged55GiB/7GiB/2GiB/raw resource policy and raw visibility/error denial. The
-current fixed4GiB adapter MUST NOT be invoked as if it matched that1GiB scope.
-Review the explicit new expected-unit/limits-only adapter diff first; policy
-function bytes remain unchanged. No caller-supplied API projection or GO truth.
+Finite discovery has an entry ceiling derived from historical50077 plus the
+explicit source/root count, not a new arbitrary forest allowance. It reads only
+fixed proposed roots. Every unknown link/type/writable entry is reported and
+never followed. Exact stat sizes define candidate hash-byte bounds before any
+content read; hashes stream64KiB, FD/entry metadata checked before/after. ELF
+metadata has a separate per-file read budget of one exact file size,4KiB name
+limit (Linux path bound), finite header/table bounds and deadline. Unsupported
+ELF/script/search/path mappings stay UNREADY, with exact dependency names and
+configured finite search-path proposals. No claim of complete native closure.
 
-Setup may read and inventory the fixed Kani/sysroot/tool/Python/runtime/native
-ELF dependency source trees, resolve dependency closure from bytes with a bounded
-text/ELF reader (no ldd/compiler/Cargo/Kani/version command or native child), and
-prepare the fixed empty output cache only if separately allocated. It must not
-hash a wider private host universe or run a target. Retain exact source/tool/
-runtime/environment/limits/cache inventories plus oversized hash+size records.
-If closure cannot be established by this metadata-only inspection, expose the
-exact missing executable/library/source instead of silently accepting hashes as
-a body/semantic proof. Errors terminate; no retry/cap increase.
+Concrete gaps before metadata allocation:
 
-The setup receipt is DATA ONLY, not4GiB admission, Kani allocation, API adoption
-or execution authority. Lead then reviews inventory/closure, pins the exact
-bootstrap/source package, patches the sealed plan, reviews the activation diff,
-and separately allocates the still-unspent final Kani slot. The actual producer
-still runs fresh4GiB prospective/inside/GO gates; setup GO cannot replace them.
+- The fresh canonical alias/component catalog, Python stdlib/mapping/tool roles,
+  UID/GID/mode assessments, setup clean environment and source bootstrap chain
+  have not been observed. setup_deferred records these gaps; actual data cannot
+  silently clear them or activate anything. The partial catalog producer can
+  discover data for review, but current setup_environment is null and denies.
+- The outer verified fixed-scope shutdown interface is not implemented. Both
+  wrappers conservatively report SCOPE_UNRESOLVED after any child spawn; they
+  cannot produce a successful execution receipt. Required design: outer retain
+  actual fixed systemd user-unit invocation/start and cgroup inode/owner binding,
+  bind launched scope child by proc start identity and membership, hold a stable
+  cgroup FD, recheck before any fixed-unit kill, and observe populated/tasks
+  afterward. No caller PID/path, numeric kill, root/sudo/ns, or assumed wrapper
+  kill implication. Refused permission, D-state or unreadable/changed identity
+  stays UNRESOLVED with the durable packet/control path; no finite kernel reap
+  promise. This needs a source implementation and explicit orphan/race mocks.
+- Catalog discovery does not yet independently seal its source bootstrap or
+  compare all source/native metadata across its full collection interval.
+  Reader snapshots are individually stable; this is not whole-run stability.
+- Copied raw visibility/control collectors retain their existing observation
+  limits; a512MiB sampled guard/1GiB cgroup does not prove each raw read bounded.
+
+Operational pinsets/missing inputs are finite data. Universal Rust/OS/compiler
+semantics is not a prerequisite to admission and is not proved by it. OS,
+compiler, Kani and trusted policy boundaries remain. Historical50077 records and
+059 are provenance only. Cache choice remains null pending the concrete profile
+assessment and fresh fixed cache inventory. No new empty cache default.
+
+After these source gaps and lead review, a separately allocated metadata action
+may publish candidate data only. Lead reviews fresh data, source/package pins,
+plan seal and activation separately. Any final Kani allocation still requires
+fresh4G prospective/inside/GO checks and durable59->60 charge before its single
+Popen. All actual budgets here are ZERO; final59/60 remains reserved.

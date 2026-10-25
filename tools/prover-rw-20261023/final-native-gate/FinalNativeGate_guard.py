@@ -105,6 +105,8 @@ class Proc:
 
 
 class Guard:
+    budget = BUDGET
+    max_samples = MAX_SAMPLES
     def __init__(self, proc=None, pid=None, notify=None):
         self.proc = proc or Proc()
         self.pid = os.getpid() if pid is None else pid
@@ -157,12 +159,12 @@ class Guard:
             pending.extend((child, pid) for child in children)
         total = sum(row['rss_bytes'] for row in live.values())
         self.peak = max(self.peak, total)
-        if len(self.samples) >= MAX_SAMPLES:
+        if len(self.samples) >= self.max_samples:
             raise GuardError('sample record limit')
         self.samples.append(dict(monotonic=time.monotonic(),rss_bytes=total,
                                  processes=sorted(live),process_rss=live))
-        if total > BUDGET:
-            raise GuardError('sampled aggregate job RSS exceeds 4GiB')
+        if total > self.budget:
+            raise GuardError('sampled aggregate job RSS exceeds fixed guard budget')
 
     def check(self):
         if self.error:
@@ -210,7 +212,7 @@ class Guard:
         if failed:
             self.cancel_owned()
         return dict(kind='sampled aggregate PROCESS RSS; TGID once; fixed job; not continuous',
-                    budget_bytes=BUDGET,interval_seconds=INTERVAL,max_samples=MAX_SAMPLES,
+                    budget_bytes=self.budget,interval_seconds=INTERVAL,max_samples=self.max_samples,
                     max_lineage=MAX_LINEAGE,peak_sampled_rss_bytes=self.peak,
                     samples=self.samples,lineage=self.lineage,error=self.error,
                     cancellations=self.cancelled,started=self.started,stopped=self.stopped,

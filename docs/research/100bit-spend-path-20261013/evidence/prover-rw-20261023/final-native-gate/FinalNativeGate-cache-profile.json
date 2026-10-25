@@ -1,0 +1,143 @@
+{
+  "schema": "FinalNativeGate-cache-profile-assessment-v1",
+  "inputs": {
+    "tools/prover-rw-20261023/resume-p6/compact/run.py": {
+      "revision": "f56c7c533b",
+      "sha256": "dd5c071340fce8dae254d6fb34f1055683ddbde0e498cb9e94da46b1f0fc9b2c",
+      "size": 3934
+    },
+    "tools/prover-rw-20261023/resume-p6/compact/proof/Cargo.toml": {
+      "revision": "f56c7c533b",
+      "sha256": "9071223cfbb13b7c7daa8eebb9068265c979a0b3580abad50c364ed2e792c258",
+      "size": 313
+    },
+    "tools/prover-rw-20261023/resume-mir/compile.py": {
+      "revision": "f56c7c533b",
+      "sha256": "b96563cfba46d5cb88a4b90dd616422df10f404c78d361765e924a93ef8fe615",
+      "size": 4109
+    },
+    "tools/prover-rw-20261023/resume-mir/proof/Cargo.toml": {
+      "revision": "f56c7c533b",
+      "sha256": "19820f7ecbdf0b6b5fe411f6c874d7f1d098409c675542af3018ca631800cb10",
+      "size": 393
+    },
+    "tools/prover-rw-20261023/resume-scalar/proof/Cargo.toml": {
+      "revision": "f56c7c533b",
+      "sha256": "19820f7ecbdf0b6b5fe411f6c874d7f1d098409c675542af3018ca631800cb10",
+      "size": 393
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/resume-mir/pin-summary.json": {
+      "revision": "f56c7c533b",
+      "sha256": "dc6b31eac929446deddf58976e452244045b858f44a2aa952ff1e0b46672ecd2",
+      "size": 94059
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/resume-p6/packet/kani059/receipt.json": {
+      "revision": "f56c7c533b",
+      "sha256": "c0de90c4ff1e93cb190d8d8c2d3d1e68e2b915910a9cb6cf4cd49bd54be8c136",
+      "size": 114365
+    },
+    "docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/resume-p6/packet/kani059/stderr.log": {
+      "revision": "f56c7c533b",
+      "sha256": "248b299f59642925dd91b5c28ec34f7687d05d79d51720d0f4f25ab0e0707761",
+      "size": 515
+    }
+  },
+  "actual_cache_observed_now": false,
+  "old059": {
+    "target": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-p6/compact/target",
+    "profile": "dev optimized+debuginfo",
+    "env_override": "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "manifest_dev_opt_level": 3,
+    "manifest_overflow_checks": true,
+    "exit": 124,
+    "wall": 243.1032235249877,
+    "fingerprint": "9c7183e98127f2cd2d96b3a4af6d28e5ba27dd00cae1fa0315540d4ad2514e51"
+  },
+  "MIR": {
+    "target": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/target",
+    "profile": "release",
+    "environment": {
+      "RUSTC": "/home/dombarker/.kani/kani-0.67.0/toolchain/bin/rustc",
+      "RUSTFLAGS": "--cfg prover_rw_resume_scalar -Ccodegen-units=1 -Zdump-mir=all -Zdump-mir-exclude-pass-number -Zdump-mir-dir=/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/mir",
+      "CARGO_BUILD_JOBS": "1",
+      "CARGO_NET_OFFLINE": "true",
+      "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-mir/target"
+    },
+    "count": 50077,
+    "fingerprint": "63746246066065c3885fbdb48de006d5bf5dec11c7c9d6fe8a70c541327d7ded",
+    "kani_cfg": false
+  },
+  "new_proposal": {
+    "opt_level_override": "3",
+    "reason": "restore actual059 optimized dev intention; scalar manifest only profiles release; omission would change intended dev profile",
+    "source_changes": "launcher environment proposal only; no Rust source/manifest/harness changes",
+    "cache_selected": null
+  },
+  "mismatches": [
+    "MIR release outputs are not dev Kani outputs; ordinary MIR excluded cfg(kani)",
+    "059 package prover-rw-resume-p6 versus scalar; scalar adds renamed original zeroize package",
+    "instrumented getrandom/zeroize/root source bytes differ",
+    "new proposal RUSTFLAGS cfg/codegen flags versus no explicit059 override; inherited059 full environment unrecorded",
+    "absolute vendor/package paths differ; Cargo fingerprints and target layout need fresh metadata"
+  ],
+  "changed_source_records": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/getrandom-error-instrumented.rs.txt",
+      "old_sha256": "39be2b62d069e475564c10f754b807b86c151e140d3cb89a34d445c92102ca3a",
+      "new_sha256": "21ff278511cc018bc106f0f692fa85dfb38ff7de603601dbe51f199b52dcdea8"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/metadata.rs.txt",
+      "old_sha256": "be027bd3814a18411f8ed452cba065ad0ded55403d4b4b916ae04ec8cd0ff134",
+      "new_sha256": "4a36cd75ae4eb66f78d85753c475e5fdd9012401055e8a812ab73881cc0a7757"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/Cargo.lock",
+      "old_sha256": "939bfa0c138d5272aab89f0b26809be392476f87dfcd7120c64045b4ca8ff310",
+      "new_sha256": "885fe4980586b1cbb92dc439b1df804e786b00c1f5055b62395d2c93f6354e43"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/Cargo.toml",
+      "old_sha256": "9071223cfbb13b7c7daa8eebb9068265c979a0b3580abad50c364ed2e792c258",
+      "new_sha256": "19820f7ecbdf0b6b5fe411f6c874d7f1d098409c675542af3018ca631800cb10"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/lib.rs",
+      "old_sha256": "fee3ae859027b81db2ea453b13f184337bb0db197965d224009052e8434a9a5d",
+      "new_sha256": "f07ab675de0556f5feb518f00050583c9d8b9db2b03d79c9c6b1035c90ac8dc2"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/selected.rs",
+      "old_sha256": "c897e9970a22badba06a1a44e18993b2f29695735cf76f04dea7270c436825c0",
+      "new_sha256": "e565ae2fe0831415569b7c03880433f90ec850ae625e75bba7df092aa1e10562"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/vendor/getrandom-0.3.4/src/error.rs",
+      "old_sha256": "39be2b62d069e475564c10f754b807b86c151e140d3cb89a34d445c92102ca3a",
+      "new_sha256": "21ff278511cc018bc106f0f692fa85dfb38ff7de603601dbe51f199b52dcdea8"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/vendor/zeroize-1.8.1/src/lib.rs",
+      "old_sha256": "3bda2fe470061e7fb32a36eeb08a6afb398af4c3e9e926f1d4d8b5994d10a402",
+      "new_sha256": "e77e2b9013d3541f14139d0d99c714c05480bd733e7fa3315522a29c1b1d906c"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/zeroize-instrumented.rs.txt",
+      "old_sha256": "3bda2fe470061e7fb32a36eeb08a6afb398af4c3e9e926f1d4d8b5994d10a402",
+      "new_sha256": "e77e2b9013d3541f14139d0d99c714c05480bd733e7fa3315522a29c1b1d906c"
+    }
+  ],
+  "minimum_changed_crates": [
+    "prover-rw-resume-scalar",
+    "zeroize instrumented",
+    "getrandom instrumented",
+    "prover-rw-resume-scalar-zeroize-original (added)"
+  ],
+  "possibly_reusable_unchanged": [
+    "libc0.2.186",
+    "cfg-if1.0.4"
+  ],
+  "build_cost": "At least4 local package compile/translation units; exact transitive reuse/time/RSS unknown. No cold dependency rebuild authorized; measure no compiler here.",
+  "next": "Fresh read-only inventory of exact059 target and MIR target fingerprints/artifact metadata; compare Kani compiler/cfg/profile/path flags before selecting reuse. No copy/create/delete/upload authorized.",
+  "semantic_boundary": "source metadata only; no cfg(kani) typecheck or native/security result"
+}

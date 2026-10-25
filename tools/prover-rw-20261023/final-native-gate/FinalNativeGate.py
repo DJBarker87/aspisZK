@@ -55,7 +55,10 @@ def _plan():
     seal=(HERE/'FinalNativeGate_seal.py').read_text()
     if seal != 'PLAN_SHA256 = '+repr(PLAN_SHA256)+'\n':
         raise Denied('bootstrap seal source drift')
-    raw=(HERE/'FinalNativeGate-plan.json').read_bytes()
+    with (HERE/'FinalNativeGate-plan.json').open('rb') as stream:
+        before=os.fstat(stream.fileno())
+        raw=stream.read(4*2**20+1)
+        if len(raw)>4*2**20 or before!=os.fstat(stream.fileno()):raise Denied('plan size/identity drift')
     if hashlib.sha256(raw).hexdigest()!=PLAN_SHA256:
         raise Denied('fixed plan source seal drift')
     p=json.loads(raw)
@@ -65,22 +68,19 @@ def _plan():
     return p
 
 
-def _tree(roots):
-    # Fixed roots come from the sealed plan; never a user manifest or CLI path.
-    result={}
-    for root in roots:
-        p=Path(root)
-        if not p.exists():raise Denied('missing fixed input: '+root)
-        if p.is_dir():
-            for directory,dirs,files in os.walk(p,followlinks=True):
-                dirs.sort()
-                for name in sorted(files):
-                    f=Path(directory)/name
-                    if not f.is_file():raise Denied('non-file input: '+str(f))
-                    result[str(f)]=hashlib.sha256(f.read_bytes()).hexdigest()
-        elif p.is_file():result[str(p)]=hashlib.sha256(p.read_bytes()).hexdigest()
-        else:raise Denied('non-file fixed root')
-    return result
+def _tree(roots, catalog):
+    from FinalNativeGate_bounded import Reader
+    return Reader(catalog).inventory(roots)
+
+
+def _file_pins(p):
+    from FinalNativeGate_bounded import Reader
+    catalog=p['catalogs']['source']
+    snapshot=Reader(catalog).inventory(catalog['roots'])
+    if set(snapshot)!=set(p['files']):raise Denied('source inventory coverage drift')
+    files={path:snapshot[path]['sha256'] for path in p['files']}
+    if files!=p['files']:raise Denied('fixed source/package/tool drift')
+    return files
 
 
 def _pins():
@@ -89,12 +89,11 @@ def _pins():
     if HERE!=STAGE:raise Denied('wrong fixed staging directory')
     if dict(os.environ)!=p['environment']:raise Denied('environment drift')
     check(limits(),p['inherited_limits'])
-    if o.runtime_pins()!=p['host_runtime']:raise Denied('collector runtime/tool/source drift')
-    files={path:hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in p['files']}
-    if files!=p['files']:raise Denied('fixed source/package/tool drift')
-    native=_tree(p['native_roots'])
+    if o.runtime_pins(p['catalogs']['runtime'])!=p['host_runtime']:raise Denied('collector runtime/tool/source drift')
+    files=_file_pins(p)
+    native=_tree(p['native_roots'],p['catalogs']['native'])
     if native!=p['native_runtime_dependencies']:raise Denied('native tool/sysroot dependency drift')
-    cache=_tree(p['cache_roots'])
+    cache=_tree(p['cache_roots'],p['catalogs']['cache'])
     if cache!=p['cache_inventory']:raise Denied('cache preflight drift')
     return dict(files=files,native=native,cache=cache,environment=p['environment'],
                 inherited_limits=limits(),source_revision=p['source_revision'],
@@ -203,26 +202,16 @@ def _execute():
     finally:
         # Capture/reap/timeout failures are never relabelled as proof success.
         signal.signal(signal.SIGUSR1,signal.SIG_IGN)
-        if proc is not None and proc.returncode is None:
-            try:
-                if fd is not None and identity is not None:
-                    errors.append(_cancel_child(proc,fd,identity))
-                guard.cancel_owned()
-                deadline=time.monotonic()+5
-                while time.monotonic()<deadline:
-                    pid,status,u=os.wait4(proc.pid,os.WNOHANG)
-                    if pid:
-                        usage=u;code=os.waitstatus_to_exitcode(status);proc.returncode=code;break
-                    time.sleep(.05)
-                if proc.returncode is None:errors.append('REAP_UNRESOLVED: no successful closure')
-            except BaseException as exc:errors.append('cleanup/reap: '+repr(exc))
-        if fd is not None:os.close(fd)
-        try:
-            monitor=guard.finish(failed=failed)
-            guard.check()
-        except BaseException as exc:monitor=dict(error=repr(exc));failed=True
+        from FinalNativeGate_cleanup import cleanup
+        closure=cleanup(proc,fd,identity,guard,_cancel_child)
+        errors.extend(closure['errors']);monitor=closure['monitor']
+        if closure['usage'] is not None:usage=closure['usage']
+        if proc is not None:code=proc.returncode
+        if closure['errors'] or closure['unresolved']:failed=True
         o.ACTIVE_GUARD=None
-        _save('FinalNativeGate-guard.json',monitor)
+        try:_save('FinalNativeGate-guard.json',monitor)
+        except BaseException as exc:
+            failed=True;errors.append('guard receipt: '+repr(exc))
         _save('FinalNativeGate-terminal.json',dict(schema='FinalNativeGate-terminal-v1',
               terminal='COMMAND_EXIT_ZERO_PENDING_PROOF_REVIEW' if not failed else 'FAILED',
               actual_command_exit=code,child_spawned=proc is not None,
@@ -236,15 +225,28 @@ def _execute():
     return 78 if failed else 0
 
 
+def _cache_after(p):
+    # Mutable Cargo outputs have a separately reviewed finite output envelope;
+    # neither previous equality nor a new unbounded forest is required.
+    from FinalNativeGate_catalog import discover
+    from FinalNativeGate_bounded import Reader
+    b=p['cache_output_bounds']
+    if not b or not b.get('rationale') or not p['cache_roots']:raise Denied('missing reviewed cache output envelope')
+    catalog,missing=discover(p['cache_roots'],b['files'],time.monotonic()+b['seconds'])
+    if missing or catalog['bounds']['bytes']>b['bytes']:raise Denied('cache output alias/type/size envelope')
+    catalog['bounds']=b
+    return dict(catalog=catalog,files=Reader(catalog).inventory(p['cache_roots']))
+
+
 def _pins_after():
     # Cargo outputs legitimately change; retain exact post cache inventory without
     # falsely requiring an immutable output cache. Source/tools remain immutable.
     p=_plan();o,_,limits,check,_=_modules()
     check(limits(),p['inherited_limits'])
-    if dict(os.environ)!=p['environment'] or o.runtime_pins()!=p['host_runtime']:
+    if dict(os.environ)!=p['environment'] or o.runtime_pins(p['catalogs']['runtime'])!=p['host_runtime']:
         raise Denied('post runtime/environment drift')
-    return dict(files={path:hashlib.sha256(Path(path).read_bytes()).hexdigest() for path in p['files']},
-                native=_tree(p['native_roots']),cache=_tree(p['cache_roots']))
+    return dict(files=_file_pins(p),
+                native=_tree(p['native_roots'],p['catalogs']['native']),cache=_cache_after(p))
 
 
 def _scope_argv():
@@ -297,23 +299,21 @@ def _prospective():
             _save('FinalNativeGate-parent-error.json',dict(error=repr(exc)))
         finally:
             signal.signal(signal.SIGUSR1,signal.SIG_IGN)
-            if child is not None and child.returncode is None:
-                if fd is not None and ident is not None:_cancel_child(child,fd,ident)
-                guard.cancel_owned()
-                deadline=time.monotonic()+5
-                reaped=False
-                while time.monotonic()<deadline:
-                    pid,status,usage=os.wait4(child.pid,os.WNOHANG)
-                    if pid:
-                        child.returncode=os.waitstatus_to_exitcode(status);reaped=True;break
-                    time.sleep(.05)
-                _save('FinalNativeGate-parent-cleanup.json',dict(reaped=reaped,exit=child.returncode))
-            if fd is not None:os.close(fd)
-            monitor=guard.finish(failed=failed)
-            if monitor.get('error'):failed=True
-            _save('FinalNativeGate-parent-guard.json',monitor)
+            from FinalNativeGate_cleanup import cleanup
+            closure=cleanup(child,fd,ident,guard,_cancel_child)
+            if closure['errors'] or closure['unresolved']:failed=True
+            o.ACTIVE_GUARD=None
+            # A record-write error must not skip another terminal write attempt.
+            for name,value in [('FinalNativeGate-parent-cleanup.json',dict(
+                    errors=closure['errors'],unresolved=closure['unresolved'],
+                    reaped=child is not None and child.returncode is not None)),
+                    ('FinalNativeGate-parent-guard.json',closure['monitor'])]:
+                try:_save(name,value)
+                except BaseException as exc:
+                    failed=True;closure['errors'].append('receipt '+name+': '+repr(exc))
             _save('FinalNativeGate-parent-terminal.json',dict(failed=failed,scope_exit=None if child is None else child.returncode,
-                  charged=(PACKET/'FinalNativeGate-Kani060-CHARGED.json').exists(),print_axioms='N/A'))
+                  charged=(PACKET/'FinalNativeGate-Kani060-CHARGED.json').exists(),errors=closure['errors'],
+                  unresolved=closure['unresolved'],print_axioms='N/A'))
             o.ACTIVE_GUARD=None
     return 78 if failed else 0
 

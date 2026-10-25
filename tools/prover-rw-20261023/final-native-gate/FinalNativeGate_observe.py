@@ -18,54 +18,35 @@ def save(name,value):
 def digest(data):
     return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
 
-def filepin(path):
-    return digest(Path(path).read_bytes())
+def filepin(path,catalog):
+    from FinalNativeGate_bounded import Reader
+    return Reader(catalog).pin(path)
 
-def runtime_pins():
-    # Pure ELF metadata inspection: no ldd/native helper execution. Reject new
-    # env runtime dependencies rather than silently leaving them unpinned.
-    raw=Path('/usr/bin/env').read_bytes()
-    if raw[:6] != b'\x7fELF\x02\x01' or struct.unpack_from('<H',raw,18)[0] != 62:
-        raise ValueError('env ELF ABI drift')
-    phoff,shoff=struct.unpack_from('<QQ',raw,32)
-    phsize,phnum,shsize,shnum=struct.unpack_from('<HHHH',raw,54)
-    interp=[]
-    for i in range(phnum):
-        ph=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
-        if ph[0]==3:interp.append(raw[ph[2]:ph[2]+ph[5]].rstrip(b'\0').decode())
-    sections=[struct.unpack_from('<IIQQQQIIQQ',raw,shoff+i*shsize) for i in range(shnum)]
-    needed=[]
-    for section in sections:
-        if section[1]!=6:continue
-        strings=sections[section[6]]
-        table=raw[strings[4]:strings[4]+strings[5]]
-        for off in range(section[4],section[4]+section[5],section[9]):
-            tag,value=struct.unpack_from('<qQ',raw,off)
-            if tag==1:needed.append(table[value:].split(b'\0',1)[0].decode())
-            if tag in (15,29):raise ValueError('env ELF search path drift')
-    if interp!=['/lib64/ld-linux-x86-64.so.2'] or needed!=['libc.so.6']:
-        raise ValueError('env ELF runtime dependency drift')
-    std = Path(sysconfig.get_path('stdlib')).resolve()
-    files = {}
-    for root, dirs, names in os.walk(std):
-        dirs[:] = sorted(d for d in dirs if d not in ('site-packages','dist-packages','__pycache__'))
-        for name in sorted(names):
-            if name.endswith(('.py','.so')):
-                p = Path(root)/name
-                files[str(p)] = filepin(p)
-    mapped = {}
-    for line in Path('/proc/self/maps').read_text().splitlines():
-        parts = line.split(None,5)
+
+def runtime_pins(catalog):
+    # Changed helper semantics: finite reviewed runtime catalog, no sys.path
+    # forest walk, PATH discovery or whole-file ELF read. Missing data denies.
+    from FinalNativeGate_bounded import Reader
+    if sys.executable!=catalog['python_executable'] or sysconfig.get_path('stdlib')!=catalog['stdlib']:
+        raise ValueError('Python executable/stdlib role drift')
+    for name,path in catalog['tools'].items():
+        if shutil.which(name)!=path:raise ValueError('PATH tool resolution drift: '+name)
+    limit=catalog['maps_limit']
+    if type(limit) is not int or limit<=0:raise ValueError('missing finite maps bound')
+    with open('/proc/self/maps') as stream:raw=stream.read(limit+1)
+    if len(raw)>limit:raise ValueError('maps bound')
+    mapped=set()
+    for line in raw.splitlines():
+        parts=line.split(None,5)
         if len(parts)==6 and parts[5].startswith('/'):
-            p=parts[5]
-            mapped[p]=filepin(p)
-    tools = {name:dict(path=shutil.which(name), **filepin(shutil.which(name)))
-             for name in ('ps','systemctl','docker','systemd-run')}
-    return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable),
-                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools,
-                env_binary=dict(path='/usr/bin/env', **filepin('/usr/bin/env')),
-                env_elf_contract=dict(interpreter=interp,needed=needed),
-                env_dependencies={p:filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})
+            if parts[5].endswith(' (deleted)'):raise ValueError('deleted runtime mapping')
+            mapped.add(parts[5])
+    if mapped!=set(catalog['mapped_libraries']):raise ValueError('runtime mapping catalog drift')
+    pins=Reader(catalog).inventory(catalog['roots'])
+    if not mapped.issubset(pins) or not set(catalog['tools'].values()).issubset(pins):
+        raise ValueError('runtime/tool catalog coverage gap')
+    return dict(executable=sys.executable,version=sys.version,files=pins,tools=catalog['tools'],mapped_libraries=sorted(mapped))
+
 
 def collect(phase):
     """Record every ordered filesystem/command input without changing API logic."""

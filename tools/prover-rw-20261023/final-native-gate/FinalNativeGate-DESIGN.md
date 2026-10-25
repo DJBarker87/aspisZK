@@ -1,3 +1,15 @@
+# Repair status at f56 continuation
+
+This revision supersedes the runtime/hash/cache/cleanup readiness descriptions
+below. See FinalNativeGate-SETUP-PROPOSAL.md for the concrete source and remaining
+interfaces. Public entries remain unconditionally disabled. No host data read.
+The new finite catalog/FD reader and independent cleanup are source repairs;
+fixed-scope shutdown is still unimplemented and every spawned scope is reported
+UNRESOLVED. No successful receipt can be inferred from wrapper exit. Setup source
+exists but is partial, unallocated and UNREADY. Cache choice is null; optimized
+dev opt-level3 is restored in the proposal. Historical sections follow as design
+context, not claims that these interfaces are complete or accepted.
+
 # FinalNativeGate prospective fixed producer (SOURCE ONLY)
 
 Criteria were committed first at4008aeadf2. Base dcc848acfc3c5c9dd95003a7ea0bcff5d924b59b.
@@ -44,7 +56,7 @@ required for this ordinary user Kani source. No SBF restriction was bypassed.
 Fixed new launcher staging directory:
 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate
 Fresh one-shot child packet: FinalNativeGate-packet (never overwritten/reused).
-Fixed new output cache: FinalNativeGate-target, same stage. Preparation of its
+Superseded empty-cache proposal (not selected): FinalNativeGate-target, same stage. Preparation of its
 empty directory is a separately allocated setup action, NOT done in this job.
 The command uses the existing scalar proof/package paths, no harness changes:
 
