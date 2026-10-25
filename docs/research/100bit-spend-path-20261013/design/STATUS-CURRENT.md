@@ -57,6 +57,28 @@ No cap increase, second dependency framework, compatibility axiom or full
 replay is selected. The minimum next deliverable is a coherent selected
 D189/S6 closure with one declaration owner, then this exact consumer check.
 
+One bounded canonical-owner alternative was then tried in an isolated warm
+workspace. The selected import graph has fourteen affected modules. The
+smallest replacement factor file imports the existing original
+`S2W_D189Consolidation` declaration owners and introduces no declaration or
+assumption. That file alone failed during import with Lean's unchanged
+`-M4400` interpreter memory limit: exit134,31.4786s,peak5,437,030,400B,
+sampled aggregate5,468,143,616B,swap0. No dependent module was compiled and no
+new theorem or native/security premise was discharged. Receipt/source/logs
+are `31-S6SdkDependencyFactorV1.*` in the existing evidence directory.
+The repair stops here: no larger-cap retry, new loader or unrelated cache
+rebuild. The minimum operator/build-owner deliverable is an approved
+workspace/cache whose coherent original-owner D189/S6 closure passes this
+focused import under the resource policy, then the retained same-witness
+consumer check. The previously checked conditional SDK consumer remains valid.
+
+Worker `660a4a50b9` additionally checks actual native Box pointer/value coupling
+with predecoded symbolic rows under DEFAULT checks. Its UNINIT partial-prefix
+Box cleanup fails on unsupported raw-pointer/union interaction. This is not a
+new original Claims initialization/cleanup proof, and the unsupported whole
+check must not be retried unchanged. No native SAT or IR check was repeated
+here.
+
 New worker evidence at `1b94856af9` was inspected, not duplicated: the original
 raw-store loop's native arbitrary-cell initializedness and byte/range model
 are checked. They do NOT cover Box projection/ownership transfer, actual
@@ -97,8 +119,8 @@ and the current SDK/S1 worker statements. In particular, D189's actual `f,s`
 witnesses must feed the selected semantic cut, not an independently selected
 tuple. Its conditional child boundary is reused; SDK internals and outer S2
 are not restarted. The worker branch examined is
-`codex/s126-caller-20261021` through `1b94856af9`; the active transport branch
-`codex/cx-port36-transport-20261025` at `2642b6ba35` still supplies no checked integration theorem.
+`codex/s126-caller-20261021` through `660a4a50b9`; the active transport branch
+`codex/cx-port36-transport-20261025` at `71e1c83847` still supplies no checked integration theorem.
 
 | Kind | Exact boundary or open obligation | Concrete consumer | Next check that can close it |
 |---|---|---|---|
