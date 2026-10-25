@@ -28,3 +28,12 @@ RowFinish_Finalization.returned also passed (RowFinish_001): actual returned
 slice equals the certificate's selected output, so all certified row reads
 apply to THAT return. Standard axioms only; 1.424s, 3,839,504 KiB, swap 0.
 Budget after dependencies plus finalization: 94/100 Lean, 0/60 Kani.
+
+Stage 3: RowFinish_Control.round_value and parent_value passed in
+RowFinish_004: exit0,7.097s,4,454,528 KiB,swap0, standard axioms only.
+The entire current wrapping-round/native parent is normalized, preserving
+Relation and Query rejection and comparison order. Primitive totality is
+explicit at exact operands; no parent acceptance is assumed. Attempts002/003
+failed on simplifier normalization of the release dictionary and slice-index
+carrier, respectively; neither is credited. Sources changed before replacements;
+there was no timeout, memory kill or cap increase. Budget97/100 Lean,0/60 Kani.
