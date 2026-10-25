@@ -357,3 +357,695 @@ Uni_SecondMarks/Uni_Audit. Joint kernel inhabitation of all remaining
 runtime/crypto/log/model premises is NOT established. The exact union and
 canonical security endpoint remain linked conditionally through the retained
 source/runtime/oracle association obligations, rather than an assumed join.
+
+## Recount on Cons_Top (2026-10-25)
+
+**Actual theorem: `AspisR1.Cons_Top.deployed`. Target not yet established.**
+Branch `codex/cx-consolidate-20261026`; receipts: `evidence/consolidate-20261026/`.
+Date is the actual UTC/UK audit date; the job/branch retains its assigned 20261026 name.
+
+This is a fresh application of Ledger_003–005's method: kernel-print the full
+ACTUAL statement, print structures/definitions, split conjunctive law leaves,
+keep quantified families and shared existential witnesses/guards, then manually
+classify and deduplicate with a reproducible renderer. The classifications are
+reviewed audit decisions; Python does not prove implications or discharge rows.
+`Cons_039/stdout.log` contains the actual top plus every factored conclusion,
+the shared TX2 tuple/calls, and shared Cons_Finish/Cons_Ten outcomes;
+`Cons_007` repeats the original field inventory on this coherent selection;
+`Cons_008` expands all newly exposed preparation/query/geometry contracts;
+`Cons_010` expands canonicality and the remaining data carriers. The initial Cons_006 print hid deep terms; Cons_009 fixed that
+display issue for Stage1. Cons_039 freshly audits the final shared-tuple top. Only proof-irrelevant subtype witnesses are hidden.
+`Cons_field_catalog.json` mechanically extracts every printed structure field.
+The before statement/field evidence and baseline remain Ledger_003–005 and
+`premises.json`; the named-binder after sources are `lean/Cons_Top.lean`, `Cons_Result`,
+`Cons_Base`, `Cons_Caller`, `Cons_Continuation`, `Cons_Finish` and `Cons_Ten`.
+
+Counting unit remains an atomic law FAMILY, not byte cells or independent
+proof gates. Fixed canonicality conjunctions are split into their four/eight
+limb laws; Fin22/Fin2/Fin10/Fin4 quantified families are not enumerated. Payload
+and whole-vector equalities remain one family. Repeated primitiveOwner,
+queryLeaves and Cons_Ten ports refer to the same dictionary and are counted
+once. Read/prepare model families repeated in the ten/finish continuations
+are deduplicated; existential entry.parsed and the particular ten.parseReached
+guard are distinct. Params/Functional/initFits remain structural carrier laws,
+not assertions of actual source correctness. No new typeclass is required.
+Configuration, FinishOps, query/geometry Ops, B, std, Context and Runtime are
+data-only dictionaries/carriers; arbitrary functions are not source proofs.
+
+The old ledger mixed actual antecedents with additional deployment items E
+and historical endpoints D. The tables distinguish them. “Deployment alias”
+means an umbrella for already counted antecedent leaves; it adds no independent
+gate. An absent deployment item is not silently credited as a proof. Counts
+measure neither a security percentage nor unconditional release progress.
+
+| Scope | T | P | C | lead | session A | external |
+|---|---:|---:|---:|---:|---:|---:|
+| actual antecedent | 82 | 174 | 0 | 26 | 145 | 85 |
+| deployment only | 6 | 14 | 0 | 13 | 1 | 6 |
+| deployment alias | 0 | 5 | 0 | 4 | 1 | 0 |
+| all retained audit rows | 88 | 193 | 0 | 43 | 147 | 91 |
+| deduplicated actual plus non-alias deployment | 88 | 188 | 0 | 39 | 146 | 91 |
+
+| Actual antecedent owner | T | P | C |
+|---|---:|---:|---:|
+| lead | 0 | 26 | 0 |
+| session A | 0 | 145 | 0 |
+| external | 82 | 3 | 0 |
+
+The expanded P total increases because this theorem EXPOSES previously
+uninventoried preparation/primitive and saved-encoding boundaries. This is
+not evidence of protocol regression, nor permission to subtract job reports
+from the baseline. L149/L150 disappear as inputs, but `tx1_saved` remains a
+strong same-Vec/Context/model ten-state equation. A root/state observation is
+not that equation. AuS1 removes the authenticated_S1 input by proving a
+collision OR indexed-recovery branch under SessionAPrepare. No collision-free
+unconditional authentication theorem is claimed.
+
+The same f,s,outer,pre,middle,fs,ss and the same TX1 run supply every native,
+writer, preparation-trace and finish output. Fresh first_run is derived from
+THAT SourceCuts, not supplied by the caller. Writer admission is reconstructed
+on THAT run from immutable prepareOwner and primitiveOwner, not assumed.
+Old weaker TX2 finish and TX1 authentication continuations are not exported.
+Cons_Ten returns collision OR the ten-state result. Cons_Finish.Outcome retains
+AuS1's strongest branch on ONE shared TX2 tuple; Cons_FinishProof derives
+saved_ten/twelve internally and retains the original round/pair/dot/semantic
+laws. The shared native/finish tuple is constructed once from the accepted source
+common call, including Op5T's installed batch. Cons_Base/Caller/Continuation/Result
+only factor conclusions; they add no top hypothesis. Native Witness has ten
+data fields and no Prop field. The SDK installation equality is a proved output and CPhy is definitionally
+the same sdk; complete driver/source Program equality is a proved output.
+The headline uses this same installed source/dictionary. It does NOT identify
+the arbitrary GExp adversary/project with the accepted native pair; the global
+experiment/event/source association remains L157/L159/L181 and the bounds.
+Carriers, failure game, Q quantifiers, metric and collision constants are unchanged;
+the arbitrary driver/dictionary family is specialized to DrvC's constructed
+release installation, explicitly rather than via a compatibility assumption.
+
+### Row-by-row baseline diff
+
+| Baseline | Name | Class / owner | Status | Actual location or reason |
+|---|---|---|---|---|
+| L001 | sdk.account_data_cell.data-cell identity | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L002 | sdk.account_data_cell.lamports-cell identity | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L003 | sdk.account_data_cell.shared data-cell alias agreement | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L004 | sdk.account_data_cell.live data/lamports separation | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L005 | sdk.cell_payload.typed cell payload equality | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L006 | sdk.cell_counter.counter equality | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L007 | sdk.cell_counter.live-guard lookup equality | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L008 | sdk.guard_liveness.live guard identity | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L009 | sdk.guard_liveness.allocation liveness | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L010 | sdk.guard_liveness.descriptor identity | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L011 | sdk.shared_ok.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L012 | sdk.shared_ok.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L013 | sdk.shared_err.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L014 | sdk.shared_err.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L015 | sdk.exclusive_ok.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L016 | sdk.exclusive_ok.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L017 | sdk.exclusive_err.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L018 | sdk.exclusive_err.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L019 | sdk.shared_deref.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L020 | sdk.shared_deref.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L021 | sdk.exclusive_deref.read.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L022 | sdk.exclusive_deref.read.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L023 | sdk.exclusive_deref.write.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L024 | sdk.exclusive_deref.write.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L025 | sdk.guard_move.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L026 | sdk.guard_move.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L027 | sdk.shared_drop.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L028 | sdk.shared_drop.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L029 | sdk.exclusive_drop.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L030 | sdk.exclusive_drop.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L031 | sdk.error_move_drop.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L032 | sdk.error_move_drop.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L033 | sdk.borrow_frame.Matches.reply | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L034 | sdk.borrow_frame.Matches.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L035 | std.slice_copy_from_slice | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L036 | admission1.entry.valid.uniqueToken | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L037 | admission1.entry.valid.uniqueOwner | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L038 | admission1.entry.valid.counterLower | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L039 | admission1.entry.valid.counterUpper | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L040 | admission1.entry.valid.counterEquation | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L041 | admission1.entry.valid.exclusive.externalZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L042 | admission1.entry.valid.exclusive.sharedZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L043 | admission1.entry.valid.exclusive.one | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L044 | admission1.entry.valid.externalNegative.sharedZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L045 | admission1.entry.valid.externalNegative.exclusiveZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L046 | admission1.entry.valid.guardAllocated | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L047 | admission1.entry.valid.guardDescriptor | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L048 | admission1.entry.valid.liveSeparate | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L049 | admission1.entry.valid.liveAllocated | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L050 | admission1.entry.freshGuards | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L051 | admission1.entry.noExternalBorrows | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L052 | admission1.entry.liveAccount | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L053 | admission1.entry.counterZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L054 | admission1.entry.sharedCellsOnlyEqualKeys | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L055 | admission1.entry.duplicateKeysShareCell | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L056 | admission1.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L057 | admission2.entry.valid.uniqueToken | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L058 | admission2.entry.valid.uniqueOwner | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L059 | admission2.entry.valid.counterLower | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L060 | admission2.entry.valid.counterUpper | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L061 | admission2.entry.valid.counterEquation | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L062 | admission2.entry.valid.exclusive.externalZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L063 | admission2.entry.valid.exclusive.sharedZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L064 | admission2.entry.valid.exclusive.one | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L065 | admission2.entry.valid.externalNegative.sharedZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L066 | admission2.entry.valid.externalNegative.exclusiveZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L067 | admission2.entry.valid.guardAllocated | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L068 | admission2.entry.valid.guardDescriptor | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L069 | admission2.entry.valid.liveSeparate | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L070 | admission2.entry.valid.liveAllocated | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L071 | admission2.entry.freshGuards | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L072 | admission2.entry.noExternalBorrows | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L073 | admission2.entry.liveAccount | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L074 | admission2.entry.counterZero | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L075 | admission2.entry.sharedCellsOnlyEqualKeys | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L076 | admission2.entry.duplicateKeysShareCell | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L077 | admission2.related | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L078 | extraction.stage1 | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L079 | extraction.stage2 | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L080 | extraction.digestSource | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L081 | p1 | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L082 | syscall | T / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L083 | accepted1 | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L084 | accepted2 | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L085 | p.hL | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L086 | p.encLen | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L087 | p.decEnc | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L088 | port.erasure | P / lead | removed (derived/superseded) | Constructed SdkD child port; erasure is a theorem, not a supplied ChildConeJoin. |
+| L089 | firstMarks.source | C / lead | removed (derived/superseded) | Old unguarded FirstMarks is not a premise; success-conditioned concrete marks consumed internally. |
+| L090 | secondMarks.source | C / lead | removed (derived/superseded) | Old unguarded SecondMarks is not a premise; concrete marks consumed internally. |
+| L091 | writer.header | P / lead | removed (derived/superseded) | Writer.header is derived and exported on the exact cut. |
+| L092 | writer.size | P / lead | removed (derived/superseded) | Writer.size is derived and exported. |
+| L093 | reader.checkedHeader | P / lead | removed (derived/superseded) | Reader.checkedHeader is derived and exported. |
+| L094 | history.savedAtCommit | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L095 | history.loadedAtEntry | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L096 | history.noInterveningWrite | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L097 | p2prime.binding.proof | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L098 | p2prime.binding.pub | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L099 | entry.parsed | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L100 | multiproof.batch0Ranges.PhysicalRange.start | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L101 | multiproof.batch0Ranges.PhysicalRange.finish | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L102 | multiproof.batch0Ranges.PhysicalRange.bound | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L103 | multiproof.batch0Ranges.PhysicalRange.index | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L104 | multiproof.batch1Ranges.PhysicalRange.start | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L105 | multiproof.batch1Ranges.PhysicalRange.finish | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L106 | multiproof.batch1Ranges.PhysicalRange.bound | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L107 | multiproof.batch1Ranges.PhysicalRange.index | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L108 | scan.scanArgument.length | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L109 | scan.scanArgument.index | P / lead | removed (derived/superseded) | Concrete physical node/y1 ranges derived and exported on same f,s; no independent range/join premise. |
+| L110 | r0.field0 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L111 | r0.field4 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L112 | r0.add | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L113 | r0.quarter_run | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L114 | r0.multiply | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L115 | r0.evaluate | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L116 | r1.field0 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L117 | r1.field4 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L118 | r1.add | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L119 | r1.quarter_run | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L120 | r1.multiply | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L121 | r1.evaluate | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L122 | s2 | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L123 | ha0 | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L124 | ha1 | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L125 | hw | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L126 | has | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L127 | hp | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L128 | hd | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L129 | hi | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L130 | hq | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L131 | read | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L132 | decoded | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L133 | pairing_S3_S5_S9.round0.boundary | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L134 | pairing_S3_S5_S9.round0.quarter | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L135 | pairing_S3_S5_S9.round0.eval | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L136 | pairing_S3_S5_S9.round1.boundary | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L137 | pairing_S3_S5_S9.round1.quarter | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L138 | pairing_S3_S5_S9.round1.eval | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L139 | pairing_S3_S5_S9.claim | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L140 | pairing_S3_S5_S9.alpha0 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L141 | pairing_S3_S5_S9.alpha1 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L142 | pairing_S3_S5_S9.pair | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L143 | matches_S4_S7 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L144 | semantic_S3_S9.EquationEndpoint.initial | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L145 | semantic_S3_S9.EquationEndpoint.chain | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L146 | semantic_S3_S9.EquationEndpoint.terminal | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L147 | dot_S5 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L148 | canonical_S3_S4_S5_S9 | P / session A | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L149 | saved_ten | P / lead | removed (derived/superseded) | No saved_ten input in the sole finish branch; derived internally from same saved encoding and reader success. See retained tx1_saved. |
+| L150 | twelve | P / lead | removed (derived/superseded) | No twelve input in the sole finish branch; derived by Tx2N under primitive/geometry/read/preparation laws. |
+| L151 | i.data.Functional.map_add | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L152 | i.data.Functional.map_smul | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L153 | tr.statement.initFits | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L154 | hqueries | P / external | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L155 | globalJoin.verifier | C / lead | removed (derived/superseded) | Superseded arbitrary-logical-input domain, not proof of that contradictory/global statement. |
+| L156 | globalJoin.annotated | P / lead | removed (derived/superseded) | Superseded unrestricted annotated interface; canonical domain used instead. |
+| L157 | canonicalJoin.verifier | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L158 | canonicalJoin.annotated | P / lead | removed (derived/superseded) | Derived two-pass canonical annotation from raw verifier join and constructed Physical. |
+| L159 | StoredCarrierBinding | P / lead | still present (actual antecedent) | Literal expanded antecedent, at the constructed installed instance. |
+| L160 | Physical rust (transport predecessor) | P / lead | removed (derived/superseded) | Constructed implementation/source and proved Program equality on all inputs; SDK identities checked, not assumed. |
+| L161 | Carried.statement | P / lead | removed (derived/superseded) | Carried.statement is derived for canon(lift P); no independent Carried hypothesis. |
+| L162 | Carried.stored | P / lead | removed (derived/superseded) | Carried.stored is derived for canon(lift P). |
+| L163 | Carried.rows | P / lead | removed (derived/superseded) | Carried.rows is derived for canon(lift P). |
+| L164 | combine op34 and TX2 installation | P / lead | removed (derived/superseded) | One checked CPhy/T2Nat/AuS1 dictionary and shared f,s/run construction. |
+| L165 | shape full semantic/transcript join | P / lead | still present (deployment only) | Header/shape value installed; full source semantic/transcript association remains in L129-L132 and raw join. |
+| L166 | batch source Result/effects | P / lead | still present (deployment only) | Installed source batch effects are identified by driver construction; native lowering/adoption/effect association still required. |
+| L167 | indexed authentication | P / lead | removed (derived/superseded) | Indexed authentication is derived with a collision alternative on the same trace; no authenticated_S1 input. SessionAPrepare remains. |
+| L168 | prepare Context/Data binding | P / lead | still present (deployment only) | Same Context/data/preparation and saved-byte association remains as N preparation laws and tx1_saved; not discharged by state arithmetic. |
+| L169 | TX1 ten-step query | P / lead | removed (derived/superseded) | Native ten-step query instance and collision-or-model ten state on the same run; preparation/read/geometry leaves remain. |
+| L170 | TX1 flush materialization | P / lead | removed (derived/superseded) | Native flush materialization on the same run. |
+| L171 | TX1 writer/Q2 bridge | P / lead | removed (derived/superseded) | Actual writer and native-writer results derived on same run; full Context/physical encoding still tx1_saved. |
+| L172 | reader native/helper composition | P / lead | removed (derived/superseded) | Native reader/OnRun/helper composition exported; no native-reader equality hypothesis. |
+| L173 | powers same-return instance | P / session A | removed (derived/superseded) | Installed same-return powers uses Tx2N_Powers and existing checked early_powers, no new powers hypothesis. |
+| L174 | initial/pending native instance | P / lead | removed (derived/superseded) | Installed initial/pending constructor derived on the exact run. |
+| L175 | finish full effects | P / lead | removed (derived/superseded) | Complete successful finish silent-effects law exported; session A pairing/dot/round laws retained. |
+| L176 | S6 native decoded/public transport | P / session A | still present (deployment only) | Semantic source getters/cuts compose, but native ownership/error/cleanup/adoption remains outside the kernel statement. |
+| L177 | Claims native std slots | P / lead | still present (deployment only) | Arbitrary Claims reserve/intoBox data dictionary has no full native ownership/abort/effects interpretation. |
+| L178 | remaining primitive instances | P / session A | still present (deployment only) | Covered explicitly by N001-N114 primitive/preparation law leaves; do not add another count for this umbrella. |
+| L179 | library/native frame | P / lead | still present (deployment only) | SDK borrow trust retained; concrete allocator/library/native frame and source association remain deployment obligations. |
+| L180 | history protection / Pool-ASQ8 | P / lead | still present (deployment only) | Specific cross-transaction history protection remains L094-L096; runtime rollback semantics alone is insufficient. |
+| L181 | oracle model order | P / lead | still present (deployment only) | Complete source Program equality is proved; ordered source-to-frozen2 model event/projection association remains raw L157/GExq work. |
+| L182 | raw canonical join | P / lead | still present (deployment only) | Same obligation as literal L157 at this installed source, not a second independent gate. |
+| L183 | two annotation passes | P / lead | removed (derived/superseded) | Two canonical annotation passes derived from raw verifier join and Physical. |
+| L184 | canonical per-attempt endpoint | P / lead | removed (derived/superseded) | Corrected canonical PerAttempt Claims and repeated/adaptive bound plus zero-query corollary proved conditionally. |
+| L185 | deployed stored experiment | P / lead | still present (deployment only) | Same obligation as literal L159 at this installed source, not a second independent gate. |
+| L186 | source lowering to frozen ELFs | P / lead | still present (deployment only) | Source-to-SBF/artifact association for the exact frozen ELFs remains; no new binary proof. |
+| L187 | coherent frozen replay | P / lead | still present (deployment only) | Only coherent cached focused composition audited; full frozen dependency release replay not run. |
+| L188 | final axioms/trust audit | P / lead | still present (deployment only) | Current top standard-axiom audit passes; final release dependency/trust/adoption audit remains. |
+| L189 | P7 compiler/LLVM/toolchain | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L190 | P6 Kani association | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L191 | runtime allocator/entrypoint/syscall | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L192 | TrustedStd.option_ok_or | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L193 | TrustedStd.result_unwrap32 | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L194 | cryptographic security contract | T / external | still present (deployment only) | Retained release/tool/runtime/cryptographic trust; not an additional explicit Lean binder. |
+| L195 | P6Boundary.oracle | P / lead | still present (deployment only) | Actual native total-oracle/source association remains, distinct from success-only RuntimeSyscall; no P6-boundary binder in this top. |
+| L196 | P6Boundary.binary_parent | P / lead | still present (deployment only) | Actual native binary-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L197 | P6Boundary.occupied_parent | P / lead | still present (deployment only) | Actual native occupied-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L198 | P6Boundary.sibling_parent | P / lead | still present (deployment only) | Actual native sibling-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L199 | P6Boundary.leaf | P / lead | still present (deployment only) | Actual native leaf callback/source association remains a deployment obligation; no leaf gate binder here. |
+
+### Newly present expanded antecedents
+
+Every row below is P. This includes the replacement boundaries behind the
+reported removals; these are not new external cryptographic assumptions.
+
+| ID | Law family | Owner | Meaning | Blocker |
+|---|---|---|---|---|
+| N001 | prepareOwner.accepted.variant | session A | Every successful actual preparation has variant S2; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N002 | prepareOwner.accepted.queries | session A | Every successful actual preparation has all 22 query words below 262144; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N003 | prepareOwner.accepted.gamma.c0.c0.a | session A | Every successful actual preparation has gamma limb c0.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N004 | prepareOwner.accepted.gamma.c0.c0.b | session A | Every successful actual preparation has gamma limb c0.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N005 | prepareOwner.accepted.gamma.c0.c1.a | session A | Every successful actual preparation has gamma limb c0.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N006 | prepareOwner.accepted.gamma.c0.c1.b | session A | Every successful actual preparation has gamma limb c0.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N007 | prepareOwner.accepted.gamma.c1.c0.a | session A | Every successful actual preparation has gamma limb c1.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N008 | prepareOwner.accepted.gamma.c1.c0.b | session A | Every successful actual preparation has gamma limb c1.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N009 | prepareOwner.accepted.gamma.c1.c1.a | session A | Every successful actual preparation has gamma limb c1.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N010 | prepareOwner.accepted.gamma.c1.c1.b | session A | Every successful actual preparation has gamma limb c1.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N011 | prepareOwner.accepted.kappa.c0.c0.a | session A | Every successful actual preparation has kappa limb c0.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N012 | prepareOwner.accepted.kappa.c0.c0.b | session A | Every successful actual preparation has kappa limb c0.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N013 | prepareOwner.accepted.kappa.c0.c1.a | session A | Every successful actual preparation has kappa limb c0.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N014 | prepareOwner.accepted.kappa.c0.c1.b | session A | Every successful actual preparation has kappa limb c0.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N015 | prepareOwner.accepted.kappa.c1.c0.a | session A | Every successful actual preparation has kappa limb c1.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N016 | prepareOwner.accepted.kappa.c1.c0.b | session A | Every successful actual preparation has kappa limb c1.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N017 | prepareOwner.accepted.kappa.c1.c1.a | session A | Every successful actual preparation has kappa limb c1.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N018 | prepareOwner.accepted.kappa.c1.c1.b | session A | Every successful actual preparation has kappa limb c1.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N019 | prepareOwner.accepted.alpha.c0.c0.a | session A | Every successful actual preparation has alpha limb c0.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N020 | prepareOwner.accepted.alpha.c0.c0.b | session A | Every successful actual preparation has alpha limb c0.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N021 | prepareOwner.accepted.alpha.c0.c1.a | session A | Every successful actual preparation has alpha limb c0.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N022 | prepareOwner.accepted.alpha.c0.c1.b | session A | Every successful actual preparation has alpha limb c0.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N023 | prepareOwner.accepted.alpha.c1.c0.a | session A | Every successful actual preparation has alpha limb c1.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N024 | prepareOwner.accepted.alpha.c1.c0.b | session A | Every successful actual preparation has alpha limb c1.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N025 | prepareOwner.accepted.alpha.c1.c1.a | session A | Every successful actual preparation has alpha limb c1.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N026 | prepareOwner.accepted.alpha.c1.c1.b | session A | Every successful actual preparation has alpha limb c1.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N027 | prepareOwner.accepted.rho.c0.a | session A | Every successful actual preparation has rho limb c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N028 | prepareOwner.accepted.rho.c0.b | session A | Every successful actual preparation has rho limb c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N029 | prepareOwner.accepted.rho.c1.a | session A | Every successful actual preparation has rho limb c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N030 | prepareOwner.accepted.rho.c1.b | session A | Every successful actual preparation has rho limb c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N031 | prepareOwner.accepted.semanticAlpha.c0.a | session A | Every successful actual preparation has semanticAlpha limb c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N032 | prepareOwner.accepted.semanticAlpha.c0.b | session A | Every successful actual preparation has semanticAlpha limb c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N033 | prepareOwner.accepted.semanticAlpha.c1.a | session A | Every successful actual preparation has semanticAlpha limb c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N034 | prepareOwner.accepted.semanticAlpha.c1.b | session A | Every successful actual preparation has semanticAlpha limb c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N035 | prepareOwner.accepted.coordinates.c0.a | session A | Every successful actual preparation has coordinates limb c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N036 | prepareOwner.accepted.coordinates.c0.b | session A | Every successful actual preparation has coordinates limb c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N037 | prepareOwner.accepted.coordinates.c1.a | session A | Every successful actual preparation has coordinates limb c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N038 | prepareOwner.accepted.coordinates.c1.b | session A | Every successful actual preparation has coordinates limb c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N039 | prepareOwner.accepted.claim.c0.c0.a | session A | Every successful actual preparation has claim limb c0.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N040 | prepareOwner.accepted.claim.c0.c0.b | session A | Every successful actual preparation has claim limb c0.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N041 | prepareOwner.accepted.claim.c0.c1.a | session A | Every successful actual preparation has claim limb c0.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N042 | prepareOwner.accepted.claim.c0.c1.b | session A | Every successful actual preparation has claim limb c0.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N043 | prepareOwner.accepted.claim.c1.c0.a | session A | Every successful actual preparation has claim limb c1.c0.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N044 | prepareOwner.accepted.claim.c1.c0.b | session A | Every successful actual preparation has claim limb c1.c0.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N045 | prepareOwner.accepted.claim.c1.c1.a | session A | Every successful actual preparation has claim limb c1.c1.a < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N046 | prepareOwner.accepted.claim.c1.c1.b | session A | Every successful actual preparation has claim limb c1.c1.b < 2147483647; all success guards and p/scratch witnesses stay shared. | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N047 | primitiveOwner.basis.s3_s4_mul | session A | Exact installed query basis primitive equation; universal helper instance. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N048 | primitiveOwner.basis.s3_s4_sub | session A | Exact installed query basis primitive equation; universal helper instance. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N049 | primitiveOwner.basis.s3_s4_double | session A | Exact installed query basis primitive equation; universal helper instance. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N050 | primitiveOwner.basis.zero | session A | Exact installed query basis primitive equation; universal helper instance. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N051 | primitiveOwner.basis.one | session A | Exact installed query basis primitive equation; universal helper instance. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N052 | primitiveOwner.arithmetic.s3_s4_s5_mulE.value | session A | Exact decoded arithmetic output under all original canonical/input/result guards. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N053 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c0.a | session A | Same output limb c0.c0.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N054 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c0.b | session A | Same output limb c0.c0.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N055 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c1.a | session A | Same output limb c0.c1.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N056 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c1.b | session A | Same output limb c0.c1.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N057 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c0.a | session A | Same output limb c1.c0.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N058 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c0.b | session A | Same output limb c1.c0.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N059 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c1.a | session A | Same output limb c1.c1.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N060 | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c1.b | session A | Same output limb c1.c1.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N061 | primitiveOwner.arithmetic.s3_s4_s5_addE.value | session A | Exact decoded arithmetic output under all original canonical/input/result guards. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N062 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c0.a | session A | Same output limb c0.c0.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N063 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c0.b | session A | Same output limb c0.c0.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N064 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c1.a | session A | Same output limb c0.c1.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N065 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c1.b | session A | Same output limb c0.c1.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N066 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c0.a | session A | Same output limb c1.c0.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N067 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c0.b | session A | Same output limb c1.c0.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N068 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c1.a | session A | Same output limb c1.c1.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N069 | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c1.b | session A | Same output limb c1.c1.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N070 | primitiveOwner.arithmetic.s3_s4_s9_mulK.value | session A | Exact decoded arithmetic output under all original canonical/input/result guards. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N071 | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c0.a | session A | Same output limb c0.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N072 | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c0.b | session A | Same output limb c0.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N073 | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c1.a | session A | Same output limb c1.a < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N074 | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c1.b | session A | Same output limb c1.b < 2147483647; not an independent output witness. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N075 | primitiveOwner.m31.multiply | session A | Decoded M31 primitive result agrees with the model on its actual successful return. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N076 | primitiveOwner.m31.double | session A | Decoded M31 primitive result agrees with the model on its actual successful return. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N077 | primitiveOwner.m31.one | session A | Decoded M31 primitive result agrees with the model on its actual successful return. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N078 | primitiveOwner.m31.subtract | session A | Decoded M31 primitive result agrees with the model on its actual successful return. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N079 | primitiveOwner.decoder.decode | session A | Every successful bounded four-wide opening decode agrees with the selected wire slice. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N080 | primitiveOwner.line | session A | Actual op16 line result equals lineWithInverses on the same values and inverse carrier. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N081 | primitiveOwner.line_canonical.c0.c0.a | session A | Same successful op16 output limb c0.c0.a < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N082 | primitiveOwner.line_canonical.c0.c0.b | session A | Same successful op16 output limb c0.c0.b < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N083 | primitiveOwner.line_canonical.c0.c1.a | session A | Same successful op16 output limb c0.c1.a < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N084 | primitiveOwner.line_canonical.c0.c1.b | session A | Same successful op16 output limb c0.c1.b < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N085 | primitiveOwner.line_canonical.c1.c0.a | session A | Same successful op16 output limb c1.c0.a < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N086 | primitiveOwner.line_canonical.c1.c0.b | session A | Same successful op16 output limb c1.c0.b < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N087 | primitiveOwner.line_canonical.c1.c1.a | session A | Same successful op16 output limb c1.c1.a < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N088 | primitiveOwner.line_canonical.c1.c1.b | session A | Same successful op16 output limb c1.c1.b < 2147483647. | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N089 | geoLeaves.point.x | session A | Geometry primitive successful output x is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N090 | geoLeaves.point.y | session A | Geometry primitive successful output y is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N091 | geoLeaves.line.value | session A | Geometry primitive successful output value is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N092 | geoLeaves.multiply.value | session A | Geometry primitive successful output value is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N093 | geoLeaves.double.value | session A | Geometry primitive successful output value is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N094 | geoLeaves.one.value | session A | Geometry primitive successful output value is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N095 | geoLeaves.subtract.value | session A | Geometry primitive successful output value is canonical, with every original guard. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N096 | domain.fibre.identity | session A | Actual geometry fibre output identity has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N097 | domain.fibre.bound | session A | Actual geometry fibre output bound has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N098 | domain.point.x | session A | Actual geometry point output x has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N099 | domain.point.y | session A | Actual geometry point output y has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N100 | domain.line.value | session A | Actual geometry line output value has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N101 | domain.multiply.value | session A | Actual geometry multiply output value has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N102 | domain.double.value | session A | Actual geometry double output value has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N103 | domain.one.value | session A | Actual geometry one output value has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N104 | domain.subtract.value | session A | Actual geometry subtract output value has the exact model-domain meaning; same result witness. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N105 | geometry.multiply | session A | Exact geometry helper equation in the conditional source/model composition. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N106 | geometry.one | session A | Exact geometry helper equation in the conditional source/model composition. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N107 | geometry.inverse | session A | Exact geometry helper equation in the conditional source/model composition. | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N108 | prepare_S1.queries | session A | Same TX1 preparation-to-model law queries; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N109 | prepare_S1.rho_eq | session A | Same TX1 preparation-to-model law rho_eq; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N110 | prepare_S1.rho_canonical.c0.a | session A | Same TX1 preparation-to-model law rho_canonical limb c0.a; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N111 | prepare_S1.rho_canonical.c0.b | session A | Same TX1 preparation-to-model law rho_canonical limb c0.b; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N112 | prepare_S1.rho_canonical.c1.a | session A | Same TX1 preparation-to-model law rho_canonical limb c1.a; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N113 | prepare_S1.rho_canonical.c1.b | session A | Same TX1 preparation-to-model law rho_canonical limb c1.b; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N114 | prepare_S1.alpha1 | session A | Same TX1 preparation-to-model law alpha1; shared data/rho/q and actual run.p. | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N115 | tx1_saved | lead | The ACTUAL saved Vec equals Tx2N_Reader.writer H stored publicBytes of prepared Context/data/rho/q and the model ten-state accumulator. | Derive the full Context, Prepared and physical writer encoding equation on this same TX1 run. Cons_Ten proves the accumulator under preparation/read laws but does not prove this complete Vec equation. |
+| N116 | ten.parseReached | lead | The particular transcript used for the strengthened ten-state conclusion parses the same authParsed; distinct from mere existence in entry.parsed. | Associate the selected transcript with the same source proof and matching-data read; existential parser success alone does not identify an arbitrary transcript. |
+| N117 | prefixBound | external | Universal query-budget bound for adversary before TX1. | Provide the source-experiment budget association; no resource/work normalization credit is inferred. |
+| N118 | choiceBound | external | Universal query-budget bound for chooseSecond on every input and saved Vec. | Provide the source-experiment budget association; no resource/work normalization credit is inferred. |
+
+### All remaining P rows and accountable blockers
+
+This list includes actual antecedents and remaining deployment rows, explicitly
+labelled; aliases are not independent gates. Ownership is accountable owner,
+not a claim about a concurrent worker's completion.
+
+| ID | Scope | Owner | Remaining law / deliverable | Waiting on |
+|---|---|---|---|---|
+| L083 | actual antecedent | lead | accepted1 | Successful native pair at the exact installed source and runtime; remains a success-conditioned theorem. |
+| L084 | actual antecedent | lead | accepted2 | Successful native pair at the exact installed source and runtime; remains a success-conditioned theorem. |
+| L085 | actual antecedent | lead | p.hL | Unchanged FS2.Params data-carrier law (unused parameter); not an implementation/security closure. |
+| L086 | actual antecedent | lead | p.encLen | Unchanged FS2.Params data-carrier law (unused parameter); not an implementation/security closure. |
+| L087 | actual antecedent | lead | p.decEnc | Unchanged FS2.Params data-carrier law (unused parameter); not an implementation/security closure. |
+| L094 | actual antecedent | lead | history.savedAtCommit | Prove protection and version provenance of the actual saved Pool checkpoint across transactions. |
+| L095 | actual antecedent | lead | history.loadedAtEntry | Prove protection and version provenance of the actual saved Pool checkpoint across transactions. |
+| L096 | actual antecedent | lead | history.noInterveningWrite | Prove protection and version provenance of the actual saved Pool checkpoint across transactions. |
+| L097 | actual antecedent | lead | p2prime.binding.proof | Prove actual account proof/public binding, or its collision-event transport; digest equality alone is insufficient. |
+| L098 | actual antecedent | lead | p2prime.binding.pub | Prove actual account proof/public binding, or its collision-event transport; digest equality alone is insufficient. |
+| L099 | actual antecedent | lead | entry.parsed | Associate the actual accepted proof with its reached parsed transcript on this pair. |
+| L110 | actual antecedent | session A | r0.field0 | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L111 | actual antecedent | session A | r0.field4 | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L112 | actual antecedent | session A | r0.add | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L113 | actual antecedent | session A | r0.quarter_run | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L114 | actual antecedent | session A | r0.multiply | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L115 | actual antecedent | session A | r0.evaluate | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L116 | actual antecedent | session A | r1.field0 | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L117 | actual antecedent | session A | r1.field4 | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L118 | actual antecedent | session A | r1.add | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L119 | actual antecedent | session A | r1.quarter_run | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L120 | actual antecedent | session A | r1.multiply | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L121 | actual antecedent | session A | r1.evaluate | Supply the two actual round return/evaluation laws from S3/S5/S9. |
+| L122 | actual antecedent | lead | s2 | Derive the exact resumed Prepared variant and alpha/slice observations from the accepted source calls. |
+| L123 | actual antecedent | lead | ha0 | Derive the exact resumed Prepared variant and alpha/slice observations from the accepted source calls. |
+| L124 | actual antecedent | lead | ha1 | Derive the exact resumed Prepared variant and alpha/slice observations from the accepted source calls. |
+| L125 | actual antecedent | session A | hw | Supply the same native newWeights/pair/dot primitive return and its model interpretation. |
+| L126 | actual antecedent | lead | has | Derive the exact resumed Prepared variant and alpha/slice observations from the accepted source calls. |
+| L127 | actual antecedent | session A | hp | Supply the same native newWeights/pair/dot primitive return and its model interpretation. |
+| L128 | actual antecedent | session A | hd | Supply the same native newWeights/pair/dot primitive return and its model interpretation. |
+| L129 | actual antecedent | lead | hi | Join the same transcript, queries, matching-data reads and decoded query bytes with the source execution. |
+| L130 | actual antecedent | lead | hq | Join the same transcript, queries, matching-data reads and decoded query bytes with the source execution. |
+| L131 | actual antecedent | lead | read | Join the same transcript, queries, matching-data reads and decoded query bytes with the source execution. |
+| L132 | actual antecedent | lead | decoded | Join the same transcript, queries, matching-data reads and decoded query bytes with the source execution. |
+| L133 | actual antecedent | session A | pairing_S3_S5_S9.round0.boundary | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L134 | actual antecedent | session A | pairing_S3_S5_S9.round0.quarter | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L135 | actual antecedent | session A | pairing_S3_S5_S9.round0.eval | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L136 | actual antecedent | session A | pairing_S3_S5_S9.round1.boundary | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L137 | actual antecedent | session A | pairing_S3_S5_S9.round1.quarter | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L138 | actual antecedent | session A | pairing_S3_S5_S9.round1.eval | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L139 | actual antecedent | session A | pairing_S3_S5_S9.claim | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L140 | actual antecedent | session A | pairing_S3_S5_S9.alpha0 | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L141 | actual antecedent | session A | pairing_S3_S5_S9.alpha1 | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L142 | actual antecedent | session A | pairing_S3_S5_S9.pair | Instantiate same-call S3/S5/S9 pairing and round laws, not merely generic algebra. |
+| L143 | actual antecedent | session A | matches_S4_S7 | Prove actual S4/S7 matching relation for all selected queries. |
+| L144 | actual antecedent | session A | semantic_S3_S9.EquationEndpoint.initial | Bind same source semantic/initial/chain/terminal equations from S3/S9. |
+| L145 | actual antecedent | session A | semantic_S3_S9.EquationEndpoint.chain | Bind same source semantic/initial/chain/terminal equations from S3/S9. |
+| L146 | actual antecedent | session A | semantic_S3_S9.EquationEndpoint.terminal | Bind same source semantic/initial/chain/terminal equations from S3/S9. |
+| L147 | actual antecedent | session A | dot_S5 | Prove actual S5 dot product equals the selected opening/accumulator model. |
+| L148 | actual antecedent | session A | canonical_S3_S4_S5_S9 | Prove same source round/pair/dot/rhs canonical observation roundtrips. |
+| L151 | actual antecedent | lead | i.data.Functional.map_add | Structural law of the unchanged model carrier; no arbitrary source arithmetic follows from it. |
+| L152 | actual antecedent | lead | i.data.Functional.map_smul | Structural law of the unchanged model carrier; no arbitrary source arithmetic follows from it. |
+| L153 | actual antecedent | lead | tr.statement.initFits | Structural law of the unchanged model carrier; no arbitrary source arithmetic follows from it. |
+| L154 | actual antecedent | external | hqueries | Prove total ByteProver query budget in the chosen oracle work model. |
+| L157 | actual antecedent | lead | canonicalJoin.verifier | Raw canonical accepted source/frozen2 equality, including complete ordered oracle log; RawJ_ owner work is not imported. |
+| L159 | actual antecedent | lead | StoredCarrierBinding | Identify complete accepted runtime RunView with this same source program and oracle world. |
+| N001 | actual antecedent | session A | prepareOwner.accepted.variant | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N002 | actual antecedent | session A | prepareOwner.accepted.queries | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N003 | actual antecedent | session A | prepareOwner.accepted.gamma.c0.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N004 | actual antecedent | session A | prepareOwner.accepted.gamma.c0.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N005 | actual antecedent | session A | prepareOwner.accepted.gamma.c0.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N006 | actual antecedent | session A | prepareOwner.accepted.gamma.c0.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N007 | actual antecedent | session A | prepareOwner.accepted.gamma.c1.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N008 | actual antecedent | session A | prepareOwner.accepted.gamma.c1.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N009 | actual antecedent | session A | prepareOwner.accepted.gamma.c1.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N010 | actual antecedent | session A | prepareOwner.accepted.gamma.c1.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N011 | actual antecedent | session A | prepareOwner.accepted.kappa.c0.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N012 | actual antecedent | session A | prepareOwner.accepted.kappa.c0.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N013 | actual antecedent | session A | prepareOwner.accepted.kappa.c0.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N014 | actual antecedent | session A | prepareOwner.accepted.kappa.c0.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N015 | actual antecedent | session A | prepareOwner.accepted.kappa.c1.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N016 | actual antecedent | session A | prepareOwner.accepted.kappa.c1.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N017 | actual antecedent | session A | prepareOwner.accepted.kappa.c1.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N018 | actual antecedent | session A | prepareOwner.accepted.kappa.c1.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N019 | actual antecedent | session A | prepareOwner.accepted.alpha.c0.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N020 | actual antecedent | session A | prepareOwner.accepted.alpha.c0.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N021 | actual antecedent | session A | prepareOwner.accepted.alpha.c0.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N022 | actual antecedent | session A | prepareOwner.accepted.alpha.c0.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N023 | actual antecedent | session A | prepareOwner.accepted.alpha.c1.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N024 | actual antecedent | session A | prepareOwner.accepted.alpha.c1.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N025 | actual antecedent | session A | prepareOwner.accepted.alpha.c1.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N026 | actual antecedent | session A | prepareOwner.accepted.alpha.c1.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N027 | actual antecedent | session A | prepareOwner.accepted.rho.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N028 | actual antecedent | session A | prepareOwner.accepted.rho.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N029 | actual antecedent | session A | prepareOwner.accepted.rho.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N030 | actual antecedent | session A | prepareOwner.accepted.rho.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N031 | actual antecedent | session A | prepareOwner.accepted.semanticAlpha.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N032 | actual antecedent | session A | prepareOwner.accepted.semanticAlpha.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N033 | actual antecedent | session A | prepareOwner.accepted.semanticAlpha.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N034 | actual antecedent | session A | prepareOwner.accepted.semanticAlpha.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N035 | actual antecedent | session A | prepareOwner.accepted.coordinates.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N036 | actual antecedent | session A | prepareOwner.accepted.coordinates.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N037 | actual antecedent | session A | prepareOwner.accepted.coordinates.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N038 | actual antecedent | session A | prepareOwner.accepted.coordinates.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N039 | actual antecedent | session A | prepareOwner.accepted.claim.c0.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N040 | actual antecedent | session A | prepareOwner.accepted.claim.c0.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N041 | actual antecedent | session A | prepareOwner.accepted.claim.c0.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N042 | actual antecedent | session A | prepareOwner.accepted.claim.c0.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N043 | actual antecedent | session A | prepareOwner.accepted.claim.c1.c0.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N044 | actual antecedent | session A | prepareOwner.accepted.claim.c1.c0.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N045 | actual antecedent | session A | prepareOwner.accepted.claim.c1.c1.a | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N046 | actual antecedent | session A | prepareOwner.accepted.claim.c1.c1.b | Session A S1/S3/S4/S5/S9 must instantiate the immutable preparation contract on the constructed installed dictionary; this is the replacement boundary behind writer admission. |
+| N047 | actual antecedent | session A | primitiveOwner.basis.s3_s4_mul | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N048 | actual antecedent | session A | primitiveOwner.basis.s3_s4_sub | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N049 | actual antecedent | session A | primitiveOwner.basis.s3_s4_double | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N050 | actual antecedent | session A | primitiveOwner.basis.zero | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N051 | actual antecedent | session A | primitiveOwner.basis.one | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N052 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.value | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N053 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N054 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N055 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N056 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c0.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N057 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N058 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N059 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N060 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_mulE.canonical.c1.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N061 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.value | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N062 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N063 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N064 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N065 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c0.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N066 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N067 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N068 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N069 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s5_addE.canonical.c1.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N070 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s9_mulK.value | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N071 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N072 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N073 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N074 | actual antecedent | session A | primitiveOwner.arithmetic.s3_s4_s9_mulK.canonical.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N075 | actual antecedent | session A | primitiveOwner.m31.multiply | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N076 | actual antecedent | session A | primitiveOwner.m31.double | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N077 | actual antecedent | session A | primitiveOwner.m31.one | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N078 | actual antecedent | session A | primitiveOwner.m31.subtract | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N079 | actual antecedent | session A | primitiveOwner.decoder.decode | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N080 | actual antecedent | session A | primitiveOwner.line | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N081 | actual antecedent | session A | primitiveOwner.line_canonical.c0.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N082 | actual antecedent | session A | primitiveOwner.line_canonical.c0.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N083 | actual antecedent | session A | primitiveOwner.line_canonical.c0.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N084 | actual antecedent | session A | primitiveOwner.line_canonical.c0.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N085 | actual antecedent | session A | primitiveOwner.line_canonical.c1.c0.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N086 | actual antecedent | session A | primitiveOwner.line_canonical.c1.c0.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N087 | actual antecedent | session A | primitiveOwner.line_canonical.c1.c1.a | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N088 | actual antecedent | session A | primitiveOwner.line_canonical.c1.c1.b | Session A S3/S4/S5/S9 must supply the exact local primitive laws for the installed query dictionary; generic kernel algebra does not instantiate native helpers. |
+| N089 | actual antecedent | session A | geoLeaves.point.x | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N090 | actual antecedent | session A | geoLeaves.point.y | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N091 | actual antecedent | session A | geoLeaves.line.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N092 | actual antecedent | session A | geoLeaves.multiply.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N093 | actual antecedent | session A | geoLeaves.double.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N094 | actual antecedent | session A | geoLeaves.one.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N095 | actual antecedent | session A | geoLeaves.subtract.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N096 | actual antecedent | session A | domain.fibre.identity | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N097 | actual antecedent | session A | domain.fibre.bound | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N098 | actual antecedent | session A | domain.point.x | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N099 | actual antecedent | session A | domain.point.y | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N100 | actual antecedent | session A | domain.line.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N101 | actual antecedent | session A | domain.multiply.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N102 | actual antecedent | session A | domain.double.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N103 | actual antecedent | session A | domain.one.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N104 | actual antecedent | session A | domain.subtract.value | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N105 | actual antecedent | session A | geometry.multiply | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N106 | actual antecedent | session A | geometry.one | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N107 | actual antecedent | session A | geometry.inverse | Session A S3/S4/S5 must instantiate the actual geometry primitive/canonical domain and inverse bindings on this installed dictionary. |
+| N108 | actual antecedent | session A | prepare_S1.queries | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N109 | actual antecedent | session A | prepare_S1.rho_eq | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N110 | actual antecedent | session A | prepare_S1.rho_canonical.c0.a | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N111 | actual antecedent | session A | prepare_S1.rho_canonical.c0.b | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N112 | actual antecedent | session A | prepare_S1.rho_canonical.c1.a | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N113 | actual antecedent | session A | prepare_S1.rho_canonical.c1.b | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N114 | actual antecedent | session A | prepare_S1.alpha1 | Session A S1 must bind the same returned TX1 Prepared to the chosen model data/rho/query map; lead still must join the complete context and saved encoding. |
+| N115 | actual antecedent | lead | tx1_saved | Derive the full Context, Prepared and physical writer encoding equation on this same TX1 run. Cons_Ten proves the accumulator under preparation/read laws but does not prove this complete Vec equation. |
+| N116 | actual antecedent | lead | ten.parseReached | Associate the selected transcript with the same source proof and matching-data read; existential parser success alone does not identify an arbitrary transcript. |
+| N117 | actual antecedent | external | prefixBound | Provide the source-experiment budget association; no resource/work normalization credit is inferred. |
+| N118 | actual antecedent | external | choiceBound | Provide the source-experiment budget association; no resource/work normalization credit is inferred. |
+| L165 | deployment only | lead | shape full semantic/transcript join | Header/shape value installed; full source semantic/transcript association remains in L129-L132 and raw join. |
+| L166 | deployment only | lead | batch source Result/effects | Installed source batch effects are identified by driver construction; native lowering/adoption/effect association still required. |
+| L168 | deployment alias | lead | prepare Context/Data binding | Same Context/data/preparation and saved-byte association remains as N preparation laws and tx1_saved; not discharged by state arithmetic. |
+| L176 | deployment only | session A | S6 native decoded/public transport | Semantic source getters/cuts compose, but native ownership/error/cleanup/adoption remains outside the kernel statement. |
+| L177 | deployment only | lead | Claims native std slots | Arbitrary Claims reserve/intoBox data dictionary has no full native ownership/abort/effects interpretation. |
+| L178 | deployment alias | session A | remaining primitive instances | Covered explicitly by N001-N114 primitive/preparation law leaves; do not add another count for this umbrella. |
+| L179 | deployment only | lead | library/native frame | SDK borrow trust retained; concrete allocator/library/native frame and source association remain deployment obligations. |
+| L180 | deployment alias | lead | history protection / Pool-ASQ8 | Specific cross-transaction history protection remains L094-L096; runtime rollback semantics alone is insufficient. |
+| L181 | deployment only | lead | oracle model order | Complete source Program equality is proved; ordered source-to-frozen2 model event/projection association remains raw L157/GExq work. |
+| L182 | deployment alias | lead | raw canonical join | Same obligation as literal L157 at this installed source, not a second independent gate. |
+| L185 | deployment alias | lead | deployed stored experiment | Same obligation as literal L159 at this installed source, not a second independent gate. |
+| L186 | deployment only | lead | source lowering to frozen ELFs | Source-to-SBF/artifact association for the exact frozen ELFs remains; no new binary proof. |
+| L187 | deployment only | lead | coherent frozen replay | Only coherent cached focused composition audited; full frozen dependency release replay not run. |
+| L188 | deployment only | lead | final axioms/trust audit | Current top standard-axiom audit passes; final release dependency/trust/adoption audit remains. |
+| L195 | deployment only | lead | P6Boundary.oracle | Actual native total-oracle/source association remains, distinct from success-only RuntimeSyscall; no P6-boundary binder in this top. |
+| L196 | deployment only | lead | P6Boundary.binary_parent | Actual native binary-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L197 | deployment only | lead | P6Boundary.occupied_parent | Actual native occupied-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L198 | deployment only | lead | P6Boundary.sibling_parent | Actual native sibling-parent callback/log lowering remains a deployment association, not a top antecedent. |
+| L199 | deployment only | lead | P6Boundary.leaf | Actual native leaf callback/source association remains a deployment obligation; no leaf gate binder here. |
+
+### Requested removal claims: statement-level reconciliation
+
+| Reported row / claim | Recount finding / discrepancy |
+|---|---|
+| L089 | Absent: old unguarded FirstMarks removed. No discrepancy on this top; it does not prove the old unguarded law. |
+| L090 | Absent: old unguarded SecondMarks removed. No discrepancy on this top. |
+| writer admission | Admitted is an OUTPUT, not a premise. Qualified: immutable prepareOwner's 46 atomic laws plus primitiveOwner remain; not unconditional native writer certification. |
+| L164 | Removed: one checked dictionary and same f,s/run, no compatibility premise. |
+| L091 | Removed: writer header derived. |
+| L092 | Removed: writer size derived. |
+| L093 | Removed: reader checkedHeader derived. |
+| L100 | Removed: batch0 physical start derived. |
+| L101 | Removed: batch0 physical finish derived. |
+| L102 | Removed: batch0 physical bound derived. |
+| L103 | Removed: batch0 physical index derived. |
+| L104 | Removed: batch1 physical start derived. |
+| L105 | Removed: batch1 physical finish derived. |
+| L106 | Removed: batch1 physical bound derived. |
+| L107 | Removed: batch1 physical index derived. |
+| L108 | Removed: y1 length derived. |
+| L109 | Removed: y1 index derived. |
+| authenticated_S1 | Absent in the sole finish and strengthened ten branch. Removal confirmed with the documented collision alternative; seven prepare_S1 laws remain. |
+| L158 | Removed: canonical annotation derived; raw L157 remains. |
+| L183 | Removed: two passes derived; raw L157 and runtime L159 remain. |
+| L184 | Removed: corrected conditional PerAttempt endpoint is an actual conclusion, including the zero-query bound. It is not an unconditional deployed guarantee. |
+| L175 | Successful finish effects are an output. Removal confirmed on the shared tuple; source/runtime/artifact association and round/pair/dot laws remain as documented. |
+| L172 | Native/helper reader and exact OnRun effects are outputs. Removal confirmed on the shared tuple; extraction/native source association remains as documented, and saved_ten depends on tx1_saved. |
+| L160 | Removed at this constructed instance: Program equality and dictionary identities proved. No claim that every arbitrary Implementation is installed. |
+| L149 saved_ten | Removed as an input. Material replacement boundary: tx1_saved remains a whole saved-Vec/model encoding equation. |
+| L150 twelve | Removed as an input. Primitive/domain/read/preparation and saved-Vec boundaries still needed. |
+
+Direct comparison with `DrvC_HANDOFF.md`, `auth-s1-20261026/HANDOFF.md` and
+`T2Nat_HANDOFF.md` finds no disagreement with their SCOPED named-removal claims.
+The material qualifications above are retained documented boundaries, not
+contradictions of those reports. The initial Stage1 independent TX2 packaging
+is superseded by the shared tuple in Stage2. Newly inventoried P rows largely
+expose inherited CPhy/owner contracts; they are not all introduced by Cons_.
+
+No contradiction/vacuity-suspect C antecedent from the old endpoints survives.
+This is not a joint inhabitation proof for all remaining runtime/model premises.
+No imported candidate from RawJ_, NP6_ or Low2_ is credited or changed.
+Source-to-ELF association and the full release target remain open.
+
+### Validation and handoff
+
+Thirty-nine Lean compile attempts of60, zero Kani of0; zero dependency builds.
+Fifteen failed development versions are retained and excluded: 001,012,013,015,
+018,019,020,021,023,026,028,030,032,034,035. Compiler-generated sorryAx in failed
+versions is never accepted. Eleven default-heartbeat failures were isolated and
+split; no wall timeout/memory kill/cap/heartbeat increase occurred. The decisive
+source-shape correction is in Cons_036: the concrete native TX2 base must include
+Op5T's installed batch, rather than reducing unequal arbitrary dictionaries.
+Cons_037/038 pass the final Pair/Top; Cons_039 prints all five new theorem audits,
+all exactly [propext, Classical.choice, Quot.sound]. Current native/finish/base/
+caller/result definitions also passed independently. Every actual call uses the
+unchanged S2W launchers, lake env lean -j1 -M7000 -DElab.async=false, separate
+scopes MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. One own scope at a time;
+initial inventory observed one NP6 scope. No unchanged timed-out source+dependency
+rerun, package replay or launcher/infrastructure edit occurred.
+
+Per-attempt source revisions, exact source/dependency hashes, targets, exits,
+wall/RSS/swap and full axiom/error lines are in the receipts and source snapshots.
+Cons_validation.json validates current sources against the accepted receipts,
+field coverage, deduplication/totals and append-only preservation of prior ledger
+text. Unchanged cached canonical/SInt2/DrvC/T2Nat/AuS1/Tx2N dependencies were
+reused; this is a focused coherent composition, not a frozen release rebuild.
+
+No shipped or cfg(kani) file changed, so the three-ELF rebuild trigger did not
+fire. Pins inherited, not freshly reproduced: default
+f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+No session A live worktree/candidate, foreign module, key or release scope was
+changed. Commits are local; no push. Next concrete deliverables are raw L157,
+complete runtime L159, same saved-Vec/Context equation and actual source/model
+primitive instances, followed by global event and source/artifact association.
