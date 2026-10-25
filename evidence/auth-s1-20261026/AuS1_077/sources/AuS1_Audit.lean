@@ -1,0 +1,99 @@
+import AuS1_Accepted
+import AuS1_Transport
+import AuS1_Bound
+import AuS1_Stability
+import SdkD_Nonvacuity
+set_option autoImplicit false
+set_option pp.proofs false
+set_option pp.maxDepth 1000
+#print axioms AspisR1.AuS1_Absorb.code
+#print axioms AspisR1.AuS1_Absorb.read
+#print axioms AspisR1.AuS1_Accepted.accepted_pair_unified
+#print axioms AspisR1.AuS1_Association.pure_uniform
+#print axioms AspisR1.AuS1_Association.lift_uniform
+#print axioms AspisR1.AuS1_Association.digest_uniform
+#print axioms AspisR1.AuS1_Association.bind_uniform
+#print axioms AspisR1.AuS1_Association.associated
+#print axioms AspisR1.AuS1_Block.read
+#print axioms AspisR1.AuS1_Block.scalar_read
+#print axioms AspisR1.AuS1_Bound.collision_loss
+#print axioms AspisR1.AuS1_Bound.loss_binary
+#print axioms AspisR1.AuS1_ClosedRead.frame
+#print axioms AspisR1.AuS1_Context.authenticated
+#print axioms AspisR1.AuS1_Enclosing.reached
+#print axioms AspisR1.AuS1_Finish.strengthen
+#print axioms AspisR1.AuS1_Frame.folded
+#print axioms AspisR1.AuS1_Hash.new_uniform
+#print axioms AspisR1.AuS1_Hash.absorb_uniform
+#print axioms AspisR1.AuS1_Hash.block_uniform
+#print axioms AspisR1.AuS1_Install.dictionary
+#print axioms AspisR1.AuS1_Map.occurrences
+#print axioms AspisR1.AuS1_Observe.append
+#print axioms AspisR1.AuS1_Observe.lower
+#print axioms AspisR1.AuS1_Offsets.add
+#print axioms AspisR1.AuS1_Offsets.mul
+#print axioms AspisR1.AuS1_Offsets.sub
+#print axioms AspisR1.AuS1_Offsets.semantic_values
+#print axioms AspisR1.AuS1_Offsets.logical
+#print axioms AspisR1.AuS1_Offsets.semantic
+#print axioms AspisR1.AuS1_Offsets.y1
+#print axioms AspisR1.AuS1_Offsets.y1_size
+#print axioms AspisR1.AuS1_Offsets.inactive
+#print axioms AspisR1.AuS1_Offsets.round0
+#print axioms AspisR1.AuS1_Offsets.folded
+#print axioms AspisR1.AuS1_Offsets.round1
+#print axioms AspisR1.AuS1_OnRun.same_pair
+#print axioms AspisR1.AuS1_OriginalRead.frame
+#print axioms AspisR1.AuS1_Pair.same_pair
+#print axioms AspisR1.AuS1_Prepare.semantic_uniform
+#print axioms AspisR1.AuS1_Prepare.original_uniform
+#print axioms AspisR1.AuS1_Prepare.uniform
+#print axioms AspisR1.AuS1_Prepare.associated
+#print axioms AspisR1.AuS1_PrepareRead.frame
+#print axioms AspisR1.AuS1_Prepared.control
+#print axioms AspisR1.AuS1_Prepared.uniform
+#print axioms AspisR1.AuS1_Recovery.consistent
+#print axioms AspisR1.AuS1_Recovery.authenticated
+#print axioms AspisR1.AuS1_RootSource.root
+#print axioms AspisR1.AuS1_RootSource.model
+#print axioms AspisR1.AuS1_Row30.reached
+#print axioms AspisR1.AuS1_Sampling.scalar_uniform
+#print axioms AspisR1.AuS1_Sampling.rho_uniform
+#print axioms AspisR1.AuS1_Sampling.queries_uniform
+#print axioms AspisR1.AuS1_Semantic.sampleBlock_uniform
+#print axioms AspisR1.AuS1_Semantic.semanticValidated_uniform
+#print axioms AspisR1.AuS1_Semantic.begin13_uniform
+#print axioms AspisR1.AuS1_Semantic.begin9_uniform
+#print axioms AspisR1.AuS1_Semantic.begin5_uniform
+#print axioms AspisR1.AuS1_Semantic.begin_uniform
+#print axioms AspisR1.AuS1_Semantic.newTranscript_uniform
+#print axioms AspisR1.AuS1_Semantic.publicTranscript_uniform
+#print axioms AspisR1.AuS1_Semantic.roundStep_uniform
+#print axioms AspisR1.AuS1_Semantic.rounds_uniform
+#print axioms AspisR1.AuS1_Semantic.circleValidated_uniform
+#print axioms AspisR1.AuS1_Semantic.finish_uniform
+#print axioms AspisR1.AuS1_Semantic.verify_uniform
+#print axioms AspisR1.AuS1_Stability.after_commitment
+#print axioms AspisR1.AuS1_Suffix.right_read
+#print axioms AspisR1.AuS1_Suffix.left_read
+#print axioms AspisR1.AuS1_Trace.run_bind
+#print axioms AspisR1.AuS1_Trace.observe_append
+#print axioms AspisR1.AuS1_Trace.success_bind
+#print axioms AspisR1.AuS1_Transport.accepted
+#print axioms AspisR1.AuS1_Vec.map_clone
+#print axioms AspisR1.AuS1_Vec.list_clone
+#print axioms AspisR1.AuS1_Vec.slice_clone
+#print axioms AspisR1.AuS1_Vec.extend
+#print axioms AspisR1.AuS1_Vec.payload
+open Lean Elab Command in
+run_cmd do
+  let env ← getEnv
+  for (name, _) in env.constants.toList do
+    if name.toString.endsWith "AuS1_View.bind_ok_inv" then
+      elabCommand (← `(#print axioms $(mkIdent name)))
+#print axioms AspisR1.AuS1_View.wide_folded
+#print axioms AspisR1.AuS1_ViewSource.folded
+#print AspisR1.AuS1_Finish.Outcome
+#print AspisR1.AuS1_Finish.Collision
+#print AspisR1.AuS1_Accepted.accepted_pair_unified
+#print axioms AspisR1.SdkD_Nonvacuity.instance_exists
