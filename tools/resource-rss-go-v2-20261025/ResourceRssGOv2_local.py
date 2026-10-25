@@ -95,8 +95,30 @@ def inspection_payload():
     selected += [n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in ('digest','filepin','runtime_pins')]
     payload=ast.unparse(ast.Module(body=selected,type_ignores=[]))
     payload += '\n' + (HERE/'ResourceRssGOv2_guard.py').read_text().split('class Proc:')[0]
-    bootstrap=payload+"\np=Path("+repr(REMOTE)+"); parent=p.parent; assert parent.resolve()==parent; print(json.dumps(dict(runtime=runtime_pins(),inherited_limits=inherited_limits(),uid=os.getuid(),stage_exists=p.exists(),parent_uid=parent.stat().st_uid,parent_mode=oct(parent.stat().st_mode & 0o777),parent_resolved=str(parent.resolve()),lock_exists=Path('/tmp/aspis-r0-lean.lock').exists())))"
+    bootstrap=payload+"\nif sys.platform != 'linux' or type(resource.RLIM_INFINITY) is not int or resource.RLIM_INFINITY != -1: raise GuardError('unsupported remote Linux resource platform')\nlimits=inherited_limits(); check_limits(limits)\np=Path("+repr(REMOTE)+"); parent=p.parent; assert parent.resolve()==parent; print(json.dumps(dict(runtime=runtime_pins(),inherited_limits=limits,limit_platform=dict(platform=sys.platform,rlim_infinity=resource.RLIM_INFINITY),uid=os.getuid(),stage_exists=p.exists(),parent_uid=parent.stat().st_uid,parent_mode=oct(parent.stat().st_mode & 0o777),parent_resolved=str(parent.resolve()),lock_exists=Path('/tmp/aspis-r0-lean.lock').exists())))"
     return bootstrap
+
+
+def check_remote_linux_limits(info, expected=None):
+    # Fixed Linux Python wire contract, independent of this LOCAL platform.
+    metadata=info.get('limit_platform')
+    if (type(metadata) is not dict or set(metadata) != {'platform','rlim_infinity'} or
+        metadata['platform'] != 'linux' or type(metadata['rlim_infinity']) is not int or
+        metadata['rlim_infinity'] != -1):
+        raise host.GuardError('unsupported remote Linux resource platform')
+    limits=info.get('inherited_limits')
+    for candidate in ([limits] if expected is None else [limits,expected]):
+        if type(candidate) is not dict or any(
+            type(name) is not str or not name.startswith('RLIMIT_') or
+            type(pair) is not list or len(pair) != 2 or any(
+                type(value) is not int or value < -1 for value in pair)
+            for name,pair in candidate.items()):
+            raise host.GuardError('malformed remote Linux resource limits')
+        for name in ('RLIMIT_AS','RLIMIT_DATA'):
+            if candidate.get(name) != [-1,-1]:
+                raise host.GuardError('unexpected inherited restriction: '+name)
+    if expected is not None and limits != expected:
+        raise host.GuardError('inherited resource limits changed; no bypass')
 
 
 def inspect():
@@ -108,11 +130,12 @@ def inspect():
     if info['stage_exists'] or info['uid']!=info['parent_uid']:
         raise ValueError('stage exists/conflicting ownership; no writes authorized')
     save('runtime-inspection.json',info)
-    host.check_limits(info['inherited_limits'])
+    check_remote_linux_limits(info)
 
 
 def stage():
     info=json.loads((OUT/'runtime-inspection.json').read_text())
+    check_remote_linux_limits(info)
     files=sources()
     manifest=dict(inherited_limits=info['inherited_limits'],files={name:host.digest(s.encode()) for name,s in files.items()},runtime=info['runtime'],env=env(info['uid']),
                   epoch=host.EPOCH,stage=REMOTE,source_revision=revision(),parent_resolved=info['parent_resolved'],reviewed_base='fbe04424e7553d9b0844ae19c2206b15cf3dd831',mode=host.MODE)
