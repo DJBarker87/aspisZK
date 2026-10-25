@@ -1,0 +1,245 @@
+'AspisR1.Hiq_CanonicalAccountDriver.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_NativeVersion.version' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_FirstShape.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_AuthenticatedPrograms.inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_DispatchRelease.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_DispatchRelease.lifecycle_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_DispatchOracle.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_PoolGuards.account_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_PoolGuards.owned_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_RuntimeNonvacuity.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_AccountClean.exists_clean' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_CommonEvent.union_subset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_AccountLoss.one_loss' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_BindingFailure.mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_StoredTransport.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_RuntimeScope.carried_insufficient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_ExactMargin.new_term' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_ExactMargin.exact_margin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hiq_ExactMargin.positive_margin' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Hiq_CanonicalAccountDriver.accepted : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A))
+  (chooseSecond :
+    AspisR1.GExq_AccountExperiment.FirstInputs A →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          A →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A)),
+  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)).op36 = AspisR1.Hist_Authority.keyEq →
+    ∀ (Q0 Q1 : ℕ),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+        (∀ (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+            (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A)
+            (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+          AspisR1.S2W_TrustedStd.TrustedStd copy →
+            ∀ (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+              AspisR1.S2W_DigestExtraction.AeneasExtraction
+                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) native1 native2 hashv →
+                ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                      ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                        (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final1 final2 : A),
+                        (have input := (AspisV8R19.MemoizedProgramLaw.eval H adversary).2;
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator input.entry id input.data input.state =
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1))) →
+                          (have input := (AspisV8R19.MemoizedProgramLaw.eval H adversary).2;
+                            have next :=
+                              (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved post1 final1)).2;
+                            AspisR1.S2W_D189Wrappers.second native2 allocator next.entry id next.data next.slot
+                                next.state =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2))) →
+                            ∀ (initial : AspisR1.Hist_Store.Store) (actions : List (AspisR1.Hiq_NativeAction.Action A))
+                              (l1 l2 : AspisR1.Hist_RuntimeEntry.Layout),
+                              (AspisV8R19.MemoizedProgramLaw.eval H adversary).2.entry =
+                                  AspisR1.Hist_RuntimeEntry.load initial l1 →
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (chooseSecond (AspisV8R19.MemoizedProgramLaw.eval H adversary).2 saved post1
+                                            final1)).2.entry =
+                                    AspisR1.Hist_RuntimeEntry.load
+                                      (AspisR1.Hiq_NativeHistory.run native1 copy allocator id
+                                          (AspisR1.Hist_RuntimeEntry.commit initial (l1.handles 2).1 saved) actions).1
+                                      l2 →
+                                  (l2.handles 6).1 = (l1.handles 2).1 →
+                                    ∀
+                                      (project :
+                                        AspisR1.GExq_AccountExperiment.Outcome A →
+                                          AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                                      have input := (AspisV8R19.MemoizedProgramLaw.eval H adversary).2;
+                                      have next :=
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (chooseSecond input saved post1 final1)).2;
+                                      ∃ f s v,
+                                        AspisR1.S2W_NativeConsolidation.SourceCuts
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                            input.entry.first (next.entry.second AspisR1.S2W_D189Wrappers.secondSizes)
+                                            saved f s ∧
+                                          AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                f.statement =
+                                              Aeneas.Std.Result.ok f.semantic ∧
+                                            AdapterRw.r1_pool_adapter.owned.validate_asq8
+                                                  (AspisR1.DrvC_Installation.sdk
+                                                    (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  id (next.entry.second AspisR1.S2W_D189Wrappers.secondSizes) next.data
+                                                  next.slot =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v) ∧
+                                              (AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.DrvC_FirstConstants.configuration c)).op22
+                                                    v.statement =
+                                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s.encoded) ∧
+                                                AspisR1.Hiq_ByteSelection.select
+                                                      (AspisR1.DrvC_Installation.sdk
+                                                        (AspisR1.DrvC_FirstConstants.configuration c))
+                                                      id
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                          (AspisR1.Hiq_DrvExperiment.source
+                                                            (AspisR1.DrvC_FirstConstants.configuration c) hashv copy
+                                                            allocator id adversary chooseSecond)).2 =
+                                                    AspisR1.Hist_PairExperiment.select { first := f, second := s } ∧
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                      AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (AspisR1.Hiq_DrvExperiment.joint
+                                                          (AspisR1.DrvC_FirstConstants.configuration c) hashv copy
+                                                          allocator id adversary chooseSecond project)) ∨
+                                                    ∃ i,
+                                                      i = AspisR1.Hiq_CanonicalCarrier.input f.pub f.proof ∧
+                                                        AspisR1.Port1_StoredCarrier.Carried i ∧
+                                                          i.statement.pubBytes =
+                                                              AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                                                            i.stored =
+                                                                AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                      (AspisR1.DrvC_Implementation.driver
+                                                                        (AspisR1.DrvC_FirstConstants.configuration c)
+                                                                        i)).2 =
+                                                                  true ∧
+                                                                ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                          (AspisR1.DrvC_Implementation.driver
+                                                                            (AspisR1.DrvC_FirstConstants.configuration
+                                                                              c)
+                                                                            j)).2 =
+                                                                      false) :=
+⋯
+theorem AspisR1.Hiq_CommonEvent.union_subset : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A))
+  (chooseSecond :
+    AspisR1.GExq_AccountExperiment.FirstInputs A →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          A →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A))
+  (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+    (∀ (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+      ∀
+        (project :
+          AspisR1.GExq_AccountExperiment.Outcome A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        AspisR1.AuS1_Finish.Collision H
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Hiq_DrvExperiment.source c hashv copy allocator id adversary chooseSecond)).1
+              (project
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.Hiq_DrvExperiment.source c hashv copy allocator id adversary chooseSecond)).2).1
+              (project
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.Hiq_DrvExperiment.source c hashv copy allocator id adversary chooseSecond)).2).2 ∨
+            AspisR1.Hiq_BindingFailure.failure (AspisR1.Hiq_ByteSelection.select (AspisR1.DrvC_Installation.sdk c) id)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_DrvRecorded.program c hashv copy allocator id adversary chooseSecond project)) →
+          AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+            (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Hiq_DrvRecorded.program c hashv copy allocator id adversary chooseSecond project)) :=
+⋯
+theorem AspisR1.Hiq_AccountLoss.one_loss : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (adversary :
+    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+      (AspisR1.GExq_AccountExperiment.FirstInputs A))
+  (chooseSecond :
+    AspisR1.GExq_AccountExperiment.FirstInputs A →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          A →
+            AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+              (AspisR1.GExq_AccountExperiment.SecondInputs A))
+  (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+    (∀ (input : AspisR1.GExq_AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+        (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+      ∀
+        (project :
+          AspisR1.GExq_AccountExperiment.Outcome A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+        (AspisV8R19.MemoizedProgramLaw.lazyMean
+            (AspisR1.Hiq_DrvRecorded.program c hashv copy allocator id adversary chooseSecond project) FS.emptyTable
+            fun v =>
+            AspisV8R19.CausalFirstHitUnionBound.indicator
+              (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                v)) ≤
+          AspisR1.Hiq_Numeric.accountLoss (Q0 + Q1) :=
+⋯
+theorem AspisR1.Hiq_StoredTransport.transport : ∀ {A : Type} (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+  (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime)
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (bad : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A → Prop),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (run : AspisR1.OraclePortStoredExperimentC4.RunView),
+      (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = some run →
+        run.2.2 = true →
+          run =
+              AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust
+                  (AspisR1.OraclePortStoredAdmissionC4.canon P)) ∨
+            bad (AspisV8R19.MemoizedProgramLaw.eval H source)) →
+    AspisR1.OraclePortRuntimeBindingC7.deployedFailure runtime ≤
+      (AspisV8R19.MemoizedProgramLaw.lazyMean
+          (AspisR1.OraclePortRuntimeBindingC7.annotatedWith D rust (AspisR1.OraclePortStoredAdmissionC4.canon P))
+          FS.emptyTable fun v =>
+          AspisR1.RawRecordedOracleExtractionMassBin.failureMass (AspisR1.OraclePortStoredExperimentC4.view v)) +
+        AspisV8R19.MemoizedProgramLaw.lazyMean source FS.emptyTable fun v =>
+          AspisV8R19.CausalFirstHitUnionBound.indicator (bad v) :=
+⋯
+theorem AspisR1.Hiq_RuntimeScope.carried_insufficient : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.OraclePortStoredExperimentC4.Prover)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (state : AspisV8R19.SourceDuplexStep.State),
+  ∃ runtime run,
+    runtime = AspisV8R19.MemoizedProgramLaw.Program.done (some run) ∧
+      run.2.1 = AspisR1.Hiq_CanonicalCarrier.input pub proof ∧
+        run.2.2 = true ∧
+          AspisR1.Port1_StoredCarrier.Carried run.2.1 ∧
+            ¬AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D (AspisR1.DrvC_Implementation.driver c) P
+                runtime :=
+⋯
