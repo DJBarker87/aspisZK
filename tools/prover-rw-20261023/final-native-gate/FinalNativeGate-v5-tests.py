@@ -86,6 +86,13 @@ class Compact(unittest.TestCase):
             self.assertEqual(r['phase'],phase)
             self.assertNotIn('before_observation',r['decision'])
 
+    def test_projection_exception_keeps_structured_unknown(self):
+        history=[]
+        with patch.object(observe.adapter,'read_only_admission',return_value={'decision':{'allowed':True}}),patch.object(compact,'project',side_effect=ValueError('synthetic projection error')),patch.object(observe,'save',return_value={'name':'ordered.json','size':2,'sha256':'a'*64}):
+            with self.assertRaisesRegex(ValueError,'projection error'):observe.collect('prospective',admission=history)
+        self.assertEqual(history,[compact.unknown('prospective')])
+        self.assertTrue(history[0]['reporting_failed']);self.assertIsNone(history[0]['allowed'])
+
     def test_collect_history_before_raw_publication_fault_and_private_save(self):
         history=[]
         with patch.object(observe.adapter,'read_only_admission',return_value={'decision':{'allowed':False,'error':'new cause'}}),patch.object(observe,'save',side_effect=OSError('disk fault')):

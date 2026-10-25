@@ -81,7 +81,7 @@ def prepare(release=None):
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Relative to maintained source-019: two SETUP mains activate and four seal/plan files regenerate. Maintained source changes compact reporting, no-owned cleanup, private raw publication and exact new v5 stage. Compare complete source-019 before/after report against e8ffe0b688; no historical-v4 byte-identity claim.\n')
+        f.write('Relative to maintained source-020: two SETUP mains activate and four seal/plan files regenerate. Maintained source changes compact reporting, no-owned cleanup, private raw publication and exact new v5 stage. Compare complete source-020 before/after report against e8ffe0b688; no historical-v4 byte-identity claim.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')

@@ -103,7 +103,8 @@ def collect(phase,admission=None):
         subprocess.run=recorded_run
         os.scandir=recorded_scandir
         report=api['read_only_admission'](phase='inside-scope' if phase=='go' else phase)
-        record.clear();record.update(project(phase,report))
+        projected=project(phase,report)
+        record.clear();record.update(projected)
     finally:
         Path.read_text=read
         subprocess.run=execute
