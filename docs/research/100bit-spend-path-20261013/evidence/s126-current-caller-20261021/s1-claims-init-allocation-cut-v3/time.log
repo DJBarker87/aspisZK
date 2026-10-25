@@ -1,0 +1,64 @@
+       Fresh aspis-core v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/core-workspace/crates/aspis-core)
+warning: some trace filter directives would enable traces that are disabled statically
+ | `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit=trace` would enable the TRACE level for the `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit` target
+ = note: the static max level is `debug`
+ = help: to enable TRACE logging, remove the `max_level_debug` feature from the `tracing` crate
+       Dirty aspis-r1-cost-probe v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/min): the file `src/claims_init_cut/native_claims_proofs.rs` has changed (1792896780.645749584s, 52s after last build at 1792896728.272044318s)
+   Compiling aspis-r1-cost-probe v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/min)
+     Running `/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe --edition=2021 src/probe_claims_init_cut.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C split-debuginfo=unpacked -C debug-assertions=on --cfg 'feature="default"' --cfg 'feature="private-leaf-salts"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("default", "private-leaf-salts", "prover", "r1p-check"))' -C metadata=fe540ca4827181bd -C extra-filename=-a3254146a878c53a --out-dir /private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps --target aarch64-apple-darwin -C incremental=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/incremental -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/debug/deps --extern aspis_core=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps/libaspis_core-da4a05e63ee3eb90.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing -Z ghost-state --ub-check=uninit --harness native_claims::proofs::native_claims_init_allocation_cut --exact -Z unstable-options -Z stubbing -Z uninit-checks' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0 -L /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.0132595s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis (second pass) in 0.001257167s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.045730416s
+====== Reachability Analysis Result =======
+Total # items: 272
+Total # statements: 4267
+Total # expressions: 1208
+
+Reachable Items:
+  - static item: 7
+  - function: 265
+
+Statements:
+  - SwitchInt: 164
+  - Return: 254
+  - Ignored: 1868
+  - Assign: 1208
+  - Call: 396
+  - Unreachable: 17
+  - Assert: 98
+  - Drop: 8
+  - Goto: 254
+
+Expressions:
+  - NullaryOp: 2
+  - Repeat: 5
+  - Ref: 115
+  - Cast: 149
+  - CheckedBinaryOp: 39
+  - AddressOf: 7
+  - Aggregate: 101
+  - UnaryOp: 32
+  - BinaryOp: 200
+  - Discriminant: 38
+  - Use: 520
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.00s
+        2.33 real         1.96 user         0.23 sys
+           339247104  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               37103  page reclaims
+                2058  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   1  signals received
+                 564  voluntary context switches
+                1393  involuntary context switches
+            53368825  instructions retired
+            29088267  cycles elapsed
+             3342744  peak memory footprint
