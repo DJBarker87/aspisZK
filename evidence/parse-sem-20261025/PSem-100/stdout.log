@@ -1,0 +1,588 @@
+AspisR1.Tx1Q_Accepted.accepted_pair_claims_tx1 {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7) (adapterOps : AdapterRw.Ops)
+  (ops : AspisR1CurrentCaller.Ops) (reserved : Bool) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (geoOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (claimsStd : AspisR1.ClaimsUnrolledFinish.StdCalls) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+        claimsStd)
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (p : FS2.Duplex.Params M Cv N) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (port :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin E
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+        claimsStd))
+  (firstMarks : AspisR1.S2W_TraceSplice.FirstMarks port) (secondMarks : AspisR1.S2W_TraceSplice.SecondMarks port) :
+  ∃ f s outer pre middle fs ss,
+    AspisR1.S2W_NativeConsolidation.SourceCuts
+        (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+          claimsStd)
+        e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+      ((AspisR1.RowShape_InstalledSlots.verifierOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                  claimsStd).op3
+              f.proof =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+          AspisR1.Op3I_Install.sourceBody f.proof =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+            AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) = true ∧
+              AspisR1.Op3I_Cuts.frozenHeader (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) =
+                some AspisR1CurrentCaller.transport.Variant.S2) ∧
+        ((AspisR1.RowShape_InstalledSlots.verifierOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                    claimsStd).op4
+                f.proof =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+            AspisR1.Op4P_Install.sourceBody f.proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+              AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)) ∧
+          (∃ run,
+              reserved = true ∧
+                f.split = 10#usize ∧
+                  ↑run.out.next = 10 ∧
+                    (↑run.flushed).length = 64 ∧
+                      (∀ x ∈ ↑(AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k run.flushed),
+                          AspisR1.Port3_FlushInstall.Canonical x) ∧
+                        AspisR1.Port3_CheckpointInstall.writer
+                              (AspisR1.Tx1Q_Install.digest
+                                (AspisR1.Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd))
+                              (AspisR1.Tx1Q_Carriers.prepared run.p)
+                              (AspisR1.Tx1Q_Carriers.accumulator
+                                (have __src := run.out;
+                                { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                  next := __src.next }))
+                              f.proof f.pub () =
+                            Aeneas.Std.Result.ok saved ∧
+                          AspisR1.Tx1Q_Endpoint.WhenBound run) ∧
+            AspisR1.S2W_ExpandedTrace.runExpanded
+                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                  (AspisR1.S2W_ExpandedChildren.children port)
+                  (AspisR1.S2W_Observation.two
+                    (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                      (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                    program e1.first data1 (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot)
+                  [] =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok saved,
+                    AspisR1.S2W_ExpandedTrace.full (AspisR1.S2W_ExpandedChildren.children port) outer) ∧
+              AspisR1.S2W_D189Interpretation.runOwned
+                    (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                      (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                    (AspisR1.S2W_Observation.two
+                      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                        (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                      program e1.first data1 (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot)
+                    [] e1.heap =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved, outer, e1.heap) ∧
+                AspisR1.S2W_TraceSplice.projected port outer = AspisR1.S2W_SiteSchedule.timeline pre middle fs ss ∧
+                  post2 = e2.heap ∧
+                    AspisR1.S2W_D189Consolidation.before e1 e2 AspisR1.S2LeadInterface.Site.tx1 =
+                        AspisR1.S2W_D189Interpretation.nativeObserve L AspisR1.S2W_ReturnedCheckpoint.encode e1.metadata
+                          3 w1 e1.heap.ambient ∧
+                      AspisR1.S2W_D189Consolidation.before e1 e2 AspisR1.S2LeadInterface.Site.tx2 =
+                          AspisR1.S2W_D189Interpretation.nativeObserve L AspisR1.S2W_ReturnedCheckpoint.encode
+                            e2.metadata 7 w2 e2.heap.ambient ∧
+                        (∃ selectedPublic,
+                            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                  f.statement =
+                                Aeneas.Std.Result.ok selectedPublic ∧
+                              AspisR1.S2W_NativeConsolidation.SourceCuts
+                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                  e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved
+                                  { proofAccount := f.proofAccount, publicAccount := f.publicAccount, raw := f.raw,
+                                    pub := f.pub, statement := f.statement, semantic := selectedPublic,
+                                    proof := f.proof, split := f.split }
+                                  s ∧
+                                ∃ semantic y1 v sem claimsPrefix,
+                                  AspisR1SelectedWideViewV1.verifier.candidate.wide_view f.proof semantic y1 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v) ∧
+                                    (AspisS1NativeBufferClaimTrace.semanticBase
+                                              (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps)
+                                              (AspisR1.ClaimsUnrolledFinish.install claimsStd B)).op9
+                                          (AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.callerDigest
+                                            adapterOps
+                                            (AspisS1ValuesOwnedInstallation.withValues
+                                              (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps))
+                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                            AspisS1ExtractedRoundChildren.children
+                                            (AspisR1.ClaimsUnrolledFinish.install claimsStd B))
+                                          (AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+                                            (AspisR1PublicPreparation.PreparationBinding.preparationPublic
+                                              (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1
+                                                f.statement)))
+                                          v.semantic () none =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+                                      AspisR1PublicPreparation.PrefixAdapter.parseAccepted v.semantic =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claimsPrefix) ∧
+                                        AspisR1.ClaimsUnrolledFinish.reference claimsStd claimsPrefix =
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.result.Result.Ok
+                                              (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims)) ∧
+                          ∀ (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+                            (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (y1 : Aeneas.Std.Slice Aeneas.Std.U8),
+                            AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin
+                                (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                  (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                decode H f.semantic f.pub f.proof f.split →
+                              AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin
+                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                  decode H s.pub s.proof s.checkpoint →
+                                ∀
+                                  (a :
+                                    AspisR1.S2X.CheckpointVersionBinding
+                                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                                        (post1.payload (e1.heap.accounts 2).1) 1768)
+                                      (AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint)),
+                                  AspisR1.S2W_AuthenticatedInputs.P2Prime H f.proof f.pub s.proof s.pub →
+                                    AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+                                      AspisR1.S2W_ChildJoins.MultiproofConeJoin f.proof s.proof nodes →
+                                        AspisR1.S2W_ChildJoins.S8StageConeJoin f.proof y1 →
+                                          ∃ parsed,
+                                            AspisR1.S2W_LeadInterface.S2CallerFacts
+                                                (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs
+                                                  ss (AspisR1.S2W_D189Consolidation.before e1 e2)
+                                                  (AspisR1.S2W_D189Consolidation.after e1 e2 post1))
+                                                (AspisR1.S2Z.Oracle.leadDigest
+                                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                                    claimsStd))
+                                                () H (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub)
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑saved) parsed ∧
+                                              ∀ (site : AspisR1.S2LeadInterface.Site),
+                                                (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs
+                                                        ss (AspisR1.S2W_D189Consolidation.before e1 e2)
+                                                        (AspisR1.S2W_D189Consolidation.after e1 e2 post1)).reached
+                                                    site ↔
+                                                  AspisR1.S2W_SiteSchedule.Event.site site ∈
+                                                    AspisR1.S2W_TraceSplice.projected port outer
+AspisR1.PSem_Accepted.accepted_pair_claims_semantic_rows {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7) (adapterOps : AdapterRw.Ops)
+  (ops : AspisR1CurrentCaller.Ops) (reserved : Bool) (queryOps : AspisR1.Port3_NativeQueryBody.Ops)
+  (geoOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (claimsStd : AspisR1.ClaimsUnrolledFinish.StdCalls) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+        claimsStd)
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (p : FS2.Duplex.Params M Cv N) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (port :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin E
+      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+        claimsStd))
+  (firstMarks : AspisR1.S2W_TraceSplice.FirstMarks port) (secondMarks : AspisR1.S2W_TraceSplice.SecondMarks port) :
+  ∃ f s outer pre middle fs ss,
+    AspisR1.S2W_NativeConsolidation.SourceCuts
+        (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+          claimsStd)
+        e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f s ∧
+      ((AspisR1.RowShape_InstalledSlots.verifierOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                  claimsStd).op3
+              f.proof =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+          AspisR1.Op3I_Install.sourceBody f.proof =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1CurrentCaller.transport.Variant.S2) ∧
+            AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) = true ∧
+              AspisR1.Op3I_Cuts.frozenHeader (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) =
+                some AspisR1CurrentCaller.transport.Variant.S2) ∧
+        ((AspisR1.RowShape_InstalledSlots.verifierOps (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                    claimsStd).op4
+                f.proof =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+            AspisR1.Op4P_Install.sourceBody f.proof = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+              AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)) ∧
+          (∃ run,
+              reserved = true ∧
+                f.split = 10#usize ∧
+                  ↑run.out.next = 10 ∧
+                    (↑run.flushed).length = 64 ∧
+                      (∀ x ∈ ↑(AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k run.flushed),
+                          AspisR1.Port3_FlushInstall.Canonical x) ∧
+                        AspisR1.Port3_CheckpointInstall.writer
+                              (AspisR1.Tx1Q_Install.digest
+                                (AspisR1.Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd))
+                              (AspisR1.Tx1Q_Carriers.prepared run.p)
+                              (AspisR1.Tx1Q_Carriers.accumulator
+                                (have __src := run.out;
+                                { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                  next := __src.next }))
+                              f.proof f.pub () =
+                            Aeneas.Std.Result.ok saved ∧
+                          AspisR1.Tx1Q_Endpoint.WhenBound run ∧
+                            ∃ expanded sourcePrefix,
+                              AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sourcePrefix) ∧
+                                AspisR1.OraclePortCompactDraft.semanticRows 27 0
+                                    (AspisR1.OraclePortCompactDraft.slice
+                                      (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) 48 6983) =
+                                  some
+                                    (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s)
+                                      ↑sourcePrefix.records)) ∧
+            AspisR1.S2W_ExpandedTrace.runExpanded
+                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                  (AspisR1.S2W_ExpandedChildren.children port)
+                  (AspisR1.S2W_Observation.two
+                    (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                      (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                    program e1.first data1 (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot)
+                  [] =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok saved,
+                    AspisR1.S2W_ExpandedTrace.full (AspisR1.S2W_ExpandedChildren.children port) outer) ∧
+              AspisR1.S2W_D189Interpretation.runOwned
+                    (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                      (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                    (AspisR1.S2W_Observation.two
+                      (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                        (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                      program e1.first data1 (e2.second AspisR1.S2W_D189Wrappers.secondSizes) data2 slot)
+                    [] e1.heap =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved, outer, e1.heap) ∧
+                AspisR1.S2W_TraceSplice.projected port outer = AspisR1.S2W_SiteSchedule.timeline pre middle fs ss ∧
+                  post2 = e2.heap ∧
+                    AspisR1.S2W_D189Consolidation.before e1 e2 AspisR1.S2LeadInterface.Site.tx1 =
+                        AspisR1.S2W_D189Interpretation.nativeObserve L AspisR1.S2W_ReturnedCheckpoint.encode e1.metadata
+                          3 w1 e1.heap.ambient ∧
+                      AspisR1.S2W_D189Consolidation.before e1 e2 AspisR1.S2LeadInterface.Site.tx2 =
+                          AspisR1.S2W_D189Interpretation.nativeObserve L AspisR1.S2W_ReturnedCheckpoint.encode
+                            e2.metadata 7 w2 e2.heap.ambient ∧
+                        (∃ selectedPublic,
+                            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                  f.statement =
+                                Aeneas.Std.Result.ok selectedPublic ∧
+                              AspisR1.S2W_NativeConsolidation.SourceCuts
+                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                  e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved
+                                  { proofAccount := f.proofAccount, publicAccount := f.publicAccount, raw := f.raw,
+                                    pub := f.pub, statement := f.statement, semantic := selectedPublic,
+                                    proof := f.proof, split := f.split }
+                                  s ∧
+                                ∃ semantic y1 v sem claimsPrefix,
+                                  AspisR1SelectedWideViewV1.verifier.candidate.wide_view f.proof semantic y1 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok v) ∧
+                                    (AspisS1NativeBufferClaimTrace.semanticBase
+                                              (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps)
+                                              (AspisR1.ClaimsUnrolledFinish.install claimsStd B)).op9
+                                          (AspisR1CurrentCaller.BorrowedClaimPrepared.NativeBuffers.callerDigest
+                                            adapterOps
+                                            (AspisS1ValuesOwnedInstallation.withValues
+                                              (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps))
+                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                            AspisS1ExtractedRoundChildren.children
+                                            (AspisR1.ClaimsUnrolledFinish.install claimsStd B))
+                                          (AspisR1CurrentCaller.FirstComposition.toCurrentPublic
+                                            (AspisR1PublicPreparation.PreparationBinding.preparationPublic
+                                              (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1
+                                                f.statement)))
+                                          v.semantic () none =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) ∧
+                                      AspisR1PublicPreparation.PrefixAdapter.parseAccepted v.semantic =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claimsPrefix) ∧
+                                        AspisR1.ClaimsUnrolledFinish.reference claimsStd claimsPrefix =
+                                          Aeneas.Std.Result.ok
+                                            (Aeneas.Std.core.result.Result.Ok
+                                              (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims)) ∧
+                          ∀ (decode : AspisR1.S2W_AuthenticatedInputs.HeaderDecode)
+                            (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (y1 : Aeneas.Std.Slice Aeneas.Std.U8),
+                            AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin
+                                (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                  (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                decode H f.semantic f.pub f.proof f.split →
+                              AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin
+                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                  decode H s.pub s.proof s.checkpoint →
+                                ∀
+                                  (a :
+                                    AspisR1.S2X.CheckpointVersionBinding
+                                      (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                                        (post1.payload (e1.heap.accounts 2).1) 1768)
+                                      (AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint)),
+                                  AspisR1.S2W_AuthenticatedInputs.P2Prime H f.proof f.pub s.proof s.pub →
+                                    AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+                                      AspisR1.S2W_ChildJoins.MultiproofConeJoin f.proof s.proof nodes →
+                                        AspisR1.S2W_ChildJoins.S8StageConeJoin f.proof y1 →
+                                          ∃ parsed,
+                                            AspisR1.S2W_LeadInterface.S2CallerFacts
+                                                (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs
+                                                  ss (AspisR1.S2W_D189Consolidation.before e1 e2)
+                                                  (AspisR1.S2W_D189Consolidation.after e1 e2 post1))
+                                                (AspisR1.S2Z.Oracle.leadDigest
+                                                  (AspisR1.ClaimsUnrolledSdk.sdkOps adapterOps
+                                                    (AspisR1.Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                                    claimsStd))
+                                                () H (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub)
+                                                (AspisR1.MultiproofConeCanonical.bytesOf ↑saved) parsed ∧
+                                              ∀ (site : AspisR1.S2LeadInterface.Site),
+                                                (AspisR1.S2W_InputSchedule.observation f s saved nodes y1 pre middle fs
+                                                        ss (AspisR1.S2W_D189Consolidation.before e1 e2)
+                                                        (AspisR1.S2W_D189Consolidation.after e1 e2 post1)).reached
+                                                    site ↔
+                                                  AspisR1.S2W_SiteSchedule.Event.site site ∈
+                                                    AspisR1.S2W_TraceSplice.projected port outer
+AspisR1.PSem_SemanticRows.on_run {CoreError H : Type} (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (publicBytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (run :
+    AspisR1.Tx1Q_Execution.Run (AspisR1.Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash
+      pub publicBytes proof split saved) :
+  ∃ expanded pre,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      AspisR1.OraclePortCompactDraft.semanticRows 27 0
+          (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) 48 6983) =
+        some (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records)
+AspisR1.PSem_RunTrace.on_run {CoreError H : Type} (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (publicBytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (run :
+    AspisR1.Tx1Q_Execution.Run (AspisR1.Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash
+      pub publicBytes proof split saved) :
+  ∃ expanded pre t0 t25 cs,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      AspisR1.OraclePortCompactDraft.semanticRows 27 0
+            (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) 48 6983) =
+          some (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records) ∧
+        AspisR1PublicPreparation.SourceFull25.Trace (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D) pre t0
+            t25 cs ∧
+          List.map (fun c => ↑c.row) cs = List.range 25 ∧
+            List.map (fun c => AspisR1.MultiproofConeCanonical.bytesOf ↑c.record.framed) cs =
+              List.take 25 (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records)
+AspisR1.PSem_Parser.when_aligned {CoreError H : Type} (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (publicBytes proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (run :
+    AspisR1.Tx1Q_Execution.Run (AspisR1.Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash
+      pub publicBytes proof split saved)
+  (header : AspisR1.OraclePortHeader.accepts (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) = true)
+  (scan : AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)) :
+  ∃ expanded pre,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      ∀ (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix),
+        AspisR1.OraclePortCompactDraft.Aligned
+            { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+              semantic := List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records }
+            tr →
+          AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+            some
+              { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+                semantic := List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records }
+def AspisR1.Tx1Q_Endpoint.WhenBound : {CoreError H : Type} →
+  {installed : AspisR1CurrentCaller.Ops} →
+    {reserved : Bool} →
+      {query : AspisR1.Port3_NativeQueryBody.Ops} →
+        {geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError} →
+          {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} →
+            {hash : H} →
+              {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public} →
+                {pub proof : Aeneas.Std.Slice Aeneas.Std.U8} →
+                  {split : Aeneas.Std.Usize} →
+                    {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8} →
+                      AspisR1.Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved →
+                        Prop :=
+fun {CoreError H} {installed} {reserved} {query} {geo} {D} {hash} {semantic} {pub proof} {split} {saved} run =>
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+      (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+      (rho : AspisR1.OraclePortCheckpointAbiC5.K),
+      AspisR1.Port5Q1_QueryPorts.SessionAPrepare (AspisR1.Tx1Q_Carriers.prepared run.p) data q rho →
+        AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+            some parsed →
+          AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) = some data →
+            ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+              (∀ pos < 22,
+                  recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                    some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+                  AspisR1.Port5Q1_Domain.SessionADomain geo →
+                    geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                      geo.op7 = Aeneas.Std.Result.ok 1#u32 →
+                        geo.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                          have state :=
+                            AspisR1.Tx1Q_Carriers.accumulator
+                              (have __src := run.out;
+                              { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                next := __src.next });
+                          AspisR1.CheckpointBytes5Output.accumulator state =
+                              (AspisR1.OraclePortCheckpointStateC3.write
+                                  (AspisR1.OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+                            AspisR1.Port3_CheckpointInstall.writer (AspisR1.Tx1Q_Install.digest D)
+                                  (AspisR1.Tx1Q_Carriers.prepared run.p) state proof pub hash =
+                                Aeneas.Std.Result.ok saved ∧
+                              (↑run.flushed).length = 64 ∧ ↑run.out.next = 10
+def AspisR1.PSem_Validation.Logical : ℕ → AspisV8R19.DuplexFrames.Bytes → Prop :=
+fun row b =>
+  List.take 5 b =
+      ⟨(AspisR1.OraclePortCompactDraft.rowShape row).1 % 256, ⋯⟩ ::
+        AspisR1.OraclePortCompactDraft.le32 (AspisR1.OraclePortCompactDraft.rowShape row).2 ∧
+    (14 ≤ row → AspisR1.OraclePortCompactDraft.canonical (List.drop 5 b))
+def AspisR1.PSem_Validation.Checked : ℕ → List AspisV8R19.DuplexFrames.Bytes → Prop :=
+fun x x_1 => List.brecOn (motive := fun x => ℕ → Prop) x_1 AspisR1.PSem_Validation.Checked._f x
+structure AspisR1PublicPreparation.SourceFull25.Call {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) : Type
+number of parameters: 3
+fields:
+  AspisR1PublicPreparation.SourceFull25.Call.row : Aeneas.Std.U8
+  AspisR1PublicPreparation.SourceFull25.Call.before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+  AspisR1PublicPreparation.SourceFull25.Call.after : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+  AspisR1PublicPreparation.SourceFull25.Call.record : AspisR1PublicPreparation.r1_wire.ValidatedRecord
+  AspisR1PublicPreparation.SourceFull25.Call.q : AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.SourceFull25.Call.tag : Aeneas.Std.U8
+  AspisR1PublicPreparation.SourceFull25.Call.next : Aeneas.Std.U8
+  AspisR1PublicPreparation.SourceFull25.Call.absorbed : AspisR1PublicPreparation.TranscriptStep.Bytes32
+  AspisR1PublicPreparation.SourceFull25.Call.block : AspisR1PublicPreparation.TranscriptStep.Bytes32
+  AspisR1PublicPreparation.SourceFull25.Call.state : AspisR1PublicPreparation.TranscriptStep.Bytes32
+  AspisR1PublicPreparation.SourceFull25.Call.validated : pre.validated_record self.row =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.record)
+  AspisR1PublicPreparation.SourceFull25.Call.semantic : AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated
+        D self.before self.record =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.q, self.after)
+  AspisR1PublicPreparation.SourceFull25.Call.record_row : self.record.row = self.row
+  AspisR1PublicPreparation.SourceFull25.Call.slot : (↑pre.records)[↑self.row]? = some self.record.framed
+  AspisR1PublicPreparation.SourceFull25.Call.before_row : self.record.row = self.before.next_row
+  AspisR1PublicPreparation.SourceFull25.Call.tag_code : ↑self.tag = 160 + ↑self.record.row
+  AspisR1PublicPreparation.SourceFull25.Call.next_row : ↑self.next = ↑self.record.row + 1
+  AspisR1PublicPreparation.SourceFull25.Call.absorb : D.digest self.before.hash
+        (AspisR1PublicPreparation.TranscriptStep.absorbParts self.before.state self.tag self.record.framed) =
+      Aeneas.Std.Result.ok self.absorbed
+  AspisR1PublicPreparation.SourceFull25.Call.read1 : D.digest self.before.hash
+        (AspisR1PublicPreparation.TranscriptStep.readParts self.absorbed 1#u8) =
+      Aeneas.Std.Result.ok self.block
+  AspisR1PublicPreparation.SourceFull25.Call.read2 : D.digest self.before.hash
+        (AspisR1PublicPreparation.TranscriptStep.readParts self.absorbed 2#u8) =
+      Aeneas.Std.Result.ok self.state
+  AspisR1PublicPreparation.SourceFull25.Call.sample : AspisR1PublicPreparation.sampler.qm31_sample self.block =
+      Aeneas.Std.Result.ok self.q
+  AspisR1PublicPreparation.SourceFull25.Call.carried : self.after =
+      { state := self.state, hash := self.before.hash, next_row := self.next }
+constructor:
+  AspisR1PublicPreparation.SourceFull25.Call.mk {H : Type} {D : AspisR1PublicPreparation.aspis_core.Digest32 H}
+    {pre : AspisR1PublicPreparation.r1_wire.Prefix} (row : Aeneas.Std.U8)
+    (before after : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (record : AspisR1PublicPreparation.r1_wire.ValidatedRecord) (q : AspisR1PublicPreparation.aspis_core.field.QM31)
+    (tag next : Aeneas.Std.U8) (absorbed block state : AspisR1PublicPreparation.TranscriptStep.Bytes32)
+    (validated : pre.validated_record row = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok record))
+    (semantic :
+      AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated D before record =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after))
+    (record_row : record.row = row) (slot : (↑pre.records)[↑row]? = some record.framed)
+    (before_row : record.row = before.next_row) (tag_code : ↑tag = 160 + ↑record.row)
+    (next_row : ↑next = ↑record.row + 1)
+    (absorb :
+      D.digest before.hash (AspisR1PublicPreparation.TranscriptStep.absorbParts before.state tag record.framed) =
+        Aeneas.Std.Result.ok absorbed)
+    (read1 :
+      D.digest before.hash (AspisR1PublicPreparation.TranscriptStep.readParts absorbed 1#u8) =
+        Aeneas.Std.Result.ok block)
+    (read2 :
+      D.digest before.hash (AspisR1PublicPreparation.TranscriptStep.readParts absorbed 2#u8) =
+        Aeneas.Std.Result.ok state)
+    (sample : AspisR1PublicPreparation.sampler.qm31_sample block = Aeneas.Std.Result.ok q)
+    (carried : after = { state := state, hash := before.hash, next_row := next }) :
+    AspisR1PublicPreparation.SourceFull25.Call D pre
+structure AspisR1.Port5Q1_QueryPorts.SessionAPrepare (p : AspisR1Stage2.verifier.Prepared)
+  (data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE) (q : Fin 22 → Fin 262144)
+  (rho : AspisR1.Port5Q1_QueryPorts.FK) : Prop
+number of parameters: 4
+fields:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.queries : ∀ (i : ℕ) (hi : i < 22),
+      ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩)
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.alpha1 : ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha → AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1
+constructor:
+  AspisR1.Port5Q1_QueryPorts.SessionAPrepare.mk {p : AspisR1Stage2.verifier.Prepared}
+    {data : AspisR1.MatchingSupport.Data AspisR1.Port5Q1_QueryPorts.FE} {q : Fin 22 → Fin 262144}
+    {rho : AspisR1.Port5Q1_QueryPorts.FK}
+    (queries : ∀ (i : ℕ) (hi : i < 22), ↑(AspisR1.Port5Q1_GeometryBinding.queryAt p.queries i) = ↑(q ⟨i, hi⟩))
+    (rho_eq : AspisR1.CheckpointBytes5Output.ofK p.rho = rho)
+    (rho_canonical : AspisR1.Port3_FlushInstall.Canonical p.rho)
+    (alpha1 :
+      ∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        p.alpha.index_usize 1#usize = Aeneas.Std.Result.ok alpha →
+          AspisR1.CheckpointBytes5Output.ofE alpha = data.alpha1) :
+    AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho
+def AspisR1.LiteralMatchingData.read : List (AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge) →
+  Option (AspisR1.MatchingSupport.Data AspisR1.LiteralMatchingData.E) :=
+fun rs => do
+  let common ← AspisR1.LiteralOpeningView.read rs
+  let staged ← AspisR1.LiteralOpeningStages.readSecond rs
+  let row31 ←
+    AspisR1.LiteralOpeningStages.readAt rs 31 (AspisR1.OpeningRecordCodec.decode AspisR1.OpeningRecordCodec.Row.final)
+  let word ← AspisR1.LiteralTranscript.vAt rs
+  let gamma ← AspisR1.LiteralChallengeRead.ordinaryAt rs 27
+  let kappa ← AspisR1.LiteralChallengeRead.ordinaryAt rs 28
+  let alpha0 ← AspisR1.LiteralChallengeRead.ordinaryAt rs 29
+  let alpha1 ← AspisR1.LiteralChallengeRead.ordinaryAt rs 30
+  have payloads : AspisR1.SelectedOpeningData.Payloads :=
+    { row25 := staged.row25, row26 := staged.row26, row27 := staged.row27, row28 := staged.row28, row29 := staged.row29,
+      row30 := staged.row30, row31 := row31 }
+  pure
+      (AspisR1.SelectedOpeningData.data payloads common.word word common.functionals common.baseFunctional gamma kappa
+        alpha0 alpha1)
+'AspisR1.PSem_Accepted.accepted_pair_claims_semantic_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
