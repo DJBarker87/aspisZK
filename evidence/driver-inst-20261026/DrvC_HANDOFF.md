@@ -124,8 +124,10 @@ be25078479 plus exact dirty-source SHA and object fingerprints in its receipt.
 Every actual invocation was one module via unchanged S2W launchers in the
 coherent SInt2 workspace, lake env lean,-j1,-M7000,-DElab.async=false,
 MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64. At most two own scopes
-(16GiB reservation) coexisted; no other populated build scope was observed.
-No infrastructure was written/changed, no foreign job or worktree touched.
+(16GiB reservation) coexisted; initial/intermediate observations saw no other
+populated build scopes. A final inventory after our audit saw lowering2 SBF
+and NP6 scopes owned by other workers; no own build scope remains. They were
+not touched. No infrastructure was written/changed, no foreign job or worktree touched.
 
 023 and048 hit default200000-heartbeat limits; neither was retried unchanged
 or given larger caps/options. They were split into symbolic checked
