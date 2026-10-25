@@ -1,0 +1,24 @@
+Hist_Nonvacuity.lean:24:68: warning: This simp argument is unused:
+  List.getElem?_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵S̵l̵i̵c̵e̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵]̵[̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲ ̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Hist_Nonvacuity.lean:40:58: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+ops : AdapterRw.Ops
+events : List S2X.AccountEvent :=
+  [S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data), S2X.AccountEvent.rollback]
+first :
+  Step ops (key 0#u8) original (S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data))
+    (put original 1 changed)
+trace : Trace ops (key 0#u8) original events (put original 1 changed)
+⊢ events ≠ [] ∧
+    Trace ops (key 0#u8) original events (put original 1 changed) ∧
+      (original 0).owner = key 0#u8 ∧
+        Initialized (original 0).data ∧ byteLedger (put original 1 changed) 0 = byteLedger original 0
+Hist_Nonvacuity.lean:41:2: error: No goals to be solved
+'AspisR1.Hist_Nonvacuity.different' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hist_Nonvacuity.initialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hist_Nonvacuity.trace_exists' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

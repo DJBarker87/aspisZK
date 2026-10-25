@@ -1,0 +1,48 @@
+{
+  "kind": "kani",
+  "source_revision": "f3285332d64c6057443f7950d64ed26c786def0c",
+  "timeout": 240,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "Hist_Fixture/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "Hist_proofs::Hist_initialized_never_rewritten",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "old",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-history-20261026/Hist_kani-target",
+    "CARGO_BUILD_JOBS": "4",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "sources": "Immutable copy of retained WAdm src, checked against Hist_source-pins.json; no shipped edit",
+    "reason": "RUST001 selected fresh transitive versions; input lock is now exact production Cargo.lock (root package update only)"
+  },
+  "expected_time": "Optimized Kani compilation then literal source initialized-checkpoint guard; no arithmetic gate",
+  "attempt": "Hist_KANI001",
+  "sources": [
+    "Hist_Fixture/Cargo.toml",
+    "Hist_Fixture/Hist_lib.rs",
+    "Hist_Fixture/Cargo.lock"
+  ],
+  "source_tree_dirty": true
+}
