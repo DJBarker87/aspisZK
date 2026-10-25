@@ -1,0 +1,41 @@
+WAdm_WeightsHelpers.lean:13:29: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  WAdm_weights_loop.body iter out
+in the target expression
+  (match
+      match (iter, out) with
+      | (iter1, out1) => WAdm_weights_loop.body iter1 out1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1) => WAdm_weights_loop.body iter1 out1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+
+iter next : alloc.vec.into_iter.IntoIter K
+out mid after : alloc.vec.Vec U8
+step : WAdm_weights_loop.body iter out = ok (cont (next, mid))
+tail : WAdm_weights_loop next mid = ok after
+⊢ (match
+      match (iter, out) with
+      | (iter1, out1) => WAdm_weights_loop.body iter1 out1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (iter1, out1) => WAdm_weights_loop.body iter1 out1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok after
+'AspisR1.WAdm_WeightsHelpers.loop_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_WeightsHelpers.loop_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_WeightsHelpers.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -51,6 +51,10 @@ theorem accepted_pair_claims_tx1 {W A E M Cv CoreError : Type} {N : Nat}
       WAdm_SourceWriter.writer
         (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd))
         (Tx1Q_Carriers.prepared run.p) (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
+        f.proof f.pub () = ok saved ∧
+      (WAdm_NativeInstall.install (Tx1Q_Execution.actual ops reserved queryOps geoOps B claimsStd)).op16
+        (Tx1Q_SameCut.callerDigest adapterOps ops reserved queryOps geoOps B claimsStd) run.p
+        {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}
         f.proof f.pub () = ok saved ∧ Tx1Q_Endpoint.WhenBound run) ∧
       S2W_ExpandedTrace.runExpanded (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd) (children port)
         (S2W_Observation.two (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] =
