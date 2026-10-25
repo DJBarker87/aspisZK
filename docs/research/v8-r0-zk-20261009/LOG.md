@@ -9666,3 +9666,18 @@ Both deployed targets remain NOT ESTABLISHED. Frozen implementation/artifact pin
 Privacy source032/1912a56990 fixes the removed-kernfs retained-FD predicate without relaxing scope identity/control checks. Actualv13/a8052c25ff passed setup exit0,7.245683229s,80080KiB RSS,swap0; parent failed=false,unresolved=false and prospective/inside/go resource admissions passed. This is bounded DATA operational evidence, not Kani/native/privacy closure. Installed OS/tools/no-untrusted-writer trust and strict final Reader remain unchanged; native/runtime/cache/control roles still require review. Final Kani59/60 remains reserved. Host repair restored exact existing stronger proof/lib.rs pin f07ab675de0556f5feb518f00050583c9d8b9db2b03d79c9c6b1035c90ac8dc2; only the missing Ghost::coordinate()==j assertion was added. Backup preserves old bytes. Repair exit0,.670410625s, no proof execution or frozen implementation change.
 
 Both deployed targets remain NOT ESTABLISHED. Next: review observed native/runtime/cache/control roles and remaining final configuration before any last Kani grant. No new final proof charge.
+
+## D190 (lead, 2026-10-25 13:05): lead resumes; the Codex-manager period is wound down
+
+From 2026-10-24 10:00 to 2026-10-25 12:30 a Codex manager ran the loop. In about 27 hours there were
+about 500 commits, and about 114 of them concerned launcher, admission, metadata, monitor, installer,
+staging and memory-policy machinery rather than proofs. Root cause found by the lead: the manager
+rewrote the worker Lean rules (scratchpad `local-lean.txt`, 00:16) to `-M4400` with extra pinning,
+I/O and deadline rules. Ordinary imports peak at about 4.2–4.4 GB, so compiles hit Lean's internal
+4,400 MB ceiling, which was then treated as a host "memory failure". Each failure spawned more
+infrastructure review. The build host itself is healthy (52 GB available, low load). Actions: the
+lead's rules are restored (`-M7000` inside 6G/8G scopes; workers do not build or repair
+infrastructure; on launcher trouble they stop and report). The manager's running job
+`cx-port36-transport` was stopped, with a WIP snapshot kept. Proof results the manager merged are kept
+(e.g. the concrete Claims parent and S1 finish connection, and Q1/Q2 port modules). Infrastructure
+changes are left in place but no longer required by worker rules.
