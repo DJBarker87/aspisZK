@@ -1,0 +1,89 @@
+GExq_OuterLower.lean:38:16: error: Tactic `rfl` failed: The left-hand side
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+    (CheckpointBytes5Effect.bind (impl op) fun a => lower (fun {A} => impl) (k a))
+is not definitionally equal to the right-hand side
+  do
+    let b ← fail e
+    S2W_Trace.erase sdk (k b)
+
+case call.fail
+A : Type
+sdk : AdapterRw.Ops
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+impl : {B : Type} → S2W_Trace.Call B → Oracle B
+law :
+  ∀ {B : Type} (call : S2W_Trace.Call B),
+    GExq_ChildCode.Admissible hashv call →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (impl call) = S2W_Trace.invoke sdk call
+B✝ : Type
+op : S2W_Trace.Call B✝
+k : B✝ → S2W_Trace.Code A
+ih :
+  ∀ (a : B✝),
+    Good hashv (k a) →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (lower (fun {A} => impl) (k a)) =
+        S2W_Trace.erase sdk (k a)
+good : Good hashv (S2W_Trace.Code.call op k)
+e : Error
+⊢ CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+      (CheckpointBytes5Effect.bind (impl op) fun a => lower (fun {A} => impl) (k a)) =
+    do
+    let b ← fail e
+    S2W_Trace.erase sdk (k b)
+GExq_OuterLower.lean:39:13: error: Tactic `rfl` failed: The left-hand side
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+    (CheckpointBytes5Effect.bind (impl op) fun a => lower (fun {A} => impl) (k a))
+is not definitionally equal to the right-hand side
+  do
+    let b ← div
+    S2W_Trace.erase sdk (k b)
+
+case call.div
+A : Type
+sdk : AdapterRw.Ops
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+impl : {B : Type} → S2W_Trace.Call B → Oracle B
+law :
+  ∀ {B : Type} (call : S2W_Trace.Call B),
+    GExq_ChildCode.Admissible hashv call →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (impl call) = S2W_Trace.invoke sdk call
+B✝ : Type
+op : S2W_Trace.Call B✝
+k : B✝ → S2W_Trace.Code A
+ih :
+  ∀ (a : B✝),
+    Good hashv (k a) →
+      CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (lower (fun {A} => impl) (k a)) =
+        S2W_Trace.erase sdk (k a)
+good : Good hashv (S2W_Trace.Code.call op k)
+⊢ CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+      (CheckpointBytes5Effect.bind (impl op) fun a => lower (fun {A} => impl) (k a)) =
+    do
+    let b ← div
+    S2W_Trace.erase sdk (k b)
+GExq_OuterLower.lean:40:14: error: Type mismatch
+  ih a (good.right a)
+has type
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) () (lower (fun {A} => impl) (k a)) =
+    S2W_Trace.erase sdk (k a)
+but is expected to have type
+  CheckpointBytes5Effect.erase (SdkC_Source.dictionary hashv) ()
+      (CheckpointBytes5Effect.bind (impl op) fun a => lower (fun {A} => impl) (k a)) =
+    do
+    let b ← ok a
+    S2W_Trace.erase sdk (k b)
+GExq_OuterLower.lean:36:21: warning: This simp argument is unused:
+  CheckpointBytes5Effect.erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵l̵a̵w̵[̲l̲o̲w̲e̲r̲,̲ ̲l̲a̲w̲ op g̵o̵o̵d̵.̵1̵,̵S̵2̵W̵_̵T̵r̵a̵c̵e̵.̵e̵r̵a̵s̵e̵]̵g̲o̲o̲d̲.̲1̲,̲ ̲S̲2̲W̲_̲T̲r̲a̲c̲e̲.̲e̲r̲a̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_OuterLower.lean:36:55: warning: This simp argument is unused:
+  law op good.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵l̵a̵w̵ ̵o̵p̵ ̵g̵o̵o̵d̵.̵1̵,̵S̵2̵W̵_̵T̵r̵a̵c̵e̵.̵e̵r̵a̵s̵e̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲S̲2̲W̲_̲T̲r̲a̲c̲e̲.̲e̲r̲a̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.GExq_OuterLower.erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
