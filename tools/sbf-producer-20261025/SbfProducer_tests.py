@@ -51,6 +51,13 @@ class Suite(unittest.TestCase):
             a = next(n for n in original.body if isinstance(n,ast.FunctionDef) and n.name==name)
             b = next(n for n in changed.body if isinstance(n,ast.FunctionDef) and n.name==name)
             self.assertEqual(ast.dump(a),ast.dump(b))
+        original=ast.parse((HERE/'SbfProducerLinux_backend.py').read_text())
+        candidate=ast.parse((HERE/'SbfProducer_backend_candidate.py').read_text())
+        changed={'guest','internal_backend'}
+        for a in original.body:
+            if isinstance(a,ast.FunctionDef) and a.name not in changed:
+                b=next(n for n in candidate.body if isinstance(n,ast.FunctionDef) and n.name==a.name)
+                self.assertEqual(ast.dump(a),ast.dump(b))
 
     def test_policy_full_raw_count_once_and_deductions(self):
         s,expected,legacy = synthetic()
@@ -62,7 +69,7 @@ class Suite(unittest.TestCase):
         self.assertEqual(d['safe_limit_bytes'],55*G)
         self.assertEqual(d['adjusted_available_bytes'],74*G)
         for field in ('Active(file)','KReclaimable','SReclaimable'):
-            b = copy.deepcopy(s);b['meminfo'][field] += (2 if field=='SReclaimable' else 1)*G
+            b = copy.deepcopy(s);b['meminfo'][field] += (-2 if field=='SReclaimable' else 1)*G
             result = obs.adapter.policy.evaluate(legacy(b,0),b,b,0,phase='inside-scope',expected=expected,expected_unit=pkg.UNIT+'.scope')
             self.assertEqual(result['adjusted_available_bytes'],73*G)
 
@@ -107,8 +114,8 @@ class Suite(unittest.TestCase):
         candidate.validate_runtime=lambda _: events.append('runtime')
         candidate.producer_fixed_body=backend
         with patch.dict(sys.modules,SbfProducer_backend_candidate=candidate), \
-             patch.object(flow.os,'getresuid',return_value=(0,0,0)), \
-             patch.object(flow.os,'getresgid',return_value=(0,0,0)), \
+             patch.object(flow.os,'getresuid',return_value=(0,0,0),create=True), \
+             patch.object(flow.os,'getresgid',return_value=(0,0,0),create=True), \
              patch.object(flow,'approval',return_value=approved), \
              patch.object(flow.proc,'lineage',side_effect=lambda _:events.append('lineage') or before), \
              patch.object(flow,'fresh',side_effect=lambda *_:events.append('full fresh')), \
@@ -222,6 +229,36 @@ class Suite(unittest.TestCase):
                 self.assertEqual([r['role'] for r in proc.lineage(approved)],chain)
                 rows[43]['cgroup']='0::/old.scope\n'
                 with self.assertRaises(Denied):proc.lineage(approved)
+
+    def test_live_process_reads_bind_all_metadata_and_start(self):
+        status=('Tgid: 43\nPid: 43\nThreads: 1\nUid: 0 0 0 0\nGid: 0 0 0 0\n'
+                'Groups: \nCapInh: 0\nCapPrm: ff\nCapEff: ff\nCapBnd: ff\nCapAmb: 0\n'
+                'NoNewPrivs: 0\nSeccomp: 0\n').encode()
+        cg='0::/'+pkg.UNIT+'.scope\n'
+        data={'/proc/43/status':status,'/proc/43/environ':b'A=B\0',
+              '/proc/43/cmdline':b'fixed\0','/proc/43/cgroup':cg.encode(),
+              '/proc/43/maps':b'1-2 r-xp 0 00:00 1 /opt/fixed\n2-3 r-xp 0 00:00 0 [vdso]\n',
+              '/proc/43/limits':b'actual inherited limits'}
+        expected=dict(exe={'hash':'exe'},uid=[0]*4,gid=[0]*4,groups=[],
+            caps={'Inh':0,'Prm':255,'Eff':255,'Bnd':255,'Amb':0},threads=1,nnp=0,seccomp=0,
+            env=pkg.digest(b'A=B\0'),cmdline=pkg.digest(b'fixed\0'),
+            limits=pkg.digest(b'actual inherited limits'),
+            maps={'/opt/fixed':{'pin':{'sha256':'p','size':1},'mode':0o555}},
+            kernel_maps=[['[vdso]','r-xp']])
+        stable=dict(pid=43,ppid=42,starttime=9)
+        with patch.object(proc,'read',side_effect=lambda path,*_:data[path]), \
+             patch.object(proc,'stat',return_value=stable), \
+             patch.object(proc,'executable',return_value={'hash':'exe'}), \
+             patch.object(proc,'pinned_file') as pinned:
+            self.assertEqual(proc.process(43,'helper',expected)['starttime'],9)
+            pinned.assert_called_once_with('/opt/fixed',{'sha256':'p','size':1},0o555)
+            for key in ('env','limits','exe','uid','kernel_maps'):
+                bad=dict(expected);bad[key]='old'
+                with self.assertRaises(Denied):proc.process(43,'helper',bad)
+            with patch.object(proc,'stat',side_effect=[stable,dict(stable,starttime=10)]):
+                with self.assertRaises(Denied):proc.process(43,'helper',expected)
+            data['/proc/43/maps']=b'1-2 rwxp 0 00:00 0\n'
+            with self.assertRaises(Denied):proc.process(43,'helper',expected)
 
     def test_backend_owned_child_gate_cleanup_mock_only(self):
         import SbfProducer_backend_candidate as backend

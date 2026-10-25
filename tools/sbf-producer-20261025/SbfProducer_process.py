@@ -59,6 +59,7 @@ def process(pid, role, expected):
     require(cgroup.count('\n') == 1 and cgroup.startswith('0::/'), 'actual unified process scope')
     maps = read(prefix+'/maps', 2**20).decode('ascii').splitlines()
     mapped = set()
+    kernel_maps = []
     for line in maps:
         parts = line.split(None,5)
         require(len(parts) >= 5, 'maps syntax')
@@ -67,7 +68,9 @@ def process(pid, role, expected):
         if len(parts) == 6 and parts[5].startswith('/'):
             mapped.add(parts[5])
         elif 'x' in rights:
-            require(len(parts) == 6 and parts[5] == '[vdso]', 'unapproved anonymous executable map')
+            require(len(parts) == 6 and parts[5] in ('[vdso]','[vsyscall]'),
+                    'unapproved anonymous executable map')
+            kernel_maps.append([parts[5],rights])
     require(mapped == set(expected['maps']), 'limited/changed runtime map')
     for path, item in expected['maps'].items():
         pinned_file(path, item['pin'], item['mode'])
@@ -78,7 +81,7 @@ def process(pid, role, expected):
         caps={k:int(status['Cap'+k],16) for k in ('Inh','Prm','Eff','Bnd','Amb')},
         threads=int(status['Threads']), nnp=int(status['NoNewPrivs']),
         seccomp=int(status['Seccomp']), env=digest(envraw), cmdline=digest(cmdline),
-        limits=digest(read(prefix+'/limits')), maps=expected['maps'])
+        limits=digest(read(prefix+'/limits')), maps=expected['maps'],kernel_maps=sorted(kernel_maps))
     require(set(expected) == set(observed) and observed == expected, 'role source/runtime/env/limits/control pin')
     require(stat(pid) == first and first['starttime'] > 0, 'process ancestry/start drift')
     return dict(first, role=role, cgroup=cgroup, observation=observed)
