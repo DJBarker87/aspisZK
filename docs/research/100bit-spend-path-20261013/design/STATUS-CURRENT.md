@@ -1,5 +1,48 @@
 # Current status: 100-bit soundness and privacy (living page)
 
+## Concrete Claims parent connection — 2026-10-25
+
+The next bounded implementation step uses the worker's already successful
+finite Claims extraction at `6eec87d293` (run8), not another native union or
+iterator attempt. `ClaimsUnrolledParentSource` retains the emitted function
+body with explicit primitive operation parameters, nominal namespace/type
+relocation and default resource options. It imports no external axiom
+templates. Its pure `mapError` and `boxArray` definitions are **value models**;
+their native std/ownership/error/cleanup/effect correspondence remains open.
+
+`AspisR1ClaimsUnrolledParent.claims_value` now proves an **all-outcome complete
+parent value refinement**, including the real delayed setter closures and
+decoder error/fail/div prefixes. The three returned rows are decoded from
+the same record at offsets0/29/58. The proof does not need an allocator
+zero-content/frame hypothesis. This extends the older owned-step result to
+the actual emitted finite parent; it does not establish native initializedness.
+
+The new `ClaimsUnrolledFinish` fixes the getter and full indexed decoder to
+the existing selected S1 source implementations, installs the parent as the
+Claims callback, and checks `AspisR1.ClaimsUnrolledFinish.finish_claims`
+against `FinishModel.finish`: the SAME accepted full finish supplies the
+Claims return, with no separately assumed accepted Claims run or chosen rows.
+The getter/decoder nominal adapter laws in `ClaimsUnrolledFinishAdapters`
+are the final focused check; no candidate adoption is implied.
+
+The original narrow and S1 caches differed at `Aeneas.Std.Core.Fmt` and
+`Aeneas.Std.Array.ArraySlice`. No compatibility assumption was used. The new
+Types/Source/Rows were recompiled in order against the existing S1 selection,
+then the actual finish consumer passed: exit0,7.6023s,
+peak3,292,839,936B,swap0, with only propext/Classical.choice/Quot.sound.
+The parent proof in that selection passed exit0,2.0115s,
+peak2,263,072,768B,swap0. Exact changed sources, commands, dependencies,
+failures and metrics are retained in `evidence/claims-unrolled-parent-20261025/`.
+
+Remaining: actual native reserve/boxing and explicit std value-model
+correspondence, initializedness, cleanup/abort and ordered effects, frozen-to-
+safe/unrolled equivalence, CU/stack and all affected artifact checks; then
+installation in the same SDK/S2 accepted execution. The runtime model now has
+two operational placeholders, but this is **not** a discharge of those native
+obligations. Terminal remains separate. The safe source is unadopted; no
+shipped source, security contract, authority or key changed. Neither deployed
+soundness nor real-prover privacy is established.
+
 ## Programme reset — 2026-10-25
 
 **Target not yet established**, for both implementation-linked 100-bit

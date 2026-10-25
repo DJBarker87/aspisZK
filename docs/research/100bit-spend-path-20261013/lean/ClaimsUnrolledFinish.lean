@@ -1,0 +1,142 @@
+import ClaimsUnrolledParentRows
+import S1ExtractedRoundChildrenV1
+import S1SemanticFinishBoundsV1
+
+/-! Install the complete emitted finite Claims VALUE interpretation in the
+actual S1 finish consumer. Source getters and the existing full indexed decoder
+are fixed. Native reserve/box ownership/error/cleanup/effect correspondence and
+candidate adoption remain open; this file does not assert them as std trust.
+-/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ClaimsUnrolledFinish
+open Aeneas Aeneas.Std Result
+abbrev ParentQM := AspisR1ClaimsUnrolledParent.aspis_core.field.QM31
+abbrev MainQM := AspisR1PublicPreparation.aspis_core.field.QM31
+abbrev ParentError := AspisR1ClaimsUnrolledParent.r1_wire.Error
+abbrev MainError := AspisR1PublicPreparation.r1_wire.Error
+abbrev MainPrefix := AspisR1PublicPreparation.r1_wire.Prefix
+abbrev MainRecord := AspisR1PublicPreparation.r1_wire.ValidatedRecord
+abbrev MainClaims := Array (Array MainQM 29#usize) 3#usize
+
+/-- Two unresolved operational placeholders in this VALUE interpretation.
+No successful allocation, zero content, frame or Claims postcondition occurs
+in this dictionary. Their actual-runtime instance is NOT proved here. The
+explicit mapError/boxArray value models ALSO retain their native std,
+ownership/error/abort/cleanup/effect correspondence obligations. -/
+structure StdCalls where
+  reserve : {T : Type} → (A : Type) → alloc.vec.Vec T → Usize →
+    Result ((core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError) × alloc.vec.Vec T)
+  intoBox : {T : Type} → (A : Type) → alloc.vec.Vec T → Result (Slice T)
+
+def fromMainError : MainError → ParentError
+  | .Allocation  => .Allocation 
+  | .RowOrder a b => .RowOrder a b
+  | .InvalidRow  => .InvalidRow 
+  | .Tag row => .Tag row
+  | .Length row => .Length row
+  | .NonCanonical row offset => .NonCanonical row offset
+  | .Boundary round => .Boundary round
+  | .Terminal  => .Terminal 
+  | .EqualCirclePoints  => .EqualCirclePoints 
+  | .TrailingBytes  => .TrailingBytes 
+  | .Public  => .Public 
+
+def toMainError : ParentError → MainError
+  | .Allocation  => .Allocation 
+  | .RowOrder a b => .RowOrder a b
+  | .InvalidRow  => .InvalidRow 
+  | .Tag row => .Tag row
+  | .Length row => .Length row
+  | .NonCanonical row offset => .NonCanonical row offset
+  | .Boundary round => .Boundary round
+  | .Terminal  => .Terminal 
+  | .EqualCirclePoints  => .EqualCirclePoints 
+  | .TrailingBytes  => .TrailingBytes 
+  | .Public  => .Public 
+
+def fromMainQM (q : MainQM) : ParentQM := ⟨⟨q.c0.a,q.c0.b⟩,⟨q.c1.a,q.c1.b⟩⟩
+def toMainQM (q : ParentQM) : MainQM := ⟨⟨q.c0.a,q.c0.b⟩,⟨q.c1.a,q.c1.b⟩⟩
+def fromMainArray {n : Usize} (a : Array MainQM n) : Array ParentQM n :=
+  ⟨a.val.map fromMainQM,by simpa using a.property⟩
+def toMainArray {n : Usize} (a : Array ParentQM n) : Array MainQM n :=
+  ⟨a.val.map toMainQM,by simpa using a.property⟩
+def fromMainPrefix (p : MainPrefix) : AspisR1ClaimsUnrolledParent.r1_wire.Prefix :=
+  ⟨p.c1_root,p.records⟩
+def toMainPrefix (p : AspisR1ClaimsUnrolledParent.r1_wire.Prefix) : MainPrefix :=
+  ⟨p.c1_root,p.records⟩
+def toMainRecord (r : AspisR1ClaimsUnrolledParent.r1_wire.ValidatedRecord) : MainRecord :=
+  ⟨r.row,r.framed⟩
+
+def sourceRecord (p : AspisR1ClaimsUnrolledParent.r1_wire.Prefix) (row : U8) :
+    Result (core.result.Result AspisR1ClaimsUnrolledParent.r1_wire.ValidatedRecord ParentError) :=
+  match AspisR1PublicPreparation.r1_wire.Prefix.validated_record (toMainPrefix p) row with
+  | .ok (.Ok r) => .ok (.Ok ⟨r.row,r.framed⟩)
+  | .ok (.Err e) => .ok (.Err (fromMainError e))
+  | .fail e => .fail e
+  | .div => .div
+
+/-- Actual complete indexed decode_k body already selected by S1, including
+all errors and ambient fail/div. No chosen decoder outcome is a parameter. -/
+def sourceDecode (n : Usize) (r : AspisR1ClaimsUnrolledParent.r1_wire.ValidatedRecord)
+    (offset : Usize) : Result (core.result.Result (Array ParentQM n) ParentError) :=
+  match AspisS1ExtractedRoundChildren.decodeMain n (toMainRecord r) offset with
+  | .ok (.Ok a) => .ok (.Ok (fromMainArray a))
+  | .ok (.Err e) => .ok (.Err (fromMainError e))
+  | .fail e => .fail e
+  | .div => .div
+
+def external (std : StdCalls) : AspisR1ClaimsUnrolledParent.External :=
+  {reserve := std.reserve, intoBox := std.intoBox,
+   validated := sourceRecord, decode := sourceDecode}
+
+def toMainStatus :
+    Result (core.result.Result AspisR1ClaimsUnrolledParent.Claims ParentError) →
+      Result (core.result.Result MainClaims MainError)
+  | .ok (.Ok a) => .ok (.Ok ⟨a.val.map toMainArray,by simpa using a.property⟩)
+  | .ok (.Err e) => .ok (.Err (toMainError e))
+  | .fail e => .fail e
+  | .div => .div
+
+def claims (std : StdCalls) (pre : MainPrefix) : Result (core.result.Result MainClaims MainError) :=
+  toMainStatus (AspisR1ClaimsUnrolledParent.candidate_claims.claims (external std) (fromMainPrefix pre))
+
+def reference (std : StdCalls) (pre : MainPrefix) : Result (core.result.Result MainClaims MainError) :=
+  toMainStatus (AspisR1ClaimsUnrolledParent.claimsReference (external std) (fromMainPrefix pre))
+
+/-- Complete parent refinement with actual source getter/decoder installed.
+No assertion about native allocation/cleanup or candidate adoption is added. -/
+theorem claims_value (std : StdCalls) (pre : MainPrefix) :
+    claims std pre = reference std pre :=
+  congrArg toMainStatus (AspisR1ClaimsUnrolledParent.claims_value (external std) (fromMainPrefix pre))
+
+def install (std : StdCalls) (B : AspisR1PublicPreparation.FinishModel.Boundaries) :
+    AspisR1PublicPreparation.FinishModel.Boundaries := {B with claims := claims std}
+
+/-- Actual whole-finish success supplies this SAME Claims execution. No
+separate accepted Claims equation, initialized storage or chosen rows premise.
+All other finish children, native/std/refinement and release gates remain. -/
+theorem finish_claims
+    (std : StdCalls) (R : AspisR1PublicPreparation.RoundModel.Boundaries)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+    {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+    (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (pre : MainPrefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+    (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+    (obs : Option (AspisR1PublicPreparation.verifier.Phase → Result Unit))
+    (out : AspisR1PublicPreparation.r1_semantic.Verified H)
+    (accepted : AspisR1PublicPreparation.FinishModel.finish R (install std B)
+      D pub pre before challenges obs = ok (.Ok out)) :
+    reference std pre = ok (.Ok out.claims) := by
+  obtain ⟨running,t25,record25,record26,z0,t26,z1,t27,
+      rounds,challenge,state,transcript,called,rest⟩ :=
+    AspisR1PublicPreparation.S1SemanticFinishBounds.finish_success R (install std B)
+      D pub pre before challenges obs out accepted
+  change claims std pre = ok (.Ok out.claims) at called
+  rw [claims_value] at called
+  exact called
+
+#print axioms claims_value
+#print axioms finish_claims
+end AspisR1.ClaimsUnrolledFinish
+end
