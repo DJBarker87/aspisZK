@@ -88,3 +88,44 @@ Host launch is independently confirmed blocked: `sh .../tools/run-joint.sh
 11400 R1Z/L2Leaf_Trace J 7000 8` exits 64, “attempt 11400 outside 5000-9999”.
 Calling the script directly also exits 126 because it is not executable.
 No infrastructure repair was attempted. No env-J Lean compiler ran.
+
+## Stage 3: Kani source-expression results
+
+14 bounded Kani 0.67.0 attempts, seven passing harnesses:
+
+| Receipt | Passing scope |
+|---|---|
+| kani-04 | 32-byte two-seed logical comparison: source-expression verdict erasure and same-input trace determinism |
+| kani-05 | 16-word masked m31 accept/reject schedule, same raw words |
+| kani-09 | one binary multiproof parent group, two sorted indices, independent node payloads; same selected addresses/consumed positions |
+| kani-11 | one division limb with arbitrary remainder < P and arbitrary u32 word, quotient range/remainder and same-input operand trace |
+| kani-12 | one checker pivot decision on the same row value/pivot state |
+| kani-13 | one four-limb sparse suffix coordinate, source-expression Boolean erasure and same-input short-circuit trace |
+| kani-14 | one QueryScan comparison, same accepted entry/candidate |
+
+Same-input determinism checks are deliberately modest: they do not establish
+any coin/challenge distribution and do not establish that a native caller
+supplies witness-free inputs. In particular kani-12/14 are elementary local
+decision checks, not elimination/search proofs. Only kani-09 varies actual
+payload data across runs. Harnesses are proof-local source expressions and
+instrumented slices, not Aeneas extractions or cfg(kani) crate changes.
+There are no frozen ELF rebuild claims, and no shipped code was edited.
+
+Failed/aborted attempts are retained. kani-01/02 were stopped after 200/135
+seconds while expanding Vec-based proof-only observation collectors (not a
+memory kill). kani-03 failed an observer memcmp unwinding assertion; the
+observer comparison was changed to pointwise checks. kani-06/07/08 timed out
+at 120 seconds on the larger contains/division/suffix loops; replaced by
+strictly smaller scopes in kani-14/11/13. kani-10 likewise exposed a proof-side
+memcmp unwind bound and was replaced with explicit scalar equality. No
+unchanged failed job was rerun with more memory or a longer timeout.
+
+Every Kani job ran in its own systemd scope with MemoryHigh=6G,
+MemoryMax=8G, MemorySwapMax=0, TasksMax=64. No more than three of these jobs
+were concurrently populated (24 GiB total caps); process inspection showed no
+other Lean/Kani/Rust build process. This work is symbolic bounded checking,
+not dense finite-field elimination, a debug Cargo build or a release arithmetic
+gate. There is no Cargo target directory. Timed-out GNU time wrappers report
+only 2112 KiB for the timeout process; those values are NOT asserted to be
+aggregate child peaks. Their true peak is unavailable; the 8 GiB cgroup cap
+and zero-swap policy remained enforced. Failed checks are not release evidence.
