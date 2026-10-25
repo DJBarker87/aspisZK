@@ -291,3 +291,32 @@ native adequacy obstruction. No extractor trust change or shipped Rust rewrite
 is authorized by this proof result. **Conjunct1 and the security target are not
 yet established.** No keys were altered, no push/merge, native gate, timing,
 three-ELF identity check or release/adoption claim was made.
+
+## Selected64 abort-law audit (11368–11369)
+
+`ProverRwEntropyAbort64.failure_mass` gives the exact OS-plus-RepeatedZero
+partition for the selected64 model, with nonce, schedule, initial state and tape
+all allowed to depend on the same finite experiment carrier. No independence
+is used. `candidate_bad_mass` is the two-half bound2/2^256, rather than the
+historical96-byte owner's3/2^256. This is a one-successful-return bound, not
+an assertion about native exhaustion probability.
+
+The existing external item is exactly `ProverCommitPublicNonce40.E1`.
+`unavailable_generate` retains the failed RNG history and unchanged cursor/
+ledger; `unavailable_mass` is1. `e1_no_subunit_availability` proves that E1's
+successful-byte equation alone cannot imply an OS-abort bound below1. This
+countermodel does not refute privacy: the model permits common aborts. It
+forbids silently setting the OS term to zero or charging it to realBad.
+
+Stage evidence: `evidence/prover-rw-20261023/entropy-abort64/` relative to
+`docs/research/100bit-spend-path-20261013`.11368 failed elaboration;11369
+changed the affected proofs, exit0,2.14s,4,261,056KiB RSS,swap0. All six
+axiom reports use only the three standard axioms. The existing stricter
+5G/7G,swap0,TasksMax64,-M7000 launcher is unchanged; reservation24+7GiB.
+The first input inherited a stale predecessor label; summary.json corrects
+its actual10ad0e38c4 base and pins both immutable source snapshots.
+
+This removes no conjunct1 premise. The native effect/extraction association,
+conditional law at actual adaptive contexts, all rejected/abort observations,
+and the two actual outer contracts remain open. No new trust item was added.
+No Rust, ELF, runtime, Kani, timing or full-manifest work was run.
