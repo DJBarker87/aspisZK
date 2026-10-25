@@ -14,7 +14,7 @@ origins=sorted({r[1] for r in j['selected']});s={'origins':origins,'roots':j['ro
 g=json.loads((E/'Port35ANCHOR_ref-Port32CONSUMER_groups.json').read_text());g=[r for r in g if r[0] in origins]
 for r in g:
  for i,label in enumerate(['CURRENT:BASE:ExtractedOpeningQueriesModel:part0','CURRENT:INCREMENTAL:Query31ArrayReadback:part0','CURRENT:INCREMENTAL:Query31DigestInputBridge:part0','CURRENT:INCREMENTAL:Query31SourceCalls:part0','CURRENT:INCREMENTAL:Query31SourceOracleBridge:part0']):
-  if r[0]==label:r[1]=f'/private/tmp/Port34RAW-361-20261025/Port34RAW-part{i}.olean'
+  if i>0 and r[0]==label:r[1]=f'/private/tmp/Port34RAW-361-20261025/Port34RAW-part{i}.olean'
 assert {r[0] for r in g}==set(origins)
 (E/'Port35ANCHOR_groups.json').write_text(json.dumps(g,separators=(',',':'))+'\n')
 pre=json.loads((E/'Port35ANCHOR_reused-attempt-361.json').read_text())['fresh'];runtime=pre['runtime'];api=pre['api']

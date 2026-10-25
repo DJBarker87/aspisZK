@@ -245,7 +245,11 @@ def load (env : Environment) : IO (Std.HashMap Name ConstantInfo × Std.HashMap 
         unless c.hasValue (allowOpaque := true) do throw (IO.userError "missing full body")
       | _ => pure ()
       selected := selected.insert c.name c
-  unless selected.size == choices.size do throw (IO.userError "missing selection")
+  unless selected.size == choices.size do
+    let missing := choices.toList.filter (fun (n,_) => !selected.contains n)
+    IO.FS.writeFile "/private/tmp/Port35ANCHOR-20261025/Port35ANCHOR-missing.json"
+      (toJson (missing.map (fun (n,o) => (encodeName n,o)))).pretty
+    throw (IO.userError s!"missing selection {selected.size}/{choices.size}")
   -- ExactName closure; no arbitrary environment fallback and no new axiom.
   for (_,c) in selected.toList do
     for n in dependencies c do
