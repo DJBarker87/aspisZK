@@ -19,3 +19,11 @@ extern crate alloc;
 #[cfg(kani)] mod NP6_characterization;
 
 #[cfg(kani)] mod NP6_scalars;
+
+#[cfg(kani)] mod NP6_errors;
+
+#[cfg(kani)] mod NP6_frames;
+
+#[cfg(kani)] mod NP6_ownership;
+
+#[cfg(kani)] mod NP6_alloc;
