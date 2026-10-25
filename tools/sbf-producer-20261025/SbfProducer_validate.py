@@ -41,6 +41,7 @@ if __name__ == '__main__':
              'SbfProducer-fd-focused' if followup else 'SbfProducer-focused')
     if package_followup:
         names = ['test_exact_copy_and_operational_functions',
+                 'test_inherited_descriptor_and_stdio_access_fail_closed',
                  'test_launcher_and_root_policy_are_pinned_by_live_reads']
         suite = unittest.TestSuite(SbfProducer_tests.Suite(name) for name in names)
     elif followup:

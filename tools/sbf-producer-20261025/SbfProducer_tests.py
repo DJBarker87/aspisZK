@@ -302,6 +302,8 @@ class Suite(unittest.TestCase):
         flow.host_stdio(api)
         api.listdir.return_value=['0','1','2','50']
         with self.assertRaises(Denied):flow.host_stdio(api)
+        api.listdir.return_value=['0','1','2'];api.flags.side_effect=lambda _:os.O_RDWR
+        with self.assertRaises(Denied):flow.host_stdio(api)
         import SbfProducerLinux_capture as capture
         for valid in (True,False):
             with patch.object(capture,'open_safe_ancestry',return_value=10), \
@@ -329,8 +331,6 @@ class Suite(unittest.TestCase):
                 self.assertEqual(reader.call_count,len(observed))
             with patch.object(pkg,'pinned_file',side_effect=Denied('old external launcher')):
                 with self.assertRaises(Denied):pkg.verify_package()
-        api.listdir.return_value=['0','1','2'];api.flags.side_effect=lambda _:os.O_RDWR
-        with self.assertRaises(Denied):flow.host_stdio(api)
 
 
 if __name__ == '__main__':
