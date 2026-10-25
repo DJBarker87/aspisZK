@@ -23,7 +23,7 @@ def pin(path):
 
 
 def main():
-    assert len(sys.argv)==3 and sys.argv[1] in ('v2','v3','v4','final')
+    assert len(sys.argv)==3 and sys.argv[1] in ('v2','v3','v4','v5','final')
     assert len(sys.argv[2])==40 and all(c in '0123456789abcdef' for c in sys.argv[2])
     label,revision=sys.argv[1:]
     start=time.monotonic()

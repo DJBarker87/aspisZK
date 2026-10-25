@@ -14,7 +14,7 @@ from SbfLinux_capture import (Capture, PublicOutput, Denied, require, ROOT, OWN,
     ENV, PROBE, DIR_FLAGS, FILE_FLAGS, check_dir, check_entry, inode,
     open_safe_ancestry, create_fixed_layout, open_source, validate_manifest,
     FD_AUDIT_TEXT)
-from SbfLinux_abi import (LinuxABI, I, U, NEWNS, NEWNET, NEWPID, PRIVATE,
+from SbfLinux_abi import (LinuxABI, I, U, C, NEWNS, NEWNET, NEWPID, PRIVATE,
     RDONLY, NOSUID, NODEV, NOEXEC)
 
 # No complete finite loader/import/proc/resource closure has been supplied.
@@ -461,7 +461,7 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time,manifest=None):
         require(signal.getsignal(signal.SIGCHLD) == signal.SIG_DFL, 'external reaper')
     gate_r,gate_w = api.pipe2(0x80000)
     try:
-        abi.zero('unshare',U(NEWNS | NEWNET | NEWPID))
+        abi.zero('unshare',C.c_ulong(NEWNS | NEWNET | NEWPID))
         pid = api.fork()
     except BaseException:
         api.close(gate_r);api.close(gate_w)

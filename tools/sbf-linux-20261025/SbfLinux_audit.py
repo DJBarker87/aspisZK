@@ -55,7 +55,7 @@ def main():
                  future_scope=dict(MemoryHigh=3*2**30,MemoryMax=4*2**30,MemorySwapMax=0,TasksMax=64),
                  authority='NONE; fresh prospective/inside-Q0/count-once/current producer assembly missing',
                  actual_runtime_or_probe_executions=0)
-    for name,data in [('SbfLinux-package-v3.json',package),('SbfLinux-future-command-v3.json',command)]:
+    for name,data in [('SbfLinux-package-v4.json',package),('SbfLinux-future-command-v4.json',command)]:
         dest=OUT/name
         assert not dest.exists(), 'retain existing evidence'
         dest.write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
@@ -65,10 +65,10 @@ def main():
               source_revision=revision,exit=0,wall_seconds=time.monotonic()-start,
               peak_rss_bytes=usage.ru_maxrss,swap=usage.ru_nswap,axioms='N/A',
               source_overlay=sources,functions=functions,imports=imports,
-              reference_count=len(refs),package=pin(OUT/'SbfLinux-package-v3.json'),
-              command_manifest=pin(OUT/'SbfLinux-future-command-v3.json'),
+              reference_count=len(refs),package=pin(OUT/'SbfLinux-package-v4.json'),
+              command_manifest=pin(OUT/'SbfLinux-future-command-v4.json'),
               claim='byte-identical capture copy, AST entry denials, source/reference/package hashes only')
-    (OUT/'SbfLinux-source-audit-v3.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
+    (OUT/'SbfLinux-source-audit-v4.json').write_text(json.dumps(data,indent=2,sort_keys=True)+'\n')
     print(json.dumps({k:data[k] for k in ('exit','wall_seconds','peak_rss_bytes','swap','reference_count','axioms')}))
 
 if __name__=='__main__':

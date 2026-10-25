@@ -67,6 +67,8 @@ class AbiTests(unittest.TestCase):
         self.assertEqual(A.SPECS['mount_setattr'][1],
                          (A.I,A.S,A.U,C.POINTER(A.MountAttr),C.c_size_t))
         self.assertEqual(A.SPECS['fsconfig'][1],(A.I,A.U,A.S,A.P,A.I))
+        self.assertEqual(A.SPECS['unshare'][1],(C.c_ulong,))
+        self.assertEqual(A.SPECS['statx'][1],(A.I,A.S,A.U,A.U,C.POINTER(A.Statx)))
     def test_descriptor_tree_flags(self):
         self.a.tree(19)
         n,num,args=self.c.calls[-1]

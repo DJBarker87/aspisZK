@@ -40,14 +40,14 @@ class Rlimit(C.Structure):
 
 # syscall_64.tbl and include/linux/syscalls.h, pinned in reference manifest.
 SPECS = {
- 'unshare': (272, (U,)),
+ 'unshare': (272, (C.c_ulong,)),
  'open_tree': (428, (I, S, U)),
  'move_mount': (429, (I, S, I, S, U)),
  'fsopen': (430, (S, U)),
  'fsconfig': (431, (I, U, S, P, I)),
  'fsmount': (432, (I, U, U)),
  'mount_setattr': (442, (I, S, U, C.POINTER(MountAttr), C.c_size_t)),
- 'statx': (332, (I, S, I, U, C.POINTER(Statx))),
+ 'statx': (332, (I, S, U, U, C.POINTER(Statx))),
  'prctl': (157, (I, C.c_ulong, C.c_ulong, C.c_ulong, C.c_ulong)),
  'capget': (125, (C.POINTER(CapHeader), C.POINTER(CapData))),
  'capset': (126, (C.POINTER(CapHeader), C.POINTER(CapData))),
@@ -123,7 +123,7 @@ class LinuxABI:
 
     def mount_id(self, fd):
         result = Statx()
-        self.zero('statx', I(fd), b'', I(EMPTY | 0x100 | 0x800), U(0x1000), C.byref(result))
+        self.zero('statx', I(fd), b'', U(EMPTY | 0x100 | 0x800), U(0x1000), C.byref(result))
         require(result.mask & 0x1000 and result.mnt_id > 0, 'missing actual mount ID')
         return result.mnt_id
 

@@ -62,3 +62,13 @@ its null runtime manifest denies before native loading. Privileged CLI still
 always denies independently. Dedicated capture/cleanup/composition mock tests
 and new v4/v3 audit are warranted by this source change. No copied primitive
 was modified and no new real ordinary-FD suite was needed.
+
+## Exact signedness/width audit
+
+After the v4 pass, comparing every signature directly to pinned syscalls.h
+identified two exact-prototype mismatches: unshare flags were c_uint instead of
+unsigned long; statx flags were c_int instead of unsigned int. The used bit
+values fit both old carriers, but exact UAPI typing is required. Corrected both
+binding and call-site carriers; added explicit type assertions. Final v5 tests
+and v4 source audit correspond to that corrected revision, superseding v4/v3
+as final-source evidence. No real syscall was used to discover this issue.
