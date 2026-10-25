@@ -1,0 +1,92 @@
+F3J_SourceBlock.lean:18:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+rowEq : c.row = c.before.next_row
+hv : ↑c.tag = 160 + ↑c.row
+⊢ 160#u8 + c.row = ok c.tag
+F3J_SourceBlock.lean:23:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+rowEq : c.row = c.before.next_row
+addTag : 160#u8 + c.row = ok c.tag
+hv : ↑c.next = ↑c.row + 1
+beforeVal : ↑c.row = ↑c.before.next_row
+⊢ c.before.next_row + 1#u8 = ok c.next
+F3J_SourceBlock.lean:25:75: error(lean.unknownIdentifier): Unknown identifier `bne_self`
+F3J_SourceBlock.lean:25:55: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+rowEq : c.row = c.before.next_row
+addTag : 160#u8 + c.row = ok c.tag
+addNext : c.before.next_row + 1#u8 = ok c.next
+⊢ (c.before.next_row != c.before.next_row) = false
+F3J_SourceBlock.lean:26:49: error: Ambiguous term
+  bind
+Possible interpretations:
+  PreparedHashCode.bind : Code ?m.139 → (?m.139 → Code ?m.140) → Code ?m.140
+  
+  Std.bind : Result ?m.139 → (?m.139 → Result ?m.140) → Result ?m.140
+  
+  Bind.bind : ?m.139 ?m.141 → (?m.141 → ?m.139 ?m.142) → ?m.139 ?m.142
+F3J_SourceBlock.lean:31:10: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+F3J_SourceBlock.lean:27:2: error: 'change' tactic failed, pattern
+  observe
+      (run do
+          let absorbed ←
+            effects.digest D c.before.hash (TranscriptStep.absorbParts c.before.state c.tag c.record.framed)
+          let block ← effects.digest D c.before.hash (TranscriptStep.readParts absorbed 1#u8)
+          let state ← effects.digest D c.before.hash (TranscriptStep.readParts absorbed 2#u8)
+          pure
+              (?m.216 absorbed () block () state (),
+                let __src := c.before;
+                { state := state, hash := __src.hash, next_row := c.next })).1 =
+    callLog c
+is not definitionally equal to target
+  observe
+      (run do
+          let s ← liftM (lift c.before.state.to_slice)
+          let i ← liftM (ok c.tag)
+          let s1 ← liftM (lift (Array.make 2#usize [0#u8, i] ⋯).to_slice)
+          let s2 ← liftM (lift (Array.make 3#usize [s, s1, c.record.framed] ⋯).to_slice)
+          let absorbed ← Code.digest D c.before.hash s2 Code.done
+          let s3 ← liftM (lift absorbed.to_slice)
+          let s4 ← liftM (lift (Array.make 1#usize [1#u8] S1SemanticCode.sampleBlock._proof_10).to_slice)
+          let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+          let block ← Code.digest D c.before.hash s5 Code.done
+          let s6 ← liftM (lift absorbed.to_slice)
+          let s7 ← liftM (lift (Array.make 1#usize [2#u8] S1SemanticCode.sampleBlock._proof_13).to_slice)
+          let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+          let a ← Code.digest D c.before.hash s8 Code.done
+          let i1 ← liftM (ok c.next)
+          pure (core.result.Result.Ok block, { state := a, hash := c.before.hash, next_row := i1 })).1 =
+    callLog c
+F3J_SourceBlock.lean:26:54: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [sameRow, ̲Bool.false_eq_true, ̲if_false, ̲bind,r̵u̵n̵,̵ ̲effects, ̲addTag, ̲addNext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_SourceBlock.sample' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

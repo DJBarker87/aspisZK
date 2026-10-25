@@ -1,0 +1,59 @@
+F3J_ValidatedLog.lean:20:2: error: 'change' tactic failed, pattern
+  observe (run (PreparedHashCode.bind (S1SemanticCode.sampleBlock D c.before c.record.row c.record.framed) ?m.77)).1 =
+    ?m.81
+is not definitionally equal to target
+  observe
+      (run
+          (Code.step (ok c.record.row) fun row =>
+            if row > 24#u8 then Code.done (core.result.Result.Err r1_wire.Error.InvalidRow, c.before)
+            else
+              Code.step (ok c.record.framed) fun s =>
+                PreparedHashCode.bind (S1SemanticCode.sampleBlock D c.before row s) fun __x =>
+                  Code.step (core.result.Result.Insts.CoreOpsTry.branch __x.1) fun cf =>
+                    match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      Code.step (sampler.qm31_sample val) fun q => Code.done (core.result.Result.Ok q, __x.2)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      Code.step
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                        fun r1 => Code.done (r1, __x.2))).1 =
+    callLog c
+F3J_ValidatedLog.lean:14:25: warning: This simp argument is unused:
+  decide_eq_false_iff_not
+
+Hint: Omit it from the simp argument list.
+  simp only [gt_iff_lt,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵_̵i̵f̵f̵_̵n̵o̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:4: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp only [r1_wire.ValidatedRecord.impl.row, ̲r1_wire.ValidatedRecord.impl.framed,
+      g̵u̵a̵r̵d̵,̵Bool.false_eq_true, ̲if_false, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:10: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵r̵o̵w̵,̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵f̵r̵a̵m̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵]̵[̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲r̲o̲w̲,̲ ̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲f̲r̲a̲m̲e̲d̲,̲ ̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_ValidatedLog.lean:18:29: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵r̵o̵w̵,̵r̵1̵_̵w̵i̵r̵e̵.̵V̵a̵l̵i̵d̵a̵t̵e̵d̵R̵e̵c̵o̵r̵d̵.̵i̵m̵p̵l̵.̵f̵r̵a̵m̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵]̵[̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲r̲o̲w̲,̲ ̲r̲1̲_̲w̲i̲r̲e̲.̲V̲a̲l̲i̲d̲a̲t̲e̲d̲R̲e̲c̲o̲r̲d̲.̲i̲m̲p̲l̲.̲f̲r̲a̲m̲e̲d̲,̲ ̲g̲u̲a̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_ValidatedLog.semantic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

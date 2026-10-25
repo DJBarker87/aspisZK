@@ -1,0 +1,61 @@
+F3J_SourceBlock.lean:13:95: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+rowEq : c.row = c.before.next_row
+addTag : 160#u8 + c.row = ok c.tag
+addNext : c.before.next_row + 1#u8 = ok c.next
+ha :
+  D.digest c.before.hash
+      (Array.make 3#usize [c.before.state.to_slice, (Array.make 2#usize [0#u8, c.tag] ⋯).to_slice, c.record.framed]
+          ⋯).to_slice =
+    ok c.absorbed
+hb :
+  D.digest c.before.hash
+      (Array.make 2#usize [Array.to_slice c.absorbed, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice =
+    ok c.block
+hs :
+  D.digest c.before.hash
+      (Array.make 2#usize [Array.to_slice c.absorbed, (Array.make 1#usize [2#u8] ⋯).to_slice] ⋯).to_slice =
+    ok c.state
+sameRow : (c.row != c.before.next_row) = false
+⊢ [(flatten
+          (Array.make 3#usize [c.before.state.to_slice, (Array.make 2#usize [0#u8, c.tag] ⋯).to_slice, c.record.framed]
+              ⋯).to_slice,
+        decodeState c.absorbed),
+      (flatten
+          (Array.make 2#usize
+              [Array.to_slice c.absorbed, (Array.make 1#usize [1#u8] S1SemanticCode.sampleBlock._proof_10).to_slice]
+              ⋯).to_slice,
+        decodeState c.block),
+      (flatten
+          (Array.make 2#usize
+              [Array.to_slice c.absorbed, (Array.make 1#usize [2#u8] S1SemanticCode.sampleBlock._proof_13).to_slice]
+              ⋯).to_slice,
+        decodeState c.state)] =
+    [(flatten (TranscriptStep.absorbParts c.before.state c.tag c.record.framed), decodeState c.absorbed),
+      (flatten (TranscriptStep.readParts c.absorbed 1#u8), decodeState c.block),
+      (flatten (TranscriptStep.readParts c.absorbed 2#u8), decodeState c.state)]
+F3J_SourceBlock.lean:36:119: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵,̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵d̵d̵N̵e̵x̵t̵,̵h̵a̵,̵h̵b̵,̵h̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵,̵c̵a̵l̵l̵L̵o̵g̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲a̲d̲d̲N̲e̲x̲t̲,̲ ̲h̲a̲,̲ ̲h̲b̲,̲ ̲h̲s̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲c̲a̲l̲l̲L̲o̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_SourceBlock.lean:36:130: warning: This simp argument is unused:
+  addNext
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵,̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵d̵d̵N̵e̵x̵t̵,̵h̵a̵,̵h̵b̵,̵h̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵,̵c̵a̵l̵l̵L̵o̵g̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲a̲,̲ ̲h̲b̲,̲ ̲h̲s̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲c̲a̲l̲l̲L̲o̲g̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_SourceBlock.sample' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
