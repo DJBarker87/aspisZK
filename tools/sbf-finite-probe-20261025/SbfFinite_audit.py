@@ -38,6 +38,14 @@ for p in sorted(O.glob('*.baseline.txt')):
  patches.extend(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile=n+'.baseline',tofile=n))
 (O/'SbfFinite-delta.patch.txt').write_text(''.join(patches))
 save(O/'SbfFinite-statements-and-identities.json',records)
+# Current repair statements include the exact dormant entry and internal installer.
+repair={}
+for n in ('SbfFinite_install.py','SbfFinite_install_entry.py','SbfFinite_audit.py','SbfFinite_tests.py','SbfFinite_run_tests.py','SbfFinite_check.py'):
+ before=(O/('SbfFinite-entry-repair-before-'+n+'.txt')).read_text()
+ after=(H/n).read_text();a=definitions(before);b=definitions(after)
+ repair[n]=dict(before=pin(before.encode()),after=pin(after.encode()),
+  complete_changed_statements={k:dict(before=a.get(k),after=b.get(k)) for k in sorted(a.keys()|b.keys()) if a.get(k)!=b.get(k)})
+# Written after regeneration below, so generated entry identities are current.
 # Noncircular source graph: core -> package pins -> dormant user/root entries
 # -> literal package inventory -> dormant installer entry. Entries are externally
 # authenticated bootstrap roots, not their own hash authority.
@@ -65,7 +73,7 @@ for name,function in [('SbfFinite_entry.py','root_continuation'),('SbfFinite_use
 cat=[dict(name=n,pin=dict(pin((H/n).read_bytes()),mode=0o444),payload=(H/n).read_bytes()) for n in names]
 (H/'SbfFinite_inventory.py').write_text("if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\n\"\"\"Externally reviewed bootstrap payload; never adopted from staging.\"\"\"\nPACKAGE_CATALOG = "+repr(cat)+'\n')
 bootstrap_names=list(entrypins)+['SbfFinite_inventory.py','SbfFinite_install.py']
-entry('SbfFinite_install_entry.py','/opt/aspis/SbfFinite-20261025-bootstrap-v1','SbfFinite_install','fixed_install',
+entry('SbfFinite_install_entry.py','/opt/aspis/SbfFinite-20261025-bootstrap-v1','SbfFinite_install','fixed_install_entry',
  {n:pin((H/n).read_bytes()) for n in bootstrap_names})
 save(O/'SbfFinite-installation.json',dict(schema='SbfFinite-installation-source-v1',
  package='/opt/aspis/SbfFinite-20261025-v1',root='/var/lib/SbfFinite-20261025-v1',
@@ -75,5 +83,12 @@ save(O/'SbfFinite-installation.json',dict(schema='SbfFinite-installation-source-
  bootstrap={n:dict(pin((H/n).read_bytes()),mode=0o444) for n in bootstrap_names+['SbfFinite_install_entry.py']},
  bootstrap_boundary='External exact entry/interpreter authentication required; dormant fixed sealed loader implemented; selfpin does not authenticate itself',
  runtime_rows=92,runtime_copied_bytes=35655597,
+ installer_entry_function='fixed_install_entry',installer_entry_success_exit=0,
+ installation_receipt=dict(path='/var/lib/SbfFinite-20261025-v1/journal-root/installation-source-outcome.json',mode=0o600,owner=[0,0],bound_bytes=512,exclusive=True,file_and_directory_fsync=True,meaning='source installation outcome only; not execution/security evidence'),
  no_install=True,no_native=True,axioms='N/A'))
 print('source statements/deltas sealed; fixed package and dormant sealed entries generated')
+
+# Refresh generated entry after pin regeneration, including complete entry body.
+n='SbfFinite_install_entry.py';before=(O/('SbfFinite-entry-repair-before-'+n+'.txt')).read_text();after=(H/n).read_text();a=definitions(before);b=definitions(after)
+repair[n]=dict(before=pin(before.encode()),after=pin(after.encode()),complete_before=before,complete_after=after,complete_changed_statements={k:dict(before=a.get(k),after=b.get(k)) for k in sorted(a.keys()|b.keys()) if a.get(k)!=b.get(k)})
+save(O/'SbfFinite-entry-repair-statements.json',repair)

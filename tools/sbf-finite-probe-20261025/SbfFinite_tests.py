@@ -525,4 +525,154 @@ class DormantLoaderTests(unittest.TestCase):
             tree=ast.parse((H/name).read_text());values={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign)}
             self.assertNotIn(name,values['SbfFinite_PINS'])
             for source,pin in values['SbfFinite_PINS'].items():self.assertEqual(pin,digest((H/source).read_bytes()))
-            self.assertEqual(values['SbfFinite_FUNCTION'],{'SbfFinite_entry.py':'root_continuation','SbfFinite_user_entry.py':'user_producer','SbfFinite_install_entry.py':'fixed_install'}[name])
+            self.assertEqual(values['SbfFinite_FUNCTION'],{'SbfFinite_entry.py':'root_continuation','SbfFinite_user_entry.py':'user_producer','SbfFinite_install_entry.py':'fixed_install_entry'}[name])
+
+class InstallerEntryRepairTests(unittest.TestCase):
+    def run_entry(self,variant='ok'):
+        # Entire actual installer functions/classes and dormant entry/main/bottom.
+        # All OS calls hit FS; imports resolve only explicit synthetic modules.
+        import importlib.abc,importlib.util,gc
+        gc.collect() # release previous synthetic OS/function cycles before next case
+        from SbfFiniteLinux_capture import require,canonical,DIR_FLAGS,FILE_FLAGS
+        fs=FS()
+        for k in ('O_WRONLY','O_CREAT','O_EXCL','O_NOFOLLOW','O_CLOEXEC'):
+            setattr(fs,k,getattr(os,k))
+        fs.getresuid=fs.getresgid=lambda:(0,0,0)
+        for p in ('/var','/var/lib','/opt','/opt/aspis','/src'):
+            fs.add(p,stat.S_IFDIR|0o755)
+        catalog=[];payloads={}
+        # Exercise all actual 92 copy iterations / exact original byte accounting
+        # with new synthetic bytes, not host/captured source access.
+        for i in range(92):
+            size=387560 if i<91 else 35655597-91*387560
+            path='/src/f'+str(i)
+            if size not in payloads:payloads[size]=b'x'*size
+            data=payloads[size]
+            fs.add(path,stat.S_IFREG|0o444,data)
+            chain=[dict(path=p,identity=list(identity(fs.nodes[p]))) for p in ('/','/src',path)]
+            catalog.append(dict(guest='/f'+str(i),mode=0o444,
+                source=dict(path=path,physical=path,size=size,sha256=digest(data)['sha256'],chain=chain)))
+        original_stat=fs.stat
+        def stat_call(path,dir_fd=None,follow_symlinks=False):
+            if variant=='entrydrift' and path=='installation-source-outcome.json':
+                fs.add(receipt_path,stat.S_IFREG|0o600,b'replacement retained')
+            try:return original_stat(path,dir_fd,follow_symlinks)
+            except KeyError:raise FileNotFoundError(path)
+        fs.stat=stat_call
+        original_write=fs.write;original_chmod=fs.fchmod;original_fsync=fs.fsync
+        receipt_path='/var/lib/SbfFinite-20261025-v1/journal-root/installation-source-outcome.json'
+        def write(fd,b):
+            p=fs.handles[fd]['path']
+            if variant=='copy' and p.endswith('/rootfs/f0'):raise OSError('synthetic copy failure')
+            if variant=='receiptwrite' and p==receipt_path:raise OSError('synthetic receipt write failure')
+            return original_write(fd,b)
+        fs.write=write
+        def chmod(fd,mode):
+            if variant=='seal':raise OSError('synthetic seal failure')
+            return original_chmod(fd,mode)
+        fs.fchmod=chmod
+        def sync(fd):
+            if variant=='receiptfsync' and fs.handles[fd]['path']==receipt_path:raise OSError('synthetic receipt fsync failure')
+            if variant=='dirfsync' and fs.handles[fd]['path'].endswith('/journal-root'):raise OSError('synthetic journal fsync failure')
+            original_fsync(fd)
+        fs.fsync=sync
+        oldopen=fs.open
+        def open_call(path,flags,mode=0o777,dir_fd=None):
+            if variant in ('existingreceipt','symlinkreceipt') and path=='installation-source-outcome.json' and flags&os.O_CREAT:
+                fs.add(receipt_path,stat.S_IFLNK|0o777 if variant=='symlinkreceipt' else stat.S_IFREG|0o600,b'old retained',target='/never-follow')
+            fd=oldopen(path,flags,mode,dir_fd)
+            if fs.handles[fd]['path']==receipt_path and flags&os.O_CREAT:
+                node=fs.handles[fd]['node']
+                if variant=='uid':node.st_uid=1000
+                if variant=='gid':node.st_gid=1000
+                if variant=='nlink':node.st_nlink=2
+                if variant=='mode':node.st_mode=stat.S_IFREG|0o644
+            return fd
+        fs.open=open_call
+        modules={
+            'SbfFinite_continue':types.SimpleNamespace(host_stdio=lambda:None),
+            'SbfFinite_backend_candidate':types.SimpleNamespace(status=lambda:{'Threads':'1'}),
+            'SbfFinite_inventory':types.SimpleNamespace(PACKAGE_CATALOG=[]),
+            'SbfFinite_validate':types.SimpleNamespace(validate_fixed=lambda:None)}
+        imports=[]
+        def imp(name,*args,**kwargs):imports.append(name);return modules[name]
+        e=dict(os=fs,stat=stat,time=time,hashlib=hashlib,require=require,identity=identity,
+            canonical=canonical,DIR_FLAGS=DIR_FLAGS,FILE_FLAGS=FILE_FLAGS,CATALOG=catalog,
+            OWN='/var/lib/SbfFinite-20261025-v1',__import__=imp)
+        t=ast.parse((H/'SbfFinite_install.py').read_text())
+        nodes=[n for n in t.body if isinstance(n,(ast.FunctionDef,ast.ClassDef,ast.Assign))]
+        # Import statements inside functions use explicit builtins import mock.
+        e['__builtins__']=dict(vars(__import__('builtins')),__import__=imp)
+        exec(compile(ast.Module(body=nodes,type_ignores=[]),'actual-installer-under-OS-mocks','exec'),e)
+        modules['SbfFinite_install']=types.SimpleNamespace(fixed_install_entry=e['fixed_install_entry'])
+        entry=ast.parse((H/'SbfFinite_install_entry.py').read_text())
+        vals={n.targets[0].id:ast.literal_eval(n.value) for n in entry.body if isinstance(n,ast.Assign)}
+        fs.environ=dict(vals['SbfFinite_ENV'])
+        fake=types.SimpleNamespace(argv=[vals['SbfFinite_ROOT']+'/SbfFinite_install_entry.py'],modules={},meta_path=[])
+        reads=[]
+        def read(name,pin):
+            self.assertEqual(digest((H/name).read_bytes()),pin);reads.append(name);return b'# synthetic transport only\n'
+        v=dict(vals,os=fs,sys=fake,stat=stat,hashlib=hashlib,importlib=importlib,
+               SbfFinite_read=read,__builtins__=dict(vars(__import__('builtins')),__import__=imp),__name__='__main__')
+        selected('SbfFinite_install_entry.py',['SbfFinite_require','SbfFinite_loader','SbfFinite_main'],v)
+        def invoke():
+            try:exec(compile(ast.Module(body=[entry.body[-1]],type_ignores=[]),'actual-entry-bottom','exec'),v)
+            finally:self.assertEqual(fake.meta_path,[])
+        if variant=='ok':
+            with self.assertRaises(SystemExit) as raised:invoke()
+            self.assertIs(type(raised.exception.code),int);self.assertEqual(raised.exception.code,0)
+            self.assertEqual(fs.nodes[receipt_path].data,e['INSTALL_RECEIPT'])
+            self.assertLessEqual(len(fs.nodes[receipt_path].data),512)
+            self.assertEqual(stat.S_IMODE(fs.nodes[receipt_path].st_mode),0o600)
+            self.assertEqual((fs.nodes[receipt_path].st_uid,fs.nodes[receipt_path].st_gid), (0,0))
+            writes=[x for x in fs.events if x[0]=='open' and x[1]==receipt_path and x[3]&os.O_CREAT]
+            self.assertEqual(len(writes),1)
+            events=list(fs.events)
+            with self.assertRaises(RuntimeError):invoke() # existing installation, never adopt/retry
+            self.assertEqual(fs.nodes[receipt_path].data,e['INSTALL_RECEIPT'])
+            self.assertEqual(len([x for x in fs.events if x[0]=='open' and x[1]==receipt_path and x[3]&os.O_CREAT]),1)
+            self.assertIn(('fsync',writes[0][2]),events)
+        else:
+            with self.assertRaises((OSError,Denied)):invoke()
+            if variant in ('copy','seal'):self.assertNotIn(receipt_path,fs.nodes)
+            else:
+                self.assertIn(receipt_path,fs.nodes) # partial/full failed publication retained
+                self.assertEqual(stat.S_IMODE(fs.nodes['/var/lib/SbfFinite-20261025-v1/rootfs/f0'].st_mode),0o444)
+            self.assertIn('/var/lib/SbfFinite-20261025-v1/rootfs/f0',fs.nodes)
+        self.assertEqual(fs.handles,{})
+        self.assertEqual(imports.count('SbfFinite_install'),2 if variant=='ok' else 1)
+        self.assertEqual(len(reads),len(vals['SbfFinite_PINS'])*(2 if variant=='ok' else 1))
+    def test_actual_dormant_installer_success_integer_zero_fixed_receipt_once(self):self.run_entry()
+    def test_actual_copy_and_seal_failures_do_not_publish_success(self):
+        for variant in ('copy','seal'):
+            with self.subTest(variant=variant):self.run_entry(variant)
+    def test_actual_receipt_write_sync_and_rights_errors_retain_copy(self):
+        for variant in ('receiptwrite','receiptfsync','dirfsync','uid','gid','nlink','mode','entrydrift','existingreceipt','symlinkreceipt'):
+            with self.subTest(variant=variant):self.run_entry(variant)
+
+    def test_wrapper_rejects_nonexact_result_and_entry_contracts_are_unchanged(self):
+        from SbfFiniteLinux_capture import require
+        for result in (None,0,{},dict(status='wrong',rows=92,bytes=35655597)):
+            calls=[]
+            def install():calls.append('install');return result
+            e=dict(fixed_install=install,require=require)
+            selected('SbfFinite_install.py',['fixed_install_entry'],e)
+            with self.assertRaises(Denied):e['fixed_install_entry']()
+            self.assertEqual(calls,['install'])
+        # Every dormant entry uses the identical shared noargument main and
+        # SystemExit bottom. Only installer function changed; no integer coercion
+        # imposed on root/user continuation functions.
+        template=ast.parse((H/'SbfFinite_sealed_entry.py.template.txt').read_text()
+            .replace('@ROOT@',"'/placeholder'").replace('@PINS@','{}')
+            .replace('@MODULE@',"'placeholder'").replace('@FUNCTION@',"'placeholder'")
+            .replace('@ENTRY@',"'placeholder'"))
+        for name,function in [('SbfFinite_entry.py','root_continuation'),('SbfFinite_user_entry.py','user_producer')]:
+            tree=ast.parse((H/name).read_text())
+            vals={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign)}
+            self.assertEqual(vals['SbfFinite_FUNCTION'],function)
+            self.assertEqual(ast.dump(tree.body[-1]),ast.dump(template.body[-1]))
+            self.assertIsInstance(tree.body[0],ast.Raise)
+        install=ast.parse((H/'SbfFinite_install.py').read_text())
+        wrapper=next(n for n in install.body if isinstance(n,ast.FunctionDef) and n.name=='fixed_install_entry')
+        self.assertEqual(ast.unparse(wrapper.returns),'int')
+        self.assertEqual(wrapper.args.args,[]);self.assertEqual(wrapper.args.kwonlyargs,[])

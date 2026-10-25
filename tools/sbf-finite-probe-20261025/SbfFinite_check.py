@@ -63,19 +63,20 @@ try:
   v=values(H/entry)
   check(entry not in v['SbfFinite_PINS'],'entry selfpin remains external '+entry)
   for name,p in v['SbfFinite_PINS'].items():check(pin((H/name).read_bytes())==p,'literal dormant entry pin '+entry+'->'+name)
- receipt=json.loads((O/'SbfFinite-tests-attempt8.json').read_bytes())
+ receipt=json.loads((O/sys.argv[1]).read_bytes())
  for p in sorted(H.iterdir()):
   if p.is_file() and p.name in receipt['source_overlay'] and p.name!='SbfFinite_REVIEW.md':check(pin(p.read_bytes())==receipt['source_overlay'][p.name],'tested final source overlay '+p.name)
- check(receipt['exit']==0 and receipt['tests']==30,'30 final synthetic methods passed, no native effects inferred')
+ check(receipt['exit']==0 and receipt['tests']==34,'34 coherent changed-suite synthetic methods passed, no native effects inferred')
 except BaseException:exit=1;failure=traceback.format_exc()
+revision=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
 r=resource.getrusage(resource.RUSAGE_SELF);rss=r.ru_maxrss*(1 if sys.platform=='darwin' else 1024)
 children=resource.getrusage(resource.RUSAGE_CHILDREN);child_rss=children.ru_maxrss*(1 if sys.platform=='darwin' else 1024)
-check(rss<512*2**20,'source validation below512MiB')
+check(rss+child_rss<512*2**20,'source validation below512MiB')
 report=dict(command=getattr(sys,'orig_argv',sys.argv),target='fixed final immutable-source and import/pin audit',exit=exit,wall_seconds=time.monotonic()-START,
  peak_process_rss_bytes=rss,peak_aggregate_rss_bytes=None,aggregate_peak_upper_bound_bytes=rss+child_rss,
  aggregate_method='Exact concurrent aggregate peak UNOBSERVED; conservative sum of SELF/CHILDREN peak RSS, Git reads serial and only children',
  child_peak_rss_bytes=child_rss,child_swaps=children.ru_nswap,
- swap=r.ru_nswap,source_revision=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip(),
+ swap=r.ru_nswap,source_revision=revision,
  source_overlay={p.name:pin(p.read_bytes()) for p in sorted(H.iterdir()) if p.is_file()},immutable_inputs=inputs,
  dependencies={n:dict(path=m.__file__,**pin(pathlib.Path(m.__file__).read_bytes())) for n,m in sorted(sys.modules.items()) if getattr(m,'__file__',None) and pathlib.Path(m.__file__).is_file()},
  interpreter=dict(path=sys.executable,version=sys.version,**pin(pathlib.Path(sys.executable).read_bytes())),checks=checks,source_imports=locals().get('imports',{}),failure=failure,

@@ -226,3 +226,55 @@ SDK/std/runtime/allocator/extraction, frozen SBF/compiler/artifact binding and
 cryptographic/adaptive-oracle/event-law joins remain OPEN. No universal OS,
 sourceDrop equality, cryptographic closure or security release is inferred.
 Both deployed targets NOT ESTABLISHED. Stop for lead review; no merge or push.
+
+
+## Installer entry correction (2026-10-25)
+
+The lead counterexample is retained verbatim as
+SbfFinite-entry-repair-lead-counterexample.json. The preceding 30-method suite
+missed a real contract error: fixed_install returned a dict into SystemExit,
+which CPython reports as failure. Historical passing reports above establish
+only their stated coverage; they do not establish correct installer exit status.
+
+Before: dormant installer FUNCTION=fixed_install; structured dict forwarded to
+SystemExit. After: FUNCTION=fixed_install_entry, a noargument typed int wrapper.
+It calls the unchanged copy/seal sequence once, checks its exact structured
+result, publishes the exact fixed <=512-byte installation-source-outcome.json
+under retained root:root0700 journal-root, and returns integer0. The receipt
+is regular root:root0600 nlink1, O_EXCL/O_NOFOLLOW, FD/entry identity checked,
+file-fsynced and closed before directory fsync. Newly created copy ancestry
+entries are fsynced before the internal result. No stdout receipt, retry,
+overwrite, adoption, delete, key operation or caller path/result/callback exists.
+Exceptions propagate, including after sealing and on failed receipt fsync;
+partial or even complete receipt bytes on failure stay retained and do not
+establish durable publication or successful entry exit. Other root/user
+continuation contracts and the public denial-before-imports remain unchanged.
+The receipt has installation-only meaning, never native/security approval.
+
+The first repair test attempt9 passed its 3 methods but failed the conservative
+self+Git-child peak-sum 512MiB assertion before serializing measurements. Its
+log, failing sources, and explicit missing-measurement report are retained.
+The replacement interns mock source buffers by size and collects prior mock
+cycles between subcases; it retains all92 actual copy iterations and35655597
+synthetic destination bytes with the same cap. Focused attempt10 passed after
+that change. Final coherent suite/audit receipts are indexed in the repair report.
+No unchanged failed resource run was retried and no cap was raised.
+
+Exact missing finite operational data: schema SbfFinite-operational-v1;
+top-level schema,host,roles,scope_path,limits,env. host requires collector/helper,
+each exactly {files}, mapping exact paths to {pin:{size,sha256},mode}. roles
+requires collector,sudo,sudo-monitor,helper, each with exact observed fields
+exe,uid,gid,groups,caps(Inh/Prm/Eff/Bnd/Amb),threads,nnp,seccomp,env,cmdline,
+limits,maps,kernel_maps. exe/env/cmdline/limits use size/SHA256 digests; maps
+map exact paths to pin/mode; kernel_maps contains sorted names/rights. limits
+requires collector/helper inherited resource-limit dictionaries. scope_path is
+the actual unified own-unit path; env is the unchanged captured literal ENV.
+No values for these fields have been fabricated. OPERATIONAL_PIN remains ().
+The next concrete source/data action is a separately reviewed finite operational
+schema/data publication that supplies these exact role/map/runtime/limit/control
+inputs and pins its bytes, followed by separately authenticated administrative
+bootstrap/launcher publication and distinct authority for any actual operation.
+Current source is unactivated and not ready to install. Native kernel/LSM,
+PDEATHSIG, cancellation/D-state/cleanup, SDK/runtime/extraction/refinement and
+source-to-frozen-artifact/security joins remain open. Both security targets
+NOT ESTABLISHED. Stop for lead review; no merge/push/permission request.
