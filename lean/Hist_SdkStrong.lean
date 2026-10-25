@@ -48,6 +48,9 @@ theorem accepted_pair_claims {W A E M Cv : Type} {N : Nat}
       AdapterRw.r1_pool_adapter.owned.validate_asq8 (sdkOps adapterOps ops B claimsStd)
         program (e2.second secondSizes) data2 slot = ok (.Ok validated) ∧
       (sdkOps adapterOps ops B claimsStd).op22 validated.statement = ok (.Ok s.encoded) ∧
+      S2W_Trace.run (sdkOps adapterOps ops B claimsStd)
+        (S2W_Observation.two (sdkOps adapterOps ops B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] =
+        ok (.Ok saved,outer) ∧
       S2W_ExpandedTrace.runExpanded (sdkOps adapterOps ops B claimsStd) (children port)
         (S2W_Observation.two (sdkOps adapterOps ops B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] =
         ok (.Ok saved,S2W_ExpandedTrace.full (children port) outer) ∧
@@ -96,7 +99,7 @@ theorem accepted_pair_claims {W A E M Cv : Type} {N : Nat}
     native1 native2 hashv extraction sha256 H p1 syscall program data1 data2 slot
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
     port firstMarks secondMarks
-  obtain ⟨f, s, validated, outer, pre, middle, fs, ss, cuts, getter, validation, encoder, expanded, owned, layout,
+  obtain ⟨f, s, validated, outer, pre, middle, fs, ss, cuts, getter, validation, encoder, execution, expanded, owned, layout,
     unchanged, before1, before2, caller⟩ := original
   have originalAccepted : AspisS6SdkFirstObjectEquivalence.originalFirst native1 copy
       allocator e1 program data1 state1 = ok (.Ok (saved,post1,final1)) := by
@@ -111,7 +114,7 @@ theorem accepted_pair_claims {W A E M Cv : Type} {N : Nat}
     viewCall, variant, semanticCall, prepareCall, powers, claimPowers, claim,
     numeric, challengesNumeric, seeds, meaning, eachPower, trace, queries,
     ⟨claimsPrefix, parsed, normalizedClaims⟩, tail⟩ := steps (e2.second secondSizes) f s cuts
-  exact ⟨f, s, validated, outer, pre, middle, fs, ss, cuts, getter, validation, encoder, expanded, owned, layout,
+  exact ⟨f, s, validated, outer, pre, middle, fs, ss, cuts, getter, validation, encoder, execution, expanded, owned, layout,
     unchanged, before1, before2,
     ⟨selectedPublic, publicSemantic, selectedCut, semantic, y1, v, sem, claimsPrefix,
       viewCall, semanticCall, parsed, normalizedClaims⟩, caller⟩

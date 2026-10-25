@@ -46,6 +46,9 @@ theorem accepted_run {W A E : Type}
         f.statement = ok f.semantic ∧
       AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program (e2.second secondSizes) data2 slot = ok (.Ok validated) ∧
       ops.op22 validated.statement = ok (.Ok s.encoded) ∧
+      S2W_Trace.run ops
+        (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes) data2 slot) [] =
+        ok (.Ok saved,outer) ∧
       S2W_ExpandedTrace.runExpanded ops (children port)
         (S2W_Observation.two ops program e1.first data1 (e2.second secondSizes) data2 slot) [] =
         ok (.Ok saved,S2W_ExpandedTrace.full (children port) outer) ∧
@@ -80,7 +83,7 @@ theorem accepted_run {W A E : Type}
   obtain ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,expanded,layout,projectedInputs⟩ :=
     Hist_ScheduledStrong.accepted_run ops native1 native2 hashv extraction sha256 H p1 syscall
       program e1.first (e2.second secondSizes) data1 data2 slot saved owned1 owned2 port firstMarks secondMarks
-  refine ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,expanded,
+  refine ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,expanded,
     S2W_D189Interpretation.accepted_owned_frame ops _ [] outer (core.result.Result.Ok saved : core.result.Result (alloc.vec.Vec U8) AdapterRw.Cuts.PE) e1.heap execution,
     layout,unchanged,?_,?_,?_⟩
   · exact (S2W_D189Interpretation.native_observation L sdk encode e1.metadata 3 w1 e1.heap

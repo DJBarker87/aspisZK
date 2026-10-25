@@ -67,6 +67,9 @@ theorem accepted_pair_causal {W A E M Cv CoreError : Type} {N : Nat}
         program ((Hist_RuntimeEntry.load final layout2).second secondSizes) data2 slot = ok (.Ok validated) ∧
       (sdkOps (Hist_Authority.install adapterOps) (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd).op22
         validated.statement = ok (.Ok s.encoded) ∧
+      S2W_Trace.run (sdkOps (Hist_Authority.install adapterOps) (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+        (S2W_Observation.two (sdkOps (Hist_Authority.install adapterOps) (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd) program (Hist_RuntimeEntry.load initial layout1).first data1 ((Hist_RuntimeEntry.load final layout2).second secondSizes) data2 slot) [] =
+        ok (.Ok saved,outer) ∧
       ((RowShape_InstalledSlots.verifierOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd).op3 f.proof = ok (.Ok .S2) ∧
         Op3I_Install.sourceBody f.proof = ok (.Ok .S2) ∧
         OraclePortHeader.accepts (bytesOf f.proof.val) = true ∧
@@ -138,7 +141,7 @@ theorem accepted_pair_causal {W A E M Cv CoreError : Type} {N : Nat}
           (bytesOf saved.val) parsed ∧
         (∀ site, (observation f s saved nodes y1 pre middle fs ss (before (Hist_RuntimeEntry.load initial layout1) (Hist_RuntimeEntry.load final layout2)) (after (Hist_RuntimeEntry.load initial layout1) (Hist_RuntimeEntry.load final layout2) post1)).reached site ↔
           S2W_SiteSchedule.Event.site site ∈ projected port outer) := by
-  obtain ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,header,scan,writerInfo,expanded,owned,layout,
+  obtain ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,header,scan,writerInfo,expanded,owned,layout,
     unchanged,before1,before2,claims,caller⟩ :=
     Hist_AcceptedStrong.accepted_pair_claims_tx1 L sdk copy std allocator
       (Hist_RuntimeEntry.load initial layout1) (Hist_RuntimeEntry.load final layout2)
@@ -146,7 +149,7 @@ theorem accepted_pair_causal {W A E M Cv CoreError : Type} {N : Nat}
       B claimsStd prepareOwner primitiveOwner native1 native2 hashv extraction sha256 H p1 syscall
       program data1 data2 slot state1 state2 final1 final2 saved post1 post2
       accepted1 accepted2 p root length port firstMarks secondMarks
-  refine ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,header,scan,writerInfo,expanded,owned,layout,
+  refine ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,header,scan,writerInfo,expanded,owned,layout,
     unchanged,before1,before2,claims,?_⟩
   intro decode nodes y1 writer reader associated entry multiproof childScan
   let runtime := Hist_CommittedSdk.version adapterOps ops reserved queryOps geoOps B claimsStd

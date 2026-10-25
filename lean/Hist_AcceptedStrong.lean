@@ -57,6 +57,9 @@ theorem accepted_pair_claims_tx1 {W A E M Cv CoreError : Type} {N : Nat}
         program (e2.second secondSizes) data2 slot = ok (.Ok validated) ∧
       (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd).op22
         validated.statement = ok (.Ok s.encoded) ∧
+      S2W_Trace.run (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+        (S2W_Observation.two (sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] =
+        ok (.Ok saved,outer) ∧
       ((RowShape_InstalledSlots.verifierOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd).op3 f.proof = ok (.Ok .S2) ∧
         Op3I_Install.sourceBody f.proof = ok (.Ok .S2) ∧
         OraclePortHeader.accepts (bytesOf f.proof.val) = true ∧
@@ -129,7 +132,7 @@ theorem accepted_pair_claims_tx1 {W A E M Cv CoreError : Type} {N : Nat}
           (bytesOf saved.val) parsed ∧
         (∀ site, (observation f s saved nodes y1 pre middle fs ss (before e1 e2) (after e1 e2 post1)).reached site ↔
           S2W_SiteSchedule.Event.site site ∈ projected port outer) := by
-  obtain ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,expanded,owned,
+  obtain ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,expanded,owned,
     layout,unchanged,before1,before2,claims,caller⟩ :=
     Hist_SdkStrong.accepted_pair_claims L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       adapterOps (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd
@@ -140,7 +143,7 @@ theorem accepted_pair_claims_tx1 {W A E M Cv CoreError : Type} {N : Nat}
     e1.first (e2.second secondSizes) saved f s cuts
   have scan := Op4P_Cuts.same_cut_scan adapterOps (Tx1Q_Execution.base ops reserved queryOps geoOps)
     B claimsStd e1.first (e2.second secondSizes) saved f s cuts
-  exact ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,header,scan,
+  exact ⟨f,s,validated,outer,pre,middle,fs,ss,cuts,getter,validation,encoder,execution,header,scan,
     WAdm_NativeEndpoint.reached adapterOps ops reserved queryOps geoOps B claimsStd e1 _ saved f s cuts prepareOwner primitiveOwner,
     expanded,owned,layout,unchanged,before1,before2,claims,caller⟩
 
