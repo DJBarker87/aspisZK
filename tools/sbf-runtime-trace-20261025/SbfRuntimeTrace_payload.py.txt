@@ -1,0 +1,711 @@
+"""Sampled metadata-only RSS watchdog. No subprocesses, rlimits or VSize cap.
+
+Not a continuous physical-memory theorem. Cgroup controls remain authoritative.
+The one persistent thread exists before and throughout both collector snapshots.
+"""
+import os
+import resource
+import signal
+import threading
+import time
+
+BUDGET = 512 * 2**20
+INTERVAL = 0.02
+MAX_SAMPLES = 8192
+MAX_LINEAGE = 256
+
+class GuardError(RuntimeError):
+    pass
+
+
+def inherited_limits():
+    return {name:list(resource.getrlimit(getattr(resource, name))) for name in
+            sorted(dir(resource)) if name.startswith('RLIMIT_')}
+
+
+def check_limits(limits, expected=None):
+    if expected is not None and limits != expected:
+        raise GuardError('inherited resource limits changed; no bypass')
+    for name in ('RLIMIT_AS', 'RLIMIT_DATA'):
+        if limits.get(name) != [resource.RLIM_INFINITY, resource.RLIM_INFINITY]:
+            raise GuardError('unexpected inherited restriction: '+name)
+
+
+class Proc:
+    """Direct procfs only; status TGID and stat identity/RSS, never thread sum."""
+    def read(self, path):
+        with open(path) as stream:
+            return stream.read()
+
+    def identity(self, pid):
+        text = self.read(f'/proc/{pid}/stat')
+        leader, tail = text.split(' (', 1)
+        fields = tail.rsplit(') ', 1)[1].split()
+        status = dict(line.split(':', 1) for line in self.read(f'/proc/{pid}/status').splitlines() if ':' in line)
+        if int(leader) != pid or int(status['Tgid']) != pid or int(status['Pid']) != pid:
+            raise GuardError('unknown non-TGID identity')
+        # stat field22=starttime,23=vsize,24=rss; state starts field3.
+        result = dict(pid=pid, ppid=int(fields[1]), starttime=int(fields[19]),
+                      rss_bytes=int(fields[21])*os.sysconf('SC_PAGE_SIZE'))
+        again = self.read(f'/proc/{pid}/stat').rsplit(') ', 1)[1].split()
+        if int(again[19]) != result['starttime']:
+            raise GuardError('PID reuse during proc observation')
+        if result['rss_bytes'] < 0 or result['starttime'] <= 0:
+            raise GuardError('invalid proc identity/RSS')
+        return result
+
+    def absent(self, path):
+        try:
+            os.stat(path)
+        except FileNotFoundError:
+            return True
+        return False
+
+    def optional(self, pid):
+        try:
+            return self.identity(pid)
+        except FileNotFoundError:
+            if self.absent(f'/proc/{pid}'):
+                return None
+            raise GuardError('unknown live-child visibility')
+
+    def children(self, pid):
+        result = set()
+        for tid in os.listdir(f'/proc/{pid}/task'):
+            if not tid.isdecimal():
+                raise GuardError('invalid task identity')
+            try:
+                raw = self.read(f'/proc/{pid}/task/{tid}/children')
+            except FileNotFoundError:
+                if self.absent(f'/proc/{pid}/task/{tid}'):
+                    continue
+                raise GuardError('unknown live task children')
+            for child in raw.split():
+                if not child.isdecimal() or int(child) <= 0:
+                    raise GuardError('invalid child identity')
+                result.add(int(child))
+        return result
+
+    def cancel(self, pid, starttime):
+        # Open the stable handle BEFORE rechecking identity; reuse never signalled.
+        try:
+            fd = os.pidfd_open(pid)
+        except ProcessLookupError:
+            return 'disappeared'
+        try:
+            observed = self.optional(pid)
+            if observed is None:
+                return 'disappeared'
+            if observed['starttime'] != starttime:
+                return 'reused-not-signalled'
+            signal.pidfd_send_signal(fd, signal.SIGKILL)
+            return 'verified-owned-signalled'
+        finally:
+            os.close(fd)
+
+
+class Guard:
+    def __init__(self, proc=None, pid=None, notify=None):
+        self.proc = proc or Proc()
+        self.pid = os.getpid() if pid is None else pid
+        self.notify = notify or (lambda: os.kill(self.pid, signal.SIGUSR1))
+        self.stop_event = threading.Event()
+        self.ready = threading.Event()
+        self.samples = []
+        self.owned = {}
+        self.lineage = []
+        self.peak = 0
+        self.error = None
+        self.cancelled = []
+        self.thread = None
+        self.started = None
+        self.stopped = None
+
+    def remember(self, row, parent):
+        pid = row['pid']
+        if pid in self.owned:
+            if self.owned[pid] != row['starttime']:
+                raise GuardError('PID reuse: '+str(pid))
+        else:
+            if len(self.owned) >= MAX_LINEAGE:
+                raise GuardError('lineage record limit')
+            self.owned[pid] = row['starttime']
+            self.lineage.append(dict(pid=pid, starttime=row['starttime'], parent=parent))
+
+    def sample(self):
+        live = {}
+        pending = [(self.pid, None)] + [(p, 'retained-descendant') for p in self.owned if p != self.pid]
+        while pending:
+            pid, parent = pending.pop()
+            if pid in live:
+                continue
+            row = self.proc.optional(pid)
+            if row is None:
+                if pid == self.pid:
+                    raise GuardError('collector disappeared')
+                continue
+            if pid not in self.owned and parent is not None and row['ppid'] != parent:
+                raise GuardError('unknown live-child lineage')
+            self.remember(row, parent)
+            live[pid] = row
+            try:
+                children = self.proc.children(pid)
+            except FileNotFoundError:
+                if self.proc.optional(pid) is not None:
+                    raise GuardError('unknown live-child visibility')
+                children = set()
+            pending.extend((child, pid) for child in children)
+        total = sum(row['rss_bytes'] for row in live.values())
+        self.peak = max(self.peak, total)
+        if len(self.samples) >= MAX_SAMPLES:
+            raise GuardError('sample record limit')
+        self.samples.append(dict(monotonic=time.monotonic(),rss_bytes=total,
+                                 processes=sorted(live),process_rss=live))
+        if total > BUDGET:
+            raise GuardError('sampled aggregate metadata RSS exceeds 512MiB')
+
+    def check(self):
+        if self.error:
+            raise GuardError(self.error)
+
+    def cancel_owned(self):
+        for pid, start in list(self.owned.items()):
+            if pid == self.pid:
+                continue
+            try:
+                outcome = self.proc.cancel(pid, start)
+            except (OSError, ValueError, GuardError) as exc:
+                outcome = 'cancellation-error: '+str(exc)
+            self.cancelled.append(dict(pid=pid,starttime=start,outcome=outcome))
+
+    def loop(self):
+        try:
+            while True:
+                self.sample()
+                self.ready.set()
+                if self.stop_event.wait(INTERVAL):
+                    self.sample()  # final observation before monitor exit
+                    break
+        except Exception as exc:
+            self.error = type(exc).__name__+': '+str(exc)
+            self.cancel_owned()
+            self.ready.set()
+            self.notify()
+
+    def start(self):
+        self.started = time.monotonic()
+        self.thread = threading.Thread(target=self.loop, name='ResourceMeta1G-resident-guard', daemon=True)
+        self.thread.start()
+        self.ready.wait(2)
+        if not self.ready.is_set():
+            raise GuardError('monitor failed to become ready')
+        self.check()
+
+    def finish(self, failed=False):
+        self.stop_event.set()
+        self.thread.join(2)
+        if self.thread.is_alive():
+            raise GuardError('monitor failed to stop')
+        self.stopped = time.monotonic()
+        if failed:
+            self.cancel_owned()
+        return dict(kind='sampled aggregate PROCESS RSS; TGID once; metadata only; not continuous',
+                    budget_bytes=BUDGET,interval_seconds=INTERVAL,max_samples=MAX_SAMPLES,
+                    max_lineage=MAX_LINEAGE,peak_sampled_rss_bytes=self.peak,
+                    samples=self.samples,lineage=self.lineage,error=self.error,
+                    cancellations=self.cancelled,started=self.started,stopped=self.stopped,
+                    cgroup_peak='separate authoritative go-controls receipts; N/A if no scope')
+
+# End unchanged reviewed guard
+"""Finite root-owned walk. Attempts, including failures, are durable data.
+
+No permission follows from a trace pathname. Symlinks use ordinary 0777 link
+mode; non-writability applies to every containing directory and regular file.
+"""
+import os
+import stat
+
+PUBLIC = ('/usr/bin', '/usr/lib', '/usr/local/lib')
+ALIASES = ('/lib', '/lib64', '/usr/lib64')
+CONFIG = ('/etc/ld.so.cache', '/etc/ld.so.preload', '/etc/localtime', '/etc/ssl/openssl.cnf')
+CONFIG_TARGETS = ('/usr/share/zoneinfo', '/usr/lib/ssl', '/etc/ssl')
+
+def under(path, roots):
+    return any(path == p or path.startswith(p + '/') for p in roots)
+
+def lexical(path):
+    if not isinstance(path, str) or not path.startswith('/') or len(path) >= 4096 or not path.isascii():
+        raise ValueError('path syntax')
+    if any(p in ('', '.', '..') or p.startswith('.') or p in ('site-packages', 'dist-packages') or
+           any(ord(c) < 33 or ord(c) > 126 for c in p) for p in path.split('/')[1:]):
+        raise ValueError('path components')
+    return path
+
+def identity(s):
+    return tuple(getattr(s, k) for k in ('st_dev', 'st_ino', 'st_mode', 'st_uid', 'st_gid',
+                  'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns'))
+
+def walk(path, attempts, fs=os):
+    row = dict(path=path, status='ATTEMPT', components=[], symlinks=[], failed_component=None)
+    attempts.append(row)  # BEFORE syntax, stat, or ownership operations
+    fd = None
+    try:
+        lexical(path)
+        config = path in CONFIG
+        if not (under(path, PUBLIC + ALIASES) or config):
+            raise ValueError('outside explicit observation paths')
+        todo = path.split('/')[1:]
+        done = []
+        seen = set()
+        fd = fs.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        root = fs.fstat(fd)
+        if root.st_uid != 0 or root.st_mode & 0o022:
+            raise ValueError('root ownership/mode')
+        while todo:
+            name = todo.pop(0)
+            current = '/' + '/'.join(done + [name])
+            row['failed_component'] = current
+            s = fs.stat(name, dir_fd=fd, follow_symlinks=False)
+            item = dict(path=current, identity=list(identity(s)))
+            row['components'].append(item)
+            if s.st_uid != 0:
+                raise ValueError('non-root component: ' + current)
+            if stat.S_ISLNK(s.st_mode):
+                target = fs.readlink(name, dir_fd=fd)
+                item['target'] = target
+                row['symlinks'].append(item.copy())
+                if identity(s) != identity(fs.stat(name, dir_fd=fd, follow_symlinks=False)):
+                    raise ValueError('symlink drift')
+                state = (current, tuple(todo))
+                if state in seen or len(row['symlinks']) > 16:
+                    raise ValueError('symlink loop/depth')
+                seen.add(state)
+                combined = target if target.startswith('/') else '/' + '/'.join(done + [target])
+                normalized = os.path.normpath(combined)
+                lexical(normalized)
+                allowed_config = (path == '/etc/localtime' and under(normalized, ('/usr/share/zoneinfo',)) or
+                                  path == '/etc/ssl/openssl.cnf' and under(normalized, ('/usr/lib/ssl','/etc/ssl')))
+                if not (under(normalized, PUBLIC + ALIASES) or config and allowed_config):
+                    raise ValueError('symlink outside explicit paths: ' + normalized)
+                todo = normalized.split('/')[1:] + todo
+                done = []
+                fs.close(fd)
+                fd = None
+                fd = fs.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC)
+                root = fs.fstat(fd)
+                if root.st_uid != 0 or root.st_mode & 0o022:
+                    raise ValueError('root drift')
+                continue
+            if s.st_mode & 0o022:
+                raise ValueError('writable component: ' + current)
+            if todo:
+                if not stat.S_ISDIR(s.st_mode):
+                    raise ValueError('non-directory ancestry')
+                child = fs.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC, dir_fd=fd)
+                if identity(s) != identity(fs.fstat(child)):
+                    fs.close(child)
+                    raise ValueError('directory drift')
+                fs.close(fd)
+                fd = child
+                done.append(name)
+            else:
+                allowed_config = (current == path or
+                                  path == '/etc/localtime' and under(current, ('/usr/share/zoneinfo',)) or
+                                  path == '/etc/ssl/openssl.cnf' and under(current, ('/usr/lib/ssl','/etc/ssl')))
+                if not (under(current, PUBLIC) or config and allowed_config):
+                    raise ValueError('final endpoint outside original roots')
+                if not (stat.S_ISREG(s.st_mode) or stat.S_ISDIR(s.st_mode)):
+                    raise ValueError('unsupported file type')
+                row.update(status='OBSERVED', physical=current, failed_component=None)
+                return current, s, row
+        raise ValueError('empty endpoint')
+    except BaseException as exc:
+        row.update(status='FAILED', error_type=type(exc).__name__, errno=getattr(exc, 'errno', None),
+                   error=str(exc))
+        raise
+    finally:
+        if fd is not None:
+            fs.close(fd)
+
+"""Conservative single-tracee parser; unknown state denies completeness.
+
+Every raw line survives in events, including unpaired split records. This is
+metadata interpretation, never an open-to-inode identity proof.
+"""
+import ast
+import os
+import re
+
+def split_args(text):
+    out, start, stack, quoted, escaped = [], 0, [], False, False
+    for i, c in enumerate(text):
+        if quoted:
+            if escaped: escaped = False
+            elif c == '\\': escaped = True
+            elif c == '"': quoted = False
+        elif c == '"': quoted = True
+        elif c in '([{': stack.append(c)
+        elif c in ')]}':
+            if not stack or '([{'.index(stack.pop()) != ')]}'.index(c): raise ValueError('argument brackets')
+        elif c == ',' and not stack:
+            out.append(text[start:i].strip()); start = i + 1
+    if quoted or stack: raise ValueError('incomplete arguments')
+    return out + [text[start:].strip()]
+
+def string(value):
+    if not re.fullmatch(r'"(?:[^"\\]|\\.)*"', value): raise ValueError('nonliteral/truncated path')
+    result = ast.literal_eval(value)
+    if not isinstance(result, str) or '\x00' in result: raise ValueError('invalid path')
+    return result
+
+def fdnum(value):
+    m = re.fullmatch(r'(-?\d+)(?:<([^\n]*)>)?', value)
+    if not m: raise ValueError('FD syntax: ' + value)
+    return int(m[1]), m[2]
+
+def parse(raw, expected_pid=None):
+    result = dict(complete=False, events=[], errors=[], opens=[], negatives=[], mapped=[],
+                  positive_paths=[], identity_association='OPEN; pathname/FD labels are not inode pins')
+    states, pending, pids, execs = {}, {}, set(), 0
+    def path_at(value, dirfd, fds):
+        p = string(value)
+        if p.startswith('/'): return p
+        if dirfd == 'AT_FDCWD': raise ValueError('relative path with unknown cwd')
+        n, label = fdnum(dirfd)
+        base = fds.get(n)
+        if not base or not base.startswith('/'): raise ValueError('unknown dirfd')
+        if label is not None and label != base: raise ValueError('dirfd annotation mismatch')
+        return os.path.normpath(base + '/' + p)
+    for index, line in enumerate(raw.splitlines()):
+        event = dict(index=index, raw=line)
+        result['events'].append(event)
+        try:
+            m = re.fullmatch(r'(\d+)\s+(\d+\.\d+)\s+(.*)', line)
+            if not m: raise ValueError('missing PID/timestamp')
+            pid, stamp, body = int(m[1]), m[2], m[3]
+            pids.add(pid); event.update(pid=pid, timestamp=stamp)
+            if expected_pid is not None and pid != expected_pid: raise ValueError('unauthorized process/thread')
+            if len(pids) != 1: raise ValueError('multiple tracee identities')
+            fds = states.setdefault(pid, {0:'STDIN', 1:'STDOUT', 2:'STDERR'})
+            if body.endswith('<unfinished ...>'):
+                if pid in pending: raise ValueError('duplicate unfinished')
+                pending[pid] = (body[:-len('<unfinished ...>')], index)
+                event['unfinished'] = True
+                continue
+            if body.startswith('<... '):
+                r = re.fullmatch(r'<\.\.\. (\w+) resumed>(.*)', body)
+                if not r or pid not in pending: raise ValueError('unmatched resumed')
+                first, earlier = pending.pop(pid)
+                if not first.startswith(r[1] + '('): raise ValueError('resumed syscall mismatch')
+                event['resumes'] = earlier
+                body = first + r[2]
+            if re.fullmatch(r'\+\+\+ exited with \d+ \+\+\+', body):
+                event['exit'] = body
+                continue
+            if body.startswith('--- '): raise ValueError('signal record requires review')
+            call = re.fullmatch(r'(\w+)\((.*)\)\s+=\s+(.*)', body)
+            if not call: raise ValueError('unknown record')
+            name, text, ret = call.groups()
+            args = split_args(text)
+            event.update(syscall=name, args=args, result=ret)
+            failed = ret.startswith('-1 ')
+            paths = []
+            if name in ('openat', 'openat2', 'newfstatat', 'faccessat', 'faccessat2', 'readlinkat', 'statx'):
+                if len(args) < 2: raise ValueError('short dirfd syscall')
+                if args[1] == '""' and name in ('newfstatat', 'statx') and 'AT_EMPTY_PATH' in text:
+                    n, label = fdnum(args[0])
+                    if n not in fds: raise ValueError('empty path unknown FD')
+                    event['fd_path'] = fds[n]
+                else: paths = [path_at(args[1], args[0], fds)]
+            elif name in ('open', 'access', 'stat', 'lstat', 'readlink', 'execve'):
+                paths = [path_at(args[0], 'AT_FDCWD', fds)]
+            elif name in ('close', 'dup', 'dup2', 'dup3', 'fcntl', 'mmap', 'munmap', 'exit_group', 'exit'):
+                pass
+            elif name in ('clone', 'clone3', 'fork', 'vfork', 'execveat'):
+                raise ValueError('unauthorized process/shared-files/exec transition')
+            else: raise ValueError('unsupported syscall/state: ' + name)
+            event['paths'] = paths
+            if failed:
+                errno = ret.split()[1]
+                result['negatives'].append(dict(index=index, syscall=name, paths=paths, errno=errno))
+                continue
+            result['positive_paths'].extend(dict(index=index, syscall=name, path=p) for p in paths)
+            if name == 'execve':
+                execs += 1
+                if execs != 1 or paths != ['/usr/bin/python3']: raise ValueError('unexpected exec target/count')
+                # At first exec only inherited standard streams are authorized.
+                if set(fds) != {0,1,2}: raise ValueError('unknown exec descriptor state')
+            elif name in ('open', 'openat', 'openat2'):
+                if any(flag in text for flag in ('O_WRONLY','O_RDWR','O_CREAT','O_TRUNC','O_APPEND')):
+                    raise ValueError('unexpected write open')
+                n, label = fdnum(ret)
+                if n in fds: raise ValueError('open reused live descriptor')
+                if label is not None and label != paths[0]:
+                    event['physical_label_unproved'] = label
+                fds[n] = paths[0]
+                result['opens'].append(dict(index=index, pid=pid, fd=n, path=paths[0], fd_label=label,
+                                            inode_association='OPEN'))
+            elif name == 'close':
+                n, label = fdnum(args[0])
+                if n not in fds: raise ValueError('close unknown descriptor')
+                event['fd_path'] = fds.pop(n)
+            elif name in ('dup','dup2','dup3','fcntl'):
+                n, label = fdnum(args[0])
+                if n not in fds: raise ValueError('descriptor operation unknown source')
+                if name == 'fcntl' and args[1] not in ('F_DUPFD','F_DUPFD_CLOEXEC'):
+                    if args[1] not in ('F_GETFD','F_GETFL','F_SETFD'): raise ValueError('unknown fcntl effect')
+                else:
+                    dest, label2 = fdnum(ret)
+                    if name in ('dup','fcntl') and dest in fds: raise ValueError('duplicate to live descriptor')
+                    fds[dest] = fds[n]
+                    event['fd_path'] = fds[n]
+            elif name == 'mmap':
+                if len(args) != 6: raise ValueError('mmap shape')
+                n, label = fdnum(args[4])
+                if n != -1:
+                    if n not in fds: raise ValueError('mmap unknown descriptor')
+                    result['mapped'].append(dict(index=index, path=fds[n], fd=n, label=label))
+        except Exception as exc:
+            event['error'] = str(exc)
+            result['errors'].append(dict(index=index, error=str(exc)))
+    for pid, (_, index) in pending.items():
+        result['errors'].append(dict(index=index, error='unpaired unfinished', pid=pid))
+    if execs != 1: result['errors'].append(dict(error='missing unique initial exec'))
+    if not result['events'] or not any('exit' in e for e in result['events']):
+        result['errors'].append(dict(error='missing complete exit record'))
+    result.update(complete=not result['errors'], pids=sorted(pids), exec_count=execs,
+                  opened_unmapped=sorted({o['path'] for o in result['opens']} - {m['path'] for m in result['mapped']}))
+    return result
+
+def parse_elf(raw):
+    global ELFS
+    if raw[:4]!=b'\x7fELF': return None
+    ELFS+=1
+    require_data(ELFS<=64,'ELF count bound')
+    require_data(raw[:6]==b'\x7fELF\x02\x01' and len(raw)>=64,'ELF64 little-endian required')
+    require_data(struct.unpack_from('<H',raw,18)[0]==62,'x86_64 ELF required')
+    phoff=struct.unpack_from('<Q',raw,32)[0]
+    phsize,phnum=struct.unpack_from('<HH',raw,54)
+    require_data(phsize==56 and phnum<=256 and phoff+phnum*phsize<=len(raw),'ELF program header bounds')
+    loads=[];dynamic=[];interp=[]
+    def string(table,start):
+        require_data(0<=start<len(table),'ELF string offset')
+        end=table.find(b'\0',start)
+        require_data(end>=start and end-start<4096,'ELF string bound')
+        return table[start:end].decode('ascii')
+    for i in range(phnum):
+        p=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
+        typ,flags,off,va,pa,sz,mem,align=p
+        require_data(off+sz<=len(raw),'ELF segment bounds')
+        if typ==1: loads.append((va,off,sz))
+        if typ==2:
+            require_data(sz%16==0 and sz//16<=65536,'ELF dynamic bound')
+            dynamic=[struct.unpack_from('<qQ',raw,o) for o in range(off,off+sz,16)]
+        if typ==3: interp.append(string(raw[off:off+sz],0))
+    tags={}
+    for tag,val in dynamic:
+        if tag==0:break
+        tags.setdefault(tag,[]).append(val)
+    ans=dict(interpreter=interp,needed=[],soname=[],rpath=[],runpath=[])
+    if 5 in tags:
+        require_data(len(tags[5])==1 and len(tags.get(10,[]))==1,'ELF dynamic string table shape')
+        va=tags[5][0];sz=tags[10][0]
+        match=[off+va-base for base,off,n in loads if base<=va and va+sz<=base+n]
+        require_data(len(match)==1 and match[0]+sz<=len(raw),'ELF string table mapping')
+        table=raw[match[0]:match[0]+sz]
+        for tag,name in ((1,'needed'),(14,'soname'),(15,'rpath'),(29,'runpath')):
+            ans[name]=[string(table,i) for i in tags.get(tag,[])]
+    return ans
+
+# Data-only collector, appended after exact reviewed guard and new helpers.
+START = time.monotonic()
+INITIAL_LIMITS = inherited_limits()
+check_limits(INITIAL_LIMITS)
+def interrupted(signum, frame):
+    raise GuardError('deadline or resident guard failed')
+signal.signal(signal.SIGUSR1, interrupted)
+signal.signal(signal.SIGALRM, interrupted)
+signal.alarm(115)
+MONITOR = Guard()
+MONITOR.start()
+import hashlib
+import json
+import selectors
+import struct
+import subprocess
+import sys
+SBF_RUNTIME_INPUTS = {'env': {'HOME': '/probe', 'LC_ALL': 'C', 'PATH': '/usr/bin', 'TMPDIR': '/tmp'}, 'fixed_probe': ['/usr/bin/python3', '-I', '-S', '-B', '-c', "import errno,json,os,resource,stat\ndef SbfSeal_fds(os_api):\n names=os_api.listdir('/proc/self/fd')\n if len(names)>4096: raise RuntimeError('FD inventory bound')\n result=[]\n for name in names:\n  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')\n  fd=int(name)\n  try: os_api.fstat(fd)\n  except OSError as e:\n   if e.errno!=errno.EBADF: raise\n  else: result.append(fd)\n return sorted(result)\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nassert SbfSeal_fds(os)==[0,1,2]\nassert stat.S_ISCHR(os.fstat(0).st_mode)\nassert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)\nfor fd in (1,2):\n t=os.fstat(fd)\n assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1\n assert stat.S_IMODE(t.st_mode)==0o600\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nassert os.getpid()==1\nassert os.stat('/proc/1/ns/pid').st_ino==os.stat('/proc/self/ns/pid').st_ino\nassert os.stat('/').st_ino==os.stat('.').st_ino\nwith open('/proc/self/status',encoding='ascii') as f:\n q=dict(line.split(':',1) for line in f if ':' in line)\nassert q['Threads'].strip()=='1'\nwith open('/proc/self/cgroup',encoding='ascii') as f:\n cg=f.read()\nassert cg.startswith('0::/') and cg.count('\\n')==1\nassert os.statvfs('/').f_flag & os.ST_RDONLY\nassert os.statvfs('/proc').f_flag & os.ST_RDONLY\nassert not os.statvfs('/tmp').f_flag & os.ST_RDONLY\nassert os.listdir('/dev')==[]\nv=os.statvfs('/tmp')\nassert v.f_blocks*v.f_frsize<=1048576 and v.f_files<=64\nassert stat.S_IMODE(os.stat('/tmp').st_mode)==0o1777 and os.stat('/tmp').st_uid==0\nwith open('/proc/self/mountinfo',encoding='ascii') as f:\n rows=[line.split() for line in f]\nassert {r[4] for r in rows}=={'/','/tmp','/proc'} and len(rows)==3\nfor r in rows:\n sep=r.index('-')\n assert not any(x.startswith(('shared:','master:','propagate_from:')) for x in r[6:sep])\n needed={'nosuid','nodev'} | ({'rw','noexec'} if r[4]=='/tmp' else {'ro'})\n if r[4]=='/proc': needed.add('noexec')\n assert needed<=set(r[5].split(','))\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"], 'guard_revision': '13abf7fe51', 'historical_runtime': {'executable': '/usr/bin/python3.12', 'executable_pin': {'sha256': 'e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f', 'size': 8020928}, 'revision': 'c7bbb274e2', 'version': '3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]'}, 'imports': {'abi': ['SbfLinux_capture', 'ctypes', 'platform'], 'backend': ['SbfLinux_abi', 'SbfLinux_capture', 'errno', 'fcntl', 'json', 'os', 'signal', 'stat', 'threading', 'time'], 'capture': ['errno', 'hashlib', 'json', 'os', 'stat', 'time'], 'entry': []}, 'probe_imports': ['errno', 'json', 'os', 'resource', 'stat'], 'required_modules': ['ctypes', 'errno', 'fcntl', 'hashlib', 'json', 'os', 'platform', 'resource', 'signal', 'stat', 'threading', 'time'], 'root': '/var/lib/SbfSeal-20261025-v1/rootfs', 'source_revision': '9f50be799e', 'sources': {'SbfRuntime-abi.py.txt': {'sha256': '86b035c515a4e2a82958ee55a00028411790353a7dfefe85c36a8e1b30811ddc', 'size': 8084}, 'SbfRuntime-backend.py.txt': {'sha256': '7086004797870bb69e18b355110f232d7b8ea57c7f22b451a4e2e73bdcc48eda', 'size': 22321}, 'SbfRuntime-capture.py.txt': {'sha256': '5b4f0f65abd1f3e7548a1c93bb8a8b027dd2b7346588f6f06b203cd2a2e19664', 'size': 17802}, 'SbfRuntime-entry.py.txt': {'sha256': '6544bc9c6ce7cebf4f94a9cae0df0eda35fd96afd95d56f322f6fa9d55f5e203', 'size': 168}, 'SbfRuntime-guard.py.txt': {'sha256': '9f0fbfd713895348a3df87fb4bb8643a85a4facb1d5ce95e31ad7839db74ca6d', 'size': 8426}}, 'new_sourcepins': {'abi': {'revision': '9f50be799e', 'path': 'tools/sbf-linux-20261025/SbfLinux_abi.py', 'size': 8084, 'sha256': '86b035c515a4e2a82958ee55a00028411790353a7dfefe85c36a8e1b30811ddc'}, 'backend': {'revision': '9f50be799e', 'path': 'tools/sbf-linux-20261025/SbfLinux_backend.py', 'size': 22321, 'sha256': '7086004797870bb69e18b355110f232d7b8ea57c7f22b451a4e2e73bdcc48eda'}, 'capture': {'revision': '9f50be799e', 'path': 'tools/sbf-linux-20261025/SbfLinux_capture.py', 'size': 17802, 'sha256': '5b4f0f65abd1f3e7548a1c93bb8a8b027dd2b7346588f6f06b203cd2a2e19664'}, 'entry': {'revision': '9f50be799e', 'path': 'tools/sbf-linux-20261025/SbfLinux_entry.py', 'size': 168, 'sha256': '6544bc9c6ce7cebf4f94a9cae0df0eda35fd96afd95d56f322f6fa9d55f5e203'}}, 'guard_pin': {'size': 8426, 'sha256': '9f0fbfd713895348a3df87fb4bb8643a85a4facb1d5ce95e31ad7839db74ca6d'}, 'source_assessment': 'immutable public source only; not a new identity or admission gate'}
+TRACEE_SOURCE = "import os,sys\nos.write(1,('SbfRuntimeTrace_READY '+str(os.getpid())+'\\n').encode('ascii'))\nif os.read(0,1)!=b'G': raise RuntimeError('missing collector release')\nimport ctypes\nimport errno\nimport fcntl\nimport hashlib\nimport json\nimport os\nimport platform\nimport resource\nimport signal\nimport stat\nimport threading\nimport time\nmodules={n:dict(file=getattr(m,'__file__',None),cached=getattr(m,'__cached__',None)) for n,m in sorted(list(sys.modules.items())) if m is not None}\nwith open('/proc/self/maps','r',encoding='ascii') as stream:\n maps=stream.read(1048577)\nif len(maps)>1048576: raise RuntimeError('maps bound')\nprint(json.dumps(dict(pid=os.getpid(),threads=threading.active_count(),modules=modules,maps=maps,version=sys.version,argv=getattr(sys,'orig_argv',sys.argv),argv_source='sys.orig_argv' if hasattr(sys,'orig_argv') else 'sys.argv'),sort_keys=True))\n"
+ATTEMPTS = []
+FILES = {}
+TOTAL = 0
+ELFS = 0
+RESULT = dict(status='UNKNOWN', runtime_approval=None, producer_assembly=None, axioms='N/A',
+              source_inputs=SBF_RUNTIME_INPUTS, argv_source='sys.orig_argv' if hasattr(sys,'orig_argv') else 'sys.argv',
+              argv=getattr(sys,'orig_argv',sys.argv))
+RAW = dict(trace=bytearray(), stdout=bytearray(), stderr=bytearray())
+FAILED = True
+CHILD = None
+def require_data(ok, message):
+    if not ok: raise GuardError(message)
+
+def source_path(path):
+    physical, s, row = walk(path, ATTEMPTS)
+    return physical, row['components'], row['symlinks'], s
+
+def pin_file(path, reason):
+    global TOTAL
+    MONITOR.check()
+    physical, chain, links, s = source_path(path)
+    require_data(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'not regular single-link input: '+physical)
+    if physical in FILES:
+        require_data(FILES[physical]['identity'] == list(identity(s)), 'repeated input drift')
+        FILES[physical]['reasons'].append(reason)
+        return physical
+    require_data(len(FILES)<512 and s.st_size<=16*2**20 and TOTAL+s.st_size<=128*2**20, 'pin bounds')
+    d=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        for part in physical.split('/')[1:-1]:
+            child=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=d)
+            t=os.fstat(child)
+            require_data(t.st_uid==0 and not t.st_mode&0o022,'opened ancestry mode')
+            os.close(d);d=child
+        f=os.open(physical.split('/')[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,dir_fd=d)
+    finally: os.close(d)
+    try:
+        require_data(identity(os.fstat(f))==identity(s),'source drift before read')
+        chunks=[]; count=0
+        while True:
+            data=os.read(f,min(65536,s.st_size-count+1))
+            if not data: break
+            count+=len(data);require_data(count<=s.st_size,'source growth')
+            chunks.append(data)
+        require_data(count==s.st_size and identity(os.fstat(f))==identity(s),'source drift during read')
+        raw=b''.join(chunks)
+        row=dict(size=count,sha256=hashlib.sha256(raw).hexdigest(),identity=list(identity(s)),
+                 chain=chain,symlinks=links,reasons=[reason],elf=parse_elf(raw),stable_fd=True)
+        if physical.endswith('.pyc'):
+            require_data(len(raw)>=16,'short cache header')
+            row['pyc']=dict(header_hex=raw[:16].hex(),flags=int.from_bytes(raw[4:8],'little'),
+                            executed_body_binding='OPEN; no unmarshal or execution to assert source equality')
+        FILES[physical]=row;TOTAL+=count
+        return physical
+    finally: os.close(f)
+
+def fresh_recheck(path, expected):
+    global TOTAL
+    # Fresh bytes and chain, not a cached pin result.
+    physical, chain, links, s=source_path(path)
+    saved=FILES.pop(physical)
+    TOTAL-=saved['size']
+    try:
+        observed=pin_file(path,'fresh post-trace provenance')
+        require_data(FILES[observed]['sha256']==saved['sha256'] and
+                     FILES[observed]['identity']==saved['identity'],'strace provenance drift')
+        return dict(physical=observed,sha256=FILES[observed]['sha256'],size=FILES[observed]['size'],chain=chain)
+    except BaseException:
+        FILES.setdefault(physical,saved)
+        raise
+
+try:
+    tracer=pin_file('/usr/bin/strace','required prelaunch installed tracer provenance')
+    RESULT['tracer_before']=dict(physical=tracer,**FILES[tracer])
+    python=pin_file('/usr/bin/python3','actual tracee interpreter entry')
+    RESULT['python_entry']=python
+    for path in FILES[python]['elf']['interpreter']:
+        pin_file(path,'actual PT_INTERP before launch')
+    # Dedicated inherited output pipe avoids host staging files and symlinks.
+    readfd,writefd=os.pipe2(os.O_CLOEXEC)
+    argv=['/usr/bin/strace','-f','-ttt','-yy','-s','4096','-e',
+          'trace=%file,%process,close,dup,dup2,dup3,fcntl,mmap,munmap',
+          '-o','/proc/self/fd/'+str(writefd),'/usr/bin/python3','-I','-S','-B','-c',TRACEE_SOURCE]
+    RESULT['controlled_argv']=argv
+    CHILD=subprocess.Popen(argv,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,
+                           pass_fds=(writefd,),env={'HOME':'/probe','LC_ALL':'C','PATH':'/usr/bin','TMPDIR':'/tmp'})
+    os.close(writefd)
+    selector=selectors.DefaultSelector()
+    trace_stream=os.fdopen(readfd,'rb',buffering=0)
+    for stream,kind in ((trace_stream,'trace'),(CHILD.stdout,'stdout'),(CHILD.stderr,'stderr')):
+        os.set_blocking(stream.fileno(),False);selector.register(stream,selectors.EVENT_READ,kind)
+    ready_pid=None;released=False
+    try:
+        while selector.get_map():
+            MONITOR.check()
+            for key,mask in selector.select(.02):
+                b=os.read(key.fileobj.fileno(),65536)
+                if not b:
+                    selector.unregister(key.fileobj);key.fileobj.close();continue
+                RAW[key.data].extend(b)
+                require_data(len(RAW['trace'])<=16*2**20,'raw trace exceeds 16MiB; not complete')
+                require_data(sum(len(v) for v in RAW.values())<=3*2**20,'raw export reserve exceeds 3MiB; not complete')
+            if ready_pid is None and b'\n' in RAW['stdout']:
+                line=bytes(RAW['stdout']).split(b'\n',1)[0]
+                require_data(line.startswith(b'SbfRuntimeTrace_READY '),'unexpected tracee protocol')
+                ready_pid=int(line.split()[1]);RESULT['tracee_pid']=ready_pid
+            if ready_pid is not None and not released:
+                # Both live TGIDs must occur together in an original guard sample.
+                if any({os.getpid(),CHILD.pid,ready_pid}<=set(s['processes']) for s in MONITOR.samples):
+                    require_data(set(MONITOR.owned)=={os.getpid(),CHILD.pid,ready_pid},'unexpected owned worker')
+                    CHILD.stdin.write(b'G');CHILD.stdin.flush();CHILD.stdin.close();released=True
+            if CHILD.poll() is not None and not selector.get_map(): break
+        code=CHILD.wait()
+    finally: selector.close()
+    RESULT.update(trace_exit=code,handshake_released=released,tracer_pid=CHILD.pid)
+    RESULT['tracer_after']=fresh_recheck('/usr/bin/strace',RESULT['tracer_before'])
+    require_data(code==0 and released,'terminal strace/tracee failure')
+    require_data(set(MONITOR.owned)=={os.getpid(),CHILD.pid,ready_pid},'unexpected owned worker')
+    lines=bytes(RAW['stdout']).split(b'\n',1)
+    metadata=json.loads(lines[1]);RESULT['tracee_metadata']=metadata
+    require_data(metadata['pid']==ready_pid and metadata['threads']==1,'tracee identity/thread count')
+    parsed=parse(bytes(RAW['trace']).decode('ascii'),expected_pid=ready_pid)
+    # Full parser runs locally as well; host summary avoids duplicating raw trace.
+    RESULT['parser_summary']={k:v for k,v in parsed.items() if k!='events'}
+    observed={o['path'] for o in parsed['opens']}
+    RESULT['unapproved_positive_paths']=[]
+    for path in sorted(observed):
+        if path=='/proc/self/maps': continue  # explicit controlled own metadata
+        if not (under(path,PUBLIC+ALIASES) or path in CONFIG):
+            RESULT['unapproved_positive_paths'].append(path);continue
+        try:
+            physical,s,row=walk(path,ATTEMPTS)
+            if stat.S_ISREG(s.st_mode): pin_file(path,'successful controlled trace open; inode binding OPEN')
+        except FileNotFoundError:
+            RESULT.setdefault('open_missing_at_pin',[]).append(path)
+    # Separately record source/cache metadata. Only trace-observed paths are read.
+    positive={p['path'] for p in parsed['positive_paths']}
+    for name,module in sorted(metadata['modules'].items()):
+        for kind in ('file','cached'):
+            path=module.get(kind)
+            if path in positive and path not in observed and (under(path,PUBLIC+ALIASES) or path in CONFIG):
+                try: pin_file(path,'trace-observed module '+kind+' '+name)
+                except FileNotFoundError: module[kind+'_missing_at_pin']=True
+    # Every newly observed native input is parsed; exact PT_INTERP only, no guesses.
+    for row in list(FILES.values()):
+        if row['elf']:
+            for path in row['elf']['interpreter']: pin_file(path,'observed native PT_INTERP')
+    check_limits(inherited_limits(),INITIAL_LIMITS)
+    MONITOR.check()
+    RESULT['status']='PARTIAL_UNAPPROVED_OBSERVATION'
+    FAILED=False
+except BaseException as exc:
+    RESULT['error']=dict(type=type(exc).__name__,message=str(exc),errno=getattr(exc,'errno',None))
+finally:
+    signal.signal(signal.SIGUSR1,signal.SIG_IGN)
+    guard=MONITOR.finish(failed=FAILED)
+    RESULT.update(guard=guard,files=FILES,path_attempts=ATTEMPTS,unique_hashed_bytes=TOTAL,elf_count=ELFS,
+                  raw={k:bytes(v).decode('ascii',errors='backslashreplace') for k,v in RAW.items()},
+                  raw_pins={k:dict(size=len(v),sha256=hashlib.sha256(v).hexdigest()) for k,v in RAW.items()},
+                  wall_seconds=time.monotonic()-START,
+                  process_peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+                  child_peak_rss_bytes=resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss*1024,
+                  swap_operations=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+                  inherited_limits_before=INITIAL_LIMITS,inherited_limits_after=inherited_limits(),
+                  cgroup_pressure_reservations='UNOBSERVED; focused metadata exception, no GO/admission authority',
+                  completeness='OPEN; host fixture only, inode association/cache bodies/conditional imports/private runtime unproved')
+    if guard['error']: FAILED=True;RESULT['status']='UNKNOWN'
+    raw=json.dumps(RESULT,sort_keys=True,separators=(',',':')).encode()+b'\n'
+    if len(raw)>4*2**20:
+        raise GuardError('serialized export exceeds 4MiB; no completeness claim')
+    sys.stdout.buffer.write(raw);sys.stdout.buffer.flush()
+    signal.alarm(0)
+raise SystemExit(78 if FAILED else 0)
