@@ -74,6 +74,7 @@ class Diagnostic(unittest.TestCase):
         self.assertTrue(r['errors']);self.assertTrue(all('sha256' not in x and 'untrusted_parsed_json' not in x for x in r['files'].values()))
     def test_open_owner_race_denied(self):
         r=self.run_diag(wrongowner=True)
+        self.assertFalse(r['interval_stable'])
         self.assertTrue(all('error' in x for x in r['files'].values()))
     def test_duplicate_nonfinite_and_large_terminal_not_authority(self):
         p=self.packet/diag.NAMES[0]

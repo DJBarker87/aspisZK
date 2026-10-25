@@ -14,7 +14,7 @@ import time
 
 D=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate')
 PAYLOAD=D/'FinalNativeGate-receipt-diagnostic-payload.txt'
-PIN={'size': 7121, 'sha256': 'c0516ccff7a704cf66d0a09aebc029db408cd5e448cf2d10abc36752f98d30a8'}
+PIN={'size': 7520, 'sha256': '23572ac049dc7cdd782ed6880aedee4fbf40d604d04db3030f0c85dae10a7cf0'}
 CAPTURE=Path('/private/tmp/FinalNativeGate-receipt-diagnostic-010-future')
 ARGV=['/usr/bin/ssh','-T','-oBatchMode=yes','-oConnectTimeout=10','-oStrictHostKeyChecking=yes','-oClearAllForwardings=yes','-oForwardAgent=no','dombarker@100.108.41.90','/usr/bin/python3 -I -B -']
 LIMIT=4*2**20

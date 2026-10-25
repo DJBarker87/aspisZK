@@ -20,7 +20,7 @@ def main():
         changed[p.name]=dict(before_pin=pin(before),after_pin=pin(after),complete_changed_functions={k:dict(before=a.get(k),after=b.get(k)) for k in sorted(set(a)|set(b)) if a.get(k)!=b.get(k)})
     assert set(changed)=={'FinalNativeGate_setup.py'},set(changed)
     assert set(changed['FinalNativeGate_setup.py']['complete_changed_functions'])=={'_publish'}
-    write('FinalNativeGate-source-functions-010.json',dict(base=BASE,changes=changed,theorem_premise_changes='N/A: no theorem changes',claim='Private filesystem publication only; no output/security equivalence theorem'))
+    write('FinalNativeGate-source-functions-011.json',dict(base=BASE,changes=changed,theorem_premise_changes='N/A: no theorem changes',claim='Private filesystem publication only; no output/security equivalence theorem'))
     imports={}
     for name in manifest:
         if not name.endswith('.py'):continue
@@ -46,7 +46,7 @@ def main():
     assert all(p.startswith(allowed_prefixes) for p in touched)
     assert not any('/prospective-data-' in p for p in touched)
     assert not any(p.startswith(('crates/','programs/')) for p in touched)
-    write('FinalNativeGate-receipt-seals-010.json',dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+    write('FinalNativeGate-receipt-seals-011.json',dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         maintained_source_status='UNSEALED / NOT READY; historical plan/bootstrap seals intentionally stale',
         manifest=manifest,diagnostic_payload=pin(payload),transport=pin((D/'FinalNativeGate-receipt-transport.py').read_bytes()),
         future_argv=values['ARGV'],future_capture='/private/tmp/FinalNativeGate-receipt-diagnostic-010-future',
@@ -60,6 +60,6 @@ def main():
         remaining_blocker='Actual diagnostic error/current mode/host umask UNOBSERVED; lead review then explicit allocation before any SSH',
         print_axioms='N/A: source/AST/import audit; no Lean or formal theorem'))
     diff=subprocess.check_output(['git','diff',BASE,'--','tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py'],cwd=ROOT)
-    with (E/'FinalNativeGate-source-publication-diff-010.txt').open('xb') as f:f.write(diff)
+    with (E/'FinalNativeGate-source-publication-diff-011.txt').open('xb') as f:f.write(diff)
     print(json.dumps(dict(changed_functions=['FinalNativeGate_setup._publish'],diagnostic_payload=pin(payload),transport=pin((D/'FinalNativeGate-receipt-transport.py').read_bytes()),actual_SSH=0,print_axioms='N/A')))
 if __name__=='__main__':main()

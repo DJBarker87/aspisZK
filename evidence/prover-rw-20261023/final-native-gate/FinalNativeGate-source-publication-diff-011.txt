@@ -1,0 +1,75 @@
+diff --git a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
+index 401fee1084..146697a392 100644
+--- a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
++++ b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
+@@ -34,20 +34,57 @@ def _inputs():
+ 
+ 
+ def _publish(name,value):
+-    # Fixed exclusive own packet, bounded streaming JSON, durable data only.
++    # Exclusive relative publication in the existing private packet. Never repair,
++    # adopt, unlink, rename or chmod an existing or partially written entry.
++    if not isinstance(name,str) or not name or name in ('.','..') or '/' in name or '\x00' in name:
++        raise ValueError('publication basename required')
++    def stamp(s):
++        return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_nlink,
++                s.st_size,s.st_mtime_ns,s.st_ctime_ns)
++    def private_file(s):
++        if not stat.S_ISREG(s.st_mode) or s.st_uid!=os.getuid() or s.st_nlink!=1 or stat.S_IMODE(s.st_mode)!=0o600:
++            raise ValueError('new publication must be current-owner single-link regular0600')
+     owned=PACKET.lstat()
+-    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or owned.st_mode&0o077:raise ValueError('owned private setup packet required')
+-    path=PACKET/name;h=hashlib.sha256();size=0
+-    with path.open('xb') as out:
+-        for piece in json.JSONEncoder(sort_keys=True).iterencode(value):
+-            raw=piece.encode();size+=len(raw)
+-            if size>512*2**20:raise ValueError('metadata record512MiB ceiling')
+-            out.write(raw);h.update(raw)
+-        out.flush();os.fsync(out.fileno())
+-    fd=os.open(PACKET,os.O_DIRECTORY|os.O_RDONLY|os.O_NOFOLLOW)
+-    try:os.fsync(fd)
+-    finally:os.close(fd)
+-    return dict(name=name,size=size,sha256=h.hexdigest())
++    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or stat.S_IMODE(owned.st_mode)!=0o700:
++        raise ValueError('owned private setup packet0700 required')
++    directory=os.open(PACKET,os.O_DIRECTORY|os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC)
++    writer=None
++    try:
++        if stamp(os.fstat(directory))!=stamp(owned):raise ValueError('packet open identity drift')
++        writer=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=directory)
++        initial=os.fstat(writer);private_file(initial)
++        h=hashlib.sha256();size=0
++        for piece in json.JSONEncoder(sort_keys=True,allow_nan=False).iterencode(value):
++            for offset in range(0,len(piece),16384):
++                raw=piece[offset:offset+16384].encode();size+=len(raw)
++                if size>512*2**20:raise ValueError('metadata record512MiB ceiling')
++                view=memoryview(raw)
++                while view:
++                    count=os.write(writer,view)
++                    if count<=0:raise OSError('publication short write')
++                    view=view[count:]
++                h.update(raw)
++        os.fsync(writer)
++        final=os.fstat(writer);private_file(final)
++        if (initial.st_dev,initial.st_ino)!=(final.st_dev,final.st_ino) or final.st_size!=size:
++            raise ValueError('publication writer identity/size drift')
++        if stamp(os.stat(name,dir_fd=directory,follow_symlinks=False))!=stamp(final):
++            raise ValueError('publication entry identity drift')
++        closing=writer;writer=None;os.close(closing)
++        if stamp(os.stat(name,dir_fd=directory,follow_symlinks=False))!=stamp(final):
++            raise ValueError('publication closed entry drift')
++        # Directory size/times/link count may change from our own new entry
++        # (APFS counts files). File nlink remains strictly one above.
++        current=os.fstat(directory);entry=PACKET.lstat()
++        for s in (current,entry):
++            if (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid)!=(owned.st_dev,owned.st_ino,owned.st_mode,owned.st_uid,owned.st_gid):
++                raise ValueError('publication packet identity drift')
++        os.fsync(directory)
++        return dict(name=name,size=size,sha256=h.hexdigest())
++    finally:
++        try:
++            if writer is not None:os.close(writer)
++        finally:os.close(directory)
+ 
+ 
+ def _guard():

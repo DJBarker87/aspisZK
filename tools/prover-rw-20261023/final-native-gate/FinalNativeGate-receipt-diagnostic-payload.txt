@@ -88,7 +88,8 @@ def collect():
                 if identity in seen:raise ValueError('file alias')
                 seen.add(identity)
                 src=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|os.O_CLOEXEC,dir_fd=fd);held.append(src)
-                if stamp(os.fstat(src))!=stamp(before):raise ValueError('file entry/fd race')
+                if stamp(os.fstat(src))!=stamp(before):
+                    row['drift']=True;raise ValueError('file entry/fd race')
                 checks.append((src,before,fd,name))
                 h=hashlib.sha256();size=0;pieces=[]
                 include=name==NAMES[0] and before.st_size<=TERMINAL_LIMIT
@@ -99,9 +100,10 @@ def collect():
                     if size>FILE_LIMIT or total>TOTAL_LIMIT:raise ValueError('diagnostic byte bound')
                     h.update(raw)
                     if include:pieces.append(raw)
-                if size!=before.st_size:raise ValueError('file size drift')
+                if size!=before.st_size:
+                    row['drift']=True;raise ValueError('file size drift')
                 if stamp(os.fstat(src))!=stamp(before) or stamp(os.stat(name,dir_fd=fd,follow_symlinks=False))!=stamp(before):
-                    raise ValueError('file interval drift')
+                    row['drift']=True;raise ValueError('file interval drift')
                 row.update(size=size,sha256=h.hexdigest())
                 if include:
                     try:row['untrusted_parsed_json']=json.loads(b''.join(pieces).decode('utf-8','strict'),object_pairs_hook=unique,parse_constant=finite,parse_float=finite_float)
@@ -109,6 +111,7 @@ def collect():
                 elif name==NAMES[0]:row['parse_error']='terminal exceeds64KiB; hash/size only'
             except (OSError,ValueError) as exc:
                 row['error']=str(exc)
+        if any(row.get('drift') for row in result['files'].values()):raise ValueError('file race denies whole diagnostic interval')
         for opened,before,parent,name in checks:
             if stamp(os.fstat(opened))!=stamp(before):raise ValueError('final fd drift')
             if parent is not None and stamp(os.stat(name,dir_fd=parent,follow_symlinks=False))!=stamp(before):
@@ -120,7 +123,10 @@ def collect():
             for key in ('untrusted_parsed_json','sha256','size'):row.pop(key,None)
         result['interval_stable']=False;result['errors'].append(str(exc))
     finally:
-        for opened in reversed(held):os.close(opened)
+        for opened in reversed(held):
+            try:os.close(opened)
+            except OSError as exc:
+                result['errors'].append('fd close: '+str(exc));result['interval_stable']=False
     return result
 
 
@@ -130,7 +136,7 @@ def diagnostic_entry():
     try:
         result=collect()
         print(json.dumps(result,sort_keys=True,allow_nan=False))
-        return 78 if result['errors'] or any('error' in row for row in result['files'].values()) else 0
+        return 78 if result['errors'] or any('error' in row or 'parse_error' in row for row in result['files'].values()) else 0
     finally:signal.alarm(0)
 
 
