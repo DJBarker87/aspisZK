@@ -15,8 +15,9 @@ artifact reproduction or fresh axioms audit was performed. Historical receipts b
 are reused evidence, qualified by their original source/domain/dependency pins.
 
 All Lean declarations cited here use file links with `#decl=fully.qualified.name`.
-Run `python3 -B tools/release-ledger/check.py` from any directory to check those
-citations against current tracked source, including exact namespaces and record fields.
+Run `python3 -B tools/release-ledger/check.py` from the repository root to check those
+citations against current source, requiring every cited file to match its HEAD blob,
+including exact namespaces and record fields.
 This checks declaration existence, not elaboration, theorem truth, dependency closure,
 proof hashes, accepted axioms or satisfaction of hypotheses.
 
@@ -43,54 +44,32 @@ retains them. The draft traces P1–P4 to the V5 assumptions ledger at
 
 | Item / exact field | One-sentence meaning | Why not a hidden conclusion / remaining interpretation |
 |---|---|---|
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P1`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P1) | Classical SHA-256 random-oracle, collision and target-preimage properties apply to designated transcript, binary commitment and Pool calls. | Does not supply query accounting, source grammar or a security probability conclusion. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P2`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P2) | Runtime enforces ownership, signer/write permissions, locks, rollback/CPI atomicity and persistent writes. | Does not establish helper arithmetic or the actual exclusive writer path. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P2_prime`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P2_prime) | Matching checkpoint digests bind the complete proof suffix and reconstructed public verifier input presented across transactions. | An explicit account-boundary premise, not hash injectivity or identity of arbitrary Pool images. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P3`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P3) | SHA hashes concatenated slices correctly and PDA/stored-bump/System-address/signature operations obey the stated failure-prefix and seed-limit contract. | Functional syscall semantics, distinct from P1 ROM; Agave 4.2.1 reference is not release-cluster attestation. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P4`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P4) | Observed owner/signer/writable/executable metadata equals runtime metadata. | Four-component observation equality, not SDK borrow correctness, authentication or custody. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P5`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P5) | Stored master/lane/registry/checkpoint/page/vault images have canonical authorized F6 creation provenance. | A matching bump/hint alone does not supply provenance; actual initialization/use remains required. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P6`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P6) | Pinned Charon/Aeneas, Lean kernel and mathlib correctly process the recorded sources and terms. | Does not cover unextracted callers, arbitrary opaque axioms or replace coherent replay; see D188 refinement below. |
-
 | [`AspisR1.R1FinalSoundness.BoundaryStatements.P7`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.P7) | Pinned Rust/LLVM/platform-tools/SBF compilation preserves semantics for the exact sources/features/artifacts. | Reproduction proves identity only; wrapping/checked and caller/source correspondence remain proofs. |
 
 ### Concrete runtime, extraction and caller boundaries
 
 | Exact Lean declaration / file | Authority | One-sentence meaning | Why not a hidden conclusion; status |
 |---|---|---|---|
-
 | [`AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding`](../docs/research/100bit-spend-path-20261013/lean/OraclePortRuntimeBindingC7.lean#decl=AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding) | C3-BIN 2026-10-21; retained 2026-10-24 source-authentication reviews | Every accepted resumed runtime RunView equals the complete two-pass annotated source carrier in the same oracle world. | This IS a strong unproved execution identity, explicitly retained, never called an external cryptographic assumption; bytes/roots/acceptance alone are insufficient. |
-
 | [`AspisR1.AdapterRw.RuntimeEntrypointAdmission`](../docs/research/100bit-spend-path-20261013/lean/AdapterRwRuntimeAdmission.lean#decl=AspisR1.AdapterRw.RuntimeEntrypointAdmission) | LOG D183; C3-BIN 2026-10-23 02:40 runtime ruling | Entry heap is valid with fresh guards, zero external borrows/counters, live accounts and exact duplicate-key/cell alias correspondence. | Initial eligibility only; no acceptance/postcondition, allocator/CU admission or persistence. |
-
 | [`AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission`](../docs/research/100bit-spend-path-20261013/lean/S2W_D189Consolidation.lean#decl=AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission) | LOG D189; C3-BIN 2026-10-23 18:05 | Adds typed library/heap relatedness to the native entry admission for each transaction. | Initial relation, not the fourteen-field caller conclusion. |
-
 | [`AspisR1.S2W_ExtractionBoundary.P1`](../docs/research/100bit-spend-path-20261013/lean/S2W_ExtractionBoundary.lean#decl=AspisR1.S2W_ExtractionBoundary.P1) | LOG D188; C3-BIN 2026-10-23 18:05 | Real SHA implementation agrees with the chosen ideal H for every byte string. | Functional realization boundary, not a proof of SHA random-oracle security. |
-
 | [`AspisR1.S2W_ExtractionBoundary.RuntimeSyscall`](../docs/research/100bit-spend-path-20261013/lean/S2W_ExtractionBoundary.lean#decl=AspisR1.S2W_ExtractionBoundary.RuntimeSyscall) | C3-BIN 2026-10-23 11:05 / 18:05; P3 | Returning hashv calls have the concatenated SHA value. | Success-value contract retains failure/divergence; does not supply multiproof totality. |
-
 | [`AspisR1.S2W_D189Wrappers.Allocator`](../docs/research/100bit-spend-path-20261013/lean/S2W_D189Wrappers.lean#decl=AspisR1.S2W_D189Wrappers.Allocator) | C3-BIN 2026-10-23 18:05; P2–P4 private-region interpretation | Allocation and cleanup operate on private allocator state and may fail or diverge. | An interface with allocate/cleanup, not totality or account write authority; accepted wrappers exclude aborts but physical interpretation still needs association. |
-
 | [`AspisR1.S2W_DigestExtraction.AeneasExtraction`](../docs/research/100bit-spend-path-20261013/lean/S2W_DigestExtraction.lean#decl=AspisR1.S2W_DigestExtraction.AeneasExtraction) | LOG D188 (2026-10-23 16:40), D189; C3-BIN 18:05 | Universal stage1/stage2 source-function interpretation and digestSource equality bind the extracted functions. | Three explicit source-function equalities, no caller account/frame/site/acceptance conclusion; SBF remains S10/P7 and unextracted wrappers remain separate. |
-
 | [`AspisR1.S2W_AuthenticatedInputs.P2Prime`](../docs/research/100bit-spend-path-20261013/lean/S2W_AuthenticatedInputs.lean#decl=AspisR1.S2W_AuthenticatedInputs.P2Prime) | P2-prime; C3-BIN 2026-10-23 11:05 / 18:05 | Instantiates account-input binding on the actual writer/reader proof and public slices. | Same pair only; derived digest matches plus this premise give bytes, never universal collision-free injectivity. |
-
 | [`AspisR1.S2X.CheckpointVersionBinding`](../docs/research/100bit-spend-path-20261013/lean/S2X_RuntimeRetention.lean#decl=AspisR1.S2X.CheckpointVersionBinding) | C3-BIN 2026-10-23 11:05 / 18:05 | Loaded checkpoint is the protected committed version of the actual saved payload. | Runtime history fact; does not prove writer arithmetic, encoding or authenticated input identity. |
-
 | [`AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding`](../docs/research/100bit-spend-path-20261013/lean/S2W_AuthenticatedInputs.lean#decl=AspisR1.S2W_AuthenticatedInputs.CheckpointVersionBinding) | Same cross-transaction history ruling | Wraps the S2X protected-version binding for authenticated-input composition. | Not a second independent proof of persistence. |
-
 | [`AspisR1.S2W_ExpandedChildren.ChildConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_ExpandedChildren.lean#decl=AspisR1.S2W_ExpandedChildren.ChildConeJoin) | LOG D188; C3-BIN 2026-10-23 18:05 | Each typed child invocation has an execution/event program whose erasure is the invoked source operation. | Per-child source/effect contract; concrete event instances remain implementation obligations. |
-
 | [`AspisR1.S2W_TraceSplice.FirstMarks`](../docs/research/100bit-spend-path-20261013/lean/S2W_TraceSplice.lean#decl=AspisR1.S2W_TraceSplice.FirstMarks) | LOG D188; C3-BIN 2026-10-23 18:05 | First-stage child events expose the named same-invocation sites. | Explicit child-internal mark contract, not a fabricated outer schedule. |
-
 | [`AspisR1.S2W_TraceSplice.SecondMarks`](../docs/research/100bit-spend-path-20261013/lean/S2W_TraceSplice.lean#decl=AspisR1.S2W_TraceSplice.SecondMarks) | LOG D188; C3-BIN 2026-10-23 18:05 | Second-stage child events expose the named same-invocation sites. | Same retained child-instance obligation. |
-
 | [`AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary`](../docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Frozen2Stage.lean#decl=AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary) | C3-BIN 2026-10-21 23:15; LOG D188 | Names the multiproof parent/leaf/oracle lowering contracts, including its separate total-oracle scope. | Not implied by success-only RuntimeSyscall; actual native child/effect instances still required. |
 
 The older [`AspisR1.S2W_ExtractionBoundary.AeneasExtraction`](../docs/research/100bit-spend-path-20261013/lean/S2W_ExtractionBoundary.lean#decl=AspisR1.S2W_ExtractionBoundary.AeneasExtraction) is a derived compatibility record: its digest field is obtained from the extracted wrapper, not an extra opaque op43 axiom. [`AspisR1.S2W_DigestExtraction.native_binding`](../docs/research/100bit-spend-path-20261013/lean/S2W_DigestExtraction.lean#decl=AspisR1.S2W_DigestExtraction.native_binding) makes that distinction explicit. The underlying [`AspisR1.R9PoolRuntimeBinding.P2Prime`](../docs/research/100bit-spend-path-20261013/lean/R9PoolRuntimeBinding.lean#decl=AspisR1.R9PoolRuntimeBinding.P2Prime) is the actual account-input predicate. Checkpoint writer/reader, first-entry verifier, multiproof and S8 source joins are enumerated below; FullForestAcceptedRoundtrip is not required by D189’s authenticated route.
@@ -101,35 +80,20 @@ The older [`AspisR1.S2W_ExtractionBoundary.AeneasExtraction`](../docs/research/1
 
 | Exact field (same cited file) | One-sentence specification / no concealed caller conclusion |
 |---|---|
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell) | Typed AccountInfo data/lamports cell observations and alias relations match the admitted heap. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload) | Every observed cell has the exact typed payload descriptor and contents. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter) | Counters and live-guard lookup match the heap. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok) | A fresh enabled shared borrow below maxCounter acquires the corresponding guard. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err) | Negative or saturated counters reject shared borrowing without state change. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok) | An enabled zero-counter exclusive borrow acquires the exclusive guard. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err) | A nonzero-counter exclusive borrow rejects without state change. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref) | A live shared guard reads the same cell payload. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref) | A live exclusive guard reads the payload and permits only in-range writes to that cell. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move) | Moving a guard relocates its sole owner while retaining token/cell identity. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop) | Dropping a live shared guard decrements its positive counter and releases it. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop) | Dropping a live exclusive guard restores the -1 counter to zero and releases it. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop) | The error move/drop path owns no guard and preserves state. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame) | Every enabled primitive matches the local run specification, preserving its full ambient frame. None asserts adapter success, source refinement or soundness. |
-
 | [`AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness`](../docs/research/100bit-spend-path-20261013/lean/S2TrustedSdkBorrow.lean#decl=AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness) | A live guard retains allocated-cell identity and the same descriptor. None asserts adapter success, source refinement or soundness. |
 
 ### Trusted standard library — complete named field inventory
@@ -138,57 +102,31 @@ D133 (2026-10-21), D145 (2026-10-22 03:45), D156 (08:15) and D157 (08:35) author
 
 | Exact field / file | Decision | One-sentence law | Source call site |
 |---|---|---|---|
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_empty`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_empty) | D133 | Decoded empty map is empty. | sim.rs map construction in tape/program_tree |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_state`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_state) | D133 | Insertion replaces the decoded key with the new value. | sim.rs CoinOracle/ProgramOne map insert |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_previous`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_previous) | D133 | Insertion returns exactly the previous optional value. | sim.rs ProgramOne::digest collision flag |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_get`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_get) | D133 | Lookup equals model lookup. | sim.rs tape/parent/publication lookup |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_iter_ordered`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_iter_ordered) | D133 | Iteration equals ordered model toList. | sim.rs ordered transcript/map traversal |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_entry_or_insert_with`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_entry_or_insert_with) | D145 | Hit retains its value without callback; miss evaluates once and inserts. | sim.rs publication entry(..).or_insert_with |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_set_from_iter_ordered`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_set_from_iter_ordered) | D156 | BTreeSet collect/iteration gives distinct ascending usize keys. | sim.rs program_tree parent collection (PROVER-COMMIT44) |
-
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_empty`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_empty) | D133 | Decoded empty map is empty. | crates/aspis-r1-cost-probe/src/sim.rs::program_tree:370,379 and publication:439–452 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_state`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_state) | D133 | Insertion replaces the decoded key with the new value. | sim.rs::CoinOracle::digest:104 / ProgramOne::digest:116 / program_tree:374,384 / publication:448,453–454,494 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_previous`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_insert_previous) | D133 | Insertion returns exactly the previous optional value. | sim.rs::CoinOracle::digest:104 / ProgramOne::digest:116 / transcript merge:494 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_get`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_get) | D133 | Lookup equals model lookup. | sim.rs programmed_answer:138 / program_tree:381,388 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_iter_ordered`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_iter_ordered) | D133 | Iteration equals ordered model toList. | sim.rs::program_tree leaves/level traversal:372–381 / opened/folded publication:453–454 / transcript merge:494 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_entry_or_insert_with`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_entry_or_insert_with) | D145 | Hit retains its value without callback; miss evaluates once and inserts. | sim.rs publication folded.entry(..).or_insert_with:451 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_set_from_iter_ordered`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_set_from_iter_ordered) | D156 | BTreeSet collect/iteration gives distinct ascending usize keys. | sim.rs::program_tree level.keys().map(i → i/2).collect:378 (PROVER-COMMIT44) |
 | [`R1Z.ProverCommitTrustedStd24.TrustedStd.btree_len`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.btree_len) | D157 | Length equals decoded entry cardinality without usize truncation. | sim.rs:389,493 level/transcript guards |
-
 | [`R1Z.ProverCommitTrustedStd24.TrustedStd.slice_sort_ascending`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.slice_sort_ascending) | D157 | Scalar sort gives stable ascending mergeSort. | sim.rs:477 batch u32 indices |
-
 | [`R1Z.ProverCommitTrustedStd24.TrustedStd.vec_dedup_adjacent`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.vec_dedup_adjacent) | D157 | Dedup removes adjacent repeated values. | sim.rs:477 after sort |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.tls_live_key`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.tls_live_key) | D133 | Each live typed TLS access equals the single-key native model. | sim.rs CoinOracle/programmed TLS access |
-
-| [`R1Z.ProverCommitTrustedStd24.TrustedStd.tls_single_thread`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.tls_single_thread) | D133 | The designated live-key schedule runs on one selected thread. | sim.rs invocation schedule; existing P_R1 workers require explicit confinement |
-
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.tls_live_key`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.tls_live_key) | D133 | Each live typed TLS access equals the single-key native model. | sim.rs::COINS/PROGRAMMED live-key access:96–139 |
+| [`R1Z.ProverCommitTrustedStd24.TrustedStd.tls_single_thread`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitTrustedStd24.lean#decl=R1Z.ProverCommitTrustedStd24.TrustedStd.tls_single_thread) | D133 | The designated live-key schedule runs on one selected thread. | sim.rs selected-thread invocation schedule; existing P_R1 workers require explicit confinement |
 | [`R1Z.ProverCommitStdIndex46.TrustedIndex.btree_index`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitStdIndex46.lean#decl=R1Z.ProverCommitStdIndex46.TrustedIndex.btree_index) | D157 | BTreeMap Index returns associated value or panic. | sim.rs:360 ProgrammedTree::multiproof callback |
-
 | [`R1Z.ProverCommitStdIndex46.TrustedSequence.vec_index`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitStdIndex46.lean#decl=R1Z.ProverCommitStdIndex46.TrustedSequence.vec_index) | D157 | Vec Index returns the indexed element or panic. | sim.rs:360 callback |
-
 | [`R1Z.ProverCommitBatchGuard46.TrustedBatch.slice_windows2_all_lt`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitBatchGuard46.lean#decl=R1Z.ProverCommitBatchGuard46.TrustedBatch.slice_windows2_all_lt) | D157 | windows(2).all is the adjacent strict-chain predicate. | multiproof.rs well-formedness guard; report46:57–58 (module comment67–71) |
-
 | [`R1Z.ProverCommitBatchGuard46.TrustedBatch.slice_iter_all_lt`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitBatchGuard46.lean#decl=R1Z.ProverCommitBatchGuard46.TrustedBatch.slice_iter_all_lt) | D157 | iter().all is the all-indices-below-bound predicate. | same multiproof guard |
-
 | [`R1Z.ProverCommitCompactSource46.TrustedChunks.slice_chunks_exact32`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitCompactSource46.lean#decl=R1Z.ProverCommitCompactSource46.TrustedChunks.slice_chunks_exact32) | D157 | chunks_exact yields complete forward 32-byte chunks, omitting remainder. | compact.rs:113 compact_values |
-
 | [`R1Z.ProverCommitIteratorStd48.TrustedStd.slice_chunks_exact`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitIteratorStd48.lean#decl=R1Z.ProverCommitIteratorStd48.TrustedStd.slice_chunks_exact) | D157 | Positive-size chunks are exact forward chunks. | encoder.rs::eval_pair q.chunks_exact(2) |
-
 | [`R1Z.ProverCommitIteratorStd48.TrustedStd.iterator_zip`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitIteratorStd48.lean#decl=R1Z.ProverCommitIteratorStd48.TrustedStd.iterator_zip) | D157 | Zip traverses forward until either side exhausts. | encoder.rs::eval_pair .zip(basis) |
-
 | [`R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_rev`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitIteratorConsumer48.lean#decl=R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_rev) | D157 | Reverse equals list reversal. | host_semantic.rs::extra iter().rev().fold |
-
 | [`R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_fold`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitIteratorConsumer48.lean#decl=R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_fold) | D157 | Fold equals ordered left fold. | host_semantic.rs::extra |
-
 | [`R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_flat_map`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitIteratorConsumer48.lean#decl=R1Z.ProverCommitIteratorConsumer48.TrustedStd.iterator_flat_map) | D157 | flat_map equals flatten after map. | prover.rs::encoded into_iter().flat_map(...).collect |
-
 | [`AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice`](../docs/research/100bit-spend-path-20261013/lean/S2W_TrustedStd.lean#decl=AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice) | D157; C3-BIN 2026-10-23 | Equal-length slice copy changes only accessible destination bytes; mismatch panics and frames other state. | r1_pool_adapter.rs stage1_owned checkpoint copy (C3-BIN 2026-10-23 18:05) |
-
 | [`AspisR1.S2K.StdCopy.TrustedStd.slice_copy_from_slice`](../docs/research/100bit-spend-path-20261013/lean/S2K_TrustedStd.lean#decl=AspisR1.S2K.StdCopy.TrustedStd.slice_copy_from_slice) | D157; C3-BIN 2026-10-23 | Equal-length slice copy changes only accessible destination bytes; mismatch panics and frames other state. | S2-K selected checkpoint exclusive-copy bracket |
-
 | [`AspisR1.Port1_Library.TrustedStd.option_ok_or`](../docs/research/100bit-spend-path-20261013/lean/Port1_Library.lean#decl=AspisR1.Port1_Library.TrustedStd.option_ok_or) | D157; C3-BIN 2026-10-23 | Exact pure Option/Result success and error/panic semantics. | candidate::tx1/tx2_common inactive decode |
-
 | [`AspisR1.Port1_Library.TrustedStd.result_unwrap32`](../docs/research/100bit-spend-path-20261013/lean/Port1_Library.lean#decl=AspisR1.Port1_Library.TrustedStd.result_unwrap32) | D157; C3-BIN 2026-10-23 | Exact pure Option/Result success and error/panic semantics. | candidate::tx1/tx2_common folded-root array conversion |
 
 Field introduction/call-site evidence: [PROVER-COMMIT24-20261021.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT24-20261021.md), [PROVER-COMMIT33-20261022.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT33-20261022.md), [PROVER-COMMIT44-20261022.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT44-20261022.md), [PROVER-COMMIT45-20261022.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT45-20261022.md), [PROVER-COMMIT46-20261022.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT46-20261022.md), [PROVER-COMMIT48-20261022.md](../docs/research/v8-r0-zk-20261009/r1p-final/PROVER-COMMIT48-20261022.md). Mutable enumeration/map/collect/from_fn and filled/Copy content interpretations in the port rows remain explicit local std/runtime interfaces; these pure models do not certify native heap, allocation failure, Drop or abort/effects. D157 alone cannot authorize that extension.
@@ -197,17 +135,11 @@ Field introduction/call-site evidence: [PROVER-COMMIT24-20261021.md](../docs/res
 
 | Item / exact Lean declaration when present | Decision | One-sentence meaning | Why not a hidden conclusion / remaining boundary |
 |---|---|---|---|
-
 | E1: [`R1Z.ProverCommitPublicNonce40.E1`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitPublicNonce40.lean#decl=R1Z.ProverCommitPublicNonce40.E1) | LOG D147 (2026-10-22 04:50), specialized by selected public-nonce route D152/D162 | Every successful 64-byte OS RNG draw is conditionally uniform over Raw given the complete prior public/private context. | Does not assert availability, retry independence without contextual transport, source control, native cleanup or privacy. |
-
 | Historical E1: [`R1Z.ProverCommitEnvironment35.E1`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitEnvironment35.lean#decl=R1Z.ProverCommitEnvironment35.E1) | LOG D147/D148 | The older 96-byte Candidate law is uniform conditional on context. | Not the selected64 API; cannot silently replace the deployed route. |
-
 | E2: [`R1Z.ProverCommitLedger36.E2`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitLedger36.lean#decl=R1Z.ProverCommitLedger36.E2) | LOG D148 (2026-10-22 05:20) | Atomic create-if-absent preserves existing private entries and successful fsynced data persists. | Atomic/durable fields are environmental semantics, not successful reservation or error-free OS; native instance remains explicit. |
-
 | Byte-blind adversarial fault schedule and private ledger | LOG D147/D148/D149 | Adversary chooses failures/initial entries without seeing secret bytes/paths; filesystem membership remains faithful private state. | Not a small OS/fs failure probability; fail-closed and replay on every schedule must be proved for the actual source. P1 supplies any claimed fresh-address law. |
-
 | L3 compiler constant-time trust — **no dedicated Lean structure found** | LOG D162 (2026-10-22 11:05) | The pinned compiler/flags preserve the selected source constant-time behavior in the native x86_64 Linux binary. | Requires binary/compiler/flags pins and disassembly evidence; no theorem follows from a platform label. |
-
 | L3 CPU constant-time trust — **no dedicated Lean structure found** | LOG D162 | The pinned CPU model executes the audited instructions with the specified timing/observable behavior. | dudect-style measurements are measurements, not universal proof; CPU pin and scope still owed. |
 
 ## Soundness premises and ownership
@@ -216,18 +148,26 @@ The preferred sufficient source-event endpoint is [`AspisR1.Port6AUTH_Headline.f
 
 | Literal remaining premise | Owner | Nearest declaration | Current status |
 |---|---|---|---|
-
 | hq: adversary P has at most Q oracle reads for every H | lead | [`AspisR1.Port6AUTH_Headline.final_soundness`](../docs/research/100bit-spend-path-20261013/lean/Port6AUTH_Headline.lean#decl=AspisR1.Port6AUTH_Headline.final_soundness) | Explicit adversary/work-domain restriction; include verifier interactions and campaign interpretation in release contract. |
-
 | contains: every charged-prefix read occurs in the actual source log | lead + session A sampler/preparation | [`AspisR1.Port6AUTH_Prefix.prefix_bound`](../docs/research/100bit-spend-path-20261013/lean/Port6AUTH_Prefix.lean#decl=AspisR1.Port6AUTH_Prefix.prefix_bound) | Open concrete containment; decoder rejection prevents an unconditional sampler-containment shortcut. |
-
-| physical: Physical rust | lead | [`AspisR1.Port6AUTH_Accounting.budget`](../docs/research/100bit-spend-path-20261013/lean/Port6AUTH_Accounting.lean#decl=AspisR1.Port6AUTH_Accounting.budget) | Open frozen/source interpretation; physical input behavior must match installed operations, not a pure Result no-read assertion. |
-
-| calls: every rust i execution has at most1161 reads, all H and outcomes | lead; session A ids3/4/7/17 | [`AspisR1.Port17RELEASE_Prepare.OtherBudgets`](../docs/research/100bit-spend-path-20261013/lean/Port17RELEASE_Prepare.lean#decl=AspisR1.Port17RELEASE_Prepare.OtherBudgets) | Open residual ids3,4,6,9,10,11,12,17,19 and native effects. Checked op7<=115 and conditional driver<=1161+R do not prove1161. |
-
+| physical: Physical rust | lead | [`AspisR1.Port6AUTH_Accounting.budget`](../docs/research/100bit-spend-path-20261013/lean/Port6AUTH_Accounting.lean#decl=AspisR1.Port6AUTH_Accounting.budget) | Proved for the installed Port1 driver interpretation; association of the actual frozen runtime/source with that driver remains open. Not a pure Result no-read assertion. |
+| calls: every rust i execution has at most 1161 reads, all H and outcomes | lead; session A ids3/4/7/17 | [`AspisR1.Port17RELEASE_Prepare.OtherBudgets`](../docs/research/100bit-spend-path-20261013/lean/Port17RELEASE_Prepare.lean#decl=AspisR1.Port17RELEASE_Prepare.OtherBudgets) | Open residual ids3,4,6,9,10,11,12,17,19 and native effects. Checked op7<=115 and conditional driver<=1161+R do not prove1161. |
 | checks: CleanAcceptedModel on this source and bad event | lead; session A arithmetic/S1/S6 | [`AspisR1.Port7CLEAN_Accepted.terminal_from_calls`](../docs/research/100bit-spend-path-20261013/lean/Port7CLEAN_Accepted.lean#decl=AspisR1.Port7CLEAN_Accepted.terminal_from_calls) | Open same-run terminal Checks plus classifier no-hit; model callbacks/equal acceptance do not supply it. |
-
 | binding: StoredCarrierBinding D rust (lift P) runtime | lead | [`AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding`](../docs/research/100bit-spend-path-20261013/lean/OraclePortRuntimeBindingC7.lean#decl=AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding) | Open complete accepted carrier/ordered trace/probability-law runtime instance; no independent byte tuple may replace actual witnesses. |
+
+The unchanged conditional failure expression is
+`(Q+34) * (15/2^109) + 6*(Q+1161)^2/2^256 + 2^-126 + 2^-454`.
+The safe-range theorem gives at most `(Q+1)/2^100` for
+`0 <= Q <= 14777960484892959601791002642008314224629686649`, and the zero-query
+bound is at most `2^-100`. See
+[`AspisR1.StartChargeNumeric.safe_range`](../docs/research/100bit-spend-path-20261013/lean/StartChargeNumeric.lean#decl=AspisR1.StartChargeNumeric.safe_range),
+[`AspisR1.StartChargeNumeric.zero_queries`](../docs/research/100bit-spend-path-20261013/lean/StartChargeNumeric.lean#decl=AspisR1.StartChargeNumeric.zero_queries),
+[`AspisR1.PerAttemptEnvelope.B`](../docs/research/100bit-spend-path-20261013/lean/PerAttemptEnvelope.lean#decl=AspisR1.PerAttemptEnvelope.B), and
+[`AspisR1.BinCombinedMerkleCollision.kappa`](../docs/research/100bit-spend-path-20261013/lean/BinCombinedMerkleCollision.lean#decl=AspisR1.BinCombinedMerkleCollision.kappa).
+These numeric facts do not instantiate the source/runtime premises or settle the
+campaign work metric. Physicality means the source verifier ignores proof-only
+enrichment while keeping the same physical proof/public inputs, as defined by
+[`AspisR1.Port1_StoredCarrier.Physical`](../docs/research/100bit-spend-path-20261013/lean/Port1_StoredCarrier.lean#decl=AspisR1.Port1_StoredCarrier.Physical).
 
 The runtime projection [`AspisR1.Port21PROJECTION_Experiment.accepted_mass_transport`](../docs/research/100bit-spend-path-20261013/lean/Port21PROJECTION_Experiment.lean#decl=AspisR1.Port21PROJECTION_Experiment.accepted_mass_transport) can hide terminal private allocator state while preserving the full accepted extractor input under the memoized oracle law. Its [`AspisR1.Port21PROJECTION_Experiment.soundness_and_query_transport`](../docs/research/100bit-spend-path-20261013/lean/Port21PROJECTION_Experiment.lean#decl=AspisR1.Port21PROJECTION_Experiment.soundness_and_query_transport) retains independent all-outcome query transport. Accepted-output/log equality cannot establish rejected-prefix charges. The unadopted1175 envelope adds14 to the collision budget and28 to two-pass log length; it is not the advertised1161 premise and is not a new composed endpoint.
 
@@ -237,38 +177,22 @@ This expands the headline bundles rather than treating trust, a record name or a
 
 | Remaining source/caller premise | Owner | Nearest theorem or record | Status / exact next join |
 |---|---|---|---|
-
 | Accepted original wrapper pair, entry/runtime/SDK/std/private allocator/extraction/syscall interpretation | lead | [`AspisR1.S2W_D189Consolidation.accepted_run`](../docs/research/100bit-spend-path-20261013/lean/S2W_D189Consolidation.lean#decl=AspisR1.S2W_D189Consolidation.accepted_run) | Conditional full Required14 producer exists. Feed its actual f,s into selected semantic/SDK cut; canonical dependency ownership and native/artifact instance remain open. |
-
 | Checkpoint writer header and size on reached prefix | lead | [`AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_AuthenticatedInputs.lean#decl=AspisR1.S2W_AuthenticatedInputs.CheckpointWriterConeJoin) | Port4A exposed false uniform provenance under arbitrary op7; production S2/64/next10 domain is required. Q2 supplies conditional same-prefix provenance, not unconditional native writer adoption. |
-
 | Checkpoint reader authenticated header on actual saved bytes | lead | [`AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_AuthenticatedInputs.lean#decl=AspisR1.S2W_AuthenticatedInputs.CheckpointReaderConeJoin) | Q2 current helper/result and weight-read joins checked; native enclosing op18/codec/allocator/std/runtime installation remains. |
-
 | S1 preparation/op7 and powers/op17 on same returned Prepared/gamma scratch | session A | [`AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_ChildJoins.lean#decl=AspisR1.S2W_ChildJoins.FirstEntryVerifierConeJoin) | Same-return Prepared/model/root/query binding and primitive/sampler leaves remain. Recent Claims SDK value result retains native extraction boundary; no global S1/S6 discharge. |
-
 | Both native multiproof batches, source leaf/parent/effects and actual parsed/query/root association | lead + session A preparation | [`AspisR1.MultiproofConeP6Frozen2Stage.both_batches`](../docs/research/100bit-spend-path-20261013/lean/MultiproofConeP6Frozen2Stage.lean#decl=AspisR1.MultiproofConeP6Frozen2Stage.both_batches) | Port4B StageRows gives conditional accepted-only lowering with PreparedBinding and P6 leaves; native panic/Parse mismatch is excluded from accepted class, not repaired or a total Result theorem. |
-
 | Ten and twelve query-step arithmetic and indexed opening/matching evidence | lead + session A primitives | [`AspisR1.Port5Q1_Complete.accepted`](../docs/research/100bit-spend-path-20261013/lean/Port5Q1_Complete.lean#decl=AspisR1.Port5Q1_Complete.accepted) | Conditional same-run10+12 model state proof exists; concrete SessionAPrepare/Primitives and indexed Merkle recovery/matching log are still required. |
-
 | Saved-to-resumed checkpoint state and ObservationBinding | lead + session A prepare | [`AspisR1.Port5Q2_Checkpoint.accepted`](../docs/research/100bit-spend-path-20261013/lean/Port5Q2_Checkpoint.lean#decl=AspisR1.Port5Q2_Checkpoint.accepted) | Conditional BodyMatches/six reads on same returned Vec. Instantiate actual prepare/geometry/opening/basis leaves and enclosing native reader. |
-
 | Flush mutable iterator/map4/backwrite interpretation and arithmetic reducer | lead + session A S5 | [`AspisR1.Port4D_Value.reference_eq`](../docs/research/100bit-spend-path-20261013/lean/Port4D_Value.lean#decl=AspisR1.Port4D_Value.reference_eq) | Current interpreted complete Result equality checked; std/ABI/allocator/reducer native association and same-prefix arithmetic remain. |
-
 | Finish pairing/matches/semantic/dot laws on actual completed state | session A leaves; lead composition | [`AspisR1.Port4D_ReturnedFinish.accepted_twelve`](../docs/research/100bit-spend-path-20261013/lean/Port4D_ReturnedFinish.lean#decl=AspisR1.Port4D_ReturnedFinish.accepted_twelve) | Conditional accepted verdict equals frozen2 finish; pairing_S3_S5_S9, matches_S4_S7, semantic_S3_S9, dot_S5 remain explicit. |
-
 | Claims and Terminal complete finish children, native effects, errors/cleanup/abort | session A; lead same-witness integration | [`AspisR1.Port7CLEAN_Accepted.terminal_from_calls`](../docs/research/100bit-spend-path-20261013/lean/Port7CLEAN_Accepted.lean#decl=AspisR1.Port7CLEAN_Accepted.terminal_from_calls) | Finite unrolled Claims value body/selected SDK consumer checked; safe candidate unadopted. Native Box/decoder/allocation/cleanup composition and Terminal remain open. |
-
 | ChildConeJoin, FirstMarks/SecondMarks; first-entry/multiproof/S8 child joins | lead + session A children | [`AspisR1.S2W_ExpandedChildren.ChildConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_ExpandedChildren.lean#decl=AspisR1.S2W_ExpandedChildren.ChildConeJoin) | D188 allows named per-child hypotheses; concrete same-call event instances are still owed, not swallowed by AeneasExtraction. |
-
 | Actual S8 y1 scan/canonical range child | lead + session A child source | [`AspisR1.S2W_ChildJoins.S8StageConeJoin`](../docs/research/100bit-spend-path-20261013/lean/S2W_ChildJoins.lean#decl=AspisR1.S2W_ChildJoins.S8StageConeJoin) | Conditional range/byte/model joins retained in D189; no independently successful scan is substituted. |
-
 | Parser3/canonical scan4, sampler and S3/S4/S5/S9 backend source domains/R22 | session A | [`AspisR1.R1FinalSoundness.BoundaryEvidence`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryEvidence) | Retain exact source/backend pins, rejected branches and reached numeric domains; local arithmetic lemmas are not full caller certificates. |
-
 | Pool ASQ8/public reconstruction/cross-TX input and metadata/authority history | lead | [`AspisR1.S2W_AuthenticatedInputs.authenticated_inputs`](../docs/research/100bit-spend-path-20261013/lean/S2W_AuthenticatedInputs.lean#decl=AspisR1.S2W_AuthenticatedInputs.authenticated_inputs) | Writer/reader headers plus actual protected-version history and P2Prime derive bytes. Pool/deployed source/artifact association still open; no extra FullForest premise. |
-
 | Complete source-event dominance/no-hit, collision scope and enriched two-pass law | lead | [`AspisR1.Port6AUTH_Probability.failure_bound`](../docs/research/100bit-spend-path-20261013/lean/Port6AUTH_Probability.lean#decl=AspisR1.Port6AUTH_Probability.failure_bound) | Open concrete checks/contains/budget inputs; collision charged once on actual source log, unchanged Q+34 start charge. |
-
-| S10 lowering and exact release source/feature/ELF association | session A inventory; lead final gate | [`AspisR1.R1FinalSoundness.BoundaryStatements.S10`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.S10) | Incomplete; selected140 dominance facts and identity pins are insufficient for complete indirect/inline/library/caller correspondence. |
+| S10 lowering and exact release source/feature/ELF association | session A inventory; lead final gate | [`AspisR1.R1FinalSoundness.BoundaryStatements.S10`](../docs/research/100bit-spend-path-20261013/lean/R1FinalSoundness.lean#decl=AspisR1.R1FinalSoundness.BoundaryStatements.S10) | Incomplete; selected 140 dominance facts and identity pins are insufficient for complete indirect/inline/library/caller correspondence. |
 
 ### Legacy headline slot coverage
 
@@ -280,27 +204,16 @@ Endpoint: [`R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`](../doc
 
 | Remaining premise / obligation | Owner | Nearest declaration / evidence | Status |
 |---|---|---|---|
-
 | Real-prover refinement (old conjunct1), complete real observable run and joint law | lead | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | Open. Requires RunJoin for the selected native prover/view/observer suffix, retaining seed/fuel/query-scan bad-event and probability marginals; not equal proof bytes alone. |
-
 | E1 successful64 conditional law, all-error/native OS-world association | lead | [`R1Z.ProverCommitPublicNonce40.E1`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitPublicNonce40.lean#decl=R1Z.ProverCommitPublicNonce40.E1) | Environment premise retained; native provider/control state and physical cleanup association remain unproved. Zeroed buffers/ghost provider tokens do not imply freshness or independence. |
-
 | E2 private ledger, byte-blind faults, retries/abort/error/fail-closed observables | lead | [`R1Z.ProverCommitLedger36.E2`](../docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitLedger36.lean#decl=R1Z.ProverCommitLedger36.E2) | Atomic/durable trust retained; concrete real factory16/outer8, private reservations and joint witness-free replay still require full native transport. |
-
 | L1 outcome counts and joint mask/count/TLS/oracle transcript | lead | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | Open. Cover attempts/retries, failed call/error codes, ledger effects, output lengths/order and cleanup. Fixed-query rank or entropy symmetry is not joint adaptive privacy. |
-
-| L2 two-run control/address/allocation/cleanup traces and CT v2 | lead | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | Open selected native event producer/refinement and full two-run trace equivalence, including errors/retries/TLS instrumentation. CT candidate is unadopted. |
-
+| L2 two-run control/address/allocation/cleanup traces and CT v2 | lead | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | Open selected native event producer/refinement and full two-run branch/index/collection-path/allocation-size/loop/variable-latency trace equivalence, including division/inversion, errors/retries/TLS instrumentation. CT candidate is unadopted. |
 | L3 x86_64 Linux binary/compiler/flags/CPU, disassembly plus timing measurements | lead | [status history](../docs/research/100bit-spend-path-20261013/design/STATUS-CURRENT.md) | D162 platform trust retained; exact final native pins and measurement evidence required. No dedicated Lean L3 record and no native closure from DATA admission. |
-
 | Prover rewrite source equivalence, native helpers, whole-run refinement | lead | [status history](../docs/research/100bit-spend-path-20261013/design/STATUS-CURRENT.md) | Unmerged/unadopted candidate. Selected64 factory fission/request-resume and component native gates are partial; actual Drop/event erasure, every valid native error, world/control/controller/finite16 and outer8 remain open. Final private Kani slot59/60 reserved in current status, not a proof. |
-
 | Selected proof-account client route and caller-error behavior | lead | LOG D162 / [CLIENT-ROUTE-ADOPTION-GATE-20261024.md](../docs/research/100bit-spend-path-20261013/design/CLIENT-ROUTE-ADOPTION-GATE-20261024.md) | D162 requires RealR1_client::prove_for_proof_accounts → generate_for_mask_nonce(proof_account(k)) → prove_masked_retrying_with. Root devnet plan still uses generic96-byte route until candidate adoption; client64 candidate1dfbd5711684 remains parked/unadopted. |
-
 | Representable statement domain and publication/observer association | lead | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | D146 announced deployed public_bytes-success image must be bound to actual client/native statement; no adversary restriction or independently chosen statement. |
-
 | Complete arithmetic/codec/transcript/sampler/caller source and ordered shared oracle experiment | session A shared leaves; lead prover integration | [`R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement`](../docs/research/v8-r0-zk-20261009/lean/R1Z/PrivacyR1HeadlineDeployedReal.lean#decl=R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement) | Local owned algebra/byte-image/source helpers are reused only in their domains; joint adaptive messages/openings/errors/history and native source instance remain open. |
-
 | Frozen source/dependency/artifact closure and final accepted axioms | lead + session A closure | [status history](../docs/research/100bit-spend-path-20261013/design/STATUS-CURRENT.md) | Open final coherent release gate, independent of a real-vs-ideal refinement simplification. |
 
 Privacy boundaries and candidate evidence: [REAL-R1-20261023.md](../docs/research/v8-r0-zk-20261009/r1p-final/REAL-R1-20261023.md), [PROVER-SPEED-20261022.md](../docs/research/100bit-spend-path-20261013/design/PROVER-SPEED-20261022.md), [CLIENT-ROUTE-ADOPTION-GATE-20261024.md](../docs/research/100bit-spend-path-20261013/design/CLIENT-ROUTE-ADOPTION-GATE-20261024.md), LOG D159/D162/D185/D187/D191 and later native-factory reviews. L1/L2/L3 are part of the privacy contract; the older side-channel exclusion is superseded. The latest DATA setup and scope-cleanup success is operational evidence only, not a native proof or producer/runtime adoption.
@@ -309,13 +222,13 @@ Privacy boundaries and candidate evidence: [REAL-R1-20261023.md](../docs/researc
 
 | Gate | Owner | Required evidence / current disposition |
 |---|---|---|
-| Freeze and all-three ELF association | lead + session A S10 | Keep the pins below, exact source revision, locked dependency/features, wire/protocol parameters, toolchain and program IDs. Historical reproduction is reused, not rerun in this job. Any adopted source change needs explicit invalidation assessment and applicable artifact/differential revalidation. |
+| Freeze and all three ELF association | lead + session A S10 | Keep the pins below, exact source revision, locked dependency/features, wire/protocol parameters, toolchain and program IDs. Historical reproduction is reused, not rerun in this job. Any adopted source change needs explicit invalidation assessment and applicable artifact/differential revalidation. |
 | S10 completeness | session A inventory; lead acceptance | Complete declaration-owner and reachable indirect/inline/library/caller-to-artifact coverage. Current re-pin3 inventory/reconcile `--check --require-complete` gates historically exit2; 140 surviving selected-call dominance facts, zero reselections and reproducible ELFs do not close S10. |
-| Prover rewrite adoption | lead | Source/effect/native refinement, actual selected64 client/controller/Drop/error/E1/world/L1/L2/L3 joins; whole-prover identical-coin proof bytes on1000 comparisons; all-three ELF identity after final source; H5 slowdown<=10% and quiet median<15s. Component/factory fixtures do not replace whole-prover equivalence. Unadopted. |
-| CT v2 adoption | lead | Each kernel equivalence, fixed-shape two-run branch/index trace, production TLS gating, unchanged proof bytes, applicable all-three verifier ELF identities and final native disassembly/CPU/timing evidence. Candidate is not the freeze. |
+| Prover rewrite adoption | lead | Source/effect/native refinement, actual selected64 client/controller/Drop/error/E1/world/L1/L2/L3 joins; whole-prover identical-coin proof bytes on 1000 comparisons; all three ELF identity after final source; H5 slowdown<=10% and quiet median<15s. Component/factory fixtures do not replace whole-prover equivalence. Unadopted. |
+| CT v2 adoption | lead | Each kernel equivalence, fixed-shape two-run branch/index trace, production TLS gating, unchanged proof bytes, applicable all three verifier ELF identities and final native disassembly/CPU/timing evidence. Candidate is not the freeze. |
 | Claims safe-storage candidate (if selected) | session A + lead | Full original/safe/unrolled source equivalence, actual decoder/allocation errors, initializedness, ownership/Drop/cleanup/abort/effects, CU/stack, same-witness SDK/S1/D189 integration and affected artifact checks. Current value-model SDK result is conditional; candidate unadopted. |
 | Concrete soundness/privacy inputs | respective owners above | Instantiate every necessary row on the SAME execution, source dictionary and oracle world. No aggregate theorem, callback record or cached import substitutes for the instance. |
-| Premise acceptance and security contract | lead | Bind P1–P7/P2-prime, SDK/std/E1/E2/extraction/runtime/L3 scope to the final pins. Resolve stale reacceptance draft and release-cluster runtime attestation. Demonstrate actual100-bit attack-work criterion including repeated attempts/verifier interactions; do not lower target to the available numeric theorem. |
+| Premise acceptance and security contract | lead | Bind P1–P7/P2-prime, SDK/std/E1/E2/extraction/runtime/L3 scope to the final pins. Resolve stale reacceptance draft and release-cluster runtime attestation. Demonstrate actual 100-bit attack-work criterion including repeated attempts/verifier interactions; do not lower target to the available numeric theorem. |
 | Frozen-manifest replay | lead + session A | After focused changed file/consumer and dependent bridge pass, perform ONE coherent final dependency-closure replay on the adopted freeze, including soundness/privacy joins. No unchanged full-regression repeat; source/tool/environment change or missing evidence must justify another. Current focused/import/kernel receipts are not that final replay. |
 | Final `#print axioms` audit | lead + session A | Audit exact final soundness and real-privacy endpoints and selected dependency closure. Accept only the recorded standard propext/Classical.choice/Quot.sound scope; reject sorryAx and unapproved project/opaque axioms. Record known Formatter helper exceptions separately and prove they stay outside headline closure. |
 
