@@ -1,0 +1,42 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryProgramTotalV1.lean:20:35: error(lean.unknownIdentifier): Unknown identifier `Bytes`
+
+Note: It is not possible to treat `Bytes` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryProgramTotalV1.lean:23:47: error: unsolved goals
+H M Cv : Type
+L : ℕ
+p : Params M Cv L
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+payload : Slice U8
+oracle : sorry → State
+address : AspisV8R19.DuplexFrames.Bytes :=
+  flatten (CallerStep.openingAbsorbParts self.state 191#u8 (UScalar.cast UScalarTy.U32 payload.len) payload)
+absorbed : State := oracle sorry
+log : List (AspisV8R19.DuplexFrames.Bytes × State)
+bs xs : List State
+hbs : bs.length = [].length + 8
+hxs : xs.length = [].length + 8
+heval :
+  ∀ {A : Type} (out : List State → List State → A),
+    eval sorry (pairedBytesProgram out 8 absorbed [] []) = (log, out bs xs)
+blen : bs.length = 8
+xlen : xs.length = 8
+blocks advances : PreparedQueryMaterialize.Blocks8
+hpack : packEight bs xs = ok (blocks, advances)
+hblocks : List.map decodeState ↑blocks = bs
+hadvances : List.map decodeState ↑advances = xs
+material : sorry
+source : sorry
+sf : AspisS1OwnedQueryPairs.OwnedScan
+selected : AspisS1OwnedQueryPairs.Model.Block
+called :
+  closedHashQueries.decode blocks advances =
+    ok (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected))
+valid : AspisS1OwnedQueryPairs.Model.Valid sf
+total :
+  finish closedHashQueries D { state := encodeState absorbed, hash := self.hash } blocks advances =
+    ok
+      (AspisS1QueryContinuationTotal.output { state := encodeState absorbed, hash := self.hash }
+        (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected)))
+⊢ ∃ result, (eval oracle sorry).2 = ok result
+'AspisS1QueryProgramTotal.row31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

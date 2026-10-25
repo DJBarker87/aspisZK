@@ -85,3 +85,41 @@ The latest lead handoff additionally requests identification of returned
 Prepared data with LiteralMatchingData in SessionAPrepare/S1 PreparedBinding.
 That is a separate same-source equation, not supplied by this query decoder
 identity. No work on lead's parser/oracle/import track was undertaken.
+
+## Addendum: complete row31 source-program totality
+
+Three further focused targets consume the installed equality:
+
+- `AspisS1QueryDecodeTotal.closed_decode_total`: the EXISTING preparation
+  decoder always returns a native Ok/Err and bounded complete final scanner
+  witness on every typed eight-pair input. The former generic decoder-success
+  input is derived from the exact concrete owned execution.
+- `AspisS1QueryContinuationTotal.finish_of_decoded`: full continuation result
+  is fixed by that SAME decode return. All 22 actual array reads, concrete
+  M31 embeddings and release trace operations succeed; accepted state selects
+  the source decoder's bytes and rejection maps to the actual Transcript error
+  while preserving the absorbed transcript. This generic helper's decode
+  premise is discharged by closed_decode_total in the enclosing theorem.
+- `AspisS1QueryProgramTotal.row31_total`: the actual complete source row31
+  byte-oracle program returns a normal native verifier Ok/Err and transcript
+  for EVERY byte oracle and payload. Absorb, all 16 squeeze/advance calls,
+  materialization, decoder and complete continuation are composed; there is
+  no accepted-only, successful sampler, successful decoder, embedding or
+  query-model hypothesis. This is TOTAL in the byte-oracle source
+  interpretation, not a native allocator/abort/SDK/runtime theorem.
+
+The full source program target exited0 in4.844950208 seconds, peak RSS
+3,870,392,320 bytes, swap0; #print axioms standard-only. Decoder/continuation
+final focused receipts also exit0 with standard-only audits. The checker now
+covers all13 final targets; the prior10-target audit remains historical and
+is not overwritten. Current report:
+evidence/s126-current-caller-20261021/s1-query-totality-audit-v1/audit.json.
+All source/tool/import hashes, rejected focused proof attempts, wall/RSS/swap
+and audits are retained. No new NUC job or cap increase was needed.
+
+This closes the enclosing row31 source-program range/totality obligation in
+the stated interpretation. It does not close Stage1Extraction, the actual
+native preparation/caller/heap effects, the lead's requested literal-data
+identification, coherent caller imports or final release obligations listed
+above. No source decision, production edit or security-contract change was
+made, and the <=2^-100 per-attempt deployed target remains unestablished.

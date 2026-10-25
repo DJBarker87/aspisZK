@@ -1,0 +1,85 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryProgramTotalV1.lean:45:10: error: don't know how to synthesize placeholder for argument `w`
+context:
+H M Cv : Type
+L : ℕ
+p : Params M Cv L
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+payload : Slice U8
+oracle : Bytes → State
+address : Bytes := ⋯
+absorbed : State := ⋯
+log : List (Bytes × State)
+bs xs : List State
+hbs : bs.length = [].length + 8
+hxs : xs.length = [].length + 8
+heval :
+  ∀ {A : Type} (out : List State → List State → A),
+    eval oracle (pairedBytesProgram out 8 absorbed [] []) = (log, out bs xs)
+blen : bs.length = 8
+xlen : xs.length = 8
+blocks advances : PreparedQueryMaterialize.Blocks8
+hpack : packEight bs xs = ok (blocks, advances)
+hblocks : List.map decodeState ↑blocks = bs
+hadvances : List.map decodeState ↑advances = xs
+material : eval oracle (modelMaterialize p (encodeState absorbed)) = (log, ok (blocks, advances))
+source :
+  eval oracle (oracleProgram (PreparedQueryEffects.queries effects closedHashQueries D self 31#u8 payload)) =
+    ((address, absorbed) :: log,
+      finish closedHashQueries D { state := encodeState absorbed, hash := self.hash } blocks advances)
+sf : AspisS1OwnedQueryPairs.OwnedScan
+selected : AspisS1OwnedQueryPairs.Model.Block
+called :
+  closedHashQueries.decode blocks advances =
+    ok (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected))
+valid : AspisS1OwnedQueryPairs.Model.Valid sf
+total :
+  finish closedHashQueries D { state := encodeState absorbed, hash := self.hash } blocks advances =
+    ok
+      (AspisS1QueryContinuationTotal.output { state := encodeState absorbed, hash := self.hash }
+        (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected)))
+⊢ core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryProgramTotalV1.lean:23:47: error: unsolved goals
+H M Cv : Type
+L : ℕ
+p : Params M Cv L
+D : aspis_core.Digest32 H
+self : transcript.Transcript H
+payload : Slice U8
+oracle : Bytes → State
+address : Bytes :=
+  flatten (CallerStep.openingAbsorbParts self.state 191#u8 (UScalar.cast UScalarTy.U32 payload.len) payload)
+absorbed : State := oracle address
+log : List (Bytes × State)
+bs xs : List State
+hbs : bs.length = [].length + 8
+hxs : xs.length = [].length + 8
+heval :
+  ∀ {A : Type} (out : List State → List State → A),
+    eval oracle (pairedBytesProgram out 8 absorbed [] []) = (log, out bs xs)
+blen : bs.length = 8
+xlen : xs.length = 8
+blocks advances : PreparedQueryMaterialize.Blocks8
+hpack : packEight bs xs = ok (blocks, advances)
+hblocks : List.map decodeState ↑blocks = bs
+hadvances : List.map decodeState ↑advances = xs
+material : eval oracle (modelMaterialize p (encodeState absorbed)) = (log, ok (blocks, advances))
+source :
+  eval oracle (oracleProgram (PreparedQueryEffects.queries effects closedHashQueries D self 31#u8 payload)) =
+    ((address, absorbed) :: log,
+      finish closedHashQueries D { state := encodeState absorbed, hash := self.hash } blocks advances)
+sf : AspisS1OwnedQueryPairs.OwnedScan
+selected : AspisS1OwnedQueryPairs.Model.Block
+called :
+  closedHashQueries.decode blocks advances =
+    ok (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected))
+valid : AspisS1OwnedQueryPairs.Model.Valid sf
+total :
+  finish closedHashQueries D { state := encodeState absorbed, hash := self.hash } blocks advances =
+    ok
+      (AspisS1QueryContinuationTotal.output { state := encodeState absorbed, hash := self.hash }
+        (AspisS1QueryDecodeTotal.scheduleValue (AspisS1OwnedQueryPairs.Model.finishValue sf selected)))
+⊢ ∃ result,
+    (eval oracle (oracleProgram (PreparedQueryEffects.queries effects closedHashQueries D self 31#u8 payload))).2 =
+      ok result
+'AspisS1QueryProgramTotal.row31_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
