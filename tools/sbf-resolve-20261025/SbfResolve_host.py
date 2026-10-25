@@ -120,7 +120,7 @@ def index_rel(n):
 def universe(req):
  R['parent_pins']=verify_parent();R['admission']=admission()
  lock=tomllib.loads((S/'src/Cargo.lock').read_text());pkgs=[p for p in lock['package'] if p.get('source','').startswith('registry+')];assert len(pkgs)==428
- downloads=0;rows=[];attempts=[];R['attempts']=attempts
+ downloads=0;rows=[];attempts=[];R['attempts']=attempts;R['public_fixture_names']=[]
  for p in pkgs:
   assert p['source']=='registry+https://github.com/rust-lang/crates.io-index'
   name,version=p['name'],p['version'];crate=name+'-'+version;assert re.fullmatch('[a-zA-Z0-9_.+-]+',crate)
@@ -161,7 +161,9 @@ def universe(req):
      assert (m.mode & ~0o777) in (0,stat.S_IFREG if m.isfile() else stat.S_IFDIR)
      assert 0<=m.size<=32*1024**2;total+=m.size;assert total<=128*1024**2
      assert q.name not in ('.cargo-ok','.cargo-checksum.json')
-     assert not (re.search(r'(keypair|private.?key|mnemonic|credential|secret|\.pem$|\.key$|\.env(?:\.|$)|id_rsa)',q.name,re.I) and q.suffix not in ('.rs','.toml','.md','.txt')),'possible key filename '+m.name
+     if re.search(r'(keypair|private.?key|mnemonic|credential|secret|\.pem$|\.key$|\.env(?:\.|$)|id_rsa)',q.name,re.I) and q.suffix not in ('.rs','.toml','.md','.txt'):
+      assert any(x in q.parts[1:-1] for x in ('test','tests','testdata','examples','data','fixtures')),'nonfixture possible key filename '+m.name
+      R['public_fixture_names'].append(dict(archive_sha256=p['checksum'],path=m.name,classification='published locked-package test/example data, not user/task wallet data'))
     root.mkdir(mode=0o700,parents=True)
     for m in members:
      q=O/'cargo/registry/src'/IDX/m.name
@@ -239,7 +241,7 @@ def main():
   R.update(wall_seconds=time.monotonic()-t,peak_rss_kib=u.ru_maxrss,children_peak_rss_kib=c.ru_maxrss,sampled_aggregate_rss_bytes=peak,sampled_aggregate_swap_bytes=swappeak,swap=u.ru_nswap+c.ru_nswap,rss_limit_bytes=LIMIT)
   raw=json.dumps(R,sort_keys=True)+'\n';name=op+('-'+str(req['number']) if op=='query' else '')+'-receipt.json'
   if O.exists():
-   with (O/name).open('x') as f:f.write(raw)
+   with (O/(req.get('receipt_name',name))).open('x') as f:f.write(raw)
   print(raw)
  return R['exit']
 if __name__=='__main__':sys.exit(main())

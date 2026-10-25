@@ -19,6 +19,7 @@ if op=='query':
  req['runtime_pins']=runtime
 argv=['ssh','-o','BatchMode=yes','-o','ConnectTimeout=10','dombarker@100.108.41.90',' '.join(shlex.quote(x) for x in req['host_command'])]
 label=op+('-'+str(req['number']) if op=='query' else '')
+if len(sys.argv)>2 and op=='universe':label+='-'+sys.argv[2];req['receipt_name']=label+'-receipt.json'
 request=(json.dumps(req,sort_keys=True)+'\n').encode();(B/('SbfResolve-'+label+'-request.json')).write_bytes(request)
 t=time.monotonic();p=subprocess.run(argv,input=request,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=600)
 for name,b in [('stdout',p.stdout),('stderr',p.stderr)]:
