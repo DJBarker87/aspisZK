@@ -1,16 +1,18 @@
 # Current status: 100-bit soundness and privacy (living page)
 
-## Lead checkpoint — 2026-10-25, updated after actual capture review
+## Lead checkpoint — 2026-10-25, after strict body data review
 
-Both deployed targets remain **not yet established**. One accepted wrapper execution supplies the original public account bytes, decoded-public reuse, checkpoint write and public-account frame; selected S1 carries those bytes into preparation, ranges and joint trace. SDK/std/runtime/allocator/extraction boundaries remain explicit. The enclosing import/re-pin and caller join are still open.
+Both deployed targets remain **not yet established**. One accepted wrapper execution supplies the original public account bytes, decoded-public reuse, checkpoint write and public-account frame; selected S1 carries those same bytes into preparation, ranges and joint trace. SDK/std/runtime/allocator/extraction boundaries remain explicit. The coherent dependency import/re-pin and enclosing caller join remain open.
 
-Port30JOIN accepted_original_sdk_s2_s1 is reviewed/merged66dec5b4d8 but UNCOMPILED. Port31 attempt353 proves a new namespaced Bool case lemma with no axioms; it is not historical helper identity. Raw diagnostic354 failed export syntax; partial observations and binaries remain unaccepted/quarantined. Corrected worker47730 has ONE data-only attempt355, adding the omitted original87 Root fragments, grouped Core bodies and full43 duplicate guards. Actual354/368 before launch;14 remain=1unassigned+1pending355+5reserved kernel consumers+7carry. All5 consumer slots untouched.13 definition conflicts/45 representation differences retained; no exact-Name/kernel closure yet.
+Port31 corrected355 passed six strict raw body readbacks and all43 CURRENT duplicate guards. Independent raw graph audit passes: all107 S8 seed closure3648/zero gaps; actual three-root union28843/one historical Bool helper gap. Namespaced Bool353 is a checked no-axiom new fact, not old helper identity; original applications now observed and need an explicit ordinary-kernel alias.13 definition conflicts/45 representation differences/four proof-variant names retained,1773 reached-name selection obligations. Mergedda9602be04/cleaned; failed354 remains quarantined.
 
-SbfSeal disabled fd-anchored setup/bounded output source independently reviewed and merged9f48e742a9;32 tests/895 checks pass. SbfLinux44932 prepares concrete Linux backend source with ZERO actual host/root/ns/probe/compiler authority. Full immutable runtime/trace/cache/native/artifact gates remain.
+Port32CONSUMER52474 now targets actual selected declaration reconstruction, old Bool alias/application and accepted_original_sdk_s2_s1 with complete strict/axiom audits. MAXTWO local consumer calls356/357 allocated; actualbefore355/368,13remain=1unassigned+2pending+3reserved+7carry. No claim of compiled composed theorem yet. All SDK/std/runtime/extraction/child/mark/P2Prime/native/release boundaries retain.
 
-Resourcev3 capture independently replayed29595 events and merged7f6719926f. Prospective passed; actual GO denied552960B reserve shortfall, controls passed, marker explicitly absent. All six metadata epochs remain charged/failed; this is not supported evidence of Mac port hardening. ResourceMeta1G48717 SOURCE ONLY prepares tighter768M/1G metadata scope without weakening policy or authorizing larger consumers. No fresh host epoch yet. Final Kani59/60 remains reserved.
+SbfLinux concrete unexecuted backend reviewed/independent54 tests plus package audit pass, mergede8100b8d12/cleaned. Privileged entrypoints disabled; actual finite runtime/producer/LSM/cancellation/parent-death/kernel/probe gates open. It establishes source preparation, not native sandbox or artifact security.
 
-Private Lean240/260,Rust2/3charges(actual ordinary builds1),extraction54/56,backend15/16,ELF0/3 unchanged. Native E1/world/errors/drop/controller/Claims/Terminal/L1/L2/L3/client/equivalence/timing/artifact/replay obligations remain. Frozen security contract and all three ELF pins unchanged.
+ResourceMeta1G tighter metadata768M/1G source independently reviewed/8 focused groups pass, merged19bd47bc72/cleaned. LIVE51248 has ONE new metadata epoch7, exact reviewed policy/pins/guards, prospective1GiB then onlyifpass insideQ0 and tiny marker, with bounded existing-capture export. Six prior failures remain charged, including552960B actual reserve denial. No final Kani/native/compiler consumer.1GiB marker cannot authorize larger jobs; general APIs disabled.
+
+Private Kani59/60 final1reserved,Lean240/260,Rust2/3charges(actual ordinary build1),extraction54/56,backend15/16,ELF0/3 unchanged. E1/world/error/drop/controller/Claims/Terminal/transcript/L1/L2/L3/client/equivalence/<15s timing/all3ELF/final coherent replay and axioms obligations remain. Frozen contract/artifact pins unchanged.
 
 ## Current coordinator checkpoint — 2026-10-24 22:44 BST
 
