@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 1309); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+Full error:
+  Application type mismatch: The argument
+    accepted
+  has type
+    Queries
+  but is expected to have type
+    { l // l.length = ↑22#usize }
+  in the application
+    ↑accepted
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryContains.lean:29:17: error: unsolved goals
+case h_3
+accepted : Queries
+candidate : U32
+n : Usize
+size : ↑n ≤ 22
+fuel : ℕ
+ih :
+  ∀ (index : Usize),
+    ↑index + fuel = ↑n →
+      loop (fun i1 => host_transcript.query_contains_loop.body accepted n candidate i1) index =
+        ok (search accepted candidate fuel index)
+index : Usize
+bound : ↑index + (fuel + 1) = ↑n
+go : index < n
+hi : ↑index < ↑22#usize
+hidx : Array.index_usize accepted index = ok (↑accepted)[↑index]
+hlen : ↑index < (↑accepted).length
+add : ↑(index.wrapping_add 1#usize) = ↑index + 1
+x✝ : Result (ControlFlow Usize (Option Bool))
+heq✝ :
+  (if (↑accepted)[↑index] = candidate then ok (done (some true))
+    else do
+      let i2 ← lift (index.wrapping_add 1#usize)
+      ok (cont i2)) =
+    div
+⊢ div =
+    ok
+      (if (↑accepted)[↑index] = candidate then some true
+      else search accepted candidate fuel (index.wrapping_add 1#usize))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryContains.lean:28:70: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [host_transcript.query_contains_loop.body, ̲stop, ̲if_false,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲search]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryContains.lean:56:57: error: Tactic `rfl` failed: The left-hand side
+  ↑0#usize + ↑n
+is not definitionally equal to the right-hand side
+  ↑n
+
+accepted : Queries
+n : Usize
+candidate : U32
+size : ↑n ≤ 22
+⊢ ↑0#usize + ↑n = ↑n
+'R1Z.ProverRwQueryContains.loop_search' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryContains.contains_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.65
+	Maximum resident set size (kbytes): 3856024
+	Swaps: 0
+	Exit status: 1
