@@ -4,7 +4,7 @@ from pathlib import Path
 import os,sys,json,hashlib,subprocess,time,signal,resource
 W=Path(__file__).resolve().parent
 G=2**30;CAP=6*G;HIGH=4*G
-UNIT='aspis-s126-claims-extract-20261025-r3'
+UNIT='aspis-s126-claims-extract-20261025-r4'
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def save(name,value):(W/name).write_text(json.dumps(value,indent=2)+'\n')
@@ -56,7 +56,7 @@ def tool_pins():
   q=subprocess.run(['/home/dombarker/.cargo/bin/rustup','which','--toolchain','nightly-2026-06-01',name],text=True,capture_output=True,timeout=15);assert q.returncode==0,q.stderr;paths.append(Path(q.stdout.strip()))
  runtime=set()
  for p in paths:
-  q=subprocess.run(['/usr/bin/ldd',str(p)],text=True,capture_output=True,timeout=10)
+  q=subprocess.run(['/usr/bin/ldd',str(p)],text=True,capture_output=True,timeout=10,env={**os.environ,'LD_LIBRARY_PATH':str(paths[3].parent.parent/'lib')})
   assert 'not found' not in q.stdout,q.stdout
   for line in q.stdout.splitlines():
    for word in line.split():
@@ -93,7 +93,7 @@ try:
  sources=source_pins();tools=tool_pins();plan=json.loads((W/'plan.json').read_text())
  save('pins-before.json',dict(sources=sources,tools=tools,cgroup=str(cg),runner_sha256=sha(W/'run.py')))
  env=dict(os.environ);env.update(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',RUSTUP_TOOLCHAIN='nightly-2026-06-01',
- CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(W/'target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='')
+ CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(W/'target'),CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='',LD_LIBRARY_PATH=str(next(Path(p)for p in tools if Path(p).name=='rustc').parent.parent/'lib'))
  for key in ['RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER','CARGO_ENCODED_RUSTFLAGS']:env.pop(key,None)
  # New private target, only two local packages; no another-session cache writes.
  old=plan['host_directory'];commands=[[a.replace(old,str(W))for a in plan[k]]for k in ['charon_command','aeneas_command']]
@@ -104,7 +104,7 @@ try:
    llbc=json.loads((W/'ClaimsSafe.llbc').read_text());assert llbc.get('has_errors')is False,'Charon output is not error-free'
   (W/'generated').mkdir(exist_ok=True)
   timed=['/usr/bin/time','-v','-o',str(W/(phase+'-time.log')),'/usr/bin/timeout','--signal=TERM','--kill-after=5s','540s',*cmd]
-  save(phase+'-input.json',dict(command=cmd,executed_command=timed,environment={k:env[k]for k in ['RUSTUP_TOOLCHAIN','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS','RUSTFLAGS']},source_pins=sources,tool_pins=tools,expected_time='Focused optimized two-local-package extraction/translation; no certificates/SBF/SAT; stop after540s for review',print_axioms='N/A: source extraction, no theorem yet'))
+  save(phase+'-input.json',dict(command=cmd,executed_command=timed,environment={k:env[k]for k in ['RUSTUP_TOOLCHAIN','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS','RUSTFLAGS','LD_LIBRARY_PATH']},source_pins=sources,tool_pins=tools,expected_time='Focused optimized two-local-package extraction/translation; no certificates/SBF/SAT; stop after540s for review',print_axioms='N/A: source extraction, no theorem yet'))
   start=time.monotonic()
   with (W/(phase+'-stdout.log')).open('wb')as out,(W/(phase+'-stderr.log')).open('wb')as err:
    child=subprocess.Popen(timed,cwd=W/'reference',env=env,stdout=out,stderr=err,start_new_session=True)
