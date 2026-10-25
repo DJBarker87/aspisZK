@@ -17,6 +17,7 @@ def norm(s):
         i=s.find(marker)
         if i>=0 and (i==0 or s[i-1]=='/'):return s[i:]
     if s in ('Cargo.lock','Cargo.toml'):return s
+    if s in ('src/Cargo.lock','src/Cargo.toml'):return s[4:]
     if s.endswith('/src/Cargo.lock'):return 'Cargo.lock'
     return None
 
