@@ -6,22 +6,33 @@ import base64
 import difflib
 import hashlib
 import json
+import re
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v10'
-STAGE='/home/dombarker/final-native-gate-v10-20261025/'
-ENTRY='92a0cfa06c'
+RELEASE=D/'prospective-data-v11'
+STAGE='/home/dombarker/final-native-gate-v11-20261025/'
+ENTRY='40af522fb98a3bb57d7e33ab0a59c1810f23cb0f'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
 def funcs(raw):
     return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(raw).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
 
+def validate_stage_join(source):
+    expected=STAGE.rstrip('/').split('/')[-1]
+    active=('FinalNativeGate.py','FinalNativeGate_scope.py','FinalNativeGate_inside.py',
+            'FinalNativeGate_setup.py','FinalNativeGate_setup_inside.py','FinalNativeGate_candidate.py',
+            'FinalNativeGate-transfer-template.txt')
+    for name in active:
+        stages=set(re.findall(r'final-native-gate-v[0-9]+-20261025',source[name].decode()))
+        if stages!={expected}:raise ValueError('incoherent active stage role: '+name)
+
 def prepare(release=None):
     release=RELEASE if release is None else Path(release)
     release.mkdir(mode=0o700,exist_ok=False)
     source={p.name:p.read_bytes() for p in sorted(D.iterdir()) if p.is_file()}
+    validate_stage_join(source)
     rows=dict(source);delta={};diff=[]
     # Two literal setup-only entry changes. Isolated Python requires fixed path
     # bootstrap before importing sibling source, even in the outer setup entry.
@@ -41,7 +52,7 @@ def prepare(release=None):
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus Source029 prospective-data-v10 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus Source030 prospective-data-v11 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -66,12 +77,12 @@ def prepare(release=None):
     assert len(receiver)<4*2**20
     with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
     template=source['FinalNativeGate-transport-template.txt'].decode()
-    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v10/FinalNativeGate-data-transfer.py')"
+    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v11/FinalNativeGate-data-transfer.py')"
     assert template.count(old_receiver)==1
     template=template.replace(old_receiver,'RECEIVER=Path('+repr(str(RELEASE/'FinalNativeGate-data-transfer.py'))+')')
     transport=template.replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
     # Source-only preflight: bind canonical NEW receiver, exact length and hash.
-    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v10/FinalNativeGate-data-transfer.py'
+    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v11/FinalNativeGate-data-transfer.py'
     assignments={n.targets[0].id:n.value for n in ast.parse(transport).body
                  if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name)}
     assert ast.literal_eval(assignments['RECEIVER'].args[0])==canonical
