@@ -1,0 +1,32 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_adapter.py
++++ ResourceRssGO_adapter.py
+@@ -3,11 +3,11 @@
+ import os
+ from pathlib import Path
+ import subprocess
+-from ResourceStableGO_sources import load
++from ResourceRssGO_sources import load
+ 
+ c, go, identity, inventory, policy = load()
+ EXPECTED=dict(high=3*c.GIB,cap=4*c.GIB,swap_max=0,tasks_max=64)
+-UNIT='resource-stable-go-20261025'
++UNIT='resource-rss-go-20261025'
+ COMMANDS=[['ps','-e','-o','pid,ppid,rss,comm,cgroup'],
+           ['systemctl','list-units','--type=service','--state=running','--no-pager','--no-legend'],
+           ['docker','ps','-q']]
+@@ -49,7 +49,7 @@
+         words=line.split()
+         if len(words)<4 or not words[0].endswith('.service') or words[2:4]!=['active','running']:
+             raise ValueError('malformed/racing service visibility')
+-    return dict(schema='ResourceStableGO-visibility-v1',cgroups=rows,
++    return dict(schema='ResourceRssGO-visibility-v1',cgroups=rows,
+         bounded_reserved_bytes=reserved,projected_reserved_bytes=c.add((reserved,requested)),
+         process_visibility=processes,service_visibility=services,docker_visibility=containers,
+         allowed=True,reserve_check=True,
+@@ -72,5 +72,5 @@
+         expected=EXPECTED if phase=='inside-scope' else None,
+         expected_unit=UNIT+'.scope' if phase=='inside-scope' else None)
+     if failures:decision.update(allowed=False,collection_failures=failures)
+-    return dict(api_version='ResourceStableGO20261025-v1',collector_pid=os.getpid(),decision=decision,
++    return dict(api_version='ResourceRssGO20261025-v1',collector_pid=os.getpid(),decision=decision,
+                 snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')

@@ -1,0 +1,26 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_audit.py
++++ ResourceRssGO_audit.py
+@@ -15,10 +15,10 @@
+ from unittest.mock import patch
+ 
+ ROOT=Path(__file__).resolve().parents[2]
+-OUT=ROOT/'evidence/resource-stable-go-20261025'
+-import ResourceStableGO_adapter as adapter
+-import ResourceStableGO_sources as sources
+-import ResourceStableGO_host as host
++OUT=ROOT/'evidence/resource-rss-go-20261025'
++import ResourceRssGO_adapter as adapter
++import ResourceRssGO_sources as sources
++import ResourceRssGO_host as host
+ 
+ 
+ def load(name):return json.loads((OUT/name).read_text())
+@@ -93,7 +93,7 @@
+     assert manifest['scope_argv']==host.scope_argv(manifest)
+     for name,pin in manifest['files'].items():
+         p=Path(__file__).with_name(name)
+-        raw=(json.dumps(sources.bundle(),sort_keys=True,indent=2)+chr(10)).encode() if name=='ResourceStableGO_reviewed.json' else p.read_bytes()
++        raw=(json.dumps(sources.bundle(),sort_keys=True,indent=2)+chr(10)).encode() if name=='ResourceRssGO_reviewed.json' else p.read_bytes()
+         assert pin==dict(sha256=hashlib.sha256(raw).hexdigest(),size=len(raw))
+     export=load('export-receipt.json')
+     for name,pin in export['host_files'].items():
