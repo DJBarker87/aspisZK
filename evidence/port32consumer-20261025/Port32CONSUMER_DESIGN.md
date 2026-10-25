@@ -53,3 +53,16 @@ The first noncompiler preflight loaded all JSON records and peaked at805404672B,
 violating512MiB: INVALID, retained with source/receipt, not accepted admission.
 Replacement streams SQLite and drops unused dependency arrays; the material
 change yielded223444992B. This is data/text validation only, zero Lean calls.
+
+## Material357 supersession
+
+The initial global IO.Ref lifetime strategy aborted at356; see FAILURES.md.
+The source now uses one run_cmd lexical owner through normal source-command
+elaboration and all final audits; mappings have no automatic destructor and
+are never explicitly freed before process exit. FirstCut record-update syntax
+is expanded exactly to its eight-field constructor (seven retained fields).
+Only namespace metadata from checked exact-Name prefixes is registered.
+Port32CONSUMER_ComposedSource.lean.txt is the complete actual source elaborated
+inside the command, and is embedded verbatim in the Consumer source strings.
+The original make.py describes356; material357.py is its explicit replacement.
+No theorem premise, quantifier, carrier or conclusion is weakened.
