@@ -1,0 +1,52 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -S -B -c '\"\"\"Read only the finished own metadata artifacts; never repeat queries.\"\"\"\nimport hashlib,json,os,pathlib,resource,sys,time\nP=pathlib.Path;O=P('\"'\"'/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfResolve-20261025-v1'\"'\"')\ndef main():\n req=json.loads(sys.stdin.readline());t=time.monotonic();assert os.getuid()==1000 and O.stat().st_uid==1000 and not O.is_symlink()\n for row in req['\"'\"'files'\"'\"']:\n  name=row['\"'\"'name'\"'\"'];assert '\"'\"'/'\"'\"' not in name and name in ['\"'\"'query-1.stdout'\"'\"','\"'\"'query-2.stdout'\"'\"','\"'\"'query-1.trace'\"'\"','\"'\"'query-2.trace'\"'\"','\"'\"'compiler-queries.jsonl'\"'\"']\n  p=O/name;assert p.is_file() and not p.is_symlink() and p.stat().st_nlink==1 and p.stat().st_size<5_000_000\n  b=p.read_bytes();assert len(b)==row['\"'\"'bytes'\"'\"'] and hashlib.sha256(b).hexdigest()==row['\"'\"'sha256'\"'\"']\n  header=json.dumps(dict(name=name,bytes=len(b),sha256=hashlib.sha256(b).hexdigest()))+'\"'\"'\\n'\"'\"';sys.stdout.buffer.write(header.encode()+b);sys.stdout.buffer.flush()\n # Oversized derived manifest remains remote: stream summary, no whole JSON copy.\n mf=O/'\"'\"'private-cache-complete.jsonl'\"'\"';h=hashlib.sha256();files=total=0;packages=set();indices=set();markers=0\n with mf.open('\"'\"'rb'\"'\"') as f:\n  for line in f:\n   h.update(line);r=json.loads(line);files+=1;total+=r['\"'\"'bytes'\"'\"'];rel=P(r['\"'\"'path'\"'\"']).relative_to(O/'\"'\"'cargo/registry'\"'\"')\n   if rel.parts[0]=='\"'\"'src'\"'\"':packages.add(rel.parts[2]);markers+=rel.name=='\"'\"'.cargo-ok'\"'\"'\n   if rel.parts[0]=='\"'\"'index'\"'\"' and '\"'\"'.cache'\"'\"' in rel.parts:indices.add(str(rel))\n target=[]\n for p in (O/'\"'\"'target'\"'\"').rglob('\"'\"'*'\"'\"'):\n  assert not p.is_symlink();target.append(dict(path=str(p.relative_to(O)),bytes=p.stat().st_size,type='\"'\"'file'\"'\"' if p.is_file() else '\"'\"'directory'\"'\"'))\n u=resource.getrusage(0);data=dict(exit=0,wall_seconds=time.monotonic()-t,peak_rss_kib=u.ru_maxrss,swap=u.ru_nswap,print_axioms='\"'\"'N/A'\"'\"',remote_manifest=dict(path=str(mf),bytes=mf.stat().st_size,sha256=h.hexdigest(),regular_files=files,file_bytes=total,packages=len(packages),index_files=len(indices),completion_markers=markers,marker_kind='\"'\"'official Cargo LockMetadata v1 completion only, not checksum/fingerprint forgery'\"'\"'),target_entries=target)\n b=json.dumps(data,sort_keys=True).encode();sys.stdout.buffer.write((json.dumps(dict(name='\"'\"'export-summary.json'\"'\"',bytes=len(b),sha256=hashlib.sha256(b).hexdigest()))+'\"'\"'\\n'\"'\"').encode()+b)\nif __name__=='\"'\"'__main__'\"'\"':main()\n'"
+  ],
+  "request": "{\"files\": [{\"name\": \"query-1.stdout\", \"bytes\": 66574, \"sha256\": \"c585956e97ddee2e1461f17c5be5858610a0e49056f1a8d6a335e7c40e015309\"}, {\"name\": \"query-1.trace\", \"bytes\": 93557, \"sha256\": \"b8edf0ca41d12c49e8c356514a8dc451d0ae2e6a71080cd3be3da77dc6c9d9f2\"}, {\"name\": \"query-2.stdout\", \"bytes\": 1788956, \"sha256\": \"7868469fc46044f89ebde26357fca7e80eb01001815b897e9598a735819ccea8\"}, {\"name\": \"query-2.trace\", \"bytes\": 1715267, \"sha256\": \"339e986a14c89503635456d6ad20e24121cfe26dc283592cfec87c00f7f857d1\"}, {\"name\": \"compiler-queries.jsonl\", \"bytes\": 1243, \"sha256\": \"a5fec42ebef74c98dfd415d817ad2cfd77b467b79157865feaa1281c64161a59\"}]}\n",
+  "source_revision": "8e14f736f1435b2891a999c96d1181ac45bf9878",
+  "helper_sha256": "bb9d1aeff718f7c7deaf2637e5d6d5167c8c4130433c6f96bea4934054723a1d",
+  "exit": 0,
+  "wall_seconds": 2.608152291737497,
+  "peak_rss_bytes": 51658752,
+  "swap": 0,
+  "stderr": "",
+  "files": [
+    {
+      "name": "query-1.stdout",
+      "bytes": 66574,
+      "sha256": "c585956e97ddee2e1461f17c5be5858610a0e49056f1a8d6a335e7c40e015309"
+    },
+    {
+      "name": "query-1.trace",
+      "bytes": 93557,
+      "sha256": "b8edf0ca41d12c49e8c356514a8dc451d0ae2e6a71080cd3be3da77dc6c9d9f2"
+    },
+    {
+      "name": "query-2.stdout",
+      "bytes": 1788956,
+      "sha256": "7868469fc46044f89ebde26357fca7e80eb01001815b897e9598a735819ccea8"
+    },
+    {
+      "name": "query-2.trace",
+      "bytes": 1715267,
+      "sha256": "339e986a14c89503635456d6ad20e24121cfe26dc283592cfec87c00f7f857d1"
+    },
+    {
+      "name": "compiler-queries.jsonl",
+      "bytes": 1243,
+      "sha256": "a5fec42ebef74c98dfd415d817ad2cfd77b467b79157865feaa1281c64161a59"
+    },
+    {
+      "name": "export-summary.json",
+      "bytes": 582,
+      "sha256": "cb3de43b0ad634e78e92a419af5de82939e14ed558e744d86d43d249deb20cf9"
+    }
+  ],
+  "print_axioms": "N/A"
+}
