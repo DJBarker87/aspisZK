@@ -921,3 +921,8 @@ Immutablecef39d839d fullfournewsource/statements/checker reviewed; independent69
 ## Lead update — 2026-10-25, actual Query31 raw body acquired
 
 Raw361 PASSfiveexports/88strictreadbacks reviewed/merged; actualweakerCallsbodyhasexplicitpair0=self1.state/eightpairlist, Bridgeexpectsanchor. No theoremchecked yet. Port35 max2focused362/363 attemptsNEWstrongCalls retainingoldweakerCallsunchanged, thenexplicitNEWBridgeproofwithSTRICTIDENTICALtype andONLYoldCallsconstant→newstrongCalls valuepatch, allnormallykernelchecked. No historicprivateNamerenaming/metadata trustbypass. Wholecaller/re-pinjoin remainsopen; no duplicate/Acompilation orlivecacheaccess requested.
+
+
+## Lead update — 2026-10-25, Query31 anchor normally checked
+
+Port35actual363 passed NEWsource-executionstrongCalls theorem plusBridgeproofonlyoneCallsreferencechange; originalweakerCallsunchanged, BridgeentireTYPE/metadataSTRICTsame. Threefullaxiomwalksstandard-only,4758-namefocusednormalcontext/strictdeltaexports; leadfullsource+independentdatareviewpasses. This closesinitial-stateanchor atmodel/source scope, no newpremise/model/function/contract/trustchange. WholeoriginalSDK/S1/S2caller coherentimport/re-pin remainsopen; Port36SOURCEONLY checkedCIpublictransport orkernelconsumer proposal, no privateconstructor/uncheckedrawtrustimport, no364yet. No A/livecacheaccess/duplicatecompilationrequested. Existing13definition/45representation/fourproofvariantchoices remainexplicitnewcontext, notoldwholefactoridentity.
