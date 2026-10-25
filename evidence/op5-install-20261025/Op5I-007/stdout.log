@@ -1,0 +1,39 @@
+Op5I_BatchEventCounterexample.lean:86:23: error: unsolved goals
+case cons
+E : Type
+ops : AdapterRw.Ops
+base : ChildConeJoin E ops
+read : E
+event : S2W_Trace.Event
+rest : List S2W_Trace.Event
+ih :
+  List.flatMap (expand (children (inject base read))) rest =
+    List.flatMap (atBatch read) (List.flatMap (expand (children base)) rest)
+⊢ Event.outer event ::
+      (invocation event ++
+        (List.flatMap (atBatch read) (events base event) ++
+          List.flatMap (atBatch read) (List.flatMap (expand (children base)) rest))) =
+    Event.outer event ::
+      ([] ++
+        (invocation event ++
+          (List.flatMap (atBatch read) (events base event) ++
+            List.flatMap (atBatch read) (List.flatMap (expand (children base)) rest))))
+Op5I_BatchEventCounterexample.lean:88:58: warning: This simp argument is unused:
+  List.singleton_append
+
+Hint: Omit it from the simp argument list.
+  simp only [full, List.flatMap_cons, expand, children, events_injected, List.flatMap_append,
+  ̲  ̲ ̲ ̲ ̲ ̲atBatch, invocation_unchanged, L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵,̵List.cons_append, List.append_assoc] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Op5I_BatchEventCounterexample.project_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.project_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.events_injected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.first_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.second_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.invocation_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.full_injected' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.Op5I_BatchEventCounterexample.batch_adjacent' depends on axioms: [propext, Classical.choice, Quot.sound]
