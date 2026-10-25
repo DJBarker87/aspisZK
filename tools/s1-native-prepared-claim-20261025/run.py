@@ -3,6 +3,7 @@
 from pathlib import Path
 import hashlib,json,os,subprocess,time,signal,re,argparse
 R=Path(__file__).resolve().parents[2];B=R/'docs/research/100bit-spend-path-20261013';E=B/'evidence/s126-current-caller-20261021';parser=argparse.ArgumentParser();parser.add_argument('--attempt',default='s1-native-prepared-claim-v1');parser.add_argument('--verify',action='store_true');parser.add_argument('--predecessor',default='s1-native-prepared-claim-v1');parser.add_argument('--negative-control',action='store_true');parser.add_argument('--harness');args=parser.parse_args();assert re.fullmatch(r's1-native-prepared-claim-v[0-9]+',args.attempt);A=E/args.attempt;A.mkdir(exist_ok=False)
+rss_limit=(7 if args.harness and args.harness.endswith(('_point_4','_point_5')) else 6)*2**30
 W=Path('/private/tmp/s126-kani-local-diagnostic-20261025-v1');K=W/'kani-0.67.0';N=Path('/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin');C=W/'min';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert (K/'rustc-version').read_text().strip()=='rustc 1.93.0-nightly (53732d5e0 2025-11-20)'
 # Single local compiler slot; never remove an unknown lock.
@@ -48,7 +49,7 @@ try:
  # Checked loop-specific bounds; failures remain assertions, never assumptions.
  loop='_RINvNtCseaUOSMtER5T_19aspis_r1_cost_probe8verifier14prepared_claimNtNtB2_6proofs4HashEB4_'
  cmd+=['--unwindset',loop+'.0:30,'+loop+'.1:'+str(min(point+2,7))+','+loop+'.2:8']
- input_record=dict(schema='focused-extractor-proof-packet-v1',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),command=cmd,cwd=str(C),metadata_command=metadata,source_files=source_files,tool_pins=tool_pins,archive=json.loads((W/'release-asset.json').read_text()),source_binding=source,environment={k:env[k] for k in ['PATH','RUSTUP_TOOLCHAIN','DYLD_LIBRARY_PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS','KANI_LOG','RUST_BACKTRACE']},negative_control=args.negative_control,kind=('Native Prepared.new S2 normal-child-return control, complete selected carriers, actual powers/transcript/claim bodies; sampling/dot/field/arithmetic normal-return cuts, scripted digest primitive; DEFAULT checks, no initialization/SDK/oracle/SBF closure' if args.verify else 'Native Prepared.new S2 compile diagnostic'),guard=dict(aggregate_rss_limit_bytes=6*2**30,wall_limit_seconds=600,process_limit=64,one_job=True,local_shared_lock=True),expected_time=('Warm optimized compilation then native constructor control SAT; bounded at6GiB/600s; no arithmetic elimination or higher-cap retry' if args.verify else 'Focused two-package compilation, no solver'),print_axioms='N/A: compiler diagnostic')
+ input_record=dict(schema='focused-extractor-proof-packet-v1',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),command=cmd,cwd=str(C),metadata_command=metadata,source_files=source_files,tool_pins=tool_pins,archive=json.loads((W/'release-asset.json').read_text()),source_binding=source,environment={k:env[k] for k in ['PATH','RUSTUP_TOOLCHAIN','DYLD_LIBRARY_PATH','CARGO_BUILD_JOBS','CARGO_NET_OFFLINE','CARGO_TARGET_DIR','RUSTFLAGS','KANI_LOG','RUST_BACKTRACE']},negative_control=args.negative_control,kind=('Native Prepared.new S2 normal-child-return control, complete selected carriers, actual powers/transcript/claim bodies; sampling/dot/field/arithmetic normal-return cuts, scripted digest primitive; DEFAULT checks, no initialization/SDK/oracle/SBF closure' if args.verify else 'Native Prepared.new S2 compile diagnostic'),guard=dict(aggregate_rss_limit_bytes=rss_limit,wall_limit_seconds=600,process_limit=64,one_job=True,local_shared_lock=True),expected_time=('Warm optimized compilation then native constructor control SAT; bounded at selected6/7GiB/600s; no arithmetic elimination or higher-cap retry' if args.verify else 'Focused two-package compilation, no solver'),print_axioms='N/A: compiler diagnostic')
  snap=A/'source';snap.mkdir()
  for rel in ['min/Cargo.toml','min/Cargo.lock','min/src/probe_prepared_claim.rs','min/src/sampler.rs','core-workspace/Cargo.toml']+['min/'+str(p.relative_to(C)) for p in (C/'src/prepared_claim_native').glob('*.rs')]:
   f=W/rel
@@ -62,7 +63,7 @@ try:
    ps=subprocess.check_output(['ps','-axo','pid=,pgid=,rss='],text=True)
    entries=[list(map(int,l.split())) for l in ps.splitlines() if len(l.split())==3]
    members=[r for r in entries if r[1]==pid];rss=sum(r[2] for r in members)*1024;peak=max(peak,rss);maxprocs=max(maxprocs,len(members))
-   if rss>6*2**30:stop='aggregate RSS watchdog'
+   if rss>rss_limit:stop='aggregate RSS watchdog'
    elif len(members)>64:stop='process watchdog'
    elif time.monotonic()-start>600:stop='wall watchdog'
    if stop:

@@ -98,3 +98,69 @@ The other five claim-error partitions must pass before crediting coverage of
 all174 possible failing push positions. Even all seven normal-return partitions
 would leave concrete leaf/runtime/extraction/caller/release obligations; this
 packet does not close S1/S6 or the100-bit source security target.
+
+## Addendum: completed rows and retained resource failures
+
+The sealed metrics now accept points0/1/2/3 and6. In addition to the initial
+success and first-row error results:
+
+- v7 point1: exit0,155.663742s,RSS5638406144B,aggregate5887410176B,swap0.
+- v9 point2: exit0,211.970360s,RSS5848367104B,aggregate5775212544B,swap0.
+- v11 point3 (extra): exit0,215.317782s,RSS6359351296B,
+  aggregate6260031488B,swap0.
+
+All use the exact initial proofs.rs, same native bodies/carriers and normal
+cuts. Their smallest changed harnesses compiled first (v6/v8/v10). Source-only
+receipts/commands/tool/source/import pins and read-only checks are included.
+Points4/5 remain OPEN; no passing declarations or failed attempts are credited.
+
+Retained local failures: v13 original point4 hit the6GiB sampled RSS watchdog
+at305.945357s/6455508992B aggregate. v14/v15 changed expected scalar reads to
+exact typed copies of the SAME semantic inputs; compile passed, verify still
+hit6GiB at276.481585s/6461177856B. v16/v17 shortened ONLY the unused test-output
+tape to145 reachable push returns (point4 failure positions116–144), preserving
+all source inputs/fields/cuts; compile passed, verify hit its initial7GiB cap
+at117.734342s/7601029120B. The latter was a materially reshaped target, not an
+unchanged bigger-cap replay. For these terminated process groups time(1) never
+reported final peak RSS/swaps: those metrics are UNKNOWN, not zero.
+
+The two failing-row ranges were then split into0–14 and15–28, whose union
+covers all29 columns, with full174-entry native state tapes restored and
+expected semantic copies. This is proofs-halves.rs, a candidate only. The NUC
+first refused12GiB before scope/compiler creation: its old admission added
+whole-host occupied counters to full capped reservations that already cover
+some of those residents. A separate new runner retains every populated finite
+MemoryMax reservation, requires their sum plus the new cap below the host's
+safe limit, and requires MemAvailable above ALL those full caps plus9GiB.
+Whole-host counters are retained as context, not added twice. This is an
+operational snapshot/headroom policy, not a formal bound on future uncapped
+growth; no resource limit of another owner was changed.
+
+NUC v2 used10GiB high/12GiB max/Swap0 and fresh admission. The focused Linux
+compile passed4.874946s. Reading the unnormalized .symtab.out yielded no loop
+IDs, so validation stopped BEFORE verification. v3 reuses that exact closed
+owned source/cache and compile receipt/tools, reads normalized .out identities,
+and enables all unwinding assertions with source bounds30/6/8. Its first lo4
+half timed out after500s (exit1,504.453952s,maximum RSS10981212KiB,
+CG peak11267641344B,swaps0,no OOM). MemoryHigh logged60329 events. v4 changes
+ONLY the resource environment to12GiB high/14GiB max with new admission and
+an exact compile reuse. It also timed out (exit1,504.422522s,RSS12973008KiB,
+CG peak13311078400B,swaps0,no OOM),106751 high events. Neither is a theorem
+failure/counterexample or a passing proof. High pressure may contribute to
+wall time, but the records do not prove it is the only cause. No other half
+was launched. Raw terminal source/text histories and immutable runner/plan
+versions are retained in nuc-history-v1/v2; transport source archives contain
+no binaries. The source/cut domain and14GiB attempt remain explicitly candidate.
+
+Full-constructor retries were stopped after these diagnostics. The next proof
+shape checks the canonical TEST-input generator once and uses verified contract
+stubbing, rather than repeatedly validating it throughout the whole controller.
+The generator is not a protocol sampler or a new source assumption. Its
+private native E return requires a verification-only raw Arbitrary extension
+followed by the checked canonical postcondition, isolated in a separate candidate
+core workspace; the native fields and existing functions remain unchanged.
+This candidate has its own source/tool/import pins and must not be attributed
+to these historical original-core proofs. No raw return is used for arithmetic
+before the canonical postcondition. No production edit/adoption is requested.
+All remaining primitive/SDK/runtime/extraction/oracle/release obligations stay
+open regardless of whether that optimization eventually passes the late cases.

@@ -27,7 +27,7 @@ for row in accepted:
  for rel,h in b['unchanged_native_modules'].items():assert sha(S/rel)==h
  assert (S/'fast_pairing.rs').read_text()==expected
  for key in ['Error','View','Prepared','prepared_claim','Prepared_impl']:assert old['selected'][key] in (S/'verifier.rs').read_text()
- proof=(S/'proofs.rs').read_text();assert proof==(T/'proofs.rs').read_text()
+ proof=(S/'proofs.rs').read_text();assert proof==(T/row.get('proof_file','proofs.rs')).read_text()
  assert 'transmute' not in proof and 'kani::assume' not in proof and 'kani::stub(crate::verifier::prepared_claim' not in proof
  assert 'kani::stub(crate::weights::powers' not in proof and 'kani::stub(crate::transcript::' not in proof
  assert proof.count('#[kani::stub(')==63
@@ -38,4 +38,18 @@ assert len(points)==len(set(points)) and set(points)<={0,1,2,3,4,5,6}
 f=json.loads((E/'s1-native-prepared-claim-v2/receipt.json').read_text());assert f['exit_status']==-15 and f['watchdog_stop']=='wall watchdog'
 assert f['peak_rss_bytes'] is None and f['swaps'] is None
 assert all(json.loads((T/'reconstruction.json').read_text())['checks'].values())
+
+
+for n in [13,15,17]:
+ r=json.loads((E/f's1-native-prepared-claim-v{n}/receipt.json').read_text());assert r['exit_status']==-15 and r['watchdog_stop']=='aggregate RSS watchdog'
+ assert r['peak_rss_bytes']is None and r['swaps']is None
+for base,vs in [('s1-native-prepared-claim-nuc-history-v1',[1,2,3]),('s1-native-prepared-claim-nuc-history-v2',[4])]:
+ d=E/base;j=json.loads((d/'collection.json').read_text())
+ for rel,h in j['files'].items():assert sha(d/rel)==h
+for n,base,cap in [(3,'s1-native-prepared-claim-nuc-history-v1',12),(4,'s1-native-prepared-claim-nuc-history-v2',14)]:
+ d=E/base/f'v{n}/run-lo4';r=json.loads((d/'verify-receipt.json').read_text())
+ assert r['exit_status']==1 and r['swaps']==0 and r['source_unchanged']and r['tools_unchanged']
+ assert r['cgroup']['memory.max']==str(cap*2**30)and r['cgroup']['memory.swap.max']=='0'
+ assert 'oom_kill 0'in r['cgroup']['memory.events']and 'CBMC timed out'in(d/'verify-stdout.log').read_text()
+
 print(json.dumps(dict(status='PASS',pins=len(m['files']),accepted_claim_partitions=points,remaining_claim_partitions=sorted(set(range(7))-set(points)),native_arithmetic_or_sdk_closed=False)))

@@ -1,0 +1,20 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "changes": [
+    [
+      "static mut DOT_COUNTS:[usize;174]=[0;174];",
+      "static mut DOT_COUNTS:[usize;174]=[0;174];\nstatic mut SEM_CLAIMS:[[QM31;29];3]=[[QM31::ZERO;29];3];\nstatic mut SEM_EXTRA:[QM31;29]=[QM31::ZERO;29];\nstatic mut SEM_BEFORE:[QM31;29]=[QM31::ZERO;29];"
+    ],
+    [
+      " let sem=&*(SEM_PTR as *const Verified<Hash>);\n same_q(scalar,match p{0..=2=>sem.claims[p][l],3=>sem.extra[l],4=>sem.before_z1[l],_=>FIELDS[l].c0()});",
+      " same_q(scalar,match p{0..=2=>SEM_CLAIMS[p][l],3=>SEM_EXTRA[l],4=>SEM_BEFORE[l],_=>FIELDS[l].c0()});"
+    ],
+    [
+      "unsafe{STOP=stop;",
+      "unsafe{SEM_CLAIMS=*sem.claims;SEM_EXTRA=sem.extra;SEM_BEFORE=sem.before_z1;STOP=stop;"
+    ]
+  ],
+  "before_sha256": "2411c7ee1333440a1d6cbe194dd3622d2e9d3d7b8efa68679d387c66269ba217",
+  "after_sha256": "97a13a4392c5f2429c1b92f8f1cbe979ecc355ab636e1d03461119ca94a7426e",
+  "qualification": "Only expected-value harness access changes. Full native semantic carrier, all symbolic input domains, source constructor/transcript/powers/claim and dot state/callee cut contracts remain unchanged. No additional assumptions, source failure event or output condition changed."
+}

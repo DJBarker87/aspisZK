@@ -3,11 +3,11 @@
 from pathlib import Path
 import argparse,hashlib,json,subprocess
 R=Path(__file__).resolve().parents[2];T=Path(__file__).resolve().parent
-p=argparse.ArgumentParser();p.add_argument('--out',required=True);a=p.parse_args();O=Path(a.out);assert not O.exists()
+p=argparse.ArgumentParser();p.add_argument('--out',required=True);p.add_argument('--copied-inputs',action='store_true');p.add_argument('--prefix145',action='store_true');p.add_argument('--halves',action='store_true');a=p.parse_args();O=Path(a.out);assert not O.exists()
 subprocess.run(['python3',str(R/'tools/s1-native-prepared-transcript-20261025/prepare.py'),'--out',str(O)],check=True)
 (O/'binding.json').rename(O/'transcript-binding.json')
 D=O/'min/src/prepared_claim_native';(O/'min/src/prepared_transcript_native').rename(D)
-(D/'proofs.rs').write_bytes((T/'proofs.rs').read_bytes())
+(D/'proofs.rs').write_bytes((T/('proofs-halves.rs' if a.halves else ('proofs-prefix145.rs' if a.prefix145 else ('proofs-copied.rs' if a.copied_inputs else 'proofs.rs')))).read_bytes())
 (O/'min/src/probe_prepared_transcript.rs').unlink();(O/'min/src/probe_prepared_claim.rs').write_bytes((T/'probe.rs').read_bytes())
 c=O/'min/Cargo.toml';c.write_text(c.read_text().replace('probe_prepared_transcript.rs','probe_prepared_claim.rs'))
 b=json.loads((T/'source-binding.json').read_text())['dot_helpers'];f=D/'fast_pairing.rs'

@@ -1,0 +1,912 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "source_revision": "e4555c7882e96736befc104c7c639e82871aef7b",
+  "command": [
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-driver",
+    "kani",
+    "--keep-temps",
+    "--verbose",
+    "--manifest-path",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/min/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "verifier::proofs::prepared_new_claim_point_4",
+    "--solver",
+    "cadical",
+    "--no-assertion-reach-checks",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--output-format",
+    "terse",
+    "--harness-timeout",
+    "600",
+    "--cbmc-args",
+    "--unwinding-assertions",
+    "--unwindset",
+    "_RINvNtCseaUOSMtER5T_19aspis_r1_cost_probe8verifier14prepared_claimNtNtB2_6proofs4HashEB4_.0:30,_RINvNtCseaUOSMtER5T_19aspis_r1_cost_probe8verifier14prepared_claimNtNtB2_6proofs4HashEB4_.1:6,_RINvNtCseaUOSMtER5T_19aspis_r1_cost_probe8verifier14prepared_claimNtNtB2_6proofs4HashEB4_.2:8"
+  ],
+  "cwd": "/private/tmp/s126-kani-local-diagnostic-20261025-v1/min",
+  "metadata_command": [
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/bin/cargo",
+    "metadata",
+    "--manifest-path",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/min/Cargo.toml",
+    "--offline",
+    "--locked",
+    "--format-version",
+    "1"
+  ],
+  "source_files": {
+    "core-workspace/crates/aspis-core/build.rs": "fe5aebdbcad65764c4eb34cee39fa60621e7bdfc6de262664990fe9ee1ef3edc",
+    "core-workspace/crates/aspis-core/Cargo.toml": "448219b92b3e8e0a3c78cc183359371326f63991a90f9ab4f485f02554657df6",
+    "core-workspace/crates/aspis-core/src/v7_merkle208.rs": "071ade1236140fdae559bb7b607ac9b7ee299e74eccb16b3385e3b1bbf215fdf",
+    "core-workspace/crates/aspis-core/src/circle_merkle.rs": "826736d396946cf7927d4617dcd0e4706ab08c0d778b647117c7369ed9ab7592",
+    "core-workspace/crates/aspis-core/src/circle_fri.rs": "f883d298fb4790d3e69131b90d8626c5083ff194655522e3047f849138460dcc",
+    "core-workspace/crates/aspis-core/src/circle_hiding_query.rs": "f256ea7b9ae761df4834aa902a250a539c06f5b23cdefab7cb7698eb51290029",
+    "core-workspace/crates/aspis-core/src/field.rs": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+    "core-workspace/crates/aspis-core/src/params.rs": "5f1e013c441f80b04c7960af8d4d3ae8ebbd295fe0031e9b60dd9e85b2be10b3",
+    "core-workspace/crates/aspis-core/src/v7_fixed_canonical_audit.rs": "322091fa61477cc214e177433bcd0c00b450fe652e5aae945f37aaa818b7961f",
+    "core-workspace/crates/aspis-core/src/sumcheck.rs": "7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead",
+    "core-workspace/crates/aspis-core/src/v6_query_batch.rs": "3c1d1dcdb2dcc9df30bf8723d9ba10444cbcd79bcbbca6854e1443eb1921eb9d",
+    "core-workspace/crates/aspis-core/src/v7_code_switch.rs": "4704d1e633b9c962f000246203caacb71928a06b24e2468a801489d60b940761",
+    "core-workspace/crates/aspis-core/src/v6_onefold.rs": "fa7977f2be11f4676146b802e687844086f0f33c56857c83514e8b6346f14fea",
+    "core-workspace/crates/aspis-core/src/merkle.rs": "88e5ff328069d4dc802203746de7123c1a150d0d7a49393a7a880d50e2d38a18",
+    "core-workspace/crates/aspis-core/src/statement_hiding.rs": "78b84cb12067d6f6f31068dd15aa76f4e9ecdb38315030d686040472814b1b9f",
+    "core-workspace/crates/aspis-core/src/circle_hiding_prefix.rs": "92f47e55f9d1e73280e48de7563e40685e88ff78c21f589fa98a4cc2c4c31973",
+    "core-workspace/crates/aspis-core/src/circle_query.rs": "5da1dbee29f3a052ad260ebbaeda0233dadb9ed3cf6d04f2a5c2cf84352e31de",
+    "core-workspace/crates/aspis-core/src/v7_staged_pair.rs": "501474bad8d39074b0e595e0956690ea5b785b6e5b33d9a1b126707c33b809ed",
+    "core-workspace/crates/aspis-core/src/state_only_sumcheck.rs": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d",
+    "core-workspace/crates/aspis-core/src/v7_onefold.rs": "6abb0376100611c5553258062480777187785579f402c9c1d3ce72379518258f",
+    "core-workspace/crates/aspis-core/src/statement_sumcheck.rs": "f707317329a8e13bac2538d718b16e048bc58c7de82ef2bb08f0e0d75da66a78",
+    "core-workspace/crates/aspis-core/src/r0_op_count.rs": "10124a2ec44f0581b3e99225b44c23fc3c54452cc93691b46c75646ba018a7e7",
+    "core-workspace/crates/aspis-core/src/circle_prefix.rs": "437a5c853f8018ffa256cfa14a5f36e718cb2b1fc39410e82e9a0fc455a8c4db",
+    "core-workspace/crates/aspis-core/src/v7_lane_zeta.rs": "41d0ad3a95b4d39d6ea39d67e81a2631dc138ebe8630c1a9ff4c77fcd8a8f5a3",
+    "core-workspace/crates/aspis-core/src/state_only_private_merkle.rs": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451",
+    "core-workspace/crates/aspis-core/src/v7_merkle.rs": "ca11ccce5a2a0915ff8979a8ce275912eddbba9c696b770f438f2d957250ad95",
+    "core-workspace/crates/aspis-core/src/state_only_masked_switch_basis.rs": "ec0a3646cf610b593b75179b751f27386f66903483227bbe14678ad0b3ab05ec",
+    "core-workspace/crates/aspis-core/src/circle_line_merkle.rs": "d226fd9b200ea829fca0fe8a045b9ede1408a2f0387db7916facc908544284a8",
+    "core-workspace/crates/aspis-core/src/state_only_hiding.rs": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+    "core-workspace/crates/aspis-core/src/circle_pcs_shape.rs": "0de69556b718b8184f6c65f698b6ce7e4347c80f652bd4e1a84fa7e7809e5093",
+    "core-workspace/crates/aspis-core/src/lib.rs": "c179731989675fa3218cf2230ec3681d2e61d23c2b2694ea10b72fb68ee377d0",
+    "core-workspace/crates/aspis-core/src/state_only_private_openings.rs": "75fae54796b9be405cfdf37e950bdb1b4b53da0cf447762635a4227d67cc0343",
+    "core-workspace/crates/aspis-core/src/digest.rs": "e9a3476d8d3f05639253ea663aebaade2318af60e2ea0fd87a280e058208aba0",
+    "core-workspace/crates/aspis-core/src/v7_compact_onefold.rs": "10527392130f25fd477084fd19da433c20f8bad45adc4f825b193e21b35ca765",
+    "core-workspace/crates/aspis-core/src/v7_profile.rs": "0b5f15c358f9897d84dcb6377e3ea448e5ebceba0bca42660ad60996de3c4a02",
+    "core-workspace/crates/aspis-core/src/transcript.rs": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179",
+    "core-workspace/crates/aspis-core/src/v6_transcript.rs": "48275a37053ce5d33c7ec61caf6301863666f45a1e388c2c64bdb856708764cf",
+    "core-workspace/crates/aspis-core/src/state_only_prefix.rs": "e9fa838650266890a16f74e7c5757a565a882668c42b6980a78b758b31a02f18",
+    "core-workspace/crates/aspis-core/src/state_only_spend_query.rs": "03d959ba62591dfdd55173a45e55647f38d9a0f1aded7dae1f654913aca2f0ac",
+    "core-workspace/crates/aspis-core/src/circle_openings.rs": "8ad10e78495fa67924a38606cc8c7e8bd3e96741fa12bd6abe731c90a89d26f6",
+    "core-workspace/crates/aspis-core/src/state_only_query.rs": "4e91b9b356998cc52f5482bc18c5de79b6dddeb9f9bb77bbf6af7d30ff401bd6",
+    "core-workspace/crates/aspis-core/src/state_only_spend_relation.rs": "6c82101c3546c2a26201731567aa687c6a9050b55bc0d88ac127131b5d9ba1dd",
+    "core-workspace/crates/aspis-core/src/state_only_relation.rs": "e9e57e1497eceb22163698b466d059e14e76cff9ff998bf257d5bbd9533342eb",
+    "core-workspace/crates/aspis-core/src/state_only_spend_openings.rs": "0e3de4cfb3678137b6260daec537e4d70b0c4d26e03a5ee3b99acad31a6c3681",
+    "core-workspace/crates/aspis-core/src/proof.rs": "a8e3b259da25d47a3d88b38ca838d57ab104476929fe5758b43d1a37c06306a0",
+    "core-workspace/crates/aspis-core/src/verify.rs": "108021252ada329b627808c045509eb0678c720b7ed052060213af0763b40656",
+    "core-workspace/crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+    "core-workspace/crates/aspis-core/src/circle.rs": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c",
+    "core-workspace/crates/aspis-core/src/state_only_masked_switch.rs": "8704f8a9a23787ef468dbff013fb4211bda637d1ebd42908292c2a055b3f3c1d",
+    "core-workspace/crates/aspis-core/src/r0/encoder.rs": "6e34b6b2b264573e63f963fe2879d05eaed4f767e105bf7ca0c79d5b6dfc5c88",
+    "core-workspace/crates/aspis-core/src/r0/onchain_re3.rs": "29a854d79535b83b8cd28882080dfe9ada344148cce33129ac5ff0399d83780e",
+    "core-workspace/crates/aspis-core/src/r0/structured_re3.rs": "15b761a01f41bb68ed8595507dfa9d5b007e01eca73942157917220f26ca0adb",
+    "core-workspace/crates/aspis-core/src/r0/chord.rs": "b3a3d096fec5f307613ad87525eea452bae5c13080a7f52816e0dc0b986f1868",
+    "core-workspace/crates/aspis-core/src/r0/merkle.rs": "ad0f32108562607b9454ac911471a8bebe6306ce98c69eed742c8f8f3985c554",
+    "core-workspace/crates/aspis-core/src/r0/basis.rs": "f557751312781a0dec538b9b3934436e20644f4430144c5a612cfe6bc8d06166",
+    "core-workspace/crates/aspis-core/src/r0/mod.rs": "709f1d0d9be9d3ee74e2b63e13065f5a91c878ba77ed2d2e97a414fbbc646aca",
+    "core-workspace/crates/aspis-core/src/r0/prover.rs": "4d4d8634bcb872d372bd430ac56cd60aece6d60e87e505126ce9ab46d2ef6c28",
+    "core-workspace/crates/aspis-core/src/r0/heap.rs": "67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9",
+    "core-workspace/crates/aspis-core/src/r0/wire.rs": "1e4910a77ddc0734967554c86266fb37496723a3c8eeb0b1fa9eaa12d4ea35bc",
+    "core-workspace/crates/aspis-core/src/r0/onchain.rs": "08468c643f1b909ee811984cf7a2dde1d9fb1e6c8dd9c943d5904fcf0f493421",
+    "core-workspace/crates/aspis-core/src/r0/top_overflow.rs": "d69cb3545a5cb93d5faaf005298459b3fe10f704ee82da7d97306cfc067cd89e",
+    "core-workspace/crates/aspis-core/src/r0/structured.rs": "c5eb9569c3819e95ccd55e87b7c888f367b433c8a63c4ea7ab4c34389a1d3f74",
+    "core-workspace/crates/aspis-core/src/r0/domain.rs": "43bfef6f29698a4751504f9adee0e7dfdd092f6ecae6ace16f498cb2ef0fe068",
+    "core-workspace/crates/aspis-core/src/r0/transport.rs": "ac892fa35fd6a8d697805770ece27fde79d1b91db619323870dff603b4f3045d",
+    "core-workspace/crates/aspis-core/src/r0/opening_tests.rs": "7ddfa487f936ca4e3ca83dfc9bd9f60ac99a0bf4cf951c367490bd845f63ea3d",
+    "core-workspace/crates/aspis-core/src/r0/transcript.rs": "0871a78b1c20a2b1dd2108dedf5865200a9213f6c2b5633cd920303f631bb623",
+    "core-workspace/crates/aspis-core/src/r0/transport_pads.rs": "f2b42975f868d78bb8ece807bf32f1c5e162f07521f5ec2c6f87f00df82a814c",
+    "core-workspace/crates/aspis-core/src/r0/tests.rs": "3c88e41d3e1c64548adf93f92fee0ad3ce1786472bbe626d3d84095c3c57c8b2",
+    "core-workspace/crates/aspis-core/src/r0/onchain_unhoisted.rs": "5e49bea79639a641bc4b5252bffb6ab8285a7c94341188f2244d5812fd860099",
+    "core-workspace/crates/aspis-core/src/r0/verifier.rs": "d8f06728e85236520d0d0f4c81fb5f24c31c5cf10a3bacf5bf1591d9a6631607",
+    "core-workspace/crates/aspis-core/src/r0/fold.rs": "06afbfb2c1c03306b59136695fdbf89382e21ed420f123982a70e977c2f35e39",
+    "core-workspace/crates/aspis-core/src/r0/opening.rs": "349dc999c1165e9e3be07a840ce99dc7a0b567c7a0545088baea80894476ee7d",
+    "core-workspace/crates/aspis-core/src/r0/scalar.rs": "a36f076d3333ad53e01815bda7d030ce12e9c6e30aafc475d928d4df8af11d44",
+    "core-workspace/crates/aspis-core/src/r0/equality_trace.rs": "fa249833dcb5160c936da42be55caaeb4f7cbb8a5e3b5ae3d51d6e31abfc667f",
+    "core-workspace/crates/aspis-core/src/field/wide_exact.rs": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+    "core-workspace/crates/aspis-core/src/r0_transcript/tests.rs": "2be72d867d0505146b67cb56fc860a9a20feee1d32117ba156c7bd1038a61976",
+    "core-workspace/crates/aspis-core/tests/r15_q22_stopping.rs": "bb6926e3c570f6af0fb5752f46404e002ab87d7aebad9e9669a48c65dce6b477",
+    "core-workspace/crates/aspis-core/tests/r17_transcript_freshness.rs": "d17cae50ec0c9a54298d9598f031e48d91e74c111641ee5755d06705f7005d5b",
+    "core-workspace/crates/aspis-core/tests/fuzz_parser.rs": "83e3af0720b6a6ad80fe3d03c15c926e2cc8fd1179900892736a2a85359210b3",
+    "core-workspace/crates/aspis-core/tests/r17_rejection_cursor.rs": "c37fb3eed5c0baa85fba2c76f7871839895fc996b1688b37d556aba17f047631",
+    "core-workspace/crates/aspis-core/tests/v8_paired_commitment_source_kats.rs": "999dadc5acaf9bcb364dedac5430c5b756a727a0f184c5d16fe9fb6f806c53c6",
+    "core-workspace/crates/aspis-core/tests/r0_semantics.rs": "38f38e6bf25a3cf8cf974d69a389693a5998806e1f3430b1a51e274fe12a9e1e",
+    "core-workspace/crates/aspis-core/tests/r15_circle_domain.rs": "6c0cf419e748f748c49beba0c3167bc0309d19fbe35192ec9d99375a28e333de",
+    "core-workspace/crates/aspis-core/tests/fuzz_field.rs": "742c3b4fc6ce259b27af037588780b9c6581835fd1b39766b3b17b0128ee0e1d",
+    "core-workspace/crates/aspis-core/tests/r0_e4_field.rs": "f29ac15e675629d9bc6ea49debf344d89f2a9235481ff1fc2706fe6da3cd4fe7",
+    "core-workspace/crates/aspis-core/examples/v7_lane_kats.rs": "e8b3e39ae48be1503940a702b1a3c0bf1f4e2649a64b93e649c2c1aaf04397eb",
+    "core-workspace/crates/aspis-core/examples/r0_weight_table.rs": "0032c9920d431a191f7f97aec3b3899df982c215814aff51706ac0f6a693d138",
+    "core-workspace/crates/aspis-core/examples/r0_structured_gate.rs": "22beb75f35075cf3164b578618e20036dd7badbb6dfa9026feaf44416364d532",
+    "min/Cargo.lock": "104b9c913aabeb1c700800dc90a311ac2f8ff000f34435a39b3b0e84499e7fcd",
+    "min/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+    "min/src/claims_write_proofs.rs": "0f21b59e7d37dcc9d604f2be545d16e74fb89000bb3d6596a532a97844a1682b",
+    "min/src/r1_wire.rs": "691c0813a0af75888f5b3c7be29a43895577d514c691b98161af0d0274928260",
+    "min/src/lib.rs": "ede9ead2f23ec78f1d81cb218d981030aaa986b003ad1aba3e6641af71b4a5ad",
+    "min/Cargo.toml": "0717da3831fb6eee06ab8be3fd390f7bd6c28a4bce15c7a051eeccfc22911ef9",
+    "core-workspace/Cargo.toml": "55235c7451062fc29d599b94c23f9488b8ebfc8acbde3bd6a158afe12b07eb0e",
+    "min/src/probe_prepared_claim.rs": "c0007ed7c6b5dd99f21301158a5fe9f627ff7bc3d079e271cfa013421d18cb36",
+    "min/src/prepared_claim_native/r1_semantic.rs": "3e98d5cd12f63163ebe4c59fd1465786c518136cc32ec4b8dce9fdda36d31449",
+    "min/src/prepared_claim_native/r1_wire.rs": "54db68fb0556a1dc33f9bb1e23c02037bebc8223389a885780b19d00f1e86098",
+    "min/src/prepared_claim_native/transport.rs": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+    "min/src/prepared_claim_native/transcript.rs": "a4cf5f6a0e0d4caada2bab6901d2ee025af6c1000d41e0bd3f592dd68363f0ac",
+    "min/src/prepared_claim_native/fast_pairing.rs": "464afc02d278a4e183d90bfe421fa84cf0694701c1ceba4e6158d724d900cbae",
+    "min/src/prepared_claim_native/trace.rs": "8315e3caed12ed8f0b3cfe097746339eec735f08c75095d1c036ac37469cf7cd",
+    "min/src/prepared_claim_native/proofs.rs": "97a13a4392c5f2429c1b92f8f1cbe979ecc355ab636e1d03461119ca94a7426e",
+    "min/src/prepared_claim_native/verifier.rs": "45c11c8112f22c8ed04c7092ea5976e7b899f25321e7d6f6f48a9401945d8d4f",
+    "min/src/prepared_claim_native/weights.rs": "e91506302ad63dabd1c3c190e563b1da17ea1b4ebbeb4d21d25f3d921cc4c1c3"
+  },
+  "tool_pins": {
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/license-notes.txt": "cc498c984467d903297d661913abd73d799f89b1f982b1aecbb0f598db673198",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/rustc-version": "5e2c0b41d4dd8731450af7491164959c828f52c2a9160a825f0bfc94f234711a",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/rust-toolchain-version": "f72d455b995cdb9f75093099cd4e8fa41ff6e84ce05648d3fb7e18c6962e198a",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-compiler": "7c514266bb2ec9c26d2aed1dfa021464603ff5f456e3c1975dc475417942cd85",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/goto-analyzer": "7698e19f5f6b6cfa2f7a2663a1a1d97c90ab9124a6da65bfc2da7d704f715b6b",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kissat": "6cbea531c356468c23872474053de41e8c281cec0d7e4189f80b3524101c9aaf",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/cbmc": "941a843499275d60625bdb5e3631617c8b9760cc9e1709d2126d3858ba85e85d",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-cov": "37923a3a4b5444036d286484a9c8e976e535a0bc1d5b14241b290388361fd7de",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/goto-instrument": "54b03b79863ea6f84d6b5bf094c85a5090b0fd9b0d25049cfee9cf210dba320c",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/goto-cc": "005656e6dab1700c50351101ee36575b7c84712cb8167f52466aa23aaa691838",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-driver": "00e3872e33d1546f556f6cc55c3ece1f9f906eeb2b0c5ac5513b2aa66f0017cb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libkani_macros.dylib": "ccf17f74d725f6f9b579fc31b72d88803b56b3826e833a62baa52cfd28f0f691",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libstd.rlib": "491146861d49a8eceaa24f9f6d7ae1822835ff5aca539c09b3fc0d8b5e5c137c",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libkani_core-351af68869ba52ed.rlib": "84f1f786c42cf334ed138e67d14b96003f7808b738b29fd7ea31a5192547beaa",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libkani.rlib": "5933f323e757f6da9aec9b0a6925fabf7f0ce0e495b5dee9837d349cc8a2f3c0",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/no_core/lib/libkani_core.rlib": "d44e9db63d79cddcaf9e039bc5656830d68ec410449fc8c709613ef07bba9395",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/no_core/lib/libkani_macros.dylib": "ddaa8a343c0887f3b345b278ff22eb04907468b914cce6ac36142e323890ebed",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/std/Cargo.toml": "cfe3cc329e51363b270c1ef5ecfdd9b366ce2df4198c53947b4f7d1da002955a",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/Cargo.toml": "f2256b8c485f2ecc6f8baa2558c0059d7d60c3f98e836f19f6546bacc7904b65",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/kani_lib.c": "4a3c653c5cf540de061dc6044b85cad196b1321119f936621e692e13a88cd6b6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/build.rs": "5ab93eafbf57b56c13767247a46a86b4ec33cdd2bdba33946e10830220141dcb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/Cargo.toml": "7afbaa51a848b1ccddc3156f072899f98470c26f833e9ac419d34ccbd338f999",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/build.rs": "5ab93eafbf57b56c13767247a46a86b4ec33cdd2bdba33946e10830220141dcb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/std/src/lib.rs": "f3a9a374664964e32d7988c6fd1ed978977167acad465747b11021aaed6abd35",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/std/src/process.rs": "366282f235e1eaf12b144165e45cdbaabaa9d1cb7267643f740c8703fc102e1d",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/arbitrary.rs": "ae733af15e1808f246ec873e24dcca71735bc24d238e1950b23ee8ad636ea283",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/futures.rs": "d44107d0f6034da5923fcde1ccb0ed8e4ea30342b62b9bd3881462672fa6df78",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/concrete_playback.rs": "26d6332001525cb728509a2d2804edba5841800a469dafe1b1fc7bccd088b9da",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/lib.rs": "b6d11752f9d5cc47c54e5fda8240472c8f8d4c7a98842aff0cc4ba5a309f6555",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/iter.rs": "c49b3ce607824ca0886f5148eebca766c93d61dafaca1b1192f9d1f7ed2119d0",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/tuple.rs": "9a3adf6d0b7ea79314c0e59d1b528842f5480440b95971666cc7a0736808d8fa",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/vec.rs": "ecd0454090ea8f9861c821a7f216d827a269bac7215c4b555493774f4e6df467",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/bounded_arbitrary.rs": "24f765ee294984ab3c99ff56ddeca2bae654a45a5f46e38bea01b8ff2b3b79fb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/invariant.rs": "ae370648e8df04a5843d3a1d4a223adc76bbbc49aa369163d7aaea70e738a2e1",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/shadow.rs": "a3e9fe9fa8b844ae05ab51d03a391c178016e7fa3d33b8d4a458647eae97fe65",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/contracts.rs": "05b329fa34923824ffe0f6e488a61bf06ff6bf99d2a0be990f951d50a1dc38ac",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani/src/models/mod.rs": "61e11837be75259207de91184cad7e31a868c9b26a07f88a1dc310258ba4c71f",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/derive.rs": "a912ef3f47a9ac9c5f5a287787f7cad97441ae64d533181321bedb1406857ecb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/lib.rs": "f566f25c0595acbc7c4ad6b428463bad91261c35ac838001f3ae358e37ff4749",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/derive_bounded.rs": "5507a00508f9bb4642e2c238f8beaac79f48e6eb902b60de2a8e41e485c28a66",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/assert.rs": "091e4d62618b2ecebd90e424b16372d07b27b99ee512d563325cb0ad626fc7d6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/check.rs": "6a694010ecf8dc4ee4f2dd1389daacb989877ff2e9097533fffdf51e20a39be2",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/initialize.rs": "779daea7ed44cc9f2bd2a1d626a34fd079cc50a6db5e9e880c8b2515b60bae3e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/bootstrap.rs": "889e33d011fda102a6fa592c5036f55dd6cbe054ea452429617152280b1c2f36",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/helpers.rs": "94ba323170d62c89ef87767c3fc22fdda69680197fabc1d0d5fbfed7df4d4962",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/mod.rs": "b1891d393767517ac01b1000e800ff2cd5f996374a65489a4a1c612da235e5ba",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/replace.rs": "e124bcbf1e89bac4403fe3b9399414bd1873458038793db8324b081f606cc0f6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/contracts/shared.rs": "1fc40a88a01c916b17c000d5cf2aaed454e5f7532557c746ba2712a96d842f50",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/library/kani_macros/src/sysroot/loop_contracts/mod.rs": "b9d3ac70d367cbcce7728de4819343c14d2ce610ea90d82f0352a601219d21f9",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/libkani_macros.dylib": "ccf17f74d725f6f9b579fc31b72d88803b56b3826e833a62baa52cfd28f0f691",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/libstd.rlib": "77bb588befb6bb136ed732396041c10bc0844065baaf09453b9084c2a3895ed6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/libkani_core-0071be04a2f99080.rlib": "056b5fb2ecb5a1eadaf083f0d03262ab9ad932ab1af8dbb9e885779ea889cd4f",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/libkani.rlib": "982d883186bbba12f3f3c120e17d69876d733785d71d3dcc301f89cb49d93bbd",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libgimli-59c98226c9eac380.rlib": "7630be1aaef7e75fccc9cd72163bd7e4e13007a957d310ef628355cb82abe17d",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/liballoc-c584689944d40609.rlib": "2551950fb695f9b95373f31f1ee2de835e29a2200af669bd583583aca7e062b7",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_std-adbc9c8f07f30a9e.rlib": "906952cb53635733395562e4bf903407790fce390b051f3449141528008c0da1",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro_error2-388a97248c9adf47.rlib": "9fdc1807af907deffc54532d53535f4171d807d8e330bfd831b8dee00e6b5576",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-6c559490b15ce18a.rlib": "c850d51747c0f2e85eec06d591503f43a22784b5c98e4cbc13ff5636de128bd2",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libunwind-8a3cde7984292d99.rlib": "d65495e3e6693bd73e62486a3a949df4d2645e63b10583c01a6b46f0a1051ee3",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libunicode_ident-2c3ccea98a6c0f6f.rlib": "1d3a511995bf326b6d96dc6b64133cd802d9d9b5b393f4e69315f5f49df841e1",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro_error_attr2-7d975fb259556503.dylib": "3abd66ff5cd91d4167428432bd940776afc73b37dc8c082c0afd4b5a6aad5bad",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libstrum-bc039516e831b495.rlib": "95ae159724fe720b3a633c9072555f71d3a67170b8c6ee221a5df14956db2eb5",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-02a3fbb4c21e31ef.rlib": "e8f52586c1b7354d01ff955a38c867204765927f70d6520938d5743bfd18e9dc",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_alloc-a566ebf46955a754.rlib": "44488bfaf723c17895951698ac7582e874e33888931586cd59a18de9b9dbd12f",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libsyn-46a2b05e11d37426.rlib": "f1407f4f125e453dd62caea976dd3c4fb4f7bfbd8dda48a7ddd4cad7749b7815",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libadler2-d3309d77ca433f32.rlib": "e922eac9737897ecb82499ff1afd3b1feb71ad20bae7e2b2b3f98dc39dda93cc",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libheck-404a8bd377780bdd.rlib": "230be16760b1e1fd38c87745d2f682f44d53f3215e3de045e2866d473edd186e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libstd-87d2a86943b419fe.rlib": "91c9540aec013f8ccf5ca08c336494ea27d2da70746c13f3ca901d71ccc5ab95",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-ed5c0630888ab1ea.rlib": "95efbf185679acf59c15fd5866f0697d5df1c9f3570ec07a7a9b15f6a1619337",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libquote-85cf704800910e41.rlib": "78de4e2ef57eca07d837aa47c14d711fbb2b6ad002a015087c4ad03de9bc625b",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libstd_detect-d947030f97b5b3e4.rlib": "373b1878ef6638196bf430a9a47b8d4779d9455c145bb04194184db77637b6a0",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libpanic_abort-a086e510b76bc1cd.rlib": "cc4ca1c190b880fd2db8276775f36f4401dedcddf500b70bf027f400215699eb",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro2-61fd67f6a3b45feb.rlib": "399d09d2803253e43a78ec6a328ca4f1c447b50a4e21c3acb24888079f7e4e36",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libstrum_macros-32153c58ef134ab4.dylib": "0386460e632aa7743b3317509554db1104fda20f0f5c8888db7900018eb4e2c6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libcore-a36d4d2337cc5dc3.rlib": "e5ca2688074606e9cc1bcb8e57982d65ce4be195b35322a8d2fbabc06deab0bf",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libcfg_if-8f9f634ba13fdabb.rlib": "9521ea39eb095dc12436d005bfae7a57f91f995484aadc0561da2391f6a60194",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libobject-891c0460e163eace.rlib": "2a7d3c568d515bdcb6fe0e608329254b8e914d085c1d48a87aee0f3034b768e8",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro-4634aeb969c57246.rlib": "b0a40baf9fffc904f207842de6f4152e4fa4e9a93e98c9d70c2d508e2223e925",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libmemchr-bac36404885330d7.rlib": "0cbbd7b5f39b24190bb319c5989fd4038b193fe56af73b6ad3a10d24a549ed49",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-c2693fb29964a88c.rlib": "1da8f15e053d15a1103cea5eced6e102b4ab861985e4e7d0ceea197a44e87cca",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-4a3542e4b502c5dc.rlib": "4806db8885654ab6a41f95ca5f1c6b349e346f555b0a3099eec5c7e606e09c27",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libgetopts-5b0a23c2d2241113.rlib": "91504eed663815729af35fd3d7c9633b49661797baceaa3e26c732f86e6ddb0c",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_core-6ede0afdd99a3301.rlib": "c2ebc8d86ea50a13e50e5909227290890714b22c47a0a827d338044ec916a1ec",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-ab13238ddf0b0aaa.rlib": "2a00219f7fd374591795661c0e66987e77db952bd49a6270b43d805ec71c2256",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/liblibc-85e57bf2ef9f4e48.rlib": "df482c629566628c94a9f05c95733839a0bfc8d7f178024fc0cb6c0f2c3af33e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/libtest-735386beca340ca3.rlib": "f9dd4133a2fb32272b9439a134a16a2c6a6fbe5c81963832ba722ec47e3faad2",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/playback/lib/rustlib/aarch64-apple-darwin/lib/librustc_literal_escaper-33fe2acf2e4662af.rlib": "27378b34c236259e795c7899705baccf31a9af0354fb7611cec0466b198c7ebe",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_core-bcef73c7dc96ee75.rlib": "8b673c0515d41b54f41b3c22b19cdd52d5d694041f630abe11a3cb14213aba61",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_alloc-ee1d488f5d582538.rlib": "68ef8e9fa37201a20e94f447e1a0b7004e93b1e5e86272bed0e9d57a86b04b35",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libstd_detect-64b0a74f84acebd2.rlib": "55afb550a3faab737ee7774e4e7e85e0efdddc0d37aea1dfffbe8ec8a8c0bced",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libobject-aa6c0f63503f5a30.rlib": "32406c70d5f310b7775237ac5ffef90fbf6dfc883b848313a8c8bfe944b5e2ff",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro_error2-388a97248c9adf47.rlib": "9fdc1807af907deffc54532d53535f4171d807d8e330bfd831b8dee00e6b5576",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libunicode_ident-2c3ccea98a6c0f6f.rlib": "1d3a511995bf326b6d96dc6b64133cd802d9d9b5b393f4e69315f5f49df841e1",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libcfg_if-7ffa5ae100f72e75.rlib": "b2337f025959ba3e09f5672f31b3fa11dcf30a89265cb300b2d8666ddd22617e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libmemchr-6ea5a884ab7694d0.rlib": "cbc39932bb302a7f62290a47c951360a873d5df075e603b44890318783865fb9",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro_error_attr2-7d975fb259556503.dylib": "3abd66ff5cd91d4167428432bd940776afc73b37dc8c082c0afd4b5a6aad5bad",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libstrum-bc039516e831b495.rlib": "95ae159724fe720b3a633c9072555f71d3a67170b8c6ee221a5df14956db2eb5",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libsyn-46a2b05e11d37426.rlib": "f1407f4f125e453dd62caea976dd3c4fb4f7bfbd8dda48a7ddd4cad7749b7815",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_std-f1183f3db7c1ba26.rlib": "3aaae0e905c8d82c18725809694b27e50726202d959653521f656bcd252ea699",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/liblibc-fe23a23c42111d10.rlib": "13f160292ae59ac2b32c3c52767a40549f56327a40167028a15cf474a77d2af9",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libcore-d2532ceef3e41a77.rlib": "af9cad64ddbe041c1cd1b23386aa2a45f29f9a38d201edd6741d57c33d0c8b6c",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libheck-404a8bd377780bdd.rlib": "230be16760b1e1fd38c87745d2f682f44d53f3215e3de045e2866d473edd186e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libunwind-6c669374918b7733.rlib": "990a7644eaf7413d781b5f6752019bd0e05e1063746f781b94910435f9fe3a3e",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libtest-78374af4b4a2c50f.rlib": "d510ef88b0c46bcd36b75adf12f10de46a3aa0ff741e25c232320f60a28a04af",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libquote-85cf704800910e41.rlib": "78de4e2ef57eca07d837aa47c14d711fbb2b6ad002a015087c4ad03de9bc625b",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-393a3a2dac730983.rlib": "2b13642e34792c233f900d8aa5699df39f0bc40e9666a096d5a51a32e0a00b24",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-320f6a200f0bf5e6.rlib": "eeb501e1dba0772a25595963bfbfc058d45e4fa5bbc782bf042811b3274f171c",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/liballoc-248e012bf3db265c.rlib": "72daf567120ae0a867e86dc094f938a1dcd0048e5f5832833d036758d9bcd06d",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro-916f97bf4ebaaa68.rlib": "cee75df35fcb69eb59029250e406aad98e1bfed2928253cf3ebba9f5a4f93182",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro2-61fd67f6a3b45feb.rlib": "399d09d2803253e43a78ec6a328ca4f1c447b50a4e21c3acb24888079f7e4e36",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libpanic_abort-1c4b944469760c0a.rlib": "5922714d1a70fd8e98d1bc427c710c92f03fb9d6bc4bb7d4bb985c424d2d8635",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libstrum_macros-32153c58ef134ab4.dylib": "0386460e632aa7743b3317509554db1104fda20f0f5c8888db7900018eb4e2c6",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libgetopts-3f3d8d8a0dff4975.rlib": "1f2b8d184033a542b423ef1290ddc522adf436820368121beb1e3bdaa4ea2366",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/librustc_literal_escaper-5aa8f0f08c7b4405.rlib": "bd650b66e0a018d00ac97e9c51eee2de6899e1e4eb5f6f4648a6f831e6bbbab9",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-60ae3c2563887a23.rlib": "16a14103463d88160964f7eedb4bdf6edd1bb3bfc1fd8f16bac8365559c34473",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libgimli-e77686ee70e9ae3b.rlib": "d488c383f289282a49a08e41fc84fdcde84abf548d07141f4eddcc301fb2ffa0",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libstd-09bfdf887cb8cd2f.rlib": "40bf1154ab5768fafad84d65d6cbcc0324587e7c5cb5d0023965109a77ab6367",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libadler2-6d045e798e7974d5.rlib": "eaad082109e537407e696ab46ae65ce1c5113922ced01b5d2ed561f193f36bb3",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-a928c9a773f458f2.rlib": "9a929bfb19b6b1f16b2004377585d0076783090a2bc58ece0cf8fc086714af56",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-45aeeb07454196ae.rlib": "17e91956fa6336cffec263a1060090d008fb8efe27f33fcde0c39b76fc129e9f",
+    "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-9fc491968635df12.rlib": "44d408657218e937ed384943a56bd8bfb6ca180cddefad2df7930788c24368af",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/bin/rustc": "35ac51dc4c414acbe362bc1d173e911dcd89b98f6fa65ff32807de3424a13888",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/bin/cargo": "a8167e1ab9e977dff79938f756a258cec6dbbbaf9926d71de8651830a2c90530",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/librustc-nightly_rt.tsan.dylib": "17ae181f49102ec398f711dbdb3b00cc42c3126d30ce7a42ecb7c7bfe2e2e4ff",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/librustc-nightly_rt.asan.dylib": "72b7a993dcc60aba0bd7889fa2f0260586d4c9d8ee0f95e6e329cefb274b3e26",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/librustc-nightly_rt.lsan.dylib": "3d7be1784a1e08b31a289605892e3073831026edab1dd88c77e90d10e514f724",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/librustc_driver-4f10604dc9267822.dylib": "54669ed1f97df3d83088da263d1da4973927caa2e4f252ed1ec5aa89d62786f9",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/librustc-nightly_rt.rtsan.dylib": "a2dbb6b04d9993f3b476f78eebe5e1dac5f9b21f2a29be51ccd9aaebd385a2bf",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/liblibc-c912ff1c9fd794c5.rlib": "d90e9557e4bcc6a61f56c5eb979252baa6c6aaf7e35c28c318ac773fc836ebac",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libstd-0aa8ea73e26c09d1.rlib": "1170c5c2f725dc065090b0855eb2cc8ca9729945d0f4dc2e049b446aebfcb666",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libpanic_unwind-7637fc5005ceedbf.rlib": "11b7eb0d8e2a1d859106b1b7ef50794bb6cd4791fdc8da8e838fdef3e99b942c",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc_demangle-f3e6750b21698926.rlib": "53f6634ca1b319e6dd95af6df3d7a8aff96d50f789e61625ac30322240170298",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc-nightly_rt.tsan.dylib": "17ae181f49102ec398f711dbdb3b00cc42c3126d30ce7a42ecb7c7bfe2e2e4ff",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libadler2-cb5d32857432fa74.rlib": "ca1e1631736158adc0878a87e6f1dfe8331489531d4d2fa79e974e896bb598b1",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libprofiler_builtins-01bba1ed6dce0fed.rlib": "2b54e407795c184ca596da91215b2bd40bdeead413a5d7d92fbbb47ce5734ec0",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libgimli-eeca0316b2966e8c.rlib": "2a5591e4fdc1a1215e1c887a07c481318423de842b601ae609814c23f9174727",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libminiz_oxide-0557e4db84186296.rlib": "d8ff474fb1c1acb03eea7f10ddad5b3909d048eb16d5dd858322c2dda39a8da9",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc-nightly_rt.asan.dylib": "72b7a993dcc60aba0bd7889fa2f0260586d4c9d8ee0f95e6e329cefb274b3e26",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libmemchr-9fccbd75b7d3e89d.rlib": "82c7a74aa4100505dac903223ed889862a5638c3f7fa4c6761a770c633569cc4",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libsysroot-5a2297d69d3a99b9.rlib": "d9d44384ba205ab067ab03bb6979e2cf20584ed409aca6036d0d2295fdf436b2",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/liballoc-c639e303defeca80.rlib": "d24d3ffb712206d144cae47b6671e5c2521b254f65a129be76303856dbf06feb",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libcompiler_builtins-54b4c1b3b19756d1.rlib": "616b48e7fb934f5a3ee90a5ae14e8e6dcbf4e52daa48c6d5f456ea83b2f45737",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc-nightly_rt.lsan.dylib": "3d7be1784a1e08b31a289605892e3073831026edab1dd88c77e90d10e514f724",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libstd_detect-b5a6f97ab8f2c32f.rlib": "307cde8a5896a41cc4ddbda6ac532343c8a3891cc3943f8e0dccc4e377413cc3",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libtest-36688e198e2100f4.rlib": "780d7dc19191fbcb97d1c38f1e11c1ae88f2de9a97a72740be04c142eb709f7b",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc-nightly_rt.rtsan.dylib": "a2dbb6b04d9993f3b476f78eebe5e1dac5f9b21f2a29be51ccd9aaebd385a2bf",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_std-63b8dbd4466966d7.rlib": "75ed2ef991820aec89a4d49bfc57fa93aeb7c2391641a3d7d64a61b2cb32a1eb",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libcfg_if-9cfc3c8bb587c600.rlib": "b156a50f5ff17034bbdf6da42e5a63b8a45e28c5b76d9f5c5388fde5492500a9",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libobject-2daae2c7800d5dba.rlib": "7c9a20ece0d43629d1b245361bc4648fe9450c13ce90e337eea0b40aed8954b4",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libcore-a6081f5590547d09.rlib": "9b49651f46bb23d30838dfa8fdfff69b85e8a4205175218f4003e94d833a8175",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_alloc-434c0338d2cb8a28.rlib": "0aca048c9161ac4565a163392b6b092e954c35d767d80fb6971061006a491bb8",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libunwind-0030615e8a0e0492.rlib": "3b7e52968b52ae1726978b39988e1fb9cc1e4c388d56c8aaaf9dbcb0c8a4c3ca",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libstd-0aa8ea73e26c09d1.dylib": "0bbab86f6218cb8266afd0bd39f7b788ba3e87e476b71d6c938360ce9a07c39f",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libproc_macro-cb8c25b2d7647628.rlib": "a3b96daaf7e10c80c06067aca4b6d567e63feac9bf5cbcc4a4d2c9c72171fad4",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libhashbrown-1abad15ebf87df6d.rlib": "2d2d63a58c5b9540d0d594cac3d20bb3ac5e5049c63a27a4747eebfa211fd586",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc_literal_escaper-1847ebcde3ab82de.rlib": "6376f907c88cb763c84cdae65e416c440b696930f308941d32a64d3926224132",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libaddr2line-919dd32358b842e9.rlib": "8b77c7e39b71a80f993956e94a4de3999004de552b04ec9c49092c9070fc7b12",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libgetopts-ff7bd01f5a2b0af1.rlib": "9f7305944f32d5aa4e14b77f7bf2669f522c65757b5bb91143fbace4a2885a9b",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libpanic_abort-b52679a352f16aba.rlib": "d91e66c81ce5acfea57a9628f1e1f1a37fbc011762d5ad3f8ed65d8c238dd953",
+    "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc_std_workspace_core-a5941e725045535d.rlib": "1ec66bf04910bb1c04f0f6c1b29b5a0a6c9e48a5e24530ead27da5ed71d7ddd4"
+  },
+  "archive": {
+    "name": "kani-0.67.0-aarch64-apple-darwin.tar.gz",
+    "id": 341228123,
+    "size": 104168339,
+    "digest": "sha256:7fd0b71130aa37bd1e346eba675aad09e9b66e4b383f707fc657330ceb29eeec",
+    "browser_download_url": "https://github.com/model-checking/kani/releases/download/kani-0.67.0/kani-0.67.0-aarch64-apple-darwin.tar.gz",
+    "created_at": "2026-01-16T01:22:36Z",
+    "updated_at": "2026-01-16T01:22:39Z"
+  },
+  "source_binding": {
+    "schema": "focused-extractor-proof-packet-v1",
+    "native_source_files": [
+      {
+        "path": "core-workspace/crates/aspis-core/build.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/build.rs",
+        "sha256": "fe5aebdbcad65764c4eb34cee39fa60621e7bdfc6de262664990fe9ee1ef3edc"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/Cargo.toml",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/Cargo.toml",
+        "sha256": "448219b92b3e8e0a3c78cc183359371326f63991a90f9ab4f485f02554657df6"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_merkle208.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_merkle208.rs",
+        "sha256": "071ade1236140fdae559bb7b607ac9b7ee299e74eccb16b3385e3b1bbf215fdf"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_merkle.rs",
+        "sha256": "826736d396946cf7927d4617dcd0e4706ab08c0d778b647117c7369ed9ab7592"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_fri.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_fri.rs",
+        "sha256": "f883d298fb4790d3e69131b90d8626c5083ff194655522e3047f849138460dcc"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_hiding_query.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_hiding_query.rs",
+        "sha256": "f256ea7b9ae761df4834aa902a250a539c06f5b23cdefab7cb7698eb51290029"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/field.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/field.rs",
+        "sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/params.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/params.rs",
+        "sha256": "5f1e013c441f80b04c7960af8d4d3ae8ebbd295fe0031e9b60dd9e85b2be10b3"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_fixed_canonical_audit.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_fixed_canonical_audit.rs",
+        "sha256": "322091fa61477cc214e177433bcd0c00b450fe652e5aae945f37aaa818b7961f"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/sumcheck.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/sumcheck.rs",
+        "sha256": "7e12acf033a9c309a836dcb1c334c69932e15b97407613b3968f8e1c53787ead"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v6_query_batch.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v6_query_batch.rs",
+        "sha256": "3c1d1dcdb2dcc9df30bf8723d9ba10444cbcd79bcbbca6854e1443eb1921eb9d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_code_switch.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_code_switch.rs",
+        "sha256": "4704d1e633b9c962f000246203caacb71928a06b24e2468a801489d60b940761"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v6_onefold.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v6_onefold.rs",
+        "sha256": "fa7977f2be11f4676146b802e687844086f0f33c56857c83514e8b6346f14fea"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/merkle.rs",
+        "sha256": "88e5ff328069d4dc802203746de7123c1a150d0d7a49393a7a880d50e2d38a18"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/statement_hiding.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/statement_hiding.rs",
+        "sha256": "78b84cb12067d6f6f31068dd15aa76f4e9ecdb38315030d686040472814b1b9f"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_hiding_prefix.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_hiding_prefix.rs",
+        "sha256": "92f47e55f9d1e73280e48de7563e40685e88ff78c21f589fa98a4cc2c4c31973"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_query.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_query.rs",
+        "sha256": "5da1dbee29f3a052ad260ebbaeda0233dadb9ed3cf6d04f2a5c2cf84352e31de"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_staged_pair.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_staged_pair.rs",
+        "sha256": "501474bad8d39074b0e595e0956690ea5b785b6e5b33d9a1b126707c33b809ed"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_sumcheck.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_sumcheck.rs",
+        "sha256": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_onefold.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_onefold.rs",
+        "sha256": "6abb0376100611c5553258062480777187785579f402c9c1d3ce72379518258f"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/statement_sumcheck.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/statement_sumcheck.rs",
+        "sha256": "f707317329a8e13bac2538d718b16e048bc58c7de82ef2bb08f0e0d75da66a78"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0_op_count.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0_op_count.rs",
+        "sha256": "10124a2ec44f0581b3e99225b44c23fc3c54452cc93691b46c75646ba018a7e7"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_prefix.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_prefix.rs",
+        "sha256": "437a5c853f8018ffa256cfa14a5f36e718cb2b1fc39410e82e9a0fc455a8c4db"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_lane_zeta.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_lane_zeta.rs",
+        "sha256": "41d0ad3a95b4d39d6ea39d67e81a2631dc138ebe8630c1a9ff4c77fcd8a8f5a3"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_private_merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_private_merkle.rs",
+        "sha256": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_merkle.rs",
+        "sha256": "ca11ccce5a2a0915ff8979a8ce275912eddbba9c696b770f438f2d957250ad95"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_masked_switch_basis.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_masked_switch_basis.rs",
+        "sha256": "ec0a3646cf610b593b75179b751f27386f66903483227bbe14678ad0b3ab05ec"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_line_merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_line_merkle.rs",
+        "sha256": "d226fd9b200ea829fca0fe8a045b9ede1408a2f0387db7916facc908544284a8"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_hiding.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_hiding.rs",
+        "sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_pcs_shape.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_pcs_shape.rs",
+        "sha256": "0de69556b718b8184f6c65f698b6ce7e4347c80f652bd4e1a84fa7e7809e5093"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/lib.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/lib.rs",
+        "sha256": "c179731989675fa3218cf2230ec3681d2e61d23c2b2694ea10b72fb68ee377d0"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_private_openings.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_private_openings.rs",
+        "sha256": "75fae54796b9be405cfdf37e950bdb1b4b53da0cf447762635a4227d67cc0343"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/digest.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/digest.rs",
+        "sha256": "e9a3476d8d3f05639253ea663aebaade2318af60e2ea0fd87a280e058208aba0"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_compact_onefold.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_compact_onefold.rs",
+        "sha256": "10527392130f25fd477084fd19da433c20f8bad45adc4f825b193e21b35ca765"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v7_profile.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v7_profile.rs",
+        "sha256": "0b5f15c358f9897d84dcb6377e3ea448e5ebceba0bca42660ad60996de3c4a02"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/transcript.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/transcript.rs",
+        "sha256": "9bd74c66a28567e4d964896b7e2d7c0ac79840565d44b561747879868bdd9179"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/v6_transcript.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/v6_transcript.rs",
+        "sha256": "48275a37053ce5d33c7ec61caf6301863666f45a1e388c2c64bdb856708764cf"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_prefix.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_prefix.rs",
+        "sha256": "e9fa838650266890a16f74e7c5757a565a882668c42b6980a78b758b31a02f18"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_spend_query.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_spend_query.rs",
+        "sha256": "03d959ba62591dfdd55173a45e55647f38d9a0f1aded7dae1f654913aca2f0ac"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle_openings.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle_openings.rs",
+        "sha256": "8ad10e78495fa67924a38606cc8c7e8bd3e96741fa12bd6abe731c90a89d26f6"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_query.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_query.rs",
+        "sha256": "4e91b9b356998cc52f5482bc18c5de79b6dddeb9f9bb77bbf6af7d30ff401bd6"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_spend_relation.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_spend_relation.rs",
+        "sha256": "6c82101c3546c2a26201731567aa687c6a9050b55bc0d88ac127131b5d9ba1dd"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_relation.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_relation.rs",
+        "sha256": "e9e57e1497eceb22163698b466d059e14e76cff9ff998bf257d5bbd9533342eb"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_spend_openings.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_spend_openings.rs",
+        "sha256": "0e3de4cfb3678137b6260daec537e4d70b0c4d26e03a5ee3b99acad31a6c3681"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/proof.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/proof.rs",
+        "sha256": "a8e3b259da25d47a3d88b38ca838d57ab104476929fe5758b43d1a37c06306a0"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/verify.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/verify.rs",
+        "sha256": "108021252ada329b627808c045509eb0678c720b7ed052060213af0763b40656"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0_transcript.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0_transcript.rs",
+        "sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/circle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/circle.rs",
+        "sha256": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/state_only_masked_switch.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/state_only_masked_switch.rs",
+        "sha256": "8704f8a9a23787ef468dbff013fb4211bda637d1ebd42908292c2a055b3f3c1d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/encoder.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/encoder.rs",
+        "sha256": "6e34b6b2b264573e63f963fe2879d05eaed4f767e105bf7ca0c79d5b6dfc5c88"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/onchain_re3.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/onchain_re3.rs",
+        "sha256": "29a854d79535b83b8cd28882080dfe9ada344148cce33129ac5ff0399d83780e"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/structured_re3.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/structured_re3.rs",
+        "sha256": "15b761a01f41bb68ed8595507dfa9d5b007e01eca73942157917220f26ca0adb"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/chord.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/chord.rs",
+        "sha256": "b3a3d096fec5f307613ad87525eea452bae5c13080a7f52816e0dc0b986f1868"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/merkle.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/merkle.rs",
+        "sha256": "ad0f32108562607b9454ac911471a8bebe6306ce98c69eed742c8f8f3985c554"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/basis.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/basis.rs",
+        "sha256": "f557751312781a0dec538b9b3934436e20644f4430144c5a612cfe6bc8d06166"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/mod.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/mod.rs",
+        "sha256": "709f1d0d9be9d3ee74e2b63e13065f5a91c878ba77ed2d2e97a414fbbc646aca"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/prover.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/prover.rs",
+        "sha256": "4d4d8634bcb872d372bd430ac56cd60aece6d60e87e505126ce9ab46d2ef6c28"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/heap.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/heap.rs",
+        "sha256": "67153a3fb69c839160855a9b8fdb886fbd1eac90f4dc686260f23a85e346e4f9"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/wire.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/wire.rs",
+        "sha256": "1e4910a77ddc0734967554c86266fb37496723a3c8eeb0b1fa9eaa12d4ea35bc"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/onchain.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/onchain.rs",
+        "sha256": "08468c643f1b909ee811984cf7a2dde1d9fb1e6c8dd9c943d5904fcf0f493421"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/top_overflow.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/top_overflow.rs",
+        "sha256": "d69cb3545a5cb93d5faaf005298459b3fe10f704ee82da7d97306cfc067cd89e"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/structured.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/structured.rs",
+        "sha256": "c5eb9569c3819e95ccd55e87b7c888f367b433c8a63c4ea7ab4c34389a1d3f74"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/domain.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/domain.rs",
+        "sha256": "43bfef6f29698a4751504f9adee0e7dfdd092f6ecae6ace16f498cb2ef0fe068"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/transport.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/transport.rs",
+        "sha256": "ac892fa35fd6a8d697805770ece27fde79d1b91db619323870dff603b4f3045d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/opening_tests.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/opening_tests.rs",
+        "sha256": "7ddfa487f936ca4e3ca83dfc9bd9f60ac99a0bf4cf951c367490bd845f63ea3d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/transcript.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/transcript.rs",
+        "sha256": "0871a78b1c20a2b1dd2108dedf5865200a9213f6c2b5633cd920303f631bb623"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/transport_pads.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/transport_pads.rs",
+        "sha256": "f2b42975f868d78bb8ece807bf32f1c5e162f07521f5ec2c6f87f00df82a814c"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/tests.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/tests.rs",
+        "sha256": "3c88e41d3e1c64548adf93f92fee0ad3ce1786472bbe626d3d84095c3c57c8b2"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/onchain_unhoisted.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/onchain_unhoisted.rs",
+        "sha256": "5e49bea79639a641bc4b5252bffb6ab8285a7c94341188f2244d5812fd860099"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/verifier.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/verifier.rs",
+        "sha256": "d8f06728e85236520d0d0f4c81fb5f24c31c5cf10a3bacf5bf1591d9a6631607"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/fold.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/fold.rs",
+        "sha256": "06afbfb2c1c03306b59136695fdbf89382e21ed420f123982a70e977c2f35e39"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/opening.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/opening.rs",
+        "sha256": "349dc999c1165e9e3be07a840ce99dc7a0b567c7a0545088baea80894476ee7d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/scalar.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/scalar.rs",
+        "sha256": "a36f076d3333ad53e01815bda7d030ce12e9c6e30aafc475d928d4df8af11d44"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0/equality_trace.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0/equality_trace.rs",
+        "sha256": "fa249833dcb5160c936da42be55caaeb4f7cbb8a5e3b5ae3d51d6e31abfc667f"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/field/wide_exact.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/field/wide_exact.rs",
+        "sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/src/r0_transcript/tests.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/src/r0_transcript/tests.rs",
+        "sha256": "2be72d867d0505146b67cb56fc860a9a20feee1d32117ba156c7bd1038a61976"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r15_q22_stopping.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r15_q22_stopping.rs",
+        "sha256": "bb6926e3c570f6af0fb5752f46404e002ab87d7aebad9e9669a48c65dce6b477"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r17_transcript_freshness.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r17_transcript_freshness.rs",
+        "sha256": "d17cae50ec0c9a54298d9598f031e48d91e74c111641ee5755d06705f7005d5b"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/fuzz_parser.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/fuzz_parser.rs",
+        "sha256": "83e3af0720b6a6ad80fe3d03c15c926e2cc8fd1179900892736a2a85359210b3"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r17_rejection_cursor.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r17_rejection_cursor.rs",
+        "sha256": "c37fb3eed5c0baa85fba2c76f7871839895fc996b1688b37d556aba17f047631"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/v8_paired_commitment_source_kats.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/v8_paired_commitment_source_kats.rs",
+        "sha256": "999dadc5acaf9bcb364dedac5430c5b756a727a0f184c5d16fe9fb6f806c53c6"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r0_semantics.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r0_semantics.rs",
+        "sha256": "38f38e6bf25a3cf8cf974d69a389693a5998806e1f3430b1a51e274fe12a9e1e"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r15_circle_domain.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r15_circle_domain.rs",
+        "sha256": "6c0cf419e748f748c49beba0c3167bc0309d19fbe35192ec9d99375a28e333de"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/fuzz_field.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/fuzz_field.rs",
+        "sha256": "742c3b4fc6ce259b27af037588780b9c6581835fd1b39766b3b17b0128ee0e1d"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/tests/r0_e4_field.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/tests/r0_e4_field.rs",
+        "sha256": "f29ac15e675629d9bc6ea49debf344d89f2a9235481ff1fc2706fe6da3cd4fe7"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/examples/v7_lane_kats.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/examples/v7_lane_kats.rs",
+        "sha256": "e8b3e39ae48be1503940a702b1a3c0bf1f4e2649a64b93e649c2c1aaf04397eb"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/examples/r0_weight_table.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/examples/r0_weight_table.rs",
+        "sha256": "0032c9920d431a191f7f97aec3b3899df982c215814aff51706ac0f6a693d138"
+      },
+      {
+        "path": "core-workspace/crates/aspis-core/examples/r0_structured_gate.rs",
+        "revision": "25866ec331cc7ce27dd9956609c11d32fa8fa58a",
+        "source": "crates/aspis-core/examples/r0_structured_gate.rs",
+        "sha256": "22beb75f35075cf3164b578618e20036dd7badbb6dfa9026feaf44416364d532"
+      },
+      {
+        "path": "min/Cargo.lock",
+        "source": "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-claims-row-step-20261024/extra/uninit-min/Cargo.lock",
+        "sha256": "104b9c913aabeb1c700800dc90a311ac2f8ff000f34435a39b3b0e84499e7fcd"
+      },
+      {
+        "path": "min/src/sampler.rs",
+        "source": "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-claims-row-step-20261024/extra/uninit-min/src/sampler.rs",
+        "sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+      },
+      {
+        "path": "min/src/claims_write_proofs.rs",
+        "source": "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-claims-row-step-20261024/extra/uninit-min/src/claims_write_proofs.rs",
+        "sha256": "0f21b59e7d37dcc9d604f2be545d16e74fb89000bb3d6596a532a97844a1682b"
+      },
+      {
+        "path": "min/src/r1_wire.rs",
+        "source": "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-claims-row-step-20261024/extra/uninit-min/src/r1_wire.rs",
+        "sha256": "691c0813a0af75888f5b3c7be29a43895577d514c691b98161af0d0274928260"
+      },
+      {
+        "path": "min/src/lib.rs",
+        "source": "docs/research/100bit-spend-path-20261013/evidence/s126-current-caller-20261021/s1-claims-row-step-20261024/extra/uninit-min/src/lib.rs",
+        "sha256": "ede9ead2f23ec78f1d81cb218d981030aaa986b003ad1aba3e6641af71b4a5ad"
+      }
+    ],
+    "crate_manifest_before_sha256": "f9c4a83e6217bdf0c0ecb0e392f80939d4013a1a9bf8e895f504d27eaf6493bd",
+    "crate_manifest_after_sha256": "4e82a380161b6606bd05698da112b4980fe2549936410c93af2de590d1426e0c",
+    "metadata_changes": [
+      "Relocate core path dependency to private immutable byte-matched source sibling workspace",
+      "Retain exact effective workspace.package edition/license/version",
+      "Set ordinary dev/build-script optimization3/checked overflow explicitly; no native source, feature, stub or raw-word domain change"
+    ],
+    "host_change": "NEW Apple Silicon macOS compiler-only diagnostic, not historical Linux/SBF execution or initializedness proof",
+    "expected_time": "Small core/harness compilation and optimized bounded fixed-table build script (maximum domain log19); no elimination/proof generation or solver verification",
+    "constraints": "Ordinary focused local diagnostic only: one process group/job,2GiB aggregate RSS watchdog/180s deadline, source/tool/import pre-post pins, shared local compiler lock. If cap/timeout/cold expansion occurs stop and move only after reviewed NUC admission; no unchanged cap increase."
+  },
+  "environment": {
+    "PATH": "/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin:/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/bin:/Users/dominic/.cargo/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    "RUSTUP_TOOLCHAIN": "nightly-2025-11-21-aarch64-apple-darwin",
+    "DYLD_LIBRARY_PATH": "/Users/dominic/.rustup/toolchains/nightly-2025-11-21-aarch64-apple-darwin/lib",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/s126-kani-local-diagnostic-20261025-v1/target",
+    "RUSTFLAGS": "-C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes",
+    "KANI_LOG": "kani_compiler::kani_middle::transform::check_uninit::ptr_uninit=debug",
+    "RUST_BACKTRACE": "full"
+  },
+  "negative_control": false,
+  "kind": "Native Prepared.new S2 normal-child-return control, complete selected carriers, actual powers/transcript/claim bodies; sampling/dot/field/arithmetic normal-return cuts, scripted digest primitive; DEFAULT checks, no initialization/SDK/oracle/SBF closure",
+  "guard": {
+    "aggregate_rss_limit_bytes": 6442450944,
+    "wall_limit_seconds": 600,
+    "process_limit": 64,
+    "one_job": true,
+    "local_shared_lock": true
+  },
+  "expected_time": "Warm optimized compilation then native constructor control SAT; bounded at selected6/7GiB/600s; no arithmetic elimination or higher-cap retry",
+  "print_axioms": "N/A: compiler diagnostic"
+}
