@@ -7,22 +7,11 @@ EXPECTED=dict(high=768*2**20, cap=2**30, swap_max=0, tasks_max=64)
 ACTIVE_GUARD=None
 
 def save(name,value):
-    # Fixed exclusive own packet. Large derived JSON stays external; receipts
-    # carry size/hash only. Streaming serialization has a64MiB disk ceiling.
-    packet=HERE/'FinalNativeGate-setup-packet'
-    owned=packet.lstat()
-    if not stat.S_ISDIR(owned.st_mode) or owned.st_uid!=os.getuid() or owned.st_mode&0o077:raise ValueError('private owned packet required')
-    h=hashlib.sha256();size=0
-    with (packet/name).open('xb') as out:
-        for piece in json.JSONEncoder(sort_keys=True).iterencode(value):
-            raw=piece.encode();size+=len(raw)
-            if size>64*2**20:raise ValueError('raw derived JSON64MiB disk bound')
-            out.write(raw);h.update(raw)
-        out.flush();os.fsync(out.fileno())
-    fd=os.open(packet,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
-    try:os.fsync(fd)
-    finally:os.close(fd)
-    return dict(name=name,size=size,sha256=h.hexdigest())
+    # Same explicit private publisher as receiver-consumed terminals. Raw evidence
+    # retains its existing JSON meaning; ambient umask is not a privacy contract.
+    from FinalNativeGate_setup import _publish
+    return _publish(name,value,limit=64*2**20)
+
 
 def digest(data):
     return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
@@ -57,8 +46,11 @@ def runtime_pins(catalog):
     return dict(executable=sys.executable,version=sys.version,files=pins,tools=catalog['tools'],mapped_libraries=sorted(mapped))
 
 
-def collect(phase):
+def collect(phase,admission=None):
     """Record every ordered filesystem/command input without changing API logic."""
+    from FinalNativeGate_compact import project,unknown,receipt
+    record=unknown(phase)
+    if admission is not None:admission.append(record)
     api=adapter.__dict__
     events=[];raw_bytes=0;event_limit=32768;raw_limit=16*2**20
     def append(event):
@@ -111,6 +103,7 @@ def collect(phase):
         subprocess.run=recorded_run
         os.scandir=recorded_scandir
         report=api['read_only_admission'](phase='inside-scope' if phase=='go' else phase)
+        record.clear();record.update(project(phase,report))
     finally:
         Path.read_text=read
         subprocess.run=execute
@@ -124,6 +117,8 @@ def collect(phase):
         aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3) if report.get('original_legacy') else 'N/A visibility unavailable; not peak',
         print_axioms='N/A'))
     report['raw_receipts'].extend([report_receipt,metrics_receipt])
+    receipt(record,report['raw_receipts'])
+    if record['reporting_failed']:raise ValueError('compact admission reporting failure')
     return report
 
 def controls():

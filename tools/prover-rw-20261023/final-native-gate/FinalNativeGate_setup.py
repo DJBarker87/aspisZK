@@ -9,7 +9,7 @@ import stat
 import time
 
 HERE=Path(__file__).resolve().parent
-STAGE=Path('/home/dombarker/final-native-gate')
+STAGE=Path('/home/dombarker/final-native-gate-v5-20261025')
 PACKET=STAGE/'FinalNativeGate-setup-packet'
 UNIT='FinalNativeGate-pin-setup'
 TRANSPORT_SECONDS=120
@@ -33,7 +33,7 @@ def _inputs():
     return json.loads(raw)
 
 
-def _publish(name,value):
+def _publish(name,value,*,limit=512*2**20):
     # Exclusive relative publication in the existing private packet. Never repair,
     # adopt, unlink, rename or chmod an existing or partially written entry.
     if not isinstance(name,str) or not name or name in ('.','..') or '/' in name or '\x00' in name:
@@ -57,7 +57,7 @@ def _publish(name,value):
         for piece in json.JSONEncoder(sort_keys=True,allow_nan=False).iterencode(value):
             for offset in range(0,len(piece),16384):
                 raw=piece[offset:offset+16384].encode();size+=len(raw)
-                if size>512*2**20:raise ValueError('metadata record512MiB ceiling')
+                if size>limit:raise ValueError('metadata record512MiB ceiling')
                 view=memoryview(raw)
                 while view:
                     count=os.write(writer,view)
@@ -108,14 +108,14 @@ def _prospective():
     from FinalNativeGate_candidate import bootstrap,stable
     PACKET.mkdir(mode=0o700,exist_ok=False)
     p=_inputs();guard=_guard();child=None;fd=None;ident=None;errors=[];failed=True
-    scope=FixedScope('setup')
+    scope=FixedScope('setup');spawn_state='not_started';admission=[]
     signal.signal(signal.SIGUSR1,lambda *_: (_ for _ in ()).throw(RuntimeError('metadata guard failed')))
     hm=datetime.datetime.now(zoneinfo.ZoneInfo('Europe/London')).strftime('%H%M')
     with open('/tmp/aspis-r0-lean.lock','r') as lock:
         if not (hm>='2230' or hm<'1400'):fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         try:
             guard.start();observation.ACTIVE_GUARD=guard
-            report=observation.collect('prospective')
+            report=observation.collect('prospective',admission=admission)
             if report['decision']['allowed'] is not True:raise ValueError('setup prospective admission denied')
             parent_bootstrap=bootstrap(STAGE)
             env=environment()  # concrete proposal; UID/bus are candidate DATA
@@ -123,7 +123,9 @@ def _prospective():
             _publish('FinalNativeGate-setup-argv.json',argv)
             with (PACKET/'FinalNativeGate-setup.stdout').open('xb') as out,(PACKET/'FinalNativeGate-setup.stderr').open('xb') as err:
                 deadline=time.monotonic()+120
+                spawn_state='uncertain'  # Set BEFORE Popen: an exception is not proof of no spawn.
                 child=subprocess.Popen(argv,cwd=STAGE,env=env,stdout=out,stderr=err)
+                spawn_state='started'
                 fd=os.pidfd_open(child.pid);ident=Proc().identity(child.pid);guard.remember(ident,os.getpid())
                 scope.bind_release(child,ident,guard)
                 while child.returncode is None:
@@ -136,7 +138,7 @@ def _prospective():
         except BaseException as exc:errors.append(repr(exc))
         finally:
             signal.signal(signal.SIGUSR1,signal.SIG_IGN)
-            closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True);errors.extend(closure['errors'])
+            closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True,spawn_state=spawn_state);errors.extend(closure['errors'])
             observation.ACTIVE_GUARD=None
             for name,value in [('FinalNativeGate-setup-parent-cleanup.json',closure),
                                ('FinalNativeGate-setup-parent-guard.json',closure['monitor'])]:
@@ -145,7 +147,7 @@ def _prospective():
             # Compute only after prior writes: a persisted terminal must include
             # their failures. A terminal write failure still forces nonzero exit.
             terminal=dict(failed=failed or bool(errors) or bool(closure['unresolved']),errors=list(errors),
-                          unresolved=closure['unresolved'],print_axioms='N/A',execution_authority=False)
+                          unresolved=closure['unresolved'],admission=admission,spawn_state=spawn_state,print_axioms='N/A',execution_authority=False)
             try:_publish('FinalNativeGate-setup-parent-terminal.json',terminal)
             except BaseException as exc:errors.append('terminal write FinalNativeGate-setup-parent-terminal.json: '+repr(exc))
 
@@ -162,7 +164,7 @@ def _collect():
     from FinalNativeGate_bounded import Reader
     from FinalNativeGate_elf import dependencies
     p=_inputs();guard=_guard();initial=inherited_limits();check_limits(initial)
-    acquisition=None;failed=True;errors=[];data=[];unresolved=[];start=time.monotonic();deadline=start+115
+    admission=[];acquisition=None;failed=True;errors=[];data=[];unresolved=[];start=time.monotonic();deadline=start+115
     signal.signal(signal.SIGUSR1,lambda *_: (_ for _ in ()).throw(RuntimeError('metadata resident guard failed')))
     signal.signal(signal.SIGALRM,lambda *_: (_ for _ in ()).throw(TimeoutError('metadata115s alarm')))
     signal.alarm(115);observation.ACTIVE_GUARD=guard
@@ -170,7 +172,7 @@ def _collect():
         guard.start()
         boot_before=bootstrap(STAGE)
         controls=[]
-        report=observation.collect('inside-scope')
+        report=observation.collect('inside-scope',admission=admission)
         if report['decision']['allowed'] is not True:raise ValueError('metadata inside-scope admission denied')
         control=observation.controls();observation.check_controls(control)
         if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
@@ -217,7 +219,7 @@ def _collect():
         # Bootstrap covers collection. Acquired metadata/hash interval begins
         # at this snapshot; initial per-entry stamps and known source hashes
         # are checked too. No native hash identity before its first observation.
-        report=observation.collect('go')
+        report=observation.collect('go',admission=admission)
         if report['decision']['allowed'] is not True:raise ValueError('metadata go admission denied')
         control=observation.controls();observation.check_controls(control)
         if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
@@ -255,7 +257,7 @@ def _collect():
         try:data.append(_publish('FinalNativeGate-setup-guard.json',monitor))
         except BaseException as exc:errors.append('guard receipt: '+repr(exc))
         u=resource.getrusage(resource.RUSAGE_SELF)
-        summary=dict(status=data_status(unresolved,errors or (['collection incomplete'] if failed else [])),errors=errors,data=data,
+        summary=dict(failed=failed or bool(errors),admission=admission,status=data_status(unresolved,errors or (['collection incomplete'] if failed else [])),errors=errors,data=data,
                      wall_seconds=time.monotonic()-start,peak_rss=u.ru_maxrss,swaps=u.ru_nswap,
                      print_axioms='N/A',execution_authority=False,source_revision=p['source_revision'])
         if len(json.dumps(summary).encode())>SUMMARY_LIMIT:raise ValueError('public4MiB summary ceiling')

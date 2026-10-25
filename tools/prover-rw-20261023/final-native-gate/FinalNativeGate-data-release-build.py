@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v4'
-STAGE='/home/dombarker/final-native-gate/'
-ENTRY='c67d0a3d5a0b4d53ec9a7431e8ba70c8a31c93e2'
+RELEASE=D/'prospective-data-v5'
+STAGE='/home/dombarker/final-native-gate-v5-20261025/'
+ENTRY='e8ffe0b688735e46e397c7aa0c0b2e8aa3c68b7e'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
@@ -41,7 +41,7 @@ def prepare(release=None):
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus prospective-data-v4 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus prospective-data-v5 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -81,7 +81,7 @@ def prepare(release=None):
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Relative to maintained source-009: two SETUP mains activate and four seal/plan files regenerate. Maintained source also repairs staging paths and parent terminal ordering; compare complete source-009 before/after report against c67d0a3d5a; no historical-v3 byte-identity claim.\n')
+        f.write('Relative to maintained source-019: two SETUP mains activate and four seal/plan files regenerate. Maintained source changes compact reporting, no-owned cleanup, private raw publication and exact new v5 stage. Compare complete source-019 before/after report against e8ffe0b688; no historical-v4 byte-identity claim.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')

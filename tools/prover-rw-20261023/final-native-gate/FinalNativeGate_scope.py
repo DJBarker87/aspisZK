@@ -13,7 +13,7 @@ import subprocess
 import time
 from FinalNativeGate_guard import Proc
 
-STAGE=Path('/home/dombarker/final-native-gate')
+STAGE=Path('/home/dombarker/final-native-gate-v5-20261025')
 PROFILES={
     'final':('FinalNativeGate-060',3*2**30,4*2**30,'FinalNativeGate-packet','FinalNativeGate_inside.py'),
     'setup':('FinalNativeGate-pin-setup',768*2**20,2**30,'FinalNativeGate-setup-packet','FinalNativeGate_setup_inside.py')}
