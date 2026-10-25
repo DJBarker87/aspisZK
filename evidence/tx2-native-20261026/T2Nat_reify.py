@@ -68,4 +68,10 @@ theorem parent_effects {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
 end AspisR1.T2Nat_FinishCode
 end
 '''
-Path('lean/T2Nat_FinishCode.lean').write_text(pre+transform(body)+post)
+rendered = pre+transform(body)+post
+output = Path('lean/T2Nat_FinishCode.lean')
+import sys
+if '--check' in sys.argv:
+    assert output.read_text() == rendered, 'Reified parent drift'
+else:
+    output.write_text(rendered)
