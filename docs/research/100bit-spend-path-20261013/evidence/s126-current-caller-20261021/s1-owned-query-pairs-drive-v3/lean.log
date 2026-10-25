@@ -1,0 +1,28 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryPairsDriveV1.lean:61:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  drive (?k :: ?ks) ?s ?state ?blocks ?advances
+in the target expression
+  let (after, next, stop) := (s0, state0, false)
+  if stop = true then pairs_finish after next
+  else drive [⟨1, ⋯⟩, ⟨2, ⋯⟩, ⟨3, ⋯⟩, ⟨4, ⋯⟩, ⟨5, ⋯⟩, ⟨6, ⋯⟩, ⟨7, ⋯⟩] after next blocks advances
+
+blocks advances : Blocks
+state : Std.Array U8 32#usize
+s0 : OwnedScan
+state0 : Std.Array U8 32#usize
+| let (after, next, stop) := (s0, state0, false)
+  if stop = true then pairs_finish after next
+  else drive [⟨1, ⋯⟩, ⟨2, ⋯⟩, ⟨3, ⋯⟩, ⟨4, ⋯⟩, ⟨5, ⋯⟩, ⟨6, ⋯⟩, ⟨7, ⋯⟩] after next blocks advances
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisS1OwnedQueryPairs.Model.drive_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryPairs.Model.drive_single' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryPairs.Model.reference_eq_drive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
