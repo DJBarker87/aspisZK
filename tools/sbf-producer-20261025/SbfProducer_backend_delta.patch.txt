@@ -1,32 +1,16 @@
 --- reviewed/SbfProducerLinux_backend.py
 +++ candidate/SbfProducer_backend_candidate.py
-@@ -10,6 +10,8 @@
- import os
- import stat
- import time
+@@ -12,0 +13,2 @@
 +import select
 +import signal
- from SbfProducerLinux_capture import (Capture, PublicOutput, Denied, require, ROOT, OWN,
-     ENV, PROBE, DIR_FLAGS, FILE_FLAGS, check_dir, check_entry, inode,
-     open_safe_ancestry, create_fixed_layout, open_source, validate_manifest,
-@@ -376,9 +378,12 @@
- FIXED_PROBE = PROBE[:-1]+(POSTEXEC,)
- 
- 
+@@ -379 +381 @@
 -def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None):
 +def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None,parentfd=None):
-     """Child-only branch. Every exception exits, never host fallback exec."""
-     try:
+@@ -381,0 +384,3 @@
 +        require(parentfd is not None, 'owned helper pidfd required')
 +        require(abi.prctl(1,9) == 0, 'guest parent-death arm')
 +        parent_alive(parentfd)
-         ns = child_namespaces(before,api)
-         private_propagation(abi,api)
-         capture_runtime(rootfd,manifest)
-@@ -395,10 +400,18 @@
-             api.close(newroot)
-         # Closes inherited parent readfds, pidfds, capture directory fds, host
-         # root, stdin source, stdout/stderr sources and arbitrary high/socket fds.
+@@ -398,2 +403,5 @@
 -        abi.close_escape_fds()
 -        stdio_check(stdio,api)
 +        # Retain only the owned parent liveness handle through credential drop.
@@ -34,20 +18,13 @@
 +        api.dup2(parentfd,3,inheritable=False)
 +        abi.zero('close_range',U(4),U(0xffffffff),U(0))
 +        require(inventory(api) == [0,1,2,3], 'pending descriptor after root closure')
-         abi.guest_limits()  # never reduce NOFILE while high inherited fds live
-         abi.drop(last_cap)
+@@ -401,0 +410,5 @@
 +        # setresuid/setresgid may clear PDEATHSIG: rearm, then stable-handle
 +        # check catches parent death in that gap before any guest exec.
 +        require(abi.prctl(1,9) == 0, 'guest parent-death rearm')
 +        parent_alive(3)
 +        api.close(3)
-         dropped_check(ns,cgroup,root_inode,stdio,abi,api)
-         api.execve(FIXED_PROBE[0],FIXED_PROBE,dict(ENV))
-         raise Denied('exec unexpectedly returned')
-@@ -459,12 +472,19 @@
-         import threading
-         require(threading.current_thread() is threading.main_thread(), 'main thread only')
-         require(signal.getsignal(signal.SIGCHLD) == signal.SIG_DFL, 'external reaper')
+@@ -462 +475,7 @@
 -    gate_r,gate_w = api.pipe2(0x80000)
 +    selfpidfd = abi.call('pidfd_open',I(api.getpid()),U(0))
 +    require(selfpidfd >= 3, 'helper pidfd alias')
@@ -56,36 +33,14 @@
 +    except BaseException:
 +        api.close(selfpidfd)
 +        raise
-     try:
-         abi.zero('unshare',C.c_ulong(NEWNS | NEWNET | NEWPID))
-         pid = api.fork()
-     except BaseException:
-         api.close(gate_r);api.close(gate_w)
+@@ -467,0 +487 @@
 +        api.close(selfpidfd)
-         raise
-     if pid == 0:
-         try:
-@@ -472,7 +492,7 @@
-             token = api.read(gate_r,2)
-             api.close(gate_r)
-             require(token == b'G', 'parent lifecycle gate closed')
+@@ -475 +495 @@
 -            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest)
 +            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest,selfpidfd)
-         except BaseException:
-             try:
-                 abi.close_escape_fds()
-@@ -528,6 +548,7 @@
-             api.close(gate_w)
-         if pidfd is not None:
-             api.close(pidfd)
+@@ -530,0 +551 @@
 +        api.close(selfpidfd)
- 
- 
- def privileged_entrypoint():
-@@ -541,3 +562,54 @@
- 
- if __name__ == '__main__':
-     raise SystemExit('SbfProducerLinux disabled: no privileged CLI')
+@@ -543,0 +565,51 @@
 +
 +
 +def parent_alive(fd):
