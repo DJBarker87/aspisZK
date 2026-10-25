@@ -6,7 +6,7 @@ def save(name,d):
  b=(json.dumps(d,indent=2,sort_keys=True)+'\n').encode();assert len(b)<=5_000_000;(OUT/name).write_bytes(b)
 def load(name):return json.loads((OUT/name).read_bytes())
 producer={};statements={}
-for name in ('SbfProducer_package.py','SbfProducer_pins.py','SbfProducer_continue.py','SbfProducer_backend_candidate.py','SbfProducer_entry.py','SbfProducer_user_entry.py','DEPLOYMENT-REVIEW.md'):
+for name in ('SbfProducer_package.py','SbfProducer_pins.py','SbfProducer_continue.py','SbfProducer_backend_candidate.py','SbfProducerLinux_capture.py','SbfProducer_entry.py','SbfProducer_user_entry.py','DEPLOYMENT-REVIEW.md'):
  path='tools/sbf-producer-20261025/'+name;b=subprocess.check_output(['git','show','20a0f5bb38:'+path],cwd=ROOT);producer['20a0f5bb38:'+path]=pin(b)
  if name.endswith('.py'):
   tree=ast.parse(b);lines=b.decode().splitlines(keepends=True)

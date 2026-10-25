@@ -42,7 +42,9 @@ misreport51 distinct old files. Tracer remains tool-only, excluded from guest.
 92 prospective candidate rows/35655597 copied bytes,<=64MiB/256rows, sealed
 444/555 mode metadata. Eligible FINITE INPUT DATA only, no actual copies/rootfs.
 136 fields/68 old modules retained;29 timestamp pyc headers,28 source-size/time
-matches (the remaining cache has no source pair). No hash-body/cache execution
+matches for all28 cache paths represented in module records. The29th pyc is
+encodings/ascii.cpython-312.pyc, retained from old opens but outside the module
+cache fields; no module correspondence is invented for it. No hash-body/cache execution
 or native-code identity/effect conclusion. Matching old later pins does not
 prove historical openFD/inode binding. No fresh version claim from old numbers.
 
