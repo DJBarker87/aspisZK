@@ -1,0 +1,19 @@
+{
+  "authority": "Lead ONE bounded preserved partialreport read-only; separate from conditionalstatus; no compiler/native",
+  "command": [
+    "/usr/bin/ssh",
+    "-T",
+    "-oBatchMode=yes",
+    "-oConnectTimeout=10",
+    "-oStrictHostKeyChecking=yes",
+    "-oClearAllForwardings=yes",
+    "-oForwardAgent=no",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -B -c 'import os,stat,hashlib,sys\np='\"'\"'/home/dombarker/final-native-gate-v9-20261025/FinalNativeGate-setup-packet/FinalNativeGate-candidate-partial-failure.json'\"'\"'\ns=os.lstat(p)\nassert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==819122\nf=os.open(p,os.O_RDONLY|os.O_NOFOLLOW)\nwith os.fdopen(f,'\"'\"'rb'\"'\"') as h:b=h.read(819123);t=os.fstat(h.fileno())\nassert len(b)==819122 and hashlib.sha256(b).hexdigest()=='\"'\"'796ab0f8c80be318afe76d88af793481af4684099340d98149a340037f7dd325'\"'\"'\nassert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)\nsys.stdout.buffer.write(b)\n'"
+  ],
+  "expected": {
+    "name": "FinalNativeGate-candidate-partial-failure.json",
+    "sha256": "796ab0f8c80be318afe76d88af793481af4684099340d98149a340037f7dd325",
+    "size": 819122
+  }
+}
