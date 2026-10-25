@@ -14,7 +14,7 @@ F3K_QueryValues.deterministic derives the two output lists on the specified
 byte oracle's mathematical recurrence. No last-advance/selected-state equality
 is assumed. The concrete installed scanner/Q22 correspondence remains open.
 
-12/100 actual focused Lean invocations, 0 Kani. Seven passed, five elaboration
+12/100 actual focused Lean invocations, 0 Kani. Six passed, six elaboration
 failures retained and excluded. No timeout, memory kill, cap raise, dependency
 build or package replay. Standard axioms only in every accepted top theorem;
 failed recovery sorryAx output is excluded. Exact command, source anchor+hash,

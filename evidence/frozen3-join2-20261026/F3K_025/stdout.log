@@ -1,0 +1,13 @@
+F3K_QueryAddress.lean:18:12: error(lean.unknownIdentifier): Unknown identifier `absorbA`
+F3K_QueryAddress.lean:16:60: error: unsolved goals
+before : Std.Array U8 32#usize
+payload : Slice U8
+fits : (↑payload).length < 4294967296
+P : LiteralTranscript.Prefix
+b : LiteralTranscript.BytesMessage
+state : UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before
+framing : ↑b = OraclePortCompactDraft.framed (MultiproofConeCanonical.bytesOf ↑payload)
+⊢ (FS2.Duplex.absorbA SelectedTranscriptParams.params (decodeState before) (SelectedTranscriptParams.params.lbl 31)
+        (SelectedTranscriptParams.params.enc b) ⋯).toBytes =
+    flatten (CallerStep.openingAbsorbParts before 191#u8 (UScalar.cast UScalarTy.U32 payload.len) payload)
+'AspisR1.F3K_QueryAddress.address' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

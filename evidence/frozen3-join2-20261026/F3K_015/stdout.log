@@ -1,0 +1,24 @@
+F3K_QueryScanCall.lean:27:40: error: Type mismatch
+  fields.left
+has type
+  s.accepted_len = AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT
+but is expected to have type
+  s.accepted_len = 22#usize
+F3K_QueryScanCall.lean:24:85: error: unsolved goals
+s : Query31ModelDriverChain.QueryScan
+out : Std.Array U32 22#usize
+success : AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish s = ok (core.result.Result.Ok out)
+fields : s.accepted_len = AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT ∧ out = s.accepted
+count : ↑s.accepted_len = 22
+same : s.accepted = out
+len : (↑out).length = 22
+⊢ (if True then Except.ok (List.map (fun x => ↑x) ↑out) else Except.error 22) = Except.ok (List.map (fun x => ↑x) ↑out)
+F3K_QueryScanCall.lean:33:87: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [List.take_of_length_le (by omega : out.val.length ̲≤ ̲22), ̲List.length_map,l̵e̵n̵,̵i̵f̵_̵p̵o̵s̵ r̵f̵le̲n̲]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3K_QueryScanCall.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3K_QueryScanCall.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
