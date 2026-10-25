@@ -9,7 +9,7 @@ import stat
 import time
 
 HERE=Path(__file__).resolve().parent
-STAGE=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate')
+STAGE=Path('/home/dombarker/final-native-gate')
 PACKET=STAGE/'FinalNativeGate-setup-packet'
 UNIT='FinalNativeGate-pin-setup'
 TRANSPORT_SECONDS=120
@@ -102,11 +102,15 @@ def _prospective():
             closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True);errors.extend(closure['errors'])
             observation.ACTIVE_GUARD=None
             for name,value in [('FinalNativeGate-setup-parent-cleanup.json',closure),
-                               ('FinalNativeGate-setup-parent-guard.json',closure['monitor']),
-                               ('FinalNativeGate-setup-parent-terminal.json',dict(failed=failed or bool(errors),errors=errors,
-                                unresolved=closure['unresolved'],print_axioms='N/A',execution_authority=False))]:
+                               ('FinalNativeGate-setup-parent-guard.json',closure['monitor'])]:
                 try:_publish(name,value)
                 except BaseException as exc:errors.append('terminal write '+name+': '+repr(exc))
+            # Compute only after prior writes: a persisted terminal must include
+            # their failures. A terminal write failure still forces nonzero exit.
+            terminal=dict(failed=failed or bool(errors) or bool(closure['unresolved']),errors=list(errors),
+                          unresolved=closure['unresolved'],print_axioms='N/A',execution_authority=False)
+            try:_publish('FinalNativeGate-setup-parent-terminal.json',terminal)
+            except BaseException as exc:errors.append('terminal write FinalNativeGate-setup-parent-terminal.json: '+repr(exc))
 
     return 78 if failed or errors else 0
 

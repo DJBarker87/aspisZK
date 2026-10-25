@@ -9,17 +9,18 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v3'
-STAGE='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate/'
-ENTRY='b34142b0169312eca9f86c8fd0993715d2923b1e'
+RELEASE=D/'prospective-data-v4'
+STAGE='/home/dombarker/final-native-gate/'
+ENTRY='c67d0a3d5a0b4d53ec9a7431e8ba70c8a31c93e2'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
 def funcs(raw):
     return {n.name:ast.dump(n,include_attributes=False) for n in ast.parse(raw).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
 
-def prepare():
-    RELEASE.mkdir(mode=0o700,exist_ok=False)
+def prepare(release=None):
+    release=RELEASE if release is None else Path(release)
+    release.mkdir(mode=0o700,exist_ok=False)
     source={p.name:p.read_bytes() for p in sorted(D.iterdir()) if p.is_file()}
     rows=dict(source);delta={};diff=[]
     # Two literal setup-only entry changes. Isolated Python requires fixed path
@@ -40,7 +41,7 @@ def prepare():
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus prospective-data-v3 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus prospective-data-v4 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -56,31 +57,31 @@ def prepare():
     assert all(v['changed']==(['main'] if n in replacements else []) for n,v in identities.items())
     for name in ('FinalNativeGate.py','FinalNativeGate_inside.py'):
         assert rows[name]==source[name]
-    payload=RELEASE/'payload';payload.mkdir(mode=0o700)
+    payload=release/'payload';payload.mkdir(mode=0o700)
     for name,raw in rows.items():
         with (payload/name).open('xb') as f:f.write(raw)
     encoded={name:dict(**manifest[name],b85=base64.b85encode(raw).decode()) for name,raw in sorted(rows.items())}
     root=hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest()
     receiver=source['FinalNativeGate-transfer-template.txt'].decode().replace('__FILES_LITERAL__',repr(encoded)).replace('__ROOT_LITERAL__',repr(root)).encode()
     assert len(receiver)<4*2**20
-    with (RELEASE/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
+    with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
     transport=source['FinalNativeGate-transport-template.txt'].decode().replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
-    with (RELEASE/'FinalNativeGate-data-transport.py').open('xb') as f:f.write(transport)
+    with (release/'FinalNativeGate-data-transport.py').open('xb') as f:f.write(transport)
     report=dict(transport=pin(transport),entry_revision=ENTRY,source_manifest={n:pin(v) for n,v in source.items()},transfer_manifest=manifest,
         transfer_manifest_root=root,receiver=pin(receiver),changed_files=changed,entry_deltas=delta,
         function_identities=identities,unchanged_files=sorted(n for n in rows if rows[n]==source[n]),
         unchanged_policy_bundles={n:pin(item['source'].encode()) for n,item in json.loads(rows['FinalNativeGate_reviewed.json']).items()},
         no_final_charge_authority=True,execution_performed=False,print_axioms='N/A',
         caveat='AST/source identities are not OS/native semantics; fresh actual cleanup permission/control and complete pin approval remain open')
-    with (RELEASE/'FinalNativeGate-release-identities.json').open('xb') as f:f.write(dump(report))
-    with (RELEASE/'FinalNativeGate-data-activation.patch.txt').open('x') as f:f.write(''.join(diff))
-    with (RELEASE/'FinalNativeGate-release-manifest.txt').open('x') as f:
+    with (release/'FinalNativeGate-release-identities.json').open('xb') as f:f.write(dump(report))
+    with (release/'FinalNativeGate-data-activation.patch.txt').open('x') as f:f.write(''.join(diff))
+    with (release/'FinalNativeGate-release-manifest.txt').open('x') as f:
         f.write('PROSPECTIVE ONLY; STOP for lead source/release review and explicit new allocation.\n')
         f.write('Exactly one future SSH candidate DATA action. No invocation authorized now.\n')
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Only two setup main functions change; four regenerated seal/plan files; all other functions/bundles identical.\n')
+        f.write('Relative to maintained source-009: two SETUP mains activate and four seal/plan files regenerate. Maintained source also repairs staging paths and parent terminal ordering; compare complete source-009 before/after report against c67d0a3d5a; no historical-v3 byte-identity claim.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')
