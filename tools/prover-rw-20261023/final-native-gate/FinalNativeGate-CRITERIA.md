@@ -46,3 +46,37 @@ remain. Both security targets NOT ESTABLISHED. Final slot59/60 reserved; all
 actual execution budgets for this step zero. Finish with evidence and plain
 path-limited commits, no merge/push. If runtime join is incomplete, state exact
 source condition and next deliverable; never substitute an assumed GO wrapper.
+
+## Repair continuation criteria (entry f56c7c533b; before repair code)
+
+Retain entry Git objects and all prior receipts/failures. Lead review v1 and its
+confirmed cancellation OSError counterexample are authoritative source findings;
+28 old mock passes are reused, not a new native or identity gate.
+
+Replace recursive following/whole-file hashing with finite catalogued entries,
+explicit complete component/alias chains, stable no-follow descriptors, planned
+sizes and byte/file/time limits. Unknown entry/type/alias/cycle/owner/mode or
+pre/post drift denies. Bounds must be recorded with rationale; absent catalog
+is a blocker, never a permissive fallback. Post-Cargo cache may differ only
+within reviewed output bounds; source/native/runtime remain exact.
+
+Cleanup actions run independently even after cancel/control/reap/guard errors;
+terminal failures retain null unobserved metrics. Outer fixed owned-scope
+shutdown must bind actual unit, cgroup inode, owner and start before signalling,
+never an arbitrary PID/path. Orphans and kernel refusal remain UNRESOLVED,
+without a finite termination claim. Test only explicit mocks/data fixtures.
+
+Assess immutable 059 and MIR profiles before selecting any cache. Preserve
+historical opt-level3 where applicable; ordinary MIR excludes cfg(kani) and
+cannot typecheck the harness. No empty cache default or compatibility claim.
+
+Supply disabled no-argument FinalNativeGate_setup.py with a separate fixed
+768MiB/1GiB/Swap0/Tasks64 integration, 512MiB sampled resident guard, 115s alarm,
+120s transport and 4MiB summary bound. Preserve full policy bytes and all scans,
+visibility and failure semantics. Publish exclusive0700 DATA only; no plan
+update/seal/activation/cache creation. Null fresh fields can remain null.
+Finite operational catalog gaps are data, not universal semantics obligations.
+If exact interface cannot be completed within ~600 implementation lines, commit
+useful repairs and explicitly name remaining interface gaps before review.
+All actual host/setup/native/compiler/Kani/Rust/Lean/extraction/backend/ELF
+budgets remain ZERO. Final59/60 reserved; both security targets NOT ESTABLISHED.
