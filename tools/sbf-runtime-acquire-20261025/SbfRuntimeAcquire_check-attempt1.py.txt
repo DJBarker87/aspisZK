@@ -1,0 +1,115 @@
+"""Independent retained-data audit. Calls only exact copied9e pure helpers.
+No acquire, payload, host call, rootfs or producer execution.
+"""
+import collections, hashlib, importlib.util, json, os, pathlib, resource, stat, sys, time
+START=time.monotonic()
+ROOT=pathlib.Path(__file__).resolve().parents[2];HERE=pathlib.Path(__file__).resolve().parent
+OUT=ROOT/'evidence/sbf-runtime-acquire-20261025'
+checks=[]
+def check(ok,label):
+ checks.append(dict(check=label,passed=bool(ok)))
+ if not ok:raise AssertionError(label)
+def pin(b):return dict(size=len(b),sha256=hashlib.sha256(b).hexdigest())
+def read(name):return json.loads((OUT/name).read_bytes())
+def save(name,value):
+ b=(json.dumps(value,sort_keys=True,indent=2)+'\n').encode();check(len(b)<=5_000_000,'derived JSON<=5MB '+name);(OUT/name).write_bytes(b)
+reg=read('SbfRuntimeAcquire-preregister.json');receipt=read('SbfRuntimeAcquire-transport-receipt.json');plan=read('SbfRuntimeAcquire-plan.json')
+raw=(OUT/'SbfRuntimeAcquire-transport.stdout').read_bytes();err=(OUT/'SbfRuntimeAcquire-transport.stderr').read_bytes()
+check(pin(raw)==receipt['stdout'] and pin(err)==receipt['stderr'],'complete stdout/stderr pins')
+check(receipt['exit']==0 and receipt['terminal_error'] is None,'actual SSH zero with no transport error')
+check(len(raw)+len(err)<=4*2**20 and receipt['wall_seconds']<120,'transport output and deadline bounds')
+check(receipt['stdin_bytes_sent']==145492 and receipt['payload']==reg['payload'],'exact payload sent')
+check(receipt['argv']==reg['argv'] and receipt['preregister']==pin((OUT/'SbfRuntimeAcquire-preregister.json').read_bytes()),'fixed ARGV and preregister identity')
+check((OUT/'SbfRuntimeAcquire-ATTEMPTED.txt').is_file(),'charged attempt retained')
+for path,expected in reg['sources'].items():check(pin((ROOT/path).read_bytes())==expected,'registered source '+path)
+for origin,row in read('SbfRuntimeAcquire-immutable-inputs.json').items():check(pin((ROOT/row['copy']).read_bytes())=={k:row[k] for k in ('size','sha256')},'immutable copy '+origin)
+corepath=HERE/'SbfRuntimeAcquire-source-SbfRuntimeFinish_core.py'
+check(pin(corepath.read_bytes())=={k:read('SbfRuntimeAcquire-immutable-inputs.json')['9e48b23c90:tools/sbf-runtime-finish-20261025/SbfRuntimeFinish_core.py'][k] for k in ('size','sha256')},'exact copied pure helper source')
+spec=importlib.util.spec_from_file_location('SbfRuntimeAcquire_pure',corepath);core=importlib.util.module_from_spec(spec);spec.loader.exec_module(core)
+d=json.loads(raw);outcomes=d['outcomes'];paths={r['path']:r for r in plan['paths']}
+check(set(outcomes)==set(paths) and len(paths)==98,'all98 literal outcomes, no additions')
+check(d['old_trace']==plan['old_trace'] and d['bounds']==plan['bounds'],'historical association and exact bounds')
+check(d['runtime_approval'] is None and d['producer_assembly'] is None and d['executed_trace'] is False,'no runtime approval/producer/trace')
+state=core.association(plan,outcomes);modules=core.correspondence(plan['modules'],outcomes);candidate=core.candidate(plan,outcomes,state)
+check(state==d['association'],'recomputed association')
+check(modules==d['modules'],'recomputed source/cache correspondence')
+check(candidate==d['candidate'],'recomputed exact candidate')
+attempts={r['path']:r for r in d['attempts']}
+check(len(attempts)==len(d['attempts'])==97,'exactly97 unique acquisition attempts')
+old_comparisons=[];physical={};elf=0
+for path,item in paths.items():
+ row=outcomes[path]
+ check(row['provenance']==item['provenance'],'actual path provenance '+path)
+ if item['classification']=='OWN_PROC_METADATA_NOT_REACQUIRED':
+  check(row['status']=='REUSED_OWN_PROC_ONLY' and path not in attempts,'ownproc skip '+path);continue
+ check(attempts[path]==row,'full attempt retained '+path)
+ check(row['status']==('DIRECTORY' if item['classification']=='DIRECTORY_METADATA' else 'PINNED'),'expected outcome '+path)
+ check(row['path']==path and row['stable_fd'] is True and row['failed_component'] is None,'stable acquisition metadata '+path)
+ chain=row['chain'];check(chain[0]['path']=='/' and chain[-1]['path']==row['physical'] and chain[-1]['identity']==row['identity'],'full chain endpoints '+path)
+ expected=path;component='/'
+ for i,c in enumerate(chain):
+  ident=c['identity'];mode=ident[2]
+  check(len(ident)==9 and ident[3:5]==[0,0],'root uid+gid chain '+path+':'+str(i))
+  if stat.S_ISLNK(mode):
+   check(ident[5]==1 and 'target' in c,'single-link symlink '+path+':'+str(i))
+  else:check(not mode&0o022,'nonwritable component '+path+':'+str(i))
+  if c['path']=='/':
+   check(stat.S_ISDIR(mode),'root directory '+path+':'+str(i));component='/';continue
+  check(os.path.dirname(c['path'])==component,'complete direct component ancestry '+path+':'+str(i))
+  if stat.S_ISLNK(mode):
+   target=c['target'];suffix=expected[len(c['path']):]
+   check(expected==c['path'] or expected.startswith(c['path']+'/'),'symlink lies on requested resolution '+path)
+   expected=os.path.normpath((target if target.startswith('/') else os.path.dirname(c['path'])+'/'+target)+suffix)
+   check(core.permitted(path,expected),'exact alias grammar '+path+':'+str(i))
+   check(i+1<len(chain) and chain[i+1]['path']=='/','restart complete root chain '+path+':'+str(i))
+  else:component=c['path']
+ check(expected==row['physical'] and core.permitted(path,row['physical'],final=True),'exact final path provenance '+path)
+ check(row['symlinks']==[c for c in chain if 'target' in c],'all symlink metadata '+path)
+ if 'old_pin' in item:
+  old=item['old_pin'];old_comparisons.append(dict(path=path,old_pin=old,new_pin={k:row[k] for k in ('physical','sha256','size','identity')},equal=all(row.get(k)==v for k,v in old.items())))
+  check(old_comparisons[-1]['equal'],'old full pin '+path)
+ fresh={c['path']:c['identity'] for c in chain}
+ for c in item.get('old_chain',[]):check(fresh.get(c['path'])==c['identity'],'old known chain '+path+':'+c['path'])
+ if row['status']=='PINNED':
+  check(stat.S_ISREG(row['identity'][2]) and row['identity'][5]==1 and row['size']==row['identity'][6] and 0<=row['size']<=16*2**20,'regular single-link size '+path)
+  check(len(row['sha256'])==64,'SHA256 field '+path)
+  phys=row['physical']
+  if phys in physical:check(all(physical[phys][k]==row[k] for k in ('size','sha256','identity')),'alias physical agreement '+path)
+  else:physical[phys]=row
+  if path.endswith('.pyc'):
+   check(core.pyc_header(bytes.fromhex(row['pyc']['header_hex']))==row['pyc'],'pure pyc header classification '+path)
+check(set(physical)==set(d['files']),'all unique physical pins')
+for p,r in physical.items():check(r==d['files'][p],'unique physical row '+p)
+check(sum(r['size'] for r in physical.values())==d['unique_hashed_bytes']<=128*2**20 and len(physical)<=512,'unique accounting')
+check(sum(bool(r['elf']) for r in d['files'].values())==d['elf_count']<=64,'ELF parse accounting')
+rows=candidate['manifest']['files'];check(len(rows)<=256 and len({r['logical'] for r in rows})==len(rows),'unique schema row cap')
+check(sum(r['size'] for r in rows)==candidate['copied_bytes']<=64*2**20,'every alias byte clone counted')
+for r in rows:
+ p=physical[r['physical']];check(set(r)=={'logical','physical','size','sha256','mode'} and r['size']==p['size'] and r['sha256']==p['sha256'] and r['mode']==(0o555 if p['identity'][2]&0o111 else 0o444),'exact sealed candidate row '+r['logical'])
+check(len(plan['module_fields'])==136 and len(modules)==len(plan['modules'])==68,'all module fields and correspondence')
+for f in plan['module_fields']:check(plan['modules'][f['module']][f['field']]==f['path'],'exact old module field '+f['module']+':'+f['field'])
+check(d['inherited_limits_before']==d['inherited_limits_after'],'inherited limits unchanged')
+check(all(d['inherited_limits_before'][n]==[-1,-1] for n in ('RLIMIT_AS','RLIMIT_DATA')),'no inherited AS/DATA restriction')
+g=d['guard'];check(g['error'] is None and not g['cancellations'],'guard no error or cancellation')
+check(g['budget_bytes']==512*2**20 and g['interval_seconds']==0.02 and g['peak_sampled_rss_bytes']<512*2**20,'exact resident guard bounds')
+check(len(g['lineage'])==1 and g['lineage'][0]['parent'] is None,'collector only lineage1')
+pid=g['lineage'][0]['pid'];samples=g['samples']
+check(2<=len(samples)<=8192,'guard initial/final retained samples')
+for s in samples:
+ check(s['processes']==[pid] and set(s['process_rss'])=={str(pid)},'sample no descendant')
+ check(sum(r['rss_bytes'] for r in s['process_rss'].values())==s['rss_bytes'],'sample RSS exact sum')
+ check(s['process_rss'][str(pid)]['starttime']==g['lineage'][0]['starttime'],'stable collector starttime')
+check(max(s['rss_bytes'] for s in samples)==g['peak_sampled_rss_bytes'],'sample aggregate peak')
+check(d['peak_rss_bytes']<128*2**20 and d['swap']==0 and d['wall_seconds']<115,'expected metadata RSS/swap/deadline')
+check(g['started']<=samples[0]['monotonic']<=samples[-1]['monotonic']<=g['stopped'],'guard sampling interval')
+check('UNOBSERVED' in d['cgroup_reservations'],'cgroup reservations unobserved')
+check(d['status']=='FINITE_METADATA_INPUT_DATA_ONLY' and state['eligible_candidate'] and candidate['eligible_candidate'],'finite INPUT DATA eligibility only')
+check(candidate['runtime_approval'] is None and candidate['security_approval'] is None,'no producer/runtime/security promotion')
+save('SbfRuntimeAcquire-old-pin-comparisons.json',old_comparisons)
+save('SbfRuntimeAcquire-candidate-INPUT-DATA-ONLY.json',candidate)
+save('SbfRuntimeAcquire-module-correspondence.json',modules)
+summary=dict(status='PASS independent retained-data checks; finite input data only',actual_outcomes=dict(collections.Counter(r['status'] for r in outcomes.values())),attempts=len(attempts),old_pin_comparisons=len(old_comparisons),known_chain_comparisons=sum(len(i.get('old_chain',[])) for i in plan['paths']),unique_files=len(physical),unique_bytes=d['unique_hashed_bytes'],elf_count=d['elf_count'],candidate_rows=len(rows),copied_bytes=candidate['copied_bytes'],association=state,module_fields=136,modules=68,pyc_headers=dict(collections.Counter(r['pyc']['classification'] for r in outcomes.values() if 'pyc' in r)),timestamp_size_matches=sum(r.get('timestamp_size_match') is True for r in modules),guard_samples=len(samples),guard_lineage=g['lineage'],host_wall_seconds=d['wall_seconds'],host_peak_rss_bytes=d['peak_rss_bytes'],sampled_aggregate_peak_rss_bytes=g['peak_sampled_rss_bytes'],host_swap=d['swap'],cgroup_metrics='UNOBSERVED',reservations='UNOBSERVED',runtime_approval=None,security_approval=None,host_budget_used='1/1 SSH; terminal, no retry',reused='35 source fixtures/independent lead review and historical trace metadata; no suites rerun',boundaries='OPEN historical open-FD/inode; executed cache body; native effect/control/full runtime/producer/security joins; both deployed targets NOT ESTABLISHED',axioms='N/A; data')
+save('SbfRuntimeAcquire-summary.json',summary)
+usage=resource.getrusage(resource.RUSAGE_SELF)
+save('SbfRuntimeAcquire-check-receipt.json',dict(command=getattr(sys,'orig_argv',sys.argv),source_revision=receipt['source_revision'],source_overlay={p.name:pin(p.read_bytes()) for p in sorted(HERE.iterdir()) if p.is_file()},dependencies={n:dict(path=m.__file__,**pin(pathlib.Path(m.__file__).read_bytes())) for n,m in sorted(sys.modules.items()) if getattr(m,'__file__',None) and pathlib.Path(m.__file__).is_file()},interpreter=dict(path=sys.executable,version=sys.version,**pin(pathlib.Path(sys.executable).read_bytes())),exit=0,wall_seconds=time.monotonic()-START,peak_rss_bytes=usage.ru_maxrss*(1 if sys.platform=='darwin' else 1024),swap=usage.ru_nswap,checks=checks,stdout=pin(raw),stderr=pin(err),actual_new_host_calls=0,pure_helpers_called=['association','correspondence','candidate','permitted','pyc_header'],acquire_called=False,axioms='N/A; data'))
+print(json.dumps(summary,sort_keys=True))
