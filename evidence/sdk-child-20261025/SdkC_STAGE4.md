@@ -38,7 +38,7 @@ axioms lines and all section6 fields. Source/object closure metadata is in
 SdkC_object-manifest.json; no binaries/objects committed.
 
 Total58/100 Lean attempts:33 unchanged dependency builds and25 proof/audit
-attempts;46 green,12 elaboration failures. No timeout/memory kill, unchanged
+attempts;47 green,11 elaboration failures. No timeout/memory kill, unchanged
 rerun, cap raise, package replay, Kani, Rust/SBF rebuild or shipped-file edit.
 No key/session-A/Tx1Q_/Tx2N_ operation. Frozen ELF pins are inherited unchanged.
 
