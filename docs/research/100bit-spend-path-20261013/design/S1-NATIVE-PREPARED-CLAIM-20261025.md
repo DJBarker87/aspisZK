@@ -172,3 +172,41 @@ ledger identifies later build source4bb3b3f51e; see
 [S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
 for exact unchanged selected items and changed lower/core/adapter contexts.
 No whole-release/source transport is inferred from these historical checks.
+
+
+## 2026-10-25: first late-error half passes with increased memory
+
+The user authorized more memory. NUC v6 changes only the resource/admission
+configuration of the exact v2 compiled source/tool kit: MemoryHigh23GiB,
+MemoryMax24GiB, MemorySwapMax0, one solver. Fresh admission counts all populated
+finite caps against the safe host cap and requires MemAvailable to cover their
+unused headroom plus4GiB additional reserve. Already resident capped memory is
+already excluded from MemAvailable. No other owner's limits changed. v5 retained
+the earlier9GiB extra-reserve rule and refused admission before launching.
+
+`verifier::proofs::prepared_new_claim_lo_point_4` PASSED: exit0,
+347.940938063s, peak process RSS12973036KiB, cgroup peak14375067648B,
+swaps0, zero high/max/OOM events, 0/3027failed and2/3covers. Exact sources and
+tools were unchanged; the focused compile was reused with pinned receipts.
+This checks the native constructor/transcript/powers/original claim through
+before_z1 push errors at columns0–14, plus the existing query-rejection branch,
+under the SAME nine normal-return primitive cuts. It does not discharge those
+cuts, allocation/initialization/runtime/extraction/oracle or release binding.
+No new hypothesis or frozen source change was introduced.
+
+Before: both halves of point4 and both halves of point5 were unverified.
+After: point4 columns0–14 are checked; columns15–28 and both point5 halves
+remain unverified at this snapshot. Full point4 is not yet closed. Earlier
+points0/1/2/3 and complete-success6 remain checked as previously recorded.
+The old14GiB run timed out with106751 high events; the successful24GiB run has
+none. This supports increasing the throttle threshold; it does not establish
+that memory pressure was the only cause of the earlier timeout.
+
+Source-only packet: `evidence/s126-current-caller-20261021/`
+`s1-native-prepared-claim-memory24-terminal-v1`, read-only checker
+`tools/s1-native-prepared-memory24-20261025/check.py` PASS21pins. The packet also
+contains an explicitly nonterminal hi4 launch snapshot; only lo4 is accepted.
+Kani has no Lean #print axioms result (N/A), and adds no Lean axiom. Native
+historical25866 context remains distinct from current whole4bb3 source, as
+specified by the freeze reconciliation above. S1/S6 and the security target
+remain OPEN. The next running target is the complementary hi4 partition.
