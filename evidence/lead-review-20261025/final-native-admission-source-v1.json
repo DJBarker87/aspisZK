@@ -1,0 +1,121 @@
+{
+  "status": "PASS_FIXED_ADMISSION_DIAGNOSTIC_SOURCE",
+  "revision": "6122c94ec9",
+  "exit": 0,
+  "wall_seconds": 0.8093435000628233,
+  "peak_self_rss_bytes": 20365312,
+  "peak_child_rss_bytes": 102809600,
+  "aggregate_peak_upper_bound_bytes": 123174912,
+  "aggregate_peak": "UNOBSERVED; conservative serial peak sum",
+  "self_swap": 0,
+  "child_swap": 0,
+  "steps": [
+    {
+      "argv": [
+        "git",
+        "clone",
+        "--quiet",
+        "--shared",
+        "--no-checkout",
+        "/Users/dominic/ZK",
+        "/private/tmp/lead-final-native-admission-source-review-20261025-v1/repo"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "git",
+        "sparse-checkout",
+        "set",
+        "tools/prover-rw-20261023/final-native-gate",
+        "evidence/prover-rw-20261023/final-native-gate"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "git",
+        "checkout",
+        "--quiet",
+        "6122c94ec9"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-B",
+        "-c",
+        "import runpy,unittest,pathlib; n=runpy.run_path('/private/tmp/lead-final-native-admission-source-review-20261025-v1/repo/tools/prover-rw-20261023/final-native-gate/FinalNativeGate-admission-report-tests.py',run_name=\"lead_review\"); n[\"t\"].PAYLOAD=pathlib.Path('/private/tmp/lead-final-native-admission-source-review-20261025-v1/repo/tools/prover-rw-20261023/final-native-gate/FinalNativeGate-admission-report-payload.txt'); result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(n[\"Report\"])); raise SystemExit(not result.wasSuccessful())"
+      ],
+      "exit": 0
+    },
+    {
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-B",
+        "-c",
+        "__file__='/private/tmp/lead-final-native-admission-source-review-20261025-v1/repo/tools/prover-rw-20261023/final-native-gate/FinalNativeGate-admission-report-audit.py';exec(compile('\"\"\"Source/import/pin review only. No operational body or remote invocation.\"\"\"\\nimport ast, difflib, hashlib, json, subprocess, sys\\nfrom pathlib import Path\\nD=Path(__file__).resolve().parent;ROOT=D.parents[2]\\nE=ROOT/\\'evidence/prover-rw-20261023/final-native-gate\\'\\nBASE=\\'ee8335334c299ef379fe23785740137d6bc4082d\\'\\nPREFIX=\\'FinalNativeGate-admission-report\\'\\ndef pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())\\ndef write(name,value):\\n    with (E/(\\'admission-report-\\'+name)).open(\\'x\\') as f:json.dump(value,f,indent=2,sort_keys=True);f.write(\\'\\\\n\\')\\ndef functions(raw):\\n    s=raw.decode();return {n.name:ast.get_source_segment(s,n) for n in ast.parse(s).body if isinstance(n,ast.FunctionDef)}\\ndef git(*args):return subprocess.check_output([\\'git\\',*args],cwd=ROOT)\\ndef main():\\n    names=[PREFIX+tail for tail in (\\'.py\\',\\'-payload.txt\\',\\'-transport.py\\',\\'-tests.py\\',\\'-check.py\\',\\'-audit.py\\')]\\n    manifest={n:pin((D/n).read_bytes()) for n in names}\\n    imports={}\\n    for n in names:\\n        tree=ast.parse((D/n).read_bytes());imports[n]=[]\\n        for node in ast.walk(tree):\\n            if isinstance(node,ast.Import):imports[n].extend(a.name for a in node.names)\\n            if isinstance(node,ast.ImportFrom):imports[n].append(node.module)\\n    source=(D/(PREFIX+\\'.py\\')).read_bytes();payload=(D/(PREFIX+\\'-payload.txt\\')).read_bytes()\\n    assert payload==source.replace(b\"if __name__==\\'__main__\\':raise SystemExit(main())\",b\"if __name__==\\'__main__\\':raise SystemExit(diagnostic_entry())\")\\n    tree=ast.parse((D/(PREFIX+\\'-transport.py\\')).read_bytes())\\n    values={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id in (\\'PIN\\',\\'ARGV\\')}\\n    assert values[\\'PIN\\']==pin(payload)\\n    expected=[\\'/usr/bin/ssh\\',\\'-T\\',\\'-oBatchMode=yes\\',\\'-oConnectTimeout=10\\',\\'-oStrictHostKeyChecking=yes\\',\\'-oClearAllForwardings=yes\\',\\'-oForwardAgent=no\\',\\'dombarker@100.108.41.90\\',\\'/usr/bin/python3 -I -B -\\']\\n    assert values[\\'ARGV\\']==expected\\n    assert set(imports[PREFIX+\\'.py\\'])=={\\'hashlib\\',\\'json\\',\\'math\\',\\'os\\',\\'signal\\',\\'stat\\'}\\n    changes={};diff=[]\\n    for old,new in ((\\'FinalNativeGate-receipt-diagnostic.py\\',PREFIX+\\'.py\\'),(\\'FinalNativeGate-receipt-transport.py\\',PREFIX+\\'-transport.py\\'),(\\'FinalNativeGate-receipt-local-check.py\\',PREFIX+\\'-check.py\\')):\\n        before=(D/old).read_bytes();after=(D/new).read_bytes()\\n        assert before==git(\\'show\\',BASE+\\':\\'+str((D/old).relative_to(ROOT)))\\n        a,b=functions(before),functions(after)\\n        changes[new]=dict(before_source=old,before_pin=pin(before),after_pin=pin(after),\\n                          complete_functions_before=a,complete_functions_after=b,\\n                          changed_functions=[k for k in sorted(set(a)|set(b)) if a.get(k)!=b.get(k)])\\n        diff.extend(difflib.unified_diff(before.decode().splitlines(True),after.decode().splitlines(True),fromfile=old,tofile=new))\\n    assert functions((D/\\'FinalNativeGate-receipt-transport.py\\').read_bytes())[\\'_reviewed_future\\']==functions((D/(PREFIX+\\'-transport.py\\')).read_bytes())[\\'_reviewed_future\\']\\n    for name in (PREFIX+\\'.py\\',PREFIX+\\'-transport.py\\',\\'FinalNativeGate.py\\',\\'FinalNativeGate_inside.py\\',\\'FinalNativeGate_setup.py\\',\\'FinalNativeGate_setup_inside.py\\'):\\n        body=ast.parse(functions((D/name).read_bytes())[\\'main\\'])\\n        assert any(isinstance(n,ast.Return) and isinstance(n.value,ast.Constant) and n.value.value==78 for n in ast.walk(body))\\n        assert not any(isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id in (\\'_reviewed_future\\',\\'diagnostic_entry\\',\\'_prospective\\',\\'_collect\\',\\'_bound_body\\') for n in ast.walk(body))\\n    capture=Path(\\'/private/tmp/FinalNativeGate-admission-report-012-future\\')\\n    assert not capture.exists() and not capture.is_symlink()\\n    touched=git(\\'diff\\',\\'--name-only\\',BASE,\\'--\\').decode().splitlines()\\n    allowed=(\\'tools/prover-rw-20261023/final-native-gate/FinalNativeGate-admission-report\\',\\n             \\'evidence/prover-rw-20261023/final-native-gate/admission-report-\\')\\n    assert all(n.startswith(allowed) for n in touched),touched\\n    # Immutable reviewed source is parsed as DATA only; no policy imports/exec.\\n    bundle=json.loads((D/\\'FinalNativeGate_reviewed.json\\').read_bytes())\\n    policy=bundle[\\'policy\\'][\\'source\\'];policy_functions=functions(policy.encode())\\n    context={n:dict(pin=pin((D/n).read_bytes()),functions=functions((D/n).read_bytes())) for n in (\\'FinalNativeGate_setup_observe.py\\',\\'FinalNativeGate_setup_adapter.py\\')}\\n    context[\\'embedded_policy\\']=dict(pin=pin(policy.encode()),evaluate=policy_functions[\\'evaluate\\'],source_identity=bundle[\\'policy\\'][\\'revision\\'])\\n    write(\\'functions-018-lead-v1.json\\',dict(base=BASE,changes=changes,context=context,premise_changes=\\'N/A: no formal statements changed\\',\\n         original_predicate_before=\\'regular and nlink1 and currentUID and (mode & 0o022)==0\\',\\n         original_predicate_after=\\'regular and nlink1 and currentUID and (mode & 0o022)==0\\',\\n         claim=\\'Bounded untrusted report diagnostic SOURCE; no source/output/security equivalence theorem\\'))\\n    with (E/\\'admission-report-source-diff-018-lead-v1.txt\\').open(\\'x\\') as f:f.writelines(diff)\\n    reused={}\\n    for label in (\\'receipt-publication-011\\',\\'receipt-transport-010\\',\\'receipt-diagnostic-011\\'):\\n        p=E/(label+\\'.json\\');r=json.loads(p.read_bytes())\\n        relevant=(\\'FinalNativeGate_setup.py\\',\\'FinalNativeGate-receipt-publication-tests.py\\') if label.startswith(\\'receipt-publication\\') else (\\'FinalNativeGate-receipt-transport.py\\',\\'FinalNativeGate-receipt-transport-tests.py\\')\\n        reused[label]=dict(receipt=pin(p.read_bytes()),source_revision=r[\\'source_revision\\'],exit=r[\\'exit\\'],\\n            assessed_source_matches={n:r[\\'sources_and_dependencies\\'].get(n)==pin((D/n).read_bytes()) for n in relevant},\\n            scope=\\'Historical local fixtures only. Not rerun; no new identity or release gate.\\')\\n    old_transport=git(\\'show\\',\\'80c7917238:tools/prover-rw-20261023/final-native-gate/FinalNativeGate-receipt-transport.py\\')\\n    historical=json.loads((E/\\'receipt-transport-010.json\\').read_bytes())\\n    assert pin(old_transport)==historical[\\'sources_and_dependencies\\'][\\'FinalNativeGate-receipt-transport.py\\']\\n    assert functions(old_transport)[\\'_reviewed_future\\']==functions((D/(PREFIX+\\'-transport.py\\')).read_bytes())[\\'_reviewed_future\\']\\n    reused[\\'transport_body_assessment\\']=dict(historical_git_revision=\\'80c7917238\\',historical_pin=pin(old_transport),\\n        complete_reviewed_future_function_identical=True,\\n        literals_changed=[\\'PAYLOAD\\',\\'PIN\\',\\'CAPTURE\\',\\'disabled main message\\'],\\n        new_literals_validated=\\'admission-report-tests-017: exact payload/argv/pin/disabled mains/fresh fixed capture and one durable-charge mock; no SSH\\')\\n    dependencies={}\\n    for name,module in sorted(sys.modules.copy().items()):\\n        path=getattr(module,\\'__file__\\',None)\\n        if path and Path(path).is_file() and (path.endswith(\\'.py\\') or path.endswith(\\'.so\\')):\\n            dependencies[name]=dict(path=path,**pin(Path(path).read_bytes()))\\n    future=\"python3 -I -B -c \\\\\"import runpy; m=runpy.run_path(\\'\"+str(D/(PREFIX+\\'-transport.py\\'))+\"\\',run_name=\\'reviewed_source\\'); raise SystemExit(m[\\'_reviewed_future\\']())\\\\\"\"\\n    write(\\'seals-018-lead-v1.json\\',dict(source_revision=git(\\'rev-parse\\',\\'HEAD\\').decode().strip(),base=BASE,manifest=manifest,\\n        imports=imports,local_audit_loaded_dependencies=dependencies,payload=pin(payload),transport=manifest[PREFIX+\\'-transport.py\\'],\\n        future_argv=values[\\'ARGV\\'],future_local_command_NOT_EXECUTED=future,future_capture=str(capture),fixed_capture_absent=True,\\n        counters=dict(SSH=0,host=0,setup=0,probe=0,native=0,root=0,sudo=0,namespace=0,Lean=0,compiler=0,Kani=0,ELF=0),\\n        maintained_setup=\\'UNSEALED / NO RELEASE ALLOWED\\',security_targets=\\'BOTH NOT ESTABLISHED\\',actual_decision=\\'UNKNOWN\\',\\n        formal_assumptions_discharged=[],new_trust_assumptions=[],retained=\\'All existing Python/stdlib/SSH/OS, SDK/runtime/allocator/extraction/child/mark/P2Prime/native and security contract boundaries\\',\\n        axioms=\\'N/A: no theorem, Lean, formal import audit or compiler\\',reused_validation=reused,\\n        original_raw_save=\\'UNCHANGED ambient umask/hash-only legacy telemetry; no private-publication or actual-host-umask claim\\',\\n        budgets=\\'Kani59/60 final reserved; privateLean240/260; extraction54/56; backend15/16; Rust2/3 actual ordinary1; ELF0/3; soundness366/368 with367/368 reserved\\',\\n        oversize_policy=\\'No reads/parse/fetch above2MiB. Complete SHA256 unavailable for oversized report: cannot combine exact hash with hard read cap. Bounds denial with metadata, no fabricated hash.\\',\\n        next=\\'STOP FOR LEAD REVIEW; no actual query, admission retry, scope repair, new stage or v5\\'))\\n    print(json.dumps(dict(audit=\\'PASS\\',manifest=manifest,actual_SSH=0,axioms=\\'N/A\\')))\\nif __name__==\\'__main__\\':main()\\n',__file__,\"exec\"))"
+      ],
+      "exit": 0
+    }
+  ],
+  "focused_fixtures": 14,
+  "source_manifest": {
+    "FinalNativeGate-admission-report-audit.py": {
+      "sha256": "28fb27e92621801be535bd0377a5aab856b7b226cc577a0329afa0b57a13d4c2",
+      "size": 8842
+    },
+    "FinalNativeGate-admission-report-check.py": {
+      "sha256": "297b401fdbdb85a00d84e7e978e5ea92a3f37110da6127e8dad0662cddd87ba8",
+      "size": 2942
+    },
+    "FinalNativeGate-admission-report-payload.txt": {
+      "sha256": "da8b1f52c34a012399c1fab602b12b31c3826f31f3544ef6df48827d25c3f290",
+      "size": 10257
+    },
+    "FinalNativeGate-admission-report-tests.py": {
+      "sha256": "79abcc25dcafc1a1e9869b564700ece383dd573836547fad24ec8313f2ffd383",
+      "size": 11621
+    },
+    "FinalNativeGate-admission-report-transport.py": {
+      "sha256": "8cbdaa628f3cce076814fcf9b3be33c77bac403a8730fb67e4ce1354a8839258",
+      "size": 7269
+    },
+    "FinalNativeGate-admission-report.py": {
+      "sha256": "cf43bc939a80fa198cc7549160fb37fa9919904dc2e0d973c6d08fce2ff72f27",
+      "size": 10245
+    }
+  },
+  "payload": {
+    "sha256": "da8b1f52c34a012399c1fab602b12b31c3826f31f3544ef6df48827d25c3f290",
+    "size": 10257
+  },
+  "transport": {
+    "sha256": "8cbdaa628f3cce076814fcf9b3be33c77bac403a8730fb67e4ce1354a8839258",
+    "size": 7269
+  },
+  "future_argv": [
+    "/usr/bin/ssh",
+    "-T",
+    "-oBatchMode=yes",
+    "-oConnectTimeout=10",
+    "-oStrictHostKeyChecking=yes",
+    "-oClearAllForwardings=yes",
+    "-oForwardAgent=no",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -B -"
+  ],
+  "complete_function_reports_match": true,
+  "fixed_one_report": true,
+  "untrusted_data_only": true,
+  "oversize_policy": "Above2MiB metadata+denial with hash unavailable; no content read or invented hash",
+  "test_only_redirects": [
+    "mock payload path to immutable clone",
+    "audit output suffix in memory; source/input bytes unchanged"
+  ],
+  "new_SSH_setup_Lean_Kani_actions": 0,
+  "print_axioms": "N/A source/fixtures/mocks only",
+  "targets_established": false,
+  "next": "Separately allocate ONE exact read-only prospective-report.json query; no setup retry"
+}
