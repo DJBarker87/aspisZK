@@ -5,3 +5,5 @@ extern crate alloc;
 #[path="NP6_shipped.rs"] mod shipped;
 #[path="NP6_reference.rs"] mod reference;
 #[cfg(kani)] mod NP6_proofs;
+
+#[cfg(kani)] mod NP6_construction;

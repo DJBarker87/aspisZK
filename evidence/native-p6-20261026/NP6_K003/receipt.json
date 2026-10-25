@@ -1,0 +1,74 @@
+{
+  "attempt": "NP6_K003",
+  "kind": "kani",
+  "source_revision": "9fac5591afff1fa3ba13aefbf4abb76ab688685b",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "NP6_claims/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "NP6_proofs::NP6_claims_result_only",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "old",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions",
+    "--no-array-field-sensitivity",
+    "--symex-cache-dereferences"
+  ],
+  "sources": [
+    "NP6_claims/Cargo.toml",
+    "NP6_claims/src/NP6_reference.rs",
+    "NP6_claims/src/NP6_shipped.rs",
+    "NP6_claims/src/lib.rs",
+    "NP6_claims/src/NP6_wire.rs",
+    "NP6_claims/src/NP6_sampler.rs",
+    "NP6_claims/src/NP6_proofs.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/NP6_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "core_validation": "NP6_core-validation.json",
+    "source_binding": "NP6_binding.json"
+  },
+  "expected_time": "Isolate complete Result/error equality from output contents after K002 symbolic memory growth; array dereference caching and array-theory encoding",
+  "exit_status": 124,
+  "wall_seconds": 180.3719156709849,
+  "peak_rss_kib": "15644",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r10b40066b23146d3adb30fa4b38d5173.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6693138432",
+  "source_hashes": {
+    "NP6_claims/Cargo.toml": "17b07b5278108db14352ad00f75279695d8927ee12484d9215c0bc7020455de7",
+    "NP6_claims/src/NP6_reference.rs": "c8c9ed695e47919b58adfa4aca00664cc4707510d8f42c7707fe7e1743258f61",
+    "NP6_claims/src/NP6_shipped.rs": "b9d6fc1f145a2fead690742f7bb9d173177ded38c1603ca05bd30292628500e1",
+    "NP6_claims/src/lib.rs": "804484d1c56e7c45963b596eb8eba485ec279a54bc121ab2f194d4360d9c46df",
+    "NP6_claims/src/NP6_wire.rs": "89edcffb9481714c199744e8d083d68cf7d28954dca0be067bcbeec13ac426c6",
+    "NP6_claims/src/NP6_sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+    "NP6_claims/src/NP6_proofs.rs": "89b8fcec4759ed2cc4c3565bdc074eb16f35b6f69a1b4a708731c078614f05a7"
+  },
+  "print_axioms": "N/A: kani"
+}
