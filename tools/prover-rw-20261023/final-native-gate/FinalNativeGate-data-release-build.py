@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v8-r2'
+RELEASE=D/'prospective-data-v8-r3'
 STAGE='/home/dombarker/final-native-gate-v8-20261025/'
 ENTRY='c03e7860d3bc6b8e2bf1af961bffa779bfc7126a'
 
@@ -65,7 +65,11 @@ def prepare(release=None):
     receiver=source['FinalNativeGate-transfer-template.txt'].decode().replace('__FILES_LITERAL__',repr(encoded)).replace('__ROOT_LITERAL__',repr(root)).encode()
     assert len(receiver)<4*2**20
     with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
-    transport=source['FinalNativeGate-transport-template.txt'].decode().replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
+    template=source['FinalNativeGate-transport-template.txt'].decode()
+    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v8/FinalNativeGate-data-transfer.py')"
+    assert template.count(old_receiver)==1
+    template=template.replace(old_receiver,'RECEIVER=Path('+repr(str(RELEASE/'FinalNativeGate-data-transfer.py'))+')')
+    transport=template.replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
     with (release/'FinalNativeGate-data-transport.py').open('xb') as f:f.write(transport)
     report=dict(transport=pin(transport),entry_revision=ENTRY,source_manifest={n:pin(v) for n,v in source.items()},transfer_manifest=manifest,
         transfer_manifest_root=root,receiver=pin(receiver),changed_files=changed,entry_deltas=delta,
