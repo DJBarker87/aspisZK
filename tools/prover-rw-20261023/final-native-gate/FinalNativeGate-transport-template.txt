@@ -13,10 +13,14 @@ import sys
 import tempfile
 import time
 
-RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v1/FinalNativeGate-data-transfer.py')
+RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v3/FinalNativeGate-data-transfer.py')
 PIN=__RECEIVER_PIN__
 ARGV=['/usr/bin/ssh','-T','-oBatchMode=yes','-oConnectTimeout=10','-oStrictHostKeyChecking=yes','-oClearAllForwardings=yes','-oForwardAgent=no','dombarker@100.108.41.90','/usr/bin/python3 -I -B -']
 LIMIT=4*2**20
+
+
+def source_stamp(s):
+    return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
 
 
 def main():
@@ -43,7 +47,7 @@ def main():
                         if total>LIMIT:raise ValueError('combined public summary4MiB bound')
                         key.data.write(raw)
                 exit_code=child.wait(timeout=max(.001,120-(time.monotonic()-start)))
-            if before!=os.fstat(source.fileno()):raise ValueError('receiver source interval drift')
+            if source_stamp(before)!=source_stamp(os.fstat(source.fileno())):raise ValueError('receiver source interval drift')
         except BaseException as exc:errors.append(repr(exc));exit_code=78
         finally:
             if child is not None:

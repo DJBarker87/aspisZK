@@ -19,6 +19,9 @@ BYTE_LIMIT=16*2**20
 
 def identity(s):return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid)
 
+def source_stamp(s):
+    return (*identity(s),s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
+
 
 def check_directory(s):
     if not stat.S_ISDIR(s.st_mode) or s.st_uid not in (0,os.getuid()) or s.st_mode&0o022:
@@ -102,7 +105,7 @@ def install():
                     piece=os.read(src,min(left,65536))
                     if not piece:raise ValueError('transfer short source')
                     left-=len(piece);h.update(piece)
-                if os.read(src,1) or h.hexdigest()!=FILES[name]['sha256'] or os.fstat(src)!=before:
+                if os.read(src,1) or h.hexdigest()!=FILES[name]['sha256'] or source_stamp(os.fstat(src))!=source_stamp(before):
                     raise ValueError('transfer closed-writer source drift')
             finally:os.close(src)
         os.fsync(leaf);os.fsync(fd)
@@ -110,6 +113,48 @@ def install():
             if identity(os.stat(name,dir_fd=parent,follow_symlinks=False))!=expected:raise ValueError('transfer final ancestry drift')
         if identity(os.stat('final-native-gate',dir_fd=fd,follow_symlinks=False))!=leaf_id:raise ValueError('transfer leaf replaced')
         return dict(status='FIXED_DATA_SOURCE_TRANSFERRED',files=len(rows),bytes=sum(map(len,rows.values())),root=TRANSFER_ROOT_SHA256,execution_authority=False,print_axioms='N/A')
+    finally:
+        for fd in reversed(held):os.close(fd)
+
+
+def packet_summary():
+    # Fixed own DATA packet only; no arbitrary report reader or directory scan.
+    names=('FinalNativeGate-setup-terminal.json','FinalNativeGate-setup-parent-terminal.json',
+           'FinalNativeGate-candidate-controls.json','FinalNativeGate-setup-parent-cleanup.json',
+           'FinalNativeGate-setup-parent-guard.json')
+    public=set(names[:3]);result={};held=[]
+    try:
+        fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);held.append(fd)
+        for part in (*STAGE.split('/')[1:],'FinalNativeGate-setup-packet'):
+            before=os.stat(part,dir_fd=fd,follow_symlinks=False);check_directory(before)
+            sub=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(sub)
+            if identity(os.fstat(sub))!=identity(before):raise ValueError('summary ancestry race')
+            fd=sub
+        owner=os.fstat(fd)
+        if owner.st_uid!=os.getuid() or stat.S_IMODE(owner.st_mode)!=0o700:raise ValueError('summary private packet0700')
+        for name in names:
+            src=None
+            try:
+                src=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=fd)
+                before=os.fstat(src)
+                if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_uid!=os.getuid() or before.st_mode&0o022:
+                    raise ValueError('summary regular single-link owner/permissions')
+                if not 0<=before.st_size<=512*2**20:raise ValueError('summary512MiB file bound')
+                h=hashlib.sha256();left=before.st_size;pieces=[]
+                include=name in public and before.st_size<=4*2**20
+                while left:
+                    raw=os.read(src,min(left,65536))
+                    if not raw:raise ValueError('summary short read')
+                    left-=len(raw);h.update(raw)
+                    if include:pieces.append(raw)
+                if os.read(src,1) or source_stamp(os.fstat(src))!=source_stamp(before):raise ValueError('summary file drift')
+                result[name]=dict(size=before.st_size,sha256=h.hexdigest())
+                if include:result[name]['record']=json.loads(b''.join(pieces))
+                elif name in public:result[name]['error']='public record exceeds4MiB; retained remote'
+            except (OSError,ValueError) as exc:result[name]=dict(error=repr(exc))
+            finally:
+                if src is not None:os.close(src)
+        return result
     finally:
         for fd in reversed(held):os.close(fd)
 
@@ -124,7 +169,15 @@ def main():
     result=subprocess.run(['/usr/bin/python3','-I','-B',STAGE+'/FinalNativeGate_setup.py'],
                           cwd=STAGE,env=env,stdin=subprocess.DEVNULL,timeout=max(.001,120-(time.monotonic()-start)))
     receipt['setup_exit']=result.returncode
-    print(json.dumps(receipt,sort_keys=True))
-    return result.returncode
+    try:receipt['packet']=packet_summary()
+    except (OSError,ValueError) as exc:receipt['packet_error']=repr(exc)
+    failed=bool(receipt.get('packet_error')) or any('error' in row for row in receipt.get('packet',{}).values())
+    raw=json.dumps(receipt,sort_keys=True)
+    if len(raw.encode())>4*2**20:
+        raw=json.dumps(dict(status='PUBLIC_SUMMARY_LIMIT',setup_exit=result.returncode,
+            packet_retained=STAGE+'/FinalNativeGate-setup-packet',execution_authority=False,print_axioms='N/A'))
+        failed=True
+    print(raw)
+    return 78 if failed else result.returncode
 
 if __name__=='__main__':raise SystemExit(main())

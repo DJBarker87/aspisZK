@@ -22,12 +22,13 @@ def main():
 
 
 def _inputs():
+    from FinalNativeGate_bounded import stamp
     from FinalNativeGate_seal import PLAN_SHA256
     with (HERE/'FinalNativeGate-plan.json').open('rb') as stream:
         before=os.fstat(stream.fileno())
         if before.st_size>SUMMARY_LIMIT:raise ValueError('setup plan stat bound')
         raw=stream.read(SUMMARY_LIMIT+1)
-        if before!=os.fstat(stream.fileno()):raise ValueError('setup plan identity drift')
+        if stamp(before)!=stamp(os.fstat(stream.fileno())):raise ValueError('setup plan identity drift')
     if len(raw)>SUMMARY_LIMIT or hashlib.sha256(raw).hexdigest()!=PLAN_SHA256:raise ValueError('setup plan seal/size')
     return json.loads(raw)
 

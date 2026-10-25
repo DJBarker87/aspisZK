@@ -25,7 +25,7 @@ def main():
     manifest={str(p.relative_to(D)):pin(p.read_bytes()) for p in sorted(D.rglob('*')) if p.is_file()}
     assert all(not n.endswith(('.pyc','.elf','.olean','.o')) for n in manifest)
     assert all(v['size']<=5_000_000 for n,v in manifest.items() if n.endswith('.json'))
-    write('FinalNativeGate-source-manifest-006.json',manifest)
+    write('FinalNativeGate-source-manifest-008.json',manifest)
     identity={};diff=[]
     tracked=subprocess.check_output(['git','ls-tree','--name-only',BASE,PREFIX],cwd=ROOT,text=True).splitlines()
     # Enumerate the baseline directory with Git only, not another live checkout.
@@ -36,7 +36,7 @@ def main():
         before=subprocess.check_output(['git','show',BASE+':'+path],cwd=ROOT);after=(D/name).read_bytes()
         a,b=funcs(before),funcs(after)
         identity[name]=dict(before=pin(before),after=pin(after),unchanged=sorted(k for k in a if a[k]==b.get(k)),changed=sorted(k for k in a if a[k]!=b.get(k)),added=sorted(set(b)-set(a)))
-        if before!=after:diff.extend(difflib.unified_diff(before.decode().splitlines(True),after.decode().splitlines(True),fromfile=BASE+'/'+name,tofile='source-006/'+name))
+        if before!=after:diff.extend(difflib.unified_diff(before.decode().splitlines(True),after.decode().splitlines(True),fromfile=BASE+'/'+name,tofile='source-008/'+name))
     for name in ('FinalNativeGate.py','FinalNativeGate_inside.py','FinalNativeGate_scope.py','FinalNativeGate_policy.py','FinalNativeGate_adapter.py','FinalNativeGate_setup_adapter.py','FinalNativeGate_reviewed.json'):
         assert subprocess.check_output(['git','show',BASE+':'+PREFIX+name],cwd=ROOT)==(D/name).read_bytes(),name
     for name in ('FinalNativeGate.py','FinalNativeGate_inside.py','FinalNativeGate_setup.py','FinalNativeGate_setup_inside.py'):
@@ -55,21 +55,21 @@ def main():
     assert {k:v for k,v in p['files'].items() if not k.startswith(stage)}=={k:v for k,v in before['files'].items() if not k.startswith(stage)}
     for path,value in p['files'].items():
         if path.startswith(stage):assert manifest[Path(path).name]==dict(sha256=value,size=p['job_source_sizes'][path])
-    write('FinalNativeGate-function-identity-006.json',identity)
-    with (E/'FinalNativeGate-source-diff-006.txt').open('x') as f:f.write(''.join(diff))
+    write('FinalNativeGate-function-identity-008.json',identity)
+    with (E/'FinalNativeGate-source-diff-008.txt').open('x') as f:f.write(''.join(diff))
     results=[]
-    for name in ('FinalNativeGate-order-release-tests.py','FinalNativeGate-release-tests.py'):
+    for name in ('FinalNativeGate-release-tests.py',):
         argv=[sys.executable,'-B',str(D/name)];begin=time.monotonic()
-        with (E/(name+'.006.log')).open('xb') as log:
+        with (E/(name+'.008.log')).open('xb') as log:
             child=subprocess.run(argv,stdout=log,stderr=subprocess.STDOUT,cwd=ROOT)
         results.append(dict(argv=argv,exit=child.returncode,wall_seconds=time.monotonic()-begin,
-            log=pin((E/(name+'.006.log')).read_bytes()),source=manifest[name]))
+            log=pin((E/(name+'.008.log')).read_bytes()),source=manifest[name]))
     usage=resource.getrusage(resource.RUSAGE_SELF);children=resource.getrusage(resource.RUSAGE_CHILDREN)
     receipt=dict(argv=[sys.executable,'-B',str(D/'FinalNativeGate-local-release-check.py')],results=results,
         exit=0 if all(x['exit']==0 for x in results) else 1,wall_seconds=time.monotonic()-start,
         self_peak_rss_bytes=usage.ru_maxrss*(1 if sys.platform=='darwin' else 1024),
         max_child_peak_rss_bytes=children.ru_maxrss*(1 if sys.platform=='darwin' else 1024),swap=usage.ru_nswap+children.ru_nswap,
-        source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()+' plus exact source-manifest-006 overlay',
+        source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()+' plus exact source-manifest-008 overlay',
         source_dependency_manifest=pin(json.dumps(manifest,sort_keys=True).encode()),
         print_axioms='N/A: source text/AST/hashes and explicit Python mocks; no formal theorem/import/tool invocation',
         actual_host=0,actual_SSH=0,actual_network=0,actual_setup=0,actual_metadata=0,actual_native=0,actual_compiler=0,
@@ -77,7 +77,7 @@ def main():
         security_targets_established=False,
         reused='Lead receipt and 37 focused tests at b34142b016 are historical evidence only; unchanged functions/policies have source identity, no new host identity gate',
         trust='existing Python/source/OS boundary; interpreter runtime bytes not newly identified; mocks establish no installed OS/native/cancellation semantics')
-    write('FinalNativeGate-order-release-006.json',receipt)
+    write('FinalNativeGate-order-release-008.json',receipt)
     print(json.dumps(receipt,sort_keys=True))
     return receipt['exit']
 

@@ -17,7 +17,7 @@ for path in list(p['files']):
 p['job_source_sizes']={}
 for x in source:
     value=pin(x.read_bytes());p['files'][STAGE+x.name]=value['sha256'];p['job_source_sizes'][STAGE+x.name]=value['size']
-p['job_revision']='b34142b016 admission-order/release criteria baseline plus exact source-manifest-006 overlay'
+p['job_revision']='b34142b016 admission-order/release criteria baseline plus exact source-manifest-008 overlay'
 p['setup_environment']=dict(HOME='/home/dombarker',USER='dombarker',LOGNAME='dombarker',PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8')
 p['bootstrap_source_boundary']='Plan excludes own/seal/bootstrap hashes. Bootstrap manifest pins plan+plan seal+finite job transfer source; bootstrap seal excluded. Both root seal bytes require independent transfer/source-manifest review. Operational pin observation is not executed-bytecode semantics.'
 p['setup_deferred']=['candidate UID/bus/runtime/tool/ELF dependency roles and selected cache fingerprint data require lead review; DATA never grants execution']

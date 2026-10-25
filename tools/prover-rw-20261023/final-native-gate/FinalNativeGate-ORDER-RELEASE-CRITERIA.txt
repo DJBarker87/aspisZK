@@ -39,3 +39,23 @@ controls will record cgroup.kill lstat owner/mode/type and effective write-acces
 metadata, or exact observation error. This is no write/cancellation probe and no
 proof the kernel permits cgroup.kill. Lead must review fresh actual metadata
 before final Kani allocation; unknown/refused observations remain unresolved.
+
+Prospective release v2 public DATA return criterion (before implementation):
+v1 only returned transfer/setup exit, insufficient for review in one SSH action.
+v2 will include the fixed inner/parent terminal and candidate controls records,
+plus streaming hash/size receipts for the fixed parent cleanup/guard records.
+Only fixed own-packet paths, no recursion/caller report. Missing files are exact
+partial DATA errors; all file reads regular/single-link/nofollow/user-owned and
+bounded512MiB. Selected public JSON records are <=4MiB each and the entire
+encoded response <=4MiB; excess fails with bounded status and retained remote
+packet rather than dumping it. Preserve v1 and its validation unchanged.
+
+Prospective v3 correction criterion (before implementation): full stat_result
+comparison includes atime, so a read can invalidate itself on an atime-updating
+mount. _inputs plan read, transfer reopened-file read, packet read, and local
+transport receiver read must compare the existing stable stamp fields instead
+(dev/ino/mode/uid/gid/size/mtime_ns/ctime_ns/nlink), excluding atime only.
+This explicitly changes the stability predicate; hash/size/content/owner/link/
+mtime/ctime checks stay required. Mock atime advance must succeed, mocked ctime
+or content drift must fail. Preserve v1/v2 source packages and receipts; neither
+is the proposed final DATA release. No actual mount/kernel behavior is claimed.

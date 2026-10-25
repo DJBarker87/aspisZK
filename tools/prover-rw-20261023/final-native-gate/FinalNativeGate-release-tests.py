@@ -12,7 +12,7 @@ import unittest
 from unittest.mock import Mock,patch
 
 D=Path(__file__).resolve().parent
-R=D/'prospective-data-v1'
+R=D/'prospective-data-v3'
 
 def receiver():
     ns={'__name__':'source_review_only'}
@@ -21,7 +21,7 @@ def receiver():
 
 class Tree:
     def __init__(self,ns):
-        self.nodes={};self.fds={};self.counter=100;self.fail_close=False;self.hardlink=False
+        self.nodes={};self.fds={};self.counter=100;self.fail_close=False;self.hardlink=False;self.change_ctime=False
         current=''
         for part in ['',*ns['STAGE'].split('/')[1:-1]]:
             current=(current+'/'+part) if current else '/'
@@ -37,7 +37,7 @@ class Tree:
         if path not in self.nodes:raise FileNotFoundError(path)
         row=self.nodes[path]
         return NS(st_dev=1,st_ino=list(self.nodes).index(path)+1,st_mode=row['mode'],st_uid=row['uid'],st_gid=123,
-            st_size=len(row['raw']),st_nlink=2 if self.hardlink and stat.S_ISREG(row['mode']) else 1)
+            st_size=len(row['raw']),st_mtime_ns=1,st_ctime_ns=row.get('ctime',1),st_atime_ns=row.get('atime',1),st_nlink=2 if self.hardlink and stat.S_ISREG(row['mode']) else 1)
     def fstat(self,fd):return self.stat(self.fds[fd][0])
     def open(self,name,flags,mode=0o777,dir_fd=None):
         path=self.path(name,dir_fd)
@@ -59,7 +59,10 @@ class Tree:
         self.nodes[path]=dict(mode=stat.S_IFDIR|mode,raw=bytearray(),uid=123)
     def write(self,fd,raw):self.nodes[self.fds[fd][0]]['raw'].extend(raw);return len(raw)
     def read(self,fd,n):
-        path,at,_=self.fds[fd];raw=bytes(self.nodes[path]['raw'][at:at+n]);self.fds[fd][1]+=len(raw);return raw
+        path,at,_=self.fds[fd]
+        self.nodes[path]['atime']=self.nodes[path].get('atime',1)+1
+        if self.change_ctime:self.nodes[path]['ctime']=self.nodes[path].get('ctime',1)+1
+        raw=bytes(self.nodes[path]['raw'][at:at+n]);self.fds[fd][1]+=len(raw);return raw
 
 class Release(unittest.TestCase):
     def test_exact_activated_bytes_seals_and_only_two_entry_deltas(self):
@@ -128,6 +131,51 @@ class Release(unittest.TestCase):
     def test_receiver_limits_before_decode_or_write(self):
         ns=receiver();first=next(iter(ns['FILES']));ns['FILES'][first]['size']=4*2**20+1
         with self.assertRaisesRegex(ValueError,'per-file bound'):ns['decoded']()
+
+    def packet(self):
+        ns=receiver();tree=Tree(ns);ns['os']=tree.api
+        ns['install']()
+        fd=tree.open(ns['STAGE'],os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+        tree.mkdir('FinalNativeGate-setup-packet',0o700,fd);tree.close(fd)
+        for name in ('FinalNativeGate-setup-terminal.json','FinalNativeGate-setup-parent-terminal.json',
+                     'FinalNativeGate-candidate-controls.json','FinalNativeGate-setup-parent-cleanup.json','FinalNativeGate-setup-parent-guard.json'):
+            tree.nodes[ns['STAGE']+'/FinalNativeGate-setup-packet/'+name]=dict(mode=0o100600,raw=bytearray(json.dumps({'role':name,'execution_authority':False}).encode()),uid=123)
+        return ns,tree
+
+    def test_fixed_packet_summary_public_records_and_hash_only_cleanup(self):
+        ns,tree=self.packet();summary=ns['packet_summary']()
+        self.assertEqual(len(summary),5)
+        self.assertEqual(summary['FinalNativeGate-candidate-controls.json']['record']['role'],'FinalNativeGate-candidate-controls.json')
+        self.assertNotIn('record',summary['FinalNativeGate-setup-parent-cleanup.json'])
+        for name,row in summary.items():
+            raw=bytes(tree.nodes[ns['STAGE']+'/FinalNativeGate-setup-packet/'+name]['raw'])
+            self.assertEqual(row['sha256'],hashlib.sha256(raw).hexdigest());self.assertEqual(row['size'],len(raw))
+        self.assertFalse(tree.fds)
+
+    def test_fixed_packet_missing_file_exact_partial_error(self):
+        ns,tree=self.packet()
+        del tree.nodes[ns['STAGE']+'/FinalNativeGate-setup-packet/FinalNativeGate-candidate-controls.json']
+        summary=ns['packet_summary']()
+        self.assertIn('FinalNativeGate-candidate-controls.json',summary['FinalNativeGate-candidate-controls.json']['error'])
+        self.assertIn('record',summary['FinalNativeGate-setup-terminal.json']);self.assertFalse(tree.fds)
+
+    def test_packet_alias_refused(self):
+        ns,tree=self.packet();tree.nodes[ns['STAGE']+'/FinalNativeGate-setup-packet']['mode']=0o120777
+        with self.assertRaisesRegex(ValueError,'ancestor'):ns['packet_summary']()
+        self.assertFalse(tree.fds)
+
+    def test_receiver_ctime_change_rejected_even_with_identical_bytes(self):
+        ns=receiver();tree=Tree(ns);ns['os']=tree.api;tree.change_ctime=True
+        with self.assertRaisesRegex(ValueError,'source drift'):ns['install']()
+        self.assertIn(ns['STAGE'],tree.nodes);self.assertFalse(tree.fds)
+
+    def test_source_stamp_excludes_only_atime_not_content_identity(self):
+        ns=receiver()
+        first=NS(st_dev=1,st_ino=2,st_mode=0o100600,st_uid=123,st_gid=123,st_size=4,st_mtime_ns=10,st_ctime_ns=11,st_nlink=1,st_atime_ns=1)
+        after=copy.copy(first);after.st_atime_ns=99
+        self.assertEqual(ns['source_stamp'](first),ns['source_stamp'](after))
+        after.st_ctime_ns=12
+        self.assertNotEqual(ns['source_stamp'](first),ns['source_stamp'](after))
 
     def test_literal_outer_transport_without_execution(self):
         ns={'__name__':'source_review_only'}
