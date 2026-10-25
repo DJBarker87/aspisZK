@@ -1,0 +1,165 @@
+{
+  "base": "c67d0a3d5a0b4d53ec9a7431e8ba70c8a31c93e2",
+  "caveat": "Complete changed function/class statements; module-level constants and all text deltas are in source-diff-009.txt. No historical-v3 identity assertion.",
+  "changes": {
+    "FinalNativeGate-bootstrap.json": {
+      "after_pin": {
+        "sha256": "48139ba64c4c60f2eb9feb9f555ceaa79fc100477a6a26be7e23f9fbb5e14ba3",
+        "size": 6239
+      },
+      "before_pin": {
+        "sha256": "eb9892092dab96c1a0b1e5ee260ea8a9295a68c5cba88d1ae41a6392fa5c030d",
+        "size": 5954
+      }
+    },
+    "FinalNativeGate-data-release-build.py": {
+      "after_pin": {
+        "sha256": "da74e6408cf0e666d42aa7c4edf12e67af4719f4f8e5a7ee3d1dccdbf54e9cee",
+        "size": 7563
+      },
+      "before_pin": {
+        "sha256": "958d7cf339eb92181b75b704946903b295ce1869cdc51861d71d8291c3a9ecea",
+        "size": 7371
+      },
+      "complete_changed_functions": {
+        "prepare": {
+          "after": "def prepare(release=None):\n    release=RELEASE if release is None else Path(release)\n    release.mkdir(mode=0o700,exist_ok=False)\n    source={p.name:p.read_bytes() for p in sorted(D.iterdir()) if p.is_file()}\n    rows=dict(source);delta={};diff=[]\n    # Two literal setup-only entry changes. Isolated Python requires fixed path\n    # bootstrap before importing sibling source, even in the outer setup entry.\n    replacements={\n      'FinalNativeGate_setup.py':(\"def main():\\n    print('FinalNativeGate setup source-only: disabled; review and new allocation required')\\n    return 78\", \"def main():\\n    import sys\\n    if HERE!=STAGE:raise ValueError('wrong fixed DATA stage')\\n    sys.path.insert(0,str(STAGE))\\n    return _prospective()\"),\n      'FinalNativeGate_setup_inside.py':(\"def main():\\n    print('FinalNativeGate setup inside source-only: disabled')\\n    return 78\", \"def main():\\n    return _bound_body()\")}\n    for name,(before,after) in replacements.items():\n        text=rows[name].decode()\n        if text.count(before)!=1:raise ValueError('entry before statement mismatch: '+name)\n        rows[name]=text.replace(before,after).encode()\n        delta[name]=dict(before=before,after=after,before_pin=pin(source[name]),after_pin=pin(rows[name]))\n        diff.extend(difflib.unified_diff(text.splitlines(True),rows[name].decode().splitlines(True),fromfile='disabled/'+name,tofile='prospective-DATA/'+name))\n    p=json.loads(rows['FinalNativeGate-plan.json'])\n    for path in list(p['files']):\n        if path.startswith(STAGE):del p['files'][path]\n    p['job_source_sizes']={}\n    for name,raw in sorted(rows.items()):\n        if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):\n            p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)\n    p['job_revision']=ENTRY+' plus prospective-data-v4 exact transfer-manifest overlay (activated DATA bytes only)'\n    p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))\n    rows['FinalNativeGate-plan.json']=dump(p)\n    rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\\n').encode()\n    bootstrap={n:pin(raw) for n,raw in sorted(rows.items()) if n not in ('FinalNativeGate-bootstrap.json','FinalNativeGate_bootstrap_seal.py')}\n    rows['FinalNativeGate-bootstrap.json']=dump(bootstrap)\n    rows['FinalNativeGate_bootstrap_seal.py']=('BOOTSTRAP_SHA256 = '+repr(pin(rows['FinalNativeGate-bootstrap.json'])['sha256'])+'\\n').encode()\n    manifest={name:pin(raw) for name,raw in sorted(rows.items())}\n    identities={name:dict(unchanged=sorted(k for k,v in funcs(raw).items() if funcs(rows[name]).get(k)==v),\n                        changed=sorted(k for k,v in funcs(raw).items() if funcs(rows[name]).get(k)!=v))\n                for name,raw in source.items() if name.endswith('.py')}\n    changed=sorted(name for name in rows if rows[name]!=source[name])\n    assert changed==sorted([*replacements,'FinalNativeGate-plan.json','FinalNativeGate_seal.py','FinalNativeGate-bootstrap.json','FinalNativeGate_bootstrap_seal.py'])\n    assert all(v['changed']==(['main'] if n in replacements else []) for n,v in identities.items())\n    for name in ('FinalNativeGate.py','FinalNativeGate_inside.py'):\n        assert rows[name]==source[name]\n    payload=release/'payload';payload.mkdir(mode=0o700)\n    for name,raw in rows.items():\n        with (payload/name).open('xb') as f:f.write(raw)\n    encoded={name:dict(**manifest[name],b85=base64.b85encode(raw).decode()) for name,raw in sorted(rows.items())}\n    root=hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest()\n    receiver=source['FinalNativeGate-transfer-template.txt'].decode().replace('__FILES_LITERAL__',repr(encoded)).replace('__ROOT_LITERAL__',repr(root)).encode()\n    assert len(receiver)<4*2**20\n    with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)\n    transport=source['FinalNativeGate-transport-template.txt'].decode().replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()\n    with (release/'FinalNativeGate-data-transport.py').open('xb') as f:f.write(transport)\n    report=dict(transport=pin(transport),entry_revision=ENTRY,source_manifest={n:pin(v) for n,v in source.items()},transfer_manifest=manifest,\n        transfer_manifest_root=root,receiver=pin(receiver),changed_files=changed,entry_deltas=delta,\n        function_identities=identities,unchanged_files=sorted(n for n in rows if rows[n]==source[n]),\n        unchanged_policy_bundles={n:pin(item['source'].encode()) for n,item in json.loads(rows['FinalNativeGate_reviewed.json']).items()},\n        no_final_charge_authority=True,execution_performed=False,print_axioms='N/A',\n        caveat='AST/source identities are not OS/native semantics; fresh actual cleanup permission/control and complete pin approval remain open')\n    with (release/'FinalNativeGate-release-identities.json').open('xb') as f:f.write(dump(report))\n    with (release/'FinalNativeGate-data-activation.patch.txt').open('x') as f:f.write(''.join(diff))\n    with (release/'FinalNativeGate-release-manifest.txt').open('x') as f:\n        f.write('PROSPECTIVE ONLY; STOP for lead source/release review and explicit new allocation.\\n')\n        f.write('Exactly one future SSH candidate DATA action. No invocation authorized now.\\n')\n        f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\\n')\n        f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\\n')\n        f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\\n')\n        f.write('Relative to maintained source-009: two SETUP mains activate and four seal/plan files regenerate. Maintained source also repairs staging paths and parent terminal ordering; compare complete source-009 before/after report against c67d0a3d5a; no historical-v3 byte-identity claim.\\n')\n        f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\\n')\n        f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\\n')\n        f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\\n')\n        f.write('Outer transport120s and public combined output4MiB; >5MB derived JSON stays remote with size/hash.\\n')\n        f.write('Timeout/disconnection can leave remote work unresolved; no native cancellation guarantee from source/mocks.\\n')\n    return report",
+          "before": "def prepare():\n    RELEASE.mkdir(mode=0o700,exist_ok=False)\n    source={p.name:p.read_bytes() for p in sorted(D.iterdir()) if p.is_file()}\n    rows=dict(source);delta={};diff=[]\n    # Two literal setup-only entry changes. Isolated Python requires fixed path\n    # bootstrap before importing sibling source, even in the outer setup entry.\n    replacements={\n      'FinalNativeGate_setup.py':(\"def main():\\n    print('FinalNativeGate setup source-only: disabled; review and new allocation required')\\n    return 78\", \"def main():\\n    import sys\\n    if HERE!=STAGE:raise ValueError('wrong fixed DATA stage')\\n    sys.path.insert(0,str(STAGE))\\n    return _prospective()\"),\n      'FinalNativeGate_setup_inside.py':(\"def main():\\n    print('FinalNativeGate setup inside source-only: disabled')\\n    return 78\", \"def main():\\n    return _bound_body()\")}\n    for name,(before,after) in replacements.items():\n        text=rows[name].decode()\n        if text.count(before)!=1:raise ValueError('entry before statement mismatch: '+name)\n        rows[name]=text.replace(before,after).encode()\n        delta[name]=dict(before=before,after=after,before_pin=pin(source[name]),after_pin=pin(rows[name]))\n        diff.extend(difflib.unified_diff(text.splitlines(True),rows[name].decode().splitlines(True),fromfile='disabled/'+name,tofile='prospective-DATA/'+name))\n    p=json.loads(rows['FinalNativeGate-plan.json'])\n    for path in list(p['files']):\n        if path.startswith(STAGE):del p['files'][path]\n    p['job_source_sizes']={}\n    for name,raw in sorted(rows.items()):\n        if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):\n            p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)\n    p['job_revision']=ENTRY+' plus prospective-data-v3 exact transfer-manifest overlay (activated DATA bytes only)'\n    p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))\n    rows['FinalNativeGate-plan.json']=dump(p)\n    rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\\n').encode()\n    bootstrap={n:pin(raw) for n,raw in sorted(rows.items()) if n not in ('FinalNativeGate-bootstrap.json','FinalNativeGate_bootstrap_seal.py')}\n    rows['FinalNativeGate-bootstrap.json']=dump(bootstrap)\n    rows['FinalNativeGate_bootstrap_seal.py']=('BOOTSTRAP_SHA256 = '+repr(pin(rows['FinalNativeGate-bootstrap.json'])['sha256'])+'\\n').encode()\n    manifest={name:pin(raw) for name,raw in sorted(rows.items())}\n    identities={name:dict(unchanged=sorted(k for k,v in funcs(raw).items() if funcs(rows[name]).get(k)==v),\n                        changed=sorted(k for k,v in funcs(raw).items() if funcs(rows[name]).get(k)!=v))\n                for name,raw in source.items() if name.endswith('.py')}\n    changed=sorted(name for name in rows if rows[name]!=source[name])\n    assert changed==sorted([*replacements,'FinalNativeGate-plan.json','FinalNativeGate_seal.py','FinalNativeGate-bootstrap.json','FinalNativeGate_bootstrap_seal.py'])\n    assert all(v['changed']==(['main'] if n in replacements else []) for n,v in identities.items())\n    for name in ('FinalNativeGate.py','FinalNativeGate_inside.py'):\n        assert rows[name]==source[name]\n    payload=RELEASE/'payload';payload.mkdir(mode=0o700)\n    for name,raw in rows.items():\n        with (payload/name).open('xb') as f:f.write(raw)\n    encoded={name:dict(**manifest[name],b85=base64.b85encode(raw).decode()) for name,raw in sorted(rows.items())}\n    root=hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest()\n    receiver=source['FinalNativeGate-transfer-template.txt'].decode().replace('__FILES_LITERAL__',repr(encoded)).replace('__ROOT_LITERAL__',repr(root)).encode()\n    assert len(receiver)<4*2**20\n    with (RELEASE/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)\n    transport=source['FinalNativeGate-transport-template.txt'].decode().replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()\n    with (RELEASE/'FinalNativeGate-data-transport.py').open('xb') as f:f.write(transport)\n    report=dict(transport=pin(transport),entry_revision=ENTRY,source_manifest={n:pin(v) for n,v in source.items()},transfer_manifest=manifest,\n        transfer_manifest_root=root,receiver=pin(receiver),changed_files=changed,entry_deltas=delta,\n        function_identities=identities,unchanged_files=sorted(n for n in rows if rows[n]==source[n]),\n        unchanged_policy_bundles={n:pin(item['source'].encode()) for n,item in json.loads(rows['FinalNativeGate_reviewed.json']).items()},\n        no_final_charge_authority=True,execution_performed=False,print_axioms='N/A',\n        caveat='AST/source identities are not OS/native semantics; fresh actual cleanup permission/control and complete pin approval remain open')\n    with (RELEASE/'FinalNativeGate-release-identities.json').open('xb') as f:f.write(dump(report))\n    with (RELEASE/'FinalNativeGate-data-activation.patch.txt').open('x') as f:f.write(''.join(diff))\n    with (RELEASE/'FinalNativeGate-release-manifest.txt').open('x') as f:\n        f.write('PROSPECTIVE ONLY; STOP for lead source/release review and explicit new allocation.\\n')\n        f.write('Exactly one future SSH candidate DATA action. No invocation authorized now.\\n')\n        f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\\n')\n        f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\\n')\n        f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\\n')\n        f.write('Only two setup main functions change; four regenerated seal/plan files; all other functions/bundles identical.\\n')\n        f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\\n')\n        f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\\n')\n        f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\\n')\n        f.write('Outer transport120s and public combined output4MiB; >5MB derived JSON stays remote with size/hash.\\n')\n        f.write('Timeout/disconnection can leave remote work unresolved; no native cancellation guarantee from source/mocks.\\n')\n    return report"
+        }
+      }
+    },
+    "FinalNativeGate-plan.json": {
+      "after_pin": {
+        "sha256": "37244b6c62e48e1ca42c5b30039382b99ccc6571de0147c9f13fd675ae1a0cdb",
+        "size": 155282
+      },
+      "before_pin": {
+        "sha256": "af6d9b7ab06fdca5f1fdef527c38ae5a13f1da1f4e1ecdc0004f80f966b1dc0f",
+        "size": 158752
+      }
+    },
+    "FinalNativeGate-source-refresh.py": {
+      "after_pin": {
+        "sha256": "8c5dc9b96cc54be5335e4c387a13abbff36318dbe2dcda01dea98b3aa5821d29",
+        "size": 2621
+      },
+      "before_pin": {
+        "sha256": "97191a6807791c3212d0529d916bb7236093174a0423f3014738ee6eb864e0c8",
+        "size": 2565
+      },
+      "complete_changed_functions": {}
+    },
+    "FinalNativeGate-transfer-template.txt": {
+      "after_pin": {
+        "sha256": "3ff3ee85fc7a090fd456b65eabaec5775edce40deb3a335fcb6c6eb4cb1435fe",
+        "size": 10220
+      },
+      "before_pin": {
+        "sha256": "93de120f9c23ca133fb1f5e241b32a02f5fc3eb0216583848a8442eed4c6d6d8",
+        "size": 10265
+      }
+    },
+    "FinalNativeGate-transport-template.txt": {
+      "after_pin": {
+        "sha256": "5c09d6540c21f0fa4736a9d5c7dfe66dcde0da4b65485689b6d32d9403bb3bc9",
+        "size": 3776
+      },
+      "before_pin": {
+        "sha256": "1d7d258bfd715461f96f2a3d17315810ac27eb249b1107cedd3064dc7a02a18e",
+        "size": 3776
+      }
+    },
+    "FinalNativeGate.py": {
+      "after_pin": {
+        "sha256": "9e4f66ff952d00764082345a2cfee727ccad138ce494ed4748e7bb2c835c3af5",
+        "size": 17012
+      },
+      "before_pin": {
+        "sha256": "b320db8584d3a9052afa01e530266bf261c152868c2fdccf7ab711555e385b44",
+        "size": 17057
+      },
+      "complete_changed_functions": {}
+    },
+    "FinalNativeGate_bootstrap_seal.py": {
+      "after_pin": {
+        "sha256": "59f0571774d859037f4c85e6e477ef8d7460eb5808fa3915bd33f4fe56c7cf66",
+        "size": 86
+      },
+      "before_pin": {
+        "sha256": "b5dbeac2e8fe3251d7c2de5208fe65137bd1470fbe677539df45d0b84fd5f9d1",
+        "size": 86
+      },
+      "complete_changed_functions": {}
+    },
+    "FinalNativeGate_inside.py": {
+      "after_pin": {
+        "sha256": "d47ea51b09d652de0daa2392069a1b5842542090baa23cad26a3427bf0bbbd55",
+        "size": 666
+      },
+      "before_pin": {
+        "sha256": "728aaae4717825bdb51408a888c9b3b711ac02fd89e0296c732d217f42025391",
+        "size": 711
+      },
+      "complete_changed_functions": {
+        "_bound_body": {
+          "after": "def _bound_body():\n    import sys\n    from pathlib import Path\n    stage=Path('/home/dombarker/final-native-gate')\n    if Path(__file__).resolve().parent!=stage:raise ValueError('wrong fixed bootstrap path')\n    sys.path.insert(0,str(stage))  # explicit fixed source bootstrap under -I\n    from FinalNativeGate_scope import child_wait\n    child_wait('final')\n    from FinalNativeGate import _execute\n    return _execute()",
+          "before": "def _bound_body():\n    import sys\n    from pathlib import Path\n    stage=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate')\n    if Path(__file__).resolve().parent!=stage:raise ValueError('wrong fixed bootstrap path')\n    sys.path.insert(0,str(stage))  # explicit fixed source bootstrap under -I\n    from FinalNativeGate_scope import child_wait\n    child_wait('final')\n    from FinalNativeGate import _execute\n    return _execute()"
+        }
+      }
+    },
+    "FinalNativeGate_scope.py": {
+      "after_pin": {
+        "sha256": "cf270b8c6e63b0c35cd84889efbc9f8775a38b096b2869af7f0297dad3a34490",
+        "size": 13865
+      },
+      "before_pin": {
+        "sha256": "9d1771381d7f3f843d593333ccabf2472434f8565a31c937b70fce445bcde9f8",
+        "size": 13910
+      },
+      "complete_changed_functions": {}
+    },
+    "FinalNativeGate_seal.py": {
+      "after_pin": {
+        "sha256": "2fca6b27a51c156b8b9045660567dccb2b2c0d68f58c8778898342840786ae00",
+        "size": 81
+      },
+      "before_pin": {
+        "sha256": "cc32f6bb387c264bf7396a09b1d3d66bd4d6984180045d9dcb59b6ddd2823c6b",
+        "size": 81
+      },
+      "complete_changed_functions": {}
+    },
+    "FinalNativeGate_setup.py": {
+      "after_pin": {
+        "sha256": "8350fbf686ea291016e6e8bfd8d5cc5d92af3a919ea841f617e1e955def63e1b",
+        "size": 13456
+      },
+      "before_pin": {
+        "sha256": "bcfe95ae244c03e81b1b22b5d75f70b908fc25bbdd4ca860bad64878a21c78e0",
+        "size": 13158
+      },
+      "complete_changed_functions": {
+        "_prospective": {
+          "after": "def _prospective():\n    # Private future orchestration, still unreachable from main. New allocation\n    # and review required;120s timeout is transport,115s alarm is inside collection.\n    if HERE!=STAGE:raise ValueError('wrong fixed setup stage')\n    import datetime,fcntl,subprocess,zoneinfo\n    import FinalNativeGate_setup_observe as observation\n    from FinalNativeGate_cleanup import cleanup\n    from FinalNativeGate import _cancel_child\n    from FinalNativeGate_guard import Proc\n    from FinalNativeGate_scope import FixedScope,environment\n    from FinalNativeGate_candidate import bootstrap,stable\n    PACKET.mkdir(mode=0o700,exist_ok=False)\n    p=_inputs();guard=_guard();child=None;fd=None;ident=None;errors=[];failed=True\n    scope=FixedScope('setup')\n    signal.signal(signal.SIGUSR1,lambda *_: (_ for _ in ()).throw(RuntimeError('metadata guard failed')))\n    hm=datetime.datetime.now(zoneinfo.ZoneInfo('Europe/London')).strftime('%H%M')\n    with open('/tmp/aspis-r0-lean.lock','r') as lock:\n        if not (hm>='2230' or hm<'1400'):fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)\n        try:\n            guard.start();observation.ACTIVE_GUARD=guard\n            report=observation.collect('prospective')\n            if report['decision']['allowed'] is not True:raise ValueError('setup prospective admission denied')\n            parent_bootstrap=bootstrap(STAGE)\n            env=environment()  # concrete proposal; UID/bus are candidate DATA\n            scope.preflight();argv=scope.argv(env)\n            _publish('FinalNativeGate-setup-argv.json',argv)\n            with (PACKET/'FinalNativeGate-setup.stdout').open('xb') as out,(PACKET/'FinalNativeGate-setup.stderr').open('xb') as err:\n                deadline=time.monotonic()+120\n                child=subprocess.Popen(argv,cwd=STAGE,env=env,stdout=out,stderr=err)\n                fd=os.pidfd_open(child.pid);ident=Proc().identity(child.pid);guard.remember(ident,os.getpid())\n                scope.bind_release(child,ident,guard)\n                while child.returncode is None:\n                    guard.check();pid,status,_=os.wait4(child.pid,os.WNOHANG)\n                    if pid:child.returncode=os.waitstatus_to_exitcode(status);break\n                    if time.monotonic()>deadline:raise TimeoutError('setup120s transport')\n                    time.sleep(.05)\n                failed=child.returncode!=0\n                stable(parent_bootstrap,bootstrap(STAGE))\n        except BaseException as exc:errors.append(repr(exc))\n        finally:\n            signal.signal(signal.SIGUSR1,signal.SIG_IGN)\n            closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True);errors.extend(closure['errors'])\n            observation.ACTIVE_GUARD=None\n            for name,value in [('FinalNativeGate-setup-parent-cleanup.json',closure),\n                               ('FinalNativeGate-setup-parent-guard.json',closure['monitor'])]:\n                try:_publish(name,value)\n                except BaseException as exc:errors.append('terminal write '+name+': '+repr(exc))\n            # Compute only after prior writes: a persisted terminal must include\n            # their failures. A terminal write failure still forces nonzero exit.\n            terminal=dict(failed=failed or bool(errors) or bool(closure['unresolved']),errors=list(errors),\n                          unresolved=closure['unresolved'],print_axioms='N/A',execution_authority=False)\n            try:_publish('FinalNativeGate-setup-parent-terminal.json',terminal)\n            except BaseException as exc:errors.append('terminal write FinalNativeGate-setup-parent-terminal.json: '+repr(exc))\n\n    return 78 if failed or errors else 0",
+          "before": "def _prospective():\n    # Private future orchestration, still unreachable from main. New allocation\n    # and review required;120s timeout is transport,115s alarm is inside collection.\n    if HERE!=STAGE:raise ValueError('wrong fixed setup stage')\n    import datetime,fcntl,subprocess,zoneinfo\n    import FinalNativeGate_setup_observe as observation\n    from FinalNativeGate_cleanup import cleanup\n    from FinalNativeGate import _cancel_child\n    from FinalNativeGate_guard import Proc\n    from FinalNativeGate_scope import FixedScope,environment\n    from FinalNativeGate_candidate import bootstrap,stable\n    PACKET.mkdir(mode=0o700,exist_ok=False)\n    p=_inputs();guard=_guard();child=None;fd=None;ident=None;errors=[];failed=True\n    scope=FixedScope('setup')\n    signal.signal(signal.SIGUSR1,lambda *_: (_ for _ in ()).throw(RuntimeError('metadata guard failed')))\n    hm=datetime.datetime.now(zoneinfo.ZoneInfo('Europe/London')).strftime('%H%M')\n    with open('/tmp/aspis-r0-lean.lock','r') as lock:\n        if not (hm>='2230' or hm<'1400'):fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)\n        try:\n            guard.start();observation.ACTIVE_GUARD=guard\n            report=observation.collect('prospective')\n            if report['decision']['allowed'] is not True:raise ValueError('setup prospective admission denied')\n            parent_bootstrap=bootstrap(STAGE)\n            env=environment()  # concrete proposal; UID/bus are candidate DATA\n            scope.preflight();argv=scope.argv(env)\n            _publish('FinalNativeGate-setup-argv.json',argv)\n            with (PACKET/'FinalNativeGate-setup.stdout').open('xb') as out,(PACKET/'FinalNativeGate-setup.stderr').open('xb') as err:\n                deadline=time.monotonic()+120\n                child=subprocess.Popen(argv,cwd=STAGE,env=env,stdout=out,stderr=err)\n                fd=os.pidfd_open(child.pid);ident=Proc().identity(child.pid);guard.remember(ident,os.getpid())\n                scope.bind_release(child,ident,guard)\n                while child.returncode is None:\n                    guard.check();pid,status,_=os.wait4(child.pid,os.WNOHANG)\n                    if pid:child.returncode=os.waitstatus_to_exitcode(status);break\n                    if time.monotonic()>deadline:raise TimeoutError('setup120s transport')\n                    time.sleep(.05)\n                failed=child.returncode!=0\n                stable(parent_bootstrap,bootstrap(STAGE))\n        except BaseException as exc:errors.append(repr(exc))\n        finally:\n            signal.signal(signal.SIGUSR1,signal.SIG_IGN)\n            closure=cleanup(child,fd,ident,guard,_cancel_child,scope,outer=True);errors.extend(closure['errors'])\n            observation.ACTIVE_GUARD=None\n            for name,value in [('FinalNativeGate-setup-parent-cleanup.json',closure),\n                               ('FinalNativeGate-setup-parent-guard.json',closure['monitor']),\n                               ('FinalNativeGate-setup-parent-terminal.json',dict(failed=failed or bool(errors),errors=errors,\n                                unresolved=closure['unresolved'],print_axioms='N/A',execution_authority=False))]:\n                try:_publish(name,value)\n                except BaseException as exc:errors.append('terminal write '+name+': '+repr(exc))\n\n    return 78 if failed or errors else 0"
+        }
+      }
+    },
+    "FinalNativeGate_setup_inside.py": {
+      "after_pin": {
+        "sha256": "2b57411143b1b1398fb24a81fd5a1b210465384fe992b24b3bc52a2816c66ac5",
+        "size": 645
+      },
+      "before_pin": {
+        "sha256": "34d67af229e00e3b27cdd6c7b968defed96a0453aec1db1e5a533c824afaf3d1",
+        "size": 690
+      },
+      "complete_changed_functions": {
+        "_bound_body": {
+          "after": "def _bound_body():\n    import sys\n    from pathlib import Path\n    stage=Path('/home/dombarker/final-native-gate')\n    if Path(__file__).resolve().parent!=stage:raise ValueError('wrong fixed bootstrap path')\n    sys.path.insert(0,str(stage))  # explicit fixed source bootstrap under -I\n    from FinalNativeGate_scope import child_wait\n    child_wait('setup')\n    from FinalNativeGate_setup import _collect\n    return _collect()",
+          "before": "def _bound_body():\n    import sys\n    from pathlib import Path\n    stage=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/final-native-gate')\n    if Path(__file__).resolve().parent!=stage:raise ValueError('wrong fixed bootstrap path')\n    sys.path.insert(0,str(stage))  # explicit fixed source bootstrap under -I\n    from FinalNativeGate_scope import child_wait\n    child_wait('setup')\n    from FinalNativeGate_setup import _collect\n    return _collect()"
+        }
+      }
+    }
+  }
+}
