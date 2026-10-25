@@ -1,0 +1,40 @@
+'AspisR1.Tx1Q_Endpoint.on_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx1Q_Endpoint.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Tx1Q_Endpoint.WhenBound : {CoreError H : Type} →
+  {installed : AspisR1CurrentCaller.Ops} →
+    {reserved : Bool} →
+      {query : Port3_NativeQueryBody.Ops} →
+        {geo : Port3_NativeGeometryBody.Ops CoreError} →
+          {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} →
+            {hash : H} →
+              {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public} →
+                {pub proof : Slice U8} →
+                  {split : Usize} →
+                    {saved : alloc.vec.Vec U8} →
+                      Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved → Prop :=
+fun {CoreError H} {installed} {reserved} {query} {geo} {D} {hash} {semantic} {pub proof} {split} {saved} run =>
+  Port5Q1_QueryPorts.SessionAPrimitives query →
+    ∀ (parsed : Parsed) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix)
+      (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E) (rho : OraclePortCheckpointAbiC5.K),
+      Port5Q1_QueryPorts.SessionAPrepare (prepared run.p) data q rho →
+        OraclePortStoredParserC4.parseReached (bytesOf ↑proof) tr = some parsed →
+          LiteralMatchingData.read (typedRows parsed q tr) = some data →
+            ∀ (recovered : ℕ → Option Bytes),
+              (∀ pos < 22, recovered (index q 2 pos) = some (OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+                  Port5Q1_Domain.SessionADomain geo →
+                    geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                      geo.op7 = ok 1#u32 →
+                        geo.op11 = Port4C_InverseExecution.inverse_owned →
+                          have state :=
+                            accumulator
+                              (have __src := run.out;
+                              { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                next := __src.next });
+                          CheckpointBytes5Output.accumulator state =
+                              (OraclePortCheckpointStateC3.write
+                                  (OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+                            Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (prepared run.p) state proof pub
+                                  hash =
+                                ok saved ∧
+                              (↑run.flushed).length = 64 ∧ ↑run.out.next = 10
