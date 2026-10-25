@@ -20,7 +20,7 @@ theorem array_back {n : Usize} (a : Array MainQM n) :
   apply Subtype.ext
   change (a.val.map fromMainQM).map toMainQM = a.val
   rw [List.map_map]
-  simp only [Function.comp_def,qm_back,List.map_id_fun]
+  simp only [Function.comp_def,qm_back,List.map_id_fun']
 
 theorem prefix_back (p : MainPrefix) : toMainPrefix (fromMainPrefix p) = p := by
   cases p
