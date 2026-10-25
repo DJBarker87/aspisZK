@@ -1,0 +1,159 @@
+"""Source-only fixed delta application to derived baselines. Never imports them."""
+import pathlib
+H=pathlib.Path(__file__).resolve().parent
+O=H.parents[1]/'evidence/sbf-finite-probe-20261025'
+def baseline(n):return (O/(n+'.baseline.txt')).read_text()
+def write(n,s):
+ if n.endswith('.py'):
+  s="if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\n"+s
+ (H/n).write_text(s)
+# Capture now supplies only audited read-only helpers and public-output lifecycle.
+# Remove obsolete writer-retaining Capture and staging source opener entirely.
+s=baseline('SbfFiniteLinux_capture.py')
+a=s.index('FD_AUDIT_TEXT =');b=s.index('\n\ndef identity',a)
+fromast="from SbfFinite_fixed import OWN, ROOT, ENV, ARGV\nPROBE = ARGV\nFD_AUDIT_TEXT = ARGV[-1][ARGV[-1].index('def SbfSeal_fds'):ARGV[-1].index('assert os.getresuid')]\n"
+s=s[:a]+fromast+s[b:]
+a=s.index('class Capture:');b=s.index('class PublicOutput:',a);s=s[:a]+s[b:]
+a=s.index('def create_fixed_layout():');b=s.index('class PublicOutput:',a)
+s=s[:a]+'''def create_fixed_layout():
+    """Open installed fixed root; outputs exclusively created by PublicOutput.
+
+    Installer already made own/rootfs/public-output; exact setup tree is verified
+    separately. No existing arbitrary tree is adopted. One shot stdout/stderr.
+    """
+    require(os.getresuid() == os.getresgid() == (0,0,0), 'root IDs')
+    own = root = outputs = None
+    try:
+        own = open_safe_ancestry(OWN)
+        root = open_safe_ancestry(ROOT)
+        outputs = open_safe_ancestry(OWN+'/public-output')
+        require(not os.listdir(outputs), 'fresh output directory')
+        return own,root,outputs
+    except BaseException:
+        for fd in (outputs,root,own):
+            if fd is not None: os.close(fd)
+        raise
+
+
+'''+s[b:]
+s=s.replace("{'SbfFinite':'tiny-public-v1'", "{'SbfSeal':'tiny-public-v1'")
+a=s.index('def validate_manifest(');b=s.index('\n\ndef privileged_entrypoint',a)
+s=s[:a]+'''def validate_manifest(m):
+    from SbfFinite_validate import validate
+    return validate({'schema':'SbfFinite-runtime-v1','runtime':m})
+'''+s[b:]
+s=s.replace("stat.S_ISDIR(s.st_mode) and s.st_uid == owner", "stat.S_ISDIR(s.st_mode) and s.st_uid == s.st_gid == owner")
+write('SbfFiniteLinux_capture.py',s)
+# Native ABI retained; public script gate before ctypes import.
+write('SbfFiniteLinux_abi.py',baseline('SbfFiniteLinux_abi.py'))
+s=baseline('SbfFinite_backend_candidate.py')
+s=s.replace('(Capture, PublicOutput,','(PublicOutput,')
+s=s.replace('create_fixed_layout, open_source, validate_manifest,','create_fixed_layout, validate_manifest,')
+a=s.index('def validate_runtime(');b=s.index('\n\ndef fixed_null(',a)
+s=s[:a]+'''def validate_runtime(manifest):
+    from SbfFinite_validate import validate
+    return validate({'schema':'SbfFinite-runtime-v1','runtime':manifest})
+
+
+def capture_runtime(rootfd,manifest):
+    """Read-only verification of installed exclusive copies; no recopy/adoption."""
+    validate_runtime(manifest)
+    from SbfFinite_package import verify_tree
+    verify_tree(rootfd)
+
+
+def fixed_backend_body():
+    # No full Producer approval premise. Concrete root continuation alone calls
+    # this after separate finite operational pins, fresh admission and lineage.
+    from SbfFinite_fixed import RUNTIME
+    manifest = RUNTIME
+    validate_runtime(manifest)
+    abi = LinuxABI()
+    parent = os.getppid()
+    parentfd = abi.call('pidfd_open',I(parent),U(0))
+    own = root = outputs = nullfd = None
+    output = None
+    previous = {}
+    def terminate(*_):
+        raise Denied('helper parent/termination event; retain capture')
+    try:
+        require(parentfd >= 3, 'helper parent pidfd alias')
+        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):
+            previous[sig] = signal.getsignal(sig)
+            signal.signal(sig,terminate)
+        require(abi.prctl(1,15) == 0, 'helper parent-death arm')
+        require(os.getppid() == parent, 'helper parent changed during arm')
+        parent_alive(parentfd)
+        os.close(parentfd); parentfd = None
+        own,root,outputs = create_fixed_layout()
+        output = PublicOutput(outputs,0)
+        nullfd = fixed_null()
+        result = internal_backend(root,output,nullfd,abi,manifest=manifest)
+        from SbfFinite_package import journal
+        journal('root-result.json',dict(kind='finite observation ONLY',public=result))
+        return 0
+    finally:
+        if output is not None: output.close()
+        for fd in (parentfd,nullfd,outputs,root,own):
+            if fd is not None: os.close(fd)
+        for sig,handler in previous.items(): signal.signal(sig,handler)
+'''+s[b:]
+a=s.index('# Extend the exact fixed');b=s.index('\n\ndef guest(',a)
+s=s[:a]+"# Captured postexec body/argv/env are byte-identical, including SbfSeal label.\nfrom SbfFinite_fixed import ARGV as FIXED_PROBE\n"+s[b:]
+a=s.index('\n\ndef producer_fixed_body():');s=s[:a]
+# remove obsolete null approval variables, misleading unused gates
+s=s.replace('RUNTIME_APPROVAL = None\nPRODUCER_ASSEMBLY = None\n','')
+write('SbfFinite_backend_candidate.py',s)
+# Use one backend implementation, no stale alternative native lifecycle.
+write('SbfFiniteLinux_backend.py','"""Compatibility imports to the single finite backend; no alternate body."""\nfrom SbfFinite_backend_candidate import read_small, inventory, fixed_null\n')
+for n in ('SbfFinite_process.py','SbfFinite_continue.py','SbfFinite_observe.py','SbfFiniteRss_adapter.py','SbfFiniteRss_guard.py','SbfFiniteRss_sources.py'):
+ s=baseline(n)
+ if n=='SbfFiniteRss_adapter.py':
+  s=s.replace('high=3*c.GIB,cap=4*c.GIB','high=768*2**20,cap=c.GIB').replace("UNIT='resource-rss-go-v3-20261025'","UNIT='SbfFinite-20261025-tiny-v1'").replace("requested=4*c.GIB", "requested=c.GIB")
+ if n=='SbfFinite_observe.py':
+  s=s.replace('high=3*2**30, cap=4*2**30','high=768*2**20, cap=2**30')
+  a=s.index('def runtime_pins():');b=s.index('\ndef collect(',a)
+  s=s[:a]+'''def runtime_pins():
+    # Exact finite host-role paths published in separate operational data.
+    # No broad filesystem discovery, dlopen, ldd, version/help probe or host shell.
+    from SbfFinite_package import approval, pinned_file
+    role = 'helper' if os.geteuid() == 0 else 'collector'
+    expected = approval()['host'][role]
+    if type(expected) is not dict or set(expected) != {'files'}:
+        raise ValueError('finite host file catalog required')
+    return {'files':{p:dict(item, observed=digest(pinned_file(p,item['pin'],item['mode'])))
+                     for p,item in sorted(expected['files'].items())}}
+''' +s[b:]
+ if n=='SbfFinite_continue.py':
+  s=s.replace('finite own 4GiB cap counted once','finite own1GiB cap counted once')
+  s=s.replace("PACKAGE+'/runtime/'", "'/var/lib/SbfFinite-20261025-v1/rootfs/'")
+  s=s.replace('from SbfFinite_backend_candidate import producer_fixed_body','from SbfFinite_backend_candidate import fixed_backend_body').replace('return producer_fixed_body()', 'return fixed_backend_body()')
+  s=s.replace('child.wait(timeout=115)','child.wait(timeout=120)')
+ if n=='SbfFiniteRss_guard.py':
+  s=s.replace('self.sample()\n                self.ready.set()',"if time.monotonic()-self.started >= 115:\n                    raise GuardError('115s sampled guard deadline')\n                self.sample()\n                self.ready.set()")
+ if n=='SbfFiniteRss_sources.py':
+  s=s.replace("data=json.loads(path.read_bytes()) if path.exists() else bundle()", "data=json.loads(path.read_bytes())  # fixed installed bundle only; no Git fallback")
+ write(n,s)
+# Ensure bundle data itself is byte-identical, not renamed within historical source.
+import subprocess
+(H/'SbfFiniteRss_reviewed.json').write_bytes(subprocess.check_output(['git','show','20a0f5bb38:tools/sbf-producer-20261025/SbfProducerRss_reviewed.json']))
+# Tree package copy streams literal reviewed payload; never adopts a staging FD.
+p=H/'SbfFinite_install.py';s=p.read_text()
+s=s.replace('    def audit(self):\n', '    def read(self,size): return self.api.read(self.fd,size)\n\n    def audit(self):\n',1)
+s=s.replace("key!=(self.api.fstat(source.fd).st_dev,self.api.fstat(source.fd).st_ino)","(source.fd is None or key!=(self.api.fstat(source.fd).st_dev,self.api.fstat(source.fd).st_ino))")
+s=s.replace('self.api.read(source.fd,min(65536,pin[\'size\']-n+1))','source.read(min(65536,pin[\'size\']-n+1))')
+s=s.replace("source=Source(row['source'])\n            try:pkg.copy", "source=LiteralSource(row['payload'],row['pin'])\n            try:pkg.copy")
+s=s.replace('class Tree:', '''class LiteralSource:
+    """Source-pinned package bytes inside externally reviewed bootstrap bundle."""
+    fd=None
+    def __init__(self, raw, pin):
+        self.raw=raw;self.pin=pin;self.offset=0;self.audit()
+    def audit(self):
+        require(len(self.raw)==self.pin['size'] and hashlib.sha256(self.raw).hexdigest()==self.pin['sha256'], 'literal package pin')
+    def read(self,size):
+        b=self.raw[self.offset:self.offset+size];self.offset+=len(b);return b
+    def close(self): pass
+
+class Tree:''')
+p.write_text(s)
+print('applied explicit finite source deltas')
