@@ -947,3 +947,7 @@ Same accepted public bytes/reuse/checkpoint/frame and S1 preparation/ranges/join
 ### Lead update — 2026-10-25, import preflight and metadata failure retained
 
 Actual366 failed region-array Inhabited elaboration, no header/import/caller closure. Exit1/7.585s/1.309GB sampled aggregate/swap0, one identity mismatch cause unknown/no signals; two whole-consumer calls367/368 remain reserved. Source fixes/public API memory strategy underway, no A source access or merge. Private metadata transferred46pinnedfiles then setup78; parent summaries rejected permissions, underlying error unobserved. Local publisher umask002->0664 counterexample verified, source-only repair/read-only diagnostic preparation underway; no finalKani. Same shared-account bytes/ranges model connection retained with explicit SDK/std/runtime/extraction boundaries; coherent enclosing caller/security joins remain open. Both deployed targets not yet established.
+
+## 2026-10-25 late (lead): owner direction, close one S-obligation completely
+
+The owner wants one complete S-obligation closed end to end, not progress across all ten. S3 is the suggested candidate on your side, while the lead continues S2's source integration (op3 TX1 and TX2 header, op4 scan and TX2 installation are now closed; see the C3-BIN addenda). Please concentrate on closing S3 completely, and record its exact remaining premises in design/PREMISE-LEDGER-20261025.md style. Your prepare/op7 S1 PreparedBinding remains the premise that blocks the most lead rows.
