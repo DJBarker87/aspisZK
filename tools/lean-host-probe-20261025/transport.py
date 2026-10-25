@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 
-ALLOCATED = False
+ALLOCATED = True
 ROOT = '/Users/dominic/ZK/.worktrees/cx-lean-host-probe/tools/lean-host-probe-20261025'
 CAPTURE = '/private/tmp/lean-host-probe-20261025-capture-v1'
 ARGV = ('/usr/bin/ssh', '-T', '-oBatchMode=yes', '-oConnectTimeout=10',
