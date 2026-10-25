@@ -1,0 +1,47 @@
+@[irreducible] def Op4P_Extract.Op4P_reference.parser_reference.canonical_words : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result Bool :=
+Lean.Order.fix
+  (fun f bytes => do
+    let b ← Aeneas.Std.core.slice.Slice.is_empty bytes
+    if b = true then Aeneas.Std.Result.ok true
+      else
+        let i := bytes.len;
+        if i < 4#usize then Aeneas.Std.Result.ok false
+        else do
+          let i1 ← bytes.index_usize 0#usize
+          let i2 ← bytes.index_usize 1#usize
+          let i3 ← bytes.index_usize 2#usize
+          let i4 ← bytes.index_usize 3#usize
+          let b1 ←
+            Op4P_Extract.Op4P_reference.reference.canonical_word (Aeneas.Std.Array.make 4#usize [i1, i2, i3, i4] ⋯)
+          if b1 = true then do
+              let s ←
+                Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) bytes { start := 4#usize }
+              f s
+            else Aeneas.Std.Result.ok false)
+  Op4P_Extract.Op4P_reference.parser_reference.canonical_words._proof_1
+@[irreducible] def MultiproofParserRef.parser_reference.canonical_words : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Result Bool :=
+Lean.Order.fix
+  (fun f bytes => do
+    let b ← Aeneas.Std.core.slice.Slice.is_empty bytes
+    if b = true then Aeneas.Std.Result.ok true
+      else
+        let i := bytes.len;
+        if i < 4#usize then Aeneas.Std.Result.ok false
+        else do
+          let i1 ← bytes.index_usize 0#usize
+          let i2 ← bytes.index_usize 1#usize
+          let i3 ← bytes.index_usize 2#usize
+          let i4 ← bytes.index_usize 3#usize
+          let b1 ← MultiproofParserRef.reference.canonical_word (Aeneas.Std.Array.make 4#usize [i1, i2, i3, i4] ⋯)
+          if b1 = true then do
+              let s ←
+                Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) bytes { start := 4#usize }
+              f s
+            else Aeneas.Std.Result.ok false)
+  MultiproofParserRef.parser_reference.canonical_words._proof_6
+Op4P_EmissionDiag.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Op4P_Extract.Op4P_reference.parser_reference.canonical_words._partial_fixpoint`
+Op4P_EmissionDiag.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Op4P_Extract.Op4P_reference.parser_reference.canonical_words._unary`
