@@ -86,6 +86,7 @@ class ResourceMeta1GTests(unittest.TestCase):
             self.assertEqual(argv.count(value),1)
         self.assertNotIn('--replace',argv)
         s,e=snapshot(); other=F['node']('/sys/fs/cgroup/other.scope',current=G,cap=8*G,owner='/sys/fs/cgroup')
+        other.update(pids_enabled=True,pids_current=0,tasks_max=64)
         s['rows'].append(other); untouched=copy.deepcopy(other)
         d=evaluate(s,e);self.assertTrue(d['allowed'],d)
         self.assertEqual(d['additional_bytes'],0);self.assertEqual(d['projected_reserved_bytes'],9*G)
@@ -142,7 +143,7 @@ class ResourceMeta1GTests(unittest.TestCase):
             if mutate=='changed':expected['RLIMIT_CPU']=[1,1]
             with self.assertRaises(guard.GuardError):local.check_remote_linux_limits(good,expected)
         with tempfile.TemporaryDirectory(prefix='ResourceMeta1G-wire-') as tmp:
-            with patch.object(local,'REMOTE',str(Path(tmp)/'unused-stage')):
+            with patch.object(local,'REMOTE',str(Path(tmp).resolve()/'unused-stage')):
                 tree=ast.parse(local.inspection_payload())
             # Execute actual bootstrap top level with only runtime/limits providers stubbed.
             for n in tree.body:
@@ -158,8 +159,8 @@ class ResourceMeta1GTests(unittest.TestCase):
     def test_actual_inspect_and_stage_temp_only_charge_terminal(self):
         for mode in ('success','wrong-wire','transport-exit','transport-error'):
             with self.subTest(mode=mode),tempfile.TemporaryDirectory(prefix='ResourceMeta1G-inspect-') as tmp:
-                root=Path(tmp);out=root/'out';out.mkdir();remote=root/'new-stage';calls=[]
-                info=dict(wire(),uid=os.getuid(),parent_uid=os.getuid(),parent_resolved=tmp,runtime={},stage_exists=False)
+                root=Path(tmp).resolve();out=root/'out';out.mkdir();remote=root/'new-stage';calls=[]
+                info=dict(wire(),uid=os.getuid(),parent_uid=os.getuid(),parent_resolved=str(root),runtime={},stage_exists=False)
                 if mode=='wrong-wire':info['limit_platform']['rlim_infinity']=True
                 def transport(payload,label,environment=None,data=None):
                     self.assertTrue((out/'ATTEMPTED').exists());calls.append(label)
