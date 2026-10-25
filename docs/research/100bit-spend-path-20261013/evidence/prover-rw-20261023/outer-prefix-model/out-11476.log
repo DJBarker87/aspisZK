@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOuterFrames.lean:54:2: error: Tactic `rfl` failed: The left-hand side
+  [byte 85#u8, byte 78#u8, byte 80#u8, byte 82#u8, byte 79#u8, byte 86#u8, byte 69#u8, byte 68#u8, byte 58#u8,
+      byte 82#u8, byte 49#u8, byte 58#u8, byte 80#u8, byte 51#u8, byte 58#u8, byte 80#u8, byte 82#u8, byte 73#u8,
+      byte 86#u8, byte 65#u8, byte 84#u8, byte 69#u8, byte 45#u8, byte 65#u8, byte 84#u8, byte 84#u8, byte 69#u8,
+      byte 77#u8, byte 80#u8, byte 84#u8] ++
+    (List.map byte ↑val ++ ([byte (ProverRwOuterTag.byte v)] ++ LayoutR1PBin.ctxEnc (block digest) (block nonce)))
+is not definitionally equal to the right-hand side
+  LayoutR1PBin.dBind0 ++ List.map byte ↑val ++ [byte (ProverRwOuterTag.byte v)] ++
+    LayoutR1PBin.ctxEnc (block digest) (block nonce)
+
+val : alloc.vec.Vec U8
+v : transport.Variant
+digest nonce : Std.Array U8 32#usize
+⊢ [byte 85#u8, byte 78#u8, byte 80#u8, byte 82#u8, byte 79#u8, byte 86#u8, byte 69#u8, byte 68#u8, byte 58#u8,
+        byte 82#u8, byte 49#u8, byte 58#u8, byte 80#u8, byte 51#u8, byte 58#u8, byte 80#u8, byte 82#u8, byte 73#u8,
+        byte 86#u8, byte 65#u8, byte 84#u8, byte 69#u8, byte 45#u8, byte 65#u8, byte 84#u8, byte 84#u8, byte 69#u8,
+        byte 77#u8, byte 80#u8, byte 84#u8] ++
+      (List.map byte ↑val ++ ([byte (ProverRwOuterTag.byte v)] ++ LayoutR1PBin.ctxEnc (block digest) (block nonce))) =
+    LayoutR1PBin.dBind0 ++ List.map byte ↑val ++ [byte (ProverRwOuterTag.byte v)] ++
+      LayoutR1PBin.ctxEnc (block digest) (block nonce)
+'R1Z.ProverRwOuterFrames.direct_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwOuterFrames.digest_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwOuterFrames.binding_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

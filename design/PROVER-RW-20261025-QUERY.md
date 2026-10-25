@@ -457,3 +457,29 @@ stopped on missing out11470. No compile was repeated. The completed transfer
 was then validated,11470's receipt and raw logs added, and the full12-attempt
 summary regenerated. Source snapshots/hashes and accepted proof claims are
 unchanged; the earlier partial evidence commit is retained in history.
+
+## Actual public hash frames (11471–11479)
+
+`ProverRwOuterTag` installs the retained native-source variant tag(op234),
+with no tag-result premise. `ProverRwOuterPrepare.prepare_direct` discharges
+all three context/tag/encoding callees. `ProverRwOuterFrames.digest_frame`
+and `binding_frame` identify the actual flattened hash arguments with the
+existing model statement bytes and `ProverCommitPublicBinding40.binding`.
+Both source hash calls and failure/divergence retain their order; no hash
+success, ROM freshness or output equality is supplied. `ProverRwOuterCaller.
+source_entry` installs this result into the actual emitted prove_masked_attempt,
+retaining its serializer guard, every error branch and whole unchanged body.
+The checked generators pin the sole proved-callee substitutions.
+
+This closes three source function entries(115,116,234) in the selected source
+instance, alongside pre-existing233/248. Native interpretations, public source
+representation/serializer binding, reservation-path/effect association and the
+whole body remain open. Exact byte framing is not an ordered native ROM log
+or a PrefixContract/BodyContract instance. Both original refinement conjuncts,
+all bad events, observers and admissible carriers are unchanged.
+
+Nine compiles:4pass,5changed elaboration failures; no resource failures.
+11479 exit0,1.72s,4,290,252KiB RSS,swap0; all nine new reports standard axioms.
+Evidence: `evidence/prover-rw-20261023/outer-prefix-model`. New budget52/100
+Lean,0/20Kani. Existing unchanged scopes and launchers reused; no Rust,
+Kani, performance, artifact, native or frozen-manifest job.
