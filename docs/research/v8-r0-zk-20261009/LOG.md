@@ -9454,3 +9454,8 @@ Port32 separate soundness356/357 failed before reconstruction, original applicat
 
 
 D225 continuation: Port32 material358 reviewed/mergedb1742a83cc as candidate+FAILURE evidence, not closure; actual6060 strict core matches then Query31 stronger-dependency mismatch and13 private-name metadata collision pairs. Port33 focused359 fromlastunassigned, BOTH remainingwholeconsumer slots untouched, no privacy budget. RuntimeTrace2ce and Producer20a terminal cleanUNMERGED fullreviewpending: collectorSSL-alias78 despite tracee0/complete loader chain reported, source producer/deploy artifacts UNREADY/runtime pins missing, no actualroot/ns/probe/compiler. No new privacy/native/security claim. Both deployed targets remain not yet established.
+
+
+## D226 — Focused Query31 failure retained, privacy budgets unchanged (lead, 2026-10-25)
+
+Port33 actual359 parsing failed before raw reads/kernel checks; independently reviewed/merged as failure evidence, not closure. Port34 ONE raw-only local360 from soundness carry, no host/private budget use, no unchanged enclosing replay. Both reserved consumer calls preserved; all SDK/std/runtime/allocator/extraction/native/artifact boundaries remain. RuntimeTrace2ce/Producer20a still terminal/unmerged/full-review pending. Private Lean240/260,Kani59/60final1RESERVED,Rust2/3charges(actualordinarybuild1),extraction54/56,backend15/16,ELF0/3 unchanged. Both targets not yet established.
