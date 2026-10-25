@@ -1,0 +1,29 @@
+Hist_InitialZero.lean:20:73: error: unsolved goals
+e : Entry
+ops : AdapterRw.Ops
+program : S2W_ExtractionBoundary.Program
+data : Slice U8
+saved : alloc.vec.Vec U8
+accepted : AdapterRw.r1_pool_adapter.owned.stage1_owned ops program e.first data = ok (core.result.Result.Ok saved)
+bytes : Slice U8
+zero : AdapterRw.r1_pool_adapter.owned.require_zero bytes = ok (core.result.Result.Ok ())
+index : Slice.index_usize e.first 2#usize = ok (e.snapshot 2 1768 1768)
+read : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 2 1768 1768) = ok (core.result.Result.Ok bytes)
+size : (↑(e.buffers (e.handles 2).1)).length = 1768
+⊢ (match
+      if True then core.result.Result.Ok (e.buffers (e.handles 2).1)
+      else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData with
+    | core.result.Result.Ok bytes => ok (core.result.Result.Ok bytes.deref)
+    | core.result.Result.Err error1 => do
+      let pe ← ops.op35 error1
+      ok (core.result.Result.Err pe)) =
+    ok (core.result.Result.Ok (e.buffers (e.handles 2).1))
+Hist_InitialZero.lean:21:43: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵E̵n̵t̵r̵y̵.̵s̵n̵a̵p̵s̵h̵o̵t̵,̵s̵i̵z̵e̵,̵o̵r̵_̵s̵e̵l̵f̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵[̲E̲n̲t̲r̲y̲.̲s̲n̲a̲p̲s̲h̲o̲t̲,̲ ̲s̲i̲z̲e̲,̲ ̲o̲r̲_̲s̲e̲l̲f̲,̲ AdapterRw.r1_pool_adapter.owned.OwnedAccount.data]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hist_InitialZero.accepted_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_InitialZero.no_reinitialize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
