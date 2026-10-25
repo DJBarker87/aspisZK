@@ -1,0 +1,137 @@
+Running as unit: Port36LINUX-371-20261025-v1.scope; invocation ID: d197a5fccebf491e8df3d48e3e085cb1
+PORT36_DIAG371 import-and-marker-ready
+PORT36_DIAG371 before-source370-line-6:namespace Port36TRANSPORT_Literal
+PORT36_DIAG371 before-source370-line-9:def sameDeclaration (a b : ConstantInfo) : Bool :=
+PORT36_DIAG371 before-source370-line-29:private def rawSliceEq (a b : Substring.Raw) : Bool :=
+PORT36_DIAG371 before-source370-line-31:private def sourceInfoEq : SourceInfo → SourceInfo → Bool
+PORT36_DIAG371 before-source370-line-37:private partial def syntaxEq : Syntax → Syntax → Bool
+PORT36_DIAG371 before-source370-line-44:private def dataValueEq (a b : DataValue) : Bool :=
+PORT36_DIAG371 before-source370-line-48:private def mdataEq (a b : MData) : Bool :=
+PORT36_DIAG371 before-source370-line-51:def strictExpr (a b : Expr) : Bool := Id.run do
+PORT36_DIAG371 before-source370-line-80:private def strictValue (a b : ConstantInfo) : Bool :=
+PORT36_DIAG371 before-source370-line-85:private def strictRules (a b : ConstantInfo) : Bool :=
+PORT36_DIAG371 before-source370-line-91:def strictDeclaration (a b : ConstantInfo) : Bool :=
+PORT36_DIAG371 before-source370-line-93:private def strictConstantVal (a b : ConstantInfo) : Bool :=
+PORT36_DIAG371 before-source370-line-97:end Port36TRANSPORT_Literal
+PORT36_DIAG371 before-source370-line-99:namespace Port36TRANSPORT_Select
+PORT36_DIAG371 before-source370-line-101:def encodeName : Name → Json
+PORT36_DIAG371 before-source370-line-106:def standard (n : Name) : Bool := n == `propext || n == `Classical.choice || n == `Quot.sound
+PORT36_DIAG371 before-source370-line-107:private def expressionDeps (e : Expr) : Array Name := Id.run do
+PORT36_DIAG371 before-source370-line-127:def dependencies (c : ConstantInfo) : Array Name := Id.run do
+PORT36_DIAG371 before-source370-line-147:def validateGroups (selected : Std.HashMap Name ConstantInfo) (core : Environment) : IO Unit := do
+PORT36_DIAG371 before-source370-line-187:end Port36TRANSPORT_Select
+PORT36_DIAG371 before-source370-line-188:namespace Port36TRANSPORT_Kernel
+PORT36_DIAG371 before-source370-line-191:namespace Replay
+PORT36_DIAG371 before-source370-line-193:structure Context where
+PORT36_DIAG371 before-source370-line-196:structure State where
+PORT36_DIAG371 before-source370-line-203:abbrev M := ReaderT Context <| StateRefT State IO
+PORT36_DIAG371 before-source370-line-206:def isTodo (name : Name) : M Bool := do
+PORT36_DIAG371 before-source370-line-215:def throwKernelException (ex : Kernel.Exception) : M Unit := do
+PORT36_DIAG371 before-source370-line-219:def addDecl (d : Declaration) : M Unit := do
+PORT36_DIAG371 before-source370-line-224:mutual
+PORT36_DIAG371 before-source370-line-297:def checkPostponedConstructors : M Unit := do
+PORT36_DIAG371 before-source370-line-308:def checkPostponedRecursors : M Unit := do
+PORT36_DIAG371 before-source370-line-315:end Replay
+PORT36_DIAG371 before-source370-line-325:def replay (newConstants : Std.HashMap Name ConstantInfo) (env : Kernel.Environment) : IO Kernel.Environment := do
+PORT36_DIAG371 before-source370-line-343:end Port36TRANSPORT_Kernel
+PORT36_DIAG371 before-source370-line-344:namespace Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-346:def audit (env : Kernel.Environment) (root : Name) (allowDefinition := false) : IO Json := do
+PORT36_DIAG371 before-source370-line-366:end Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-370:namespace Port36TRANSPORT_Delta
+PORT36_DIAG371 before-source370-line-372:def oldCalls := `AspisR1PublicPreparation.Query31SourceSchedule.queries_success_with_digest_pairs_full
+PORT36_DIAG371 before-source370-line-373:def oldBridge := `AspisR1PublicPreparation.Query31SourceSchedule.queries_success_pairs_functional_full
+PORT36_DIAG371 before-source370-line-374:def newCalls := `Port35ANCHOR.queries_success_with_digest_pairs_full
+PORT36_DIAG371 before-source370-line-375:def pairName := `AspisR1PublicPreparation.Query31SourceSchedule.DigestPair
+PORT36_DIAG371 before-source370-line-376:def pairState := pairName.str state
+PORT36_DIAG371 before-source370-line-377:def transcriptHash := `AspisR1PublicPreparation.transcript.Transcript.hash
+PORT36_DIAG371 before-source370-line-378:def transcriptState := `AspisR1PublicPreparation.transcript.Transcript.state
+PORT36_DIAG371 before-source370-line-379:def chainName := `AspisR1PublicPreparation.Query31SourceSchedule.stateChain
+PORT36_DIAG371 before-source370-line-380:def materialName := `AspisR1PublicPreparation.Query31SourceSchedule.materializedOutputs
+PORT36_DIAG371 before-source370-line-382:def app? (n : Name) (arity : Nat) (e : Expr) : Option (Array Expr) :=
+PORT36_DIAG371 before-source370-line-385:def tail? (e : Expr) : Option (Array Expr) := do
+PORT36_DIAG371 before-source370-line-394:def andE (a b : Expr) := mkApp2 (mkConst `And) a b
+PORT36_DIAG371 before-source370-line-395:def andI (a b ha hb : Expr) := mkApp4 (mkConst `And.intro) a b ha hb
+PORT36_DIAG371 before-source370-line-396:def eqE (t a b : Expr) := mkApp3 (mkConst `Eq [Level.one]) t a b
+PORT36_DIAG371 before-source370-line-397:def refl (t a : Expr) := mkApp2 (mkConst `Eq.refl [Level.one]) t a
+PORT36_DIAG371 before-source370-line-398:def existsE (t p : Expr) := mkApp2 (mkConst `Exists [Level.one]) t p
+PORT36_DIAG371 before-source370-line-399:def existsI (t p x h : Expr) := mkApp4 (mkConst `Exists.intro [Level.one]) t p x h
+PORT36_DIAG371 before-source370-line-401:def anchor (stateTy : Expr) (c : Array Expr) : Expr := Id.run do
+PORT36_DIAG371 before-source370-line-415:structure StrictKey where
+PORT36_DIAG371 before-source370-line-417:instance : BEq StrictKey := ⟨fun a b => Port36TRANSPORT_Literal.strictExpr a.val b.val⟩
+PORT36_DIAG371 before-source370-line-418:instance : Hashable StrictKey := ⟨fun a => a.val.hash⟩
+PORT36_DIAG371 before-source370-line-420:def children (e : Expr) : Array Expr :=
+PORT36_DIAG371 before-source370-line-428:def countTails (e : Expr) : Nat := Id.run do
+PORT36_DIAG371 before-source370-line-440:def strengthen (stateTy e : Expr) : Expr :=
+PORT36_DIAG371 before-source370-line-444:def localLet (ctx : Array (Name × Option Expr)) (e : Expr) : Except String (Name × Expr) := do
+PORT36_DIAG371 before-source370-line-449:def witness (ctx : Array (Name × Option Expr)) (stateTy : Expr) (c : Array Expr) : Except String Expr := do
+PORT36_DIAG371 before-source370-line-477:def repairValue (stateTy e : Expr) : IO (Expr × Json) := do
+PORT36_DIAG371 before-source370-line-510:def guard (selected : Std.HashMap Name ConstantInfo) (delta : Array ConstantInfo) : IO Unit := do
+PORT36_DIAG371 before-source370-line-539:end Port36TRANSPORT_Delta
+PORT36_DIAG371 before-source370-line-545:namespace Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-547:def checkedAdd (k : Kernel.Environment) (d : Declaration) : IO Kernel.Environment := do
+PORT36_DIAG371 before-source370-line-553:def unique (cs : Array ConstantInfo) : IO (Std.HashMap Name ConstantInfo) := do
+PORT36_DIAG371 before-source370-line-560:def exactKernel (base actual : Kernel.Environment) (added : Array ConstantInfo) : IO Unit := do
+PORT36_DIAG371 before-source370-line-576:def exactEnvironment (base : Kernel.Environment) (added : Array ConstantInfo)
+PORT36_DIAG371 before-source370-line-586:structure FileStamp where
+PORT36_DIAG371 before-source370-line-594:structure PinnedFile where
+PORT36_DIAG371 before-source370-line-601:private def assertPublicationBytes (path : System.FilePath) (bytes : ByteArray) : IO Unit := do
+PORT36_DIAG371 before-source370-line-610:structure CoreModule where
+PORT36_DIAG371 before-source370-line-615:inductive RootProfile where
+PORT36_DIAG371 before-source370-line-619:def RootProfile.moduleName : RootProfile → Name
+PORT36_DIAG371 before-source370-line-623:structure ImportPlan where
+PORT36_DIAG371 before-source370-line-632:private def assertCoreStamp (f : PinnedFile) : IO Unit := do
+PORT36_DIAG371 before-source370-line-645:private def coreArtifacts (p : ImportPlan) : IO (NameMap ImportArtifacts) := do
+PORT36_DIAG371 before-source370-line-661:structure CoreGuardModule where
+PORT36_DIAG371 before-source370-line-666:structure CoreGuardBundle where
+PORT36_DIAG371 before-source370-line-669:def CoreGuardBundle.partCount (held : CoreGuardBundle) : Nat :=
+PORT36_DIAG371 before-source370-line-674:def revalidateCoreData (p : ImportPlan) (held : CoreGuardBundle) : IO Unit := do
+PORT36_DIAG371 before-source370-line-719:def guardCoreData (p : ImportPlan) : IO CoreGuardBundle := do
+PORT36_DIAG371 before-source370-line-731:structure CoreOwner where
+PORT36_DIAG371 before-source370-line-735:structure PublicationOwner where
+PORT36_DIAG371 before-source370-line-744:def baseline (p : ImportPlan) : IO (Environment × CoreOwner) := do
+PORT36_DIAG371 before-source370-line-779:def boolCompat : TheoremVal := Id.run do
+PORT36_DIAG371 before-source370-line-802:def reconstruct (base : Environment) (selected delta : Array ConstantInfo) :
+PORT36_DIAG371 before-source370-line-906:def publish (p : ImportPlan) (base : Environment) (owner : CoreOwner) (checked : Kernel.Environment)
+PORT36_DIAG371 before-source370-line-980:end Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-984:namespace Port36TRANSPORT_Recover
+PORT36_DIAG371 before-source370-line-988:def widePow (env : Kernel.Environment) : IO Kernel.Environment := do
+PORT36_DIAG371 before-source370-line-1016:end Port36TRANSPORT_Recover
+PORT36_DIAG371 before-source370-line-1017:def Port36TRANSPORT_commandTexts : Array String := #[
+PORT36_DIAG371 before-source370-line-1048:namespace Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-1053:def prepareConsumer (p : ImportPlan) (selected delta : Array ConstantInfo) :
+PORT36_DIAG371 before-source370-line-1072:def elaborateConsumer (imported : Environment) : Elab.Command.CommandElabM Unit := do
+PORT36_DIAG371 before-source370-line-1102:end Port36TRANSPORT
+PORT36_DIAG371 before-source370-line-1107:namespace Port36TRANSPORT_Full
+PORT36_DIAG371 before-source370-line-1109:def unwrap (x : Except String α) : IO α :=
+PORT36_DIAG371 before-source370-line-1114:def jsonFile (p : System.FilePath) : IO Json := do
+PORT36_DIAG371 before-source370-line-1117:def decodeName : Nat → Json → Except String Name
+PORT36_DIAG371 before-source370-line-1130:def obj (j : Json) (k : String) : IO Json := unwrap (j.getObjVal? k)
+PORT36_DIAG371 before-source370-line-1131:def arr (j : Json) : IO (Array Json) := unwrap j.getArr?
+PORT36_DIAG371 before-source370-line-1132:def str (j : Json) : IO String := unwrap j.getStr?
+PORT36_DIAG371 before-source370-line-1133:def nat (j : Json) : IO Nat := unwrap j.getNat?
+PORT36_DIAG371 before-source370-line-1137:def inputRoot : System.FilePath := /home/dombarker/Port36LINUX-367-20261025-v1/input
+PORT36_DIAG371 before-source370-line-1138:def planFile := inputRoot / Port36LINUX_plan.json
+PORT36_DIAG371 before-source370-line-1139:def selectionFile := inputRoot / Port36LINUX_selection.json
+PORT36_DIAG371 before-source370-line-1140:def groupsFile := inputRoot / Port36LINUX_groups.json
+PORT36_DIAG371 before-source370-line-1141:def artifact : System.FilePath := /home/dombarker/Port36LINUX-367-20261025-v1/result/Port36LINUX_Full.olean
+PORT36_DIAG371 before-source370-line-1142:def moduleName := `Port36TRANSPORT.FullReleasedR1
+PORT36_DIAG371 before-source370-line-1146:def bindingFile : System.FilePath := /home/dombarker/Port36LINUX-367-20261025-v1/result371/Port36LINUX_core-binding371.json
+PORT36_DIAG371 before-source370-line-1147:def loadBinding : IO Json := do
+PORT36_DIAG371 before-source370-line-1162:def fileIndex (rows : Array Json) : IO (Std.HashMap String (Nat × String)) := do
+PORT36_DIAG371 before-source370-line-1172:def coreFile (bindingIndex : Std.HashMap String (Nat × String)) (entries : Json)
+PORT36_DIAG371 before-source370-line-1199:def loadPlan : IO Port36TRANSPORT.ImportPlan := do
+PORT36_DIAG371 before-source370-line-1232:def rawHeader (d : ModuleData) : IO Unit := do
+PORT36_DIAG371 before-source370-line-1238:def loadSelected (base : Environment) : IO (Array ConstantInfo × Array (ModuleData × CompactedRegion)) := do
+PORT36_DIAG371 before-source370-line-1303:def loadDelta : IO (Array ConstantInfo × (ModuleData × CompactedRegion)) := do
+PORT36_DIAG371 before-source370-line-1313:def phase (label : String) : IO Unit := do
+PORT36_DIAG371 before-source370-line-1318:def driver : Elab.Command.CommandElabM Unit := do
+PORT36_DIAG371 before-source370-line-1353:end Port36TRANSPORT_Full
+PORT36_DIAG371 all-declarations-before-materialization
+PORT36_DIAG371 materialization-action-entered
+PORT36_DIAG371 driver-action-held-not-executed
+PORT36_DIAG371 diagnostic-complete
+Traceback (most recent call last):
+  File "<string>", line 11, in <module>
+  File "Port36LINUX-fixed-prefix", line 89, in proof_inside
+  File "/home/dombarker/Port36LINUX-367-20261025-v1/source/Port36LINUX_caller.py-fixed371", line 198, in scoped_body_source
+ValueError: incomplete/out-of-order diagnostic markers

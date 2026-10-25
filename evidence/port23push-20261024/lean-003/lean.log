@@ -1,0 +1,58 @@
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port23PUSH_Frame.lean:20:2: error: unsolved goals
+case pos
+arrayIntoIter : ArrayIntoIter
+b : verifier.BatchedWeights
+index : Usize
+power : field.QM31
+basis : field.M31
+bound : ↑index < (↑b.raw).length
+row : Std.Array U64 4#usize
+hr : b.raw.index_usize index = ok row
+hrow : row = (↑b.raw)[↑index]
+old : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+hm : b.raw.index_mut_usize index = ok (old, back)
+hold : old = (↑b.raw)[↑index]
+hback : back = b.raw.set index
+hm' :
+  alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw index = ok (old, back)
+hr' : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (Std.Array U64 4#usize)) b.raw index = ok row
+oldrow : old = row
+⊢ (let (a, index_mut_back) := (row, b.raw.set index)
+    do
+    let a1 ← verifier.update_residue_row arrayIntoIter a power basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms }) =
+    do
+    let updated ← verifier.update_residue_row arrayIntoIter row power basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := b.raw.set index updated, terms := b.terms }
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port23PUSH_Frame.lean:35:2: error: unsolved goals
+case neg
+arrayIntoIter : ArrayIntoIter
+b : verifier.BatchedWeights
+index : Usize
+power : field.QM31
+basis : field.M31
+bound : ¬↑index < (↑b.raw).length
+⊢ (do
+      let _ ← lift (b.terms &&& 3#usize)
+      fail Error.arrayOutOfBounds) =
+    fail Error.arrayOutOfBounds
+'Port23PUSH.push_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.15 real         0.98 user         1.14 sys
+          2224340992  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182019  page reclaims
+                  77  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   3  voluntary context switches
+                 841  involuntary context switches
+         25415342941  instructions retired
+          7990572228  cycles elapsed
+           369970864  peak memory footprint

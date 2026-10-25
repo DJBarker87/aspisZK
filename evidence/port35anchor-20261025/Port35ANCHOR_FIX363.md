@@ -1,0 +1,7 @@
+# Identified362 loader input failure and363 source fix
+
+362 compiler source elaborated; run_cmd stopped at `missing selection`, before all construction/kernel/axioms work. Exit1, wall8.197065750s, processRSS1369997312B, sampled aggregate1331576832B, swap0. Source snapshot/stdout/time/charged receipt retained. Not a resource failure. No theorem established.
+
+Exact SQLite/selection-to-Port34-plan comparison identifies8 missing BASE:ExtractedOpeningQueriesModel names: QuerySampleError and its3 constructors/recursor; Transcript.queries.closure and its FunctionFnOnce instance/call_once. Port34RAW-part0 contains39 exported names, while this closure selects47 from that origin. Other four raw361 parts cover exactly3/1/41/4 selected names. Port35 preparation wrongly substituted the39-name subset for the47-name containing part; byte equality of existing exported CIs never certified coverage of the8 others.
+
+363 change: load the original explicitly released immutable BASE containing part (05970628028687fcf3778431c8268c111659548050a692609462a97e7f47892e,116448B), retaining exactly the same selected origins/names. Fresh pin required. Other four raw361 inputs unchanged. Add fail-closed missing-name JSON and count if any future loader gap occurs. This is a source/input fix, not unchanged rerun. Original Calls/Bridge proof repair algorithm unchanged. All preflight362 inputs/groups/source retained. 363 is the final allocated local call; remaining after charge5=2reserved+3carry. No364/helper/audit/consumer/host/Rust/manifest call authorized.

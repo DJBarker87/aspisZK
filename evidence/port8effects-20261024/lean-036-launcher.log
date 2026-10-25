@@ -1,0 +1,40 @@
+{"attempt": "lean-036", "exit_status": 0, "wall_seconds": 1.947317826008657, "peak_rss_kib": "4448192", "swaps": "0", "print_axioms": ["'AspisR1.Port8EFF_Bodies.reader_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Bodies.writer_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Bodies.reader_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Bodies.writer_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Bodies.installed_reader' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Bodies.installed_writer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Budget.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Budget.reader_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Budget.reader_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_CheckpointCode.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_CheckpointCode.effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Control.common_ok' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Control.common_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Control.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.head' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.common_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.common_reader' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.authenticated_common' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.powers_reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_Driver.first_reader' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_NativeReader.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_ReaderJoin.tail' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_ReaderJoin.program' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_ReaderSkeleton.native' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port8EFF_ReaderSkeleton.retained' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port8EFF_Bodies.reader_value : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : VTop_Stages.transport.Variant) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash)).2 =
+    AspisR1.Port6CK_Reader.reader reserved unwrap D ck proof pub v hash
+'AspisR1.Port8EFF_Bodies.reader_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Port8EFF_Bodies.writer_value : ∀ {Hash : Type} (D : VTop_Stage
+...
+CheckpointBytes5Resume.program ops ck proof pub v =
+    AspisR1.Port8EFF_ReaderSkeleton.skeleton ops ck proof pub v (ck.len - 32#usize)
+      (AspisR1.CheckpointBytes5Resume.tail ops ck v)
+'AspisR1.Port8EFF_ReaderSkeleton.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.CheckpointBytes5Inputs.Oracle : {Hash : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+    Hash → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun {Hash} D hash H =>
+  ∀ (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)) (digest : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+    D.digest hash parts = Aeneas.Std.Result.ok digest →
+      AspisR1.CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten parts)
+def AspisR1.Port8EFF_Bodies.body : Bool →
+  AspisR1.Port6CK_Semantic.Unwrap → AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun reserved unwrap other {A} call =>
+  match A, call with
+  | .(Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8), AspisR1.VTop_Trace.Call.op8 D p a proof pub hash =>
+    AspisR1.Port8EFF_Bodies.writer D p a proof pub hash
+  |
+  .(Aeneas.Std.core.result.Result (VTop_Stages.verifier.Prepared × VTop_Stages.verifier.Accumulator)
+        VTop_Stages.verifier.Error),
+    AspisR1.VTop_Trace.Call.op18 D ck proof pub v hash =>
+    AspisR1.Port8EFF_Bodies.reader reserved unwrap D ck proof pub v hash
+  | x, call => other call
+def AspisR1.Port8EFF_Bodies.implementation : VTop_Stages.Ops →
+  Bool →
+    AspisR1.Port6CK_Semantic.Unwrap → AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun ops reserved unwrap other {A} =>
+  AspisR1.Port1_Library.implementation ops fun {A} => AspisR1.Port8EFF_Bodies.body reserved unwrap fun {A} => other
+
+Running as unit: run-rf706c81905aa422ca99776460e40b572.scope; invocation ID: 02a44097d1f342dbba0f02b09ce86579

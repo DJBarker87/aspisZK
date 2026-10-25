@@ -1,0 +1,29 @@
+Port10AUTH_TerminalCut.lean:81:2: error: Type mismatch
+  map_log D hash ?m.753 fun out =>
+    if out.1 = true then done (out.2.1, out.2.2, some (core.result.Result.Ok ())) else done (out.2.1, out.2.2, none)
+has type
+  (Port9OR_Code.trace D hash do
+        let a ← ?m.753
+        pure
+            (if a.1 = true then done (a.2.1, a.2.2, some (core.result.Result.Ok ()))
+            else done (a.2.1, a.2.2, none))).1 =
+    (Port9OR_Code.trace D hash ?m.753).1
+but is expected to have type
+  (Port9OR_Code.trace D hash
+        (have this := do
+          let __x ← Port9OR_BatchStep.verify root s.idx s.val s.n supplied
+          match __x with
+            | (b, idx, val) =>
+              if b = true then pure (done (idx, val, some (core.result.Result.Ok ())))
+              else pure (done (idx, val, none));
+        this)).1 =
+    (Port9OR_Code.trace D hash (Port9OR_BatchStep.verify root s.idx s.val s.n supplied)).1
+Port10AUTH_TerminalCut.lean:75:13: warning: This simp argument is unused:
+  Port9OR_BatchStep.ops
+
+Hint: Omit it from the simp argument list.
+  simp only [Port9̵O̵R̵_̵B̵a̵t̵c̵h̵S̵t̵e̵p̵.̵o̵p̵s̵,̵P̵o̵r̵t̵3_BatchStd.install] at scanRead
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_TerminalCut.map_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_TerminalCut.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

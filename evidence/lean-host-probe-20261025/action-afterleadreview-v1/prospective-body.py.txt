@@ -1,0 +1,229 @@
+"""Finite metadata source. Import and direct execution perform no observations."""
+import errno
+import hashlib
+import json
+import os
+import signal
+import stat
+import struct
+import sys
+import time
+
+HOME = '/home/dombarker'
+TOOLCHAINS = HOME + '/.elan/toolchains'
+ROOT = TOOLCHAINS + '/leanprover--lean4---v4.32.0'
+FILES = (
+    'bin/lean',
+    'lib/lean/libleanshared.so', 'lib/lean/libInit_shared.so',
+    'lib/lean/libleanshared_1.so', 'lib/lean/libleanshared_2.so',
+    'src/lean/Lean/Environment.lean', 'src/lean/Lean/ImportingFlag.lean',
+    'src/lean/Lean/Setup.lean', 'src/lean/Lean/CompactedRegion.lean',
+    'src/lean/Lean/Compiler/InitAttr.lean',
+    'lib/lean/Init/Prelude.olean', 'lib/lean/Init/Prelude.ir',
+    'lib/lean/Init/Prelude.olean.server', 'lib/lean/Init/Prelude.olean.private',
+)
+HISTORICAL = HOME + '/project-offloads/r1-privacy-build-integration-20261019'
+SOURCES = HOME + '/project-offloads/aspis-joint-20261019/sources'
+FILE_CAP = 256 * 1024 * 1024
+TOTAL_CAP = 512 * 1024 * 1024
+OUTPUT_CAP = 1024 * 1024
+CHUNK = 64 * 1024
+
+
+class Deadline(Exception):
+    pass
+
+
+class Observation(Exception):
+    def __init__(self, outcome, data=None):
+        self.outcome, self.data = outcome, data or {}
+
+
+def identity(s):
+    return (s.st_dev, s.st_ino, s.st_mode, s.st_uid, s.st_gid,
+            s.st_nlink, s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+
+
+def metadata(s):
+    return dict(zip(('dev', 'ino', 'mode', 'uid', 'gid', 'nlink', 'size',
+                     'mtime_ns', 'ctime_ns'), identity(s)),
+                group_writable=bool(s.st_mode & stat.S_IWGRP),
+                world_writable=bool(s.st_mode & stat.S_IWOTH))
+
+
+def elf_header(b):
+    if len(b) < 64 or b[:4] != b'\x7fELF':
+        return {'outcome': 'not_64_byte_ELF_header'}
+    data = b[5]
+    return {'outcome': 'header_only', 'class': b[4], 'data': data,
+            'machine': int.from_bytes(b[18:20], 'little' if data == 1 else 'big')
+            if data in (1, 2) else None}
+
+
+class Probe:
+    def __init__(self):
+        self.end = time.monotonic() + 9.5
+        self.sampled = 0
+
+    def check(self):
+        if time.monotonic() >= self.end:
+            raise Deadline()
+
+    def observe(self, path, role, cap=FILE_CAP, elf=False):
+        """Every traversal uses held parent FDs; no symlink is followed."""
+        row = {'path': path, 'role': role, 'ancestors': []}
+        held, edges = [], []
+        root_identity = None
+        try:
+            self.check()
+            if not path.startswith('/') or any(p in ('', '.', '..') for p in path[1:].split('/')):
+                raise Observation('invalid_literal_path')
+            fd = os.open('/', os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_NONBLOCK)
+            held.append(fd)
+            root_identity = identity(os.fstat(fd))
+            row['ancestors'].append({'path': '/', **metadata(os.fstat(fd))})
+            parts = path[1:].split('/')
+            for i, part in enumerate(parts):
+                self.check()
+                last = i == len(parts) - 1
+                before = os.stat(part, dir_fd=fd, follow_symlinks=False)
+                entry = {'path': '/' + '/'.join(parts[:i+1]), **metadata(before)}
+                if stat.S_ISLNK(before.st_mode):
+                    target = os.readlink(part, dir_fd=fd)
+                    after = os.stat(part, dir_fd=fd, follow_symlinks=False)
+                    if identity(before) != identity(after):
+                        raise Observation('stale_alias', {'entry': entry})
+                    raw = os.fsencode(target)
+                    if len(raw) > 4096:
+                        raise Observation('alias_over_4096_bytes', {'entry': entry})
+                    raise Observation('alias_not_followed', {'entry': entry, 'alias': target})
+                directory = not last or role in ('directory', 'names', 'space')
+                if directory and not stat.S_ISDIR(before.st_mode):
+                    raise Observation('not_directory', {'entry': entry})
+                if not directory and not stat.S_ISREG(before.st_mode):
+                    raise Observation('not_regular', {'entry': entry})
+                flags = os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK
+                if directory:
+                    flags |= os.O_DIRECTORY
+                child = os.open(part, flags, dir_fd=fd)
+                held.append(child)
+                opened = os.fstat(child)
+                edges.append((fd, part, child, identity(before)))
+                if identity(before) != identity(opened):
+                    raise Observation('stale_open', {'entry': entry})
+                if not last:
+                    row['ancestors'].append(entry)
+                fd = child
+            row['entry'] = metadata(opened)
+            if opened.st_uid not in (0, os.getuid()):
+                raise Observation('unexpected_owner')
+            # Installed hardlinks are recorded, not rejected or globally enumerated.
+            if role == 'directory':
+                row['outcome'] = 'directory_metadata_only'
+            elif role == 'space':
+                v = os.fstatvfs(fd)
+                row.update(outcome='space_data_only', available_bytes=v.f_bavail * v.f_frsize)
+            elif role == 'names':
+                names = []
+                with os.scandir(fd) as entries:
+                    for e in entries:
+                        self.check()
+                        if len(names) == 64:
+                            raise Observation('more_than_64_entries', {'truncated': True})
+                        if len(e.name) > 256 or len(os.fsencode(e.name)) > 256:
+                            raise Observation('entry_name_over_256', {'truncated': True})
+                        names.append(e.name)  # Never stat/open a discovered name.
+                row.update(outcome='shallow_names_only', names=sorted(names), truncated=False)
+            elif role == 'alias_metadata':
+                row['outcome'] = 'regular_metadata_only'
+            elif role == 'hash':
+                size = opened.st_size
+                if size > cap:
+                    raise Observation('file_cap_exceeded', {'cap': cap})
+                if size > TOTAL_CAP - self.sampled:
+                    raise Observation('total_cap_exceeded', {'remaining': TOTAL_CAP-self.sampled})
+                h, first, remaining = hashlib.sha256(), b'', size
+                while remaining:
+                    self.check()
+                    b = os.read(fd, min(CHUNK, remaining))
+                    self.sampled += len(b)
+                    if not b:
+                        raise Observation('short_read')
+                    if len(first) < 64:
+                        first += b[:64-len(first)]
+                    h.update(b)
+                    remaining -= len(b)
+                row.update(outcome='hashed', sha256=h.hexdigest(), hashed_bytes=size)
+                if elf:
+                    row['elf'] = elf_header(first)
+            else:
+                raise Observation('invalid_role')
+        except Observation as e:
+            row.update(outcome=e.outcome, **e.data)
+        except Deadline:
+            row['outcome'] = 'deadline'
+        except OSError as e:
+            row.update(outcome={errno.ENOENT: 'missing', errno.EACCES: 'denied',
+                                errno.EPERM: 'denied', errno.ELOOP: 'alias_race'}.get(e.errno, 'read_error'),
+                       errno=e.errno)
+        finally:
+            # No digest is retained if any held edge or entry drifted during sampling.
+            try:
+                if held and root_identity != identity(os.fstat(held[0])):
+                    row['outcome'] = 'stale_prepost'
+                for parent, name, child, expected in edges:
+                    if (identity(os.fstat(child)) != expected or
+                            identity(os.stat(name, dir_fd=parent, follow_symlinks=False)) != expected):
+                        row['outcome'] = 'stale_prepost'
+                        break
+            except OSError as e:
+                row.update(outcome='stale_prepost', errno=e.errno)
+            finally:
+                for f in reversed(held):
+                    os.close(f)
+            if row.get('outcome') != 'hashed':
+                for key in ('sha256', 'hashed_bytes', 'elf'):
+                    row.pop(key, None)
+            if row.get('outcome') == 'stale_prepost':
+                for key in ('names', 'available_bytes', 'alias'):
+                    row.pop(key, None)
+        return row
+
+
+def plan():
+    return [(HOME, 'space', FILE_CAP, False), (TOOLCHAINS, 'names', FILE_CAP, False)] + [
+        (ROOT + '/' + p, 'hash', FILE_CAP, p == 'bin/lean' or p.endswith('.so')) for p in FILES
+    ] + [(HOME + '/.elan/bin/lean', 'alias_metadata', FILE_CAP, False),
+         (HISTORICAL + '/run-joint.sh', 'hash', 1024*1024, False),
+         (HISTORICAL + '/lean-toolchain', 'hash', 1024*1024, False),
+         (SOURCES, 'directory', FILE_CAP, False)]
+
+
+def main():
+    def alarm(_signum, _frame):
+        raise Deadline()
+    signal.signal(signal.SIGALRM, alarm)
+    signal.alarm(10)
+    report = {'schema': 1, 'claim': 'read_only_metadata_not_admission',
+              'uid': os.getuid(), 'uname': {'machine': os.uname().machine, 'release': os.uname().release},
+              'byteorder': sys.byteorder, 'pointer_bytes': struct.calcsize('P'), 'observations': []}
+    p = Probe()
+    try:
+        for path, role, cap, elf in plan():
+            p.check()
+            report['observations'].append(p.observe(path, role, cap, elf))
+    except Deadline:
+        report['outcome'] = 'deadline_incomplete'
+    try:
+        report['sampled_bytes'] = p.sampled
+        b = json.dumps(report, sort_keys=True, ensure_ascii=True).encode() + b'\n'
+        if len(b) > OUTPUT_CAP:
+            b = b'{"outcome":"output_cap_exceeded","observations_discarded":true}\n'
+        sys.stdout.buffer.write(b)
+        sys.stdout.buffer.flush()
+    finally:
+        signal.alarm(0)
+
+
+# Prospective footer: reachable only after lead allocates the one metadata action.
+main()

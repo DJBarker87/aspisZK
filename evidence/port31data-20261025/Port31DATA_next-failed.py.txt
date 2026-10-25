@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""Noncompiler targeted next-input preparation; ZERO launch authority."""
+import collections,json,pathlib,resource,sqlite3,subprocess,time
+from Port31DATA_run import T,E,SYS,pin,safe,state
+start=time.monotonic();out=pathlib.Path('/private/tmp/Port31DATA-354-20261025')
+db=sqlite3.connect('file:'+str(out/'Port31DATA_observed.sqlite')+'?mode=ro',uri=True)
+rows=[l.split('\t') for l in (out/'Port31DATA_inputs.tsv').read_text().splitlines()];admitted={p for _,p in rows}
+root=pathlib.Path('/private/tmp/port28rootexport-20261024-2e053459f91b43c3b4c640d575d607c9')
+a=safe(root/'correction-output-audit.json');sa=state(a);audit=json.loads(a.read_text());packet=[]
+for r in audit['final_round_transports']:
+ p=safe(r['path']);assert p.stat().st_size==r['bytes'];packet.append(dict(**r,stat=state(p),already_admitted=str(p) in admitted,assessment='published hash REUSED; safe/stat now; actual Names/kernel/strict readback NOT checked here'))
+assert state(a)==sa
+# Owner43 is a presentation worklist only. Map each endpoint to actual observed
+# constant keys, then query guards ONLY when the Name constructors match.
+release=pathlib.Path('/private/tmp/s126-sdk-current-incremental-release-20261024-v1');mp=safe(release/'manifest.json');m=json.loads(mp.read_text());p=safe(release/'duplicates-combined.jsonl');prior=next(r for r in m['files'] if r['relative']=='duplicates-combined.jsonl');assert pin(p)['sha256']==prior['sha256']
+owner=[]
+for line in p.open():
+ x=json.loads(line);sides=[]
+ for mod in [x['first'],x['second']]:
+  sides.append(list(db.execute("SELECT name,origin FROM constant WHERE display=? AND origin LIKE 'CURRENT:%' AND origin LIKE ?",(x['name'],'%:'+mod+':part0'))))
+ matches=[]
+ for a,oa in sides[0]:
+  for b,ob in sides[1]:
+   if a!=b:continue
+   pr=db.execute('SELECT strict FROM pair WHERE name=? AND ((left_origin=? AND right_origin=?) OR (left_origin=? AND right_origin=?))',(a,oa,ob,ob,oa)).fetchone()
+   matches.append(dict(name=json.loads(a),left=oa,right=ob,strict=None if pr is None else bool(pr[0]),reached=db.execute('SELECT 1 FROM reached WHERE name=?',(a,)).fetchone() is not None))
+ owner.append(dict(presentation_row=x,actual_endpoint_names=[[dict(name=json.loads(n),origin=o) for n,o in side] for side in sides],actual_same_name_pairs=matches,status='runtime-guard-observed' if matches and all(y['strict'] is True for y in matches) else 'not-covered-by-failed354; no irrelevance inference while D189 root absent'))
+# Historical targeted core pins: load the existing pin manifest, NOT core objects.
+old=json.loads(subprocess.check_output(['git','show','74a62fd7b6:evidence/port29sdkdata-20261025/Port29SDKDATA_Strict-v3-final-audit.json']))
+pp=next(a for a in old['artifacts'] if a['path'].endswith('Port29SDKDATA_reused-input-pins.json'))
+rawpins=json.loads(pathlib.Path(pp['path']).read_text());core=[]
+for suffix in ['', '.server','.private']:
+ p=SYS/'lib/lean'/('Init/Core.olean'+suffix);r=next(x for x in rawpins if x['path']==str(p));safe(p);assert p.stat().st_size==r['bytes'];core.append(dict(path=str(p),bytes=r['bytes'],sha256=r['sha256'],stat=state(p),assessment='historical core bytes REUSED; group must be read together; no CLI/raw body comparison here'))
+result=dict(status='NEXT-INPUT PREPARATION ONLY; no authority for another CLI',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source=pin(__file__),command=['python3','-B',str(pathlib.Path(__file__))],original_packet=dict(audit=pin(a),fragments=len(packet),bytes=sum(r['bytes'] for r in packet),new_bytes=sum(r['bytes'] for r in packet if not r['already_admitted']),fragments_data=packet),owner43=dict(input=pin(release/'duplicates-combined.jsonl'),rows=len(owner),runtime_guard_observed=sum(r['status']=='runtime-guard-observed' for r in owner),not_covered=sum(r['status']!='runtime-guard-observed' for r in owner),data=owner),core_supplement=dict(names=['noConfusionEnum','noConfusionTypeEnum'],source=pin(SYS/'src/lean/Init/Core.lean'),parts=core,read_rule='readModuleDataParts #[main,server,private], never suffix alone; retain all until synchronous analysis ends'),total_with_root_packet_and_core=sum(pathlib.Path(p).stat().st_size for _,p in rows)+sum(r['bytes'] for r in packet if not r['already_admitted'])+sum(r['bytes'] for r in core),remaining_CLI=0,axioms='N/A: noncompiler metadata only',wall_seconds=time.monotonic()-start,peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,exit_status=0)
+assert result['total_with_root_packet_and_core']<=512*1024**2
+(E/'Port31DATA_next-inputs.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n')
+print(json.dumps(dict(original_fragments=len(packet),original_bytes=sum(r['bytes'] for r in packet),owner43_observed=result['owner43']['runtime_guard_observed'],owner43_uncovered=result['owner43']['not_covered'],total_bytes=result['total_with_root_packet_and_core'],wall_seconds=result['wall_seconds'],peak_rss_bytes=result['peak_rss_bytes'])))

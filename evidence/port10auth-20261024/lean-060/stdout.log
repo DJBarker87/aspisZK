@@ -1,0 +1,150 @@
+Port10AUTH_TX1Reached.lean:83:12: error: Type mismatch: After simplification, term
+  full
+ has type
+  @Eq (List (Bytes × State))
+    (eval H
+        (interpret (fun {A} => impl)
+          (Code.call Call.op16 fun b =>
+            VTop_Trace.bind (Code.done b) fun i =>
+              if (10#usize != i) = true then
+                pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+              else do
+                let r ← VTop_Flow.traceEffects.op3 proof
+                let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r1 ← VTop_Flow.traceEffects.op4 proof
+                    let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        let we ← VTop_Flow.traceEffects.op1
+                        let __x ← VTop_Flow.traceEffects.op7 D semantic proof hash none (Array.repeat 29#usize we)
+                        let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf2 with
+                          | core.ops.control_flow.ControlFlow.Continue val => do
+                            let r3 ← VTop_Flow.traceEffects.op12 AspisR1Stage2.transport.Variant.S2
+                            let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                            match cf3 with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare
+                                let i1 ← VTop_Flow.traceEffects.op15
+                                let i2 ← VTop_Flow.traceEffects.op14
+                                let s ←
+                                  liftM
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        proof { start := i1, «end» := i2 })
+                                let r4 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s)
+                                let folded_root ← VTop_Flow.traceEffects.unwrap32 r4
+                                let r5 ← perform (Call.op5 D proof val folded_root 0#usize hash)
+                                Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none val val1 __x.2 r5
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)))).1
+    ((eval H (impl Call.op16)).1 ++
+      ((eval H (impl (Call.op3 proof))).1 ++
+        ((eval H (impl (Call.op4 proof))).1 ++
+          ((eval H (impl (Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed))).1 ++
+            ((eval H (impl Call.op1)).1 ++
+              ((eval H (impl (Call.op7 D semantic proof hash none (Array.repeat 29#usize we)))).1 ++
+                ((eval H (impl (Call.op12 AspisR1Stage2.transport.Variant.S2))).1 ++
+                  ((eval H (impl (Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare))).1 ++
+                    ((eval H (impl Call.op15)).1 ++
+                      ((eval H (impl Call.op14)).1 ++
+                        ((eval H (impl (Call.unwrap32 conversion))).1 ++
+                          ((eval H (impl (Call.op5 D proof p folded 0#usize hash))).1 ++
+                            (eval H
+                                (interpret (fun {A} => impl)
+                                  (VTop_Trace.bind (Code.done (core.result.Result.Ok PUnit.unit)) fun r5 =>
+                                    Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p a g
+                                      r5))).1))))))))))))
+but is expected to have type
+  @Eq (List (Bytes × State))
+    (eval H
+        (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) do
+          let i ← VTop_Flow.traceEffects.op16
+          if (10#usize != i) = true then
+              pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+            else do
+              let r ← VTop_Flow.traceEffects.op3 proof
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r1 ← VTop_Flow.traceEffects.op4 proof
+                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                      let we ← VTop_Flow.traceEffects.op1
+                      let __x ← VTop_Flow.traceEffects.op7 D semantic proof hash none (Array.repeat 29#usize we)
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let r3 ← VTop_Flow.traceEffects.op12 AspisR1Stage2.transport.Variant.S2
+                          let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                          match cf3 with
+                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                              VTop_Flow.traceEffects.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare
+                              let i1 ← VTop_Flow.traceEffects.op15
+                              let i2 ← VTop_Flow.traceEffects.op14
+                              let s ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i1, «end» := i2 })
+                              let r4 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s)
+                              let folded_root ← VTop_Flow.traceEffects.unwrap32 r4
+                              let r5 ← perform (Call.op5 D proof val folded_root 0#usize hash)
+                              Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none val val1 __x.2 r5
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual))).1
+    ((eval H (impl Call.op16)).1 ++
+      ((eval H (impl (Call.op3 proof))).1 ++
+        ((eval H (impl (Call.op4 proof))).1 ++
+          ((eval H (impl (Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed))).1 ++
+            ((eval H (impl Call.op1)).1 ++
+              ((eval H (impl (Call.op7 D semantic proof hash none (Array.repeat 29#usize we)))).1 ++
+                ((eval H (impl (Call.op12 AspisR1Stage2.transport.Variant.S2))).1 ++
+                  ((eval H (impl (Call.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Prepare))).1 ++
+                    ((eval H (impl Call.op15)).1 ++
+                      ((eval H (impl Call.op14)).1 ++
+                        ((eval H (impl (Call.unwrap32 conversion))).1 ++
+                          ((eval H (Port9OR_Installed.batch D hash proof p folded 0#usize)).1 ++
+                            (eval H
+                                (interpret
+                                  (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                  (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p a g
+                                    (core.result.Result.Ok ())))).1))))))))))))
+Port10AUTH_TX1Reached.lean:40:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+Port10AUTH_TX1Reached.lean:66:15: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Port10AUTH_TX1Reached.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

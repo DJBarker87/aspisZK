@@ -1,0 +1,64 @@
+Port9OR_Reached.lean:40:14: error: don't know how to synthesize implicit argument `A`
+  @Port9OR_Installed.implementation ops reserved unwrap (fun {A} => rest) ?m.197
+context:
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+i : Usize
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+H : Bytes → State
+accepted :
+  (eval H
+        (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port8EFF_Control.afterPowers D proof hash none p a i g))).2 =
+    ok (core.result.Result.Ok ())
+⊢ Type
+Port9OR_Reached.lean:40:6: error: failed to infer `let` declaration type
+Port9OR_Reached.lean:39:121: error: unsolved goals
+ops : Ops
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+rest : Implementation
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+i : Usize
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+H : Bytes → State
+accepted :
+  (eval H
+        (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+          (Port8EFF_Control.afterPowers D proof hash none p a i g))).2 =
+    ok (core.result.Result.Ok ())
+⊢ ∃ inactive folded slice conversion,
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+          { start := 7751#usize, «end» := 7783#usize } =
+        ok slice ∧
+      core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 slice = ok conversion ∧
+        ops.unwrap32 conversion = ok folded ∧
+          Port4B_Install.batch (Port9OR_Bodies.native D H) proof p folded 1#usize hash = ok (core.result.Result.Ok ()) ∧
+            (eval H
+                    (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                      (Port9OR_BatchCut.afterBatch D proof none p a i g inactive 7527#usize 7751#usize 7783#usize
+                        (core.result.Result.Ok ())))).2 =
+                ok (core.result.Result.Ok ()) ∧
+              (eval H
+                    (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                      (Port8EFF_Control.afterPowers D proof hash none p a i g))).1 =
+                (eval H (Port9OR_Installed.batch D hash proof p folded 1#usize)).1 ++
+                  (eval H
+                      (interpret (fun {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                        (Port9OR_BatchCut.afterBatch D proof none p a i g inactive 7527#usize 7751#usize 7783#usize
+                          (core.result.Result.Ok ())))).1
+'AspisR1.Port9OR_Reached.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Reached.after_powers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

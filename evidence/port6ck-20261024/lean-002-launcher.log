@@ -1,0 +1,58 @@
+{"attempt": "lean-002", "exit_status": 1, "wall_seconds": 2.032785902003525, "peak_rss_kib": "4395952", "swaps": "0", "print_axioms": ["'AspisR1.Port6CK_Roots.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port6CK_Roots.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port5Q2_ReaderRaw.raw 32#usize (unwrap 32#usize) ?m.30
+in the target expression
+  (do
+      let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize { bytes := bytes, «at» := 80#usize }
+      match __x with
+        | (state, r) => do
+          let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r
+          match __x with
+            | (root0, r1) => do
+              let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r1
+              match __x with
+                | (root1, r2) => ok (state, root0, root1, r2)) =
+    do
+    let __x ← CheckpointBytes3Reader.raw
+...
+
+
+unwrap : (N : Usize) → core.result.Result (Std.Array U8 N) core.array.TryFromSliceError → Result (Std.Array U8 N)
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+bytes : Slice U8
+room : 176 ≤ (↑bytes).length
+size : (↑bytes).length ≤ 4096
+⊢ (do
+      let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize { bytes := bytes, «at» := 80#usize }
+      match __x with
+        | (state, r) => do
+          let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r
+          match __x with
+            | (root0, r1) => do
+              let __x ← (fun N => Port5Q2_ReaderRaw.raw N (unwrap N)) 32#usize r1
+              match __x with
+                | (root1, r2) => ok (state, root0, root1, r2)) =
+    do
+    let __x ← CheckpointBytes3Reader.raw 32#usize { bytes := bytes, «at» := 80#usize }
+    match __x with
+      | (state, r) => do
+        let __x ← CheckpointBytes3Reader.raw 32#usize r
+        match __x with
+          | (root0, r1) => do
+            let __x ← CheckpointBytes3Reader.raw 32#usize r1
+            match __x with
+              | (root1, r2) => ok (state, root0, root1, r2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port6CK_Roots.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r95fcb120d71540aea11822bae6161eb1.scope; invocation ID: 6f950dedfc8c413998681556b41ae17e

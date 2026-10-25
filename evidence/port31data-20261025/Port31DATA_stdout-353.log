@@ -1,0 +1,14 @@
+theorem Port31DATA.eq_true_of_not_eq_false : ∀ {b : Bool} (h : @Ne.{1} Bool b Bool.false), @Eq.{1} Bool b Bool.true :=
+fun {b : Bool} (h : @Ne.{1} Bool b Bool.false) =>
+  @Bool.casesOn.{0} (fun (t : Bool) => ∀ (h : @Eq.{1} Bool b t), @Eq.{1} Bool b Bool.true) b
+    (fun (h_1 : @Eq.{1} Bool b Bool.false) =>
+      @Eq.ndrec.{0, 1} Bool Bool.false (fun {b : Bool} => ∀ (h : @Ne.{1} Bool b Bool.false), @Eq.{1} Bool b Bool.true)
+        (fun (h : @Ne.{1} Bool Bool.false Bool.false) =>
+          @False.elim.{0} (@Eq.{1} Bool Bool.false Bool.true) (h (@rfl.{1} Bool Bool.false)))
+        b (@Eq.symm.{1} Bool b Bool.false h_1) h)
+    (fun (h_1 : @Eq.{1} Bool b Bool.true) =>
+      @Eq.ndrec.{0, 1} Bool Bool.true (fun {b : Bool} => ∀ (h : @Ne.{1} Bool b Bool.false), @Eq.{1} Bool b Bool.true)
+        (fun (h : @Ne.{1} Bool Bool.true Bool.false) => @Eq.refl.{1} Bool Bool.true) b
+        (@Eq.symm.{1} Bool b Bool.true h_1) h)
+    (@Eq.refl.{1} Bool b)
+'Port31DATA.eq_true_of_not_eq_false' does not depend on any axioms

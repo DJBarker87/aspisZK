@@ -1,0 +1,50 @@
+Port8EFF_Driver.lean:75:14: error: don't know how to synthesize implicit argument `A`
+  @Port8EFF_Bodies.implementation ops reserved unwrap (fun {A} => other) ?m.73
+context:
+ops : Ops
+reserved : Bool
+unwrap : Unwrap
+other : Implementation
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+pub proof ck : Slice U8
+H : Bytes → State
+accepted :
+  (eval H
+        (interpret (fun {A} => Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+          (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+    ok (core.result.Result.Ok ())
+⊢ Type
+Port8EFF_Driver.lean:75:6: error: failed to infer `let` declaration type
+Port8EFF_Driver.lean:74:86: error: unsolved goals
+ops : Ops
+reserved : Bool
+unwrap : Unwrap
+other : Implementation
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+pub proof ck : Slice U8
+H : Bytes → State
+accepted :
+  (eval H
+        (interpret (fun {A} => Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+          (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+    ok (core.result.Result.Ok ())
+⊢ (eval H
+          (interpret (fun {A} => Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+            (VTop_Flow.tx2_common VTop_Flow.traceEffects D pub proof ck hash none))).2 =
+      ok (core.result.Result.Ok ()) ∧
+    ∃ earlier,
+      (eval H
+            (interpret (fun {A} => Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+              (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof ck hash none))).1 =
+        earlier ++
+          (eval H
+              (interpret (fun {A} => Port8EFF_Bodies.implementation ops reserved unwrap fun {A} => other)
+                (VTop_Flow.tx2_common VTop_Flow.traceEffects D pub proof ck hash none))).1
+'AspisR1.Port8EFF_Driver.authenticated_common' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Driver.head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Driver.common_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Driver.common_reader' depends on axioms: [propext, Classical.choice, Quot.sound]

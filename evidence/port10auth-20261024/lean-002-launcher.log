@@ -1,0 +1,67 @@
+{"attempt": "lean-002", "exit_status": 1, "wall_seconds": 1.9838044680072926, "peak_rss_kib": "4408368", "swaps": "0", "print_axioms": ["'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+Port10AUTH_Trace.lean:19:11: error: unsolved goals
+case done
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+a : A
+⊢ trace D hash (Code.done a >>= k) = ((trace D hash (k a)).1, (trace D hash (k a)).2)
+Port10AUTH_Trace.lean:20:16: error: unsolved goals
+case step.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, di
+...
+iv)
+Port10AUTH_Trace.lean:19:25: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:20:42: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵i̵h̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:20:76: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲trace,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:22:52: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵c̵a̵l̵l̵,̵i̵h̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲c̲a̲l̲l̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:22:91: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲trace, ̲call,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r59f4f0d635934507b3595f2874ee89ab.scope; invocation ID: bbd12b61374142ceb82739f1fca05ed4

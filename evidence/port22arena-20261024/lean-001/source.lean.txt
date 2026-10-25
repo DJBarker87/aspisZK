@@ -1,0 +1,120 @@
+import Init.Data.BitVec.Lemmas
+import Lean.Elab.Tactic.Omega
+
+/-! Literal integer/store interpretation of entrypoint2.3.0 BumpAllocator::alloc.
+NOT an extraction and NOT a native Rust/ABI interpretation theorem. -/
+set_option autoImplicit false
+namespace Port22ARENA
+
+def initial (start len cursor : Nat) : Nat :=
+  if cursor = 0 then start + len else cursor
+
+def candidate (start len cursor size align : Nat) : Nat :=
+  (initial start len cursor - size) &&& (2^64 - align)
+
+/-- Exact finite-word complement identity, for valid nonzero alignment.
+The subtraction align-1 cannot wrap in this admitted range. -/
+theorem mask_word (align : Nat) (positive : 0 < align) (bounded : align < 2^64) :
+    (~~~(BitVec.ofNat 64 (align-1))).toNat = 2^64-align := by
+  rw [BitVec.toNat_not, BitVec.toNat_ofNat, Nat.mod_eq_of_lt (by omega)]
+  omega
+
+theorem candidate_le (s l c n a : Nat) :
+    candidate s l c n a ≤ initial s l c - n :=
+  Nat.and_le_left
+
+/-- Symbolic low-bit elimination: the mask, not a concrete recurrence, is used. -/
+theorem masked_aligned (x mask k : Nat) (low : mask % 2^k = 0) :
+    (x &&& mask) % 2^k = 0 := by
+  rw [Nat.and_mod_two_pow, low, Nat.and_zero]
+
+theorem qm31_aligned (s l c n : Nat) : candidate s l c n 4 % 4 = 0 := by
+  exact masked_aligned _ _ 2 (by omega)
+
+theorem four_u64_aligned (s l c n : Nat) : candidate s l c n 8 % 8 = 0 := by
+  exact masked_aligned _ _ 3 (by omega)
+
+/-- Arena admission is explicit; no claim about invalid/wrapping arena addresses. -/
+theorem initial_upper (s l c : Nat) (admitted : c = 0 ∨ c ≤ s+l) :
+    initial s l c ≤ s+l := by
+  unfold initial
+  split <;> omega
+
+/-- Saturation cannot rescue an oversized request on the success branch. -/
+theorem success_interval (s l c n a : Nat) (admitted : c = 0 ∨ c ≤ s+l)
+    (success : s+8 ≤ candidate s l c n a) :
+    s+8 ≤ candidate s l c n a ∧
+    candidate s l c n a+n ≤ initial s l c ∧ initial s l c ≤ s+l := by
+  have upper := initial_upper s l c admitted
+  have lower := candidate_le s l c n a
+  omega
+
+abbrev Memory := Nat → Nat
+/-- Byte-addressed 64-bit little endian cursor store. -/
+def storeCursor (mem : Memory) (s value : Nat) : Memory := fun x =>
+  if s ≤ x ∧ x < s+8 then (value / 256^(x-s)) % 256 else mem x
+
+def alloc (mem : Memory) (s l c n a : Nat) : Nat × Memory :=
+  let p := candidate s l c n a
+  if p < s+8 then (0,mem) else (p,storeCursor mem s p)
+
+theorem store_outside (mem : Memory) (s v x : Nat)
+    (outside : x < s ∨ s+8 ≤ x) : storeCursor mem s v x = mem x := by
+  unfold storeCursor
+  split <;> omega
+
+/-- Both normal return branches, without successful-allocation conditioning. -/
+theorem alloc_outside (mem : Memory) (s l c n a x : Nat)
+    (outside : x < s ∨ s+8 ≤ x) :
+    (alloc mem s l c n a).2 x = mem x := by
+  unfold alloc
+  split
+  · rfl
+  · exact store_outside mem s _ x outside
+
+theorem null_no_write (mem : Memory) (s l c n a : Nat)
+    (failed : candidate s l c n a < s+8) :
+    alloc mem s l c n a = (0,mem) := by
+  simp only [alloc, failed, ↓reduceIte]
+
+theorem ok_exact_store (mem : Memory) (s l c n a : Nat)
+    (success : s+8 ≤ candidate s l c n a) :
+    alloc mem s l c n a =
+      (candidate s l c n a,storeCursor mem s (candidate s l c n a)) := by
+  have h : ¬ candidate s l c n a < s+8 := by omega
+  simp only [alloc, h, ↓reduceIte]
+
+/-- Source-order primitive events, distinct from oracle events/native executions. -/
+inductive Event where
+  | readCursor (address : Nat)
+  | writeCursor (address value : Nat)
+  | returned (pointer : Nat)
+  deriving DecidableEq
+
+def events (s l c n a : Nat) : List Event :=
+  let p := candidate s l c n a
+  if p < s+8 then [.readCursor s,.returned 0]
+  else [.readCursor s,.writeCursor s p,.returned p]
+
+/-- Interruptions keep the pre-call history, even for null/abort prefixes.
+No assertion is made that arbitrary cuts are actual native abort sites. -/
+def cut (history : List Event) (s l c n a count : Nat) : List Event :=
+  history ++ (events s l c n a).take count
+
+theorem prefix_retained (history : List Event) (s l c n a count : Nat) :
+    (cut history s l c n a count).take history.length = history := by
+  simp [cut]
+
+#print axioms mask_word
+#print axioms candidate_le
+#print axioms masked_aligned
+#print axioms qm31_aligned
+#print axioms four_u64_aligned
+#print axioms initial_upper
+#print axioms success_interval
+#print axioms store_outside
+#print axioms alloc_outside
+#print axioms null_no_write
+#print axioms ok_exact_store
+#print axioms prefix_retained
+end Port22ARENA

@@ -1,0 +1,364 @@
+# Fixed data-only payload body. The reviewed guard above is unchanged.
+SBF_RUNTIME_INPUTS = None
+import sys
+START = time.monotonic()
+signal.alarm(115)
+INITIAL_LIMITS = inherited_limits()
+check_limits(INITIAL_LIMITS)
+def interrupted(signum, frame):
+    raise GuardError('deadline or original resident guard failed')
+signal.signal(signal.SIGUSR1, interrupted)
+signal.signal(signal.SIGALRM, interrupted)
+MONITOR = Guard()
+RESULT = {'kind':'SbfRuntime finite public metadata observation','status':'UNKNOWN',
+          'axioms':'N/A; no theorem/compiler invocation', 'source_inputs':SBF_RUNTIME_INPUTS}
+ERROR = None
+FAILED = True
+# Guard module imports necessarily precede guard startup. ru_maxrss retains the
+# process startup maximum; no claim of continuous bootstrap aggregate coverage.
+MONITOR.start()
+import stat
+PUBLIC = ('/usr/bin','/usr/lib','/usr/local/lib')
+ALIASES = ('/lib','/lib64')
+FILES = {}
+CHAINS = {}
+OPEN_EVENTS = []
+DLOPEN = []
+LIST_EVENTS = []
+PHASE = 'import'
+TOTAL = 0
+ELFS = 0
+
+def require_data(ok, reason):
+    if not ok: raise GuardError(reason)
+
+def lexical(path):
+    require_data(isinstance(path,str) and path.startswith('/') and len(path)<4096 and path.isascii(), 'nonpublic path syntax')
+    require_data(all(x not in ('','.','..') and not any(ord(c)<33 or ord(c)>126 for c in x) for x in path.split('/')[1:]), 'path component syntax')
+    require_data(not any(x in ('site-packages','dist-packages') or x.startswith('.') for x in path.split('/')), 'excluded package/dot path')
+    return path
+
+def prefix(path):
+    return any(path==p or path.startswith(p+'/') for p in PUBLIC)
+
+def _source_path(path):
+    lexical(path)
+    require_data(prefix(path) or any(path==p or path.startswith(p+'/') for p in ALIASES), 'outside finite public roots')
+    todo=path.split('/')[1:]
+    done=[]
+    links=[]
+    chain=[]
+    hops=0
+    fd=os.open('/', os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        root=os.fstat(fd)
+        require_data(root.st_uid==0 and not root.st_mode&0o022,'root ownership/mode')
+        while todo:
+            name=todo.pop(0)
+            s=os.stat(name,dir_fd=fd,follow_symlinks=False)
+            current='/'+('/'.join(done+[name]))
+            require_data(s.st_uid==0,'non-root component: '+current)
+            row=dict(path=current,uid=s.st_uid,gid=s.st_gid,mode=s.st_mode,dev=s.st_dev,ino=s.st_ino)
+            if stat.S_ISLNK(s.st_mode):
+                hops+=1
+                require_data(hops<=16,'symlink hop bound')
+                target=os.readlink(name,dir_fd=fd)
+                again=os.stat(name,dir_fd=fd,follow_symlinks=False)
+                require_data((s.st_dev,s.st_ino,s.st_mtime_ns,s.st_ctime_ns)==(again.st_dev,again.st_ino,again.st_mtime_ns,again.st_ctime_ns),'symlink drift')
+                row['target']=target
+                links.append(row.copy()); chain.append(row)
+                combined=target if target.startswith('/') else '/'+('/'.join(done+[target]))
+                normalized=os.path.normpath(combined)
+                require_data(prefix(normalized),'symlink target outside public roots: '+normalized)
+                lexical(normalized)
+                todo=normalized.split('/')[1:]+todo
+                done=[]
+                os.close(fd)
+                fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+                continue
+            require_data(not s.st_mode&0o022,'writable public component: '+current)
+            chain.append(row)
+            if todo:
+                require_data(stat.S_ISDIR(s.st_mode),'non-directory ancestry: '+current)
+                child=os.open(name,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=fd)
+                t=os.fstat(child)
+                require_data((s.st_dev,s.st_ino,s.st_mode,s.st_uid)==(t.st_dev,t.st_ino,t.st_mode,t.st_uid),'directory drift')
+                os.close(fd);fd=child;done.append(name)
+            else:
+                resolved='/'+('/'.join(done+[name]))
+                require_data(prefix(resolved),'unresolved external alias')
+                require_data(stat.S_ISREG(s.st_mode) or stat.S_ISDIR(s.st_mode),'unsupported public file type')
+                return resolved,chain,links,s
+    finally:
+        os.close(fd)
+    raise GuardError('empty public path')
+
+AUDIT_LOCAL = threading.local()
+def source_path(path):
+    previous=getattr(AUDIT_LOCAL,'internal',False)
+    AUDIT_LOCAL.internal=True
+    try: return _source_path(path)
+    finally: AUDIT_LOCAL.internal=previous
+
+# Audited opens are import/open attempts, not a native loader syscall trace.
+# The original guard only reads this process and its tracked owned descendants.
+def checked_audit(event,args):
+    if event=='open':
+        path,mode,flags=args
+        if isinstance(path,int): return
+        require_data(isinstance(path,str),'non-string open path')
+        if path.startswith('/proc/'):
+            parts=path.split('/')
+            allowed=(parts[2]=='self' and len(parts)==4 and parts[3] in ('maps','status'))
+            if parts[2].isdecimal() and int(parts[2]) in ({os.getpid()}|set(MONITOR.owned)):
+                allowed=(len(parts)==4 and parts[3] in ('stat','status')) or (len(parts)==6 and parts[3]=='task' and parts[4].isdecimal() and parts[5]=='children')
+            require_data(allowed,'unknown proc input')
+            return
+        require_data(not flags & (os.O_WRONLY|os.O_RDWR|os.O_CREAT|os.O_TRUNC|os.O_APPEND),'write open forbidden')
+        resolved,chain,links,s=source_path(path)
+        require_data(len(OPEN_EVENTS)<4096,'open event bound')
+        if PHASE=='import': OPEN_EVENTS.append(dict(path=path,physical=resolved,mode=mode,flags=flags))
+    elif event in ('os.listdir','os.scandir'):
+        path=args[0]
+        if isinstance(path,int): return
+        if path=='/proc/self/fd' or (isinstance(path,str) and path.startswith('/proc/') and path.endswith('/task') and path.split('/')[2].isdecimal() and int(path.split('/')[2]) in ({os.getpid()}|set(MONITOR.owned))): return
+        require_data(isinstance(path,str) and prefix(path),'nonpublic directory inventory')
+        source_path(path)
+        require_data(len(LIST_EVENTS)<512,'list event bound')
+        LIST_EVENTS.append(dict(event=event,path=path))
+    elif event in ('os.fork','os.forkpty','os.exec','os.posix_spawn','subprocess.Popen','os.system','os.setuid','os.setgid','resource.setrlimit'):
+        raise GuardError('prohibited operation: '+event)
+    elif event=='ctypes.dlopen':
+        # ctypes import's own PythonAPI initialization is explicitly authorized.
+        # No CDLL/PyDLL/syscall call exists in this payload.
+        require_data(PHASE=='import','non-import native load')
+        DLOPEN.append(dict(name=args[0],phase=PHASE))
+
+def audit(event,args):
+    if getattr(AUDIT_LOCAL,'internal',False): return
+    AUDIT_LOCAL.internal=True
+    try: return checked_audit(event,args)
+    finally: AUDIT_LOCAL.internal=False
+sys.addaudithook(audit)
+BOOTSTRAP = sorted(sys.modules)
+
+def identity(s):
+    return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid,s.st_nlink,s.st_size,s.st_mtime_ns,s.st_ctime_ns)
+
+def parse_elf(raw):
+    global ELFS
+    if raw[:4]!=b'\x7fELF': return None
+    ELFS+=1
+    require_data(ELFS<=64,'ELF count bound')
+    require_data(raw[:6]==b'\x7fELF\x02\x01' and len(raw)>=64,'ELF64 little-endian required')
+    require_data(struct.unpack_from('<H',raw,18)[0]==62,'x86_64 ELF required')
+    phoff=struct.unpack_from('<Q',raw,32)[0]
+    phsize,phnum=struct.unpack_from('<HH',raw,54)
+    require_data(phsize==56 and phnum<=256 and phoff+phnum*phsize<=len(raw),'ELF program header bounds')
+    loads=[];dynamic=[];interp=[]
+    def string(table,start):
+        require_data(0<=start<len(table),'ELF string offset')
+        end=table.find(b'\0',start)
+        require_data(end>=start and end-start<4096,'ELF string bound')
+        return table[start:end].decode('ascii')
+    for i in range(phnum):
+        p=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
+        typ,flags,off,va,pa,sz,mem,align=p
+        require_data(off+sz<=len(raw),'ELF segment bounds')
+        if typ==1: loads.append((va,off,sz))
+        if typ==2:
+            require_data(sz%16==0 and sz//16<=65536,'ELF dynamic bound')
+            dynamic=[struct.unpack_from('<qQ',raw,o) for o in range(off,off+sz,16)]
+        if typ==3: interp.append(string(raw[off:off+sz],0))
+    tags={}
+    for tag,val in dynamic:
+        if tag==0:break
+        tags.setdefault(tag,[]).append(val)
+    ans=dict(interpreter=interp,needed=[],soname=[],rpath=[],runpath=[])
+    if 5 in tags:
+        require_data(len(tags[5])==1 and len(tags.get(10,[]))==1,'ELF dynamic string table shape')
+        va=tags[5][0];sz=tags[10][0]
+        match=[off+va-base for base,off,n in loads if base<=va and va+sz<=base+n]
+        require_data(len(match)==1 and match[0]+sz<=len(raw),'ELF string table mapping')
+        table=raw[match[0]:match[0]+sz]
+        for tag,name in ((1,'needed'),(14,'soname'),(15,'rpath'),(29,'runpath')):
+            ans[name]=[string(table,i) for i in tags.get(tag,[])]
+    return ans
+
+def _pin_file(path,reason):
+    global TOTAL,PHASE
+    MONITOR.check()
+    physical,chain,links,s=source_path(path)
+    CHAINS[path]=dict(physical=physical,components=chain,symlinks=links)
+    if physical in FILES:
+        FILES[physical]['reasons']=sorted(set(FILES[physical]['reasons']+[reason]))
+        return physical
+    require_data(len(FILES)<512,'file count bound')
+    require_data(stat.S_ISREG(s.st_mode) and s.st_nlink==1,'regular single-link source required: '+physical)
+    require_data(s.st_size<=16*2**20,'16MiB file bound: '+physical)
+    require_data(TOTAL+s.st_size<=128*2**20,'128MiB acquisition total bound')
+    # physical is already an explicitly checked no-symlink component path.
+    d=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)
+    try:
+        names=physical.split('/')[1:]
+        for part in names[:-1]:
+            child=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=d)
+            t=os.fstat(child)
+            require_data(t.st_uid==0 and not t.st_mode&0o022,'opened ancestry mode')
+            os.close(d);d=child
+        f=os.open(names[-1],os.O_RDONLY|os.O_NOFOLLOW|os.O_CLOEXEC|os.O_NONBLOCK,dir_fd=d)
+    finally:os.close(d)
+    try:
+        before=os.fstat(f)
+        require_data(identity(before)==identity(s),'source changed before open')
+        h=hashlib.sha256();count=0;chunks=[]
+        while True:
+            b=os.read(f,min(65536,s.st_size-count+1))
+            if not b:break
+            count+=len(b);require_data(count<=s.st_size,'source grew')
+            h.update(b);chunks.append(b)
+        after=os.fstat(f)
+        require_data(identity(before)==identity(after) and count==s.st_size,'stable file check failed')
+        raw=b''.join(chunks)
+        row=dict(sha256=h.hexdigest(),size=count,uid=s.st_uid,gid=s.st_gid,mode=s.st_mode,nlink=s.st_nlink,
+                 dev=s.st_dev,ino=s.st_ino,mtime_ns=s.st_mtime_ns,ctime_ns=s.st_ctime_ns,
+                 stable_open_fd_prepost=True,reasons=[reason],elf=parse_elf(raw))
+        if physical.endswith('.pyc'):
+            require_data(len(raw)>=16,'short pyc header')
+            flags=int.from_bytes(raw[4:8],'little')
+            row['pyc']=dict(header_hex=raw[:16].hex(),magic_hex=raw[:4].hex(),flags=flags,
+                classification='hash-based' if flags&1 else 'timestamp-based',
+                checked_hash=bool(flags&2) if flags&1 else None,
+                timestamp=int.from_bytes(raw[8:12],'little') if not flags&1 else None,
+                source_size=int.from_bytes(raw[12:16],'little') if not flags&1 else None,
+                body_binding='OPEN; metadata/header/hash observation only')
+        FILES[physical]=row;TOTAL+=count
+        return physical
+    finally:os.close(f)
+
+def pin_file(path,reason):
+    previous=getattr(AUDIT_LOCAL,'internal',False)
+    AUDIT_LOCAL.internal=True
+    try: return _pin_file(path,reason)
+    finally: AUDIT_LOCAL.internal=previous
+
+try:
+    # Guard's five modules plus AST-derived ordinary backend/probe modules only.
+    import json
+    import hashlib
+    import struct
+    import sysconfig
+    for module in SBF_RUNTIME_INPUTS['required_modules']:
+        __import__(module)
+    # sysconfig reports public paths; get_config_vars imports its exact data file.
+    paths=sysconfig.get_paths()
+    for key,value in paths.items():
+        require_data(isinstance(value,str) and value.startswith('/usr/'),'sysconfig nonpublic root: '+key)
+    config={k:sysconfig.get_config_var(k) for k in ('VERSION','LDVERSION','SOABI','MULTIARCH','LIBDIR','LIBPL','LDLIBRARY','Py_ENABLE_SHARED')}
+    RESULT.update(version=sys.version,executable=sys.executable,argv=sys.orig_argv,
+                  sys_path=list(sys.path),sysconfig_paths=paths,sysconfig=config,
+                  bootstrap_modules_before_audit=BOOTSTRAP,
+                  bootstrap_input_observation='OPEN; module imports preceding audit/guard are not traced')
+    for p in sys.path:
+        require_data(prefix(p),'sys.path outside public prefixes')
+    RESULT['api_presence']={m:{n:hasattr(sys.modules[m],n) for n in names} for m,names in {
+        'os':['fork','execve','pidfd_open','getresuid','getresgid','pipe2','chroot','O_NOFOLLOW','O_CLOEXEC','O_DIRECTORY','O_NONBLOCK','statvfs'],
+        'signal':['pidfd_send_signal','SIGCHLD','SIGUSR1'],
+        'resource':['RLIMIT_NOFILE','RLIMIT_FSIZE','getrlimit'],
+        'ctypes':['CDLL','PyDLL','CFUNCTYPE','c_ulong','c_void_p'],
+        'fcntl':['fcntl','F_GETFL']}.items()}
+    PHASE='metadata-hash'
+    interpreter=pin_file('/usr/bin/python3','pinned interpreter logical entry')
+    historic=SBF_RUNTIME_INPUTS['historical_runtime']
+    require_data(interpreter==historic['executable'] and
+                 {k:FILES[interpreter][k] for k in ('sha256','size')}==historic['executable_pin'] and
+                 sys.version==historic['version'],'historical pinned interpreter drift')
+    RESULT['fresh_interpreter_matches_historical_pin']=True
+    require_data(sys.executable=='/usr/bin/python3','unexpected interpreter entry')
+    modules={}
+    # Snapshot only; no backend definition or fixed probe executes.
+    for name,module in sorted(list(sys.modules.items())):
+        if module is None:continue
+        file=getattr(module,'__file__',None);cached=getattr(module,'__cached__',None)
+        spec=getattr(module,'__spec__',None)
+        row=dict(file=file,cached=cached,origin=getattr(spec,'origin',None),
+                 loader=type(getattr(spec,'loader',None)).__name__)
+        for label,path in (('file',file),('cached',cached)):
+            if path and not path.startswith('<'):
+                try: row[label+'_physical']=pin_file(path,'module '+name+' '+label)
+                except FileNotFoundError:row[label+'_missing']=True
+        modules[name]=row
+    RESULT['modules']=modules
+    # Every successful audited import open remains a pinned acquisition input.
+    # Failed cached attempts are retained as missing; no source-only assumption.
+    for event in OPEN_EVENTS:
+        try:event['pin_physical']=pin_file(event['path'],'audited import open attempt')
+        except FileNotFoundError:event['missing_at_pin']=True
+    rawmaps=open('/proc/self/maps','rb').read(1024*1024+1)
+    require_data(len(rawmaps)<=1024*1024,'own maps bound')
+    mapped={}
+    for line in rawmaps.decode('ascii').splitlines():
+        parts=line.split(None,5)
+        if len(parts)!=6 or not parts[5].startswith('/'):continue
+        addr,perms,offset,device,ino,path=parts
+        physical=pin_file(path,'actual file-backed mapping')
+        major,minor=(int(x,16) for x in device.split(':'))
+        row=FILES[physical]
+        require_data(os.major(row['dev'])==major and os.minor(row['dev'])==minor and row['ino']==int(ino),'mapped file identity association mismatch')
+        mapped.setdefault(physical,[]).append(dict(offset=int(offset,16),device=device,inode=int(ino),permissions=perms))
+    RESULT['mapped_files']=mapped
+    RESULT['mapping_association']='observed dev/inode/offset paired with stable disk hashes; not ELF proof/native effect law'
+    # Only inspect explicit PT_INTERP names, never enumerate library directories.
+    for row in list(FILES.values()):
+        if row['elf']:
+            for path in row['elf']['interpreter']:pin_file(path,'ELF PT_INTERP exact path')
+    lookup={}
+    for p in mapped:
+        e=FILES[p]['elf']
+        for key in [os.path.basename(p)]+(e['soname'] if e else []):lookup.setdefault(key,set()).add(p)
+    needed=[]
+    for p,row in FILES.items():
+        if row['elf']:
+            for name in row['elf']['needed']:
+                needed.append(dict(source=p,needed=name,actual_mapped_candidates=sorted(lookup.get(name,[])),
+                                   status='observed-unique' if len(lookup.get(name,[]))==1 else 'OPEN'))
+    RESULT['needed_resolution']=needed
+    RESULT['own_fd_listing']=[int(n) for n in os.listdir('/proc/self/fd') if n.isdecimal()]
+    rawstatus=open('/proc/self/status','rb').read(65537)
+    require_data(len(rawstatus)<=65536,'own status bound')
+    selected={}
+    for line in rawstatus.decode('ascii').splitlines():
+        k,sep,v=line.partition(':')
+        if k in ('Pid','Tgid','PPid','Threads','VmPeak','VmHWM','VmRSS','VmSwap'):selected[k]=v.strip()
+    RESULT['own_resource_status']=selected
+    RESULT['status']='OBSERVED_PARTIAL_CANDIDATE; full closure OPEN'
+    MONITOR.check();check_limits(inherited_limits(),INITIAL_LIMITS)
+    FAILED=False
+except BaseException as exc:
+    ERROR=dict(type=type(exc).__name__,message=str(exc))
+    RESULT['error']=ERROR
+finally:
+    PHASE='receipt'
+    signal.signal(signal.SIGUSR1,signal.SIG_IGN)
+    guard_receipt=MONITOR.finish(failed=FAILED)
+    RESULT.update(files=FILES,chains=CHAINS,import_open_events=OPEN_EVENTS,
+                  directory_lookup_events=LIST_EVENTS,ctypes_import_dlopen_events=DLOPEN,
+                  selected_unique_file_bytes=TOTAL,elf_count=ELFS,guard=guard_receipt,
+                  inherited_limits_before=INITIAL_LIMITS,inherited_limits_after=inherited_limits(),
+                  wall_seconds=time.monotonic()-START,
+                  process_peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+                  process_swap_operations=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+                  cgroup_metrics='UNOBSERVED; metadata exception, no scope or reservation claim',
+                  continuous_rss='UNOBSERVED; original sampled guard only',
+                  runtime_approval=None,producer_assembly=None,
+                  completeness='OPEN: pre-hook bootstrap/native loader/cache/locale/NSS/conditional imports/pyc executed-body binding/future private probe')
+    if guard_receipt['error']:
+        RESULT['status']='UNKNOWN';ERROR=ERROR or dict(type='GuardError',message=guard_receipt['error'])
+    # json is an allowed necessary runtime module; if its import failed, retain
+    # raw transport stderr rather than attempting another command or query.
+    raw=json.dumps(RESULT,sort_keys=True,separators=(',',':')).encode()+b'\n'
+    require_data(len(raw)<=4*2**20,'4MiB output bound')
+    sys.stdout.buffer.write(raw)
+    sys.stdout.buffer.flush()
+    signal.alarm(0)
+raise SystemExit(0 if not FAILED and not ERROR else 78)

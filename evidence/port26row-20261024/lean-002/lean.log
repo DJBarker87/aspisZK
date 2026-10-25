@@ -1,0 +1,50 @@
+/Users/dominic/ZK/.worktrees/cx-port23push/docs/research/100bit-spend-path-20261013/lean/Port26ROW_Add.lean:65:84: error: unsolved goals
+row : Row
+basis : U32
+limbs : Std.Array U32 4#usize
+⊢ (do
+      let step ←
+        let (o, iter1) := (none, { start := 4#usize, «end» := 4#usize })
+          match o with
+          | none => ok (done row)
+          | some j => do
+            let old ← verifier.residue_limb_at row j
+            let limb ← verifier.power_limb_at limbs j
+            let i ← lift (core.convert.num.FromU64U32.from limb)
+            let i1 ← lift (core.convert.num.FromU64U32.from basis)
+            let i2 ← i * i1
+            let i3 ← old + i2
+            let row1 ← Array.update row j i3
+            ok (cont (iter1, row1, basis))
+      match step with
+        | done out => ok out
+        | cont (it, r, b) => verifier.update_residue_row_loop0 it r b limbs) =
+    ok row
+'Port26ROW.range_end' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port26ROW.add_body0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port26ROW.add_body1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port26ROW.add_body2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port26ROW.add_body3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Port26ROW.add_tail0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Port26ROW.add_tail1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Port26ROW.add_tail2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Port26ROW.add_tail3' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Port26ROW.add_tail4' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        2.69 real         1.04 user         0.88 sys
+          2234531840  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              182644  page reclaims
+                  91  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                7708  voluntary context switches
+                 930  involuntary context switches
+         19974934805  instructions retired
+          7305883357  cycles elapsed
+           375820408  peak memory footprint

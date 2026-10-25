@@ -1,0 +1,157 @@
+Port9OR_BatchStep.lean:35:55: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Port9OR_BatchStep.lean:194:26: error: unexpected token ':'; expected '=>'
+Port9OR_BatchStep.lean:185:63: error: unsolved goals
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+root : Digest
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+⊢ (if pos < n then do
+      let a ← (ops base).op9 keys pos
+      let a_1 ← lift (pos.wrapping_add 1#usize)
+      let a_2 ← lift (a.wrapping_shr 8#u32)
+      let a_3 ← lift (UScalar.cast UScalarTy.U32 a_2)
+      let a ← lift (a &&& 255#u64)
+      let a ← lift (UScalar.cast UScalarTy.Usize a)
+      let a ← lift (lo.wrapping_add a)
+      let a ← (ops base).op2 proof a
+      let a ← erase D hash (Port4B_LeafCode.code tree a)
+      if d > 0#usize then do
+          let a_4 ← lift (d.wrapping_sub 1#usize)
+          let a_5 ← (ops base).op8 idx a_4 a_3
+          if a_5 = true then do
+              let a_6 ← lift (d.wrapping_sub 1#usize)
+              let a ← (ops base).op7 val a_6 a
+              if a = true then ok (cont (idx, val, d, a_1))
+                else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+            else do
+              let a_6 ← Array.update idx d a_3
+              let a ← Array.update val d a
+              let a_7 ← lift (d.wrapping_add 1#usize)
+              ok (cont (a_6, a, a_7, a_1))
+        else do
+          let a_4 ← Array.update idx d a_3
+          let a ← Array.update val d a
+          let a_5 ← lift (d.wrapping_add 1#usize)
+          ok (cont (a_4, a, a_5, a_1))
+    else do
+      let a ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+            { «end» := d }
+      let a ← (ops base).op11 Port3_NativeBatchBody.multiproof.Arity.Two a
+      let a ← (ops base).op1 a verifier.Error.Merkle
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase D hash
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let nodes ← liftResult ((ops base).op3 proof slot)
+            let a ← liftResult (ops base).op12
+            let i ← liftResult (a.index_usize slot)
+            if val1 > i then pure (done (idx, val, none))
+              else do
+                let i1 ← liftResult (lift (Usize.wrapping_mul 32#usize val1))
+                let s2 ←
+                  liftResult
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                        { start := i1 })
+                let ce ← liftResult (core.slice.Slice.chunks_exact s2 8#usize)
+                let __x ←
+                  liftResult
+                      ((ops base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                        (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                          (ops base) D)
+                        ce ())
+                if __x.1 = true then pure (done (idx, val, none))
+                  else do
+                    let i2 ← liftResult (lift (Usize.wrapping_mul 32#usize val1))
+                    let s3 ←
+                      liftResult
+                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                            { «end» := i2 })
+                    let __x ← verify root idx val d s3
+                    if __x.1 = true then pure (done (__x.2.1, __x.2.2, some (core.result.Result.Ok ())))
+                      else pure (done (__x.2.1, __x.2.2, none))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let _ ←
+              liftResult
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (done (idx, val, none)))) =
+    if pos < n then do
+      let key ← (ops base).op9 keys pos
+      let key_position1 ← lift (pos.wrapping_add 1#usize)
+      let i ← lift (key.wrapping_shr 8#u32)
+      let index ← lift (UScalar.cast UScalarTy.U32 i)
+      let i1 ← lift (key &&& 255#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+      let i3 ← lift (lo.wrapping_add i2)
+      let q ← (ops base).op2 proof i3
+      let leaf ← (ops base).op6 D hash tree q
+      if d > 0#usize then do
+          let i4 ← lift (d.wrapping_sub 1#usize)
+          let b ← (ops base).op8 idx i4 index
+          if b = true then do
+              let i5 ← lift (d.wrapping_sub 1#usize)
+              let b1 ← (ops base).op7 val i5 leaf
+              if b1 = true then ok (cont (idx, val, d, key_position1))
+                else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+            else do
+              let idx1 ← Array.update idx d index
+              let val1 ← Array.update val d leaf
+              let d1 ← lift (d.wrapping_add 1#usize)
+              ok (cont (idx1, val1, d1, key_position1))
+        else do
+          let idx1 ← Array.update idx d index
+          let val1 ← Array.update val d leaf
+          let d1 ← lift (d.wrapping_add 1#usize)
+          ok (cont (idx1, val1, d1, key_position1))
+    else do
+      let s1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+            { «end» := d }
+      let o ← (ops base).op11 Port3_NativeBatchBody.multiproof.Arity.Two s1
+      let r ← (ops base).op1 o verifier.Error.Merkle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let nodes ← (ops base).op3 proof slot
+          let a ← (ops base).op12
+          let i ← a.index_usize slot
+          if val1 > i then ok (done (idx, val, none))
+            else do
+              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+              let (b, _) ←
+                (ops base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      (ops base) D)
+                    ce ()
+              if b = true then ok (done (idx, val, none))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    (ops base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                  if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                    else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))
+'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

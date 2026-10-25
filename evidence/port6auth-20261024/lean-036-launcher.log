@@ -1,0 +1,43 @@
+{"attempt": "lean-036", "exit_status": 0, "wall_seconds": 2.4273688929970376, "peak_rss_kib": "4447972", "swaps": "0", "print_axioms": ["'AspisR1.Port6AUTH_Accounting.first_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.budget' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.log_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.extractor_cost' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Challenge.frontier_independent' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port6AUTH_Challenge.both_batches' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port6AUTH_Compiler.maps_eq_builder' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.erased_index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.targets' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.read' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Native.authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.source_eval' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.recovered' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.hit_mass' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.prefix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Probability.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Probability.runtime_transport' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Query.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Recovery.batches' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Recovery.repeated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_SourceCut.first_pass_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_SourceCut.clean_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_SourceCut.budget' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_SourceCut.frame_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_WordStability.frame_replay' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_WordStability.words_stable' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port6AUTH_Accounting.first_reads : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver),
+  AspisR1.Port1_StoredCarrier.Physical rust →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)).1 =
+        FS.firstReads FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortRuntimeBindingC7.originalWith rust
+                (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)))).1
+'AspisR1.Port6
+...
+ H).1 a) →
+    (∀ (k : Fin 3),
+        AspisR1.BinRawByteCollisionTargets.pred (AspisR1.Port6AUTH_Frames.selectors k)
+            (AspisR1.Port6AUTH_Frames.frames D H (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.statement
+              (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.proof k) =
+          some (AspisR1.OraclePortBatchDraft.committedRoot p ↑k)) →
+      AspisR1.OraclePortFrozenOrderChecks.maps (AspisR1.Port6AUTH_SourceCut.first rust P H).1
+          (AspisR1.Port6AUTH_Frames.frames D H (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.statement
+            (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.proof)
+          p =
+        AspisR1.OraclePortStoredAdmissionC4.build D
+          (AspisR1.OraclePortStoredExperimentC4.view (AspisR1.Port6AUTH_SourceCut.first rust P H)) :=
+⋯
+theorem AspisR1.Port6AUTH_WordStability.words_stable : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (P : AspisR1.Port1_StoredCarrier.ByteProver)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (∀ (a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.RawCutProverCompiler.verifier D (fun x x_1 => false)
+                (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.statement
+                (AspisR1.Port6AUTH_SourceCut.first rust P H).2.1.proof)).1
+          a →
+        FS2.Duplex.Read (AspisR1.Port6AUTH_SourceCut.first rust P H).1 a) →
+    AspisR1.OraclePortStoredAdmissionC4.build D
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port6AUTH_Prefix.source D rust P)) =
+      AspisR1.OraclePortStoredAdmissionC4.build D
+        (AspisR1.OraclePortStoredExperimentC4.view (AspisR1.Port6AUTH_SourceCut.first rust P H)) :=
+⋯
+
+Running as unit: run-rb2bb0e3df06d4d7b82d20f1e6710cd4c.scope; invocation ID: 0be8e4ea141148e3a9747c4ab4bb11da

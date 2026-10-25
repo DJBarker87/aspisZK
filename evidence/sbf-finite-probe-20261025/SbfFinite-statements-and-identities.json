@@ -1,0 +1,1588 @@
+{
+  "9f50:SbfLinux_abi.py": {
+    "complete_changed_statements": {},
+    "renamed": {
+      "sha256": "772c8667fb74a1d3b59e1e5343a24ca43049b146ec46104184045a7c2acf84fa",
+      "size": 8090
+    },
+    "renames": [
+      [
+        "SbfLinux",
+        "SbfFiniteLinux"
+      ],
+      [
+        "SbfSeal",
+        "SbfFinite"
+      ]
+    ],
+    "source": {
+      "sha256": "86b035c515a4e2a82958ee55a00028411790353a7dfefe85c36a8e1b30811ddc",
+      "size": 8084
+    },
+    "target": {
+      "sha256": "d54b4a72a9463aadd447196c439749632685ec85aafc6252791a8b18c6d61e76",
+      "size": 8188
+    },
+    "unchanged": {
+      "LinuxABI.__init__": {
+        "sha256": "fa79a426afc7ff412d3a07cf4ca17bc5d81aba0c6e81abf150f4d51e106c3276",
+        "size": 566
+      },
+      "LinuxABI.attach": {
+        "sha256": "82272a5ca398a7e1be02da296ab6f8628b3cae5b6cf1469cdb3c34f86f7b0f34",
+        "size": 112
+      },
+      "LinuxABI.attr": {
+        "sha256": "584f04c9fbac0e0083150e2183e95b56ae118148a66559dc694fe4cdd7fb7aad",
+        "size": 261
+      },
+      "LinuxABI.call": {
+        "sha256": "ec91f8106932d5445046b84a4003a661572ceb82450c5ed55437512d12b5950b",
+        "size": 456
+      },
+      "LinuxABI.check_owned_signal": {
+        "sha256": "d55386ef5b1b404ab5759ed69b708dc243a9c1d08a70d35faab93cce5fabb1e2",
+        "size": 103
+      },
+      "LinuxABI.close_escape_fds": {
+        "sha256": "0a7c4361ece8feb6ba2c163a7c73836b2a762311bda624f3811afd4493149e24",
+        "size": 87
+      },
+      "LinuxABI.drop": {
+        "sha256": "97bd4112e1ba0b85e1b65c1474a6c1915cd883741a73163ec9e5578bd8cf8579",
+        "size": 980
+      },
+      "LinuxABI.filesystem": {
+        "sha256": "23b7b0d70e9dbbd7febf429bf3cb0a144166b84937d99f56505518b53b0d21a6",
+        "size": 769
+      },
+      "LinuxABI.guest_limits": {
+        "sha256": "3626a6f2a5daf429926db5ceb0d79ac1b06e03c742961126bedd40865ca5d596",
+        "size": 435
+      },
+      "LinuxABI.kill_owned": {
+        "sha256": "accc6cd3174522d9a4f8c8ea8e66913ff7ee65b1fa5f0e0eb248ace2283e4c92",
+        "size": 95
+      },
+      "LinuxABI.mount_id": {
+        "sha256": "84660c6a043a80b72de59892875bcff15ea6377742084c8f4003daedc69ad29b",
+        "size": 257
+      },
+      "LinuxABI.prctl": {
+        "sha256": "d14be3650369a9668b7269f63a2aeb85e27f0d50b33cf2daafaeb43e63f86730",
+        "size": 170
+      },
+      "LinuxABI.tree": {
+        "sha256": "198c18b2b36b4e44518ee9ec28d0dfebc7c7443b868f1b0ad396e3e5170a7692",
+        "size": 109
+      },
+      "LinuxABI.zero": {
+        "sha256": "ac4bc806d9b511408135e734812b03c964e7c604fe5825d464f3aa1a5d09a80b",
+        "size": 90
+      },
+      "layout_check": {
+        "sha256": "fdefa0286638100aea98ae5d636593797bc65715064385052dd4bfe5bb24f684",
+        "size": 421
+      },
+      "supported": {
+        "sha256": "1e700e9769a64da7ea4a2f539a855d2e3fa96304a63fd23c2de799f7db58165b",
+        "size": 277
+      }
+    }
+  },
+  "9f50:SbfLinux_backend.py": {
+    "complete_changed_statements": {
+      "capture_runtime": {
+        "after": "def capture_runtime(rootfd,manifest):\n    \"\"\"Read-only verification of installed exclusive copies; no recopy/adoption.\"\"\"\n    validate_runtime(manifest)\n    from SbfFinite_package import verify_tree\n    verify_tree(rootfd)",
+        "before": "def capture_runtime(rootfd,manifest):\n    \"\"\"Guest-only after private propagation; no inherited capture write fds.\n\n    Recheck fixed root ancestry, copy exact finite public manifest, seal and\n    close every capture descriptor. Retain only independently owned rootfd.\n    \"\"\"\n    validate_runtime(manifest)\n    anchor = open_safe_ancestry(ROOT)\n    try:\n        require(inode(os.fstat(anchor)) == inode(os.fstat(rootfd)), 'fixed capture root identity')\n    finally:\n        os.close(anchor)\n    capture = Capture(rootfd,0)\n    try:\n        for directory in ('tmp','proc','dev'):\n            capture.parent('/'+directory+'/.anchor')\n        for row in manifest['files']:\n            require(row['logical'].split('/')[1] not in ('tmp','proc','dev'),\n                    'reserved mount target')\n            fd = open_source(row['physical'])\n            try:\n                capture.copy(fd,row['logical'],{k:row[k] for k in ('sha256','size','mode')})\n            finally:\n                os.close(fd)\n        capture.seal()\n    finally:\n        capture.close()"
+      },
+      "fixed_backend_body": {
+        "after": "def fixed_backend_body():\n    # No full Producer approval premise. Concrete root continuation alone calls\n    # this after separate finite operational pins, fresh admission and lineage.\n    from SbfFinite_fixed import RUNTIME\n    manifest = RUNTIME\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    parent = os.getppid()\n    parentfd = abi.call('pidfd_open',I(parent),U(0))\n    own = root = outputs = nullfd = None\n    output = None\n    previous = {}\n    def terminate(*_):\n        raise Denied('helper parent/termination event; retain capture')\n    try:\n        require(parentfd >= 3, 'helper parent pidfd alias')\n        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):\n            previous[sig] = signal.getsignal(sig)\n            signal.signal(sig,terminate)\n        require(abi.prctl(1,15) == 0, 'helper parent-death arm')\n        require(os.getppid() == parent, 'helper parent changed during arm')\n        parent_alive(parentfd)\n        os.close(parentfd); parentfd = None\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        result = internal_backend(root,output,nullfd,abi,manifest=manifest)\n        from SbfFinite_package import journal\n        journal('root-result.json',dict(kind='finite observation ONLY',public=result))\n        return 0\n    finally:\n        if output is not None: output.close()\n        for fd in (parentfd,nullfd,outputs,root,own):\n            if fd is not None: os.close(fd)\n        for sig,handler in previous.items(): signal.signal(sig,handler)",
+        "before": "def fixed_backend_body():\n    \"\"\"Concrete future body, no input parameters or usable entrypoint.\n\n    Null runtime approval blocks before effects. A future approved manifest\n    alone does not enable CLI; the separate unconditional entry denial remains.\n    No current producer/admission continuation calls this internal body.\n    \"\"\"\n    require(type(RUNTIME_APPROVAL) is dict, 'complete pinned runtime missing')\n    manifest = RUNTIME_APPROVAL\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    own = root = outputs = nullfd = None\n    output = None\n    try:\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        return internal_backend(root,output,nullfd,abi,manifest=manifest)\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)"
+      },
+      "fresh_host_admission": {
+        "after": null,
+        "before": "def fresh_host_admission():\n    raise Denied('SOURCE ONLY: no current fresh producer authority')"
+      },
+      "guest": {
+        "after": "def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None,parentfd=None):\n    \"\"\"Child-only branch. Every exception exits, never host fallback exec.\"\"\"\n    try:\n        require(parentfd is not None, 'owned helper pidfd required')\n        require(abi.prctl(1,9) == 0, 'guest parent-death arm')\n        parent_alive(parentfd)\n        ns = child_namespaces(before,api)\n        private_propagation(abi,api)\n        capture_runtime(rootfd,manifest)\n        newroot, mount_ids = mount_guest(rootfd,abi,api)\n        try:\n            root_inode = inode(api.fstat(newroot))\n            stdio = stdio_install(output,nullfd,api)\n            api.fchdir(newroot)\n            api.chroot('.')  # fixed dot relative to NEW mount root, never path input\n            api.chdir('/')\n            require(abi.mount_id(newroot) == mount_ids['root'], 'chroot mount ID')\n            private_proc_check(ns,api)\n        finally:\n            api.close(newroot)\n        # Closes inherited parent readfds, pidfds, capture directory fds, host\n        # root, stdin source, stdout/stderr sources and arbitrary high/socket fds.\n        # Retain only the owned parent liveness handle through credential drop.\n        # dup2 is before close_range; old roots/readers/writers cannot survive.\n        api.dup2(parentfd,3,inheritable=False)\n        abi.zero('close_range',U(4),U(0xffffffff),U(0))\n        require(inventory(api) == [0,1,2,3], 'pending descriptor after root closure')\n        abi.guest_limits()  # never reduce NOFILE while high inherited fds live\n        abi.drop(last_cap)\n        # setresuid/setresgid may clear PDEATHSIG: rearm, then stable-handle\n        # check catches parent death in that gap before any guest exec.\n        require(abi.prctl(1,9) == 0, 'guest parent-death rearm')\n        parent_alive(3)\n        api.close(3)\n        dropped_check(ns,cgroup,root_inode,stdio,abi,api)\n        api.execve(FIXED_PROBE[0],FIXED_PROBE,dict(ENV))\n        raise Denied('exec unexpectedly returned')\n    except BaseException:\n        # No privileged diagnostic export of paths or exception data.\n        try:\n            abi.close_escape_fds()\n        finally:\n            api._exit(126)",
+        "before": "def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None):\n    \"\"\"Child-only branch. Every exception exits, never host fallback exec.\"\"\"\n    try:\n        ns = child_namespaces(before,api)\n        private_propagation(abi,api)\n        capture_runtime(rootfd,manifest)\n        newroot, mount_ids = mount_guest(rootfd,abi,api)\n        try:\n            root_inode = inode(api.fstat(newroot))\n            stdio = stdio_install(output,nullfd,api)\n            api.fchdir(newroot)\n            api.chroot('.')  # fixed dot relative to NEW mount root, never path input\n            api.chdir('/')\n            require(abi.mount_id(newroot) == mount_ids['root'], 'chroot mount ID')\n            private_proc_check(ns,api)\n        finally:\n            api.close(newroot)\n        # Closes inherited parent readfds, pidfds, capture directory fds, host\n        # root, stdin source, stdout/stderr sources and arbitrary high/socket fds.\n        abi.close_escape_fds()\n        stdio_check(stdio,api)\n        abi.guest_limits()  # never reduce NOFILE while high inherited fds live\n        abi.drop(last_cap)\n        dropped_check(ns,cgroup,root_inode,stdio,abi,api)\n        api.execve(FIXED_PROBE[0],FIXED_PROBE,dict(ENV))\n        raise Denied('exec unexpectedly returned')\n    except BaseException:\n        # No privileged diagnostic export of paths or exception data.\n        try:\n            abi.close_escape_fds()\n        finally:\n            api._exit(126)"
+      },
+      "internal_backend": {
+        "after": "def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time,manifest=None):\n    \"\"\"Future helper continuation, deliberately no CLI/admission connection.\n\n    Must run only once in a disposable independently scoped root helper. Parent\n    after unshare NEWPID remains host PIDns. CPython os.fork creates guest PID1,\n    then parent opens its pidfd while the direct child remains unreaped/gated.\n    No additional thread/reaper/monitor is created here.\n    \"\"\"\n    before,cgroup,last_cap = root_helper_preflight(api)\n    # Require normal SIGCHLD disposition, so unreaped child cannot disappear.\n    if api is os:\n        import signal\n        import threading\n        require(threading.current_thread() is threading.main_thread(), 'main thread only')\n        require(signal.getsignal(signal.SIGCHLD) == signal.SIG_DFL, 'external reaper')\n    selfpidfd = abi.call('pidfd_open',I(api.getpid()),U(0))\n    require(selfpidfd >= 3, 'helper pidfd alias')\n    try:\n        gate_r,gate_w = api.pipe2(0x80000)\n    except BaseException:\n        api.close(selfpidfd)\n        raise\n    try:\n        abi.zero('unshare',C.c_ulong(NEWNS | NEWNET | NEWPID))\n        pid = api.fork()\n    except BaseException:\n        api.close(gate_r);api.close(gate_w)\n        api.close(selfpidfd)\n        raise\n    if pid == 0:\n        try:\n            api.close(gate_w)\n            token = api.read(gate_r,2)\n            api.close(gate_r)\n            require(token == b'G', 'parent lifecycle gate closed')\n            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest,selfpidfd)\n        except BaseException:\n            try:\n                abi.close_escape_fds()\n            finally:\n                api._exit(126)\n        api._exit(126)\n    reaped = False\n    pidfd = None\n    try:\n        api.close(gate_r)\n        require(type(pid) is int and pid > 1, 'actual direct child host PID')\n        # No reaper or other thread: an unreaped direct child cannot have its\n        # PID reused, including if it exits before pidfd_open. It cannot exec\n        # before this parent releases the gate. CPython performs native hooks.\n        pidfd = abi.call('pidfd_open',I(pid),U(0))\n        require(pidfd >= 3, 'own pidfd must not alias stdio')\n        pidfd_identity(pidfd,pid,api)\n        abi.check_owned_signal(pidfd)\n        output.close_writers()\n        require(api.write(gate_w,b'G') == 1, 'parent lifecycle gate write')\n        api.close(gate_w)\n        gate_w = None\n        waited,result = owned_wait(pid,pidfd,abi,api,clock)\n        reaped = True\n        return output.collect(waited,pid,result)\n    except BaseException:\n        if not reaped:\n            # Before pidfd acquisition the child is still blocked on gate EOF,\n            # so failure closes the gate and reaps WITHOUT numeric-PID signalling.\n            if gate_w is not None:\n                api.close(gate_w)\n                gate_w = None\n            if pidfd is not None:\n                try:\n                    abi.kill_owned(pidfd)\n                except OSError as error:\n                    if error.errno != errno.ESRCH:\n                        raise\n            try:\n                while True:\n                    try:\n                        got,_ = api.waitpid(pid,0)\n                        require(got == pid, 'cleanup wait identity')\n                        break\n                    except InterruptedError:\n                        continue\n            except ChildProcessError:\n                # owned_wait already reaped a timeout child before denying.\n                pass\n        raise\n    finally:\n        if gate_w is not None:\n            api.close(gate_w)\n        if pidfd is not None:\n            api.close(pidfd)\n        api.close(selfpidfd)",
+        "before": "def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time,manifest=None):\n    \"\"\"Future helper continuation, deliberately no CLI/admission connection.\n\n    Must run only once in a disposable independently scoped root helper. Parent\n    after unshare NEWPID remains host PIDns. CPython os.fork creates guest PID1,\n    then parent opens its pidfd while the direct child remains unreaped/gated.\n    No additional thread/reaper/monitor is created here.\n    \"\"\"\n    before,cgroup,last_cap = root_helper_preflight(api)\n    # Require normal SIGCHLD disposition, so unreaped child cannot disappear.\n    if api is os:\n        import signal\n        import threading\n        require(threading.current_thread() is threading.main_thread(), 'main thread only')\n        require(signal.getsignal(signal.SIGCHLD) == signal.SIG_DFL, 'external reaper')\n    gate_r,gate_w = api.pipe2(0x80000)\n    try:\n        abi.zero('unshare',C.c_ulong(NEWNS | NEWNET | NEWPID))\n        pid = api.fork()\n    except BaseException:\n        api.close(gate_r);api.close(gate_w)\n        raise\n    if pid == 0:\n        try:\n            api.close(gate_w)\n            token = api.read(gate_r,2)\n            api.close(gate_r)\n            require(token == b'G', 'parent lifecycle gate closed')\n            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest)\n        except BaseException:\n            try:\n                abi.close_escape_fds()\n            finally:\n                api._exit(126)\n        api._exit(126)\n    reaped = False\n    pidfd = None\n    try:\n        api.close(gate_r)\n        require(type(pid) is int and pid > 1, 'actual direct child host PID')\n        # No reaper or other thread: an unreaped direct child cannot have its\n        # PID reused, including if it exits before pidfd_open. It cannot exec\n        # before this parent releases the gate. CPython performs native hooks.\n        pidfd = abi.call('pidfd_open',I(pid),U(0))\n        require(pidfd >= 3, 'own pidfd must not alias stdio')\n        pidfd_identity(pidfd,pid,api)\n        abi.check_owned_signal(pidfd)\n        output.close_writers()\n        require(api.write(gate_w,b'G') == 1, 'parent lifecycle gate write')\n        api.close(gate_w)\n        gate_w = None\n        waited,result = owned_wait(pid,pidfd,abi,api,clock)\n        reaped = True\n        return output.collect(waited,pid,result)\n    except BaseException:\n        if not reaped:\n            # Before pidfd acquisition the child is still blocked on gate EOF,\n            # so failure closes the gate and reaps WITHOUT numeric-PID signalling.\n            if gate_w is not None:\n                api.close(gate_w)\n                gate_w = None\n            if pidfd is not None:\n                try:\n                    abi.kill_owned(pidfd)\n                except OSError as error:\n                    if error.errno != errno.ESRCH:\n                        raise\n            try:\n                while True:\n                    try:\n                        got,_ = api.waitpid(pid,0)\n                        require(got == pid, 'cleanup wait identity')\n                        break\n                    except InterruptedError:\n                        continue\n            except ChildProcessError:\n                # owned_wait already reaped a timeout child before denying.\n                pass\n        raise\n    finally:\n        if gate_w is not None:\n            api.close(gate_w)\n        if pidfd is not None:\n            api.close(pidfd)"
+      },
+      "parent_alive": {
+        "after": "def parent_alive(fd):\n    poller = select.poll()\n    poller.register(fd, select.POLLIN | select.POLLHUP | select.POLLERR)\n    require(poller.poll(0) == [], 'owned parent exited/handle error')",
+        "before": null
+      },
+      "privileged_entrypoint": {
+        "after": null,
+        "before": "def privileged_entrypoint():\n    raise Denied('SOURCE ONLY: independent review, actual fresh producer continuation, '\n                 'finite approved runtime and separately allocated actual probe missing')"
+      },
+      "root_helper_preflight": {
+        "after": "def root_helper_preflight(api=os):\n    require(api.getresuid() == api.getresgid() == (0,0,0), 'root helper IDs')\n    s = status(api)\n    require(s['Threads'] == '1', 'root helper must be single threaded')\n    require(s['NoNewPrivs'] == '0' and s['Seccomp'] == '0', 'unexpected helper control state')\n    needed = sum(1<<n for n in (5,6,7,8,18,21))\n    require(int(s['CapEff'],16) & needed == needed, 'helper setup/cancellation capabilities')\n    last = read_small('/proc/sys/kernel/cap_last_cap',api,16)\n    require(last == b'40\\n', 'pinned capability ABI')\n    cg = read_small('/proc/self/cgroup',api,4096)\n    require(cg.startswith(b'0::/') and cg.count(b'\\n') == 1, 'unified cgroup')\n    # Concrete finite continuation separately rechecks current role lineage,\n    # package pins and full resource admission; this preflight is not authority.\n    return namespaces(api), cg, 40",
+        "before": "def root_helper_preflight(api=os):\n    require(api.getresuid() == api.getresgid() == (0,0,0), 'root helper IDs')\n    s = status(api)\n    require(s['Threads'] == '1', 'root helper must be single threaded')\n    require(s['NoNewPrivs'] == '0' and s['Seccomp'] == '0', 'unexpected helper control state')\n    needed = sum(1<<n for n in (5,6,7,8,18,21))\n    require(int(s['CapEff'],16) & needed == needed, 'helper setup/cancellation capabilities')\n    last = read_small('/proc/sys/kernel/cap_last_cap',api,16)\n    require(last == b'40\\n', 'pinned capability ABI')\n    cg = read_small('/proc/self/cgroup',api,4096)\n    require(cg.startswith(b'0::/') and cg.count(b'\\n') == 1, 'unified cgroup')\n    # Fresh actual collector/monitor ancestry, executable and control validation\n    # belongs to missing external producer assembly; this is not authorization.\n    return namespaces(api), cg, 40"
+      },
+      "validate_runtime": {
+        "after": "def validate_runtime(manifest):\n    from SbfFinite_validate import validate\n    return validate({'schema':'SbfFinite-runtime-v1','runtime':manifest})",
+        "before": "def validate_runtime(manifest):\n    require(type(manifest) is dict and manifest.get('version') == 'SbfFiniteLinux-tiny-v1'\n            and manifest.get('argv') == list(FIXED_PROBE), 'fixed Linux manifest')\n    reused_shape = dict(manifest,version='SbfFinite-tiny-v1',argv=list(PROBE))\n    validate_manifest(reused_shape)"
+      }
+    },
+    "renamed": {
+      "sha256": "2f2fcfce85413d498787c7bf060865fb686b46bc5e50b7fadb680db2d501e7fe",
+      "size": 22349
+    },
+    "renames": [
+      [
+        "SbfLinux",
+        "SbfFiniteLinux"
+      ],
+      [
+        "SbfSeal",
+        "SbfFinite"
+      ]
+    ],
+    "source": {
+      "sha256": "7086004797870bb69e18b355110f232d7b8ea57c7f22b451a4e2e73bdcc48eda",
+      "size": 22321
+    },
+    "target": {
+      "sha256": "4746c1140158c76c2b5351c1e59126ff2ddeeb9402088be65b1d925b0853018c",
+      "size": 21315
+    },
+    "unchanged": {
+      "child_namespaces": {
+        "sha256": "9713933b71892bcc988b34d2258c3f69b22cb0a519bb7426e8d1d4024e50c530",
+        "size": 359
+      },
+      "dropped_check": {
+        "sha256": "5a255709382099a7473c45ee502f85d72030a24b001a8caaa72135051da414bc",
+        "size": 734
+      },
+      "fixed_null": {
+        "sha256": "63e0d7484d2b20d3cfc2d34a3977e994468f134e396e662934f833d2120e2c56",
+        "size": 654
+      },
+      "inventory": {
+        "sha256": "3f7a11dc642aaf7d05d55244e65b4b02bf13404696a378df304e7c938eea5d6d",
+        "size": 450
+      },
+      "mount_guest": {
+        "sha256": "ccc883b0f9566ca97df8a5811a667dd8cb2d43d2bc8b66446328bdad81a09147",
+        "size": 2637
+      },
+      "mount_table": {
+        "sha256": "f6e6c69a3f5d41a78daefb72e1454f1d5a8d3e500a823a3dc3db2ebdf9be100c",
+        "size": 789
+      },
+      "namespaces": {
+        "sha256": "69c8e48d64b3e3e45c226d76d8a4854300b5c54062d7cdaf079288d7b7032019",
+        "size": 441
+      },
+      "owned_wait": {
+        "sha256": "97a04d0d9755e32661523303185bba37042680df85989059f1c70e604345ae27",
+        "size": 1055
+      },
+      "pidfd_identity": {
+        "sha256": "ba8c19a0df00a173c2a0b2775e83a6841232e643efe6ed3da37a5bc2215c7a0a",
+        "size": 411
+      },
+      "private_proc_check": {
+        "sha256": "391edaa14494bd729dc8ff6e5a6239123b59ad5814cf25932ab78d2cdd615b8e",
+        "size": 582
+      },
+      "private_propagation": {
+        "sha256": "9783a827bfe33a870e3693a1860bf37e4868aa5d1d0f2e43f21114edf3374979",
+        "size": 263
+      },
+      "read_small": {
+        "sha256": "82b9eacfb8c38aeb1b0a339c6a0466f2cddfd671a6727bb2deac5a20d24627c7",
+        "size": 455
+      },
+      "status": {
+        "sha256": "f9bc5cf3c6129fec8c88cab26fd5c8d4f59f668beae7675735fa04ddf0e97dcb",
+        "size": 316
+      },
+      "stdio_check": {
+        "sha256": "14480f3bb30347347f4ea0cff9bd5ce78b80c88d32a52a5e65ac509d51ef886c",
+        "size": 847
+      },
+      "stdio_install": {
+        "sha256": "d0732e1dac1fe79909881160e720676844ffcb7d36250e328eab4c2070477952",
+        "size": 521
+      },
+      "subdirectory": {
+        "sha256": "dc22f2af766a7e90c04a9308931fa65584935a9e9c0be47fa7838ef868aeef49",
+        "size": 452
+      },
+      "verify_mount": {
+        "sha256": "0c84dd26b2430899272ac60ecb6157cc95a5a9c59f7d85a3e0939158298efe36",
+        "size": 284
+      }
+    }
+  },
+  "9f50:SbfLinux_capture.py": {
+    "complete_changed_statements": {
+      "Capture.__init__": {
+        "after": null,
+        "before": "def __init__(self, rootfd, owner):\n        check_dir(rootfd, owner)\n        self.rootfd = os.dup(rootfd)\n        os.set_inheritable(self.rootfd, False)\n        self.owner = owner\n        self.dirs = {'/': self.rootfd}\n        self.files = {}\n        self.sealed = False"
+      },
+      "Capture.close": {
+        "after": null,
+        "before": "def close(self):\n        for row in self.files.values():\n            if row['fd'] is not None:\n                os.close(row['fd'])\n                row['fd'] = None\n        for fd in self.dirs.values():\n            os.close(fd)\n        self.dirs.clear()"
+      },
+      "Capture.copy": {
+        "after": null,
+        "before": "def copy(self, srcfd, logical, expected):\n        require(not self.sealed, 'capture sealed')\n        require(logical not in self.files, 'duplicate destination')\n        require(set(expected) == {'sha256','size','mode'}, 'exact file pin fields')\n        require(type(expected['size']) is int and 0 <= expected['size'] <= MAX_FILE, 'file bound')\n        require(expected['mode'] in (0o444, 0o555), 'sealed public modes only')\n        a = os.fstat(srcfd)\n        require(stat.S_ISREG(a.st_mode) and a.st_nlink == 1 and a.st_size == expected['size'],\n                'regular single-link bounded source')\n        parent, name = self.parent(logical)\n        dst = os.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW |\n                      os.O_CLOEXEC, 0o600, dir_fd=parent)\n        try:\n            require(inode(a) != inode(os.fstat(dst)), 'source aliases destination')\n            os.lseek(srcfd, 0, os.SEEK_SET)\n            h, total = hashlib.sha256(), 0\n            while True:\n                chunk = os.read(srcfd, min(65536, expected['size']-total+1))\n                if not chunk:\n                    break\n                total += len(chunk)\n                require(total <= expected['size'], 'source grew')\n                h.update(chunk)\n                offset = 0\n                while offset < len(chunk):\n                    n = os.write(dst, chunk[offset:])\n                    require(n > 0, 'short write')\n                    offset += n\n            require(identity(a) == identity(os.fstat(srcfd)), 'source changed during copy')\n            require(total == expected['size'] and h.hexdigest() == expected['sha256'], 'source digest')\n            # No live source or destination name used for chmod/chown/hash.\n            os.fchmod(dst, expected['mode'])\n            s = os.fstat(dst)\n            require(s.st_uid == self.owner and s.st_nlink == 1, 'destination owner/link')\n            check_entry(parent, name, dst)\n            require(hash_fd(dst, expected['size']) == expected['sha256'], 'destination digest')\n            self.files[logical] = dict(pin=dict(expected), identity=identity(s), fd=dst)\n            dst = None\n        finally:\n            if dst is not None:\n                os.close(dst)"
+      },
+      "Capture.parent": {
+        "after": null,
+        "before": "def parent(self, logical):\n        parts = canonical(logical)\n        fd, prefix = self.rootfd, ''\n        for name in parts[:-1]:\n            check_dir(fd, self.owner)\n            prefix += '/'+name\n            if prefix not in self.dirs:\n                self.dirs[prefix] = exclusive_dir(fd, name, self.owner)\n            else:\n                check_entry(fd, name, self.dirs[prefix])\n            fd = self.dirs[prefix]\n        return fd, parts[-1]"
+      },
+      "Capture.seal": {
+        "after": null,
+        "before": "def seal(self):\n        require(not self.sealed, 'already sealed')\n        for logical, row in self.files.items():\n            parent, name = self.parent(logical)\n            check_entry(parent, name, row['fd'])\n            require(identity(os.fstat(row['fd'])) == row['identity'], 'destination drift')\n            require(hash_fd(row['fd'], row['pin']['size']) == row['pin']['sha256'], 'sealed bytes')\n        for fd in self.dirs.values():\n            check_dir(fd, self.owner)\n            os.fchmod(fd, 0o555)\n        self.sealed = True\n        # Write-capable destination handles MUST close before any future fork.\n        for row in self.files.values():\n            os.close(row['fd'])\n            row['fd'] = None"
+      },
+      "PublicOutput.collect": {
+        "after": "def collect(self, waited_pid, expected_pid, wait_status):\n        # These arguments must originate from actual waitpid, not caller claims;\n        # this object alone is not an authorization or live parent implementation.\n        require(type(expected_pid) is int and expected_pid > 1 and waited_pid == expected_pid,\n                'wrong wait identity')\n        require(os.WIFEXITED(wait_status) and os.WEXITSTATUS(wait_status) == 0, 'child failed')\n        require(all(r['w'] is None for r in self.rows.values()), 'parent writer still open')\n        result = {}\n        for name, row in self.rows.items():\n            self.verify(name)\n            before = identity(os.fstat(row['r']))\n            os.lseek(row['r'], 0, os.SEEK_SET)\n            raw = os.read(row['r'], OUTPUT_BOUND+1)\n            require(len(raw) <= OUTPUT_BOUND, 'output overflow')\n            require(before == identity(os.fstat(row['r'])), 'output changed while collecting')\n            result[name] = raw\n        require(result['stderr'] == b'', 'probe stderr')\n        expected = (json.dumps({'SbfSeal':'tiny-public-v1', 'uid':1000,\n                               'gid':1000, 'fds':[0,1,2]}, sort_keys=True)+'\\n').encode()\n        require(result['stdout'] == expected, 'nonpublic/unexpected output')\n        return {'stdout': result['stdout'].decode('ascii'), 'stderr': ''}",
+        "before": "def collect(self, waited_pid, expected_pid, wait_status):\n        # These arguments must originate from actual waitpid, not caller claims;\n        # this object alone is not an authorization or live parent implementation.\n        require(type(expected_pid) is int and expected_pid > 1 and waited_pid == expected_pid,\n                'wrong wait identity')\n        require(os.WIFEXITED(wait_status) and os.WEXITSTATUS(wait_status) == 0, 'child failed')\n        require(all(r['w'] is None for r in self.rows.values()), 'parent writer still open')\n        result = {}\n        for name, row in self.rows.items():\n            self.verify(name)\n            before = identity(os.fstat(row['r']))\n            os.lseek(row['r'], 0, os.SEEK_SET)\n            raw = os.read(row['r'], OUTPUT_BOUND+1)\n            require(len(raw) <= OUTPUT_BOUND, 'output overflow')\n            require(before == identity(os.fstat(row['r'])), 'output changed while collecting')\n            result[name] = raw\n        require(result['stderr'] == b'', 'probe stderr')\n        expected = (json.dumps({'SbfFinite':'tiny-public-v1', 'uid':1000,\n                               'gid':1000, 'fds':[0,1,2]}, sort_keys=True)+'\\n').encode()\n        require(result['stdout'] == expected, 'nonpublic/unexpected output')\n        return {'stdout': result['stdout'].decode('ascii'), 'stderr': ''}"
+      },
+      "PublicOutput.wait_and_collect": {
+        "after": null,
+        "before": "def wait_and_collect(self, child_pid):\n        \"\"\"Future own direct-child wait only; no pid kill, root read or shell.\n\n        Caller must retain the host PID returned by its fixed probe fork. A\n        timeout never exports output and never signals a possibly reused PID.\n        Separate reviewed lifecycle/pidfd handling required before enabling.\n        \"\"\"\n        require(type(child_pid) is int and child_pid > 1, 'own child PID')\n        self.close_writers()\n        deadline = time.monotonic()+5\n        while time.monotonic() < deadline:\n            waited, status = os.waitpid(child_pid, os.WNOHANG)\n            if waited:\n                return self.collect(waited, child_pid, status)\n            time.sleep(0.01)\n        raise Denied('own child wait deadline; retain files, no export or unsafe cancellation')"
+      },
+      "check_dir": {
+        "after": "def check_dir(fd, owner):\n    s = os.fstat(fd)\n    require(stat.S_ISDIR(s.st_mode) and s.st_uid == s.st_gid == owner, 'directory owner/type')\n    require(not s.st_mode & 0o022, 'writable ancestry')\n    return s",
+        "before": "def check_dir(fd, owner):\n    s = os.fstat(fd)\n    require(stat.S_ISDIR(s.st_mode) and s.st_uid == owner, 'directory owner/type')\n    require(not s.st_mode & 0o022, 'writable ancestry')\n    return s"
+      },
+      "create_fixed_layout": {
+        "after": "def create_fixed_layout():\n    \"\"\"Open installed fixed root; outputs exclusively created by PublicOutput.\n\n    Installer already made own/rootfs/public-output; exact setup tree is verified\n    separately. No existing arbitrary tree is adopted. One shot stdout/stderr.\n    \"\"\"\n    require(os.getresuid() == os.getresgid() == (0,0,0), 'root IDs')\n    own = root = outputs = None\n    try:\n        own = open_safe_ancestry(OWN)\n        root = open_safe_ancestry(ROOT)\n        outputs = open_safe_ancestry(OWN+'/public-output')\n        require(not os.listdir(outputs), 'fresh output directory')\n        return own,root,outputs\n    except BaseException:\n        for fd in (outputs,root,own):\n            if fd is not None: os.close(fd)\n        raise",
+        "before": "def create_fixed_layout():\n    \"\"\"Unexecuted concrete replacement for old create_root; fixed safe ancestry.\n\n    No user-stage OWNER file, parent symlink check or pathname reopen. Retain all\n    fds through later seal/mount review. No removal on failure, no existing entry\n    reuse. No source writes occur until root-owned ancestry validation completes.\n    \"\"\"\n    require(os.getuid() == os.geteuid() == 0, 'root-only proposed layout')\n    parent = open_safe_ancestry('/var/lib')\n    own = root = outputs = None\n    try:\n        own = exclusive_dir(parent, 'SbfFinite-20261025-v1', 0)\n        root = exclusive_dir(own, 'rootfs', 0)\n        outputs = exclusive_dir(own, 'public-output', 0)\n        return own, root, outputs\n    except BaseException:\n        for fd in (own, root, outputs):\n            if fd is not None:\n                os.close(fd)\n        raise\n    finally:\n        os.close(parent)"
+      },
+      "hash_fd": {
+        "after": null,
+        "before": "def hash_fd(fd, size):\n    os.lseek(fd, 0, os.SEEK_SET)\n    h, total = hashlib.sha256(), 0\n    while True:\n        chunk = os.read(fd, min(65536, size-total+1))\n        if not chunk:\n            break\n        total += len(chunk)\n        require(total <= size, 'hash overflow')\n        h.update(chunk)\n    require(total == size, 'hash short read')\n    return h.hexdigest()"
+      },
+      "open_source": {
+        "after": null,
+        "before": "def open_source(path):\n    \"\"\"Untrusted public source: nofollow components; hash pins bytes separately.\n\n    Caller cannot use this as a privileged arbitrary read/export API. Only exact\n    manifest entries would be opened by a reviewed future root route.\n    \"\"\"\n    parts = canonical(path)\n    directory = os.open('/', DIR_FLAGS)\n    try:\n        for name in parts[:-1]:\n            child = os.open(name, DIR_FLAGS, dir_fd=directory)\n            os.close(directory)\n            directory = child\n        fd = os.open(parts[-1], FILE_FLAGS, dir_fd=directory)\n        try:\n            s = os.fstat(fd)\n            require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'source type/hardlink')\n            return fd\n        except BaseException:\n            os.close(fd)\n            raise\n    finally:\n        os.close(directory)"
+      },
+      "privileged_entrypoint": {
+        "after": null,
+        "before": "def privileged_entrypoint():\n    # No caller arguments and no operations before denial. Separate reviewed\n    # source/producer/allocation required; allowlist manipulation is insufficient.\n    raise Denied('SOURCE ONLY: no current producer route, runtime closure or Linux ABI approval')"
+      },
+      "validate_manifest": {
+        "after": "def validate_manifest(m):\n    from SbfFinite_validate import validate\n    return validate({'schema':'SbfFinite-runtime-v1','runtime':m})",
+        "before": "def validate_manifest(m):\n    require(type(m) is dict and set(m) == {'version','root','uid','gid','argv','env','files'},\n            'exact manifest schema')\n    require(m['version'] == 'SbfFinite-tiny-v1' and m['root'] == ROOT, 'fixed version/root')\n    require(type(m['uid']) is int and type(m['gid']) is int and m['uid'] == m['gid'] == UID,\n            'fixed UID/GID')\n    require(m['argv'] == list(PROBE) and m['env'] == ENV, 'fixed probe argv/env')\n    require(type(m['files']) is list and 0 < len(m['files']) <= 256, 'finite runtime list')\n    seen, total = set(), 0\n    for row in m['files']:\n        require(type(row) is dict and set(row) == {'logical','physical','sha256','size','mode'},\n                'exact regular mapping')\n        canonical(row['physical']); canonical(row['logical'])\n        require(row['logical'] not in seen, 'duplicate mapping')\n        seen.add(row['logical'])\n        require(type(row['size']) is int and 0 <= row['size'] <= MAX_FILE, 'file size')\n        require(row['mode'] in (0o444,0o555), 'file mode')\n        require(type(row['sha256']) is str and len(row['sha256']) == 64 and\n                all(c in '0123456789abcdef' for c in row['sha256']), 'digest')\n        total += row['size']\n    require(total <= MAX_TOTAL and '/usr/bin/python3' in seen, 'runtime bound/interpreter')\n    return digest((json.dumps(m,sort_keys=True,separators=(',',':'))+'\\n').encode())"
+      }
+    },
+    "renamed": {
+      "sha256": "e3dc385c499ec23d84b75c2e6f79691526ac3582a71d4451543443f4a88f1553",
+      "size": 17818
+    },
+    "renames": [
+      [
+        "SbfLinux",
+        "SbfFiniteLinux"
+      ],
+      [
+        "SbfSeal",
+        "SbfFinite"
+      ]
+    ],
+    "source": {
+      "sha256": "5b4f0f65abd1f3e7548a1c93bb8a8b027dd2b7346588f6f06b203cd2a2e19664",
+      "size": 17802
+    },
+    "target": {
+      "sha256": "985d96c3ca35d4c7fa7a142fe8a7f6720784d473d1cb31a96f4ef3838d827b86",
+      "size": 8545
+    },
+    "unchanged": {
+      "PublicOutput.__init__": {
+        "sha256": "e3742553545aa3c5ee5afb556a4413af84b3592e2776d9197aa1b1875578d7d2",
+        "size": 762
+      },
+      "PublicOutput.close": {
+        "sha256": "d3a1131b35944cace756d11fe64b44ae032453ed57d7e9e3abb42032d7a4ceaa",
+        "size": 298
+      },
+      "PublicOutput.close_writers": {
+        "sha256": "253c20adb2dcd6591ab64000c8bf5624fb45e77a5262125739b9060fccc1e993",
+        "size": 167
+      },
+      "PublicOutput.verify": {
+        "sha256": "a5add92d05730b62227b2d23a5041fce60551bb234edc75dc0bcbeb12b378124",
+        "size": 389
+      },
+      "canonical": {
+        "sha256": "942a17d31b2e248aef969305e42e47fd10935662a3c594742b9ccfa27fdf61a5",
+        "size": 377
+      },
+      "check_entry": {
+        "sha256": "865e8ae46b0a811818af864a49f175a51cba130871639bec03c2c7afe50644c3",
+        "size": 325
+      },
+      "component": {
+        "sha256": "63df36ab19c2560fbaea3ad6fd5054d45e046ef11769e3bece5b2b0ff4f2c80c",
+        "size": 121
+      },
+      "digest": {
+        "sha256": "62b6ce21032a7c7b2d1f16df8e5872568c0314cacc403bb2b6cdef45399e21ec",
+        "size": 87
+      },
+      "exclusive_dir": {
+        "sha256": "31857215d87dc2da7096dac15c386e9951cca9f82e918a2bd6cdd375e291f326",
+        "size": 659
+      },
+      "identity": {
+        "sha256": "e74168cd08f1ccb845284f0246c319d01ebb24f331a986cf854198389cb1e0fe",
+        "size": 144
+      },
+      "inode": {
+        "sha256": "9ac1ff5ded0d744a6c73813ddfe823fddc6cf3a818febf593abe2c199184f11f",
+        "size": 45
+      },
+      "open_safe_ancestry": {
+        "sha256": "d0ccd1179065cee8c7e33d365110a4b73a3611d3be8e766f745a82a26dc47f16",
+        "size": 771
+      },
+      "require": {
+        "sha256": "309f4477ba691bc168c24ea594fdaebf45f375f4e7cf932d7d8d5d6d2de76a16",
+        "size": 82
+      }
+    }
+  },
+  "SbfFiniteLinux_abi.py": {
+    "after": {
+      "sha256": "d54b4a72a9463aadd447196c439749632685ec85aafc6252791a8b18c6d61e76",
+      "size": 8188
+    },
+    "before": {
+      "sha256": "772c8667fb74a1d3b59e1e5343a24ca43049b146ec46104184045a7c2acf84fa",
+      "size": 8090
+    },
+    "complete_changed_statements": {},
+    "unchanged": {
+      "LinuxABI.__init__": {
+        "ast_pin": {
+          "sha256": "a633eebca1dee4531ed687341656f2ce37cb21c66003e3526f93ddf3ceb69b95",
+          "size": 2837
+        },
+        "byte_pin": {
+          "sha256": "fa79a426afc7ff412d3a07cf4ca17bc5d81aba0c6e81abf150f4d51e106c3276",
+          "size": 566
+        }
+      },
+      "LinuxABI.attach": {
+        "ast_pin": {
+          "sha256": "7b85b0f0a050098e603b5b13444d52e3bdc5b7e5228dd3773f52a54d067e4e01",
+          "size": 683
+        },
+        "byte_pin": {
+          "sha256": "82272a5ca398a7e1be02da296ab6f8628b3cae5b6cf1469cdb3c34f86f7b0f34",
+          "size": 112
+        }
+      },
+      "LinuxABI.attr": {
+        "ast_pin": {
+          "sha256": "1979578d48a66b88918ec9d89cf83be83f313b1b8434483c7158a60e62d49bfa",
+          "size": 1399
+        },
+        "byte_pin": {
+          "sha256": "584f04c9fbac0e0083150e2183e95b56ae118148a66559dc694fe4cdd7fb7aad",
+          "size": 261
+        }
+      },
+      "LinuxABI.call": {
+        "ast_pin": {
+          "sha256": "1f17ad29c535a174af7c9c4e799732c27d2345d7489a638e7736de0c2e1b5018",
+          "size": 2361
+        },
+        "byte_pin": {
+          "sha256": "ec91f8106932d5445046b84a4003a661572ceb82450c5ed55437512d12b5950b",
+          "size": 456
+        }
+      },
+      "LinuxABI.check_owned_signal": {
+        "ast_pin": {
+          "sha256": "b72e70c3f626a487b5e07f034c5e343b054073560cba58f06289b4784c187cd9",
+          "size": 642
+        },
+        "byte_pin": {
+          "sha256": "d55386ef5b1b404ab5759ed69b708dc243a9c1d08a70d35faab93cce5fabb1e2",
+          "size": 103
+        }
+      },
+      "LinuxABI.close_escape_fds": {
+        "ast_pin": {
+          "sha256": "b39243f42a61514e84e4531d3361825a0c694e129261fef5d736e8d3e18c2046",
+          "size": 592
+        },
+        "byte_pin": {
+          "sha256": "0a7c4361ece8feb6ba2c163a7c73836b2a762311bda624f3811afd4493149e24",
+          "size": 87
+        }
+      },
+      "LinuxABI.drop": {
+        "ast_pin": {
+          "sha256": "61dfca0bb8e17c473c0c60443ba36c088b322b03454b24d9015689702caa966b",
+          "size": 5232
+        },
+        "byte_pin": {
+          "sha256": "97bd4112e1ba0b85e1b65c1474a6c1915cd883741a73163ec9e5578bd8cf8579",
+          "size": 980
+        }
+      },
+      "LinuxABI.filesystem": {
+        "ast_pin": {
+          "sha256": "7cc2dd9759ad997e5421c67c6b852dac0166ec1deeba45ac5f128966d62f9f3e",
+          "size": 3653
+        },
+        "byte_pin": {
+          "sha256": "23b7b0d70e9dbbd7febf429bf3cb0a144166b84937d99f56505518b53b0d21a6",
+          "size": 769
+        }
+      },
+      "LinuxABI.guest_limits": {
+        "ast_pin": {
+          "sha256": "c874415141078929a17307160f483f7b18e3d7eebef1a9523f439df6fb307106",
+          "size": 1939
+        },
+        "byte_pin": {
+          "sha256": "3626a6f2a5daf429926db5ceb0d79ac1b06e03c742961126bedd40865ca5d596",
+          "size": 435
+        }
+      },
+      "LinuxABI.kill_owned": {
+        "ast_pin": {
+          "sha256": "3422bb7d5f8cb05dd533a979f9cd543d849cec3ed86a5bc46da218c631c48c78",
+          "size": 634
+        },
+        "byte_pin": {
+          "sha256": "accc6cd3174522d9a4f8c8ea8e66913ff7ee65b1fa5f0e0eb248ace2283e4c92",
+          "size": 95
+        }
+      },
+      "LinuxABI.mount_id": {
+        "ast_pin": {
+          "sha256": "d1f1b13a06788013d83b654a0197cac5b3626b312d916c1f29610150893a1344",
+          "size": 1474
+        },
+        "byte_pin": {
+          "sha256": "84660c6a043a80b72de59892875bcff15ea6377742084c8f4003daedc69ad29b",
+          "size": 257
+        }
+      },
+      "LinuxABI.prctl": {
+        "ast_pin": {
+          "sha256": "0c67a8d5357aac52adbb248d05bc61ec6c35a11067edf53e3bfe019c3072a591",
+          "size": 1019
+        },
+        "byte_pin": {
+          "sha256": "d14be3650369a9668b7269f63a2aeb85e27f0d50b33cf2daafaeb43e63f86730",
+          "size": 170
+        }
+      },
+      "LinuxABI.tree": {
+        "ast_pin": {
+          "sha256": "33a193fecac1b259b0531d1f034e4ff83162061b97f7975cae425dde100a9302",
+          "size": 764
+        },
+        "byte_pin": {
+          "sha256": "198c18b2b36b4e44518ee9ec28d0dfebc7c7443b868f1b0ad396e3e5170a7692",
+          "size": 109
+        }
+      },
+      "LinuxABI.zero": {
+        "ast_pin": {
+          "sha256": "90fd983f987ed89127ab4e6ab2167ff173959ded2e88d4e52f505adbdfe697b2",
+          "size": 645
+        },
+        "byte_pin": {
+          "sha256": "ac4bc806d9b511408135e734812b03c964e7c604fe5825d464f3aa1a5d09a80b",
+          "size": 90
+        }
+      },
+      "layout_check": {
+        "ast_pin": {
+          "sha256": "4b39e2320ac194fcba0bb6fb544e5d0b5bd3836374b7fb6ae646f69d1bb4ebae",
+          "size": 2316
+        },
+        "byte_pin": {
+          "sha256": "fdefa0286638100aea98ae5d636593797bc65715064385052dd4bfe5bb24f684",
+          "size": 421
+        }
+      },
+      "supported": {
+        "ast_pin": {
+          "sha256": "381a5852d5486740bc0ee7298904def34e38918bd745e4d6c50f6fdfae89dda4",
+          "size": 1165
+        },
+        "byte_pin": {
+          "sha256": "1e700e9769a64da7ea4a2f539a855d2e3fa96304a63fd23c2de799f7db58165b",
+          "size": 277
+        }
+      }
+    }
+  },
+  "SbfFiniteLinux_backend.py": {
+    "after": {
+      "sha256": "a5f4e62cdb8700431315b8d2a2de9bf5d764542def1b6fd37c245e714e2b98a7",
+      "size": 249
+    },
+    "before": {
+      "sha256": "2f2fcfce85413d498787c7bf060865fb686b46bc5e50b7fadb680db2d501e7fe",
+      "size": 22349
+    },
+    "complete_changed_statements": {
+      "capture_runtime": {
+        "after": null,
+        "before": "def capture_runtime(rootfd,manifest):\n    \"\"\"Guest-only after private propagation; no inherited capture write fds.\n\n    Recheck fixed root ancestry, copy exact finite public manifest, seal and\n    close every capture descriptor. Retain only independently owned rootfd.\n    \"\"\"\n    validate_runtime(manifest)\n    anchor = open_safe_ancestry(ROOT)\n    try:\n        require(inode(os.fstat(anchor)) == inode(os.fstat(rootfd)), 'fixed capture root identity')\n    finally:\n        os.close(anchor)\n    capture = Capture(rootfd,0)\n    try:\n        for directory in ('tmp','proc','dev'):\n            capture.parent('/'+directory+'/.anchor')\n        for row in manifest['files']:\n            require(row['logical'].split('/')[1] not in ('tmp','proc','dev'),\n                    'reserved mount target')\n            fd = open_source(row['physical'])\n            try:\n                capture.copy(fd,row['logical'],{k:row[k] for k in ('sha256','size','mode')})\n            finally:\n                os.close(fd)\n        capture.seal()\n    finally:\n        capture.close()"
+      },
+      "child_namespaces": {
+        "after": null,
+        "before": "def child_namespaces(before, api=os):\n    require(api.getpid() == 1, 'guest must be PID1')\n    current = namespaces(api)\n    require(all(current[n] != before[n] for n in ('mnt','net','pid')) and\n            current['user'] == before['user'], 'actual namespace transition')\n    require(status(api)['Threads'] == '1', 'single threaded guest')\n    return current"
+      },
+      "dropped_check": {
+        "after": null,
+        "before": "def dropped_check(expected_ns,cgroup,root_inode,stdio,abi,api=os):\n    require(api.getresuid() == api.getresgid() == (1000,1000,1000) and\n            api.getgroups() == [], 'all saved IDs/groups')\n    s = status(api)\n    require(all(int(s[k],16) == 0 for k in\n                ('CapInh','CapPrm','CapEff','CapBnd','CapAmb')) and\n            s['NoNewPrivs'] == '1' and s['Threads'] == '1', 'drop control verification')\n    require(abi.prctl(39) == 1, 'NNP actual query')\n    require(read_small('/proc/self/cgroup',api,4096) == cgroup, 'cgroup drift')\n    require(inode(api.stat('/')) == root_inode and\n            inode(api.stat('.')) == root_inode, 'chroot/cwd inode')\n    private_proc_check(expected_ns,api)\n    stdio_check(stdio,api)"
+      },
+      "fixed_backend_body": {
+        "after": null,
+        "before": "def fixed_backend_body():\n    \"\"\"Concrete future body, no input parameters or usable entrypoint.\n\n    Null runtime approval blocks before effects. A future approved manifest\n    alone does not enable CLI; the separate unconditional entry denial remains.\n    No current producer/admission continuation calls this internal body.\n    \"\"\"\n    require(type(RUNTIME_APPROVAL) is dict, 'complete pinned runtime missing')\n    manifest = RUNTIME_APPROVAL\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    own = root = outputs = nullfd = None\n    output = None\n    try:\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        return internal_backend(root,output,nullfd,abi,manifest=manifest)\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)"
+      },
+      "fixed_null": {
+        "after": null,
+        "before": "def fixed_null(api=os):\n    parent = open_safe_ancestry('/dev') if api is os else api.safe_dev()\n    try:\n        fd = api.open('null', FILE_FLAGS, dir_fd=parent)\n        try:\n            s = api.fstat(fd)\n            require(stat.S_ISCHR(s.st_mode) and s.st_uid == 0 and\n                    (api.major(s.st_rdev),api.minor(s.st_rdev)) == (1,3), 'null device')\n            require(fcntl.fcntl(fd,fcntl.F_GETFL) & os.O_ACCMODE == os.O_RDONLY,\n                    'readonly stdin') if api is os else api.readonly_null(fd)\n            return fd\n        except BaseException:\n            api.close(fd)\n            raise\n    finally:\n        api.close(parent)"
+      },
+      "fresh_host_admission": {
+        "after": null,
+        "before": "def fresh_host_admission():\n    raise Denied('SOURCE ONLY: no current fresh producer authority')"
+      },
+      "guest": {
+        "after": null,
+        "before": "def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None):\n    \"\"\"Child-only branch. Every exception exits, never host fallback exec.\"\"\"\n    try:\n        ns = child_namespaces(before,api)\n        private_propagation(abi,api)\n        capture_runtime(rootfd,manifest)\n        newroot, mount_ids = mount_guest(rootfd,abi,api)\n        try:\n            root_inode = inode(api.fstat(newroot))\n            stdio = stdio_install(output,nullfd,api)\n            api.fchdir(newroot)\n            api.chroot('.')  # fixed dot relative to NEW mount root, never path input\n            api.chdir('/')\n            require(abi.mount_id(newroot) == mount_ids['root'], 'chroot mount ID')\n            private_proc_check(ns,api)\n        finally:\n            api.close(newroot)\n        # Closes inherited parent readfds, pidfds, capture directory fds, host\n        # root, stdin source, stdout/stderr sources and arbitrary high/socket fds.\n        abi.close_escape_fds()\n        stdio_check(stdio,api)\n        abi.guest_limits()  # never reduce NOFILE while high inherited fds live\n        abi.drop(last_cap)\n        dropped_check(ns,cgroup,root_inode,stdio,abi,api)\n        api.execve(FIXED_PROBE[0],FIXED_PROBE,dict(ENV))\n        raise Denied('exec unexpectedly returned')\n    except BaseException:\n        # No privileged diagnostic export of paths or exception data.\n        try:\n            abi.close_escape_fds()\n        finally:\n            api._exit(126)"
+      },
+      "internal_backend": {
+        "after": null,
+        "before": "def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time,manifest=None):\n    \"\"\"Future helper continuation, deliberately no CLI/admission connection.\n\n    Must run only once in a disposable independently scoped root helper. Parent\n    after unshare NEWPID remains host PIDns. CPython os.fork creates guest PID1,\n    then parent opens its pidfd while the direct child remains unreaped/gated.\n    No additional thread/reaper/monitor is created here.\n    \"\"\"\n    before,cgroup,last_cap = root_helper_preflight(api)\n    # Require normal SIGCHLD disposition, so unreaped child cannot disappear.\n    if api is os:\n        import signal\n        import threading\n        require(threading.current_thread() is threading.main_thread(), 'main thread only')\n        require(signal.getsignal(signal.SIGCHLD) == signal.SIG_DFL, 'external reaper')\n    gate_r,gate_w = api.pipe2(0x80000)\n    try:\n        abi.zero('unshare',C.c_ulong(NEWNS | NEWNET | NEWPID))\n        pid = api.fork()\n    except BaseException:\n        api.close(gate_r);api.close(gate_w)\n        raise\n    if pid == 0:\n        try:\n            api.close(gate_w)\n            token = api.read(gate_r,2)\n            api.close(gate_r)\n            require(token == b'G', 'parent lifecycle gate closed')\n            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest)\n        except BaseException:\n            try:\n                abi.close_escape_fds()\n            finally:\n                api._exit(126)\n        api._exit(126)\n    reaped = False\n    pidfd = None\n    try:\n        api.close(gate_r)\n        require(type(pid) is int and pid > 1, 'actual direct child host PID')\n        # No reaper or other thread: an unreaped direct child cannot have its\n        # PID reused, including if it exits before pidfd_open. It cannot exec\n        # before this parent releases the gate. CPython performs native hooks.\n        pidfd = abi.call('pidfd_open',I(pid),U(0))\n        require(pidfd >= 3, 'own pidfd must not alias stdio')\n        pidfd_identity(pidfd,pid,api)\n        abi.check_owned_signal(pidfd)\n        output.close_writers()\n        require(api.write(gate_w,b'G') == 1, 'parent lifecycle gate write')\n        api.close(gate_w)\n        gate_w = None\n        waited,result = owned_wait(pid,pidfd,abi,api,clock)\n        reaped = True\n        return output.collect(waited,pid,result)\n    except BaseException:\n        if not reaped:\n            # Before pidfd acquisition the child is still blocked on gate EOF,\n            # so failure closes the gate and reaps WITHOUT numeric-PID signalling.\n            if gate_w is not None:\n                api.close(gate_w)\n                gate_w = None\n            if pidfd is not None:\n                try:\n                    abi.kill_owned(pidfd)\n                except OSError as error:\n                    if error.errno != errno.ESRCH:\n                        raise\n            try:\n                while True:\n                    try:\n                        got,_ = api.waitpid(pid,0)\n                        require(got == pid, 'cleanup wait identity')\n                        break\n                    except InterruptedError:\n                        continue\n            except ChildProcessError:\n                # owned_wait already reaped a timeout child before denying.\n                pass\n        raise\n    finally:\n        if gate_w is not None:\n            api.close(gate_w)\n        if pidfd is not None:\n            api.close(pidfd)"
+      },
+      "inventory": {
+        "after": null,
+        "before": "def inventory(api=os):\n    names = api.listdir('/proc/self/fd')\n    require(len(names) <= 4096, 'FD inventory bound')\n    living = []\n    for name in names:\n        require(name.isascii() and name.isdigit(), 'FD syntax')\n        fd = int(name)\n        try:\n            api.fstat(fd)\n        except OSError as e:\n            require(e.errno == errno.EBADF, 'FD inspection failure')\n        else:\n            living.append(fd)\n    return sorted(living)"
+      },
+      "mount_guest": {
+        "after": null,
+        "before": "def mount_guest(rootfd, abi, api=os):\n    \"\"\"Use only NEW mount object fd for subtargets and eventual chroot.\n\n    mount_setattr propagation applies to namespace / in private_propagation before capture/open_tree/fsopen.\n    open_tree is NONrecursive; source must have no submounts (checked below).\n    move_mount targets are descriptor-only. Retained tree fd refers to attached\n    clone, never the old covered directory. No name reopen or /proc/fd magic.\n    \"\"\"\n    old_id = abi.mount_id(rootfd)\n    table = mount_table(api)\n    require(not any(r['path'].startswith(ROOT+'/') for r in table.values()),\n            'source contains submounts')\n    newroot = abi.tree(rootfd)\n    try:\n        require(abi.mount_id(newroot) != old_id, 'clone mount identity')\n        abi.attr(newroot, RDONLY | NOSUID | NODEV)\n        abi.attach(newroot,rootfd)\n        require(abi.mount_id(newroot) != old_id, 'retained new mount required')\n        root_id = verify_mount(newroot,abi,{'ro','nosuid','nodev'},api)\n        mount_ids = {'root':root_id}\n        for name, kind in (('tmp','tmpfs'),('proc','proc')):\n            target = subdirectory(newroot,name,api)\n            mounted = None\n            try:\n                require(abi.mount_id(target) == root_id, 'target outside NEW root mount')\n                mounted = abi.filesystem(kind,api.close)\n                abi.attach(mounted,target)\n                flags = {'nosuid','nodev','noexec', 'ro' if kind == 'proc' else 'rw'}\n                mid = verify_mount(mounted,abi,flags,api,kind)\n                require(mid != root_id and mid not in mount_ids.values(), 'submount identity')\n                mount_ids[name] = mid\n                if name == 'tmp':\n                    s = api.fstat(mounted)\n                    require(s.st_uid == 0 and stat.S_IMODE(s.st_mode) == 0o1777,\n                            'finite writable tmp ownership/mode')\n            finally:\n                if mounted is not None:\n                    api.close(mounted)\n                api.close(target)\n        dev = subdirectory(newroot,'dev',api)\n        api.close(dev)  # empty sealed directory, no device binds, NODEV retained\n        table = mount_table(api)\n        under = {mid:r for mid,r in table.items()\n                 if r['path'] == ROOT or r['path'].startswith(ROOT+'/')}\n        require(set(under) == set(mount_ids.values()), 'unexpected guest submount')\n        require(under[mount_ids['tmp']]['parent'] == root_id and\n                under[mount_ids['proc']]['parent'] == root_id, 'submount topology')\n        return newroot, mount_ids\n    except BaseException:\n        api.close(newroot)\n        raise"
+      },
+      "mount_table": {
+        "after": null,
+        "before": "def mount_table(api=os):\n    raw = read_small('/proc/self/mountinfo', api, 1024*1024).decode('ascii')\n    result = {}\n    for line in raw.splitlines():\n        fields = line.split()\n        require('-' in fields and fields.index('-') >= 6, 'mountinfo syntax')\n        sep = fields.index('-')\n        require(len(fields) == sep+4, 'mountinfo fields')\n        mid = int(fields[0])\n        require(mid > 0 and mid not in result, 'mount ID')\n        require(not any(f.startswith(('shared:','master:','propagate_from:'))\n                        for f in fields[6:sep]), 'nonprivate mount')\n        result[mid] = dict(parent=int(fields[1]), path=fields[4],\n                           options=set(fields[5].split(',')), fs=fields[sep+1])\n    require(result, 'empty mount table')\n    return result"
+      },
+      "namespaces": {
+        "after": null,
+        "before": "def namespaces(api=os):\n    # Following these fixed kernel namespace magic links is intentional; never\n    # a mount path or /proc/self/fd fallback. fstat identity, not caller strings.\n    result = {}\n    for name in ('mnt','net','pid','user'):\n        fd = api.open('/proc/self/ns/'+name, api.O_RDONLY | api.O_CLOEXEC)\n        try:\n            result[name] = inode(api.fstat(fd))\n        finally:\n            api.close(fd)\n    return result"
+      },
+      "owned_wait": {
+        "after": null,
+        "before": "def owned_wait(pid,pidfd,abi,api=os,clock=time):\n    \"\"\"Wait only direct own child. Timeout cancellation uses retained pidfd.\n\n    No SIGCHLD handler/other reaper permitted. Never send signals by numeric PID.\n    Parent is outside the guest PID namespace; pid is the host-visible clone PID.\n    Reap after cancellation (even timeout) before returning/raising. Kernel wait\n    after SIGKILL can await D-state completion; no false bounded-exit guarantee.\n    \"\"\"\n    deadline = clock.monotonic()+DEADLINE\n    while clock.monotonic() < deadline:\n        waited, result = api.waitpid(pid,api.WNOHANG)\n        require(waited in (0,pid), 'unexpected wait identity')\n        if waited == pid:\n            return waited,result\n        clock.sleep(0.01)\n    abi.kill_owned(pidfd)\n    while True:\n        try:\n            waited,result = api.waitpid(pid,0)\n            require(waited == pid, 'cancelled child wait identity')\n            break\n        except InterruptedError:\n            continue\n    raise Denied('deadline; own child killed and reaped; no output')"
+      },
+      "pidfd_identity": {
+        "after": null,
+        "before": "def pidfd_identity(fd,pid,api=os):\n    # Fixed actual fdinfo, not caller evidence; own direct-child pidfd retained until\n    # wait. No inherited arbitrary fd is accepted by the lifecycle below.\n    raw = read_small('/proc/self/fdinfo/'+str(fd),api,4096).decode('ascii')\n    rows = dict(line.split(':',1) for line in raw.splitlines() if ':' in line)\n    require(int(rows['Pid']) == pid, 'pidfd actual host PID')"
+      },
+      "private_proc_check": {
+        "after": null,
+        "before": "def private_proc_check(expected_ns, api=os):\n    require(api.getpid() == 1, 'private proc PID1')\n    # Actual proc namespace objects for visible PID1 and self must equal the\n    # pre-chroot guest namespace inode. Not matching caller-provided strings.\n    for path in ('/proc/1/ns/pid','/proc/self/ns/pid'):\n        fd = api.open(path, api.O_RDONLY | api.O_CLOEXEC)\n        try:\n            require(inode(api.fstat(fd)) == expected_ns['pid'], 'proc PID namespace association')\n        finally:\n            api.close(fd)\n    require(namespaces(api) == expected_ns, 'namespace drift')"
+      },
+      "private_propagation": {
+        "after": null,
+        "before": "def private_propagation(abi,api=os):\n    hostroot = api.open('/', DIR_FLAGS)\n    try:\n        abi.attr(hostroot, propagation=PRIVATE, recursive=True)\n        mount_table(api)  # deny any remaining shared/master propagation\n    finally:\n        api.close(hostroot)"
+      },
+      "privileged_entrypoint": {
+        "after": null,
+        "before": "def privileged_entrypoint():\n    raise Denied('SOURCE ONLY: independent review, actual fresh producer continuation, '\n                 'finite approved runtime and separately allocated actual probe missing')"
+      },
+      "read_small": {
+        "after": null,
+        "before": "def read_small(path, api=os, bound=65536, directory=None):\n    fd = api.open(path, FILE_FLAGS, dir_fd=directory)\n    try:\n        chunks, total = [], 0\n        while True:\n            raw = api.read(fd, min(4096,bound+1-total))\n            if not raw:\n                break\n            total += len(raw)\n            require(total <= bound, 'metadata bound')\n            chunks.append(raw)\n        return b''.join(chunks)\n    finally:\n        api.close(fd)"
+      },
+      "root_helper_preflight": {
+        "after": null,
+        "before": "def root_helper_preflight(api=os):\n    require(api.getresuid() == api.getresgid() == (0,0,0), 'root helper IDs')\n    s = status(api)\n    require(s['Threads'] == '1', 'root helper must be single threaded')\n    require(s['NoNewPrivs'] == '0' and s['Seccomp'] == '0', 'unexpected helper control state')\n    needed = sum(1<<n for n in (5,6,7,8,18,21))\n    require(int(s['CapEff'],16) & needed == needed, 'helper setup/cancellation capabilities')\n    last = read_small('/proc/sys/kernel/cap_last_cap',api,16)\n    require(last == b'40\\n', 'pinned capability ABI')\n    cg = read_small('/proc/self/cgroup',api,4096)\n    require(cg.startswith(b'0::/') and cg.count(b'\\n') == 1, 'unified cgroup')\n    # Fresh actual collector/monitor ancestry, executable and control validation\n    # belongs to missing external producer assembly; this is not authorization.\n    return namespaces(api), cg, 40"
+      },
+      "status": {
+        "after": null,
+        "before": "def status(api=os):\n    raw = read_small('/proc/self/status', api).decode('ascii')\n    rows = [line.split(':',1) for line in raw.splitlines()]\n    require(all(len(r) == 2 for r in rows), 'status syntax')\n    require(len({r[0] for r in rows}) == len(rows), 'status duplicate')\n    return {k:v.strip() for k,v in rows}"
+      },
+      "stdio_check": {
+        "after": null,
+        "before": "def stdio_check(expected, api=os):\n    require(inventory(api) == [0,1,2], 'living escape/control/socket/root/output FD')\n    for fd in (0,1,2):\n        require(inode(api.fstat(fd)) == expected[fd], 'stdio inode changed')\n    s = api.fstat(0)\n    require(stat.S_ISCHR(s.st_mode) and (api.major(s.st_rdev),api.minor(s.st_rdev)) == (1,3),\n            'stdin null identity')\n    for fd in (1,2):\n        s = api.fstat(fd)\n        require(stat.S_ISREG(s.st_mode) and s.st_uid == 0 and s.st_nlink == 1 and\n                stat.S_IMODE(s.st_mode) == 0o600, 'root-owned output writers')\n    if api is os:\n        require(fcntl.fcntl(0,fcntl.F_GETFL) & os.O_ACCMODE == os.O_RDONLY,\n                'stdin access')\n        for fd in (1,2):\n            require(fcntl.fcntl(fd,fcntl.F_GETFL) & os.O_ACCMODE == os.O_WRONLY,\n                    'output access')"
+      },
+      "stdio_install": {
+        "after": null,
+        "before": "def stdio_install(output, nullfd, api=os):\n    require(set(output.rows) == {'stdout','stderr'}, 'fixed output handles')\n    require(nullfd > 2 and all(row['w'] > 2 for row in output.rows.values()),\n            'nonoverlapping stdio sources')\n    for name in ('stdout','stderr'):\n        output.verify(name)\n    api.dup2(nullfd,0,inheritable=True)\n    api.dup2(output.rows['stdout']['w'],1,inheritable=True)\n    api.dup2(output.rows['stderr']['w'],2,inheritable=True)\n    return {fd:inode(api.fstat(fd)) for fd in (0,1,2)}"
+      },
+      "subdirectory": {
+        "after": null,
+        "before": "def subdirectory(rootfd, name, api=os):\n    require(name in ('tmp','proc','dev'), 'fixed target')\n    fd = api.open(name, DIR_FLAGS, dir_fd=rootfd)\n    try:\n        s = api.fstat(fd)\n        require(stat.S_ISDIR(s.st_mode) and s.st_uid == 0 and\n                not s.st_mode & 0o022, 'target owner/type')\n        require(not api.listdir(fd), 'mount targets must be empty')\n        return fd\n    except BaseException:\n        api.close(fd)\n        raise"
+      },
+      "validate_runtime": {
+        "after": null,
+        "before": "def validate_runtime(manifest):\n    require(type(manifest) is dict and manifest.get('version') == 'SbfFiniteLinux-tiny-v1'\n            and manifest.get('argv') == list(FIXED_PROBE), 'fixed Linux manifest')\n    reused_shape = dict(manifest,version='SbfFinite-tiny-v1',argv=list(PROBE))\n    validate_manifest(reused_shape)"
+      },
+      "verify_mount": {
+        "after": null,
+        "before": "def verify_mount(fd, abi, required, api=os, fs=None):\n    mid = abi.mount_id(fd)\n    rows = mount_table(api)\n    require(mid in rows and required <= rows[mid]['options'], 'mount flags/ID')\n    if fs is not None:\n        require(rows[mid]['fs'] == fs, 'filesystem type')\n    return mid"
+      }
+    },
+    "unchanged": {}
+  },
+  "SbfFiniteLinux_capture.py": {
+    "after": {
+      "sha256": "985d96c3ca35d4c7fa7a142fe8a7f6720784d473d1cb31a96f4ef3838d827b86",
+      "size": 8545
+    },
+    "before": {
+      "sha256": "e3dc385c499ec23d84b75c2e6f79691526ac3582a71d4451543443f4a88f1553",
+      "size": 17818
+    },
+    "complete_changed_statements": {
+      "Capture.__init__": {
+        "after": null,
+        "before": "def __init__(self, rootfd, owner):\n        check_dir(rootfd, owner)\n        self.rootfd = os.dup(rootfd)\n        os.set_inheritable(self.rootfd, False)\n        self.owner = owner\n        self.dirs = {'/': self.rootfd}\n        self.files = {}\n        self.sealed = False"
+      },
+      "Capture.close": {
+        "after": null,
+        "before": "def close(self):\n        for row in self.files.values():\n            if row['fd'] is not None:\n                os.close(row['fd'])\n                row['fd'] = None\n        for fd in self.dirs.values():\n            os.close(fd)\n        self.dirs.clear()"
+      },
+      "Capture.copy": {
+        "after": null,
+        "before": "def copy(self, srcfd, logical, expected):\n        require(not self.sealed, 'capture sealed')\n        require(logical not in self.files, 'duplicate destination')\n        require(set(expected) == {'sha256','size','mode'}, 'exact file pin fields')\n        require(type(expected['size']) is int and 0 <= expected['size'] <= MAX_FILE, 'file bound')\n        require(expected['mode'] in (0o444, 0o555), 'sealed public modes only')\n        a = os.fstat(srcfd)\n        require(stat.S_ISREG(a.st_mode) and a.st_nlink == 1 and a.st_size == expected['size'],\n                'regular single-link bounded source')\n        parent, name = self.parent(logical)\n        dst = os.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW |\n                      os.O_CLOEXEC, 0o600, dir_fd=parent)\n        try:\n            require(inode(a) != inode(os.fstat(dst)), 'source aliases destination')\n            os.lseek(srcfd, 0, os.SEEK_SET)\n            h, total = hashlib.sha256(), 0\n            while True:\n                chunk = os.read(srcfd, min(65536, expected['size']-total+1))\n                if not chunk:\n                    break\n                total += len(chunk)\n                require(total <= expected['size'], 'source grew')\n                h.update(chunk)\n                offset = 0\n                while offset < len(chunk):\n                    n = os.write(dst, chunk[offset:])\n                    require(n > 0, 'short write')\n                    offset += n\n            require(identity(a) == identity(os.fstat(srcfd)), 'source changed during copy')\n            require(total == expected['size'] and h.hexdigest() == expected['sha256'], 'source digest')\n            # No live source or destination name used for chmod/chown/hash.\n            os.fchmod(dst, expected['mode'])\n            s = os.fstat(dst)\n            require(s.st_uid == self.owner and s.st_nlink == 1, 'destination owner/link')\n            check_entry(parent, name, dst)\n            require(hash_fd(dst, expected['size']) == expected['sha256'], 'destination digest')\n            self.files[logical] = dict(pin=dict(expected), identity=identity(s), fd=dst)\n            dst = None\n        finally:\n            if dst is not None:\n                os.close(dst)"
+      },
+      "Capture.parent": {
+        "after": null,
+        "before": "def parent(self, logical):\n        parts = canonical(logical)\n        fd, prefix = self.rootfd, ''\n        for name in parts[:-1]:\n            check_dir(fd, self.owner)\n            prefix += '/'+name\n            if prefix not in self.dirs:\n                self.dirs[prefix] = exclusive_dir(fd, name, self.owner)\n            else:\n                check_entry(fd, name, self.dirs[prefix])\n            fd = self.dirs[prefix]\n        return fd, parts[-1]"
+      },
+      "Capture.seal": {
+        "after": null,
+        "before": "def seal(self):\n        require(not self.sealed, 'already sealed')\n        for logical, row in self.files.items():\n            parent, name = self.parent(logical)\n            check_entry(parent, name, row['fd'])\n            require(identity(os.fstat(row['fd'])) == row['identity'], 'destination drift')\n            require(hash_fd(row['fd'], row['pin']['size']) == row['pin']['sha256'], 'sealed bytes')\n        for fd in self.dirs.values():\n            check_dir(fd, self.owner)\n            os.fchmod(fd, 0o555)\n        self.sealed = True\n        # Write-capable destination handles MUST close before any future fork.\n        for row in self.files.values():\n            os.close(row['fd'])\n            row['fd'] = None"
+      },
+      "PublicOutput.collect": {
+        "after": "def collect(self, waited_pid, expected_pid, wait_status):\n        # These arguments must originate from actual waitpid, not caller claims;\n        # this object alone is not an authorization or live parent implementation.\n        require(type(expected_pid) is int and expected_pid > 1 and waited_pid == expected_pid,\n                'wrong wait identity')\n        require(os.WIFEXITED(wait_status) and os.WEXITSTATUS(wait_status) == 0, 'child failed')\n        require(all(r['w'] is None for r in self.rows.values()), 'parent writer still open')\n        result = {}\n        for name, row in self.rows.items():\n            self.verify(name)\n            before = identity(os.fstat(row['r']))\n            os.lseek(row['r'], 0, os.SEEK_SET)\n            raw = os.read(row['r'], OUTPUT_BOUND+1)\n            require(len(raw) <= OUTPUT_BOUND, 'output overflow')\n            require(before == identity(os.fstat(row['r'])), 'output changed while collecting')\n            result[name] = raw\n        require(result['stderr'] == b'', 'probe stderr')\n        expected = (json.dumps({'SbfSeal':'tiny-public-v1', 'uid':1000,\n                               'gid':1000, 'fds':[0,1,2]}, sort_keys=True)+'\\n').encode()\n        require(result['stdout'] == expected, 'nonpublic/unexpected output')\n        return {'stdout': result['stdout'].decode('ascii'), 'stderr': ''}",
+        "before": "def collect(self, waited_pid, expected_pid, wait_status):\n        # These arguments must originate from actual waitpid, not caller claims;\n        # this object alone is not an authorization or live parent implementation.\n        require(type(expected_pid) is int and expected_pid > 1 and waited_pid == expected_pid,\n                'wrong wait identity')\n        require(os.WIFEXITED(wait_status) and os.WEXITSTATUS(wait_status) == 0, 'child failed')\n        require(all(r['w'] is None for r in self.rows.values()), 'parent writer still open')\n        result = {}\n        for name, row in self.rows.items():\n            self.verify(name)\n            before = identity(os.fstat(row['r']))\n            os.lseek(row['r'], 0, os.SEEK_SET)\n            raw = os.read(row['r'], OUTPUT_BOUND+1)\n            require(len(raw) <= OUTPUT_BOUND, 'output overflow')\n            require(before == identity(os.fstat(row['r'])), 'output changed while collecting')\n            result[name] = raw\n        require(result['stderr'] == b'', 'probe stderr')\n        expected = (json.dumps({'SbfFinite':'tiny-public-v1', 'uid':1000,\n                               'gid':1000, 'fds':[0,1,2]}, sort_keys=True)+'\\n').encode()\n        require(result['stdout'] == expected, 'nonpublic/unexpected output')\n        return {'stdout': result['stdout'].decode('ascii'), 'stderr': ''}"
+      },
+      "PublicOutput.wait_and_collect": {
+        "after": null,
+        "before": "def wait_and_collect(self, child_pid):\n        \"\"\"Future own direct-child wait only; no pid kill, root read or shell.\n\n        Caller must retain the host PID returned by its fixed probe fork. A\n        timeout never exports output and never signals a possibly reused PID.\n        Separate reviewed lifecycle/pidfd handling required before enabling.\n        \"\"\"\n        require(type(child_pid) is int and child_pid > 1, 'own child PID')\n        self.close_writers()\n        deadline = time.monotonic()+5\n        while time.monotonic() < deadline:\n            waited, status = os.waitpid(child_pid, os.WNOHANG)\n            if waited:\n                return self.collect(waited, child_pid, status)\n            time.sleep(0.01)\n        raise Denied('own child wait deadline; retain files, no export or unsafe cancellation')"
+      },
+      "check_dir": {
+        "after": "def check_dir(fd, owner):\n    s = os.fstat(fd)\n    require(stat.S_ISDIR(s.st_mode) and s.st_uid == s.st_gid == owner, 'directory owner/type')\n    require(not s.st_mode & 0o022, 'writable ancestry')\n    return s",
+        "before": "def check_dir(fd, owner):\n    s = os.fstat(fd)\n    require(stat.S_ISDIR(s.st_mode) and s.st_uid == owner, 'directory owner/type')\n    require(not s.st_mode & 0o022, 'writable ancestry')\n    return s"
+      },
+      "create_fixed_layout": {
+        "after": "def create_fixed_layout():\n    \"\"\"Open installed fixed root; outputs exclusively created by PublicOutput.\n\n    Installer already made own/rootfs/public-output; exact setup tree is verified\n    separately. No existing arbitrary tree is adopted. One shot stdout/stderr.\n    \"\"\"\n    require(os.getresuid() == os.getresgid() == (0,0,0), 'root IDs')\n    own = root = outputs = None\n    try:\n        own = open_safe_ancestry(OWN)\n        root = open_safe_ancestry(ROOT)\n        outputs = open_safe_ancestry(OWN+'/public-output')\n        require(not os.listdir(outputs), 'fresh output directory')\n        return own,root,outputs\n    except BaseException:\n        for fd in (outputs,root,own):\n            if fd is not None: os.close(fd)\n        raise",
+        "before": "def create_fixed_layout():\n    \"\"\"Unexecuted concrete replacement for old create_root; fixed safe ancestry.\n\n    No user-stage OWNER file, parent symlink check or pathname reopen. Retain all\n    fds through later seal/mount review. No removal on failure, no existing entry\n    reuse. No source writes occur until root-owned ancestry validation completes.\n    \"\"\"\n    require(os.getuid() == os.geteuid() == 0, 'root-only proposed layout')\n    parent = open_safe_ancestry('/var/lib')\n    own = root = outputs = None\n    try:\n        own = exclusive_dir(parent, 'SbfFinite-20261025-v1', 0)\n        root = exclusive_dir(own, 'rootfs', 0)\n        outputs = exclusive_dir(own, 'public-output', 0)\n        return own, root, outputs\n    except BaseException:\n        for fd in (own, root, outputs):\n            if fd is not None:\n                os.close(fd)\n        raise\n    finally:\n        os.close(parent)"
+      },
+      "hash_fd": {
+        "after": null,
+        "before": "def hash_fd(fd, size):\n    os.lseek(fd, 0, os.SEEK_SET)\n    h, total = hashlib.sha256(), 0\n    while True:\n        chunk = os.read(fd, min(65536, size-total+1))\n        if not chunk:\n            break\n        total += len(chunk)\n        require(total <= size, 'hash overflow')\n        h.update(chunk)\n    require(total == size, 'hash short read')\n    return h.hexdigest()"
+      },
+      "open_source": {
+        "after": null,
+        "before": "def open_source(path):\n    \"\"\"Untrusted public source: nofollow components; hash pins bytes separately.\n\n    Caller cannot use this as a privileged arbitrary read/export API. Only exact\n    manifest entries would be opened by a reviewed future root route.\n    \"\"\"\n    parts = canonical(path)\n    directory = os.open('/', DIR_FLAGS)\n    try:\n        for name in parts[:-1]:\n            child = os.open(name, DIR_FLAGS, dir_fd=directory)\n            os.close(directory)\n            directory = child\n        fd = os.open(parts[-1], FILE_FLAGS, dir_fd=directory)\n        try:\n            s = os.fstat(fd)\n            require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'source type/hardlink')\n            return fd\n        except BaseException:\n            os.close(fd)\n            raise\n    finally:\n        os.close(directory)"
+      },
+      "privileged_entrypoint": {
+        "after": null,
+        "before": "def privileged_entrypoint():\n    # No caller arguments and no operations before denial. Separate reviewed\n    # source/producer/allocation required; allowlist manipulation is insufficient.\n    raise Denied('SOURCE ONLY: no current producer route, runtime closure or Linux ABI approval')"
+      },
+      "validate_manifest": {
+        "after": "def validate_manifest(m):\n    from SbfFinite_validate import validate\n    return validate({'schema':'SbfFinite-runtime-v1','runtime':m})",
+        "before": "def validate_manifest(m):\n    require(type(m) is dict and set(m) == {'version','root','uid','gid','argv','env','files'},\n            'exact manifest schema')\n    require(m['version'] == 'SbfFinite-tiny-v1' and m['root'] == ROOT, 'fixed version/root')\n    require(type(m['uid']) is int and type(m['gid']) is int and m['uid'] == m['gid'] == UID,\n            'fixed UID/GID')\n    require(m['argv'] == list(PROBE) and m['env'] == ENV, 'fixed probe argv/env')\n    require(type(m['files']) is list and 0 < len(m['files']) <= 256, 'finite runtime list')\n    seen, total = set(), 0\n    for row in m['files']:\n        require(type(row) is dict and set(row) == {'logical','physical','sha256','size','mode'},\n                'exact regular mapping')\n        canonical(row['physical']); canonical(row['logical'])\n        require(row['logical'] not in seen, 'duplicate mapping')\n        seen.add(row['logical'])\n        require(type(row['size']) is int and 0 <= row['size'] <= MAX_FILE, 'file size')\n        require(row['mode'] in (0o444,0o555), 'file mode')\n        require(type(row['sha256']) is str and len(row['sha256']) == 64 and\n                all(c in '0123456789abcdef' for c in row['sha256']), 'digest')\n        total += row['size']\n    require(total <= MAX_TOTAL and '/usr/bin/python3' in seen, 'runtime bound/interpreter')\n    return digest((json.dumps(m,sort_keys=True,separators=(',',':'))+'\\n').encode())"
+      }
+    },
+    "unchanged": {
+      "PublicOutput.__init__": {
+        "ast_pin": {
+          "sha256": "89866e8420f020f2f7465588a00133d67ab26e855f27f0ff29000ca48485117e",
+          "size": 3798
+        },
+        "byte_pin": {
+          "sha256": "e3742553545aa3c5ee5afb556a4413af84b3592e2776d9197aa1b1875578d7d2",
+          "size": 762
+        }
+      },
+      "PublicOutput.close": {
+        "ast_pin": {
+          "sha256": "88406ed7d9d8b0c795bd99e2256a71b968e0e9b991a1b529ff19b7eb828b8a58",
+          "size": 1531
+        },
+        "byte_pin": {
+          "sha256": "d3a1131b35944cace756d11fe64b44ae032453ed57d7e9e3abb42032d7a4ceaa",
+          "size": 298
+        }
+      },
+      "PublicOutput.close_writers": {
+        "ast_pin": {
+          "sha256": "3f2e5a9c0ac1726f72d340c4fd894cdf355175d1bba4211a7ee5b1161ea93db5",
+          "size": 923
+        },
+        "byte_pin": {
+          "sha256": "253c20adb2dcd6591ab64000c8bf5624fb45e77a5262125739b9060fccc1e993",
+          "size": 167
+        }
+      },
+      "PublicOutput.verify": {
+        "ast_pin": {
+          "sha256": "751917ac5c4913d1fa79b7bab5ffea08ef3a76921993f260ba96b54eedbf773c",
+          "size": 2275
+        },
+        "byte_pin": {
+          "sha256": "a5add92d05730b62227b2d23a5041fce60551bb234edc75dc0bcbeb12b378124",
+          "size": 389
+        }
+      },
+      "canonical": {
+        "ast_pin": {
+          "sha256": "3d910a6e933fcfe27edb93bd892d6e6a37430aca95cab8f48aefc79b1bc57fe0",
+          "size": 2091
+        },
+        "byte_pin": {
+          "sha256": "942a17d31b2e248aef969305e42e47fd10935662a3c594742b9ccfa27fdf61a5",
+          "size": 377
+        }
+      },
+      "check_entry": {
+        "ast_pin": {
+          "sha256": "962581fa8dbd0263a272328fc57946a5260e6158a4afefc9dfd4d52346f43263",
+          "size": 951
+        },
+        "byte_pin": {
+          "sha256": "865e8ae46b0a811818af864a49f175a51cba130871639bec03c2c7afe50644c3",
+          "size": 325
+        }
+      },
+      "component": {
+        "ast_pin": {
+          "sha256": "786972ab31479a1e560bb9a1f889c8dacc420d219875e7b8f77b65d35e008e84",
+          "size": 778
+        },
+        "byte_pin": {
+          "sha256": "63df36ab19c2560fbaea3ad6fd5054d45e046ef11769e3bece5b2b0ff4f2c80c",
+          "size": 121
+        }
+      },
+      "digest": {
+        "ast_pin": {
+          "sha256": "ace3a6a8d1286b455988d9ff4ed629da5c03c3e1fd8ed6f70c56b03f109a530d",
+          "size": 631
+        },
+        "byte_pin": {
+          "sha256": "62b6ce21032a7c7b2d1f16df8e5872568c0314cacc403bb2b6cdef45399e21ec",
+          "size": 87
+        }
+      },
+      "exclusive_dir": {
+        "ast_pin": {
+          "sha256": "fb29454e2e8c791efe98c38dc628e7d97714b0519bb682e917ffef67450fe194",
+          "size": 2340
+        },
+        "byte_pin": {
+          "sha256": "31857215d87dc2da7096dac15c386e9951cca9f82e918a2bd6cdd375e291f326",
+          "size": 659
+        }
+      },
+      "identity": {
+        "ast_pin": {
+          "sha256": "9e9ddab80a6cd9e61b067ed7d558cfb5c065403a4699d32741ea035af4112dbf",
+          "size": 883
+        },
+        "byte_pin": {
+          "sha256": "e74168cd08f1ccb845284f0246c319d01ebb24f331a986cf854198389cb1e0fe",
+          "size": 144
+        }
+      },
+      "inode": {
+        "ast_pin": {
+          "sha256": "1ecf38bf5ccc348f58e059b6b73745b26df693f38a40214403849580e23e850c",
+          "size": 376
+        },
+        "byte_pin": {
+          "sha256": "9ac1ff5ded0d744a6c73813ddfe823fddc6cf3a818febf593abe2c199184f11f",
+          "size": 45
+        }
+      },
+      "open_safe_ancestry": {
+        "ast_pin": {
+          "sha256": "bb31216de4aaaef5fe898fba4f05494e520e9cc4510ce886ff34affaa9427167",
+          "size": 2415
+        },
+        "byte_pin": {
+          "sha256": "d0ccd1179065cee8c7e33d365110a4b73a3611d3be8e766f745a82a26dc47f16",
+          "size": 771
+        }
+      },
+      "require": {
+        "ast_pin": {
+          "sha256": "6c60eb71e8f05c31d81b150717363056d8f616c95e4b1ecb76e3c04535e3445b",
+          "size": 417
+        },
+        "byte_pin": {
+          "sha256": "309f4477ba691bc168c24ea594fdaebf45f375f4e7cf932d7d8d5d6d2de76a16",
+          "size": 82
+        }
+      }
+    }
+  },
+  "SbfFiniteRss_adapter.py": {
+    "after": {
+      "sha256": "3e668325a4c514df318c4a03d838a8bcdebf9c80ff89583af9b5e4c9533f08a5",
+      "size": 4639
+    },
+    "before": {
+      "sha256": "00f32f7c211f038a42928ff12406b57947d2db13df5e2fac6f8f86740044fce8",
+      "size": 4544
+    },
+    "complete_changed_statements": {
+      "read_only_admission": {
+        "after": "def read_only_admission(*,phase):\n    if phase not in ('prospective','inside-scope'):raise ValueError('unknown phase')\n    requested=c.GIB if phase=='prospective' else 0\n    old=None;snapshots={};failures={}\n    try:old=visibility(requested)\n    except (OSError,ValueError,TypeError,KeyError,subprocess.SubprocessError) as exc:\n        failures['visibility']=dict(error=str(exc),type=type(exc).__name__)\n    for label in ('before','after'):\n        try:snapshots[label]=identity['scan_bound']()\n        except (OSError,ValueError,TypeError,KeyError,IndexError) as exc:\n            snapshots[label]=None\n            failures[label]=dict(error=str(exc),type=type(exc).__name__,errno=getattr(exc,'errno',None),\n                raw_inputs=getattr(exc,'partial_raw_inputs',{}),read_attempts=getattr(exc,'read_attempts',[]))\n    decision=policy.evaluate(old,snapshots['before'],snapshots['after'],requested,phase=phase,\n        expected=EXPECTED if phase=='inside-scope' else None,\n        expected_unit=UNIT+'.scope' if phase=='inside-scope' else None)\n    if failures:decision.update(allowed=False,collection_failures=failures)\n    return dict(api_version='SbfFiniteRss20261025-v1',collector_pid=os.getpid(),decision=decision,\n                snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')",
+        "before": "def read_only_admission(*,phase):\n    if phase not in ('prospective','inside-scope'):raise ValueError('unknown phase')\n    requested=4*c.GIB if phase=='prospective' else 0\n    old=None;snapshots={};failures={}\n    try:old=visibility(requested)\n    except (OSError,ValueError,TypeError,KeyError,subprocess.SubprocessError) as exc:\n        failures['visibility']=dict(error=str(exc),type=type(exc).__name__)\n    for label in ('before','after'):\n        try:snapshots[label]=identity['scan_bound']()\n        except (OSError,ValueError,TypeError,KeyError,IndexError) as exc:\n            snapshots[label]=None\n            failures[label]=dict(error=str(exc),type=type(exc).__name__,errno=getattr(exc,'errno',None),\n                raw_inputs=getattr(exc,'partial_raw_inputs',{}),read_attempts=getattr(exc,'read_attempts',[]))\n    decision=policy.evaluate(old,snapshots['before'],snapshots['after'],requested,phase=phase,\n        expected=EXPECTED if phase=='inside-scope' else None,\n        expected_unit=UNIT+'.scope' if phase=='inside-scope' else None)\n    if failures:decision.update(allowed=False,collection_failures=failures)\n    return dict(api_version='SbfFiniteRss20261025-v1',collector_pid=os.getpid(),decision=decision,\n                snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')"
+      }
+    },
+    "unchanged": {
+      "visibility": {
+        "ast_pin": {
+          "sha256": "d0327a5c027bd682f2877b77ef5423706d18c753b868223c4e29b9c72d1ae1ca",
+          "size": 11925
+        },
+        "byte_pin": {
+          "sha256": "67bcc14c85416ed3743c3c01869697f652c8794223bfd9b21dfe226ee7e773c1",
+          "size": 2667
+        }
+      }
+    }
+  },
+  "SbfFiniteRss_guard.py": {
+    "after": {
+      "sha256": "90953ce4ab221422a014db32923162e6bf4d83f75ca7e615296c3b838c7b7518",
+      "size": 8647
+    },
+    "before": {
+      "sha256": "bef10590255dbd2bb528982a90356a25cdc32514552a28c96addd4afc038e0f0",
+      "size": 8424
+    },
+    "complete_changed_statements": {
+      "Guard.loop": {
+        "after": "def loop(self):\n        try:\n            while True:\n                if time.monotonic()-self.started >= 115:\n                    raise GuardError('115s sampled guard deadline')\n                self.sample()\n                self.ready.set()\n                if self.stop_event.wait(INTERVAL):\n                    self.sample()  # final observation before monitor exit\n                    break\n        except Exception as exc:\n            self.error = type(exc).__name__+': '+str(exc)\n            self.cancel_owned()\n            self.ready.set()\n            self.notify()",
+        "before": "def loop(self):\n        try:\n            while True:\n                self.sample()\n                self.ready.set()\n                if self.stop_event.wait(INTERVAL):\n                    self.sample()  # final observation before monitor exit\n                    break\n        except Exception as exc:\n            self.error = type(exc).__name__+': '+str(exc)\n            self.cancel_owned()\n            self.ready.set()\n            self.notify()"
+      }
+    },
+    "unchanged": {
+      "Guard.__init__": {
+        "ast_pin": {
+          "sha256": "ed8d3897820fc80e2d91193b1c9d9028897a01dae5d80e28c284ab8ac2593e84",
+          "size": 2889
+        },
+        "byte_pin": {
+          "sha256": "07db4562043e0e50a7891cc7e2e0199c6a31d0dc85f1b5737abe62cd4c699e14",
+          "size": 537
+        }
+      },
+      "Guard.cancel_owned": {
+        "ast_pin": {
+          "sha256": "3b9031b34701ecaee8401ca5f2999a84dd1a20c741014bfbde752c244f836d47",
+          "size": 1802
+        },
+        "byte_pin": {
+          "sha256": "527130f9d459f950c5dff3e108a7fbcb2915858593142dc7f8f4fa7716e6f709",
+          "size": 404
+        }
+      },
+      "Guard.check": {
+        "ast_pin": {
+          "sha256": "43fbea742d2063e2133f7e8926b0aae0ca68036fe0d285c098146dc7cc222693",
+          "size": 447
+        },
+        "byte_pin": {
+          "sha256": "de7f72cf3dad2242eaf9cf936f2a89975f7202d976d1d7e1c878e075427a7968",
+          "size": 80
+        }
+      },
+      "Guard.finish": {
+        "ast_pin": {
+          "sha256": "ca3737a462736cba19eb4288c16cdba0c5771c0166e542186f79f77a2bcc14ba",
+          "size": 2596
+        },
+        "byte_pin": {
+          "sha256": "02cbe42978151bf2d84070a96ffd50a75a295bc45fda8a88ef1ca9c8ef76b141",
+          "size": 807
+        }
+      },
+      "Guard.remember": {
+        "ast_pin": {
+          "sha256": "76fa3b97953f49dd3881c9f02966b43c4b81fe00eb9135b6810966f8ea96cc9d",
+          "size": 2124
+        },
+        "byte_pin": {
+          "sha256": "c39baadd3135fe8130b865379f1859be101f5cf6942cb93913385abc82f1af91",
+          "size": 451
+        }
+      },
+      "Guard.sample": {
+        "ast_pin": {
+          "sha256": "6a88b19a428583eafcc02466b6fb404ec762eea403b6ce6b6448e259cdccca07",
+          "size": 5982
+        },
+        "byte_pin": {
+          "sha256": "ee8eaa849ee3853291e7cf8d691aa752f57d52c961933b665ded7cfb1d29a2f4",
+          "size": 1453
+        }
+      },
+      "Guard.start": {
+        "ast_pin": {
+          "sha256": "aad0576266106ed6b6a8bfb7b2505421bb4f970b817ee1954be80cbb2570ef9a",
+          "size": 1623
+        },
+        "byte_pin": {
+          "sha256": "22ca0d4246a41a7ad48b2ea4ec782ce51ef1c9955580d3e265d3a7cdd80d978d",
+          "size": 337
+        }
+      },
+      "Proc.absent": {
+        "ast_pin": {
+          "sha256": "cb2c5a7e44261b98829a62efcea0a3b50350287e48f185e979577bd8443deba0",
+          "size": 548
+        },
+        "byte_pin": {
+          "sha256": "02a8722c1105ef9c97766795332cfc2c29465b30e3d35e66b8a3f3e087c147ce",
+          "size": 141
+        }
+      },
+      "Proc.cancel": {
+        "ast_pin": {
+          "sha256": "ead9d4c4901e96b7fda37603c0122940b293d54d4544a49668d63e84fb078455",
+          "size": 1679
+        },
+        "byte_pin": {
+          "sha256": "0d2ae084b2cd971862045b7fd67a593cd62add9ab3be50c24d98c1c91997579f",
+          "size": 601
+        }
+      },
+      "Proc.children": {
+        "ast_pin": {
+          "sha256": "d84bb0caa2517fc0f1738db16cebd8f6e65d8242e926e91046fcd279f384f781",
+          "size": 2766
+        },
+        "byte_pin": {
+          "sha256": "4d909299a260363dd138b42c32a7945cab024d45c38f72fda1d314ca2198d548",
+          "size": 690
+        }
+      },
+      "Proc.identity": {
+        "ast_pin": {
+          "sha256": "baf4ac5b3adaca31c7b653ae535db3fa35e1afe6c74c6e29ee365fd0a0504c6f",
+          "size": 5015
+        },
+        "byte_pin": {
+          "sha256": "75a2200c97821ae4f78e9f74527e1093a17b3957aa492a9030be1729b8cd2032",
+          "size": 985
+        }
+      },
+      "Proc.optional": {
+        "ast_pin": {
+          "sha256": "ca6d4d770d92791d195fd417315409475140b32a16bf4561f7ae7595535e3128",
+          "size": 887
+        },
+        "byte_pin": {
+          "sha256": "587b47c98d81c7d515fcdfad970508388c82ad8923627d1065773a0cc73935c0",
+          "size": 243
+        }
+      },
+      "Proc.read": {
+        "ast_pin": {
+          "sha256": "a9f075e33db24174af8d08db5ee87b40c6906e6b5b551c0bf348ce8a109bce7a",
+          "size": 514
+        },
+        "byte_pin": {
+          "sha256": "9de47606e1fa695c67d473adf9c3f27e9c94dbf3f933b058097743a09131c57e",
+          "size": 89
+        }
+      },
+      "check_limits": {
+        "ast_pin": {
+          "sha256": "e1cc9f45549e3fe435c74ef053440d42ed8da91f40a3ef8f32a5a11f5d956d6e",
+          "size": 1383
+        },
+        "byte_pin": {
+          "sha256": "e33b6f86d1568f69617810d4d833c7f669eaa99a6cd8f7a7b57222c8e9361c9f",
+          "size": 364
+        }
+      },
+      "inherited_limits": {
+        "ast_pin": {
+          "sha256": "09a93940b2fc50254efda2cf67581aa7e7fba3422c1c588687b5303437891a4b",
+          "size": 931
+        },
+        "byte_pin": {
+          "sha256": "4b8fead2baa7d70afa9728d0ff8317fd1777355321c76f2db4e6b9a7d2b48e1f",
+          "size": 167
+        }
+      }
+    }
+  },
+  "SbfFiniteRss_reviewed.json": {
+    "after": {
+      "sha256": "ce3415ad130a35de66ee29820326fe385daa99ab593f063b95e5efe442d5acaf",
+      "size": 69294
+    },
+    "before": {
+      "sha256": "ce3415ad130a35de66ee29820326fe385daa99ab593f063b95e5efe442d5acaf",
+      "size": 69294
+    },
+    "exact_bytes": true
+  },
+  "SbfFiniteRss_sources.py": {
+    "after": {
+      "sha256": "08aed1aa640662e62c155cdcf881a386be54ea38b918b71ad3161f0c4d8594f5",
+      "size": 4999
+    },
+    "before": {
+      "sha256": "e709712d2ca084d8a96a66798ae4302d7acf34fd3a5dd0c66d7d5f6b9897b690",
+      "size": 4884
+    },
+    "complete_changed_statements": {
+      "load_bundle": {
+        "after": "def load_bundle():\n    path=HERE/'SbfFiniteRss_reviewed.json'\n    data=json.loads(path.read_bytes())  # fixed installed bundle only; no Git fallback\n    if set(data)!=set(SPECS):raise ValueError('reviewed source set drift')\n    for key,(rev,path) in SPECS.items():\n        entry=data[key]\n        if entry['revision']!=REVISIONS[rev] or entry['path']!=path or digest(entry['source'].encode())!={k:entry[k] for k in ('sha256','size')}:\n            raise ValueError('reviewed source pin drift')\n    validate_bundle(data)\n    return data",
+        "before": "def load_bundle():\n    path=HERE/'SbfFiniteRss_reviewed.json'\n    data=json.loads(path.read_bytes()) if path.exists() else bundle()\n    if set(data)!=set(SPECS):raise ValueError('reviewed source set drift')\n    for key,(rev,path) in SPECS.items():\n        entry=data[key]\n        if entry['revision']!=REVISIONS[rev] or entry['path']!=path or digest(entry['source'].encode())!={k:entry[k] for k in ('sha256','size')}:\n            raise ValueError('reviewed source pin drift')\n    validate_bundle(data)\n    return data"
+      }
+    },
+    "unchanged": {
+      "bundle": {
+        "ast_pin": {
+          "sha256": "d52f68d0beae1e08f97e891a3e610d511eacad41bf55bf0dea2d8ed48574fed9",
+          "size": 1697
+        },
+        "byte_pin": {
+          "sha256": "d010a1014776f21d25a817436d6c161a68489f52186387456a33535521277eea",
+          "size": 268
+        }
+      },
+      "digest": {
+        "ast_pin": {
+          "sha256": "ace3a6a8d1286b455988d9ff4ed629da5c03c3e1fd8ed6f70c56b03f109a530d",
+          "size": 631
+        },
+        "byte_pin": {
+          "sha256": "43dc7c46b67e87f2f97ad0da28cd8bac23c14f2a64ec0d6583b247e1c01bd3c0",
+          "size": 86
+        }
+      },
+      "functions": {
+        "ast_pin": {
+          "sha256": "1d566dd83853e5615962c0eae70ec81c97b9379839c63d2c78be10276ecafa25",
+          "size": 2109
+        },
+        "byte_pin": {
+          "sha256": "d65974ceb30a438bd4197fb3c0b128f54a66a0b79c5fff7744fc8d3ed6edd6da",
+          "size": 384
+        }
+      },
+      "load": {
+        "ast_pin": {
+          "sha256": "77c097f559da88703cdf53087212066e30c543fb59789e02c4be41a8c3d737e6",
+          "size": 7001
+        },
+        "byte_pin": {
+          "sha256": "d0cfc6781bccda16fed351e15496b0145ddeee77a5e05417458ae1821752424e",
+          "size": 1583
+        }
+      },
+      "validate_bundle": {
+        "ast_pin": {
+          "sha256": "bfbdf436bbaefd9bea20601a1d3a4328850b6c6e32417cb195a65410606a7269",
+          "size": 2440
+        },
+        "byte_pin": {
+          "sha256": "1f8b7397e5bca0b694265634d17cd3e1719f9018f2a6b0c62d541ce28bd51c0a",
+          "size": 405
+        }
+      }
+    }
+  },
+  "SbfFinite_backend_candidate.py": {
+    "after": {
+      "sha256": "4746c1140158c76c2b5351c1e59126ff2ddeeb9402088be65b1d925b0853018c",
+      "size": 21315
+    },
+    "before": {
+      "sha256": "330dd9dc960ea41715b46b68f51a85500d83b5b748bf603633c29280fdaa8c60",
+      "size": 25345
+    },
+    "complete_changed_statements": {
+      "capture_runtime": {
+        "after": "def capture_runtime(rootfd,manifest):\n    \"\"\"Read-only verification of installed exclusive copies; no recopy/adoption.\"\"\"\n    validate_runtime(manifest)\n    from SbfFinite_package import verify_tree\n    verify_tree(rootfd)",
+        "before": "def capture_runtime(rootfd,manifest):\n    \"\"\"Guest-only after private propagation; no inherited capture write fds.\n\n    Recheck fixed root ancestry, copy exact finite public manifest, seal and\n    close every capture descriptor. Retain only independently owned rootfd.\n    \"\"\"\n    validate_runtime(manifest)\n    anchor = open_safe_ancestry(ROOT)\n    try:\n        require(inode(os.fstat(anchor)) == inode(os.fstat(rootfd)), 'fixed capture root identity')\n    finally:\n        os.close(anchor)\n    capture = Capture(rootfd,0)\n    try:\n        for directory in ('tmp','proc','dev'):\n            capture.parent('/'+directory+'/.anchor')\n        for row in manifest['files']:\n            require(row['logical'].split('/')[1] not in ('tmp','proc','dev'),\n                    'reserved mount target')\n            fd = open_source(row['physical'])\n            try:\n                capture.copy(fd,row['logical'],{k:row[k] for k in ('sha256','size','mode')})\n            finally:\n                os.close(fd)\n        capture.seal()\n    finally:\n        capture.close()"
+      },
+      "fixed_backend_body": {
+        "after": "def fixed_backend_body():\n    # No full Producer approval premise. Concrete root continuation alone calls\n    # this after separate finite operational pins, fresh admission and lineage.\n    from SbfFinite_fixed import RUNTIME\n    manifest = RUNTIME\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    parent = os.getppid()\n    parentfd = abi.call('pidfd_open',I(parent),U(0))\n    own = root = outputs = nullfd = None\n    output = None\n    previous = {}\n    def terminate(*_):\n        raise Denied('helper parent/termination event; retain capture')\n    try:\n        require(parentfd >= 3, 'helper parent pidfd alias')\n        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):\n            previous[sig] = signal.getsignal(sig)\n            signal.signal(sig,terminate)\n        require(abi.prctl(1,15) == 0, 'helper parent-death arm')\n        require(os.getppid() == parent, 'helper parent changed during arm')\n        parent_alive(parentfd)\n        os.close(parentfd); parentfd = None\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        result = internal_backend(root,output,nullfd,abi,manifest=manifest)\n        from SbfFinite_package import journal\n        journal('root-result.json',dict(kind='finite observation ONLY',public=result))\n        return 0\n    finally:\n        if output is not None: output.close()\n        for fd in (parentfd,nullfd,outputs,root,own):\n            if fd is not None: os.close(fd)\n        for sig,handler in previous.items(): signal.signal(sig,handler)",
+        "before": "def fixed_backend_body():\n    \"\"\"Concrete future body, no input parameters or usable entrypoint.\n\n    Null runtime approval blocks before effects. A future approved manifest\n    alone does not enable CLI; the separate unconditional entry denial remains.\n    No current producer/admission continuation calls this internal body.\n    \"\"\"\n    require(type(RUNTIME_APPROVAL) is dict, 'complete pinned runtime missing')\n    manifest = RUNTIME_APPROVAL\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    own = root = outputs = nullfd = None\n    output = None\n    try:\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        return internal_backend(root,output,nullfd,abi,manifest=manifest)\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)"
+      },
+      "fresh_host_admission": {
+        "after": null,
+        "before": "def fresh_host_admission():\n    raise Denied('SOURCE ONLY: no current fresh producer authority')"
+      },
+      "privileged_entrypoint": {
+        "after": null,
+        "before": "def privileged_entrypoint():\n    raise Denied('SOURCE ONLY: independent review, actual fresh producer continuation, '\n                 'finite approved runtime and separately allocated actual probe missing')"
+      },
+      "producer_fixed_body": {
+        "after": null,
+        "before": "def producer_fixed_body():\n    \"\"\"Only root_continuation calls this, after concrete admission and pins.\n\n    Re-read the immutable approved manifest, no runtime argument/global setter.\n    Root helper termination raises into internal_backend's owned-child cleanup.\n    Parent death requests SIGTERM; SIGKILL/LSM and D-state remain unvalidated.\n    \"\"\"\n    from SbfFinite_package import approval, journal\n    manifest = approval()['runtime']\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    parent = os.getppid()\n    parentfd = abi.call('pidfd_open',I(parent),U(0))\n    own = root = outputs = nullfd = None\n    output = None\n    previous = {}\n    def terminate(*_):\n        raise Denied('helper parent/termination event; no output')\n    try:\n        require(parentfd >= 3, 'helper parent pidfd alias')\n        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):\n            previous[sig] = signal.getsignal(sig)\n            signal.signal(sig,terminate)\n        require(abi.prctl(1,15) == 0, 'helper parent-death arm')\n        require(os.getppid() == parent, 'helper parent changed during arm')\n        parent_alive(parentfd)\n        # Parent liveness FD need not cross guest fork: PDEATHSIG now armed.\n        os.close(parentfd)\n        parentfd = None\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        result = internal_backend(root,output,nullfd,abi,manifest=manifest)\n        journal('root-result.json',result)\n        return 0\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (parentfd,nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)\n        for sig,handler in previous.items():\n            signal.signal(sig,handler)"
+      },
+      "root_helper_preflight": {
+        "after": "def root_helper_preflight(api=os):\n    require(api.getresuid() == api.getresgid() == (0,0,0), 'root helper IDs')\n    s = status(api)\n    require(s['Threads'] == '1', 'root helper must be single threaded')\n    require(s['NoNewPrivs'] == '0' and s['Seccomp'] == '0', 'unexpected helper control state')\n    needed = sum(1<<n for n in (5,6,7,8,18,21))\n    require(int(s['CapEff'],16) & needed == needed, 'helper setup/cancellation capabilities')\n    last = read_small('/proc/sys/kernel/cap_last_cap',api,16)\n    require(last == b'40\\n', 'pinned capability ABI')\n    cg = read_small('/proc/self/cgroup',api,4096)\n    require(cg.startswith(b'0::/') and cg.count(b'\\n') == 1, 'unified cgroup')\n    # Concrete finite continuation separately rechecks current role lineage,\n    # package pins and full resource admission; this preflight is not authority.\n    return namespaces(api), cg, 40",
+        "before": "def root_helper_preflight(api=os):\n    require(api.getresuid() == api.getresgid() == (0,0,0), 'root helper IDs')\n    s = status(api)\n    require(s['Threads'] == '1', 'root helper must be single threaded')\n    require(s['NoNewPrivs'] == '0' and s['Seccomp'] == '0', 'unexpected helper control state')\n    needed = sum(1<<n for n in (5,6,7,8,18,21))\n    require(int(s['CapEff'],16) & needed == needed, 'helper setup/cancellation capabilities')\n    last = read_small('/proc/sys/kernel/cap_last_cap',api,16)\n    require(last == b'40\\n', 'pinned capability ABI')\n    cg = read_small('/proc/self/cgroup',api,4096)\n    require(cg.startswith(b'0::/') and cg.count(b'\\n') == 1, 'unified cgroup')\n    # Fresh actual collector/monitor ancestry, executable and control validation\n    # belongs to missing external producer assembly; this is not authorization.\n    return namespaces(api), cg, 40"
+      },
+      "validate_runtime": {
+        "after": "def validate_runtime(manifest):\n    from SbfFinite_validate import validate\n    return validate({'schema':'SbfFinite-runtime-v1','runtime':manifest})",
+        "before": "def validate_runtime(manifest):\n    require(type(manifest) is dict and manifest.get('version') == 'SbfFiniteLinux-tiny-v1'\n            and manifest.get('argv') == list(FIXED_PROBE), 'fixed Linux manifest')\n    reused_shape = dict(manifest,version='SbfFinite-tiny-v1',argv=list(PROBE))\n    validate_manifest(reused_shape)"
+      }
+    },
+    "unchanged": {
+      "child_namespaces": {
+        "ast_pin": {
+          "sha256": "f239c9ec4e063a2b63c753be240e898d869e9c8d9407372c62aec95eff5ee226",
+          "size": 1913
+        },
+        "byte_pin": {
+          "sha256": "9713933b71892bcc988b34d2258c3f69b22cb0a519bb7426e8d1d4024e50c530",
+          "size": 359
+        }
+      },
+      "dropped_check": {
+        "ast_pin": {
+          "sha256": "20d540e3f32cbbe736516718ccdd3f065650fbbedbb1c9e4820cbda8a61d731a",
+          "size": 3700
+        },
+        "byte_pin": {
+          "sha256": "5a255709382099a7473c45ee502f85d72030a24b001a8caaa72135051da414bc",
+          "size": 734
+        }
+      },
+      "fixed_null": {
+        "ast_pin": {
+          "sha256": "00fd0bec304cffefd775ecb1c610813c6dbc1648314362530ad1b9d5da626133",
+          "size": 3258
+        },
+        "byte_pin": {
+          "sha256": "63e0d7484d2b20d3cfc2d34a3977e994468f134e396e662934f833d2120e2c56",
+          "size": 654
+        }
+      },
+      "guest": {
+        "ast_pin": {
+          "sha256": "8b2e52aa5d5bfd662dbbfc333a1263dea04482641c010d6fdc1064f3725af748",
+          "size": 6454
+        },
+        "byte_pin": {
+          "sha256": "8626922a82f1a5c6c4687a8a8923c273df019c7d84ae2a23bf080d18f0f6972b",
+          "size": 2184
+        }
+      },
+      "internal_backend": {
+        "ast_pin": {
+          "sha256": "54d4467cb4143e98bc3eeae62b9fda57360a2f9b9579a178dc9f282548ec9d46",
+          "size": 11597
+        },
+        "byte_pin": {
+          "sha256": "349cf25c9757e072e29fb0aca6c501ef28fdac1775bb4b96ef45c70a0cecb03d",
+          "size": 3724
+        }
+      },
+      "inventory": {
+        "ast_pin": {
+          "sha256": "6ca321750ffb3923c9561acac04c46d1c1af1a64e152a52e2ef0e92b548f5e4f",
+          "size": 2153
+        },
+        "byte_pin": {
+          "sha256": "3f7a11dc642aaf7d05d55244e65b4b02bf13404696a378df304e7c938eea5d6d",
+          "size": 450
+        }
+      },
+      "mount_guest": {
+        "ast_pin": {
+          "sha256": "fa70f5b0a8f78512641b3ad7d9d7694a377791f1d4d98ee00ed718ccc184f5e8",
+          "size": 10084
+        },
+        "byte_pin": {
+          "sha256": "ccc883b0f9566ca97df8a5811a667dd8cb2d43d2bc8b66446328bdad81a09147",
+          "size": 2637
+        }
+      },
+      "mount_table": {
+        "ast_pin": {
+          "sha256": "92d50e8b2cc2e3479916aaf35773f198ed8a06b874a2e0032f70f8f080ec450c",
+          "size": 4174
+        },
+        "byte_pin": {
+          "sha256": "f6e6c69a3f5d41a78daefb72e1454f1d5a8d3e500a823a3dc3db2ebdf9be100c",
+          "size": 789
+        }
+      },
+      "namespaces": {
+        "ast_pin": {
+          "sha256": "1ac2cd78135fb0423ef57123970ef32da29c6b96907d11acc91db0c8750fec71",
+          "size": 1461
+        },
+        "byte_pin": {
+          "sha256": "69c8e48d64b3e3e45c226d76d8a4854300b5c54062d7cdaf079288d7b7032019",
+          "size": 441
+        }
+      },
+      "owned_wait": {
+        "ast_pin": {
+          "sha256": "59a8c85474f29e4b1dff6b38b171f293817f2815c5da8aa070aef0521d2d9e15",
+          "size": 3123
+        },
+        "byte_pin": {
+          "sha256": "97a04d0d9755e32661523303185bba37042680df85989059f1c70e604345ae27",
+          "size": 1055
+        }
+      },
+      "parent_alive": {
+        "ast_pin": {
+          "sha256": "b1dfd31842fc9e1c208519aa8ce962438bc7163d1da8a13205fc06ab60f0c1d2",
+          "size": 1117
+        },
+        "byte_pin": {
+          "sha256": "4668f8ed2f23aaa13c9217dc5d47e242106bd613d9951d6ef600d3cc18689568",
+          "size": 191
+        }
+      },
+      "pidfd_identity": {
+        "ast_pin": {
+          "sha256": "83cc64e8c012910549070466a10b022be319d775dcd270236c31a6c69c7166fa",
+          "size": 1576
+        },
+        "byte_pin": {
+          "sha256": "ba8c19a0df00a173c2a0b2775e83a6841232e643efe6ed3da37a5bc2215c7a0a",
+          "size": 411
+        }
+      },
+      "private_proc_check": {
+        "ast_pin": {
+          "sha256": "98f2982d36d9116e26859bc71475398af551d092ecd52b7f9fb8987f875290a5",
+          "size": 1977
+        },
+        "byte_pin": {
+          "sha256": "391edaa14494bd729dc8ff6e5a6239123b59ad5814cf25932ab78d2cdd615b8e",
+          "size": 582
+        }
+      },
+      "private_propagation": {
+        "ast_pin": {
+          "sha256": "ef36e8f13aed07be7acd686dc48a83987ca7637ade30f307d1b4bfb5374055dc",
+          "size": 1033
+        },
+        "byte_pin": {
+          "sha256": "9783a827bfe33a870e3693a1860bf37e4868aa5d1d0f2e43f21114edf3374979",
+          "size": 263
+        }
+      },
+      "read_small": {
+        "ast_pin": {
+          "sha256": "a7cfd82bbace5ae60a1e075ee65f79600f727cfcbbd7e758e9e79217a079221c",
+          "size": 2170
+        },
+        "byte_pin": {
+          "sha256": "82b9eacfb8c38aeb1b0a339c6a0466f2cddfd671a6727bb2deac5a20d24627c7",
+          "size": 455
+        }
+      },
+      "status": {
+        "ast_pin": {
+          "sha256": "35ba0f6b9a9bf9cd4514d3798a0e2e43ff248b23ec633712a1c4d1369291cacd",
+          "size": 2202
+        },
+        "byte_pin": {
+          "sha256": "f9bc5cf3c6129fec8c88cab26fd5c8d4f59f668beae7675735fa04ddf0e97dcb",
+          "size": 316
+        }
+      },
+      "stdio_check": {
+        "ast_pin": {
+          "sha256": "056039afa45c06ca719551ca342076cbfdf601d48d0201f3074ccac9532a2559",
+          "size": 4584
+        },
+        "byte_pin": {
+          "sha256": "14480f3bb30347347f4ea0cff9bd5ce78b80c88d32a52a5e65ac509d51ef886c",
+          "size": 847
+        }
+      },
+      "stdio_install": {
+        "ast_pin": {
+          "sha256": "253fd3a86ca78bb743f3a2c9a7ee5f7112a8818ccbaff201634a7b692fe0c2d6",
+          "size": 3000
+        },
+        "byte_pin": {
+          "sha256": "d0732e1dac1fe79909881160e720676844ffcb7d36250e328eab4c2070477952",
+          "size": 521
+        }
+      },
+      "subdirectory": {
+        "ast_pin": {
+          "sha256": "f121445ca1e38ab962e72fcbe4fd27ff7e23510be52be56a35d7661f26239504",
+          "size": 2169
+        },
+        "byte_pin": {
+          "sha256": "dc22f2af766a7e90c04a9308931fa65584935a9e9c0be47fa7838ef868aeef49",
+          "size": 452
+        }
+      },
+      "verify_mount": {
+        "ast_pin": {
+          "sha256": "98c46b7f3d7bddc071af461d098abf17a83782a51ce28fc97530c2b99f150020",
+          "size": 1601
+        },
+        "byte_pin": {
+          "sha256": "0c84dd26b2430899272ac60ecb6157cc95a5a9c59f7d85a3e0939158298efe36",
+          "size": 284
+        }
+      }
+    }
+  },
+  "SbfFinite_continue.py": {
+    "after": {
+      "sha256": "9b7a1327ba670f2ce1f6c22f029d705c694d53266787de3c46546bea02ed4d11",
+      "size": 7852
+    },
+    "before": {
+      "sha256": "4938197314caaf5ebbe049f101f4eda0f1bea7a3dea51770ba0986f72bcd4a18",
+      "size": 7736
+    },
+    "complete_changed_statements": {
+      "fresh": {
+        "after": "def fresh(approved, role):\n    \"\"\"Full policy recomputation, before/after actual pins and controls.\n\n    The only truth inspected below comes from the exact copied collector,\n    which itself invokes scans, visibility and evaluate. It is not an input.\n    \"\"\"\n    start = time.monotonic()\n    before = pins(approved, role)\n    controls0 = observation.controls()\n    observation.check_controls(controls0)\n    report = observation.collect('inside-scope')\n    controls1 = observation.controls()\n    observation.check_controls(controls1)\n    after = pins(approved, role)\n    label = 'root' if role == 'helper' else 'user'\n    journal(label+'-before.json', dict(pins=before, controls=controls0))\n    journal(label+'-after.json', dict(pins=after, controls=controls1))\n    require(before == after, 'source/runtime/environment/identity/inherited limits changed')\n    decision = report['decision']\n    require(report['api_version'] == 'SbfFiniteRss20261025-v1' and\n            decision['schema'] == 'ResourceStability20261025-v1' and\n            decision['phase'] == 'inside-scope' and decision['additional_bytes'] == 0 and\n            decision['allowed'] is True and 'error' not in decision and\n            'collection_failures' not in decision, 'fresh full admission denied')\n    bound = decision['scope_binding']\n    require(bound['expected_limits'] == bound['observed_limits'] == observation.EXPECTED,\n            'finite own1GiB cap counted once')\n    for observed in (controls0, controls1):\n        actual = {k:v for k,v in observed['self_observation'].items() if k != 'reads'}\n        require(actual == bound['self_identity'] == decision['collector_identity'], 'admission/control collector drift')\n        require(actual['pid'] == os.getpid() == report['collector_pid'] and\n                actual['unified_path'] == approved['scope_path'] and\n                actual['path'].endswith('/'+UNIT+'.scope'), 'actual own scope binding')\n    require(0 <= time.monotonic()-start < 110, 'stale scan/deadline')\n    return before",
+        "before": "def fresh(approved, role):\n    \"\"\"Full policy recomputation, before/after actual pins and controls.\n\n    The only truth inspected below comes from the exact copied collector,\n    which itself invokes scans, visibility and evaluate. It is not an input.\n    \"\"\"\n    start = time.monotonic()\n    before = pins(approved, role)\n    controls0 = observation.controls()\n    observation.check_controls(controls0)\n    report = observation.collect('inside-scope')\n    controls1 = observation.controls()\n    observation.check_controls(controls1)\n    after = pins(approved, role)\n    label = 'root' if role == 'helper' else 'user'\n    journal(label+'-before.json', dict(pins=before, controls=controls0))\n    journal(label+'-after.json', dict(pins=after, controls=controls1))\n    require(before == after, 'source/runtime/environment/identity/inherited limits changed')\n    decision = report['decision']\n    require(report['api_version'] == 'SbfFiniteRss20261025-v1' and\n            decision['schema'] == 'ResourceStability20261025-v1' and\n            decision['phase'] == 'inside-scope' and decision['additional_bytes'] == 0 and\n            decision['allowed'] is True and 'error' not in decision and\n            'collection_failures' not in decision, 'fresh full admission denied')\n    bound = decision['scope_binding']\n    require(bound['expected_limits'] == bound['observed_limits'] == observation.EXPECTED,\n            'finite own 4GiB cap counted once')\n    for observed in (controls0, controls1):\n        actual = {k:v for k,v in observed['self_observation'].items() if k != 'reads'}\n        require(actual == bound['self_identity'] == decision['collector_identity'], 'admission/control collector drift')\n        require(actual['pid'] == os.getpid() == report['collector_pid'] and\n                actual['unified_path'] == approved['scope_path'] and\n                actual['path'].endswith('/'+UNIT+'.scope'), 'actual own scope binding')\n    require(0 <= time.monotonic()-start < 110, 'stale scan/deadline')\n    return before"
+      },
+      "root_continuation": {
+        "after": "def root_continuation():\n    \"\"\"Fixed operation, no arguments; all metadata FDs close before setup.\"\"\"\n    require(os.getresuid() == os.getresgid() == (0,0,0), 'root continuation IDs')\n    host_stdio()\n    approved = approval()\n    before = proc.lineage(approved)\n    fresh(approved, 'helper')\n    require(before == proc.lineage(approved), 'sudo/monitor/helper transition drift')\n    # Pin all guest physical sources to the root-owned published package; user\n    # staging paths are never promoted to immutable root-owned sources.\n    from SbfFinite_package import PACKAGE, pinned_file\n    from SbfFinite_backend_candidate import validate_runtime\n    manifest = approved['runtime']\n    validate_runtime(manifest)\n    for row in manifest['files']:\n        require(row['physical'].startswith('/var/lib/SbfFinite-20261025-v1/rootfs/'), 'root runtime package path')\n        pinned_file(row['physical'], {k:row[k] for k in ('sha256','size')}, row['mode'])\n    require(before == proc.lineage(approved), 'prebackend lineage drift')\n    require(pins(approved, 'helper')['process'] == before[-1], 'helper prebackend drift')\n    # Concrete fixed body, no callback premise, runtime argument or flag enables\n    # public CLI. This gate is the only candidate caller of the native body.\n    from SbfFinite_backend_candidate import fixed_backend_body\n    return fixed_backend_body()",
+        "before": "def root_continuation():\n    \"\"\"Fixed operation, no arguments; all metadata FDs close before setup.\"\"\"\n    require(os.getresuid() == os.getresgid() == (0,0,0), 'root continuation IDs')\n    host_stdio()\n    approved = approval()\n    before = proc.lineage(approved)\n    fresh(approved, 'helper')\n    require(before == proc.lineage(approved), 'sudo/monitor/helper transition drift')\n    # Pin all guest physical sources to the root-owned published package; user\n    # staging paths are never promoted to immutable root-owned sources.\n    from SbfFinite_package import PACKAGE, pinned_file\n    from SbfFinite_backend_candidate import validate_runtime\n    manifest = approved['runtime']\n    validate_runtime(manifest)\n    for row in manifest['files']:\n        require(row['physical'].startswith(PACKAGE+'/runtime/'), 'root runtime package path')\n        pinned_file(row['physical'], {k:row[k] for k in ('sha256','size')}, row['mode'])\n    require(before == proc.lineage(approved), 'prebackend lineage drift')\n    require(pins(approved, 'helper')['process'] == before[-1], 'helper prebackend drift')\n    # Concrete fixed body, no callback premise, runtime argument or flag enables\n    # public CLI. This gate is the only candidate caller of the native body.\n    from SbfFinite_backend_candidate import producer_fixed_body\n    return producer_fixed_body()"
+      },
+      "user_producer": {
+        "after": "def user_producer():\n    require(os.getresuid() == os.getresgid() == (1000,1000,1000), 'fixed collector IDs')\n    approved = approval()\n    notifyfd = os.pidfd_open(os.getpid())\n    guard = Guard(notify=lambda: signal.pidfd_send_signal(notifyfd, signal.SIGUSR1))\n    observation.ACTIVE_GUARD = guard\n    old = signal.getsignal(signal.SIGUSR1)\n    signal.signal(signal.SIGUSR1, lambda *_: (_ for _ in ()).throw(Denied('resident guard failed')))\n    failed = True\n    child = None\n    try:\n        guard.start()\n        before = fresh(approved, 'collector')\n        guard.check()\n        # Fixed literal sudo command only; no stdin, arbitrary output, retries,\n        # shell, user environment forwarding or scope creation here.\n        from SbfFiniteLinux_backend import fixed_null\n        null0 = fixed_null()\n        null12 = None\n        try:\n            null12 = null_writers()\n            child = subprocess.Popen(SUDO, stdin=null0, stdout=null12, stderr=null12,\n                                     env=ENV, close_fds=True)\n        finally:\n            os.close(null0)\n            if null12 is not None:\n                os.close(null12)\n        code = child.wait(timeout=120)\n        guard.check()\n        require(code == 0, 'root continuation failed')\n        require(pins(approved, 'collector') == before, 'producer changed during helper')\n        failed = False\n        return 0\n    finally:\n        try:\n            if failed and child is not None:\n                # Guard cancellation opens stable handles before checking the\n                # retained start identities. Permission failures are retained;\n                # waiting for our direct sudo child may be unbounded (OPEN).\n                guard.cancel_owned()\n                child.wait()\n            if guard.thread is not None:\n                journal('user-guard.json', guard.finish(failed=failed))\n        finally:\n            observation.ACTIVE_GUARD = None\n            signal.signal(signal.SIGUSR1, old)\n            os.close(notifyfd)",
+        "before": "def user_producer():\n    require(os.getresuid() == os.getresgid() == (1000,1000,1000), 'fixed collector IDs')\n    approved = approval()\n    notifyfd = os.pidfd_open(os.getpid())\n    guard = Guard(notify=lambda: signal.pidfd_send_signal(notifyfd, signal.SIGUSR1))\n    observation.ACTIVE_GUARD = guard\n    old = signal.getsignal(signal.SIGUSR1)\n    signal.signal(signal.SIGUSR1, lambda *_: (_ for _ in ()).throw(Denied('resident guard failed')))\n    failed = True\n    child = None\n    try:\n        guard.start()\n        before = fresh(approved, 'collector')\n        guard.check()\n        # Fixed literal sudo command only; no stdin, arbitrary output, retries,\n        # shell, user environment forwarding or scope creation here.\n        from SbfFiniteLinux_backend import fixed_null\n        null0 = fixed_null()\n        null12 = None\n        try:\n            null12 = null_writers()\n            child = subprocess.Popen(SUDO, stdin=null0, stdout=null12, stderr=null12,\n                                     env=ENV, close_fds=True)\n        finally:\n            os.close(null0)\n            if null12 is not None:\n                os.close(null12)\n        code = child.wait(timeout=115)\n        guard.check()\n        require(code == 0, 'root continuation failed')\n        require(pins(approved, 'collector') == before, 'producer changed during helper')\n        failed = False\n        return 0\n    finally:\n        try:\n            if failed and child is not None:\n                # Guard cancellation opens stable handles before checking the\n                # retained start identities. Permission failures are retained;\n                # waiting for our direct sudo child may be unbounded (OPEN).\n                guard.cancel_owned()\n                child.wait()\n            if guard.thread is not None:\n                journal('user-guard.json', guard.finish(failed=failed))\n        finally:\n            observation.ACTIVE_GUARD = None\n            signal.signal(signal.SIGUSR1, old)\n            os.close(notifyfd)"
+      }
+    },
+    "unchanged": {
+      "host_stdio": {
+        "ast_pin": {
+          "sha256": "0d4605ab11dfee715ecb96220d9322d655efee9ae8ce47183ba799326cfcf6bf",
+          "size": 2972
+        },
+        "byte_pin": {
+          "sha256": "d19e99e0ec028028057f42994664b76184724b78e45201613c60eb5eca9cd5a0",
+          "size": 564
+        }
+      },
+      "null_writers": {
+        "ast_pin": {
+          "sha256": "1c7287d1467215c97b1edd7440ba468c28b6b159f8d517085c338ae2a7d01bfe",
+          "size": 2550
+        },
+        "byte_pin": {
+          "sha256": "6320b07f5f8e3494422efe466687bf881578741d65372b668572bf62169b596d",
+          "size": 543
+        }
+      },
+      "pins": {
+        "ast_pin": {
+          "sha256": "0ab743e22dc9e718c8549c9eab3d59ba869ef24337ec688f189bf20a1df42628",
+          "size": 2907
+        },
+        "byte_pin": {
+          "sha256": "a41b861aa4278b268e04ca121a518d349382a11538cf09f7d6c45a4afac29c95",
+          "size": 665
+        }
+      }
+    }
+  },
+  "SbfFinite_observe.py": {
+    "after": {
+      "sha256": "d1853bb466b9982d7517273cee613f014704a5df1b947239400234e1638aaec1",
+      "size": 5829
+    },
+    "before": {
+      "sha256": "2b255ac993f97db98215d35d2d8898fcf803c35ba72a73ddb2c58d687be84dfb",
+      "size": 7684
+    },
+    "complete_changed_statements": {
+      "runtime_pins": {
+        "after": "def runtime_pins():\n    # Exact finite host-role paths published in separate operational data.\n    # No broad filesystem discovery, dlopen, ldd, version/help probe or host shell.\n    from SbfFinite_package import approval, pinned_file\n    role = 'helper' if os.geteuid() == 0 else 'collector'\n    expected = approval()['host'][role]\n    if type(expected) is not dict or set(expected) != {'files'}:\n        raise ValueError('finite host file catalog required')\n    for p,item in sorted(expected['files'].items()):\n        pinned_file(p,item['pin'],item['mode'])\n    return expected",
+        "before": "def runtime_pins():\n    # Pure ELF metadata inspection: no ldd/native helper execution. Reject new\n    # env runtime dependencies rather than silently leaving them unpinned.\n    raw=Path('/usr/bin/env').read_bytes()\n    if raw[:6] != b'\\x7fELF\\x02\\x01' or struct.unpack_from('<H',raw,18)[0] != 62:\n        raise ValueError('env ELF ABI drift')\n    phoff,shoff=struct.unpack_from('<QQ',raw,32)\n    phsize,phnum,shsize,shnum=struct.unpack_from('<HHHH',raw,54)\n    interp=[]\n    for i in range(phnum):\n        ph=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)\n        if ph[0]==3:interp.append(raw[ph[2]:ph[2]+ph[5]].rstrip(b'\\0').decode())\n    sections=[struct.unpack_from('<IIQQQQIIQQ',raw,shoff+i*shsize) for i in range(shnum)]\n    needed=[]\n    for section in sections:\n        if section[1]!=6:continue\n        strings=sections[section[6]]\n        table=raw[strings[4]:strings[4]+strings[5]]\n        for off in range(section[4],section[4]+section[5],section[9]):\n            tag,value=struct.unpack_from('<qQ',raw,off)\n            if tag==1:needed.append(table[value:].split(b'\\0',1)[0].decode())\n            if tag in (15,29):raise ValueError('env ELF search path drift')\n    if interp!=['/lib64/ld-linux-x86-64.so.2'] or needed!=['libc.so.6']:\n        raise ValueError('env ELF runtime dependency drift')\n    std = Path(sysconfig.get_path('stdlib')).resolve()\n    files = {}\n    for root, dirs, names in os.walk(std):\n        dirs[:] = sorted(d for d in dirs if d not in ('site-packages','dist-packages','__pycache__'))\n        for name in sorted(names):\n            if name.endswith(('.py','.so')):\n                p = Path(root)/name\n                files[str(p)] = filepin(p)\n    mapped = {}\n    for line in Path('/proc/self/maps').read_text().splitlines():\n        parts = line.split(None,5)\n        if len(parts)==6 and parts[5].startswith('/'):\n            p=parts[5]\n            mapped[p]=filepin(p)\n    tools = {name:dict(path=shutil.which(name), **filepin(shutil.which(name)))\n             for name in ('ps','systemctl','docker','systemd-run')}\n    return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable),\n                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools,\n                env_binary=dict(path='/usr/bin/env', **filepin('/usr/bin/env')),\n                env_elf_contract=dict(interpreter=interp,needed=needed),\n                env_dependencies={p:filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})"
+      }
+    },
+    "unchanged": {
+      "check_controls": {
+        "ast_pin": {
+          "sha256": "cd8d0018a8bcbdc7e78a587797d0900e63fc43a0bc5147ac2c017372bdb1efc4",
+          "size": 4808
+        },
+        "byte_pin": {
+          "sha256": "4da07eb1b9d25d5c444bed846798ec3277fbf6ba55a227dde045f9b865e65e51",
+          "size": 1137
+        }
+      },
+      "collect": {
+        "ast_pin": {
+          "sha256": "407a459299bfd87fe46d66b82aade7a5bed668cc16e48e91a6b5b604c91ed0fa",
+          "size": 12084
+        },
+        "byte_pin": {
+          "sha256": "aa6c0a538e0451cb545adbf08fc1015b6a46503c6a31f3d0b5c31702472c4413",
+          "size": 2638
+        }
+      },
+      "controls": {
+        "ast_pin": {
+          "sha256": "9810474975faf5d73cca56ca9d8bcd8366676ffb5f8edde9267b816c4395c757",
+          "size": 2654
+        },
+        "byte_pin": {
+          "sha256": "3174cec1d21aa195e669a3b2f42768b1859347632da12f6fb3499bf3c53e6aea",
+          "size": 585
+        }
+      },
+      "digest": {
+        "ast_pin": {
+          "sha256": "ace3a6a8d1286b455988d9ff4ed629da5c03c3e1fd8ed6f70c56b03f109a530d",
+          "size": 631
+        },
+        "byte_pin": {
+          "sha256": "62b6ce21032a7c7b2d1f16df8e5872568c0314cacc403bb2b6cdef45399e21ec",
+          "size": 87
+        }
+      },
+      "filepin": {
+        "ast_pin": {
+          "sha256": "55be9b57742f5729171436819ddf6a108fa262e41d86d157911834d21663d5ae",
+          "size": 447
+        },
+        "byte_pin": {
+          "sha256": "ce0df294e84a201e98e7c0218c83f92f9b0c0a450f43e2f4c86d5a5594c76807",
+          "size": 61
+        }
+      }
+    }
+  },
+  "SbfFinite_package.py": {
+    "after": {
+      "sha256": "d948e90d16bda805541d8fc5f8d50438e85d83a445c5c59be21909e498cfcacf",
+      "size": 7365
+    },
+    "before": {
+      "sha256": "e8bf6b8c9944ae518ab00ca784af2bfe4fa4eb6db9305c79de59373d6327be14",
+      "size": 5709
+    },
+    "complete_changed_statements": {
+      "approval": {
+        "after": "def approval():\n    \"\"\"Fresh fixed finite operational inputs, not full Producer adoption.\n\n    No report/manifest/path/GO argument. This job publishes no such actual host\n    data. A later reviewed source revision must pin it; CLI still always denies.\n    \"\"\"\n    require(type(OPERATIONAL_PIN) is dict and set(OPERATIONAL_PIN)=={'size','sha256'},'finite operational data not published')\n    raw=pinned_file(PACKAGE+'/SbfFinite-operational.json',OPERATIONAL_PIN,0o444)\n    value=json.loads(raw,object_pairs_hook=no_duplicates,parse_constant=lambda _:require(False,'nonfinite JSON'))\n    require(type(value) is dict and set(value)=={'schema','host','roles','scope_path','limits','env'},'finite operational fields')\n    require(value['schema']=='SbfFinite-operational-v1' and value['env']==ENV,'finite operational schema/env')\n    require(set(value['roles'])=={'collector','sudo','sudo-monitor','helper'} and\n            set(value['host'])==set(value['limits'])=={'collector','helper'},'finite operational roles')\n    require(value['scope_path'].startswith('/') and value['scope_path'].endswith('/'+UNIT+'.scope') and\n            '..' not in value['scope_path'].split('/'),'finite own scope')\n    # Runtime is independently literal candidate data, never caller authority.\n    return dict(value,runtime=RUNTIME)",
+        "before": "def approval():\n    from SbfFinite_pins import RUNTIME_PIN\n    require(type(RUNTIME_PIN) is dict and set(RUNTIME_PIN) == {'sha256','size'},\n            'published reviewed runtime closure unavailable')\n    raw = pinned_file(PACKAGE+'/SbfFinite_runtime.json', RUNTIME_PIN, 0o444)\n    value = json.loads(raw, object_pairs_hook=no_duplicates,\n                       parse_constant=lambda _: require(False, 'nonfinite JSON'))\n    require(set(value) == {'schema','runtime','host','roles','scope_path','limits','env'},\n            'finite approval fields')\n    require(value['schema'] == 'SbfFinite-runtime-v1' and value['env'] == ENV,\n            'approval version/environment')\n    require(value['scope_path'].endswith('/'+UNIT+'.scope'), 'approved scope path')\n    return value"
+      },
+      "digest": {
+        "after": "def digest(raw):return dict(sha256=hashlib.sha256(raw).hexdigest(),size=len(raw))",
+        "before": "def digest(raw):\n    return dict(sha256=hashlib.sha256(raw).hexdigest(), size=len(raw))"
+      },
+      "journal": {
+        "after": "def journal(name,value):\n    require(name in {'inside-scope-ordered.json','inside-scope-report.json','inside-scope-metrics.json',\n                    'root-before.json','root-after.json','user-before.json','user-after.json',\n                    'user-guard.json','root-result.json','failure.json'},'fixed journal name')\n    if os.geteuid()==0:parent=open_safe_ancestry(ROOT_JOURNAL)\n    else:\n        parent=os.open(USER_JOURNAL,DIR_FLAGS);s=os.fstat(parent)\n        if s.st_uid!=os.getuid() or s.st_gid!=os.getgid() or stat.S_IMODE(s.st_mode)!=0o700:\n            os.close(parent);raise RuntimeError('user journal rights')\n    fd=None\n    try:\n        fd=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC,0o600,dir_fd=parent)\n        total=0\n        for text in json.JSONEncoder(sort_keys=True).iterencode(value):\n            raw=text.encode();total+=len(raw);require(total<=128*2**20,'raw capture bound')\n            while raw:\n                n=os.write(fd,raw);require(n>0,'capture write');raw=raw[n:]\n        os.fsync(fd)\n    finally:\n        if fd is not None:os.close(fd)\n        os.close(parent)",
+        "before": "def journal(name, value):\n    \"\"\"Exclusive full raw JSON retention, no public export of arbitrary content.\n\n    Both fixed journal directories are prerequisites, not created by this API.\n    Root never reads the user journal or accepts it as authority.\n    \"\"\"\n    require(name in {'inside-scope-ordered.json','inside-scope-report.json',\n                    'inside-scope-metrics.json','root-before.json','root-after.json',\n                    'user-before.json','user-after.json','user-guard.json',\n                    'root-result.json','failure.json'}, 'fixed journal name')\n    root = os.geteuid() == 0\n    if root:\n        parent = open_safe_ancestry(ROOT_JOURNAL)\n    else:\n        parent = os.open(USER_JOURNAL, os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW|os.O_CLOEXEC)\n        s = os.fstat(parent)\n        if s.st_uid != os.getuid() or stat.S_IMODE(s.st_mode) != 0o700:\n            os.close(parent)\n            raise Denied('user journal owner/mode')\n    fd = None\n    try:\n        fd = os.open(name, os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW|os.O_CLOEXEC, 0o600, dir_fd=parent)\n        encoder = json.JSONEncoder(sort_keys=True)\n        size = 0\n        for chunk in encoder.iterencode(value):\n            raw = chunk.encode()\n            size += len(raw)\n            require(size <= 128*2**20, 'raw journal bound')\n            while raw:\n                written = os.write(fd, raw)\n                require(written > 0, 'journal short write')\n                raw = raw[written:]\n        os.fsync(fd)\n    finally:\n        if fd is not None:\n            os.close(fd)\n        os.close(parent)"
+      },
+      "no_duplicates": {
+        "after": "def no_duplicates(pairs):\n    result={}\n    for k,v in pairs:\n        require(k not in result,'duplicate JSON key');result[k]=v\n    return result",
+        "before": "def no_duplicates(pairs):\n    out = {}\n    for key, value in pairs:\n        require(key not in out, 'duplicate key')\n        out[key] = value\n    return out"
+      },
+      "pinned_file": {
+        "after": "def pinned_file(path,pin,mode,api=os,ancestry=open_safe_ancestry):\n    parent=ancestry(path.rsplit('/',1)[0]);fd=None\n    try:\n        fd=api.open(canonical(path)[-1],FILE_FLAGS,dir_fd=parent)\n        s=api.fstat(fd)\n        require(stat.S_ISREG(s.st_mode) and s.st_uid==s.st_gid==0 and s.st_nlink==1 and\n                stat.S_IMODE(s.st_mode)==mode and s.st_size==pin['size']<=64*2**20,'pinned file rights/size')\n        chunks=[];n=0\n        while True:\n            b=api.read(fd,min(65536,pin['size']-n+1))\n            if not b:break\n            n+=len(b);require(n<=pin['size'],'pinned file growth');chunks.append(b)\n        raw=b''.join(chunks)\n        require(identity(s)==identity(api.fstat(fd)) and digest(raw)==pin,'pinned file drift/hash')\n        check_entry(parent,canonical(path)[-1],fd) if api is os else api.check_entry(parent,canonical(path)[-1],fd)\n        return raw\n    finally:\n        if fd is not None:api.close(fd)\n        api.close(parent)",
+        "before": "def pinned_file(path, pin, mode, api=os, ancestry=open_safe_ancestry):\n    \"\"\"Root-owned nofollow ancestry, regular single-link exact modes and bytes.\n\n    Proc exe magic links are intentionally handled elsewhere, never here.\n    A root adversary is outside this boundary, as in the reviewed backend.\n    \"\"\"\n    directory, name = path.rsplit('/', 1)\n    parent = ancestry(directory)\n    fd = None\n    try:\n        fd = api.open(name, FILE_FLAGS, dir_fd=parent)\n        before = api.fstat(fd)\n        require(stat.S_ISREG(before.st_mode) and before.st_uid == 0 and\n                before.st_gid == 0 and before.st_nlink == 1 and\n                stat.S_IMODE(before.st_mode) == mode, 'package type/owner/mode/link')\n        require(before.st_size == pin['size'] <= 64*2**20, 'package size')\n        check_entry(parent, name, fd) if api is os else api.check_entry(parent, name, fd)\n        pieces, total = [], 0\n        while True:\n            raw = api.read(fd, min(65536, pin['size']+1-total))\n            if not raw:\n                break\n            pieces.append(raw)\n            total += len(raw)\n            require(total <= pin['size'], 'package grew')\n        raw = b''.join(pieces)\n        require(identity(before) == identity(api.fstat(fd)) and digest(raw) == pin,\n                'package changed/digest')\n        return raw\n    finally:\n        if fd is not None:\n            api.close(fd)\n        api.close(parent)"
+      },
+      "public_summary": {
+        "after": "def public_summary(value):\n    raw=(json.dumps(value,sort_keys=True)+'\\n').encode('ascii')\n    require(len(raw)<=4*2**20,'transport summary bound')\n    return raw",
+        "before": null
+      },
+      "verify_package": {
+        "after": "def verify_package():\n    from SbfFinite_package_pins import FILES\n    require(FILES and all(n.startswith('SbfFinite') and '/' not in n for n in FILES),'fixed package inventory')\n    result={n:digest(pinned_file(PACKAGE+'/'+n,r,0o444)) for n,r in sorted(FILES.items())}\n    from SbfFinite_launcher_pin import LAUNCHER_PIN\n    result[LAUNCHER]=digest(pinned_file(LAUNCHER,LAUNCHER_PIN,0o555))\n    # package_pins itself is an explicit bootstrap boundary. Exact externally\n    # published install inventory pins it; this function cannot prove its selfpin.\n    return result",
+        "before": "def verify_package():\n    from SbfFinite_pins import FILES, EXTERNAL, ROOT_EXTERNAL\n    require(FILES and all('/' not in name and name.startswith('SbfFinite')\n                         for name in FILES), 'fixed package file set')\n    require(set(EXTERNAL) == {LAUNCHER} and set(ROOT_EXTERNAL) ==\n            {'/etc/sudoers.d/SbfFinite-20261025-tiny-root'}, 'fixed external source set')\n    files = {PACKAGE+'/'+name:row for name,row in FILES.items()}\n    files.update(EXTERNAL)\n    if os.geteuid() == 0:\n        files.update(ROOT_EXTERNAL)\n    return {name:digest(pinned_file(name, row['pin'], row['mode']))\n            for name, row in sorted(files.items())}"
+      },
+      "verify_tree": {
+        "after": "def verify_tree(rootfd):\n    \"\"\"Exact finite installed guest tree. Bounded expected entries, no discovery.\n\n    SourceFD bytes are rehashed before mount; historical source inode identity\n    does not become destination inode identity. No writer authority retained.\n    \"\"\"\n    from SbfFinite_validate import validate_fixed\n    validate_fixed();anchor=open_safe_ancestry(ROOT)\n    try:require(inode(os.fstat(anchor))==inode(os.fstat(rootfd)),'fixed installed root identity')\n    finally:os.close(anchor)\n    expected={'/':set()};modes={}\n    for r in RUNTIME['files']:\n        parts=canonical(r['logical']);path='/'\n        for i,name in enumerate(parts):\n            expected.setdefault(path,set()).add(name)\n            nxt=path.rstrip('/')+'/'+name\n            if i<len(parts)-1:expected.setdefault(nxt,set())\n            else:modes[nxt]=r\n            path=nxt\n    for target in ('tmp','proc','dev'):\n        expected['/'].add(target);expected['/'+target]=set()\n    started=time.monotonic();fds={'/':os.dup(rootfd)}\n    try:\n        for path in sorted(expected,key=lambda p:(p.count('/'),p)):\n            require(time.monotonic()-started<110,'tree verification deadline')\n            if path!='/':\n                parent,name=path.rsplit('/',1);fds[path]=os.open(name,DIR_FLAGS,dir_fd=fds[parent or '/'])\n            fd=fds[path];s=os.fstat(fd)\n            require(stat.S_ISDIR(s.st_mode) and s.st_uid==s.st_gid==0 and stat.S_IMODE(s.st_mode)==0o555,'sealed directory')\n            require(set(os.listdir(fd))==expected[path],'unknown/missing installed entry')\n        for path,r in modes.items():\n            require(time.monotonic()-started<110,'tree hash deadline')\n            pinned_file(ROOT+path,{k:r[k] for k in ('size','sha256')},r['mode'])\n    finally:\n        for fd in reversed(list(fds.values())):os.close(fd)",
+        "before": null
+      }
+    },
+    "unchanged": {}
+  },
+  "SbfFinite_process.py": {
+    "after": {
+      "sha256": "08fce0f0422245ed865bc94037ef35a6e16367bb3485eab1057f6ec2cfe87167",
+      "size": 5583
+    },
+    "before": {
+      "sha256": "93a6cc39bc6c57424a866d06affcc4ae7e96b5a59eaf83816ad6355efb7430a9",
+      "size": 5485
+    },
+    "complete_changed_statements": {},
+    "unchanged": {
+      "executable": {
+        "ast_pin": {
+          "sha256": "6991d4b352b33f60a48ed814dc7a76322644852affb0ec00481dbba444b9fffe",
+          "size": 4044
+        },
+        "byte_pin": {
+          "sha256": "3ab0a942c08d4ae519c0678c6c26a13fd4c44d609f90b838bf144c8a39d72d6e",
+          "size": 766
+        }
+      },
+      "lineage": {
+        "ast_pin": {
+          "sha256": "3eb6cd794bdd2776b9f98a7c305239808517f88cc74d7fad9861730fa9237975",
+          "size": 5581
+        },
+        "byte_pin": {
+          "sha256": "f9c6264d54520830340c8b59cdfac49e38e056a429fac97ebaafd87b75d2db55",
+          "size": 1462
+        }
+      },
+      "process": {
+        "ast_pin": {
+          "sha256": "42687c565428ca2d0179fd88c58ff77bad552671c3818aa22cf04521540652c7",
+          "size": 13189
+        },
+        "byte_pin": {
+          "sha256": "5fe82c3ec5dbc090db1cb6a9556454bc5f62ca3ad6e26f9fee928a1a0ac25362",
+          "size": 2434
+        }
+      },
+      "read": {
+        "ast_pin": {
+          "sha256": "b78bcae256026e24f4711cf70f7c217c2bc851b5c74341bf5b14e652400d9a46",
+          "size": 402
+        },
+        "byte_pin": {
+          "sha256": "2263ea6b23f4d9348ebff0abef0648d62f9f29977179229e842b8a38bc3095d2",
+          "size": 69
+        }
+      },
+      "stat": {
+        "ast_pin": {
+          "sha256": "96c03612b07b3fc4ddafb9b4e2a89f861e8402ac09eeff9e70803afbd00ae36b",
+          "size": 2123
+        },
+        "byte_pin": {
+          "sha256": "0b2632cda8cbe98fed86367932c4be9b81bd59f34999bd6eebbee50028ad99da",
+          "size": 311
+        }
+      }
+    }
+  }
+}

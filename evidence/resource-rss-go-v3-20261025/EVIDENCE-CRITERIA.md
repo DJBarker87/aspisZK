@@ -1,0 +1,9 @@
+# Existing capture retrieval ruling
+
+Allocation 6 remains charged and terminal; five prior failures unchanged. Exactly one SSH driver may export existing capture bytes from the known own immutable 8f3c8677b5 stage. No runner/API execution, admission, runtime inventory, scope, compiler, native gate, new epoch, retry, repair, source update or key access is authorized. Axioms N/A. No policy or premise changes.
+
+Before capture reads: traverse exact absolute stage components with directory descriptors and O_NOFOLLOW; validate stage uid1000 and mode0700. Open only finite filenames derived from the retained runner save/stream writes, regular files with nlink1, uid1000, stable fd/path identity and bounded pre/post metadata. Missing finite entries explicitly ABSENT, never interpreted as earlier historical absence. Max32MiB/file,256MiB original total,120s collection/SSH,400MiB output,512MiB resident ceiling. Retain partial output/stderr on transport failure and stop without further host queries. No directory listing or external path following. Only stdlib byte/hash work remotely and own retrieval metrics; no rlimit inventory.
+
+Stream exact bytes in 512KiB base64 frames, each saved below5MB locally, preserving all ordered inputs and complete reports with exact reconstruction/hash checking. Originals >5MB remain remote; local shards enable exact reconstruction without a large derived JSON artifact. Retrieval wall/RSS/swap are distinct from original-run metrics.
+
+Offline: verify frames and full file hashes, actual source/dependency/runtime/environment pins using retained maps, ordered collector/evaluator replay from immutable published sources if complete inputs exist. Report exact exit78 branch and raw reason; qualify scope independently if pins changed. Missing artifacts remain UNKNOWN. No full native or security claim; both deployed targets not established. Lead reviews failure and chooses any separately authorized aligned change.

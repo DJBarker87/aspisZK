@@ -1,0 +1,49 @@
+{"attempt": "lean-013", "exit_status": 1, "wall_seconds": 1.895158674014965, "peak_rss_kib": "4415832", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_Checksum.list_compare' depends on axioms: [propext, sorryAx]", "'AspisR1.Port9OR_Checksum.compare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_Checksum.checksum_branches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_Checksum.checksum_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_Checksum.discarded_reply' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+Port9OR_Checksum.lean:23:6: error: unsolved goals
+case neg
+x : U8
+xs : List U8
+ih : ∀ (ys : List U8), CheckpointBytes4Ops.listEq core.cmp.PartialEqU8 xs ys = ok (decide (xs = ys))
+y : U8
+ys : List U8
+h : ¬x = y
+⊢ (if false = true then CheckpointBytes4Ops.listEq core.cmp.PartialEqU8 xs ys else ok false) = ok false
+Port9OR_Checksum.lean:23:34: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵L̵i̵s̵t̵.̵c̵o̵n̵s̵.̵i̵n̵j̵E̵q̵,̵f̵a̵l̵s̵e̵_̵a̵n̵d̵]̵[̲h̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲L̲i̲s̲t̲.̲c̲o̲n̲s̲.̲i̲n̲j̲E̲q̲,̲ ̲f̲a̲l̲s̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linte
+...
+̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_Checksum.lean:43:71: error: unsolved goals
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+matchReply otherReply : State
+different : matchReply ≠ otherReply
+differentBytes : ↑(Port9OR_Reply.digest matchReply) ≠ ↑(Port9OR_Reply.digest otherReply)
+⊢ True ∧ ok (decide ¬False) = ok true
+Port9OR_Checksum.lean:52:72: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵u̵f̵f̵i̵x̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵B̵y̵t̵e̵s̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵]̵[̲s̲u̲f̲f̲i̲x̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲i̲f̲f̲e̲r̲e̲n̲t̲B̲y̲t̲e̲s̲,̲ ̲a̲n̲d̲_̲s̲e̲l̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port9OR_Checksum.lean:52:84: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [suffix, ̲ne_eq, ̲not_true_eq_false, ̲decide_false, ̲differentBytes, ̲decide_true,̵a̵n̵d̵_̵s̵e̵l̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port9OR_Checksum.list_compare' depends on axioms: [propext, sorryAx]
+'AspisR1.Port9OR_Checksum.compare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_branches' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.checksum_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_Checksum.discarded_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7057b357730040f4acd9d63ae2ecca69.scope; invocation ID: 51bdf46069b346628e1dbb7ef59ed0e2

@@ -1,0 +1,62 @@
+{"attempt": "lean-003", "exit_status": 1, "wall_seconds": 4.783716439997079, "peak_rss_kib": "4463192", "swaps": "0", "print_axioms": ["'AspisR1.Port12COUNT_Potential.parent_funded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.node_funded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port12COUNT_Potential.finish_spec' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+Port12COUNT_Potential.lean:62:12: warning: 'simp_all' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Port12COUNT_Potential.lean:62:25: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Port12COUNT_Potential.lean:62:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Port12COUNT_Potential.lean:62:25: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Port12COUNT_Potential.lean:96:54: error: scalar_tac failed to prove the goal b
+...
+ (↑s.n - ↑i + ↑w) - 1)
+      (Port9OR_P6Node.parent s (↑s.val)[↑i] a a✝² a✝ (↑s.idx)[↑i] w) ⦄
+Port12COUNT_Potential.lean:96:54: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+a✝⁴ : U32
+a_post✝² : a✝⁴ = (↑s.idx)[↑i]
+a✝³ : Std.Array U8 32#usize
+a_post✝¹ : a✝³ = (↑s.val)[↑i]
+a✝² : Usize
+a_post✝ : ↑a✝² = ↑i + 1
+h✝² : ¬a✝² < s.n
+a✝¹ : Usize
+a_post1✝ : ↑a✝¹ = ↑physical.len - ↑s.at
+a_post2✝ : ↑s.at ≤ ↑physical.len
+h✝¹ : ¬a✝¹ < 32#usize
+a✝ : Usize
+a_post : ↑a✝ = ↑s.at + 32
+a : Slice U8
+a_post1 : ↑a = List.slice (↑s.at) (↑s.at + 32) ↑physical
+a_post2 : a.length = ↑s.at + 32 - ↑s.at
+h✝ : ¬(↑s.idx)[↑i] &&& 1#u32 = 0#u32
+⊢ reference.read32 a ⦃ a =>
+    Funded (rowPost physical) (((↑physical).length - ↑s.at) / 32 + (↑s.n - ↑i + ↑w) - 1)
+      (Port9OR_P6Node.parent s a (↑s.val)[↑i] a✝² a✝ (↑s.idx)[↑i] w) ⦄
+Port12COUNT_Potential.lean:96:27: warning: This simp argument is unused:
+  Funded
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵F̵u̵n̵d̵e̵d̵,̵r̵o̵w̵P̵o̵s̵t̵,̵c̵r̵e̵d̵i̵t̵]̵[̲r̲o̲w̲P̲o̲s̲t̲,̲ ̲c̲r̲e̲d̲i̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port12COUNT_Potential.parent_funded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Potential.node_funded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Potential.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_Potential.finish_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r78e520cdc10b4f41962691da68045707.scope; invocation ID: 180a38e89ac04e60b07a0e7f8e68c70f

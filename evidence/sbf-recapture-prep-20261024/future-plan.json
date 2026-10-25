@@ -1,0 +1,455 @@
+{
+  "schema": "SbfRecapturePrep-plan-v1",
+  "status": "PREPARED NOT RUN; execution disabled pending separate lead allocation and unresolved gates",
+  "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "immutable_receipt_base": "3e9998bbfc828c6e9455cc45a846dcd0f5372710",
+  "stage": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024",
+  "source_manifest": {
+    "sha256": "a84a528cfc4b294c603fe5381343cdaf9df0547467bcc94e61a67e5111adb9d1",
+    "bytes": 3047214,
+    "git_blob": "867e1fad72ac165bdf82926e46605482003baa36"
+  },
+  "source_input_count": 7978,
+  "source_materialization": "Materialize exactly source-inputs.json file list from immutable Git objects at frozen source; verify every size/SHA-256, file type/mode and symlink before use. Stop on any missing, extra or differing input. Do not populate the full repository or follow another worker path.",
+  "wrapper": {
+    "immutable_git_source": "3e9998bbfc828c6e9455cc45a846dcd0f5372710:tools/s10-repin3-20261023/rustc-diagnostics.py",
+    "destination": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/rustc-diagnostics.py",
+    "sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84"
+  },
+  "builds": [
+    {
+      "mode": "default",
+      "cwd": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-default-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/rustc-diagnostics.py",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-default-v1/diagnostics",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "unset_environment": [
+        "RUSTFLAGS",
+        "ASPIS_R1_POOL_PROGRAM_ID",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID"
+      ],
+      "scope_command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--unit=sbf-recapture-20261024-default-v1",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-default-v1/time.log",
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-default-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_phase": "optimized SBF compilation and retained MIR/LLVM emission; no proving, arithmetic, extraction or bootstrap",
+      "output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-default-v1/artifacts/aspis_r1_cost_probe_program.so",
+      "linked_output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-verifier/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so",
+      "expected_sha256": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+      "expected_bytes": 1563728,
+      "historical_predecessor": {
+        "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+        "command": [
+          "timeout",
+          "600",
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-default-v1/artifacts",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+        "expected_time": "optimized frozen SBF compilation with mono/MIR/LLVM diagnostics",
+        "exit_status": 0,
+        "wall_seconds": 31.913,
+        "peak_rss_kib": 686076,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r982451c26f4e4c329b7dec93868babea.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 1176027136,
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": "true",
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      },
+      "historical_command_sha256": "ae423697b12b67b63d986a8633bbe9fa8a762476495cede6da39613090455e39",
+      "status": "PREPARED NOT RUN; BLOCKED for execution"
+    },
+    {
+      "mode": "devnet",
+      "cwd": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-devnet-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-verifier",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/rustc-diagnostics.py",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-devnet-v1/diagnostics",
+        "ASPIS_R1_POOL_PROGRAM_ID": "BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID": "9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "unset_environment": [
+        "RUSTFLAGS"
+      ],
+      "scope_command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--unit=sbf-recapture-20261024-devnet-v1",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-devnet-v1/time.log",
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-devnet-v1/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_phase": "optimized SBF compilation and retained MIR/LLVM emission; no proving, arithmetic, extraction or bootstrap",
+      "output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-devnet-v1/artifacts/aspis_r1_cost_probe_program.so",
+      "linked_output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-verifier/sbpf-solana-solana/release/aspis_r1_cost_probe_program.so",
+      "expected_sha256": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+      "expected_bytes": 1563728,
+      "historical_predecessor": {
+        "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+        "command": [
+          "timeout",
+          "600",
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/r1-cost-probe/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-devnet-v1/artifacts",
+          "--features",
+          "pool-adapter,private-leaf-salts",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+        "expected_time": "optimized frozen SBF compilation with mono/MIR/LLVM diagnostics",
+        "exit_status": 0,
+        "wall_seconds": 31.48,
+        "peak_rss_kib": 683772,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r116d291836504038be158c219127646c.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 1174343680,
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-verifier",
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": "true",
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      },
+      "historical_command_sha256": "d3c027be0a9ac695c57322ee5cb4ddd2709e9c4896f6bf7f79ca70a191e1dc71",
+      "status": "PREPARED NOT RUN; BLOCKED for execution"
+    },
+    {
+      "mode": "pool",
+      "cwd": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src",
+      "command": [
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-pool-v1/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-pool",
+        "CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS": "-C link-arg=--threads=4",
+        "RUSTC_WRAPPER": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/rustc-diagnostics.py",
+        "S10_DIAGNOSTICS": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-pool-v1/diagnostics",
+        "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+        "CARGO_HOME": "/home/dombarker/.cargo",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "unset_environment": [
+        "RUSTFLAGS",
+        "ASPIS_R1_POOL_PROGRAM_ID",
+        "ASPIS_R1_REGISTRY_PROGRAM_ID"
+      ],
+      "scope_command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "--unit=sbf-recapture-20261024-pool-v1",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-pool-v1/time.log",
+        "timeout",
+        "600",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/src/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-pool-v1/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "expected_phase": "optimized SBF compilation and retained MIR/LLVM emission; no proving, arithmetic, extraction or bootstrap",
+      "output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/capture-pool-v1/artifacts/aspis_pool.so",
+      "linked_output": "/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/sbf-target-pool/sbpf-solana-solana/release/aspis_pool.so",
+      "expected_sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+      "expected_bytes": 605704,
+      "historical_predecessor": {
+        "source_revision": "b2727acd3abf79315d18b754a260f58f4b1c6326",
+        "command": [
+          "timeout",
+          "600",
+          "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+          "--manifest-path",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src/programs/aspis-pool/Cargo.toml",
+          "--sbf-out-dir",
+          "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/build-pool-v1/artifacts",
+          "--features",
+          "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+          "--skip-tools-install",
+          "--offline",
+          "-j",
+          "4",
+          "--",
+          "--locked"
+        ],
+        "cwd": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/src",
+        "expected_time": "optimized frozen SBF compilation with mono/MIR/LLVM diagnostics",
+        "exit_status": 0,
+        "wall_seconds": 32.529,
+        "peak_rss_kib": 678960,
+        "swaps": 0,
+        "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9c78282b7ec2425889778ef49aab1e0f.scope",
+        "limits": {
+          "memory.high": "6442450944",
+          "memory.max": "8589934592",
+          "memory.swap.max": "0",
+          "pids.max": "64"
+        },
+        "cgroup_memory_peak_bytes": 1138647040,
+        "env": {
+          "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s10-repin3-20261023/sbf-target-pool",
+          "CARGO_BUILD_JOBS": null,
+          "CARGO_NET_OFFLINE": "true",
+          "SBF_TRACE_DIR": null
+        },
+        "print_axioms": "N/A: no Lean compilation"
+      },
+      "historical_command_sha256": "fe67c4ef3737ded8de826f3560f52557aed3bb618b8caca7803085a54ae2c313",
+      "status": "PREPARED NOT RUN; BLOCKED for execution"
+    }
+  ],
+  "dependencies": {
+    "current-content.json": {
+      "sha256": "bb4df9dca99f97b72193741438ccf690100b2ff02dd3ec07484192f5ae2f89c2",
+      "bytes": 996920
+    },
+    "current-drivers.json": {
+      "sha256": "d390f41da7bbd226f9d3cb17ed49a1e9765005e2c27b6d45618b4249113de3f3",
+      "bytes": 4644
+    },
+    "current-global.json": {
+      "sha256": "c4feed4596f2f4eb9a9caf87eb4d9a9ce29b69b6e55017b09c6f1aaeb4722210",
+      "bytes": 5089
+    },
+    "current-source-tree.json": {
+      "sha256": "3b36539eb5a0f1e1ed44a9148bc2bc5358b1a8ffaa6c7b2e00670ae35f3f7f25",
+      "bytes": 590807
+    },
+    "immutable-assessment.json": {
+      "sha256": "0fa9c09808b4772f635897d1ca2d4386c4be0f28fa6f52638b729584b4ef128a",
+      "bytes": 24611
+    },
+    "platform-release.txt": {
+      "sha256": "9c562e3b98a0b16007feda1a140d597595e6a3ac38fcebbdb32bc5ecde4219a2",
+      "bytes": 10404
+    },
+    "official-source-comparison.json": {
+      "sha256": "930826a00f6832bf820bd9aaf1583249b8bff812e9fbb81dec7d5471f02f88e8",
+      "bytes": 8210
+    },
+    "complete-source-comparison.json": {
+      "sha256": "a626a407053b7e32c3e0fba95498a8477048b9ae256eabfa22118de3f90d419b",
+      "bytes": 27950
+    }
+  },
+  "reviewed_plan": {
+    "revision": "009b61e61bf52dba92c4fbefae79702a938f05b3",
+    "path": "evidence/sbf-identity-20261024/recapture-plan.json",
+    "sha256": "d26661bfee369ee3b78d526589fd24c363116f79ced6a15ec4259c44d32ebeab"
+  },
+  "builds_run": 0,
+  "headroom": "UNKNOWN; ResourceSLAB/GO candidate NOT ADOPTED",
+  "execution_blockers": [
+    "Donor visibility denied; no complete cache provenance/inventory/export or freshness assessment",
+    "Cold compilation guard not validated before dependency/compiler/build-script execution",
+    "Registry archives AND unpacked consumed source bytes not verified against frozen lock",
+    "Time-of-use exclusion and complete effective input closure unestablished",
+    "Current approved strict admission runner/pin not supplied; no admission or scope launched",
+    "Separate lead allocation required"
+  ],
+  "pre_go_post_required": {
+    "phases": [
+      "pre after private source/cache preparation",
+      "go inside reviewed admission and concurrency exclusion immediately before invocation",
+      "post before releasing exclusion"
+    ],
+    "inputs": [
+      "entire 7978-file source incl config/build scripts/target/lock + exclusion policy",
+      "immutable transparent diagnostics wrapper",
+      "cargo-build-sbf and SDK dispatch configuration",
+      "rustup proxy/link chain/selected host cargo/rustc/compiler runtime/sysroots/build-script compiler/linker",
+      "SBF rustc/compiler driver/LLVM/linker/objcopy/runtime/newlib/all target archives/full rust-src",
+      "registry archive checksums from Cargo.lock AND every unpacked consumed source byte/config",
+      "all copied target constituents including .fingerprint dep-info outputs build-script artifacts",
+      "exact environment allowlist only; start from env -i, explicitly review HOME/tool selection/locale/temp requirements; no secret environment dump"
+    ],
+    "check": "Digest/size/type/mode/link-path equality plus actual invocation/library path capture. Unmanifested input, change, or ambiguous writer denies. Snapshots alone do not prove time-of-use identity."
+  },
+  "diagnostic_freshness": {
+    "status": "PROPOSED; no mtimes/fingerprints invalidated in this job",
+    "selected_crates": [
+      "aspis_core",
+      "aspis_statement",
+      "aspis_r1_cost_probe",
+      "aspis_r1_cost_probe_program",
+      "aspis_pool"
+    ],
+    "method": "In own materialized src only, hash selected crates input closure, advance owned .rs mtimes after copy; retain identical before/after content and mtime receipt. Do not clean or edit fingerprints. Capture fresh empty per-mode diagnostics, require selected crate command/mono/MIR/LLVM files created after go and exact target,opt3,compiler/owned source paths. Do not count preexisting copied files as newly emitted. Preserve default before devnet.",
+    "limitations": "Source relocation, new wrapper path, build-script OUT_DIR/provenance, host-tool/runtime/config and default/devnet env transitions may invalidate dependency fingerprints. mtime forcing alone cannot prove new diagnostics or warm dependencies."
+  },
+  "cold_guard": {
+    "status": "BLOCKED; design only, not installed or run",
+    "requirement": "Deny unexpected dependency compiler or build-script execution BEFORE it starts; offline/locked/-j4/timeout/memory cap do not provide this guarantee.",
+    "candidate": "An outer invocation dispatcher could allow metadata queries and selected owned crate compile commands then delegate verbatim to the unchanged pinned wrapper; reject any dependency or unapproved build-script command before exec.",
+    "assessment": "Changing RUSTC_WRAPPER/RUSTC or adding RUSTC_WORKSPACE_WRAPPER can change Cargo fingerprints/unit identity. The dispatcher may itself force dependencies dirty. Without donor fingerprints and a validated same-identity interception mechanism, do not call it warm, launch it, or fall back to cold compilation. A monitor of Cargo logs or polling processes is too late.",
+    "next": "Lead obtains permission-complete donor quiescence and exact source/tool/dependency/fingerprint assessment; separately review a pre-exec guard plus build-script coverage. No guard contents or Cargo fingerprints fabricated."
+  },
+  "resources": {
+    "scope": "sequential MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64; retain stricter existing 5G/7G",
+    "admission": "approved strict finite disjoint populated reservations including proposed 8GiB <55GiB, exclusive uncapped/resident/MemAvailable and 7GiB control-reserve gates; missing/raced data deny; no slab credit",
+    "smaller_gate": "No 2GiB proposal recommended while cold guard/cache freshness unestablished. Historical warm ~1.18GB peaks are reused only; lead decides separately.",
+    "scope_launches": 0
+  }
+}

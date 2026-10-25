@@ -1,0 +1,131 @@
+def Port22ARENA.initial : Nat → Nat → Nat → Nat :=
+fun start len cursor => if cursor = 0 then start + len else cursor
+def Port22ARENA.candidate : Nat → Nat → Nat → Nat → Nat → Nat :=
+fun start len cursor size align => Port22ARENA.initial start len cursor - size &&& 2 ^ 64 - align
+def Port22ARENA.storeCursor : Port22ARENA.Memory → Nat → Nat → Port22ARENA.Memory :=
+fun mem s value x => if s ≤ x ∧ x < s + 8 then value / 256 ^ (x - s) % 256 else mem x
+def Port22ARENA.alloc : Port22ARENA.Memory → Nat → Nat → Nat → Nat → Nat → Nat × Port22ARENA.Memory :=
+fun mem s l c n a =>
+  have p := Port22ARENA.candidate s l c n a;
+  if p < s + 8 then (0, mem) else (p, Port22ARENA.storeCursor mem s p)
+def Port22ARENA.events : Nat → Nat → Nat → Nat → Nat → List Port22ARENA.Event :=
+fun s l c n a =>
+  have p := Port22ARENA.candidate s l c n a;
+  if p < s + 8 then [Port22ARENA.Event.readCursor s, Port22ARENA.Event.returned 0]
+  else [Port22ARENA.Event.readCursor s, Port22ARENA.Event.writeCursor s p, Port22ARENA.Event.returned p]
+def Port22ARENA.cut : List Port22ARENA.Event → Nat → Nat → Nat → Nat → Nat → Nat → List Port22ARENA.Event :=
+fun history s l c n a count => history ++ List.take count (Port22ARENA.events s l c n a)
+def Port22ARENA.readLE : Port22ARENA.Memory → Nat → Nat → Nat :=
+fun mem base x => Nat.brecOn (motive := fun x => Nat → Nat) x (Port22ARENA.readLE._f mem) base
+def Port22ARENA.Separated : Nat → Nat → Prop :=
+fun x y => x + 8 ≤ y ∨ y + 8 ≤ x
+def Port22ARENA.stores : Port22ARENA.Memory → List (Nat × Nat) → Port22ARENA.Memory :=
+fun mem x => List.brecOn (motive := fun x => Port22ARENA.Memory → Port22ARENA.Memory) x Port22ARENA.stores._f mem
+def Port22ARENA.wordInitial : BitVec 64 → BitVec 64 → BitVec 64 → BitVec 64 :=
+fun s l c => if c = 0 then s + l else c
+def Port22ARENA.wordSaturatingSub : BitVec 64 → BitVec 64 → BitVec 64 :=
+fun x n => if x < n then 0 else x - n
+def Port22ARENA.wordCandidate : BitVec 64 → BitVec 64 → BitVec 64 → BitVec 64 → BitVec 64 → BitVec 64 :=
+fun s l c n a => Port22ARENA.wordSaturatingSub (Port22ARENA.wordInitial s l c) n &&& ~~~(a - 1)
+Port22ARENA.mask_word : ∀ (align : Nat),
+  0 < align → align < 2 ^ 64 → (~~~BitVec.ofNat 64 (align - 1)).toNat = 2 ^ 64 - align
+'Port22ARENA.mask_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+Port22ARENA.candidate_le : ∀ (s l c n a : Nat), Port22ARENA.candidate s l c n a ≤ Port22ARENA.initial s l c - n
+'Port22ARENA.candidate_le' depends on axioms: [propext, Quot.sound]
+Port22ARENA.masked_aligned : ∀ (x mask k : Nat), mask % 2 ^ k = 0 → (x &&& mask) % 2 ^ k = 0
+'Port22ARENA.masked_aligned' depends on axioms: [propext, Quot.sound]
+Port22ARENA.qm31_aligned : ∀ (s l c n : Nat), Port22ARENA.candidate s l c n 4 % 4 = 0
+'Port22ARENA.qm31_aligned' depends on axioms: [propext, Quot.sound]
+Port22ARENA.four_u64_aligned : ∀ (s l c n : Nat), Port22ARENA.candidate s l c n 8 % 8 = 0
+'Port22ARENA.four_u64_aligned' depends on axioms: [propext, Quot.sound]
+Port22ARENA.initial_upper : ∀ (s l c : Nat), c = 0 ∨ c ≤ s + l → Port22ARENA.initial s l c ≤ s + l
+'Port22ARENA.initial_upper' depends on axioms: [propext, Quot.sound]
+Port22ARENA.success_interval : ∀ (s l c n a : Nat),
+  c = 0 ∨ c ≤ s + l →
+    s + 8 ≤ Port22ARENA.candidate s l c n a →
+      s + 8 ≤ Port22ARENA.candidate s l c n a ∧
+        Port22ARENA.candidate s l c n a + n ≤ Port22ARENA.initial s l c ∧ Port22ARENA.initial s l c ≤ s + l
+'Port22ARENA.success_interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+Port22ARENA.store_outside : ∀ (mem : Port22ARENA.Memory) (s v x : Nat),
+  x < s ∨ s + 8 ≤ x → Port22ARENA.storeCursor mem s v x = mem x
+'Port22ARENA.store_outside' depends on axioms: [propext, Quot.sound]
+Port22ARENA.alloc_outside : ∀ (mem : Port22ARENA.Memory) (s l c n a x : Nat),
+  x < s ∨ s + 8 ≤ x → (Port22ARENA.alloc mem s l c n a).snd x = mem x
+'Port22ARENA.alloc_outside' depends on axioms: [propext, Quot.sound]
+Port22ARENA.null_no_write : ∀ (mem : Port22ARENA.Memory) (s l c n a : Nat),
+  Port22ARENA.candidate s l c n a < s + 8 → Port22ARENA.alloc mem s l c n a = (0, mem)
+'Port22ARENA.null_no_write' depends on axioms: [propext]
+Port22ARENA.ok_exact_store : ∀ (mem : Port22ARENA.Memory) (s l c n a : Nat),
+  s + 8 ≤ Port22ARENA.candidate s l c n a →
+    Port22ARENA.alloc mem s l c n a =
+      (Port22ARENA.candidate s l c n a, Port22ARENA.storeCursor mem s (Port22ARENA.candidate s l c n a))
+'Port22ARENA.ok_exact_store' depends on axioms: [propext, Quot.sound]
+Port22ARENA.prefix_retained : ∀ (history : List Port22ARENA.Event) (s l c n a count : Nat),
+  List.take history.length (Port22ARENA.cut history s l c n a count) = history
+'Port22ARENA.prefix_retained' depends on axioms: [propext]
+Port22ARENA.readLE_congr : ∀ (m m' : Port22ARENA.Memory) (base count : Nat),
+  (∀ (x : Nat), base ≤ x → x < base + count → m x = m' x) →
+    Port22ARENA.readLE m base count = Port22ARENA.readLE m' base count
+'Port22ARENA.readLE_congr' depends on axioms: [propext, Quot.sound]
+Port22ARENA.store_length_frame : ∀ (mem : Port22ARENA.Memory) (address value lengthAddress : Nat),
+  Port22ARENA.Separated address lengthAddress →
+    Port22ARENA.readLE (Port22ARENA.storeCursor mem address value) lengthAddress 8 =
+      Port22ARENA.readLE mem lengthAddress 8
+'Port22ARENA.store_length_frame' depends on axioms: [propext, Quot.sound]
+Port22ARENA.stores_length_frame : ∀ (mem : Port22ARENA.Memory) (writes : List (Nat × Nat)) (lengthAddress : Nat),
+  (∀ (w : Nat × Nat), w ∈ writes → Port22ARENA.Separated w.fst lengthAddress) →
+    Port22ARENA.readLE (Port22ARENA.stores mem writes) lengthAddress 8 = Port22ARENA.readLE mem lengthAddress 8
+'Port22ARENA.stores_length_frame' depends on axioms: [propext, Quot.sound]
+Port22ARENA.fresh_reserve_length : ∀ (mem : Port22ARENA.Memory)
+  (arena ptrField capField lenField pointer capacity count : Nat),
+  Port22ARENA.Separated arena lenField →
+    Port22ARENA.Separated ptrField lenField →
+      Port22ARENA.Separated capField lenField →
+        Port22ARENA.readLE
+            (Port22ARENA.stores mem (List.take count [(arena, pointer), (ptrField, pointer), (capField, capacity)]))
+            lenField 8 =
+          Port22ARENA.readLE mem lenField 8
+'Port22ARENA.fresh_reserve_length' depends on axioms: [propext, Quot.sound]
+Port22ARENA.fresh_reserve_empty : ∀ (mem : Port22ARENA.Memory)
+  (arena ptrField capField lenField pointer capacity count : Nat),
+  Port22ARENA.Separated arena lenField →
+    Port22ARENA.Separated ptrField lenField →
+      Port22ARENA.Separated capField lenField →
+        Port22ARENA.readLE mem lenField 8 = 0 →
+          ∀ (index : Nat),
+            ¬index <
+                Port22ARENA.readLE
+                  (Port22ARENA.stores mem
+                    (List.take count [(arena, pointer), (ptrField, pointer), (capField, capacity)]))
+                  lenField 8
+'Port22ARENA.fresh_reserve_empty' depends on axioms: [propext, Quot.sound]
+Port22ARENA.wrapping_mask : ∀ (a : BitVec 64), 0 < a.toNat → (~~~(a - 1)).toNat = 2 ^ 64 - a.toNat
+'Port22ARENA.wrapping_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+Port22ARENA.saturating_word : ∀ (x n : BitVec 64), (Port22ARENA.wordSaturatingSub x n).toNat = x.toNat - n.toNat
+'Port22ARENA.saturating_word' depends on axioms: [propext, Quot.sound]
+Port22ARENA.initial_word : ∀ (s l c : BitVec 64),
+  s.toNat + l.toNat < 2 ^ 64 → (Port22ARENA.wordInitial s l c).toNat = Port22ARENA.initial s.toNat l.toNat c.toNat
+'Port22ARENA.initial_word' depends on axioms: [propext]
+Port22ARENA.candidate_word : ∀ (s l c n a : BitVec 64),
+  s.toNat + l.toNat < 2 ^ 64 →
+    0 < a.toNat →
+      (Port22ARENA.wordCandidate s l c n a).toNat = Port22ARENA.candidate s.toNat l.toNat c.toNat n.toNat a.toNat
+'Port22ARENA.candidate_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+        0.78 real         0.15 user         0.19 sys
+           652214272  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               35948  page reclaims
+                5088  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                 676  voluntary context switches
+                3396  involuntary context switches
+          3025314451  instructions retired
+          1264645002  cycles elapsed
+           127548472  peak memory footprint

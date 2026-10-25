@@ -1,0 +1,423 @@
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: No `[refl]` lemma registered for relation
+  And
+
+Hint: Add the `[refl]` attribute to reflexivity lemmas for `And` to use this tactic
+
+case h_1.isTrue
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝² : d > 0#usize
+r✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝¹ : a✝¹ = true
+r✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = ok true
+h✝ : a✝ = true
+⊢ True ∧ True
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++ (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).2 =
+    ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_1.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝² : d > 0#usize
+r✝¹ : Result Bool
+a✝¹ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝¹ : a✝¹ = true
+r✝ : Result Bool
+a✝ : Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = ok false
+h✝ : ¬a✝ = true
+⊢ log ++ (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash (pure (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle))))).2 =
+      ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++ [] = log
+is not definitionally equal to the right-hand side
+  fail e✝ = do
+    let equal ← fail e✝
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝¹ : d > 0#usize
+r✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝ : a✝ = true
+r✝ : Result Bool
+e✝ : Error
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = fail e✝
+⊢ log ++ [] = log ∧
+    fail e✝ = do
+      let equal ← fail e✝
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++ [] = log
+is not definitionally equal to the right-hand side
+  div = do
+    let equal ← div
+    if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+      else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝¹ : d > 0#usize
+r✝¹ : Result Bool
+a✝ : Bool
+heq✝¹ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok true
+h✝ : a✝ = true
+r✝ : Result Bool
+heq✝ : Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf = div
+⊢ log ++ [] = log ∧
+    div = do
+      let equal ← div
+      if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++
+      (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash do
+        let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+        let val1 ← liftResult (Array.update val d leaf)
+        let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+    do
+    let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+    let val1 ← Array.update val d leaf
+    ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_1.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝¹ : d > 0#usize
+r✝ : Result Bool
+a✝ : Bool
+heq✝ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = ok false
+h✝ : ¬a✝ = true
+⊢ log ++
+        (Port9OR_Code.trace D hash do
+            let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+            let val1 ← liftResult (Array.update val d leaf)
+            let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+      do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++ [] = log
+is not definitionally equal to the right-hand side
+  fail e✝ = do
+    let same ← fail e✝
+    if same = true then do
+        let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+        if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+          else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_2
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝ : d > 0#usize
+r✝ : Result Bool
+e✝ : Error
+heq✝ :
+  Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = fail e✝
+⊢ log ++ [] = log ∧
+    fail e✝ = do
+      let same ← fail e✝
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++ [] = log
+is not definitionally equal to the right-hand side
+  div = do
+    let same ← div
+    if same = true then do
+        let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+        if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+          else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+      else do
+        let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+        let val1 ← Array.update val d leaf
+        ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case h_3
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝ : d > 0#usize
+r✝ : Result Bool
+heq✝ : Port3_BatchStd.sameIndex idx (d.wrapping_sub 1#usize) (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)) = div
+⊢ log ++ [] = log ∧
+    div = do
+      let same ← div
+      if same = true then do
+          let equal ← Port3_BatchStd.sameLeaf val (d.wrapping_sub 1#usize) leaf
+          if equal = true then ok (cont (idx, val, d, pos.wrapping_add 1#usize))
+            else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+        else do
+          let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+          let val1 ← Array.update val d leaf
+          ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:59:16: error: Tactic `rfl` failed: The left-hand side
+  log ++
+      (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+    log
+is not definitionally equal to the right-hand side
+  (Port9OR_Code.trace D hash do
+        let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+        let val1 ← liftResult (Array.update val d leaf)
+        let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+        pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+    do
+    let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+    let val1 ← Array.update val d leaf
+    ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+
+case mk.ok.isFalse
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+root : Digest
+kind lo n slot d pos : Usize
+keys : Std.Array U64 16#usize
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+key : U64
+view : Slice U8
+more : pos < n
+keyRead : keys.index_usize pos = ok key
+viewRead :
+  (Port9OR_BatchStep.ops base).op2 proof (lo.wrapping_add (UScalar.cast UScalarTy.Usize (key &&& 255#u64))) = ok view
+kr : (Port9OR_BatchStep.ops base).op9 keys pos = ok key
+log : Log
+leaf : Digest
+h : Port9OR_Code.trace D hash (Port4B_LeafCode.code kind view) = (log, ok leaf)
+h✝ : ¬d > 0#usize
+⊢ log ++
+        (Port9OR_Code.trace D hash do
+            let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+            let val1 ← liftResult (Array.update val d leaf)
+            let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+            pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).1 =
+      log ∧
+    (Port9OR_Code.trace D hash do
+          let idx1 ← liftResult (Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32)))
+          let val1 ← liftResult (Array.update val d leaf)
+          let d1 ← liftResult (ok (d.wrapping_add 1#usize))
+          pure (cont (idx1, val1, d1, pos.wrapping_add 1#usize))).2 =
+      do
+      let idx1 ← Array.update idx d (UScalar.cast UScalarTy.U32 (key.wrapping_shr 8#u32))
+      let val1 ← Array.update val d leaf
+      ok (cont (idx1, val1, d.wrapping_add 1#usize, pos.wrapping_add 1#usize))
+Port10AUTH_Leaf.lean:42:40: warning: This simp argument is unused:
+  openingIndex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵k̵r̵,̵l̵i̵f̵t̵,̵v̵i̵e̵w̵R̵e̵a̵d̵,̵o̵p̵e̵n̵i̵n̵g̵I̵n̵d̵e̵x̵,̵d̵e̵c̵o̵d̵e̵d̵I̵n̵d̵e̵x̵]̵[̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲k̲r̲,̲ ̲l̲i̲f̲t̲,̲ ̲v̲i̲e̲w̲R̲e̲a̲d̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲I̲n̲d̲e̲x̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:57:28: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵p̵u̵r̵e̵_̵t̵r̵a̵c̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲p̲u̲r̲e̲_̲t̲r̲a̲c̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:58:55: warning: This simp argument is unused:
+  Result.ok.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵,̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲P̲r̲o̲d̲.̲m̲k̲.̲i̲n̲j̲E̲q̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:58:71: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Prod.mk.injEq, ̲Result.ok.injEq, ̲if_t̵r̵u̵e̵,̵i̵f_̵f̵alse]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Leaf.lean:58:79: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [Prod.mk.injEq, ̲Result.ok.injEq, ̲if_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_Leaf.lift_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.pure_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Leaf.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]

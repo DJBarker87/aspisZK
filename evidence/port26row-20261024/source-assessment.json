@@ -1,0 +1,619 @@
+{
+  "schema": "Port26ROW-source-assessment-v1",
+  "command": "python3 tools/port26row-20261024/Port26ROW_assess.py",
+  "revision": "826e23389fa6caacec10d603573013c032cd9d98",
+  "script_sha256": "8aeef3e3b699c06ee1c1842fcd261584f00e4a8e2b8ebfb87bd9dab683a939c3",
+  "exact_array_call": {
+    "caller": {
+      "name": [
+        {
+          "Ident": [
+            "port23push_native",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "verifier",
+            0
+          ]
+        },
+        {
+          "Ident": [
+            "update_residue_row",
+            0
+          ]
+        }
+      ],
+      "span": {
+        "data": {
+          "file_id": 9,
+          "beg": {
+            "line": 6,
+            "col": 0
+          },
+          "end": {
+            "line": 16,
+            "col": 1
+          }
+        },
+        "generated_from_span": null
+      },
+      "source_text": "fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {\n    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];\n    for j in 0..4 {\n        let old=residue_limb_at(row,j);\n        let limb=power_limb_at(&limbs,j);\n        row[j]=old+u64::from(limb)*u64::from(basis.0);\n    }\n    if flush {\n        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}\n    }\n}",
+      "attr_info": {
+        "attributes": [],
+        "inline": "Always",
+        "rename": null,
+        "public": false
+      },
+      "is_local": true,
+      "opacity": "Transparent",
+      "lang_item": null
+    },
+    "external": {
+      "def_id": 14,
+      "item_meta": {
+        "name": [
+          {
+            "Ident": [
+              "core",
+              0
+            ]
+          },
+          {
+            "Ident": [
+              "array",
+              0
+            ]
+          },
+          {
+            "Impl": {
+              "Trait": 7
+            }
+          },
+          {
+            "Ident": [
+              "into_iter",
+              0
+            ]
+          }
+        ],
+        "span": {
+          "data": {
+            "file_id": 20,
+            "beg": {
+              "line": 376,
+              "col": 4
+            },
+            "end": {
+              "line": 376,
+              "col": 40
+            }
+          },
+          "generated_from_span": null
+        },
+        "source_text": null,
+        "attr_info": {
+          "attributes": [],
+          "inline": null,
+          "rename": null,
+          "public": true
+        },
+        "is_local": false,
+        "opacity": "Foreign",
+        "lang_item": null
+      },
+      "generics": {
+        "regions": [
+          {
+            "index": 0,
+            "name": "'a",
+            "mutability": "Unknown"
+          }
+        ],
+        "types": [
+          {
+            "index": 0,
+            "name": "T"
+          }
+        ],
+        "const_generics": [
+          {
+            "index": 0,
+            "name": "N",
+            "ty": {
+              "Deduplicated": 317
+            }
+          }
+        ],
+        "trait_clauses": [],
+        "regions_outlive": [],
+        "types_outlive": [],
+        "trait_type_constraints": []
+      },
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "HashConsedValue": [
+              5449,
+              {
+                "Ref": [
+                  {
+                    "Var": {
+                      "Free": 0
+                    }
+                  },
+                  {
+                    "HashConsedValue": [
+                      5448,
+                      {
+                        "Array": [
+                          {
+                            "Deduplicated": 5435
+                          },
+                          {
+                            "kind": {
+                              "Var": {
+                                "Free": 0
+                              }
+                            },
+                            "ty": {
+                              "Deduplicated": 317
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "Mut"
+                ]
+              }
+            ]
+          }
+        ],
+        "output": {
+          "HashConsedValue": [
+            5451,
+            {
+              "Adt": {
+                "id": {
+                  "Adt": 9
+                },
+                "generics": {
+                  "regions": [
+                    {
+                      "Var": {
+                        "Free": 0
+                      }
+                    }
+                  ],
+                  "types": [
+                    {
+                      "Deduplicated": 5435
+                    }
+                  ],
+                  "const_generics": [],
+                  "trait_refs": []
+                }
+              }
+            }
+          ]
+        }
+      },
+      "src": {
+        "TraitImpl": {
+          "impl_ref": {
+            "id": 7,
+            "generics": {
+              "regions": [
+                {
+                  "Var": {
+                    "Free": 0
+                  }
+                }
+              ],
+              "types": [
+                {
+                  "Deduplicated": 5435
+                }
+              ],
+              "const_generics": [
+                {
+                  "kind": {
+                    "Var": {
+                      "Free": 0
+                    }
+                  },
+                  "ty": {
+                    "Deduplicated": 317
+                  }
+                }
+              ],
+              "trait_refs": []
+            }
+          },
+          "trait_ref": {
+            "id": 6,
+            "generics": {
+              "regions": [],
+              "types": [
+                {
+                  "Deduplicated": 5449
+                },
+                {
+                  "Deduplicated": 5450
+                },
+                {
+                  "Deduplicated": 5451
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          },
+          "item_id": {
+            "Method": 0
+          },
+          "reuses_default": true
+        }
+      },
+      "is_global_initializer": null,
+      "body": "Opaque"
+    },
+    "call": {
+      "func": {
+        "Regular": {
+          "kind": {
+            "Fun": {
+              "Regular": 14
+            }
+          },
+          "generics": {
+            "regions": [
+              {
+                "Body": 30
+              }
+            ],
+            "types": [
+              {
+                "Deduplicated": 491
+              }
+            ],
+            "const_generics": [
+              {
+                "kind": {
+                  "Literal": {
+                    "Scalar": {
+                      "Unsigned": [
+                        "Usize",
+                        "4"
+                      ]
+                    }
+                  }
+                },
+                "ty": {
+                  "Deduplicated": 317
+                }
+              }
+            ],
+            "trait_refs": []
+          }
+        }
+      },
+      "args": [
+        {
+          "Move": {
+            "kind": {
+              "Local": 35
+            },
+            "ty": {
+              "Deduplicated": 1045
+            }
+          }
+        }
+      ],
+      "dest": {
+        "kind": {
+          "Local": 34
+        },
+        "ty": {
+          "Deduplicated": 1044
+        }
+      }
+    },
+    "expanded_call": {
+      "func": {
+        "Regular": {
+          "kind": {
+            "Fun": {
+              "Regular": 14
+            }
+          },
+          "generics": {
+            "regions": [
+              {
+                "Body": 30
+              }
+            ],
+            "types": [
+              {
+                "Literal": {
+                  "UInt": "U64"
+                }
+              }
+            ],
+            "const_generics": [
+              {
+                "kind": {
+                  "Literal": {
+                    "Scalar": {
+                      "Unsigned": [
+                        "Usize",
+                        "4"
+                      ]
+                    }
+                  }
+                },
+                "ty": {
+                  "Literal": {
+                    "UInt": "Usize"
+                  }
+                }
+              }
+            ],
+            "trait_refs": []
+          }
+        }
+      },
+      "args": [
+        {
+          "Move": {
+            "kind": {
+              "Local": 35
+            },
+            "ty": {
+              "Ref": [
+                {
+                  "Body": 12
+                },
+                {
+                  "Array": [
+                    {
+                      "HashConsedValue": [
+                        491,
+                        {
+                          "Literal": {
+                            "UInt": "U64"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": {
+                        "Literal": {
+                          "Scalar": {
+                            "Unsigned": [
+                              "Usize",
+                              "4"
+                            ]
+                          }
+                        }
+                      },
+                      "ty": {
+                        "HashConsedValue": [
+                          317,
+                          {
+                            "Literal": {
+                              "UInt": "Usize"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                "Mut"
+              ]
+            }
+          }
+        }
+      ],
+      "dest": {
+        "kind": {
+          "Local": 34
+        },
+        "ty": {
+          "Adt": {
+            "id": {
+              "Adt": 9
+            },
+            "generics": {
+              "regions": [
+                {
+                  "Body": 11
+                }
+              ],
+              "types": [
+                {
+                  "Literal": {
+                    "UInt": "U64"
+                  }
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          }
+        }
+      }
+    }
+  },
+  "inherited_native_delegation": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "whole_sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "needle": "fn into_iter(self) -> IterMut",
+      "start_line": 376,
+      "end_line": 378,
+      "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "whole_sha256": "354992a6a3d69a0185eef9044a07ea5180e767bdb467aef55e69ee3d44317840",
+      "needle": "pub const fn iter_mut(",
+      "start_line": 1061,
+      "end_line": 1063,
+      "text": "    pub const fn iter_mut(&mut self) -> IterMut<'_, T> {\n        IterMut::new(self)\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "whole_sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "needle": "pub(super) const fn new(slice: &'a mut [T])",
+      "start_line": 219,
+      "end_line": 244,
+      "text": "    pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "whole_sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+      "needle": "fn into_iter(self) -> IterMut",
+      "start_line": 33,
+      "end_line": 35,
+      "text": "    fn into_iter(self) -> IterMut<'a, T> {\n        self.iter_mut()\n    }"
+    }
+  ],
+  "source_artifacts": {
+    "evidence/port23push-20261024/Port23PUSH.llbc": {
+      "sha256": "c72fd07d42fb22616dd3285236da053eaabe41c94fce298a3c8954931450aced",
+      "bytes": 598648
+    },
+    "evidence/port23push-20261024/std-source-graph-focused.json": {
+      "sha256": "df7371ef15b03efd6db41180e60e05d757df0f70fdd533b0dc9992f17e51f8a9",
+      "bytes": 24433
+    },
+    "evidence/port23push-20261024/Port23PUSH-generated/Funs.lean.txt": {
+      "sha256": "d14bc2a2e494f767fd4fcaaa9472e0a89091d4feefdcf30e4c2c98351c598403",
+      "bytes": 5703
+    },
+    "evidence/port23push-20261024/Port23PUSH-generated/FunsExternal_Template.lean.txt": {
+      "sha256": "cebf3565390d992883c19a94ae3e98a0cdd6e4cc9cf8107ce8783bc25d44404f",
+      "bytes": 1375
+    }
+  },
+  "accepted": {
+    "Port26ROW_Steps": {
+      "attempt": "lean-001",
+      "source_sha256": "519dfb2e474ec67af4439b9fe9695309e3fffd440937ad7ba5b6f7d8e0e0e9a4",
+      "object_sha256": "3dd482e288b2dba721e58a849073beeb5b7235aee3b86f2bec5098d9ec175091",
+      "dependencies": [
+        {
+          "module": "Port25ARRAY_Lane",
+          "object_path": "/tmp/port25array-20261024-objects/Port25ARRAY_Lane.olean",
+          "object_sha256": "4e8d6f29310ed82f07ee861e6e9725c2addc5bae62e434b45a0f65432a57efa3",
+          "source_sha256": "a8c9432227e3564e2fd694dee259611168ad08fb149fe188f3c9be8b3ccecd2c"
+        }
+      ]
+    },
+    "Port26ROW_Add": {
+      "attempt": "lean-003",
+      "source_sha256": "6ac79c6468e5238842939da25527e7d2cb7cd21796b84f86f5b399b794853b42",
+      "object_sha256": "9cbe25a83c8c3885b9a1410f4d050d89b5b47d027408a057251a615ead25d68e",
+      "dependencies": [
+        {
+          "module": "Port26ROW_Steps",
+          "object_path": "/tmp/port26row-20261024-objects/Port26ROW_Steps.olean",
+          "object_sha256": "3dd482e288b2dba721e58a849073beeb5b7235aee3b86f2bec5098d9ec175091",
+          "source_sha256": "519dfb2e474ec67af4439b9fe9695309e3fffd440937ad7ba5b6f7d8e0e0e9a4"
+        }
+      ]
+    },
+    "Port26ROW_Fold": {
+      "attempt": "lean-006",
+      "source_sha256": "ab3378d396bb1f5e233f6a424092e474b7dda834d818f6f4496f16b6773b16e8",
+      "object_sha256": "6926c7ac4f51d8775a5e80af4ace48adb7e851f9554e8eed0e88d471fe5500d0",
+      "dependencies": [
+        {
+          "module": "Port26ROW_Steps",
+          "object_path": "/tmp/port26row-20261024-objects/Port26ROW_Steps.olean",
+          "object_sha256": "3dd482e288b2dba721e58a849073beeb5b7235aee3b86f2bec5098d9ec175091",
+          "source_sha256": "519dfb2e474ec67af4439b9fe9695309e3fffd440937ad7ba5b6f7d8e0e0e9a4"
+        }
+      ]
+    },
+    "Port26ROW_Row": {
+      "attempt": "lean-007",
+      "source_sha256": "d6df27b6f23c2d1f9024f8ee8643cea2e722d034b2679e3fa3f4963bbb8ab452",
+      "object_sha256": "daad7c14f79384870623506f76029f89810cf630135da85b812b66c358af6004",
+      "dependencies": [
+        {
+          "module": "Port26ROW_Add",
+          "object_path": "/tmp/port26row-20261024-objects/Port26ROW_Add.olean",
+          "object_sha256": "9cbe25a83c8c3885b9a1410f4d050d89b5b47d027408a057251a615ead25d68e",
+          "source_sha256": "6ac79c6468e5238842939da25527e7d2cb7cd21796b84f86f5b399b794853b42"
+        },
+        {
+          "module": "Port26ROW_Fold",
+          "object_path": "/tmp/port26row-20261024-objects/Port26ROW_Fold.olean",
+          "object_sha256": "6926c7ac4f51d8775a5e80af4ace48adb7e851f9554e8eed0e88d471fe5500d0",
+          "source_sha256": "ab3378d396bb1f5e233f6a424092e474b7dda834d818f6f4496f16b6773b16e8"
+        },
+        {
+          "module": "Port23PUSH_Frame",
+          "object_path": "/tmp/port23push-20261024-objects/Port23PUSH_Frame.olean",
+          "object_sha256": "864573779e98b50691913ac86be4837b359c4ef82a4546b7b298746fcc17bf4d",
+          "source_sha256": "2c9c6cf2b7b7ffa171c1ec4f600f3762e5a744346bfdad98bd197fd57f09dd9c"
+        }
+      ]
+    },
+    "Port26ROW_Audit": {
+      "attempt": "lean-008",
+      "source_sha256": "c9d27d344dcd7743333390ece44bf8cdc743c4176b45b19ef3f6d812f38ab3c0",
+      "object_sha256": "354914326dda99f7814303d8990598e12c7ac8e753ab313c1d6aeb9badf27ee0",
+      "dependencies": [
+        {
+          "module": "Port26ROW_Row",
+          "object_path": "/tmp/port26row-20261024-objects/Port26ROW_Row.olean",
+          "object_sha256": "daad7c14f79384870623506f76029f89810cf630135da85b812b66c358af6004",
+          "source_sha256": "d6df27b6f23c2d1f9024f8ee8643cea2e722d034b2679e3fa3f4963bbb8ab452"
+        }
+      ]
+    }
+  },
+  "not_accepted": [
+    "lean-002",
+    "lean-004",
+    "lean-005"
+  ],
+  "source_revision_qualification": "HEAD records repository context; each exact dirty/untracked proof input is the independently hashed source snapshot, not falsely attributed to that HEAD tree.",
+  "reused": "Port23 actual extraction/header adaptation and frame; Port25 Std/Lane and their warm dependencies; inherited sysroot graph. No new native identity/release gate; early Port23 integrity limitations remain.",
+  "established": "complete actual parametric source row and Vec push at the derived content delegation instance; full Result equality, exact carriers, no domain/equality premises",
+  "remaining": [
+    "native ordered primitive effect producer and rejected-prefix semantics",
+    "P6 execution association at exact call14 with existing approved collection interpretation",
+    "op6 other children/trace observer/source-native release composition"
+  ],
+  "boundary": "D157 permits pure called collection content semantics; derives no unsafe internals/panic/allocator policy. No new TrustedStd field or backend registration; raw unused template ABI mismatch is not an obligation to verify all Aeneas.",
+  "budget": {
+    "new_lean": 8,
+    "new_lean_cap": 8,
+    "known_global_prior": 339,
+    "known_global_after_this_job": 347,
+    "global_ceiling": 368,
+    "prior_port23": 13,
+    "kani": 0,
+    "rust": 0,
+    "extraction": 0,
+    "backend": 0,
+    "elf": 0,
+    "full_manifest": 0
+  },
+  "checks": {
+    "exit_status": 0,
+    "wall_seconds": 0.1591947921551764,
+    "peak_rss": "see command-time.log",
+    "swaps": "see command-time.log"
+  }
+}

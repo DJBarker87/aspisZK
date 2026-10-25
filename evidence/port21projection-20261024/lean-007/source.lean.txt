@@ -1,0 +1,41 @@
+import Port21PROJECTION_Experiment
+import Port21PROJECTION_Counterexamples
+
+/-! One focused full-statement/import audit. No frozen manifest replay. -/
+set_option autoImplicit false
+open AspisR1
+#print Port21PROJECTION_Core.Sim
+#print Port21PROJECTION_Core.evaluated
+#print Port21PROJECTION_Core.charge
+#print Port21PROJECTION_Core.bind_sim
+#print Port21PROJECTION_Core.mass_le
+#print Port21PROJECTION_Experiment.NativeRuntime
+#print Port21PROJECTION_Experiment.AcceptedLeaf
+#print Port21PROJECTION_Experiment.nativeMass
+#print Port21PROJECTION_Experiment.accepted_event
+#print Port21PROJECTION_Experiment.failure_transport
+#print Port21PROJECTION_Experiment.all_outcome_queries
+#print Port21PROJECTION_Experiment.accepted_mass_transport
+#print Port21PROJECTION_Experiment.soundness_and_query_transport
+#print OraclePortRuntimeBindingC7.Runtime
+#print OraclePortRuntimeBindingC7.runtimeMass
+#print OraclePortRuntimeBindingC7.deployedFailure
+#print RawRecordedOracleExtractionMassBin.failureMass
+#print OracleProgramLawExt.lazyMean_le_of_eval
+#print Port21PROJECTION_Counterexamples.same_output
+#print Port21PROJECTION_Counterexamples.accepted_same_log
+#print Port21PROJECTION_Counterexamples.rejected_extra_queries
+#print axioms Port21PROJECTION_Core.evaluated
+#print axioms Port21PROJECTION_Core.charge
+#print axioms Port21PROJECTION_Core.bind_sim
+#print axioms Port21PROJECTION_Core.mass_le
+#print axioms Port21PROJECTION_Experiment.nonnegative
+#print axioms Port21PROJECTION_Experiment.accepted_event
+#print axioms Port21PROJECTION_Experiment.leaf_mass
+#print axioms Port21PROJECTION_Experiment.failure_transport
+#print axioms Port21PROJECTION_Experiment.all_outcome_queries
+#print axioms Port21PROJECTION_Experiment.accepted_mass_transport
+#print axioms Port21PROJECTION_Experiment.soundness_and_query_transport
+#print axioms Port21PROJECTION_Counterexamples.same_output
+#print axioms Port21PROJECTION_Counterexamples.accepted_same_log
+#print axioms Port21PROJECTION_Counterexamples.rejected_extra_queries

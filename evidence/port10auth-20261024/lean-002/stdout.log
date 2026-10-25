@@ -1,0 +1,213 @@
+Port10AUTH_Trace.lean:19:11: error: unsolved goals
+case done
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+a : A
+⊢ trace D hash (Code.done a >>= k) = ((trace D hash (k a)).1, (trace D hash (k a)).2)
+Port10AUTH_Trace.lean:20:16: error: unsolved goals
+case step.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : B✝
+⊢ trace D hash (Code.step (ok v✝) c >>= k) =
+    match trace D hash (c v✝) with
+    | (before, ok a) => (before ++ (trace D hash (k a)).1, (trace D hash (k a)).2)
+    | (before, fail e) => (before, fail e)
+    | (before, div) => (before, div)
+
+case step.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+e✝ : Error
+⊢ trace D hash (Code.step (fail e✝) c >>= k) = ([], fail e✝)
+
+case step.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+B✝ : Type
+c : B✝ → Code A
+ih :
+  ∀ (a : B✝),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+⊢ trace D hash (Code.step div c >>= k) = ([], div)
+Port10AUTH_Trace.lean:24:23: error: unsolved goals
+case read.ok.mk.ok
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝¹ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝¹
+before : Log
+v✝ : A
+h : trace D hash (c v✝¹) = (before, ok v✝)
+⊢ trace D hash (Code.read parts c >>= k) =
+    ((parts, v✝¹) :: (before ++ (trace D hash (k v✝)).1), (trace D hash (k v✝)).2)
+
+case read.ok.mk.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝
+before : Log
+e✝ : Error
+h : trace D hash (c v✝) = (before, fail e✝)
+⊢ trace D hash (Code.read parts c >>= k) = ((parts, v✝) :: before, fail e✝)
+
+case read.ok.mk.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+v✝ : Std.Array U8 32#usize
+call : D.digest hash parts = ok v✝
+before : Log
+h : trace D hash (c v✝) = (before, div)
+⊢ trace D hash (Code.read parts c >>= k) = ((parts, v✝) :: before, div)
+Port10AUTH_Trace.lean:21:20: error: unsolved goals
+case read.fail
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+e✝ : Error
+call : D.digest hash parts = fail e✝
+⊢ trace D hash (Code.read parts c >>= k) = ([], fail e✝)
+
+case read.div
+A B Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+k : A → Code B
+parts : Parts
+c : Digest → Code A
+ih :
+  ∀ (a : Digest),
+    trace D hash (c a >>= k) =
+      match trace D hash (c a) with
+      | (before, ok a) =>
+        let after := trace D hash (k a);
+        (before ++ after.1, after.2)
+      | (before, fail e) => (before, fail e)
+      | (before, div) => (before, div)
+call : D.digest hash parts = div
+⊢ trace D hash (Code.read parts c >>= k) = ([], div)
+Port10AUTH_Trace.lean:19:25: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:20:42: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵i̵h̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:20:76: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲trace,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:22:52: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵t̵r̵a̵c̵e̵,̵c̵a̵l̵l̵,̵i̵h̵]̵[̲t̲r̲a̲c̲e̲,̲ ̲c̲a̲l̲l̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_Trace.lean:22:91: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲trace, ̲call,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_Trace.trace_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_Trace.run_of_trace' depends on axioms: [propext, Classical.choice, Quot.sound]

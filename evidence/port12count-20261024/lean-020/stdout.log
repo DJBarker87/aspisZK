@@ -1,0 +1,85 @@
+Port12COUNT_BatchTree.lean:29:22: error: Invalid projection: Type of
+  out
+is not known; cannot resolve projection `2`
+Port12COUNT_BatchTree.lean:31:26: error: Invalid projection: Type of
+  out
+is not known; cannot resolve projection `1`
+Port12COUNT_BatchTree.lean:31:32: error: Invalid projection: Type of
+  out
+is not known; cannot resolve projection `2`
+Port12COUNT_BatchTree.lean:35:24: error: Type mismatch
+  Nat.zero_le 0
+has type
+  0 ≤ 0
+but is expected to have type
+  (eval H (Port9OR_Code.program D hash (?m.127 (outIdx, outVal, none)))).1.length ≤ 0
+Port12COUNT_BatchTree.lean:35:24: error: Type mismatch
+  Nat.zero_le 0
+has type
+  0 ≤ 0
+but is expected to have type
+  (eval H (Port9OR_Code.program D hash (?m.127 (outIdx, outVal, some val✝)))).1.length ≤ 0
+Port12COUNT_BatchTree.lean:19:55: error: unsolved goals
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+proof : Slice U8
+queries : Std.Array U32 22#usize
+root : Digest
+batch tree : Usize
+idx : Indices
+val : Values
+cap : Usize
+capRead : capacities.index_usize (Port4B_TreeCuts.slot batch tree) = ok cap
+small : ↑cap ≤ 172
+nonzero : 0 < ↑cap
+raw keys : Std.Array U64 16#usize
+nSmall : ↑(Port4B_TreeCuts.count batch) < 256
+first :
+  (eval H
+          (Port9OR_Code.program D hash
+            (Port9OR_BatchLoop.code base D hash proof root tree (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+              (Port4B_TreeCuts.slot batch tree) keys (↑(Port4B_TreeCuts.count batch) + 1) idx val 0#usize
+              0#usize))).1.length ≤
+    ↑cap + ↑0#usize + 2 * (↑(Port4B_TreeCuts.count batch) - ↑0#usize) - 1
+⊢ (eval H
+          (Port9OR_Code.program D hash do
+            let __x ←
+              Port9OR_BatchLoop.code base D hash proof root tree (Port4B_TreeCuts.lo batch)
+                  (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch tree) keys
+                  (↑(Port4B_TreeCuts.count batch) + 1) idx val 0#usize 0#usize
+            match __x with
+              | (outIdx, outVal, pending) =>
+                match pending with
+                | none => liftResult (fail Error.panic)
+                | some r => pure (r, outIdx, outVal))).1.length ≤
+    ↑cap + 2 * ↑(Port4B_TreeCuts.count batch) - 1
+Port12COUNT_BatchTree.lean:52:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 0#usize 2#usize) = ok 128#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port12COUNT_BatchTree.lean:52:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 0#usize 2#usize) = ok 128#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port12COUNT_BatchTree.lean:52:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 0#usize 2#usize) = ok 128#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port12COUNT_BatchTree.lean:67:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 1#usize 2#usize) = ok 150#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port12COUNT_BatchTree.lean:67:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 1#usize 2#usize) = ok 150#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+Port12COUNT_BatchTree.lean:67:106: error: failed to synthesize
+  Decidable (capacities.index_usize (Port4B_TreeCuts.slot 1#usize 2#usize) = ok 150#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

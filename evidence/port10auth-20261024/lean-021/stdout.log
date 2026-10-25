@@ -1,0 +1,95 @@
+Port10AUTH_VerifyCut.lean:60:8: error: unsolved goals
+case neg
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+root : Digest
+s out : reference.Scratch
+nodes : Slice U8
+zero : ¬s.n = 0#usize
+large : ¬s.n > 16#usize
+success :
+  (do
+      let a ← reference.valid_indices s.idx s.n 0#usize
+      erase D hash
+          (if a = true then do
+            let rem ← liftResult (nodes.len % 32#usize)
+            if (rem != 0#usize) = true then pure (false, s)
+              else do
+                let out ← Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                liftResult (Port9OR_P6Verify.after root nodes out)
+          else pure (false, s))) =
+    ok (true, out)
+validCall : reference.valid_indices s.idx s.n 0#usize = ok true
+remaining✝ :
+  (do
+      let a ← nodes.len % 32#usize
+      erase D hash
+          (if (a != 0#usize) = true then pure (false, s)
+          else do
+            let out ← Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+            liftResult (Port9OR_P6Verify.after root nodes out))) =
+    ok (true, out)
+rem : UScalar UScalarTy.Usize
+remCall : nodes.len % 32#usize = ok rem
+aligned : ¬(rem != 0#usize) = true
+remaining :
+  (do
+      let a ← erase D hash (Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes)
+      Port9OR_P6Verify.after root nodes a) =
+    ok (true, out)
+rootOK : MultiproofConeRootGuard.sourceRoot root nodes out = true
+heightCall :
+  erase D hash (Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes) =
+    ok (reference.Level.Done out)
+afterCall : Port9OR_P6Verify.after root nodes (reference.Level.Done out) = ok (true, out)
+log : Log
+result : Result reference.Level
+eq :
+  Port9OR_Code.trace D hash
+      (Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes) =
+    (log, result)
+heightTrace : result = ok (reference.Level.Done out)
+⊢ [] ++
+      (Port9OR_Code.trace D hash
+          (if True then do
+            let rem ← liftResult (ok rem)
+            if (rem != 0#usize) = true then pure (false, s)
+              else do
+                let out ← Port9OR_P6Levels.levels 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } nodes
+                liftResult (Port9OR_P6Verify.after root nodes out)
+          else pure (false, s))).1 =
+    log
+Port10AUTH_VerifyCut.lean:68:34: warning: This simp argument is unused:
+  Port10AUTH_Leaf.lift_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg l̵a̵r̵g̵e̵,̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵v̵a̵l̵i̵d̵C̵a̵l̵l̵,̵i̵f̵_̵t̵r̵u̵e̵,̵r̵e̵m̵C̵a̵l̵l̵,̵l̲a̲r̲g̲e̲,̲ ̲v̲a̲l̲i̲d̲C̲a̲l̲l̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲m̲C̲a̲l̲l̲,̲ if_neg a̵l̵i̵g̵n̵e̵d̵,̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵T̵r̵a̵c̵e̵.̵t̵r̵a̵c̵e̵_̵b̵i̵n̵d̵]̵a̲l̲i̲g̲n̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲T̲r̲a̲c̲e̲.̲t̲r̲a̲c̲e̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_VerifyCut.lean:68:70: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg l̵a̵r̵g̵e̵,̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵v̵a̵l̵i̵d̵C̵a̵l̵l̵,̵i̵f̵_̵t̵r̵u̵e̵,̵r̵e̵m̵C̵a̵l̵l̵,̵l̲a̲r̲g̲e̲,̲ ̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲L̲e̲a̲f̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲v̲a̲l̲i̲d̲C̲a̲l̲l̲,̲ ̲r̲e̲m̲C̲a̲l̲l̲,̲ if_neg a̵l̵i̵g̵n̵e̵d̵,̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵T̵r̵a̵c̵e̵.̵t̵r̵a̵c̵e̵_̵b̵i̵n̵d̵]̵a̲l̲i̲g̲n̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲T̲r̲a̲c̲e̲.̲t̲r̲a̲c̲e̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_VerifyCut.lean:69:12: warning: This simp argument is unused:
+  if_neg aligned
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg large, ̲Port10AUTH_Leaf.lift_bind, ̲validCall, ̲if_true, ̲remCall,
+              i̵f̵_̵n̵e̵g̵ ̵a̵l̵i̵g̵n̵e̵d̵,̵Port10AUTH_Trace.trace_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_VerifyCut.lean:75:49: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [Port10AUTH_Trace.trace_lift,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_VerifyCut.after_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_VerifyCut.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

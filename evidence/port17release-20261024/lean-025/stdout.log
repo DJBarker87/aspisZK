@@ -1,0 +1,1014 @@
+def AspisR1.Port15DRIVER_Local.delegatedIds : List ℕ :=
+[3, 4, 6, 7, 9, 10, 11, 12, 17, 19]
+def AspisR1.Port15DRIVER_Local.LocalBudgets : AspisR1.VTop_OracleCode.Implementation → (ℕ → ℕ) → Prop :=
+fun rest w =>
+  ∀ {A : Type} (op : AspisR1.VTop_Trace.Call A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    AspisR1.VTop_Trace.operationId op ∈ AspisR1.Port15DRIVER_Local.delegatedIds →
+      (AspisV8R19.MemoizedProgramLaw.eval H (rest op)).1.length ≤ w (AspisR1.VTop_Trace.operationId op)
+def AspisR1.Port17RELEASE_Domain.ReleaseCall : {A : Type} → AspisR1.VTop_Trace.Call A → Prop :=
+fun {A} x =>
+  match A, x with
+  |
+  .(Aeneas.Std.core.result.Result (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)
+        VTop_Stages.verifier.Error),
+    AspisR1.VTop_Trace.Call.op6 a0 a1 a2 a3 observer a5 a6 a7 => observer = none
+  |
+  .(Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error ×
+        Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize),
+    AspisR1.VTop_Trace.Call.op7 aspis_coredigestDigest32Inst a0 a1 a2 observer a4 => observer = none
+  | .(Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error), AspisR1.VTop_Trace.Call.op19 a0 a1 a2 observer =>
+    observer = none
+  | A, x => True
+def AspisR1.Port17RELEASE_Domain.CallsIn : {A : Type} → AspisR1.VTop_Trace.Code A → Prop :=
+fun {A} x => AspisR1.VTop_Trace.Code.brecOn x AspisR1.Port17RELEASE_Domain.CallsIn._f
+def AspisR1.Port17RELEASE_Domain.ReleaseBudgets : AspisR1.VTop_OracleCode.Implementation → (ℕ → ℕ) → Prop :=
+fun rest w =>
+  ∀ {A : Type} (op : AspisR1.VTop_Trace.Call A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    AspisR1.VTop_Trace.operationId op ∈ AspisR1.Port15DRIVER_Local.delegatedIds →
+      AspisR1.Port17RELEASE_Domain.ReleaseCall op →
+        (AspisV8R19.MemoizedProgramLaw.eval H (rest op)).1.length ≤ w (AspisR1.VTop_Trace.operationId op)
+def AspisR1.Port17RELEASE_Prepare.OtherBudgets : AspisR1.VTop_OracleCode.Implementation → (ℕ → ℕ) → Prop :=
+fun other w =>
+  ∀ {A : Type} (op : AspisR1.VTop_Trace.Call A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    AspisR1.VTop_Trace.operationId op ∈ AspisR1.Port15DRIVER_Local.delegatedIds →
+      AspisR1.VTop_Trace.operationId op ≠ 7 →
+        AspisR1.Port17RELEASE_Domain.ReleaseCall op →
+          (AspisV8R19.MemoizedProgramLaw.eval H (other op)).1.length ≤ w (AspisR1.VTop_Trace.operationId op)
+def AspisR1.Port17RELEASE_Prepare.weight : (ℕ → ℕ) → ℕ → ℕ :=
+fun w id => if id = 7 then 115 else w id
+def AspisR1.Port17RELEASE_Prepare.implementation : VTop_Stages.Ops →
+  Bool →
+    AspisR1.Port6CK_Semantic.Unwrap →
+      AspisR1CurrentCaller.Ops →
+        AspisR1PublicPreparation.RoundModel.Boundaries →
+          AspisR1PublicPreparation.FinishModel.Boundaries →
+            AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun ops reserved unwrap base R B other {A} =>
+  AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} =>
+    AspisS1TopPrepareCode.body base R B fun {A} => other
+def AspisR1.Port17RELEASE_Driver.remainingWeight : (ℕ → ℕ) → ℕ :=
+fun w => 2 * w 3 + w 4 + 2 * w 6 + 2 * w 9 + 2 * w 10 + 2 * w 11 + w 12 + w 17 + w 19
+def AspisS1TopPrepareCode.body : AspisR1CurrentCaller.Ops →
+  AspisR1PublicPreparation.RoundModel.Boundaries →
+    AspisR1PublicPreparation.FinishModel.Boundaries →
+      AspisR1.VTop_OracleCode.Implementation → AspisR1.VTop_OracleCode.Implementation :=
+fun base R B other {A} call =>
+  match A, call with
+  |
+  .(Aeneas.Std.core.result.Result VTop_Stages.verifier.Prepared VTop_Stages.verifier.Error ×
+        Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize),
+    AspisR1.VTop_Trace.Call.op7 D pub proof hash none input =>
+    AspisR1PublicPreparation.PreparedHashCode.oracleProgram (AspisS1TopPrepareCode.code base R B D pub proof hash input)
+  | x, call => other call
+def AspisS1TopPrepareCode.sourceOps : AspisR1CurrentCaller.Ops →
+  AspisR1PublicPreparation.RoundModel.Boundaries →
+    AspisR1PublicPreparation.FinishModel.Boundaries → AspisR1CurrentCaller.Ops :=
+fun base R B =>
+  AspisR1CurrentCaller.S1SemanticInstallation.install
+    (have __src := AspisS1ValuesOwnedInstallation.withValues base;
+    { op0 := __src.op0, op1 := @AspisR1CurrentCaller.Ops.op1 __src, op2 := __src.op2, op3 := __src.op3,
+      op4 := __src.op4, op5 := __src.op5, op6 := @AspisR1CurrentCaller.Ops.op6 __src, op7 := __src.op7,
+      op8 := @AspisR1CurrentCaller.Ops.op8 __src, op9 := @AspisR1CurrentCaller.Ops.op9 __src,
+      op10 := AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues,
+      op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+      op16 := @AspisR1CurrentCaller.Ops.op16 __src, op17 := __src.op17, op18 := __src.op18, op19 := __src.op19,
+      op20 := __src.op20, op21 := __src.op21 })
+    R B
+structure AspisR1CurrentCaller.Ops : Type 1
+number of parameters: 0
+fields:
+  AspisR1CurrentCaller.Ops.op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31
+  AspisR1CurrentCaller.Ops.op1 : {T : Type} →
+      Aeneas.Std.core.marker.Copy T →
+        Aeneas.Std.Usize →
+          T →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error)
+  AspisR1CurrentCaller.Ops.op2 : AspisR1CurrentCaller.compact.CodecError →
+      Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error
+  AspisR1CurrentCaller.Ops.op3 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op4 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op5 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op6 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          AspisR1CurrentCaller.verifier.Prepared →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op7 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      AspisR1CurrentCaller.verifier.Prepared →
+        AspisR1CurrentCaller.verifier.Accumulator →
+          Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+            Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+              AspisR1CurrentCaller.verifier.QueryGeometry →
+                AspisR1CurrentCaller.verifier.BatchedWeights →
+                  Aeneas.Std.Usize →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result
+                        (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                        AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op8 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.r1_semantic.Verified H →
+          AspisR1CurrentCaller.verifier.View →
+            H →
+              Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                      AspisR1CurrentCaller.verifier.Error ×
+                    Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  AspisR1CurrentCaller.Ops.op9 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            H →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                    AspisR1CurrentCaller.r1_wire.Error)
+  AspisR1CurrentCaller.Ops.op10 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op11 : Aeneas.Std.Slice Aeneas.Std.U8 →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Aeneas.Std.Slice Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op12 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op13 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op14 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op15 : Aeneas.Std.Result Aeneas.Std.Usize
+  AspisR1CurrentCaller.Ops.op16 : {H : Type} →
+      AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  AspisR1CurrentCaller.Ops.op17 : AspisR1CurrentCaller.verifier.BatchedWeights →
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31)
+  AspisR1CurrentCaller.Ops.op18 : Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op19 : Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+              AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op20 : AspisR1CurrentCaller.transport.Variant →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error)
+  AspisR1CurrentCaller.Ops.op21 : Aeneas.Std.Result Aeneas.Std.Usize
+constructor:
+  AspisR1CurrentCaller.Ops.mk (op0 : Aeneas.Std.Result AspisR1CurrentCaller.aspis_core.field.QM31)
+    (op1 :
+      {T : Type} →
+        Aeneas.Std.core.marker.Copy T →
+          Aeneas.Std.Usize →
+            T →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) AspisR1CurrentCaller.aspis_core.r0.Error))
+    (op2 : AspisR1CurrentCaller.compact.CodecError → Aeneas.Std.Result AspisR1CurrentCaller.verifier.Error)
+    (op3 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.transport.Variant AspisR1CurrentCaller.verifier.Error))
+    (op4 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op5 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.View AspisR1CurrentCaller.verifier.Error))
+    (op6 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            AspisR1CurrentCaller.verifier.Prepared →
+              Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                Aeneas.Std.Usize →
+                  H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error))
+    (op7 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          AspisR1CurrentCaller.verifier.Accumulator →
+            Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+              Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                AspisR1CurrentCaller.verifier.QueryGeometry →
+                  AspisR1CurrentCaller.verifier.BatchedWeights →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                          (AspisR1CurrentCaller.verifier.Accumulator × AspisR1CurrentCaller.verifier.BatchedWeights)
+                          AspisR1CurrentCaller.verifier.Error))
+    (op8 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.r1_semantic.Verified H →
+            AspisR1CurrentCaller.verifier.View →
+              H →
+                Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Prepared
+                        AspisR1CurrentCaller.verifier.Error ×
+                      Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize))
+    (op9 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              H →
+                Option (AspisR1CurrentCaller.verifier.Phase → Aeneas.Std.Result Unit) →
+                  Aeneas.Std.Result
+                    (Aeneas.Std.core.result.Result (AspisR1CurrentCaller.r1_semantic.Verified H)
+                      AspisR1CurrentCaller.r1_wire.Error))
+    (op10 op11 :
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.compact.CodecError ×
+              Aeneas.Std.Slice Aeneas.Std.U8))
+    (op12 op13 op14 op15 : Aeneas.Std.Result Aeneas.Std.Usize)
+    (op16 :
+      {H : Type} →
+        AspisR1CurrentCaller.aspis_core.digest.Digest32 H →
+          AspisR1CurrentCaller.verifier.Prepared →
+            AspisR1CurrentCaller.verifier.Accumulator →
+              Aeneas.Std.Slice Aeneas.Std.U8 →
+                Aeneas.Std.Slice Aeneas.Std.U8 → H → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+    (op17 :
+      AspisR1CurrentCaller.verifier.BatchedWeights →
+        Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+          Aeneas.Std.Result (Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31))
+    (op18 :
+      Aeneas.Std.Slice AspisR1CurrentCaller.aspis_core.field.QM31 →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.BatchedWeights
+            AspisR1CurrentCaller.verifier.Error))
+    (op19 :
+      Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.QueryGeometry
+                AspisR1CurrentCaller.verifier.Error))
+    (op20 :
+      AspisR1CurrentCaller.transport.Variant →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result AspisR1CurrentCaller.verifier.Accumulator AspisR1CurrentCaller.verifier.Error))
+    (op21 : Aeneas.Std.Result Aeneas.Std.Usize) : AspisR1CurrentCaller.Ops
+structure AspisR1PublicPreparation.RoundModel.Boundaries : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.RoundModel.Boundaries.decode : (N : Aeneas.Std.Usize) →
+      AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 N)
+              AspisR1PublicPreparation.r1_wire.Error)
+  AspisR1PublicPreparation.RoundModel.Boundaries.boundary : Aeneas.Std.Array
+        AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.RoundModel.Boundaries.value : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        28#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        Aeneas.Std.Usize → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+constructor:
+  AspisR1PublicPreparation.RoundModel.Boundaries.mk
+    (decode :
+      (N : Aeneas.Std.Usize) →
+        AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 N)
+                AspisR1PublicPreparation.r1_wire.Error))
+    (boundary :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (value :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 28#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          Aeneas.Std.Usize → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31) :
+    AspisR1PublicPreparation.RoundModel.Boundaries
+structure AspisR1PublicPreparation.FinishModel.Boundaries : Type 1
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.FinishModel.Boundaries.fromFn : {T F : Type} →
+      (N : Aeneas.Std.Usize) →
+        Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N)
+  AspisR1PublicPreparation.FinishModel.Boundaries.mask : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31
+        16#usize →
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.add : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.mul : AspisR1PublicPreparation.aspis_core.field.QM31 →
+      AspisR1PublicPreparation.aspis_core.field.QM31 → Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31
+  AspisR1PublicPreparation.FinishModel.Boundaries.terminal : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+      Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.r1_wire.Challenges →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error)
+  AspisR1PublicPreparation.FinishModel.Boundaries.circle : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      AspisR1PublicPreparation.FinishModel.CircleRow →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+  AspisR1PublicPreparation.FinishModel.Boundaries.unwrapRoot : Aeneas.Std.core.result.Result
+        (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  AspisR1PublicPreparation.FinishModel.Boundaries.claims : AspisR1PublicPreparation.r1_wire.Prefix →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result
+          (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+          AspisR1PublicPreparation.r1_wire.Error)
+constructor:
+  AspisR1PublicPreparation.FinishModel.Boundaries.mk
+    (fromFn :
+      {T F : Type} →
+        (N : Aeneas.Std.Usize) →
+          Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → F → Aeneas.Std.Result (Aeneas.Std.Array T N))
+    (mask :
+      Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 16#usize →
+        Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+          AspisR1PublicPreparation.aspis_core.field.QM31 →
+            Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+              Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (add mul :
+      AspisR1PublicPreparation.aspis_core.field.QM31 →
+        AspisR1PublicPreparation.aspis_core.field.QM31 →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.QM31)
+    (terminal :
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize →
+          Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize →
+            AspisR1PublicPreparation.r1_wire.Challenges →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1PublicPreparation.aspis_core.field.QM31
+                  AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error))
+    (circle :
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        AspisR1PublicPreparation.FinishModel.CircleRow →
+          Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint)
+    (unwrapRoot :
+      Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+        Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (claims :
+      AspisR1PublicPreparation.r1_wire.Prefix →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result
+            (Aeneas.Std.Array (Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 29#usize) 3#usize)
+            AspisR1PublicPreparation.r1_wire.Error)) :
+    AspisR1PublicPreparation.FinishModel.Boundaries
+theorem AspisR1.Port16CUT_Driver.rust : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) (w : ℕ → ℕ),
+  AspisR1.Port15DRIVER_Local.LocalBudgets (fun {A} => rest) w →
+    ∀ (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (i : AspisR1.OraclePortStoredExperimentC4.Input),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Port1_Driver.rust adapter
+                (fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest) D hash
+                i)).1.length ≤
+        1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w :=
+fun ops reserved unwrap rest w budgets adapter {Hash} D hash H i =>
+  id
+    (AspisR1.Port1_Driver.rust.match_2.splitter✝
+      (fun x x_1 =>
+        AspisR1.Port1_Driver.asSlice i.statement.pubBytes = x →
+          AspisR1.Port1_Driver.asSlice i.stored = x_1 →
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (match AspisR1.Port1_Driver.asSlice i.statement.pubBytes, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.Port1_Driver.stages
+                          (fun {A} {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                          D hash semantic pub proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_2 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+              1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+      (AspisR1.Port1_Driver.asSlice i.statement.pubBytes) (AspisR1.Port1_Driver.asSlice i.stored)
+      (fun pub proof h =>
+        Eq.ndrec (motive := fun x =>
+          AspisR1.Port1_Driver.asSlice i.statement.pubBytes = x →
+            AspisR1.Port1_Driver.asSlice i.stored = some proof →
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (match x, AspisR1.Port1_Driver.asSlice i.stored with
+                      | some pub, some proof =>
+                        match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                        | Aeneas.Std.Result.ok (some semantic) =>
+                          AspisR1.Port1_Driver.stages
+                            (fun {A} {A} =>
+                              AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                            D hash semantic pub proof
+                        | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                      | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+          (fun heq h =>
+            Eq.ndrec (motive := fun x =>
+              AspisR1.Port1_Driver.asSlice i.stored = x →
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                        (match some pub, x with
+                        | some pub, some proof =>
+                          match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                          | Aeneas.Std.Result.ok (some semantic) =>
+                            AspisR1.Port1_Driver.stages
+                              (fun {A} {A} =>
+                                AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                              D hash semantic pub proof
+                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                  1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+              (fun heq =>
+                id
+                  (AspisR1.Port1_Driver.rust.match_1.splitter✝
+                    (fun x =>
+                      AspisR1.Port1_Driver.decodeSemantic adapter pub = x →
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                                | Aeneas.Std.Result.ok (some semantic) =>
+                                  AspisR1.Port1_Driver.stages
+                                    (fun {A} {A} =>
+                                      AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                    D hash semantic pub proof
+                                | x => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                          1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                    (AspisR1.Port1_Driver.decodeSemantic adapter pub)
+                    (fun semantic h =>
+                      Eq.ndrec (motive := fun x =>
+                        AspisR1.Port1_Driver.decodeSemantic adapter pub = x →
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (match x with
+                                  | Aeneas.Std.Result.ok (some semantic) =>
+                                    AspisR1.Port1_Driver.stages
+                                      (fun {A} {A} =>
+                                        AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                      D hash semantic pub proof
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                            1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                        (fun heq =>
+                          id
+                            (AspisR1.Port16CUT_Driver.stages ops reserved unwrap (fun {A} => rest) w
+                              (fun {A} => budgets) D hash semantic pub proof H))
+                        (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.decodeSemantic adapter pub)))
+                    (fun x x_1 h =>
+                      Eq.ndrec (motive := fun x =>
+                        (∀ (semantic : AspisR1.Port1_Driver.Semantic),
+                            x = Aeneas.Std.Result.ok (some semantic) → False) →
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                                  | Aeneas.Std.Result.ok (some semantic) =>
+                                    AspisR1.Port1_Driver.stages
+                                      (fun {A} {A} =>
+                                        AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                      D hash semantic pub proof
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                            1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                        (fun x =>
+                          Eq.ndrec (motive := fun x =>
+                            (∀ (semantic : AspisR1.Port1_Driver.Semantic),
+                                x = Aeneas.Std.Result.ok (some semantic) → False) →
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                      (match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} {A} =>
+                                            AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} =>
+                                              rest)
+                                          D hash semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                                1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                            (fun x =>
+                              Eq.mpr
+                                (id
+                                  (congrFun'
+                                    (congrArg LE.le
+                                      (congrArg List.length
+                                        (congrArg Prod.fst
+                                          (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                            (AspisR1.Port1_Driver.rust.match_1.eq_2✝
+                                              (fun x =>
+                                                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                  AspisV8R19.SourceDuplexStep.State Bool)
+                                              (AspisR1.Port1_Driver.decodeSemantic adapter pub)
+                                              (fun semantic =>
+                                                AspisR1.Port1_Driver.stages
+                                                  (fun {A} {A} =>
+                                                    AspisR1.Port9OR_Installed.implementation ops reserved unwrap
+                                                      fun {A} => rest)
+                                                  D hash semantic pub proof)
+                                              (fun x => AspisV8R19.MemoizedProgramLaw.Program.done false) x)))))
+                                    (1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)))
+                                (Nat.zero_le (1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)))
+                            (Eq.refl (AspisR1.Port1_Driver.decodeSemantic adapter pub)) x)
+                        h x_1)
+                    (Eq.refl (AspisR1.Port1_Driver.decodeSemantic adapter pub))))
+              (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)))
+          (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)))
+      (fun x x_1 x_2 h =>
+        Eq.ndrec (motive := fun x =>
+          (∀ (pub proof : Aeneas.Std.Slice Aeneas.Std.U8), x = some pub → x_1 = some proof → False) →
+            AspisR1.Port1_Driver.asSlice i.stored = x_1 →
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                      (match AspisR1.Port1_Driver.asSlice i.statement.pubBytes,
+                        AspisR1.Port1_Driver.asSlice i.stored with
+                      | some pub, some proof =>
+                        match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                        | Aeneas.Std.Result.ok (some semantic) =>
+                          AspisR1.Port1_Driver.stages
+                            (fun {A} {A} =>
+                              AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                            D hash semantic pub proof
+                        | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                      | x, x_3 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+          (fun x h =>
+            Eq.ndrec (motive := fun x =>
+              (∀ (pub proof : Aeneas.Std.Slice Aeneas.Std.U8),
+                  AspisR1.Port1_Driver.asSlice i.statement.pubBytes = some pub → x = some proof → False) →
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                        (match AspisR1.Port1_Driver.asSlice i.statement.pubBytes,
+                          AspisR1.Port1_Driver.asSlice i.stored with
+                        | some pub, some proof =>
+                          match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                          | Aeneas.Std.Result.ok (some semantic) =>
+                            AspisR1.Port1_Driver.stages
+                              (fun {A} {A} =>
+                                AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                              D hash semantic pub proof
+                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | x, x_3 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                  1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+              (fun x =>
+                Eq.ndrec (motive := fun x =>
+                  (∀ (pub proof : Aeneas.Std.Slice Aeneas.Std.U8),
+                      x = some pub → AspisR1.Port1_Driver.asSlice i.stored = some proof → False) →
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (match x, AspisR1.Port1_Driver.asSlice i.stored with
+                            | some pub, some proof =>
+                              match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                  D hash semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_4 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                      1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                  (fun x =>
+                    Eq.ndrec (motive := fun x =>
+                      (∀ (pub proof : Aeneas.Std.Slice Aeneas.Std.U8),
+                          AspisR1.Port1_Driver.asSlice i.statement.pubBytes = some pub → x = some proof → False) →
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (match AspisR1.Port1_Driver.asSlice i.statement.pubBytes, x with
+                                | some pub, some proof =>
+                                  match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                                  | Aeneas.Std.Result.ok (some semantic) =>
+                                    AspisR1.Port1_Driver.stages
+                                      (fun {A} {A} =>
+                                        AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+                                      D hash semantic pub proof
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                                | x, x_4 => AspisV8R19.MemoizedProgramLaw.Program.done false)).1.length ≤
+                          1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)
+                      (fun x =>
+                        Eq.mpr
+                          (id
+                            (congrFun'
+                              (congrArg LE.le
+                                (congrArg List.length
+                                  (congrArg Prod.fst
+                                    (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                      (AspisR1.Port1_Driver.rust.match_2.eq_2✝
+                                        (fun x x_3 =>
+                                          AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                            AspisV8R19.SourceDuplexStep.State Bool)
+                                        (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)
+                                        (AspisR1.Port1_Driver.asSlice i.stored)
+                                        (fun pub proof =>
+                                          match AspisR1.Port1_Driver.decodeSemantic adapter pub with
+                                          | Aeneas.Std.Result.ok (some semantic) =>
+                                            AspisR1.Port1_Driver.stages
+                                              (fun {A} {A} =>
+                                                AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} =>
+                                                  rest)
+                                              D hash semantic pub proof
+                                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                        (fun x x_3 => AspisV8R19.MemoizedProgramLaw.Program.done false) x)))))
+                              (1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)))
+                          (Nat.zero_le (1046 + AspisR1.Port16CUT_Cuts.delegatedWeight w)))
+                      (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)) x)
+                  (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)) x)
+              h x)
+          h x_2)
+      (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)) (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)))
+theorem AspisR1.Port17RELEASE_Driver.rust : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (base : AspisR1CurrentCaller.Ops)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (other : AspisR1.VTop_OracleCode.Implementation) (w : ℕ → ℕ),
+  AspisR1.Port17RELEASE_Prepare.OtherBudgets (fun {A} => other) w →
+    ∀ (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (i : AspisR1.OraclePortStoredExperimentC4.Input),
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Port1_Driver.rust adapter
+                (fun {A} => AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other)
+                D hash i)).1.length ≤
+        1161 + AspisR1.Port17RELEASE_Driver.remainingWeight w :=
+fun ops reserved unwrap base R B other w remaining adapter {Hash} D hash H i =>
+  have h :=
+    AspisR1.Port17RELEASE_Control.rust ops reserved unwrap
+      (fun {A} => AspisS1TopPrepareCode.body base R B fun {A} => other) (AspisR1.Port17RELEASE_Prepare.weight w)
+      (fun {A} => AspisR1.Port17RELEASE_Prepare.budgets base R B (fun {A} => other) w fun {A} => remaining) adapter D
+      hash H i;
+  LE.le.trans
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port1_Driver.rust adapter
+                    (fun {A} =>
+                      AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} =>
+                        AspisS1TopPrepareCode.body base R B fun {A} => other)
+                    D hash i)).1.length ≤
+            1046 + _a)
+        (AspisR1.Port17RELEASE_Driver.weights w))
+      h)
+    (Decidable.byContradiction fun a =>
+      AspisR1.Port17RELEASE_Driver.rust._proof_1 ops reserved unwrap base R B other w adapter D hash H i a)
+theorem AspisR1.Port17RELEASE_Accounting.budget : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (base : AspisR1CurrentCaller.Ops)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (other : AspisR1.VTop_OracleCode.Implementation) (w : ℕ → ℕ),
+  AspisR1.Port17RELEASE_Prepare.OtherBudgets (fun {A} => other) w →
+    ∀ (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (decoder : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port6AUTH_Prefix.source decoder
+                    (AspisR1.Port1_Driver.rust adapter
+                      (fun {A} =>
+                        AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other)
+                      D hash)
+                    P)).1 ≤
+            Q + 1161 + AspisR1.Port17RELEASE_Driver.remainingWeight w :=
+fun ops reserved unwrap base R B other w remaining adapter {Hash} D hash decoder P Q hq H =>
+  let rust :=
+    AspisR1.Port1_Driver.rust adapter
+      (fun {A} => AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other) D hash;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a ≤ Q + 1161 + AspisR1.Port17RELEASE_Driver.remainingWeight w)
+          (AspisR1.Port6AUTH_Accounting.first_reads decoder rust P
+            (AspisR1.Port1_StoredCarrier.driver_physical adapter
+              (@AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other) D hash)
+            H)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => FS.firstReads FS.emptyTable _a.1 ≤ Q + 1161 + AspisR1.Port17RELEASE_Driver.remainingWeight w)
+            (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+              (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)) H)))
+        (have h :=
+          AspisR1.VerifierCallBudget.firstReads_le_length FS.emptyTable
+            ((AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (rust
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))).2)).1);
+        have hp :=
+          Eq.mpr
+            (id
+              (congrFun'
+                (congrArg LE.le
+                  (congrArg List.length
+                    (congrArg Prod.fst
+                      (Eq.trans (AspisR1.OraclePortStoredAdmissionC4.canon_eval (AspisR1.Port1_StoredCarrier.lift P) H)
+                        (congr (congrArg Prod.mk (congrArg Prod.fst (AspisR1.Port1_StoredCarrier.lift_eval P H)))
+                          (congrArg AspisR1.OraclePortStoredAdmissionC4.canonInput
+                            (congrArg Prod.snd (AspisR1.Port1_StoredCarrier.lift_eval P H))))))))
+                Q))
+            (hq H);
+        have calls :=
+          AspisR1.Port17RELEASE_Driver.rust ops reserved unwrap base R B (fun {A} => other) w (fun {A} => remaining)
+            adapter D hash H
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))).2;
+        LE.le.trans
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                FS.firstReads FS.emptyTable
+                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))).1 ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (rust
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.OraclePortStoredAdmissionC4.canon
+                                  (AspisR1.Port1_StoredCarrier.lift P))).2)).1) ≤
+                  _a)
+              List.length_append)
+            h)
+          (LE.le.trans (Nat.add_le_add hp calls)
+            (Decidable.byContradiction fun a =>
+              AspisR1.Port17RELEASE_Accounting.budget._proof_1 ops reserved unwrap base R B other w adapter D hash P Q H
+                a)))))
+theorem AspisR1.Port17RELEASE_Accounting.log_length : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (base : AspisR1CurrentCaller.Ops)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (other : AspisR1.VTop_OracleCode.Implementation) (w : ℕ → ℕ),
+  AspisR1.Port17RELEASE_Prepare.OtherBudgets (fun {A} => other) w →
+    ∀ (adapter : AdapterRw.Ops) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+      (decoder : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q : ℕ),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port6AUTH_Prefix.source decoder
+                    (AspisR1.Port1_Driver.rust adapter
+                      (fun {A} =>
+                        AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other)
+                      D hash)
+                    P)).1.length ≤
+            Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w :=
+fun ops reserved unwrap base R B other w remaining adapter {Hash} D hash decoder P Q hq H =>
+  let rust :=
+    AspisR1.Port1_Driver.rust adapter
+      (fun {A} => AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B fun {A} => other) D hash;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a.1.length ≤ Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w)
+          (AspisR1.Port6AUTH_Prefix.source_eval decoder rust P H)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (AspisR1.OraclePortStoredExperimentC4.view _a).1.length ≤
+                Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w)
+            (AspisR1.OraclePortFrozen2Join.annotatedWith_eval decoder rust
+              (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)) H)))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a ≤ Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w)
+                List.length_append))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a.1.length +
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                              (rust
+                                (AspisR1.OraclePortStoredExperimentC4.enrich
+                                  (AspisR1.OraclePortStoredAdmissionC4.build decoder
+                                    (_a.1, (_a.2.1.statement, _a.2.1.proof), _a.2.2))
+                                  _a.2.1))).1.length ≤
+                      Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w)
+                  (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                    (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)) H)))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg LE.le
+                      (congrFun' (congrArg HAdd.hAdd List.length_append)
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                              (rust
+                                (AspisR1.OraclePortStoredExperimentC4.enrich
+                                  (AspisR1.OraclePortStoredAdmissionC4.build decoder
+                                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.OraclePortStoredAdmissionC4.canon
+                                              (AspisR1.Port1_StoredCarrier.lift P))).1 ++
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (rust
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                    (AspisR1.Port1_StoredCarrier.lift P))).2)).1,
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                (AspisR1.Port1_StoredCarrier.lift P))).2.statement,
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                (AspisR1.Port1_StoredCarrier.lift P))).2.proof),
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (rust
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                  (AspisR1.Port1_StoredCarrier.lift P))).2)).2))
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                      (AspisR1.OraclePortStoredAdmissionC4.canon
+                                        (AspisR1.Port1_StoredCarrier.lift P))).2))).1.length))
+                    (Q + 2322 + 2 * AspisR1.Port17RELEASE_Driver.remainingWeight w)))
+                (have hp :=
+                  Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrArg List.length
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (AspisR1.OraclePortStoredAdmissionC4.canon_eval (AspisR1.Port1_StoredCarrier.lift P) H)
+                                (congr
+                                  (congrArg Prod.mk (congrArg Prod.fst (AspisR1.Port1_StoredCarrier.lift_eval P H)))
+                                  (congrArg AspisR1.OraclePortStoredAdmissionC4.canonInput
+                                    (congrArg Prod.snd (AspisR1.Port1_StoredCarrier.lift_eval P H))))))))
+                        Q))
+                    (hq H);
+                have calls := fun i =>
+                  AspisR1.Port17RELEASE_Driver.rust ops reserved unwrap base R B (fun {A} => other) w
+                    (fun {A} => remaining) adapter D hash H i;
+                have h1 :=
+                  calls
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))).2;
+                have h2 :=
+                  calls
+                    (AspisR1.OraclePortStoredExperimentC4.enrich
+                      (AspisR1.OraclePortStoredAdmissionC4.build decoder
+                        (AspisR1.OraclePortStoredExperimentC4.view
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.OraclePortRuntimeBindingC7.originalWith rust
+                              (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P))))))
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.OraclePortRuntimeBindingC7.originalWith rust
+                              (AspisR1.OraclePortStoredAdmissionC4.canon (AspisR1.Port1_StoredCarrier.lift P)))).2.1);
+                Decidable.byContradiction fun a =>
+                  AspisR1.Port17RELEASE_Accounting.log_length._proof_1 ops reserved unwrap base R B other w adapter D
+                    hash decoder P Q H hp h1
+                    (Eq.mp
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrArg List.length
+                            (congrArg Prod.fst
+                              (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                (congrArg rust
+                                  (congr
+                                    (congrArg AspisR1.OraclePortStoredExperimentC4.enrich
+                                      (congrArg (AspisR1.OraclePortStoredAdmissionC4.build decoder)
+                                        (congr
+                                          (congrArg Prod.mk
+                                            (congrArg Prod.fst
+                                              (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                                                (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                  (AspisR1.Port1_StoredCarrier.lift P))
+                                                H)))
+                                          (congr
+                                            (congrArg Prod.mk
+                                              (congr
+                                                (congrArg Prod.mk
+                                                  (congrArg AspisR1.OraclePortStoredExperimentC4.Input.statement
+                                                    (congrArg Prod.fst
+                                                      (congrArg Prod.snd
+                                                        (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                                                          (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                            (AspisR1.Port1_StoredCarrier.lift P))
+                                                          H)))))
+                                                (congrArg AspisR1.OraclePortStoredExperimentC4.Input.proof
+                                                  (congrArg Prod.fst
+                                                    (congrArg Prod.snd
+                                                      (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                                                        (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                          (AspisR1.Port1_StoredCarrier.lift P))
+                                                        H))))))
+                                            (congrArg Prod.snd
+                                              (congrArg Prod.snd
+                                                (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                                                  (AspisR1.OraclePortStoredAdmissionC4.canon
+                                                    (AspisR1.Port1_StoredCarrier.lift P))
+                                                  H)))))))
+                                    (congrArg Prod.fst
+                                      (congrArg Prod.snd
+                                        (AspisR1.OraclePortFrozen2Join.originalWith_eval rust
+                                          (AspisR1.OraclePortStoredAdmissionC4.canon
+                                            (AspisR1.Port1_StoredCarrier.lift P))
+                                          H)))))))))
+                        (1161 + AspisR1.Port17RELEASE_Driver.remainingWeight w))
+                      h2)
+                    a)))))))
+theorem AspisR1.Port17RELEASE_Effects.op7_effects_count : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (base : AspisR1CurrentCaller.Ops)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (other : AspisR1.VTop_OracleCode.Implementation)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : S4SolanaDigestWrapperP3BindingV1.SolanaDigest)
+  (input : Aeneas.Std.Array AspisS1TopPrepareCarrier.Top.E 29#usize),
+  AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B (fun {A} => other)
+          (AspisR1.VTop_Trace.Call.op7
+            (AspisS1TopPrepareCode.digest fun bytes => AspisV8R19.SqueezeOracleBridge.encodeState (H bytes)) pub proof
+            hash none input)) =
+      (AspisR1PublicPreparation.PreparedHashCode.observe
+          (AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisS1TopPrepareCode.code base R B
+                (AspisS1TopPrepareCode.digest fun bytes => AspisV8R19.SqueezeOracleBridge.encodeState (H bytes)) pub
+                proof hash input)).1,
+        AspisS1TopPrepareSource.prepare (AspisS1TopPrepareCode.sourceOps base R B)
+          (AspisS1TopPrepareCode.digest fun bytes => AspisV8R19.SqueezeOracleBridge.encodeState (H bytes)) pub proof
+          hash none input) ∧
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port17RELEASE_Prepare.implementation ops reserved unwrap base R B (fun {A} => other)
+              (AspisR1.VTop_Trace.Call.op7
+                (AspisS1TopPrepareCode.digest fun bytes => AspisV8R19.SqueezeOracleBridge.encodeState (H bytes)) pub
+                proof hash none input))).1.length ≤
+      115 :=
+fun ops reserved unwrap base R B other H pub proof hash input =>
+  AspisS1TopPrepareCode.installed_effects_count base R B (fun {A} => other) H pub proof hash input
+def AspisR1.Port1_Driver.stages : AspisR1.VTop_OracleCode.Implementation →
+  {Hash : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 Hash →
+      Hash →
+        AspisR1.Port1_Driver.Semantic →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                Bool :=
+fun impl {Hash} D hash semantic pub proof =>
+  AspisV8R19.OracleProgramOps.bind
+    (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+      (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))
+    fun first =>
+    match first with
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+      AspisV8R19.OracleProgramOps.bind
+        (AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+          (AspisR1.VTop_Flow.tx2_authenticated AspisR1.VTop_Flow.traceEffects D pub proof saved.deref hash none))
+        fun second => AspisV8R19.MemoizedProgramLaw.Program.done (AspisR1.Port1_Driver.verdict second)
+    | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+def AspisR1.Port16CUT_Driver.next : AspisR1.VTop_OracleCode.Implementation →
+  {Hash : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 Hash →
+      Hash →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) VTop_Stages.verifier.Error) →
+              AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State
+                Bool :=
+fun impl {Hash} D hash pub proof first =>
+  match first with
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+    AspisV8R19.OracleProgramOps.bind (AspisR1.Port16CUT_Cuts.sourceTwo (fun {A} => impl) D hash pub proof saved.deref)
+      fun second => AspisV8R19.MemoizedProgramLaw.Program.done (AspisR1.Port1_Driver.verdict second)
+  | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+theorem AspisR1.Port16CUT_Cuts.sourceOne_eq : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (semantic : AspisR1.Port1_Driver.Semantic)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port16CUT_Cuts.sourceOne (fun {A} => impl) D hash semantic pub proof =
+    AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+      (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash none) :=
+fun impl {Hash} D hash semantic pub proof =>
+  id
+    (Eq.refl
+      (AspisR1.VTop_OracleCode.interpret (fun {A} {A} => impl)
+        (AspisR1.VTop_Flow.tx1 AspisR1.VTop_Flow.traceEffects D semantic pub proof 10#usize hash none)))
+theorem AspisR1.Port16CUT_Cuts.sourceTwo_eq : ∀ (impl : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.Port16CUT_Cuts.sourceTwo (fun {A} => impl) D hash pub proof checkpoint =
+    AspisR1.VTop_OracleCode.interpret (fun {A} => impl)
+      (AspisR1.VTop_Flow.tx2_authenticated AspisR1.VTop_Flow.traceEffects D pub proof checkpoint hash none) :=
+fun impl {Hash} D hash pub proof checkpoint =>
+  id
+    (Eq.refl
+      (AspisR1.VTop_OracleCode.interpret (fun {A} {A} => impl)
+        (AspisR1.VTop_Flow.tx2_authenticated AspisR1.VTop_Flow.traceEffects D pub proof checkpoint hash none)))
+'AspisR1.Port17RELEASE_Domain.old_implies_release' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Domain.delegated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Invariant.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Invariant.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_TX1.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_TX2.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Cuts.sourceOne_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Cuts.sourceTwo_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Control.next_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Control.stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Control.rust' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Prepare.op7_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Prepare.body_other' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Prepare.budgets' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Driver.weights' depends on axioms: [propext, Quot.sound]
+'AspisR1.Port17RELEASE_Driver.stages' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Driver.rust' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Accounting.budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Accounting.log_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port17RELEASE_Effects.op7_effects_count' depends on axioms: [propext, Classical.choice, Quot.sound]

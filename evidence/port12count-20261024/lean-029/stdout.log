@@ -1,0 +1,460 @@
+theorem AspisR1.Port12COUNT_Batch.pure_cap : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (r : Aeneas.Std.Result A)
+  (n : ℕ),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash (AspisR1.CheckpointBytes5Effect.liftResult r))).1.length ≤
+    n :=
+⋯
+'AspisR1.Port12COUNT_Batch.pure_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Batch.values0 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array AspisR1.CheckpointBytes5Effect.Digest 3#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash
+            (AspisR1.Port9OR_Batch.values base D hash proof queries roots 0#usize))).1.length ≤
+    477 :=
+⋯
+'AspisR1.Port12COUNT_Batch.values0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Batch.batch0 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : AspisR1.CheckpointBytes5Effect.Digest),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash
+            (AspisR1.Port9OR_Batch.code base D hash proof p folded 0#usize))).1.length ≤
+    477 :=
+⋯
+'AspisR1.Port12COUNT_Batch.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Batch.values1 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array AspisR1.CheckpointBytes5Effect.Digest 3#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash
+            (AspisR1.Port9OR_Batch.values base D hash proof queries roots 1#usize))).1.length ≤
+    563 :=
+⋯
+'AspisR1.Port12COUNT_Batch.values1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Batch.batch1 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : AspisR1.CheckpointBytes5Effect.Digest),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash
+            (AspisR1.Port9OR_Batch.code base D hash proof p folded 1#usize))).1.length ≤
+    563 :=
+⋯
+'AspisR1.Port12COUNT_Batch.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchLeaf.lift_cap : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (r : Aeneas.Std.Result A)
+  (k : A → AspisR1.CheckpointBytes5Effect.Code B) (n : ℕ),
+  (∀ (a : A), (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a))).1.length ≤ n) →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port9OR_Code.program D hash (AspisR1.CheckpointBytes5Effect.liftResult r >>= k))).1.length ≤
+      n :=
+⋯
+'AspisR1.Port12COUNT_BatchLeaf.lift_cap' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchLeaf.active : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos : Aeneas.Std.Usize),
+  pos < n →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port9OR_Code.program D hash
+              (AspisR1.Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos))).1.length ≤
+      1 :=
+⋯
+'AspisR1.Port12COUNT_BatchLeaf.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchLeaf.cont_shape : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos : Aeneas.Std.Usize) (nextIdx : AspisR1.Port9OR_BatchStep.Indices)
+  (nextVal : AspisR1.Port9OR_BatchStep.Values) (nextD nextPos : Aeneas.Std.Usize),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port9OR_BatchStep.ops base) D proof
+        root tree hash lo n slot keys idx val d pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (nextIdx, nextVal, nextD, nextPos)) →
+    nextD = d ∨ nextD = d.wrapping_add 1#usize :=
+⋯
+'AspisR1.Port12COUNT_BatchLeaf.cont_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchLoop.count : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (fuel : ℕ) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos cap : Aeneas.Std.Usize),
+  AspisR1.Port12COUNT_BatchTail.capacities.index_usize slot = Aeneas.Std.Result.ok cap →
+    ↑cap ≤ 172 →
+      0 < ↑cap →
+        ↑n < 256 →
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Port9OR_Code.program D hash
+                    (AspisR1.Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel idx val d
+                      pos))).1.length ≤
+            ↑cap + ↑d + 2 * (↑n - ↑pos) - 1 :=
+⋯
+'AspisR1.Port12COUNT_BatchLoop.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port12COUNT_BatchTail.capacities : Aeneas.Std.Array Aeneas.Std.Usize 6#usize :=
+Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+  AspisR1.Port12COUNT_BatchTail.capacities._proof_6
+theorem AspisR1.Port12COUNT_BatchTail.prefix_length : ∀ (nodes supplied : Aeneas.Std.Slice Aeneas.Std.U8)
+  (stop : Aeneas.Std.Usize),
+  Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes
+        { «end» := stop } =
+      Aeneas.Std.Result.ok supplied →
+    (↑supplied).length ≤ ↑stop :=
+⋯
+'AspisR1.Port12COUNT_BatchTail.prefix_length' depends on axioms: [propext, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTail.verify : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d : Aeneas.Std.Usize) (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_BatchStep.verify root idx val d nodes))).1.length ≤
+    (↑nodes).length / 32 + ↑d - 1 :=
+⋯
+'AspisR1.Port12COUNT_BatchTail.verify' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTail.verify_prefix : ∀ {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values) (d : Aeneas.Std.Usize)
+  (nodes supplied : Aeneas.Std.Slice Aeneas.Std.U8) (used cap : Aeneas.Std.Usize),
+  Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes
+        { «end» := Aeneas.Std.Usize.wrapping_mul 32#usize used } =
+      Aeneas.Std.Result.ok supplied →
+    ¬used > cap →
+      ↑cap ≤ 172 →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Port9OR_Code.program D hash
+                  (AspisR1.Port9OR_BatchStep.verify root idx val d supplied))).1.length ≤
+          ↑cap + ↑d - 1 :=
+⋯
+'AspisR1.Port12COUNT_BatchTail.verify_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTail.terminal : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port9OR_BatchStep.Indices)
+  (val : AspisR1.Port9OR_BatchStep.Values) (d pos cap : Aeneas.Std.Usize),
+  ¬pos < n →
+    AspisR1.Port12COUNT_BatchTail.capacities.index_usize slot = Aeneas.Std.Result.ok cap →
+      ↑cap ≤ 172 →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Port9OR_Code.program D hash
+                  (AspisR1.Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos))).1.length ≤
+          ↑cap + ↑d - 1 :=
+⋯
+'AspisR1.Port12COUNT_BatchTail.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTree.count : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (batch tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values)
+  (cap : Aeneas.Std.Usize),
+  AspisR1.Port12COUNT_BatchTail.capacities.index_usize (AspisR1.Port4B_TreeCuts.slot batch tree) =
+      Aeneas.Std.Result.ok cap →
+    ↑cap ≤ 172 →
+      0 < ↑cap →
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Port9OR_Code.program D hash
+                  (AspisR1.Port9OR_BatchTree.code base D hash proof queries root batch tree idx val))).1.length ≤
+          (↑cap + 2 * if batch = 0#usize then 10 else 12) - 1 :=
+⋯
+'AspisR1.Port12COUNT_BatchTree.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTree.batch0 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  ↑tree < 3 →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port9OR_Code.program D hash
+              (AspisR1.Port9OR_BatchTree.code base D hash proof queries root 0#usize tree idx val))).1.length ≤
+      if tree = 2#usize then 147 else 165 :=
+⋯
+'AspisR1.Port12COUNT_BatchTree.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_BatchTree.batch1 : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : AspisR1.CheckpointBytes5Effect.Digest)
+  (tree : Aeneas.Std.Usize) (idx : AspisR1.Port9OR_BatchStep.Indices) (val : AspisR1.Port9OR_BatchStep.Values),
+  ↑tree < 3 →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port9OR_Code.program D hash
+              (AspisR1.Port9OR_BatchTree.code base D hash proof queries root 1#usize tree idx val))).1.length ≤
+      if tree = 2#usize then 173 else 195 :=
+⋯
+'AspisR1.Port12COUNT_BatchTree.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_FirstReads.checkpointChain : ∀ (reserved : Bool) (unwrap : AspisR1.Port6CK_Semantic.Unwrap)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p0 : VTop_Stages.verifier.Prepared) (written : VTop_Stages.verifier.Accumulator)
+  (folded0 folded1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  FS.firstReads FS.emptyTable
+      (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port12COUNT_Installed.checkpointChain reserved unwrap D hash proof pub p0 written folded0
+            folded1)).1 ≤
+    1046 :=
+⋯
+'AspisR1.Port12COUNT_FirstReads.checkpointChain' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_FirstReads.owned_calls : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof pub ck : Aeneas.Std.Slice Aeneas.Std.U8) (p0 p1 : VTop_Stages.verifier.Prepared)
+  (written : VTop_Stages.verifier.Accumulator) (folded0 folded1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+  FS.firstReads FS.emptyTable
+      ((AspisV8R19.MemoizedProgramLaw.eval H (impl (AspisR1.VTop_Trace.Call.op5 D proof p0 folded0 0#usize hash))).1 ++
+            (AspisV8R19.MemoizedProgramLaw.eval H (impl (AspisR1.VTop_Trace.Call.op8 D p0 written proof pub hash))).1 ++
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (impl (AspisR1.VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash))).1 ++
+        (AspisV8R19.MemoizedProgramLaw.eval H (impl (AspisR1.VTop_Trace.Call.op5 D proof p1 folded1 1#usize hash))).1) ≤
+    1046 :=
+⋯
+'AspisR1.Port12COUNT_FirstReads.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Installed.batch0 : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Installed.batch D hash proof p folded 0#usize)).1.length ≤
+    477 :=
+⋯
+'AspisR1.Port12COUNT_Installed.batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Installed.batch1 : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Installed.batch D hash proof p folded 1#usize)).1.length ≤
+    563 :=
+⋯
+'AspisR1.Port12COUNT_Installed.batch1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Installed.owned_calls : ∀ (ops : VTop_Stages.Ops) (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) (rest : AspisR1.VTop_OracleCode.Implementation) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof pub ck : Aeneas.Std.Slice Aeneas.Std.U8) (p0 p1 : VTop_Stages.verifier.Prepared)
+  (written : VTop_Stages.verifier.Accumulator) (folded0 folded1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  have impl := fun {A} => AspisR1.Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest;
+  (AspisV8R19.MemoizedProgramLaw.eval H (impl (AspisR1.VTop_Trace.Call.op5 D proof p0 folded0 0#usize hash))).1.length +
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                (impl (AspisR1.VTop_Trace.Call.op8 D p0 written proof pub hash))).1.length +
+        (AspisV8R19.MemoizedProgramLaw.eval H
+              (impl (AspisR1.VTop_Trace.Call.op18 D ck proof pub AspisR1Stage2.transport.Variant.S2 hash))).1.length +
+      (AspisV8R19.MemoizedProgramLaw.eval H
+            (impl (AspisR1.VTop_Trace.Call.op5 D proof p1 folded1 1#usize hash))).1.length ≤
+    1046 :=
+⋯
+'AspisR1.Port12COUNT_Installed.owned_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Installed.program_bind_bound : ∀ {A B : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (next : A → AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State B)
+  (n m : ℕ),
+  (AspisV8R19.MemoizedProgramLaw.eval H p).1.length ≤ n →
+    (∀ (a : A), (AspisV8R19.MemoizedProgramLaw.eval H (next a)).1.length ≤ m) →
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisV8R19.OracleProgramOps.bind p next)).1.length ≤ n + m :=
+⋯
+'AspisR1.Port12COUNT_Installed.program_bind_bound' depends on axioms: [propext, Quot.sound]
+def AspisR1.Port12COUNT_Installed.checkpointChain : Bool →
+  AspisR1.Port6CK_Semantic.Unwrap →
+    {Hash : Type} →
+      VTop_Stages.aspis_core.digest.Digest32 Hash →
+        Hash →
+          Aeneas.Std.Slice Aeneas.Std.U8 →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              VTop_Stages.verifier.Prepared →
+                VTop_Stages.verifier.Accumulator →
+                  Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                    Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+                      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                        AspisV8R19.SourceDuplexStep.State Bool :=
+fun reserved unwrap {Hash} D hash proof pub p0 written folded0 folded1 =>
+  AspisV8R19.OracleProgramOps.bind (AspisR1.Port9OR_Installed.batch D hash proof p0 folded0 0#usize) fun first =>
+    match first with
+    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok a) =>
+      AspisV8R19.OracleProgramOps.bind (AspisR1.Port9OR_Bodies.writer D p0 written proof pub hash) fun wrote =>
+        match wrote with
+        | Aeneas.Std.Result.ok saved =>
+          AspisV8R19.OracleProgramOps.bind
+            (AspisR1.Port9OR_Bodies.reader reserved unwrap D saved.deref proof pub AspisR1Stage2.transport.Variant.S2
+              hash)
+            fun resumed =>
+            match resumed with
+            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p1, snd)) =>
+              AspisV8R19.OracleProgramOps.bind (AspisR1.Port9OR_Installed.batch D hash proof p1 folded1 1#usize)
+                fun final => AspisV8R19.MemoizedProgramLaw.Program.done (AspisR1.Port1_Driver.verdict final)
+            | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+        | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+    | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+theorem AspisR1.Port12COUNT_Installed.checkpointChain_count : ∀ (reserved : Bool)
+  (unwrap : AspisR1.Port6CK_Semantic.Unwrap) {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (p0 : VTop_Stages.verifier.Prepared)
+  (written : VTop_Stages.verifier.Accumulator) (folded0 folded1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port12COUNT_Installed.checkpointChain reserved unwrap D hash proof pub p0 written folded0
+            folded1)).1.length ≤
+    1046 :=
+⋯
+'AspisR1.Port12COUNT_Installed.checkpointChain_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Levels.level : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    have out :=
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Levels.level s physical));
+    out.1.length + AspisR1.Port12COUNT_Rows.retained (AspisR1.Port12COUNT_Potential.levelPost physical) out.2 ≤
+      AspisR1.Port12COUNT_Potential.credit physical s 0#usize 0#usize :=
+⋯
+'AspisR1.Port12COUNT_Levels.level' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Levels.levels : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (height : ℕ) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    have out :=
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Levels.levels height s physical));
+    out.1.length + AspisR1.Port12COUNT_Rows.retained (AspisR1.Port12COUNT_Potential.levelPost physical) out.2 ≤
+      AspisR1.Port12COUNT_Potential.credit physical s 0#usize 0#usize :=
+⋯
+'AspisR1.Port12COUNT_Levels.levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Levels.count : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (height : ℕ) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Levels.levels height s physical))).1.length ≤
+      ((↑physical).length - ↑s.at) / 32 + ↑s.n - 1 :=
+⋯
+'AspisR1.Port12COUNT_Levels.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port12COUNT_Potential.Funded : {A : Type} → (A → ℕ) → ℕ → AspisR1.CheckpointBytes5Effect.Code A → Prop :=
+fun {A} post x x_1 =>
+  AspisR1.CheckpointBytes5Effect.Code.brecOn (motive := fun x => ℕ → Prop) x_1
+    (AspisR1.Port12COUNT_Potential.Funded._f post) x
+def AspisR1.Port12COUNT_Potential.credit : Aeneas.Std.Slice Aeneas.Std.U8 →
+  MultiproofConeRef.reference.Scratch → Aeneas.Std.Usize → Aeneas.Std.Usize → ℕ :=
+fun physical s i w => ((↑physical).length - ↑s.at) / 32 + (↑s.n - ↑i + ↑w) - 1
+def AspisR1.Port12COUNT_Potential.rowPost : Aeneas.Std.Slice Aeneas.Std.U8 → MultiproofConeRef.reference.Row → ℕ :=
+fun physical x =>
+  match x with
+  | MultiproofConeRef.reference.Row.Stop a => 0
+  | MultiproofConeRef.reference.Row.Next s i w => AspisR1.Port12COUNT_Potential.credit physical s i w
+def AspisR1.Port12COUNT_Potential.levelPost : Aeneas.Std.Slice Aeneas.Std.U8 → MultiproofConeRef.reference.Level → ℕ :=
+fun physical x =>
+  match x with
+  | MultiproofConeRef.reference.Level.Stop a => 0
+  | MultiproofConeRef.reference.Level.Done s => AspisR1.Port12COUNT_Potential.credit physical s 0#usize 0#usize
+theorem AspisR1.Port12COUNT_Potential.count : ∀ {A Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (post : A → ℕ) (n : ℕ),
+  AspisR1.Port12COUNT_Potential.Funded post n code →
+    have out := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code);
+    (out.1.length +
+        match out.2 with
+        | Aeneas.Std.Result.ok a => post a
+        | x => 0) ≤
+      n :=
+⋯
+'AspisR1.Port12COUNT_Potential.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Potential.finish_spec : ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch) (digest : AspisR1.CheckpointBytes5Effect.Digest)
+  (ni cursor : Aeneas.Std.Usize) (index : Aeneas.Std.U32) (w i : Aeneas.Std.Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n →
+      Aeneas.Std.WP.spec (AspisR1.MultiproofConePhysicalProgram.finish s digest ni cursor index w) fun out =>
+        match out with
+        | MultiproofConeRef.reference.Row.Stop a => False
+        | MultiproofConeRef.reference.Row.Next next ni' nw =>
+          next.n = s.n ∧ next.at = cursor ∧ ni' = ni ∧ ↑nw = ↑w + 1 :=
+⋯
+'AspisR1.Port12COUNT_Potential.finish_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Potential.parent_funded : ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch) (left right : AspisR1.CheckpointBytes5Effect.Digest)
+  (ni cursor : Aeneas.Std.Usize) (index : Aeneas.Std.U32) (w i : Aeneas.Std.Usize) (budget : ℕ),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n →
+      1 + (((↑physical).length - ↑cursor) / 32 + (↑s.n - ↑ni + (↑w + 1)) - 1) ≤ budget →
+        AspisR1.Port12COUNT_Potential.Funded (AspisR1.Port12COUNT_Potential.rowPost physical) budget
+          (AspisR1.Port9OR_P6Node.parent s left right ni cursor index w) :=
+⋯
+'AspisR1.Port12COUNT_Potential.parent_funded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Potential.read32_spec : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  32 ≤ (↑bytes).length → Aeneas.Std.WP.spec (MultiproofConeRef.reference.read32 bytes) fun x => True :=
+⋯
+'AspisR1.Port12COUNT_Potential.read32_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Potential.node_funded : ∀ (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch) (i w : Aeneas.Std.Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n →
+      AspisR1.Port12COUNT_Potential.Funded (AspisR1.Port12COUNT_Potential.rowPost physical)
+        (AspisR1.Port12COUNT_Potential.credit physical s i w) (AspisR1.Port9OR_P6Node.node s physical i w) :=
+⋯
+'AspisR1.Port12COUNT_Potential.node_funded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Rows.eval_join : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (code >>= k)) =
+    have first := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code);
+    match first.2 with
+    | Aeneas.Std.Result.ok a =>
+      have rest := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a));
+      (first.1 ++ rest.1, rest.2)
+    | Aeneas.Std.Result.fail e => (first.1, Aeneas.Std.Result.fail e)
+    | Aeneas.Std.Result.div => (first.1, Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port12COUNT_Rows.eval_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port12COUNT_Rows.retained : {A : Type} → (A → ℕ) → Aeneas.Std.Result A → ℕ :=
+fun {A} post x =>
+  match x with
+  | Aeneas.Std.Result.ok a => post a
+  | x => 0
+theorem AspisR1.Port12COUNT_Rows.rows : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (physical : Aeneas.Std.Slice Aeneas.Std.U8) (fuel : ℕ) (s : MultiproofConeRef.reference.Scratch)
+  (i w : Aeneas.Std.Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    have out :=
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Rows.rows fuel s physical i w));
+    out.1.length + AspisR1.Port12COUNT_Rows.retained (AspisR1.Port12COUNT_Potential.levelPost physical) out.2 ≤
+      AspisR1.Port12COUNT_Potential.credit physical s i w :=
+⋯
+'AspisR1.Port12COUNT_Rows.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Verify.eval_lift_join : ∀ {A B Hash : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (r : Aeneas.Std.Result A)
+  (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.Port9OR_Code.program D hash (AspisR1.CheckpointBytes5Effect.liftResult r >>= k)) =
+    match r with
+    | Aeneas.Std.Result.ok a => AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a))
+    | Aeneas.Std.Result.fail e => ([], Aeneas.Std.Result.fail e)
+    | Aeneas.Std.Result.div => ([], Aeneas.Std.Result.div) :=
+⋯
+'AspisR1.Port12COUNT_Verify.eval_lift_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Verify.bind_count : ∀ {A B Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B) (n m : ℕ),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code)).1.length ≤ n →
+    (∀ (a : A),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash code)).2 = Aeneas.Std.Result.ok a →
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (k a))).1.length ≤ m) →
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Port9OR_Code.program D hash (code >>= k))).1.length ≤ n + m :=
+⋯
+'AspisR1.Port12COUNT_Verify.bind_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Port12COUNT_Verify.count : ∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (root : AspisR1.CheckpointBytes5Effect.Digest) (s : MultiproofConeRef.reference.Scratch)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.Port9OR_Code.program D hash (AspisR1.Port9OR_P6Verify.code root s nodes))).1.length ≤
+    (↑nodes).length / 32 + ↑s.n - 1 :=
+⋯
+'AspisR1.Port12COUNT_Verify.count' depends on axioms: [propext, Classical.choice, Quot.sound]

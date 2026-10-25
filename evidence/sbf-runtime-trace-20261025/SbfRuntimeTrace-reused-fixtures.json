@@ -1,0 +1,39 @@
+{
+  "fixtures": {
+    "loader-cache": {
+      "line": "3971333 openat(AT_FDCWD, \"/etc/ld.so.cache\", O_RDONLY|O_CLOEXEC) = 3",
+      "unsupported_reason": "loader/cache runtime mapping partial"
+    },
+    "negative-probe": {
+      "line": "3971333 access(\"/etc/ld.so.preload\", R_OK) = -1 ENOENT (No such file or directory)",
+      "unsupported_reason": "requires sealed absence/complete directory membership"
+    },
+    "pyc": {
+      "line": "3971334 newfstatat(AT_FDCWD, \"/usr/bin/lib/python3.12/os.pyc\", 0x7fff0fa47ca0, 0) = -1 ENOENT (No such file or directory)",
+      "unsupported_reason": "Python import/pyc closure partial"
+    },
+    "resumed": {
+      "line": "3971333 <... clone3 resumed>)           = 3971334",
+      "unsupported_reason": "split records unsupported"
+    },
+    "shared-state": {
+      "line": "3971334 clone3({flags=CLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTID, child_tid=0x732d12fff990, parent_tid=0x732d12fff990, exit_signal=0, stack=0x732d12dff000, stack_size=0x1ff300, tls=0x732d12fff6c0} => {parent_tid=[3971335]}, 88) = 3971335",
+      "unsupported_reason": "shared CLONE_FS/FILES/THREAD state unsupported"
+    },
+    "unfinished": {
+      "line": "3971333 clone3({flags=CLONE_VM|CLONE_VFORK|CLONE_CLEAR_SIGHAND, exit_signal=SIGCHLD, stack=0x747d2674e000, stack_size=0x9000}, 88 <unfinished ...>",
+      "unsupported_reason": "split records unsupported"
+    },
+    "wait": {
+      "line": "3971333 wait4(3971334, [{WIFEXITED(s) && WEXITSTATUS(s) == 0}], 0, NULL) = 3971334",
+      "unsupported_reason": "strict subset has no wait semantics"
+    }
+  },
+  "limitation": "lexical extraction only; raw records also lack timestamps expected by strict parser; missing close/dup/fcntl capture; no parser PASS",
+  "path": "evidence/sbf-resolve-20261025/SbfResolve-raw-query-2.trace",
+  "source_revision": "50ab99cfbf3febcea66046e017be3e619ca8c732",
+  "trace_pin": {
+    "sha256": "339e986a14c89503635456d6ad20e24121cfe26dc283592cfec87c00f7f857d1",
+    "size": 1715267
+  }
+}

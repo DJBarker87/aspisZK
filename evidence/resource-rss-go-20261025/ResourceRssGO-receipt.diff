@@ -1,0 +1,20 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_receipt.py
++++ ResourceRssGO_receipt.py
+@@ -9,7 +9,7 @@
+ 
+ ROOT=Path(__file__).resolve().parents[2]
+ HERE=Path(__file__).resolve().parent
+-OUT=ROOT/'evidence/resource-stable-go-20261025'
++OUT=ROOT/'evidence/resource-rss-go-20261025'
+ 
+ 
+ def pin(raw):return dict(sha256=hashlib.sha256(raw).hexdigest(),size=len(raw))
+@@ -17,7 +17,7 @@
+ 
+ def main():
+     target,label=sys.argv[1:]
+-    assert Path(target).name==target and target.startswith('ResourceStableGO_') and target.endswith('.py')
++    assert Path(target).name==target and target.startswith('ResourceRssGO_') and target.endswith('.py')
+     assert label.replace('-','').isalnum()
+     command=[sys.executable,'-B',str(HERE/target)]
+     sources={p.name:pin(p.read_bytes()) for p in sorted(HERE.glob('*.py'))}

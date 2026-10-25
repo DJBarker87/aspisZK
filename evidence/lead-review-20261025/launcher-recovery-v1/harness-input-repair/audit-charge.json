@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/usr/bin/ssh",
+    "-T",
+    "-oBatchMode=yes",
+    "-oConnectTimeout=10",
+    "-oStrictHostKeyChecking=yes",
+    "-oClearAllForwardings=yes",
+    "-oForwardAgent=no",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -B -c 'import os,stat,time,json,hashlib,resource\nfrom pathlib import Path,PurePosixPath\nstart=time.monotonic();p=Path('\"'\"'/home/dombarker/final-native-gate-v12-20261025/FinalNativeGate-plan.json'\"'\"');raw=p.read_bytes();assert len(raw)=={'\"'\"'sha256'\"'\"': '\"'\"'6c9d84fbee1f4becfb8b44928da05e78f76cf45969b592642a07cd318bd8f4e2'\"'\"', '\"'\"'size'\"'\"': 164247}['\"'\"'size'\"'\"'] and hashlib.sha256(raw).hexdigest()=={'\"'\"'sha256'\"'\"': '\"'\"'6c9d84fbee1f4becfb8b44928da05e78f76cf45969b592642a07cd318bd8f4e2'\"'\"', '\"'\"'size'\"'\"': 164247}['\"'\"'sha256'\"'\"'];j=json.loads(raw)\nallowed=('\"'\"'/home/dombarker/.cargo/bin/'\"'\"','\"'\"'/home/dombarker/.cargo/registry/src/'\"'\"','\"'\"'/home/dombarker/.kani/'\"'\"','\"'\"'/home/dombarker/.rustup/toolchains/'\"'\"','\"'\"'/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/'\"'\"','\"'\"'/home/dombarker/final-native-gate-v12-20261025/'\"'\"','\"'\"'/usr/bin/'\"'\"','\"'\"'/usr/lib/'\"'\"','\"'\"'/usr/lib64/'\"'\"','\"'\"'/usr/local/lib/'\"'\"','\"'\"'/lib/'\"'\"','\"'\"'/lib64/'\"'\"')\nassert len(j['\"'\"'files'\"'\"'])<=2048\nout=[];total=0;checked=0\nfor name,expected in sorted(j['\"'\"'files'\"'\"'].items()):\n try:\n  if time.monotonic()-start>60:raise TimeoutError('\"'\"'audit60s'\"'\"')\n  assert str(PurePosixPath(name))==name and '\"'\"'..'\"'\"' not in PurePosixPath(name).parts and name.startswith(allowed)\n  p=Path(name);r=p.resolve(strict=True);assert str(r).startswith(allowed);s=r.stat();assert stat.S_ISREG(s.st_mode) and s.st_size<=256*2**20 and total+s.st_size<=2*2**30\n  fd=os.open(r,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK);h=hashlib.sha256();n=0\n  with os.fdopen(fd,'\"'\"'rb'\"'\"') as f:\n   opened=os.fstat(f.fileno());assert (opened.st_dev,opened.st_ino)==(s.st_dev,s.st_ino)\n   while True:\n    if time.monotonic()-start>60:raise TimeoutError('\"'\"'audit60s'\"'\"')\n    b=f.read(65536)\n    if not b:break\n    n+=len(b);h.update(b)\n   t=os.fstat(f.fileno())\n  assert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns) and n==s.st_size and p.resolve(strict=True)==r\n  actual=h.hexdigest();total+=n;checked+=1\n  if actual!=expected:out.append(dict(path=name,expected=expected,actual=actual,bytes=n))\n except (OSError,ValueError,AssertionError,TimeoutError) as exc:out.append(dict(path=name,error=repr(exc)))\nprint(json.dumps(dict(checked=checked,planned=len(j['\"'\"'files'\"'\"']),total_hashed_bytes=total,mismatches_or_errors=out,wall_seconds=time.monotonic()-start,peak_rss_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,formal_calls=0,claim='\"'\"'fixed manifest bytes/hash audit only, notnative proof or sourceextractionclosure'\"'\"')))\n'"
+  ],
+  "grant_sha256": "e10f298975398f71eecc12c2faa383b76d6b6feb47068b52b67157e6ab9c44bf",
+  "formal_calls": 0
+}

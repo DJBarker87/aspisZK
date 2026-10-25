@@ -1,0 +1,47 @@
+{"attempt": "lean-025", "exit_status": 1, "wall_seconds": 2.214210687990999, "peak_rss_kib": "4419816", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port9OR_BatchStep.lean:31:55: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Port9OR_BatchStep.lean:184:2: error: Tactic `rfl` failed: The left-hand side
+  if pos < n then do
+    let a ← (ops base).op9 keys pos
+    let a_1 ← lift (pos.wrapping_add 1#usize)
+    let a_2 ← lift (a.wrapping_shr 8#u32)
+    let a_3 ← lift (UScalar.cast UScalarTy.U32 a_2)
+    let a ← lift (a &&& 255#u64)
+    let a ← lift (UScalar.cast UScalarTy.Usize a)
+    let a ← lift (lo.wrapping_add a)
+    let a ← (ops base).op2 proof a
+    let a ← erase D hash
+...
+          (ops base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      (ops base) D)
+                    ce ()
+              if b = true then ok (done (idx, val, none))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    (ops base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                  if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                    else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))
+Port9OR_BatchStep.lean:182:61: warning: This simp argument is unused:
+  verify_source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵e̵r̵a̵s̵e̵_̵i̵t̵e̵,̵v̵e̵r̵i̵f̵y̵_̵s̵o̵u̵r̵c̵e̵]̵[̲b̲o̲d̲y̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r06994dfccbf04f548479e3f23730db58.scope; invocation ID: 9089e6a9636a4e59bdb2a89e49250531

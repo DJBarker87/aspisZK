@@ -1,0 +1,184 @@
+Port10AUTH_Tree.lean:87:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CheckpointBytes5Inputs.observe
+    (Port9OR_Code.trace D hash
+        (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+          (Port4B_TreeCuts.slot batch kind) sorted (↑(Port4B_TreeCuts.count batch) + 1) (reset initial).idx
+          (reset initial).val (reset initial).n 0#usize)).1
+in the target expression
+  ∃ final,
+    eval H
+          (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+            (↑kind) physical initial) =
+        (CheckpointBytes5Inputs.observe
+            (Port9OR_Code.trace D hash
+                (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch)
+                  (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) sorted
+                  (↑(Port4B_TreeCuts.count batch) + 1) initial.idx initial.val 0#usize 0#usize)).1,
+          true, final) ∧
+      final.idx = outIdx ∧ final.val = outVal
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle D hash H
+occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+occupiedGate : MultiproofConeP6Callbacks.ParentGate (MultiproofConePhysicalTransport.rawOracle H) occupied
+siblingGate : MultiproofConeP6Callbacks.ParentGate (MultiproofConePhysicalTransport.rawOracle H) sibling
+leafGate : MultiproofConeP6Batch.LeafGate H leaf
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+queries : Std.Array U32 22#usize
+q : Fin 22 → Fin 262144
+batch kind : Usize
+hb : ↑batch < 2
+hk : ↑kind < 3
+builder : Port4B_TreeJoin.PackedKeys base queries q batch kind
+root : Std.Array U8 32#usize
+rootValue : root = encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)
+physical : Slice U8
+view :
+  bytesOf ↑physical =
+    OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * ↑batch + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * ↑batch + ↑kind))
+initial : reference.Scratch
+outIdx : Indices
+outVal : Values
+run :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree (Port3_BatchStd.install (Port4B_VerifyInstall.install base)) D
+      proof queries root batch kind initial.idx initial.val hash =
+    ok (core.result.Result.Ok (), outIdx, outVal)
+raw sorted : Std.Array U64 16#usize
+built :
+  (Port4B_VerifyInstall.install base).op4 queries (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) kind = ok raw
+sortedCall : (Port4B_VerifyInstall.install base).op5 raw (Port4B_TreeCuts.count batch) = ok sorted
+loopCall :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port3_BatchStd.install (Port4B_VerifyInstall.install base))
+      D proof root kind initial.idx initial.val hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+      (Port4B_TreeCuts.slot batch kind) sorted 0#usize 0#usize =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+bounds :
+  (↑(Port4B_TreeCuts.count batch) = if batch = 0#usize then 10 else 12) ∧
+    ↑(Port4B_TreeCuts.lo batch) = if ↑batch = 0 then 0 else 10
+small : ↑(Port4B_TreeCuts.count batch) ≤ 16
+positive : 0 < ↑(Port4B_TreeCuts.count batch)
+packed :
+  List.take ↑(Port4B_TreeCuts.count batch) ↑raw =
+    List.map (MultiproofConeSortOrder.packed q ↑batch ↑kind) (OraclePortSelectedDraft.batchPositions ↑batch)
+length : (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind).length = ↑(Port4B_TreeCuts.count batch)
+stream :
+  Port4B_LeafLoop.KeyStream q (↑batch) (↑kind) sorted 0#usize (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind)
+room : ↑(reset initial).n + (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind).length ≤ 16
+small256 : ↑(Port4B_TreeCuts.count batch) < 256
+loopSource :
+  CheckpointBytes5Effect.erase D hash
+      (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+        (Port4B_TreeCuts.slot batch kind) sorted (↑(Port4B_TreeCuts.count batch) + 1) initial.idx initial.val 0#usize
+        0#usize) =
+    Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (Port9OR_BatchStep.ops base) D proof root kind initial.idx
+      initial.val hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) sorted
+      0#usize 0#usize
+loopCode :
+  CheckpointBytes5Effect.erase D hash
+      (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+        (Port4B_TreeCuts.slot batch kind) sorted (↑(Port4B_TreeCuts.count batch) + 1) initial.idx initial.val 0#usize
+        0#usize) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+afterLeaf : reference.Scratch
+remaining : ℕ
+fold :
+  eval H
+      (MultiproofConeP6Batch.leaves MultiproofConeP6Batch.referenceLeaf parsed q (↑kind)
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) (reset initial)) =
+    (List.map
+        (fun p => (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind),
+      ok (some afterLeaf))
+terminal :
+  CheckpointBytes5Effect.erase D hash
+      (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+        (Port4B_TreeCuts.slot batch kind) sorted remaining afterLeaf.idx afterLeaf.val afterLeaf.n
+        (Port4B_TreeCuts.count batch)) =
+    ok (outIdx, outVal, some (core.result.Result.Ok ()))
+leafLogs :
+  CheckpointBytes5Inputs.observe
+      (Port9OR_Code.trace D hash
+          (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+            (Port4B_TreeCuts.slot batch kind) sorted (↑(Port4B_TreeCuts.count batch) + 1) (reset initial).idx
+            (reset initial).val (reset initial).n 0#usize)).1 =
+    List.map
+        (fun p => (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+      CheckpointBytes5Inputs.observe
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+              (Port4B_TreeCuts.slot batch kind) sorted remaining afterLeaf.idx afterLeaf.val afterLeaf.n
+              (Port4B_TreeCuts.count batch))).1
+terminalBody :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (Port9OR_BatchStep.ops base) D proof root kind hash
+      (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) sorted afterLeaf.idx
+      afterLeaf.val afterLeaf.n (Port4B_TreeCuts.count batch) =
+    ok (ControlFlow.done (outIdx, outVal, some (core.result.Result.Ok ())))
+terminalLogs :
+  (Port9OR_Code.trace D hash
+        (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+          (Port4B_TreeCuts.slot batch kind) sorted remaining afterLeaf.idx afterLeaf.val afterLeaf.n
+          (Port4B_TreeCuts.count batch))).1 =
+    (Port9OR_Code.trace D hash
+        (Port9OR_BatchStep.body base D proof root kind hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+          (Port4B_TreeCuts.slot batch kind) sorted afterLeaf.idx afterLeaf.val afterLeaf.n
+          (Port4B_TreeCuts.count batch))).1
+final : reference.Scratch
+indices : final.idx = outIdx
+values : final.val = outVal
+nodeRead : Port4B_SlotInstall.nodeSlot proof (Port4B_TreeCuts.slot batch kind) = ok physical
+nodeView :
+  bytesOf ↑physical =
+    OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * ↑batch + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * ↑batch + ↑kind))
+tailValue :
+  eval H
+      (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+        physical afterLeaf) =
+    (CheckpointBytes5Inputs.observe
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchStep.body base D proof root kind hash (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+              (Port4B_TreeCuts.slot batch kind) sorted afterLeaf.idx afterLeaf.val afterLeaf.n
+              (Port4B_TreeCuts.count batch))).1,
+      true, final)
+treeLogs :
+  CheckpointBytes5Inputs.observe
+      (Port9OR_Code.trace D hash
+          (Port9OR_BatchTree.code base D hash proof queries root batch kind initial.idx initial.val)).1 =
+    CheckpointBytes5Inputs.observe
+      (Port9OR_Code.trace D hash
+          (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch) (Port4B_TreeCuts.count batch)
+            (Port4B_TreeCuts.slot batch kind) sorted (↑(Port4B_TreeCuts.count batch) + 1) initial.idx initial.val
+            0#usize 0#usize)).1
+⊢ ∃ final,
+    eval H
+          (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+            (↑kind) physical initial) =
+        (CheckpointBytes5Inputs.observe
+            (Port9OR_Code.trace D hash
+                (Port9OR_BatchLoop.code base D hash proof root kind (Port4B_TreeCuts.lo batch)
+                  (Port4B_TreeCuts.count batch) (Port4B_TreeCuts.slot batch kind) sorted
+                  (↑(Port4B_TreeCuts.count batch) + 1) initial.idx initial.val 0#usize 0#usize)).1,
+          true, final) ∧
+      final.idx = outIdx ∧ final.val = outVal
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port10AUTH_Tree.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

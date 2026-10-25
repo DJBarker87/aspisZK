@@ -1,0 +1,47 @@
+import os,stat,json,time,hashlib,base64
+from pathlib import Path
+EXPECTED=base64.b85decode(b'FE1e=P;zB(VRB_;AaG%6a%E&7b8mHWV`U(6Wo%(|X>V>WAX-IIPasQSZfPKCZgy{DVRUJ4ZgU`Eb#!QNa%p;HWFTp7AarPHb0BkcWpFMEBOzO1Y;13LC~j|VUvq9@Yh_<!VRL0HAY^4>WM5-%WMwQMb#7&NaAjk3Wn^DtW@mFLT?!*xWMy(`c4a6;Wny(_EFe%}a&&27Y(;S_AVqO0T?%k@VjyL1b!{M0Wpj0GbWn0{YGq?|X>V>IdmvA9C}(AKa$#;{Z*4j{MRIa)aw#kzMR;gob#ruOWGo;}Z*pZUAWwI0WpXHWI4pHIEOj_3AbkoWTV!Q&X?A5OL}g-iXDlF4VRCe7VQfWlEFeX3DP0P1bz&fMbaHiLbRbZ2Z)#;@bZKvHAbTKibz&fLWpr|RIv`JQbZKvHJScT@X?kTWbvP+LEFf@oVjyy5b9HQVIv`SIb9HQVP;zf-Wn*+{Z*Cxc3UGB|AZ>4CAW3d>baHiVWo~q3WFUJAARr(hX>Ma|b!25BC?a!ZY-M9~Wn?aLb0R4_3LqdLAZc!6Y;|O1At)kmVsmA3c4aPdb0R4_3VjN2bz&fGZ)6}(a%pF2ZeeU7dkP>RARu*fWgvQGa&KvRWnXV{X=iC}VQe5_b0B(Ua&KvRWjhKWARr)VZewh9WMv^JB6DSIWn*+@WG-@ZA}KoxARr(hX>Ma|b!25BC?aoSb7gXNWiE1aA}KoxeF`I6V`gV4Yhi9_DP0O}Z)6~2Xk}w-b0B*PARr(hb#rAPb9HcKaymLHI|?8mARu*fWgvQGa&KvRWjZ=ga&LBJa#D9vWpj0HWm98eY+-UBVRIlyXm4|LI|?8mARu#eVRUI@AZ>MYAW%<JR5~DAbvQdVG+iJ)AX_jyHZ)y33LqdLAaitKbZKKCZFO`YMN(2vQaT_{aCB*JZaimYbaG*CWN&RcIz@7FZ*o2$Js?hRZe=?PARr(hb97;JX=5O5b#x$3MOaiiAayo0AUz;3I|?8mARu#eVRUI@AZ>MYAWTI>M@3RPAayo0AUz;3I|?8mARu#eVRUI@AZ>MYAVWb+Oj9}_bvPhBATT=$ARr(hW^N#6X>4p?VsCYBWMOi7C}d@GbUGj=ZFO`YTXi^HDIhIAAW~&>b!>DzC@CywWpr|3Ze(w5Iyyyia&K}zAbScRARr(hARr)Nb8}^KbYEq0At+>Jb963jWo{@bEH*SLI|?8mARr(hARugIbRcRyM`&+zbUHd?Z*OvBX>MV3Whf~-3LqdLARr(hAYpTJWpZ?1WpN=WWMy-7TWVb_Fey7AVRLh3a&%v1aUm#VWpi{}YAZ7`T`VvuI|?8mARr(hARu*ab75v>AbScRARr(hARr(hARr)Nb8}^KbRj51K}<|jJTfUeAVWb+Oj9d8F*^z%ARr(hARr(hARr)QWpi{cV{dSIUuJS|ZC`V2X=7z5CQwgPR4F?OARr(hARr(hARr(hOhrUTMN&OZMOaij3LqdLARr(hARr(hAZ=lEV`v~nQc_P+AbTKFZ*65LWpZ+Faw$DNMRIZ|WpZ+Faw#kzPH%2yJw8usC@3i@AbkoTARr(hARr)p3LqdLAbkoTARr)SZXjiLWo~pRWjY{7Xm4|LIyyymWo~pVAZ%rBI(2htdSxsiY;SiubvP^_XlZ9?I(0ZHAbScRARr(hARr)Nb8}^KbYEq0At+@oVr6D;a%C(>Xm4|LIyz5cb7gXNVRUJ4ZXkPXWo|5NZ+9$cX=iACDLV=vARr(hARr)Nb8}^KbYEq0At+@oVP<q?ax6z^Z*z1yI!|JAWpZ|5bZKvHAbV_OZY*qXcRDaEXlZ9?Ixu}HI|?8mARv7TARr(hW^N#9ZgX^Ub!}yCbY)~;aA;w3WhirXV`F7=b2?&gZ)_<bdkP>RARr(hARugIbRZ~UEMhEUEMsqVZgebfc4cyAY;SidJx6G7b96d7Wp-t5baN;vI|?8mARr(hARu9Lb7gXLAt)hlc4cyAY;SidI|?8mARr(hARugIbRcRyM`&+zbUHd?Z*OvBX>MV3Whf~-3LqdLARr(hAZ%rHASi5acPwaWXJ{;DVQFk-WGOv$ZgXK~WgvSfP)}1-TWVb_P)}1-TWTvaGF>c1Qc_P+E@^XLb8l^BC@Cp@I|?8mARr(hARuXGAZB4{Y-MC1e0(5tbz@^?b8{ej3LqdLARr(hARr(hATKW<MsIQ;b9G~5Wpi^NbZBKDa%FUNa&Bd0Gcq7%X=Q9=b0A@IWgv5OX>4pDOi5NnAYpVMbZBXFAY)-{Y%U5QARr(hARr(hARr)Nb8}^KbYEq0At+;Sb#8PlF)2GBWp-t5bSPmgHZ&}3Z+9$cX=i9DI|?8mARr(hARv7pWo&b0AbScRARr(hARr(hARr)Nb8}^KbYEq0At+;Sb#8PlGbuX?ARr(hARr(hARr(hWp-t5bSPmgGcqh_X=i9GFey7AWp-t5bSPphGcqh}Z+9#(DLWu#c4cmKC}S)(G%RdycPwaWXJ{!q3LqdLARr(hAbkoTARr)p3LqdLAZBhLZ*pm8X>MU`UvOw)b7d%BI%02cY$+gneF`8TARuOLAZ~ANdS!BNC}MeZWpg?vTXi^HDJ?!?Z*OcMdkP>RARr(hARugIbRcbYbRc7IZDMI|Wn?`tJ0NCnav)-PbY&oEZXjZLbY*iOdt+~HVrgz=WPCj;VtI6BJAEKyZ*5{}Ze?U4JunI&ARr)p3LqdLAR}9AVQy(UI&gAtZ)RNzARr(hBU@`>ZfQC?b#8ZQZe%DnHYr^SARr(hBU@`>ZfQC?b98lLC}(AKa$#;{Z*4j{W@&6}EM{qJY+qt;b#7!~a(O9T3LqdLAZBhLaA9e3Wn^DtZ*OvBX>MV3WnXS#bZK^FUvg!0b!}xRDIj|aARr(hARr(hFE1ceXk{RCZ){~CV{dPAWNB_;bY&o8Xm4p_Wji2aZ+2yJb0A@CY%?+-X>Md`V`Xz7W^ZyJVQg$5V{dJ6Y-Mz1AZc!Jb#!ws3LqdLARr(hAZ%rHAaY@MUur#TVQy(UI$>^kIyyXcI6f#TI|?8mARr(hARtF*Z*z1yI%#fcbZKF1X?kTSa$$F0YAHJkARr(hARr(hY-MyHYCR}&VRv6@B{MQ9AYpSLb#rNYWjhKWARr(hARr)YWpp5JZ*F5{J!@fZX*xP#Zh1O7JX>`*J2Ns}J}4<W3LqdLARr(hAZ%rHAaHMUbUkZfZfQC?VQzUkIy_r-I6F2pT|Ou&I|?8mARr(hARugIbRcDJbaHt;C~IMEX*xP#Zh1O7JasreC@Cc|HYp%sb0BqdX?kTl3LqdLARr(hAZ%rHAZB4{Y-MCUYhi9_Iyzx)c{(~gVsCG3J}4<W3LqdLARr(hAZ%rHAaZ4Jay@HdZfQC?VQzUkIy`AJGCn9NI|?8mARr(hARugIbRc7IWMw^LZ*pZiI&O7sIyz2oZdzq>Z%H#UIy!D;cPMgYaB?X-3LqdLARr(hAZuZ6X*xP#b8~fVWhi5BWMwXCb6<0BZDlAaDLV=vARr(hARr)YWpp5Aa&m8SJ!fTfa$#;{Z*4j{MRIa)aymM2a&LBJa$j<HUvg!0b!}x|b7Ns_VRBz)a&K*4a%FIGC}VGAWiEAYcXDBHC@CpB3LqdLARr(hAZ%rHAZ}%NbUkZfZfQC?VQzUkIy`kYG(IRPI|?8mARr(hARu*ab75v>AbTKCPg7JqaBp*TJ0L|;QcqGnX=Wg1VQFk-WFUJ}Z*65LWpZ+Faw&ZvWo&b0AbU=4Ze@Kt3LqdLARr(hARr(hAWlVCR6TBGcyv1;OhrUTMN&O$VQy(UI$>^kC@DK2eF`8TARr(hARugIbRcPNb98cbZDnqBWn?``ZgX^Ub!}yCbY)~ZI&yVxC~j|VV`VI5Zgg^aENU!iZgX^Ub!}yCbY)~;aA;w3WhpxfARr(hARr(hY-MyHVPj)uaCBv4Jt1acX>4U=ASNatZf|aSWpZyQCU9?abXzViGcsK%ASNatZf|aSWpZyQCU9?abXzkrE-qauI|?8mARr(hARugIbRcDTaAjk3Wn?{RW*}x^X>4U=AbScRARr(hARr(hARr)6a&Ky7V{~b6ZXkPdWpr|RI!<qHWh`=Kb9HQVI#OkGb!>D{a&Ky7V{~b6ZaO+ob0}qUa&K}eeF`8TARr(hARv7pWo&b0AZcbGVPj)uaCBv4AbScRARr(hARr(hARr)6a&Ky7V{~b6ZXkPdWpr|RI!<qHWh`=Kb9HQVI#OkGb!>D{a&Ky7V{~b6ZaO+ocWz~JC~j|VV`W=vT`X{Kb97s3T`X{Kb97s3D>E`(DSZkcARr(hARr)pAZ2WGWguy0AZ2cJa(O&4H6VKmARr(hARr(hARr(hP;zf-Wn*+{Z*Cxaa%FUKc{)>XZDlAZWo~qGc`Gq2Zf|a5Wm{@pDJd*+Wpj0GbUIRHb9HQVP;zf-Wn*+{Z*Dp|O>c5#eF`8TARr(hARv7pWo&b0AbTKCa&Ky7V{~b6ZXkPdWpr|RI!<qHWh`=Kb9HQVI#OkGb!>D{a&Ky7V{~b6ZaO+ecxYjDb97~7eIR{13LqdLARr(hAYpTJWpZ?1WpN=WX>N0La&>KGZggd2EM<6bWn*+@WGOoeARr(hARr(hY-MyHXJ~J8bYEd+bY*fqM`&+zbUHd^c4cmKb0{f03LqdLARr(hAZ%rHAShuhVk~1UV{dhCbS!UnWpZY0Z+9s@XJ~J8bYEd+bY*fo3LqdLARr(hAYpTJWpZ>OC?RilWpZY0Z+9s>AYpTJWpZ?1WpN=WV{dhCbS!CRAZB4{Y-MC1dog_=Wo&b0AbT@?DLV=vARr(hARr)VW*}i>V`Xr3Wn>_G3LqdLARr(hARr(hAZ2!CZgePNEH*SOaBp*TTWVb_aBp*TTWTvaGF>S<3LqdLARr(hARr(hAZ2!CZgePOEHg4JaBp*TTWVb_Fey7AWp-t5bSPsiGcqi2Z*z28YAZ7`T`VvuI|?8mARr(hARv7TARr(hARr(hb#8NEW@R9IAZ%rHAZ%r1XJv9dOhrUTMN&H;Y-MyHV_|G;b3H>rOiWWdAYpTJWpZ?1WpN=WY-MC;WpXTTWq5QcJ0M|mb7gXLUuAJ2C}Ux4Y;!CzDLWv23LqdLARr(hAZ%rHAa8PMXK8L>Y&}nMX=iC}VQe}&a&>MfZf|a5Wh`ZGbaHttYAkPZX=iC}VQgP;Xkl|@DLV=vARr(hARr)Nb8}^KbYEq0At-NhX=iC}VQegEZgX^Ub!}yCbY)~II|?8mARr(hARu9Lb7gXLUuAJ2C`V{-b96d7Wp-t5baN;vEN5tMb97%}W^`q8DLV=vARr(hARr)Nb8}^KbYEq0At*;^Z*z1yI%98da%5?4VRU6EDJ*I!I|?8mARr(hARu*ab75v>AbTKeWpp5HWn^b%ay?8%L`OwZJ0NUjbRc74Y;1EqLqSYTQ#&AGb8}^KbYEq0At-ERWM^e^EN*3ZbSXO^VRLh3a&%v1aUm#UVQg%3EHWuOAbkoTARr)p3VjL')
+NEW='f07ab675de0556f5feb518f00050583c9d8b9db2b03d79c9c6b1035c90ac8dc2'
+OLD='06524676687190c99b9c9934ab7972b78c4ae45a2ac504b49c5f992b33a7e95e'
+ROOT='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar'
+P=Path(ROOT+'/proof/lib.rs');B=Path('/home/dombarker/final-native-gate-v12-20261025/FinalNativeGate-setup-packet/proof-lib.before-pin-repair.rs')
+start=time.monotonic();assert len(EXPECTED)==4331 and hashlib.sha256(EXPECTED).hexdigest()==NEW
+own={os.getpid()};pid=os.getppid()
+for _ in range(16):
+ if pid<=1 or pid in own:break
+ own.add(pid)
+ try:s=Path('/proc/'+str(pid)+'/stat').read_text();pid=int(s[s.rfind(')')+2:].split()[1])
+ except FileNotFoundError:break
+busy=[];observed=0
+for name in os.listdir('/proc'):
+ if not name.isdecimal() or int(name) in own:continue
+ try:
+  q=Path('/proc')/name;status=(q/'status').read_text();uid=int(next(x for x in status.splitlines() if x.startswith('Uid:')).split()[1])
+  if uid!=1000:continue
+  cwd=os.readlink(q/'cwd');cmd=(q/'cmdline').read_bytes()[:65536];observed+=1
+  if cwd.startswith(ROOT) or ROOT.encode() in cmd or b'paired_coordinate_native_resume' in cmd:busy.append(dict(pid=int(name),cwd=cwd))
+ except FileNotFoundError:continue
+assert not busy,('own harness workspace in use',busy)
+assert P.resolve(strict=True)==P and os.getuid()==1000
+stamp=lambda s:(s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_mode,s.st_uid,s.st_gid,s.st_nlink)
+def read_old():
+ fd=os.open(P,os.O_RDONLY|os.O_NOFOLLOW)
+ with os.fdopen(fd,'rb') as f:
+  s=os.fstat(f.fileno());b=f.read(1048577);t=os.fstat(f.fileno())
+ assert stat.S_ISREG(s.st_mode) and s.st_uid==1000 and s.st_nlink==1 and stat.S_IMODE(s.st_mode)==0o644 and s.st_size==4288
+ assert stamp(s)==stamp(t)==stamp(P.lstat()) and hashlib.sha256(b).hexdigest()==OLD
+ return b,s
+before,meta=read_old();assert B.parent.resolve(strict=True)==B.parent
+with B.open('xb') as f:f.write(before);f.flush();os.fsync(f.fileno())
+os.chmod(B,0o600)
+temp=P.parent/'.lib.rs.lead-pin-repair-20261025'
+fd=os.open(temp,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
+with os.fdopen(fd,'wb') as f:f.write(EXPECTED);f.flush();os.fsync(f.fileno());os.fchmod(f.fileno(),0o644)
+_,again=read_old();assert stamp(again)==stamp(meta)
+os.replace(temp,P)
+fd=os.open(P.parent,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+try:os.fsync(fd)
+finally:os.close(fd)
+after=P.read_bytes();s=P.lstat();assert after==EXPECTED and s.st_uid==1000 and s.st_nlink==1 and stat.S_IMODE(s.st_mode)==0o644
+assert hashlib.sha256(B.read_bytes()).hexdigest()==OLD
+print(json.dumps(dict(action='restoredexactpinnedstrongerharness',target=str(P),before_sha256=OLD,after_sha256=NEW,bytes=len(after),backup=str(B),other_uid1000_processes_observed=observed,busy=busy,wall_seconds=time.monotonic()-start,formal_calls=0,claim='inputrepaironly; no Kani assertion proved or source-to-nativeclosure')))

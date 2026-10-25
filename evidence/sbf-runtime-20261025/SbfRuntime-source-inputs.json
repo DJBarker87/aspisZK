@@ -1,0 +1,99 @@
+{
+  "env": {
+    "HOME": "/probe",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin",
+    "TMPDIR": "/tmp"
+  },
+  "fixed_probe": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import errno,json,os,resource,stat\ndef SbfSeal_fds(os_api):\n names=os_api.listdir('/proc/self/fd')\n if len(names)>4096: raise RuntimeError('FD inventory bound')\n result=[]\n for name in names:\n  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')\n  fd=int(name)\n  try: os_api.fstat(fd)\n  except OSError as e:\n   if e.errno!=errno.EBADF: raise\n  else: result.append(fd)\n return sorted(result)\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nassert SbfSeal_fds(os)==[0,1,2]\nassert stat.S_ISCHR(os.fstat(0).st_mode)\nassert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)\nfor fd in (1,2):\n t=os.fstat(fd)\n assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1\n assert stat.S_IMODE(t.st_mode)==0o600\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nassert os.getpid()==1\nassert os.stat('/proc/1/ns/pid').st_ino==os.stat('/proc/self/ns/pid').st_ino\nassert os.stat('/').st_ino==os.stat('.').st_ino\nwith open('/proc/self/status',encoding='ascii') as f:\n q=dict(line.split(':',1) for line in f if ':' in line)\nassert q['Threads'].strip()=='1'\nwith open('/proc/self/cgroup',encoding='ascii') as f:\n cg=f.read()\nassert cg.startswith('0::/') and cg.count('\\n')==1\nassert os.statvfs('/').f_flag & os.ST_RDONLY\nassert os.statvfs('/proc').f_flag & os.ST_RDONLY\nassert not os.statvfs('/tmp').f_flag & os.ST_RDONLY\nassert os.listdir('/dev')==[]\nv=os.statvfs('/tmp')\nassert v.f_blocks*v.f_frsize<=1048576 and v.f_files<=64\nassert stat.S_IMODE(os.stat('/tmp').st_mode)==0o1777 and os.stat('/tmp').st_uid==0\nwith open('/proc/self/mountinfo',encoding='ascii') as f:\n rows=[line.split() for line in f]\nassert {r[4] for r in rows}=={'/','/tmp','/proc'} and len(rows)==3\nfor r in rows:\n sep=r.index('-')\n assert not any(x.startswith(('shared:','master:','propagate_from:')) for x in r[6:sep])\n needed={'nosuid','nodev'} | ({'rw','noexec'} if r[4]=='/tmp' else {'ro'})\n if r[4]=='/proc': needed.add('noexec')\n assert needed<=set(r[5].split(','))\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"
+  ],
+  "guard_revision": "13abf7fe51",
+  "historical_runtime": {
+    "executable": "/usr/bin/python3.12",
+    "executable_pin": {
+      "sha256": "e50d468e8b0adfb05733f5b87b3cff34829c4a8c1aea50c865aa8bdfe4bb150f",
+      "size": 8020928
+    },
+    "revision": "c7bbb274e2",
+    "version": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "imports": {
+    "abi": [
+      "SbfLinux_capture",
+      "ctypes",
+      "platform"
+    ],
+    "backend": [
+      "SbfLinux_abi",
+      "SbfLinux_capture",
+      "errno",
+      "fcntl",
+      "json",
+      "os",
+      "signal",
+      "stat",
+      "threading",
+      "time"
+    ],
+    "capture": [
+      "errno",
+      "hashlib",
+      "json",
+      "os",
+      "stat",
+      "time"
+    ],
+    "entry": []
+  },
+  "probe_imports": [
+    "errno",
+    "json",
+    "os",
+    "resource",
+    "stat"
+  ],
+  "required_modules": [
+    "ctypes",
+    "errno",
+    "fcntl",
+    "hashlib",
+    "json",
+    "os",
+    "platform",
+    "resource",
+    "signal",
+    "stat",
+    "threading",
+    "time"
+  ],
+  "root": "/var/lib/SbfSeal-20261025-v1/rootfs",
+  "source_revision": "9f50be799e",
+  "sources": {
+    "SbfRuntime-abi.py.txt": {
+      "sha256": "86b035c515a4e2a82958ee55a00028411790353a7dfefe85c36a8e1b30811ddc",
+      "size": 8084
+    },
+    "SbfRuntime-backend.py.txt": {
+      "sha256": "7086004797870bb69e18b355110f232d7b8ea57c7f22b451a4e2e73bdcc48eda",
+      "size": 22321
+    },
+    "SbfRuntime-capture.py.txt": {
+      "sha256": "5b4f0f65abd1f3e7548a1c93bb8a8b027dd2b7346588f6f06b203cd2a2e19664",
+      "size": 17802
+    },
+    "SbfRuntime-entry.py.txt": {
+      "sha256": "6544bc9c6ce7cebf4f94a9cae0df0eda35fd96afd95d56f322f6fa9d55f5e203",
+      "size": 168
+    },
+    "SbfRuntime-guard.py.txt": {
+      "sha256": "9f0fbfd713895348a3df87fb4bb8643a85a4facb1d5ce95e31ad7839db74ca6d",
+      "size": 8426
+    }
+  }
+}

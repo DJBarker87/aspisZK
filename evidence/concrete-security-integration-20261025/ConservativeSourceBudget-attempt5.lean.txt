@@ -1,0 +1,79 @@
+import Port18COHERENCE_CheckedAccounting
+
+/-! A candidate conservative query envelope, not an adopted source budget.
+The remaining native/effect contracts are explicit. No security definition,
+query range, start charge, frozen artifact or shipped implementation changes.
+The scalar `decide` checks below reduce rational expressions of at most a few
+thousand bits; there is no recurrence or generated certificate normalization.
+-/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ConservativeSourceBudget
+
+/-- Every still-delegated operation may issue one query, including on error.
+The real source/effect proof of this allowance remains required. -/
+theorem residual_one : Port17RELEASE_Driver.remainingWeight (fun _ => 1) = 14 := rfl
+
+/-- Same actual saved-Vec Flow10/None driver and concrete <=115 preparation.
+All-outcome native delegated budgets are RETAINED, not inferred from Result. -/
+theorem driver_count
+    (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (base : AspisR1CurrentCaller.Ops)
+    (R : AspisR1PublicPreparation.RoundModel.Boundaries)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+    (other : VTop_OracleCode.Implementation)
+    (remaining : Port17RELEASE_Prepare.OtherBudgets other (fun _ => 1))
+    (adapter : AdapterRw.Ops) {Hash : Type}
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (i : OraclePortStoredExperimentC4.Input) :
+    (AspisV8R19.MemoizedProgramLaw.eval H (Port1_Driver.rust adapter
+      (Port17RELEASE_Prepare.implementation ops reserved unwrap base R B other) D hash i)).1.length ≤ 1175 := by
+  have bound := Port17RELEASE_Driver.rust ops reserved unwrap base R B other
+    (fun _ => 1) remaining adapter D hash H i
+  rw [residual_one] at bound
+  exact bound
+
+#print axioms residual_one
+#print axioms driver_count
+end AspisR1.ConservativeSourceBudget
+end
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ConservativeSourceAccounting
+
+variable (ops : VTop_Stages.Ops) (reserved : Bool) (unwrap : Port6CK_Semantic.Unwrap)
+    (base : AspisR1CurrentCaller.Ops)
+    (R : AspisR1PublicPreparation.RoundModel.Boundaries)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+    (other : VTop_OracleCode.Implementation)
+    (remaining : Port17RELEASE_Prepare.OtherBudgets other (fun _ => 1))
+    (adapter : AdapterRw.Ops) {Hash : Type}
+    (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (decoder : LiteralByteProtocol.Decoder) (P : Port1_StoredCarrier.ByteProver) (Q : Nat)
+    (hq : ∀ H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State, (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+
+theorem first_reads :
+    FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (Port6AUTH_Prefix.source decoder
+      (Port1_Driver.rust adapter
+        (Port17RELEASE_Prepare.implementation ops reserved unwrap base R B other) D hash) P)).1
+      ≤ Q + 1175 := by
+  have bound := Port17RELEASE_Accounting.budget ops reserved unwrap base R B other
+    (fun _ => 1) remaining adapter D hash decoder P Q hq H
+  rw [ConservativeSourceBudget.residual_one] at bound
+  exact bound
+
+theorem log_length :
+    (AspisV8R19.MemoizedProgramLaw.eval H (Port6AUTH_Prefix.source decoder
+      (Port1_Driver.rust adapter
+        (Port17RELEASE_Prepare.implementation ops reserved unwrap base R B other) D hash) P)).1.length
+      ≤ Q + 2350 := by
+  have bound := Port17RELEASE_Accounting.log_length ops reserved unwrap base R B other
+    (fun _ => 1) remaining adapter D hash decoder P Q hq H
+  rw [ConservativeSourceBudget.residual_one] at bound
+  exact bound
+
+#print axioms first_reads
+#print axioms log_length
+end AspisR1.ConservativeSourceAccounting
+end

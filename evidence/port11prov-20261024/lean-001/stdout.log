@@ -1,0 +1,40 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+Port11PROV_Views.lean:23:13: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val`
+Port11PROV_Views.lean:24:2: error: Tactic `apply` failed: could not unify the conclusion of `range_total`
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ?bytes
+      { start := ?start, «end» := ?finish } =
+    ok (sub ?bytes ?start ?finish)
+with the goal
+  (if small : ↑(3 * b + k)#usize < 6 then
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := Port4B_SlotInstall.offset ↑(3 * b + k)#usize ⋯,
+          «end» := Port4B_SlotInstall.offset (↑(3 * b + k)#usize + 1) ⋯ }
+    else fail Error.arrayOutOfBounds) =
+    ok (sub proof (Port4B_SlotInstall.offset (3 * b + k) ⋯) (Port4B_SlotInstall.offset (3 * b + k + 1) ⋯))
+
+Note: The full type of `range_total` is
+  ∀ (bytes : Slice U8) (start finish : Usize),
+    ↑start ≤ ↑finish →
+      ↑finish ≤ (↑bytes).length →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := start, «end» := finish } =
+          ok (sub bytes start finish)
+
+proof : Slice U8
+len : (↑proof).length = 57607
+b k : ℕ
+hb : b < 2
+hk : k < 3
+small : 3 * b + k < 6
+⊢ (if small : ↑(3 * b + k)#usize < 6 then
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := Port4B_SlotInstall.offset ↑(3 * b + k)#usize ⋯,
+          «end» := Port4B_SlotInstall.offset (↑(3 * b + k)#usize + 1) ⋯ }
+    else fail Error.arrayOutOfBounds) =
+    ok (sub proof (Port4B_SlotInstall.offset (3 * b + k) ⋯) (Port4B_SlotInstall.offset (3 * b + k + 1) ⋯))
+Port11PROV_Views.lean:60:10: error(lean.unknownIdentifier): Unknown identifier `MultiproofConePhysicalTransport.digest_injective`
+Port11PROV_Views.lean:61:4: error: No goals to be solved
+'AspisR1.Port11PROV_Views.node_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_Views.node_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port11PROV_Views.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

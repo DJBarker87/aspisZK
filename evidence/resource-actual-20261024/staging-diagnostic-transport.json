@@ -1,0 +1,21 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "env -i DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus HOME=/home/dombarker LANG=C.UTF-8 LOGNAME=dombarker PATH=/usr/bin:/bin USER=dombarker XDG_RUNTIME_DIR=/run/user/1000 /usr/bin/python3 -I -B -c 'import json,pathlib,hashlib,sys; p=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-cx-resource-actual-20261024/manifest.json'\"'\"'); raw=p.read_bytes(); expected=json.dumps(json.load(sys.stdin),sort_keys=True,indent=2).encode(); print(json.dumps(dict(size=len(raw),expected_size=len(expected),tail_hex=raw[-20:].hex(),expected_tail_hex=expected[-20:].hex(),prefix_matches=raw.startswith(expected),pin=hashlib.sha256(raw).hexdigest())))'"
+  ],
+  "exit": 0,
+  "print_axioms": "N/A",
+  "source_revision": "4d8529707a69fa60dd236c55c5ea49054d4c6361",
+  "stderr": "",
+  "stdin_pin": {
+    "sha256": "5fb9b779bbdf638b3031c29c48d006acccdbc0698f895fa18f3c6a6f418de740",
+    "size": 91264
+  },
+  "stdout": "{\"size\": 110811, \"expected_size\": 110810, \"tail_hex\": \"63356561343930353464346336333631220a7d0a\", \"expected_tail_hex\": \"3563356561343930353464346336333631220a7d\", \"prefix_matches\": true, \"pin\": \"09f33d3804bd4ffdf3021f31ad512ec6a16ba98f50c22afe63c9f3ecb7d4c56d\"}\n",
+  "wall_seconds": 1.0361430002376437
+}

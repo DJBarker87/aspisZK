@@ -1,0 +1,55 @@
+{"attempt": "lean-032", "exit_status": 1, "wall_seconds": 2.1361673350038473, "peak_rss_kib": "4419524", "swaps": "0", "print_axioms": ["'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms", "'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port9OR_BatchStep.lean:35:55: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+Port9OR_BatchStep.lean:194:26: error: unexpected token ':'; expected '=>'
+Port9OR_BatchStep.lean:185:63: error: unsolved goals
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+root : Digest
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+⊢ (if pos < n then do
+      let a ← (ops base).op9 keys pos
+      let a_1 ← lift (pos.wrapping_add 1#usize)
+
+...
+usize slot
+          if val1 > i then ok (done (idx, val, none))
+            else do
+              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+              let (b, _) ←
+                (ops base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      (ops base) D)
+                    ce ()
+              if b = true then ok (done (idx, val, none))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    (ops base).op10 D hash Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                  if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                    else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))
+'AspisR1.Port9OR_BatchStep.pair_match' does not depend on any axioms
+'AspisR1.Port9OR_BatchStep.verify_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port9OR_BatchStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r92d382fcff5c452cbdfaaa1a86d16db2.scope; invocation ID: 9d6ff497fb4d429d923e745e55b74f5f

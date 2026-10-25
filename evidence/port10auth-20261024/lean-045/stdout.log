@@ -1,0 +1,199 @@
+Port10AUTH_BatchLog.lean:55:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port9OR_Code.trace D hash
+    (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+        Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val >>=
+      ?m.184)
+in the target expression
+  (match
+        match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[0#usize]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x with
+      | ok a =>
+        match
+          match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[1#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x with
+        | ok a_1 =>
+          match
+            match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[2#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x with
+          | ok a_2 =>
+            Port9OR_Code.trace D hash do
+              let __x ←
+                Port9OR_BatchTree.code base D hash proof p.queries a batch 0#usize (Array.repeat 16#usize 0#u32)
+                    (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))
+              let cf ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let __x ← Port9OR_BatchTree.code base D hash proof p.queries a_1 batch 1#usize __x.2.1 __x.2.2
+                  let cf1 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let __x ← Port9OR_BatchTree.code base D hash proof p.queries a_2 batch 2#usize __x.2.1 __x.2.2
+                      let cf2 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a => pure (core.result.Result.Ok ())
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftResult
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftResult
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftResult
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual)
+          | fail e => ([], fail e)
+          | div => ([], div)
+        | fail e => ([], fail e)
+        | div => ([], div)
+      | fail e => ([], fail e)
+      | div => ([], div)).1 =
+    (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val)).1 ++
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1
+              val1)).1 ++
+      (Port9OR_Code.trace D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2)).1
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+p : verifier.Prepared
+folded : Digest
+batch : Usize
+idx1 idx2 idx3 : Indices
+val1 val2 val3 : Values
+c0 :
+  erase D hash
+      (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+        Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val) =
+    ok (core.result.Result.Ok (), idx1, val1)
+c1 :
+  erase D hash (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1 val1) =
+    ok (core.result.Result.Ok (), idx2, val2)
+c2 :
+  erase D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2) =
+    ok (core.result.Result.Ok (), idx3, val3)
+h0 : p.roots.index_usize 0#usize = ok (Port3_BatchStage.root0 p)
+h1 : p.roots.index_usize 1#usize = ok (Port3_BatchStage.root1 p)
+⊢ (match
+        match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[0#usize]? with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x with
+      | ok a =>
+        match
+          match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[1#usize]? with
+          | none => fail Error.arrayOutOfBounds
+          | some x => ok x with
+        | ok a_1 =>
+          match
+            match ⟨[Port3_BatchStage.root0 p, Port3_BatchStage.root1 p, folded], ⋯⟩[2#usize]? with
+            | none => fail Error.arrayOutOfBounds
+            | some x => ok x with
+          | ok a_2 =>
+            Port9OR_Code.trace D hash do
+              let __x ←
+                Port9OR_BatchTree.code base D hash proof p.queries a batch 0#usize (Array.repeat 16#usize 0#u32)
+                    (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))
+              let cf ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let __x ← Port9OR_BatchTree.code base D hash proof p.queries a_1 batch 1#usize __x.2.1 __x.2.2
+                  let cf1 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      let __x ← Port9OR_BatchTree.code base D hash proof p.queries a_2 batch 2#usize __x.2.1 __x.2.2
+                      let cf2 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue a => pure (core.result.Result.Ok ())
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftResult
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftResult
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftResult
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual)
+          | fail e => ([], fail e)
+          | div => ([], div)
+        | fail e => ([], fail e)
+        | div => ([], div)
+      | fail e => ([], fail e)
+      | div => ([], div)).1 =
+    (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val)).1 ++
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1
+              val1)).1 ++
+      (Port9OR_Code.trace D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2)).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array Digest 3#usize
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑a
+Port10AUTH_BatchLog.lean:52:68: warning: This simp argument is unused:
+  List.getElem?_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵[̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲L̲e̲a̲f̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵r̲f̲l̲,̲ ̲s̲h̲o̲w̲ ̲(̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲ from rfl,
+      show (̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵(̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲2̲ from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_BatchLog.lean:53:4: warning: This simp argument is unused:
+  List.getElem?_cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [Port10AUTH_Leaf.lift_bind, ̲Array.index_usize, ̲Array.make, ̲List.getElem?_cons_zero,
+      L̵i̵st̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵s̵how (0#usize).val ̲= ̲0 from rfl, ̲show (1#usize).val ̲= ̲1 from rfl,
+      show (2#usize).val ̲= ̲2 from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_BatchLog.lean:53:28: warning: This simp argument is unused:
+  show (0#usize).val = 0 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵[̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲L̲e̲a̲f̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲s̲h̲o̲w̲ ̲(̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵rfl, show (̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵(̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲2̲ from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_BatchLog.lean:53:58: warning: This simp argument is unused:
+  show (1#usize).val = 1 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵[̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲L̲e̲a̲f̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵rfl, show (̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵(̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲2̲ from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Port10AUTH_BatchLog.lean:54:4: warning: This simp argument is unused:
+  show (2#usize).val = 2 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵1̵0̵A̵U̵T̵H̵_̵L̵e̵a̵f̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵[̲P̲o̲r̲t̲1̲0̲A̲U̲T̲H̲_̲L̲e̲a̲f̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵ ̵f̵r̵o̵m̵ ̵rfl, show (̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵2̵(̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲ from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Port10AUTH_BatchLog.bind_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_BatchLog.logs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

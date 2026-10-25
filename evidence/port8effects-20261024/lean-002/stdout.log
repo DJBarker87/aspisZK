@@ -1,0 +1,31 @@
+Port8EFF_Bodies.lean:48:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a ← Port4A_NativeReader.resume (Port6CK_Ops.ops reserved unwrap) (VTop_Checkpoint.digest D) ck proof pub v hash
+    ok
+        (match a with
+        | core.result.Result.Ok pair => core.result.Result.Ok pair
+        | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))
+is not definitionally equal to the right-hand side
+  Port6CK_Reader.reader reserved unwrap D ck proof pub v hash
+
+reserved : Bool
+unwrap : Unwrap
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+v : transport.Variant
+hash : Hash
+H : Bytes → State
+⊢ (do
+      let a ←
+        Port4A_NativeReader.resume (Port6CK_Ops.ops reserved unwrap) (VTop_Checkpoint.digest D) ck proof pub v hash
+      ok
+          (match a with
+          | core.result.Result.Ok pair => core.result.Result.Ok pair
+          | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    Port6CK_Reader.reader reserved unwrap D ck proof pub v hash
+'AspisR1.Port8EFF_Bodies.reader_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Bodies.writer_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Bodies.reader_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Bodies.installed_reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_Bodies.installed_writer' depends on axioms: [propext, Classical.choice, Quot.sound]

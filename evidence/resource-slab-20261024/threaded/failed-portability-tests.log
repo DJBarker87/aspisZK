@@ -1,0 +1,276 @@
+test_active_anon_unreclaimable_retained (test_resource_slab.CandidateTests.test_active_anon_unreclaimable_retained) ... ok
+test_cap_overrun (test_resource_slab.CandidateTests.test_cap_overrun) ... ok
+test_components_exceed_current (test_resource_slab.CandidateTests.test_components_exceed_current) ... ok
+test_controller_disabled_subtree_covered_at_owner (test_resource_slab.CandidateTests.test_controller_disabled_subtree_covered_at_owner) ... ok
+test_disabled_cannot_reenable (test_resource_slab.CandidateTests.test_disabled_cannot_reenable) ... ok
+test_empty_charged_finite_and_uncapped (test_resource_slab.CandidateTests.test_empty_charged_finite_and_uncapped) ... ok
+test_envelope_max_usage_min_credit (test_resource_slab.CandidateTests.test_envelope_max_usage_min_credit) ... ok
+test_exclusive_accounting_and_nonoverlap (test_resource_slab.CandidateTests.test_exclusive_accounting_and_nonoverlap) ... ok
+test_finite_ancestor_once (test_resource_slab.CandidateTests.test_finite_ancestor_once) ... ok
+test_legacy_cap_denial_never_overridden (test_resource_slab.CandidateTests.test_legacy_cap_denial_never_overridden) ... ok
+test_legacy_reserve_denial_may_change (test_resource_slab.CandidateTests.test_legacy_reserve_denial_may_change) ... ok
+test_low_available_strict_boundary (test_resource_slab.CandidateTests.test_low_available_strict_boundary) ... ok
+test_membership_and_controls_race (test_resource_slab.CandidateTests.test_membership_and_controls_race) ... ok
+test_missing_stat_or_slab_denies (test_resource_slab.CandidateTests.test_missing_stat_or_slab_denies) ... ok
+test_missing_visibility_and_legacy_errors (test_resource_slab.CandidateTests.test_missing_visibility_and_legacy_errors) ... ok
+test_negative_and_overflow (test_resource_slab.CandidateTests.test_negative_and_overflow) ... ok
+test_no_credit_inside_finite_frontier (test_resource_slab.CandidateTests.test_no_credit_inside_finite_frontier) ... ok
+test_odd_credit_floor (test_resource_slab.CandidateTests.test_odd_credit_floor) ... ok
+test_parent_component_race (test_resource_slab.CandidateTests.test_parent_component_race) ... ok
+test_parent_current_inconsistent (test_resource_slab.CandidateTests.test_parent_current_inconsistent) ... ok
+test_physical_total_boundary (test_resource_slab.CandidateTests.test_physical_total_boundary) ... ok
+test_population_race (test_resource_slab.CandidateTests.test_population_race) ... ok
+test_root_residual_fully_retained (test_resource_slab.CandidateTests.test_root_residual_fully_retained) ... ok
+test_sibling_caps_and_ancestor_constraints (test_resource_slab.CandidateTests.test_sibling_caps_and_ancestor_constraints) ... ok
+test_unknown_controller_owner (test_resource_slab.CandidateTests.test_unknown_controller_owner) ... ok
+test_unaccountable_global_residual_denies (test_resource_slab.FailureRetentionTests.test_unaccountable_global_residual_denies) ... ok
+test_unsupported_read_denies_and_keeps_old_visibility (test_resource_slab.FailureRetentionTests.test_unsupported_read_denies_and_keeps_old_visibility) ... ok
+test_sysfs_missing_stat_and_slab_and_negative (test_resource_slab.ScannerTests.test_sysfs_missing_stat_and_slab_and_negative) ... ok
+test_complete_threaded_alternative_and_actual_tag_capture (test_resource_slab.ThreadedTests.test_complete_threaded_alternative_and_actual_tag_capture) ... ERROR
+test_missing_domain_or_thread_or_identity_denies (test_resource_slab.ThreadedTests.test_missing_domain_or_thread_or_identity_denies) ... ERROR
+test_observed_root_type_supported_without_inferred_tag (test_resource_slab.ThreadedTests.test_observed_root_type_supported_without_inferred_tag) ... ERROR
+test_pids_current_population_and_duplicates_deny (test_resource_slab.ThreadedTests.test_pids_current_population_and_duplicates_deny) ... ERROR
+test_thread_exit_or_identity_reuse_denies (test_resource_slab.ThreadedTests.test_thread_exit_or_identity_reuse_denies) ... ERROR
+test_threaded_memory_delegation_denies (test_resource_slab.ThreadedTests.test_threaded_memory_delegation_denies) ... ok
+test_type_and_identity_snapshot_changes_deny (test_resource_slab.ThreadedTests.test_type_and_identity_snapshot_changes_deny) ... ERROR
+test_type_transition_denies (test_resource_slab.ThreadedTests.test_type_transition_denies) ... ERROR
+test_unknown_and_invalid_tags_deny (test_resource_slab.ThreadedTests.test_unknown_and_invalid_tags_deny) ... ok
+test_unknown_eopnotsupp_denies (test_resource_slab.ThreadedTests.test_unknown_eopnotsupp_denies) ... ok
+test_wrong_domain_memory_owner_and_membership_deny (test_resource_slab.ThreadedTests.test_wrong_domain_memory_owner_and_membership_deny) ... ERROR
+
+======================================================================
+ERROR: test_complete_threaded_alternative_and_actual_tag_capture (test_resource_slab.ThreadedTests.test_complete_threaded_alternative_and_actual_tag_capture)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 291, in test_complete_threaded_alternative_and_actual_tag_capture
+    s=self.run_scan();a=accounting(s)
+      ^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_missing_domain_or_thread_or_identity_denies (test_resource_slab.ThreadedTests.test_missing_domain_or_thread_or_identity_denies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 317, in test_missing_domain_or_thread_or_identity_denies
+    self.assertRaises(ValueError,self.run_scan,lambda r,d,t:(d/'cgroup.procs').write_text(''))
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 778, in assertRaises
+    return context.handle('assertRaises', args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 238, in handle
+    callable_obj(*args, **kwargs)
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_observed_root_type_supported_without_inferred_tag (test_resource_slab.ThreadedTests.test_observed_root_type_supported_without_inferred_tag)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 358, in test_observed_root_type_supported_without_inferred_tag
+    s=self.run_scan(lambda r,d,t:(r/'cgroup.type').write_text('domain'))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_pids_current_population_and_duplicates_deny (test_resource_slab.ThreadedTests.test_pids_current_population_and_duplicates_deny)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 355, in test_pids_current_population_and_duplicates_deny
+    self.assertRaises(ValueError,self.run_scan,lambda r,d,t:(t/name).write_text(value))
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 778, in assertRaises
+    return context.handle('assertRaises', args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 238, in handle
+    callable_obj(*args, **kwargs)
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_thread_exit_or_identity_reuse_denies (test_resource_slab.ThreadedTests.test_thread_exit_or_identity_reuse_denies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 351, in test_thread_exit_or_identity_reuse_denies
+    self.assertRaises(ValueError,self.run_scan,read_mutate=reuse)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 778, in assertRaises
+    return context.handle('assertRaises', args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 238, in handle
+    callable_obj(*args, **kwargs)
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_type_and_identity_snapshot_changes_deny (test_resource_slab.ThreadedTests.test_type_and_identity_snapshot_changes_deny)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 363, in test_type_and_identity_snapshot_changes_deny
+    s=self.run_scan();old=legacy(s)
+      ^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_type_transition_denies (test_resource_slab.ThreadedTests.test_type_transition_denies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 324, in test_type_transition_denies
+    self.assertRaises(ValueError,self.run_scan,read_mutate=read)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 778, in assertRaises
+    return context.handle('assertRaises', args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/case.py", line 238, in handle
+    callable_obj(*args, **kwargs)
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+======================================================================
+ERROR: test_wrong_domain_memory_owner_and_membership_deny (test_resource_slab.ThreadedTests.test_wrong_domain_memory_owner_and_membership_deny)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 331, in test_wrong_domain_memory_owner_and_membership_deny
+    s=self.run_scan()
+      ^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 288, in run_scan
+    with patch.object(Path,'read_text',read): return scan(root)
+                                                     ^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 175, in scan
+    visit(root, False, str(root))
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 166, in visit
+    visit(child, row['subtree_memory'], owner, row['subtree_pids'],
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 112, in visit
+    procs = ids(read(path/'cgroup.procs'))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/resource_slab_candidate.py", line 66, in read
+    content = path.read_text()
+              ^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-slab/tools/resource-slab-20261024/test_resource_slab.py", line 282, in read
+    if path == thread/'cgroup.procs': raise OSError(95,'threaded unsupported')
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 95] threaded unsupported
+
+----------------------------------------------------------------------
+Ran 39 tests in 0.100s
+
+FAILED (errors=8)

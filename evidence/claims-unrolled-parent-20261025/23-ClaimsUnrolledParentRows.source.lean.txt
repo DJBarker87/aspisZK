@@ -1,0 +1,229 @@
+import ClaimsUnrolledParentSource
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1ClaimsUnrolledParent
+open Aeneas Aeneas.Std Result
+abbrev Row := Array aspis_core.field.QM31 29#usize
+abbrev Claims := Array Row 3#usize
+abbrev Record := r1_wire.ValidatedRecord
+abbrev Status := core.result.Result Claims r1_wire.Error
+
+/-- Literal suffix of emitted candidate_claims.claims after successful
+allocation/conversion. Includes its actual delayed setter closures. -/
+def afterAllocated (external : External) (vr : Record) (val1 : Claims) : Result Status := do
+  let r5 ← external.decode 29#usize vr 0#usize
+  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+  match cf3 with
+  | core.ops.control_flow.ControlFlow.Continue val2 =>
+    let (_, index_mut_back) ← Array.index_mut_usize val1 0#usize
+    let r6 ← external.decode 29#usize vr 29#usize
+    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r6
+    match cf4 with
+    | core.ops.control_flow.ControlFlow.Continue val3 =>
+      let out := index_mut_back val2
+      let (_, index_mut_back1) ← Array.index_mut_usize out 1#usize
+      let r7 ← external.decode 29#usize vr 58#usize
+      let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
+      match cf5 with
+      | core.ops.control_flow.ControlFlow.Continue val4 =>
+        let out1 := index_mut_back1 val3
+        let out2 ← Array.update out1 2#usize val4
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+          (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+        (core.convert.FromSame r1_wire.Error) residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+      (core.convert.FromSame r1_wire.Error) residual
+
+/-- Same decoder calls, error order and ambient fail/div returns. All three
+rows come from this same validated record; no initial heap contents remain. -/
+def decodeRows (external : External) (vr : Record) : Result Status := do
+  let r0 ← external.decode 29#usize vr 0#usize
+  match r0 with
+  | .Err e => ok (.Err e)
+  | .Ok row0 =>
+    let r1 ← external.decode 29#usize vr 29#usize
+    match r1 with
+    | .Err e => ok (.Err e)
+    | .Ok row1 =>
+      let r2 ← external.decode 29#usize vr 58#usize
+      match r2 with
+      | .Err e => ok (.Err e)
+      | .Ok row2 => ok (.Ok ⟨[row0,row1,row2],by simp⟩)
+
+private theorem overwrite_three (before : Claims) (row0 row1 row2 : Row) :
+    ((before.set 0#usize row0).set 1#usize row1).set 2#usize row2 =
+      (⟨[row0,row1,row2],by simp⟩ : Claims) := by
+  apply Subtype.ext
+  obtain ⟨a,b,c,shape⟩ := List.length_eq_three.mp before.property
+  change (((before.val.set 0 row0).set 1 row1).set 2 row2) = [row0,row1,row2]
+  rw [shape]
+  rfl
+
+/-- ALL outcomes of the actual emitted suffix. No allocation initializedness,
+zero-content, canonicality, successful decoder or setter premise is assumed.
+Native memory/effect/cleanup correspondence is not asserted. -/
+theorem afterAllocated_eq_decodeRows (external : External) (vr : Record) (before : Claims) :
+    afterAllocated external vr before = decodeRows external vr := by
+  obtain ⟨⟨old0,back0⟩,mut0,_,set0⟩ := WP.spec_imp_exists
+    (Array.index_mut_usize_spec before 0#usize (by simp [before.property]))
+  subst back0
+  cases d0 : external.decode 29#usize vr 0#usize with
+  | fail error => simp [afterAllocated,decodeRows,d0]
+  | div => simp [afterAllocated,decodeRows,d0]
+  | ok r0 =>
+    cases r0 with
+    | Err error =>
+      simp [afterAllocated,decodeRows,d0,core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+    | Ok row0 =>
+      obtain ⟨⟨old1,back1⟩,mut1,_,set1⟩ := WP.spec_imp_exists
+        (Array.index_mut_usize_spec (before.set 0#usize row0) 1#usize
+          (by simp [(before.set 0#usize row0).property]))
+      subst back1
+      cases d1 : external.decode 29#usize vr 29#usize with
+      | fail error => simp [afterAllocated,decodeRows,d0,d1,mut0,core.result.Result.Insts.CoreOpsTry.branch]
+      | div => simp [afterAllocated,decodeRows,d0,d1,mut0,core.result.Result.Insts.CoreOpsTry.branch]
+      | ok r1 =>
+        cases r1 with
+        | Err error =>
+          simp [afterAllocated,decodeRows,d0,d1,mut0,
+            core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+        | Ok row1 =>
+          cases d2 : external.decode 29#usize vr 58#usize with
+          | fail error => simp [afterAllocated,decodeRows,d0,d1,d2,mut0,mut1,core.result.Result.Insts.CoreOpsTry.branch]
+          | div => simp [afterAllocated,decodeRows,d0,d1,d2,mut0,mut1,core.result.Result.Insts.CoreOpsTry.branch]
+          | ok r2 =>
+            cases r2 with
+            | Err error =>
+              simp [afterAllocated,decodeRows,d0,d1,d2,mut0,mut1,
+                core.result.Result.Insts.CoreOpsTry.branch,
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+            | Ok row2 =>
+              obtain ⟨after,updated,same⟩ := WP.spec_imp_exists
+                (Array.update_spec ((before.set 0#usize row0).set 1#usize row1) 2#usize row2
+                  (by simp [((before.set 0#usize row0).set 1#usize row1).property]))
+              subst after
+              simp [afterAllocated,decodeRows,d0,d1,d2,mut0,mut1,updated,overwrite_three,
+                core.result.Result.Insts.CoreOpsTry.branch,
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+def claimsFactored (external : External)
+  (prefix1 : r1_wire.Prefix) :
+  Result (core.result.Result (Array (Array aspis_core.field.QM31 29#usize)
+    3#usize) r1_wire.Error)
+  := do
+  let r ← external.validated prefix1 25#u8
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue vr =>
+    let q ← zero
+    let a := Array.repeat 29#usize q
+    let r1 ←
+      aspis_core.r0.heap.filled external (Array.Insts.CoreMarkerCopy 29#usize
+        aspis_core.field.QM31.Insts.CoreMarkerCopy) 3#usize a
+    let r2 ←
+      mapError
+        candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        r1 ()
+    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+    match cf1 with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let s ← external.intoBox Global val
+      let r3 ←
+        boxArray 3#usize s
+      let r4 ←
+        mapError
+          candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error
+          r3 ()
+      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+      match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        afterAllocated external vr val1
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+          (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+        (core.convert.FromSame r1_wire.Error) residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+      (core.convert.FromSame r1_wire.Error) residual
+
+
+/-- Definitional factorization of the complete emitted parent, before any
+semantic replacement of its suffix. -/
+theorem claims_factored (external : External) (prefix1 : r1_wire.Prefix) :
+    candidate_claims.claims external prefix1 = claimsFactored external prefix1 := rfl
+
+def claimsReference (external : External)
+  (prefix1 : r1_wire.Prefix) :
+  Result (core.result.Result (Array (Array aspis_core.field.QM31 29#usize)
+    3#usize) r1_wire.Error)
+  := do
+  let r ← external.validated prefix1 25#u8
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+  | core.ops.control_flow.ControlFlow.Continue vr =>
+    let q ← zero
+    let a := Array.repeat 29#usize q
+    let r1 ←
+      aspis_core.r0.heap.filled external (Array.Insts.CoreMarkerCopy 29#usize
+        aspis_core.field.QM31.Insts.CoreMarkerCopy) 3#usize a
+    let r2 ←
+      mapError
+        candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        r1 ()
+    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+    match cf1 with
+    | core.ops.control_flow.ControlFlow.Continue val =>
+      let s ← external.intoBox Global val
+      let r3 ←
+        boxArray 3#usize s
+      let r4 ←
+        mapError
+          candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error
+          r3 ()
+      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+      match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val1 =>
+        decodeRows external vr
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+          (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+        (core.convert.FromSame r1_wire.Error) residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      (Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+      (core.convert.FromSame r1_wire.Error) residual
+
+
+/-- Complete parent VALUE refinement, including arbitrary external reserve/
+box-conversion results and every decoder rejection/fail/div outcome. It does
+not assert native initializedness, private state equality or oracle effects. -/
+theorem claims_value (external : External) (prefix1 : r1_wire.Prefix) :
+    candidate_claims.claims external prefix1 = claimsReference external prefix1 := by
+  rw [claims_factored]
+  unfold claimsFactored claimsReference
+  simp_rw [afterAllocated_eq_decodeRows]
+
+#print axioms afterAllocated_eq_decodeRows
+#print axioms claims_factored
+#print axioms claims_value
+end AspisR1ClaimsUnrolledParent
+end

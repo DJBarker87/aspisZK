@@ -1,0 +1,90 @@
+# PROSPECTIVE METADATA ACQUISITION ONLY. NEVER EXECUTED IN SOURCE PREPARATION.
+START = time.monotonic()
+INITIAL_LIMITS = inherited_limits()
+check_limits(INITIAL_LIMITS)
+def interrupted(signum, frame):
+    raise GuardError('deadline or resident guard failed')
+signal.signal(signal.SIGUSR1, interrupted)
+signal.signal(signal.SIGALRM, interrupted)
+signal.alarm(115)
+MONITOR = Guard()
+import json
+import struct
+import sys
+ATTEMPTS = []
+OUTCOMES = {}
+FILES = {}
+TOTAL = 0
+ELFS = 0
+FAILED = True
+RESULT = dict(status='UNKNOWN', executed_trace=False, runtime_approval=None,
+              producer_assembly=None, print_axioms='N/A; data only',
+              old_trace=SBF_FINISH_PLAN['old_trace'], bounds=SBF_FINISH_PLAN['bounds'])
+def admit(physical, s):
+    if physical not in FILES:
+        require_data(len(FILES) < 512 and TOTAL + s.st_size <= 128*2**20, 'unique pin cap before read')
+
+def require_data(ok, message):
+    if not ok:
+        raise GuardError(message)
+try:
+    MONITOR.start()
+    for item in SBF_FINISH_PLAN['paths']:
+        MONITOR.check()
+        path = item['path']
+        if item['classification'] == 'OWN_PROC_METADATA_NOT_REACQUIRED':
+            OUTCOMES[path] = dict(status='REUSED_OWN_PROC_ONLY', provenance=item['provenance'])
+            continue
+        # Only literal finite plan entries reach the injectable reader. No
+        # runtime-derived new paths, directory enumeration or loader execution.
+        raw, row = acquire(path, ATTEMPTS, os, check=MONITOR.check, admit=admit)
+        OUTCOMES[path] = row
+        row['provenance'] = item['provenance']
+        if row['status'] != 'PINNED':
+            continue  # absent/rejected/error rows retained; state fails closed
+        physical = row['physical']
+        if physical in FILES:
+            require_data(all(row[k] == FILES[physical][k] for k in ('sha256','size','identity')),
+                         'alias/repeated physical input drift')
+        else:
+            require_data(len(FILES) < 512 and TOTAL + row['size'] <= 128*2**20, 'unique pin cap')
+            row['elf'] = parse_elf(raw)
+            FILES[physical] = row
+            TOTAL += row['size']
+        if path.endswith('.pyc'):
+            row['pyc'] = pyc_header(raw)
+            if row['pyc']['classification'].startswith('REJECTED'):
+                row['status'] = 'REJECTED_PYC_HEADER'
+        raw = None
+    state = association(SBF_FINISH_PLAN, OUTCOMES)
+    RESULT.update(association=state, modules=correspondence(SBF_FINISH_PLAN['modules'], OUTCOMES),
+                  candidate=candidate(SBF_FINISH_PLAN, OUTCOMES, state))
+    check_limits(inherited_limits(), INITIAL_LIMITS)
+    MONITOR.check()
+    require_data(set(MONITOR.owned) == {os.getpid()}, 'unexpected collector descendant')
+    RESULT['status'] = 'FINITE_METADATA_INPUT_DATA_ONLY'
+    FAILED = not RESULT['candidate']['eligible_candidate']
+except BaseException as exc:
+    RESULT['error'] = dict(type=type(exc).__name__, message=str(exc), errno=getattr(exc,'errno',None))
+finally:
+    signal.signal(signal.SIGUSR1, signal.SIG_IGN)
+    guard = MONITOR.finish(failed=FAILED) if MONITOR.thread is not None else dict(error='guard not started')
+    RESULT.update(guard=guard, outcomes=OUTCOMES, attempts=ATTEMPTS, files=FILES,
+                  unique_hashed_bytes=TOTAL, elf_count=ELFS,
+                  inherited_limits_before=INITIAL_LIMITS, inherited_limits_after=inherited_limits(),
+                  wall_seconds=time.monotonic()-START,
+                  peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
+                  swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+                  completeness='OPEN; source/runtime effects/conditional dlopen/locale/NSS/private guest/control/LSM/cancellation/parentdeath',
+                  own_proc='unchanged guard metadata only; no maps/tracee/probe collection',
+                  cgroup_reservations='UNOBSERVED; no admission or execution permission')
+    if guard['error']:
+        FAILED = True
+        RESULT['status'] = 'UNKNOWN'
+    export = json.dumps(RESULT, sort_keys=True, separators=(',',':')).encode() + b'\n'
+    if len(export) > 4*2**20:
+        raise GuardError('output over 4MiB; no eligible candidate')
+    sys.stdout.buffer.write(export)
+    sys.stdout.buffer.flush()
+    signal.alarm(0)
+raise SystemExit(78 if FAILED else 0)

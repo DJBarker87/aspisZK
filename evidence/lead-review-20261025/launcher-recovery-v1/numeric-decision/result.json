@@ -1,0 +1,102 @@
+{
+  "command": "python3 evidence/port36transport-20261025/linux367/numeric-denial-review/review.py",
+  "source_revision": "49f36dfb1b2b3a1ee93c21b847757462f477caed",
+  "pins": {
+    "f7b90c82300c8a2409625fefb5dc529db6547f9c:tools/resource-stability-20261025/ResourceStability_evaluator.py": {
+      "bytes": 7448,
+      "sha256": "8dfffb421e33df0cfd43e0b3c43112f5d9ea34a65bf83da8e60adff82ab73813"
+    },
+    "49f36dfb1b:tools/port17release-20261024/Port17RELEASE_admission.py": {
+      "bytes": 2849,
+      "sha256": "0bc008b9f9ae3ab04c0380ba12c29ff75ba6c17983adb1edffa4c491c7d48be9"
+    },
+    "tools/port36transport-20261025/linux367/Port36LINUX_pid_candidate.py": {
+      "bytes": 18304,
+      "sha256": "98382278ab4de78f16f68a178e1d231790a3d52797e5129f3819b237d1b29d32"
+    }
+  },
+  "capture": {
+    "path": "/private/tmp/Port36LINUX-publication-action-20261025-v1/stdout.log",
+    "bytes": 15473168,
+    "sha256": "279909c5bbd0a7c1f281d6bf217de8b59a85ed6c8ec0f9f14ee24d568977bd94"
+  },
+  "arithmetic": {
+    "minimum_bytes": 55814279168,
+    "active_bytes": 10183766016,
+    "kernel_bytes": 6848081920,
+    "residual_bytes": 2278531072,
+    "frontier_bytes": 26172456960,
+    "requested_bytes": 8589934592,
+    "reserve_bytes": 7516192768,
+    "adjusted_bytes": 36503900160,
+    "required_bytes": 42278584320,
+    "deficit_bytes": 5774684160,
+    "deficit_GiB": 5.378093719482422
+  },
+  "snapshots": {
+    "before": {
+      "rows": 116,
+      "mem_total_bytes": 66698661888,
+      "frontier_current_bytes": 7559217152,
+      "accounted_current_outside_frontier_bytes": 52680368128
+    },
+    "after": {
+      "rows": 116,
+      "mem_total_bytes": 66698661888,
+      "frontier_current_bytes": 7559479296,
+      "accounted_current_outside_frontier_bytes": 52687200256
+    }
+  },
+  "cases": [
+    {
+      "name": "captured strict denial",
+      "result": false,
+      "expected": false
+    },
+    {
+      "name": "exact adjusted equality still denies",
+      "result": false,
+      "expected": false
+    },
+    {
+      "name": "one byte beyond adjusted equality passes numeric gates only",
+      "result": true,
+      "expected": true
+    },
+    {
+      "name": "six GiB less existing reservation passes numeric gates only",
+      "result": true,
+      "expected": true
+    },
+    {
+      "name": "five GiB less existing reservation still denies",
+      "result": false,
+      "expected": false
+    },
+    {
+      "name": "55 GiB reservation equality denies despite ample availability",
+      "result": false,
+      "expected": false
+    },
+    {
+      "name": "two GiB availability guard equality denies",
+      "result": false,
+      "expected": false
+    },
+    {
+      "name": "historical Port17 reservation-only test passes",
+      "result": true,
+      "expected": true
+    }
+  ],
+  "exit_status": 0,
+  "wall_seconds": 0.1071442081592977,
+  "peak_self_RSS_bytes": 77611008,
+  "peak_serial_child_RSS_bytes": 6012928,
+  "self_swap_counter": 0,
+  "child_swap_counter": 0,
+  "metric_units": "Darwin ru_maxrss bytes; ru_nswap counters, not measured swap bytes",
+  "print_axioms": "N/A; no Lean/proof invocation",
+  "policy_change": false,
+  "security_targets": "both NOT ESTABLISHED"
+}

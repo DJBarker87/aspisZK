@@ -1,0 +1,115 @@
+Port10AUTH_BatchLog.lean:55:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port9OR_Code.trace D hash
+    (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+        Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val >>=
+      ?m.184)
+in the target expression
+  (Port9OR_Code.trace D hash do
+        let __x ←
+          Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))
+        let cf ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let __x ←
+              Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize __x.2.1
+                  __x.2.2
+            let cf1 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let __x ← Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize __x.2.1 __x.2.2
+                let cf2 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => pure (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftResult
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftResult
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftResult
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual)).1 =
+    (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val)).1 ++
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1
+              val1)).1 ++
+      (Port9OR_Code.trace D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2)).1
+
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+p : verifier.Prepared
+folded : Digest
+batch : Usize
+idx1 idx2 idx3 : Indices
+val1 val2 val3 : Values
+c0 :
+  erase D hash
+      (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+        Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val) =
+    ok (core.result.Result.Ok (), idx1, val1)
+c1 :
+  erase D hash (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1 val1) =
+    ok (core.result.Result.Ok (), idx2, val2)
+c2 :
+  erase D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2) =
+    ok (core.result.Result.Ok (), idx3, val3)
+h0 : p.roots.index_usize 0#usize = ok (Port3_BatchStage.root0 p)
+h1 : p.roots.index_usize 1#usize = ok (Port3_BatchStage.root1 p)
+⊢ (Port9OR_Code.trace D hash do
+        let __x ←
+          Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))
+        let cf ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let __x ←
+              Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize __x.2.1
+                  __x.2.2
+            let cf1 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let __x ← Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize __x.2.1 __x.2.2
+                let cf2 ← liftResult (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => pure (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftResult
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftResult
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftResult
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual)).1 =
+    (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root0 p) batch 0#usize
+              Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val)).1 ++
+        (Port9OR_Code.trace D hash
+            (Port9OR_BatchTree.code base D hash proof p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1
+              val1)).1 ++
+      (Port9OR_Code.trace D hash (Port9OR_BatchTree.code base D hash proof p.queries folded batch 2#usize idx2 val2)).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Port10AUTH_BatchLog.bind_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port10AUTH_BatchLog.logs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

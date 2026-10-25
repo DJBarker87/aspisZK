@@ -1,0 +1,42 @@
+{"attempt": "lean-023", "exit_status": 0, "wall_seconds": 2.361043150012847, "peak_rss_kib": "4448056", "swaps": "0", "print_axioms": ["'AspisR1.Port6AUTH_Recovery.batches' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Recovery.repeated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Native.authenticated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.erased_index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.targets' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Frames.read' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Query.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Challenge.frontier_independent' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port6AUTH_Challenge.both_batches' depends on axioms: [propext, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.source_eval' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.recovered' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.hit_mass' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Prefix.prefix_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Probability.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Probability.runtime_transport' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.first_reads' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.budget' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.log_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Accounting.extractor_cost' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port6AUTH_Headline.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port6AUTH_Recovery.batches : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored : AspisV8R19.DuplexFrames.Bytes) (p : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.OraclePortCompactDraft.parse stored = some p →
+    ∀ (q : Fin 22 → Fin 262144)
+      (log0 log1 log : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)) (Q : ℕ),
+      AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0) =
+          (log0, true) →
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1) =
+            (log1, true) →
+          (∀ (a : As
+...
+ceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      FS.firstReads FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2Consumer.projected D P)).1 ≤
+        Q + 1161 :=
+⋯
+theorem AspisR1.OraclePortHeadlineFrozen2PerAttempt.failure_bound : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤
+            ↑(Q + 34) * AspisR1.PerAttemptEnvelope.B + AspisR1.BinCombinedMerkleCollision.kappa (Q + 1161) +
+                1 / 2 ^ 126 +
+              1 / 2 ^ 454 :=
+⋯
+theorem AspisR1.OraclePortHeadlineFrozen2PerAttempt.zero_queries : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.OraclePortStoredExperimentC4.Prover),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ 0) →
+    ∀ (rust : AspisR1.OraclePortRuntimeBindingC7.Verifier) (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+      AspisR1.OraclePortFrozen2Join.AcceptedRunJoin D rust →
+        AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D rust P runtime →
+          AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel runtime ≤ 1 / 2 ^ 100 :=
+⋯
+
+Running as unit: run-re183c14d36604723815b5b6a0c5eca69.scope; invocation ID: adc11d4bd9b2464780074983593c556b

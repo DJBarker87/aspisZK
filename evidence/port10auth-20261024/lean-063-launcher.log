@@ -1,0 +1,53 @@
+{"attempt": "lean-063", "exit_status": 1, "wall_seconds": 3.2683567980129737, "peak_rss_kib": "4470708", "swaps": "0", "print_axioms": ["'AspisR1.Port10AUTH_FirstBoth.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port10AUTH_FirstBoth.lean:73:4: error: Type mismatch: After simplification, term
+  first
+ has type
+  (eval H
+        (match
+          Port1_Driver.asSlice
+            (Port6AUTH_SourceCut.first (Port1_Driver.rust adapter (fun {A} => impl) D hash) P H).2.1.statement.pubBytes,
+          Port1_Driver.asSlice
+            (Port6AUTH_SourceCut.first (Port1_Driver.rust adapter (fun {A} => impl) D hash) P H).2.1.stored with
+        | some pub, some proof =>
+          match Port1_Driver.decodeSemantic adapter pub with
+          | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+          | x => Program.done false
+        | x, x_1 => Program.done false)).2 =
+    tr
+...
+ceCut.first (Port1_Driver.rust adapter (fun {A} => impl) D hash) P H).2.1.stored with
+        | some pub, some proof =>
+          match Port1_Driver.decodeSemantic adapter pub with
+          | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+          | x => Program.done false
+        | x, x_1 => Program.done false)).2 =
+    true
+but is expected to have type
+  (eval H (Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof)).2 = true
+Port10AUTH_FirstBoth.lean:80:4: error: Type mismatch: After simplification, term
+  stageLogs
+ has type
+  (eval H (Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof)).1 =
+    (eval H
+          (interpret (fun {A} => impl)
+            (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).1 ++
+      (eval H
+          (interpret (fun {A} => impl)
+            (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).1
+but is expected to have type
+  (eval H
+        (match Port1_Driver.asSlice input.statement.pubBytes, Port1_Driver.asSlice input.stored with
+        | some pub, some proof =>
+          match Port1_Driver.decodeSemantic adapter pub with
+          | ok (some semantic) => Port1_Driver.stages (fun {A} => impl) D hash semantic pub proof
+          | x => Program.done false
+        | x, x_1 => Program.done false)).1 =
+    (eval H
+          (interpret (fun {A} => impl)
+            (VTop_Flow.tx1 VTop_Flow.traceEffects D semantic pub proof 10#usize hash none))).1 ++
+      (eval H
+          (interpret (fun {A} => impl)
+            (VTop_Flow.tx2_authenticated VTop_Flow.traceEffects D pub proof saved.deref hash none))).1
+'AspisR1.Port10AUTH_FirstBoth.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd6b9880ca66646b9b7c04353c7afcd32.scope; invocation ID: e3e57f0635e94c6eb48895b892c8753a

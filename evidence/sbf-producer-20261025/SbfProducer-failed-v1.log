@@ -1,0 +1,41 @@
+test_actual_adapter_recomputes_twice_and_never_accepts_go (SbfProducer_tests.Suite.test_actual_adapter_recomputes_twice_and_never_accepts_go) ... ok
+test_actual_pins_env_limits_source_and_runtime (SbfProducer_tests.Suite.test_actual_pins_env_limits_source_and_runtime) ... ok
+test_backend_owned_child_gate_cleanup_mock_only (SbfProducer_tests.Suite.test_backend_owned_child_gate_cleanup_mock_only) ... ok
+test_concrete_live_ancestry_optional_monitor_and_reparent (SbfProducer_tests.Suite.test_concrete_live_ancestry_optional_monitor_and_reparent) ... ok
+test_disabled_entry_and_lifecycle_source (SbfProducer_tests.Suite.test_disabled_entry_and_lifecycle_source) ... ok
+test_exact_controls_pressure_errors (SbfProducer_tests.Suite.test_exact_controls_pressure_errors) ... ok
+test_exact_copy_and_operational_functions (SbfProducer_tests.Suite.test_exact_copy_and_operational_functions) ... ok
+test_fresh_executes_collector_and_rechecks_pins (SbfProducer_tests.Suite.test_fresh_executes_collector_and_rechecks_pins) ... ok
+test_package_alias_writer_staging_and_cleanup (SbfProducer_tests.Suite.test_package_alias_writer_staging_and_cleanup) ... ok
+test_policy_full_raw_count_once_and_deductions (SbfProducer_tests.Suite.test_policy_full_raw_count_once_and_deductions) ... ERROR
+test_policy_wrong_unit_controls_start_raw_and_1g_deny (SbfProducer_tests.Suite.test_policy_wrong_unit_controls_start_raw_and_1g_deny) ... ok
+test_root_order_no_backend_on_any_guard_failure (SbfProducer_tests.Suite.test_root_order_no_backend_on_any_guard_failure) ... ERROR
+
+======================================================================
+ERROR: test_policy_full_raw_count_once_and_deductions (SbfProducer_tests.Suite.test_policy_full_raw_count_once_and_deductions)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-sbf-producer/tools/sbf-producer-20261025/SbfProducer_tests.py", line 66, in test_policy_full_raw_count_once_and_deductions
+    result = obs.adapter.policy.evaluate(legacy(b,0),b,b,0,phase='inside-scope',expected=expected,expected_unit=pkg.UNIT+'.scope')
+                                         ^^^^^^^^^^^
+  File "reviewed-raw-fixtures", line 34, in legacy
+  File "tools/resource-available-20261024/ResourceAvailable_candidate.py", line 341, in observe
+ValueError: KReclaimable below SReclaimable
+
+======================================================================
+ERROR: test_root_order_no_backend_on_any_guard_failure (SbfProducer_tests.Suite.test_root_order_no_backend_on_any_guard_failure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-sbf-producer/tools/sbf-producer-20261025/SbfProducer_tests.py", line 109, in test_root_order_no_backend_on_any_guard_failure
+    with patch.dict(sys.modules,SbfProducer_backend_candidate=candidate), \
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1455, in __enter__
+    original, local = self.get_original()
+                      ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/unittest/mock.py", line 1428, in get_original
+    raise AttributeError(
+AttributeError: <module 'os' (frozen)> does not have the attribute 'getresuid'
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.040s
+
+FAILED (errors=2)

@@ -1,0 +1,72 @@
+Port8EFF_CheckpointEffects.lean:53:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H
+    (Port8EFF_CheckpointCode.program ?D ?hash
+      (CheckpointBytes5Effect.bind ?code fun a => CheckpointBytes5Effect.Code.done (?f a)))
+in the target expression
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash do
+        let out ←
+          Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2
+        pure
+            (match out with
+            | core.result.Result.Ok pair => core.result.Result.Ok pair
+            | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+
+reserved : Bool
+unwrap : Port6CK_Semantic.Unwrap
+unwrap_ok : ∀ (N : Usize) (b : Std.Array U8 N), unwrap N (core.result.Result.Ok b) = ok b
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+ck proof pub : Slice U8
+p : VTop_Stages.verifier.Prepared
+a : VTop_Stages.verifier.Accumulator
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest D) hash H
+actual :
+  Port6CK_Reader.reader reserved unwrap D ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+after : CheckpointBytes5Effect.Log
+current :
+  CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub AspisR1Stage2.transport.Variant.S2)
+      [] =
+    ok (core.result.Result.Ok (p, a), after)
+retained :
+  CheckpointBytes5Effect.run (VTop_Checkpoint.digest D) hash
+      (CheckpointBytes5Resume.program (CheckpointBytes4Ops.ops reserved) ck proof pub
+        AspisR1Stage2.transport.Variant.S2)
+      [] =
+    ok (core.result.Result.Ok (p, a), after)
+pair :
+  CheckpointBytes5Inputs.observe after =
+      CheckpointBytes5Inputs.observe [] ++
+        (eval H
+            (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+              (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+                AspisR1Stage2.transport.Variant.S2))).1 ∧
+    (eval H
+          (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+            (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2))).2 =
+      ok (core.result.Result.Ok (p, a))
+full :
+  eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash
+        (CheckpointBytes5Resume.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+          AspisR1Stage2.transport.Variant.S2)) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+⊢ eval H
+      (Port8EFF_CheckpointCode.program (VTop_Checkpoint.digest D) hash do
+        let out ←
+          Port8EFF_NativeReader.program (Port6CK_Ops.ops reserved unwrap) ck proof pub
+              AspisR1Stage2.transport.Variant.S2
+        pure
+            (match out with
+            | core.result.Result.Ok pair => core.result.Result.Ok pair
+            | core.result.Result.Err e => core.result.Result.Err (Port3_CheckpointInstall.error e))) =
+    (CheckpointBytes5Inputs.observe after, ok (core.result.Result.Ok (p, a)))
+'AspisR1.Port8EFF_CheckpointEffects.mapped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Port8EFF_CheckpointEffects.reader' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

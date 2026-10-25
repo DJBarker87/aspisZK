@@ -1,0 +1,88 @@
+{
+  "status": "PASS_LINUX_SOURCE_PREPARATION_ONLY",
+  "revision": "c0da01870c",
+  "exit": 0,
+  "wall_seconds": 1.732020208146423,
+  "self_peak_rss_bytes": 75464704,
+  "max_serial_child_rss_bytes": 99991552,
+  "aggregate_peak": "UNOBSERVED",
+  "self_swap": 0,
+  "child_swap": 0,
+  "steps": [
+    {
+      "argv": [
+        "git",
+        "clone",
+        "--quiet",
+        "--shared",
+        "--no-checkout",
+        "/Users/dominic/ZK",
+        "/private/tmp/lead-port36-linux-source-review-20261025-v1/repo"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.08661250025033951,
+      "peak_rss_bytes": 11190272,
+      "swap": 0
+    },
+    {
+      "argv": [
+        "git",
+        "sparse-checkout",
+        "set",
+        "tools/port36transport-20261025",
+        "evidence/port36transport-20261025"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.03171274997293949,
+      "peak_rss_bytes": 4456448,
+      "swap": 0
+    },
+    {
+      "argv": [
+        "git",
+        "checkout",
+        "--quiet",
+        "c0da01870c"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.5463042496703565,
+      "peak_rss_bytes": 99991552,
+      "swap": 0
+    },
+    {
+      "argv": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-B",
+        "-c",
+        "__file__='/private/tmp/lead-port36-linux-source-review-20261025-v1/repo/tools/port36transport-20261025/linux367/Port36LINUX_checks.py';exec(compile('\"\"\"Small synthetic/source checks only. No host/cgroup/Lean/native operation.\"\"\"\\nfrom pathlib import Path\\nimport ast,copy,hashlib,importlib.util,json,os,resource,struct,subprocess,sys,tempfile,time\\nT=Path(__file__).resolve().parent;ROOT=T.parents[2];E=ROOT/\\'evidence/port36transport-20261025/linux367\\'\\nsys.path.insert(0,str(T))\\nimport Port36LINUX_prepare as prep\\nimport Port36LINUX_stage as stage\\nimport Port36LINUX_runtime_query as runtime\\nimport Port36LINUX_caller as caller\\nimport Port36LINUX_rss_sources as rss\\nSTART=time.monotonic();cases=[]\\ndef check(name,fn):fn();cases.append(name)\\ndef reject(fn):\\n try:fn()\\n except (ValueError,RuntimeError,FileExistsError):return\\n raise AssertionError(\\'expected refusal\\')\\ndef eq(a,b):assert a==b,(a,b)\\nfiles,report=prep.generate()\\ncheck(\\'deterministic immutable generation\\',lambda:eq({k:prep.sha(v) for k,v in files.items()},{k:prep.sha(v) for k,v in prep.generate()[0].items()}))\\nfor n in (\\'Checked\\',\\'Delta\\',\\'Transport\\',\\'Consumer\\'):\\n check(\\'unchanged full body \\'+n,lambda n=n:eq(files[f\\'Port36LINUX_{n}.lean.txt\\'],prep.blob(prep.PREFIX+f\\'Port36TRANSPORT_{n}.lean\\')))\\noldloader=prep.blob(prep.PREFIX+\\'Port36TRANSPORT_FullLoader.lean\\').decode();newloader=files[\\'Port36LINUX_FullLoader.lean.txt\\'].decode()\\nfor r in report[\\'replacements\\']:\\n assert oldloader.count(r[\\'before\\'])==r[\\'count\\'];oldloader=oldloader.replace(r[\\'before\\'],r[\\'after\\'])\\ncheck(\\'FullLoader only complete literal operation diff\\',lambda:eq(oldloader,newloader))\\nplan=json.loads(files[\\'Port36LINUX_plan.json\\']);transfers=json.loads(files[\\'Port36LINUX_transfer.json\\'])\\ncheck(\\'1445 exact unique transfer leaves\\',lambda:eq(len(set(r[\\'path\\'] for r in transfers)),1445))\\ncheck(\\'all core relative artifact coverage\\',lambda:eq(len(plan[\\'core_pins\\']),9080))\\ncheck(\\'raw logical origin and order retained\\',lambda:eq([r[\\'origin\\'] for r in transfers[:-1]],[r[\\'origin\\'] for r in plan[\\'raw\\']]))\\ncheck(\\'structural selection exact bytes\\',lambda:eq(files[\\'Port36LINUX_selection.json\\'],prep.blob(prep.EP+\\'Port36TRANSPORT_released-selection.json\\')))\\ncheck(\\'no Mac runtime adoption\\',lambda:eq(any(\\'.dylib\\' in r[\\'path\\'] or \\'/Users/\\' in r[\\'path\\'] for r in plan[\\'runtime\\']+plan[\\'core_pins\\']+plan[\\'api\\']),False))\\ncheck(\\'all14 and five native candidates\\',lambda:eq((len(report[\\'observed14\\']),len(plan[\\'runtime\\'])),(14,5)))\\ncheck(\\'readiness rejects missing runtime data\\',lambda:eq(caller.readiness()[\\'ready\\'],False))\\ncheck(\\'unallocated entry refuses without spawn\\',lambda:reject(caller.entry))\\ncheck(\\'publication refuses without allocation\\',lambda:reject(stage.publish_fixed))\\ncheck(\\'fixed exact Lean command\\',lambda:eq(caller.ARGV,[prep.LINUX+\\'/bin/lean\\',\\'-j1\\',\\'-M3200\\',\\'-DElab.async=false\\',prep.STAGE+\\'/source/Port36LINUX_FullDriver.lean\\']))\\ncheck(\\'scope caps and namespace\\',lambda:eq(caller.SCOPE_ARGV[:12],[\\'systemd-run\\',\\'--user\\',\\'--scope\\',\\'--unit=Port36LINUX-367-20261025-v1.scope\\',\\'-p\\',\\'MemoryHigh=6G\\',\\'-p\\',\\'MemoryMax=8G\\',\\'-p\\',\\'MemorySwapMax=0\\',\\'-p\\',\\'TasksMax=64\\']))\\n# Pure reviewed API only; no live identity scan or adapter invocation.\\nc,go,ident,inventory,policy=rss.load()\\ncheck(\\'RssGO missing data fails closed\\',lambda:eq(policy.evaluate(None,None,None,8*2**30,phase=\\'prospective\\')[\\'allowed\\'],False))\\ncheck(\\'RssGO double own request refuses\\',lambda:eq(policy.evaluate({},None,None,8*2**30,phase=\\'inside-scope\\',expected=caller.LIMITS,expected_unit=caller.UNIT)[\\'allowed\\'],False))\\ncheck(\\'RssGO unknown scope refuses\\',lambda:eq(policy.evaluate({},None,None,0,phase=\\'inside-scope\\',expected=caller.LIMITS,expected_unit=\\'other.scope\\')[\\'allowed\\'],False))\\nmut=copy.deepcopy(rss.load_bundle());mut[\\'policy\\'][\\'source\\']+=\\'\\\\n\\'\\ncheck(\\'policy source drift refuses\\',lambda:reject(lambda:rss.validate_bundle(mut)))\\ncheck(\\'runtime exact14 required\\',lambda:reject(lambda:runtime.query([])))\\ncheck(\\'runtime noncanonical refuses\\',lambda:reject(lambda:runtime.canonical(\\'/lib/../etc/secret\\')))\\ncheck(\\'runtime arbitrary etc path refuses\\',lambda:reject(lambda:runtime.canonical(\\'/etc/shadow\\')))\\ncheck(\\'runtime outside whitelist refuses\\',lambda:reject(lambda:runtime.canonical(\\'/home/dombarker/other-worker/x\\')))\\n# Every test file is ours, tiny, and in a new private directory; no payload reads.\\nbase=Path(\\'/private/tmp/lead-port36-linux-source-review-20261025-v1/synthetic-fixtures\\')\\nwith tempfile.TemporaryDirectory(prefix=\\'checks-\\',dir=base) as td:\\n q=Path(td);(q/\\'raw\\').mkdir();stage.STAGE=q\\n previous_uid=stage.os.getuid\\n stage.os.getuid=lambda:1000\\n try:check(\\'fresh root rejects every preexisting entry\\',lambda:reject(stage.fresh_root))\\n finally:stage.os.getuid=previous_uid\\n src=q/\\'payload\\';src.write_bytes(b\\'tiny raw synthetic\\')\\n row=dict(source=str(src),path=str(q/\\'raw/0000.olean\\'),index=0,bytes=src.stat().st_size,sha256=hashlib.sha256(src.read_bytes()).hexdigest())\\n check(\\'ordinary byte copy readback owner singlelink readonly\\',lambda:eq(stage.stream_copy(row)[\\'sha256\\'],row[\\'sha256\\']))\\n check(\\'duplicate leaf refuses overwrite\\',lambda:reject(lambda:stage.stream_copy(row)))\\n bad=dict(row,path=str(q/\\'raw/0001.olean\\'))\\n check(\\'wrong index refuses\\',lambda:reject(lambda:stage.stream_copy(bad)))\\n alias=q/\\'alias\\';alias.symlink_to(src)\\n bad=dict(row,source=str(alias),index=1,path=str(q/\\'raw/0001.olean\\'))\\n check(\\'raw symlink refuses\\',lambda:reject(lambda:stage.stream_copy(bad)))\\n runtime.ROOTS=(str(q),)\\n def resolved():\\n  reader=runtime.Reader();fd,p,s,chain=reader.resolve(str(alias));os.close(fd);eq(p,str(src))\\n check(\\'runtime finite symlink resolution\\',resolved)\\n cyc=q/\\'cycle\\';cyc.symlink_to(cyc)\\n check(\\'runtime alias cycle refuses\\',lambda:reject(lambda:runtime.Reader().resolve(str(cyc))))\\n # ELF parser operates on a 120-byte synthetic fixture, never native binaries.\\n h=bytearray(64);h[:6]=b\\'\\\\x7fELF\\\\x02\\\\x01\\';struct.pack_into(\\'<H\\',h,18,62);struct.pack_into(\\'<Q\\',h,32,64);struct.pack_into(\\'<HH\\',h,54,56,1)\\n elf=q/\\'synthetic-elf\\';elf.write_bytes(h+struct.pack(\\'<IIQQQQQQ\\',1,0,0,0,0,120,120,1))\\n with elf.open(\\'rb\\') as f:\\n  check(\\'bounded ELF64 synthetic\\',lambda:eq(runtime.elf64(f.fileno(),120),dict(interpreter=[],needed=[],search=[])))\\n  check(\\'ELF truncated range refuses\\',lambda:reject(lambda:runtime.elf64(f.fileno(),64)))\\n h[4]=1;elf.write_bytes(h+b\\'\\\\0\\'*56)\\n with elf.open(\\'rb\\') as f:check(\\'ELF wrong class refuses\\',lambda:reject(lambda:runtime.elf64(f.fileno(),120)))\\n# Fixed binding is loaded as Python source only; never inspect real catalog files.\\nspec=importlib.util.spec_from_file_location(\\'Port36LINUX_test_binding\\',E/\\'Port36LINUX_binding.py\\');binding=importlib.util.module_from_spec(spec);spec.loader.exec_module(binding)\\ncheck(\\'binding duplicate rows refuse\\',lambda:reject(lambda:binding.Binding([dict(path=\\'/same\\'),dict(path=\\'/same\\')])))\\ncheck(\\'missing binding seal refuses\\',lambda:reject(lambda:binding.Binding([]).verify_record()))\\n# AST confirms ordering of charge relative to fixed proof Popen; no executing it.\\ns=(T/\\'Port36LINUX_caller.py\\').read_text();check(\\'charge367 fsync precedes proof Popen\\',lambda:eq(s.index(\\'os.fsync(chargefd)\\')<s.index(\\'p=subprocess.Popen(ARGV\\'),True))\\ncheck(\\'runtime refusal precedes core work\\',lambda:eq(s.index(\"if plan[\\'runtime_closure\\']\")<s.index(\\'core=fixed_binding()\\'),True))\\nfor p in T.glob(\\'*.py\\'):ast.parse(p.read_text())\\ncheck(\\'all Python source parses\\',lambda:None)\\nu=resource.getrusage(resource.RUSAGE_SELF);peak=u.ru_maxrss if sys.platform==\\'darwin\\' else u.ru_maxrss*1024\\nassert peak<512*2**20 and time.monotonic()-START<30\\npins=[]\\nfor p in sorted(T.iterdir()):\\n if p.is_file():b=p.read_bytes();pins.append(dict(path=str(p.relative_to(ROOT)),bytes=len(b),sha256=hashlib.sha256(b).hexdigest()))\\nr=dict(command=[\\'python3\\',\\'-B\\',str(Path(__file__).resolve())],target=\\'Port36LINUX source/synthetic checks\\',exit=0,wall_seconds=time.monotonic()-START,peak_rss_bytes=peak,swap_counter=u.ru_nswap,swap_bytes=\\'unobserved; counter only\\',source_revision=subprocess.check_output([\\'git\\',\\'rev-parse\\',\\'HEAD\\'],text=True).strip(),source_pins=pins,dependency_pins=dict(base_revision=prep.REV,probe_revision=prep.PROBE,plan=prep.pin(prep.blob(prep.EP+\\'Port36TRANSPORT_full-inputs.json\\'))),cases=cases,lean_calls=0,host_calls=0,scope_calls=0,payload_reads=0,full_print_axioms=\\'N/A: source-only checks; no formal theorem or Lean invocation\\',security_targets=\\'both NOT ESTABLISHED\\')\\n(E/\\'Port36LINUX_checks.json\\').write_text(json.dumps(r,indent=2)+\\'\\\\n\\');print(json.dumps({k:r[k] for k in (\\'exit\\',\\'wall_seconds\\',\\'peak_rss_bytes\\',\\'swap_counter\\')}));print(\\'cases\\',len(cases))\\n',__file__,\"exec\"))"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.7267625839449465,
+      "peak_rss_bytes": 99696640,
+      "swap": 0
+    }
+  ],
+  "fixtures": 40,
+  "complete_generated_source_byte_reproduction": true,
+  "package_manifest_verified": true,
+  "unchanged_logical_bodies": [
+    "Checked",
+    "Delta",
+    "Transport",
+    "Consumer"
+  ],
+  "FullLoader": "exact enumerated operational literal substitutions",
+  "same_binding_functions": true,
+  "same_monitor_bytes": true,
+  "same_rss_bundle_and_explicit_adapter_changes": true,
+  "all_noncheck_join_pins_verified": true,
+  "source_test_only_redirect": "private temp fixture base in memory; source bytes unchanged",
+  "actual_SSH_scope_payload_Lean_calls": 0,
+  "print_axioms": "N/A source/fixtures only",
+  "runtime_probe": "SOURCE ONLY; no transport/action allocation yet",
+  "caller": "DISABLED; no readiness/compatibility/capacity/peak/security closure",
+  "remaining_source_findings": [
+    "stream_copy source FD opens before destination O_EXCL outside try; existing-destination failure leaks source FD; repair before actual staging"
+  ],
+  "targets_established": false
+}

@@ -1,0 +1,129 @@
+--- 4f4b0a2470:tools/resource-stable-go-20261025/ResourceStableGO_host.py
++++ ResourceRssGO_host.py
+@@ -18,13 +18,13 @@
+ 
+ HERE = Path(__file__).resolve().parent
+ sys.path.insert(0,str(HERE))
+-if sys.platform == 'linux':
+-    resource.setrlimit(resource.RLIMIT_AS,(512*2**20,512*2**20))
+-import ResourceStableGO_adapter as adapter
++import ResourceRssGO_adapter as adapter
++from ResourceRssGO_guard import Guard, GuardError, inherited_limits, check_limits
++ACTIVE_GUARD = None
+ EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
+-UNIT = 'resource-stable-go-20261025'
+-EPOCH = 'ResourceStableGO-20261025-epoch1'
+-STAGE = '/home/dombarker/project-offloads/codex-cx-resource-stable-go-20261025'
++UNIT = 'resource-rss-go-20261025'
++EPOCH = 'ResourceRssGO-20261025-epoch1'
++STAGE = '/home/dombarker/project-offloads/codex-cx-resource-rss-go-20261025'
+ ENV_BINARY = '/usr/bin/env'
+ PYTHON_BINARY = '/usr/bin/python3'
+ LOCK = '/tmp/aspis-r0-lean.lock'
+@@ -114,6 +114,7 @@
+     actual={name:filepin(HERE/name) for name in manifest['files']}
+     if actual != manifest['files']:
+         raise ValueError('source drift')
++    check_limits(inherited_limits(), manifest['inherited_limits'])
+     runtime=runtime_pins()
+     if runtime != manifest['runtime']:
+         raise ValueError('runtime/dependency drift')
+@@ -126,7 +127,7 @@
+     return ['/usr/bin/systemd-run','--user','--scope','--unit='+UNIT,
+             '-p','MemoryHigh=3G','-p','MemoryMax=4G','-p','MemorySwapMax=0','-p','TasksMax=64',
+             ENV_BINARY,'-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+[
+-            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceStableGO_host.py','go']
++            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceRssGO_host.py','go']
+ 
+ 
+ def flow(prospective, launch):
+@@ -159,6 +160,7 @@
+         events.append(dict(kind='read',path=str(path),content=content,errno=0,**digest(content.encode())))
+         return content
+     def recorded_run(args,*pos,**kwargs):
++        if ACTIVE_GUARD: ACTIVE_GUARD.check()
+         try:
+             result=execute(args,*pos,**kwargs)
+         except (OSError,subprocess.SubprocessError) as exc:
+@@ -192,7 +194,7 @@
+     save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
+         peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
+         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+-        aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3),
++        aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3) if report.get('original_legacy') else 'N/A visibility unavailable; not peak',
+         print_axioms='N/A'))
+     return report
+ 
+@@ -226,22 +228,22 @@
+ 
+ 
+ def main():
+-    signal.alarm(115)  # metadata diagnostic deadline, including pinning
+     action=sys.argv[1]
+-    manifest=json.loads((HERE/'ResourceStableGO_manifest.json').read_text())
++    manifest=json.loads((HERE/'ResourceRssGO_manifest.json').read_text())
+     start=time.monotonic()
+     save(action+'-pre-pins.json',verify(manifest))
+     if action=='run':
+-        with (HERE/'ResourceStableGO_ATTEMPTED').open('x') as sentinel:
+-            sentinel.write(EPOCH+'; new epoch 1/1; prior two epochs remain charged failures; fixed Q4GiB; transport/observation failures terminal'+chr(10))
++        with (HERE/'ResourceRssGO_ATTEMPTED').open('x') as sentinel:
++            sentinel.write(EPOCH+'; new epoch 1/1; prior three epochs remain charged failures; fixed Q4GiB; transport/observation failures terminal'+chr(10))
+     if action=='go':
+         before_controls=controls()
+         save('go-controls-before.json',before_controls)
+         report=collect('inside-scope')
+         save('go-pins.json',verify(manifest))
+         def marker():
++            ACTIVE_GUARD.check()
+             # No subprocess or workload: only actual identity, after GO.
+-            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceStableGO metadata marker only',self_observation=adapter.identity['self_observation'](),go_report_pin=filepin(HERE/'capture/inside-scope-report.json'),source_manifest_pin=filepin(HERE/'ResourceStableGO_manifest.json')))
++            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceRssGO metadata marker only',self_observation=adapter.identity['self_observation'](),go_report_pin=filepin(HERE/'capture/inside-scope-report.json'),source_manifest_pin=filepin(HERE/'ResourceRssGO_manifest.json')))
+         after_controls=controls()
+         save('go-controls-after-scan.json',after_controls)
+         gated=report
+@@ -268,6 +270,7 @@
+             save('lock.json',dict(path=LOCK,mode='LOCK_EX|LOCK_NB',held_through='prospective and scope exit',
+                                   inode=os.fstat(lock.fileno()).st_ino))
+             def launch():
++                ACTIVE_GUARD.check()
+                 argv=scope_argv(manifest)
+                 save('scope-argv.json',argv)
+                 child=subprocess.Popen(argv,stdout=(HERE/'capture/scope.stdout').open('x'),stderr=(HERE/'capture/scope.stderr').open('x'),env=manifest['env'])
+@@ -286,5 +289,35 @@
+         swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,print_axioms='N/A'))
+     return code
+ 
++def guarded_main():
++    global ACTIVE_GUARD
++    signal.alarm(115)  # whole metadata diagnostic, including monitor startup/pins
++    action=sys.argv[1]
++    initial=inherited_limits()
++    save(action+'-inherited-limits-initial.json',initial)
++    check_limits(initial)
++    manifest=json.loads((HERE/'ResourceRssGO_manifest.json').read_text())
++    check_limits(initial,manifest['inherited_limits'])
++    def stop_on_guard(signum, frame):
++        raise GuardError('resident watchdog failed; see guard receipt')
++    signal.signal(signal.SIGUSR1,stop_on_guard)
++    signal.signal(signal.SIGALRM,lambda signum,frame: (_ for _ in ()).throw(GuardError('overall metadata deadline')))
++    ACTIVE_GUARD=Guard()
++    failed=True
++    try:
++        ACTIVE_GUARD.start()
++        result=main()
++        ACTIVE_GUARD.check()
++        check_limits(inherited_limits(),initial)
++        failed=False
++        return result
++    finally:
++        # Thread survives final collection, child exits and main's exit receipt.
++        signal.signal(signal.SIGUSR1,signal.SIG_IGN)
++        receipt=ACTIVE_GUARD.finish(failed=failed)
++        save(action+'-resident-guard.json',receipt)
++        save(action+'-inherited-limits-final.json',inherited_limits())
++        ACTIVE_GUARD.check()
++
+ if __name__=='__main__':
+-    raise SystemExit(main())
++    raise SystemExit(guarded_main())

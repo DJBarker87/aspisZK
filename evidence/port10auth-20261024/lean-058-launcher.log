@@ -1,0 +1,44 @@
+{"attempt": "lean-058", "exit_status": 1, "wall_seconds": 2.7718762989970855, "peak_rss_kib": "4469304", "swaps": "0", "print_axioms": ["'AspisR1.Port10AUTH_TX1Reached.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+Port10AUTH_TX1Reached.lean:73:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H
+      (interpret (fun {A} => impl)
+        (Code.call Call.op16 fun b =>
+          VTop_Trace.bind (Code.done b) fun i =>
+            if (10#usize != i) = true then
+              pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+            else do
+              let r ← VTop_Flow.traceEffects.op3 proof
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let r1 ← VTop_Flow.traceEffects.op4 proof
+              
+...
+ResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual))).1 =
+    (eval H (impl (Call.op3 proof))).1 ++ (eval H (impl (Call.op4 proof))).1 ++
+          (eval H (rest (Call.op7 D semantic proof hash none (Array.repeat 29#usize we)))).1 ++
+        (eval H (Port9OR_Installed.batch D hash proof p folded 0#usize)).1 ++
+      (eval H
+          (interpret (fun {A} {A} => Port9OR_Installed.implementation ops reserved unwrap fun {A} => rest)
+            (Port10AUTH_TX1Cut.afterBatch D pub proof 10#usize hash none p a g (core.result.Result.Ok ())))).1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+Port10AUTH_TX1Reached.lean:40:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+Port10AUTH_TX1Reached.lean:66:15: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Port10AUTH_TX1Reached.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd8e46b8c429745a3aa0a5067daba9d50.scope; invocation ID: 5eb9d7c5817d472ab4ee0dd2e3d0fc82

@@ -1,0 +1,15 @@
+--- fe3/Port36LINUX_pid_candidate.py
++++ ResourceSnapshot_candidate.py
+@@ -219,12 +219,6 @@
+                 uint(r['tasks_max'])
+                 if r['pids_current'] > r['tasks_max']:
+                     raise ValueError('pids current exceeds finite cap')
+-            count = sum(len(c['threads']) for c in rows if c['path'] == r['path'] or c['path'].startswith(r['path']+'/'))
+-            # Kernel task iteration omits dying tasks still charged to pids.current.
+-            # A positive accounting residual gives NO memory or reservation credit.
+-            if count > r['pids_current']:
+-                raise ValueError('pids membership/current mismatch: '+r['path']+
+-                                 ' visible='+str(count)+' charged='+str(r['pids_current']))
+         for i in r['identities']:
+             if not uint(i['tid']) or not uint(i['tgid']):
+                 raise ValueError('zero thread/process identity')

@@ -1,0 +1,53 @@
+{
+  "mode": "source-only fake scans; original parser uses mocked reads",
+  "exit": 0,
+  "focused": {
+    "tests": 7,
+    "successful": true,
+    "output": "test_all_metadata_files (__main__.RetryTests.test_all_metadata_files) ... ok\ntest_exhaustion (__main__.RetryTests.test_exhaustion) ... ok\ntest_fourth (__main__.RetryTests.test_fourth) ... ok\ntest_fresh (__main__.RetryTests.test_fresh) ... ok\ntest_no_failure (__main__.RetryTests.test_no_failure) ... ok\ntest_no_retry (__main__.RetryTests.test_no_retry) ... ok\ntest_source_exact (__main__.RetryTests.test_source_exact) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.012s\n\nOK\n"
+  },
+  "original16": {
+    "tests": 16,
+    "successful": true,
+    "output": "test_checked_arithmetic (original_tests.ResourceAvailableTests.test_checked_arithmetic) ... ok\ntest_each_reserve_component_monotonic (original_tests.ResourceAvailableTests.test_each_reserve_component_monotonic) ... ok\ntest_fixed_formula (original_tests.ResourceAvailableTests.test_fixed_formula) ... ok\ntest_global_errors (original_tests.ResourceAvailableTests.test_global_errors) ... ok\ntest_live_disabled_and_source_read_errors (original_tests.ResourceAvailableTests.test_live_disabled_and_source_read_errors) ... ok\ntest_negative_and_overlap_diagnostics_only (original_tests.ResourceAvailableTests.test_negative_and_overlap_diagnostics_only) ... ok\ntest_pair_envelope_mixed_extrema (original_tests.ResourceAvailableTests.test_pair_envelope_mixed_extrema) ... ok\ntest_phase_and_binding_errors (original_tests.ResourceAvailableTests.test_phase_and_binding_errors) ... ok\ntest_raw_global_parser_and_delegation (original_tests.ResourceAvailableTests.test_raw_global_parser_and_delegation) ... ok\ntest_raw_stat_errors_not_ignored (original_tests.ResourceAvailableTests.test_raw_stat_errors_not_ignored) ... ok\ntest_scope_once_both_allowed_sizes_and_ancestor (original_tests.ResourceAvailableTests.test_scope_once_both_allowed_sizes_and_ancestor) ... ok\ntest_strict_adjusted_and_available_equality (original_tests.ResourceAvailableTests.test_strict_adjusted_and_available_equality) ... ok\ntest_strict_frontier_equality (original_tests.ResourceAvailableTests.test_strict_frontier_equality) ... ok\ntest_supplied_receipts_cannot_hide_read_errors (original_tests.ResourceAvailableTests.test_supplied_receipts_cannot_hide_read_errors) ... ok\ntest_tree_pid_controller_and_cap_errors (original_tests.ResourceAvailableTests.test_tree_pid_controller_and_cap_errors) ... ok\ntest_visibility_and_nonreserve_errors (original_tests.ResourceAvailableTests.test_visibility_and_nonreserve_errors) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.007s\n\nOK\n"
+  },
+  "wall_seconds": 0.14687325013801455,
+  "peak_rss_bytes": 35225600,
+  "swaps": 0,
+  "local_limit_bytes": 536870912,
+  "print_axioms": "N/A; compiler/formal budget 0",
+  "source_pins": {
+    "base_revision": "9fe9f199d1e52e3dcf4b355dff57330e5019a220",
+    "base": {
+      "size_bytes": 17798,
+      "sha256": "276812f07f621ed3413a839cce737fd6ecd3a6d914a130a7eb64ef6f62386226"
+    },
+    "candidate": {
+      "size_bytes": 19388,
+      "sha256": "30895796730e70da8f36e9d832d93e7dc2633fc73f860c9b394b90a2a9ec4028"
+    },
+    "stat_revision": "5756082d85e4d6784de4566059d6a9845604342a",
+    "stat_go": {
+      "size_bytes": 15649,
+      "sha256": "0ff959fd4e01414fa7748c2598a19cdb34dd24b38ba14ac85e2294f282429000"
+    },
+    "scan_bound": {
+      "size_bytes": 950,
+      "sha256": "a6ceb1843c29699a241b1deecc5808e2144c16a70e38ddc85ec32728b3cf55d1"
+    },
+    "generic_revision": "fbe04424e7553d9b0844ae19c2206b15cf3dd831",
+    "generic": {
+      "size_bytes": 12809,
+      "sha256": "c453bc3ea9423de7054b36f196805196c0f149c09a9c99212f2e8bd9b618621e"
+    },
+    "go": {
+      "size_bytes": 7675,
+      "sha256": "1f207247cdf947ec6c1d0a9b6fbf8126caae1f9b0373915b1d11df537199a574"
+    }
+  },
+  "scan_wrapper_source": "def scan(root=Path('/sys/fs/cgroup')):\n    \"\"\"Bounded fresh metadata scans; failed raw captures are not retained/reused.\n\n    Only compact failure provenance survives; no failed epoch supplies GO inputs.\n    This refresh is not an atomic-state, safety, termination or crypto proof.\n    \"\"\"\n    failures = []\n    for attempt in range(1, 5):\n        try:\n            snapshot = scan_once(root)\n        except OSError as exc:\n            path = exc.filename\n            parts = path.split('/') if isinstance(path, str) else []\n            retryable = (exc.errno in (2, 3) and len(parts) == 4\n                         and parts[:2] == ['', 'proc']\n                         and parts[2].isascii() and parts[2].isdecimal()\n                         and parts[2][0] in '123456789'\n                         and parts[3] in ('stat', 'status', 'cgroup'))\n            if not retryable:\n                raise\n            failures.append(dict(attempt=attempt, errno=exc.errno, path=path,\n                                 type=type(exc).__name__, discarded_all_inputs=True))\n            # Original scan annotates errors with potentially large partial data.\n            # Drop it and its scan frames, including on terminal exhaustion.\n            exc.__dict__.clear()\n            exc.__traceback__ = None\n            if attempt == 4:\n                exc.discarded_scan_failures = failures\n                raise exc.with_traceback(None) from None\n        else:\n            snapshot['discarded_scan_failures'] = failures\n            snapshot['discarded_all_inputs'] = True\n            return snapshot",
+  "scan_wrapper_function_sha256": "433f75eaaee1178230ac794bd61151ac6a82964caeaca2499c0e66b662e3eb8c",
+  "needs_scan_once_original_alias": true,
+  "both_security_targets": "NOT ESTABLISHED",
+  "execution_grant": false
+}

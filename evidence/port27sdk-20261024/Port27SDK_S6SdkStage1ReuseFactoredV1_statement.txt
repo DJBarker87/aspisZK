@@ -1,0 +1,32 @@
+theorem accepted_sdk_stage1 {W A : Type}
+    (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
+    (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
+    (std : TrustedStd copy) (allocator : Allocator A)
+    (e : Entry) (world : W)
+    (admission : S2W_D189Consolidation.RuntimeEntrypointAdmission L e world 3)
+    (ops : AdapterRw.Ops) (vops : AspisR1CurrentCaller.Ops)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+    (extraction : S2W_DigestExtraction.AeneasExtraction
+      (install ops vops) native1 native2 hashv)
+    (program : S2W_ExtractionBoundary.Program) (data : Slice U8)
+    (initial final : A) (saved : alloc.vec.Vec U8) (post : Heap (Nat → Record))
+    (accepted : S2W_D189Wrappers.first native1 copy allocator e program data initial =
+      ok (.Ok (saved,post,final))) :
+    post = writeBracket e.heap 2 0 0 (source (nativeBytes saved)) ∧
+    ∃ (pub proof : Slice U8) (split : Usize)
+      (statement : AspisS6CurrentCodecInstallation.Statement) (encoded : Array U8 1880#usize),
+      pub = e.buffers (e.handles 1).1 ∧ pub.val.length = 1880 ∧
+      payloadBytes encode (L.cellPayload world (L.accountData world 1))
+        (L.cellPayload world (L.accountData world 1)).descriptor.length =
+          MultiproofConeCanonical.bytesOf pub.val ∧
+      AspisS6CurrentCodecInstallation.decode pub = ok (.Ok statement) ∧
+      AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1 pub =
+        ok (.Ok (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1 statement)) ∧
+      AspisS6CurrentCodecInstallation.encode statement = ok (.Ok encoded) ∧ encoded.val = pub.val ∧
+      AspisR1CurrentCaller.FirstComposition.firstCurrent
+        AdapterRw.solana_program_error.ProgramError.InvalidAccountData vops
+        (toDigest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (install ops vops)))
+        (fun error => ops.op44 (fromError error)) pub proof split = ok (.Ok saved) ∧
+      S2W_AccountObservations.observe encode e.metadata 3 post 1 =
+        S2W_D189Interpretation.nativeObserve L encode e.metadata 3 world e.heap.ambient 1

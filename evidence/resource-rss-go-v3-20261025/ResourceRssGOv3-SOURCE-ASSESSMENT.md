@@ -1,0 +1,9 @@
+# Source assessment
+
+Seven bounded modules copied from immutable abcd149434; current root contains that portability correction. Identity mapping pins before/after bytes and both authorized renames. All historical sources and five failure records are untouched. Historical auditors are excluded as runnable current entrypoints; only the ordered replay audit has no historical fixed-source assertions and is retained for conditional future inputs.
+
+REUSED: reviewed 6 portability + 9 guard + 8+8+5+16 groups, old ordered traces, independent lead identity and causal audits. These are source-assessed past validation, not executions in this job and not new host/source identity gates. Historical proof/resource claims are not promoted.
+
+Retained boundaries: sampled watchdog limitations, Linux runtime assumptions, full hierarchy/visibility and control policy, inherited AS/DATA unlimited, exact whole maps, source/runtime closure only (no immutable ELF closure), no security/native/theorem claim. No premise was changed, added or discharged; there is no theorem statement change.
+
+Pre-host obstruction: abcd local.inspection_payload selects only imports, digest/filepin/runtime_pins, guard prefix and stage/parent/lock expression. It never refers to host.UNIT, invokes systemctl show for that unit, or checks its cgroup. host.UNIT is used later in scope argv and GO binding, after prospective. Distinct stage and unit identities mean absence of a stage is insufficient to rule out an existing unit. This is a missing first-inspection obligation, not evidence that a collision actually exists. Checking it remotely requires new operational inspection behavior, outside strict identity-only source copying. Current allocation directs source-only STOP for an unexpected semantic repair. No SSH, charge, stage, prospective, GO or marker is authorized by this assessment.

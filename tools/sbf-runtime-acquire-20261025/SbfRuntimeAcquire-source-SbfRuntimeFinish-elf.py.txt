@@ -1,0 +1,39 @@
+def parse_elf(raw):
+    global ELFS
+    if raw[:4]!=b'\x7fELF': return None
+    ELFS+=1
+    require_data(ELFS<=64,'ELF count bound')
+    require_data(raw[:6]==b'\x7fELF\x02\x01' and len(raw)>=64,'ELF64 little-endian required')
+    require_data(struct.unpack_from('<H',raw,18)[0]==62,'x86_64 ELF required')
+    phoff=struct.unpack_from('<Q',raw,32)[0]
+    phsize,phnum=struct.unpack_from('<HH',raw,54)
+    require_data(phsize==56 and phnum<=256 and phoff+phnum*phsize<=len(raw),'ELF program header bounds')
+    loads=[];dynamic=[];interp=[]
+    def string(table,start):
+        require_data(0<=start<len(table),'ELF string offset')
+        end=table.find(b'\0',start)
+        require_data(end>=start and end-start<4096,'ELF string bound')
+        return table[start:end].decode('ascii')
+    for i in range(phnum):
+        p=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
+        typ,flags,off,va,pa,sz,mem,align=p
+        require_data(off+sz<=len(raw),'ELF segment bounds')
+        if typ==1: loads.append((va,off,sz))
+        if typ==2:
+            require_data(sz%16==0 and sz//16<=65536,'ELF dynamic bound')
+            dynamic=[struct.unpack_from('<qQ',raw,o) for o in range(off,off+sz,16)]
+        if typ==3: interp.append(string(raw[off:off+sz],0))
+    tags={}
+    for tag,val in dynamic:
+        if tag==0:break
+        tags.setdefault(tag,[]).append(val)
+    ans=dict(interpreter=interp,needed=[],soname=[],rpath=[],runpath=[])
+    if 5 in tags:
+        require_data(len(tags[5])==1 and len(tags.get(10,[]))==1,'ELF dynamic string table shape')
+        va=tags[5][0];sz=tags[10][0]
+        match=[off+va-base for base,off,n in loads if base<=va and va+sz<=base+n]
+        require_data(len(match)==1 and match[0]+sz<=len(raw),'ELF string table mapping')
+        table=raw[match[0]:match[0]+sz]
+        for tag,name in ((1,'needed'),(14,'soname'),(15,'rpath'),(29,'runpath')):
+            ans[name]=[string(table,i) for i in tags.get(tag,[])]
+    return ans
