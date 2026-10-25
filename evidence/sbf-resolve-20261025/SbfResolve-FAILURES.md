@@ -27,3 +27,11 @@ Published source-package public-signing data is not task wallet material.
 Replacement adds only this exact path plus frozen archive checksum. Seven focused
 policy checks now pass. V3 helper and original receipts remain. No Cargo charged,
 no network attempt or resource failure in any of these preparation failures.
+
+Universe v4: exit1,0.953145263s,68276KiB process peak,70660096B aggregate,
+swap0; filename filter falsely treated a published Windows import-library API
+name containing `credentials` as credential data. Replacement permits only
+lib/libwinapi_*.a for the TWO exact frozen winapi Windows GNU0.4.0 archive hashes.
+No library execution/adoption/compilation. Nine focused policy checks pass.
+All four failed preparations are data-policy failures, not memory failures;
+all partial files and exact sources/receipts retained. No Cargo/network charged.

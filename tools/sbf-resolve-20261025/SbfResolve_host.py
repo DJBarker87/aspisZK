@@ -118,6 +118,8 @@ def index_rel(n):
  return '1/'+n if len(n)==1 else '2/'+n if len(n)==2 else '3/'+n[0]+'/'+n if len(n)==3 else n[:2]+'/'+n[2:4]+'/'+n
 
 def fixture_allowed(q,checksum):
+ public_winapi={'winapi-i686-pc-windows-gnu-0.4.0': 'ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6', 'winapi-x86_64-pc-windows-gnu-0.4.0': '712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f'}
+ if len(q.parts)==3 and q.parts[0] in public_winapi and public_winapi[q.parts[0]]==checksum and q.parts[1]=='lib' and q.name.startswith('libwinapi_') and q.suffix=='.a':return True
  return (str(q),checksum)==('untrusted-0.9.0/mk/llvm-snapshot.gpg.key','8ecb6da28b8a351d773b68d5825ac39017e680750f980f3a1a85cd8dd28a47c1') or any(x in q.parts[1:-1] for x in ('test','tests','testdata','examples','data','fixtures')) or (str(q),checksum)==('ring-0.17.14/src/rsa/signature_rsa_example_private_key.der','a4689e6c2294d81e88dc6261c768b63bc4fcdb852be6d1352498b114f61383b7')
 
 def universe(req):
@@ -166,7 +168,7 @@ def universe(req):
      assert q.name not in ('.cargo-ok','.cargo-checksum.json')
      if re.search(r'(keypair|private.?key|mnemonic|credential|secret|\.pem$|\.key$|\.env(?:\.|$)|id_rsa)',q.name,re.I) and q.suffix not in ('.rs','.toml','.md','.txt'):
       assert fixture_allowed(q,p['checksum']),'nonfixture possible key filename '+m.name
-      R['public_fixture_names'].append(dict(archive_sha256=p['checksum'],path=m.name,classification='published locked-package test/example or public signing data, not user/task wallet data'))
+      R['public_fixture_names'].append(dict(archive_sha256=p['checksum'],path=m.name,classification='published locked-package test/example, public signing or Windows import-library data, not user/task wallet data'))
     root.mkdir(mode=0o700,parents=True)
     for m in members:
      q=O/'cargo/registry/src'/IDX/m.name
