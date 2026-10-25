@@ -131,3 +131,16 @@ and `ProverRwEntropyIteration.no_retry_then_success`. This does not refute
 privacy; the next required interface must carry effects or have a proved
 observational transport. Final audit 11261 is standard-axiom-only. Next ID
 11262; 60/100 Stage 3 Lean compiles and 42/60 Kani runs used.
+
+## Restored-rules continuation (2026-10-25)
+
+The rewritten ordered query-word owner now has total source execution and a
+composed retained Q22 model chain, including duplicates, exhaustion rejection,
+64-word bound and exact advance-state selection. See
+`design/PROVER-RW-20261025-QUERY.md` and query-scan evidence. This does not close
+the grouped query policy, full transcript caller or any top-level privacy
+premise. The proposed caller factorization failed elaboration and is archived
+as rejected text. Final focused audit11325 passes with29 standard-axiom reports.
+The latest carried Lean budget is now260/260 exhausted (20 new compiles),
+Kani59/60 unchanged; next free env-J ID11326. No infrastructure work or native
+source/artifact change, no merge/push/adoption/security claim.

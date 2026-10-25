@@ -81,3 +81,34 @@ retry/caller adequacy, other pipeline components, PrefixContract/BodyContract,
 E1/E2, joint L1/L2 observations, RunJoin, adoption/timing and artifact gates remain
 open and unchanged. Kani59/60 remains with its historically reserved last slot;
 no unrelated native gate is repeated for these Lean-only changes.
+
+## Final audit and exhausted Lean budget
+
+Proof-stage commit71941bda40. Focused audit11325 exits0 in1.46s, peak RSS
+3,850,472KiB, swaps0, one Lean thread, -M7000. All29 reports use only subsets
+of [propext, Classical.choice, Quot.sound]. The unchanged existing launcher
+uses MemoryHigh5G/MemoryMax7G/MemorySwapMax0/TasksMax64, with24GiB populated
+reservation before each launch. This is stricter than the restored6G/8G cap.
+No launcher, monitoring or build infrastructure was written or repaired.
+
+`query-scan/summary.json` records all20 new compiles (10 passes,10 elaboration
+failures), exact targets/commands/source hashes/revisions/dependency fingerprints,
+raw wall/RSS/swap and full axioms. Snapshot hashes are checked against receipts;
+`final-environment.json` checks the nine branch dependency objects against the
+final audit and records their final source hashes. The failed caller is absent
+from the final import closure. No unsuccessful axiom audit is accepted.
+
+Lean260/260 is exhausted against the latest carried ceiling; Kani59/60 is
+unchanged, its last native slot remains historically reserved. Next unused
+assigned env-J number11326. No full frozen replay or new ELF/native identity,
+quiet-host timing, privacy, adoption or100-bit security claim is made.
+User-required ELF targets remain defaultd7d42f77…, devnet2b2a9f0e…,
+Pool121f3e29…; this proof-only step neither rebuilds nor replaces them.
+
+Next concrete deliverable: split and prove actual Transcript.queries
+materialization/publication, transport the exact word decoder/grouped stop
+semantics to the existing query policy, then continue the still-uninstalled
+external contracts and remaining pipeline. Preserve the retained pure entropy
+obstruction and effect-aware source/callback/retry obligation. The original
+realBad, realSeedQueries, adversaries, experiment carriers, E1/E2 and L1/L2
+observer laws are unchanged; none has been discharged or hidden in a record.
