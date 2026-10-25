@@ -1,0 +1,24 @@
+--- frozen/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ candidate/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -44,11 +44,10 @@
+-    let mut out =
+-        aspis_core::r0::heap::uninit::<[[QM31; 29]; 3]>().map_err(|_| Error::Allocation)?;
+-    unsafe {
+-        for p in 0..3 {
+-            out.as_mut_ptr()
+-                .cast::<[QM31; 29]>()
+-                .add(p)
+-                .write(record.decode_k::<29>(p * 29)?);
+-        }
+-        Ok(out.assume_init())
+-    }
++    let rows = aspis_core::r0::heap::filled(3, [QM31::ZERO; 29])
++        .map_err(|_| Error::Allocation)?;
++    let mut out: Box<[[QM31; 29]; 3]> = rows
++        .into_boxed_slice()
++        .try_into()
++        .map_err(|_| Error::Allocation)?;
++    for p in 0..3 {
++        out[p] = record.decode_k::<29>(p * 29)?;
++    }
++    Ok(out)
