@@ -1,0 +1,3225 @@
+RowFinish_Control.lean:58:75: error: unsolved goals
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Ok ())
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Query)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Query)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Query)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Ok ())
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case pos
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+
+case neg
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RoundValues ops v.round0 alpha0 p.claim
+r1 : RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+h0 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round0 alpha0 p.claim 0#usize =
+    ok (if r0.lhs = r0.rhs then core.result.Result.Ok r0.value else core.result.Result.Err verifier.Error.Relation)
+h1 :
+  Port4D_Round.round (Port3_FinishStage.release ops) v.round1 alpha1 r0.value 1#usize =
+    ok (if r1.lhs = r1.rhs then core.result.Result.Ok r1.value else core.result.Result.Err verifier.Error.Relation)
+e0 : ¬r0.lhs = r0.rhs
+e1 : ¬r1.lhs = r1.rhs
+ep : ¬pair = r1.value
+en : ¬a.next = 22#usize
+ed : ¬dot = a.rhs
+⊢ (do
+      let r ←
+        Port4D_Round.round
+            { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM, ne := Port3_FinishStage.ne,
+              polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (), folds := Port3_FinishStage.folds,
+              newWeights := ops.newWeights, pair := ops.pair, mark := Port3_QueryStage.mark, dot := ops.dot }
+            v.round0 alpha0 p.claim 0#usize
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            Port4D_Round.round
+                { field := ops.field, quarter := ops.quarter, add := ops.add, mulM := ops.mulM,
+                  ne := Port3_FinishStage.ne, polynomial := ops.polynomial, trace := fun x x_1 x_2 => ok (),
+                  folds := Port3_FinishStage.folds, newWeights := ops.newWeights, pair := ops.pair,
+                  mark := Port3_QueryStage.mark, dot := ops.dot }
+                v.round1 alpha1 val 1#usize
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← ops.newWeights transport.Variant.S2 p.semantic_alpha p.z
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let s ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 2#usize } p.alpha.to_slice
+                  let r3 ← ops.pair val2 s v.final_message p.kappa
+                  let cf3 ←
+                    match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 =>
+                      if val3 = val1 then ok (core.result.Result.Err verifier.Error.Query)
+                      else ok (core.result.Result.Err verifier.Error.Relation)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      match residual with
+                      | core.result.Result.Ok x =>
+                        core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                      | core.result.Result.Err v => ok (core.result.Result.Err v)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+                  | core.result.Result.Err v => ok (core.result.Result.Err v)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result Unit verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    ok (core.result.Result.Err verifier.Error.Relation)
+RowFinish_Control.lean:65:26: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [ha0, ̲ha1, ̲h0̵,̵h̵1, ̲hw, ̲has, ̲hp, ̲hd, ̲s2, ̲Port3_FinishStage.release,
+      Port3_FinishStage.folds, ̲Port3_FinishStage.ne, ̲Port3_QueryStage.mark,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲e0, ̲e1, ̲ep, ̲en, ̲ed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RowFinish_Control.lean:65:29: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp [ha0, ̲ha1, ̲h0, ̲h1̵,̵h̵w, ̲has, ̲hp, ̲hd, ̲s2, ̲Port3_FinishStage.release,
+      Port3_FinishStage.folds, ̲Port3_FinishStage.ne, ̲Port3_QueryStage.mark,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲e0, ̲e1, ̲ep, ̲en, ̲ed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RowFinish_Control.lean:65:32: warning: This simp argument is unused:
+  hw
+
+Hint: Omit it from the simp argument list.
+  simp [ha0, ̲ha1, ̲h0, ̲h1, ̲hw̵,̵h̵as, ̲hp, ̲hd, ̲s2, ̲Port3_FinishStage.release,
+      Port3_FinishStage.folds, ̲Port3_FinishStage.ne, ̲Port3_QueryStage.mark,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲e0, ̲e1, ̲ep, ̲en, ̲ed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RowFinish_Control.lean:65:35: warning: This simp argument is unused:
+  has
+
+Hint: Omit it from the simp argument list.
+  simp [ha0, ̲ha1, ̲h0, ̲h1, ̲hw, ̲ha̵s̵,̵h̵p, ̲hd, ̲s2, ̲Port3_FinishStage.release,
+      Port3_FinishStage.folds, ̲Port3_FinishStage.ne, ̲Port3_QueryStage.mark,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲e0, ̲e1, ̲ep, ̲en, ̲ed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+RowFinish_Control.lean:65:39: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp [ha0, ̲ha1, ̲h0, ̲h1, ̲hw, ̲has, ̲hp̵,̵h̵d, ̲s2, ̲Port3_FinishStage.release,
+      Port3_FinishStage.folds, ̲Port3_FinishStage.ne, ̲Port3_QueryStage.mark,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame.from, ̲e0, ̲e1, ̲ep, ̲en, ̲ed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RowFinish_Control.round_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RowFinish_Control.parent_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
