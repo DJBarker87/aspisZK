@@ -83,3 +83,154 @@ after its test module, vault test writer) are not executable instructions.
 The verifier's non-pool-adapter unsafe heap diagnostic is feature-excluded.
 Neither a signature nor PDA seed protects an account against **its own owner's**
 other instructions: the alternate-role/type/size checks above are essential.
+
+## Exact property needed by soundness
+
+Fix the **same canonical committed execution history**, pinned verifier V and
+Pool P, runtime/ABI/allocator interpretations and cryptographic children. Admit
+initial accounts only through a proved genesis/creation history: first assignment
+to V/P supplies zero data, not arbitrary preloaded owner-authenticated bytes.
+Freeze programs throughout this interval, or separately prove equivalent upgrades.
+Use public keys as account identities, with runtime alias coherence; do not use
+independently supplied byte arrays as a substitute for account history.
+
+Let `load(e2,k)` be the actual CP bytes snapshotted by an accepted V2 TX2 at O:477,
+subsequently passed at O:439, with owner V, length1768. Then there exists a
+**committed accepted V1 invocation e1**, strictly earlier than that load, whose
+actual account2 key is k and whose actual verifier-returned bytes c were copied
+at O:457, such that:
+
+1. `c = load(e2,k)` as complete bytes, `length(c)=1768`, and the native successful
+   TX1 child of e1 produced c on e1's original proof/public inputs.
+2. Immediately after e1's committed copy, `store[k].data = c`; at e2's snapshot,
+   `store[k].data = c`. Throughout the intervening canonical history there is
+   **no committed accepted data write, resize, close/deallocation, or owner
+   reassignment of k**. Failed/transient writes restore their prestate. Lamport
+   credits are permitted; no stronger unchanged-lamports claim is needed here.
+3. The chosen e1 is the actual causal writer of that physical account, not a
+   separately existential accepted TX1 with a matching digest. Since c begins
+   with82 and V1 requires every prior byte zero, no second accepted V1 can
+   overwrite k while its initialized owner/data state persists.
+
+This is a writer-origin and retention theorem, **not** a theorem that TX1 alone
+finishes verification, nor an assumption of hash injectivity. TX2 checkpoint
+parsing accepts only nonzero magic (`verifier.rs:394`), so a zero newly assigned
+account cannot be its successful input. The statement is false if arbitrary
+initial nonzero V-owned accounts are admitted without provenance; that is an
+initial-state model obstruction, not an exhibited shipped-source attack.
+
+Dependencies for CP: V0/V1 (unique writer, actual output and nonzero marker),
+V2 (actual key/snapshot/load, readonly), V3 (unreachable alternate writers),
+P0–P11/H1–H2/C1–C2 (Pool cannot write V-owned CP or pass it writable), R1–R4
+(genesis, ownership, schedule, rollback and fixed deployment). For CP retention
+alone, Pool is a foreign owner and a short runtime argument plus verifier CPI
+meta inspection suffices; proving all Pool arithmetic is unnecessary.
+
+The additional **Pool ASC8 origin/retention property** needed for L180 is separate:
+any ASC8 account q read by that same V2 was created by a committed accepted P1
+AS8C on q's authenticated master/sequence; its complete image is exactly the
+planner/encoder output for the eight authenticated lane snapshots of that action,
+and no later committed mutation/resize/close/reassignment changes q before the
+load. No claim is made that AS8C requires verifier TX1: **it does not**. ASC8 is
+created permissionlessly from Pool state. Its provenance depends on P1/H1/R1,
+noninterference on every P2–P11/H2/C1–C2/R2–R4, and causal loading on V2/P4.
+The stored discriminator ASC8, exact192 length and occupied-byte rejection
+provide a short preservation invariant. Source state correctness additionally
+needs initialization plus every lane/master writer (P2/P3/P4); an immutable
+ASC8 can still be wrong if the upstream source-state invariant is unproved.
+
+P2Prime proof/public equality is another obligation. Proof/public buffers have
+arbitrary owners, and readonly flags protect one invocation only. Neither CP
+retention nor ASC8 immutability establishes their cross-transaction identity.
+Reuse the Hist_/Hiq_/Hir_ measured SAME-world collision/log argument and actual
+reconstruction/validator/encoder cuts; keep all rejected-prefix/adversary queries
+and byte association. Do not remove L097/L098 using this inventory alone.
+No complete scheduler/query-budget transport, L159 or endpoint probability
+refinement is claimed. Rows L094–L098 and L180 remain open.
+
+## Proof scope, sizes and decision
+
+Counts below are **source measurements or engineering estimates**, not timings,
+proof counts, or an assertion of automated extraction coverage.
+`PoolS_surface-scan.json` counts lexical `fn`, loop and unsafe tokens after
+comment removal, up to each file's final test module; includes trait signatures,
+feature-off functions and some test-only helpers. Consequently gross file totals
+are upper envelopes, not the live callgraph. External SDK/crypto bodies are extra.
+
+| Component | Measured source envelope (lines / fn tokens / loop tokens / unsafe tokens) |
+|---|---|
+| All Pool src files | 14,364 / 402 / 52 / 0; test/feature caveat above. |
+| Pool processor | 2,625 / 46 / 3 / 0. |
+| Forest accounts/instructions | 2,223 / 62 / 14 / 0. |
+| Forest verifier CPI dispatch | 478 / 18 / 2 / 0. |
+| Pair processor (feature-off here) | 588 / 6 / 1 / 0. |
+| Pure forest account codec/planner | 550 / 13 / 8 / 0. |
+| Actual owned verifier adapter | 481 / 17 / 3 / 0. |
+| Parent verifier adapter | 973 / 32 / 2 / 0, includes dead lifecycle and borrowed helpers. |
+
+The tight ASC8 write kernel is `F:704–791` (three functions,88 lines),
+`F:2130–2188` (one function,59 lines), freshness `F:400–415` (one,16 lines),
+`P:273–297` (one,25 lines), pure checkpoint encode/decode `:390–486`
+(two,97 lines) and planner `:488–548` (one,61 lines): **nine functions,
+346 source-span lines** before callees. Includes fixed8 lane loops, exact192
+zero scans, encoder sequences and checked-u64 chronology. Master/lane decoders,
+PDA/hash and System-CPI helpers are not included in those346 lines and cannot
+be silently omitted. The verifier CP admission/copy core `O:376–414`,
+`:447–460`, require-zero `:73–79`, checkpoint metadata `:51–58` is four
+functions/68 lines, plus snapshots/alias/child/body cleanup and runtime bridges.
+These span counts include blank lines/comments and are review sizing only.
+
+| Option | Scope and estimated additional effort | Reuse and limitation |
+|---|---|---|
+| A — complete relevant lifecycle by extraction/P6 | All11 live Pool handler kinds (AS8I/C/D, ASQ8, ASIN, ASDI, ASPP/X/F, ASPT, ASWD), dispatcher and dependent helpers; verifier V1/V2 and admission. Roughly180–300 reachable helper/method instances,8–14k local source lines,35–55 loop sites before crypto/SDK dependencies; **6–12 engineer-weeks /60–120 focused targets**, high uncertainty. Gross envelope above prevents claiming an exact extracted callgraph. Includes zero local production unsafe but imported SDK/entrypoint unsafe, syscalls, CPI and rollback. | Reuse native TX1/TX2/copy/SDK children, pure codecs/invariants, history proofs. Full Pool Aeneas extraction has already failed in shared zero check (`pair_forest.rs:400–415`, internal Unreachable at SymbolicToPureValues.ml:878), despite Charon success. Do not rerun unchanged or build new launcher infrastructure. P6 must relate actual code, effects and errors; assuming a full lifecycle law would not prove it. |
+| B — write slice plus exhaustive noninterference (**recommended**) | Prove the nine-function ASC8 write kernel, add metadata/decoder/PDA/CPI callees (about20–35 functions,0.9–1.6k lines,8–15 local loop sites); CP unique-writer slice reuses native child proofs. Prove short-circuit occupied-checkpoint exclusion for each other live handler and fixed-owner effects (about25–45 guard/helper instances,1–2k source lines reviewed, overlaps prior count). Runtime genesis/rollback/load association is a separate6–10 targets. Estimate **2–4 engineer-weeks /25–45 focused targets** total, contingent on existing child gates; not a guarantee within this job's20/10 budget. | Reuse Hir_ freshness/planner/encoder/close rejection and reader-owner Kani gates; Hiq_ extracted Pool metadata and whole verifier release dispatcher; Hist_ source marker/same-account retention; Hir_ causal-writer selection, lifetime log, same-world loss; SInt2 actual owned source/copy children. Avoid forest tree/hash normalization for noninterference: a192-byte occupied account fails another writable role before heavy arithmetic. Preserve all earlier effects/errors, prove frames, and bind the runtime instance. A wrapper assuming “only AS8C writes” is insufficient. |
+| C — reviewed deployment trust item | Publish precise named fixed-deployment lifecycle/provenance law covering ALL inventory rows, genesis and rollback; independent source/loader review and owner approval. Roughly2–4 reviewer-days plus owner/security-contract decision;0–3 integration targets, **no source-refinement closure credit**. | Existing review/ELF pins support the review only. Route-B SDK trust expressly excludes realloc, lamport borrows, CPI, concurrency/reentrancy; it does not authorize this item. This would enlarge headline trust and require explicit owner/contract adoption. The worker does not adopt it or relabel open rows proved. |
+
+Recommendation B is sufficient **for origin/retention** if the runtime instance
+and exhaustive dispatch frames are actually supplied. It is not a shortcut to
+all source-state correctness or the deployed soundness probability bound.
+Use a targeted P6/accepted-run slice or extraction isolation of the already
+failing zero guard; no unchanged failing full-Pool extraction retry. If extraction
+cannot support that small slice, report the exact obstruction to the lead before
+commissioning another history-only wrapper. Do not silently choose C.
+
+Concrete next deliverable: a `PoolS_` (or newly assigned worker prefix) source
+certificate keyed by physical account/public key and canonical committed action,
+covering P1's actual post-CPI copy and every other handler's occupied-ASC8 frame;
+then instantiate Hir_'s selected-writer/load/genesis obligations on that SAME
+history, preserving real verifier child/copy observations and full source log.
+Budget that work separately; this scoping job launches no proof campaign.
+
+## Runtime references and assurance boundary
+
+Runtime rules used in R1–R3: current owner and writable privileges govern data
+updates/resize/debits, and changing ownership requires zero-initialized data.
+These justify why foreign assignment cannot manufacture a nonzero checkpoint;
+see [Solana account modification rules](https://solana.com/docs/core/accounts/modification-rules).
+Transaction instructions execute atomically and a failed transaction discards
+account modifications; see [Solana validator runtime](https://beta.docs.solanalabs.com/validator/runtime).
+These current primary documents explain the intended boundary; they do not
+certify the pinned validator build or prove the runtime instance. The proof
+must use the release's exact runtime/ABI pins, including failed-CPI restoration,
+account aliasing and canonical-bank history, rather than substitute these pages
+for executable semantics.
+
+## Validation and handoff
+
+No source, feature, dependency, ELF, key or live account changed. Only this
+requested design file and `evidence/pool-scope-20261026/PoolS_` receipts changed.
+Default/devnet/Pool inherited ELF hashes remain respectively
+`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`,
+`63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299`,
+`121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548`.
+All historical source input hashes match; no rebuild trigger fired.
+
+New Lean invocations **0/20**, Kani runs **0/10**, Rust builds0. No new theorem,
+axiom or formal release result; `#print axioms`, formal target/exit/wall/peak
+RSS/swap are **not applicable**. Historical Hir_/Hiq_/Hist_ results retain their
+own receipts, scope and standard-axiom audits; they were not rerun. No large
+job or host reservation was launched. Inspection validation and source pin
+comparisons are in the PoolS receipts. No assumption was discharged, retained
+assumptions were not strengthened or renamed, no global row was removed, and
+no new security trust, metric or target was adopted. Main remaining blocker:
+complete deployed runtime/Pool instance of the history/lifecycle property.
