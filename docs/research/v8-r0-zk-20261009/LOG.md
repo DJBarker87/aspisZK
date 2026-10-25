@@ -9484,3 +9484,13 @@ FinalNativeGatef56 fullsource review/independent28mocktests+6bundle/functioniden
 
 
 D228 continuation: separatePort36source29DATAchecksreviewed, missingencoder/root-before-import admissionfoundprecompile. ONEsoundnesscarry364fixedsyntheticnormalcheckedprivate-True/publicimport/fullstrictkeyset/preludeprobe allocated, no actualR1wholeconsumer/host/privatebudget. FinalNativeGatefix/setup77362sourceonlylive, lastKani59reserved/allnativeeffect/world/E1/controller/transcript/client/performance/artifactreleaseobligationsretain. Bothsecuritytargetsnotyetestablished.
+
+
+## D229 — Native source repair reviewed; concrete lifecycle/setup completion
+
+
+### Lead addendum — 2026-10-25, native repair review and lifecycle continuation
+
+Immutable dc20aedeee source repair reviewed fully. Independent evidence/lead-review-20261025/final-native-repair-v1.json reproduces22 focused mock/synthetic checks, six immutable policy bundle identities, plan seal and byte-identical source manifest/function/diff reports: exit0,1.322899875s,115245056B child peak RSS/swap0. No host/compiler/Kani/Lean call. Cancellation OSError now reaches independent cleanup/failed terminal. Finite catalog/streaming source/native hashing and separate1GiB setup policy are concrete source progress. Original28 evidence reused; no native or security closure inferred.
+
+Candidate still unready: unconditional SCOPE_UNRESOLVED after any child spawn, setup clean environment/bootstrap/full-interval source/native stability incomplete, fresh runtime/alias/library/cache data missing. SAME candidate remains unmerged. Source-only continuation allocated fixed owned-unit lifecycle/handshake/verified shutdown and concrete candidate-data setup collection, with all actual host/native/compiler budgets0, disabled entries and final Kani59/60 slot reserved. Unknown native roles may be reported as candidate DATA for review; they are not permission or final pin approval. No permanent placeholder accepted as completed producer. Exact prompt archived in worker-prompts-20261025/prompt-finalnativegate-lifecycle-20261025.txt. Private budgets unchanged; both deployed targets NOT YET ESTABLISHED.
