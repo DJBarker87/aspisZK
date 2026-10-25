@@ -1,0 +1,27 @@
+LogA_Tags.lean:37:35: error: Tactic `decide` failed for proposition
+  MultiproofConeCanonical.bytesOf ↑AspisR1PublicPreparation.r1_wire.DOMAIN = PublicInitFrame.domain
+because its `Decidable` instance
+  instDecidableEqList (MultiproofConeCanonical.bytesOf ↑AspisR1PublicPreparation.r1_wire.DOMAIN) PublicInitFrame.domain
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match MultiproofConeCanonical.bytesOf ↑AspisR1PublicPreparation.r1_wire.DOMAIN with
+  | [] =>
+    match PublicInitFrame.domain with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: «as» =>
+    match PublicInitFrame.domain with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match «as».hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+'AspisR1.LogA_Tags.prefix_free' depends on axioms: [propext, Quot.sound]
+'AspisR1.LogA_Tags.fixed_prefix_injective' does not depend on any axioms
+'AspisR1.LogA_Tags.squeeze_advance_separate' depends on axioms: [propext]
+'AspisR1.LogA_Tags.short_absorb_separate' depends on axioms: [propext, Quot.sound]
+'AspisR1.LogA_Tags.semantic_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
