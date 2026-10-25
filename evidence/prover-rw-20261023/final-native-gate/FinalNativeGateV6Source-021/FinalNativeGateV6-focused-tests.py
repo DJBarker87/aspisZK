@@ -269,7 +269,44 @@ class CallerTests(unittest.TestCase):
         with patch('subprocess.Popen',side_effect=AssertionError('no launch')):
             with self.assertRaisesRegex(ValueError,'no future caller allocation'):c.future_precharge('unused')
         text=(E/'FinalNativeGateV6-caller-template.py').read_text()
-        self.assertNotIn('subprocess.Popen(',text);self.assertNotIn('killpg(',text)
+        self.assertNotIn('Popen(ARGV',text);self.assertNotIn('Popen(argv',text);self.assertNotIn('killpg(',text)
+
+
+    def test_valid_kernel_metadata_and_uid_zero_are_not_permission_errors(self):
+        rows=c.parse_ps('0 0 0 0 0 Sun Oct 25 12:00:00 2026 kernel_task\n1 0 0 1 10 Sun Oct 25 12:00:00 2026 launchd')
+        self.assertEqual(rows[1]['uid'],0)
+        self.assertEqual(c.identity(row(uid=0))[2],0)
+
+    def test_exact_owned_reaped_sampler_is_charged_without_retaining_live_ownership(self):
+        class Sample(dict):pass
+        data=Sample({20:row(),21:row(pid=21,ppid=10)});data.reaped_sampler=21
+        x=self.collector([None,None,None,None],data);x.sample()
+        self.assertNotIn(21,x.owned)
+        self.assertEqual(x.samples[-1]['rss_bytes'],200)
+        x.snapshot.return_value={20:row()};self.assertTrue(x.sample())
+
+
+    def test_snapshot_owns_and_reaps_exact_metadata_child_only(self):
+        child=Mock(pid=21,returncode=0)
+        child.communicate.return_value=('20 10 501 20 10 Sun Oct 25 12:00:00 2026 python3', '')
+        child.poll.return_value=0
+        with patch.object(c.subprocess,'Popen',return_value=child) as popen:
+            rows=c.snapshot()
+        self.assertEqual(popen.call_args.args[0][0],'/bin/ps')
+        self.assertEqual(rows.reaped_sampler,21);child.wait.assert_called_once();child.kill.assert_not_called()
+        child=Mock(pid=21,returncode=1);child.communicate.return_value=('', 'permission denied');child.poll.return_value=1
+        with patch.object(c.subprocess,'Popen',return_value=child),self.assertRaisesRegex(RuntimeError,'permission denied'):c.snapshot()
+        child.wait.assert_called_once()
+        child=Mock(pid=21);child.communicate.side_effect=TimeoutError('ps deadline');child.poll.return_value=None
+        with patch.object(c.subprocess,'Popen',return_value=child),self.assertRaises(TimeoutError):c.snapshot()
+        child.kill.assert_called_once();child.wait.assert_called_once()
+
+
+    def test_sampler_control_failure_still_attempts_owned_reap(self):
+        child=Mock(pid=21);child.communicate.side_effect=TimeoutError('ps timeout');child.poll.return_value=None
+        child.kill.side_effect=PermissionError('ps kill denied');child.wait.side_effect=TimeoutError('ps reap timeout')
+        with patch.object(c.subprocess,'Popen',return_value=child),self.assertRaisesRegex(RuntimeError,'ps kill denied.*ps reap timeout.*ps timeout'):c.snapshot()
+        child.wait.assert_called_once()
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

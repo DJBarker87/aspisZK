@@ -5,6 +5,7 @@ Command labels never establish identity. No remote cleanup conclusion.
 import json
 import hashlib
 import subprocess
+import sys
 import os
 import time
 from pathlib import Path
@@ -13,13 +14,13 @@ RELEASE = Path('tools/prover-rw-20261023/final-native-gate/prospective-data-v6')
 CAPTURE = Path('/private/tmp/FinalNativeGateV6-future-capture-021')
 ARGV = ['python3', '-B', str(RELEASE/'FinalNativeGate-data-transport.py')]
 FUTURE_ALLOCATION = None  # No main/conditional SSH allocation in this source job.
-PINS = None  # Replaced with exact reviewed v6 receiver/transport/root pins after preparation.
+PINS = {'transfer_manifest_root': '5cbeb415a6aa21a15137de557d3ca700f51b46fe2eb779aef07e75c606d5d927', 'files': {'FinalNativeGate-data-transfer.py': {'size': 883629, 'sha256': '1c7a2f8186f8ccd4058038432c60a3d688e346b01fff3941694c931a461c480e'}, 'FinalNativeGate-data-transport.py': {'size': 3854, 'sha256': '7ad8fee820bf1d3a4211c98f0550cd21d461cec7613ecea639317457037461c5'}, 'FinalNativeGate-release-identities.json': {'size': 34984, 'sha256': 'c66a2753b83550ce936cdf67db9a2e5544b9016c42a3b95969beec634d2666e1'}}}  # Exact prospective v6 bytes; no invocation authority.
 HARD = ('pid', 'ppid', 'uid', 'pgid', 'start')
 
 
 def identity(row):
     value = tuple(row[k] for k in HARD)
-    if any(x is None for x in value) or any(type(row[k]) is not int or row[k] <= 0 for k in HARD[:-1]):
+    if any(x is None for x in value) or type(row['pid']) is not int or row['pid'] <= 0 or any(type(row[k]) is not int or row[k] < 0 for k in ('ppid','uid','pgid')):
         raise ValueError('malformed hard identity')
     if not isinstance(row['start'], str) or not row['start']:
         raise ValueError('missing birth start')
@@ -35,18 +36,46 @@ def parse_ps(text):
             raise ValueError('process sample shape')
         row = dict(pid=int(w[0]), ppid=int(w[1]), uid=int(w[2]), pgid=int(w[3]),
                    rss_bytes=int(w[4])*1024, start=' '.join(w[5:10]), command=w[10])
-        identity(row)
+        # Unselected kernel/system metadata may legitimately contain PID/UID zero.
+        if any(row[k] < 0 for k in ('pid','ppid','uid','pgid')):
+            raise ValueError('negative process metadata')
         if row['rss_bytes'] < 0 or row['pid'] in rows:
             raise ValueError('invalid/duplicate RSS row')
         rows[row['pid']] = row
     return rows
 
 
+class Snapshot(dict):
+    reaped_sampler = None
+
+
 def snapshot():
-    result = subprocess.run(['/bin/ps', '-axo', 'pid=,ppid=,uid=,pgid=,rss=,lstart=,comm='],
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            timeout=2, check=True, text=True)
-    return parse_ps(result.stdout)
+    # Exact owned metadata child only; no transport/native Popen entry exists.
+    child = subprocess.Popen(['/bin/ps', '-axo', 'pid=,ppid=,uid=,pgid=,rss=,lstart=,comm='],
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    try:
+        out, err = child.communicate(timeout=2)
+        if child.returncode != 0:
+            raise RuntimeError('ps failure '+str(child.returncode)+': '+err)
+        rows = Snapshot(parse_ps(out))
+        rows.reaped_sampler = child.pid
+        return rows
+    finally:
+        # This Popen is exclusively owned and unreaped until communicate/wait.
+        original = repr(sys.exc_info()[1])
+        errors = []
+        try:
+            if child.poll() is None:
+                child.kill()
+        except Exception as exc:
+            errors.append('ps control: '+repr(exc))
+        finally:
+            try:
+                child.wait(timeout=3)
+            except Exception as exc:
+                errors.append('ps reap: '+repr(exc))
+        if errors:
+            raise RuntimeError('ps ownership/reap unresolved: '+repr(errors)+'; original='+original)
 
 
 def pin(path):
@@ -150,14 +179,15 @@ class Collector:
             birth = identity(row)
             if pid in self.owned and birth != self.owned[pid]:
                 raise ValueError('retained child hard identity drift/reuse')
-            if pid != self.parent_pid:
+            if pid != self.parent_pid and pid != getattr(rows, 'reaped_sampler', None):
                 self.owned[pid] = birth
             observed.append(row)
         missing = sorted(retained - rows.keys() - {self.child.pid})
         total = sum(row['rss_bytes'] for row in observed)
         self.samples.append(dict(elapsed=self.clock()-self.started, rss_bytes=total,
                                  processes=observed, scan_root=root, root_already_exited=ended,
-                                 missing_retained=missing, metrics_complete=not missing))
+                                 missing_retained=missing, metrics_complete=not missing,
+                                 reaped_sampler=getattr(rows, 'reaped_sampler', None)))
         if missing:
             raise ValueError('retained descendants visibility unresolved')
         if total >= 512*2**20:

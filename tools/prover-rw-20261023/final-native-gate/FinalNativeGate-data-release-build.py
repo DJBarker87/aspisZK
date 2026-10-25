@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v5'
-STAGE='/home/dombarker/final-native-gate-v5-20261025/'
-ENTRY='e8ffe0b688735e46e397c7aa0c0b2e8aa3c68b7e'
+RELEASE=D/'prospective-data-v6'
+STAGE='/home/dombarker/final-native-gate-v6-20261025/'
+ENTRY='0f17eee7c884174bf692443cd62a313183d6f979'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
@@ -41,7 +41,7 @@ def prepare(release=None):
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus prospective-data-v5 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus prospective-data-v6 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -81,7 +81,7 @@ def prepare(release=None):
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Relative to maintained source-020: two SETUP mains activate and four seal/plan files regenerate. Maintained source changes compact reporting, no-owned cleanup, private raw publication and exact new v5 stage. Compare complete source-020 before/after report against e8ffe0b688; no historical-v4 byte-identity claim.\n')
+        f.write('Relative to maintained source-021: exactly two SETUP mains activate and four seal/plan files regenerate. Source-021 adds verified ENOENT/ESRCH disappearance handling and exact v6 stage; full source020 beforeimages and function diff retained. Historical v1-v5 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')
