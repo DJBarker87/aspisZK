@@ -1,0 +1,41 @@
+Hir_CallTotal.lean:33:62: error: Type mismatch: After simplification, term
+  safe
+ has type
+  NoFault hashv (secondCode c hashv allocator id store call)
+but is expected to have type
+  NoFault hashv (firstCode c hashv copy allocator id store call)
+Hir_CallTotal.lean:33:11: error: unsolved goals
+case second
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+store : Store
+call : Call A
+safe : Safe c hashv copy allocator id store call
+route : Hiq_ReleaseRoute.route call.data = Hiq_ReleaseRoute.Route.second
+⊢ (match Hiq_ReleaseRoute.Route.second with
+    | Hiq_ReleaseRoute.Route.first =>
+      AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (firstCode c hashv copy allocator id store call))
+        fun reply => Program.done (firstEffect store call reply)
+    | Hiq_ReleaseRoute.Route.second =>
+      AspisV8R19.OracleProgramOps.bind (Hir_PartialOracle.program hashv (secondCode c hashv allocator id store call))
+        fun reply => Program.done (store, S2X.AccountEvent.rollback, Sum.inr reply)
+    | Hiq_ReleaseRoute.Route.reject =>
+      Program.done
+        (store, S2X.AccountEvent.rollback,
+          Sum.inr (ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))) =
+    match Hiq_ReleaseRoute.Route.second with
+    | Hiq_ReleaseRoute.Route.first =>
+      AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (firstCode c hashv copy allocator id store call))
+        fun reply => Program.done (firstEffect store call reply)
+    | Hiq_ReleaseRoute.Route.second =>
+      AspisV8R19.OracleProgramOps.bind (SdkC_Oracle.program (secondCode c hashv allocator id store call)) fun reply =>
+        Program.done (store, S2X.AccountEvent.rollback, Sum.inr reply)
+    | Hiq_ReleaseRoute.Route.reject =>
+      Program.done
+        (store, S2X.AccountEvent.rollback,
+          Sum.inr (ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))
+'AspisR1.Hir_CallTotal.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
