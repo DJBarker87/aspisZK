@@ -1,0 +1,72 @@
+RawJ_ContainingAccepted.lean:211:68: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+'AspisR1.RawJ_ContainingAccepted.accepted_pair_unified' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+theorem AspisR1.RawJ_ContainingAccepted.accepted_pair_unified : ∀ {W A M Cv F CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (e1 e2 : Entry) (w1 w2 : W),
+          RuntimeEntrypointAdmission L e1 w1 3 →
+            RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops)
+                (geoOps : Port3_NativeGeometryBody.Ops CoreError) (stageBase : VTop_Stages.Ops)
+                (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+                (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+                (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                S2W_DigestExtraction.AeneasExtraction
+                    (sdkOps
+                      (Tx2I_Install.install adapterOps
+                        (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps)
+                      (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                    native1 native2 hashv →
+                  ∀ (sha256 H : Bytes → State),
+                    S2W_ExtractionBoundary.P1 sha256 H →
+                      S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                          (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                          (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                          first native1 copy allocator e1 program data1 state1 =
+                              ok (core.result.Result.Ok (saved, post1, final1)) →
+                            second native2 allocator e2 program data2 slot state2 =
+                                ok (core.result.Result.Ok (post2, final2)) →
+                              ∀ (p : FS2.Duplex.Params M Cv N) (root : Std.Array U8 32#usize) (length : U32),
+                                have port :=
+                                  SdkD_Child.port adapterOps (Uni_Install.current ops reserved queryOps geoOps)
+                                    (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                    finishOps B claimsStd;
+                                ∃ f s outer pre middle fs ss,
+                                  SourceCuts
+                                      (sdkOps
+                                        (Tx2I_Install.install adapterOps
+                                          (Op5T_Concrete.stage
+                                            (Tx2N_Execution.control stageBase reserved queryOps geoOps))
+                                          finishOps)
+                                        (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
+                                      e1.first (e2.second secondSizes) saved f s ∧
+                                    RawJ_RecordCuts.Recorded f s saved outer ∧
+                                      eval H ⋯ =
+                                          (⋯,
+                                            ok
+                                              (core.result.Result.Ok saved,
+                                                [GExq_OuterRecord.Event.first f.semantic f.pub f.proof f.split
+                                                    (core.result.Result.Ok saved),
+                                                  GExq_OuterRecord.Event.second s.pub s.proof s.checkpoint
+                                                    (core.result.Result.Ok ())])) ∧
+                                        ⋯ =
+                                            (GExp_FixedPair.firstInput f, ok (core.result.Result.Ok saved),
+                                              some (GExp_FixedPair.secondInput s, ok (core.result.Result.Ok ()))) ∧
+                                          ⋯ ∧ ⋯ :=
+fun {W A M Cv F CoreError} {N} L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops reserved
+    queryOps geoOps stageBase finishOps B claimsStd native1 native2 hashv extraction sha256 H p1 syscall program data1
+    data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length =>
+  sorry
+    (RawJ_FinalAccepted.accepted_pair_unified L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 adapterOps ops
+      reserved queryOps geoOps stageBase finishOps B claimsStd native1 native2 hashv extraction sha256 H p1 syscall
+      program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length)

@@ -1,0 +1,47 @@
+RawJ_ValidatedRead.lean:49:29: error: Application type mismatch: The argument
+  sub2 (flatten (RawJ_SampleRead.parts self.state tag record.framed)) member
+has type
+  Read
+    (observe
+      (run do
+          let s ← liftM (r1_wire.ValidatedRecord.impl.framed record)
+          let __x ← S1SemanticCode.sampleBlock D self record.row s
+          match __x with
+            | (r, self1) => do
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let q ← liftM (sampler.qm31_sample val)
+                  pure (core.result.Result.Ok q, self1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r1 ←
+                    liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                  pure (r1, self1)).1)
+    (flatten (RawJ_SampleRead.parts self.state tag record.framed))
+but is expected to have type
+  Read
+    (observe
+      (run
+          (if record.row > 24#u8 then pure (core.result.Result.Err r1_wire.Error.InvalidRow, self)
+          else do
+            let s ← liftM (r1_wire.ValidatedRecord.impl.framed record)
+            let __x ← S1SemanticCode.sampleBlock D self record.row s
+            match __x with
+              | (r, self1) => do
+                let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let q ← liftM (sampler.qm31_sample val)
+                    pure (core.result.Result.Ok q, self1)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r1 ←
+                      liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+                    pure (r1, self1))).1)
+    ?m.577
+in the application
+  sub1 ?m.577 (sub2 (flatten (RawJ_SampleRead.parts self.state tag record.framed)) member)
+'AspisR1.RawJ_ValidatedRead.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

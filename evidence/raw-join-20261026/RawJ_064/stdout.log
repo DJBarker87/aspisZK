@@ -1,0 +1,66 @@
+RawJ_SemanticRead.lean:22:10: error: unsolved goals
+case Err.intro
+R : RoundModel.Boundaries
+B : FinishModel.Boundaries
+H : Type
+D : aspis_core.digest.Digest32 H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+input : Slice U8
+hash : H
+out : AspisR1CurrentCaller.r1_semantic.Verified H
+success :
+  (erase do
+      let result ←
+        S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+            (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none
+      pure
+          (match result with
+          | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+          | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error))) =
+    ok (core.result.Result.Ok out)
+e : AspisR1PublicPreparation.r1_wire.Error
+call :
+  erase
+      (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+        (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none) =
+    ok (core.result.Result.Err e)
+left✝ :
+  ok
+      (match core.result.Result.Err e with
+      | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+      | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error)) =
+    ok (core.result.Result.Ok out)
+right✝ :
+  (run do
+        let result ←
+          S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+              (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none
+        pure
+            (match result with
+            | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+            | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error))).1 =
+    (run
+          (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+            (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none)).1 ++
+      (run
+          (pure
+            (match core.result.Result.Err e with
+            | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+            | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error)))).1
+⊢ ∃ p,
+    PrefixAdapter.parseAccepted input = ok (core.result.Result.Ok p) ∧
+      ∃ frame,
+        Read
+            (observe
+              (run do
+                  let result ←
+                    S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R (S1SemanticRootCopy.install B))
+                        (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none
+                  pure
+                      (match result with
+                      | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+                      | core.result.Result.Err error =>
+                        core.result.Result.Err (S1SemanticCarrier.currentWireError error))).1)
+            frame ∧
+          BinRawByteCollisionTargets.pred 2 frame = some (decodeState p.c1_root)
+'AspisR1.RawJ_SemanticRead.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

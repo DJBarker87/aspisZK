@@ -1,0 +1,110 @@
+structure AspisR1PublicPreparation.r1_wire.Prefix : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.r1_wire.Prefix.c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize
+  AspisR1PublicPreparation.r1_wire.Prefix.records : Aeneas.Std.Array (Aeneas.Std.Slice Aeneas.Std.U8) 27#usize
+constructor:
+  AspisR1PublicPreparation.r1_wire.Prefix.mk (c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    (records : Aeneas.Std.Array (Aeneas.Std.Slice Aeneas.Std.U8) 27#usize) : AspisR1PublicPreparation.r1_wire.Prefix
+structure AspisR1PublicPreparation.r1_wire.ValidatedRecord : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.r1_wire.ValidatedRecord.row : Aeneas.Std.U8
+  AspisR1PublicPreparation.r1_wire.ValidatedRecord.framed : Aeneas.Std.Slice Aeneas.Std.U8
+constructor:
+  AspisR1PublicPreparation.r1_wire.ValidatedRecord.mk (row : Aeneas.Std.U8) (framed : Aeneas.Std.Slice Aeneas.Std.U8) :
+    AspisR1PublicPreparation.r1_wire.ValidatedRecord
+def AspisR1PublicPreparation.r1_wire.Prefix.validated_record : AspisR1PublicPreparation.r1_wire.Prefix →
+  Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result AspisR1PublicPreparation.r1_wire.ValidatedRecord
+        AspisR1PublicPreparation.r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok { row := row, framed := val })
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR1PublicPreparation.r1_wire.ValidatedRecord
+        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+def AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.framed : AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+  Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun self => Aeneas.Std.Result.ok self.framed
+def AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.row : AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+  Aeneas.Std.Result Aeneas.Std.U8 :=
+fun self => Aeneas.Std.Result.ok self.row
+def AspisR1PublicPreparation.FinishModel.payload : AspisR1PublicPreparation.r1_wire.Prefix →
+  Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Slice Aeneas.Std.U8) AspisR1PublicPreparation.r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+      let s ←
+        Aeneas.Std.core.slice.index.Slice.index
+            (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) val { start := 5#usize }
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok s)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Aeneas.Std.Slice Aeneas.Std.U8) (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+        residual
+theorem AspisR1CurrentCaller.S1SemanticInstallation.verify_roots : ∀
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticInstallation.verify R B D pub bytes hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+    ∃ pre initial after challenges payload root2,
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted bytes =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisR1PublicPreparation.r1_semantic.public_transcript
+              (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+              (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) hash pre.c1_root =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) ∧
+          AspisR1PublicPreparation.r1_wire.begin (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D) pre
+                initial =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok challenges, after) ∧
+            AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B)
+                  (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+                  (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre after challenges none =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem)) ∧
+              AspisR1PublicPreparation.FinishModel.payload pre 2#u8 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok payload) ∧
+                Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 payload =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root2) ∧
+                  ↑root2 = ↑payload ∧ sem.roots = Aeneas.Std.Array.make 2#usize [pre.c1_root, root2] ⋯ :=
+fun R B {H} D pub bytes hash sem success =>
+  have source := AspisR1CurrentCaller.S1SemanticInstallation.verify_return R B D pub bytes hash sem success;
+  let ⟨pre, h✝⟩ :=
+    AspisR1PublicPreparation.S1SemanticVerify.verify_success
+      (@AspisR1PublicPreparation.FinishModel.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) bytes hash none
+      (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem) source
+  let ⟨initial, h✝¹⟩ := h✝
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨challenges, h✝³⟩ := h✝²
+  let ⟨parsed, right✝⟩ := h✝³
+  let ⟨publicInit, right✝¹⟩ := right✝
+  let ⟨begin, finish⟩ := right✝¹
+  let ⟨payload, h✝⁴⟩ :=
+    AspisR1PublicPreparation.S1SemanticRootCopy.finish_roots R B
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest D)
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub) pre after challenges
+      (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem) finish
+  let ⟨root2, h✝⁵⟩ := h✝⁴
+  let ⟨hpayload, right✝²⟩ := h✝⁵
+  let ⟨hcopy, right✝³⟩ := right✝²
+  let ⟨hbytes, hroots⟩ := right✝³
+  Exists.intro pre
+    (Exists.intro initial
+      (Exists.intro after
+        (Exists.intro challenges
+          (Exists.intro payload
+            (Exists.intro root2 ⟨parsed, ⟨publicInit, ⟨begin, ⟨finish, ⟨hpayload, ⟨hcopy, ⟨hbytes, hroots⟩⟩⟩⟩⟩⟩⟩)))))

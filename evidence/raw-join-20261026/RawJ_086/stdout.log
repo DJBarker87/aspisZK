@@ -1,0 +1,33 @@
+RawJ_SemanticC2.lean:42:6: error: Type mismatch
+  inc (flatten (RawJ_SampleRead.parts before2.state tag record.framed))
+    (left_read
+      (AspisR1PublicPreparation.S1SemanticCode.verify
+        (fun {H} =>
+          AspisR1PublicPreparation.S1SemanticCode.finish R (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+        (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none)
+      (fun result =>
+        pure
+          (match result with
+          | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+          | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error)))
+      (core.result.Result.Ok out) success (flatten (RawJ_SampleRead.parts before2.state tag record.framed))
+      (contains (flatten (RawJ_SampleRead.parts before2.state tag record.framed))
+        (inside (flatten (RawJ_SampleRead.parts before2.state tag record.framed)) read)))
+has type
+  Read
+    (observe
+      (run do
+          let result ←
+            AspisR1PublicPreparation.S1SemanticCode.verify
+                (fun {H} =>
+                  AspisR1PublicPreparation.S1SemanticCode.finish R
+                    (AspisR1PublicPreparation.S1SemanticRootCopy.install B))
+                (InstalledPreparation.retainedDigest D) (FirstComposition.toRetainedPublic pub) input hash none
+          pure
+              (match result with
+              | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+              | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.currentWireError error))).1)
+    (flatten (RawJ_SampleRead.parts before2.state tag record.framed))
+but is expected to have type
+  Read (observe (run code).1) (flatten (RawJ_SampleRead.parts before2.state tag record.framed))
+'AspisR1.RawJ_SemanticC2.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
