@@ -316,6 +316,19 @@ class Suite(unittest.TestCase):
                 else:
                     with self.assertRaises(Denied):flow.null_writers()
                     self.assertEqual([c.args[0] for c in close.call_args_list],[11,10])
+
+    def test_launcher_and_root_policy_are_pinned_by_live_reads(self):
+        from SbfProducer_pins import FILES, EXTERNAL, ROOT_EXTERNAL
+        for uid in (1000,0):
+            with patch.object(pkg.os,'geteuid',return_value=uid), \
+                 patch.object(pkg,'pinned_file',side_effect=lambda path,pin,mode:b'fixed') as reader:
+                observed=pkg.verify_package()
+                self.assertIn(pkg.LAUNCHER,observed)
+                self.assertEqual(set(observed),{pkg.PACKAGE+'/'+name for name in FILES}|
+                    set(EXTERNAL)|(set(ROOT_EXTERNAL) if uid==0 else set()))
+                self.assertEqual(reader.call_count,len(observed))
+            with patch.object(pkg,'pinned_file',side_effect=Denied('old external launcher')):
+                with self.assertRaises(Denied):pkg.verify_package()
         api.listdir.return_value=['0','1','2'];api.flags.side_effect=lambda _:os.O_RDWR
         with self.assertRaises(Denied):flow.host_stdio(api)
 

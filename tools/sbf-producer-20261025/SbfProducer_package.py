@@ -84,11 +84,17 @@ def approval():
 
 
 def verify_package():
-    from SbfProducer_pins import FILES
+    from SbfProducer_pins import FILES, EXTERNAL, ROOT_EXTERNAL
     require(FILES and all('/' not in name and name.startswith('SbfProducer')
                          for name in FILES), 'fixed package file set')
-    return {name:digest(pinned_file(PACKAGE+'/'+name, row['pin'], row['mode']))
-            for name, row in sorted(FILES.items())}
+    require(set(EXTERNAL) == {LAUNCHER} and set(ROOT_EXTERNAL) ==
+            {'/etc/sudoers.d/SbfProducer-20261025-tiny-root'}, 'fixed external source set')
+    files = {PACKAGE+'/'+name:row for name,row in FILES.items()}
+    files.update(EXTERNAL)
+    if os.geteuid() == 0:
+        files.update(ROOT_EXTERNAL)
+    return {name:digest(pinned_file(name, row['pin'], row['mode']))
+            for name, row in sorted(files.items())}
 
 
 def journal(name, value):
