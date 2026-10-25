@@ -1,4 +1,4 @@
-#!/usr/bin/python3 -I
+#!/usr/bin/python3 -IS
 """Exact source-justified metadata rustc query guard; no build-script claim."""
 import hashlib,json,os,pathlib,sys
 BASE=pathlib.Path('/home/dombarker/project-offloads/codex-cx-sbf-recapture-20261024/SbfResolve-20261025-v1')
