@@ -1,0 +1,44 @@
+"""Bounded text/data inspection of call361 JSON; no Lean/AST/proof operations."""
+import collections,hashlib,json,pathlib,re,resource,subprocess,time
+start=time.monotonic();T=pathlib.Path(__file__).resolve().parent;E=T.parents[1]/'evidence/port34raw-20261025'
+p=pathlib.Path('/private/tmp/Port34RAW-361-20261025/Port34RAW-diagnostic.json')
+def pin(p):
+ h=hashlib.sha256()
+ with p.open('rb') as f:
+  for b in iter(lambda:f.read(1048576),b''):h.update(b)
+ return dict(path=str(p),bytes=p.stat().st_size,sha256=h.hexdigest())
+def name(n):return '' if n[0]=='anon' else (name(n[1])+'.'+n[2]).lstrip('.')
+r=json.loads((E/'Port34RAW_attempt-361.json').read_text());assert r['accepted_diagnostic']
+assert pin(p) in r['outputs']
+d=json.loads(p.read_text());assert len(d['variants'])==88 and all(v['strict_complete_CI_readback'] for v in d['variants'])
+plan=json.loads((E/'Port34RAW_plan.json').read_text())
+assert collections.Counter((v['origin'],json.dumps(v['name'])) for v in d['variants'])==collections.Counter((f['origin'],json.dumps(n)) for f in plan['files'] for n in f['names'])
+# Full small types, not huge value dumps; these remain untrusted renderings.
+selected=[3,9,12,32,43,44,45,52,54,58,67,79,80,84,85,86,87]
+with (E/'Port34RAW_actual361-types.txt').open('w') as f:
+ for i in selected:
+  v=d['variants'][i];f.write(f"\nINDEX {i} ORIGIN {v['origin']} NAME {name(v['name'])}\nTYPE\n{v['type_rendering']}\n")
+  if i in [9,12,32,43,44,54,58,79,80]:
+   val=v['value_rendering'];assert val is None or len(val)<12000
+   f.write('VALUE\n'+str(val)+'\n')
+summary=[]
+for i in [52,84]:
+ v=d['variants'][i];s=v['value_rendering'];t=v['type_rendering']
+ needles=['fun (self1','hcall1 :',*[f'let pair{j} :' for j in range(8)],'let pairs :','have hmaterial','Exists.casesOn','And.casesOn','bind_success','Eq.ndrec','Exists.intro','And.intro','hfirst :','queries_success_with_digest_pairs_full']
+ hits={n:dict(count=s.count(n),first=s.find(n),last=s.rfind(n)) for n in needles}
+ excerpts=[]
+ for n in ['fun (self1','hcall1 :','let pair0 :','let pair7 :','let pairs :','have hmaterial','hfirst :','queries_success_with_digest_pairs_full']:
+  a=s.find(n)
+  if a>=0:
+   end=s.find(';',a)+1 if n=='let pairs :' else a+1000
+   if n=='let pairs :':assert 0<end-a<4000
+   excerpts.append(dict(needle=n,start=a,end=min(end,len(s)),text=s[a:end]))
+ if i==52:
+  # Final output conjunction and retained witness introductions, finite known text locations.
+  for a,b in [(95848078,95848578),(95862011,95862511),(95875793,95876293),(95886934,95887434),(98684685,98685185),(98691806,98692306),(98698632,98699132),(98705208,98707305),(98755282,98755682)]:
+   excerpts.append(dict(start=a,end=b,text=s[a:b]))
+ summary.append(dict(index=i,name=name(v['name']),type_chars=len(t),value_chars=len(s),type_head=t[:400],type_tail=t[-3000:],hits=hits,excerpts=excerpts))
+out=dict(status='PASS bounded rendering/name inspection; NOT logical validation',command=['python3',str(pathlib.Path(__file__).resolve())],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),script=pin(pathlib.Path(__file__).resolve()),input=pin(p),receipt=pin(E/'Port34RAW_attempt-361.json'),full_types=pin(E/'Port34RAW_actual361-types.txt'),exact_origin_names=88,strict_readbacks=88,distinct_names=len({json.dumps(v['name']) for v in d['variants']}),comparisons=len(d['comparisons']),summaries=summary,inventory=[dict(index=i,name=name(v['name']),origin=v['origin'],type_chars=len(v['type_rendering']),value_chars=len(v['value_rendering'] or ''),raw_output=v['raw_output'],raw_index=v['raw_index']) for i,v in enumerate(d['variants'])],axioms='N/A raw DATA, no theorem or logical audit',lean_calls=0,exit_status=0,wall_seconds=time.monotonic()-start,peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,swaps=resource.getrusage(resource.RUSAGE_SELF).ru_nswap)
+assert out['peak_rss_bytes']<512*1024**2
+(E/'Port34RAW_inspection361.json').write_text(json.dumps(out,indent=2)+'\n')
+print({k:out[k] for k in ['status','exact_origin_names','strict_readbacks','distinct_names','comparisons','wall_seconds','peak_rss_bytes','swaps']})
