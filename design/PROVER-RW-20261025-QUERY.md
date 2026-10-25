@@ -422,3 +422,32 @@ by local-lean rule1, preserving all enum codes and source operations. Its
 needed dependent closure must be rebuilt before composing these operations
 with the model or installing them in the actual query/retry caller. No native
 code, source-to-Lean trust boundary, artifact or security contract changed.
+
+## Context/model and actual caller join (11399,11460–11470)
+
+The single inherited global discriminant instance was given a qualified name,
+with identical enum codes0..4, under local-lean's explicit trivial-name-fix
+exception. All14 source/object beforeimages are snapshotted on the host and
+recorded by SHA/size in `outer-context-join/before-namefix.json`. The seven
+needed type/leaf/emission/context/write/encode/byte modules were rebuilt. This
+rewrites this branch's existing NativeBodyTypes/Leaves/Emission objects; no
+other historical dependent is newly claimed current. The adaptation checker
+now reproduces the qualified name. No native operation or enum code changed.
+
+`ProverRwOuterContextModel.context_encoding` proves the exact existing
+`LayoutR1PBin.ctxEnc` bytes, with arbitrary digest/nonce and both pinned
+fingerprints. `construct_encode` includes total source construction/encoding.
+`ProverRwOuterInstalled.prefix_entries` and `caller_eight` install op115/op116
+through the actual selected S2 retry/query caller; no field-success or output-
+equality hypothesis is supplied. This removes those two source-function
+entry obligations in that concrete selected source instance. It does not
+install native representations or PrefixContract/BodyContract.
+
+Twelve compiles:9passes,3changed model elaboration failures.11470 passes
+1.84s/4,273,576KiB/swap0; all accepted new top reports are standard axioms.
+Evidence: `evidence/prover-rw-20261023/outer-context-join`. New budget43/100
+Lean,0/20Kani. 11400up includes historical used IDs; after11399 the existing
+unchanged rng-owner launcher was used directly for unused11460up. Its caps,
+locks and retry checks are unchanged. The read-only input receipt collector
+only hashes/snapshots proof inputs; no launch/monitor infrastructure was built
+or repaired. No resource failure, Rust, Kani, native, timing, ELF or full replay.

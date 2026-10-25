@@ -14,7 +14,18 @@ for i,(n,tail) in enumerate(ts):ty+=f'abbrev {n} := @TypeLeaves.t{i} _\n'
 t=(G/'Types.lean').read_text().split('namespace '+N+'\n',1)[1].rsplit('end '+N,1)[0]
 # Discriminant attributes generate unqualified globals; the ADTs remain unchanged.
 t=re.sub(r'@\[discriminant isize,\s*', '@[',t).replace('@[discriminant isize]\n','')
-ty+=t+'attribute [discriminant isize] aspis_prover.state_only_hiding.StateOnlyMaskBuildError\nend '+N+'\n'
+ty+=t+'''def aspis_prover.state_only_hiding.StateOnlyMaskBuildError.read_discriminant
+    (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) : Isize :=
+  match e with
+  | .ZeroPrivateEntropy => 0#isize
+  | .ReusedMaskNonce => 1#isize
+  | .MaskSampleExhausted => 2#isize
+  | .TraceShape => 3#isize
+  | .Layout => 4#isize
+instance _root_.ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.instDiscriminant :
+    Discriminant aspis_prover.state_only_hiding.StateOnlyMaskBuildError Isize where
+  read_discriminant := aspis_prover.state_only_hiding.StateOnlyMaskBuildError.read_discriminant
+end '''+N+'\n'
 fs=decls(G/'FunsExternal_Template.lean');le='import R1Z.ProverRwRngNativeBodyTypes\n'+pre.split('\n',1)[1]+'variable [TypeLeaves]\n'
 # Same source-shaped map_err installation as accepted predecessor; no external hypothesis.
 le+='''def core.result.Result.map_err {T E F O : Type}
@@ -39,7 +50,7 @@ outputs={'ProverRwRngNativeBodyTypes.lean':ty,'ProverRwRngNativeBodyLeaves.lean'
 for n,s in outputs.items():
  if '--check' in sys.argv:assert (L/n).read_text()==s
  else:(L/n).write_text(s)
-record=dict(raw={p.name:sha(p.read_bytes()) for p in G.iterdir() if p.is_file()},outputs={n:sha(s.encode()) for n,s in outputs.items()},type_parameters=[dict(field='t'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(ts)],local_leaves=[dict(field='f'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(fs)],changes=['external type holes become explicit TypeLeaves fields, never installed native sorts','external function holes become explicit LocalLeaves fields, no whole-execution equality field','source-shaped Result.map_err branch installation reused','remove generated resource overrides; retain discriminant attribute only for the concrete mask-error equality consumer; other unused attributes removed to avoid global collisions','expand QM31 trait-default impl_def to its equivalent nonrecursive def using PartialEq.ne.default eq (raw macro failed kernel free-variable check); no source operation/control or backend change'],physical_zeroize='Explicit LocalLeaves field, no value-level zeroization or physical destruction claim',native_body='actual borrowed-store call emission returns (Result,Store); no FnMut body/owned-store substitution; native audit retained')
+record=dict(raw={p.name:sha(p.read_bytes()) for p in G.iterdir() if p.is_file()},outputs={n:sha(s.encode()) for n,s in outputs.items()},type_parameters=[dict(field='t'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(ts)],local_leaves=[dict(field='f'+str(i),qualified=n,signature=s) for i,(n,s) in enumerate(fs)],changes=['external type holes become explicit TypeLeaves fields, never installed native sorts','external function holes become explicit LocalLeaves fields, no whole-execution equality field','source-shaped Result.map_err branch installation reused','remove generated resource overrides; use identical mask-error read_discriminant codes0..4 with a qualified instance name; other unused attributes removed to avoid global collisions','expand QM31 trait-default impl_def to its equivalent nonrecursive def using PartialEq.ne.default eq (raw macro failed kernel free-variable check); no source operation/control or backend change'],physical_zeroize='Explicit LocalLeaves field, no value-level zeroization or physical destruction claim',native_body='actual borrowed-store call emission returns (Result,Store); no FnMut body/owned-store substitution; native audit retained')
 p=D/'body-adaptation.json';s=json.dumps(record,indent=2)+'\n'
 if '--check' in sys.argv:assert p.read_text()==s
 else:p.write_text(s)

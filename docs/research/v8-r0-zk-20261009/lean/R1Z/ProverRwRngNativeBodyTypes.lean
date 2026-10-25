@@ -369,5 +369,15 @@ def prover.prove_masked_with_attempt.closure (T0 : Type) := Unit
 @[reducible]
 def prover.prove_masked_attempt.closure := Unit
 
-attribute [discriminant isize] aspis_prover.state_only_hiding.StateOnlyMaskBuildError
+def aspis_prover.state_only_hiding.StateOnlyMaskBuildError.read_discriminant
+    (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) : Isize :=
+  match e with
+  | .ZeroPrivateEntropy => 0#isize
+  | .ReusedMaskNonce => 1#isize
+  | .MaskSampleExhausted => 2#isize
+  | .TraceShape => 3#isize
+  | .Layout => 4#isize
+instance _root_.ProverRwRngNativeBody.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.instDiscriminant :
+    Discriminant aspis_prover.state_only_hiding.StateOnlyMaskBuildError Isize where
+  read_discriminant := aspis_prover.state_only_hiding.StateOnlyMaskBuildError.read_discriminant
 end ProverRwRngNativeBody
