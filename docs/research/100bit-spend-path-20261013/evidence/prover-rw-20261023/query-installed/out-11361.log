@@ -1,0 +1,131 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryOpening.lean:110:89: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+variant : transport.Variant
+h : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+prepared : prover.PreparedOpening
+salts : host_commitment.PrivateSalts
+⊢ (do
+      let leaves ← prover.folded_leaves h prepared.folded_word.deref salts
+      let o ← host_tree.BinaryTree.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 h leaves
+      let r ← core.option.Option.ok_or o verifier.Error.Allocation
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let root ← val.root
+          let c1 ← prover.round prepared.q1.deref prepared.w1.deref
+          let s3 ← lift c1.to_slice
+          let c1bytes ← prover.encoded_slice s3
+          let s4 ← lift root.to_slice
+          let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 s4
+          let payload1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload c1bytes.deref
+          let (alpha1, transcript) ←
+            host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                prepared.transcript 30#u8 payload1.deref false
+          let final_message ← prover.fold prepared.q1.deref alpha1 false
+          let fbytes ← prover.encoded_slice final_message.deref
+          let (r1, transcript1) ←
+            ProverRwQueryInstalled.query aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript 31#u8
+                fbytes.deref
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let s10 ← lift (Std.Array.empty U8).to_slice
+              let _ ←
+                host_transcript.Transcript.scalar_k aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                    transcript1 32#u8 s10
+              let scp ← prepared.sem.z.index_usize 0#usize
+              let scp1 ← prepared.sem.z.index_usize 1#usize
+              let s11 ← lift val1.to_slice
+              let v ← alloc.slice.Slice.to_vec core.clone.CloneU32 s11
+              let a ← prepared.sem.roots.index_usize 0#usize
+              let r2 ←
+                prover.public_check variant
+                    { alpha := prepared.sem.alpha,
+                      z :=
+                        Array.make 2#usize [Array.make 2#usize [scp.x, scp.y] ⋯, Array.make 2#usize [scp1.x, scp1.y] ⋯]
+                          ⋯,
+                      gamma := prepared.gamma, kappa := prepared.kappa, alpha0 := prepared.alpha0, alpha1 := alpha1,
+                      queries := v }
+                    a
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  ok
+                    (core.result.Result.Ok
+                      { backend := prepared.backend, semantic_bytes := prepared.sem.bytes, y1 := prepared.y1,
+                        inactive := prepared.inactive, c0bytes := prepared.c0bytes, root := root, c1bytes := c1bytes,
+                        fbytes := fbytes, queries := val1, folded_word := prepared.folded_word, folded_salts := salts,
+                        tree := val })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+            (core.convert.FromSame verifier.Error) residual) =
+    do
+    let leaves ← prover.folded_leaves h prepared.folded_word.deref salts
+    let o ← host_tree.BinaryTree.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 h leaves
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let root ← val.root
+        let c1 ← prover.round prepared.q1.deref prepared.w1.deref
+        let s3 ← lift c1.to_slice
+        let c1bytes ← prover.encoded_slice s3
+        let s4 ← lift root.to_slice
+        let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 s4
+        let payload1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload c1bytes.deref
+        let (alpha1, transcript) ←
+          host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+              prepared.transcript 30#u8 payload1.deref false
+        let final_message ← prover.fold prepared.q1.deref alpha1 false
+        let fbytes ← prover.encoded_slice final_message.deref
+        let (r1, transcript1) ←
+          ProverRwQueryInstalled.query aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript 31#u8
+              fbytes.deref
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let s10 ← lift (Std.Array.empty U8).to_slice
+            let _ ←
+              host_transcript.Transcript.scalar_k aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                  transcript1 32#u8 s10
+            let scp ← prepared.sem.z.index_usize 0#usize
+            let scp1 ← prepared.sem.z.index_usize 1#usize
+            let s11 ← lift (Array.to_slice val1)
+            let v ← alloc.slice.Slice.to_vec core.clone.CloneU32 s11
+            let a ← prepared.sem.roots.index_usize 0#usize
+            let r2 ←
+              prover.public_check variant
+                  { alpha := prepared.sem.alpha,
+                    z :=
+                      Array.make 2#usize [Array.make 2#usize [scp.x, scp.y] ⋯, Array.make 2#usize [scp1.x, scp1.y] ⋯] ⋯,
+                    gamma := prepared.gamma, kappa := prepared.kappa, alpha0 := prepared.alpha0, alpha1 := alpha1,
+                    queries := v }
+                  a
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a =>
+                ok
+                  (core.result.Result.Ok
+                    { backend := prepared.backend, semantic_bytes := prepared.sem.bytes, y1 := prepared.y1,
+                      inactive := prepared.inactive, c0bytes := prepared.c0bytes, root := root, c1bytes := c1bytes,
+                      fbytes := fbytes, queries := val1, folded_word := prepared.folded_word, folded_salts := salts,
+                      tree := val })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+                  (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+          (core.convert.FromSame verifier.Error) residual
+'R1Z.ProverRwQueryOpening.opening_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

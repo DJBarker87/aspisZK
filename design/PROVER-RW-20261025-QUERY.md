@@ -181,3 +181,24 @@ Final11359: exit0,1.75s,4,095,144KiB RSS,swaps0,three standard-axiom reports.
 All new top theorems have accepted axiom reports in `query-complete`.
 New budget34/100 Lean,0/20 Kani. Existing stricter scopes unchanged; no native
 Rust/artifact/runtime/performance gate or full manifest was rerun.
+
+## Actual consumer installation (11360–11366)
+
+The query equation is now consumed in proof-only, literal source copies of
+`finish_opening` (96 lines), `prove_from_semantics` (34),
+`prove_masked_with_attempt` (278), and `prove_masked_attempt` (57).
+`query-composition.py --check` pins each original declaration and verifies the
+single proved-callee substitution; the actual emitted function equals the
+corresponding copy on every input, preserving all other operations and errors.
+`ProverRwQueryRetry.admitted_eight` composes this through the actual S2 retry
+entry and retained eight-attempt control, using only the pre-existing selected
+sampler/variant dictionary installation. Entropy remains an explicit callback;
+no freshness, error-free tape or successful-body premise is introduced.
+
+These theorems install the discharged query subcomponent on the concrete
+conjunct1 caller path. They are not the remaining whole body/model equality.
+No PrefixContract/BodyContract or RunJoin instance is asserted. Seven compiles:
+six pass, one retained opening elaboration failure; no resource failure.
+Final retry11366: exit0,1.75s,4,278,400KiB RSS,swaps0,three standard-axiom reports.
+Receipts and generator/source pins are in `query-installed`. New budget41/100
+Lean,0/20 Kani; no unchanged regression or native gate was run.
