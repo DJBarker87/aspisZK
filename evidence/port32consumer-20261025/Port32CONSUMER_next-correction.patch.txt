@@ -1,0 +1,12 @@
+--- actual357/Port32CONSUMER_Consumer.lean
++++ UNCOMPILED-next/Port32CONSUMER_Consumer.lean
+@@ -485,8 +485,7 @@
+   let n := `Port32CONSUMER.widePow
+   let wide := mkConst `AspisWideTower.WideExact
+   let ty := mkApp3 (mkConst `HPow [Level.zero,Level.zero,Level.zero]) wide (mkConst `Nat) wide
+-  let d := Declaration.defnDecl { name := n, levelParams := [], type := ty,
+-    value := instances[0]!, hints := .abbrev, safety := .safe, all := [n] }
++  let d := Declaration.defnDecl (mkDefinitionValEx n [] ty instances[0]! .abbrev .safe [n])
+   match env.addDeclCore (Core.getMaxHeartbeats {}).toUSize d (cancelTk? := none) with
+   | .ok checked => pure checked
+   | .error ex => throw (IO.userError (← ex.toMessageData {} |>.toString))
