@@ -20,3 +20,10 @@ test directory. Exact v2 helper and receipts retained. Replacement permits this
 single exact path ONLY with its frozen ring0.17.14 archive checksum; no generic
 src/ key exception. Five focused filename/provenance policy tests pass with no
 compiler execution. Prior public fixture names are retained in v2 receipt.
+
+Universe v3: exit1,0.861105555s,45800KiB process peak,47267840B aggregate,
+swap0; stopped before untrusted0.9.0 extraction on mk/llvm-snapshot.gpg.key.
+Published source-package public-signing data is not task wallet material.
+Replacement adds only this exact path plus frozen archive checksum. Seven focused
+policy checks now pass. V3 helper and original receipts remain. No Cargo charged,
+no network attempt or resource failure in any of these preparation failures.
