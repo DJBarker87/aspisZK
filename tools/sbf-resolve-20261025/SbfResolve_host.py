@@ -117,6 +117,9 @@ def index_rel(n):
  assert re.fullmatch('[a-zA-Z0-9_-]+',n);n=n.lower()
  return '1/'+n if len(n)==1 else '2/'+n if len(n)==2 else '3/'+n[0]+'/'+n if len(n)==3 else n[:2]+'/'+n[2:4]+'/'+n
 
+def fixture_allowed(q,checksum):
+ return any(x in q.parts[1:-1] for x in ('test','tests','testdata','examples','data','fixtures')) or (str(q),checksum)==('ring-0.17.14/src/rsa/signature_rsa_example_private_key.der','a4689e6c2294d81e88dc6261c768b63bc4fcdb852be6d1352498b114f61383b7')
+
 def universe(req):
  R['parent_pins']=verify_parent();R['admission']=admission()
  lock=tomllib.loads((S/'src/Cargo.lock').read_text());pkgs=[p for p in lock['package'] if p.get('source','').startswith('registry+')];assert len(pkgs)==428
@@ -162,7 +165,7 @@ def universe(req):
      assert 0<=m.size<=32*1024**2;total+=m.size;assert total<=128*1024**2
      assert q.name not in ('.cargo-ok','.cargo-checksum.json')
      if re.search(r'(keypair|private.?key|mnemonic|credential|secret|\.pem$|\.key$|\.env(?:\.|$)|id_rsa)',q.name,re.I) and q.suffix not in ('.rs','.toml','.md','.txt'):
-      assert any(x in q.parts[1:-1] for x in ('test','tests','testdata','examples','data','fixtures')),'nonfixture possible key filename '+m.name
+      assert fixture_allowed(q,p['checksum']),'nonfixture possible key filename '+m.name
       R['public_fixture_names'].append(dict(archive_sha256=p['checksum'],path=m.name,classification='published locked-package test/example data, not user/task wallet data'))
     root.mkdir(mode=0o700,parents=True)
     for m in members:

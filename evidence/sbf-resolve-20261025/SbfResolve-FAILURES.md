@@ -12,3 +12,11 @@ All path/type/mode/duplicate/size/checksum checks remain. No theorem/premise cha
 This is public-source test data preparation, not task key adoption or cleanup.
 Partial private data remain; continuation reuses checked files and does not
 repeat the initial123 archive extraction. Metadata query allocation remains1/2.
+
+Universe v2: exit1,1.129251914s,32396KiB process peak,33431552B aggregate,
+swap0; stopped before extracting ring0.17.14 because the published RSA example
+fixture lives in src/rsa/signature_rsa_example_private_key.der rather than a
+test directory. Exact v2 helper and receipts retained. Replacement permits this
+single exact path ONLY with its frozen ring0.17.14 archive checksum; no generic
+src/ key exception. Five focused filename/provenance policy tests pass with no
+compiler execution. Prior public fixture names are retained in v2 receipt.
