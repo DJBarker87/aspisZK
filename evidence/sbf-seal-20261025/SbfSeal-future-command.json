@@ -1,0 +1,23 @@
+{
+  "approved_manifest_sha256": [],
+  "argv": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import errno,json,os,resource\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nfor fd in range(3,256):\n try: os.fstat(fd)\n except OSError as e:\n  if e.errno!=errno.EBADF: raise\n else: raise RuntimeError(\"surviving descriptor\")\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"
+  ],
+  "command_note": "Only execve of fixed argv after every host/kernel/runtime/FD gate; no sudo/root shell CLI",
+  "env": {
+    "HOME": "/probe",
+    "LC_ALL": "C",
+    "PATH": "/usr/bin",
+    "TMPDIR": "/tmp"
+  },
+  "gid": 1000,
+  "root": "/var/lib/SbfSeal-20261025-v1",
+  "runtime_manifest": null,
+  "status": "PENDING REVIEW; NO EXECUTION AUTHORITY",
+  "uid": 1000
+}
