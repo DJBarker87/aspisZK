@@ -1,0 +1,34 @@
+def AspisR1.GExq_AccountExperiment.program : {A F C : Type} →
+  AdapterRw.Ops →
+    AspisR1CurrentCaller.Ops →
+      VTop_Stages.Ops →
+        AspisR1Stage2.Stage2Finish.FinishOps F →
+          Bool →
+            Port3_NativeQueryBody.Ops →
+              Port3_NativeGeometryBody.Ops C →
+                AspisR1PublicPreparation.FinishModel.Boundaries →
+                  ClaimsUnrolledFinish.StdCalls →
+                    (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+                      (Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) →
+                        Allocator A →
+                          S2W_ExtractionBoundary.Program →
+                            Program Bytes State (FirstInputs A) →
+                              (FirstInputs A →
+                                  alloc.vec.Vec U8 → Heap (ℕ → Record) → A → Program Bytes State (SecondInputs A)) →
+                                Program Bytes State (Outcome A) :=
+fun {A F C} adapter ops stage finish reserved query geo B std hashv copy allocator id adversary chooseSecond =>
+  AspisV8R19.OracleProgramOps.bind adversary fun input =>
+    AspisV8R19.OracleProgramOps.bind
+      (SdkC_Oracle.program
+        (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator input.entry
+          id input.data input.state))
+      fun reply =>
+      match reply with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        AspisV8R19.OracleProgramOps.bind (chooseSecond input saved post final) fun next =>
+          AspisV8R19.OracleProgramOps.bind
+            (SdkC_Oracle.program
+              (GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator next.entry
+                id next.data next.slot next.state))
+            fun out => Program.done (input, reply, some (next, out))
+      | x => Program.done (input, reply, none)

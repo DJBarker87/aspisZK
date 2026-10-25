@@ -1,0 +1,59 @@
+import GExq_AccountExperiment
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.GExq_AccountAccepted
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers S2W_TrustedStd
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open GExq_AccountExperiment
+
+variable {A F C : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+    (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+    (reserved : Bool) (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops C)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) (id : S2W_ExtractionBoundary.Program)
+    (adversary : Program Bytes State (FirstInputs A))
+    (chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (Nat → Record) → A → Program Bytes State (SecondInputs A))
+
+/-- Both native acceptance conditions refer to the response-selected ORIGINAL
+entries in this one oracle world. The entire ordered experiment log is retained. -/
+theorem accepted
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (extraction : S2W_DigestExtraction.AeneasExtraction
+      (GExq_Caller.sdk adapter ops stage finish reserved query geo B std) native1 native2 hashv)
+    (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
+    (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record)) (final1 final2 : A)
+    (accepted1 : let input := (eval H adversary).2
+      S2W_D189Wrappers.first native1 copy allocator input.entry id input.data input.state = ok (.Ok (saved,post1,final1)))
+    (accepted2 : let input := (eval H adversary).2
+      let next := (eval H (chooseSecond input saved post1 final1)).2
+      S2W_D189Wrappers.second native2 allocator next.entry id next.data next.slot next.state = ok (.Ok (post2,final2))) :
+    let input := (eval H adversary).2
+    let choice := eval H (chooseSecond input saved post1 final1)
+    let next := choice.2
+    let code1 := GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv
+      copy allocator input.entry id input.data input.state
+    let code2 := GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv
+      allocator next.entry id next.data next.slot next.state
+    eval H (program adapter ops stage finish reserved query geo B std hashv copy allocator id adversary chooseSecond) =
+      ((eval H adversary).1 ++ (SdkC_Source.readLog (SdkC_Source.run hashv code1 []).2 ++
+        (choice.1 ++ SdkC_Source.readLog (SdkC_Source.run hashv code2 []).2)),
+        (input,ok (.Ok (saved,post1,final1)),some (next,ok (.Ok (post2,final2))))) := by
+  let input := (eval H adversary).2
+  let next := (eval H (chooseSecond input saved post1 final1)).2
+  have first := GExq_WrapperAccepted.first adapter ops stage finish reserved query geo B std hashv
+    copy allocator input.entry id input.data input.state native1 native2 extraction sha256 H p1 syscall
+    saved post1 final1 accepted1
+  have second := GExq_WrapperAccepted.second adapter ops stage finish reserved query geo B std hashv
+    allocator next.entry id next.data next.slot next.state native1 native2 extraction sha256 H p1 syscall
+    post2 final2 accepted2
+  dsimp only [input,next] at first second
+  dsimp only
+  simp only [program,eval_bind,first,second,eval,List.append_nil]
+
+#print axioms accepted
+end AspisR1.GExq_AccountAccepted
+end

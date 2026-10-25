@@ -1,0 +1,51 @@
+GExq_BatchLoop.lean:20:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SdkC_Oracle.program (CheckpointBytes5Effect.bind ?p ?k)
+in the target expression
+  (eval H
+          (SdkC_Oracle.program do
+            let out ← Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos
+            match out with
+              | ControlFlow.done result => pure result
+              | ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx nextVal nextD
+                  nextPos)).1.length ≤
+    287 + (fuel + 1)
+
+case succ
+base : Port3_NativeBatchBody.Ops
+Hash : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 Hash
+hash : Hash
+proof : Slice U8
+root : Digest
+tree lo n slot : Usize
+keys : Std.Array U64 16#usize
+fuel : ℕ
+ih :
+  ∀ (idx : Port9OR_BatchStep.Indices) (val : Port9OR_BatchStep.Values) (d pos : Usize),
+    count (287 + fuel) (Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel idx val d pos)
+idx : Port9OR_BatchStep.Indices
+val : Port9OR_BatchStep.Values
+d pos : Usize
+H : Bytes → State
+paid :
+  ((eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos))).1.length +
+      match
+        (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos))).2 with
+      | ok a => GExq_BatchCredit.remaining a
+      | x => 0) ≤
+    288
+⊢ (eval H
+          (SdkC_Oracle.program do
+            let out ← Port9OR_BatchStep.body base D proof root tree hash lo n slot keys idx val d pos
+            match out with
+              | ControlFlow.done result => pure result
+              | ControlFlow.cont (nextIdx, nextVal, nextD, nextPos) =>
+                Port9OR_BatchLoop.code base D hash proof root tree lo n slot keys fuel nextIdx nextVal nextD
+                  nextPos)).1.length ≤
+    287 + (fuel + 1)
+'AspisR1.GExq_BatchLoop.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
