@@ -1,0 +1,81 @@
+F3J_ReseedSampler.lean:61:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (OpeningReseedFrame.addr P.statement.tag ⋯ (decodeState c.state)).toBytes
+in the target expression
+  ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+        ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+        ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state),
+        ((OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯ (decodeState c.state)).toBytes,
+          H (OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯ (decodeState c.state)).toBytes)],
+      TranscriptView.liftChallenge
+        (params.σ 26 (decodeState block),
+          H
+            (OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯
+                (decodeState c.state)).toBytes)) =
+    ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+          (flatten (TranscriptStep.readParts c.absorbed 1#u8), decodeState block),
+          (flatten (TranscriptStep.readParts c.absorbed 2#u8), decodeState c.state)] ++
+        [(OpeningReseedFrame.frame 2 (decodeState after.state), decodeState out.state)],
+      TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 26 (decodeState block)), decodeState out.state)
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+before after : r1_wire.SemanticTranscript Hash
+framed : Slice U8
+block : Std.Array U8 32#usize
+c : F3J_BlockCalls.Calls D before after 26#u8 framed block
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+hash : Hash
+out : transcript.Transcript Hash
+reseed : transcript.Transcript.new D hash after.state transport.Variant.S2 = ok out
+P : LiteralTranscript.Prefix
+m : LiteralTranscript.Message
+b : LiteralTranscript.BytesMessage
+pubTag : P.statement.tag = 2
+erased : LiteralTranscript.erase m = TranscriptView.Message.payload b
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+payload : ↑b = rawBytes framed
+params : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+bound : List.length (rawBytes framed) ≤ params.D
+tag : params.lbl 26 = decodeByte c.tag
+address :
+  (UnifiedSampler.absorb params 26 (LiteralTranscript.erasePrefix P) b).toBytes =
+    flatten (TranscriptStep.absorbParts before.state c.tag framed)
+consistent : ∀ q ∈ F3J_BlockCalls.log c, q.2 = H q.1
+ha : decodeState c.absorbed = H (flatten (TranscriptStep.absorbParts before.state c.tag framed))
+hb : decodeState block = H (squeezeA params (decodeState c.absorbed)).toBytes
+hs : decodeState c.state = H (advanceA params (decodeState c.absorbed)).toBytes
+seed : decodeState out.state = H (OpeningReseedFrame.frame 2 (decodeState after.state))
+afterState : after.state = c.state
+seedAddr :
+  (OpeningReseedFrame.addr P.statement.tag ⋯ (decodeState c.state)).toBytes =
+    OpeningReseedFrame.frame 2 (decodeState after.state)
+⊢ ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+        ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+        ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state),
+        ((OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯ (decodeState c.state)).toBytes,
+          H (OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯ (decodeState c.state)).toBytes)],
+      TranscriptView.liftChallenge
+        (params.σ 26 (decodeState block),
+          H
+            (OpeningReseedFrame.addr (LiteralTranscript.erasePrefix P).statement.tag ⋯
+                (decodeState c.state)).toBytes)) =
+    ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+          (flatten (TranscriptStep.readParts c.absorbed 1#u8), decodeState block),
+          (flatten (TranscriptStep.readParts c.absorbed 2#u8), decodeState c.state)] ++
+        [(OpeningReseedFrame.frame 2 (decodeState after.state), decodeState out.state)],
+      TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 26 (decodeState block)), decodeState out.state)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (26 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3J_ReseedSampler.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

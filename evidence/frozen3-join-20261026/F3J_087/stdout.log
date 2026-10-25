@@ -1,0 +1,14 @@
+F3J_QueryRow.lean:22:2: error: 'change' tactic failed, pattern
+  List.map ?m.128 (eval (fun a => H ?m.110) (QuerySamplerBridge.sampler ?m.116 ?m.117 ?m.118).toProgram).1 = ?m.132
+is not definitionally equal to target
+  (mapView Addr.toBytes
+        (eval (fun a => H a.toBytes)
+          (QuerySamplerBridge.sampler SelectedTranscriptParams.params
+              (UnifiedSampler.absorb SelectedTranscriptParams.params 31 (LiteralTranscript.erasePrefix P) b)
+              UnifiedSampler.liftQuery).toProgram)).1 =
+    let p := SelectedTranscriptParams.params;
+    let a := UnifiedSampler.absorb p 31 (LiteralTranscript.erasePrefix P) b;
+    List.map (fun entry => (entry.1.toBytes, entry.2))
+      ((a, H a.toBytes) :: F3J_QueryLog.issued p (fun a => H a.toBytes) 8 (H a.toBytes))
+'AspisR1.F3J_QueryRow.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3J_QueryRow.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

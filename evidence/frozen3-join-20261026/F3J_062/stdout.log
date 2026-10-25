@@ -1,0 +1,42 @@
+F3J_OpeningFrame.lean:14:2: error: Tactic `rfl` failed: The left-hand side
+  List.map decodeByte (↑s ++ ([0#u8, tag] ++ (↑(core.num.U32.to_le_bytes n) ++ ↑payload)))
+is not definitionally equal to the right-hand side
+  bytes (decodeState s) ++ ([0, decodeByte tag] ++ (PublicInitFrame.lengthBytes ↑n ++ List.map decodeByte ↑payload))
+
+s : Std.Array U8 32#usize
+tag : U8
+n : U32
+payload : Slice U8
+⊢ List.map decodeByte (↑s ++ ([0#u8, tag] ++ (↑(core.num.U32.to_le_bytes n) ++ ↑payload))) =
+    bytes (decodeState s) ++ ([0, decodeByte tag] ++ (PublicInitFrame.lengthBytes ↑n ++ List.map decodeByte ↑payload))
+F3J_OpeningFrame.lean:13:13: warning: This simp argument is unused:
+  ← state_bytes
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵←̵ ̵s̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵l̵e̵n̵g̵t̵h̵_̵b̵y̵t̵e̵s̵,̵r̵a̵w̵B̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲l̲e̲n̲g̲t̲h̲_̲b̲y̲t̲e̲s̲,̲ ̲r̲a̲w̲B̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_OpeningFrame.lean:13:27: warning: This simp argument is unused:
+  length_bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [← s̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵l̵e̵n̵g̵t̵h̵_̵b̵y̵t̵e̵s̵,̵r̵a̵w̵B̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵s̲t̲a̲t̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲r̲a̲w̲B̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_OpeningFrame.lean:13:49: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [← s̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵l̵e̵n̵g̵t̵h̵_̵b̵y̵t̵e̵s̵,̵r̵a̵w̵B̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵s̲t̲a̲t̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲l̲e̲n̲g̲t̲h̲_̲b̲y̲t̲e̲s̲,̲ ̲r̲a̲w̲B̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_OpeningFrame.lean:13:63: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [← s̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵l̵e̵n̵g̵t̵h̵_̵b̵y̵t̵e̵s̵,̵r̵a̵w̵B̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵s̲t̲a̲t̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲l̲e̲n̲g̲t̲h̲_̲b̲y̲t̲e̲s̲,̲ ̲r̲a̲w̲B̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_OpeningFrame.absorb' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

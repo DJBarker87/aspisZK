@@ -1,0 +1,65 @@
+F3J_BlockSampler.lean:51:52: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+          ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+          ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state)],
+        TranscriptView.liftChallenge (params.σ (↑row) (decodeState block), decodeState c.state)) =
+      ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+          ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+          ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state)],
+        TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑row) (decodeState block)),
+        decodeState _a.state)
+Error: Application type mismatch: The argument
+  c
+has type
+  F3J_BlockCalls.Calls D before after row framed block
+but is expected to have type
+  F3J_BlockCalls.Calls D before _a row framed block
+in the application
+  c.tag
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+before after : r1_wire.SemanticTranscript Hash
+row : U8
+framed : Slice U8
+block : Std.Array U8 32#usize
+c : F3J_BlockCalls.Calls D before after row framed block
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+positive : ↑row ≠ 0
+notReseed : ↑row ≠ 26
+notQuery : ↑row ≠ 31
+below : ↑row < 33
+P : LiteralTranscript.Prefix
+m : LiteralTranscript.Message
+b : LiteralTranscript.BytesMessage
+erased : LiteralTranscript.erase m = TranscriptView.Message.payload b
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+payload : ↑b = rawBytes framed
+params : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+bound : List.length (rawBytes framed) ≤ params.D
+tag : params.lbl ↑row = decodeByte c.tag
+address :
+  (UnifiedSampler.absorb params (↑row) (LiteralTranscript.erasePrefix P) b).toBytes =
+    flatten (TranscriptStep.absorbParts before.state c.tag framed)
+consistent : ∀ q ∈ F3J_BlockCalls.log c, q.2 = H q.1
+ha : decodeState c.absorbed = H (flatten (TranscriptStep.absorbParts before.state c.tag framed))
+hb : decodeState block = H (squeezeA params (decodeState c.absorbed)).toBytes
+hs : decodeState c.state = H (advanceA params (decodeState c.absorbed)).toBytes
+⊢ ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+        ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+        ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state)],
+      TranscriptView.liftChallenge (params.σ (↑row) (decodeState block), decodeState c.state)) =
+    ([(flatten (TranscriptStep.absorbParts before.state c.tag framed), decodeState c.absorbed),
+        ((squeezeA params (decodeState c.absorbed)).toBytes, decodeState block),
+        ((advanceA params (decodeState c.absorbed)).toBytes, decodeState c.state)],
+      TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ (↑row) (decodeState block)),
+      decodeState after.state)
+'AspisR1.F3J_BlockSampler.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

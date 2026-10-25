@@ -1,0 +1,36 @@
+import F3J_QueryJoin
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.F3J_QuerySource
+open Aeneas Aeneas.Std Result
+open AspisR1PublicPreparation
+
+private theorem bind_success {α β : Type} (m : Result α) (k : α → Result β) (v : β)
+    (h : (do let x ← m; k x)=ok v) : ∃ x,m=ok x ∧ k x=ok v := by
+  cases m with
+  | ok x => exact ⟨x,rfl,h⟩
+  | fail e => simp only [bind_tc_fail] at h; cases h
+  | div => simp only [bind_tc_div] at h; cases h
+
+/-- A successful installed query body actually executes its first squeeze and
+advance, even when the decoder later selects an earlier state. -/
+theorem first_pair {Hash : Type} (B : QueriesModel.Boundaries) (D : aspis_core.Digest32 Hash)
+    (before after : transcript.Transcript Hash) (row : U8) (payload : Slice U8)
+    (out : Array U32 22#usize)
+    (success : QueriesModel.queries B D before row payload=ok (.Ok out,after)) :
+    ∃ absorbed block next,
+      transcript.Transcript.absorb D before row payload=ok absorbed ∧
+      D.digest absorbed.hash (TranscriptStep.readParts absorbed.state 1#u8)=ok block ∧
+      D.digest absorbed.hash (TranscriptStep.readParts absorbed.state 2#u8)=ok next := by
+  unfold QueriesModel.queries at success
+  simp only [lift,bind_tc_ok] at success
+  obtain ⟨absorbed,ha,success⟩ := bind_success _ _ _ success
+  obtain ⟨block,hb,success⟩ := bind_success _ _ _ success
+  obtain ⟨pair,hi,success⟩ := bind_success _ _ _ success
+  rcases pair with ⟨unused,put⟩
+  obtain ⟨next,hn,success⟩ := bind_success _ _ _ success
+  exact ⟨absorbed,block,next,ha,hb,hn⟩
+
+#print axioms first_pair
+end AspisR1.F3J_QuerySource
+end

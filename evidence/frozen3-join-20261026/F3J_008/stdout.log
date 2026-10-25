@@ -1,0 +1,23 @@
+F3J_InitialLog.lean:27:71: error(lean.unknownIdentifier): Unknown identifier `hq`
+F3J_InitialLog.lean:27:9: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+pubInput : pool_v1.pair_forest_semantic_terminal.r0.Public
+root : TranscriptStep.Bytes32
+before : r1_wire.SemanticTranscript Hash
+init : PublicInitCall D pubInput root before
+c : SourceFull25.Call D pre
+first : c.before = before
+number : ↑c.row = 0
+empty : rawBytes c.record.framed = PublicInitFrame.emptyRecord
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+P : LiteralTranscript.Prefix
+word : LiteralTranscript.C1Word
+publicBytes : P.statement.pubBytes = rawBytes init.encoded.deref
+params : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+initCons : (initPair init).2 = H (initPair init).1
+⊢ ?m.131
+'AspisR1.F3J_InitialLog.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

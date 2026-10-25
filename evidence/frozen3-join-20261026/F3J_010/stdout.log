@@ -1,0 +1,33 @@
+F3J_InitialLog.lean:40:116: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+pubInput : pool_v1.pair_forest_semantic_terminal.r0.Public
+root : TranscriptStep.Bytes32
+before : r1_wire.SemanticTranscript Hash
+init : PublicInitCall D pubInput root before
+c : SourceFull25.Call D pre
+first : c.before = before
+number : ↑c.row = 0
+empty : rawBytes c.record.framed = PublicInitFrame.emptyRecord
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+P : LiteralTranscript.Prefix
+word : LiteralTranscript.C1Word
+publicBytes : P.statement.pubBytes = rawBytes init.encoded.deref
+params : Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+initCons : (initPair init).2 = H (initPair init).1
+initLog : ∀ q ∈ [initPair init], q.2 = H q.1
+initState : decodeState c.before.state = H (PublicInitFrame.addr P.statement.pubBytes ⋯ (decodeState root)).toBytes
+bound : List.length (rawBytes c.record.framed) ≤ params.D
+tag : decodeByte c.tag = params.lbl 0
+⊢ ↑(Addr.ofBytes
+        (absorb (bytes (H (PublicInitFrame.addr P.statement.pubBytes ⋯ (decodeState root)).toBytes)) (params.lbl 0)
+          PublicInitFrame.emptyRecord)
+        ⋯) =
+    ↑(Addr.ofBytes
+        (absorb (bytes (H (PublicInitFrame.addr P.statement.pubBytes ⋯ (decodeState root)).toBytes)) 160
+          PublicInitFrame.emptyRecord)
+        ⋯)
+'AspisR1.F3J_InitialLog.initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
