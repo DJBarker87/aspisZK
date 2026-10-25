@@ -1,0 +1,25 @@
+Hir_SelectOne.lean:42:58: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+Hir_SelectOne.lean:42:33: error: unsolved goals
+A : Type
+native1 : S2W_ExtractionBoundary.First
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+key : ℕ
+data : Slice U8
+site : CallAt A
+route : Hiq_ReleaseRoute.route site.call.data = Hiq_ReleaseRoute.Route.first
+address : (site.call.layout.handles 2).1 = key
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+accepted :
+  first native1 copy allocator (load site.before site.call.layout) id site.call.data site.call.state =
+    ok (core.result.Result.Ok (saved, post, final))
+equal : data = saved.deref
+⊢ (if Hiq_ReleaseRoute.route site.call.data = Hiq_ReleaseRoute.Route.first ∧ (site.call.layout.handles 2).1 = key then
+      some { site := site, saved := saved, post := post, final := final }
+    else none) =
+    some { site := site, saved := saved, post := post, final := final }
+'AspisR1.Hir_SelectOne.sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hir_SelectOne.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

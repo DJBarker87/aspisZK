@@ -1,0 +1,40 @@
+Hir_ScheduleOrigin.lean:39:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Hir_Schedule.run native1 native2 copy allocator id H head.1 (k head.2.2)).1 key
+in the target expression
+  Birth native1 copy allocator id key
+    ((Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).1 key).data
+    { before := store, call := call }
+
+case invoke.inl.inr
+A B : Type
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+H : Bytes → State
+key : ℕ
+call : Call A
+k : Hir_Call.Reply A → Schedule A B
+ih :
+  ∀ (a : Hir_Call.Reply A) (store : Store),
+    admissible native1 native2 copy allocator id H store (k a) →
+      ((Hir_Schedule.run native1 native2 copy allocator id H store (k a)).1 key).owner = id →
+        Initialized ((Hir_Schedule.run native1 native2 copy allocator id H store (k a)).1 key).data →
+          (Hir_Schedule.run native1 native2 copy allocator id H store (k a)).1 key = store key ∨
+            ∃ site ∈ Hir_ProvenanceModel.calls native1 native2 copy allocator id H store (k a),
+              Birth native1 copy allocator id key
+                ((Hir_Schedule.run native1 native2 copy allocator id H store (k a)).1 key).data site
+store : Store
+allowed : admissible native1 native2 copy allocator id H store (Schedule.invoke call k)
+owner : ((Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).1 key).owner = id
+marker : Initialized ((Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).1 key).data
+head : Effect A := native native1 native2 copy allocator id store call
+old : (Hir_Schedule.run native1 native2 copy allocator id H head.1 (k head.2.2)).1 key = head.1 key
+fresh :
+  Birth native1 copy allocator id key ((native native1 native2 copy allocator id store call).1 key).data
+    { before := store, call := call }
+⊢ Birth native1 copy allocator id key
+    ((Hir_Schedule.run native1 native2 copy allocator id H store (Schedule.invoke call k)).1 key).data
+    { before := store, call := call }
+'AspisR1.Hir_ScheduleOrigin.origin_or_initial' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

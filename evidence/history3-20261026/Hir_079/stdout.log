@@ -1,0 +1,46 @@
+Hir_BirthReads.lean:31:4: error: unsolved goals
+case invoke.inr
+A B F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+H : Bytes → State
+site : CallAt A
+call : Call A
+k : Hir_Call.Reply A → Schedule A B
+ih :
+  ∀ (a : Hir_Call.Reply A) (initial : Store),
+    site ∈ Hir_ProvenanceModel.calls native1 native2 copy allocator id H initial (k a) →
+      ∃ front back,
+        Hir_ScheduleLog.reads c hashv native1 native2 copy allocator id H initial (k a) =
+          front ++ SdkC_Source.readLog (Hir_CallLog.attempts c hashv copy allocator id site.before site.call) ++ back
+initial : Store
+member : site ∈ Hir_ProvenanceModel.calls native1 native2 copy allocator id H initial (Schedule.invoke call k)
+head : Effect A := native native1 native2 copy allocator id initial call
+tail :
+  site ∈
+    Hir_ProvenanceModel.calls native1 native2 copy allocator id H
+      (native native1 native2 copy allocator id initial call).1
+      (k (native native1 native2 copy allocator id initial call).2.2)
+front back : List (Bytes × State)
+eq :
+  Hir_ScheduleLog.reads c hashv native1 native2 copy allocator id H head.1 (k head.2.2) =
+    front ++ SdkC_Source.readLog (Hir_CallLog.attempts c hashv copy allocator id site.before site.call) ++ back
+⊢ SdkC_Source.readLog (Hir_CallLog.attempts c hashv copy allocator id initial call) ++
+      Hir_ScheduleLog.reads c hashv native1 native2 copy allocator id H
+        (native native1 native2 copy allocator id initial call).1
+        (k (native native1 native2 copy allocator id initial call).2.2) =
+    SdkC_Source.readLog (Hir_CallLog.attempts c hashv copy allocator id initial call) ++
+      (front ++ (SdkC_Source.readLog (Hir_CallLog.attempts c hashv copy allocator id site.before site.call) ++ back))
+Hir_BirthReads.lean:33:39: warning: This simp argument is unused:
+  eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Hir_ScheduleLog.reads,e̵q̵,̵ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hir_BirthReads.source_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
