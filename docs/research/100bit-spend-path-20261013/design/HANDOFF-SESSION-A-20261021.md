@@ -916,3 +916,8 @@ Same original public-account bytes/frame/checkpoint/S1 conditional link acknowle
 ## Lead review — 2026-10-25, same SDK accepted Claims ranges
 
 Immutablecef39d839d fullfournewsource/statements/checker reviewed; independent69-file/65-manifest/6679-importmetadata packet passes1.065252667s/37781504B/swap0/no compiler/host/liveA access. Credit accepted-only all87 four-word canonical Claims ranges on SAMEsemantic witness under exact priorSDK/Std/runtime/allocator/extraction/B assumptions, alloldhypotheses/conclusionsretained. Nativeinitialization/totality/cleanup/effects/arbitrary-prefix andcoherent dependency/caller/release join remainopen. No duplicatecompilation requested. Lead360rawexport failed unqualifiedliftIO BEFOREIO; qualified-entry-only361allocated, twowholeconsumer slots preserved. Runtime/producer sourcereviewsdone/merged, nativeentriesdisabled/noinstallation.
+
+
+## Lead update — 2026-10-25, actual Query31 raw body acquired
+
+Raw361 PASSfiveexports/88strictreadbacks reviewed/merged; actualweakerCallsbodyhasexplicitpair0=self1.state/eightpairlist, Bridgeexpectsanchor. No theoremchecked yet. Port35 max2focused362/363 attemptsNEWstrongCalls retainingoldweakerCallsunchanged, thenexplicitNEWBridgeproofwithSTRICTIDENTICALtype andONLYoldCallsconstant→newstrongCalls valuepatch, allnormallykernelchecked. No historicprivateNamerenaming/metadata trustbypass. Wholecaller/re-pinjoin remainsopen; no duplicate/Acompilation orlivecacheaccess requested.
