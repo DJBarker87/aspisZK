@@ -1,0 +1,54 @@
+RawK_CodeHead.lean:55:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (SdkC_Source.dictionary hashv) ()
+    (SdkD_PrepareLower.lower
+      (S1PrepareCode.prepare ops AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub proof
+        hash input))
+in the target expression
+  erase (SdkC_Source.dictionary hashv) ()
+      (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input)) =
+    ok (core.result.Result.Ok p, scratch)
+
+Hash : Type
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+source : ∀ (h : Hash) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : Hash
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+success :
+  erase (SdkC_Source.dictionary hashv) ()
+      (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input)) =
+    ok (core.result.Result.Ok p, scratch)
+association :
+  SdkD_PrepareLower.Associated hashv
+    (S1PrepareCode.prepare ops AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub proof
+      hash input)
+logs :
+  SdkC_Source.readLog
+      (SdkC_Source.run hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input))
+          []).2 =
+    AspisR1PublicPreparation.PreparedHashCode.observe
+      (AspisR1PublicPreparation.PreparedHashCode.run (SdkD_PrepareSource.code ops B std D pub proof hash input)).1
+⊢ ∃ entry,
+    head hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input)) = some entry ∧
+      List.head? entry.1 = some 85
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.RawK_CodeHead.lift_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawK_CodeHead.right' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawK_CodeHead.left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawK_CodeHead.prepare' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
