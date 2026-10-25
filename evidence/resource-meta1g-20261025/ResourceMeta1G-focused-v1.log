@@ -1,0 +1,53 @@
+test_actual_inspect_and_stage_temp_only_charge_terminal (__main__.ResourceMeta1GTests.test_actual_inspect_and_stage_temp_only_charge_terminal) ... 
+  test_actual_inspect_and_stage_temp_only_charge_terminal (__main__.ResourceMeta1GTests.test_actual_inspect_and_stage_temp_only_charge_terminal) (mode='success') ... FAIL
+test_all_metadata_paths_and_own_charge_once_other_jobs_retained (__main__.ResourceMeta1GTests.test_all_metadata_paths_and_own_charge_once_other_jobs_retained) ... ERROR
+test_historical_and_mismatched_controls_cannot_authorize (__main__.ResourceMeta1GTests.test_historical_and_mismatched_controls_cannot_authorize) ... ok
+test_no_real_operational_artifacts (__main__.ResourceMeta1GTests.test_no_real_operational_artifacts) ... ok
+test_normalized_bytes_ast_finite_deltas_and_policy_pins (__main__.ResourceMeta1GTests.test_normalized_bytes_ast_finite_deltas_and_policy_pins) ... ok
+test_retained_actual_report_is_historical_denial_not_authority (__main__.ResourceMeta1GTests.test_retained_actual_report_is_historical_denial_not_authority) ... ok
+test_terminal_reserve_denial_sourcepin_unit_collision (__main__.ResourceMeta1GTests.test_terminal_reserve_denial_sourcepin_unit_collision) ... ok
+test_wire_wholemap_strict_linux_and_bootstrap_temp (__main__.ResourceMeta1GTests.test_wire_wholemap_strict_linux_and_bootstrap_temp) ... FAIL
+
+======================================================================
+ERROR: test_all_metadata_paths_and_own_charge_once_other_jobs_retained (__main__.ResourceMeta1GTests.test_all_metadata_paths_and_own_charge_once_other_jobs_retained)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_tests.py", line 90, in test_all_metadata_paths_and_own_charge_once_other_jobs_retained
+    d=evaluate(s,e);self.assertTrue(d['allowed'],d)
+      ^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_tests.py", line 47, in evaluate
+    return adapter.policy.evaluate(F['legacy'](s,q),s,s,q,phase=phase,
+                                   ^^^^^^^^^^^^^^^^
+  File "ResourceMeta1G-reviewed-functions", line 34, in legacy
+  File "tools/resource-available-20261024/ResourceAvailable_candidate.py", line 297, in observe
+  File "tools/resource-available-20261024/ResourceAvailable_candidate.py", line 215, in validate_membership
+ValueError: pids delegation mismatch
+
+======================================================================
+FAIL: test_actual_inspect_and_stage_temp_only_charge_terminal (__main__.ResourceMeta1GTests.test_actual_inspect_and_stage_temp_only_charge_terminal) (mode='success')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_tests.py", line 177, in test_actual_inspect_and_stage_temp_only_charge_terminal
+    with patch.object(local,'sources',return_value={'ResourceMeta1G_stub.py':'# TEMP only\n'}):local.stage()
+                                                                                               ^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_local.py", line 163, in stage
+    r=ssh_python(bootstrap,'stage',environment=manifest['env'],data=package)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_tests.py", line 172, in transport
+    exec(compile(payload,'ResourceMeta1G-TEMP-stage','exec'),{})
+  File "ResourceMeta1G-TEMP-stage", line 4, in <module>
+AssertionError
+
+======================================================================
+FAIL: test_wire_wholemap_strict_linux_and_bootstrap_temp (__main__.ResourceMeta1GTests.test_wire_wholemap_strict_linux_and_bootstrap_temp)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-resource-meta1g/tools/resource-meta1g-20261025/ResourceMeta1G_tests.py", line 154, in test_wire_wholemap_strict_linux_and_bootstrap_temp
+    exec(compile(ast.fix_missing_locations(tree),'ResourceMeta1G-TEMP-bootstrap','exec'),{})
+  File "ResourceMeta1G-TEMP-bootstrap", line 102, in <module>
+AssertionError
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.388s
+
+FAILED (failures=2, errors=1)
