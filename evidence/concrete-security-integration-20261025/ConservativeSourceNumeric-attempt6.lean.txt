@@ -1,0 +1,48 @@
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
+
+/-! Unadopted numerical query envelope. This file imports no Aspis object.
+`bound` is the literal formula in OracleDecisionPrereqNumeric.envelope with
+c=34, B=1175; qmax is OracleDecisionMultiNumeric.safeMax. Linking this candidate
+into the final source security and extractor consumers remains required.
+All expressions are scalar rational arithmetic, with no recurrence unfolding.
+-/
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.ConservativeSourceNumeric
+
+def qmax : Nat := 14777960484892959601791002642008314224629686649
+
+def bound (Q : Nat) : Rat :=
+  ((Q+34 : Nat) : Rat) * (15 / (2 : Rat)^109) +
+    6 * ((Q+1175 : Nat) : Rat)^2 / (256^32 : Rat) +
+    1/(2 : Rat)^126 + 1/(2 : Rat)^454
+
+/-- The zero-query whole-experiment bound, with all additive allowances. -/
+theorem zero_queries : bound 0 ≤ 1/(2 : Rat)^100 := by norm_num [bound]
+
+/-- SAME Qmax and Q+34 start charge. This is not work-normalisation. -/
+theorem safe_range (Q : Nat) (hq : Q ≤ qmax) :
+    bound Q ≤ (Q+1 : Rat) * (1/(2 : Rat)^100) := by
+  let a : Rat := 6/(2 : Rat)^256
+  let d : Rat := 1/(2 : Rat)^100 - 15/(2 : Rat)^109 - 2*a*1175
+  have hn : (0 : Rat) ≤ Q := Nat.cast_nonneg Q
+  have hm : (Q : Rat) ≤ qmax := by exact_mod_cast hq
+  have ha : 0 ≤ a := by dsimp [a]; positivity
+  have slope : a * (qmax : Rat) ≤ d := by norm_num [a,d,qmax]
+  have quad : a * (Q : Rat)^2 ≤ d * Q := by
+    calc
+      a * (Q : Rat)^2 = (a * Q) * Q := by ring
+      _ ≤ (a * qmax) * Q := mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hm ha) hn
+      _ ≤ d * Q := mul_le_mul_of_nonneg_right slope hn
+  dsimp [a,d] at quad
+  unfold bound
+  norm_num [Nat.cast_add, Nat.cast_ofNat] at quad ⊢
+  nlinarith [quad]
+
+#print axioms zero_queries
+#print axioms safe_range
+end AspisR1.ConservativeSourceNumeric
+end

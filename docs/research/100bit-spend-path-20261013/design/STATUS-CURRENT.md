@@ -28,8 +28,8 @@ are not restarted. The worker branch examined is
 
 | Kind | Exact boundary or open obligation | Concrete consumer | Next check that can close it |
 |---|---|---|---|
-| Approved external/platform, only at the existing scope | P1 ideal hash; `S2TrustedSdkBorrow`, `S2W_TrustedStd.TrustedStd`, D189 entry/allocator interpretation, P2/P2-prime/P3/P4 runtime premises | `S2W_D189Consolidation.accepted_run`, checkpoint authentication | Retain their complete statements; instantiate source refinements separately. Extraction/native/artifact correspondence is not an external cryptographic assumption. |
-| Aspis implementation | `S1FinishChildren.install`: Claims and Terminal still arbitrary complete functions; six other finish operations and round children already have extracted implementations | `S1SdkSelectedSemanticTrace.original_sdk_selected_semantic_trace`; then the selected D189 `SourceCuts` | Check `ConcreteSdkFinishTrace.original_sdk_selected_semantic_trace` with those exact six operations in the original accepted SDK call; subsequently supply complete Claims/Terminal source refinements. |
+| Approved external/platform, only at the existing scope | P1 ideal hash; `S2TrustedSdkBorrow`, `S2W_TrustedStd.TrustedStd`, D189 entry interpretation, P2/P2-prime/P3/P4 runtime premises | `S2W_D189Consolidation.accepted_run`, checkpoint authentication | Retain their complete statements; instantiate source refinements separately. Extraction/native/artifact correspondence is not an external cryptographic assumption. |
+| Aspis implementation | `S1FinishChildren.install`: Claims and Terminal still arbitrary complete functions; other finish source/model operations and round children have checked implementations, with native std/extraction/allocator/abort correspondence still open | `S1SdkSelectedSemanticTrace.original_sdk_selected_semantic_trace`; then the selected D189 `SourceCuts` | Check `ConcreteSdkFinishTrace.original_sdk_selected_semantic_trace` with those exact source/model operations in the original accepted SDK call; subsequently supply complete Claims/Terminal source refinements. |
 | Integration | D189 `accepted_run` witnesses, selected semantic cut, S1 prepared/challenge/claim facts, checkpoint reader/writer and query arithmetic must describe one accepted execution | `S2W_InputSchedule.input_schedule`, `S2CallerFacts`, `Port7CLEAN_Accepted.terminal_from_calls` | Kernel-check the enclosing same-cut consumer against one coherent dependency selection. Port30's source candidate and Port32's failed replay are not such evidence. |
 | Aspis implementation/cryptography | Actual reached terminal Checks plus classifier no-hit: `CleanAcceptedModel`; actual prefix containment; ordered child effects | `Port6AUTH_Probability.failure_bound` / `Port6AUTH_Headline.final_soundness` | Feed the same execution's preparation, both authenticated batches, checkpoint and arithmetic into Checks/no-hit and prefix replay. Acceptance equality alone cannot discharge this. |
 | Aspis implementation | `Port17RELEASE_Prepare.OtherBudgets` for ids 3,4,6,9,10,11,12,17,19; native source/effect instances | `Port17RELEASE_Driver.rust`, `Port17RELEASE_Accounting.budget/log_length`; ultimately the source collision bound | Reuse checked op7 <=115 and driver bounds <=1161+R. Prove residual operations' actual ordered all-outcome effects/budgets; retain rejected prefixes and repeats. No no-read inference from `Result` or function arguments. |
@@ -74,6 +74,43 @@ actual multiplicities total14. They are an **unadopted alternative**, not a
 native source/effect discharge or a replacement for the failed SDK check.
 Exact commands, source hashes, resource measurements, failures and results
 are in `evidence/concrete-security-integration-20261025/`.
+
+**Checked result (source commit `dc373ba8c6`):**
+`ConservativeSourceBudget.driver_count` derives <=1175 for the existing
+Flow10/None source-model driver under the explicit one-query residual child
+contracts. Its actual downstream consumers
+`ConservativeSourceAccounting.first_reads` and `log_length` derive Q+1175
+and Q+2350, retaining both annotation passes and all outcomes.
+`ConservativeSourceNumeric.zero_queries` and `safe_range` prove the literal
+candidate envelope
+`(Q+34)*15/2^109 + 6*(Q+1175)^2/2^256 + 2^-126 + 2^-454`,
+with the original Qmax
+`14777960484892959601791002642008314224629686649`.
+This closes three **conditional accounting/numeric sub-obligations**; it
+does not close a native implementation/cryptographic child contract or
+eliminate any top-level security premise. The numeric file imports only
+standard mathlib, and its exact formula/Qmax correspondence is recorded in
+`source-assessment.json`; it is not a new composed security endpoint.
+
+New focused validation: source driver plus its downstream accounting consumer
+exit0, 9.7130s, peak1,350,828,032B, aggregate1,404,502,016B; scalar numeric
+consumer exit0, 4.7103s, peak1,484,914,688B, aggregate1,521,205,248B.
+Both swap0, `lake env lean -j1 -M4400 -DElab.async=false`, and complete
+`#print axioms` reports contain only propext/Classical.choice/Quot.sound.
+The earlier namespace/instance/proof-variable and finite-power elaboration
+failures are retained, not accepted as partial successful files. No unchanged
+full regression or resource-failed higher-cap retry ran.
+
+The mathematical trade-off is explicit: the candidate adds14 to the verifier
+envelope and28 to the two-pass log bound, changing only the collision term at
+the probability boundary, while keeping the Q+34 start charge, B, additive
+allowances, security criterion and adversary range. Actual residual bounds,
+failure-event transport and the extractor/Claims allowance must still be
+composed before proposing adoption of a changed advertised constant. The
+1175 result supplies no permission to assert the existing <=1161 premise.
+The next source obligation remains the concrete same-execution child
+connection, with Claims' safe-storage source/refinement qualification preferred
+over another unchanged unsupported-union attempt.
 No host action, build framework, authority, wallet or key operation is part
 of this work. No off-critical-path job was started or another session stopped.
 
