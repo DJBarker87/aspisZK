@@ -1,5 +1,82 @@
 # Current status: 100-bit soundness and privacy (living page)
 
+## Programme reset — 2026-10-25
+
+**Target not yet established**, for both implementation-linked 100-bit
+per-attempt soundness and real-prover privacy. The binding contract remains
+`SECURITY-CONTRACT-20261021.md`; no adversary, security event, parameter,
+source adoption, artifact pin or trust boundary changes in this reset.
+
+The shortest sufficient route is the source-event endpoint
+`Port6AUTH_Headline.final_soundness`, with `Port21PROJECTION_Experiment.accepted_mass_transport`
+available for the complete native stored-run experiment. The latter keeps the
+full accepted extractor input and its shared-oracle probability law; it does
+**not** supply the independent all-outcome source query bound. A universal
+`ExecutionJoin` or an all-world `AcceptedRunJoin` is not a prerequisite for
+this route. The older `OraclePortHeadlineFrozen2PerAttempt` remains the
+checked conditional numeric/extractor endpoint, not a deployed result.
+
+Read the complete statements of `S2W_D189Consolidation.accepted_run`,
+`Port6AUTH_Headline.final_soundness`, `Port6AUTH_Probability.failure_bound`,
+`Port7CLEAN_Accepted.terminal_from_calls`, the runtime binding and projection,
+and the current SDK/S1 worker statements. In particular, D189's actual `f,s`
+witnesses must feed the selected semantic cut, not an independently selected
+tuple. Its conditional child boundary is reused; SDK internals and outer S2
+are not restarted. The worker branch examined is
+`codex/s126-caller-20261021` at `d4ea499fdb`; the active transport branch
+`codex/cx-port36-transport-20261025` supplies no checked integration theorem.
+
+| Kind | Exact boundary or open obligation | Concrete consumer | Next check that can close it |
+|---|---|---|---|
+| Approved external/platform, only at the existing scope | P1 ideal hash; `S2TrustedSdkBorrow`, `S2W_TrustedStd.TrustedStd`, D189 entry/allocator interpretation, P2/P2-prime/P3/P4 runtime premises | `S2W_D189Consolidation.accepted_run`, checkpoint authentication | Retain their complete statements; instantiate source refinements separately. Extraction/native/artifact correspondence is not an external cryptographic assumption. |
+| Aspis implementation | `S1FinishChildren.install`: Claims and Terminal still arbitrary complete functions; six other finish operations and round children already have extracted implementations | `S1SdkSelectedSemanticTrace.original_sdk_selected_semantic_trace`; then the selected D189 `SourceCuts` | Check `ConcreteSdkFinishTrace.original_sdk_selected_semantic_trace` with those exact six operations in the original accepted SDK call; subsequently supply complete Claims/Terminal source refinements. |
+| Integration | D189 `accepted_run` witnesses, selected semantic cut, S1 prepared/challenge/claim facts, checkpoint reader/writer and query arithmetic must describe one accepted execution | `S2W_InputSchedule.input_schedule`, `S2CallerFacts`, `Port7CLEAN_Accepted.terminal_from_calls` | Kernel-check the enclosing same-cut consumer against one coherent dependency selection. Port30's source candidate and Port32's failed replay are not such evidence. |
+| Aspis implementation/cryptography | Actual reached terminal Checks plus classifier no-hit: `CleanAcceptedModel`; actual prefix containment; ordered child effects | `Port6AUTH_Probability.failure_bound` / `Port6AUTH_Headline.final_soundness` | Feed the same execution's preparation, both authenticated batches, checkpoint and arithmetic into Checks/no-hit and prefix replay. Acceptance equality alone cannot discharge this. |
+| Aspis implementation | `Port17RELEASE_Prepare.OtherBudgets` for ids 3,4,6,9,10,11,12,17,19; native source/effect instances | `Port17RELEASE_Driver.rust`, `Port17RELEASE_Accounting.budget/log_length`; ultimately the source collision bound | Reuse checked op7 <=115 and driver bounds <=1161+R. Prove residual operations' actual ordered all-outcome effects/budgets; retain rejected prefixes and repeats. No no-read inference from `Result` or function arguments. |
+| Aspis privacy | Full real selected prover refinement, E1/sampler law, joint adaptive L1/L2 transcript/retry/error/cleanup transport; L3 at its named scope | `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` | Complete actual real-run refinement to mathematical simE (D185). Fixed-query rank and component fixtures are insufficient; no simulator implementation campaign is required here. |
+| Integration/release evidence | Coherent selected dependency closure, final axioms, source/native/toolchain and all three frozen ELF associations | Concrete soundness and privacy release claims | Focused changed consumer first; one final dependency replay and axioms/artifact audit after the missing source instances exist. Historical cached checking is reused evidence, not a release rebuild. |
+
+Claims decision: route A has an identified native union-initialization
+obstruction, and the safe loop's Aeneas translation also failed (worker
+`s1-claims-nuc-extract-run4`). No unchanged retry of either method is selected.
+Route B, the small safe-storage Claims candidate, is the preferred candidate
+to qualify. The worker's returned-value, decoder-order, allocation/drop-control
+and finite unroll checks are reused within their explicit stub/allocator
+boundaries; they do not prove complete equivalence or memory safety. Before
+adoption it still needs full source/refinement equivalence including actual
+decoder and allocation errors, initializedness and cleanup/abort behaviour,
+CU/stack limits, enclosing caller transport, and all affected artifact checks.
+The candidate is **unadopted**. This session changes no shipped Rust source.
+
+The 1161 envelope remains advertised and unchanged. It is consumed by the
+collision/extractor accounting, not by the start-charge factor Q+34. A larger
+conservative residual budget must be propagated through the collision,
+extractor and safe-range theorems before adoption; a source driver bound of
+1161+R is not a proof of the existing 1161 premise.
+
+The principal SDK/S1 finish integration check is **blocked**, not proved.
+The first compile omitted `S2W_SnapshotFacts`; the single cache-path repair
+freshly verified the retained SDK cache's 25 module/source pins, then aborted
+at Lean's unchanged memory limit (exit134, 54.2464s, peak5,046,943,744B,
+aggregate5,080,940,544B, swap0), without a theorem result. Its source is retained
+as `ConcreteSdkFinishTrace.unchecked.lean.txt`, outside the formal source tree.
+The six-operation installation also includes an executable `from_fn` boundary
+model, whose complete native std correspondence remains open. It must not be
+reported as six discharged native implementations. No higher-cap retry or
+new declaration-transport machinery is selected.
+
+The bounded continuation requested by the owner checks three necessary
+accounting sub-obligations: a 1175-query actual source-model driver bound,
+its Q+1175 first-read / Q+2350 two-pass log consumers, and the literal scalar
+security envelope at the SAME existing Qmax. These retain explicit all-outcome
+`OtherBudgets other (fun _ => 1)` for the nine residual operation ids, whose
+actual multiplicities total14. They are an **unadopted alternative**, not a
+native source/effect discharge or a replacement for the failed SDK check.
+Exact commands, source hashes, resource measurements, failures and results
+are in `evidence/concrete-security-integration-20261025/`.
+No host action, build framework, authority, wallet or key operation is part
+of this work. No off-critical-path job was started or another session stopped.
+
 ## Lead checkpoint — 2026-10-25, Linux observations and caller preparation
 
 Both deployed targets remain **not yet established**. Launcher-history forensics PID18652 is tracing the last verified successful NUC command; old launcher failure and Mac causation are unestablished. One accepted wrapper supplies original public account bytes, decoded-public reuse, checkpoint write and public-account frame; S1 carries the same bytes into preparation, ranges and joint trace. All SDK/std/runtime/allocator/extraction and remaining native/artifact boundaries stay explicit. Coherent enclosing-caller import/re-pin join remains open.
