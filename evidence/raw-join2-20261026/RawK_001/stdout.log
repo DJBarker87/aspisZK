@@ -1,0 +1,38 @@
+RawK_Head.lean:16:22: error: Type mismatch
+  lift r
+has type
+  Result (Result A)
+of sort `Type` but is expected to have type
+  Code A
+of sort `Type 1`
+RawK_Head.lean:18:12: error: Type mismatch
+  lift r
+has type
+  Result (Result A)
+of sort `Type` but is expected to have type
+  Code A
+of sort `Type 1`
+RawK_Head.lean:36:4: error: Tactic `rfl` failed: The left-hand side
+  head (effects.digest D hash parts)
+is not definitionally equal to the right-hand side
+  some (AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)
+
+case ok.refl
+H : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+out : Std.Array U8 32#usize
+call : D.digest hash parts = ok out
+⊢ head (effects.digest D hash parts) =
+    some (AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)
+RawK_Head.lean:34:45: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵f̵f̵e̵c̵t̵s̵,̵e̵r̵a̵s̵e̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲e̲f̲f̲e̲c̲t̲s̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲c̲a̲l̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.RawK_Head.lift_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.RawK_Head.right' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RawK_Head.digest_head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
