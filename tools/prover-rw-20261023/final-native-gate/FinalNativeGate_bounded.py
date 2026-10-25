@@ -23,8 +23,15 @@ def trusted_group_directory(s, data_only=False):
     return (data_only is True and stat.S_ISDIR(s.st_mode) and
             s.st_uid==1000 and s.st_gid==1000 and not s.st_mode&0o002)
 
-def writable_rejected(s, data_only=False):
-    return bool(s.st_mode&0o022) and not trusted_group_directory(s,data_only)
+DATA_MARKER_PATHS = frozenset(('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cfg-if-1.0.4/.cargo-ok', '/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.186/.cargo-ok', '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/vendor/getrandom-0.3.4/.cargo-ok', '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/vendor/zeroize-1.8.1/.cargo-ok', '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/vendor/zeroize-original/.cargo-ok'))
+
+def trusted_group_marker(path, s, data_only=False):
+    return (data_only is True and path in DATA_MARKER_PATHS and
+            s.st_mode==0o100664 and s.st_uid==1000 and s.st_gid==1000 and
+            s.st_size==7 and s.st_nlink==1)
+
+def writable_rejected(s, data_only=False, *, path=None):
+    return bool(s.st_mode&0o022) and not (trusted_group_directory(s,data_only) or trusted_group_marker(path,s,data_only))
 
 class Reader:
     def __init__(self, catalog, *, data_only=False):
@@ -51,7 +58,7 @@ class Reader:
         kind='dir' if stat.S_ISDIR(s.st_mode) else 'file' if stat.S_ISREG(s.st_mode) else 'link' if stat.S_ISLNK(s.st_mode) else 'unknown'
         if kind!=e['kind'] or any(getattr(s,'st_'+k)!=e[k] for k in ('uid','gid','mode')):
             raise CatalogError('entry type/owner/group/mode drift: '+path)
-        if kind!='link' and writable_rejected(s,self.data_only):raise CatalogError('group/world writable input: '+path)
+        if kind!='link' and writable_rejected(s,self.data_only,path=path):raise CatalogError('group/world writable input: '+path)
         if kind=='file' and s.st_size!=e['size']:raise CatalogError('planned size drift: '+path)
         if kind=='unknown':raise CatalogError('unknown entry type')
 

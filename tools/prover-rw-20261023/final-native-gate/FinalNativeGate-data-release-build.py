@@ -9,9 +9,9 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v9'
-STAGE='/home/dombarker/final-native-gate-v9-20261025/'
-ENTRY='cab49cd04781de5e59fa314f203eb8d25dfb6fcc'
+RELEASE=D/'prospective-data-v10'
+STAGE='/home/dombarker/final-native-gate-v10-20261025/'
+ENTRY='92a0cfa06c'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
@@ -41,7 +41,7 @@ def prepare(release=None):
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus Source028 prospective-data-v9 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus Source029 prospective-data-v10 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -66,12 +66,12 @@ def prepare(release=None):
     assert len(receiver)<4*2**20
     with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
     template=source['FinalNativeGate-transport-template.txt'].decode()
-    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v9/FinalNativeGate-data-transfer.py')"
+    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v10/FinalNativeGate-data-transfer.py')"
     assert template.count(old_receiver)==1
     template=template.replace(old_receiver,'RECEIVER=Path('+repr(str(RELEASE/'FinalNativeGate-data-transfer.py'))+')')
     transport=template.replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
     # Source-only preflight: bind canonical NEW receiver, exact length and hash.
-    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v9/FinalNativeGate-data-transfer.py'
+    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v10/FinalNativeGate-data-transfer.py'
     assignments={n.targets[0].id:n.value for n in ast.parse(transport).body
                  if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name)}
     assert ast.literal_eval(assignments['RECEIVER'].args[0])==canonical
@@ -91,7 +91,7 @@ def prepare(release=None):
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Relative to maintained Source028: exactly two SETUP mains activate and four seal/plan files regenerate. Source-022 restores compatible disappeared outcomes after verified absence, including pidfd-signal; first v6 candidate and complete function diff retained in source022. Corrected prospective bytes supersede the first v6 candidate, not its historical byte identity. Historical v1-v6 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
+        f.write('Relative to maintained Source029: exactly two SETUP mains activate and four seal/plan files regenerate. Source-022 restores compatible disappeared outcomes after verified absence, including pidfd-signal; first v6 candidate and complete function diff retained in source022. Corrected prospective bytes supersede the first v6 candidate, not its historical byte identity. Historical v1-v6 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')

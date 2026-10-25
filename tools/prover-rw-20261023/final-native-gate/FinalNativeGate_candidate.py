@@ -8,14 +8,14 @@ import stat
 import sys
 import sysconfig
 import time
-from FinalNativeGate_bounded import Reader, CatalogError, stamp, writable_rejected, trusted_group_directory, DATA_TRUST
+from FinalNativeGate_bounded import Reader, CatalogError, stamp, writable_rejected, trusted_group_directory, trusted_group_marker, DATA_TRUST
 
 ENTRY_LIMIT=32768
 FILE_LIMIT=256*2**20
 BYTE_LIMIT=2*2**30
 ALIAS_LIMIT=32
 MAPS_LIMIT=2**20
-STAGE='/home/dombarker/final-native-gate-v9-20261025'
+STAGE='/home/dombarker/final-native-gate-v10-20261025'
 ADMITTED=(STAGE,'/usr/bin','/usr/lib','/usr/lib64','/usr/local/lib','/lib','/lib64','/run/user',
           '/home/dombarker/.kani','/home/dombarker/.rustup','/home/dombarker/.cargo/bin',
           '/home/dombarker/.cargo/registry/src',
@@ -29,7 +29,7 @@ def admit(path):
 class Acquisition:
     def __init__(self,deadline, *, data_only=False):
         if type(data_only) is not bool:raise CatalogError('fixed DATA option must be bool')
-        self.data_only=data_only;self.trusted_directories={}
+        self.data_only=data_only;self.trusted_directories={};self.trusted_markers={}
         self.deadline=deadline;self.rows={};self.files=set();self.unresolved=[];self.bytes=0
         self.expanded=set()
 
@@ -51,10 +51,12 @@ class Acquisition:
         if kind=='file':
             self.bytes+=s.st_size
             if self.bytes>BYTE_LIMIT:raise CatalogError('stat total2GiB bound BEFORE hash')
-        if kind=='unknown' or (kind!='link' and writable_rejected(s,self.data_only)):
+        if kind=='unknown' or (kind!='link' and writable_rejected(s,self.data_only,path=path)):
             self.unresolved.append(dict(path=path,reason='type/permissions require review; excluded from hashing'))
         if s.st_mode&0o020 and trusted_group_directory(s,self.data_only):
             self.trusted_directories[path]=dict(path=path,mode=s.st_mode,uid=s.st_uid,gid=s.st_gid,operational_trust=DATA_TRUST)
+        if trusted_group_marker(path,s,self.data_only):
+            self.trusted_markers[path]=dict(path=path,mode=s.st_mode,uid=s.st_uid,gid=s.st_gid,size=s.st_size,nlink=s.st_nlink,operational_trust=DATA_TRUST)
         self.rows[path]=row
         return row
 
@@ -66,7 +68,7 @@ class Acquisition:
             self.tick();fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
             try:
                 root=os.fstat(fd);self.record('/',root)
-                if writable_rejected(root,self.data_only):return None
+                if writable_rejected(root,self.data_only,path="/"):return None
                 parts=[] if pending=='/' else pending.split('/')[1:];current='';restart=False
                 for i,name in enumerate(parts):
                     current+='/'+name
@@ -83,7 +85,7 @@ class Acquisition:
                             return None
                         if stamp(os.stat(name,dir_fd=fd,follow_symlinks=False))!=stamp(s):raise CatalogError('alias read race')
                         restart=True;break
-                    if e['kind']=='unknown' or writable_rejected(s,self.data_only):return None
+                    if e['kind']=='unknown' or writable_rejected(s,self.data_only,path=current):return None
                     sub=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|(os.O_DIRECTORY if e['kind']=='dir' else 0),dir_fd=fd)
                     if stamp(os.fstat(sub))!=stamp(s):os.close(sub);raise CatalogError('candidate component open race')
                     os.close(fd);fd=sub
@@ -126,7 +128,7 @@ class Acquisition:
     def catalog(self):
         return dict(entries=self.rows,roots=sorted(self.files),
                     data_only=self.data_only,retained_operational_trust=DATA_TRUST if self.data_only else None,
-                    trusted_group_directories=[self.trusted_directories[p] for p in sorted(self.trusted_directories)],
+                    trusted_group_markers=[self.trusted_markers[p] for p in sorted(self.trusted_markers)],trusted_group_directories=[self.trusted_directories[p] for p in sorted(self.trusted_directories)],
                     bounds=dict(files=ENTRY_LIMIT,bytes=BYTE_LIMIT,seconds=115),
                     rationale='fixed source/native/runtime role roots only;32768 components,256MiB/file,2GiB stat total; no historical MIR forest')
 
@@ -139,7 +141,7 @@ class Acquisition:
             # Metadata-only unsafe/unknown rows remain DATA, never hashed or
             # certified by Reader. resolve rechecks every retained stamp/target.
             self.resolve(path)
-        return dict(catalog=json.loads(json.dumps(self.catalog())),pins=pins,data_only=self.data_only,retained_operational_trust=DATA_TRUST if self.data_only else None,trusted_group_directories=[self.trusted_directories[p] for p in sorted(self.trusted_directories)])
+        return dict(catalog=json.loads(json.dumps(self.catalog())),pins=pins,data_only=self.data_only,retained_operational_trust=DATA_TRUST if self.data_only else None,trusted_group_markers=[self.trusted_markers[p] for p in sorted(self.trusted_markers)],trusted_group_directories=[self.trusted_directories[p] for p in sorted(self.trusted_directories)])
 
 
 def mapped_paths():
