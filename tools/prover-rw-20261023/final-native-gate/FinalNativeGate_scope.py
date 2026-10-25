@@ -119,18 +119,20 @@ class FixedScope:
     def __init__(self,kind):
         self.kind=kind
         self.unit,self.high,self.cap,name,self.inside=PROFILES[kind]
-        self.packet=STAGE/name;self.fd=None;self.binding=None;self.events=[]
+        self.packet=STAGE/name;self.fd=None;self.binding=None;self.events=[];self.prebind_failure=None
 
-    def show(self):
+    def show(self,timeout=5):
         argv=['/usr/bin/systemctl','--user','show',self.unit+'.scope','--no-pager',
               '--property='+','.join(PROPERTIES)]
-        raw=command(argv);rows={}
+        raw=command(argv,timeout=timeout);rows={}
+        self.events.append(dict(command=argv,raw=raw))
+        # A bounded tail also preserves malformed prebinding observations.
+        del self.events[:-8]
         for line in raw.splitlines():
             k,v=line.split('=',1)
             if k in rows:raise ValueError('duplicate systemctl property')
             rows[k]=v
         if set(rows)!=set(PROPERTIES):raise ValueError('incomplete systemctl identity')
-        self.events.append(dict(command=argv,raw=raw))
         return rows
 
     def preflight(self):
@@ -191,9 +193,24 @@ class FixedScope:
             if child.poll() is not None:raise ValueError('wrapper exited before binding')
             try:ready=json.loads(bounded(self.packet/'scope-ready.json'))
             except FileNotFoundError:time.sleep(.02);continue
-            row=self.show()
-            if row['LoadState']!='loaded' or row['ActiveState']!='active' or not row['InvocationID'] or not row['ActiveEnterTimestampMonotonic'].isdigit() or int(row['ActiveEnterTimestampMonotonic'])<=0:
-                raise ValueError('scope has no live invocation/start')
+            try:row=self.show(timeout=max(.001,min(5,deadline-time.monotonic())))
+            except BaseException as exc:
+                self.prebind_failure=dict(reason=repr(exc),stdout=getattr(exc,'stdout','')[:65536],stderr=getattr(exc,'stderr','')[:65536])
+                raise
+            failed=[]
+            if row['LoadState']!='loaded':failed.append('LoadState')
+            if row['ActiveState']!='active':failed.append('ActiveState')
+            if not row['InvocationID']:failed.append('InvocationID')
+            stamp=row['ActiveEnterTimestampMonotonic']
+            if not stamp.isdigit() or int(stamp)<=0:failed.append('ActiveEnterTimestampMonotonic')
+            if failed:
+                self.prebind_failure=dict(reason='scope has no live invocation/start',failed_fields=failed,row=dict(row))
+                time.sleep(min(.02,max(0,deadline-time.monotonic())))
+                continue
+            # Only readiness is retried. Every ownership/control failure is fatal.
+            guard.check()
+            if child.poll() is not None:raise ValueError('wrapper exited before binding')
+            if time.monotonic()>=deadline:break
             self.open_group(row['ControlGroup']);group=self.group_identity();self.controls()
             proc=Proc();actual=proc.identity(ready['pid'])
             if any(actual[k]!=ready[k] for k in ('pid','starttime','ppid')):raise ValueError('ready proc start mismatch')
@@ -213,7 +230,12 @@ class FixedScope:
             again=proc.identity(ready['pid'])
             if again['starttime']!=ready['starttime'] or membership(ready['pid'])!=row['ControlGroup'] or child.poll() is not None:
                 raise ValueError('child exited/moved before release')
+            guard.check()
+            if time.monotonic()>=deadline:raise TimeoutError('fixed scope binding deadline20s before release')
             durable(self.packet,'scope-binding.json',self.binding)
+            guard.check()
+            if child.poll() is not None:raise ValueError('wrapper exited before release')
+            if time.monotonic()>=deadline:raise TimeoutError('fixed scope binding deadline20s before release')
             durable(self.packet,'scope-release.json',dict(ready=ready,invocation=row['InvocationID']))
             return self.binding
         raise TimeoutError('fixed scope binding deadline20s')

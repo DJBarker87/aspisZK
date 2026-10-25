@@ -42,6 +42,10 @@ def cleanup(child,fd,identity,guard,cancel,scope=None,*,outer=False,spawn_state=
                 errors.append('descendant unresolved: '+repr(row))
     if scope is not None and not no_owned_start:
         scope_result=attempt('scope terminal verification',scope.finish)
+    if scope is not None and not no_owned_start and scope_result is None:
+        scope_result=dict(unresolved=True,binding=scope.binding,events=list(scope.events),
+                          prebind_failure=getattr(scope,'prebind_failure',None),
+                          reason='scope terminal verification failed; ownership/closure unresolved')
     unresolved=bool((child is not None or spawn_state=='uncertain') and outer and
                     (scope_result is None or scope_result.get('unresolved',True)))
     if unresolved:errors.append('SCOPE_UNRESOLVED: retain packet/control path; no finite kernel termination promise')
