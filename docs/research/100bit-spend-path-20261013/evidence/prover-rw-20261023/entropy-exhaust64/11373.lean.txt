@@ -1,0 +1,24 @@
+import R1Z.ProverRwEntropyExhaust64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyBudget64
+open R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV
+open ProverCommitPublicNonce40 ProverCommitLedger36 ProverRwEntropyAbort64
+open ProverRwEntropyExhaust64
+attribute [local irreducible] ProverCommitPublicNonce40.generate ProverCommitPublicNonce40.run
+attribute [local irreducible] ProverRwEntropyAbort64.failed ProverRwEntropyAbort64.osBad ProverRwEntropyAbort64.zeroBad
+/-- For the very same stateful model law, availability is an explicit
+additive term. This theorem retains OS errors instead of conditioning them
+away. It does not assert that adaptive native retries use this finite law. -/
+theorem failure_bound
+    (nonce : Coins → Path) (admitted : ∀ coins, nonce coins ≠ 0)
+    (schedule : Coins → Schedule) (initial : Coins → State)
+    (cursor : ∀ coins, (initial coins).cursor = 0) :
+    eventMass (failed nonce schedule tape initial) ≤
+      eventMass (osBad nonce schedule tape initial) + zeroBudget := by
+  exact (failure_mass nonce schedule tape initial).trans_le
+    (add_le_add_left (exhaustion_mass nonce admitted schedule initial cursor) _)
+
+
+#print axioms failure_bound
+end R1Z.ProverRwEntropyBudget64

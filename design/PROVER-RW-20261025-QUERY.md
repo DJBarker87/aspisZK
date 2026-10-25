@@ -320,3 +320,24 @@ This removes no conjunct1 premise. The native effect/extraction association,
 conditional law at actual adaptive contexts, all rejected/abort observations,
 and the two actual outer contracts remain open. No new trust item was added.
 No Rust, ELF, runtime, Kani, timing or full-manifest work was run.
+
+## Selected64 exhaustion inclusion (11370–11374)
+
+`ProverRwEntropyExhaust64.exhaustion_first` proves repeated-zero exhaustion
+implies rejection of the first returned candidate in the actual64 model run.
+OS errors remain distinct. `zero_nonce_mass` exposes the guard's mass1 abort
+for an all-zero public nonce. `exhaustion_mass` bounds the16-fill model by
+2/2^256 on the stated uniform16-coordinate carrier, with fixed initial
+cursor0; the nonce, initial ledger/history and even the schedule may depend
+on the whole tape. No independence of later draws is used and no sixteenth
+power is claimed. `ProverRwEntropyBudget64.failure_bound` retains exact
+OS-abort mass as an additive term. This finite carrier is explicitly not
+identified with the native adaptive callback distribution.
+
+Attempts11370/11371 failed elaboration (including composition recursion);
+the proof was split.11372 passes in1.75s/4,259,324KiB/swap0.11373's smaller
+composition still failed recursion;11374 uses named, fully qualified typed
+intermediate bounds and passes in1.67s/4,251,076KiB/swap0. Limits unchanged;
+all four accepted top reports use standard axioms. Receipts/snapshots are in
+`evidence/prover-rw-20261023/entropy-exhaust64`. New budget7/100 Lean,0/20
+Kani. Neither outer contract nor conjunct1 is instantiated by these laws.
