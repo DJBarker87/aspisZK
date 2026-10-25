@@ -1,0 +1,97 @@
+SdkC_GlobalRecovery.lean:55:18: error: Application type mismatch: The argument
+  member
+has type
+  a ∈ List.map (fun x => x) (BinMerkle32Leaf.fullTrace H path (leaf parsed kind pos))
+but is expected to have type
+  a ∈ BinMerkle32Leaf.fullTrace H path (leaf parsed kind pos)
+in the application
+  reads a member
+SdkC_GlobalRecovery.lean:57:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  BinMerkleLeafRecovery.recover (BinMerkleRecordedLog.nodes (BinRawByteCutRecovery.cut log frame))
+    (BinMerkleRecordedLog.leaves (tag kind) (width kind) (BinRawByteCutRecovery.cut log frame))
+    (BinMultiproof.slots 18 (index q kind pos)) (committedRoot parsed kind)
+in the target expression
+  Option.map Prod.fst
+      (BinRawByteCutStability.recoverAt (tag kind) (width kind) (BinRawByteCutRecovery.cut log frame)
+        (BinMultiproof.slots 18 (index q kind pos)) (committedRoot parsed kind)) =
+    some (OraclePortPackedChoiceC4.payload parsed kind pos)
+
+case neg
+H : Bytes → State
+stored : Bytes
+parsed : Parsed
+parser : parse stored = some parsed
+q : Fin 22 → Fin 262144
+kind pos : ℕ
+hk : kind < 3
+hp : pos < 22
+path : BinMerkle32Path.Path (BinMultiproof.slots 18 (index q kind pos))
+root : BinMerkle32Path.foldPath H path (H (leaf parsed kind pos)) = committedRoot parsed kind
+log : List (Bytes × State)
+Q : ℕ
+consistent : ∀ a ∈ log, a.2 = H a.1
+reads : ∀ a ∈ BinMerkle32Leaf.fullTrace H path (leaf parsed kind pos), Read log a
+bound : firstReads emptyTable log ≤ Q
+frame : Bytes
+j : Fin 5
+frameRead : Read log frame
+rootRead : BinRawByteCollisionTargets.pred j frame = some (committedRoot parsed kind)
+collision :
+  ¬hitsBad (AllAddressCollision.bad SelectedTranscriptParams.params.iv BinRawByteCollisionTargets.pred Q) emptyTable log
+leafBytes :
+  leaf parsed kind pos =
+    BinMerkle32Leaf.leafInput (tag kind) (OraclePortPackedChoiceC4.payload parsed kind pos) (salt parsed kind pos)
+packedWidth : List.length (OraclePortPackedChoiceC4.payload parsed kind pos) = width kind
+saltWidth : List.length (salt parsed kind pos) = 32
+result :
+  (eval H
+          (BinMerkleProgram.leafProgram path
+            (BinMerkle32Leaf.leafInput (tag kind) (OraclePortPackedChoiceC4.payload parsed kind pos)
+              (salt parsed kind pos)))).2 =
+      committedRoot parsed kind →
+    (∀ (a : Bytes),
+        Read
+            (eval H
+                (BinMerkleProgram.leafProgram path
+                  (BinMerkle32Leaf.leafInput (tag kind) (OraclePortPackedChoiceC4.payload parsed kind pos)
+                    (salt parsed kind pos)))).1
+            a →
+          Read log a) →
+      BinMerkleLeafRecovery.recover (BinMerkleRecordedLog.nodes (BinRawByteCutRecovery.cut log frame))
+          (BinMerkleRecordedLog.leaves (tag kind) (width kind) (BinRawByteCutRecovery.cut log frame))
+          (BinMultiproof.slots 18 (index q kind pos)) (committedRoot parsed kind) =
+        some (OraclePortPackedChoiceC4.payload parsed kind pos, salt parsed kind pos)
+auth :
+  (eval H
+        (BinMerkleProgram.leafProgram path
+          (BinMerkle32Leaf.leafInput (tag kind) (OraclePortPackedChoiceC4.payload parsed kind pos)
+            (salt parsed kind pos)))).2 =
+    committedRoot parsed kind
+contains :
+  ∀ (a : Bytes),
+    Read
+        (eval H
+            (BinMerkleProgram.leafProgram path
+              (BinMerkle32Leaf.leafInput (tag kind) (OraclePortPackedChoiceC4.payload parsed kind pos)
+                (salt parsed kind pos)))).1
+        a →
+      Read log a
+⊢ Option.map Prod.fst
+      (BinRawByteCutStability.recoverAt (tag kind) (width kind) (BinRawByteCutRecovery.cut log frame)
+        (BinMultiproof.slots 18 (index q kind pos)) (committedRoot parsed kind)) =
+    some (OraclePortPackedChoiceC4.payload parsed kind pos)
+SdkC_GlobalRecovery.lean:54:46: warning: This simp argument is unused:
+  List.map_id
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵i̵d̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲]̲ at member
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkC_GlobalRecovery.lean:67:19: error(lean.unknownIdentifier): Unknown identifier `indicator`
+
+Note: It is not possible to treat `indicator` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.SdkC_GlobalRecovery.indexed_recovery_or_collision' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'AspisR1.SdkC_GlobalRecovery.collision_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
