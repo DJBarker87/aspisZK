@@ -1,0 +1,60 @@
+--- d39aa80a9a:SbfFinite_install.py
++++ SbfFinite_install.py
+@@ -284,7 +284,57 @@
+             finally:source.close()
+         require(not tree.writers and not pkg.writers,'all setup writers closed')
+         tree.seal();pkg.seal()
++        # Persist new directory entries as well as sealed contents.
++        os.fsync(own)
++        for parent in parents:os.fsync(parent)
+         return dict(status='copied and sealed finite input; not an execution observation',rows=92,bytes=35655597)
+     finally:
+         for tree in reversed(trees):tree.close()
+         for fd in reversed(fds+parents):os.close(fd)
++
++
++INSTALL_RECEIPT = b'{"bytes":35655597,"rows":92,"schema":"SbfFinite-installation-outcome-v1","status":"copied and sealed finite input; not an execution observation"}\n'
++
++def fixed_install_entry() -> int:
++    """Dormant noargument entry: one install, one durable fixed receipt, exit 0.
++
++    Errors propagate and every created path is retained. This receipt records
++    installation source outcome only; it grants no execution/security approval.
++    """
++    result=fixed_install()
++    require(type(result) is dict and result==dict(
++        status='copied and sealed finite input; not an execution observation',
++        rows=92,bytes=35655597), 'exact installation outcome')
++    require(os.getresuid()==os.getresgid()==(0,0,0), 'root receipt IDs')
++    raw=INSTALL_RECEIPT
++    require(type(raw) is bytes and 0<len(raw)<=512, 'fixed installation receipt bound')
++    parent=safe_parent(OWN+'/journal-root');fd=None
++    try:
++        s=os.fstat(parent)
++        require(stat.S_ISDIR(s.st_mode) and s.st_uid==s.st_gid==0 and
++                stat.S_IMODE(s.st_mode)==0o700, 'installation journal rights')
++        # Exact sole installation name, no path or result supplied by caller.
++        name='installation-source-outcome.json'
++        fd=os.open(name,WRITE,0o600,dir_fd=parent)
++        first=os.fstat(fd)
++        require(stat.S_ISREG(first.st_mode) and first.st_uid==first.st_gid==0 and
++                first.st_nlink==1 and stat.S_IMODE(first.st_mode)==0o600 and
++                first.st_size==0, 'fresh installation receipt rights')
++        offset=0
++        while offset<len(raw):
++            n=os.write(fd,raw[offset:])
++            require(type(n) is int and 0<n<=len(raw)-offset, 'installation receipt write')
++            offset+=n
++        last=os.fstat(fd)
++        require((last.st_dev,last.st_ino,last.st_mode,last.st_uid,last.st_gid,last.st_nlink)==
++                (first.st_dev,first.st_ino,first.st_mode,first.st_uid,first.st_gid,first.st_nlink)
++                and last.st_size==len(raw), 'installation receipt final rights/size')
++        os.fsync(fd)
++        require(ident(last)==ident(os.fstat(fd))==
++                ident(os.stat(name,dir_fd=parent,follow_symlinks=False)), 'installation receipt entry drift')
++        os.close(fd);fd=None
++        os.fsync(parent)
++    finally:
++        if fd is not None:os.close(fd)
++        os.close(parent)
++    return 0

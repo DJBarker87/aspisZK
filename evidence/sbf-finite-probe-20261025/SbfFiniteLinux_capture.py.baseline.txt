@@ -1,0 +1,438 @@
+"""Finite source-only replacement for SbfClosure_setup; no privileged entrypoint.
+
+Filesystem primitives run in ordinary temporary directories in local tests only.
+They are NOT authorization for root use. No ctypes, mount, fork, exec or shell.
+"""
+import errno
+import hashlib
+import json
+import os
+import stat
+import time
+
+class Denied(RuntimeError):
+    pass
+
+
+def require(condition, reason):
+    if not condition:
+        raise Denied(reason)
+
+
+def digest(raw):
+    return dict(sha256=hashlib.sha256(raw).hexdigest(), size=len(raw))
+
+
+def canonical(raw):
+    require(type(raw) is str and raw.startswith('/') and raw != '/', 'absolute file path')
+    components = raw[1:].split('/')
+    require(all(part not in ('', '.', '..') and '\x00' not in part
+                and part.isascii() and all(32 < ord(c) < 127 for c in part)
+                for part in components), 'unsafe path component')
+    return components
+
+
+def component(name):
+    require(type(name) is str and canonical('/'+name) == [name], 'single component')
+    return name
+
+
+DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
+FILE_FLAGS = os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK
+OWN = '/var/lib/SbfFinite-20261025-v1'
+ROOT = OWN+'/rootfs'
+UID = GID = 1000
+MAX_FILE = 16*2**20
+MAX_TOTAL = 64*2**20
+OUTPUT_BOUND = 16384
+# Editing this tuple alone cannot enable privileged execution (see entrypoint).
+APPROVED_MANIFEST_SHA256 = ()
+ENV = {'PATH': '/usr/bin', 'LC_ALL': 'C', 'HOME': '/probe', 'TMPDIR': '/tmp'}
+# Exact same audit text is embedded in the fixed postexec probe and exercised
+# with mock OS metadata locally. listdir closes its inspection fd before fstat;
+# EBADF identifies CLOSED inspection entries, never permits a surviving fd3.
+# Requires single-threaded probe and correctly mounted private proc. No bound
+# based on RLIMIT_NOFILE: inherited high descriptors survive lowering that limit.
+FD_AUDIT_TEXT = """def SbfFinite_fds(os_api):
+ names=os_api.listdir('/proc/self/fd')
+ if len(names)>4096: raise RuntimeError('FD inventory bound')
+ result=[]
+ for name in names:
+  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')
+  fd=int(name)
+  try: os_api.fstat(fd)
+  except OSError as e:
+   if e.errno!=errno.EBADF: raise
+  else: result.append(fd)
+ return sorted(result)
+"""
+PROBE_TEXT = 'import errno,json,os,resource,stat\n'+FD_AUDIT_TEXT+'''assert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3
+assert os.getgroups()==[]
+assert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)
+assert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)
+assert SbfFinite_fds(os)==[0,1,2]
+assert stat.S_ISCHR(os.fstat(0).st_mode)
+assert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)
+for fd in (1,2):
+ t=os.fstat(fd)
+ assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1
+ assert stat.S_IMODE(t.st_mode)==0o600
+with open('/proc/self/status',encoding='ascii') as f:
+ s=dict(line.split(':',1) for line in f if ':' in line)
+assert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))
+assert s['NoNewPrivs'].strip()=='1'
+print(json.dumps({'SbfFinite':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))
+'''
+PROBE = ('/usr/bin/python3', '-I', '-S', '-B', '-c', PROBE_TEXT)
+
+
+def identity(s):
+    return (s.st_dev, s.st_ino, s.st_mode, s.st_uid, s.st_gid, s.st_nlink,
+            s.st_size, s.st_mtime_ns, s.st_ctime_ns)
+
+
+def inode(s):
+    return (s.st_dev, s.st_ino)
+
+
+def check_dir(fd, owner):
+    s = os.fstat(fd)
+    require(stat.S_ISDIR(s.st_mode) and s.st_uid == owner, 'directory owner/type')
+    require(not s.st_mode & 0o022, 'writable ancestry')
+    return s
+
+
+def check_entry(parent, name, fd):
+    # Supplemental identity check; security comes from dirfd + immutable ancestry,
+    # NOT from this comparison preventing a subsequent attacker rename.
+    require(inode(os.stat(component(name), dir_fd=parent, follow_symlinks=False))
+            == inode(os.fstat(fd)), 'entry replaced')
+
+
+def open_safe_ancestry(path):
+    """Root-only non-writable ancestry; no sticky or user-owned ancestor fallback.
+
+    Every open is component-relative. No writes until ALL ancestry checked.
+    A root adversary is outside the proposed boundary; no same-uid writer allowed.
+    """
+    parts = canonical(path)
+    fd = os.open('/', DIR_FLAGS)
+    try:
+        check_dir(fd, 0)
+        for name in parts:
+            child = os.open(name, DIR_FLAGS, dir_fd=fd)
+            try:
+                check_dir(child, 0)
+                check_entry(fd, name, child)
+            except BaseException:
+                os.close(child)
+                raise
+            os.close(fd)
+            fd = child
+        return fd
+    except BaseException:
+        os.close(fd)
+        raise
+
+
+def exclusive_dir(parent, name, owner):
+    """Parent must already be pinned and non-writable to the adversary.
+
+    mkdir+open is safe under that premise, not under an attacker-owned parent.
+    No exist_ok, chmod/chown-by-name, or reopening an unchecked path.
+    """
+    check_dir(parent, owner)
+    name = component(name)
+    os.mkdir(name, 0o700, dir_fd=parent)
+    fd = os.open(name, DIR_FLAGS, dir_fd=parent)
+    try:
+        check_dir(fd, owner)
+        check_entry(parent, name, fd)
+        require(stat.S_IMODE(os.fstat(fd).st_mode) == 0o700, 'exclusive directory mode')
+        return fd
+    except BaseException:
+        os.close(fd)
+        raise
+
+
+def create_fixed_layout():
+    """Unexecuted concrete replacement for old create_root; fixed safe ancestry.
+
+    No user-stage OWNER file, parent symlink check or pathname reopen. Retain all
+    fds through later seal/mount review. No removal on failure, no existing entry
+    reuse. No source writes occur until root-owned ancestry validation completes.
+    """
+    require(os.getuid() == os.geteuid() == 0, 'root-only proposed layout')
+    parent = open_safe_ancestry('/var/lib')
+    own = root = outputs = None
+    try:
+        own = exclusive_dir(parent, 'SbfFinite-20261025-v1', 0)
+        root = exclusive_dir(own, 'rootfs', 0)
+        outputs = exclusive_dir(own, 'public-output', 0)
+        return own, root, outputs
+    except BaseException:
+        for fd in (own, root, outputs):
+            if fd is not None:
+                os.close(fd)
+        raise
+    finally:
+        os.close(parent)
+
+
+class Capture:
+    """All destination effects anchored to retained directory descriptors.
+
+    owner is explicit ONLY for ordinary path tests. Future root route fixes 0.
+    Caller owns all returned handles; no destructor deletion or key cleanup.
+    """
+    def __init__(self, rootfd, owner):
+        check_dir(rootfd, owner)
+        self.rootfd = os.dup(rootfd)
+        os.set_inheritable(self.rootfd, False)
+        self.owner = owner
+        self.dirs = {'/': self.rootfd}
+        self.files = {}
+        self.sealed = False
+
+    def parent(self, logical):
+        parts = canonical(logical)
+        fd, prefix = self.rootfd, ''
+        for name in parts[:-1]:
+            check_dir(fd, self.owner)
+            prefix += '/'+name
+            if prefix not in self.dirs:
+                self.dirs[prefix] = exclusive_dir(fd, name, self.owner)
+            else:
+                check_entry(fd, name, self.dirs[prefix])
+            fd = self.dirs[prefix]
+        return fd, parts[-1]
+
+    def copy(self, srcfd, logical, expected):
+        require(not self.sealed, 'capture sealed')
+        require(logical not in self.files, 'duplicate destination')
+        require(set(expected) == {'sha256','size','mode'}, 'exact file pin fields')
+        require(type(expected['size']) is int and 0 <= expected['size'] <= MAX_FILE, 'file bound')
+        require(expected['mode'] in (0o444, 0o555), 'sealed public modes only')
+        a = os.fstat(srcfd)
+        require(stat.S_ISREG(a.st_mode) and a.st_nlink == 1 and a.st_size == expected['size'],
+                'regular single-link bounded source')
+        parent, name = self.parent(logical)
+        dst = os.open(name, os.O_RDWR | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW |
+                      os.O_CLOEXEC, 0o600, dir_fd=parent)
+        try:
+            require(inode(a) != inode(os.fstat(dst)), 'source aliases destination')
+            os.lseek(srcfd, 0, os.SEEK_SET)
+            h, total = hashlib.sha256(), 0
+            while True:
+                chunk = os.read(srcfd, min(65536, expected['size']-total+1))
+                if not chunk:
+                    break
+                total += len(chunk)
+                require(total <= expected['size'], 'source grew')
+                h.update(chunk)
+                offset = 0
+                while offset < len(chunk):
+                    n = os.write(dst, chunk[offset:])
+                    require(n > 0, 'short write')
+                    offset += n
+            require(identity(a) == identity(os.fstat(srcfd)), 'source changed during copy')
+            require(total == expected['size'] and h.hexdigest() == expected['sha256'], 'source digest')
+            # No live source or destination name used for chmod/chown/hash.
+            os.fchmod(dst, expected['mode'])
+            s = os.fstat(dst)
+            require(s.st_uid == self.owner and s.st_nlink == 1, 'destination owner/link')
+            check_entry(parent, name, dst)
+            require(hash_fd(dst, expected['size']) == expected['sha256'], 'destination digest')
+            self.files[logical] = dict(pin=dict(expected), identity=identity(s), fd=dst)
+            dst = None
+        finally:
+            if dst is not None:
+                os.close(dst)
+
+    def seal(self):
+        require(not self.sealed, 'already sealed')
+        for logical, row in self.files.items():
+            parent, name = self.parent(logical)
+            check_entry(parent, name, row['fd'])
+            require(identity(os.fstat(row['fd'])) == row['identity'], 'destination drift')
+            require(hash_fd(row['fd'], row['pin']['size']) == row['pin']['sha256'], 'sealed bytes')
+        for fd in self.dirs.values():
+            check_dir(fd, self.owner)
+            os.fchmod(fd, 0o555)
+        self.sealed = True
+        # Write-capable destination handles MUST close before any future fork.
+        for row in self.files.values():
+            os.close(row['fd'])
+            row['fd'] = None
+
+    def close(self):
+        for row in self.files.values():
+            if row['fd'] is not None:
+                os.close(row['fd'])
+                row['fd'] = None
+        for fd in self.dirs.values():
+            os.close(fd)
+        self.dirs.clear()
+
+
+def hash_fd(fd, size):
+    os.lseek(fd, 0, os.SEEK_SET)
+    h, total = hashlib.sha256(), 0
+    while True:
+        chunk = os.read(fd, min(65536, size-total+1))
+        if not chunk:
+            break
+        total += len(chunk)
+        require(total <= size, 'hash overflow')
+        h.update(chunk)
+    require(total == size, 'hash short read')
+    return h.hexdigest()
+
+
+def open_source(path):
+    """Untrusted public source: nofollow components; hash pins bytes separately.
+
+    Caller cannot use this as a privileged arbitrary read/export API. Only exact
+    manifest entries would be opened by a reviewed future root route.
+    """
+    parts = canonical(path)
+    directory = os.open('/', DIR_FLAGS)
+    try:
+        for name in parts[:-1]:
+            child = os.open(name, DIR_FLAGS, dir_fd=directory)
+            os.close(directory)
+            directory = child
+        fd = os.open(parts[-1], FILE_FLAGS, dir_fd=directory)
+        try:
+            s = os.fstat(fd)
+            require(stat.S_ISREG(s.st_mode) and s.st_nlink == 1, 'source type/hardlink')
+            return fd
+        except BaseException:
+            os.close(fd)
+            raise
+    finally:
+        os.close(directory)
+
+
+class PublicOutput:
+    """Fixed files only. Root parent retains read handles, never exports paths.
+
+    Child receives dup2 writers as 1/2 before dropping IDs; file permissions stay
+    0600 root, so guest cannot reopen or replace. Parent closes its writers before
+    wait, child RLIMIT_FSIZE=16KiB, waits for exact own child, then collects bounded
+    public format. No user-owned output destination or arbitrary root reader.
+    """
+    def __init__(self, directory, owner):
+        check_dir(directory, owner)
+        self.parent = os.dup(directory)
+        self.owner = owner
+        self.rows = {}
+        try:
+            for name in ('stdout','stderr'):
+                w = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL |
+                            os.O_NOFOLLOW | os.O_CLOEXEC, 0o600, dir_fd=self.parent)
+                self.rows[name] = dict(w=w, r=None, inode=inode(os.fstat(w)))
+                r = os.open(name, FILE_FLAGS, dir_fd=self.parent)
+                self.rows[name]['r'] = r
+                require(inode(os.fstat(r)) == self.rows[name]['inode'], 'output identity')
+                self.verify(name)
+        except BaseException:
+            self.close()
+            raise
+
+    def verify(self, name):
+        row = self.rows[name]
+        s = os.fstat(row['r'])
+        require(stat.S_ISREG(s.st_mode) and s.st_uid == self.owner and s.st_nlink == 1
+                and stat.S_IMODE(s.st_mode) == 0o600, 'output rights/type')
+        require(inode(s) == row['inode'] and s.st_size <= OUTPUT_BOUND, 'output inode/size')
+        check_entry(self.parent, name, row['r'])
+
+    def close_writers(self):
+        for row in self.rows.values():
+            if row['w'] is not None:
+                os.close(row['w'])
+                row['w'] = None
+
+    def collect(self, waited_pid, expected_pid, wait_status):
+        # These arguments must originate from actual waitpid, not caller claims;
+        # this object alone is not an authorization or live parent implementation.
+        require(type(expected_pid) is int and expected_pid > 1 and waited_pid == expected_pid,
+                'wrong wait identity')
+        require(os.WIFEXITED(wait_status) and os.WEXITSTATUS(wait_status) == 0, 'child failed')
+        require(all(r['w'] is None for r in self.rows.values()), 'parent writer still open')
+        result = {}
+        for name, row in self.rows.items():
+            self.verify(name)
+            before = identity(os.fstat(row['r']))
+            os.lseek(row['r'], 0, os.SEEK_SET)
+            raw = os.read(row['r'], OUTPUT_BOUND+1)
+            require(len(raw) <= OUTPUT_BOUND, 'output overflow')
+            require(before == identity(os.fstat(row['r'])), 'output changed while collecting')
+            result[name] = raw
+        require(result['stderr'] == b'', 'probe stderr')
+        expected = (json.dumps({'SbfFinite':'tiny-public-v1', 'uid':1000,
+                               'gid':1000, 'fds':[0,1,2]}, sort_keys=True)+'\n').encode()
+        require(result['stdout'] == expected, 'nonpublic/unexpected output')
+        return {'stdout': result['stdout'].decode('ascii'), 'stderr': ''}
+
+    def wait_and_collect(self, child_pid):
+        """Future own direct-child wait only; no pid kill, root read or shell.
+
+        Caller must retain the host PID returned by its fixed probe fork. A
+        timeout never exports output and never signals a possibly reused PID.
+        Separate reviewed lifecycle/pidfd handling required before enabling.
+        """
+        require(type(child_pid) is int and child_pid > 1, 'own child PID')
+        self.close_writers()
+        deadline = time.monotonic()+5
+        while time.monotonic() < deadline:
+            waited, status = os.waitpid(child_pid, os.WNOHANG)
+            if waited:
+                return self.collect(waited, child_pid, status)
+            time.sleep(0.01)
+        raise Denied('own child wait deadline; retain files, no export or unsafe cancellation')
+
+    def close(self):
+        for row in self.rows.values():
+            for k in ('r','w'):
+                if row[k] is not None:
+                    os.close(row[k])
+                    row[k] = None
+        if self.parent is not None:
+            os.close(self.parent)
+            self.parent = None
+
+
+def validate_manifest(m):
+    require(type(m) is dict and set(m) == {'version','root','uid','gid','argv','env','files'},
+            'exact manifest schema')
+    require(m['version'] == 'SbfFinite-tiny-v1' and m['root'] == ROOT, 'fixed version/root')
+    require(type(m['uid']) is int and type(m['gid']) is int and m['uid'] == m['gid'] == UID,
+            'fixed UID/GID')
+    require(m['argv'] == list(PROBE) and m['env'] == ENV, 'fixed probe argv/env')
+    require(type(m['files']) is list and 0 < len(m['files']) <= 256, 'finite runtime list')
+    seen, total = set(), 0
+    for row in m['files']:
+        require(type(row) is dict and set(row) == {'logical','physical','sha256','size','mode'},
+                'exact regular mapping')
+        canonical(row['physical']); canonical(row['logical'])
+        require(row['logical'] not in seen, 'duplicate mapping')
+        seen.add(row['logical'])
+        require(type(row['size']) is int and 0 <= row['size'] <= MAX_FILE, 'file size')
+        require(row['mode'] in (0o444,0o555), 'file mode')
+        require(type(row['sha256']) is str and len(row['sha256']) == 64 and
+                all(c in '0123456789abcdef' for c in row['sha256']), 'digest')
+        total += row['size']
+    require(total <= MAX_TOTAL and '/usr/bin/python3' in seen, 'runtime bound/interpreter')
+    return digest((json.dumps(m,sort_keys=True,separators=(',',':'))+'\n').encode())
+
+
+def privileged_entrypoint():
+    # No caller arguments and no operations before denial. Separate reviewed
+    # source/producer/allocation required; allowlist manipulation is insufficient.
+    raise Denied('SOURCE ONLY: no current producer route, runtime closure or Linux ABI approval')
+
+
+if __name__ == '__main__':
+    raise SystemExit('SbfFinite disabled: no privileged CLI')

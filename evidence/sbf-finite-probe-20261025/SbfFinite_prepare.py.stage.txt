@@ -1,0 +1,54 @@
+"""Local immutable text derivation only. Never imports derived backend/native code."""
+import ast, difflib, hashlib, json, pathlib, subprocess
+HERE=pathlib.Path(__file__).resolve().parent
+OUT=HERE.parents[1]/'evidence/sbf-finite-probe-20261025'
+def blob(rev,path): return subprocess.check_output(['git','show',rev+':'+path])
+def pin(raw): return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+def save(name,value): (OUT/name).write_text(json.dumps(value,sort_keys=True,indent=2)+'\n')
+inputs={}
+def get(rev,path):
+ raw=blob(rev,path); inputs[rev+':'+path]=pin(raw); return raw
+candidate_raw=get('fe20884963','evidence/sbf-runtime-acquire-20261025/SbfRuntimeAcquire-candidate-INPUT-DATA-ONLY.json')
+assert pin(candidate_raw)==dict(size=30423,sha256='c69379a1f6086d66925d0ab14824a9f1c39d1a8789f8f47c8c9d183e01aa2f24')
+candidate=json.loads(candidate_raw)
+raw=json.loads(get('fe20884963','evidence/sbf-runtime-acquire-20261025/SbfRuntimeAcquire-transport.stdout'))
+integration=json.loads(get('fe20884963','evidence/sbf-runtime-acquire-20261025/SbfRuntimeAcquire-NEXT-FINITE-PROBE-INTEGRATION.json'))
+get('fe20884963','evidence/sbf-runtime-acquire-20261025/SbfRuntimeAcquire-plan.json')
+get('86d9ae90c6','evidence/lead-review-20261025/sbf-runtime-acquire-v1.json')
+root='/var/lib/SbfFinite-20261025-v1/rootfs'
+runtime=dict(candidate['manifest'],version='SbfFiniteLinux-tiny-v1',root=root)
+rows=[]
+for row in runtime['files']:
+ source=raw['outcomes'].get(row['logical'],raw['files'][row['physical']])
+ if source.get('physical')!=row['physical']: source=raw['files'][row['physical']]
+ assert source['sha256']==row['sha256'] and source['size']==row['size']
+ rows.append(dict(guest=row['logical'],destination=root+row['logical'],mode=row['mode'],source=source))
+runtime['files']=[dict(r,physical=root+r['logical']) for r in runtime['files']]
+assert len(rows)==92 and sum(r['source']['size'] for r in rows)==35655597
+save('SbfFinite-runtime.json',dict(schema='SbfFinite-runtime-v1',runtime=runtime))
+save('SbfFinite-catalog.json',rows)
+# Literal generated source: no caller manifest/catalog at privileged boundary.
+(HERE/'SbfFinite_fixed.py').write_text('"""Literal finite experiment inputs; data, not runtime or security approval."""\n'
+ +'SCHEMA = '+repr('SbfFinite-runtime-v1')+'\nROOT = '+repr(root)+'\nOWN = '+repr(root.rsplit('/',1)[0])+'\nPACKAGE = '+repr('/opt/aspis/SbfFinite-20261025-v1')+'\n'
+ +'RUNTIME = '+repr(runtime)+'\nCATALOG = '+repr(rows)+'\n'
+ +'ARGV = '+repr(tuple(runtime['argv']))+'\nENV = '+repr(runtime['env'])+'\n')
+renames=[('SbfProducerSeal','SbfFinite'),('SbfProducerLinux','SbfFiniteLinux'),('SbfProducerRss','SbfFiniteRss'),('SbfProducer','SbfFinite')]
+files=['SbfProducerLinux_abi.py','SbfProducerLinux_backend.py','SbfProducerLinux_capture.py',
+ 'SbfProducer_backend_candidate.py','SbfProducer_continue.py','SbfProducer_observe.py',
+ 'SbfProducer_process.py','SbfProducer_package.py','SbfProducerRss_adapter.py','SbfProducerRss_guard.py',
+ 'SbfProducerRss_sources.py','SbfProducerRss_reviewed.json']
+for name in files:
+ source=get('20a0f5bb38','tools/sbf-producer-20261025/'+name).decode()
+ newname=name
+ for a,b in renames: source=source.replace(a,b); newname=newname.replace(a,b)
+ # Keep exact transformed baseline as text for complete statements/delta review.
+ (OUT/(newname+'.baseline.txt')).write_text(source)
+ (HERE/newname).write_text(source)
+save('SbfFinite-inputs.json',inputs)
+save('SbfFinite-renames.json',dict(renames=renames,captured_postexec_body_delta='NONE',
+ captured_argv=integration['reconciliation'][2]['captured'],env=runtime['env'],
+ version=['SbfLinux-tiny-v1','SbfFiniteLinux-tiny-v1'],
+ root=['/var/lib/SbfSeal-20261025-v1/rootfs',root],
+ copy_count=92,copy_bytes=35655597,physical_endpoints=82,
+ startup_correspondence='Captured body/argv/env only; changed host source is not newly executed evidence'))
+print('derived literal92-row catalog and immutable renamed baselines')
