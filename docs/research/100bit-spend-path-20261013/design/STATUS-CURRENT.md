@@ -10,7 +10,7 @@ Port32CONSUMER52474 now targets actual selected declaration reconstruction, old 
 
 SbfLinux concrete unexecuted backend reviewed/independent54 tests plus package audit pass, mergede8100b8d12/cleaned. Privileged entrypoints disabled; actual finite runtime/producer/LSM/cancellation/parent-death/kernel/probe gates open. It establishes source preparation, not native sandbox or artifact security.
 
-ResourceMeta1G tighter metadata768M/1G source independently reviewed/8 focused groups pass, merged19bd47bc72/cleaned. LIVE51248 has ONE new metadata epoch7, exact reviewed policy/pins/guards, prospective1GiB then onlyifpass insideQ0 and tiny marker, with bounded existing-capture export. Six prior failures remain charged, including552960B actual reserve denial. No final Kani/native/compiler consumer.1GiB marker cannot authorize larger jobs; general APIs disabled.
+ResourceMeta1G actual epoch7 GO_MARKER_PASS reviewed/independent29639-event exact replay passed, mergedae091370b6/cleaned. Controls768M/1G/Swap0/Tasks64, observed cgroup peak105762816B, zero pressure/swap, inside3063519232B margin. This is timestamped metadata only; all six old failures retained and no larger-consumer/native/Kani authority. SbfRuntime54132 ONE bounded public runtime-data metadata sequence prepares exact finite Python/loader/import/cache inputs; no root/ns/backend/syscall/probe/compiler. Runtime/producer/probe gates remain open. General APIs disabled.
 
 Private Kani59/60 final1reserved,Lean240/260,Rust2/3charges(actual ordinary build1),extraction54/56,backend15/16,ELF0/3 unchanged. E1/world/error/drop/controller/Claims/Terminal/transcript/L1/L2/L3/client/equivalence/<15s timing/all3ELF/final coherent replay and axioms obligations remain. Frozen contract/artifact pins unchanged.
 
