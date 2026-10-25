@@ -249,6 +249,20 @@ def projection(r=None):
 
 
 class Synthetic(unittest.TestCase):
+    def test_fixed_layout_manifest_root_consistency(self):
+        # Mocked root metadata/effects only. No actual root-owned path opened.
+        with patch.object(s.os,'getuid',return_value=0), patch.object(s.os,'geteuid',return_value=0):
+            with patch.object(s,'open_safe_ancestry',return_value=100) as ancestry:
+                with patch.object(s,'exclusive_dir',side_effect=[101,102,103]) as create:
+                    with patch.object(s.os,'close') as close:
+                        self.assertEqual(s.create_fixed_layout(),(101,102,103))
+        ancestry.assert_called_once_with('/var/lib')
+        self.assertEqual([c.args for c in create.call_args_list],
+                         [(100,'SbfSeal-20261025-v1',0),(101,'rootfs',0),(101,'public-output',0)])
+        close.assert_called_once_with(100)
+        self.assertEqual(s.ROOT,s.OWN+'/rootfs')
+        self.assertEqual(manifest()['root'],s.ROOT)
+
     def test_manifest_exact_mutations(self):
         self.assertEqual(len(s.validate_manifest(manifest())['sha256']), 64)
         mutations = [('uid',0),('gid',0),('root','/tmp/arbitrary'),('argv',['/bin/sh']),

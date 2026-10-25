@@ -39,7 +39,8 @@ def component(name):
 
 DIR_FLAGS = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW | os.O_CLOEXEC
 FILE_FLAGS = os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC | os.O_NONBLOCK
-ROOT = '/var/lib/SbfSeal-20261025-v1'
+OWN = '/var/lib/SbfSeal-20261025-v1'
+ROOT = OWN+'/rootfs'
 UID = GID = 1000
 MAX_FILE = 16*2**20
 MAX_TOTAL = 64*2**20

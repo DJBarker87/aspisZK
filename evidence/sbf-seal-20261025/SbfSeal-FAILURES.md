@@ -30,3 +30,9 @@ EBADF entries (closed listdir inspection descriptors) discarded. Actual fd3 or
 high fd remains a survivor and rejects. Other fstat errors propagate. Requires
 single-threaded guest and verified private proc; both remain actual Linux gates.
 No claim that lowering RLIMIT_NOFILE closes pre-existing descriptors.
+
+Final cross-file review found future manifest root named the owned layout parent,
+whereas create_fixed_layout returns its rootfs child. No backend could execute,
+and no privileged effect occurred. Corrected ROOT=OWN+'/rootfs'; added focused
+mocked-layout/manifest consistency check. Future packet and source audit must be
+regenerated for this source change; no unchanged full suite repetition needed.

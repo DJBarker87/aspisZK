@@ -36,7 +36,11 @@ def main():
                     result=SbfSeal_audit.main()
                 else:
                     import SbfSeal_tests
-                    suite=unittest.defaultTestLoader.loadTestsFromModule(SbfSeal_tests)
+                    if label.endswith('-root-tests'):
+                        suite=unittest.defaultTestLoader.loadTestsFromName(
+                            'Synthetic.test_fixed_layout_manifest_root_consistency',SbfSeal_tests)
+                    else:
+                        suite=unittest.defaultTestLoader.loadTestsFromModule(SbfSeal_tests)
                     result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
             except Exception:
                 traceback.print_exc()
