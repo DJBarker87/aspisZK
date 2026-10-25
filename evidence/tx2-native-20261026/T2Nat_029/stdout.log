@@ -1,0 +1,394 @@
+T2Nat_ReaderBody.lean:47:74: error: unsolved goals
+ops : ResumeOps
+bytes : Slice U8
+v : transport.Variant
+next : U8
+finish : Usize
+checksum : Slice U8
+digest : Std.Array U8 32#usize
+⊢ (do
+      let different ← ops.ne core.cmp.PartialEqU8 checksum digest
+      if different = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let (state, r1) ← ops.raw 32#usize { bytes := bytes, «at» := 80#usize }
+          let (root0, r2) ← ops.raw 32#usize r1
+          let (root1, r3) ← ops.raw 32#usize r2
+          let (value, out) ← ops.readE r3
+          match value with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok a => do
+              let (value, out) ← ops.readE out
+              match value with
+                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                | core.result.Result.Ok a_1 => do
+                  let (value, out) ← ops.readE out
+                  match value with
+                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                    | core.result.Result.Ok a_2 => do
+                      let (value, out) ← ops.readE out
+                      match value with
+                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                        | core.result.Result.Ok a_3 => do
+                          let (value, out) ← ops.readK out
+                          match value with
+                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                            | core.result.Result.Ok a_4 => do
+                              let x ← ops.raw 4#usize out
+                              let x_1 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_2 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_3 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_4 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_5 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_6 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_7 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_8 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_9 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_10 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_11 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_12 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_13 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_14 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_15 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_16 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_17 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_18 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_19 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_20 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_21 ← lift (core.num.U32.from_le_bytes x.1)
+                              let x ← ops.raw 4#usize x.2
+                              let x_22 ← lift (core.num.U32.from_le_bytes x.1)
+                              let value ←
+                                ops.validate
+                                    (Array.make 22#usize
+                                      [x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9, x_10, x_11, x_12, x_13, x_14, x_15,
+                                        x_16, x_17, x_18, x_19, x_20, x_21, x_22]
+                                      ⋯)
+                              match value with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a_5 => do
+                                  let value ← ops.readSemanticAlpha bytes x.2.at
+                                  match value with
+                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                    | core.result.Result.Ok a_6 => do
+                                      let (value, out) ← ops.readK { bytes := x.2.bytes, «at» := a_6.2 }
+                                      match value with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a_7 => do
+                                          let (value, out) ← ops.readK out
+                                          match value with
+                                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                            | core.result.Result.Ok a_8 => do
+                                              let (value, out) ← ops.readK out
+                                              match value with
+                                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                | core.result.Result.Ok a_9 => do
+                                                  let (value, out) ← ops.readK out
+                                                  match value with
+                                                    | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                    | core.result.Result.Ok a_10 => do
+                                                      let (value, out) ← ops.readE out
+                                                      match value with
+                                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                        | core.result.Result.Ok a_11 => do
+                                                          let (value, out) ← ops.readE out
+                                                          match value with
+                                                            | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                                            | core.result.Result.Ok a_12 => do
+                                                              let (value, out) ← ops.readK out
+                                                              match value with
+                                                                | core.result.Result.Err e =>
+                                                                  ok (core.result.Result.Err e)
+                                                                | core.result.Result.Ok a_13 => do
+                                                                  let width ← ops.finalLen v
+                                                                  let zero ← ops.zeroK
+                                                                  let value ← ops.filled width zero
+                                                                  match value with
+                                                                    | core.result.Result.Err e =>
+                                                                      ok (core.result.Result.Err e)
+                                                                    | core.result.Result.Ok a_14 => do
+                                                                      let value ← ops.readWeights bytes out.at a_14
+                                                                      match value with
+                                                                        | core.result.Result.Err e =>
+                                                                          ok (core.result.Result.Err e)
+                                                                        | core.result.Result.Ok a_15 =>
+                                                                          if (a_15.2 != finish) = true then
+                                                                            ok
+                                                                              (core.result.Result.Err
+                                                                                verifier.Error.Checkpoint)
+                                                                          else do
+                                                                            let cursor ←
+                                                                              lift (UScalar.cast UScalarTy.Usize next)
+                                                                            ok
+                                                                                (core.result.Result.Ok
+                                                                                  ({ variant := v,
+                                                                                      roots :=
+                                                                                        Array.make 2#usize
+                                                                                          [root0, root1] ⋯,
+                                                                                      gamma := a, kappa := a_1,
+                                                                                      alpha :=
+                                                                                        Array.make 2#usize [a_2, a_3] ⋯,
+                                                                                      rho := a_4,
+                                                                                      queries :=
+                                                                                        Array.make 22#usize
+                                                                                          [x_1, x_2, x_3, x_4, x_5, x_6,
+                                                                                            x_7, x_8, x_9, ⋯]
+                                                                                          ⋯,
+                                                                                      semantic_alpha := a_6.1,
+                                                                                      z :=
+                                                                                        Array.make 2#usize
+                                                                                          [{ x := a_7, y := a_8 },
+                                                                                            { x := a_9, y := a_10 }]
+                                                                                          ⋯,
+                                                                                      claim := a_11, state := state },
+                                                                                    { weights := a_15.1, rhs := a_12,
+                                                                                      power := a_13,
+                                                                                      next := cursor }))) =
+    do
+    let b4 ← ops.ne core.cmp.PartialEqU8 checksum digest
+    if b4 = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+      else do
+        let (state, r) ← ops.raw 32#usize { bytes := bytes, «at» := 80#usize }
+        let (a3, r1) ← ops.raw 32#usize r
+        let (a4, r2) ← ops.raw 32#usize r1
+        let (r3, r4) ← ops.readE r2
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r5, r6) ← ops.readE r4
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r5
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let (r7, r8) ← ops.readE r6
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let (r9, r10) ← ops.readE r8
+                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r9
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                        let (r11, r12) ← ops.readK r10
+                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r11
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                            let (a5, r13) ← ops.raw 4#usize r12
+                            let i8 ← lift (core.num.U32.from_le_bytes a5)
+                            let (a6, r14) ← ops.raw 4#usize r13
+                            let i9 ← lift (core.num.U32.from_le_bytes a6)
+                            let (a7, r15) ← ops.raw 4#usize r14
+                            let i10 ← lift (core.num.U32.from_le_bytes a7)
+                            let (a8, r16) ← ops.raw 4#usize r15
+                            let i11 ← lift (core.num.U32.from_le_bytes a8)
+                            let (a9, r17) ← ops.raw 4#usize r16
+                            let i12 ← lift (core.num.U32.from_le_bytes a9)
+                            let (a10, r18) ← ops.raw 4#usize r17
+                            let i13 ← lift (core.num.U32.from_le_bytes a10)
+                            let (a11, r19) ← ops.raw 4#usize r18
+                            let i14 ← lift (core.num.U32.from_le_bytes a11)
+                            let (a12, r20) ← ops.raw 4#usize r19
+                            let i15 ← lift (core.num.U32.from_le_bytes a12)
+                            let (a13, r21) ← ops.raw 4#usize r20
+                            let i16 ← lift (core.num.U32.from_le_bytes a13)
+                            let (a14, r22) ← ops.raw 4#usize r21
+                            let i17 ← lift (core.num.U32.from_le_bytes a14)
+                            let (a15, r23) ← ops.raw 4#usize r22
+                            let i18 ← lift (core.num.U32.from_le_bytes a15)
+                            let (a16, r24) ← ops.raw 4#usize r23
+                            let i19 ← lift (core.num.U32.from_le_bytes a16)
+                            let (a17, r25) ← ops.raw 4#usize r24
+                            let i20 ← lift (core.num.U32.from_le_bytes a17)
+                            let (a18, r26) ← ops.raw 4#usize r25
+                            let i21 ← lift (core.num.U32.from_le_bytes a18)
+                            let (a19, r27) ← ops.raw 4#usize r26
+                            let i22 ← lift (core.num.U32.from_le_bytes a19)
+                            let (a20, r28) ← ops.raw 4#usize r27
+                            let i23 ← lift (core.num.U32.from_le_bytes a20)
+                            let (a21, r29) ← ops.raw 4#usize r28
+                            let i24 ← lift (core.num.U32.from_le_bytes a21)
+                            let (a22, r30) ← ops.raw 4#usize r29
+                            let i25 ← lift (core.num.U32.from_le_bytes a22)
+                            let (a23, r31) ← ops.raw 4#usize r30
+                            let i26 ← lift (core.num.U32.from_le_bytes a23)
+                            let (a24, r32) ← ops.raw 4#usize r31
+                            let i27 ← lift (core.num.U32.from_le_bytes a24)
+                            let (a25, r33) ← ops.raw 4#usize r32
+                            let i28 ← lift (core.num.U32.from_le_bytes a25)
+                            let (a26, r34) ← ops.raw 4#usize r33
+                            let i29 ← lift (core.num.U32.from_le_bytes a26)
+                            let r35 ←
+                              ops.validate
+                                  (Array.make 22#usize
+                                    [i8, i9, i10, i11, i12, i13, i14, i15, i16, i17, i18, i19, i20, i21, i22, i23, i24,
+                                      i25, i26, i27, i28, i29]
+                                    ⋯)
+                            let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r35
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                let r36 ← ops.readSemanticAlpha bytes r34.at
+                                let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r36
+                                match cf6 with
+                                  | core.ops.control_flow.ControlFlow.Continue val5 => do
+                                    let (r37, r38) ← ops.readK { bytes := r34.bytes, «at» := val5.2 }
+                                    let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r37
+                                    match cf7 with
+                                      | core.ops.control_flow.ControlFlow.Continue val6 => do
+                                        let (r39, r40) ← ops.readK r38
+                                        let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r39
+                                        match cf8 with
+                                          | core.ops.control_flow.ControlFlow.Continue val7 => do
+                                            let (r41, r42) ← ops.readK r40
+                                            let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r41
+                                            match cf9 with
+                                              | core.ops.control_flow.ControlFlow.Continue val8 => do
+                                                let (r43, r44) ← ops.readK r42
+                                                let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r43
+                                                match cf10 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val9 => do
+                                                    let (r45, r46) ← ops.readE r44
+                                                    let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r45
+                                                    match cf11 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val10 => do
+                                                        let (r47, r48) ← ops.readE r46
+                                                        let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r47
+                                                        match cf12 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val11 => do
+                                                            let (r49, r50) ← ops.readK r48
+                                                            let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r49
+                                                            match cf13 with
+                                                              | core.ops.control_flow.ControlFlow.Continue val12 => do
+                                                                let i30 ← ops.finalLen v
+                                                                let q ← ops.zeroK
+                                                                let r52 ← ops.filled i30 q
+                                                                let cf14 ←
+                                                                  core.result.Result.Insts.CoreOpsTry.branch r52
+                                                                match cf14 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue val13 =>
+                                                                    do
+                                                                    let r53 ← ops.readWeights bytes r50.at val13
+                                                                    let cf15 ←
+                                                                      core.result.Result.Insts.CoreOpsTry.branch r53
+                                                                    match cf15 with
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Continue
+                                                                          val14 =>
+                                                                        if (val14.2 != finish) = true then
+                                                                          ok
+                                                                            (core.result.Result.Err
+                                                                              verifier.Error.Checkpoint)
+                                                                        else do
+                                                                          let i31 ←
+                                                                            lift (UScalar.cast UScalarTy.Usize next)
+                                                                          ok
+                                                                              (core.result.Result.Ok
+                                                                                ({ variant := v,
+                                                                                    roots :=
+                                                                                      Array.make 2#usize [a3, a4] ⋯,
+                                                                                    gamma := val, kappa := val1,
+                                                                                    alpha :=
+                                                                                      Array.make 2#usize [val2, val3] ⋯,
+                                                                                    rho := val4,
+                                                                                    queries :=
+                                                                                      Array.make 22#usize
+                                                                                        [i8, i9, i10, i11, i12, i13,
+                                                                                          i14, i15, i16, ⋯]
+                                                                                        ⋯,
+                                                                                    semantic_alpha := val5.1,
+                                                                                    z :=
+                                                                                      Array.make 2#usize
+                                                                                        [{ x := val6, y := val7 },
+                                                                                          { x := val8, y := val9 }]
+                                                                                        ⋯,
+                                                                                    claim := val10, state := state },
+                                                                                  { weights := val14.1, rhs := val11,
+                                                                                    power := val12, next := i31 }))
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          (verifier.Prepared × verifier.Accumulator)
+                                                                          (core.convert.FromSame verifier.Error)
+                                                                          residual
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      (verifier.Prepared × verifier.Accumulator)
+                                                                      (core.convert.FromSame verifier.Error) residual
+                                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  (verifier.Prepared × verifier.Accumulator)
+                                                                  (core.convert.FromSame verifier.Error) residual
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (verifier.Prepared × verifier.Accumulator)
+                                                              (core.convert.FromSame verifier.Error) residual
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (verifier.Prepared × verifier.Accumulator)
+                                                          (core.convert.FromSame verifier.Error) residual
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (verifier.Prepared × verifier.Accumulator)
+                                                      (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (verifier.Prepared × verifier.Accumulator)
+                                                  (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (verifier.Prepared × verifier.Accumulator)
+                                              (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (verifier.Prepared × verifier.Accumulator)
+                                          (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                      residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error)
+                                  residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (verifier.Prepared × verifier.Accumulator) (core.convert.FromSame verifier.Error) residual
+T2Nat_ReaderBody.lean:49:29: warning: This simp argument is unused:
+  T2Nat_Try.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵t̵a̵i̵l̵,̵T̵2̵N̵a̵t̵_̵Q̵u̵e̵r̵y̵R̵e̵a̵d̵s̵.̵q̵u̵e̵r̵i̵e̵s̵,̵w̵i̵t̵h̵R̵e̵a̵d̵,̵w̵i̵t̵h̵O̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵o̵r̵t̵4̵A̵_̵N̵a̵t̵i̵v̵e̵R̵e̵a̵d̵e̵r̵.̵t̵a̵i̵l̵,̵T̵2̵N̵a̵t̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲t̲a̲i̲l̲,̲ ̲T̲2̲N̲a̲t̲_̲Q̲u̲e̲r̲y̲R̲e̲a̲d̲s̲.̲q̲u̲e̲r̲i̲e̲s̲,̲ ̲w̲i̲t̲h̲R̲e̲a̲d̲,̲ ̲w̲i̲t̲h̲O̲k̲,̲ ̲P̲o̲r̲t̲4̲A̲_̲N̲a̲t̲i̲v̲e̲R̲e̲a̲d̲e̲r̲.̲t̲a̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.T2Nat_ReaderBody.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

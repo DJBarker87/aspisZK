@@ -1,0 +1,48 @@
+T2Nat_WeightSequence.lean:59:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  weightLoop CheckpointBytes3Reader.readK (↑v).length { bytes := bytes, «at» := start }
+    { slice := ⟨[] ++ ↑v, ⋯⟩, i := [].length }
+in the target expression
+  (do
+      let r ← Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes (↑v).length start
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) =>
+          have final := Port5Q2_ReaderWeights.write v.deref 0 xs;
+          ok (core.result.Result.Ok (⟨↑final, ⋯⟩, last))) =
+    do
+    let result ←
+      weightLoop CheckpointBytes3Reader.readK (↑v).length { bytes := bytes, «at» := start } { slice := ⟨↑v, ⋯⟩ }
+    match result with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (it, r) => ok (core.result.Result.Ok (⟨↑it.slice, ⋯⟩, r.at))
+
+bytes : Slice U8
+start : Usize
+v : alloc.vec.Vec K
+⊢ (do
+      let r ← Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes (↑v).length start
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) =>
+          have final := Port5Q2_ReaderWeights.write v.deref 0 xs;
+          ok (core.result.Result.Ok (⟨↑final, ⋯⟩, last))) =
+    do
+    let result ←
+      weightLoop CheckpointBytes3Reader.readK (↑v).length { bytes := bytes, «at» := start } { slice := ⟨↑v, ⋯⟩ }
+    match result with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok (it, r) => ok (core.result.Result.Ok (⟨↑it.slice, ⋯⟩, r.at))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    v
+  has type
+    alloc.vec.Vec K
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑v
+'AspisR1.T2Nat_WeightSequence.sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_WeightSequence.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_WeightSequence.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

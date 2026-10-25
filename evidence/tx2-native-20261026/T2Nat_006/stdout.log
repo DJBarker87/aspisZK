@@ -1,0 +1,79 @@
+T2Nat_FinishResult.lean:72:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none
+in the target expression
+  Port3_QueryInstall.result
+      (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a
+        (Port3_QueryInstall.observer none)) =
+    ok
+      (if r0.lhs ≠ r0.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+      else
+        if r1.lhs ≠ r1.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+        else
+          if pair ≠ r1.value then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+          else
+            if a.next ≠ 22#usize then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Query)
+            else
+              if dot ≠ a.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Query)
+              else core.result.Result.Ok ())
+
+W : Type
+ops : FinishOps W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+alpha0 alpha1 : E
+r0 : RowFinish_Control.RoundValues ops v.round0 alpha0 p.claim
+r1 : RowFinish_Control.RoundValues ops v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : ops.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : ops.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd : ops.dot v.final_message a.weights.deref = ok (core.result.Result.Ok dot)
+normal :
+  Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a none =
+    ok
+      (if r0.lhs ≠ r0.rhs then core.result.Result.Err verifier.Error.Relation
+      else
+        if r1.lhs ≠ r1.rhs then core.result.Result.Err verifier.Error.Relation
+        else
+          if pair ≠ r1.value then core.result.Result.Err verifier.Error.Relation
+          else
+            if a.next ≠ 22#usize then core.result.Result.Err verifier.Error.Query
+            else if dot ≠ a.rhs then core.result.Result.Err verifier.Error.Query else core.result.Result.Ok ())
+⊢ Port3_QueryInstall.result
+      (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native ops) v p a
+        (Port3_QueryInstall.observer none)) =
+    ok
+      (if r0.lhs ≠ r0.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+      else
+        if r1.lhs ≠ r1.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+        else
+          if pair ≠ r1.value then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Relation)
+          else
+            if a.next ≠ 22#usize then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Query)
+            else
+              if dot ≠ a.rhs then core.result.Result.Err (Port3_CheckpointInstall.error verifier.Error.Query)
+              else core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.T2Nat_FinishResult.installed_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_FinishResult.installed_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_FinishResult.accepted_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_FinishResult.full_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

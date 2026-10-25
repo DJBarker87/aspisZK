@@ -1,0 +1,64 @@
+T2Nat_WeightLoop.lean:44:8: error: Type mismatch: After simplification, term
+  bound
+ has type
+  pre.length + (old.length + 1) ≤ Usize.max
+but is expected to have type
+  pre.length + ([].length + 1) + old.length ≤ Usize.max
+T2Nat_WeightLoop.lean:48:6: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.231 ?m.232 ?m.233).mpr`
+  ?m.231 >>= ?m.232 = ?m.231 >>= ?m.233
+with the goal
+  (do
+      let value ← readList read old.length next
+      result ⟨pre ++ [x] ++ old, bound1⟩ (pre.length + 1) old.length value) =
+    do
+    let value ←
+      let (value, out) := (core.result.Result.Ok x, next)
+        match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x => do
+          let rest ← readList read old.length out
+          match rest with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+    result ⟨pre ++ y :: old, bound⟩ pre.length (old.length + 1) value
+
+Note: The full type of `(bind_eq_iff ?m.231 ?m.232 ?m.233).mpr` is
+  (∀ (v : ?m.229), ?m.231 = ok v → ?m.232 v = ?m.233 v) → ?m.231 >>= ?m.232 = ?m.231 >>= ?m.233
+
+case cons.Ok
+read : ReadK
+y : K
+old : List K
+ih :
+  ∀ (pre : List K) (r : verifier.Reader) (bound : (pre ++ old).length ≤ Usize.max),
+    weightLoop read old.length r { slice := ⟨pre ++ old, bound⟩, i := pre.length } = do
+      let value ← readList read old.length r
+      result ⟨pre ++ old, bound⟩ pre.length old.length value
+pre : List K
+r : verifier.Reader
+bound : (pre ++ y :: old).length ≤ Usize.max
+slot : pre.length < (pre ++ y :: old).length
+next : verifier.Reader
+x : CheckpointBytes4Sections.K
+called : read r = ok (core.result.Result.Ok x, next)
+replaced : Slice.setAtNat ⟨pre ++ y :: old, ⋯⟩ pre.length x = ⟨pre ++ [x] ++ old, ⋯⟩
+bound1 : (pre ++ [x] ++ old).length ≤ Usize.max
+recursive :
+  weightLoop read old.length next { slice := ⟨pre ++ [x] ++ old, bound1⟩, i := pre.length + 1 } = do
+    let value ← readList read old.length next
+    result ⟨pre ++ [x] ++ old, bound1⟩ (pre.length + 1) old.length value
+⊢ (do
+      let value ← readList read old.length next
+      result ⟨pre ++ [x] ++ old, bound1⟩ (pre.length + 1) old.length value) =
+    do
+    let value ←
+      let (value, out) := (core.result.Result.Ok x, next)
+        match value with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok x => do
+          let rest ← readList read old.length out
+          match rest with
+            | core.result.Result.Err e => ok (core.result.Result.Err e)
+            | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))
+    result ⟨pre ++ y :: old, bound⟩ pre.length (old.length + 1) value
+'AspisR1.T2Nat_WeightLoop.normalize' depends on axioms: [propext, sorryAx, Quot.sound]
