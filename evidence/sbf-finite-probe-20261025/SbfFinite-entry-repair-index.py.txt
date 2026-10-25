@@ -1,0 +1,15 @@
+"""Local final evidence hash index only. No children/operational imports."""
+import hashlib,json,pathlib,resource,sys,time
+start=time.monotonic();H=pathlib.Path('tools/sbf-finite-probe-20261025');O=pathlib.Path('evidence/sbf-finite-probe-20261025')
+def pin(b):return dict(size=len(b),sha256=hashlib.sha256(b).hexdigest())
+files={}
+for folder in (H,O):
+ for p in sorted(folder.iterdir()):
+  if p.is_file() and p.name!='SbfFinite-entry-repair-index.json':
+   raw=p.read_bytes();assert not (p.suffix=='.json' and len(raw)>5_000_000)
+   files[str(p)]=pin(raw)
+r=resource.getrusage(resource.RUSAGE_SELF);factor=1 if sys.platform=='darwin' else 1024
+assert r.ru_maxrss*factor<512*2**20
+report=dict(command=getattr(sys,'orig_argv',sys.argv),source_revision='6ccb0487d0508512efe5de6321db9533ccd70da5',exit=0,wall_seconds=time.monotonic()-start,peak_process_rss_bytes=r.ru_maxrss*factor,peak_aggregate_rss_bytes=r.ru_maxrss*factor,aggregate_method='single process, no children',swap=r.ru_nswap,axioms='N/A; source/data hashes only',files=files,dependencies={n:dict(path=m.__file__,**pin(pathlib.Path(m.__file__).read_bytes())) for n,m in sorted(sys.modules.items()) if getattr(m,'__file__',None) and pathlib.Path(m.__file__).is_file()},interpreter=dict(path=sys.executable,version=sys.version,**pin(pathlib.Path(sys.executable).read_bytes())),derived_JSON_over5MB=[])
+p=O/'SbfFinite-entry-repair-index.json';assert not p.exists();p.write_text(json.dumps(report,sort_keys=True,indent=2)+'\n')
+print(json.dumps(dict(exit=0,files=len(files),wall_seconds=report['wall_seconds'],rss=report['peak_process_rss_bytes'])))

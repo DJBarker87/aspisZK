@@ -1,0 +1,76 @@
+"""Independent focused repair delta/hash audit and handoff. Source only."""
+import ast,difflib,hashlib,json,pathlib,resource,subprocess,sys,time
+START=time.monotonic();H=pathlib.Path('tools/sbf-finite-probe-20261025');O=pathlib.Path('evidence/sbf-finite-probe-20261025')
+BASE='d39aa80a9aa0a87bf9216f5e7a08cd952b58c784';checks=[];inputs={}
+def pin(b):return dict(size=len(b),sha256=hashlib.sha256(b).hexdigest())
+def git(*args):return subprocess.check_output(['git',*args])
+def check(value,label):
+ checks.append(dict(label=label,passed=bool(value)));assert value,label
+revision=git('rev-parse','HEAD').decode().strip()
+repair=json.loads((O/'SbfFinite-entry-repair-statements.json').read_bytes())
+for name,row in repair.items():
+ before=git('show',BASE+':'+str(H/name));inputs[BASE+':'+name]=pin(before)
+ after=(H/name).read_bytes()
+ check(pin(before)==row['before'] and pin(after)==row['after'],'repair source before/after '+name)
+ def defs(raw):
+  s=raw.decode();result={}
+  for n in ast.parse(s).body:
+   if isinstance(n,ast.FunctionDef):result[n.name]=ast.get_source_segment(s,n)
+   if isinstance(n,ast.ClassDef):
+    for method in n.body:
+     if isinstance(method,ast.FunctionDef):result[n.name+'.'+method.name]=ast.get_source_segment(s,method)
+  return result
+ a=defs(before);b=defs(after)
+ # Compare complete qualified method statements, including the new test class.
+ expected={k:dict(before=a.get(k),after=b.get(k)) for k in a.keys()|b.keys() if a.get(k)!=b.get(k)}
+ check(row['complete_changed_statements']==expected,'complete repair function statements '+name)
+ if name=='SbfFinite_install_entry.py':
+  check(row['complete_before'].encode()==before and row['complete_after'].encode()==after,'complete dormant entry statements')
+install=(H/'SbfFinite_install.py').read_text();old=(O/'SbfFinite-entry-repair-before-SbfFinite_install.py.txt').read_text()
+a=ast.parse(old);b=ast.parse(install)
+olddefs={n.name:ast.dump(n) for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
+newdefs={n.name:ast.dump(n) for n in b.body if isinstance(n,(ast.FunctionDef,ast.ClassDef))}
+check({k for k in olddefs if olddefs[k]!=newdefs[k]}=={'fixed_install'},'only internal fixed_install existing body changed')
+expected=old.replace('        tree.seal();pkg.seal()\n','        tree.seal();pkg.seal()\n        # Persist new directory entries as well as sealed contents.\n        os.fsync(own)\n        for parent in parents:os.fsync(parent)\n')
+check(install.startswith(expected),'existing complete installer differs only by explicit ancestry fsync')
+check(set(newdefs)-set(olddefs)=={'fixed_install_entry'},'sole new operational function is typed noargument installer wrapper')
+changed_tools={'SbfFinite_REVIEW.md','SbfFinite_audit.py','SbfFinite_check.py','SbfFinite_entry_repair_validate.py','SbfFinite_install.py','SbfFinite_install_entry.py','SbfFinite_run_tests.py','SbfFinite_tests.py'}
+for name in git('ls-tree','--name-only',BASE,str(H)+'/').decode().splitlines():
+ p=pathlib.Path(name)
+ if p.name not in changed_tools:
+  raw=git('show',BASE+':'+name);inputs[BASE+':'+name]=pin(raw)
+  check(raw==p.read_bytes(),'unchanged original module/data '+p.name)
+paths=git('diff','--name-only',BASE).decode().splitlines()
+check(all(p.startswith((str(H)+'/',str(O)+'/')) for p in paths),'all tracked edits confined to own writable paths')
+for name in ('SbfFinite-installation.json','SbfFinite-statements-and-identities.json','SbfFinite-delta.patch.txt'):
+ check(git('show',BASE+':'+str(O/name))==(O/('SbfFinite-entry-repair-before-'+name)).read_bytes(),'old regenerated report retained '+name)
+# Installation package/core/user/root entry bytes are unchanged. Installer entry
+# alone repins the new installer; no selfpin/circular bootstrap is introduced.
+oldentry=ast.parse((O/'SbfFinite-entry-repair-before-SbfFinite_install_entry.py.txt').read_text())
+newentry=ast.parse((H/'SbfFinite_install_entry.py').read_text())
+def vals(t):return {n.targets[0].id:ast.literal_eval(n.value) for n in t.body if isinstance(n,ast.Assign)}
+v0=vals(oldentry);v1=vals(newentry)
+check(v0['SbfFinite_FUNCTION']=='fixed_install' and v1['SbfFinite_FUNCTION']=='fixed_install_entry','exact installer function delta')
+check([n for n in v0['SbfFinite_PINS'] if v0['SbfFinite_PINS'][n]!=v1['SbfFinite_PINS'][n]]==['SbfFinite_install.py'],'only affected installer bootstrap pin changed')
+for x,y in zip(oldentry.body,newentry.body):
+ if not isinstance(x,ast.Assign):check(ast.dump(x)==ast.dump(y),'entry nonassignment body unchanged '+type(x).__name__)
+for name in ('SbfFinite-tests-attempt11.json','SbfFinite-final-check3.json','SbfFinite-entry-repair-validation1.json'):
+ r=json.loads((O/name).read_bytes());check(r['exit']==0,'accepted new validation '+name)
+ for n,p in r['source_overlay'].items():check(pin((H/n).read_bytes())==p,'validated final source '+name+' '+n)
+(O/'SbfFinite-entry-repair-delta.patch.txt').write_text(''.join(difflib.unified_diff(old.splitlines(True),install.splitlines(True),fromfile='d39aa80a9a:SbfFinite_install.py',tofile='SbfFinite_install.py')))
+r=resource.getrusage(resource.RUSAGE_SELF);c=resource.getrusage(resource.RUSAGE_CHILDREN);factor=1 if sys.platform=='darwin' else 1024
+check((r.ru_maxrss+c.ru_maxrss)*factor<512*2**20,'source audit self+serial child sum below512MiB')
+report=dict(schema='SbfFinite-entry-repair-handoff-v1',command=getattr(sys,'orig_argv',sys.argv),source_revision=revision,base=BASE,exit=0,wall_seconds=time.monotonic()-START,
+ peak_process_rss_bytes=r.ru_maxrss*factor,child_peak_rss_bytes=c.ru_maxrss*factor,peak_aggregate_rss_bytes=None,aggregate_peak_upper_bound_bytes=(r.ru_maxrss+c.ru_maxrss)*factor,aggregate_method='concurrent aggregate UNOBSERVED; conservative self+serial Git child peaks',swap=r.ru_nswap,child_swaps=c.ru_nswap,
+ source_hashes={p.name:pin(p.read_bytes()) for p in sorted(H.iterdir()) if p.is_file()},immutable_inputs=inputs,
+ dependencies={n:dict(path=m.__file__,**pin(pathlib.Path(m.__file__).read_bytes())) for n,m in sorted(sys.modules.items()) if getattr(m,'__file__',None) and pathlib.Path(m.__file__).is_file()},
+ interpreter=dict(path=sys.executable,version=sys.version,**pin(pathlib.Path(sys.executable).read_bytes())),checks=checks,axioms='N/A; source/hash/AST and explicit mocks only',
+ established='Dormant noargument installer entry publishes fixed bounded root-owned installation-only receipt then returns int0 under explicit OS/import mocks; copy/seal/receipt failures propagate and retain partial paths. Public denial remains first.',
+ assumptions=dict(discharged='No formal/security assumptions. Internal dict-to-SystemExit defect repaired at concrete source entry.',added='No new trust assumptions.',retained=['external bootstrap/interpreter authentication and administrative publication','root/kernel/filesystem/CPython/native semantics','finite operational host/role/map/env/limit/control data','actual kernel LSM/pidfd/PDEATHSIG/cleanup/D-state behavior','SDK/std/runtime/allocator/extraction/refinement','frozen artifact binding and cryptographic/adaptive oracle/event-law joins']),
+ validation=dict(new=['34 methods in SbfFinite-tests-attempt11.json','279 checks in SbfFinite-final-check3.json','two byte-identical source/report regenerations in SbfFinite-entry-repair-validation1.json','focused repair delta audit in this report'],reused='Original 30 source tests retained in changed suite; immutable historical acquisition, lineage/policy and lead review reused with explicit pins; no new identity/native gate.',retained_failure='attempt9 resource check failed; exact RSS/swap/wall unavailable after runner abort; sources/log/limitation retained. Replacement reduced mock retention without cap change; focused attempt10 passed.'),
+ remaining='OPERATIONAL_PIN=(). Exact missing finite operational schema/role fields are recorded in SbfFinite_REVIEW.md. Next separately reviewed source/data publication must supply and pin real finite roles/runtime/maps/limits/scope/env/control inputs and authenticate administrative bootstrap/launcher publication. No current authority or activation.',
+ actual_budgets=dict(host=0,SSH=0,network=0,root=0,sudo=0,namespace=0,native=0,probe=0,install=0,compiler=0,Lean=0,Rust=0,Cargo=0,Kani=0,extraction=0,backend=0,ELF=0),
+ both_security_targets='NOT ESTABLISHED',status='STOP_FOR_LEAD_REVIEW; NO MERGE OR PUSH',derived_JSON_over5MB=[])
+raw=(json.dumps(report,sort_keys=True,indent=2)+'\n').encode();assert len(raw)<5_000_000
+p=O/'SbfFinite-entry-repair-HANDOFF.json';assert not p.exists();p.write_bytes(raw)
+print(json.dumps(dict(exit=0,checks=len(checks),wall_seconds=report['wall_seconds'],self_rss=report['peak_process_rss_bytes'],aggregate_upper_bound=report['aggregate_peak_upper_bound_bytes'])))
