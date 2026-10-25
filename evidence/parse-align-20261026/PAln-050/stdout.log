@@ -1,0 +1,108 @@
+PAln_CircleDecode.lean:18:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SelectedFieldSequenceCodec.encodeLow values
+in the target expression
+  4 :: le32 3712 ++ expand 116 payload =
+    [CircleRecordCodec.tag 0] ++ le32 (CircleRecordCodec.count 0 * 32) ++ SelectedFieldSequenceCodec.encodeLow values
+
+frame payload : Bytes
+length : List.length payload = if 14 ≤ 25 then (rowShape 25).2 / 2 else (rowShape 25).2
+canonical : 14 ≤ 25 → OraclePortCompactDraft.canonical payload
+same :
+  frame =
+    ⟨(rowShape 25).1 % 256, ⋯⟩ :: le32 (rowShape 25).2 ++
+      if 14 ≤ 25 then expand ((rowShape 25).2 / 32) payload else payload
+length' : List.length payload = 16 * 116
+values : Fin 116 → SemanticCoefficientCodec.LowWide
+encoded : SelectedFieldSequenceCodec.encodeLow values = expand 116 payload
+⊢ 4 :: le32 3712 ++ expand 116 payload =
+    [CircleRecordCodec.tag 0] ++ le32 (CircleRecordCodec.count 0 * 32) ++ SelectedFieldSequenceCodec.encodeLow values
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    values
+  has type
+    Fin 116 → SemanticCoefficientCodec.LowWide
+  but is expected to have type
+    Fin (CircleRecordCodec.count 0) → SelectedFieldSequenceCodec.LowWide
+  in the application
+    SelectedFieldSequenceCodec.encodeLow values
+PAln_CircleDecode.lean:21:40: error: Application type mismatch: The argument
+  values
+has type
+  Fin 116 → SemanticCoefficientCodec.LowWide
+but is expected to have type
+  CircleRecordCodec.Payload ?m.84
+in the application
+  CircleRecordCodec.decode_encode values
+PAln_CircleDecode.lean:21:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PAln_CircleDecode.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SelectedFieldSequenceCodec.encodeLow values
+in the target expression
+  5 :: le32 928 ++ expand 29 payload =
+    [CircleRecordCodec.tag 1] ++ le32 (CircleRecordCodec.count 1 * 32) ++ SelectedFieldSequenceCodec.encodeLow values
+
+frame payload : Bytes
+length : List.length payload = if 14 ≤ 26 then (rowShape 26).2 / 2 else (rowShape 26).2
+canonical : 14 ≤ 26 → OraclePortCompactDraft.canonical payload
+same :
+  frame =
+    ⟨(rowShape 26).1 % 256, ⋯⟩ :: le32 (rowShape 26).2 ++
+      if 14 ≤ 26 then expand ((rowShape 26).2 / 32) payload else payload
+length' : List.length payload = 16 * 29
+values : Fin 29 → SemanticCoefficientCodec.LowWide
+encoded : SelectedFieldSequenceCodec.encodeLow values = expand 29 payload
+⊢ 5 :: le32 928 ++ expand 29 payload =
+    [CircleRecordCodec.tag 1] ++ le32 (CircleRecordCodec.count 1 * 32) ++ SelectedFieldSequenceCodec.encodeLow values
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    values
+  has type
+    Fin 29 → SemanticCoefficientCodec.LowWide
+  but is expected to have type
+    Fin (CircleRecordCodec.count 1) → SelectedFieldSequenceCodec.LowWide
+  in the application
+    SelectedFieldSequenceCodec.encodeLow values
+PAln_CircleDecode.lean:37:40: error: Application type mismatch: The argument
+  values
+has type
+  Fin 29 → SemanticCoefficientCodec.LowWide
+but is expected to have type
+  CircleRecordCodec.Payload ?m.84
+in the application
+  CircleRecordCodec.decode_encode values
+PAln_CircleDecode.lean:37:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PAln_CircleDecode.lean:43:55: error: Application type mismatch: The argument
+  ?m.38
+has type
+  25 < p.semantic.length
+but is expected to have type
+  ∃ (h : ?m.28 < List.length ?m.30), ?m.30[?m.28] = ?m.29
+in the application
+  List.getElem?_eq_some_iff.mpr ?m.38
+PAln_CircleDecode.lean:43:9: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some ?m.29 = List.get?Internal ?m.30 ?m.28
+at case `Eq.refl`
+PAln_CircleDecode.lean:53:55: error: Application type mismatch: The argument
+  ?m.38
+has type
+  26 < p.semantic.length
+but is expected to have type
+  ∃ (h : ?m.28 < List.length ?m.30), ?m.30[?m.28] = ?m.29
+in the application
+  List.getElem?_eq_some_iff.mpr ?m.38
+PAln_CircleDecode.lean:53:9: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some ?m.29 = List.get?Internal ?m.30 ?m.28
+at case `Eq.refl`
+'AspisR1.PAln_CircleDecode.decode_first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PAln_CircleDecode.decode_second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PAln_CircleDecode.row25' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PAln_CircleDecode.row26' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

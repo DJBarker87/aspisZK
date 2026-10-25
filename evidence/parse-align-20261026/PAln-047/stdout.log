@@ -1,0 +1,31 @@
+PAln_SemanticRead.lean:42:17: error: don't know how to synthesize placeholder for argument `fst`
+context:
+eK : AspisV8R15.ExactTowerBase.QM31Exact →+* LiteralSemanticPrefix.E
+row✝ : ℕ
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+row : ℕ
+m : LiteralTranscript.Message
+c : LiteralTranscript.Challenge
+rest : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+valid : LiteralTranscript.valid row m
+tail : Ready (row + 1) rest
+ih :
+  ∀ (decoded : List SemanticPrefixCodec.Entry),
+    SemanticPrefixCodec.decodeFrom (row + 1) (records rest) = some decoded →
+      ∃ out, LiteralSemanticPrefix.read eK (row + 1) rest = some out
+decoded : List SemanticPrefixCodec.Entry
+success : TypedPrefixParser.decode SemanticPrefixCodec.decodeOne row (record m :: records rest) = some decoded
+value : SemanticPrefixCodec.At row
+first : SemanticPrefixCodec.decodeOne row (record m) = some value
+remaining : List SemanticPrefixCodec.Entry
+remainder : SemanticPrefixCodec.decodeFrom (row + 1) (records rest) = some remaining
+out : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+read : LiteralSemanticPrefix.read eK (row + 1) rest = some out
+encoded : SemanticRecordCodec.encode value.value = record m
+payload : SemanticRecordCodec.decode ⟨row, ⋯⟩ (record m) = some value.value
+parsed :
+  LiteralSemanticPrefix.parseMessage eK ⟨row, ⋯⟩ m = some (SemanticPayloadView.toMessage (callback eK m) ↑value.value)
+challenge : LiteralTranscript.E
+challengeEq : c.1 = Value.ordinary challenge
+⊢ R0P.Mask.SemMsgZ LiteralSemanticPrefix.E
+'AspisR1.PAln_SemanticRead.read_of_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
