@@ -1,0 +1,82 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:23:50: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.hmax`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:24:55: error: Application type mismatch: The argument
+  jbound
+has type
+  ↑j + 1 ≤ Usize.max
+but is expected to have type
+  ↑j + 1 < 2 ^ UScalarTy.Usize.numBits
+in the application
+  Usize.ofNatCore (↑j + 1) jbound
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:24:69: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Std.Array U32 22#usize
+len : Usize
+candidate : U32
+hlen : ↑len ≤ 22
+fuel : ℕ
+ih : ∀ (j : Usize), ↑j ≤ ↑len → ↑len - ↑j = fuel → ∃ out, owned_contains_loop a len candidate j = ok out
+j : Usize
+hj : ↑j ≤ ↑len
+hf : ↑len - ↑j = fuel + 1
+active : j < len
+index : a.index_usize j = ok (↑a)[↑j]
+jbound : ↑j + 1 ≤ Usize.max
+⊢ j + 1#usize = ok (Usize.ofNatCore (↑j + 1) ⋯)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:29:23: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.281 = ?m.281
+but is expected to have type
+  (match r✝ with
+    | cont x =>
+      loop
+        (fun j1 =>
+          if j1 < len then do
+            let i ← a.index_usize j1
+            if i = candidate then ok (done (some true))
+              else do
+                let j1 ← j1 + 1#usize
+                ok (cont j1)
+          else ok (done none))
+        x
+    | done x => ok x) =
+    ok (some true)
+in the application
+  Exists.intro (some true) rfl
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:30:6: error: `simp` made no progress
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:20:17: error: unsolved goals
+case h_3
+a : Std.Array U32 22#usize
+len : Usize
+candidate : U32
+hlen : ↑len ≤ 22
+fuel : ℕ
+ih : ∀ (j : Usize), ↑j ≤ ↑len → ↑len - ↑j = fuel → ∃ out, owned_contains_loop a len candidate j = ok out
+j : Usize
+hj : ↑j ≤ ↑len
+hf : ↑len - ↑j = fuel + 1
+active : j < len
+index : a.index_usize j = ok (↑a)[↑j]
+jbound : ↑j + 1 ≤ Usize.max
+add : j + 1#usize = ok (Usize.ofNatCore (↑j + 1) ⋯)
+x✝ : Result (ControlFlow Usize (Option Bool))
+heq✝ :
+  (if (↑a)[↑j] = candidate then ok (done (some true))
+    else do
+      let j1 ← j + 1#usize
+      ok (cont j1)) =
+    div
+⊢ ∃ out, div = ok out
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:18:52: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵w̵n̵e̵d̵_̵c̵o̵n̵t̵a̵i̵n̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲w̲n̲e̲d̲_̲c̲o̲n̲t̲a̲i̲n̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲s̲t̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Total.contains_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Total.contains_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

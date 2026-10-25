@@ -1,0 +1,36 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:25:39: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Std.Array U32 22#usize
+len : Usize
+candidate : U32
+hlen : ↑len ≤ 22
+fuel : ℕ
+ih : ∀ (j : Usize), ↑j ≤ ↑len → ↑len - ↑j = fuel → ∃ out, owned_contains_loop a len candidate j = ok out
+j : Usize
+hj : ↑j ≤ ↑len
+hf : ↑len - ↑j = fuel + 1
+active : j < len
+index : a.index_usize j = ok (↑a)[↑j]
+next : Usize := Usize.ofNatCore (↑j + 1) ⋯
+nextval : ↑next = ↑j + 1
+⊢ j + 1#usize = ok next
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:18:52: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵w̵n̵e̵d̵_̵c̵o̵n̵t̵a̵i̵n̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵t̵o̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲w̲n̲e̲d̲_̲c̲o̲n̲t̲a̲i̲n̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲s̲t̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryContainsTotalV1.lean:30:28: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos hit,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Total.contains_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Total.contains_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
