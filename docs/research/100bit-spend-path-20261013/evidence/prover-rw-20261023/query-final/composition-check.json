@@ -1,0 +1,51 @@
+{
+  "source": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+  "check": true,
+  "declarations": [
+    {
+      "module": "ProverRwQueryOpening",
+      "source_declaration": "prover.finish_opening",
+      "source_sha256": "f4429c47fc1542d2ada2e08fb18e74dfdc6776b14944d17ca7f94b57bd5d0c0b",
+      "lines": 96,
+      "substitution": {
+        "old": "host_transcript.Transcript.queries",
+        "new": "ProverRwQueryInstalled.query"
+      },
+      "theorem": "opening_exact"
+    },
+    {
+      "module": "ProverRwQuerySemantics",
+      "source_declaration": "prover.prove_from_semantics",
+      "source_sha256": "2b4cb4e858ad54ee9fdfb598d5b4f0e4457019f51f06d02969828c50b4e9d831",
+      "lines": 34,
+      "substitution": {
+        "old": "prover.finish_opening",
+        "new": "ProverRwQueryOpening.opening"
+      },
+      "theorem": "semantics_exact"
+    },
+    {
+      "module": "ProverRwQueryAttempt",
+      "source_declaration": "prover.prove_masked_with_attempt",
+      "source_sha256": "c17b5561a388810a2324703919238a2b6a971c3e7cab4dfa485d527884c36e0c",
+      "lines": 278,
+      "substitution": {
+        "old": "prover.prove_from_semantics",
+        "new": "ProverRwQuerySemantics.semantics"
+      },
+      "theorem": "attempt_exact"
+    },
+    {
+      "module": "ProverRwQueryNativeAttempt",
+      "source_declaration": "prover.prove_masked_attempt",
+      "source_sha256": "f8739ece1c970a2532573096d5babd57e7f4d2a788f5bea635afa992665a09f9",
+      "lines": 56,
+      "substitution": {
+        "old": "prover.prove_masked_with_attempt",
+        "new": "ProverRwQueryAttempt.attempt"
+      },
+      "theorem": "native_attempt_exact"
+    }
+  ]
+}

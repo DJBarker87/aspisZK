@@ -1,0 +1,61 @@
+'R1Z.ProverRwQueryAttempt.attempt_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryBlock.model_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryBlock.block_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryCallerSplit.queries_factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryComplete.publish_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryComplete.queries_policy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryComplete.queries_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryDecode.read_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryFinishTransport.finish_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryFinishTransport.query_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryInstalled.query_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryListStep.add_wrapping' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryListStep.body_advance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryMaterial.materialize_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryMaterialTransport.absorb_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryMaterialTransport.materialize_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryNativeAttempt.native_attempt_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryOpening.opening_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryPolicy.raw_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryPolicy.policy_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryPublish.branch_publish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryRetry.attempt_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryRetry.retry_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryRetry.admitted_eight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQuerySemantics.semantics_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQuerySourceWindow.window_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryStop.run_finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryStop.run_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.loop_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.loop_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryTrace.trace_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryWindow.list_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryWindow.window_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryWindowStop.stop_lt' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.ProverRwQueryComplete.queries_complete : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  {H : Type} (h : ProverRwFull.aspis_core.digest.Digest32 H) (self : R1Z.ProverRwQueryMaterialTransport.OldState H Unit)
+  (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.host_transcript.Transcript.queries h (R1Z.ProverRwQueryMaterialTransport.erase self) row payload = do
+    let p ←
+      R1Z.ProverCommitQuery26.materialize (R1Z.ProverRwQueryMaterialTransport.hash h) R1Z.ProverCommitQuery26.policy
+          self row payload
+    let r ← R1Z.ProverCommitQuery26.policy.queries p.2.1 p.2.2
+    R1Z.ProverRwQueryComplete.publishFinite (R1Z.ProverRwQueryMaterialTransport.erase p.1)
+        (R1Z.ProverRwQueryFinishTransport.policyResult r)
+R1Z.ProverRwQueryPolicy.policy_transport : ∀ (blocks advances : R1Z.ProverRwQueryScan.Blocks),
+  ProverRwFull.host_transcript.queries_from_pairs blocks advances = do
+    let r ← R1Z.ProverCommitQuery26.policy.queries blocks advances
+    Aeneas.Std.Result.ok (R1Z.ProverRwQueryFinishTransport.policyResult r)
+@R1Z.ProverRwQueryRetry.admitted_eight : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {C : Type} (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (h : R1Z.ProverRwRetryModel.Hash) (store : R1Z.ProverRwRetryModel.Store)
+  (callback : C),
+  R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.sourceOutput
+      (ProverRwFull.prover.prove_masked_retrying_with entropy pub compiled ProverRwFull.transport.Variant.S2 h store
+        callback) =
+    R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.drop
+      (R1Z.ProverCommitRetry34.eight
+        (R1Z.ProverRwQueryRetry.queryAttempt entropy pub compiled ProverRwFull.transport.Variant.S2 h)
+        (callback, store))
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

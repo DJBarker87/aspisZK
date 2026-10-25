@@ -143,7 +143,7 @@ exhaustion and exact selected advance state are included. The bounded-window
 proof checks the policy's pre-word stop boundary, including full count reached
 on a block's last word. The eight-block driver composes those symbolic windows.
 
-Seventeen compiles: ten pass and seven retained elaboration failures; no
+Seventeen compiles: nine pass and eight retained elaboration failures; no
 resource failures. The dependency preflight for the proposed window rejected
 an absent ListStep object before launching Lean; ID11336 was subsequently used
 for the fixed ListStep, not an unchanged compile. Receipts are in `query-policy`.
@@ -186,7 +186,7 @@ Rust/artifact/runtime/performance gate or full manifest was rerun.
 
 The query equation is now consumed in proof-only, literal source copies of
 `finish_opening` (96 lines), `prove_from_semantics` (34),
-`prove_masked_with_attempt` (278), and `prove_masked_attempt` (57).
+`prove_masked_with_attempt` (278), and `prove_masked_attempt` (56).
 `query-composition.py --check` pins each original declaration and verifies the
 single proved-callee substitution; the actual emitted function equals the
 corresponding copy on every input, preserving all other operations and errors.
@@ -202,3 +202,92 @@ six pass, one retained opening elaboration failure; no resource failure.
 Final retry11366: exit0,1.75s,4,278,400KiB RSS,swaps0,three standard-axiom reports.
 Receipts and generator/source pins are in `query-installed`. New budget41/100
 Lean,0/20 Kani; no unchanged regression or native gate was run.
+
+## Final audit and exact remaining conjunct1 work
+
+Final focused audit11367 checks proof revision`2c2c7986e0`: exit0,1.79s,
+4,250,140KiB peak RSS,swaps0,-M7000,one Lean thread. All34 new theorem
+reports use only `[propext, Classical.choice, Quot.sound]`. The unchanged
+launcher uses5G/7G,swap0,TasksMax64; populated24GiB plus7GiB at launch.
+`query-final/summary.json` verifies all42 immutable attempt snapshots, all
+accepted final proof-source hashes and all908 final dependency object hashes.
+There were22 passes and20 elaboration failures, zero resource failures,
+42/100 Lean attempts and0/20 Kani runs. No budget exhaustion is claimed.
+Next unused env-J11368. No unchanged failed source/dependency pair was retried.
+The early receipts' stale predecessor revision labels are explicitly corrected
+in the summary; hashes/snapshots, rather than those labels, identify their inputs.
+The final audit uses the actual committed proof revision.
+
+### Before/after and retained premises
+
+Before: the full source caller factorisation was rejected text; the successful
+scan theorem described an ordered word chain but did not supply the grouped
+policy equation or full materialiser/publication join. After:
+
+- `queries_factor`: exact source factorisation for arbitrary digest and transcript.
+- `policy_transport`: all block/advance arrays, no external class parameters,
+  no decoder/input-success/output-equality hypothesis.
+- `queries_complete`: old exact materialiser with the same digest, its installed
+  policy, and the actual finite native publication continuation; no successful
+  materialisation hypothesis. The original ExternalTypes/ExternalFuns remain
+  universally quantified. Native TLS/ROM interpretations are not assumed away.
+- `admitted_eight`: installed through the actual S2 per-attempt/retry call path.
+  Its entropy callback and all other source components are still explicit.
+
+There is **no change** to either conjunct of the original
+`ProverCommitDeployedFuel22.RustProverRefinement`, to `realBad`,
+`realSeedQueries`, the admissible adversary/witness carriers, the observer
+decision, or the headline conclusion. No cryptographic/environment hypothesis
+was added, weakened or discharged. The removed obligations are the concrete
+query source equations above. No new native external dictionary entry was
+installed: the inherited selected variant/sampler install still leaves260 of
+262 function entries and all28 type representations open in that full instance.
+
+### Remaining sizes and next consuming theorem
+
+`query-installed/remaining-obligations.json` is generated read-only from the
+unchanged emission by `query-obligations.py`. Counts below are syntactic source
+footprints, including already-proved local controls; they overlap and are not
+proof-completion percentages or additive counts of missing premises.
+
+| Remaining component | Measured source footprint |
+|---|---:|
+| Whole `prove_masked_with_attempt` body/model join |278 direct lines;532 reachable emitted declarations,9,627 lines;145 external function references |
+| Private salt cryptographic/model and native effect binding |20 declarations,288 lines;11 external references; counted/eager control already proved |
+| Semantic construction, mask application, commitments and rows0–24 |`build_with_material`:163 declarations,3,066 lines;60 external references |
+| Opening preparation, geometry, ordinary/gamma/circle scalars and folds |`prepare_opening`:57 declarations,842 lines;32 external references |
+| Final opening, rho32 and actual P_R1 connection |`finish_opening`:49 declarations,827 lines;19 external references, including the now-proved query subcomponent; `public_check` itself has18 direct lines |
+| Compact encoding, openings, publication bytes/audit |59 declarations,1,004 lines;22 external references |
+| Native query trace interpretation |2 retained primitive entries:from_m31(op110),trace.value(op247);22 ordered writes. Source finite control is closed; TLS/vector/view association is not |
+
+Entropy/retry adequacy remains a **native effect/extraction** obligation, not
+another query lemma:8 outer attempts, up to16 entropy iterations each,64-byte
+fill buffers, including partial-write/error/provider-state histories. The
+retained zero-then-nonzero counterexample still rules out unrestricted fixed
+pure-dictionary adequacy. The prior native transport cut contains41LocalLeaves
+and16TypeLeaves, overlapping the full dictionary inventory; representation,
+selected operation simulation and secure callback/factory binding remain.
+Neither actual `RealR1_OuterOwner.PrefixContract` nor `BodyContract` is installed
+(two pointwise source/model contracts). The complete selected 64-byte caller,
+reservation and retry state must carry effects through those instances.
+
+Experiment/observer/oracle coupling remains one real-side RunJoin for **every**
+admitted adversary and witness: a common finite carrier with **two exact
+marginal laws**, plus agreement of the **joint view and observer decision**
+outside the unchanged fixed bad event. E1 remains its conditional64-byte law;
+E2 retains atomic/durable fields. Both L1/L2 streams require joint coupling and
+actual coordinate/read-history association (retained model sizes L1≤45,056,
+L2=4,096), including rejected retries/aborts and adaptive shared ROM history.
+The fixed extra fuel carrier remains24×5 oracle answers; it is not a new native
+entropy assumption. Compiler/witness/public mapping, native execution adequacy,
+artifact connection and final coherent frozen replay are also still open.
+
+The exact next consuming theorem is the whole per-attempt source/model equation
+at `prover.prove_masked_with_attempt`, now allowed to use `attempt_exact` and
+`queries_complete` for its query slot. It must prove the remaining components
+and native effect interpretation before instantiating BodyContract/PrefixContract
+and the real RunJoin. Further pure entropy wrappers cannot cross the retained
+native adequacy obstruction. No extractor trust change or shipped Rust rewrite
+is authorized by this proof result. **Conjunct1 and the security target are not
+yet established.** No keys were altered, no push/merge, native gate, timing,
+three-ELF identity check or release/adoption claim was made.
