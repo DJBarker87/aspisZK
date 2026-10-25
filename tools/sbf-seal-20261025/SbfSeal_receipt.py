@@ -9,6 +9,7 @@ import sys
 import time
 import unittest
 import types
+import traceback
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
@@ -25,14 +26,18 @@ def main():
     start=time.monotonic()
     with (OUT/(label+'.log')).open('x') as stream:
         with contextlib.redirect_stdout(stream),contextlib.redirect_stderr(stream):
-            if label.endswith('-review'):
-                import SbfSeal_review
-                SbfSeal_review.main()
-                result=types.SimpleNamespace(testsRun=0,failures=[],errors=[],wasSuccessful=lambda:True)
-            else:
-                import SbfSeal_tests
-                suite=unittest.defaultTestLoader.loadTestsFromModule(SbfSeal_tests)
-                result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
+            try:
+                if label.endswith('-review'):
+                    import SbfSeal_review
+                    SbfSeal_review.main()
+                    result=types.SimpleNamespace(testsRun=0,failures=[],errors=[],wasSuccessful=lambda:True)
+                else:
+                    import SbfSeal_tests
+                    suite=unittest.defaultTestLoader.loadTestsFromModule(SbfSeal_tests)
+                    result=unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
+            except Exception:
+                traceback.print_exc()
+                result=types.SimpleNamespace(testsRun=0,failures=[],errors=['runner exception'],wasSuccessful=lambda:False)
     usage=resource.getrusage(resource.RUSAGE_SELF)
     rss=usage.ru_maxrss*(1 if sys.platform=='darwin' else 1024)
     sources={p.name:pin(p.read_bytes()) for p in sorted(HERE.glob('*.py'))}

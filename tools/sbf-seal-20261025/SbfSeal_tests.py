@@ -21,7 +21,8 @@ def pin(raw=b'public'):
 class Paths(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='SbfSeal-ordinary-')
-        self.path = Path(self.temp.name)
+        # Test fixture physical spelling only; candidate never resolves paths.
+        self.path = Path(self.temp.name).resolve(strict=True)
         self.fd = os.open(self.path, s.DIR_FLAGS)
         self.owner = os.getuid()
         self.capture = s.Capture(self.fd, self.owner)
@@ -163,7 +164,8 @@ class Paths(unittest.TestCase):
 class OutputTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory(prefix='SbfSeal-output-')
-        self.path = Path(self.temp.name)
+        # Test fixture physical spelling only; candidate never resolves paths.
+        self.path = Path(self.temp.name).resolve(strict=True)
         self.fd = os.open(self.path, s.DIR_FLAGS)
         self.out = s.PublicOutput(self.fd, os.getuid())
 
