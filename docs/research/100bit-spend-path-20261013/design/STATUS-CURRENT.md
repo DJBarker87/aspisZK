@@ -1,5 +1,13 @@
 # Current status: 100-bit soundness and privacy (living page)
 
+## Lead checkpoint — 2026-10-25
+
+Both deployed targets remain **not yet established**. Accepted SDK/S1 byte flow and same-cut preparation/ranges are checked at their model boundary. Coherent original/current import/re-pin, ALL14 child/event/mark, native effects, release artifacts and final replay remain open.
+
+Port29 strict data stage is terminal/unmerged pending review:18/54 bodies recovered,36remain; literal versus alpha-only variants and13 definition conflicts remain explicit. Global soundness352/368;16remain=4unassigned+5reservedkernelconsumer+7carry. Latest A selected-cut raw delta/current literal audit is published and awaiting independent lead review.
+
+ResourceStableGO and SbfClosure are reviewed/merged4f4b0a2470/65c4082110. Address-limit denial retained; namespace helper disabled and runtime/trace/cache closure open. ResourceRssGO terminal8478f742e8 failed unstaged bootstrap before prospective/GO; locally repaired, pending full review, no retry authority. SbfResolve31012 is running bounded metadata-only preparation, at most2 queries and zero actual builds/root/scopes. Private prover Kani59/60 final slot reserved; all adoption/equivalence/three-ELF/timing gates remain open.
+
 ## Current coordinator checkpoint — 2026-10-24 22:44 BST
 
 Both deployed security targets are **not yet established**. This checkpoint
