@@ -12,6 +12,8 @@ SbfLinux concrete unexecuted backend reviewed/independent54 tests plus package a
 
 ResourceMeta1G actual epoch7 GO_MARKER_PASS reviewed/independent29639-event exact replay passed, mergedae091370b6/cleaned. Controls768M/1G/Swap0/Tasks64, observed cgroup peak105762816B, zero pressure/swap, inside3063519232B margin. This is timestamped metadata only; all six old failures retained and no larger-consumer/native/Kani authority. SbfRuntime54132 ONE bounded public runtime-data metadata sequence prepares exact finite Python/loader/import/cache inputs; no root/ns/backend/syscall/probe/compiler. Runtime/producer/probe gates remain open. General APIs disabled.
 
+Immutable A c610/4e9c native Claims normal-return trace and pure Terminal selector84 packets independently reviewed; no unchanged solver replay. Initializedness/arbitrary-prefix/abort/effect/native/caller installation remain open. Safe Claims candidate extraction97-source/98-file public preparation verified, not run/adopted or authorized by metadata GO.
+
 Private Kani59/60 final1reserved,Lean240/260,Rust2/3charges(actual ordinary build1),extraction54/56,backend15/16,ELF0/3 unchanged. E1/world/error/drop/controller/Claims/Terminal/transcript/L1/L2/L3/client/equivalence/<15s timing/all3ELF/final coherent replay and axioms obligations remain. Frozen contract/artifact pins unchanged.
 
 ## Current coordinator checkpoint — 2026-10-24 22:44 BST
