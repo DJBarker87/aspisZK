@@ -117,3 +117,11 @@ Next: connect these newly derived reached witnesses through the coherent origina
 SDK/native extraction and global caller join. A theorem whose source interpretation
 is still a premise is not whole frozen-source closure. Both deployed security
 targets remain not yet established.
+
+## Later-build pin correction
+
+These receipts retain historical component25866 pins. The current release
+ledger identifies later build source4bb3b3f51e; see
+[S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
+for exact unchanged selected items and changed lower/core/adapter contexts.
+No whole-release/source transport is inferred from these historical checks.

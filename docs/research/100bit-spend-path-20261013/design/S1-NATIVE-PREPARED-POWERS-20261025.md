@@ -29,7 +29,7 @@ entry is ONE because the source assigns ONE, not an extra restriction on gamma.
 
 ## Source and carrier audit
 
-Authoritative source freeze is `25866ec331cc7ce27dd9956609c11d32fa8fa58a`, including
+Historical component snapshot is `25866ec331cc7ce27dd9956609c11d32fa8fa58a`, including
 the adopted early-return powers overlay. The factored weights module is not the
 whole production file; its complete powers function is byte-identical to the
 frozen function. source-binding.json records both full frozen-file and factored
@@ -68,3 +68,11 @@ powers/arithmetic and same-caller trace proofs remain separate until that
 transport is established. The lead owns coherent enclosing SDK import/re-pin;
 S2 remains transferred. No frozen source changed and no candidate adoption or
 new source decision is requested by this result. S1/S6 remain open.
+
+## Later-build pin correction
+
+These receipts retain historical component25866 pins. The current release
+ledger identifies later build source4bb3b3f51e; see
+[S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
+for exact unchanged selected items and changed lower/core/adapter contexts.
+No whole-release/source transport is inferred from these historical checks.

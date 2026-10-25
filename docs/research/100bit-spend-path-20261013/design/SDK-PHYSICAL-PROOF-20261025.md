@@ -41,7 +41,7 @@ adapter equivalence, native allocation/abort/drop, concrete hash/oracle law,
 settlement execution or the coherent frozen release dependency/artifact join.
 S2 remains transferred; production and other sessions' tracks are untouched.
 No protocol/source-adoption/security-contract decision is changed or required.
-Inherited authoritative source freeze25866ec331cc7ce27dd9956609c11d32fa8fa58a;
+Historical component source pin25866ec331cc7ce27dd9956609c11d32fa8fa58a;
 existing extraction/source pins are reused, not attributed to a changed target.
 
 Source-only focused-extractor-proof-packet-v1 packet:
@@ -63,3 +63,11 @@ it also reuses predecessor checks as data without compiler replay.
 S1/S6 and the deployed100-bit target remain open on the named concrete source/
 SDK/extraction/runtime/oracle/release joins. The NUC claim-control job is separate
 normal-callee evidence and is not silently substituted for these source premises.
+
+## Later-build pin correction
+
+These receipts retain historical component25866 pins. The current release
+ledger identifies later build source4bb3b3f51e; see
+[S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
+for exact unchanged selected items and changed lower/core/adapter contexts.
+No whole-release/source transport is inferred from these historical checks.

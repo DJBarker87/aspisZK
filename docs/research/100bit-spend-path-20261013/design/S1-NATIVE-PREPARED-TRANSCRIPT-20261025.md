@@ -91,3 +91,11 @@ The next enclosing connection still requires actual SDK/native installation and
 coherent caller/oracle/source transport, owned jointly with the lead's import
 work; S2 remains transferred. Those premises remain explicitly open, rather
 than being replaced by this control harness.
+
+## Later-build pin correction
+
+These receipts retain historical component25866 pins. The current release
+ledger identifies later build source4bb3b3f51e; see
+[S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
+for exact unchanged selected items and changed lower/core/adapter contexts.
+No whole-release/source transport is inferred from these historical checks.

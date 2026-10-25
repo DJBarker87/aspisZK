@@ -44,3 +44,11 @@ this target. Default checks plus unwinding assertions, no initialization mode.
 - Read-only checker passes32 source/evidence pins and scope checks.
 
 S1/S6, actual SDK/account stage1 and the final100-bit source claim remain open.
+
+## Later-build pin correction
+
+These receipts retain historical component25866 pins. The current release
+ledger identifies later build source4bb3b3f51e; see
+[S126-FREEZE-RECONCILIATION-20261025.md](S126-FREEZE-RECONCILIATION-20261025.md)
+for exact unchanged selected items and changed lower/core/adapter contexts.
+No whole-release/source transport is inferred from these historical checks.
