@@ -4,6 +4,11 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import resource
+import sys
+import time
+
+START = time.monotonic()
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -89,6 +94,11 @@ for name, module in sorted(x['tracee_metadata']['modules'].items()):
                        classification=module_fields[-1]['classification']), path)
 for path, row in rows.items():
     a = old_attempts.get(path)
+    if a:
+        row['old_chain'] = a['components']
+    elif path == x['path_attempts'][-1]['path']:
+        row['old_chain'] = x['path_attempts'][-1]['components']
+        row['old_chain_is_partial_negative_provenance'] = True
     row['classification'] = ('OWN_PROC_METADATA_NOT_REACQUIRED' if path == '/proc/self/maps' else
                               'DIRECTORY_METADATA' if a and a.get('components') and
                               a['components'][-1]['identity'][2] & 0o170000 == 0o040000 else 'FILE_CANDIDATE')
@@ -122,4 +132,20 @@ save('SbfRuntimeFinish-immutable-inputs.json', dict(inputs=PINS, assessment='REU
                      'hold all component FDs and recheck after hashing; no old walk/hash/path reopen',
                      'new acquisition loops fixed plan; no tracee/tracer/import execution; source/cache candidates not only positive trace paths'],
     payload=dict(size=len(payload), sha256=hashlib.sha256(payload).hexdigest()), executed=False))
+usage = resource.getrusage(resource.RUSAGE_SELF)
+def localpin(path):
+    raw = path.read_bytes()
+    return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+save('SbfRuntimeFinish-prepare-receipt.json', dict(
+    target='immutable Git/data assembly; no payload/installer/transport execution',
+    command=[sys.executable,*getattr(sys,'orig_argv',sys.argv)[1:]],
+    source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),
+    source_overlay={p.name:localpin(p) for p in HERE.iterdir() if p.is_file()},
+    exit=0,wall_seconds=time.monotonic()-START,
+    peak_rss_bytes=usage.ru_maxrss*(1 if sys.platform=='darwin' else 1024),swap=usage.ru_nswap,
+    child_peak_rss_bytes=resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
+    dependencies={n:dict(path=m.__file__,**localpin(Path(m.__file__))) for n,m in sorted(sys.modules.items()) if getattr(m,'__file__',None) and Path(m.__file__).is_file()},
+    interpreter=dict(path=sys.executable,version=sys.version,**localpin(Path(sys.executable))),
+    print_axioms='N/A; no Lean/theorems',actual_host_budget_used=0,payload_executed=False,
+    prior_assemblies='earlier preparation runs recorded by tool exit/wall only; peak RSS/swap UNOBSERVED; not validation gates'))
 print(json.dumps(dict(paths=len(rows), module_fields=len(module_fields), payload_bytes=len(payload), executed=False)))

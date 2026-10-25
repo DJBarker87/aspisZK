@@ -150,7 +150,7 @@ def acquire(path, attempts, fs, limit=16*2**20, check=lambda: None, admit=lambda
                 row.update(size=len(raw), sha256=hashlib.sha256(raw).hexdigest())
             return raw, row
         raise ValueError('empty endpoint')
-    except Exception as exc:
+    except (OSError, ValueError) as exc:
         row.update(status='ABSENT' if isinstance(exc, FileNotFoundError) else 'ERROR',
                    error_type=type(exc).__name__, error=str(exc), errno=getattr(exc, 'errno', None))
         return None, row
@@ -187,12 +187,17 @@ def association(plan, outcomes):
         expected_status = 'DIRECTORY' if item['classification'] == 'DIRECTORY_METADATA' else 'PINNED'
         if result['status'] != expected_status:
             incomplete.append(path)
+        known_chain = item.get('old_chain', [])
+        fresh = {r['path']:r['identity'] for r in result.get('chain', [])}
+        chain_drift = any(fresh.get(r['path']) != r['identity'] for r in known_chain)
+        if chain_drift:
+            stale.append(path)
         if old and (result['status'] != 'PINNED' or
                     any(result.get(k) != old[k] for k in ('sha256', 'size', 'identity')) or
                     result.get('physical') != old['physical']):
             stale.append(path)
     return dict(oldtrace_association='STALE' if stale else 'REUSED_MATCHING_AVAILABLE_PINS_ONLY',
-                drift_paths=stale, incomplete_paths=incomplete,
+                drift_paths=sorted(set(stale)), incomplete_paths=incomplete,
                 eligible_candidate=not stale and not incomplete,
                 open_fd_to_later_inode='OPEN even when all later hashes/identities match',
                 automatic_retrace=False)
@@ -233,6 +238,6 @@ def candidate(plan, outcomes, state):
             files.append(dict(logical=logical, physical=row['physical'], size=row['size'],
                               sha256=row['sha256'], mode=0o555 if row['identity'][2] & 0o111 else 0o444))
     return dict(manifest=dict(plan['candidate_template'], files=files), status='PROSPECTIVE_INPUT_DATA_ONLY',
-                copied_bytes=total, eligible_candidate=state['eligible_candidate'] and total <= 64*2**20 and len(files) <= 512,
+                copied_bytes=total, eligible_candidate=state['eligible_candidate'] and total <= 64*2**20 and 0 < len(files) <= 256,
                 guest_copy_cap=64*2**20, runtime_approval=None, security_approval=None,
                 tool_dependencies=plan['tool_dependencies'])

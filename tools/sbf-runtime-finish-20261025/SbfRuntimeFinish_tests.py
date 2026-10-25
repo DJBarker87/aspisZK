@@ -293,6 +293,34 @@ class Suite(unittest.TestCase):
         self.assertTrue(any(r['classification']=='PROSPECTIVE_FALLBACK' for r in PLAN['module_fields']))
         self.assertEqual(sum(r['observed_open'] for r in PLAN['paths']), 49)
 
+    def test_deadline_and_guard_exceptions_propagate(self):
+        class Deadline(RuntimeError):
+            pass
+        def stop():
+            raise Deadline('alarm115')
+        fs = ssl()
+        with self.assertRaises(Deadline):
+            run(fs, check=stop)
+        self.assertFalse(fs.fds)
+
+    def test_partial_historical_chain_drift_stales_even_same_final_pin(self):
+        row = run(ssl())[1]
+        old_chain = copy.deepcopy(row['chain'])
+        old_chain[1]['identity'][1] += 1
+        plan = dict(paths=[dict(path='p',classification='FILE_CANDIDATE',old_chain=old_chain,
+                                old_pin={k:row[k] for k in ('physical','identity','sha256','size')})])
+        result = core.association(plan, {'p':row})
+        self.assertEqual(result['oldtrace_association'], 'STALE')
+        self.assertFalse(result['eligible_candidate'])
+
+    def test_guest_row_limit_256_retained(self):
+        row = run(ssl(), '/etc/ssl/openssl.cnf')[1]
+        paths = [dict(path='/usr/lib/x'+str(i),classification='FILE_CANDIDATE',provenance=[]) for i in range(256)]
+        plan = dict(paths=paths,candidate_template={},tool_dependencies={})
+        outcomes = {item['path']:row for item in paths}
+        # 256 distinct logical copies plus the distinct physical endpoint =257.
+        self.assertFalse(core.candidate(plan, outcomes, dict(eligible_candidate=True))['eligible_candidate'])
+
     def test_payload_guard_bytes_ast_globals_no_execution_sites(self):
         guard = (HERE/'SbfRuntimeFinish-guard.py.txt').read_bytes()
         payload = (HERE/'SbfRuntimeFinish_payload.py.txt').read_bytes()
