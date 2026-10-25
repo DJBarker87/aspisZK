@@ -1,0 +1,405 @@
+Op4P_Refinement.lean:22:2: error: Tactic `rfl` failed: The left-hand side
+  fun bytes =>
+    have i := bytes.len;
+    if (i != 57607#usize) = true then ok false
+    else do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 7031#usize, «end» := 7495#usize }
+      let b ←
+        Lean.Order.fix
+            (fun f bytes =>
+              let i := bytes.len;
+              if i < 16#usize then ok true
+              else do
+                let chunk ← Op4P_Extract.Op4P_reference.reference.read16 bytes
+                let b ← Op4P_Extract.Op4P_reference.reference.canonical_qm chunk
+                if b = true then do
+                    let s ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                          { start := 16#usize }
+                    f s
+                  else ok false)
+            Op4P_Extract.Op4P_reference.reference.check_values._proof_1 s
+      if b = true then do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 7495#usize, «end» := 7751#usize }
+          let b1 ←
+            Lean.Order.fix
+                (fun f bytes => do
+                  let b ← core.slice.Slice.is_empty bytes
+                  if b = true then ok true
+                    else
+                      let i := bytes.len;
+                      if i < 4#usize then ok false
+                      else do
+                        let i1 ← bytes.index_usize 0#usize
+                        let i2 ← bytes.index_usize 1#usize
+                        let i3 ← bytes.index_usize 2#usize
+                        let i4 ← bytes.index_usize 3#usize
+                        let b1 ←
+                          Op4P_Extract.Op4P_reference.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                        if b1 = true then do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                  { start := 4#usize }
+                            f s
+                          else ok false)
+                Op4P_Extract.Op4P_reference.parser_reference.canonical_words._proof_1 s1
+          if b1 = true then do
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 7783#usize, «end» := 10055#usize }
+              let b2 ←
+                Lean.Order.fix
+                    (fun f bytes => do
+                      let b ← core.slice.Slice.is_empty bytes
+                      if b = true then ok true
+                        else
+                          let i := bytes.len;
+                          if i < 4#usize then ok false
+                          else do
+                            let i1 ← bytes.index_usize 0#usize
+                            let i2 ← bytes.index_usize 1#usize
+                            let i3 ← bytes.index_usize 2#usize
+                            let i4 ← bytes.index_usize 3#usize
+                            let b1 ←
+                              Op4P_Extract.Op4P_reference.reference.canonical_word
+                                  (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                            if b1 = true then do
+                                let s ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 4#usize }
+                                f s
+                              else ok false)
+                    Op4P_Extract.Op4P_reference.parser_reference.canonical_words._proof_1 s2
+              if b2 = true then do
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                        { start := 10055#usize, «end» := 28359#usize }
+                  Lean.Order.fix
+                      (fun f bytes remaining =>
+                        if remaining = 0#u8 then core.slice.Slice.is_empty bytes
+                        else
+                          let i := bytes.len;
+                          if i < 832#usize then ok false
+                          else do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                  { «end» := 832#usize }
+                            let b ← Op4P_Extract.Op4P_reference.parser_reference.opening_scan s
+                            if b = true then do
+                                let s1 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 832#usize }
+                                let i1 ← remaining - 1#u8
+                                f s1 i1
+                              else ok false)
+                      Op4P_Extract.Op4P_reference.parser_reference.opening_rows._proof_3 s3 22#u8
+                else ok false
+            else ok false
+        else ok false
+is not definitionally equal to the right-hand side
+  fun bytes =>
+    have i := bytes.len;
+    if (i != 57607#usize) = true then ok false
+    else do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 7031#usize, «end» := 7495#usize }
+      let b ←
+        Lean.Order.fix
+            (fun f bytes =>
+              let i := bytes.len;
+              if i < 16#usize then ok true
+              else do
+                let chunk ← MultiproofParserRef.reference.read16 bytes
+                let b ← MultiproofParserRef.reference.canonical_qm chunk
+                if b = true then do
+                    let s ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                          { start := 16#usize }
+                    f s
+                  else ok false)
+            MultiproofParserRef.reference.check_values._proof_1 s
+      if b = true then do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 7495#usize, «end» := 7751#usize }
+          let b1 ←
+            Lean.Order.fix
+                (fun f bytes => do
+                  let b ← core.slice.Slice.is_empty bytes
+                  if b = true then ok true
+                    else
+                      let i := bytes.len;
+                      if i < 4#usize then ok false
+                      else do
+                        let i1 ← bytes.index_usize 0#usize
+                        let i2 ← bytes.index_usize 1#usize
+                        let i3 ← bytes.index_usize 2#usize
+                        let i4 ← bytes.index_usize 3#usize
+                        let b1 ← MultiproofParserRef.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                        if b1 = true then do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                  { start := 4#usize }
+                            f s
+                          else ok false)
+                MultiproofParserRef.parser_reference.canonical_words._proof_6 s1
+          if b1 = true then do
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 7783#usize, «end» := 10055#usize }
+              let b2 ←
+                Lean.Order.fix
+                    (fun f bytes => do
+                      let b ← core.slice.Slice.is_empty bytes
+                      if b = true then ok true
+                        else
+                          let i := bytes.len;
+                          if i < 4#usize then ok false
+                          else do
+                            let i1 ← bytes.index_usize 0#usize
+                            let i2 ← bytes.index_usize 1#usize
+                            let i3 ← bytes.index_usize 2#usize
+                            let i4 ← bytes.index_usize 3#usize
+                            let b1 ←
+                              MultiproofParserRef.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                            if b1 = true then do
+                                let s ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 4#usize }
+                                f s
+                              else ok false)
+                    MultiproofParserRef.parser_reference.canonical_words._proof_6 s2
+              if b2 = true then do
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                        { start := 10055#usize, «end» := 28359#usize }
+                  Lean.Order.fix
+                      (fun f bytes remaining =>
+                        if remaining = 0#u8 then core.slice.Slice.is_empty bytes
+                        else
+                          let i := bytes.len;
+                          if i < 832#usize then ok false
+                          else do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                  { «end» := 832#usize }
+                            let b ← MultiproofParserRef.parser_reference.opening_scan s
+                            if b = true then do
+                                let s1 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 832#usize }
+                                let i1 ← remaining - 1#u8
+                                f s1 i1
+                              else ok false)
+                      MultiproofParserRef.parser_reference.opening_rows._proof_3 s3 22#u8
+                else ok false
+            else ok false
+        else ok false
+
+⊢ (fun bytes =>
+      have i := bytes.len;
+      if (i != 57607#usize) = true then ok false
+      else do
+        let s ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := 7031#usize, «end» := 7495#usize }
+        let b ←
+          Lean.Order.fix
+              (fun f bytes =>
+                let i := bytes.len;
+                if i < 16#usize then ok true
+                else do
+                  let chunk ← Op4P_Extract.Op4P_reference.reference.read16 bytes
+                  let b ← Op4P_Extract.Op4P_reference.reference.canonical_qm chunk
+                  if b = true then do
+                      let s ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                            { start := 16#usize }
+                      f s
+                    else ok false)
+              Op4P_Extract.Op4P_reference.reference.check_values._proof_1 s
+        if b = true then do
+            let s1 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 7495#usize, «end» := 7751#usize }
+            let b1 ←
+              Lean.Order.fix
+                  (fun f bytes => do
+                    let b ← core.slice.Slice.is_empty bytes
+                    if b = true then ok true
+                      else
+                        let i := bytes.len;
+                        if i < 4#usize then ok false
+                        else do
+                          let i1 ← bytes.index_usize 0#usize
+                          let i2 ← bytes.index_usize 1#usize
+                          let i3 ← bytes.index_usize 2#usize
+                          let i4 ← bytes.index_usize 3#usize
+                          let b1 ←
+                            Op4P_Extract.Op4P_reference.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                          if b1 = true then do
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                    { start := 4#usize }
+                              f s
+                            else ok false)
+                  Op4P_Extract.Op4P_reference.parser_reference.canonical_words._proof_1 s1
+            if b1 = true then do
+                let s2 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                      { start := 7783#usize, «end» := 10055#usize }
+                let b2 ←
+                  Lean.Order.fix
+                      (fun f bytes => do
+                        let b ← core.slice.Slice.is_empty bytes
+                        if b = true then ok true
+                          else
+                            let i := bytes.len;
+                            if i < 4#usize then ok false
+                            else do
+                              let i1 ← bytes.index_usize 0#usize
+                              let i2 ← bytes.index_usize 1#usize
+                              let i3 ← bytes.index_usize 2#usize
+                              let i4 ← bytes.index_usize 3#usize
+                              let b1 ←
+                                Op4P_Extract.Op4P_reference.reference.canonical_word
+                                    (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                              if b1 = true then do
+                                  let s ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                        bytes { start := 4#usize }
+                                  f s
+                                else ok false)
+                      Op4P_Extract.Op4P_reference.parser_reference.canonical_words._proof_1 s2
+                if b2 = true then do
+                    let s3 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                          { start := 10055#usize, «end» := 28359#usize }
+                    Lean.Order.fix
+                        (fun f bytes remaining =>
+                          if remaining = 0#u8 then core.slice.Slice.is_empty bytes
+                          else
+                            let i := bytes.len;
+                            if i < 832#usize then ok false
+                            else do
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                    { «end» := 832#usize }
+                              let b ← Op4P_Extract.Op4P_reference.parser_reference.opening_scan s
+                              if b = true then do
+                                  let s1 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                        bytes { start := 832#usize }
+                                  let i1 ← remaining - 1#u8
+                                  f s1 i1
+                                else ok false)
+                        Op4P_Extract.Op4P_reference.parser_reference.opening_rows._proof_3 s3 22#u8
+                  else ok false
+              else ok false
+          else ok false) =
+    fun bytes =>
+    have i := bytes.len;
+    if (i != 57607#usize) = true then ok false
+    else do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 7031#usize, «end» := 7495#usize }
+      let b ←
+        Lean.Order.fix
+            (fun f bytes =>
+              let i := bytes.len;
+              if i < 16#usize then ok true
+              else do
+                let chunk ← MultiproofParserRef.reference.read16 bytes
+                let b ← MultiproofParserRef.reference.canonical_qm chunk
+                if b = true then do
+                    let s ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                          { start := 16#usize }
+                    f s
+                  else ok false)
+            MultiproofParserRef.reference.check_values._proof_1 s
+      if b = true then do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 7495#usize, «end» := 7751#usize }
+          let b1 ←
+            Lean.Order.fix
+                (fun f bytes => do
+                  let b ← core.slice.Slice.is_empty bytes
+                  if b = true then ok true
+                    else
+                      let i := bytes.len;
+                      if i < 4#usize then ok false
+                      else do
+                        let i1 ← bytes.index_usize 0#usize
+                        let i2 ← bytes.index_usize 1#usize
+                        let i3 ← bytes.index_usize 2#usize
+                        let i4 ← bytes.index_usize 3#usize
+                        let b1 ← MultiproofParserRef.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                        if b1 = true then do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                  { start := 4#usize }
+                            f s
+                          else ok false)
+                MultiproofParserRef.parser_reference.canonical_words._proof_6 s1
+          if b1 = true then do
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                    { start := 7783#usize, «end» := 10055#usize }
+              let b2 ←
+                Lean.Order.fix
+                    (fun f bytes => do
+                      let b ← core.slice.Slice.is_empty bytes
+                      if b = true then ok true
+                        else
+                          let i := bytes.len;
+                          if i < 4#usize then ok false
+                          else do
+                            let i1 ← bytes.index_usize 0#usize
+                            let i2 ← bytes.index_usize 1#usize
+                            let i3 ← bytes.index_usize 2#usize
+                            let i4 ← bytes.index_usize 3#usize
+                            let b1 ←
+                              MultiproofParserRef.reference.canonical_word (Array.make 4#usize [i1, i2, i3, i4] ⋯)
+                            if b1 = true then do
+                                let s ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 4#usize }
+                                f s
+                              else ok false)
+                    MultiproofParserRef.parser_reference.canonical_words._proof_6 s2
+              if b2 = true then do
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                        { start := 10055#usize, «end» := 28359#usize }
+                  Lean.Order.fix
+                      (fun f bytes remaining =>
+                        if remaining = 0#u8 then core.slice.Slice.is_empty bytes
+                        else
+                          let i := bytes.len;
+                          if i < 832#usize then ok false
+                          else do
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                                  { «end» := 832#usize }
+                            let b ← MultiproofParserRef.parser_reference.opening_scan s
+                            if b = true then do
+                                let s1 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                      { start := 832#usize }
+                                let i1 ← remaining - 1#u8
+                                f s1 i1
+                              else ok false)
+                      MultiproofParserRef.parser_reference.opening_rows._proof_3 s3 22#u8
+                else ok false
+            else ok false
+        else ok false
+'AspisR1.Op4P_Refinement.scanner_emission' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Op4P_Refinement.reference_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
