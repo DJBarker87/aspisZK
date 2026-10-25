@@ -1,0 +1,168 @@
+--- FinalNativeGate-receipt-diagnostic.py
++++ FinalNativeGate-admission-report.py
+@@ -1,4 +1,4 @@
+-"""Fixed read-only diagnostic SOURCE. Public main disabled pending lead review.
++"""Admission report read-only diagnostic SOURCE. Public main disabled pending lead review.
+ No runtime/receiver admission change. All content is untrusted DiagnosticBytes.
+ Future stdin payload is these exact bytes plus the sealed explicit footer.
+ """
+@@ -10,11 +10,11 @@
+ import stat
+ 
+ CHAIN=('home','dombarker','final-native-gate','FinalNativeGate-setup-packet')
+-NAMES=('FinalNativeGate-setup-parent-terminal.json',
+-       'FinalNativeGate-setup-parent-cleanup.json','FinalNativeGate-setup-parent-guard.json')
+-FILE_LIMIT=2**20
+-TOTAL_LIMIT=3*2**20
+-TERMINAL_LIMIT=65536
++NAMES=('prospective-report.json',)
++FILE_LIMIT=2**21
++TOTAL_LIMIT=2**21
++SELECTED_LIMIT=65536
++FIELDS=('decision','collection_failures','phase','error','errors','reason','reasons','schema')
+ 
+ 
+ def stamp(s):
+@@ -51,6 +51,51 @@
+     return number
+ 
+ 
++SEMANTIC_KEYS=('allowed','collection_failures','phase','error','errors','reason','reasons','schema',
++               'cap_ok','available_ok','legacy_nonreserve_gate_ok','adopted','type','errno')
++
++
++def semantic_value(key,value):
++    # Concrete policy decision embeds legacy visibility and full observations.
++    # Never export those nested raw structures through a selected-field wrapper.
++    if key=='decision' and type(value) is dict:
++        return {k:semantic_value(k,v) for k,v in value.items() if k in SEMANTIC_KEYS}
++    if key=='collection_failures' and type(value) is dict:
++        return {k:({n:semantic_value(n,v) for n,v in item.items() if n in ('error','type','errno','reason','reasons')}
++                   if type(item) is dict else item)
++                for k,item in value.items() if k in ('visibility','before','after')}
++    if type(value) is dict:
++        excluded=('legacy','original_legacy','process_visibility','service_visibility','docker_visibility',
++                  'raw_receipts','raw_inputs','read_attempts','orderedinput','ordered_input','env',
++                  'environment','snapshots','before_observation','after_observation')
++        return {k:semantic_value(k,v) for k,v in value.items() if k not in excluded}
++    if type(value) is list:return [semantic_value(key,v) for v in value]
++    return value
++
++
++def selected_fields(value):
++    if type(value) is not dict:raise ValueError('top-level JSON dict required')
++    selected={};used=2
++    for key in FIELDS:
++        if key not in value:continue
++        raw=json.dumps(value[key],sort_keys=True,ensure_ascii=True,allow_nan=False,separators=(',',':')).encode('ascii')
++        row=dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
++        # Budget includes keys, hashes, sizes, punctuation and content together.
++        projected=semantic_value(key,value[key])
++        row['hash_encoding']='complete original field canonical JSON: sorted keys,ASCII,compact'
++        candidate=dict(row,value=projected)
++        cost=len(json.dumps({key:candidate},sort_keys=True,ensure_ascii=True,allow_nan=False).encode('ascii'))+1
++        # Reserve bounded omission records for all following selected fields.
++        if used+cost+len(FIELDS)*512<=SELECTED_LIMIT:
++            row['value']=projected
++        else:
++            row['truncation_error']='selected field exceeds combined64KiB budget; content omitted'
++        selected[key]=row
++        used=len(json.dumps(selected,sort_keys=True,ensure_ascii=True,allow_nan=False).encode('ascii'))
++    if used>SELECTED_LIMIT:raise ValueError('selected combined64KiB bound')
++    return selected
++
++
+ def collect():
+     # Every opened fd is retained only for this bounded interval, closed even on
+     # alarm/error. No /proc, process, environment, glob, cache or command reads.
+@@ -83,7 +128,9 @@
+                 if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_uid!=os.getuid() or before.st_mode&0o002:
+                     raise ValueError('diagnostic file owner/type/link/worldwrite denial')
+                 row['group_write_exception']=bool(before.st_mode&0o020)
+-                if not 0<=before.st_size<=FILE_LIMIT:raise ValueError('per-file1MiB bound')
++                if not 0<=before.st_size<=FILE_LIMIT:
++                    row['hash_unavailable']='complete hash would exceed2MiB read bound; no bytes read'
++                    raise ValueError('report exceeds2MiB; bounds denial; no parse/fetch')
+                 identity=(before.st_dev,before.st_ino)
+                 if identity in seen:raise ValueError('file alias')
+                 seen.add(identity)
+@@ -92,9 +139,9 @@
+                     row['drift']=True;raise ValueError('file entry/fd race')
+                 checks.append((src,before,fd,name))
+                 h=hashlib.sha256();size=0;pieces=[]
+-                include=name==NAMES[0] and before.st_size<=TERMINAL_LIMIT
+-                while True:
+-                    raw=os.read(src,min(65536,FILE_LIMIT+1-size))
++                include=True
++                while size<before.st_size:
++                    raw=os.read(src,min(65536,before.st_size-size))
+                     if not raw:break
+                     size+=len(raw);total+=len(raw)
+                     if size>FILE_LIMIT or total>TOTAL_LIMIT:raise ValueError('diagnostic byte bound')
+@@ -105,10 +152,12 @@
+                 if stamp(os.fstat(src))!=stamp(before) or stamp(os.stat(name,dir_fd=fd,follow_symlinks=False))!=stamp(before):
+                     row['drift']=True;raise ValueError('file interval drift')
+                 row.update(size=size,sha256=h.hexdigest())
+-                if include:
+-                    try:row['untrusted_parsed_json']=json.loads(b''.join(pieces).decode('utf-8','strict'),object_pairs_hook=unique,parse_constant=finite,parse_float=finite_float)
+-                    except (ValueError,RecursionError) as exc:row['parse_error']=str(exc)
+-                elif name==NAMES[0]:row['parse_error']='terminal exceeds64KiB; hash/size only'
++                try:
++                    value=json.loads(b''.join(pieces).decode('utf-8','strict'),object_pairs_hook=unique,parse_constant=finite,parse_float=finite_float)
++                    row['selected_fields']=selected_fields(value)
++                except (ValueError,RecursionError,OverflowError) as exc:row['parse_error']=str(exc)[:512]
++            except TimeoutError:
++                raise
+             except (OSError,ValueError) as exc:
+                 row['error']=str(exc)
+         if any(row.get('drift') for row in result['files'].values()):raise ValueError('file race denies whole diagnostic interval')
+@@ -120,7 +169,7 @@
+     except (OSError,ValueError,TimeoutError) as exc:
+         # Deny drift: no content/hash result from a failed whole observation.
+         for row in result['files'].values():
+-            for key in ('untrusted_parsed_json','sha256','size'):row.pop(key,None)
++            for key in ('selected_fields','sha256','size'):row.pop(key,None)
+         result['interval_stable']=False;result['errors'].append(str(exc))
+     finally:
+         for opened in reversed(held):
+@@ -141,7 +190,7 @@
+ 
+ 
+ def main():
+-    print('FinalNativeGate diagnostic SOURCE disabled; lead review/new allocation required')
++    print('FinalNativeGate admission report SOURCE disabled; lead review/new allocation required')
+     return 78
+ 
+ 
+--- FinalNativeGate-receipt-transport.py
++++ FinalNativeGate-admission-report-transport.py
+@@ -13,9 +13,9 @@
+ import time
+ 
+ D=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate')
+-PAYLOAD=D/'FinalNativeGate-receipt-diagnostic-payload.txt'
+-PIN={'size': 7520, 'sha256': '23572ac049dc7cdd782ed6880aedee4fbf40d604d04db3030f0c85dae10a7cf0'}
+-CAPTURE=Path('/private/tmp/FinalNativeGate-receipt-diagnostic-010-future')
++PAYLOAD=D/'FinalNativeGate-admission-report-payload.txt'
++PIN={'size': 10257, 'sha256': 'da8b1f52c34a012399c1fab602b12b31c3826f31f3544ef6df48827d25c3f290'}
++CAPTURE=Path('/private/tmp/FinalNativeGate-admission-report-012-future')
+ ARGV=['/usr/bin/ssh','-T','-oBatchMode=yes','-oConnectTimeout=10','-oStrictHostKeyChecking=yes','-oClearAllForwardings=yes','-oForwardAgent=no','dombarker@100.108.41.90','/usr/bin/python3 -I -B -']
+ LIMIT=4*2**20
+ 
+@@ -118,7 +118,7 @@
+ 
+ 
+ def main():
+-    print('FinalNativeGate diagnostic transport SOURCE disabled; lead review/new allocation required')
++    print('FinalNativeGate admission report transport SOURCE disabled; lead review/new allocation required')
+     return 78
+ 
+ 
+--- FinalNativeGate-receipt-local-check.py
++++ FinalNativeGate-admission-report-check.py
+@@ -1,4 +1,4 @@
+-"""010 source-only focused runner; never runs remote/native/compiler commands."""
++"""Admission-report source-only focused runner; never runs remote/native/compiler commands."""
+ import ast, hashlib, json, os, resource, signal, subprocess, sys, time
+ from pathlib import Path
+ D=Path(__file__).resolve().parent
