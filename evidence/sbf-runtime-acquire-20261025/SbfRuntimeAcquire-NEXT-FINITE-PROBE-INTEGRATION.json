@@ -1,0 +1,135 @@
+{
+  "actual_producer_path": "root_continuation -> producer_fixed_body -> approval()[runtime] -> validate_runtime -> internal_backend",
+  "actual_rootfs": false,
+  "candidate_status": "PROSPECTIVE_INPUT_DATA_ONLY",
+  "complete_source_statements": {
+    "SbfProducer_backend_candidate.py:fixed_backend_body": "def fixed_backend_body():\n    \"\"\"Concrete future body, no input parameters or usable entrypoint.\n\n    Null runtime approval blocks before effects. A future approved manifest\n    alone does not enable CLI; the separate unconditional entry denial remains.\n    No current producer/admission continuation calls this internal body.\n    \"\"\"\n    require(type(RUNTIME_APPROVAL) is dict, 'complete pinned runtime missing')\n    manifest = RUNTIME_APPROVAL\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    own = root = outputs = nullfd = None\n    output = None\n    try:\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        return internal_backend(root,output,nullfd,abi,manifest=manifest)\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)\n",
+    "SbfProducer_backend_candidate.py:producer_fixed_body": "def producer_fixed_body():\n    \"\"\"Only root_continuation calls this, after concrete admission and pins.\n\n    Re-read the immutable approved manifest, no runtime argument/global setter.\n    Root helper termination raises into internal_backend's owned-child cleanup.\n    Parent death requests SIGTERM; SIGKILL/LSM and D-state remain unvalidated.\n    \"\"\"\n    from SbfProducer_package import approval, journal\n    manifest = approval()['runtime']\n    validate_runtime(manifest)\n    abi = LinuxABI()\n    parent = os.getppid()\n    parentfd = abi.call('pidfd_open',I(parent),U(0))\n    own = root = outputs = nullfd = None\n    output = None\n    previous = {}\n    def terminate(*_):\n        raise Denied('helper parent/termination event; no output')\n    try:\n        require(parentfd >= 3, 'helper parent pidfd alias')\n        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):\n            previous[sig] = signal.getsignal(sig)\n            signal.signal(sig,terminate)\n        require(abi.prctl(1,15) == 0, 'helper parent-death arm')\n        require(os.getppid() == parent, 'helper parent changed during arm')\n        parent_alive(parentfd)\n        # Parent liveness FD need not cross guest fork: PDEATHSIG now armed.\n        os.close(parentfd)\n        parentfd = None\n        own,root,outputs = create_fixed_layout()\n        output = PublicOutput(outputs,0)\n        nullfd = fixed_null()\n        result = internal_backend(root,output,nullfd,abi,manifest=manifest)\n        journal('root-result.json',result)\n        return 0\n    finally:\n        if output is not None:\n            output.close()\n        for fd in (parentfd,nullfd,outputs,root,own):\n            if fd is not None:\n                os.close(fd)\n        for sig,handler in previous.items():\n            signal.signal(sig,handler)\n",
+    "SbfProducer_backend_candidate.py:validate_runtime": "def validate_runtime(manifest):\n    require(type(manifest) is dict and manifest.get('version') == 'SbfProducerLinux-tiny-v1'\n            and manifest.get('argv') == list(FIXED_PROBE), 'fixed Linux manifest')\n    reused_shape = dict(manifest,version='SbfProducerSeal-tiny-v1',argv=list(PROBE))\n    validate_manifest(reused_shape)\n",
+    "SbfProducer_package.py:approval": "def approval():\n    from SbfProducer_pins import RUNTIME_PIN\n    require(type(RUNTIME_PIN) is dict and set(RUNTIME_PIN) == {'sha256','size'},\n            'published reviewed runtime closure unavailable')\n    raw = pinned_file(PACKAGE+'/SbfProducer_runtime.json', RUNTIME_PIN, 0o444)\n    value = json.loads(raw, object_pairs_hook=no_duplicates,\n                       parse_constant=lambda _: require(False, 'nonfinite JSON'))\n    require(set(value) == {'schema','runtime','host','roles','scope_path','limits','env'},\n            'finite approval fields')\n    require(value['schema'] == 'SbfProducer-runtime-v1' and value['env'] == ENV,\n            'approval version/environment')\n    require(value['scope_path'].endswith('/'+UNIT+'.scope'), 'approved scope path')\n    return value\n"
+  },
+  "current_gates": [
+    "approval requires published exact RUNTIME_PIN dict; immutable RUNTIME_PIN=() rejects",
+    "installed entries disabled"
+  ],
+  "exclusive_copy_spec": [
+    "fresh absent root-owned nonwritable ancestry checked nofollow",
+    "root-only O_EXCL|O_NOFOLLOW writers create new regular single-link inodes",
+    "copy only reviewed pinned bytes, check source FD and ancestry stability, hash copied bytes, close all writers then seal444/555",
+    "aliases are individual clones and each copy counts toward64MiB/256rows; no symlink/writer adoption",
+    "retain partial failures; no signatures/runtime manifest approval inferred from incomplete host closure"
+  ],
+  "finite_candidate": {
+    "sha256": "c69379a1f6086d66925d0ab14824a9f1c39d1a8789f8f47c8c9d183e01aa2f24",
+    "size": 30423
+  },
+  "installer_implemented": false,
+  "open_obligations": [
+    "historical openFD/inode binding",
+    "executed bytecode/native runtime effects",
+    "conditional imports/dlopen/locale/NSS",
+    "private guest/control/LSM/cancellation/parentdeath",
+    "full host roles/sudo/monitor/plugins/tools",
+    "SDK/std/runtime/allocator/extraction",
+    "cryptographic/adaptive-oracle/event-law joins; both deployed targets NOT ESTABLISHED"
+  ],
+  "payload": {
+    "sha256": "4349df520cf0cefa586c997e7c5adf6963d125767ef239364da18bff6eacf8b6",
+    "size": 145492
+  },
+  "plan": {
+    "sha256": "4fd92867306a043f35157063e969f3f206656e5effefd9955afbe35e56ced5f6",
+    "size": 194656
+  },
+  "producer_activation": false,
+  "producer_sources": {
+    "20a0f5bb38:tools/sbf-producer-20261025/DEPLOYMENT-REVIEW.md": {
+      "sha256": "805373be30544a38656442908bfd4805db2be0d533024bdf44ef7f8960904173",
+      "size": 6393
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_backend_candidate.py": {
+      "sha256": "c7e692559e0a845699eb4ff5ec9feb00116b2a364da6b564c2cf05822fd936e4",
+      "size": 25367
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_continue.py": {
+      "sha256": "4c5d47f44f1639aedc0d385e0dd2e2012fd5db43c9bc4c8a4e1d404f665c332f",
+      "size": 7760
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_entry.py": {
+      "sha256": "30a273538473bf7d99c135898007858302411ebfa77a36cd2b3637e9aeaa5faf",
+      "size": 150
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_package.py": {
+      "sha256": "b621c753687b89e868ebc7933b169b87efd51eb31edd9f9167afa8daca41a69b",
+      "size": 5735
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_pins.py": {
+      "sha256": "83f373a915c302e1829d142c50c67366de887b5378323e0901a31e26bc05a2f8",
+      "size": 2539
+    },
+    "20a0f5bb38:tools/sbf-producer-20261025/SbfProducer_user_entry.py": {
+      "sha256": "5b4077d47357797002c189a5d4e4c2507bdc107a8be8ac4d414477eae94edec8",
+      "size": 144
+    }
+  },
+  "raw_data": {
+    "sha256": "57a22188f370109cc050b6a597986790d4d03302b988c992e47268ecf17fec8d",
+    "size": 434799
+  },
+  "reconciliation": [
+    {
+      "captured": "SbfLinux-tiny-v1",
+      "field": "schema",
+      "producer_approval": "SbfProducer-runtime-v1 with schema/runtime/host/roles/scope_path/limits/env",
+      "required": "Separate probe-specific schema/source; do not insert tiny manifest into approval or manufacture host/role closure"
+    },
+    {
+      "captured": "/var/lib/SbfSeal-20261025-v1/rootfs",
+      "field": "root",
+      "producer": "/var/lib/SbfProducerSeal-20261025-v1/rootfs",
+      "required": "Publish a new exact probe root and matching fixed layout/validator before any use; no silent rename"
+    },
+    {
+      "captured": [
+        "/usr/bin/python3",
+        "-I",
+        "-S",
+        "-B",
+        "-c",
+        "import errno,json,os,resource,stat\ndef SbfSeal_fds(os_api):\n names=os_api.listdir('/proc/self/fd')\n if len(names)>4096: raise RuntimeError('FD inventory bound')\n result=[]\n for name in names:\n  if not name.isascii() or not name.isdigit(): raise RuntimeError('FD inventory syntax')\n  fd=int(name)\n  try: os_api.fstat(fd)\n  except OSError as e:\n   if e.errno!=errno.EBADF: raise\n  else: result.append(fd)\n return sorted(result)\nassert os.getresuid()==(1000,)*3 and os.getresgid()==(1000,)*3\nassert os.getgroups()==[]\nassert resource.getrlimit(resource.RLIMIT_NOFILE)==(256,256)\nassert resource.getrlimit(resource.RLIMIT_FSIZE)==(16384,16384)\nassert SbfSeal_fds(os)==[0,1,2]\nassert stat.S_ISCHR(os.fstat(0).st_mode)\nassert (os.major(os.fstat(0).st_rdev),os.minor(os.fstat(0).st_rdev))==(1,3)\nfor fd in (1,2):\n t=os.fstat(fd)\n assert stat.S_ISREG(t.st_mode) and t.st_uid==0 and t.st_nlink==1\n assert stat.S_IMODE(t.st_mode)==0o600\nwith open('/proc/self/status',encoding='ascii') as f:\n s=dict(line.split(':',1) for line in f if ':' in line)\nassert all(int(s[k],16)==0 for k in ('CapInh','CapPrm','CapEff','CapBnd','CapAmb'))\nassert s['NoNewPrivs'].strip()=='1'\nassert os.getpid()==1\nassert os.stat('/proc/1/ns/pid').st_ino==os.stat('/proc/self/ns/pid').st_ino\nassert os.stat('/').st_ino==os.stat('.').st_ino\nwith open('/proc/self/status',encoding='ascii') as f:\n q=dict(line.split(':',1) for line in f if ':' in line)\nassert q['Threads'].strip()=='1'\nwith open('/proc/self/cgroup',encoding='ascii') as f:\n cg=f.read()\nassert cg.startswith('0::/') and cg.count('\\n')==1\nassert os.statvfs('/').f_flag & os.ST_RDONLY\nassert os.statvfs('/proc').f_flag & os.ST_RDONLY\nassert not os.statvfs('/tmp').f_flag & os.ST_RDONLY\nassert os.listdir('/dev')==[]\nv=os.statvfs('/tmp')\nassert v.f_blocks*v.f_frsize<=1048576 and v.f_files<=64\nassert stat.S_IMODE(os.stat('/tmp').st_mode)==0o1777 and os.stat('/tmp').st_uid==0\nwith open('/proc/self/mountinfo',encoding='ascii') as f:\n rows=[line.split() for line in f]\nassert {r[4] for r in rows}=={'/','/tmp','/proc'} and len(rows)==3\nfor r in rows:\n sep=r.index('-')\n assert not any(x.startswith(('shared:','master:','propagate_from:')) for x in r[6:sep])\n needed={'nosuid','nodev'} | ({'rw','noexec'} if r[4]=='/tmp' else {'ro'})\n if r[4]=='/proc': needed.add('noexec')\n assert needed<=set(r[5].split(','))\nprint(json.dumps({'SbfSeal':'tiny-public-v1','uid':1000,'gid':1000,'fds':[0,1,2]},sort_keys=True))\n"
+      ],
+      "field": "argv",
+      "required": "Pin complete postexec body/argv from reviewed probe source; separately reconcile Producer fixed body, no silent substitution"
+    },
+    {
+      "captured": "91 logical file candidates,82 physical file endpoints; source disk nofollow pins",
+      "field": "physical",
+      "producer": "/opt/aspis/SbfProducer-20261025-v1/runtime/ prefix required by root_continuation",
+      "required": "New exclusive-copy source-only installer specification plus exact mapping and new pins; never rename/chown/adopt user staging"
+    },
+    {
+      "captured": {
+        "HOME": "/probe",
+        "LC_ALL": "C",
+        "PATH": "/usr/bin",
+        "TMPDIR": "/tmp"
+      },
+      "field": "environment",
+      "required": "Publish exact env and reconcile at probe boundary; matching env alone establishes no runtime identity"
+    },
+    {
+      "captured": "512MiB sampled read-only metadata exception; no cgroup",
+      "field": "limits/admission",
+      "required": "New explicit probe allocation/control/role/admission artifacts; current exception grants zero native/root budget"
+    }
+  ],
+  "required_concrete_artifacts": [
+    "fixed finite-probe source with exact own admission/roles/descriptor/stdio/lifecycle rules",
+    "literal runtime schema + complete root/argv/alias mapping and pinned source-only exclusive-copy installer",
+    "independent review of complete source/guard/capture delta and failure/cancellation behavior",
+    "explicit separate bounded native/root allocation before any execution; none requested now"
+  ],
+  "runtime_approval": null,
+  "status": "SOURCE_ONLY_NEXT_ARTIFACT_FOR_LEAD_REVIEW; NOT IMPLEMENTED/EXECUTABLE/APPROVED",
+  "unused_gate": "fixed_backend_body RUNTIME_APPROVAL global is not an additional producer_fixed_body path gate"
+}
