@@ -1,0 +1,19 @@
+{
+  "authority": "LeadONEfixedboundedpreservedreport read and scalar comparison; >5MBreportstaysremotehashsizeonly; compiler0",
+  "expected": {
+    "name": "inside-scope-report.json",
+    "sha256": "aece6cba8ff20fa893d1f213e9d32250a42ac06d1d4daa662a258e7efb613c2a",
+    "size": 15076291
+  },
+  "command": [
+    "/usr/bin/ssh",
+    "-T",
+    "-oBatchMode=yes",
+    "-oConnectTimeout=10",
+    "-oStrictHostKeyChecking=yes",
+    "-oClearAllForwardings=yes",
+    "-oForwardAgent=no",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -B -c 'import os,stat,json,hashlib,resource\np='\"'\"'/home/dombarker/final-native-gate-v11-20261025/FinalNativeGate-setup-packet/inside-scope-report.json'\"'\"'\ns=os.lstat(p);assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size==15076291\nfd=os.open(p,os.O_RDONLY|os.O_NOFOLLOW)\nwith os.fdopen(fd,'\"'\"'rb'\"'\"') as f:b=f.read(15076291+1);t=os.fstat(f.fileno())\nassert len(b)==15076291 and hashlib.sha256(b).hexdigest()=='\"'\"'aece6cba8ff20fa893d1f213e9d32250a42ac06d1d4daa662a258e7efb613c2a'\"'\"'\nassert (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)\nj=json.loads(b);a={r['\"'\"'path'\"'\"']:r for r in j['\"'\"'snapshots'\"'\"']['\"'\"'before'\"'\"']['\"'\"'rows'\"'\"']};b={r['\"'\"'path'\"'\"']:r for r in j['\"'\"'snapshots'\"'\"']['\"'\"'after'\"'\"']['\"'\"'rows'\"'\"']}\nfields=('\"'\"'path'\"'\"','\"'\"'parent'\"'\"','\"'\"'root'\"'\"','\"'\"'enabled'\"'\"','\"'\"'owner'\"'\"','\"'\"'subtree_memory'\"'\"','\"'\"'type'\"'\"','\"'\"'domain'\"'\"','\"'\"'procs_errno'\"'\"','\"'\"'controllers'\"'\"','\"'\"'pids_enabled'\"'\"','\"'\"'subtree_pids'\"'\"','\"'\"'tasks_max'\"'\"','\"'\"'populated'\"'\"','\"'\"'cap'\"'\"','\"'\"'high'\"'\"','\"'\"'swap_max'\"'\"')\nout=[]\nfor p in sorted(a.keys()|b.keys()):\n if p not in a or p not in b:out.append(dict(path=p,outcome='\"'\"'added'\"'\"' if p not in a else '\"'\"'removed'\"'\"',row={k:(b.get(p) or a[p]).get(k) for k in fields}))\n else:\n  delta={k:dict(before=a[p].get(k),after=b[p].get(k)) for k in fields if a[p].get(k)!=b[p].get(k)}\n  if delta:out.append(dict(path=p,delta=delta))\nassert len(json.dumps(out).encode())<65536\nprint(json.dumps(dict(decision_error=j['\"'\"'decision'\"'\"'].get('\"'\"'error'\"'\"'),structural_differences=out,before_rows=len(a),after_rows=len(b),self_peak_rss_KiB=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,claim='\"'\"'specific failed pair only; no policy change or future resource guarantee'\"'\"')))\n'"
+  ]
+}
