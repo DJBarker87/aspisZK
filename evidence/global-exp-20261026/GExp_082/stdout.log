@@ -1,0 +1,224 @@
+GExp_ReadPrefix.lean:31:6: error: unsolved goals
+case read.ok.refine_1
+A : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+parts : Parts
+k : Digest → Code A
+ih :
+  ∀ (a : Digest) (before : SdkC_Source.Log),
+    ∃ kept remaining,
+      SdkC_Source.readLog (SdkC_Source.run hashv (k a) before).2 = SdkC_Source.readLog before ++ kept ∧
+        (eval H (SdkC_Oracle.program (k a))).1 = kept ++ remaining
+before : SdkC_Source.Log
+digest : SdkC_Source.Digest
+actual : hashv parts = ok digest
+decoded : decodeState digest = H (flatten parts)
+encoded : encodeState (H (flatten parts)) = digest
+kept remaining : List (Bytes × State)
+native :
+  SdkC_Source.readLog (SdkC_Source.run hashv (k digest) (before ++ [{ parts := parts, returned := ok digest }])).2 =
+    SdkC_Source.readLog (before ++ [{ parts := parts, returned := ok digest }]) ++ kept
+ideal : (eval H (SdkC_Oracle.program (k digest))).1 = kept ++ remaining
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      (SdkC_Source.run hashv (k digest) (before ++ [{ parts := parts, returned := ok digest }])).2 =
+    List.filterMap
+        (fun q =>
+          match q.returned with
+          | ok digest => some (flatten q.parts, decodeState digest)
+          | x => none)
+        before ++
+      (flatten parts, H (flatten parts)) :: kept
+GExp_ReadPrefix.lean:34:13: error: unsolved goals
+case read.fail
+A : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+parts : Parts
+k : Digest → Code A
+ih :
+  ∀ (a : Digest) (before : SdkC_Source.Log),
+    ∃ kept remaining,
+      SdkC_Source.readLog (SdkC_Source.run hashv (k a) before).2 = SdkC_Source.readLog before ++ kept ∧
+        (eval H (SdkC_Oracle.program (k a))).1 = kept ++ remaining
+before : SdkC_Source.Log
+e : Error
+actual : hashv parts = fail e
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      (before ++ [{ parts := parts, returned := fail e }]) =
+    List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      before
+GExp_ReadPrefix.lean:38:10: error: unsolved goals
+case read.div
+A : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+parts : Parts
+k : Digest → Code A
+ih :
+  ∀ (a : Digest) (before : SdkC_Source.Log),
+    ∃ kept remaining,
+      SdkC_Source.readLog (SdkC_Source.run hashv (k a) before).2 = SdkC_Source.readLog before ++ kept ∧
+        (eval H (SdkC_Oracle.program (k a))).1 = kept ++ remaining
+before : SdkC_Source.Log
+actual : hashv parts = div
+⊢ List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      (before ++ [{ parts := parts, returned := div }]) =
+    List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      before
+GExp_ReadPrefix.lean:31:42: warning: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:31:49: warning: This simp argument is unused:
+  SdkC_Oracle.readLog_append
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:10: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:30: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:49: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:65: warning: This simp argument is unused:
+  decoded
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:73: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲s̲i̲n̲g̲l̲e̲t̲o̲n̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:32:91: warning: This simp argument is unused:
+  List.singleton_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵n̵a̵t̵i̵v̵e̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵d̵e̵c̵o̵d̵e̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵L̵i̵s̵t̵.̵s̵i̵n̵g̵l̵e̵t̵o̵n̵_̵a̵p̵p̵e̵n̵d̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲r̲e̲a̲d̲L̲o̲g̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:36:40: warning: This simp argument is unused:
+  SdkC_Oracle.readLog_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:37:8: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Source.run, ̲actual, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+          List.filterMap_c̵o̵ns̵,̵L̵is̵t̵.̵f̵i̵lt̵e̵r̵M̵a̵p̵_̵n̵i̵l̵, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:37:28: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Source.run, ̲actual, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+          List.filterMap_cons, ̲List.f̵i̵l̵t̵e̵r̵M̵ap_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:40:40: warning: This simp argument is unused:
+  SdkC_Oracle.readLog_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵a̵c̵t̵u̵a̵l̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵r̵e̵a̵d̵L̵o̵g̵_̵a̵p̵p̵e̵n̵d̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵e̵a̵d̵L̵o̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵i̵l̵t̵e̵r̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲a̲c̲t̲u̲a̲l̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲e̲a̲d̲L̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲i̲l̲t̲e̲r̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:41:8: warning: This simp argument is unused:
+  List.filterMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Source.run, ̲actual, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+          List.filterMap_c̵o̵ns̵,̵L̵is̵t̵.̵f̵i̵lt̵e̵r̵M̵a̵p̵_̵n̵i̵l̵, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExp_ReadPrefix.lean:41:28: warning: This simp argument is unused:
+  List.filterMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_Source.run, ̲actual, ̲SdkC_Oracle.readLog_append, ̲SdkC_Source.readLog,
+          List.filterMap_cons, ̲List.f̵i̵l̵t̵e̵r̵M̵ap_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.GExp_ReadPrefix.retained_reads' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,33 @@
+GExp_Nonvacuity.lean:29:80: error: Tactic `decide` failed for proposition
+  (0#usize != AspisR1CurrentCaller.compact.SPLIT) = true
+because its `Decidable` instance
+  instDecidableEqBool (0#usize != AspisR1CurrentCaller.compact.SPLIT) true
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decEq`, `instDecidableEqBitVec`, `instDecidableEqBool`, `instDecidableEqFin`, `instDecidableEqNat`, `BitVec.decEq`, `Bool.decEq`, and `Nat.decEq`, reduction got stuck at the `Decidable` instance
+  match 0#usize != AspisR1CurrentCaller.compact.SPLIT, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+GExp_Nonvacuity.lean:28:66: error: unsolved goals
+base : AspisR1CurrentCaller.Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit
+semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+different : (0#usize != AspisR1CurrentCaller.compact.SPLIT) = true
+⊢ SdkC_Source.run hashv (pure (core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse)) [] =
+    (ok (core.result.Result.Err AspisR1CurrentCaller.verifier.Error.Parse), [])
+GExp_Nonvacuity.lean:30:54: warning: This simp argument is unused:
+  SdkC_Source.run
+
+Hint: Omit it from the simp argument list.
+  simp only [̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵d̵i̵f̵f̵e̵r̵e̵n̵t̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵]̵[̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲d̲i̲f̲f̲e̲r̲e̲n̲t̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.GExp_Nonvacuity.partial_syscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_Nonvacuity.failed_attempt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.GExp_Nonvacuity.first_rejects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
