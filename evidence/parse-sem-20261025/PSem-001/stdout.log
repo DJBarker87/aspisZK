@@ -1,0 +1,70 @@
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+PSem_Rows.lean:49:6: error: Dependent elimination failed: Failed to solve equation
+  some rs =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            if List.take 5 b ≠ ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2 then none
+            else
+              if 14 ≤ row ∧ ¬canonical (slice b 5 ((rowShape row).2 / 2)) then none
+              else do
+                let tail ← semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) b)
+                pure ((List.take 5 b ++ expand ((rowShape row).2 / 32) (slice b 5 ((rowShape row).2 / 2))) :: tail))
+          h)
+      (fun h => (fun x => none) h) ((List.length b).decLt (5 + (rowShape row).2 / 2))
+PSem_Rows.lean:56:17: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some rs =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b)).bind fun a =>
+              some ((List.take 5 b ++ slice b 5 (rowShape row).2) :: a))
+          h)
+      (fun h => (fun x => none) h) instDecidableAnd
+at case `Eq.refl`
+PSem_Rows.lean:54:43: warning: This simp argument is unused:
+  Option.bind_eq_some_iff
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, Pure.pure, O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵e̵q̵_̵s̵o̵m̵e̵_̵i̵f̵f̵,̵Option.some.injEq] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Rows.lean:55:12: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [Bind.bind, Pure.pure, Option.bind_eq_some_iff,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Rows.lean:70:17: error(lean.unknownIdentifier): Unknown constant `Option.none_bind`
+PSem_Rows.lean:70:6: error: `simp` made no progress
+PSem_Rows.lean:76:19: error(lean.unknownIdentifier): Unknown constant `Option.none_bind`
+PSem_Rows.lean:78:14: error: Function expected at
+  bad
+but this term has type
+  List.length b < 5 + (rowShape row).2
+
+Note: Expected a function because this term is being applied to the argument
+  h.2.1
+PSem_Rows.lean:82:21: error(lean.unknownIdentifier): Unknown constant `Option.none_bind`
+PSem_Rows.lean:84:16: error: Invalid projection: Projections cannot be used on functions, and
+  bad
+has function type
+  List.take 5 b = ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2 → False
+PSem_Rows.lean:88:19: error: Tactic `cases` failed with a nested error:
+Dependent elimination failed: Failed to solve equation
+  some rs =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            (semanticRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b)).bind fun a =>
+              some ((List.take 5 b ++ slice b 5 (rowShape row).2) :: a))
+          h)
+      (fun h => (fun x => none) h) instDecidableAnd
+at case `Eq.refl`
+PSem_Rows.lean:96:18: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Eq.refl` does not have explicit fields, but 3 were provided
+'AspisR1.PSem_Rows.semanticRows_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Rows.strict_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

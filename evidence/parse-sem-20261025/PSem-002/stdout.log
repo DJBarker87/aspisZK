@@ -1,0 +1,125 @@
+PSem_Rows.lean:51:8: error: unsolved goals
+case pos
+fuel : ℕ
+ih :
+  ∀ (row : ℕ) (b : Bytes) (rs : List Bytes),
+    semanticRows fuel row b = some rs ↔ ValidRows fuel row b ∧ expandRows fuel row b = some rs
+row : ℕ
+b : Bytes
+rs : List Bytes
+compact : 14 ≤ row
+framing : List.take 5 b = ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+short : ¬List.length b < 5 + (rowShape row).2 / 2
+canon : canonical (slice b 5 ((rowShape row).2 / 2))
+⊢ ValidRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) b) →
+    ∀ (x : List Bytes),
+      expandRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) b) = some x →
+        (⟨(rowShape row).1 % 256, ⋯⟩ ::
+                (le32 (rowShape row).2 ++ expand ((rowShape row).2 / 32) (slice b 5 ((rowShape row).2 / 2)))) ::
+              x =
+            rs →
+          5 + (rowShape row).2 / 2 ≤ List.length b
+PSem_Rows.lean:51:8: error: unsolved goals
+case pos
+fuel : ℕ
+ih :
+  ∀ (row : ℕ) (b : Bytes) (rs : List Bytes),
+    semanticRows fuel row b = some rs ↔ ValidRows fuel row b ∧ expandRows fuel row b = some rs
+row : ℕ
+b : Bytes
+rs : List Bytes
+compact : ¬14 ≤ row
+framing : List.take 5 b = ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+short : ¬List.length b < 5 + (rowShape row).2
+canon : canonical (slice b 5 (rowShape row).2)
+⊢ ValidRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b) →
+    ∀ (x : List Bytes),
+      expandRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b) = some x →
+        (⟨(rowShape row).1 % 256, ⋯⟩ :: (le32 (rowShape row).2 ++ slice b 5 (rowShape row).2)) :: x = rs →
+          5 + (rowShape row).2 ≤ List.length b
+
+case neg
+fuel : ℕ
+ih :
+  ∀ (row : ℕ) (b : Bytes) (rs : List Bytes),
+    semanticRows fuel row b = some rs ↔ ValidRows fuel row b ∧ expandRows fuel row b = some rs
+row : ℕ
+b : Bytes
+rs : List Bytes
+compact : ¬14 ≤ row
+framing : List.take 5 b = ⟨(rowShape row).1 % 256, ⋯⟩ :: le32 (rowShape row).2
+short : ¬List.length b < 5 + (rowShape row).2
+canon : ¬canonical (slice b 5 (rowShape row).2)
+⊢ ValidRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b) →
+    ∀ (x : List Bytes),
+      expandRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b) = some x →
+        (⟨(rowShape row).1 % 256, ⋯⟩ :: (le32 (rowShape row).2 ++ slice b 5 (rowShape row).2)) :: x = rs →
+          5 + (rowShape row).2 ≤ List.length b
+PSem_Rows.lean:80:64: error: Application type mismatch: The argument
+  ht
+has type
+  expandRows fuel (row + 1) (List.drop (5 + (rowShape row).2 / 2) b) = some tail
+but is expected to have type
+  expandRows fuel (row + 1)
+      (List.drop
+        (5 +
+          if 14 ≤ row then
+            (Decidable.rec
+                  (fun h =>
+                    (fun x =>
+                        if row = 14 then (3, 32)
+                        else
+                          if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                          else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+                      h)
+                  (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2 /
+              2
+          else
+            (Decidable.rec
+                (fun h =>
+                  (fun x =>
+                      if row = 14 then (3, 32)
+                      else
+                        if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                        else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+                    h)
+                (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2)
+        b) =
+    some ?m.236
+in the application
+  ⟨strictTail, ht⟩
+PSem_Rows.lean:80:64: error: Application type mismatch: The argument
+  ht
+has type
+  expandRows fuel (row + 1) (List.drop (5 + (rowShape row).2) b) = some tail
+but is expected to have type
+  expandRows fuel (row + 1)
+      (List.drop
+        (5 +
+          if 14 ≤ row then
+            (Decidable.rec
+                  (fun h =>
+                    (fun x =>
+                        if row = 14 then (3, 32)
+                        else
+                          if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                          else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+                      h)
+                  (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2 /
+              2
+          else
+            (Decidable.rec
+                (fun h =>
+                  (fun x =>
+                      if row = 14 then (3, 32)
+                      else
+                        if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                        else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+                    h)
+                (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2)
+        b) =
+    some ?m.356
+in the application
+  ⟨strictTail, ht⟩
+'AspisR1.PSem_Rows.semanticRows_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Rows.strict_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
