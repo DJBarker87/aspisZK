@@ -3,7 +3,7 @@ import re
 s=Path('lean/Cons_Pair.lean').read_text()
 imports=s[:s.index('set_option')].replace('import Cons_Ten','import Cons_Pair')
 header=s[s.index('set_option'):s.index('/-- The union')].replace('AspisR1.Cons_Pair','AspisR1.Cons_Top')
-sig=s[s.index('theorem accepted'):s.index(' := by\n  obtain')]
+sig=s[s.index('theorem accepted'):s.index(' := by')]
 a=sig.index('    (adapterOps :'); b=sig.index(' (native1 :',a)
 sig=sig[:a]+'    (c : DrvC_Installation.Configuration F CoreError)\n   '+sig[b:]
 # after removing all dictionary argument binders, specialize every occurrence

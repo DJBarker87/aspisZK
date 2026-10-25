@@ -2,6 +2,15 @@ import T2Nat_NativePair
 import AuS1_Accepted
 import DrvC_SourceHeadline
 import Cons_Ten
+import Cons_Finish
+import Cons_Native
+import Cons_Continuation
+import Cons_Base
+import Cons_Caller
+import Cons_Result
+import Cons_NativeBuild
+import Cons_FinishProof
+import Cons_Second
 import T2Nat_ReaderEffects
 import CPhy_Physical
 import T2Nat_FinishResult
@@ -62,139 +71,8 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
       ok (.Ok (post2,final2)))
     (p : FS2.Duplex.Params M Cv N) (root : Array U8 32#usize) (length : U32)
     :
-    let port := SdkD_Child.port adapterOps (Uni_Install.current ops reserved queryOps geoOps) (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps B claimsStd
-    ∃ f s outer pre middle fs ss,
-      ∃ run : Tx1Q_Execution.Run (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)
-        reserved queryOps geoOps (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd) ()
-        (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved,
-      SourceCuts (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) e1.first (e2.second secondSizes) saved f s ∧
-      CheckpointWriterConeJoin (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) CPhy_Header.decode H f.semantic f.pub f.proof f.split ∧
-      CheckpointReaderConeJoin (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) CPhy_Header.decode H s.pub s.proof s.checkpoint ∧
-      S2W_ChildJoins.MultiproofConeJoin f.proof s.proof (CPhy_Ranges.nodes f.proof s.proof) ∧
-      S2W_ChildJoins.S8StageConeJoin f.proof (CPhy_Ranges.y1 f.proof) ∧
-      Op4P_Extract.Op4P_reference.reference.check_values (CPhy_Ranges.y1 f.proof) = ok true ∧
-      ((RowShape_InstalledSlots.verifierOps (Uni_Install.current ops reserved queryOps geoOps) B claimsStd).op4 f.proof = ok (.Ok ()) ∧
-        Op4P_Install.sourceBody f.proof = ok (.Ok ()) ∧
-        OraclePortCompactDraft.scan (bytesOf f.proof.val)) ∧
-      (reserved = true ∧ f.split = 10#usize ∧ run.out.next.val = 10 ∧ run.flushed.val.length = 64 ∧
-        (∀ x ∈ (Tx1Q_Carriers.slice Tx1Q_Carriers.k run.flushed).val, Port3_FlushInstall.Canonical x) ∧
-        Port3_CheckpointInstall.writer
-          (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd))
-          (Tx1Q_Carriers.prepared run.p)
-          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
-          f.proof f.pub () = ok saved ∧
-        WAdm_Domain.Admitted (Tx1Q_Carriers.prepared run.p)
-          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) f.proof f.pub ∧
-        WAdm_Carrier.WideInputs (Tx1Q_Carriers.prepared run.p)
-          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) ∧
-        WAdm_SourceWriter.writer (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd))
-          (Tx1Q_Carriers.prepared run.p)
-          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
-          f.proof f.pub () = ok saved ∧
-        (WAdm_NativeInstall.install (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)).op16
-          (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)
-          run.p {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}
-          f.proof f.pub () = ok saved) ∧
-      (let sdk := Op5T_SamePair.dictionary adapterOps (Uni_Install.base ops reserved queryOps geoOps) (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps) finishOps B claimsStd
-       let D := AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 sdk
-       let currentD := AspisS6CurrentFirstInstallation.toDigest D
-       ∃ (p0 : AspisR1CurrentCaller.verifier.Prepared) (root0 : Array U8 32#usize)
-         (p1 : VTop_Stages.verifier.Prepared) (root1 : Array U8 32#usize),
-         Op5T_Install.currentBatch Port4B_Install.leaves currentD f.proof p0 root0 0#usize () = ok (.Ok ()) ∧
-         Op5T_Install.stageBatch Port4B_Install.leaves D s.proof p1 root1 1#usize () = ok (.Ok ())) ∧
-      (Tx2I_Install.shape s.proof = ok (.Ok .S2) ∧
-    Op3I_Install.sourceBody s.proof = ok (.Ok .S2) ∧
-    OraclePortHeader.accepts (MultiproofConeCanonical.bytesOf s.proof.val) = true ∧
-    ∃ (p : AspisR1Stage2.verifier.Prepared) (saved : AspisR1Stage2.verifier.Accumulator)
-      (g : Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize)
-      (geometry : AspisR1Stage2.verifier.QueryGeometry) (pending : AspisR1Stage2.verifier.BatchedWeights)
-      (returned : AspisR1Stage2.verifier.Accumulator) (after : AspisR1Stage2.verifier.BatchedWeights)
-      (flushed : Slice AspisR1Stage2.aspis_core.field.QM31)
-      (back : Slice AspisR1Stage2.aspis_core.field.QM31 → alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31)
-      (v : AspisR1Stage2.verifier.View),
-      (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps).op18 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) s.checkpoint s.proof s.pub .S2 () = ok (.Ok (p,saved)) ∧
-      T2Nat_ReaderJoin.reader reserved (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) s.checkpoint s.proof s.pub .S2 () = ok (.Ok (p,saved)) ∧
-      s.checkpoint.val.length = 1768 ∧ reserved = true ∧
-      T2Nat_ReaderEffects.OnRun reserved (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) () s.checkpoint s.proof s.pub p saved ∧
-      (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps).op6 s.proof p saved g none geometry pending 22#usize = ok (.Ok (returned,after)) ∧
-      alloc.vec.Vec.deref_mut returned.weights = (returned.weights.deref,back) ∧
-      (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps).op9 after returned.weights.deref = ok flushed ∧
-      let a := {returned with weights := back flushed}
-      (Tx2I_Install.stage (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps).op19 v p a none = ok (.Ok ()) ∧
-      Port4D_FinishInstall.finish finishOps v p a none = ok (.Ok ()) ∧
-      (∀ {Hash : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 Hash) (hash : Hash)
-        (before : CheckpointBytes5Effect.Log),
-        CheckpointBytes5Effect.run D hash
-          (T2Nat_Silent.code (T2Nat_FinishResult.installed finishOps v p a)) before =
-          ok (.Ok (),before)) ) ∧
-      ((RowShape_InstalledSlots.verifierOps (Uni_Install.current ops reserved queryOps geoOps) B claimsStd).op3 f.proof = ok (.Ok .S2) ∧
-        Op3I_Install.sourceBody f.proof = ok (.Ok .S2) ∧
-        OraclePortHeader.accepts (bytesOf f.proof.val) = true ∧
-        Op3I_Cuts.frozenHeader (bytesOf f.proof.val) = some .S2) ∧
-      S2W_ExpandedTrace.runExpanded (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) (children port)
-        (S2W_Observation.two (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] =
-        ok (.Ok saved,S2W_ExpandedTrace.full (children port) outer) ∧
-      S2W_D189Interpretation.runOwned (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)
-        (S2W_Observation.two (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) program e1.first data1 (e2.second secondSizes) data2 slot) [] e1.heap =
-        ok (.Ok saved,outer,e1.heap) ∧
-      projected port outer = S2W_SiteSchedule.timeline pre middle fs ss ∧
-      post2 = e2.heap ∧
-      before e1 e2 .tx1 = S2W_D189Interpretation.nativeObserve L encode e1.metadata 3 w1 e1.heap.ambient ∧
-      before e1 e2 .tx2 = S2W_D189Interpretation.nativeObserve L encode e2.metadata 7 w2 e2.heap.ambient ∧
-      (∃ selectedPublic,
-        AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
-          f.statement = ok selectedPublic ∧
-        SourceCuts (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) e1.first (e2.second secondSizes) saved
-          {f with semantic := selectedPublic} s ∧
-        ∃ (semantic y1 : Slice U8) (v : AspisR1SelectedWideViewV1.verifier.View)
-          (sem : r1_semantic.Verified Unit) (claimsPrefix : AspisR1PublicPreparation.r1_wire.Prefix),
-          AspisR1SelectedWideViewV1.verifier.candidate.wide_view f.proof semantic y1 = ok (.Ok v) ∧
-          (semanticBase (Uni_Install.current ops reserved queryOps geoOps) (ClaimsUnrolledFinish.install claimsStd B)).op9
-            (NativeBuffers.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (withValues (Uni_Install.current ops reserved queryOps geoOps)) nativeValues
-              AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install claimsStd B))
-            (FirstComposition.toCurrentPublic
-              (AspisR1PublicPreparation.PreparationBinding.preparationPublic
-                (AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1 f.statement)))
-            v.semantic () none = ok (.Ok sem) ∧
-          AspisR1PublicPreparation.PrefixAdapter.parseAccepted v.semantic = ok (.Ok claimsPrefix) ∧
-          ClaimsUnrolledFinish.reference claimsStd claimsPrefix = ok (.Ok (retainedSem sem).claims)) ∧
-      let decode := CPhy_Header.decode
-      let nodes := CPhy_Ranges.nodes f.proof s.proof
-      let y1 := CPhy_Ranges.y1 f.proof
-      S2X.CheckpointVersionBinding
-        (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) (bytesOf s.checkpoint.val) →
-      P2Prime H f.proof f.pub s.proof s.pub →
-      S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
-      ∃ parsed,
-        S2W_LeadInterface.S2CallerFacts
-          (observation f s saved nodes y1 pre middle fs ss (before e1 e2) (after e1 e2 post1))
-          (S2Z.Oracle.leadDigest (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) () H (bytesOf f.proof.val) (bytesOf f.pub.val)
-          (bytesOf saved.val) parsed ∧
-        (∀ site, (observation f s saved nodes y1 pre middle fs ss (before e1 e2) (after e1 e2 post1)).reached site ↔
-          S2W_SiteSchedule.Event.site site ∈ projected port outer) ∧
-        ∀ (queryLeaves : Port5Q1_QueryPorts.SessionAPrimitives queryOps)
-          (geoLeaves : Port5Q1_GeometryCanonical.SessionAPrimitives geoOps)
-          (domain : Port5Q1_Domain.SessionADomain geoOps)
-          (multiply : geoOps.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul)
-          (one : geoOps.op7 = ok 1#u32) (inverse : geoOps.op11 = Port4C_InverseExecution.inverse_owned),
-        ∃ authParsed frame,
-          OraclePortCompactDraft.parse (bytesOf f.proof.val) = some authParsed ∧
-          FS2.Duplex.Read ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
-            (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
-            (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) frame ∧
-          BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot authParsed 2) ∧
-          Cons_Ten.Outcome run H ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
-              (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
-              (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) authParsed ∧
-          AuS1_Finish.Outcome finishOps reserved queryOps
-            (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
-              (sdkOps (Tx2I_Install.install adapterOps
-                (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps)
-                (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) ()
-            s.pub s.proof s.checkpoint saved H (bytesOf f.proof.val) (bytesOf f.pub.val) run.p authParsed
-            ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
-              (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
-              (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) := by
+    Cons_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H prior := by
+  unfold Cons_Result.Outcome
   obtain ⟨f,s,outer,pre,middle,fs,ss,cuts,writer,reader,multiproof,scanY,checkY,
     scan,oldTx1,batches,tx2,first,expanded,owned,layout,unchanged,before1,before2,claims,caller⟩ :=
     T2Nat_NativePair.accepted_pair_unified L sdk copy std allocator e1 e2 w1 w2
@@ -224,15 +102,17 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
       (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) f.proof f.pub () = ok saved := by
     rw [WAdm_SourceWriter.writer_eq _ _ _ _ _ _ fields size canonical control.2.2.1]
     exact run.writer_call
-  refine ⟨f,s,outer,pre,middle,fs,ss,run,cuts,writer,reader,multiproof,scanY,checkY,
-    scan,?_,batches,?_,first,expanded,owned,layout,unchanged,before1,before2,claims,?_⟩
-  · exact ⟨control.1,control.2.1,control.2.2.1,control.2.2.2.1,control.2.2.2.2,
+  obtain ⟨tx2run,calls,aux⟩ := Cons_Second.accepted adapterOps ops stageBase finishOps reserved queryOps geoOps
+    B claimsStd e1.first (e2.second secondSizes) saved f s cuts
+  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2run,calls,?_,?_⟩
+  · unfold Cons_Base.Outcome
+    refine ⟨cuts,writer,reader,multiproof,scanY,checkY,scan,?_,batches,?_,first,expanded,owned,layout,
+      unchanged,before1,before2,claims⟩
+    · exact ⟨control.1,control.2.1,control.2.2.1,control.2.2.2.1,control.2.2.2.2,
       run.writer_call,domain,WAdm_Carrier.wide _ _ _ _ domain,sourceContent,nativeContent⟩
-  · obtain ⟨p2,saved2,g,geometry,pending,returned,after,flushed,back,v,
-      hr,native,size,r,logs,hquery,hback,hflush,hfinish,hfinish2,effects,old⟩ := tx2.2.2.2
-    exact ⟨tx2.1,tx2.2.1,tx2.2.2.1,p2,saved2,g,geometry,pending,returned,after,
-      flushed,back,v,hr,native,size,r,logs,hquery,hback,hflush,hfinish,hfinish2,effects⟩
-  · dsimp only
+    · exact ⟨tx2.1,tx2.2.1,tx2.2.2.1⟩
+  · unfold Cons_Caller.Outcome
+    dsimp only
     intro runtime p2prime entry
     obtain ⟨parsed,facts,sites,oldOutcome⟩ := caller runtime p2prime entry
     obtain ⟨version,key,ledger,events,sameCheckpoint,sameProof,samePub,savedLength⟩ :=
@@ -245,6 +125,7 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
       e1.first (e2.second secondSizes) saved f s pairCuts sameCheckpoint sameProof authParsed parser
       run rootView rootRange rootCopy
     refine ⟨parsed,facts,sites,?_⟩
+    unfold Cons_Continuation.Outcome
     intro queryLeaves geoLeaves domain multiply one inverse
     have old := oldOutcome queryLeaves geoLeaves domain multiply one inverse
     refine ⟨authParsed,frame,parser,frameRead,target,?_,?_⟩
@@ -255,10 +136,14 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
           ports authParsed q tr data rho prepare parseReached read
           (OraclePortAllSelectedRecoveryC6.recovered _ frame authParsed 2) indexed
           geo domain multiply one inverse)
-    · apply AuS1_Finish.strengthen finishOps reserved queryOps _ () s.pub s.proof s.checkpoint saved H
+    · have proofLength2 : s.proof.val.length = 57607 := by
+        have lengths := congrArg List.length sameProof
+        simpa only [bytesOf,List.length_map,proofLength] using lengths
+      exact Cons_FinishProof.strengthen (AuS1_Install.base stageBase) finishOps reserved queryOps queryLeaves
+        geoOps geoLeaves domain multiply one inverse _ () s.pub s.proof s.checkpoint saved H
         (bytesOf f.proof.val) (bytesOf f.pub.val) run.p authParsed _ frame
-        ((OraclePortCompactDraft.parse_header _ _ parser).2.trans sameProof.symm) old
-      exact auth
+        ((OraclePortCompactDraft.parse_header _ _ parser).2.trans sameProof.symm)
+        sameCheckpoint proofLength2 tx2run calls aux auth
 
 #print axioms accepted
 end AspisR1.Cons_Pair
