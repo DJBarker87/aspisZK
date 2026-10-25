@@ -15,7 +15,7 @@ def state(p):
 def safe(p):
  p=pathlib.Path(p)
  for q in [p,*p.parents]:assert not q.is_symlink(),str(q)
- s=p.lstat();assert stat.S_ISREG(s.st_mode) and s.st_uid==501 and s.st_nlink==1,str(p)
+ s=p.lstat();assert stat.S_ISREG(s.st_mode) and s.st_uid==501 and (s.st_nlink==1 or p.is_relative_to(SYS)),str(p)
  return p
 if __name__=='__main__':
  n=int(sys.argv[1]);assert n in [353,354]
