@@ -1,0 +1,42 @@
+Op5T_CarrierGap.lean:48:27: error(lean.unknownIdentifier): Unknown identifier `Program`
+
+Note: It is not possible to treat `Program` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+Op5T_CarrierGap.lean:49:42: error(lean.unknownIdentifier): Unknown identifier `eval`
+
+Note: It is not possible to treat `eval` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+Op5T_CarrierGap.lean:49:60: error: unsolved goals
+F : Type
+adapter : AdapterRw.Ops
+ops : AspisR1CurrentCaller.Ops
+stage : VTop_Stages.Ops
+finish : AspisR1Stage2.Stage2Finish.FinishOps F
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+port : ChildConeJoin (Bytes × State) (Op5T_SamePair.dictionary adapter ops stage finish B std)
+first : Op5T_Marks.FirstMarks port
+second : Op5T_Marks.SecondMarks port
+event : S2W_Trace.Event
+marked : S2W_OuterOccurrences.mark event = some false
+accepted : Op5T_Marks.accepted (Op5T_SamePair.dictionary adapter ops stage finish B std) event
+H : Bytes → State
+a : Bytes
+d : State
+bad : d ≠ H a
+fake : ChildConeJoin (Bytes × State) (Op5T_SamePair.dictionary adapter ops stage finish B std) := inject port (a, d)
+segments : S2W_SiteSchedule.FirstSegments (Option (Bytes × State))
+layout : List.map project (events port event) = S2W_SiteSchedule.firstTrace segments
+projectedMember : S2W_SiteSchedule.Event.site S2LeadInterface.Site.batch0 ∈ List.map project (events port event)
+batchMember : Event.site S2LeadInterface.Site.batch0 ∈ events port event
+before after : List (S2W_ExpandedTrace.Event (Bytes × State))
+adjacent :
+  List.flatMap (atBatch (a, d)) (events port event) =
+    before ++ [Event.site S2LeadInterface.Site.batch0, Event.child (a, d)] ++ after
+emitted : events fake event = before ++ [Event.site S2LeadInterface.Site.batch0, Event.child (a, d)] ++ after
+R : Type
+code : sorry
+same : readEvents (events fake event) = sorry
+member : (a, d) ∈ sorry
+⊢ False
+'AspisR1.Op5T_CarrierGap.first_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5T_CarrierGap.second_marks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op5T_CarrierGap.countermodel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
