@@ -1,0 +1,864 @@
+{
+  "root": "PAln_Bootstrap",
+  "missing_order": [
+    {
+      "module": "PSem_SourceCuts",
+      "source": "lean/PSem_SourceCuts.lean",
+      "imports": [
+        "Tx1Q_Execution",
+        "S1NativePrepareBuffersV1"
+      ]
+    },
+    {
+      "module": "ExtractedRecordByteValue",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordByteValue.lean",
+      "imports": [
+        "Aeneas",
+        "R1RetainedFieldByteCodec"
+      ]
+    },
+    {
+      "module": "StrictLowChunkCodec",
+      "source": "docs/research/100bit-spend-path-20261013/lean/StrictLowChunkCodec.lean",
+      "imports": [
+        "ExtractedRecordByteValue",
+        "R1SemanticCoefficientCodec"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixFieldAgreement",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixFieldAgreement.lean",
+      "imports": [
+        "AspisR1PrefixAggregateParser.Funs",
+        "AspisR1RecordParser.Funs"
+      ]
+    },
+    {
+      "module": "ExtractedRecordStrictCodec",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordStrictCodec.lean",
+      "imports": [
+        "ExtractedPrefixFieldAgreement",
+        "ExtractedRecordByteValue",
+        "ExtractedRecordByteCanonicality",
+        "R1StrictWideByteCodec"
+      ]
+    },
+    {
+      "module": "ExtractedRecordStrictLow",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordStrictLow.lean",
+      "imports": [
+        "ExtractedRecordStrictCodec",
+        "StrictLowChunkCodec"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixLoopMap",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixLoopMap.lean",
+      "imports": [
+        "ExtractedPrefixFieldAgreement"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixRecordAgreement",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixRecordAgreement.lean",
+      "imports": [
+        "ExtractedPrefixLoopMap"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixParserAgreement",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixParserAgreement.lean",
+      "imports": [
+        "ExtractedPrefixRecordAgreement"
+      ]
+    },
+    {
+      "module": "ExtractedRowShape",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRowShape.lean",
+      "imports": [
+        "AspisR1RowShape.Funs",
+        "Mathlib.Tactic.IntervalCases"
+      ]
+    },
+    {
+      "module": "ExtractedRecordFraming",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordFraming.lean",
+      "imports": [
+        "AspisR1RecordParser.Funs",
+        "ExtractedRowShape"
+      ]
+    },
+    {
+      "module": "RecordPayloadPartition",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RecordPayloadPartition.lean",
+      "imports": [
+        "ExtractedRecordFraming"
+      ]
+    },
+    {
+      "module": "ExtractedRecordHighZero",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordHighZero.lean",
+      "imports": [
+        "AspisR1RecordParser.Funs"
+      ]
+    },
+    {
+      "module": "ExtractedRecordValidator",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordValidator.lean",
+      "imports": [
+        "ExtractedRecordByteCanonicality",
+        "ExtractedRecordHighZero"
+      ]
+    },
+    {
+      "module": "ExtractedRecordPayloadSoundness",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedRecordPayloadSoundness.lean",
+      "imports": [
+        "RecordPayloadPartition",
+        "ExtractedRecordValidator"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixStrictPayload",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixStrictPayload.lean",
+      "imports": [
+        "ExtractedRecordStrictLow",
+        "StrictLowChunkCodec",
+        "ExtractedPrefixParserAgreement",
+        "ExtractedRecordPayloadSoundness",
+        "ExtractedPrefixParse"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixSemanticLow",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixSemanticLow.lean",
+      "imports": [
+        "StrictLowChunkCodec",
+        "ExtractedPrefixStrictPayload"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixChunkOrder",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixChunkOrder.lean",
+      "imports": [
+        "RecordPayloadPartition"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixCoefficients",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixCoefficients.lean",
+      "imports": [
+        "ExtractedPrefixSemanticLow",
+        "ExtractedPrefixChunkOrder"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixHeaderBytes",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixHeaderBytes.lean",
+      "imports": [
+        "ExtractedPrefixParserAgreement",
+        "ExtractedRecordFraming",
+        "ExtractedRecordByteValue"
+      ]
+    },
+    {
+      "module": "R1RecordLengthCodec",
+      "source": "evidence/parse-sem-20261025/PSem-030/sources/R1RecordLengthCodec.lean",
+      "imports": [
+        "R1RetainedFieldByteCodec",
+        "R1PublicInitFrame",
+        "R1RecordFrameCodec"
+      ]
+    },
+    {
+      "module": "R1RecordParserModel",
+      "source": "docs/research/100bit-spend-path-20261013/lean/R1RecordParserModel.lean",
+      "imports": [
+        "R1RecordLengthCodec",
+        "R1ListFieldCodec"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixFrameAgreement",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixFrameAgreement.lean",
+      "imports": [
+        "ExtractedPrefixHeaderBytes",
+        "ExtractedPrefixParse",
+        "R1RecordLengthCodec",
+        "R1RecordParserModel"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixRowPayload",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixRowPayload.lean",
+      "imports": [
+        "ExtractedPrefixCoefficients",
+        "ExtractedPrefixFrameAgreement",
+        "R1SemanticRecordCodec"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixTypedFull",
+      "source": "docs/research/100bit-spend-path-20261013/lean/ExtractedPrefixTypedFull.lean",
+      "imports": [
+        "ExtractedPrefixRowPayload",
+        "R1SemanticPrefixCodec"
+      ]
+    },
+    {
+      "module": "PSem_TypedPrefix",
+      "source": "lean/PSem_TypedPrefix.lean",
+      "imports": [
+        "PSem_SourceCuts",
+        "ExtractedPrefixTypedFull"
+      ]
+    },
+    {
+      "module": "PSem_RecordChain",
+      "source": "lean/PSem_RecordChain.lean",
+      "imports": [
+        "PSem_TypedPrefix"
+      ]
+    },
+    {
+      "module": "PSem_Slices",
+      "source": "lean/PSem_Slices.lean",
+      "imports": [
+        "PSem_SourceCuts"
+      ]
+    },
+    {
+      "module": "PSem_Lenses",
+      "source": "lean/PSem_Lenses.lean",
+      "imports": [
+        "PSem_Slices"
+      ]
+    },
+    {
+      "module": "PSem_Control",
+      "source": "lean/PSem_Control.lean",
+      "imports": [
+        "PSem_Lenses"
+      ]
+    },
+    {
+      "module": "PSem_Rows",
+      "source": "lean/PSem_Rows.lean",
+      "imports": [
+        "OraclePortCompactDraft"
+      ]
+    },
+    {
+      "module": "PSem_Shapes",
+      "source": "lean/PSem_Shapes.lean",
+      "imports": [
+        "PSem_Rows",
+        "S1NativeCompactModelV1",
+        "ExtractedRowShape"
+      ]
+    },
+    {
+      "module": "PSem_Expand",
+      "source": "lean/PSem_Expand.lean",
+      "imports": [
+        "MultiproofConeExpandModel"
+      ]
+    },
+    {
+      "module": "PSem_Values",
+      "source": "lean/PSem_Values.lean",
+      "imports": [
+        "PSem_Expand",
+        "S1ValuesOwnedAcceptedBytesV1"
+      ]
+    },
+    {
+      "module": "PSem_RowStep",
+      "source": "lean/PSem_RowStep.lean",
+      "imports": [
+        "PSem_Control",
+        "PSem_Shapes",
+        "PSem_Values",
+        "RecordPayloadPartition"
+      ]
+    },
+    {
+      "module": "PSem_RowControl",
+      "source": "lean/PSem_RowControl.lean",
+      "imports": [
+        "PSem_RowStep"
+      ]
+    },
+    {
+      "module": "PSem_Iterator",
+      "source": "lean/PSem_Iterator.lean",
+      "imports": [
+        "PSem_Control",
+        "S1NativeCompactModelV1"
+      ]
+    },
+    {
+      "module": "PSem_Loop",
+      "source": "lean/PSem_Loop.lean",
+      "imports": [
+        "PSem_RowControl",
+        "PSem_Iterator"
+      ]
+    },
+    {
+      "module": "PSem_Expansion",
+      "source": "lean/PSem_Expansion.lean",
+      "imports": [
+        "PSem_Loop"
+      ]
+    },
+    {
+      "module": "PSem_Lengths",
+      "source": "lean/PSem_Lengths.lean",
+      "imports": [
+        "PSem_Expansion"
+      ]
+    },
+    {
+      "module": "PSem_SourceRows",
+      "source": "lean/PSem_SourceRows.lean",
+      "imports": [
+        "PSem_RecordChain",
+        "PSem_Lengths",
+        "ExtractedPrefixFrameAgreement"
+      ]
+    },
+    {
+      "module": "PSem_Canonical",
+      "source": "lean/PSem_Canonical.lean",
+      "imports": [
+        "PSem_Expand",
+        "MultiproofConeCanonicalAppend"
+      ]
+    },
+    {
+      "module": "PSem_FieldCanonical",
+      "source": "lean/PSem_FieldCanonical.lean",
+      "imports": [
+        "PSem_Canonical",
+        "ExtractedPrefixStrictPayload",
+        "ExtractedRecordStrictCodec"
+      ]
+    },
+    {
+      "module": "PSem_Validation",
+      "source": "lean/PSem_Validation.lean",
+      "imports": [
+        "PSem_SourceRows",
+        "PSem_FieldCanonical"
+      ]
+    },
+    {
+      "module": "PSem_Strict",
+      "source": "lean/PSem_Strict.lean",
+      "imports": [
+        "PSem_Validation",
+        "PSem_Canonical"
+      ]
+    },
+    {
+      "module": "PSem_SemanticRows",
+      "source": "lean/PSem_SemanticRows.lean",
+      "imports": [
+        "PSem_Strict"
+      ]
+    },
+    {
+      "module": "PSem_Accepted",
+      "source": "lean/PSem_Accepted.lean",
+      "imports": [
+        "Tx1Q_Accepted",
+        "PSem_SemanticRows"
+      ]
+    },
+    {
+      "module": "PAln_Reselect",
+      "source": "lean/PAln_Reselect.lean",
+      "imports": [
+        "PSem_Accepted"
+      ]
+    },
+    {
+      "module": "PAln_Borrowed",
+      "source": "lean/PAln_Borrowed.lean",
+      "imports": [
+        "PSem_SourceCuts",
+        "CurrentPreparedScratchReachability"
+      ]
+    },
+    {
+      "module": "PAln_OpeningReach",
+      "source": "lean/PAln_OpeningReach.lean",
+      "imports": [
+        "PAln_Borrowed"
+      ]
+    },
+    {
+      "module": "PAln_OpeningStages",
+      "source": "lean/PAln_OpeningStages.lean",
+      "imports": [
+        "PAln_OpeningReach"
+      ]
+    },
+    {
+      "module": "PSem_Root",
+      "source": "lean/PSem_Root.lean",
+      "imports": [
+        "PSem_SemanticRows"
+      ]
+    },
+    {
+      "module": "PSem_RoundCalls",
+      "source": "lean/PSem_RoundCalls.lean",
+      "imports": [
+        "ExtractedSemanticRoundsModel",
+        "ExtractedDigest32Begin"
+      ]
+    },
+    {
+      "module": "PSem_SemanticTrace",
+      "source": "lean/PSem_SemanticTrace.lean",
+      "imports": [
+        "PSem_RoundCalls",
+        "PSem_SourceCuts",
+        "ExtractedSourceFull25Frames",
+        "S1SemanticFinishBoundsV1"
+      ]
+    },
+    {
+      "module": "PAln_SourceRun",
+      "source": "lean/PAln_SourceRun.lean",
+      "imports": [
+        "PAln_OpeningStages",
+        "PSem_Root",
+        "PSem_SemanticRows",
+        "PSem_SemanticTrace"
+      ]
+    },
+    {
+      "module": "PAln_RunFacts",
+      "source": "lean/PAln_RunFacts.lean",
+      "imports": [
+        "PAln_SourceRun",
+        "PSem_Root",
+        "PSem_SemanticRows",
+        "PSem_SemanticTrace"
+      ]
+    },
+    {
+      "module": "PAln_RowBounds",
+      "source": "lean/PAln_RowBounds.lean",
+      "imports": [
+        "PSem_SemanticRows"
+      ]
+    },
+    {
+      "module": "PAln_FieldRead",
+      "source": "lean/PAln_FieldRead.lean",
+      "imports": [
+        "PAln_RowBounds",
+        "R1FoldedLeafCodec"
+      ]
+    },
+    {
+      "module": "PAln_LowRead",
+      "source": "lean/PAln_LowRead.lean",
+      "imports": [
+        "PAln_FieldRead"
+      ]
+    },
+    {
+      "module": "PAln_SequenceRead",
+      "source": "lean/PAln_SequenceRead.lean",
+      "imports": [
+        "PAln_LowRead",
+        "R1SelectedFieldSequenceCodec"
+      ]
+    },
+    {
+      "module": "PAln_SemanticLayout",
+      "source": "lean/PAln_SemanticLayout.lean",
+      "imports": [
+        "PAln_SequenceRead"
+      ]
+    },
+    {
+      "module": "PAln_CircleDecode",
+      "source": "lean/PAln_CircleDecode.lean",
+      "imports": [
+        "PAln_SemanticLayout"
+      ]
+    },
+    {
+      "module": "PAln_Transcript",
+      "source": "lean/PAln_Transcript.lean",
+      "imports": [
+        "PAln_RowBounds"
+      ]
+    },
+    {
+      "module": "ExtractedSourceSemanticSampler",
+      "source": "docs/research/100bit-spend-path-20261013/lean/bridge-selected-current-20261018/ExtractedSourceSemanticSampler.lean",
+      "imports": [
+        "ExtractedDigest32SamplerTransport",
+        "ExtractedSourceFull25Frames",
+        "R0P.SemD2"
+      ]
+    },
+    {
+      "module": "RawSourceLiteralSamplerStep",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceLiteralSamplerStep.lean",
+      "imports": [
+        "ExtractedSourceSemanticSampler",
+        "ExtractedSourceDigestOracle",
+        "R1UnifiedPayloadStep",
+        "R1UnifiedPayloadValue",
+        "R1LiteralTranscript",
+        "R1SelectedTranscriptParams"
+      ]
+    },
+    {
+      "module": "RawSourceLiteralTraceLift",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceLiteralTraceLift.lean",
+      "imports": [
+        "RawSourceLiteralSamplerStep",
+        "ExtractedSourceFull25Frames",
+        "R1LiteralTranscript",
+        "R1SelectedTranscriptParams"
+      ]
+    },
+    {
+      "module": "ExtractedPrefixTypedFullCurrent",
+      "source": "docs/research/100bit-spend-path-20261013/lean/bridge-typedfull-current-20261017/ExtractedPrefixTypedFullCurrent.lean",
+      "imports": [
+        "ExtractedPrefixParseCore",
+        "ExtractedPrefixTypedFull"
+      ]
+    },
+    {
+      "module": "ExtractedSourceFull25Typed",
+      "source": "docs/research/100bit-spend-path-20261013/lean/bridge-typedfull-current-20261017/ExtractedSourceFull25Typed.lean",
+      "imports": [
+        "ExtractedSourceFull25Frames",
+        "ExtractedPrefixTypedFullCurrent"
+      ]
+    },
+    {
+      "module": "RawSourceLiteralInitialCall",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceLiteralInitialCall.lean",
+      "imports": [
+        "RawSourceLiteralSamplerStep",
+        "RawSourceLiteralTraceLift",
+        "ExtractedSourceFull25Typed",
+        "R1LiteralSemanticCodecBridge",
+        "R1LiteralByteSampler",
+        "R1SelectedTranscriptParams"
+      ]
+    },
+    {
+      "module": "PAln_SemanticRead",
+      "source": "lean/PAln_SemanticRead.lean",
+      "imports": [
+        "RawSourceLiteralInitialCall"
+      ]
+    },
+    {
+      "module": "PAln_TypedRows",
+      "source": "lean/PAln_TypedRows.lean",
+      "imports": [
+        "PAln_Transcript",
+        "PAln_SemanticRead"
+      ]
+    },
+    {
+      "module": "PAln_AlignedRead",
+      "source": "lean/PAln_AlignedRead.lean",
+      "imports": [
+        "PAln_TypedRows"
+      ]
+    },
+    {
+      "module": "PAln_Records",
+      "source": "lean/PAln_Records.lean",
+      "imports": [
+        "PAln_CircleDecode",
+        "PAln_AlignedRead"
+      ]
+    },
+    {
+      "module": "PAln_Ready",
+      "source": "lean/PAln_Ready.lean",
+      "imports": [
+        "PAln_AlignedRead"
+      ]
+    },
+    {
+      "module": "PAln_LiteralPrefix",
+      "source": "lean/PAln_LiteralPrefix.lean",
+      "imports": [
+        "PAln_Records",
+        "PAln_Ready"
+      ]
+    },
+    {
+      "module": "PAln_SubSlice",
+      "source": "lean/PAln_SubSlice.lean",
+      "imports": [
+        "PAln_RowBounds"
+      ]
+    },
+    {
+      "module": "PAln_OpeningDecode",
+      "source": "lean/PAln_OpeningDecode.lean",
+      "imports": [
+        "PAln_SequenceRead",
+        "PAln_SubSlice"
+      ]
+    },
+    {
+      "module": "PAln_RowKappa",
+      "source": "lean/PAln_RowKappa.lean",
+      "imports": [
+        "PAln_OpeningDecode"
+      ]
+    },
+    {
+      "module": "PAln_RowFirst",
+      "source": "lean/PAln_RowFirst.lean",
+      "imports": [
+        "PAln_OpeningDecode"
+      ]
+    },
+    {
+      "module": "PAln_RowLast",
+      "source": "lean/PAln_RowLast.lean",
+      "imports": [
+        "PAln_OpeningDecode"
+      ]
+    },
+    {
+      "module": "PAln_DataRead",
+      "source": "lean/PAln_DataRead.lean",
+      "imports": [
+        "PAln_LiteralPrefix",
+        "PAln_RowKappa",
+        "PAln_RowFirst",
+        "PAln_RowLast"
+      ]
+    },
+    {
+      "module": "PAln_WhenAligned",
+      "source": "lean/PAln_WhenAligned.lean",
+      "imports": [
+        "PAln_DataRead",
+        "PSem_TypedPrefix"
+      ]
+    },
+    {
+      "module": "PAln_SelectedAccepted",
+      "source": "lean/PAln_SelectedAccepted.lean",
+      "imports": [
+        "PSem_Accepted",
+        "PAln_Reselect",
+        "PAln_RunFacts",
+        "PAln_WhenAligned",
+        "PSem_SemanticRows"
+      ]
+    },
+    {
+      "module": "RawSourceDigestLog",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceDigestLog.lean",
+      "imports": [
+        "ExtractedSourceDigestAddresses"
+      ]
+    },
+    {
+      "module": "RawSourceGlobalOracleCoupling",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceGlobalOracleCoupling.lean",
+      "imports": [
+        "RawSourceDigestLog",
+        "RawSourceLiteralTraceLift"
+      ]
+    },
+    {
+      "module": "RawSourceGlobalOracleInitial",
+      "source": "docs/research/100bit-spend-path-20261013/lean/RawSourceGlobalOracleInitial.lean",
+      "imports": [
+        "RawSourceGlobalOracleCoupling",
+        "R1LiteralByteSampler"
+      ]
+    },
+    {
+      "module": "PAln_Public",
+      "source": "lean/PAln_Public.lean",
+      "imports": [
+        "PAln_SelectedAccepted",
+        "RawSourceGlobalOracleInitial"
+      ]
+    },
+    {
+      "module": "PAln_Arithmetic",
+      "source": "lean/PAln_Arithmetic.lean",
+      "imports": [
+        "PSem_Control"
+      ]
+    },
+    {
+      "module": "PAln_Offsets",
+      "source": "lean/PAln_Offsets.lean",
+      "imports": [
+        "PSem_SourceCuts",
+        "PAln_Arithmetic"
+      ]
+    },
+    {
+      "module": "PAln_ViewCuts",
+      "source": "lean/PAln_ViewCuts.lean",
+      "imports": [
+        "PAln_Offsets"
+      ]
+    },
+    {
+      "module": "PAln_Physical",
+      "source": "lean/PAln_Physical.lean",
+      "imports": [
+        "PAln_ViewCuts"
+      ]
+    },
+    {
+      "module": "PAln_ChallengeRows",
+      "source": "lean/PAln_ChallengeRows.lean",
+      "imports": [
+        "PAln_SourceRun",
+        "PAln_TypedRows"
+      ]
+    },
+    {
+      "module": "PAln_Carrier",
+      "source": "lean/PAln_Carrier.lean",
+      "imports": [
+        "PAln_ChallengeRows",
+        "PAln_DataRead"
+      ]
+    },
+    {
+      "module": "PAln_Bootstrap",
+      "source": "lean/PAln_Bootstrap.lean",
+      "imports": [
+        "PAln_Public",
+        "PAln_Physical",
+        "PAln_Carrier",
+        "PSem_TypedPrefix"
+      ]
+    }
+  ],
+  "unresolved": [
+    "AspisR1PrefixAggregateParser.Funs",
+    "AspisR1RecordParser.Funs",
+    "AspisR1RowShape.Funs",
+    "Mathlib.Tactic.IntervalCases",
+    "S1ValuesOwnedAcceptedBytesV1",
+    "R0P.SemD2"
+  ],
+  "objects": {
+    "PAln_RowKappa": null,
+    "PSem_Expand": null,
+    "PAln_OpeningReach": null,
+    "PAln_RowLast": null,
+    "PAln_TypedRows": null,
+    "RawSourceGlobalOracleInitial": null,
+    "PAln_SubSlice": null,
+    "ExtractedPrefixSemanticLow": null,
+    "PSem_RoundCalls": null,
+    "PAln_SequenceRead": null,
+    "PAln_OpeningDecode": null,
+    "PSem_Iterator": null,
+    "PSem_Strict": null,
+    "StrictLowChunkCodec": null,
+    "PSem_Root": null,
+    "PAln_Transcript": null,
+    "PAln_LiteralPrefix": null,
+    "ExtractedRecordByteValue": null,
+    "PSem_Expansion": null,
+    "PAln_ViewCuts": null,
+    "PSem_RecordChain": null,
+    "PAln_OpeningStages": null,
+    "PSem_FieldCanonical": null,
+    "PSem_Canonical": null,
+    "ExtractedRowShape": null,
+    "PSem_Shapes": null,
+    "PAln_RunFacts": null,
+    "PAln_RowFirst": null,
+    "PAln_Reselect": null,
+    "PSem_SemanticRows": null,
+    "ExtractedPrefixTypedFull": null,
+    "ExtractedSourceFull25Typed": null,
+    "ExtractedPrefixChunkOrder": null,
+    "PSem_TypedPrefix": null,
+    "ExtractedRecordStrictLow": null,
+    "PAln_RowBounds": null,
+    "RawSourceLiteralTraceLift": null,
+    "PAln_SelectedAccepted": null,
+    "PAln_ChallengeRows": null,
+    "ExtractedPrefixStrictPayload": null,
+    "ExtractedPrefixFieldAgreement": null,
+    "PSem_RowStep": null,
+    "PAln_Arithmetic": null,
+    "PSem_Lengths": null,
+    "PSem_SourceRows": null,
+    "PAln_AlignedRead": null,
+    "PAln_Offsets": null,
+    "PAln_FieldRead": null,
+    "PSem_Values": null,
+    "PAln_CircleDecode": null,
+    "PSem_SemanticTrace": null,
+    "PAln_WhenAligned": null,
+    "PAln_Carrier": null,
+    "ExtractedRecordHighZero": null,
+    "RawSourceDigestLog": null,
+    "PAln_Borrowed": null,
+    "RawSourceLiteralInitialCall": null,
+    "ExtractedSourceSemanticSampler": null,
+    "ExtractedRecordStrictCodec": null,
+    "PSem_Slices": null,
+    "R1RecordLengthCodec": null,
+    "PAln_LowRead": null,
+    "PAln_Physical": null,
+    "RecordPayloadPartition": null,
+    "RawSourceLiteralSamplerStep": null,
+    "ExtractedRecordFraming": null,
+    "PSem_Accepted": null,
+    "PAln_Public": null,
+    "ExtractedRecordPayloadSoundness": null,
+    "R1RecordParserModel": null,
+    "PAln_SourceRun": null,
+    "PSem_Loop": null,
+    "ExtractedPrefixParserAgreement": null,
+    "RawSourceGlobalOracleCoupling": null,
+    "ExtractedPrefixHeaderBytes": null,
+    "ExtractedPrefixRecordAgreement": null,
+    "ExtractedPrefixTypedFullCurrent": null,
+    "PAln_SemanticRead": null,
+    "ExtractedPrefixCoefficients": null,
+    "PAln_Ready": null,
+    "PAln_DataRead": null,
+    "ExtractedPrefixRowPayload": null,
+    "PAln_Records": null,
+    "PSem_Validation": null,
+    "PSem_Control": null,
+    "PAln_Bootstrap": null,
+    "ExtractedPrefixFrameAgreement": null,
+    "ExtractedPrefixLoopMap": null,
+    "PSem_Lenses": null,
+    "PAln_SemanticLayout": null,
+    "ExtractedRecordValidator": null,
+    "PSem_Rows": null,
+    "PSem_RowControl": null,
+    "PSem_SourceCuts": null
+  }
+}
