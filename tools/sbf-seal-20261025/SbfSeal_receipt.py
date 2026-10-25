@@ -31,6 +31,9 @@ def main():
                     import SbfSeal_review
                     SbfSeal_review.main()
                     result=types.SimpleNamespace(testsRun=0,failures=[],errors=[],wasSuccessful=lambda:True)
+                elif label.endswith('-audit'):
+                    import SbfSeal_audit
+                    result=SbfSeal_audit.main()
                 else:
                     import SbfSeal_tests
                     suite=unittest.defaultTestLoader.loadTestsFromModule(SbfSeal_tests)

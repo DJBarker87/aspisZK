@@ -266,6 +266,8 @@ class Synthetic(unittest.TestCase):
         effects = []
         with patch.object(s.os,'mkdir',side_effect=lambda *args,**kwargs: effects.append(args)):
             with self.assertRaises(s.Denied): s.privileged_entrypoint()
+            with patch.object(s,'APPROVED_MANIFEST_SHA256',('arbitrary-edit',)):
+                with self.assertRaises(s.Denied): s.privileged_entrypoint()
             with self.assertRaises(s.Denied): a.fresh_host_admission()
             with self.assertRaises(s.Denied): b.linux_setup()
         self.assertEqual(effects, [])
