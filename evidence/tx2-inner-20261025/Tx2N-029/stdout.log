@@ -1,0 +1,124 @@
+Tx2N_Reserved.lean:20:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if i < (↑s).length then ?m.117 else ?m.118
+in the target expression
+  (if h : i < ↑s.len then ok (some s[i], { slice := s, i := i + 1 }) else ok (none, { slice := s, i := i })) =
+    ok (some (↑s)[i], { slice := s, i := i + 1 })
+
+s : Slice U8
+rest : core.slice.iter.Iter U8
+fuel : ℕ
+ih :
+  ∀ (i : ℕ),
+    (↑s).length - i ≤ fuel →
+      headerLoop fuel { slice := s, i := i } = ok (false, rest) →
+        ∀ (j : ℕ) (hj : j < (↑s).length), i ≤ j → (↑s)[j] = 0#u8
+i : ℕ
+enough : (↑s).length - i ≤ fuel + 1
+scan : headerLoop (fuel + 1) { slice := s, i := i } = ok (false, rest)
+j : ℕ
+hj : j < (↑s).length
+lo : i ≤ j
+room : i < (↑s).length
+⊢ (if h : i < ↑s.len then ok (some s[i], { slice := s, i := i + 1 }) else ok (none, { slice := s, i := i })) =
+    ok (some (↑s)[i], { slice := s, i := i + 1 })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑a
+Tx2N_Reserved.lean:26:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑s)[i] != 0#u8
+in the target expression
+  (let (value, rest) := (some (↑s)[i], { slice := s, i := i + 1 })
+    match value with
+    | none => ok (false, rest)
+    | some b => if (b != 0#u8) = true then ok (true, rest) else headerLoop fuel rest) =
+    ok (false, rest)
+
+s : Slice U8
+rest : core.slice.iter.Iter U8
+fuel : ℕ
+ih :
+  ∀ (i : ℕ),
+    (↑s).length - i ≤ fuel →
+      headerLoop fuel { slice := s, i := i } = ok (false, rest) →
+        ∀ (j : ℕ) (hj : j < (↑s).length), i ≤ j → (↑s)[j] = 0#u8
+i : ℕ
+enough : (↑s).length - i ≤ fuel + 1
+j : ℕ
+hj : j < (↑s).length
+lo : i ≤ j
+room : i < (↑s).length
+scan :
+  (let (value, rest) := (some (↑s)[i], { slice := s, i := i + 1 })
+    match value with
+    | none => ok (false, rest)
+    | some b => if (b != 0#u8) = true then ok (true, rest) else headerLoop fuel rest) =
+    ok (false, rest)
+next : core.slice.iter.IteratorSliceIter.next { slice := s, i := i } = ok (some (↑s)[i], { slice := s, i := i + 1 })
+nz : ¬(↑s)[i] = 0#u8
+bit : ((↑s)[i] != 0#u8) = true
+⊢ False
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+Tx2N_Reserved.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑s)[i] != 0#u8
+in the target expression
+  (let (value, rest) := (some (↑s)[i], { slice := s, i := i + 1 })
+    match value with
+    | none => ok (false, rest)
+    | some b => if (b != 0#u8) = true then ok (true, rest) else headerLoop fuel rest) =
+    ok (false, rest)
+
+case succ
+s : Slice U8
+rest : core.slice.iter.Iter U8
+fuel : ℕ
+ih :
+  ∀ (i : ℕ),
+    (↑s).length - i ≤ fuel →
+      headerLoop fuel { slice := s, i := i } = ok (false, rest) →
+        ∀ (j : ℕ) (hj : j < (↑s).length), i ≤ j → (↑s)[j] = 0#u8
+i : ℕ
+enough : (↑s).length - i ≤ fuel + 1
+j : ℕ
+hj : j < (↑s).length
+lo : i ≤ j
+room : i < (↑s).length
+scan :
+  (let (value, rest) := (some (↑s)[i], { slice := s, i := i + 1 })
+    match value with
+    | none => ok (false, rest)
+    | some b => if (b != 0#u8) = true then ok (true, rest) else headerLoop fuel rest) =
+    ok (false, rest)
+next : core.slice.iter.IteratorSliceIter.next { slice := s, i := i } = ok (some (↑s)[i], { slice := s, i := i + 1 })
+zero : (↑s)[i] = 0#u8
+⊢ (↑s)[j] = 0#u8
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+'AspisR1.Tx2N_Reserved.loop_zeros' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Tx2N_Reserved.zeros' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

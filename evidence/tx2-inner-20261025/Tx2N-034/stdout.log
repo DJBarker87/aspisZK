@@ -1,0 +1,85 @@
+Tx2N_DecodeHeader.lean:15:25: warning: `List.extract_eq_drop_take` has been deprecated: Use `List.extract_eq_take_drop` instead
+
+Note: The updated constant has a different type:
+  ∀ {α : Type u} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+instead of
+  ∀ {α : Type u_1} {l : List α} {start stop : ℕ}, l.extract start stop = List.take (stop - start) (List.drop start l)
+Tx2N_DecodeHeader.lean:59:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (↑ck)[_a] = 2#u8
+Error: Application type mismatch: The argument
+  eight
+has type
+  ↑8#usize = 8
+but is expected to have type
+  _a = 8
+in the application
+  congrArg (fun _a => _a < (↑ck).length) eight
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+reserved : Bool
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+ck proof pub : Slice U8
+hash : Hash
+p : verifier.Prepared
+a : verifier.Accumulator
+next : a.next = 10#usize
+success :
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, a))
+magic reservedBytes : Slice U8
+nextByte : U8
+iterator rest : core.slice.iter.Iter U8
+length : (↑ck).length = 1768
+magicRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) ck { «end» := 8#usize } = ok magic
+magicEq : ↑magic = [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+tagRead : ck.index_usize 8#usize = ok 2#u8
+nextRead : ck.index_usize 9#usize = ok 10#u8
+versionRead : ck.index_usize 10#usize = ok 1#u8
+reservedRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok reservedBytes
+iterRead : core.slice.Slice.iter reservedBytes = ok iterator
+scan : CheckpointBytes4Ops.headerAny { slice := reservedBytes, i := 0 } = ok (false, rest)
+eight : ↑8#usize = 8
+nine : ↑9#usize = 9
+ten : ↑10#usize = 10
+front : ↑magic = List.take 8 ↑ck
+suffixRun :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) ck
+      { start := 11#usize, «end» := 16#usize } =
+    ok (MultiproofConeSlices.sub ck 11#usize 16#usize)
+suffixEq : reservedBytes = MultiproofConeSlices.sub ck 11#usize 16#usize
+suffix : ↑reservedBytes = List.take 5 (List.drop 11 ↑ck)
+reservedSize : (↑reservedBytes).length = 5
+iter : iterator = { slice := reservedBytes, i := 0 }
+zero : ↑reservedBytes = List.replicate 5 0#u8
+fields : OraclePortCkptAbiSourceFields.Fields (CheckpointBytes4Ops.ops reserved) ck transport.Variant.S2 p a
+sameByte : fields.nextByte = nextByte
+cast : UScalar.cast UScalarTy.Usize nextByte = a.next
+nextVal : ↑nextByte = 10
+nextEq : nextByte = 10#u8
+t8 : (↑ck)[↑8#usize] = 2#u8
+t9 : (↑ck)[↑9#usize] = 10#u8
+t10 : (↑ck)[↑10#usize] = 1#u8
+⊢ slice (bytesOf ↑ck) 0 16 = OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ck
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑ck
+'AspisR1.Tx2N_DecodeHeader.range_to' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.byte' depends on axioms: [propext]
+'AspisR1.Tx2N_DecodeHeader.cast_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.Tx2N_DecodeHeader.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
