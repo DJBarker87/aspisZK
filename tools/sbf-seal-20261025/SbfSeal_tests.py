@@ -9,6 +9,7 @@ import stat
 import tempfile
 import unittest
 from unittest.mock import patch
+import types
 import SbfSeal_setup as s
 import SbfSeal_admission as a
 import SbfSeal_boundary as b
@@ -330,6 +331,26 @@ class Synthetic(unittest.TestCase):
             bad=copy.deepcopy(obs); bad[key]=value
             with self.subTest(field=key):
                 with self.assertRaises(s.Denied): b.check_guest(bad,expect)
+
+    def test_exact_postexec_fd_text_with_mock_os_only(self):
+        env={'errno':errno}
+        exec(s.FD_AUDIT_TEXT,env)
+        audit=env['SbfSeal_fds']
+        def check_fd(fd):
+            if fd==3: raise OSError(errno.EBADF,'closed inspection fd')
+            return object()
+        closed=types.SimpleNamespace(listdir=lambda path:['0','1','2','3'],fstat=check_fd)
+        self.assertEqual(audit(closed),[0,1,2])
+        # A real surviving fd3 is never silently permitted, whatever its type.
+        surviving=types.SimpleNamespace(listdir=lambda path:['0','1','2','3'],fstat=lambda fd:object())
+        self.assertEqual(audit(surviving),[0,1,2,3])
+        high=types.SimpleNamespace(listdir=lambda path:['0','1','2','9000'],fstat=lambda fd:object())
+        self.assertEqual(audit(high),[0,1,2,9000])
+        def io_error(fd): raise OSError(errno.EIO,'inspection failed')
+        broken=types.SimpleNamespace(listdir=lambda path:['3'],fstat=io_error)
+        with self.assertRaises(OSError): audit(broken)
+        invalid=types.SimpleNamespace(listdir=lambda path:['socket:3'],fstat=lambda fd:object())
+        with self.assertRaises(RuntimeError): audit(invalid)
 
     def test_trace_fixture_obstructions(self):
         data=json.loads((Path(__file__).parents[2]/'evidence/sbf-seal-20261025/SbfSeal-trace-fixtures.json').read_text())

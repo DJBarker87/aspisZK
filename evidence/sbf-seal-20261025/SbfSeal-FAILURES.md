@@ -22,3 +22,11 @@ f29c3e0e8c historical ResourceRssGO handoff describes unstaged guard import fail
 manager's current authoritative 468 assessment supersedes it: RLIM_INFINITY
 Mac/Linux mismatch failed BEFORE GO; portability repair36049 pending separately.
 Both records imply no current fresh GO authority. No live 36049 files read.
+
+Source review after successful v2 found a non-executed approach that was too weak:
+postexec fstat(range(3,256)) could miss inherited descriptors >=256 after limit
+lowering. Replaced with exact proc fd inventory in the literal probe, with only
+EBADF entries (closed listdir inspection descriptors) discarded. Actual fd3 or
+high fd remains a survivor and rejects. Other fstat errors propagate. Requires
+single-threaded guest and verified private proc; both remain actual Linux gates.
+No claim that lowering RLIMIT_NOFILE closes pre-existing descriptors.
