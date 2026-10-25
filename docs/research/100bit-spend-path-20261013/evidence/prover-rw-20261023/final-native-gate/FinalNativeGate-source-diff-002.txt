@@ -1,0 +1,343 @@
+--- tools/resource-rss-go-v3-20261025/ResourceRssGOv3_sources.py
++++ FinalNativeGate_policy.py
+@@ -3,7 +3,6 @@
+ import hashlib
+ import json
+ from pathlib import Path
+-import subprocess
+ import sys
+ import types
+ 
+@@ -23,16 +22,10 @@
+ def digest(raw):
+     return dict(sha256=hashlib.sha256(raw).hexdigest(),size=len(raw))
+ 
+-def bundle():
+-    sources={}
+-    for key,(rev,path) in SPECS.items():
+-        raw=subprocess.check_output(['git','show',REVISIONS[rev]+':'+path],cwd=ROOT)
+-        sources[key]=dict(revision=REVISIONS[rev],path=path,source=raw.decode(),**digest(raw))
+-    return sources
+ 
+ def load_bundle():
+-    path=HERE/'ResourceRssGOv3_reviewed.json'
+-    data=json.loads(path.read_bytes()) if path.exists() else bundle()
++    path=HERE/'FinalNativeGate_reviewed.json'
++    data=json.loads(path.read_bytes())  # no runtime Git fallback
+     if set(data)!=set(SPECS):raise ValueError('reviewed source set drift')
+     for key,(rev,path) in SPECS.items():
+         entry=data[key]
+--- tools/resource-rss-go-v3-20261025/ResourceRssGOv3_adapter.py
++++ FinalNativeGate_adapter.py
+@@ -3,11 +3,11 @@
+ import os
+ from pathlib import Path
+ import subprocess
+-from ResourceRssGOv3_sources import load
++from FinalNativeGate_policy import load
+ 
+ c, go, identity, inventory, policy = load()
+ EXPECTED=dict(high=3*c.GIB,cap=4*c.GIB,swap_max=0,tasks_max=64)
+-UNIT='resource-rss-go-v3-20261025'
++UNIT='FinalNativeGate-060'
+ COMMANDS=[['ps','-e','-o','pid,ppid,rss,comm,cgroup'],
+           ['systemctl','list-units','--type=service','--state=running','--no-pager','--no-legend'],
+           ['docker','ps','-q']]
+--- tools/resource-rss-go-v3-20261025/ResourceRssGOv3_guard.py
++++ FinalNativeGate_guard.py
+@@ -1,4 +1,4 @@
+-"""Sampled metadata-only RSS watchdog. No subprocesses, rlimits or VSize cap.
++"""Sampled fixed-job RSS watchdog. No subprocesses, rlimits or VSize cap.
+ 
+ Not a continuous physical-memory theorem. Cgroup controls remain authoritative.
+ The one persistent thread exists before and throughout both collector snapshots.
+@@ -9,9 +9,9 @@
+ import threading
+ import time
+ 
+-BUDGET = 512 * 2**20
++BUDGET = 4 * 2**30
+ INTERVAL = 0.02
+-MAX_SAMPLES = 8192
++MAX_SAMPLES = 32768
+ MAX_LINEAGE = 256
+ 
+ class GuardError(RuntimeError):
+@@ -108,7 +108,7 @@
+     def __init__(self, proc=None, pid=None, notify=None):
+         self.proc = proc or Proc()
+         self.pid = os.getpid() if pid is None else pid
+-        self.notify = notify or (lambda: os.kill(self.pid, signal.SIGUSR1))
++        self.notify = notify or (lambda: signal.raise_signal(signal.SIGUSR1))
+         self.stop_event = threading.Event()
+         self.ready = threading.Event()
+         self.samples = []
+@@ -162,7 +162,7 @@
+         self.samples.append(dict(monotonic=time.monotonic(),rss_bytes=total,
+                                  processes=sorted(live),process_rss=live))
+         if total > BUDGET:
+-            raise GuardError('sampled aggregate metadata RSS exceeds 512MiB')
++            raise GuardError('sampled aggregate job RSS exceeds 4GiB')
+ 
+     def check(self):
+         if self.error:
+@@ -209,7 +209,7 @@
+         self.stopped = time.monotonic()
+         if failed:
+             self.cancel_owned()
+-        return dict(kind='sampled aggregate PROCESS RSS; TGID once; metadata only; not continuous',
++        return dict(kind='sampled aggregate PROCESS RSS; TGID once; fixed job; not continuous',
+                     budget_bytes=BUDGET,interval_seconds=INTERVAL,max_samples=MAX_SAMPLES,
+                     max_lineage=MAX_LINEAGE,peak_sampled_rss_bytes=self.peak,
+                     samples=self.samples,lineage=self.lineage,error=self.error,
+--- tools/resource-rss-go-v3-20261025/ResourceRssGOv3_host.py
++++ FinalNativeGate_observe.py
+@@ -1,44 +1,25 @@
+-"""Metadata-only one-shot host runner. No compiler, consumer, or allocation probe."""
+-import contextlib
+-import datetime
+-import fcntl
+-import hashlib
+-import json
+-import os
++"""Reviewed observation functions; concrete collector, no marker/GO callback."""
++import contextlib, hashlib, json, os, resource, shutil, struct, subprocess, sys, sysconfig, time
+ from pathlib import Path
+-import resource
+-import runpy
+-import shutil
+-import signal
+-import subprocess
+-import struct
+-import sys
+-import sysconfig
+-import time
++import FinalNativeGate_adapter as adapter
++HERE=Path(__file__).resolve().parent
++EXPECTED=dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
++ACTIVE_GUARD=None
+ 
+-HERE = Path(__file__).resolve().parent
+-sys.path.insert(0,str(HERE))
+-import ResourceRssGOv3_adapter as adapter
+-from ResourceRssGOv3_guard import Guard, GuardError, inherited_limits, check_limits
+-ACTIVE_GUARD = None
+-EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
+-UNIT = 'resource-rss-go-v3-20261025'
+-EPOCH = 'ResourceRssGOv3-20261025-epoch1'
+-STAGE = '/home/dombarker/project-offloads/codex-cx-resource-rss-go-v3-20261025'
+-ENV_BINARY = '/usr/bin/env'
+-PYTHON_BINARY = '/usr/bin/python3'
+-LOCK = '/tmp/aspis-r0-lean.lock'
+-MODE = 'limited ResourceStability20261025-v1 policy; one metadata epoch only; no consumer'
+-ENV_KEYS = {'HOME','USER','LOGNAME','PATH','LANG','XDG_RUNTIME_DIR','DBUS_SESSION_BUS_ADDRESS'}
+-
++def save(name,value):
++    # One-shot fixed packet. Durable, exclusive, no overwrite or caller directory.
++    path=HERE/'FinalNativeGate-packet' / name
++    with path.open('x') as out:
++        json.dump(value,out,sort_keys=True,indent=2);out.write('\n');out.flush();os.fsync(out.fileno())
++    fd=os.open(path.parent,os.O_RDONLY|os.O_DIRECTORY)
++    try:os.fsync(fd)
++    finally:os.close(fd)
+ 
+ def digest(data):
+     return dict(sha256=hashlib.sha256(data).hexdigest(), size=len(data))
+ 
+-
+ def filepin(path):
+     return digest(Path(path).read_bytes())
+-
+ 
+ def runtime_pins():
+     # Pure ELF metadata inspection: no ldd/native helper execution. Reject new
+@@ -86,64 +67,6 @@
+                 env_elf_contract=dict(interpreter=interp,needed=needed),
+                 env_dependencies={p:filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})
+ 
+-
+-def save(name, value):
+-    # All raw captures stay intact on the host. Local export applies size policy.
+-    p=HERE/'capture'/name
+-    p.parent.mkdir(exist_ok=True)
+-    with p.open('x') as out:
+-        json.dump(value,out,sort_keys=True,indent=2)
+-        out.write('\n')
+-
+-
+-def verify_environment(expected):
+-    if set(expected) != ENV_KEYS or dict(os.environ) != expected:
+-        # Only names and expected-key observed-value digests; never dirty values.
+-        detail=dict(missing_keys=sorted(ENV_KEYS-set(os.environ)),
+-                    unexpected_keys=sorted(set(os.environ)-ENV_KEYS),
+-                    expected_key_value_digests={k:digest(os.environ[k].encode()) if k in os.environ else None for k in sorted(ENV_KEYS)})
+-        raise ValueError('environment differs from allowlist pin: '+json.dumps(detail,sort_keys=True))
+-
+-
+-def verify(manifest):
+-    if manifest.get('epoch') != EPOCH or manifest.get('stage') != STAGE or str(HERE) != STAGE:
+-        raise ValueError('epoch/stage pin drift')
+-    if manifest.get('scope_argv') != scope_argv(manifest):
+-        raise ValueError('literal scope argv pin drift')
+-    if manifest.get('mode') != MODE:raise ValueError('mode pin drift')
+-    actual={name:filepin(HERE/name) for name in manifest['files']}
+-    if actual != manifest['files']:
+-        raise ValueError('source drift')
+-    check_limits(inherited_limits(), manifest['inherited_limits'])
+-    runtime=runtime_pins()
+-    if runtime != manifest['runtime']:
+-        raise ValueError('runtime/dependency drift')
+-    verify_environment(manifest['env'])
+-    return dict(files=actual,runtime=runtime,env=dict(os.environ),mode=MODE)
+-
+-
+-def scope_argv(manifest):
+-    if set(manifest['env']) != ENV_KEYS:raise ValueError('invalid pinned env keys')
+-    return ['/usr/bin/systemd-run','--user','--scope','--unit='+UNIT,
+-            '-p','MemoryHigh=3G','-p','MemoryMax=4G','-p','MemorySwapMax=0','-p','TasksMax=64',
+-            ENV_BINARY,'-i']+[k+'='+v for k,v in sorted(manifest['env'].items())]+[
+-            PYTHON_BINARY,'-I','-B',STAGE+'/ResourceRssGOv3_host.py','go']
+-
+-
+-def flow(prospective, launch):
+-    report=prospective()
+-    if report['decision']['allowed'] is not True:
+-        return dict(terminal='PROSPECTIVE_DENY', prospective_exit=78, scope_created=False)
+-    return launch()
+-
+-
+-def go_flow(report, marker):
+-    if report['decision']['allowed'] is not True:
+-        return dict(terminal='GO_DENY', go_exit=78, marker_exit=None)
+-    marker()
+-    return dict(terminal='GO_MARKER_PASS', go_exit=0, marker_exit=0)
+-
+-
+ def collect(phase):
+     """Record every ordered filesystem/command input without changing API logic."""
+     api=adapter.__dict__
+@@ -184,7 +107,7 @@
+         Path.read_text=recorded_read
+         subprocess.run=recorded_run
+         os.scandir=recorded_scandir
+-        report=api['read_only_admission'](phase=phase)
++        report=api['read_only_admission'](phase='inside-scope' if phase=='go' else phase)
+     finally:
+         Path.read_text=read
+         subprocess.run=execute
+@@ -198,7 +121,6 @@
+         print_axioms='N/A'))
+     return report
+ 
+-
+ def controls():
+     observed=adapter.identity['self_observation']()
+     path=Path(observed['path'])
+@@ -209,7 +131,6 @@
+         try:result['values'][name]=(path/name).read_text()
+         except OSError as exc:result['values'][name]=dict(error=str(exc),errno=exc.errno)
+     return result
+-
+ 
+ def check_controls(receipt):
+     values=receipt['values']
+@@ -225,99 +146,3 @@
+     for key in ('high','max','oom','oom_kill','oom_group_kill'):
+         if events[key]!=0:raise ValueError('scope pressure event: '+key)
+     return True
+-
+-
+-def main():
+-    action=sys.argv[1]
+-    manifest=json.loads((HERE/'ResourceRssGOv3_manifest.json').read_text())
+-    start=time.monotonic()
+-    save(action+'-pre-pins.json',verify(manifest))
+-    if action=='run':
+-        with (HERE/'ResourceRssGOv3_ATTEMPTED').open('x') as sentinel:
+-            sentinel.write(EPOCH+'; new epoch 1/1; prior three epochs remain charged failures; fixed Q4GiB; transport/observation failures terminal'+chr(10))
+-    if action=='go':
+-        before_controls=controls()
+-        save('go-controls-before.json',before_controls)
+-        report=collect('inside-scope')
+-        save('go-pins.json',verify(manifest))
+-        def marker():
+-            ACTIVE_GUARD.check()
+-            # No subprocess or workload: only actual identity, after GO.
+-            save('marker.json',dict(pid=os.getpid(),cgroup=Path('/proc/self/cgroup').read_text(),identity='ResourceRssGOv3 metadata marker only',self_observation=adapter.identity['self_observation'](),go_report_pin=filepin(HERE/'capture/inside-scope-report.json'),source_manifest_pin=filepin(HERE/'ResourceRssGOv3_manifest.json')))
+-        after_controls=controls()
+-        save('go-controls-after-scan.json',after_controls)
+-        gated=report
+-        try:
+-            check_controls(before_controls);check_controls(after_controls)
+-            binding=report['decision']['scope_binding']['self_identity']
+-            for observed in (before_controls,after_controls):
+-                if {k:v for k,v in observed['self_observation'].items() if k!='reads'}!=binding:
+-                    raise ValueError('control/GO process identity drift')
+-            save('go-control-check.json',dict(allowed=True))
+-        except (KeyError,TypeError,ValueError) as exc:
+-            save('go-control-check.json',dict(allowed=False,error=str(exc)))
+-            gated=dict(decision=dict(allowed=False))
+-        result=go_flow(gated,marker)
+-        final_controls=controls()
+-        save('go-controls-after.json',final_controls)
+-        check_controls(final_controls)
+-        code=result['go_exit']
+-    elif action=='run':
+-        # One shared lock, same path/flock protocol as immutable manager launchers.
+-        # Nonblocking: a busy lock is a terminal pre-capture blocker, never a retry.
+-        with open(LOCK,'r') as lock:
+-            fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+-            save('lock.json',dict(path=LOCK,mode='LOCK_EX|LOCK_NB',held_through='prospective and scope exit',
+-                                  inode=os.fstat(lock.fileno()).st_ino))
+-            def launch():
+-                ACTIVE_GUARD.check()
+-                argv=scope_argv(manifest)
+-                save('scope-argv.json',argv)
+-                child=subprocess.Popen(argv,stdout=(HERE/'capture/scope.stdout').open('x'),stderr=(HERE/'capture/scope.stderr').open('x'),env=manifest['env'])
+-                _,status,usage=os.wait4(child.pid,0)
+-                code=os.waitstatus_to_exitcode(status)
+-                child.returncode=code
+-                save('scope-child.json',dict(argv=argv,exit=code,peak_rss_bytes=usage.ru_maxrss*1024,swap=usage.ru_nswap))
+-                return dict(terminal='SCOPE_EXIT',scope_created=True,scope_runner_exit=code,prospective_exit=0)
+-            result=flow(lambda:collect('prospective'),launch)
+-        code=0 if result.get('scope_runner_exit',78)==0 else 78
+-    else:
+-        raise ValueError('unknown action')
+-    save(action+'-post-pins.json',verify(manifest))
+-    save(action+'-exit.json',dict(**result,exit=code,wall_seconds=time.monotonic()-start,
+-        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
+-        swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,print_axioms='N/A'))
+-    return code
+-
+-def guarded_main():
+-    global ACTIVE_GUARD
+-    signal.alarm(115)  # whole metadata diagnostic, including monitor startup/pins
+-    action=sys.argv[1]
+-    initial=inherited_limits()
+-    save(action+'-inherited-limits-initial.json',initial)
+-    check_limits(initial)
+-    manifest=json.loads((HERE/'ResourceRssGOv3_manifest.json').read_text())
+-    check_limits(initial,manifest['inherited_limits'])
+-    def stop_on_guard(signum, frame):
+-        raise GuardError('resident watchdog failed; see guard receipt')
+-    signal.signal(signal.SIGUSR1,stop_on_guard)
+-    signal.signal(signal.SIGALRM,lambda signum,frame: (_ for _ in ()).throw(GuardError('overall metadata deadline')))
+-    ACTIVE_GUARD=Guard()
+-    failed=True
+-    try:
+-        ACTIVE_GUARD.start()
+-        result=main()
+-        ACTIVE_GUARD.check()
+-        check_limits(inherited_limits(),initial)
+-        failed=False
+-        return result
+-    finally:
+-        # Thread survives final collection, child exits and main's exit receipt.
+-        signal.signal(signal.SIGUSR1,signal.SIG_IGN)
+-        receipt=ACTIVE_GUARD.finish(failed=failed)
+-        save(action+'-resident-guard.json',receipt)
+-        save(action+'-inherited-limits-final.json',inherited_limits())
+-        ACTIVE_GUARD.check()
+-
+-if __name__=='__main__':
+-    raise SystemExit(guarded_main())
