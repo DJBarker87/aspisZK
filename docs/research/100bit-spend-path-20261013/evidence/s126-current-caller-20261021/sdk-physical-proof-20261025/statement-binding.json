@@ -1,0 +1,12 @@
+{
+  "schema": "focused-extractor-proof-packet-v1",
+  "before": "S1SdkReachedPreparationV1.original_sdk_reached_preparation",
+  "after": "S1SdkPhysicalProofV1.original_sdk_physical_proof",
+  "added_conjuncts": [
+    "    S2W_AccountObservations.observe S2W_ReturnedCheckpoint.encode e.metadata 3 post 0 =\n      S2W_D189Interpretation.nativeObserve L S2W_ReturnedCheckpoint.encode e.metadata 3 world e.heap.ambient 0 \u2227\n",
+    "      f.raw = e.buffers (e.handles 0).1 \u2227\n      payloadBytes S2W_ReturnedCheckpoint.encode (L.cellPayload world (L.accountData world 0))\n        (L.cellPayload world (L.accountData world 0)).descriptor.length = MultiproofConeCanonical.bytesOf f.raw.val \u2227\n      (payloadBytes S2W_ReturnedCheckpoint.encode (L.cellPayload world (L.accountData world 0))\n        (L.cellPayload world (L.accountData world 0)).descriptor.length).drop 688 = MultiproofConeCanonical.bytesOf f.proof.val \u2227\n      f.proof.val.length = 57607 \u2227 f.raw.val = f.raw.val.take 688 ++ f.proof.val \u2227\n"
+  ],
+  "new_hypotheses": [],
+  "quantifier_changes": false,
+  "native_sdk_assumptions_discharged": false
+}
