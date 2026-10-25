@@ -1,0 +1,37 @@
+RowOrder_History.lean:44:41: error(lean.unknownIdentifier): Unknown identifier `State`
+
+Note: It is not possible to treat `State` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+RowOrder_History.lean:75:17: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.RowOrder_History.reindex' does not depend on any axioms
+'AspisR1.RowOrder_History.on_d189_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.RowOrder_History.on_d189_cuts.{u_1} : ∀ {A : Type}
+  (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+  TrustedStd copy →
+    ∀ (allocator : Allocator A) (e1 e2 : Entry) (ops : AdapterRw.Ops) (native1 : S2W_ExtractionBoundary.First)
+      (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+      S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+        ∀ (program : S2W_ExtractionBoundary.Program) (data1 : Slice U8) (state1 final1 : A) (saved : alloc.vec.Vec U8)
+          (post1 : Heap (ℕ → Record)),
+          first native1 copy allocator e1 program data1 state1 = ok (core.result.Result.Ok (saved, post1, final1)) →
+            ∀ (f : FirstCut) (s : SecondCut),
+              SourceCuts ops e1.first (e2.second secondSizes) saved f s →
+                ∀ (decode : HeaderDecode) (H : Bytes → sorry),
+                  CheckpointWriterConeJoin ops decode sorry f.semantic f.pub f.proof f.split →
+                    CheckpointReaderConeJoin ops decode sorry s.pub s.proof s.checkpoint →
+                      ∀
+                        (runtime :
+                          S2X.CheckpointVersionBinding (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+                            (bytesOf ↑s.checkpoint)),
+                        P2Prime sorry f.proof f.pub s.proof s.pub →
+                          ∃ version,
+                            version.key = runtime.key ∧
+                              version.ledger = runtime.ledger ∧
+                                version.events = runtime.events ∧
+                                  bytesOf ↑s.checkpoint = bytesOf ↑saved ∧
+                                    bytesOf ↑s.proof = bytesOf ↑f.proof ∧
+                                      bytesOf ↑s.pub = bytesOf ↑f.pub ∧ List.length (bytesOf ↑saved) = 1768 :=
+fun {A} copy std allocator e1 e2 ops native1 native2 hashv extraction program data1 state1 final1 saved post1 accepted1
+    f s cuts decode H writer reader runtime p2prime =>
+  sorry (first_accepted native1 copy std allocator e1 program data1 state1 final1 saved post1 accepted1)
