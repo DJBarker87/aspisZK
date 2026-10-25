@@ -1,0 +1,1201 @@
+AuS1_Prepared.lean:14:102: error: unsolved goals
+case hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝⁴ : Std.Array U8 32#usize
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : U8
+x✝¹ x✝ : Slice U8
+x : Slice (Slice (UScalar UScalarTy.U8))
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind (Code.done b) fun s2 => do
+          let a ← effects.digest D hash s2
+          pure { state := a, hash := hash })
+      x)
+
+case hk.hk.hp.isTrue
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝⁷ : Std.Array U8 32#usize
+x✝⁶ : transcript.Transcript H
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : true = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁶.hash s3
+                      pure { state := a1, hash := x✝⁶.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 27#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.gamma block)
+            __do_jp out)
+      x)
+
+case hk.hk.hp.isFalse
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝⁷ : Std.Array U8 32#usize
+x✝⁶ : transcript.Transcript H
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : ¬true = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁶.hash s3
+                      pure { state := a1, hash := x✝⁶.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 27#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.ordinary block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝² : Std.Array U8 32#usize
+x✝¹ : transcript.Transcript H
+x✝ : aspis_core.field.WideExact × transcript.Transcript H
+x : Std.Array U8 32#usize
+⊢ Uniform hashv (Code.done x)
+
+case hk.hk.hk.hk.hk.hp.isTrue
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁰ : Std.Array U8 32#usize
+x✝⁹ : transcript.Transcript H
+x✝⁸ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁷ : Std.Array U8 32#usize
+x✝⁶ x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁸.2.hash s3
+                      pure { state := a1, hash := x✝⁸.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 28#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.gamma block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hp.isFalse
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁰ : Std.Array U8 32#usize
+x✝⁹ : transcript.Transcript H
+x✝⁸ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁷ : Std.Array U8 32#usize
+x✝⁶ x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : ¬false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁸.2.hash s3
+                      pure { state := a1, hash := x✝⁸.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 28#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.ordinary block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hk.hp.isTrue
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹¹ : Std.Array U8 32#usize
+x✝¹⁰ : transcript.Transcript H
+x✝⁹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁸ : Std.Array U8 32#usize
+x✝⁷ : Slice U8
+x✝⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁶.2.hash s3
+                      pure { state := a1, hash := x✝⁶.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 29#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.gamma block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hk.hp.isFalse
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹¹ : Std.Array U8 32#usize
+x✝¹⁰ : transcript.Transcript H
+x✝⁹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁸ : Std.Array U8 32#usize
+x✝⁷ : Slice U8
+x✝⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : ¬false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁶.2.hash s3
+                      pure { state := a1, hash := x✝⁶.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 29#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.ordinary block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hk.hk.hk.isTrue.hk.hk.hk.hk.hk.hp.isTrue
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁸ : Std.Array U8 32#usize
+x✝¹⁷ : transcript.Transcript H
+x✝¹⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁵ : Std.Array U8 32#usize
+x✝¹⁴ : Slice U8
+x✝¹³ x✝¹² : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹¹ : Usize
+h✝¹ : x✝¹¹ = 2#usize
+x✝¹⁰ : UScalar UScalarTy.Usize
+x✝⁹ : Std.Array U8 32#usize
+x✝⁸ : Slice U8
+x✝⁷ x✝⁶ : alloc.vec.Vec U8
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝¹².2.hash s3
+                      pure { state := a1, hash := x✝¹².2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 30#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.gamma block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hk.hk.hk.isTrue.hk.hk.hk.hk.hk.hp.isFalse
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁸ : Std.Array U8 32#usize
+x✝¹⁷ : transcript.Transcript H
+x✝¹⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁵ : Std.Array U8 32#usize
+x✝¹⁴ : Slice U8
+x✝¹³ x✝¹² : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹¹ : Usize
+h✝¹ : x✝¹¹ = 2#usize
+x✝¹⁰ : UScalar UScalarTy.Usize
+x✝⁹ : Std.Array U8 32#usize
+x✝⁸ : Slice U8
+x✝⁷ x✝⁶ : alloc.vec.Vec U8
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+h✝ : ¬false = true
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝¹².2.hash s3
+                      pure { state := a1, hash := x✝¹².2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (block, self1) =>
+            have __do_jp := fun out => do
+              let i ← liftM (lift (UScalar.cast UScalarTy.Usize 30#u8))
+              liftM (trace.value 4#u16 i out)
+              pure (out, self1);
+            do
+            let out ← liftM (B.sampling.ordinary block)
+            __do_jp out)
+      x)
+
+case hk.hk.hk.hk.hk.hk.hk.hk.isTrue.hk.hk.hk.hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁹ : Std.Array U8 32#usize
+x✝¹⁸ : transcript.Transcript H
+x✝¹⁷ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁶ : Std.Array U8 32#usize
+x✝¹⁵ : Slice U8
+x✝¹⁴ x✝¹³ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹² : Usize
+h✝ : x✝¹² = 2#usize
+x✝¹¹ : UScalar UScalarTy.Usize
+x✝¹⁰ : Std.Array U8 32#usize
+x✝⁹ : Slice U8
+x✝⁸ x✝⁷ : alloc.vec.Vec U8
+x✝⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind (Code.done b) fun s3 => do
+                let a1 ← effects.digest D x✝⁶.2.hash s3
+                pure { state := a1, hash := x✝⁶.2.hash })
+            b)
+          fun self1 =>
+          have a := Array.repeat 32#usize 0#u8;
+          have blocks := Array.repeat 8#usize a;
+          do
+          let s ← liftM (lift self1.state.to_slice)
+          let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+          let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+          let a1 ← effects.digest D self1.hash s2
+          let __x ← liftM (blocks.index_mut_usize 0#usize)
+          match __x with
+            | (fst, index_mut_back) => do
+              let s3 ← liftM (lift self1.state.to_slice)
+              let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+              let a2 ← effects.digest D self1.hash s5
+              have blocks1 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a2
+              let state ← liftM (blocks1.index_usize 0#usize)
+              let s6 ← liftM (lift state.to_slice)
+              let s7 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+              let a3 ← effects.digest D self1.hash s8
+              have blocks2 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a1
+              let blocks3 ← liftM (blocks2.update 1#usize a3)
+              let s9 ← liftM (lift state.to_slice)
+              let s10 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s11 ← liftM (lift (Array.make 2#usize [s9, s10] ⋯).to_slice)
+              let a4 ← effects.digest D self1.hash s11
+              let blocks4 ← liftM (blocks1.update 1#usize a4)
+              let state1 ← liftM (blocks4.index_usize 1#usize)
+              let s12 ← liftM (lift state1.to_slice)
+              let s13 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s14 ← liftM (lift (Array.make 2#usize [s12, s13] ⋯).to_slice)
+              let a5 ← effects.digest D self1.hash s14
+              let blocks5 ← liftM (blocks3.update 2#usize a5)
+              let s15 ← liftM (lift state1.to_slice)
+              let s16 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s17 ← liftM (lift (Array.make 2#usize [s15, s16] ⋯).to_slice)
+              let a6 ← effects.digest D self1.hash s17
+              let blocks6 ← liftM (blocks4.update 2#usize a6)
+              let state2 ← liftM (blocks6.index_usize 2#usize)
+              let s18 ← liftM (lift state2.to_slice)
+              let s19 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s20 ← liftM (lift (Array.make 2#usize [s18, s19] ⋯).to_slice)
+              let a7 ← effects.digest D self1.hash s20
+              let blocks7 ← liftM (blocks5.update 3#usize a7)
+              let s21 ← liftM (lift state2.to_slice)
+              let s22 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s23 ← liftM (lift (Array.make 2#usize [s21, s22] ⋯).to_slice)
+              let a8 ← effects.digest D self1.hash s23
+              let blocks8 ← liftM (blocks6.update 3#usize a8)
+              let state3 ← liftM (blocks8.index_usize 3#usize)
+              let s24 ← liftM (lift state3.to_slice)
+              let s25 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s26 ← liftM (lift (Array.make 2#usize [s24, s25] ⋯).to_slice)
+              let a9 ← effects.digest D self1.hash s26
+              let blocks9 ← liftM (blocks7.update 4#usize a9)
+              let s27 ← liftM (lift state3.to_slice)
+              let s28 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s29 ← liftM (lift (Array.make 2#usize [s27, s28] ⋯).to_slice)
+              let a10 ← effects.digest D self1.hash s29
+              let blocks10 ← liftM (blocks8.update 4#usize a10)
+              let state4 ← liftM (blocks10.index_usize 4#usize)
+              let s30 ← liftM (lift state4.to_slice)
+              let s31 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s32 ← liftM (lift (Array.make 2#usize [s30, s31] ⋯).to_slice)
+              let a11 ← effects.digest D self1.hash s32
+              let blocks11 ← liftM (blocks9.update 5#usize a11)
+              let s33 ← liftM (lift state4.to_slice)
+              let s34 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s35 ← liftM (lift (Array.make 2#usize [s33, s34] ⋯).to_slice)
+              let a12 ← effects.digest D self1.hash s35
+              let blocks12 ← liftM (blocks10.update 5#usize a12)
+              let state5 ← liftM (blocks12.index_usize 5#usize)
+              let s36 ← liftM (lift state5.to_slice)
+              let s37 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s38 ← liftM (lift (Array.make 2#usize [s36, s37] ⋯).to_slice)
+              let a13 ← effects.digest D self1.hash s38
+              let blocks13 ← liftM (blocks11.update 6#usize a13)
+              let s39 ← liftM (lift state5.to_slice)
+              let s40 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s41 ← liftM (lift (Array.make 2#usize [s39, s40] ⋯).to_slice)
+              let a14 ← effects.digest D self1.hash s41
+              let blocks14 ← liftM (blocks12.update 6#usize a14)
+              let state6 ← liftM (blocks14.index_usize 6#usize)
+              let s42 ← liftM (lift state6.to_slice)
+              let s43 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s44 ← liftM (lift (Array.make 2#usize [s42, s43] ⋯).to_slice)
+              let a15 ← effects.digest D self1.hash s44
+              let blocks15 ← liftM (blocks13.update 7#usize a15)
+              let s45 ← liftM (lift state6.to_slice)
+              let s46 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s47 ← liftM (lift (Array.make 2#usize [s45, s46] ⋯).to_slice)
+              let a16 ← effects.digest D self1.hash s47
+              let blocks16 ← liftM (blocks14.update 7#usize a16)
+              let _ ← liftM (blocks16.index_usize 7#usize)
+              let r ← liftM (Q.decode blocks15 blocks16)
+              let r1 ←
+                liftM
+                    (core.result.Result.map_err
+                      (transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError D) r
+                      ())
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  match val with
+                  | (q, state7) => do
+                    let u ← liftM (q.index_usize 0#usize)
+                    let we ← liftM (Q.embed u)
+                    liftM (trace.value 5#u16 0#usize we)
+                    let u1 ← liftM (q.index_usize 1#usize)
+                    let we1 ← liftM (Q.embed u1)
+                    liftM (trace.value 5#u16 1#usize we1)
+                    let u2 ← liftM (q.index_usize 2#usize)
+                    let we2 ← liftM (Q.embed u2)
+                    liftM (trace.value 5#u16 2#usize we2)
+                    let u3 ← liftM (q.index_usize 3#usize)
+                    let we3 ← liftM (Q.embed u3)
+                    liftM (trace.value 5#u16 3#usize we3)
+                    let u4 ← liftM (q.index_usize 4#usize)
+                    let we4 ← liftM (Q.embed u4)
+                    liftM (trace.value 5#u16 4#usize we4)
+                    let u5 ← liftM (q.index_usize 5#usize)
+                    let we5 ← liftM (Q.embed u5)
+                    liftM (trace.value 5#u16 5#usize we5)
+                    let u6 ← liftM (q.index_usize 6#usize)
+                    let we6 ← liftM (Q.embed u6)
+                    liftM (trace.value 5#u16 6#usize we6)
+                    let u7 ← liftM (q.index_usize 7#usize)
+                    let we7 ← liftM (Q.embed u7)
+                    liftM (trace.value 5#u16 7#usize we7)
+                    let u8 ← liftM (q.index_usize 8#usize)
+                    let we8 ← liftM (Q.embed u8)
+                    liftM (trace.value 5#u16 8#usize we8)
+                    let u9 ← liftM (q.index_usize 9#usize)
+                    let we9 ← liftM (Q.embed u9)
+                    liftM (trace.value 5#u16 9#usize we9)
+                    let u10 ← liftM (q.index_usize 10#usize)
+                    let we10 ← liftM (Q.embed u10)
+                    liftM (trace.value 5#u16 10#usize we10)
+                    let u11 ← liftM (q.index_usize 11#usize)
+                    let we11 ← liftM (Q.embed u11)
+                    liftM (trace.value 5#u16 11#usize we11)
+                    let u12 ← liftM (q.index_usize 12#usize)
+                    let we12 ← liftM (Q.embed u12)
+                    liftM (trace.value 5#u16 12#usize we12)
+                    let u13 ← liftM (q.index_usize 13#usize)
+                    let we13 ← liftM (Q.embed u13)
+                    liftM (trace.value 5#u16 13#usize we13)
+                    let u14 ← liftM (q.index_usize 14#usize)
+                    let we14 ← liftM (Q.embed u14)
+                    liftM (trace.value 5#u16 14#usize we14)
+                    let u15 ← liftM (q.index_usize 15#usize)
+                    let we15 ← liftM (Q.embed u15)
+                    liftM (trace.value 5#u16 15#usize we15)
+                    let u16 ← liftM (q.index_usize 16#usize)
+                    let we16 ← liftM (Q.embed u16)
+                    liftM (trace.value 5#u16 16#usize we16)
+                    let u17 ← liftM (q.index_usize 17#usize)
+                    let we17 ← liftM (Q.embed u17)
+                    liftM (trace.value 5#u16 17#usize we17)
+                    let u18 ← liftM (q.index_usize 18#usize)
+                    let we18 ← liftM (Q.embed u18)
+                    liftM (trace.value 5#u16 18#usize we18)
+                    let u19 ← liftM (q.index_usize 19#usize)
+                    let we19 ← liftM (Q.embed u19)
+                    liftM (trace.value 5#u16 19#usize we19)
+                    let u20 ← liftM (q.index_usize 20#usize)
+                    let we20 ← liftM (Q.embed u20)
+                    liftM (trace.value 5#u16 20#usize we20)
+                    let u21 ← liftM (q.index_usize 21#usize)
+                    let we21 ← liftM (Q.embed u21)
+                    liftM (trace.value 5#u16 21#usize we21)
+                    pure (core.result.Result.Ok q, { state := state7, hash := self1.hash })
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (Std.Array U32 22#usize) (core.convert.FromSame verifier.Error) residual)
+                  pure (r2, self1))
+      x)
+
+case h_1.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝²² : Std.Array U8 32#usize
+x✝²¹ : transcript.Transcript H
+x✝²⁰ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁹ : Std.Array U8 32#usize
+x✝¹⁸ : Slice U8
+x✝¹⁷ x✝¹⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁵ : Usize
+h✝ : x✝¹⁵ = 2#usize
+x✝¹⁴ : UScalar UScalarTy.Usize
+x✝¹³ : Std.Array U8 32#usize
+x✝¹² : Slice U8
+x✝¹¹ x✝¹⁰ : alloc.vec.Vec U8
+x✝⁹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁸ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝⁷ : UScalar UScalarTy.U8
+x✝⁶ x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁸.2.hash s3
+                      pure { state := a1, hash := x✝⁸.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (a, self1) => do
+            let out ← liftM (sampler.qm31_sample a)
+            let i ← liftM (lift (UScalar.cast UScalarTy.Usize x✝⁷))
+            let we ← liftM (B.sampling.fromQm out)
+            liftM (trace.value 4#u16 i we)
+            pure (out, self1))
+      x)
+
+case h_1.hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁷ : Std.Array U8 32#usize
+x✝¹⁶ : transcript.Transcript H
+x✝¹⁵ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁴ : Std.Array U8 32#usize
+x✝¹³ : Slice U8
+x✝¹² x✝¹¹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁰ : Usize
+h✝ : x✝¹⁰ = 2#usize
+x✝⁹ : UScalar UScalarTy.Usize
+x✝⁸ : Std.Array U8 32#usize
+x✝⁷ : Slice U8
+x✝⁶ x✝⁵ : alloc.vec.Vec U8
+x✝⁴ : aspis_core.field.WideExact × transcript.Transcript H
+x✝³ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝² : UScalar UScalarTy.U8
+x✝¹ : Slice U8
+x✝ : aspis_core.field.QM31 × transcript.Transcript H
+x : Std.Array aspis_core.field.WideExact 29#usize
+⊢ Uniform hashv (Code.done x)
+
+case h_1.hk.hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁸ : Std.Array U8 32#usize
+x✝¹⁷ : transcript.Transcript H
+x✝¹⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁵ : Std.Array U8 32#usize
+x✝¹⁴ : Slice U8
+x✝¹³ x✝¹² : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹¹ : Usize
+h✝ : x✝¹¹ = 2#usize
+x✝¹⁰ : UScalar UScalarTy.Usize
+x✝⁹ : Std.Array U8 32#usize
+x✝⁸ : Slice U8
+x✝⁷ x✝⁶ : alloc.vec.Vec U8
+x✝⁵ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁴ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝³ : UScalar UScalarTy.U8
+x✝² : Slice U8
+x✝¹ : aspis_core.field.QM31 × transcript.Transcript H
+x✝ : Std.Array aspis_core.field.WideExact 29#usize
+x : core.result.Result aspis_core.field.WideExact verifier.Error
+⊢ Uniform hashv (Code.done x)
+
+case hk.hk.hk.hk.hk.hk.hk.hk.isFalse.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁴ : Std.Array U8 32#usize
+x✝¹³ : transcript.Transcript H
+x✝¹² : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹¹ : Std.Array U8 32#usize
+x✝¹⁰ : Slice U8
+x✝⁹ x✝⁸ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁷ : Usize
+h✝ : ¬x✝⁷ = 2#usize
+x✝⁶ : aspis_core.field.WideExact
+x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind (Code.done b) fun s3 => do
+                let a1 ← effects.digest D x✝⁸.2.hash s3
+                pure { state := a1, hash := x✝⁸.2.hash })
+            b)
+          fun self1 =>
+          have a := Array.repeat 32#usize 0#u8;
+          have blocks := Array.repeat 8#usize a;
+          do
+          let s ← liftM (lift self1.state.to_slice)
+          let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+          let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+          let a1 ← effects.digest D self1.hash s2
+          let __x ← liftM (blocks.index_mut_usize 0#usize)
+          match __x with
+            | (fst, index_mut_back) => do
+              let s3 ← liftM (lift self1.state.to_slice)
+              let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+              let a2 ← effects.digest D self1.hash s5
+              have blocks1 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a2
+              let state ← liftM (blocks1.index_usize 0#usize)
+              let s6 ← liftM (lift state.to_slice)
+              let s7 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s8 ← liftM (lift (Array.make 2#usize [s6, s7] ⋯).to_slice)
+              let a3 ← effects.digest D self1.hash s8
+              have blocks2 : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize := index_mut_back a1
+              let blocks3 ← liftM (blocks2.update 1#usize a3)
+              let s9 ← liftM (lift state.to_slice)
+              let s10 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s11 ← liftM (lift (Array.make 2#usize [s9, s10] ⋯).to_slice)
+              let a4 ← effects.digest D self1.hash s11
+              let blocks4 ← liftM (blocks1.update 1#usize a4)
+              let state1 ← liftM (blocks4.index_usize 1#usize)
+              let s12 ← liftM (lift state1.to_slice)
+              let s13 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s14 ← liftM (lift (Array.make 2#usize [s12, s13] ⋯).to_slice)
+              let a5 ← effects.digest D self1.hash s14
+              let blocks5 ← liftM (blocks3.update 2#usize a5)
+              let s15 ← liftM (lift state1.to_slice)
+              let s16 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s17 ← liftM (lift (Array.make 2#usize [s15, s16] ⋯).to_slice)
+              let a6 ← effects.digest D self1.hash s17
+              let blocks6 ← liftM (blocks4.update 2#usize a6)
+              let state2 ← liftM (blocks6.index_usize 2#usize)
+              let s18 ← liftM (lift state2.to_slice)
+              let s19 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s20 ← liftM (lift (Array.make 2#usize [s18, s19] ⋯).to_slice)
+              let a7 ← effects.digest D self1.hash s20
+              let blocks7 ← liftM (blocks5.update 3#usize a7)
+              let s21 ← liftM (lift state2.to_slice)
+              let s22 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s23 ← liftM (lift (Array.make 2#usize [s21, s22] ⋯).to_slice)
+              let a8 ← effects.digest D self1.hash s23
+              let blocks8 ← liftM (blocks6.update 3#usize a8)
+              let state3 ← liftM (blocks8.index_usize 3#usize)
+              let s24 ← liftM (lift state3.to_slice)
+              let s25 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s26 ← liftM (lift (Array.make 2#usize [s24, s25] ⋯).to_slice)
+              let a9 ← effects.digest D self1.hash s26
+              let blocks9 ← liftM (blocks7.update 4#usize a9)
+              let s27 ← liftM (lift state3.to_slice)
+              let s28 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s29 ← liftM (lift (Array.make 2#usize [s27, s28] ⋯).to_slice)
+              let a10 ← effects.digest D self1.hash s29
+              let blocks10 ← liftM (blocks8.update 4#usize a10)
+              let state4 ← liftM (blocks10.index_usize 4#usize)
+              let s30 ← liftM (lift state4.to_slice)
+              let s31 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s32 ← liftM (lift (Array.make 2#usize [s30, s31] ⋯).to_slice)
+              let a11 ← effects.digest D self1.hash s32
+              let blocks11 ← liftM (blocks9.update 5#usize a11)
+              let s33 ← liftM (lift state4.to_slice)
+              let s34 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s35 ← liftM (lift (Array.make 2#usize [s33, s34] ⋯).to_slice)
+              let a12 ← effects.digest D self1.hash s35
+              let blocks12 ← liftM (blocks10.update 5#usize a12)
+              let state5 ← liftM (blocks12.index_usize 5#usize)
+              let s36 ← liftM (lift state5.to_slice)
+              let s37 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s38 ← liftM (lift (Array.make 2#usize [s36, s37] ⋯).to_slice)
+              let a13 ← effects.digest D self1.hash s38
+              let blocks13 ← liftM (blocks11.update 6#usize a13)
+              let s39 ← liftM (lift state5.to_slice)
+              let s40 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s41 ← liftM (lift (Array.make 2#usize [s39, s40] ⋯).to_slice)
+              let a14 ← effects.digest D self1.hash s41
+              let blocks14 ← liftM (blocks12.update 6#usize a14)
+              let state6 ← liftM (blocks14.index_usize 6#usize)
+              let s42 ← liftM (lift state6.to_slice)
+              let s43 ← liftM (lift (Array.make 1#usize [1#u8] PreparedQueryEffects.queries._proof_7).to_slice)
+              let s44 ← liftM (lift (Array.make 2#usize [s42, s43] ⋯).to_slice)
+              let a15 ← effects.digest D self1.hash s44
+              let blocks15 ← liftM (blocks13.update 7#usize a15)
+              let s45 ← liftM (lift state6.to_slice)
+              let s46 ← liftM (lift (Array.make 1#usize [2#u8] PreparedQueryEffects.queries._proof_12).to_slice)
+              let s47 ← liftM (lift (Array.make 2#usize [s45, s46] ⋯).to_slice)
+              let a16 ← effects.digest D self1.hash s47
+              let blocks16 ← liftM (blocks14.update 7#usize a16)
+              let _ ← liftM (blocks16.index_usize 7#usize)
+              let r ← liftM (Q.decode blocks15 blocks16)
+              let r1 ←
+                liftM
+                    (core.result.Result.map_err
+                      (transcript.Transcript.queries.closure.Insts.CoreOpsFunctionFnOnceTupleQuerySampleErrorError D) r
+                      ())
+              let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  match val with
+                  | (q, state7) => do
+                    let u ← liftM (q.index_usize 0#usize)
+                    let we ← liftM (Q.embed u)
+                    liftM (trace.value 5#u16 0#usize we)
+                    let u1 ← liftM (q.index_usize 1#usize)
+                    let we1 ← liftM (Q.embed u1)
+                    liftM (trace.value 5#u16 1#usize we1)
+                    let u2 ← liftM (q.index_usize 2#usize)
+                    let we2 ← liftM (Q.embed u2)
+                    liftM (trace.value 5#u16 2#usize we2)
+                    let u3 ← liftM (q.index_usize 3#usize)
+                    let we3 ← liftM (Q.embed u3)
+                    liftM (trace.value 5#u16 3#usize we3)
+                    let u4 ← liftM (q.index_usize 4#usize)
+                    let we4 ← liftM (Q.embed u4)
+                    liftM (trace.value 5#u16 4#usize we4)
+                    let u5 ← liftM (q.index_usize 5#usize)
+                    let we5 ← liftM (Q.embed u5)
+                    liftM (trace.value 5#u16 5#usize we5)
+                    let u6 ← liftM (q.index_usize 6#usize)
+                    let we6 ← liftM (Q.embed u6)
+                    liftM (trace.value 5#u16 6#usize we6)
+                    let u7 ← liftM (q.index_usize 7#usize)
+                    let we7 ← liftM (Q.embed u7)
+                    liftM (trace.value 5#u16 7#usize we7)
+                    let u8 ← liftM (q.index_usize 8#usize)
+                    let we8 ← liftM (Q.embed u8)
+                    liftM (trace.value 5#u16 8#usize we8)
+                    let u9 ← liftM (q.index_usize 9#usize)
+                    let we9 ← liftM (Q.embed u9)
+                    liftM (trace.value 5#u16 9#usize we9)
+                    let u10 ← liftM (q.index_usize 10#usize)
+                    let we10 ← liftM (Q.embed u10)
+                    liftM (trace.value 5#u16 10#usize we10)
+                    let u11 ← liftM (q.index_usize 11#usize)
+                    let we11 ← liftM (Q.embed u11)
+                    liftM (trace.value 5#u16 11#usize we11)
+                    let u12 ← liftM (q.index_usize 12#usize)
+                    let we12 ← liftM (Q.embed u12)
+                    liftM (trace.value 5#u16 12#usize we12)
+                    let u13 ← liftM (q.index_usize 13#usize)
+                    let we13 ← liftM (Q.embed u13)
+                    liftM (trace.value 5#u16 13#usize we13)
+                    let u14 ← liftM (q.index_usize 14#usize)
+                    let we14 ← liftM (Q.embed u14)
+                    liftM (trace.value 5#u16 14#usize we14)
+                    let u15 ← liftM (q.index_usize 15#usize)
+                    let we15 ← liftM (Q.embed u15)
+                    liftM (trace.value 5#u16 15#usize we15)
+                    let u16 ← liftM (q.index_usize 16#usize)
+                    let we16 ← liftM (Q.embed u16)
+                    liftM (trace.value 5#u16 16#usize we16)
+                    let u17 ← liftM (q.index_usize 17#usize)
+                    let we17 ← liftM (Q.embed u17)
+                    liftM (trace.value 5#u16 17#usize we17)
+                    let u18 ← liftM (q.index_usize 18#usize)
+                    let we18 ← liftM (Q.embed u18)
+                    liftM (trace.value 5#u16 18#usize we18)
+                    let u19 ← liftM (q.index_usize 19#usize)
+                    let we19 ← liftM (Q.embed u19)
+                    liftM (trace.value 5#u16 19#usize we19)
+                    let u20 ← liftM (q.index_usize 20#usize)
+                    let we20 ← liftM (Q.embed u20)
+                    liftM (trace.value 5#u16 20#usize we20)
+                    let u21 ← liftM (q.index_usize 21#usize)
+                    let we21 ← liftM (Q.embed u21)
+                    liftM (trace.value 5#u16 21#usize we21)
+                    pure (core.result.Result.Ok q, { state := state7, hash := self1.hash })
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (Std.Array U32 22#usize) (core.convert.FromSame verifier.Error) residual)
+                  pure (r2, self1))
+      x)
+
+case h_1.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁷ : Std.Array U8 32#usize
+x✝¹⁶ : transcript.Transcript H
+x✝¹⁵ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁴ : Std.Array U8 32#usize
+x✝¹³ : Slice U8
+x✝¹² x✝¹¹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁰ : Usize
+h✝ : ¬x✝¹⁰ = 2#usize
+x✝⁹ : aspis_core.field.WideExact
+x✝⁸ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝⁷ : UScalar UScalarTy.U8
+x✝⁶ x✝⁵ : Slice U8
+x✝⁴ : UScalar UScalarTy.U8
+x✝³ : Slice (UScalar UScalarTy.U8)
+x✝² : UScalar UScalarTy.U32
+x✝¹ : Std.Array U8 4#usize
+x✝ : Slice U8
+x : Slice (Slice U8)
+⊢ Uniform hashv
+    ((fun b =>
+        PreparedHashCode.bind
+          ((fun b =>
+              PreparedHashCode.bind
+                ((fun b =>
+                    PreparedHashCode.bind (Code.done b) fun s3 => do
+                      let a1 ← effects.digest D x✝⁸.2.hash s3
+                      pure { state := a1, hash := x✝⁸.2.hash })
+                  b)
+                fun self1 => do
+                let s ← liftM (lift self1.state.to_slice)
+                let s1 ← liftM (lift (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice)
+                let s2 ← liftM (lift (Array.make 2#usize [s, s1] ⋯).to_slice)
+                let block ← effects.digest D self1.hash s2
+                let s3 ← liftM (lift self1.state.to_slice)
+                let s4 ← liftM (lift (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice)
+                let s5 ← liftM (lift (Array.make 2#usize [s3, s4] ⋯).to_slice)
+                let a ← effects.digest D self1.hash s5
+                pure (block, { state := a, hash := self1.hash }))
+            b)
+          fun __x =>
+          match __x with
+          | (a, self1) => do
+            let out ← liftM (sampler.qm31_sample a)
+            let i ← liftM (lift (UScalar.cast UScalarTy.Usize x✝⁷))
+            let we ← liftM (B.sampling.fromQm out)
+            liftM (trace.value 4#u16 i we)
+            pure (out, self1))
+      x)
+
+case h_1.hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹² : Std.Array U8 32#usize
+x✝¹¹ : transcript.Transcript H
+x✝¹⁰ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁹ : Std.Array U8 32#usize
+x✝⁸ : Slice U8
+x✝⁷ x✝⁶ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁵ : Usize
+h✝ : ¬x✝⁵ = 2#usize
+x✝⁴ : aspis_core.field.WideExact
+x✝³ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝² : UScalar UScalarTy.U8
+x✝¹ : Slice U8
+x✝ : aspis_core.field.QM31 × transcript.Transcript H
+x : Std.Array aspis_core.field.WideExact 29#usize
+⊢ Uniform hashv (Code.done x)
+
+case h_1.hk.hk.hk.hk.hp
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+law : ∀ (h : H) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+sem : r1_semantic.Verified H
+view : verifier.View
+hash : H
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹³ : Std.Array U8 32#usize
+x✝¹² : transcript.Transcript H
+x✝¹¹ : aspis_core.field.WideExact × transcript.Transcript H
+x✝¹⁰ : Std.Array U8 32#usize
+x✝⁹ : Slice U8
+x✝⁸ x✝⁷ : aspis_core.field.WideExact × transcript.Transcript H
+x✝⁶ : Usize
+h✝ : ¬x✝⁶ = 2#usize
+x✝⁵ : aspis_core.field.WideExact
+x✝⁴ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript H
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝³ : UScalar UScalarTy.U8
+x✝² : Slice U8
+x✝¹ : aspis_core.field.QM31 × transcript.Transcript H
+x✝ : Std.Array aspis_core.field.WideExact 29#usize
+x : core.result.Result aspis_core.field.WideExact verifier.Error
+⊢ Uniform hashv (Code.done x)
+'AspisR1.AuS1_Prepared.uniform' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

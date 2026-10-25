@@ -1,0 +1,123 @@
+AuS1_Trace.lean:25:98: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts (fail e)], fail e)
+
+case digest.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+e : Error
+reply : D.digest hash parts = fail e
+⊢ run (Code.digest D hash parts next >>= k) = ([Event.digest D hash parts (fail e)], fail e)
+AuS1_Trace.lean:26:95: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts div], div)
+
+case digest.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+reply : D.digest hash parts = div
+⊢ run (Code.digest D hash parts next >>= k) = ([Event.digest D hash parts div], div)
+AuS1_Trace.lean:27:11: error: unsolved goals
+case digest.ok.ok
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+v✝ : A
+h : (run (next a)).2 = ok v✝
+⊢ run (Code.digest D hash parts next >>= k) =
+    (Event.digest D hash parts (ok a) :: ((run (next a)).1 ++ (run (k v✝)).1), (run (k v✝)).2)
+
+case digest.ok.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+e✝ : Error
+h : (run (next a)).2 = fail e✝
+⊢ run (Code.digest D hash parts next >>= k) = (Event.digest D hash parts (ok a) :: (run (next a)).1, fail e✝)
+
+case digest.ok.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+h : (run (next a)).2 = div
+⊢ run (Code.digest D hash parts next >>= k) = (Event.digest D hash parts (ok a) :: (run (next a)).1, div)
+AuS1_Trace.lean:18:25: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:25:27: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵r̵e̵p̵l̵y̵,̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵]̵[̲r̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:26:24: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵r̵e̵p̵l̵y̵,̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵]̵[̲r̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:28:17: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵r̵e̵p̵l̵y̵,̵i̵h̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲r̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:28:74: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.PreparedHashCode.bind, ̲run, ̲reply,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:30:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continueRun,h̵,̵ ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_Trace.run_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.observe_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.success_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
