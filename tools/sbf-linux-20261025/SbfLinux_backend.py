@@ -385,7 +385,7 @@ def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os):
 
 
 def pidfd_identity(fd,pid,api=os):
-    # Fixed actual fdinfo, not caller evidence; own atomic pidfd retained until
+    # Fixed actual fdinfo, not caller evidence; own direct-child pidfd retained until
     # wait. No inherited arbitrary fd is accepted by the lifecycle below.
     raw = read_small('/proc/self/fdinfo/'+str(fd),api,4096).decode('ascii')
     rows = dict(line.split(':',1) for line in raw.splitlines() if ':' in line)
@@ -422,8 +422,8 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
     """Future helper continuation, deliberately no CLI/admission connection.
 
     Must run only once in a disposable independently scoped root helper. Parent
-    after unshare NEWPID remains host PIDns. clone3 forks guest PID1 and creates
-    own pidfd atomically; pidfd_open is also checked before parent collection.
+    after unshare NEWPID remains host PIDns. CPython os.fork creates guest PID1,
+    then parent opens its pidfd while the direct child remains unreaped/gated.
     No additional thread/reaper/monitor is created here.
     """
     before,cgroup,last_cap = root_helper_preflight(api)
@@ -436,7 +436,7 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
     gate_r,gate_w = api.pipe2(0x80000)
     try:
         abi.zero('unshare',U(NEWNS | NEWNET | NEWPID))
-        pid,pidfd = abi.fork_pidfd()
+        pid = api.fork()
     except BaseException:
         api.close(gate_r);api.close(gate_w)
         raise
@@ -454,12 +454,16 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
                 api._exit(126)
         api._exit(126)
     reaped = False
-    extra = None
+    pidfd = None
     try:
         api.close(gate_r)
+        require(type(pid) is int and pid > 1, 'actual direct child host PID')
+        # No reaper or other thread: an unreaped direct child cannot have its
+        # PID reused, including if it exits before pidfd_open. It cannot exec
+        # before this parent releases the gate. CPython performs native hooks.
+        pidfd = abi.call('pidfd_open',I(pid),U(0))
+        require(pidfd >= 3, 'own pidfd must not alias stdio')
         pidfd_identity(pidfd,pid,api)
-        extra = abi.call('pidfd_open',I(pid),U(0))
-        pidfd_identity(extra,pid,api)
         abi.check_owned_signal(pidfd)
         output.close_writers()
         require(api.write(gate_w,b'G') == 1, 'parent lifecycle gate write')
@@ -470,13 +474,17 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
         return output.collect(waited,pid,result)
     except BaseException:
         if not reaped:
-            # Atomic pidfd survives validation failure and numeric PID reuse.
-            # ESRCH means child already dead; still reap direct child.
-            try:
-                abi.kill_owned(pidfd)
-            except OSError as error:
-                if error.errno != errno.ESRCH:
-                    raise
+            # Before pidfd acquisition the child is still blocked on gate EOF,
+            # so failure closes the gate and reaps WITHOUT numeric-PID signalling.
+            if gate_w is not None:
+                api.close(gate_w)
+                gate_w = None
+            if pidfd is not None:
+                try:
+                    abi.kill_owned(pidfd)
+                except OSError as error:
+                    if error.errno != errno.ESRCH:
+                        raise
             try:
                 while True:
                     try:
@@ -492,9 +500,8 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
     finally:
         if gate_w is not None:
             api.close(gate_w)
-        if extra is not None:
-            api.close(extra)
-        api.close(pidfd)
+        if pidfd is not None:
+            api.close(pidfd)
 
 
 def privileged_entrypoint():

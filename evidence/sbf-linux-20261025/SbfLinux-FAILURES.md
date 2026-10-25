@@ -29,3 +29,23 @@
   CPython fork behavior, syscall errno handling, D-state/reaping and parent death
   behavior need separately authorized finite runtime tests. No bounded kernel
   completion guarantee is claimed, and no privileged entrypoint is enabled.
+
+## Final review superseding the raw-clone implementation
+
+The 53-case mock result and first package/source audit apply ONLY to revision
+2fbed82313b0e2408017dbb401bc7ead40af846b. They do not validate the final source.
+The full rejected raw-clone source bodies remain in
+SbfLinux-rejected-raw-clone-sources.json. Python-level hooks after a ctypes raw
+clone return are too late to satisfy the CPython continuation requirement.
+The prior bullet describing that as a replacement is superseded.
+
+Final replacement uses CPython's os.fork, whose native implementation performs
+its own fork hooks. Parent remains single-threaded with default SIGCHLD and no
+other reaper. A direct child remains unreaped (so its numeric PID cannot be
+reused) during pidfd_open. Child blocks on a private CLOEXEC pipe before setup;
+parent opens/validates own pidfd and checks signal support before sending the
+fixed G byte. If pidfd acquisition fails, parent closes gate -> child gets EOF
+and unconditionally _exit, then parent reaps it without numeric-PID signalling.
+After release all cancellation uses retained own pidfd. No raw-clone ABI or
+hand-written Python hook sequence remains. This changed source justifies the
+new v3 mock run and v2 package audit; previous evidence is preserved.

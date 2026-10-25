@@ -1,8 +1,7 @@
 """Unexecuted Linux 6.8 x86_64 ABI. Import is pure; no CDLL at import.
 
 Syscalls use individual complete typed signatures at
-libc's syscall address, including the syscall-number long; clone3 uses a
-GIL-preserving PyDLL symbol with explicit argtypes/restype. No untyped pointer
+libc's syscall address, including the syscall-number long. No untyped pointer
 arguments and no architecture fallback. ENOSYS/EINVAL/EPERM all fail closed.
 """
 import ctypes as C
@@ -23,10 +22,6 @@ class CapHeader(C.Structure):
 
 class CapData(C.Structure):
     _fields_ = [('effective', U), ('permitted', U), ('inheritable', U)]
-
-class CloneArgs(C.Structure):
-    _fields_ = [(x, Q) for x in ('flags','pidfd','child_tid','parent_tid',
-        'exit_signal','stack','stack_size','tls','set_tid','set_tid_size','cgroup')]
 
 class Timestamp(C.Structure):
     _fields_ = [('sec', C.c_int64), ('nsec', U), ('reserved', I)]
@@ -61,7 +56,6 @@ SPECS = {
  'close_range': (436, (U, U, U)),
  'pidfd_open': (434, (I, U)),
  'pidfd_send_signal': (424, (I, I, P, U)),
- 'clone3': (435, (C.POINTER(CloneArgs), C.c_size_t)),
  'getrlimit': (97, (U, C.POINTER(Rlimit))),
  'setrlimit': (160, (U, C.POINTER(Rlimit))),
 }
@@ -70,10 +64,10 @@ SPECS = {
 def layout_check():
     require(C.sizeof(P) == C.sizeof(L) == 8, 'LP64 required')
     for typ, size in ((MountAttr,32),(CapHeader,8),(CapData,12),
-                      (CloneArgs,88),(Timestamp,16),(Statx,256),(Rlimit,16)):
+                      (Timestamp,16),(Statx,256),(Rlimit,16)):
         require(C.sizeof(typ) == size, 'ABI size '+typ.__name__)
     require(Statx.mnt_id.offset == 144 and Statx.atime.offset == 64 and
-            CloneArgs.pidfd.offset == 8 and MountAttr.propagation.offset == 16,
+            MountAttr.propagation.offset == 16,
             'ABI offsets')
 
 
@@ -93,29 +87,12 @@ class LinuxABI:
     """
     def __init__(self, binder=None, system=None, machine=None):
         supported(system, machine)  # before library/binder effects
-        self.fork_hooks = None
         if binder is None:
             require(platform.release().split('.')[:2] == ['6','8'], 'unreviewed kernel release')
-            hooks = []
-            for name in ('PyOS_BeforeFork','PyOS_AfterFork_Parent','PyOS_AfterFork_Child'):
-                fn = getattr(C.pythonapi,name)
-                fn.argtypes, fn.restype = [], None
-                hooks.append(fn)
-            self.fork_hooks = tuple(hooks)
             libc = C.CDLL('libc.so.6', use_errno=True)
             address = C.cast(libc.syscall, P).value
             self._libc = libc
-            # PyDLL keeps the GIL AND swaps errno; explicit complete prototype
-            # for its sole syscall symbol prevents variadic pointer truncation.
-            fork_libc = C.PyDLL('libc.so.6',use_errno=True)
-            fork_call = fork_libc.syscall
-            fork_call.argtypes = [L,C.POINTER(CloneArgs),C.c_size_t]
-            fork_call.restype = L
-            self._fork_libc = fork_libc
-            def binder(name,types):
-                if name == 'clone3':
-                    return fork_call
-                return C.CFUNCTYPE(L,L,*types,use_errno=True)(address)
+            binder = lambda name,types: C.CFUNCTYPE(L,L,*types,use_errno=True)(address)
         self.functions = {name: binder(name, types) for name, (_,types) in SPECS.items()}
 
     def call(self, name, *args):
@@ -168,36 +145,6 @@ class LinuxABI:
     def prctl(self, option, arg=0, arg2=0):
         return self.call('prctl', I(option), C.c_ulong(arg),
                          C.c_ulong(arg2), C.c_ulong(0), C.c_ulong(0))
-
-    def fork_pidfd(self):
-        """Atomic fork-like clone3 (no VM/FILES/SIGHAND sharing), SIGCHLD.
-
-        Parent gets the actual host PID and own pidfd atomically. Child gets 0,
-        enters pending PID namespace as PID1. No pidfd acquisition race/fallback.
-        """
-        pidfd = I(-1)
-        args = CloneArgs(flags=0x1000, pidfd=C.addressof(pidfd), exit_signal=17)
-        if self.fork_hooks is not None:
-            self.fork_hooks[0]()
-        try:
-            # Keep GIL for fork-like native call; repair CPython state BEFORE
-            # any Python continuation in either branch. Mock path is pure.
-            C.set_errno(0)
-            pid = self.functions['clone3'](L(435), C.byref(args), C.c_size_t(C.sizeof(args)))
-            error = C.get_errno()
-        except BaseException:
-            if self.fork_hooks is not None:
-                self.fork_hooks[1]()
-            raise
-        if self.fork_hooks is not None:
-            self.fork_hooks[2 if pid == 0 else 1]()
-        if pid == -1:
-            require(error > 0, 'clone3 errno')
-            raise OSError(error,'clone3')
-        require(type(pid) is int and pid >= 0, 'clone3 result')
-        if pid:
-            require(pid > 1 and pidfd.value >= 3, 'atomic child ownership')
-        return pid, pidfd.value
 
     def check_owned_signal(self, pidfd):
         self.zero('pidfd_send_signal', I(pidfd), I(0), None, U(0))

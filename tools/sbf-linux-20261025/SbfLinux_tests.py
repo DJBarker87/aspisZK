@@ -17,7 +17,7 @@ class ChildExit(BaseException):
 class MockC:
     def __init__(self):
         self.calls=[]; self.signatures={}; self.fail=None; self.nextfd=30
-        self.capzero=True;self.options=[];self.clonefields=None
+        self.capzero=True;self.options=[]
     def bind(self,name,types_):
         self.signatures[name]=types_
         def run(number,*args):
@@ -32,11 +32,6 @@ class MockC:
             if name=='getrlimit':
                 p=C.cast(args[-1],C.POINTER(A.Rlimit)).contents
                 p.cur=p.max=2**40
-            if name=='clone3':
-                p=C.cast(args[0],C.POINTER(A.CloneArgs)).contents
-                self.clonefields=tuple(getattr(p,n) for n in ('flags','exit_signal','stack','stack_size','tls','cgroup'))
-                C.cast(p.pidfd,C.POINTER(A.I)).contents.value=40
-                return 1234
             if name=='prctl':
                 return 1 if args[0].value==39 else 0
             if name in ('open_tree','fsopen','fsmount','pidfd_open'):
@@ -52,7 +47,6 @@ class AbiTests(unittest.TestCase):
     def test_layout(self):
         A.layout_check()
         self.assertEqual((C.sizeof(A.Statx),A.Statx.mnt_id.offset),(256,144))
-        self.assertEqual(C.sizeof(A.CloneArgs),88)
     def test_wrong_platform_before_binder_or_cdll(self):
         for platform,machine in [('Darwin','x86_64'),('Linux','aarch64')]:
             binder=Mock(side_effect=AssertionError('binder effect'))
@@ -127,23 +121,6 @@ class AbiTests(unittest.TestCase):
         self.assertEqual(self.a.mount_id(3),123)
         a=A.LinuxABI(lambda n,t:lambda *args:0,'Linux','x86_64')
         with self.assertRaises(Denied):a.mount_id(3)
-    def test_clone_atomic_pidfd_and_layout(self):
-        self.assertEqual(self.a.fork_pidfd(),(1234,40))
-        self.assertEqual(self.c.calls[-1][2][1].value,88)
-        self.assertEqual(self.c.clonefields,(0x1000,17,0,0,0,0))
-    def test_clone_python_hook_order_and_failure(self):
-        events=[]
-        self.a.fork_hooks=tuple((lambda n=n:events.append(n)) for n in ('before','parent','child'))
-        self.a.fork_pidfd()
-        self.assertEqual(events,['before','parent'])
-        events.clear();self.c.fail='clone3'
-        with self.assertRaises(OSError):self.a.fork_pidfd()
-        self.assertEqual(events,['before','parent'])
-    def test_clone_child_hook(self):
-        a=A.LinuxABI(lambda n,t:lambda *args:0,'Linux','x86_64')
-        events=[];a.fork_hooks=tuple((lambda n=n:events.append(n)) for n in ('before','parent','child'))
-        self.assertEqual(a.fork_pidfd(),(0,-1))
-        self.assertEqual(events,['before','child'])
     def test_complete_drop_order_and_ambient_queries(self):
         self.a.drop(40)
         names=[n for n,_,_ in self.c.calls]
@@ -336,9 +313,9 @@ class LifecycleTests(unittest.TestCase):
         self.abi.zero.side_effect=OSError(errno.EPERM,'unshare')
         with patch.object(B,'root_helper_preflight',return_value=({},b'x',40)):
             with self.assertRaises(OSError):B.internal_backend(10,Mock(),12,self.abi,self.api,self.clock)
-        self.abi.fork_pidfd.assert_not_called()
+        self.api.fork.assert_not_called()
     def test_gate_child_failure_always_exits_even_cleanup_failure(self):
-        self.abi.fork_pidfd.return_value=(0,-1)
+        self.api.fork.return_value=0
         self.api.read.return_value=b''
         self.abi.close_escape_fds.side_effect=Denied('close failure')
         self.api._exit.side_effect=ChildExit()
@@ -346,23 +323,23 @@ class LifecycleTests(unittest.TestCase):
             with self.assertRaises(ChildExit):B.internal_backend(10,Mock(),12,self.abi,self.api,self.clock)
         g.assert_not_called();self.api._exit.assert_called_once_with(126)
     def test_signal_permission_failure_keeps_child_gated(self):
-        self.abi.fork_pidfd.return_value=(123,44);self.abi.call.return_value=45
+        self.api.fork.return_value=123;self.abi.call.return_value=44
         self.abi.check_owned_signal.side_effect=OSError(errno.EPERM,'signal')
         self.api.waitpid.return_value=(123,9)
         with patch.object(B,'root_helper_preflight',return_value=({},b'x',40)),patch.object(B,'pidfd_identity'):
             with self.assertRaises(OSError):B.internal_backend(10,Mock(),12,self.abi,self.api,self.clock)
         self.api.write.assert_not_called();self.abi.kill_owned.assert_called_once_with(44)
     def test_parent_actual_hostpid_and_collection(self):
-        self.abi.fork_pidfd.return_value=(123,44);self.abi.call.return_value=45
+        self.api.fork.return_value=123;self.abi.call.return_value=44
         output=Mock()
         with patch.object(B,'root_helper_preflight',return_value=({},b'x',40)),patch.object(
                 B,'pidfd_identity') as identity,patch.object(B,'owned_wait',return_value=(123,0)):
             B.internal_backend(10,output,12,self.abi,self.api,self.clock)
         self.assertEqual(identity.call_args_list[0].args,(44,123,self.api))
         output.collect.assert_called_once_with(123,123,0)
-        self.api.close.assert_any_call(44);self.api.close.assert_any_call(45)
+        self.api.close.assert_any_call(44)
     def test_parent_validation_failure_kills_own_child(self):
-        self.abi.fork_pidfd.return_value=(123,44);self.api.waitpid.return_value=(123,9)
+        self.api.fork.return_value=123;self.abi.call.return_value=44;self.api.waitpid.return_value=(123,9)
         with patch.object(B,'root_helper_preflight',return_value=({},b'x',40)),patch.object(
                 B,'pidfd_identity',side_effect=Denied('identity')):
             with self.assertRaises(Denied):B.internal_backend(10,Mock(),12,self.abi,self.api,self.clock)
@@ -418,12 +395,12 @@ class DropAndStdioTests(unittest.TestCase):
     def test_parent_gate_failure_never_collects(self):
         api=Mock();api.pipe2.return_value=(50,51);api.write.return_value=1
         api.waitpid.return_value=(123,9)
-        abi=Mock();abi.fork_pidfd.return_value=(123,44);abi.call.side_effect=OSError(errno.ENOSYS,'pidfd_open')
+        abi=Mock();api.fork.return_value=123;abi.call.side_effect=OSError(errno.ENOSYS,'pidfd_open')
         output=Mock()
         with patch.object(B,'root_helper_preflight',return_value=({},b'x',40)),patch.object(B,'pidfd_identity'):
             with self.assertRaises(OSError):B.internal_backend(10,output,12,abi,api)
         api.write.assert_not_called();output.collect.assert_not_called()
-        abi.kill_owned.assert_called_once_with(44)
+        abi.kill_owned.assert_not_called();api.close.assert_any_call(51)
 
 class DisabledTests(unittest.TestCase):
     def test_all_entrypoints_unconditionally_deny(self):
