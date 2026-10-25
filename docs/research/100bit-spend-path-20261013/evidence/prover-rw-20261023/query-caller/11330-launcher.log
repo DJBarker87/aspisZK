@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 7 GiB; window=0 (London 2228); env=J
+hv✝¹¹ : v✝¹⁶.update 5#usize v✝¹² = ok v✝¹¹
+v✝¹⁰ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝¹⁰ : v✝¹¹.index_usize 5#usize = ok v✝¹⁰
+v✝⁹ : Std.Array U8 32#usize
+hv✝⁹ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁰.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝⁹
+v✝⁸ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝⁸ : v✝¹³.update 6#usize v✝⁹ = ok v✝⁸
+v✝⁷ : Std.Array U8 32#usize
+hv✝⁷ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁰.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝⁷
+v✝⁶ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝⁶ : v✝¹¹.update 6#usize v✝⁷ = ok v✝⁶
+v✝⁵ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝⁵ : v✝⁶.index_usize 6#usize = ok v✝⁵
+v✝⁴ : Std.Array U8 32#usize
+hv✝⁴ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝⁵.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice] ⋯).to_slice =
+    ok v✝⁴
+v✝³ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝³ : v✝⁸.update 7#usize v✝⁴ = ok v✝³
+v✝² : Std.Array U8 32#usize
+hv✝² :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝⁵.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice] ⋯).to_slice =
+    ok v✝²
+v✝¹ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹ : v✝⁶.update 7#usize v✝² = ok v✝¹
+v✝ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝ : v✝¹.index_usize 7#usize = ok v✝
+v : core.result.Result (Std.Array U32 22#usize × Std.Array U8 32#usize) verifier.Error
+hv : host_transcript.queries_from_pairs v✝³ v✝¹ = ok v
+⊢ (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch v
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (q, state7) := val
+          do
+          host_transcript.trace_queries q
+          ok (core.result.Result.Ok q, { state := state7, hash := v✝³⁹.hash })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 22#usize)
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, v✝³⁹)) =
+    publish v✝³⁹ v
+'R1Z.ProverRwQueryCallerSplit.queries_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.99
+	Maximum resident set size (kbytes): 3856476
+	Swaps: 0
+	Exit status: 1

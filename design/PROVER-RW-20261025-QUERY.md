@@ -112,3 +112,22 @@ external contracts and remaining pipeline. Preserve the retained pure entropy
 obstruction and effect-aware source/callback/retry obligation. The original
 realBad, realSeedQueries, adversaries, experiment carriers, E1/E2 and L1/L2
 observer laws are unchanged; none has been discharged or hidden in a record.
+
+## Caller split continuation (11326–11332)
+
+`ProverRwQueryMaterial.materialize_bind`, `ProverRwQueryPublish.branch_publish`
+and `ProverRwQueryCallerSplit.queries_factor` establish the complete emitted
+caller factorisation without external dictionary hypotheses. Materialization
+uses a continuation to avoid the rejected nested tuple-let association. The
+publication lemma is checked independently before the source join. Absorb,
+16 subsequent digests, array reads/updates and trace failure/divergence are
+retained in order. No Rust, generated extraction, runtime or artifact changes.
+
+Seven attempts: three pass, four retained elaboration failures; no resource
+failure. Final caller 11332: exit 0, 2.30 s, 3,873,400 KiB RSS, zero swaps;
+all three top theorem audits use standard axioms. Exact source snapshots,
+revision labels, dependency hashes, errors and raw timing are committed under
+`evidence/prover-rw-20261023/query-caller`. Unchanged existing launcher caps
+5G/7G, swap 0, TasksMax 64 and -M7000; populated reservation 24 GiB before
+launch. Stage 1 removes the caller-factorisation obligation, not the grouped
+policy, materialization correspondence or conjunct-1 experiment premise.

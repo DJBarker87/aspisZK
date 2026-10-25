@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCallerSplit.lean:14:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let p ← materialize ?hash ?self ?row ?payload
+    ?k p.1 p.2.1 p.2.2
+in the target expression
+  host_transcript.Transcript.queries hash self row payload = do
+    let p ← materialize hash self row payload
+    let r ← host_transcript.queries_from_pairs p.2.1 p.2.2
+    publish p.1 r
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H : Type
+hash : aspis_core.digest.Digest32 H
+self : host_transcript.Transcript H
+row : U8
+payload : Slice U8
+⊢ host_transcript.Transcript.queries hash self row payload = do
+    let p ← materialize hash self row payload
+    let r ← host_transcript.queries_from_pairs p.2.1 p.2.2
+    publish p.1 r
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.ProverRwQueryCallerSplit.queries_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,188 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCallerSplit.lean:17:64: error: unexpected token 'try'; expected ')'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCallerSplit.lean:14:26: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H : Type
+hash : aspis_core.digest.Digest32 H
+self : host_transcript.Transcript H
+row : U8
+payload : Slice U8
+v✝³⁹ : host_transcript.Transcript H
+hv✝³⁹ : host_transcript.Transcript.absorb hash self row payload = ok v✝³⁹
+v✝³⁸ : Std.Array U8 32#usize
+hv✝³⁸ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁹.state.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝³⁸
+v✝³⁷ :
+  Std.Array (UScalar UScalarTy.U8) 32#usize ×
+    (Std.Array (UScalar UScalarTy.U8) 32#usize → Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize)
+hv✝³⁷ : (Array.repeat 8#usize (Array.repeat 32#usize 0#u8)).index_mut_usize 0#usize = ok v✝³⁷
+v✝³⁶ : Std.Array U8 32#usize
+hv✝³⁶ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁹.state.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝³⁶
+v✝³⁵ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝³⁵ : (v✝³⁷.2 v✝³⁶).index_usize 0#usize = ok v✝³⁵
+v✝³⁴ : Std.Array U8 32#usize
+hv✝³⁴ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁵.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝³⁴
+v✝³³ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝³³ : (v✝³⁷.2 v✝³⁸).update 1#usize v✝³⁴ = ok v✝³³
+v✝³² : Std.Array U8 32#usize
+hv✝³² :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁵.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝³²
+v✝³¹ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝³¹ : (v✝³⁷.2 v✝³⁶).update 1#usize v✝³² = ok v✝³¹
+v✝³⁰ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝³⁰ : v✝³¹.index_usize 1#usize = ok v✝³⁰
+v✝²⁹ : Std.Array U8 32#usize
+hv✝²⁹ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁰.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝²⁹
+v✝²⁸ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝²⁸ : v✝³³.update 2#usize v✝²⁹ = ok v✝²⁸
+v✝²⁷ : Std.Array U8 32#usize
+hv✝²⁷ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝³⁰.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝²⁷
+v✝²⁶ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝²⁶ : v✝³¹.update 2#usize v✝²⁷ = ok v✝²⁶
+v✝²⁵ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝²⁵ : v✝²⁶.index_usize 2#usize = ok v✝²⁵
+v✝²⁴ : Std.Array U8 32#usize
+hv✝²⁴ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝²⁵.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝²⁴
+v✝²³ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝²³ : v✝²⁸.update 3#usize v✝²⁴ = ok v✝²³
+v✝²² : Std.Array U8 32#usize
+hv✝²² :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝²⁵.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝²²
+v✝²¹ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝²¹ : v✝²⁶.update 3#usize v✝²² = ok v✝²¹
+v✝²⁰ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝²⁰ : v✝²¹.index_usize 3#usize = ok v✝²⁰
+v✝¹⁹ : Std.Array U8 32#usize
+hv✝¹⁹ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝²⁰.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝¹⁹
+v✝¹⁸ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹⁸ : v✝²³.update 4#usize v✝¹⁹ = ok v✝¹⁸
+v✝¹⁷ : Std.Array U8 32#usize
+hv✝¹⁷ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝²⁰.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝¹⁷
+v✝¹⁶ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹⁶ : v✝²¹.update 4#usize v✝¹⁷ = ok v✝¹⁶
+v✝¹⁵ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝¹⁵ : v✝¹⁶.index_usize 4#usize = ok v✝¹⁵
+v✝¹⁴ : Std.Array U8 32#usize
+hv✝¹⁴ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁵.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝¹⁴
+v✝¹³ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹³ : v✝¹⁸.update 5#usize v✝¹⁴ = ok v✝¹³
+v✝¹² : Std.Array U8 32#usize
+hv✝¹² :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁵.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝¹²
+v✝¹¹ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹¹ : v✝¹⁶.update 5#usize v✝¹² = ok v✝¹¹
+v✝¹⁰ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝¹⁰ : v✝¹¹.index_usize 5#usize = ok v✝¹⁰
+v✝⁹ : Std.Array U8 32#usize
+hv✝⁹ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁰.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+          ⋯).to_slice =
+    ok v✝⁹
+v✝⁸ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝⁸ : v✝¹³.update 6#usize v✝⁹ = ok v✝⁸
+v✝⁷ : Std.Array U8 32#usize
+hv✝⁷ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝¹⁰.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+          ⋯).to_slice =
+    ok v✝⁷
+v✝⁶ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝⁶ : v✝¹¹.update 6#usize v✝⁷ = ok v✝⁶
+v✝⁵ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝⁵ : v✝⁶.index_usize 6#usize = ok v✝⁵
+v✝⁴ : Std.Array U8 32#usize
+hv✝⁴ :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝⁵.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice] ⋯).to_slice =
+    ok v✝⁴
+v✝³ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝³ : v✝⁸.update 7#usize v✝⁴ = ok v✝³
+v✝² : Std.Array U8 32#usize
+hv✝² :
+  hash.digest v✝³⁹.hash
+      (Array.make 2#usize
+          [v✝⁵.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice] ⋯).to_slice =
+    ok v✝²
+v✝¹ : Std.Array (Std.Array (UScalar UScalarTy.U8) 32#usize) 8#usize
+hv✝¹ : v✝⁶.update 7#usize v✝² = ok v✝¹
+v✝ : Std.Array (UScalar UScalarTy.U8) 32#usize
+hv✝ : v✝¹.index_usize 7#usize = ok v✝
+v : core.result.Result (Std.Array U32 22#usize × Std.Array U8 32#usize) verifier.Error
+hv : host_transcript.queries_from_pairs v✝³ v✝¹ = ok v
+⊢ (do
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch v
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (q, state7) := val
+          do
+          host_transcript.trace_queries q
+          ok (core.result.Result.Ok q, { state := state7, hash := v✝³⁹.hash })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 22#usize)
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, v✝³⁹)) =
+    publish v✝³⁹ v
+'R1Z.ProverRwQueryCallerSplit.queries_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

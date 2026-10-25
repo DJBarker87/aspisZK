@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 7 GiB; window=0 (London 2228); env=J
+      let state4 ← blocks10.index_usize 4#usize
+      let s30 ← ok state4.to_slice
+      let s31 ← ok (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice
+      let s32 ← ok (Array.make 2#usize [s30, s31] ⋯).to_slice
+      let a11 ← hash.digest self1.hash s32
+      let blocks11 ← blocks9.update 5#usize a11
+      let s33 ← ok state4.to_slice
+      let s34 ← ok (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice
+      let s35 ← ok (Array.make 2#usize [s33, s34] ⋯).to_slice
+      let a12 ← hash.digest self1.hash s35
+      let blocks12 ← blocks10.update 5#usize a12
+      let state5 ← blocks12.index_usize 5#usize
+      let s36 ← ok state5.to_slice
+      let s37 ← ok (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice
+      let s38 ← ok (Array.make 2#usize [s36, s37] ⋯).to_slice
+      let a13 ← hash.digest self1.hash s38
+      let blocks13 ← blocks11.update 6#usize a13
+      let s39 ← ok state5.to_slice
+      let s40 ← ok (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice
+      let s41 ← ok (Array.make 2#usize [s39, s40] ⋯).to_slice
+      let a14 ← hash.digest self1.hash s41
+      let blocks14 ← blocks12.update 6#usize a14
+      let state6 ← blocks14.index_usize 6#usize
+      let s42 ← ok state6.to_slice
+      let s43 ← ok (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice
+      let s44 ← ok (Array.make 2#usize [s42, s43] ⋯).to_slice
+      let a15 ← hash.digest self1.hash s44
+      let blocks15 ← blocks13.update 7#usize a15
+      let s45 ← ok state6.to_slice
+      let s46 ← ok (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice
+      let s47 ← ok (Array.make 2#usize [s45, s46] ⋯).to_slice
+      let a16 ← hash.digest self1.hash s47
+      let blocks16 ← blocks14.update 7#usize a16
+      let _ ← blocks16.index_usize 7#usize
+      let r ← host_transcript.queries_from_pairs blocks15 blocks16
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (q, state7) := val
+          do
+          host_transcript.trace_queries q
+          ok (core.result.Result.Ok q, { state := state7, hash := self1.hash })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Std.Array U32 22#usize)
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, self1)) =
+    host_transcript.Transcript.absorb hash self row payload >>= fun self1 =>
+      ok self1.state.to_slice >>= fun s =>
+        ok (Array.make 1#usize [1#u8] materializeK._proof_6).to_slice >>= fun s1 => ⋯ >>= ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryCallerSplit.lean:16:69: warning: This simp argument is unused:
+  branch_publish
+
+Hint: Omit it from the simp argument list.
+  simp only [host_transcript.Transcript.queries, materializeK, lift,̵ ̵b̵r̵a̵n̵c̵h̵_̵p̵u̵b̵l̵i̵s̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwQueryCallerSplit.queries_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.08
+	Maximum resident set size (kbytes): 3847432
+	Swaps: 0
+	Exit status: 1
