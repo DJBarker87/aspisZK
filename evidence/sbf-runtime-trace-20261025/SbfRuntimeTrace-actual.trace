@@ -1,0 +1,321 @@
+4105882 1792893053.901620 execve("/usr/bin/python3", ["/usr/bin/python3", "-I", "-S", "-B", "-c", "import os,sys\nos.write(1,('SbfRuntimeTrace_READY '+str(os.getpid())+'\\n').encode('ascii'))\nif os.read(0,1)!=b'G': raise RuntimeError('missing collector release')\nimport ctypes\nimport errno\nimport fcntl\nimport hashlib\nimport json\nimport os\nimport platform\nimport resource\nimport signal\nimport stat\nimport threading\nimport time\nmodules={n:dict(file=getattr(m,'__file__',None),cached=getattr(m,'__cached__',None)) for n,m in sorted(list(sys.modules.items())) if m is not None}\nwith open('/proc/self/maps','r',encoding='ascii') as stream:\n maps=stream.read(1048577)\nif len(maps)>1048576: raise RuntimeError('maps bound')\nprint(json.dumps(dict(pid=os.getpid(),threads=threading.active_count(),modules=modules,maps=maps,version=sys.version,argv=getattr(sys,'orig_argv',sys.argv),argv_source='sys.orig_argv' if hasattr(sys,'orig_argv') else 'sys.argv'),sort_keys=True))\n"], 0x7ffc95aaa210 /* 4 vars */) = 0
+4105882 1792893053.902062 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654ccc000
+4105882 1792893053.902106 access("/etc/ld.so.preload", R_OK) = -1 ENOENT (No such file or directory)
+4105882 1792893053.902151 openat(AT_FDCWD</home/dombarker>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+4105882 1792893053.902269 mmap(NULL, 42867, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x78f654cc1000
+4105882 1792893053.902300 close(3</etc/ld.so.cache>) = 0
+4105882 1792893053.902328 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libm.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libm.so.6>
+4105882 1792893053.902389 mmap(NULL, 950296, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0) = 0x78f654bd8000
+4105882 1792893053.902417 mmap(0x78f654be8000, 520192, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0x10000) = 0x78f654be8000
+4105882 1792893053.902451 mmap(0x78f654c67000, 360448, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0x8f000) = 0x78f654c67000
+4105882 1792893053.902481 mmap(0x78f654cbf000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libm.so.6>, 0xe7000) = 0x78f654cbf000
+4105882 1792893053.902521 close(3</usr/lib/x86_64-linux-gnu/libm.so.6>) = 0
+4105882 1792893053.902546 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libz.so.1", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libz.so.1.3>
+4105882 1792893053.902604 mmap(NULL, 110744, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libz.so.1.3>, 0) = 0x78f654bbc000
+4105882 1792893053.902630 mmap(0x78f654bbe000, 73728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libz.so.1.3>, 0x2000) = 0x78f654bbe000
+4105882 1792893053.902664 mmap(0x78f654bd0000, 24576, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libz.so.1.3>, 0x14000) = 0x78f654bd0000
+4105882 1792893053.902692 mmap(0x78f654bd6000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libz.so.1.3>, 0x1a000) = 0x78f654bd6000
+4105882 1792893053.902731 close(3</usr/lib/x86_64-linux-gnu/libz.so.1.3>) = 0
+4105882 1792893053.902756 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libexpat.so.1", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>
+4105882 1792893053.902817 mmap(NULL, 184448, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>, 0) = 0x78f654b8e000
+4105882 1792893053.902844 mmap(0x78f654b92000, 126976, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>, 0x4000) = 0x78f654b92000
+4105882 1792893053.902875 mmap(0x78f654bb1000, 32768, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>, 0x23000) = 0x78f654bb1000
+4105882 1792893053.902903 mmap(0x78f654bb9000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>, 0x2b000) = 0x78f654bb9000
+4105882 1792893053.902941 close(3</usr/lib/x86_64-linux-gnu/libexpat.so.1.9.1>) = 0
+4105882 1792893053.902965 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libc.so.6>
+4105882 1792893053.903045 mmap(NULL, 2174352, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0) = 0x78f654800000
+4105882 1792893053.903074 mmap(0x78f654828000, 1609728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x28000) = 0x78f654828000
+4105882 1792893053.903103 mmap(0x78f6549b1000, 323584, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1b1000) = 0x78f6549b1000
+4105882 1792893053.903130 mmap(0x78f654a00000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libc.so.6>, 0x1ff000) = 0x78f654a00000
+4105882 1792893053.903162 mmap(0x78f654a06000, 52624, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x78f654a06000
+4105882 1792893053.903193 close(3</usr/lib/x86_64-linux-gnu/libc.so.6>) = 0
+4105882 1792893053.903229 mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654b8c000
+4105882 1792893053.903560 munmap(0x78f654cc1000, 42867) = 0
+4105882 1792893053.903917 mmap(NULL, 1048576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654a8c000
+4105882 1792893053.903944 mmap(NULL, 266240, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654a4b000
+4105882 1792893053.903974 mmap(NULL, 135168, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654a2a000
+4105882 1792893053.906344 mmap(NULL, 16384, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654cc8000
+4105882 1792893053.907086 openat(AT_FDCWD</home/dombarker>, "/usr/pyvenv.cfg", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907138 openat(AT_FDCWD</home/dombarker>, "/usr/bin/pyvenv.cfg", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907178 readlink("/usr/bin/python3", "python3.12", 4096) = 10
+4105882 1792893053.907211 readlink("/usr/bin/python3.12", 0x7fff5fdf6370, 4096) = -1 EINVAL (Invalid argument)
+4105882 1792893053.907238 openat(AT_FDCWD</home/dombarker>, "/usr/bin/python3._pth", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907272 openat(AT_FDCWD</home/dombarker>, "/usr/bin/python3.12._pth", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907303 openat(AT_FDCWD</home/dombarker>, "/usr/bin/pybuilddir.txt", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907333 newfstatat(AT_FDCWD</home/dombarker>, "/usr/bin/Modules/Setup.local", 0x7fff5fdfb350, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907369 newfstatat(AT_FDCWD</home/dombarker>, "/usr/bin/lib/python312.zip", 0x7fff5fdfb110, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907398 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python312.zip", 0x7fff5fdfb170, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907428 newfstatat(AT_FDCWD</home/dombarker>, "/usr/bin/lib/python3.12/os.py", 0x7fff5fdfb170, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907454 newfstatat(AT_FDCWD</home/dombarker>, "/usr/bin/lib/python3.12/os.pyc", 0x7fff5fdfb170, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907480 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/os.py", {st_mode=S_IFREG|0644, st_size=39786, ...}, 0) = 0
+4105882 1792893053.907514 newfstatat(AT_FDCWD</home/dombarker>, "/usr/bin/lib/python3.12/lib-dynload", 0x7fff5fdfb170, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.907540 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.907569 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.908730 openat(AT_FDCWD</home/dombarker>, "/etc/localtime", O_RDONLY|O_CLOEXEC) = 3</usr/share/zoneinfo/Etc/UTC>
+4105882 1792893053.908844 close(3</usr/share/zoneinfo/Etc/UTC>) = 0
+4105882 1792893053.908993 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python312.zip", 0x7fff5fdfaba0, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.909035 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.909073 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python312.zip", 0x7fff5fdfaf20, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.909108 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.909141 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.909183 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.909213 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12>
+4105882 1792893053.909446 close(3</usr/lib/python3.12>) = 0
+4105882 1792893053.909507 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__init__.cpython-312-x86_64-linux-gnu.so", 0x7fff5fdfaf20, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.909542 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__init__.abi3.so", 0x7fff5fdfaf20, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.909572 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__init__.so", 0x7fff5fdfaf20, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.909601 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__init__.py", {st_mode=S_IFREG|0644, st_size=5884, ...}, 0) = 0
+4105882 1792893053.909675 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__init__.py", {st_mode=S_IFREG|0644, st_size=5884, ...}, 0) = 0
+4105882 1792893053.909716 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc>
+4105882 1792893053.909752 fcntl(3</usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc>, F_GETFD) = 0x1 (flags FD_CLOEXEC)
+4105882 1792893053.909894 close(3</usr/lib/python3.12/encodings/__pycache__/__init__.cpython-312.pyc>) = 0
+4105882 1792893053.910391 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.910431 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.910470 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.910500 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12/encodings>
+4105882 1792893053.910649 close(3</usr/lib/python3.12/encodings>) = 0
+4105882 1792893053.910700 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/aliases.py", {st_mode=S_IFREG|0644, st_size=15677, ...}, 0) = 0
+4105882 1792893053.910763 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/aliases.py", {st_mode=S_IFREG|0644, st_size=15677, ...}, 0) = 0
+4105882 1792893053.910802 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc>
+4105882 1792893053.910943 close(3</usr/lib/python3.12/encodings/__pycache__/aliases.cpython-312.pyc>) = 0
+4105882 1792893053.911280 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.911321 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/utf_8.py", {st_mode=S_IFREG|0644, st_size=1005, ...}, 0) = 0
+4105882 1792893053.911378 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/utf_8.py", {st_mode=S_IFREG|0644, st_size=1005, ...}, 0) = 0
+4105882 1792893053.911414 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc>
+4105882 1792893053.911540 close(3</usr/lib/python3.12/encodings/__pycache__/utf_8.cpython-312.pyc>) = 0
+4105882 1792893053.912816 fcntl(0<pipe:[24863907]>, F_GETFD) = 0
+4105882 1792893053.912920 fcntl(1<pipe:[24863908]>, F_GETFD) = 0
+4105882 1792893053.913006 fcntl(2<pipe:[24863909]>, F_GETFD) = 0
+4105882 1792893053.913246 mmap(NULL, 1048576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f654700000
+4105882 1792893053.915155 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.915218 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__init__.cpython-312-x86_64-linux-gnu.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.915258 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__init__.abi3.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.915300 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__init__.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.915333 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__init__.py", {st_mode=S_IFREG|0644, st_size=18182, ...}, 0) = 0
+4105882 1792893053.915401 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__init__.py", {st_mode=S_IFREG|0644, st_size=18182, ...}, 0) = 0
+4105882 1792893053.915442 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/ctypes/__pycache__/__init__.cpython-312.pyc>
+4105882 1792893053.915613 close(3</usr/lib/python3.12/ctypes/__pycache__/__init__.cpython-312.pyc>) = 0
+4105882 1792893053.915951 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.915992 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/types.py", {st_mode=S_IFREG|0644, st_size=10993, ...}, 0) = 0
+4105882 1792893053.916055 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/types.py", {st_mode=S_IFREG|0644, st_size=10993, ...}, 0) = 0
+4105882 1792893053.916092 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/types.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/types.cpython-312.pyc>
+4105882 1792893053.916239 close(3</usr/lib/python3.12/__pycache__/types.cpython-312.pyc>) = 0
+4105882 1792893053.916478 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.916524 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.916559 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.916597 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.916634 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12/lib-dynload>
+4105882 1792893053.916753 close(3</usr/lib/python3.12/lib-dynload>) = 0
+4105882 1792893053.916787 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so", {st_mode=S_IFREG|0644, st_size=137968, ...}, 0) = 0
+4105882 1792893053.916839 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>
+4105882 1792893053.916905 mmap(NULL, 140112, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>, 0) = 0x78f6546dd000
+4105882 1792893053.916944 mmap(0x78f6546e3000, 73728, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>, 0x6000) = 0x78f6546e3000
+4105882 1792893053.916983 mmap(0x78f6546f5000, 24576, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>, 0x18000) = 0x78f6546f5000
+4105882 1792893053.917013 mmap(0x78f6546fb000, 20480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>, 0x1d000) = 0x78f6546fb000
+4105882 1792893053.917056 close(3</usr/lib/python3.12/lib-dynload/_ctypes.cpython-312-x86_64-linux-gnu.so>) = 0
+4105882 1792893053.917085 openat(AT_FDCWD</home/dombarker>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+4105882 1792893053.917135 mmap(NULL, 42867, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x78f654a1f000
+4105882 1792893053.917166 close(3</etc/ld.so.cache>) = 0
+4105882 1792893053.917200 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libffi.so.8", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>
+4105882 1792893053.917262 mmap(NULL, 46608, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>, 0) = 0x78f654a13000
+4105882 1792893053.917295 mmap(0x78f654a15000, 28672, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>, 0x2000) = 0x78f654a15000
+4105882 1792893053.917339 mmap(0x78f654a1c000, 4096, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>, 0x9000) = 0x78f654a1c000
+4105882 1792893053.917372 mmap(0x78f654a1d000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>, 0xa000) = 0x78f654a1d000
+4105882 1792893053.917413 close(3</usr/lib/x86_64-linux-gnu/libffi.so.8.1.4>) = 0
+4105882 1792893053.917578 munmap(0x78f654a1f000, 42867) = 0
+4105882 1792893053.917790 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.917831 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/struct.py", {st_mode=S_IFREG|0644, st_size=257, ...}, 0) = 0
+4105882 1792893053.917903 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/struct.py", {st_mode=S_IFREG|0644, st_size=257, ...}, 0) = 0
+4105882 1792893053.917940 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/struct.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/struct.cpython-312.pyc>
+4105882 1792893053.918097 close(3</usr/lib/python3.12/__pycache__/struct.cpython-312.pyc>) = 0
+4105882 1792893053.918821 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.918863 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.918900 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.918930 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12/ctypes>
+4105882 1792893053.919054 close(3</usr/lib/python3.12/ctypes>) = 0
+4105882 1792893053.919089 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/_endian.py", {st_mode=S_IFREG|0644, st_size=2535, ...}, 0) = 0
+4105882 1792893053.919149 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/_endian.py", {st_mode=S_IFREG|0644, st_size=2535, ...}, 0) = 0
+4105882 1792893053.919186 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/ctypes/__pycache__/_endian.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/ctypes/__pycache__/_endian.cpython-312.pyc>
+4105882 1792893053.919327 close(3</usr/lib/python3.12/ctypes/__pycache__/_endian.cpython-312.pyc>) = 0
+4105882 1792893053.919710 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.919752 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/hashlib.py", {st_mode=S_IFREG|0644, st_size=9349, ...}, 0) = 0
+4105882 1792893053.919810 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/hashlib.py", {st_mode=S_IFREG|0644, st_size=9349, ...}, 0) = 0
+4105882 1792893053.919845 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/hashlib.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/hashlib.cpython-312.pyc>
+4105882 1792893053.919983 close(3</usr/lib/python3.12/__pycache__/hashlib.cpython-312.pyc>) = 0
+4105882 1792893053.920086 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.920124 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.920154 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so", {st_mode=S_IFREG|0644, st_size=64368, ...}, 0) = 0
+4105882 1792893053.920199 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>
+4105882 1792893053.920259 mmap(NULL, 66288, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>, 0) = 0x78f6546cc000
+4105882 1792893053.920317 mmap(0x78f6546d0000, 24576, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>, 0x4000) = 0x78f6546d0000
+4105882 1792893053.920366 mmap(0x78f6546d6000, 16384, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>, 0xa000) = 0x78f6546d6000
+4105882 1792893053.920396 mmap(0x78f6546da000, 12288, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>, 0xd000) = 0x78f6546da000
+4105882 1792893053.920439 close(3</usr/lib/python3.12/lib-dynload/_hashlib.cpython-312-x86_64-linux-gnu.so>) = 0
+4105882 1792893053.920464 openat(AT_FDCWD</home/dombarker>, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3</etc/ld.so.cache>
+4105882 1792893053.920509 mmap(NULL, 42867, PROT_READ, MAP_PRIVATE, 3</etc/ld.so.cache>, 0) = 0x78f654a1f000
+4105882 1792893053.920534 close(3</etc/ld.so.cache>) = 0
+4105882 1792893053.920560 openat(AT_FDCWD</home/dombarker>, "/lib/x86_64-linux-gnu/libcrypto.so.3", O_RDONLY|O_CLOEXEC) = 3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>
+4105882 1792893053.920618 mmap(NULL, 5323728, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>, 0) = 0x78f654000000
+4105882 1792893053.920646 mmap(0x78f6540b3000, 3358720, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>, 0xb3000) = 0x78f6540b3000
+4105882 1792893053.920678 mmap(0x78f6543e7000, 831488, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>, 0x3e7000) = 0x78f6543e7000
+4105882 1792893053.920706 mmap(0x78f6544b2000, 389120, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>, 0x4b1000) = 0x78f6544b2000
+4105882 1792893053.920740 mmap(0x78f654511000, 11216, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x78f654511000
+4105882 1792893053.920776 close(3</usr/lib/x86_64-linux-gnu/libcrypto.so.3>) = 0
+4105882 1792893053.921244 munmap(0x78f654a1f000, 42867) = 0
+4105882 1792893053.921352 openat(AT_FDCWD</home/dombarker>, "/proc/sys/crypto/fips_enabled", O_RDONLY) = -1 ENOENT (No such file or directory)
+4105882 1792893053.922334 openat(AT_FDCWD</home/dombarker>, "/usr/lib/ssl/openssl.cnf", O_RDONLY) = 3</etc/ssl/openssl.cnf>
+4105882 1792893053.922594 close(3</etc/ssl/openssl.cnf>) = 0
+4105882 1792893053.923149 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.923196 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__init__.cpython-312-x86_64-linux-gnu.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.923232 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__init__.abi3.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.923268 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__init__.so", 0x7fff5fdfb360, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.923307 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__init__.py", {st_mode=S_IFREG|0644, st_size=14020, ...}, 0) = 0
+4105882 1792893053.923371 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__init__.py", {st_mode=S_IFREG|0644, st_size=14020, ...}, 0) = 0
+4105882 1792893053.923411 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc>
+4105882 1792893053.923560 close(3</usr/lib/python3.12/json/__pycache__/__init__.cpython-312.pyc>) = 0
+4105882 1792893053.923712 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.923749 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.923787 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.923817 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12/json>
+4105882 1792893053.923902 close(3</usr/lib/python3.12/json>) = 0
+4105882 1792893053.923936 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/decoder.py", {st_mode=S_IFREG|0644, st_size=12473, ...}, 0) = 0
+4105882 1792893053.923995 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/decoder.py", {st_mode=S_IFREG|0644, st_size=12473, ...}, 0) = 0
+4105882 1792893053.924030 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc>
+4105882 1792893053.924173 close(3</usr/lib/python3.12/json/__pycache__/decoder.cpython-312.pyc>) = 0
+4105882 1792893053.924323 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.924359 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__init__.cpython-312-x86_64-linux-gnu.so", 0x7fff5fdfa680, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.924393 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__init__.abi3.so", 0x7fff5fdfa680, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.924422 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__init__.so", 0x7fff5fdfa680, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.924451 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__init__.py", {st_mode=S_IFREG|0644, st_size=16315, ...}, 0) = 0
+4105882 1792893053.924507 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__init__.py", {st_mode=S_IFREG|0644, st_size=16315, ...}, 0) = 0
+4105882 1792893053.924542 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc>
+4105882 1792893053.924679 close(3</usr/lib/python3.12/re/__pycache__/__init__.cpython-312.pyc>) = 0
+4105882 1792893053.924830 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.924866 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/enum.py", {st_mode=S_IFREG|0644, st_size=81636, ...}, 0) = 0
+4105882 1792893053.924917 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/enum.py", {st_mode=S_IFREG|0644, st_size=81636, ...}, 0) = 0
+4105882 1792893053.924952 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/enum.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/enum.cpython-312.pyc>
+4105882 1792893053.925149 close(3</usr/lib/python3.12/__pycache__/enum.cpython-312.pyc>) = 0
+4105882 1792893053.925624 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.925664 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/operator.py", {st_mode=S_IFREG|0644, st_size=10965, ...}, 0) = 0
+4105882 1792893053.925720 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/operator.py", {st_mode=S_IFREG|0644, st_size=10965, ...}, 0) = 0
+4105882 1792893053.925755 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/operator.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/operator.cpython-312.pyc>
+4105882 1792893053.925888 close(3</usr/lib/python3.12/__pycache__/operator.cpython-312.pyc>) = 0
+4105882 1792893053.926388 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.926428 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/functools.py", {st_mode=S_IFREG|0644, st_size=38126, ...}, 0) = 0
+4105882 1792893053.926486 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/functools.py", {st_mode=S_IFREG|0644, st_size=38126, ...}, 0) = 0
+4105882 1792893053.926522 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/functools.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/functools.cpython-312.pyc>
+4105882 1792893053.926657 close(3</usr/lib/python3.12/__pycache__/functools.cpython-312.pyc>) = 0
+4105882 1792893053.926939 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.926973 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__init__.cpython-312-x86_64-linux-gnu.so", 0x7fff5fdf9330, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.927008 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__init__.abi3.so", 0x7fff5fdf9330, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.927038 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__init__.so", 0x7fff5fdf9330, 0) = -1 ENOENT (No such file or directory)
+4105882 1792893053.927068 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__init__.py", {st_mode=S_IFREG|0644, st_size=52378, ...}, 0) = 0
+4105882 1792893053.927121 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__init__.py", {st_mode=S_IFREG|0644, st_size=52378, ...}, 0) = 0
+4105882 1792893053.927157 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc>
+4105882 1792893053.927336 close(3</usr/lib/python3.12/collections/__pycache__/__init__.cpython-312.pyc>) = 0
+4105882 1792893053.928045 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.928087 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/keyword.py", {st_mode=S_IFREG|0644, st_size=1073, ...}, 0) = 0
+4105882 1792893053.928143 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/keyword.py", {st_mode=S_IFREG|0644, st_size=1073, ...}, 0) = 0
+4105882 1792893053.928179 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc>
+4105882 1792893053.928316 close(3</usr/lib/python3.12/__pycache__/keyword.cpython-312.pyc>) = 0
+4105882 1792893053.928403 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.928441 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/reprlib.py", {st_mode=S_IFREG|0644, st_size=6569, ...}, 0) = 0
+4105882 1792893053.928493 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/reprlib.py", {st_mode=S_IFREG|0644, st_size=6569, ...}, 0) = 0
+4105882 1792893053.928527 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc>
+4105882 1792893053.928658 close(3</usr/lib/python3.12/__pycache__/reprlib.cpython-312.pyc>) = 0
+4105882 1792893053.930601 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.930654 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.930695 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.930727 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", O_RDONLY|O_NONBLOCK|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.12/re>
+4105882 1792893053.930814 close(3</usr/lib/python3.12/re>) = 0
+4105882 1792893053.930850 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_compiler.py", {st_mode=S_IFREG|0644, st_size=26089, ...}, 0) = 0
+4105882 1792893053.930911 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_compiler.py", {st_mode=S_IFREG|0644, st_size=26089, ...}, 0) = 0
+4105882 1792893053.930949 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc>
+4105882 1792893053.931097 close(3</usr/lib/python3.12/re/__pycache__/_compiler.cpython-312.pyc>) = 0
+4105882 1792893053.931515 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.931557 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_parser.py", {st_mode=S_IFREG|0644, st_size=41201, ...}, 0) = 0
+4105882 1792893053.931615 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_parser.py", {st_mode=S_IFREG|0644, st_size=41201, ...}, 0) = 0
+4105882 1792893053.931652 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc>
+4105882 1792893053.931816 close(3</usr/lib/python3.12/re/__pycache__/_parser.cpython-312.pyc>) = 0
+4105882 1792893053.932062 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.932099 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_constants.py", {st_mode=S_IFREG|0644, st_size=5930, ...}, 0) = 0
+4105882 1792893053.932153 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_constants.py", {st_mode=S_IFREG|0644, st_size=5930, ...}, 0) = 0
+4105882 1792893053.932188 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc>
+4105882 1792893053.932324 close(3</usr/lib/python3.12/re/__pycache__/_constants.cpython-312.pyc>) = 0
+4105882 1792893053.932681 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.932719 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_casefix.py", {st_mode=S_IFREG|0644, st_size=5446, ...}, 0) = 0
+4105882 1792893053.932898 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/_casefix.py", {st_mode=S_IFREG|0644, st_size=5446, ...}, 0) = 0
+4105882 1792893053.932934 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc>
+4105882 1792893053.933063 close(3</usr/lib/python3.12/re/__pycache__/_casefix.cpython-312.pyc>) = 0
+4105882 1792893053.933577 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.933687 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/copyreg.py", {st_mode=S_IFREG|0644, st_size=7614, ...}, 0) = 0
+4105882 1792893053.933771 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/copyreg.py", {st_mode=S_IFREG|0644, st_size=7614, ...}, 0) = 0
+4105882 1792893053.933812 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc>
+4105882 1792893053.933974 close(3</usr/lib/python3.12/__pycache__/copyreg.cpython-312.pyc>) = 0
+4105882 1792893053.934198 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.934237 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/scanner.py", {st_mode=S_IFREG|0644, st_size=2425, ...}, 0) = 0
+4105882 1792893053.934307 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/scanner.py", {st_mode=S_IFREG|0644, st_size=2425, ...}, 0) = 0
+4105882 1792893053.934342 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc>
+4105882 1792893053.934472 close(3</usr/lib/python3.12/json/__pycache__/scanner.cpython-312.pyc>) = 0
+4105882 1792893053.934570 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.934605 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.934635 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so", {st_mode=S_IFREG|0644, st_size=48952, ...}, 0) = 0
+4105882 1792893053.934684 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>
+4105882 1792893053.934742 mmap(NULL, 51104, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>, 0) = 0x78f6546bf000
+4105882 1792893053.934778 mmap(0x78f6546c1000, 28672, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>, 0x2000) = 0x78f6546c1000
+4105882 1792893053.934816 mmap(0x78f6546c8000, 8192, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>, 0x9000) = 0x78f6546c8000
+4105882 1792893053.934844 mmap(0x78f6546ca000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>, 0xa000) = 0x78f6546ca000
+4105882 1792893053.934888 close(3</usr/lib/python3.12/lib-dynload/_json.cpython-312-x86_64-linux-gnu.so>) = 0
+4105882 1792893053.935738 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+4105882 1792893053.935799 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/encoder.py", {st_mode=S_IFREG|0644, st_size=16070, ...}, 0) = 0
+4105882 1792893053.935858 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/encoder.py", {st_mode=S_IFREG|0644, st_size=16070, ...}, 0) = 0
+4105882 1792893053.935889 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc>
+4105882 1792893053.936017 close(3</usr/lib/python3.12/json/__pycache__/encoder.cpython-312.pyc>) = 0
+4105882 1792893053.936510 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.936563 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/platform.py", {st_mode=S_IFREG|0755, st_size=43331, ...}, 0) = 0
+4105882 1792893053.936624 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/platform.py", {st_mode=S_IFREG|0755, st_size=43331, ...}, 0) = 0
+4105882 1792893053.936657 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/platform.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/platform.cpython-312.pyc>
+4105882 1792893053.936813 close(3</usr/lib/python3.12/__pycache__/platform.cpython-312.pyc>) = 0
+4105882 1792893053.937093 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.937129 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.937380 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.937415 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload", {st_mode=S_IFDIR|0755, st_size=12288, ...}, 0) = 0
+4105882 1792893053.937442 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so", {st_mode=S_IFREG|0644, st_size=19432, ...}, 0) = 0
+4105882 1792893053.937484 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>
+4105882 1792893053.937539 mmap(NULL, 21432, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>, 0) = 0x78f654cc2000
+4105882 1792893053.937566 mmap(0x78f654cc4000, 4096, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>, 0x2000) = 0x78f654cc4000
+4105882 1792893053.937594 mmap(0x78f654cc5000, 4096, PROT_READ, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>, 0x3000) = 0x78f654cc5000
+4105882 1792893053.937618 mmap(0x78f654cc6000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>, 0x3000) = 0x78f654cc6000
+4105882 1792893053.937655 close(3</usr/lib/python3.12/lib-dynload/resource.cpython-312-x86_64-linux-gnu.so>) = 0
+4105882 1792893053.937780 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.937813 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/signal.py", {st_mode=S_IFREG|0644, st_size=2495, ...}, 0) = 0
+4105882 1792893053.937864 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/signal.py", {st_mode=S_IFREG|0644, st_size=2495, ...}, 0) = 0
+4105882 1792893053.937896 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/signal.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/signal.cpython-312.pyc>
+4105882 1792893053.938008 close(3</usr/lib/python3.12/__pycache__/signal.cpython-312.pyc>) = 0
+4105882 1792893053.938475 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.938500 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/threading.py", {st_mode=S_IFREG|0644, st_size=60123, ...}, 0) = 0
+4105882 1792893053.938543 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/threading.py", {st_mode=S_IFREG|0644, st_size=60123, ...}, 0) = 0
+4105882 1792893053.938571 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/threading.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/threading.cpython-312.pyc>
+4105882 1792893053.938699 close(3</usr/lib/python3.12/__pycache__/threading.cpython-312.pyc>) = 0
+4105882 1792893053.938770 mmap(NULL, 1048576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f6545bf000
+4105882 1792893053.938978 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.939006 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/_weakrefset.py", {st_mode=S_IFREG|0644, st_size=5893, ...}, 0) = 0
+4105882 1792893053.939045 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/_weakrefset.py", {st_mode=S_IFREG|0644, st_size=5893, ...}, 0) = 0
+4105882 1792893053.939072 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 3</usr/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc>
+4105882 1792893053.939161 close(3</usr/lib/python3.12/__pycache__/_weakrefset.cpython-312.pyc>) = 0
+4105882 1792893053.940065 openat(AT_FDCWD</home/dombarker>, "/proc/self/maps", O_RDONLY|O_CLOEXEC) = 3</proc/4105882/maps>
+4105882 1792893053.940160 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings", {st_mode=S_IFDIR|0755, st_size=20480, ...}, 0) = 0
+4105882 1792893053.940189 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/ascii.py", {st_mode=S_IFREG|0644, st_size=1248, ...}, 0) = 0
+4105882 1792893053.940232 newfstatat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/ascii.py", {st_mode=S_IFREG|0644, st_size=1248, ...}, 0) = 0
+4105882 1792893053.940257 openat(AT_FDCWD</home/dombarker>, "/usr/lib/python3.12/encodings/__pycache__/ascii.cpython-312.pyc", O_RDONLY|O_CLOEXEC) = 5</usr/lib/python3.12/encodings/__pycache__/ascii.cpython-312.pyc>
+4105882 1792893053.945133 close(5</usr/lib/python3.12/encodings/__pycache__/ascii.cpython-312.pyc>) = 0
+4105882 1792893053.945273 mmap(NULL, 1052672, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f653eff000
+4105882 1792893053.945333 mmap(NULL, 1048576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f653dff000
+4105882 1792893053.945383 munmap(0x78f653eff000, 8192) = 0
+4105882 1792893053.945398 mmap(NULL, 1044480, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x78f653f01000
+4105882 1792893053.945419 munmap(0x78f653f01000, 1044480) = 0
+4105882 1792893053.945432 munmap(0x78f653dff000, 8192) = 0
+4105882 1792893053.945450 close(3</proc/4105882/maps>) = 0
+4105882 1792893053.947660 munmap(0x78f654cc8000, 16384) = 0
+4105882 1792893053.947784 exit_group(0) = ?
+4105882 1792893053.948159 +++ exited with 0 +++
