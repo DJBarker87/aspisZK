@@ -21,6 +21,7 @@ theorem array_back {n : Usize} (a : Array MainQM n) :
   change (a.val.map fromMainQM).map toMainQM = a.val
   rw [List.map_map]
   simp only [Function.comp_def,qm_back,List.map_id_fun']
+  rfl
 
 theorem prefix_back (p : MainPrefix) : toMainPrefix (fromMainPrefix p) = p := by
   cases p

@@ -2,46 +2,64 @@
 
 ## Concrete Claims parent connection — 2026-10-25
 
-The next bounded implementation step uses the worker's already successful
-finite Claims extraction at `6eec87d293` (run8), not another native union or
-iterator attempt. `ClaimsUnrolledParentSource` retains the emitted function
-body with explicit primitive operation parameters, nominal namespace/type
-relocation and default resource options. It imports no external axiom
-templates. Its pure `mapError` and `boxArray` definitions are **value models**;
-their native std/ownership/error/cleanup/effect correspondence remains open.
+The bounded implementation step reuses the successful finite Claims extraction
+at worker revision `6eec87d293` (run8), rather than retrying native union or
+iterator translation. `ClaimsUnrolledParentSource` retains the complete emitted
+function body with explicit primitive operation parameters and nominal carrier
+relocation. No external axiom templates are imported. The pure `mapError` and
+`boxArray` definitions are **value models**; their native std/ownership/error/
+cleanup/abort/effect correspondence remains unproved.
 
-`AspisR1ClaimsUnrolledParent.claims_value` now proves an **all-outcome complete
-parent value refinement**, including the real delayed setter closures and
-decoder error/fail/div prefixes. The three returned rows are decoded from
-the same record at offsets0/29/58. The proof does not need an allocator
-zero-content/frame hypothesis. This extends the older owned-step result to
-the actual emitted finite parent; it does not establish native initializedness.
+**Checked:** `AspisR1ClaimsUnrolledParent.claims_value` proves all-outcome
+complete-parent **value** refinement, including delayed setter closures and
+decoder error/fail/div branches. The returned rows come from the same record
+at offsets 0/29/58. No allocator zero-content/frame, canonicality, decoder
+success or independently selected returned rows are premises. This extends
+the older owned-step result to the emitted finite parent; it does not prove
+native initializedness or ordered oracle effects.
 
-The new `ClaimsUnrolledFinish` fixes the getter and full indexed decoder to
-the existing selected S1 source implementations, installs the parent as the
-Claims callback, and checks `AspisR1.ClaimsUnrolledFinish.finish_claims`
-against `FinishModel.finish`: the SAME accepted full finish supplies the
-Claims return, with no separately assumed accepted Claims run or chosen rows.
-The getter/decoder nominal adapter laws in `ClaimsUnrolledFinishAdapters`
-are the final focused check; no candidate adoption is implied.
+`AspisR1.ClaimsUnrolledFinish.getter_exact` and `decode_exact` connect the
+nominal carriers to the actual selected S1 getter and full indexed decoder,
+for every prefix/record/offset/array length and all value/error/fail/div
+outcomes, preserving all four raw U32 words without a canonicality restriction.
+`ClaimsUnrolledFinish.install` fixes only the Claims callback; other finish
+fields remain explicit. `AspisR1.ClaimsUnrolledFinish.finish_claims` derives
+the normalized Claims return from the SAME accepted complete
+`FinishModel.finish`, with no separate accepted Claims run premise.
 
-The original narrow and S1 caches differed at `Aeneas.Std.Core.Fmt` and
-`Aeneas.Std.Array.ArraySlice`. No compatibility assumption was used. The new
-Types/Source/Rows were recompiled in order against the existing S1 selection,
-then the actual finish consumer passed: exit0,7.6023s,
-peak3,292,839,936B,swap0, with only propext/Classical.choice/Quot.sound.
-The parent proof in that selection passed exit0,2.0115s,
-peak2,263,072,768B,swap0. Exact changed sources, commands, dependencies,
-failures and metrics are retained in `evidence/claims-unrolled-parent-20261025/`.
+The final changed chain was checked against the existing S1 dependency
+selection with `lake env lean -j1 -M4400 -DElab.async=false`:
+parent refinement exit0, 2.0111s, peak2,262,417,408B; actual finish consumer
+exit0, 7.3791s, peak3,294,117,888B; getter/decoder adapters and consumer axioms
+exit0, 2.2323s, peak3,288,498,176B. All swap0; reported theorem axioms are
+only propext/Classical.choice/Quot.sound. Source snapshots/hashes, commands,
+reused dependency selection, prior failures and resource receipts are in
+`evidence/claims-unrolled-parent-20261025/`. This is focused cached checking,
+not a coherent frozen release rebuild.
 
-Remaining: actual native reserve/boxing and explicit std value-model
-correspondence, initializedness, cleanup/abort and ordered effects, frozen-to-
-safe/unrolled equivalence, CU/stack and all affected artifact checks; then
-installation in the same SDK/S2 accepted execution. The runtime model now has
-two operational placeholders, but this is **not** a discharge of those native
-obligations. Terminal remains separate. The safe source is unadopted; no
-shipped source, security contract, authority or key changed. Neither deployed
-soundness nor real-prover privacy is established.
+**Failed enclosing check:** the original accepted SDK/S1 theorem specialized
+to this installed candidate does not import: generated global declaration
+`instDiscriminantErrorIsize` collides with `AspisR1FinishRelationCurrent.Types`.
+Reusing the worker's explicit enum namespace recipe did not remove it.
+Final attempt exit1, 3.8260s, peak2,837,725,184B, swap0; no SDK theorem was
+checked. The exact attempted source is retained as
+`ClaimsUnrolledSdk.unchecked.lean.txt`, outside the formal source tree.
+There is no higher-cap retry, new declaration-transport layer or claimed
+SDK/S2 closure. The next bounded repair is to qualify the generated instance
+names while preserving their exact carriers and constructor tags, then check
+this exact enclosing consumer. No operator approval is needed for that source
+repair; no guard may be bypassed to perform it.
+
+Remaining native obligations include actual reserve/boxing operations and
+explicit std value-model correspondence, initializedness, cleanup/abort,
+ordered effects, frozen-to-safe/unrolled equivalence, CU/stack and affected
+artifact checks. The two operational placeholders are not two discharged
+native proofs. Candidate adoption still requires those checks. Claims/Terminal
+cryptographic interfaces, same-run `CleanAcceptedModel`/no-hit, probability-law
+transport, and real-prover privacy remain open. **No top-level security premise
+was eliminated.** No shipped Rust source, security contract, authority or key
+changed. The candidate is unadopted; implementation-linked soundness and
+real-prover privacy are not established.
 
 ## Programme reset — 2026-10-25
 
