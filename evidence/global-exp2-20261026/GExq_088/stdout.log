@@ -1,0 +1,52 @@
+GExq_FirstChildRoot.lean:18:33: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.sdk`
+GExq_FirstChildRoot.lean:24:102: error: unsolved goals
+F C Hash : Type
+adapter : AdapterRw.Ops
+ops : AspisR1CurrentCaller.Ops
+stage : VTop_Stages.Ops
+finish : AspisR1Stage2.Stage2Finish.FinishOps F
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : AdapterRw.aspis_core.digest.Digest32 Hash
+semantic : AdapterRw.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+hash : Hash
+saved : alloc.vec.Vec U8
+law : ∀ (h : Hash) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+success :
+  S2W_Trace.invoke sorry (S2W_Trace.Call.op10 D semantic pub proof split hash none) = ok (core.result.Result.Ok saved)
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+native :
+  AspisR1CurrentCaller.verifier.candidate.tx1
+      (GExp_FirstCode.installed (GExp_FirstPair.base ops reserved query geo) B std)
+      (AspisS6CurrentFirstInstallation.toDigest D) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof split
+      hash none =
+    ok (core.result.Result.Ok saved)
+raw :
+  erase (SdkC_Source.dictionary hashv) ()
+      (GExq_FirstCode.code (GExp_FirstPair.base ops reserved query geo) B std hashv
+        (AspisS6CurrentFirstInstallation.toDigest D) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof split
+        hash) =
+    ok (core.result.Result.Ok saved)
+frame : AspisV8R19.DuplexFrames.Bytes
+read :
+  Read
+    (SdkC_Source.readLog
+      (SdkC_Source.run hashv
+          (GExq_FirstCode.code (GExp_FirstPair.base ops reserved query geo) B std hashv
+            (AspisS6CurrentFirstInstallation.toDigest D) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof
+            split hash)
+          []).2)
+    frame
+target : BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot parsed 2)
+⊢ GExq_ContainingRead.Reads hashv
+    (GExq_ChildCode.execute adapter ops stage finish reserved query geo B std hashv
+      (S2W_Trace.Call.op10 D semantic pub proof split hash none))
+    frame
+'AspisR1.GExq_FirstChildRoot.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

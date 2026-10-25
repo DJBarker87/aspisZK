@@ -1,0 +1,100 @@
+GExq_WrapperCode.lean:25:40: error(lean.unknownIdentifier): Unknown identifier `exclusiveGuard`
+GExq_WrapperCode.lean:55:6: error: Tactic `rfl` failed: The left-hand side
+  erase (SdkC_Source.dictionary hashv) () (pure (core.result.Result.Err error✝))
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok saved with
+  | core.result.Result.Err error => ok (core.result.Result.Err error)
+  | core.result.Result.Ok saved =>
+    match
+      copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+        (source (nativeBytes saved)) with
+    | Outcome.panic => fail Error.assertionFailure
+    | Outcome.returned written => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (saved, release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+
+case h_1
+A : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+body : Code S2W_Observation.Answer
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state : A
+native : S2W_ExtractionBoundary.First
+id : S2W_ExtractionBoundary.Program
+data : Slice U8
+law : erase (SdkC_Source.dictionary hashv) () body = native id e.first data
+allocated : A
+saved : alloc.vec.Vec U8
+result✝ : S2W_Observation.Answer
+error✝ : S2W_Observation.PE
+heq✝ : core.result.Result.Ok saved = core.result.Result.Err error✝
+⊢ erase (SdkC_Source.dictionary hashv) () (pure (core.result.Result.Err error✝)) =
+    match core.result.Result.Ok saved with
+    | core.result.Result.Err error => ok (core.result.Result.Err error)
+    | core.result.Result.Ok saved =>
+      match
+        copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+          (source (nativeBytes saved)) with
+      | Outcome.panic => fail Error.assertionFailure
+      | Outcome.returned written => do
+        let cleaned ← allocator.cleanup allocated
+        ok (core.result.Result.Ok (saved, release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+GExq_WrapperCode.lean:56:4: error: unsolved goals
+case h_2
+A : Type
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+body : Code S2W_Observation.Answer
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state : A
+native : S2W_ExtractionBoundary.First
+id : S2W_ExtractionBoundary.Program
+data : Slice U8
+law : erase (SdkC_Source.dictionary hashv) () body = native id e.first data
+allocated : A
+saved : alloc.vec.Vec U8
+result✝ : S2W_Observation.Answer
+saved✝ : alloc.vec.Vec U8
+heq✝ : core.result.Result.Ok saved = core.result.Result.Ok saved✝
+⊢ erase (SdkC_Source.dictionary hashv) ()
+      (match
+        copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+          (source (nativeBytes saved✝)) with
+      | Outcome.panic => liftResult (fail Error.assertionFailure)
+      | Outcome.returned written => do
+        let cleaned ← liftM (allocator.cleanup allocated)
+        pure (core.result.Result.Ok (saved✝, release written sorry, cleaned))) =
+    match
+      copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+        (source (nativeBytes saved)) with
+    | Outcome.panic => fail Error.assertionFailure
+    | Outcome.returned written => do
+      let cleaned ← allocator.cleanup allocated
+      ok (core.result.Result.Ok (saved, release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned))
+GExq_WrapperCode.lean:56:17: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵E̵r̵a̵s̵u̵r̵e̵.̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵M̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲E̲r̲a̲s̲u̲r̲e̲.̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲M̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_WrapperCode.lean:56:28: warning: This simp argument is unused:
+  GExp_FirstErasure.erase_liftM
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵E̵r̵a̵s̵u̵r̵e̵.̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵M̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_WrapperCode.lean:56:58: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵E̵r̵a̵s̵u̵r̵e̵.̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵M̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲E̲r̲a̲s̲u̲r̲e̲.̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲M̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_WrapperCode.lean:46:13: warning: declaration uses `sorry`
+'AspisR1.GExq_WrapperCode.first_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.GExq_WrapperCode.second_source' depends on axioms: [propext, Classical.choice, Quot.sound]

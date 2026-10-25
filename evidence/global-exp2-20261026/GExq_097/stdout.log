@@ -1,0 +1,164 @@
+GExq_AccountAccepted.lean:44:86: error: unsolved goals
+A F C : Type
+adapter : AdapterRw.Ops
+ops : AspisR1CurrentCaller.Ops
+stage : VTop_Stages.Ops
+finish : AspisR1Stage2.Stage2Finish.FinishOps F
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+adversary : Program Bytes State (FirstInputs A)
+chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (ℕ → Record) → A → Program Bytes State (SecondInputs A)
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+extraction :
+  S2W_DigestExtraction.AeneasExtraction (GExq_Caller.sdk adapter ops stage finish reserved query geo B std) native1
+    native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+final1 final2 : A
+accepted1 :
+  let input := (eval H adversary).2;
+  S2W_D189Wrappers.first native1 copy allocator input.entry id input.data input.state =
+    ok (core.result.Result.Ok (saved, post1, final1))
+accepted2 :
+  let input := (eval H adversary).2;
+  let next := (eval H (chooseSecond input saved post1 final1)).2;
+  S2W_D189Wrappers.second native2 allocator next.entry id next.data next.slot next.state =
+    ok (core.result.Result.Ok (post2, final2))
+input : FirstInputs A := (eval H adversary).2
+next : SecondInputs A := (eval H (chooseSecond input saved post1 final1)).2
+first :
+  have code :=
+    GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator input.entry id
+      input.data input.state;
+  eval H (SdkC_Oracle.program code) =
+    (SdkC_Source.readLog (SdkC_Source.run hashv code []).2, ok (core.result.Result.Ok (saved, post1, final1)))
+second :
+  have code :=
+    GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator next.entry id
+      next.data next.slot next.state;
+  eval H (SdkC_Oracle.program code) =
+    (SdkC_Source.readLog (SdkC_Source.run hashv code []).2, ok (core.result.Result.Ok (post2, final2)))
+⊢ ((eval H adversary).1 ++
+        ((eval H
+              (SdkC_Oracle.program
+                (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator
+                  (eval H adversary).2.entry id (eval H adversary).2.data (eval H adversary).2.state))).1 ++
+          (eval H
+              (match
+                (eval H
+                    (SdkC_Oracle.program
+                      (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy
+                        allocator (eval H adversary).2.entry id (eval H adversary).2.data
+                        (eval H adversary).2.state))).2 with
+              | ok (core.result.Result.Ok (saved, post, final)) =>
+                AspisV8R19.OracleProgramOps.bind (chooseSecond (eval H adversary).2 saved post final) fun next =>
+                  AspisV8R19.OracleProgramOps.bind
+                    (SdkC_Oracle.program
+                      (GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator
+                        next.entry id next.data next.slot next.state))
+                    fun out =>
+                    Program.done
+                      ((eval H adversary).2,
+                        (eval H
+                            (SdkC_Oracle.program
+                              (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy
+                                allocator (eval H adversary).2.entry id (eval H adversary).2.data
+                                (eval H adversary).2.state))).2,
+                        some (next, out))
+              | x =>
+                Program.done
+                  ((eval H adversary).2,
+                    (eval H
+                        (SdkC_Oracle.program
+                          (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy
+                            allocator (eval H adversary).2.entry id (eval H adversary).2.data
+                            (eval H adversary).2.state))).2,
+                    none))).1),
+      (eval H
+          (match
+            (eval H
+                (SdkC_Oracle.program
+                  (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator
+                    (eval H adversary).2.entry id (eval H adversary).2.data (eval H adversary).2.state))).2 with
+          | ok (core.result.Result.Ok (saved, post, final)) =>
+            AspisV8R19.OracleProgramOps.bind (chooseSecond (eval H adversary).2 saved post final) fun next =>
+              AspisV8R19.OracleProgramOps.bind
+                (SdkC_Oracle.program
+                  (GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator
+                    next.entry id next.data next.slot next.state))
+                fun out =>
+                Program.done
+                  ((eval H adversary).2,
+                    (eval H
+                        (SdkC_Oracle.program
+                          (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy
+                            allocator (eval H adversary).2.entry id (eval H adversary).2.data
+                            (eval H adversary).2.state))).2,
+                    some (next, out))
+          | x =>
+            Program.done
+              ((eval H adversary).2,
+                (eval H
+                    (SdkC_Oracle.program
+                      (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy
+                        allocator (eval H adversary).2.entry id (eval H adversary).2.data
+                        (eval H adversary).2.state))).2,
+                none))).2) =
+    ((eval H adversary).1 ++
+        (SdkC_Source.readLog
+            (SdkC_Source.run hashv
+                (GExq_InstalledWrapper.first adapter ops stage finish reserved query geo B std hashv copy allocator
+                  (eval H adversary).2.entry id (eval H adversary).2.data (eval H adversary).2.state)
+                []).2 ++
+          ((eval H (chooseSecond (eval H adversary).2 saved post1 final1)).1 ++
+            SdkC_Source.readLog
+              (SdkC_Source.run hashv
+                  (GExq_InstalledWrapper.second adapter ops stage finish reserved query geo B std hashv allocator
+                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.entry id
+                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.data
+                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.slot
+                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.state)
+                  []).2)),
+      (eval H adversary).2, ok (core.result.Result.Ok (saved, post1, final1)),
+      some
+        ((eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2, ok (core.result.Result.Ok (post2, final2))))
+GExq_AccountAccepted.lean:54:31: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp only [program, ̲eval_bind,f̵i̵r̵ ̲st̵,̵s̵econd, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_AccountAccepted.lean:54:37: warning: This simp argument is unused:
+  second
+
+Hint: Omit it from the simp argument list.
+  simp only [program, ̲eval_bind, ̲first,s̵ ̲ec̵o̵n̵d̵,̵e̵val, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_AccountAccepted.lean:54:44: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [program, ̲eval_bind, ̲first, ̲second,e̵v̵a̵l̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+GExq_AccountAccepted.lean:54:49: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵f̵i̵r̵s̵t̵,̵s̵e̵c̵o̵n̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲s̲e̲c̲o̲n̲d̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.GExq_AccountAccepted.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

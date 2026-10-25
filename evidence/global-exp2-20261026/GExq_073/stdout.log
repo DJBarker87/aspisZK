@@ -1,0 +1,52 @@
+GExq_PrepareFrame.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SdkC_Source.readLog
+    (SdkC_Source.run hashv
+        (SdkD_PrepareLower.lower
+          (S1PrepareCode.prepare ops AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B) D pub
+            proof hash input))
+        []).2
+in the target expression
+  ∃ frame,
+    Read
+        (SdkC_Source.readLog
+          (SdkC_Source.run hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input))
+              []).2)
+        frame ∧
+      BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot parsed 2)
+
+Hash : Type
+ops : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+source : ∀ (h : Hash) (parts : Slice (Slice U8)), D.digest h parts = hashv parts
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+proof : Slice U8
+hash : Hash
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+success :
+  verifier.candidate.prepare (RowShape_InstalledSlots.verifierOps ops B std) D pub proof hash none input =
+    ok (core.result.Result.Ok p, scratch)
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑proof
+⊢ ∃ frame,
+    Read
+        (SdkC_Source.readLog
+          (SdkC_Source.run hashv (SdkD_PrepareLower.lower (SdkD_PrepareSource.code ops B std D pub proof hash input))
+              []).2)
+        frame ∧
+      BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot parsed 2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.GExq_PrepareFrame.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
