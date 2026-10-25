@@ -1,0 +1,94 @@
+--- reviewed/SbfProducerLinux_backend.py
++++ candidate/SbfProducer_backend_candidate.py
+@@ -12,0 +13,2 @@
++import select
++import signal
+@@ -379 +381 @@
+-def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None):
++def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None,parentfd=None):
+@@ -381,0 +384,3 @@
++        require(parentfd is not None, 'owned helper pidfd required')
++        require(abi.prctl(1,9) == 0, 'guest parent-death arm')
++        parent_alive(parentfd)
+@@ -398,2 +403,5 @@
+-        abi.close_escape_fds()
+-        stdio_check(stdio,api)
++        # Retain only the owned parent liveness handle through credential drop.
++        # dup2 is before close_range; old roots/readers/writers cannot survive.
++        api.dup2(parentfd,3,inheritable=False)
++        abi.zero('close_range',U(4),U(0xffffffff),U(0))
++        require(inventory(api) == [0,1,2,3], 'pending descriptor after root closure')
+@@ -401,0 +410,5 @@
++        # setresuid/setresgid may clear PDEATHSIG: rearm, then stable-handle
++        # check catches parent death in that gap before any guest exec.
++        require(abi.prctl(1,9) == 0, 'guest parent-death rearm')
++        parent_alive(3)
++        api.close(3)
+@@ -462 +475,7 @@
+-    gate_r,gate_w = api.pipe2(0x80000)
++    selfpidfd = abi.call('pidfd_open',I(api.getpid()),U(0))
++    require(selfpidfd >= 3, 'helper pidfd alias')
++    try:
++        gate_r,gate_w = api.pipe2(0x80000)
++    except BaseException:
++        api.close(selfpidfd)
++        raise
+@@ -467,0 +487 @@
++        api.close(selfpidfd)
+@@ -475 +495 @@
+-            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest)
++            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest,selfpidfd)
+@@ -530,0 +551 @@
++        api.close(selfpidfd)
+@@ -543,0 +565,51 @@
++
++
++def parent_alive(fd):
++    poller = select.poll()
++    poller.register(fd, select.POLLIN | select.POLLHUP | select.POLLERR)
++    require(poller.poll(0) == [], 'owned parent exited/handle error')
++
++
++def producer_fixed_body():
++    """Only root_continuation calls this, after concrete admission and pins.
++
++    Re-read the immutable approved manifest, no runtime argument/global setter.
++    Root helper termination raises into internal_backend's owned-child cleanup.
++    Parent death requests SIGTERM; SIGKILL/LSM and D-state remain unvalidated.
++    """
++    from SbfProducer_package import approval, journal
++    manifest = approval()['runtime']
++    validate_runtime(manifest)
++    abi = LinuxABI()
++    parent = os.getppid()
++    parentfd = abi.call('pidfd_open',I(parent),U(0))
++    own = root = outputs = nullfd = None
++    output = None
++    previous = {}
++    def terminate(*_):
++        raise Denied('helper parent/termination event; no output')
++    try:
++        require(parentfd >= 3, 'helper parent pidfd alias')
++        for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):
++            previous[sig] = signal.getsignal(sig)
++            signal.signal(sig,terminate)
++        require(abi.prctl(1,15) == 0, 'helper parent-death arm')
++        require(os.getppid() == parent, 'helper parent changed during arm')
++        parent_alive(parentfd)
++        # Parent liveness FD need not cross guest fork: PDEATHSIG now armed.
++        os.close(parentfd)
++        parentfd = None
++        own,root,outputs = create_fixed_layout()
++        output = PublicOutput(outputs,0)
++        nullfd = fixed_null()
++        result = internal_backend(root,output,nullfd,abi,manifest=manifest)
++        journal('root-result.json',result)
++        return 0
++    finally:
++        if output is not None:
++            output.close()
++        for fd in (parentfd,nullfd,outputs,root,own):
++            if fd is not None:
++                os.close(fd)
++        for sig,handler in previous.items():
++            signal.signal(sig,handler)

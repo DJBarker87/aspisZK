@@ -1,0 +1,153 @@
+"""Concrete reviewed operational functions; never called in this job.
+
+Function text is identical to the renamed RssGOv3 host. Only the surrounding
+bindings differ: exact new unit, root-owned raw journal and no old main/marker.
+"""
+import contextlib
+import hashlib
+import json
+import os
+from pathlib import Path
+import resource
+import shutil
+import struct
+import subprocess
+import sys
+import sysconfig
+import time
+import SbfProducerRss_adapter as adapter
+from SbfProducer_package import journal as save
+ACTIVE_GUARD = None
+EXPECTED = dict(high=3*2**30, cap=4*2**30, swap_max=0, tasks_max=64)
+adapter.UNIT = 'SbfProducer-20261025-tiny-v1'
+def digest(raw):
+    return dict(sha256=hashlib.sha256(raw).hexdigest(), size=len(raw))
+def filepin(path):
+    return digest(Path(path).read_bytes())
+
+
+def runtime_pins():
+    # Pure ELF metadata inspection: no ldd/native helper execution. Reject new
+    # env runtime dependencies rather than silently leaving them unpinned.
+    raw=Path('/usr/bin/env').read_bytes()
+    if raw[:6] != b'\x7fELF\x02\x01' or struct.unpack_from('<H',raw,18)[0] != 62:
+        raise ValueError('env ELF ABI drift')
+    phoff,shoff=struct.unpack_from('<QQ',raw,32)
+    phsize,phnum,shsize,shnum=struct.unpack_from('<HHHH',raw,54)
+    interp=[]
+    for i in range(phnum):
+        ph=struct.unpack_from('<IIQQQQQQ',raw,phoff+i*phsize)
+        if ph[0]==3:interp.append(raw[ph[2]:ph[2]+ph[5]].rstrip(b'\0').decode())
+    sections=[struct.unpack_from('<IIQQQQIIQQ',raw,shoff+i*shsize) for i in range(shnum)]
+    needed=[]
+    for section in sections:
+        if section[1]!=6:continue
+        strings=sections[section[6]]
+        table=raw[strings[4]:strings[4]+strings[5]]
+        for off in range(section[4],section[4]+section[5],section[9]):
+            tag,value=struct.unpack_from('<qQ',raw,off)
+            if tag==1:needed.append(table[value:].split(b'\0',1)[0].decode())
+            if tag in (15,29):raise ValueError('env ELF search path drift')
+    if interp!=['/lib64/ld-linux-x86-64.so.2'] or needed!=['libc.so.6']:
+        raise ValueError('env ELF runtime dependency drift')
+    std = Path(sysconfig.get_path('stdlib')).resolve()
+    files = {}
+    for root, dirs, names in os.walk(std):
+        dirs[:] = sorted(d for d in dirs if d not in ('site-packages','dist-packages','__pycache__'))
+        for name in sorted(names):
+            if name.endswith(('.py','.so')):
+                p = Path(root)/name
+                files[str(p)] = filepin(p)
+    mapped = {}
+    for line in Path('/proc/self/maps').read_text().splitlines():
+        parts = line.split(None,5)
+        if len(parts)==6 and parts[5].startswith('/'):
+            p=parts[5]
+            mapped[p]=filepin(p)
+    tools = {name:dict(path=shutil.which(name), **filepin(shutil.which(name)))
+             for name in ('ps','systemctl','docker','systemd-run')}
+    return dict(executable=str(Path(sys.executable).resolve()), executable_pin=filepin(sys.executable),
+                version=sys.version, stdlib=files, mapped_libraries=mapped, tools=tools,
+                env_binary=dict(path='/usr/bin/env', **filepin('/usr/bin/env')),
+                env_elf_contract=dict(interpreter=interp,needed=needed),
+                env_dependencies={p:filepin(p) for p in ('/lib64/ld-linux-x86-64.so.2', '/lib/x86_64-linux-gnu/libc.so.6')})
+
+def collect(phase):
+    """Record every ordered filesystem/command input without changing API logic."""
+    api=adapter.__dict__
+    events=[]
+    read=Path.read_text
+    execute=subprocess.run
+    scandir=os.scandir
+    def recorded_read(path,*args,**kwargs):
+        try:
+            content=read(path,*args,**kwargs)
+        except OSError as exc:
+            events.append(dict(kind='read',path=str(path),errno=exc.errno,error=str(exc)))
+            raise
+        events.append(dict(kind='read',path=str(path),content=content,errno=0,**digest(content.encode())))
+        return content
+    def recorded_run(args,*pos,**kwargs):
+        if ACTIVE_GUARD: ACTIVE_GUARD.check()
+        try:
+            result=execute(args,*pos,**kwargs)
+        except (OSError,subprocess.SubprocessError) as exc:
+            events.append(dict(kind='command',command=args,error=str(exc),errno=getattr(exc,'errno',None),exit=getattr(exc,'returncode',None),
+                               stdout=getattr(exc,'stdout',None),stderr=getattr(exc,'stderr',None)))
+            raise
+        events.append(dict(kind='command',command=args,exit=result.returncode,stdout=result.stdout,stderr=result.stderr))
+        return result
+    @contextlib.contextmanager
+    def recorded_scandir(path):
+        try:
+            with scandir(path) as entries:
+                entries=list(entries)
+                events.append(dict(kind='scandir',path=str(path),entries=[dict(name=e.name,path=e.path,is_dir=e.is_dir(follow_symlinks=False)) for e in entries]))
+                yield iter(entries)
+        except OSError as exc:
+            events.append(dict(kind='scandir',path=str(path),error=str(exc),errno=exc.errno))
+            raise
+    start=time.monotonic()
+    try:
+        Path.read_text=recorded_read
+        subprocess.run=recorded_run
+        os.scandir=recorded_scandir
+        report=api['read_only_admission'](phase=phase)
+    finally:
+        Path.read_text=read
+        subprocess.run=execute
+        os.scandir=scandir
+        save(phase+'-ordered.json',events)
+    save(phase+'-report.json',report)
+    save(phase+'-metrics.json',dict(wall_seconds=time.monotonic()-start,
+        peak_rss_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*(1 if sys.platform=='darwin' else 1024),
+        swap=resource.getrusage(resource.RUSAGE_SELF).ru_nswap,
+        aggregate_rss_bytes=sum(int(line.split()[2])*1024 for line in (report.get('original_legacy') or {}).get('process_visibility','').splitlines()[1:] if len(line.split())>=3) if report.get('original_legacy') else 'N/A visibility unavailable; not peak',
+        print_axioms='N/A'))
+    return report
+
+def controls():
+    observed=adapter.identity['self_observation']()
+    path=Path(observed['path'])
+    names=['memory.high','memory.max','memory.current','memory.peak','memory.swap.max','memory.swap.current',
+           'memory.events','pids.max','pids.current','cgroup.procs','cgroup.threads','cgroup.events']
+    result=dict(path=str(path),pid=os.getpid(),self_observation=observed,values={})
+    for name in names:
+        try:result['values'][name]=(path/name).read_text()
+        except OSError as exc:result['values'][name]=dict(error=str(exc),errno=exc.errno)
+    return result
+
+def check_controls(receipt):
+    values=receipt['values']
+    for name in ('memory.high','memory.max','memory.swap.max','memory.swap.current','pids.max','memory.peak','memory.current','pids.current','memory.events'):
+        if not isinstance(values[name],str):raise ValueError('unreadable scope control: '+name)
+    for name,expected in [('memory.high',EXPECTED['high']),('memory.max',EXPECTED['cap']),
+                          ('memory.swap.max',0),('memory.swap.current',0),('pids.max',64)]:
+        if adapter.c.parse_number(values[name])!=expected:raise ValueError('scope control drift: '+name)
+    if adapter.c.parse_number(values['memory.peak'])>EXPECTED['cap']:raise ValueError('scope peak exceeds cap')
+    if adapter.c.parse_number(values['memory.current'])>EXPECTED['cap']:raise ValueError('scope current exceeds cap')
+    if adapter.c.parse_number(values['pids.current'])>64:raise ValueError('scope task cap exceeded')
+    events=adapter.c.pairs(values['memory.events'])
+    for key in ('high','max','oom','oom_kill','oom_group_kill'):
+        if events[key]!=0:raise ValueError('scope pressure event: '+key)
+    return True
