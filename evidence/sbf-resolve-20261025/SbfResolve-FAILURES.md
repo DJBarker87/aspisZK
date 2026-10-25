@@ -35,3 +35,14 @@ lib/libwinapi_*.a for the TWO exact frozen winapi Windows GNU0.4.0 archive hashe
 No library execution/adoption/compilation. Nine focused policy checks pass.
 All four failed preparations are data-policy failures, not memory failures;
 all partial files and exact sources/receipts retained. No Cargo/network charged.
+
+First read-only artifact export: exited1 because local collector reconstructed
+compiler-query JSONL using recursively sorted receipt key order rather than the
+guard's original insertion order. The remote helper rejected that guessed byte
+hash, after streaming the four metadata/trace files. Collector asserted before
+saving the partial stream; that lost stream and isolated failure metrics are
+unavailable. Exact first collector source retained; terminal traceback is
+`<string>:9 AssertionError`. No Cargo/compiler call or private input mutation.
+Replacement derives JSONL key order directly from guard source and retains
+partial/error bytes before checking transport exit. This is a changed collector
+and missing-evidence retry, not a repeated query or source/archive replay.
