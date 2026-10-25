@@ -1,0 +1,20 @@
+{
+  "authority": "LeadONEfixedboundedreadonly storedcleanup+ownproofharness source todiagnose hashmismatch/kernelprobe; no edits/native execution",
+  "command": [
+    "/usr/bin/ssh",
+    "-T",
+    "-oBatchMode=yes",
+    "-oConnectTimeout=10",
+    "-oStrictHostKeyChecking=yes",
+    "-oClearAllForwardings=yes",
+    "-oForwardAgent=no",
+    "dombarker@100.108.41.90",
+    "/usr/bin/python3 -I -B -c 'import os,stat,json,hashlib\nfrom pathlib import Path\ndef read(path,limit,pin=None):\n s=os.lstat(path);assert stat.S_ISREG(s.st_mode) and s.st_nlink==1 and s.st_size<=limit\n fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW)\n with os.fdopen(fd,'\"'\"'rb'\"'\"') as f:b=f.read(limit+1);t=os.fstat(f.fileno())\n assert len(b)==s.st_size and (s.st_dev,s.st_ino,s.st_size,s.st_mtime_ns,s.st_ctime_ns)==(t.st_dev,t.st_ino,t.st_size,t.st_mtime_ns,t.st_ctime_ns)\n h=hashlib.sha256(b).hexdigest()\n if pin:assert len(b)==pin['\"'\"'size'\"'\"'] and h==pin['\"'\"'sha256'\"'\"']\n return b,dict(path=path,bytes=len(b),sha256=h,mode=s.st_mode,uid=s.st_uid,gid=s.st_gid,nlink=s.st_nlink)\np='\"'\"'/home/dombarker/final-native-gate-v12-20261025/FinalNativeGate-setup-packet/FinalNativeGate-setup-parent-cleanup.json'\"'\"'\nb,meta=read(p,5*2**20,{'\"'\"'sha256'\"'\"': '\"'\"'7a9c50d554db424701ee7915dd144c5cc8d19ba8aeffedfa5a44ddb6e76e64e6'\"'\"', '\"'\"'size'\"'\"': 4850047});j=json.loads(b);scope=j.get('\"'\"'scope'\"'\"') or {};summary=dict(report=meta,errors=j.get('\"'\"'errors'\"'\"'),unresolved=j.get('\"'\"'unresolved'\"'\"'),scope_binding=scope.get('\"'\"'binding'\"'\"'),scope_reason=scope.get('\"'\"'reason'\"'\"'),read_failures=[x for x in scope.get('\"'\"'events'\"'\"',[]) if x.get('\"'\"'kind'\"'\"')=='\"'\"'retained-scope-read-failure'\"'\"'])\nb,meta=read('\"'\"'/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/lib.rs'\"'\"',2**20)\nprint(json.dumps(dict(cleanup=summary,harness=dict(meta=meta,text=b.decode()))))\n'"
+  ],
+  "expected_cleanup": {
+    "sha256": "7a9c50d554db424701ee7915dd144c5cc8d19ba8aeffedfa5a44ddb6e76e64e6",
+    "size": 4850047
+  },
+  "expected_harness_sha256": "f07ab675de0556f5feb518f00050583c9d8b9db2b03d79c9c6b1035c90ac8dc2",
+  "formal_calls": 0
+}
