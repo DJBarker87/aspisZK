@@ -311,3 +311,49 @@ All seven use source revision anchor `a8f85a1c670e4a3646a5567f460298ebec45612d` 
 No assumptions discharged, added, or changed. No existing statement, quantifier, carrier, failure event or metric changed. The ledger identifies source-instance and vacuity risks without repairing them. No shipped/cfg(kani) file, session A candidate, other live worktree, key, protocol parameter, feature or wire format changed. ELF rebuild trigger did not fire. Inherited, NOT freshly reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No binaries/objects/ELFs/archives committed. No push.
 
 Next deliverable: Op5T_'s success-conditioned faithful marks instance and joint non-vacuity, then same-run concrete batch/query/writer/reader installations and the raw canonical ordered-log join. Recount only after comparing the full before/after statements and expanding every new record field. Removing a binder by moving its law into a record or post-existential implication earns no premise-removal credit.
+
+## Uni update — checked union and class C correction, 25 October 2026
+
+The original snapshot and every row above are retained verbatim. This section
+updates ONLY L089, L090, L155 and L164 for the corrected Uni path. **Target not
+yet established.** See [before/after and witness composition](../evidence/unify-20261025/STAGE-B.md),
+[class C and non-vacuity audit](../evidence/unify-20261025/STAGE-C.md), and
+[full checked statements/field expansions/axioms](../evidence/unify-20261025/Uni_010/stdout.log).
+
+| Targeted row | Before | After in Uni path | Removal / retained obligation |
+|---|---|---|---|
+| L089 firstMarks.source | C, unconditional layout even on rejection | P, actual-Rust-Ok guarded Op5T_Marks.FirstMarks | Old universal law removed from the entire accepted-pair chain; faithful SDK child reification remains P |
+| L090 secondMarks.source | C, unconditional full TX2 suffix | P, actual-Rust-Ok guarded Op5T_Marks.SecondMarks | Uni_SecondMarks proves successful source sites; Uni_RejectedSecond checks the old faithful-instance contradiction; source-associated child port remains P |
+| L155 globalJoin.verifier | C, arbitrary logical proof independent of physical bytes | Retired in corrected downstream endpoint; existing L157 P retained | Uni_CanonicalPerAttempt.no_global_join proves obstruction for any accepting physical verifier; final_soundness uses byte-indexed raw join and returns unchanged per-attempt Claims |
+| L164 different specializations | P | Discharged for the checked union dictionary and same witnesses | Uni_Accepted.accepted_pair_unified obtains one f,s,cuts and exports every predecessor conclusion; no compatibility or chosen-cut premise |
+
+Targeted-row delta against the original row universe (NOT a new exhaustive
+field recount of every imported Tx1Q/Op5T continuation):
+
+| Scope | T | P | C | lead | session A | external |
+|---|---:|---:|---:|---:|---:|---:|
+| Accepted-pair families, L089/L090 corrected | 82 | 71 | 0 | 40 | 31 | 82 |
+| Headline/transport, L155 retired in canonical per-attempt path | 0 | 9 | 0 | 8 | 0 | 1 |
+| Additional deliverables, L164 closed | 6 | 29 | 0 | 26 | 3 | 6 |
+| Original inventory with ONLY these four deltas | 88 | 109 | 0 | 74 | 34 | 89 |
+
+Arithmetic: C3→0; P108+2 guarded source-instance laws−1 composition gate=109;
+L155 is replaced by ALREADY counted L157, not by a new trusted assertion.
+Two original rows are retired, hence199→197. This is interface repair plus
+one composition closure; it is NOT three proved deployed refinements. Old
+L155 remains false for an accepting physical source and is not rehabilitated.
+L156 is unchanged historically and is not consumed by the corrected endpoint;
+no credit is assigned for it or any other non-targeted row. L157/L159/raw
+ordered-log, selected-map/provenance, source-associated child effects,
+Session A laws, saved_ten/twelve and native writer adoption remain open.
+`WhenBound` is expanded in the audit, not treated as a discharged source law.
+
+Non-vacuity evidence: [source-fixture-audit.json](../evidence/unify-20261025/source-fixture-audit.json)
+pins a successful SAME two-transaction LiteSVM fixture at the exact default
+ELF f8c0ec72…; all562 admitted source hashes freshly match this worktree.
+This reuses retained runtime evidence; no new execution is claimed. Successful
+literal source control fixtures and extraction consistency are checked in
+Uni_SecondMarks/Uni_Audit. Joint kernel inhabitation of all remaining
+runtime/crypto/log/model premises is NOT established. The exact union and
+canonical security endpoint remain linked conditionally through the retained
+source/runtime/oracle association obligations, rather than an assumed join.
