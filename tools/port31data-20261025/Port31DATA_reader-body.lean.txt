@@ -1,0 +1,212 @@
+private def owned (s : String) : String := String.ofList s.toList
+private def ns (n : Name) : String := owned n.toString
+-- Recursive constructor encoding, never printed-name parsing. Own String bytes.
+private def en : Name → Json
+  | .anonymous => Json.arr #[toJson "anon"]
+  | .str p s => Json.arr #[toJson "str", en p, toJson (owned s)]
+  | .num p i => Json.arr #[toJson "num", en p, toJson (toString i)]
+private def emit (h : IO.FS.Handle) (j : Json) : IO Unit := h.putStrLn j.compress
+private def kind : ConstantInfo → String
+  | .axiomInfo _ => "axiom" | .defnInfo _ => "definition"
+  | .thmInfo _ => "theorem" | .opaqueInfo _ => "opaque"
+  | .quotInfo _ => "quotient" | .inductInfo _ => "inductive"
+  | .ctorInfo _ => "constructor" | .recInfo _ => "recursor"
+-- FoldConsts intentionally omits projection structure names. Include them explicitly.
+-- Expr hash/equality is used ONLY as a traversal cache, never variant selection.
+private def expressionDeps (e : Expr) : Array Name := Id.run do
+  let mut todo := #[e]
+  let mut seen : Std.HashSet Expr := {}
+  let mut names : Std.HashSet Name := {}
+  while !todo.isEmpty do
+    let x := todo.back!
+    todo := todo.pop
+    if seen.contains x then continue
+    seen := seen.insert x
+    match x with
+    | .const n _ => names := names.insert n
+    | .proj n _ v =>
+      names := names.insert n
+      todo := todo.push v
+    | .app f a => todo := (todo.push f).push a
+    | .lam _ t v _ | .forallE _ t v _ => todo := (todo.push t).push v
+    | .letE _ t v b _ => todo := ((todo.push t).push v).push b
+    | .mdata _ v => todo := todo.push v
+    | _ => pure ()
+  return names.toArray
+private def deps (c : ConstantInfo) : Array Name := Id.run do
+  let mut ds := expressionDeps c.type
+  if let some v := c.value? (allowOpaque := true) then ds := ds ++ expressionDeps v
+  match c with
+  | .inductInfo v =>
+    ds := ds ++ v.all.toArray ++ v.ctors.toArray
+    for n in v.all do ds := ds.push (n.str "rec")
+  | .defnInfo v => ds := ds ++ v.all.toArray
+  | .thmInfo v => ds := ds ++ v.all.toArray
+  | .opaqueInfo v => ds := ds ++ v.all.toArray
+  | .ctorInfo v => ds := ds.push v.induct
+  | .recInfo v =>
+    ds := ds ++ v.all.toArray
+    for n in v.all do ds := ds.push (n.str "rec")
+    for r in v.rules do ds := (ds.push r.ctor) ++ expressionDeps r.rhs
+  | _ => pure ()
+  let mut out : Std.HashSet Name := {}
+  for n in ds do out := out.insert n
+  return out.toArray
+private def metadata (c : ConstantInfo) : Json :=
+  match c with
+  | .defnInfo v => toJson (v.all.toArray.map en, toString (repr v.safety))
+  | .thmInfo v => toJson (v.all.toArray.map en)
+  | .opaqueInfo v => toJson (v.all.toArray.map en)
+  | .inductInfo v => Json.arr #[toJson (v.all.toArray.map en),toJson (v.ctors.toArray.map en),
+      toJson v.numParams,toJson v.numIndices,toJson v.numNested,toJson v.isRec,toJson v.isReflexive]
+  | .ctorInfo v => toJson (en v.induct,v.cidx,v.numParams,v.numFields)
+  | .recInfo v => Json.arr #[toJson (v.all.toArray.map en),toJson v.numParams,toJson v.numIndices,
+      toJson v.numMotives,toJson v.numMinors,toJson v.k,
+      toJson (v.rules.toArray.map (fun r => (en r.ctor,r.nfields,(expressionDeps r.rhs).map en)))]
+  | _ => Json.null
+private def record (c : ConstantInfo) : Json := Json.mkObj [
+  ("name",en c.name),("display",toJson (ns c.name)),("kind",toJson (kind c)),
+  ("levels",toJson (c.levelParams.toArray.map en)),("unsafe",toJson c.isUnsafe),
+  ("partial",toJson c.isPartial),("has_value",toJson (c.hasValue (allowOpaque := true))),
+  ("metadata",metadata c),("dependencies",toJson ((deps c).map en)),
+  ("logical_seed_rejected",toJson (c.isUnsafe || c.isPartial || match c with
+    | .axiomInfo _ => c.name != `propext && c.name != `Classical.choice && c.name != `Quot.sound
+    | _ => false))]
+private def rawCheck (d : ModuleData) : IO Unit := do
+  unless d.imports.isEmpty && d.extraConstNames.isEmpty && d.entries.isEmpty &&
+      d.constNames == d.constants.map (·.name) do
+    throw (IO.userError "invalid raw transport header")
+-- Body and group serialization is exact raw DATA; no trusted module insertion.
+-- Borrowed references stay inside this synchronous helper, which returns Unit.
+private def readback (source : Array ConstantInfo) (check : ModuleData) : IO Unit := do
+  rawCheck check
+  unless check.constants.size == source.size do throw (IO.userError "export count")
+  for i in [:source.size] do
+    let some a := source[i]? | throw (IO.userError "source index")
+    let some b := check.constants[i]? | throw (IO.userError "readback index")
+    unless strictDeclaration a b do throw (IO.userError "strict source-part readback failed")
+private unsafe def exportPart (h : IO.FS.Handle) (dir label : String) (d : ModuleData) : IO Unit := do
+  let cs := if label.startsWith "BOOL:" then d.constants.filter (fun c => c.name == `Port31DATA.eq_true_of_not_eq_false) else d.constants
+  let path : System.FilePath := dir ++ "/raw/" ++ label ++ ".olean"
+  IO.FS.createDirAll path.parent.get!
+  saveModuleData path `Port31DATA.RawPayload { d with imports := #[], constants := cs,
+    constNames := cs.map (·.name), extraConstNames := #[], entries := #[] }
+  let (check,region) ← readModuleData path
+  readback cs check
+  region.free
+  emit h (Json.mkObj [("tag",toJson "export"),("origin",toJson label),
+    ("path",toJson path.toString),("names",toJson (cs.map (fun c => en c.name))),
+    ("strict_source_part_readback",toJson true)])
+private def guardTests (h : IO.FS.Handle) : IO Unit := do
+  let t := mkSort .zero
+  let x := mkLambda `x .default t (mkBVar 0)
+  let y := mkLambda `y .default t (mkBVar 0)
+  let z := mkLambda `x .implicit t (mkBVar 0)
+  let md1 : MData := ⟨[(`test, .ofNat 1)]⟩
+  let md2 : MData := ⟨[(`test, .ofNat 2)]⟩
+  let sm1 : MData := ⟨[(`syntax, .ofSyntax (.atom .none "x"))]⟩
+  let sm2 : MData := ⟨[(`syntax, .ofSyntax (.atom (.synthetic ⟨0⟩ ⟨1⟩ true) "x"))]⟩
+  let om1 : MData := ⟨[(`first, .ofNat 1),(`second, .ofNat 2)]⟩
+  let om2 : MData := ⟨[(`second, .ofNat 2),(`first, .ofNat 1)]⟩
+  for (label,a,b) in [("binder-name",x,y),("binder-annotation",x,z),
+      ("metadata-value",mkMData md1 t,mkMData md2 t),
+      ("syntax-source-info",mkMData sm1 t,mkMData sm2 t),
+      ("ordered-metadata",mkMData om1 t,mkMData om2 t)] do
+    emit h (Json.mkObj [("tag",toJson "guard"),("case",toJson label),
+      ("alpha",toJson (a == b)),("expr_equal",toJson (Expr.equal a b)),
+      ("strict",toJson (strictExpr a b)),("reflexive",toJson (strictExpr a a))])
+    if strictExpr a b || !strictExpr a a then throw (IO.userError "strict guard test")
+  let n := Name.num (.str .anonymous "test") 1
+  let s := Name.str (.str .anonymous "test") "1"
+  let d := Name.str .anonymous "test.1"
+  if n == s || n == d || s == d then throw (IO.userError "Name guard")
+  emit h (Json.mkObj [("tag",toJson "name-guard"),("names",toJson (#[n,s,d].map en))])
+private def applications (h : IO.FS.Handle) (c : ConstantInfo) : IO Unit := do
+  if c.name != `AspisR1.OraclePortCompactDraft.parse_header then return
+  let some v := c.value? (allowOpaque := true) | return
+  let mut todo := #[v]
+  while !todo.isEmpty do
+    let e := todo.back!
+    todo := todo.pop
+    if e.isApp && e.getAppFn.isConstOf `Bool.eq_true_of_not_eq_false then
+      emit h (Json.mkObj [("tag",toJson "historical-bool-application"),("in",en c.name),
+        ("arguments",toJson (e.getAppArgs.map (fun x => owned (toString (repr x))))),
+        ("arg_count",toJson e.getAppArgs.size)])
+    match e with
+    | .app f a => todo := (todo.push f).push a
+    | .lam _ t v _ | .forallE _ t v _ => todo := (todo.push t).push v
+    | .letE _ t v b _ => todo := ((todo.push t).push v).push b
+    | .mdata _ v | .proj _ _ v => todo := todo.push v
+    | _ => pure ()
+private unsafe def analyze (h : IO.FS.Handle) (dir : String)
+    (loaded : Array (String × ModuleData × CompactedRegion)) : IO Unit := do
+  let mut candidates : Std.HashMap Name (Array (String × ConstantInfo)) := {}
+  for (label,d,_) in loaded do
+    unless d.constNames == d.constants.map (·.name) do throw (IO.userError "name inventory mismatch")
+    if !(label.startsWith "S8:" || label.startsWith "BOOL:") then rawCheck d
+    emit h (Json.mkObj [("tag",toJson "part"),("origin",toJson label),
+      ("names",toJson (d.constNames.map en)),("imports",toJson (d.imports.map (fun i => en i.module))),
+      ("entries",toJson d.entries.size),("extra_names",toJson (d.extraConstNames.map en))])
+    for c in d.constants do
+      if label.startsWith "BOOL:" && c.name != `Port31DATA.eq_true_of_not_eq_false then continue
+      candidates := candidates.insert c.name ((candidates[c.name]?.getD #[]).push (label,c))
+      emit h (Json.mkObj [("tag",toJson "constant"),("origin",toJson label),("constant",record c)])
+      applications h c
+      if label.startsWith "BOOL:" then
+        emit h (Json.mkObj [("tag",toJson "fresh-bool-body"),("name",en c.name),
+          ("type",toJson (owned (toString (repr c.type)))),
+          ("value",toJson (owned (toString (repr (c.value? (allowOpaque := true))))))])
+    if label.startsWith "S8:" || label.startsWith "BOOL:" then exportPart h dir label d
+  let roots := #[`AspisR1.S2W_D189Consolidation.accepted_run,
+    `AspisS1SdkSelectedSemanticTrace.original_sdk_selected_semantic_trace,
+    `AspisS6SdkSelectedSemanticCaller.original_sdk_selected_cuts]
+  let mut todo := roots
+  let mut seen : Std.HashSet Name := {}
+  let mut gaps : Array Name := #[]
+  let mut pairs := 0
+  while !todo.isEmpty do
+    let n := todo.back!
+    todo := todo.pop
+    if seen.contains n then continue
+    seen := seen.insert n
+    let cs := candidates[n]?.getD #[]
+    if cs.isEmpty then
+      gaps := gaps.push n
+      emit h (Json.mkObj [("tag",toJson "gap"),("name",en n),("display",toJson (ns n))])
+      continue
+    emit h (Json.mkObj [("tag",toJson "reached"),("name",en n),
+      ("origins",toJson (cs.map (fun x => x.1)))])
+    for (_,c) in cs do todo := todo ++ deps c
+    for i in [:cs.size] do
+      for j in [i+1:cs.size] do
+        let some (a,x) := cs[i]? | throw (IO.userError "left index")
+        let some (b,y) := cs[j]? | throw (IO.userError "right index")
+        pairs := pairs + 1
+        emit h (Json.mkObj [("tag",toJson "pair"),("name",en n),
+          ("left",toJson a),("right",toJson b),("metadata",toJson (sameDeclaration x y)),
+          ("strict",toJson (strictDeclaration x y)),("strict_type",toJson (strictConstantVal x y)),
+          ("strict_value",toJson (strictValue x y)),("strict_rules",toJson (strictRules x y))])
+  emit h (Json.mkObj [("tag",toJson "summary"),("roots",toJson (roots.map en)),
+    ("reached",toJson seen.size),("known",toJson candidates.size),("gaps",toJson (gaps.map en)),
+    ("pairs",toJson pairs),("kernel_ready",toJson false),("axioms",toJson "N/A: raw data only")])
+private unsafe def main : IO Unit := do
+  let some dir ← IO.getEnv "PORT31_DATA" | throw (IO.userError "PORT31_DATA")
+  let h ← IO.FS.Handle.mk (dir ++ "/Port31DATA_raw.jsonl") .write
+  guardTests h
+  let mut loaded : Array (String × ModuleData × CompactedRegion) := #[]
+  for row in ← IO.FS.lines (dir ++ "/Port31DATA_inputs.tsv") do
+    let [label,p] := row.splitOn "\t" | throw (IO.userError "input row")
+    -- Exact released part groups; no importEnvironment/loadModule.
+    let parts ← readModuleDataParts #[p]
+    let mut i := 0
+    for (d,r) in parts do
+      loaded := loaded.push (label ++ ":part" ++ toString i,d,r)
+      i := i + 1
+  analyze h dir loaded
+  h.flush
+  -- analyze has returned Unit: no graph/ConstantInfo/Expr/Syntax reference escapes.
+  -- Retained part stack is freed in reverse, only after all synchronous use.
+  (loaded.map (fun (_,_,r) => r)).reverse.forM CompactedRegion.free
+  IO.println "Port31DATA raw diagnostic complete; axioms=N/A; no kernel insertion"
+end Port31DATA
+#eval Port31DATA.main
