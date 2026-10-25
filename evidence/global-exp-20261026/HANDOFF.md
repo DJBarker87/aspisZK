@@ -112,7 +112,9 @@ peakRSS5196356KiB,swap0, revision anchor6c3edffee3 with dirty source snapshots.
 All ten audited endpoint/trace/budget/non-vacuity prints use only
 [propext,Classical.choice,Quot.sound]. Every new theorem has its own axioms
 print in its successful receipt. Static exact-hash and hypothesis comparisons
-and git diff --check pass. This is focused verification on the pinned cache,
+and source-only git diff --check pass. The full branch whitespace check reports
+two retained trailing-whitespace lines in failed attempt024 stdout; the raw
+evidence log is deliberately preserved. This is focused verification on the pinned cache,
 NOT a fresh release dependency rebuild or source-to-ELF proof.
 
 No shipped or cfg(kani) file changed, so the ELF rebuild trigger did not apply.
