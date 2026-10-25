@@ -1,0 +1,186 @@
+--- first-v6/FinalNativeGate-bootstrap.json
++++ source022/FinalNativeGate-bootstrap.json
+@@ -60,8 +60,8 @@
+     "size": 5700
+   },
+   "FinalNativeGate-data-release-build.py": {
+-    "sha256": "1ca4300f2b6672694269da1d7b92e1bf81463d94f497b2ed06210a33e787ed4f",
+-    "size": 7632
++    "sha256": "76a01597646f81c17b3a834e4d754e5f5088027aadfc53e984f907d6a6d5e058",
++    "size": 7760
+   },
+   "FinalNativeGate-fixtures.py": {
+     "sha256": "6d9e8e300638ce98870ac5182c88862d112c6ff7397ea05f0a57ff5c4978a2c3",
+@@ -84,8 +84,8 @@
+     "size": 8037
+   },
+   "FinalNativeGate-plan.json": {
+-    "sha256": "9a8e91dc69c50f338ec690dc32648d6ea3e10a2c1c7ef7ccd1cc044e63cfeace",
+-    "size": 162346
++    "sha256": "92a9ad9791fe5ef7eb8943a11f0c68f38abe93158f75c6cf6a55eb87e7790ce0",
++    "size": 162357
+   },
+   "FinalNativeGate-receipt-REVIEW.txt": {
+     "sha256": "06c07f135d9560ee1e88115cb87e4a8e7b2cd8eae68497b8aa7732dde36ed6d5",
+@@ -152,8 +152,8 @@
+     "size": 6060
+   },
+   "FinalNativeGate-source-refresh.py": {
+-    "sha256": "12bf316ab31902a8d5cc411c54737ab28ce69b1f0d3d43e692b0e1da66c33083",
+-    "size": 2757
++    "sha256": "7fdd6040c5e5505d3ed301a37d1f57b29d921a0f54f61490482af798b0f2aeea",
++    "size": 2768
+   },
+   "FinalNativeGate-tests.py": {
+     "sha256": "707b801cbffa9dfeb77a658cf3647d6387106031e52d0d0238bf4912dbfa1c62",
+@@ -220,8 +220,8 @@
+     "size": 3053
+   },
+   "FinalNativeGate_guard.py": {
+-    "sha256": "7105563d1931720b17c455c3972b02aa3f696622db3f6df742202e598c2961f2",
+-    "size": 13236
++    "sha256": "189992611f482d6365dd2a5a0d1d5a12f95681897666cf6e68f874468e0c0aff",
++    "size": 13305
+   },
+   "FinalNativeGate_inside.py": {
+     "sha256": "8d660e109bcab825067659b37ad9c0e8c48f6ce78f88ab5acdc3f597af5bee6c",
+@@ -244,7 +244,7 @@
+     "size": 13877
+   },
+   "FinalNativeGate_seal.py": {
+-    "sha256": "405e5d3aee4dd813a9201de254b3c1978e1c7a6eaa21e81a34bf95e25f29510e",
++    "sha256": "db5dda5717b8be97b39b969205b5524f0b73edee99c4ef006baa652232275dfb",
+     "size": 81
+   },
+   "FinalNativeGate_setup.py": {
+--- first-v6/FinalNativeGate-data-release-build.py
++++ source022/FinalNativeGate-data-release-build.py
+@@ -11,7 +11,7 @@
+ D=Path(__file__).resolve().parent
+ RELEASE=D/'prospective-data-v6'
+ STAGE='/home/dombarker/final-native-gate-v6-20261025/'
+-ENTRY='0f17eee7c884174bf692443cd62a313183d6f979'
++ENTRY='018e9d2aff669c3b1292e3ad49dfdc9a7d605620'
+ 
+ def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+ def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
+@@ -81,7 +81,7 @@
+         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
+         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
+         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
+-        f.write('Relative to maintained source-021: exactly two SETUP mains activate and four seal/plan files regenerate. Source-021 adds verified ENOENT/ESRCH disappearance handling and exact v6 stage; full source020 beforeimages and function diff retained. Historical v1-v5 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
++        f.write('Relative to maintained source-022: exactly two SETUP mains activate and four seal/plan files regenerate. Source-022 restores compatible disappeared outcomes after verified absence, including pidfd-signal; first v6 candidate and complete function diff retained in source022. Corrected prospective bytes supersede the first v6 candidate, not its historical byte identity. Historical v1-v5 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
+         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
+         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
+         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')
+--- first-v6/FinalNativeGate-plan.json
++++ source022/FinalNativeGate-plan.json
+@@ -405,7 +405,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report-transport.py": "8cbdaa628f3cce076814fcf9b3be33c77bac403a8730fb67e4ce1354a8839258",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report.py": "cf43bc939a80fa198cc7549160fb37fa9919904dc2e0d973c6d08fce2ff72f27",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-audit.py": "19f45a002739d36909489a6abe91a4786c0e91f3f6cbe3aaa7d6207e41ed2c04",
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-data-release-build.py": "1ca4300f2b6672694269da1d7b92e1bf81463d94f497b2ed06210a33e787ed4f",
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-data-release-build.py": "76a01597646f81c17b3a834e4d754e5f5088027aadfc53e984f907d6a6d5e058",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-fixtures.py": "6d9e8e300638ce98870ac5182c88862d112c6ff7397ea05f0a57ff5c4978a2c3",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-lifecycle-tests.py": "7dc5ab8e2964c7b0da1bcc95d2a4baf9f8d47632da83cc27ad4cd4bd661ca07d",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-local-check.py": "758790c945a522d10647642d6e4e869bcface000ef3ee514b5f1022af1e0e396",
+@@ -424,7 +424,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-repair-fixtures.py": "e38d91fe9babc9298bc380754adc8a54b2e79fc9ce631f9f54640cd9be8d5bfb",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-repair-tests.py": "877acfab6acdd0c8de678289e8211858db96ce559529c1cc4c1602cfee96ac26",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-audit.py": "64183d0e82f3bb60db8dbb86651412ea0f4f064190aec8abf60c3ea953431e77",
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-refresh.py": "12bf316ab31902a8d5cc411c54737ab28ce69b1f0d3d43e692b0e1da66c33083",
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-refresh.py": "7fdd6040c5e5505d3ed301a37d1f57b29d921a0f54f61490482af798b0f2aeea",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-tests.py": "707b801cbffa9dfeb77a658cf3647d6387106031e52d0d0238bf4912dbfa1c62",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-v4-local-check.py": "e53a270fd38d7d40db56ef961ba48f722972efb12ab535fa6c4cda0e7b25bb83",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-v4-tests.py": "905d202a1ec50dc54b9591b19e52ef85994091b2281a9bec5921c3e88a6787bf",
+@@ -439,7 +439,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_cleanup.py": "c23751b851828cef89aab756d86019104803b4b15fe024bef928b22b7326ac8b",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_compact.py": "a2b0bc8a5f048b9ed5162c0debf9a92ed5c725efd5065600a7faf000b9d9c7c3",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_elf.py": "72071ff257b02a8c219d9d67e2a7244b1e74906867a90aa50d79a3640a98ca39",
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_guard.py": "7105563d1931720b17c455c3972b02aa3f696622db3f6df742202e598c2961f2",
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_guard.py": "189992611f482d6365dd2a5a0d1d5a12f95681897666cf6e68f874468e0c0aff",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_inside.py": "8d660e109bcab825067659b37ad9c0e8c48f6ce78f88ab5acdc3f597af5bee6c",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_observe.py": "e5fe3d61356e8375ec2c95d7feeb68d4921f7f98c6fcfc2130658b79c9feed28",
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_policy.py": "1fc9e66d17ecd40bfae3d13f216dd6f60472ea03c797901a2ed90d16a19af3aa",
+@@ -566,7 +566,7 @@
+   },
+   "host_runtime": null,
+   "inherited_limits": null,
+-  "job_revision": "0f17eee7c884174bf692443cd62a313183d6f979 plus v6 procfs disappearance source-021 overlay",
++  "job_revision": "018e9d2aff669c3b1292e3ad49dfdc9a7d605620 plus v6 compatible cancellation outcome source-022 overlay",
+   "job_source_sizes": {
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report-audit.py": 8842,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report-check.py": 2942,
+@@ -574,7 +574,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report-transport.py": 7269,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-admission-report.py": 10245,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-audit.py": 5700,
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-data-release-build.py": 7632,
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-data-release-build.py": 7760,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-fixtures.py": 1738,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-lifecycle-tests.py": 19727,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-local-check.py": 1739,
+@@ -593,7 +593,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-repair-fixtures.py": 1626,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-repair-tests.py": 14186,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-audit.py": 6060,
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-refresh.py": 2757,
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-source-refresh.py": 2768,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-tests.py": 13820,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-v4-local-check.py": 6921,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate-v4-tests.py": 19115,
+@@ -608,7 +608,7 @@
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_cleanup.py": 3201,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_compact.py": 6371,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_elf.py": 3053,
+-    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_guard.py": 13236,
++    "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_guard.py": 13305,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_inside.py": 678,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_observe.py": 8410,
+     "/home/dombarker/final-native-gate-v6-20261025/FinalNativeGate_policy.py": 4602,
+--- first-v6/FinalNativeGate-source-refresh.py
++++ source022/FinalNativeGate-source-refresh.py
+@@ -17,7 +17,7 @@
+ p['job_source_sizes']={}
+ for x in source:
+     value=pin(x.read_bytes());p['files'][STAGE+x.name]=value['sha256'];p['job_source_sizes'][STAGE+x.name]=value['size']
+-p['job_revision']='0f17eee7c884174bf692443cd62a313183d6f979 plus v6 procfs disappearance source-021 overlay'
++p['job_revision']='018e9d2aff669c3b1292e3ad49dfdc9a7d605620 plus v6 compatible cancellation outcome source-022 overlay'
+ p['setup_environment']=dict(HOME='/home/dombarker',USER='dombarker',LOGNAME='dombarker',PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8')
+ p['bootstrap_source_boundary']='Plan excludes own/seal/bootstrap hashes. Bootstrap manifest pins plan+plan seal+finite job transfer source; bootstrap seal excluded. Both root seal bytes require independent transfer/source-manifest review. Operational pin observation is not executed-bytecode semantics.'
+ p['setup_deferred']=['candidate UID/bus/runtime/tool/ELF dependency roles and selected cache fingerprint data require lead review; DATA never grants execution']
+--- first-v6/FinalNativeGate_bootstrap_seal.py
++++ source022/FinalNativeGate_bootstrap_seal.py
+@@ -1 +1 @@
+-BOOTSTRAP_SHA256 = '11594d0efbe25ba5f339f699a4f593f3887b58d0b1bcc5707d0254917b3b9672'
++BOOTSTRAP_SHA256 = 'd1cf274fcdfacb0f5dc57224f75609b60ec54fef0716c21c46627832a386280d'
+--- first-v6/FinalNativeGate_guard.py
++++ source022/FinalNativeGate_guard.py
+@@ -181,15 +181,18 @@
+             fd = self.operation('pidfd-open', f'/proc/{pid}', pid, None,
+                 dict(pid=pid, tgid=pid, starttime=starttime), lambda: os.pidfd_open(pid), f'/proc/{pid}')
+         except Gone:
+-            return 'verified-disappeared'
++            return 'disappeared'
+         try:
+             observed = self.optional(pid)
+             if observed is None:
+-                return 'verified-disappeared'
++                return 'disappeared'
+             if observed['starttime'] != starttime:
+                 return 'reused-not-signalled'
+-            self.operation('pidfd-signal', f'/proc/{pid}', pid, None,
+-                self.known.get((pid, None)), lambda: signal.pidfd_send_signal(fd, signal.SIGKILL), f'/proc/{pid}')
++            try:
++                self.operation('pidfd-signal', f'/proc/{pid}', pid, None,
++                    self.known.get((pid, None)), lambda: signal.pidfd_send_signal(fd, signal.SIGKILL), f'/proc/{pid}')
++            except Gone:
++                return 'disappeared'
+             return 'verified-owned-signalled'
+         finally:
+             os.close(fd)
+--- first-v6/FinalNativeGate_seal.py
++++ source022/FinalNativeGate_seal.py
+@@ -1 +1 @@
+-PLAN_SHA256 = '9a8e91dc69c50f338ec690dc32648d6ea3e10a2c1c7ef7ccd1cc044e63cfeace'
++PLAN_SHA256 = '92a9ad9791fe5ef7eb8943a11f0c68f38abe93158f75c6cf6a55eb87e7790ce0'

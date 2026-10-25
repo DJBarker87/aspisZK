@@ -14,7 +14,7 @@ import tempfile
 import time
 
 RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v6/FinalNativeGate-data-transfer.py')
-PIN={'size': 883629, 'sha256': '1c7a2f8186f8ccd4058038432c60a3d688e346b01fff3941694c931a461c480e'}
+PIN={'size': 883889, 'sha256': '5252c1bcc64729df99d8dd6b2f6784315f26a851ea298098c5eb1a3ae3a1a825'}
 ARGV=['/usr/bin/ssh','-T','-oBatchMode=yes','-oConnectTimeout=10','-oStrictHostKeyChecking=yes','-oClearAllForwardings=yes','-oForwardAgent=no','dombarker@100.108.41.90','/usr/bin/python3 -I -B -']
 LIMIT=4*2**20
 

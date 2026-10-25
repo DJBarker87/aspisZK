@@ -11,7 +11,7 @@ from pathlib import Path
 D=Path(__file__).resolve().parent
 RELEASE=D/'prospective-data-v6'
 STAGE='/home/dombarker/final-native-gate-v6-20261025/'
-ENTRY='0f17eee7c884174bf692443cd62a313183d6f979'
+ENTRY='018e9d2aff669c3b1292e3ad49dfdc9a7d605620'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
@@ -81,7 +81,7 @@ def prepare(release=None):
         f.write('Fixed host dombarker@100.108.41.90; fixed fresh-absent STAGE '+STAGE+'\n')
         f.write('Receiver sha256 '+pin(receiver)['sha256']+' size '+str(len(receiver))+'\n')
         f.write('Transfer root '+root+'; exact files in FinalNativeGate-release-identities.json.\n')
-        f.write('Relative to maintained source-021: exactly two SETUP mains activate and four seal/plan files regenerate. Source-021 adds verified ENOENT/ESRCH disappearance handling and exact v6 stage; full source020 beforeimages and function diff retained. Historical v1-v5 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
+        f.write('Relative to maintained source-022: exactly two SETUP mains activate and four seal/plan files regenerate. Source-022 restores compatible disappeared outcomes after verified absence, including pidfd-signal; first v6 candidate and complete function diff retained in source022. Corrected prospective bytes supersede the first v6 candidate, not its historical byte identity. Historical v1-v5 artifacts remain byte-identical. Stage existence UNKNOWN; reject ANY entry.\n')
         f.write('FINAL mains disabled; no final charge authority. Source copies identify activated DATA overlay, never historical disabled identity.\n')
         f.write('Fixed target/harness/registry pins remain reads; absent files produce exact partial failure, never implicit upload.\n')
         f.write('0700 exclusive new leaf; retained partial failures; code sources remain stable while own packet children are created.\n')

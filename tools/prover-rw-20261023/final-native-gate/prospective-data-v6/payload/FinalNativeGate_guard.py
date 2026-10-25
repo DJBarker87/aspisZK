@@ -181,15 +181,18 @@ class Proc:
             fd = self.operation('pidfd-open', f'/proc/{pid}', pid, None,
                 dict(pid=pid, tgid=pid, starttime=starttime), lambda: os.pidfd_open(pid), f'/proc/{pid}')
         except Gone:
-            return 'verified-disappeared'
+            return 'disappeared'
         try:
             observed = self.optional(pid)
             if observed is None:
-                return 'verified-disappeared'
+                return 'disappeared'
             if observed['starttime'] != starttime:
                 return 'reused-not-signalled'
-            self.operation('pidfd-signal', f'/proc/{pid}', pid, None,
-                self.known.get((pid, None)), lambda: signal.pidfd_send_signal(fd, signal.SIGKILL), f'/proc/{pid}')
+            try:
+                self.operation('pidfd-signal', f'/proc/{pid}', pid, None,
+                    self.known.get((pid, None)), lambda: signal.pidfd_send_signal(fd, signal.SIGKILL), f'/proc/{pid}')
+            except Gone:
+                return 'disappeared'
             return 'verified-owned-signalled'
         finally:
             os.close(fd)
