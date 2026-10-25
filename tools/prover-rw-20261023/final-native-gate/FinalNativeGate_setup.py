@@ -127,8 +127,15 @@ def _collect():
     try:
         guard.start()
         boot_before=bootstrap(STAGE)
-        runtime=runtime_proposal()
+        controls=[]
+        report=observation.collect('inside-scope')
+        if report['decision']['allowed'] is not True:raise ValueError('metadata inside-scope admission denied')
+        control=observation.controls();observation.check_controls(control)
+        if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
+        controls.append(dict(phase='inside-scope',control=control,raw_receipts=report.get('raw_receipts',[])))
+        guard.check()
         acquisition=Acquisition(deadline)
+        runtime=runtime_proposal()
         proposal=environment()
         acquisition.add(proposal['XDG_RUNTIME_DIR'])
         acquisition.add(proposal['XDG_RUNTIME_DIR']+'/bus')
@@ -162,16 +169,17 @@ def _collect():
                         for directory in p['setup_library_search']:acquisition.add(str(Path(directory)/name))
                 if item['format']!='ELF64LE' or item.get('search'):
                     acquisition.unresolved.append(dict(path=path,reason='native/script/search role requires review'))
+        missing=sorted(set(p['files'])-acquisition.files)
+        if missing:raise ValueError('missing fixed source files: '+json.dumps(missing))
         before=acquisition.snapshot();verify_expected(before,p['files'])
-        # Source/native hashes, stamps, chains all span BOTH full admission scans
-        # and ELF/runtime/data assembly, rather than merely one individual read.
-        controls=[]
-        for phase in ('inside-scope','go'):
-            report=observation.collect(phase)
-            if report['decision']['allowed'] is not True:raise ValueError('metadata admission denied')
-            control=observation.controls();observation.check_controls(control)
-            if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
-            controls.append(dict(phase=phase,control=control,raw_receipts=report.get('raw_receipts',[])))
+        # Bootstrap covers collection. Acquired metadata/hash interval begins
+        # at this snapshot; initial per-entry stamps and known source hashes
+        # are checked too. No native hash identity before its first observation.
+        report=observation.collect('go')
+        if report['decision']['allowed'] is not True:raise ValueError('metadata go admission denied')
+        control=observation.controls();observation.check_controls(control)
+        if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
+        controls.append(dict(phase='go',control=control,raw_receipts=report.get('raw_receipts',[])))
         unresolved=acquisition.unresolved+[
             dict(reason='native tool/loader/sysroot dependency closure needs lead role review'),
             dict(reason='candidate runtime/bus/UID/environment and cache compatibility need review')]

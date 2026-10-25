@@ -1,0 +1,151 @@
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate-source-refresh.py
++++ source-006/FinalNativeGate-source-refresh.py
+@@ -17,7 +17,7 @@
+ p['job_source_sizes']={}
+ for x in source:
+     value=pin(x.read_bytes());p['files'][STAGE+x.name]=value['sha256'];p['job_source_sizes'][STAGE+x.name]=value['size']
+-p['job_revision']='af823de916 criteria baseline plus source-manifest-005 exact overlay'
++p['job_revision']='b34142b016 admission-order/release criteria baseline plus exact source-manifest-006 overlay'
+ p['setup_environment']=dict(HOME='/home/dombarker',USER='dombarker',LOGNAME='dombarker',PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8')
+ p['bootstrap_source_boundary']='Plan excludes own/seal/bootstrap hashes. Bootstrap manifest pins plan+plan seal+finite job transfer source; bootstrap seal excluded. Both root seal bytes require independent transfer/source-manifest review. Operational pin observation is not executed-bytecode semantics.'
+ p['setup_deferred']=['candidate UID/bus/runtime/tool/ELF dependency roles and selected cache fingerprint data require lead review; DATA never grants execution']
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate_bootstrap_seal.py
++++ source-006/FinalNativeGate_bootstrap_seal.py
+@@ -1 +1 @@
+-BOOTSTRAP_SHA256 = 'c82899bec73d661d69d334d56a6e86a955e8a58f7a76e82a7868b613560ac26a'
++BOOTSTRAP_SHA256 = '75ba04a3b34cc14dcf7c525a4b4e3dbc2051eac0993c0d91b1daddd4d279caff'
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate_candidate.py
++++ source-006/FinalNativeGate_candidate.py
+@@ -173,18 +173,50 @@
+     with seal_path.open('rb') as f:
+         if os.fstat(f.fileno()).st_size!=len(expected_seal):raise CatalogError('bootstrap root seal size')
+         if f.read(len(expected_seal)+1)!=expected_seal.encode():raise CatalogError('bootstrap root seal source')
+-    rows=json.loads(raw);a=Acquisition(time.monotonic()+115)
+-    for name,pin in rows.items():
+-        if Path(name).name!=name:raise CatalogError('bootstrap basename required')
+-        a.add(str(stage/name))
+-        if a.rows[str(stage/name)]['size']!=pin['size']:raise CatalogError('bootstrap exact source size drift')
+-    a.add(str(path));a.add(str(seal_path))
+-    snapshot=a.snapshot();verify_expected(snapshot,{str(stage/k):v['sha256'] for k,v in rows.items()})
+-    return dict(manifest=hashlib.sha256(raw).hexdigest(),snapshot=snapshot)
++    rows=json.loads(raw)
++    # Independent finite source bootstrap only: no candidate Acquisition,
++    # runtime/native/cache discovery, aliases or directory recursion.
++    if not isinstance(rows,dict) or len(rows)>128:raise CatalogError('bootstrap finite128 files')
++    rows=dict(rows)
++    rows[path.name]=dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
++    rows[seal_path.name]=dict(size=len(expected_seal),sha256=hashlib.sha256(expected_seal.encode()).hexdigest())
++    snapshots={};total=0;deadline=time.monotonic()+115
++    for name,pin in sorted(rows.items()):
++        if Path(name).name!=name or name in ('.','..'):raise CatalogError('bootstrap basename required')
++        if type(pin['size']) is not int or not 0<=pin['size']<=4*2**20:raise CatalogError('bootstrap file4MiB bound')
++        total+=pin['size']
++        if total>16*2**20:raise CatalogError('bootstrap total16MiB bound')
++        held=[];chain=[]
++        try:
++            fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);held.append(fd)
++            for part in (*stage.parts[1:],name):
++                if time.monotonic()>deadline:raise CatalogError('bootstrap deadline')
++                before=os.stat(part,dir_fd=fd,follow_symlinks=False)
++                directory=part!=name
++                if not (stat.S_ISDIR(before.st_mode) if directory else stat.S_ISREG(before.st_mode)) or before.st_mode&0o022:
++                    raise CatalogError('bootstrap type/permissions/alias')
++                sub=os.open(part,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|(os.O_DIRECTORY if directory else 0),dir_fd=fd)
++                held.append(sub)
++                if stamp(os.fstat(sub))!=stamp(before):raise CatalogError('bootstrap open race')
++                chain.append((sub,stamp(before)));fd=sub
++            if before.st_size!=pin['size'] or before.st_nlink!=1:raise CatalogError('bootstrap size/single-link')
++            h=hashlib.sha256();left=pin['size']
++            while left:
++                if time.monotonic()>deadline:raise CatalogError('bootstrap deadline')
++                piece=os.read(fd,min(left,65536))
++                if not piece:raise CatalogError('bootstrap short read')
++                left-=len(piece);h.update(piece)
++            if os.read(fd,1) or h.hexdigest()!=pin['sha256']:raise CatalogError('bootstrap source hash drift: '+name)
++            for opened,before_stamp in chain:
++                if stamp(os.fstat(opened))!=before_stamp:raise CatalogError('bootstrap source chain drift')
++            snapshots[name]=dict(pin=pin,chain=[list(v) for _,v in chain])
++        finally:
++            for opened in reversed(held):os.close(opened)
++    return dict(manifest=hashlib.sha256(raw).hexdigest(),snapshot=snapshots)
+ 
+ 
+ def stable(before,after):
+-    if before!=after:raise CatalogError('full-interval source/native/bootstrap snapshot drift')
++    if before!=after:raise CatalogError('full-interval observed snapshot drift (bootstrap or acquired metadata/hash interval)')
+ 
+ 
+ def data_status(unresolved,errors):
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate_seal.py
++++ source-006/FinalNativeGate_seal.py
+@@ -1 +1 @@
+-PLAN_SHA256 = '7e100ba4f64fb58a56cc36e28855ed2483baca88df838e9ad3e60bece1138e1b'
++PLAN_SHA256 = 'e3b35013b9e8e794079f4cf23512344ab070c6db47eb3aa6ab07a715b974217f'
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate_setup.py
++++ source-006/FinalNativeGate_setup.py
+@@ -127,8 +127,15 @@
+     try:
+         guard.start()
+         boot_before=bootstrap(STAGE)
++        controls=[]
++        report=observation.collect('inside-scope')
++        if report['decision']['allowed'] is not True:raise ValueError('metadata inside-scope admission denied')
++        control=observation.controls();observation.check_controls(control)
++        if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
++        controls.append(dict(phase='inside-scope',control=control,raw_receipts=report.get('raw_receipts',[])))
++        guard.check()
++        acquisition=Acquisition(deadline)
+         runtime=runtime_proposal()
+-        acquisition=Acquisition(deadline)
+         proposal=environment()
+         acquisition.add(proposal['XDG_RUNTIME_DIR'])
+         acquisition.add(proposal['XDG_RUNTIME_DIR']+'/bus')
+@@ -162,16 +169,17 @@
+                         for directory in p['setup_library_search']:acquisition.add(str(Path(directory)/name))
+                 if item['format']!='ELF64LE' or item.get('search'):
+                     acquisition.unresolved.append(dict(path=path,reason='native/script/search role requires review'))
++        missing=sorted(set(p['files'])-acquisition.files)
++        if missing:raise ValueError('missing fixed source files: '+json.dumps(missing))
+         before=acquisition.snapshot();verify_expected(before,p['files'])
+-        # Source/native hashes, stamps, chains all span BOTH full admission scans
+-        # and ELF/runtime/data assembly, rather than merely one individual read.
+-        controls=[]
+-        for phase in ('inside-scope','go'):
+-            report=observation.collect(phase)
+-            if report['decision']['allowed'] is not True:raise ValueError('metadata admission denied')
+-            control=observation.controls();observation.check_controls(control)
+-            if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
+-            controls.append(dict(phase=phase,control=control,raw_receipts=report.get('raw_receipts',[])))
++        # Bootstrap covers collection. Acquired metadata/hash interval begins
++        # at this snapshot; initial per-entry stamps and known source hashes
++        # are checked too. No native hash identity before its first observation.
++        report=observation.collect('go')
++        if report['decision']['allowed'] is not True:raise ValueError('metadata go admission denied')
++        control=observation.controls();observation.check_controls(control)
++        if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
++        controls.append(dict(phase='go',control=control,raw_receipts=report.get('raw_receipts',[])))
+         unresolved=acquisition.unresolved+[
+             dict(reason='native tool/loader/sysroot dependency closure needs lead role review'),
+             dict(reason='candidate runtime/bus/UID/environment and cache compatibility need review')]
+--- b34142b0169312eca9f86c8fd0993715d2923b1e/FinalNativeGate_setup_observe.py
++++ source-006/FinalNativeGate_setup_observe.py
+@@ -135,6 +135,19 @@
+     for name in names:
+         try:result['values'][name]=(path/name).read_text()
+         except OSError as exc:result['values'][name]=dict(error=str(exc),errno=exc.errno)
++    # DATA only, not an added permission gate or a cancellation probe.
++    # Kernel/cgroup delegation can still refuse an apparently writable control.
++    try:
++        fd=os.open(path,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
++        try:
++            s=os.stat('cgroup.kill',dir_fd=fd,follow_symlinks=False)
++            result['cleanup_control_metadata']=dict(uid=s.st_uid,gid=s.st_gid,mode=s.st_mode,
++                regular=stat.S_ISREG(s.st_mode),euid=os.geteuid(),egid=os.getegid(),groups=os.getgroups(),
++                effective_write_access=os.access('cgroup.kill',os.W_OK,dir_fd=fd,effective_ids=True,follow_symlinks=False),
++                kernel_write_viability='UNOBSERVED; metadata only; review before final Kani charge')
++        finally:os.close(fd)
++    except (OSError,NotImplementedError) as exc:
++        result['cleanup_control_metadata']=dict(error=repr(exc),kernel_write_viability='UNRESOLVED')
+     return result
+ 
+ def check_controls(receipt):

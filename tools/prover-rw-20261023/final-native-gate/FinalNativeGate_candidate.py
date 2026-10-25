@@ -173,18 +173,50 @@ def bootstrap(stage):
     with seal_path.open('rb') as f:
         if os.fstat(f.fileno()).st_size!=len(expected_seal):raise CatalogError('bootstrap root seal size')
         if f.read(len(expected_seal)+1)!=expected_seal.encode():raise CatalogError('bootstrap root seal source')
-    rows=json.loads(raw);a=Acquisition(time.monotonic()+115)
-    for name,pin in rows.items():
-        if Path(name).name!=name:raise CatalogError('bootstrap basename required')
-        a.add(str(stage/name))
-        if a.rows[str(stage/name)]['size']!=pin['size']:raise CatalogError('bootstrap exact source size drift')
-    a.add(str(path));a.add(str(seal_path))
-    snapshot=a.snapshot();verify_expected(snapshot,{str(stage/k):v['sha256'] for k,v in rows.items()})
-    return dict(manifest=hashlib.sha256(raw).hexdigest(),snapshot=snapshot)
+    rows=json.loads(raw)
+    # Independent finite source bootstrap only: no candidate Acquisition,
+    # runtime/native/cache discovery, aliases or directory recursion.
+    if not isinstance(rows,dict) or len(rows)>128:raise CatalogError('bootstrap finite128 files')
+    rows=dict(rows)
+    rows[path.name]=dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+    rows[seal_path.name]=dict(size=len(expected_seal),sha256=hashlib.sha256(expected_seal.encode()).hexdigest())
+    snapshots={};total=0;deadline=time.monotonic()+115
+    for name,pin in sorted(rows.items()):
+        if Path(name).name!=name or name in ('.','..'):raise CatalogError('bootstrap basename required')
+        if type(pin['size']) is not int or not 0<=pin['size']<=4*2**20:raise CatalogError('bootstrap file4MiB bound')
+        total+=pin['size']
+        if total>16*2**20:raise CatalogError('bootstrap total16MiB bound')
+        held=[];chain=[]
+        try:
+            fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);held.append(fd)
+            for part in (*stage.parts[1:],name):
+                if time.monotonic()>deadline:raise CatalogError('bootstrap deadline')
+                before=os.stat(part,dir_fd=fd,follow_symlinks=False)
+                directory=part!=name
+                if not (stat.S_ISDIR(before.st_mode) if directory else stat.S_ISREG(before.st_mode)) or before.st_mode&0o022:
+                    raise CatalogError('bootstrap type/permissions/alias')
+                sub=os.open(part,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK|(os.O_DIRECTORY if directory else 0),dir_fd=fd)
+                held.append(sub)
+                if stamp(os.fstat(sub))!=stamp(before):raise CatalogError('bootstrap open race')
+                chain.append((sub,stamp(before)));fd=sub
+            if before.st_size!=pin['size'] or before.st_nlink!=1:raise CatalogError('bootstrap size/single-link')
+            h=hashlib.sha256();left=pin['size']
+            while left:
+                if time.monotonic()>deadline:raise CatalogError('bootstrap deadline')
+                piece=os.read(fd,min(left,65536))
+                if not piece:raise CatalogError('bootstrap short read')
+                left-=len(piece);h.update(piece)
+            if os.read(fd,1) or h.hexdigest()!=pin['sha256']:raise CatalogError('bootstrap source hash drift: '+name)
+            for opened,before_stamp in chain:
+                if stamp(os.fstat(opened))!=before_stamp:raise CatalogError('bootstrap source chain drift')
+            snapshots[name]=dict(pin=pin,chain=[list(v) for _,v in chain])
+        finally:
+            for opened in reversed(held):os.close(opened)
+    return dict(manifest=hashlib.sha256(raw).hexdigest(),snapshot=snapshots)
 
 
 def stable(before,after):
-    if before!=after:raise CatalogError('full-interval source/native/bootstrap snapshot drift')
+    if before!=after:raise CatalogError('full-interval observed snapshot drift (bootstrap or acquired metadata/hash interval)')
 
 
 def data_status(unresolved,errors):

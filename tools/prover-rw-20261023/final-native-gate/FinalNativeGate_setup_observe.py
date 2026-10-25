@@ -135,6 +135,19 @@ def controls():
     for name in names:
         try:result['values'][name]=(path/name).read_text()
         except OSError as exc:result['values'][name]=dict(error=str(exc),errno=exc.errno)
+    # DATA only, not an added permission gate or a cancellation probe.
+    # Kernel/cgroup delegation can still refuse an apparently writable control.
+    try:
+        fd=os.open(path,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+        try:
+            s=os.stat('cgroup.kill',dir_fd=fd,follow_symlinks=False)
+            result['cleanup_control_metadata']=dict(uid=s.st_uid,gid=s.st_gid,mode=s.st_mode,
+                regular=stat.S_ISREG(s.st_mode),euid=os.geteuid(),egid=os.getegid(),groups=os.getgroups(),
+                effective_write_access=os.access('cgroup.kill',os.W_OK,dir_fd=fd,effective_ids=True,follow_symlinks=False),
+                kernel_write_viability='UNOBSERVED; metadata only; review before final Kani charge')
+        finally:os.close(fd)
+    except (OSError,NotImplementedError) as exc:
+        result['cleanup_control_metadata']=dict(error=repr(exc),kernel_write_viability='UNRESOLVED')
     return result
 
 def check_controls(receipt):

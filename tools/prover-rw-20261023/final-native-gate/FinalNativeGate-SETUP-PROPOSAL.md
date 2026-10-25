@@ -44,8 +44,12 @@ literal target and expand at most32 links only inside fixed admitted roots.
 Directory links below selected roots are recorded without forest recursion.
 Unsafe/unknown roles are metadata only; they are never silently hashed/certified.
 Stat ceilings32768 components,256MiB/file and2GiB total precede hashes; hashing
-streams64KiB under the115second total alarm. Full snapshots compare hashes,
-metadata and chains across both admission collections and data assembly.
+streams64KiB under the115second total alarm. A fresh full inside-scope admission and actual controls precede candidate
+discovery. Bootstrap source verification spans the full collection. Candidate
+source/native metadata and hash snapshots span the interval from the first
+snapshot through GO and the final snapshot, with per-entry initial stamps and
+known source hashes also checked. No pre-observation native hash identity is
+claimed.
 File-backed mapping rows must stay stable; anonymous heap growth is raw DATA.
 ELF metadata parsing does not execute ldd/compiler/help/version/native tools.
 
