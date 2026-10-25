@@ -1,0 +1,72 @@
+       Fresh aspis-core v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/core-workspace/crates/aspis-core)
+warning: some trace filter directives would enable traces that are disabled statically
+ | `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit=trace` would enable the TRACE level for the `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit` target
+ = note: the static max level is `debug`
+ = help: to enable TRACE logging, remove the `max_level_debug` feature from the `tracing` crate
+   Compiling aspis-r1-cost-probe v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/min)
+     Running `/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe --edition=2021 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C split-debuginfo=unpacked -C debug-assertions=on --cfg 'feature="default"' --cfg 'feature="private-leaf-salts"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("default", "private-leaf-salts", "prover", "r1p-check"))' -C metadata=fe540ca4827181bd -C extra-filename=-f281a382a20b8ee0 --out-dir /private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps --target aarch64-apple-darwin -C incremental=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/incremental -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/debug/deps --extern aspis_core=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps/libaspis_core-da4a05e63ee3eb90.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing -Z ghost-state --ub-check=uninit --harness r1_semantic::claims_write_proofs::claims_row_write_preserves_initialized_prefix --exact -Z unstable-options -Z stubbing -Z uninit-checks' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0 -L /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+
+thread 'rustc' (87761032) panicked at kani-compiler/src/kani_middle/transform/check_uninit/ty_layout.rs:190:18:
+internal error: entered unreachable code: FieldsShape::Primitive with a different ABI than ValueAbi::Scalar
+stack backtrace:
+   0:        0x11331dbd0 - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::h22fc4a59e3d9e6bd
+   1:        0x1107b93e0 - core::fmt::write::hbf3584f09bd0977f
+   2:        0x1132d7f90 - std::io::Write::write_fmt::hca2cf3cc8d479595
+   3:        0x1132efed8 - std::panicking::default_hook::{{closure}}::ha9ccd6dd0079dd2c
+   4:        0x1132efba8 - std::panicking::default_hook::h254885e932dff974
+   5:        0x1049fdbe4 - kani_compiler[ea78af43bd9d6e44]::session::PANIC_HOOK::{closure#0}::{closure#0}
+   6:        0x1049fde78 - kani_compiler[ea78af43bd9d6e44]::session::JSON_PANIC_HOOK::{closure#0}::{closure#0}
+   7:        0x1049a20b8 - kani_compiler[ea78af43bd9d6e44]::codegen_cprover_gotoc::utils::debug::DEFAULT_HOOK::{closure#0}::{closure#0}
+   8:        0x1132f03b8 - std::panicking::panic_with_hook::h60ed743666a18935
+   9:        0x1132f0060 - std::panicking::panic_handler::{{closure}}::hea3e20f3e9f90c60
+  10:        0x1132e9a8c - std::sys::backtrace::__rust_end_short_backtrace::hf9ad97903ff4caa3
+  11:        0x1132ce650 - __rustc[f01a1aa1bacb466]::rust_begin_unwind
+  12:        0x1160543ec - core::panicking::panic_fmt::h95ca091ca4078df1
+  13:        0x1049d6118 - kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ty_layout::data_bytes_for_ty
+  14:        0x1049d3938 - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ty_layout::PointeeInfo>::from_ty
+  15:        0x10491bf6c - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ptr_uninit::uninit_visitor::CheckUninitVisitor as rustc_public[e4c2adf084ae11e7]::mir::visit::MirVisitor>::super_basic_block
+  16:        0x10490e7bc - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ptr_uninit::uninit_visitor::CheckUninitVisitor as kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::TargetFinder>::find_all
+  17:        0x104997388 - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::UninitInstrumenter>::run::<kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ptr_uninit::uninit_visitor::CheckUninitVisitor>
+  18:        0x1048f09f0 - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::check_uninit::ptr_uninit::UninitPass as kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::TransformPass>::transform
+  19:        0x1048c64f4 - <kani_compiler[ea78af43bd9d6e44]::kani_middle::transform::BodyTransformation>::body_ref
+  20:        0x10498c4b0 - <kani_compiler[ea78af43bd9d6e44]::kani_middle::reachability::MonoItemsCollector>::reachable_items
+  21:        0x10498faa4 - kani_compiler[ea78af43bd9d6e44]::kani_middle::reachability::collect_reachable_items
+  22:        0x1049fe930 - <kani_compiler[ea78af43bd9d6e44]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend>::codegen_items
+  23:        0x10495e88c - <kani_compiler[ea78af43bd9d6e44]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[4078633fb801e8f3]::traits::backend::CodegenBackend>::codegen_crate::{closure#0}
+  24:        0x1049a0b44 - rustc_public[e4c2adf084ae11e7]::rustc_internal::run::<<kani_compiler[ea78af43bd9d6e44]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[4078633fb801e8f3]::traits::backend::CodegenBackend>::codegen_crate::{closure#0}, alloc[6b6261a0101711c6]::boxed::Box<dyn core[6d742d909ed425e3]::any::Any>>
+  25:        0x104a0c438 - <kani_compiler[ea78af43bd9d6e44]::codegen_cprover_gotoc::compiler_interface::GotocCodegenBackend as rustc_codegen_ssa[4078633fb801e8f3]::traits::backend::CodegenBackend>::codegen_crate
+  26:        0x111c0377c - <rustc_interface[d974b31320f7ab2e]::queries::Linker>::codegen_and_build_linker
+  27:        0x11132fe5c - rustc_interface[d974b31320f7ab2e]::passes::create_and_enter_global_ctxt::<core[6d742d909ed425e3]::option::Option<rustc_interface[d974b31320f7ab2e]::queries::Linker>, rustc_driver_impl[d4b0f7e015648a8f]::run_compiler::{closure#0}::{closure#2}>
+  28:        0x1113423d4 - rustc_interface[d974b31320f7ab2e]::interface::run_compiler::<(), rustc_driver_impl[d4b0f7e015648a8f]::run_compiler::{closure#0}>::{closure#1}
+  29:        0x111333570 - std[c2c157f59ddf611b]::sys::backtrace::__rust_begin_short_backtrace::<rustc_interface[d974b31320f7ab2e]::util::run_in_thread_with_globals<rustc_interface[d974b31320f7ab2e]::util::run_in_thread_pool_with_globals<rustc_interface[d974b31320f7ab2e]::interface::run_compiler<(), rustc_driver_impl[d4b0f7e015648a8f]::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}, ()>
+  30:        0x1113463ec - <<std[c2c157f59ddf611b]::thread::Builder>::spawn_unchecked_<rustc_interface[d974b31320f7ab2e]::util::run_in_thread_with_globals<rustc_interface[d974b31320f7ab2e]::util::run_in_thread_pool_with_globals<rustc_interface[d974b31320f7ab2e]::interface::run_compiler<(), rustc_driver_impl[d4b0f7e015648a8f]::run_compiler::{closure#0}>::{closure#1}, ()>::{closure#0}, ()>::{closure#0}::{closure#0}, ()>::{closure#1} as core[6d742d909ed425e3]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  31:        0x1132e6720 - std::sys::thread::unix::Thread::new::thread_start::hdded74489621dc4d
+  32:        0x1865ddc58 - __pthread_cond_wait
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] no current codegen item.
+[Kani] no current codegen location.
+error: could not compile `aspis-r1-cost-probe` (lib); 5 warnings emitted
+
+Caused by:
+  process didn't exit successfully: `/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe --edition=2021 src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C split-debuginfo=unpacked -C debug-assertions=on --cfg 'feature="default"' --cfg 'feature="private-leaf-salts"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("default", "private-leaf-salts", "prover", "r1p-check"))' -C metadata=fe540ca4827181bd -C extra-filename=-f281a382a20b8ee0 --out-dir /private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps --target aarch64-apple-darwin -C incremental=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/incremental -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/debug/deps --extern aspis_core=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps/libaspis_core-da4a05e63ee3eb90.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing -Z ghost-state --ub-check=uninit --harness r1_semantic::claims_write_proofs::claims_row_write_preserves_initialized_prefix --exact -Z unstable-options -Z stubbing -Z uninit-checks' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0 -L /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)
+        0.21 real         0.12 user         0.07 sys
+           193331200  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               16287  page reclaims
+                 173  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   1  signals received
+                  61  voluntary context switches
+                 274  involuntary context switches
+            49725593  instructions retired
+            26611241  cycles elapsed
+             3195288  peak memory footprint

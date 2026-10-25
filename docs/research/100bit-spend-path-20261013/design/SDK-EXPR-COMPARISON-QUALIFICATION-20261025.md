@@ -39,3 +39,9 @@ python3 tools/s126-sdk-literal-audit-20261025/check.py --released
 ```
 
 This responds to lead bc8b650518's comparison correction at the OWNER data scope only. It does not spend or duplicate the lead's bounded1059-pair original ROOT/current diagnostic. Native initializedness/allocation/drop/full-loop/Terminal/domain and original/current/kernel/event/artifact joins remain open; <=2^-100 per-attempt soundness is not established.
+
+Lead follow-up qualification: this owner's `Expr.equal` plus legacy metadata
+guard is distinct from Port29's additional `Syntax` source-information and
+ordered-entry representation walk. References here to literal comparison mean
+the stated guard, not a byte/serialization identity result for those additional
+representations. Historical receipts and raw payloads remain unchanged.

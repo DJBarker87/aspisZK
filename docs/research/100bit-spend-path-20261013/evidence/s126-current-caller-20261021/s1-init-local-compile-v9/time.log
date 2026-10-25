@@ -1,0 +1,62 @@
+       Fresh aspis-core v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/core-workspace/crates/aspis-core)
+warning: some trace filter directives would enable traces that are disabled statically
+ | `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit=trace` would enable the TRACE level for the `kani_compiler::kani_middle::transform::check_uninit::ptr_uninit` target
+ = note: the static max level is `debug`
+ = help: to enable TRACE logging, remove the `max_level_debug` feature from the `tracing` crate
+   Compiling aspis-r1-cost-probe v0.1.0 (/private/tmp/s126-kani-local-diagnostic-20261025-v1/min)
+     Running `/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe --edition=2021 layout.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type lib --emit=dep-info,metadata,link -C opt-level=3 -C embed-bitcode=no -C debuginfo=2 -C split-debuginfo=unpacked -C debug-assertions=on --cfg 'feature="default"' --cfg 'feature="private-leaf-salts"' --check-cfg 'cfg(docsrs,test)' --check-cfg 'cfg(feature, values("default", "private-leaf-salts", "prover", "r1p-check"))' -C metadata=fe540ca4827181bd -C extra-filename=-67d0c0f5ef6468c1 --out-dir /private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps --target aarch64-apple-darwin -C incremental=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/incremental -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps -L dependency=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/debug/deps --extern aspis_core=/private/tmp/s126-kani-local-diagnostic-20261025-v1/target/kani/aarch64-apple-darwin/debug/deps/libaspis_core-da4a05e63ee3eb90.rmeta '-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing -Z ghost-state --ub-check=uninit --harness box_uninit --exact -Z unstable-options -Z stubbing -Z uninit-checks' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0 -L /private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/private/tmp/s126-kani-local-diagnostic-20261025-v1/kani-0.67.0/lib/libstd.rlib' -C opt-level=3 -Z mir-opt-level=0 -C overflow-checks=yes -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0`
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.008460084s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis (second pass) in 0.000295916s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.016217584s
+====== Reachability Analysis Result =======
+Total # items: 178
+Total # statements: 1937
+Total # expressions: 486
+
+Reachable Items:
+  - function: 176
+  - static item: 2
+
+Statements:
+  - Call: 237
+  - Unreachable: 8
+  - SwitchInt: 83
+  - Drop: 6
+  - Assert: 36
+  - Assign: 486
+  - Return: 165
+  - Ignored: 783
+  - Goto: 133
+
+Expressions:
+  - Cast: 70
+  - BinaryOp: 70
+  - Ref: 42
+  - Discriminant: 9
+  - Aggregate: 53
+  - CheckedBinaryOp: 24
+  - UnaryOp: 12
+  - NullaryOp: 2
+  - Use: 200
+  - AddressOf: 4
+
+-------------------------------------------
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.12s
+        0.26 real         0.17 user         0.06 sys
+           146702336  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+               25814  page reclaims
+                 634  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   1  signals received
+                  86  voluntary context switches
+                 235  involuntary context switches
+            43813894  instructions retired
+            20625896  cycles elapsed
+             3031448  peak memory footprint
