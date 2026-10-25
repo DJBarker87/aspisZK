@@ -1,0 +1,89 @@
+AuS1_Vec.lean:13:17: error: unsolved goals
+case cons
+x : U8
+xs : List U8
+ih : List.mapM core.clone.CloneU8.clone xs = ok xs
+⊢ pure (x :: xs) = ok (x :: xs)
+AuS1_Vec.lean:13:46: warning: This simp argument is unused:
+  core.clone.CloneU8
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵M̵_̵c̵o̵n̵s̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵C̵l̵o̵n̵e̵U̵8̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵i̵m̵p̵l̵s̵.̵C̵l̵o̵n̵e̵U̵8̵.̵c̵l̵o̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵F̵u̵n̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲M̲_̲c̲o̲n̲s̲,̲ ̲c̲o̲r̲e̲.̲c̲l̲o̲n̲e̲.̲i̲m̲p̲l̲s̲.̲C̲l̲o̲n̲e̲U̲8̲.̲c̲l̲o̲n̲e̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Vec.lean:19:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h : _a with
+      | ok v => ok ⟨v, ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok ⟨xs, ⋯⟩
+Error: Application type mismatch: The argument
+  h
+has type
+  _a = ok v
+but is expected to have type
+  List.mapM core.clone.CloneU8.clone xs = ok v
+in the application
+  List.clone._proof_1 core.clone.CloneU8.clone xs v h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+xs : List U8
+⊢ (match h : List.mapM core.clone.CloneU8.clone xs with
+    | ok v => ok ⟨v, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨xs, ⋯⟩
+AuS1_Vec.lean:33:47: error: Application type mismatch: The argument
+  success
+has type
+  (match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok out
+but is expected to have type
+  ok ?m.54 = ok ?m.55
+in the application
+  ok.inj success
+AuS1_Vec.lean:33:10: error: stuck at solving universe constraint
+  ?u.26 + 1 =?= max 1 ?u.27
+while trying to unify
+  Eq.{max 1 ?u.27} ?m.54 ?m.55 : Prop
+with
+  Eq.{?u.26 + 1} ?m.54 ?m.55 : Prop
+AuS1_Vec.lean:34:10: error: stuck at solving universe constraint
+  ?u.26 + 1 =?= max 1 ?u.27
+while trying to unify
+  Eq.{max 1 ?u.27} ?m.54 ?m.55 : Prop
+with
+  Eq.{?u.26 + 1} ?m.54 ?m.55 : Prop
+AuS1_Vec.lean:28:32: error: stuck at solving universe constraint
+  ?u.26 + 1 =?= max 1 ?u.27
+while trying to unify
+  Eq.{max 1 ?u.27} ?m.54 ?m.55 : Prop
+with
+  Eq.{?u.26 + 1} ?m.54 ?m.55 : Prop
+AuS1_Vec.lean:28:29: error: stuck at solving universe constraint
+  ?u.26 + 1 =?= max 1 ?u.27
+while trying to unify
+  Eq.{max 1 ?u.27} ?m.54 ?m.55 : Prop
+with
+  Eq.{?u.26 + 1} ?m.54 ?m.55 : Prop
+AuS1_Vec.lean:32:15: warning: This simp argument is unused:
+  eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵q̵]̵ ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_Vec.map_clone' depends on axioms: [sorryAx]
+'AspisR1.AuS1_Vec.list_clone' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AuS1_Vec.slice_clone' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AuS1_Vec.extend' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.AuS1_Vec.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
