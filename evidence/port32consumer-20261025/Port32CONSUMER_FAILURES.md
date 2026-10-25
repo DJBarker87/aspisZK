@@ -28,3 +28,21 @@ avoid importing structure elaboration metadata. This is a definitional source
 expansion; all seven other fields remain verbatim. Before/after statements and
 actual ComposedSource text are retained. A later parser/kernel/type mismatch
 is valid feedback and ends this worker's allocation.
+
+3. Actual LOCAL357 at61481da880 exited1 in7.8366567078s. Process RSS1319272448B,
+sampled aggregate1315225600B, swap0. Parser rejected the multiline DefinitionVal
+record at Consumer:488:75/489:44. The subsequent ordinary run_cmd evaluation
+refused the error-recovery sorry dependency, as required; no bypass was attempted.
+No load, selected-CI/core-origin audit, replay, original parse_header application,
+power-instance recovery, concrete enclosing theorem, or complete import/axiom
+audit ran. The two preceding Bool theorems were ordinarily checked and their full
+#print/axioms appeared: both depend on no axioms. This partial check is not a
+successful consumer invocation or historical helper-compatibility result.
+
+Port32CONSUMER_next-correction.patch.txt replaces just the malformed record by
+mkDefinitionValEx (whose exact public signature was text-inspected). It is a
+PROPOSED UNCOMPILED correction; the actual failed source and generator are left
+unchanged. No358, hidden helper invocation, host work or borrowed budget is allowed.
+Next deliverable under fresh lead authority: compile a materially corrected
+actual consumer, then resolve any exact selected-core/group/kernel/source error
+and retain full strict/axiom evidence. No closure or security conclusion is inferred.
