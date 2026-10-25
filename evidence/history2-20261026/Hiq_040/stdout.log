@@ -1,0 +1,22 @@
+Hiq_MeanSum.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lazyMean p (fun x => none) f
+in the target expression
+  lazyMean p emptyTable f ≤ lazyMean q emptyTable g + lazyMean r emptyTable h
+
+I A X Y Z : Type
+inst✝² : DecidableEq I
+inst✝¹ : Fintype A
+inst✝ : Inhabited A
+p : Program I A X
+q : Program I A Y
+r : Program I A Z
+f : View I A X → ℚ
+g : View I A Y → ℚ
+h : View I A Z → ℚ
+pointwise : ∀ (H : I → A), f (eval H p) ≤ g (eval H q) + h (eval H r)
+s : Finset I := support p ∪ support q ∪ support r
+hp : support p ⊆ s
+hq : support q ⊆ s
+hr : support r ⊆ s
+⊢ lazyMean p emptyTable f ≤ lazyMean q emptyTable g + lazyMean r emptyTable h
+'AspisR1.Hiq_MeanSum.le_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

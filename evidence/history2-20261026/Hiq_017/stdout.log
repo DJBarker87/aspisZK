@@ -1,0 +1,78 @@
+Hiq_DrvReaderHeader.lean:21:55: error: don't know how to synthesize placeholder for argument `base`
+context:
+F C : Type
+c : Configuration F C
+a1 a2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : FirstCut
+s : SecondCut
+cuts : SourceCuts (sdk c) a1 a2 saved f s
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle (S2Z.Oracle.leadDigest (sdk c)) () H
+accepted :
+  VTop_Stages.verifier.candidate.tx2_authenticated (stage c) (digest c) s.pub s.proof s.checkpoint () none =
+    ok (core.result.Result.Ok ())
+variant : VTop_Stages.transport.Variant
+shape : (stage c).op3 s.proof = ok (core.result.Result.Ok variant)
+common :
+  VTop_Stages.verifier.candidate.tx2_common (stage c) (digest c) s.pub s.proof s.checkpoint () none =
+    ok (core.result.Result.Ok ())
+p : VTop_Stages.verifier.Prepared
+a : VTop_Stages.verifier.Accumulator
+g : Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize
+geo : VTop_Stages.verifier.QueryGeometry
+pending : VTop_Stages.verifier.BatchedWeights
+out : VTop_Stages.verifier.Accumulator
+after : VTop_Stages.verifier.BatchedWeights
+flushed : Slice VTop_Stages.aspis_core.field.QM31
+back : Slice VTop_Stages.aspis_core.field.QM31 → alloc.vec.Vec VTop_Stages.aspis_core.field.QM31
+v : VTop_Stages.verifier.View
+read :
+  (stage c).op18 (digest c) s.checkpoint s.proof s.pub AspisR1Stage2.transport.Variant.S2 () =
+    ok (core.result.Result.Ok (p, a))
+right✝ :
+  (stage c).op6 s.proof p a g none geo pending 22#usize = ok (core.result.Result.Ok (out, after)) ∧
+    out.weights.deref_mut = (out.weights.deref, back) ∧
+      (stage c).op9 after out.weights.deref = ok flushed ∧
+        (stage c).op19 v p { weights := back flushed, rhs := out.rhs, power := out.power, next := out.next } none =
+          ok (core.result.Result.Ok ())
+⊢ VTop_Stages.Ops
+Hiq_DrvReaderHeader.lean:14:108: error: unsolved goals
+F C : Type
+c : Configuration F C
+a1 a2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : FirstCut
+s : SecondCut
+cuts : SourceCuts (sdk c) a1 a2 saved f s
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle (S2Z.Oracle.leadDigest (sdk c)) () H
+accepted :
+  VTop_Stages.verifier.candidate.tx2_authenticated (stage c) (digest c) s.pub s.proof s.checkpoint () none =
+    ok (core.result.Result.Ok ())
+variant : VTop_Stages.transport.Variant
+shape : (stage c).op3 s.proof = ok (core.result.Result.Ok variant)
+common :
+  VTop_Stages.verifier.candidate.tx2_common (stage c) (digest c) s.pub s.proof s.checkpoint () none =
+    ok (core.result.Result.Ok ())
+p : VTop_Stages.verifier.Prepared
+a : VTop_Stages.verifier.Accumulator
+g : Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize
+geo : VTop_Stages.verifier.QueryGeometry
+pending : VTop_Stages.verifier.BatchedWeights
+out : VTop_Stages.verifier.Accumulator
+after : VTop_Stages.verifier.BatchedWeights
+flushed : Slice VTop_Stages.aspis_core.field.QM31
+back : Slice VTop_Stages.aspis_core.field.QM31 → alloc.vec.Vec VTop_Stages.aspis_core.field.QM31
+v : VTop_Stages.verifier.View
+read :
+  (stage c).op18 (digest c) s.checkpoint s.proof s.pub AspisR1Stage2.transport.Variant.S2 () =
+    ok (core.result.Result.Ok (p, a))
+right✝ :
+  (stage c).op6 s.proof p a g none geo pending 22#usize = ok (core.result.Result.Ok (out, after)) ∧
+    out.weights.deref_mut = (out.weights.deref, back) ∧
+      (stage c).op9 after out.weights.deref = ok flushed ∧
+        (stage c).op19 v p { weights := back flushed, rhs := out.rhs, power := out.power, next := out.next } none =
+          ok (core.result.Result.Ok ())
+⊢ CPhy_Header.decode (bytesOf ↑s.checkpoint) = some (H (bytesOf ↑s.proof), H (bytesOf ↑s.pub))
+'AspisR1.Hiq_DrvReaderHeader.header' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

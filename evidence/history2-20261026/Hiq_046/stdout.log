@@ -1,0 +1,41 @@
+Hiq_DispatchFirst.lean:9:81: error: unsolved goals
+case inl
+Account : Type
+ops : Ops Account
+id : Key
+accounts : Slice Account
+data : Slice U8
+h : ↑data = [3#u8, 10#u8]
+⊢ (match 3#u8 with
+    | 4#8#uscalar => ops.init id accounts data
+    | 5#8#uscalar => ops.write id accounts data
+    | 6#8#uscalar => ops.finalize id accounts data
+    | x =>
+      if [3#u8, 10#u8] = ↑(Array.make 2#usize [3#u8, 10#u8] r1_pool_adapter.process._proof_4) then
+        ops.first id accounts data
+      else
+        if [3#u8, 10#u8] = ↑(Array.make 2#usize [3#u8, 11#u8] r1_pool_adapter.process._proof_6) then
+          ops.first id accounts data
+        else ops.second id accounts data) =
+    ops.first id accounts data
+
+case inr
+Account : Type
+ops : Ops Account
+id : Key
+accounts : Slice Account
+data : Slice U8
+h : ↑data = [3#u8, 11#u8]
+⊢ (match 3#u8 with
+    | 4#8#uscalar => ops.init id accounts data
+    | 5#8#uscalar => ops.write id accounts data
+    | 6#8#uscalar => ops.finalize id accounts data
+    | x =>
+      if [3#u8, 11#u8] = ↑(Array.make 2#usize [3#u8, 10#u8] r1_pool_adapter.process._proof_4) then
+        ops.first id accounts data
+      else
+        if [3#u8, 11#u8] = ↑(Array.make 2#usize [3#u8, 11#u8] r1_pool_adapter.process._proof_6) then
+          ops.first id accounts data
+        else ops.second id accounts data) =
+    ops.first id accounts data
+'AspisR1.Hiq_DispatchFirst.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

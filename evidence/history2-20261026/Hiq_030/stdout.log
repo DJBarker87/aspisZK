@@ -1,0 +1,85 @@
+'AspisR1.Hiq_DrvAccountDriver.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Hiq_DrvAccountDriver.accepted : ∀ {A F C : Type} (c : Configuration F C)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (id : S2W_ExtractionBoundary.Program) (adversary : Program Bytes State (FirstInputs A))
+  (chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (ℕ → Record) → A → Program Bytes State (SecondInputs A)),
+  (sdk (DrvC_FirstConstants.configuration c)).op36 = Hist_Authority.keyEq →
+    WAdm_Domain.SessionAPrepare
+        (Tx1Q_Execution.actual (Op5T_Concrete.current (DrvC_FirstConstants.configuration c).currentBase)
+          (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+          (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).boundaries
+          (DrvC_FirstConstants.configuration c).std) →
+      Port5Q1_QueryPorts.SessionAPrimitives (DrvC_FirstConstants.configuration c).query →
+        ∀ (Q0 Q1 : ℕ),
+          (∀ (H : Bytes → State), (eval H adversary).1.length ≤ Q0) →
+            (∀ (input : FirstInputs A) (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A)
+                (H : Bytes → State), (eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+              S2W_TrustedStd.TrustedStd copy →
+                ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second),
+                  S2W_DigestExtraction.AeneasExtraction (sdk (DrvC_FirstConstants.configuration c)) native1 native2
+                      hashv →
+                    ∀ (sha256 H : Bytes → State),
+                      S2W_ExtractionBoundary.P1 sha256 H →
+                        S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                          ∀ (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A),
+                            (have input := (eval H adversary).2;
+                              first native1 copy allocator input.entry id input.data input.state =
+                                ok (core.result.Result.Ok (saved, post1, final1))) →
+                              (have input := (eval H adversary).2;
+                                have next := (eval H (chooseSecond input saved post1 final1)).2;
+                                second native2 allocator next.entry id next.data next.slot next.state =
+                                  ok (core.result.Result.Ok (post2, final2))) →
+                                ∀ (initial final : Hist_Store.Store) (l1 l2 : Hist_RuntimeEntry.Layout),
+                                  (eval H adversary).2.entry = Hist_RuntimeEntry.load initial l1 →
+                                    (eval H (chooseSecond (eval H adversary).2 saved post1 final1)).2.entry =
+                                        Hist_RuntimeEntry.load final l2 →
+                                      ∀ (events : List S2X.AccountEvent),
+                                        Hist_Store.Trace (sdk (DrvC_FirstConstants.configuration c)) id
+                                            (Hist_RuntimeEntry.commit initial (l1.handles 2).1 saved) events final →
+                                          (l2.handles 6).1 = (l1.handles 2).1 →
+                                            ∀
+                                              (project :
+                                                Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                                              have input := (eval H adversary).2;
+                                              have next := (eval H (chooseSecond input saved post1 final1)).2;
+                                              ∃ f s v,
+                                                SourceCuts (sdk (DrvC_FirstConstants.configuration c)) input.entry.first
+                                                    (next.entry.second secondSizes) saved f s ∧
+                                                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                                        f.statement =
+                                                      ok f.semantic ∧
+                                                    AdapterRw.r1_pool_adapter.owned.validate_asq8
+                                                          (sdk (DrvC_FirstConstants.configuration c)) id
+                                                          (next.entry.second secondSizes) next.data next.slot =
+                                                        ok (core.result.Result.Ok v) ∧
+                                                      (sdk (DrvC_FirstConstants.configuration c)).op22 v.statement =
+                                                          ok (core.result.Result.Ok s.encoded) ∧
+                                                        Hiq_ByteSelection.select
+                                                              (sdk (DrvC_FirstConstants.configuration c)) id
+                                                              (eval H
+                                                                  (Hiq_DrvExperiment.source
+                                                                    (DrvC_FirstConstants.configuration c) hashv copy
+                                                                    allocator id adversary chooseSecond)).2 =
+                                                            Hist_PairExperiment.select { first := f, second := s } ∧
+                                                          (BinRawByteCollisionTargets.event
+                                                              SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                              (eval H
+                                                                (Hiq_DrvExperiment.joint
+                                                                  (DrvC_FirstConstants.configuration c) hashv copy
+                                                                  allocator id adversary chooseSecond project)) ∨
+                                                            ∃ i,
+                                                              i.statement.pubBytes = bytesOf ↑f.pub ∧
+                                                                i.stored = bytesOf ↑f.proof ∧
+                                                                  (eval H
+                                                                          (DrvC_Implementation.driver
+                                                                            (DrvC_FirstConstants.configuration c)
+                                                                            i)).2 =
+                                                                      true ∧
+                                                                    ¬∀ (j : OraclePortStoredExperimentC4.Input),
+                                                                        (eval H
+                                                                              (DrvC_Implementation.driver
+                                                                                (DrvC_FirstConstants.configuration c)
+                                                                                j)).2 =
+                                                                          false) :=
+⋯

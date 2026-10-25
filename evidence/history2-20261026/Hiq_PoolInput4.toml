@@ -1,0 +1,70 @@
+[package]
+name = "aspis-pool"
+edition.workspace = true
+license.workspace = true
+version.workspace = true
+description = "Pool V1 authenticated Solana state-transition program"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+default = []
+no-entrypoint = []
+# Measurement-only entrypoint for the proof-carried pair afterstate.  Release
+# builds do not enable this feature until the real merged 26-C1/3-C2 verifier emits
+# the authenticated ASJA result.
+pair-afterstate-evidence = []
+pair-afterstate-profile = ["pair-afterstate-evidence"]
+# Production-inactive account/PDA/checkpoint/deposit/terminal plumbing for the
+# accepted eight-lane forest candidate. Release builds leave it disabled.
+pair-forest-account-evidence = []
+# Forward the already authenticated registry and entry through the verifier
+# CPI so an audit-only verifier lane-invariant reader can independently root
+# its capability in immutable selected-release configuration.
+pair-forest-verifier-lane-invariant-audit = ["pair-forest-account-evidence"]
+# R1 split verification uses a foreign read-only proof buffer and appends a
+# separate verifier-owned checkpoint to the terminal account list. The default
+# V7 sealed-proof account contract is unchanged.
+r1-split-checkpoint = ["pair-forest-verifier-lane-invariant-audit"]
+# Audit-only direct consumer for a canonical ASR8 already decoded and bound to
+# the selected verifier return program. It avoids reconstructing ASF8 and
+# re-encoding the same ASR8 bytes after the exact field checks.
+pair-forest-direct-result-audit = ["pair-forest-account-evidence"]
+# Instrumented local phase ledger. Logging changes total CU.
+pair-forest-cu-profile-audit = ["pair-forest-account-evidence"]
+pair-forest-history-page-invariant-audit = ["pair-forest-account-evidence"]
+# Exact one-transaction eight-lane release-candidate path measured by the
+# TxV1 combined harness.  This aggregate switch keeps the selected feature
+# set reproducible while the named Rust-to-Lean/Aeneas release gates remain
+# explicit; it is intentionally not part of `default`.
+v7-pair-forest-one-tx-candidate = [
+    "pair-forest-source-result-invariant-audit",
+    "pair-forest-verifier-lane-invariant-audit",
+    "pair-forest-direct-result-audit",
+    "pair-forest-history-page-invariant-audit",
+    "pair-forest-deposit-invariant-audit",
+]
+# Audit-only full 1,880-byte ASF8 top-level transport. It shares the exact
+# account order, registry authentication, ASR8 validation, and settlement path
+# with `pair-forest-account-evidence`.
+pair-forest-full-asf8-audit = ["pair-forest-account-evidence"]
+# Default-off local CU variants backed by the named inductive Pool-write
+# invariant. They are not release features until Rust-to-Lean/Aeneas closure.
+pair-forest-source-invariant-audit = ["pair-forest-account-evidence"]
+pair-forest-source-result-invariant-audit = ["pair-forest-source-invariant-audit"]
+# Deposit-only switch for the same inductive Pool-write invariant. It does not
+# enable the terminal source/result features directly. Following sequential
+# live CU evidence and persisted-state source/formal closure, it is included
+# by the default-off V7 candidate aggregate while remaining absent from
+# `default`.
+pair-forest-deposit-invariant-audit = ["pair-forest-account-evidence"]
+
+[dependencies]
+aspis-core.workspace = true
+aspis-statement = { workspace = true, features = ["pool-v1-kernel"] }
+solana-program.workspace = true
+solana-sdk-ids = "2.2.1"
+
+[dev-dependencies]
+sha2.workspace = true
