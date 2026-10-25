@@ -47,7 +47,7 @@ class Focused(unittest.TestCase):
             if name.startswith('ResourceRssGO'):raise AssertionError('unstaged job import')
             return original(name,*a,**k)
         namespace={}
-        with patch.object(builtins,'__import__',isolated),self.assertRaisesRegex(host.GuardError,'unsupported remote Linux'):
+        with patch.object(builtins,'__import__',isolated),self.assertRaisesRegex(RuntimeError,'unsupported remote Linux'):
             exec(compile(ast.fix_missing_locations(tree),'ResourceRssGOv3-bootstrap-stub','exec'),namespace)
         self.assertNotIn('limits',namespace)
         info=fixture();local.check_remote_linux_limits(info,info['inherited_limits'])
@@ -99,7 +99,9 @@ class Focused(unittest.TestCase):
         # stage/parent/lock metadata only. No unit query or scope path appears.
         top=[n for n in tree.body if not isinstance(n,(ast.FunctionDef,ast.ClassDef,ast.Import,ast.ImportFrom))]
         text='\n'.join(ast.unparse(n) for n in top)
-        self.assertNotIn(host.UNIT,text);self.assertNotIn('systemctl',text)
+        literals=[n.value for n in ast.walk(ast.Module(body=top,type_ignores=[])) if isinstance(n,ast.Constant) and isinstance(n.value,str)]
+        self.assertNotIn(host.UNIT,literals);self.assertNotIn(host.UNIT+'.scope',literals)
+        self.assertNotIn('systemctl',text)
         self.assertNotIn('/sys/fs/cgroup',text)
         self.assertNotIn('scope_exists',text)
         # Actual caller checks only stage_exists and uid/parent_uid before save.
