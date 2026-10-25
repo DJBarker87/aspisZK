@@ -2,7 +2,7 @@
 use aspis_core::field::{M31,QM31 as K,WideExact as E};
 use super::Op4P_reference::Error;
 const OPENING:usize=832;
-mod compact {
+pub mod compact {
 use aspis_core::field::QM31;
 #[derive(Clone,Copy,Debug)] pub enum CodecError {NonCanonical}
 pub const OFF_Y1:usize=7031;
@@ -19,11 +19,11 @@ pub fn check_values(compact: &[u8]) -> Result<(), CodecError> {
 }
 }
 impl From<compact::CodecError> for Error {fn from(_:compact::CodecError)->Self{Self::Parse}}
-fn echeck(b:&[u8],k:bool)->Result<(),Error> {
+pub fn echeck(b:&[u8],k:bool)->Result<(),Error> {
     for c in b.chunks_exact(32) {let x=E::from_le_bytes(c).ok_or(Error::Parse)?;if k&&x.c1()!=K::ZERO {return Err(Error::Parse);}}
     Ok(())
 }
-fn opening(proof: &[u8], i: usize) -> &[u8] {
+pub fn opening(proof: &[u8], i: usize) -> &[u8] {
     let at = compact::OFF_OPENINGS + i * OPENING;
     &proof[at..at + OPENING]
 }
@@ -45,5 +45,20 @@ pub fn canonical_scan(proof: &[u8]) -> Result<(), Error> {
         }
         echeck(&q[672..800], false)?;
     }
+    Ok(())
+}
+
+// Exact opening-loop body, isolated without changing its expressions.
+pub fn opening_body(q:&[u8])->Result<(),Error> {
+        for s in 0..4 {
+            for l in 0..26 {
+                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
+            }
+            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+            for l in 0..2 {
+                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
+            }
+        }
+        echeck(&q[672..800], false)?;
     Ok(())
 }
