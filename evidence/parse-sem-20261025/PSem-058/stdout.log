@@ -1,0 +1,365 @@
+PSem_Loop.lean:31:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.IteratorRange.next core.iter.range.StepU8 (iter row)
+in the target expression
+  (match (iter row, out, src, dst) with
+    | (it, buf, s, d) => do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU8 it
+      match o with
+        | none =>
+          have i := input.len;
+          if (s != i) = true then
+            ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, buf))
+          else
+            have i1 := buf.len;
+            if (d != i1) = true then
+              ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, buf))
+            else ok (ControlFlow.done (core.result.Result.Ok (), buf))
+        | some row => do
+          let o1 ← r1_wire.row_shape row
+          let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (_, size) := val
+              do
+              let i ← d + 5#usize
+              let (s, index_mut_back) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) buf
+                    { start := d, «end» := i }
+              let i1 ← s + 5#usize
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := s, «end» := i1 }
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              have out1 : Slice U8 := index_mut_back s2
+              let b ← compact.compact_row row
+              if b = true then do
+                  let i2 ← size / 2#usize
+                  let i3 ← i1 + i2
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let i4 ← i + size
+                  let (s4, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i4 }
+                  let (r1, s5) ← nativeValues.expandValues s3 s4
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a =>
+                      have out2 := index_mut_back1 s5;
+                      do
+                      let src1 ← i1 + i2
+                      ok (ControlFlow.cont (iter1, out2, src1, i4))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame compact.CodecError) residual
+                      have out2 : Slice U8 := index_mut_back1 s5
+                      ok (ControlFlow.done (r2, out2))
+                else do
+                  let i2 ← i + size
+                  let (s3, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i2 }
+                  let i3 ← i1 + size
+                  let s4 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.cont (iter1, out2, i3, i2))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r1, buf))) =
+    if (src != input.len) = true then
+      ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+    else
+      if (dst != out.len) = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else ok (ControlFlow.done (core.result.Result.Ok (), out))
+
+input updated : Slice U8
+row : U8
+count : ↑row + 0 = 27
+out : Slice U8
+src dst : Usize
+atEnd : ↑row = 27
+body : State → Result (ControlFlow State Exit) :=
+  fun x =>
+    match x with
+    | (it, buf, s, d) => compact.expand_semantic_loop.body nativeValues input it buf s d
+call : loop body (iter row, out, src, dst) = ok (core.result.Result.Ok (), updated)
+⊢ (match (iter row, out, src, dst) with
+    | (it, buf, s, d) => do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU8 it
+      match o with
+        | none =>
+          have i := input.len;
+          if (s != i) = true then
+            ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, buf))
+          else
+            have i1 := buf.len;
+            if (d != i1) = true then
+              ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, buf))
+            else ok (ControlFlow.done (core.result.Result.Ok (), buf))
+        | some row => do
+          let o1 ← r1_wire.row_shape row
+          let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (_, size) := val
+              do
+              let i ← d + 5#usize
+              let (s, index_mut_back) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) buf
+                    { start := d, «end» := i }
+              let i1 ← s + 5#usize
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                    { start := s, «end» := i1 }
+              let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+              have out1 : Slice U8 := index_mut_back s2
+              let b ← compact.compact_row row
+              if b = true then do
+                  let i2 ← size / 2#usize
+                  let i3 ← i1 + i2
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let i4 ← i + size
+                  let (s4, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i4 }
+                  let (r1, s5) ← nativeValues.expandValues s3 s4
+                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a =>
+                      have out2 := index_mut_back1 s5;
+                      do
+                      let src1 ← i1 + i2
+                      ok (ControlFlow.cont (iter1, out2, src1, i4))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r2 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame compact.CodecError) residual
+                      have out2 : Slice U8 := index_mut_back1 s5
+                      ok (ControlFlow.done (r2, out2))
+                else do
+                  let i2 ← i + size
+                  let (s3, index_mut_back1) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out1
+                        { start := i, «end» := i2 }
+                  let i3 ← i1 + size
+                  let s4 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                        { start := i1, «end» := i3 }
+                  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                  have out2 : Slice U8 := index_mut_back1 s5
+                  ok (ControlFlow.cont (iter1, out2, i3, i2))
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame compact.CodecError) residual
+              ok (ControlFlow.done (r1, buf))) =
+    if (src != input.len) = true then
+      ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+    else
+      if (dst != out.len) = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else ok (ControlFlow.done (core.result.Result.Ok (), out))
+PSem_Loop.lean:40:8: error: unsolved goals
+case pos.refine_1
+input : Slice U8
+row : U8
+count : ↑row + 0 = 27
+out : Slice U8
+src dst : Usize
+atEnd : ↑row = 27
+body : State → Result (ControlFlow State Exit) :=
+  fun x =>
+    match x with
+    | (it, buf, s, d) => compact.expand_semantic_loop.body nativeValues input it buf s d
+endBody :
+  body (iter row, out, src, dst) =
+    if (src != input.len) = true then
+      ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+    else
+      if (dst != out.len) = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else ok (ControlFlow.done (core.result.Result.Ok (), out))
+hs : src = input.len
+hd : dst = out.len
+call :
+  (match
+      if false = true then
+        ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+      else
+        if false = true then
+          ok (ControlFlow.done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+        else ok (ControlFlow.done (core.result.Result.Ok (), out)) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (), out)
+empty : bytesOf (List.drop ↑src ↑input) = []
+⊢ (if True then some [] else none) = some []
+PSem_Loop.lean:89:8: error: Type mismatch: After simplification, term
+  prefixBytes
+ has type
+  List.take (↑d) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑buf) =
+    List.take (↑dst) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑out) ++
+      (List.take 5 (List.drop (↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)) ++
+        if 14 ≤ ↑row then
+          expand (↑size / 32)
+            (List.take (↑size / 2) (List.drop (5 + ↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)))
+        else List.take (↑size) (List.drop (5 + ↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)))
+but is expected to have type
+  List.take (↑d) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑buf) =
+    List.take (↑dst) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑out) ++
+      (List.take 5 (List.drop (↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)) ++
+        if 14 ≤ ↑row then
+          expand (↑size / 32)
+            (List.take (if 14 ≤ ↑row then ↑size / 2 else ↑size)
+              (List.drop (5 + ↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)))
+        else
+          List.take (if 14 ≤ ↑row then ↑size / 2 else ↑size)
+            (List.drop (5 + ↑src) (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑input)))
+PSem_Loop.lean:92:6: error: unsolved goals
+case succ.cont.refine_1
+input updated : Slice U8
+fuel : ℕ
+ih :
+  ∀ (row : U8),
+    ↑row + fuel = 27 →
+      ∀ (out : Slice U8) (src dst : Usize),
+        compact.expand_semantic_loop nativeValues (iter row) input out src dst =
+            ok (core.result.Result.Ok (), updated) →
+          ∃ rs,
+            PSem_Rows.expandRows fuel (↑row) (bytesOf (List.drop ↑src ↑input)) = some rs ∧
+              bytesOf ↑updated = bytesOf (List.take ↑dst ↑out) ++ rs.flatten
+row : U8
+count : ↑row + (fuel + 1) = 27
+out : Slice U8
+src dst : Usize
+bound : ↑row < 27
+nextRow : U8
+nextValue : ↑nextRow = ↑row + 1
+advance : core.iter.range.IteratorRange.next core.iter.range.StepU8 (iter row) = ok (some row, iter nextRow)
+tag : U8
+size : Usize
+shape : r1_wire.row_shape row = ok (some (tag, size))
+body : State → Result (ControlFlow State Exit) :=
+  fun x =>
+    match x with
+    | (it, buf, s, d) => compact.expand_semantic_loop.body nativeValues input it buf s d
+call : loop body (iter row, out, src, dst) = ok (core.result.Result.Ok (), updated)
+buf : Slice U8
+s d : Usize
+sourceNext : ↑s = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size
+destNext : ↑d = ↑dst + 5 + ↑size
+sourceBound : ↑s ≤ (↑input).length
+prefixBytes :
+  bytesOf (List.take ↑d ↑buf) =
+    bytesOf (List.take ↑dst ↑out) ++ List.take 5 (bytesOf (List.drop ↑src ↑input)) ++
+      if 14 ≤ ↑row then expand (↑size / 32) (bytesOf (List.take (↑size / 2) (List.drop (↑src + 5) ↑input)))
+      else bytesOf (List.take (↑size) (List.drop (↑src + 5) ↑input))
+step : body (iter row, out, src, dst) = ok (ControlFlow.cont (iter nextRow, buf, s, d))
+tail :
+  match ControlFlow.cont (iter nextRow, buf, s, d) with
+  | ControlFlow.cont next => loop body next = ok (core.result.Result.Ok (), updated)
+  | ControlFlow.done value => value = (core.result.Result.Ok (), updated)
+nextCount : ↑nextRow + fuel = 27
+rs : List Bytes
+expanded : PSem_Rows.expandRows fuel (↑nextRow) (bytesOf (List.drop ↑s ↑input)) = some rs
+bytes : bytesOf ↑updated = bytesOf (List.take ↑d ↑buf) ++ rs.flatten
+sizeEq : ↑size = (rowShape ↑row).2
+remaining : Bytes := bytesOf (List.drop ↑src ↑input)
+stored : ℕ := if 14 ≤ ↑row then ↑size / 2 else ↑size
+short : ¬List.length remaining < 5 + stored
+remainder : List.drop (5 + stored) remaining = bytesOf (List.drop ↑s ↑input)
+rowPrefix : bytesOf (List.take ↑d ↑buf) = bytesOf (List.take ↑dst ↑out) ++ PSem_Rows.expandedRow (↑row) remaining
+storedEq : (if 14 ≤ ↑row then (rowShape ↑row).2 / 2 else (rowShape ↑row).2) = stored
+⊢ (if List.length (bytesOf (List.drop ↑src ↑input)) < 5 + stored then none
+    else do
+      let tail ← PSem_Rows.expandRows fuel (↑row + 1) (List.drop (5 + stored) (bytesOf (List.drop ↑src ↑input)))
+      some (PSem_Rows.expandedRow (↑row) (bytesOf (List.drop ↑src ↑input)) :: tail)) =
+    some (PSem_Rows.expandedRow (↑row) remaining :: rs)
+PSem_Loop.lean:36:43: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵h̵d̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲s̲,̲ ̲h̲d̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at call
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:36:52: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵h̵d̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲s̲,̲ ̲h̲d̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲ at call
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:41:31: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵s̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵b̵y̵t̵e̵s̵O̵f̵]̵[̲h̲s̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲b̲y̲t̲e̲s̲O̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:42:48: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵e̵m̵p̵t̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲e̲m̲p̲t̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:43:29: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵d̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵b̵y̵t̵e̵s̵O̵f̵]̵[̲h̲d̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲b̲y̲t̲e̲s̲O̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:94:49: warning: This simp argument is unused:
+  if_neg short
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵s̵t̵o̵r̵e̵d̵E̵q̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵h̵o̵r̵t̵,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵,̵e̵x̵p̵a̵n̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲s̲t̲o̲r̲e̲d̲E̲q̲,̲ ̲r̲e̲m̲a̲i̲n̲d̲e̲r̲,̲ ̲e̲x̲p̲a̲n̲d̲e̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:94:62: warning: This simp argument is unused:
+  remainder
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵s̵t̵o̵r̵e̵d̵E̵q̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵h̵o̵r̵t̵,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵,̵e̵x̵p̵a̵n̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲s̲t̲o̲r̲e̲d̲E̲q̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲s̲h̲o̲r̲t̲,̲ ̲e̲x̲p̲a̲n̲d̲e̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:94:72: warning: This simp argument is unused:
+  expanded
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵s̵t̵o̵r̵e̵d̵E̵q̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵h̵o̵r̵t̵,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵,̵e̵x̵p̵a̵n̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲s̲t̲o̲r̲e̲d̲E̲q̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲s̲h̲o̲r̲t̲,̲ ̲r̲e̲m̲a̲i̲n̲d̲e̲r̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Loop.lean:95:10: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵s̵t̵o̵r̵e̵d̵E̵q̵,̵i̵f̵_̵n̵e̵g̵ ̵s̵h̵o̵r̵t̵,̵r̵e̵m̵a̵i̵n̵d̵e̵r̵,̵e̵x̵p̵a̵n̵d̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲s̲t̲o̲r̲e̲d̲E̲q̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲s̲h̲o̲r̲t̲,̲ ̲r̲e̲m̲a̲i̲n̲d̲e̲r̲,̲ ̲e̲x̲p̲a̲n̲d̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PSem_Loop.loop_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
