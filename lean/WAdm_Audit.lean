@@ -6,7 +6,6 @@ import WAdm_FissionedRoot
 import WAdm_FissionedFields
 import WAdm_Nonvacuity
 set_option pp.proofs false
-set_option pp.maxDepth 256
 
 #print axioms AspisR1.WAdm_NativeAccepted.accepted_pair_claims_tx1
 #print axioms AspisR1.WAdm_NativeInstall.writer_slot
