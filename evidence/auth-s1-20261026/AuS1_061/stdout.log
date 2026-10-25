@@ -1,0 +1,197 @@
+AuS1_Finish.lean:97:116: error: unsolved goals
+W Hash : Type
+finish : FinishOps W
+reserved : Bool
+queryOps : Port3_NativeQueryBody.Ops
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+pub proof checkpoint : Slice U8
+savedVec : alloc.vec.Vec U8
+H : Bytes → State
+stored publicBytes : Bytes
+tx1p : AspisR1CurrentCaller.verifier.Prepared
+parsed : Parsed
+trace : List (Bytes × State)
+frame : Bytes
+wire : parsed.wire = bytesOf ↑proof
+auth :
+  ∀ (data : MatchingSupport.Data OraclePortCheckpointAbiC5.E) (rho : OraclePortCheckpointAbiC5.K)
+    (q : Fin 22 → Fin 262144),
+    Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared tx1p) data q rho →
+      Collision H trace parsed q ∨
+        ∀ pos < 22,
+          OraclePortAllSelectedRecoveryC6.recovered trace frame parsed 2 (index q 2 pos) =
+            some (OraclePortPackedChoiceC4.payload parsed 2 pos)
+p : verifier.Prepared
+saved : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+returned : verifier.Accumulator
+after : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+back : Slice aspis_core.field.QM31 → alloc.vec.Vec aspis_core.field.QM31
+v : verifier.View
+hr :
+  Port4A_ReaderInstall.reader reserved D checkpoint proof pub transport.Variant.S2 hash =
+    ok (core.result.Result.Ok (p, saved))
+hquery :
+  Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install queryOps)) proof p saved g none geometry
+      pending 22#usize =
+    ok (core.result.Result.Ok (returned, after))
+hback : returned.weights.deref_mut = (returned.weights.deref, back)
+hflush : Port3_FlushInstall.flush after returned.weights.deref = ok flushed
+hfinish :
+  Port4D_FinishInstall.finish finish v p
+      { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next } none =
+    ok (core.result.Result.Ok ())
+rest :
+  ∀ (alpha0 alpha1 : E) (r0 : RoundValues finish v.round0 alpha0 p.claim)
+    (r1 : RoundValues finish v.round1 alpha1 r0.value) (weights : W) (alphas : Slice E) (pair dot : E),
+    p.variant = transport.Variant.S2 →
+      p.alpha.index_usize 0#usize = ok alpha0 →
+        p.alpha.index_usize 1#usize = ok alpha1 →
+          finish.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights) →
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+                  { «end» := 2#usize } =
+                ok alphas →
+              finish.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair) →
+                finish.dot v.final_message
+                      { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                            next := returned.next }.weights.deref =
+                    ok (core.result.Result.Ok dot) →
+                  ∀ (semantic : List Bytes) (q : Fin 22 → Fin 262144) (tr : RawCutTranscriptRun.ErasedPrefix)
+                    (i : SourceInputs),
+                    OraclePortStoredDecisionDraftC4.input { wire := bytesOf ↑proof, semantic := semantic } q tr =
+                        some i →
+                      queries tr = some q →
+                        LiteralMatchingData.read (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) =
+                            some i.data →
+                          LiteralQueryRead.decode i.queryBytes = some q →
+                            Port4D_Pairing.PairingLaws (Port3_FinishStage.release finish) CheckpointBytes5Output.ofE v p
+                                i.data →
+                              (∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)) →
+                                R3SemanticRemainingJoins.EquationEndpoint i.decoded
+                                    (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i.data →
+                                  CheckpointBytes5Output.ofE dot =
+                                      ∑ l,
+                                        i.data.f l *
+                                          LiteralOpeningView.eK
+                                            ((CheckpointBytes5Output.accumulator
+                                                  { weights := back flushed, rhs := returned.rhs,
+                                                    power := returned.power, next := returned.next }).weights
+                                              l) →
+                                    (∀
+                                        x ∈
+                                          [r0.lhs, r0.rhs, r1.lhs, r1.rhs, pair, r1.value, dot,
+                                            { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                                                next := returned.next }.rhs],
+                                        CheckpointBytes4ReaderFields.sourceE (CheckpointBytes5Output.ofE x) = x) →
+                                      ∀ (c : Context) (recovered : ℕ → Option Bytes),
+                                        (∀ pos < 22,
+                                            recovered (index q 2 pos) =
+                                              some
+                                                (OraclePortPackedChoiceC4.payload
+                                                  { wire := bytesOf ↑proof, semantic := semantic } 2 pos)) →
+                                          savedVec =
+                                              Tx2N_Reader.writer H stored publicBytes
+                                                (prepared c i.data (SelectedChallengeMap.rhoOf i.rho) q)
+                                                (OraclePortCheckpointStateC3.write
+                                                    (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                                            decide
+                                                  (Port3_NativeFinishBody.verifier.finish_relation
+                                                      (Port4D_Round.native finish) v p
+                                                      { weights := back flushed, rhs := returned.rhs,
+                                                        power := returned.power, next := returned.next }
+                                                      none =
+                                                    ok (core.result.Result.Ok ())) =
+                                                OraclePortFrozen2.finish
+                                                  { wire := bytesOf ↑proof, semantic := semantic } q tr i
+                                                  (CheckpointBytes5Output.accumulator
+                                                    { weights := back flushed, rhs := returned.rhs,
+                                                      power := returned.power, next := returned.next }) ∧
+                                              decide
+                                                    (Port4D_FinishInstall.finish finish v p
+                                                        { weights := back flushed, rhs := returned.rhs,
+                                                          power := returned.power, next := returned.next }
+                                                        none =
+                                                      ok (core.result.Result.Ok ())) =
+                                                  D0TypedChecks.verify
+                                                    (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr)
+                                                    i ∧
+                                                D0TypedChecks.verify
+                                                    (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr)
+                                                    i =
+                                                  true
+alpha0 alpha1 : E
+r0 : RoundValues finish v.round0 alpha0 p.claim
+r1 : RoundValues finish v.round1 alpha1 r0.value
+weights : W
+alphas : Slice E
+pair dot : E
+s2 : p.variant = transport.Variant.S2
+ha0 : p.alpha.index_usize 0#usize = ok alpha0
+ha1 : p.alpha.index_usize 1#usize = ok alpha1
+hw : finish.newWeights p.variant p.semantic_alpha p.z = ok (core.result.Result.Ok weights)
+has :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha
+      { «end» := 2#usize } =
+    ok alphas
+hp : finish.pair weights alphas v.final_message p.kappa = ok (core.result.Result.Ok pair)
+hd :
+  finish.dot v.final_message
+      { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next }.weights.deref =
+    ok (core.result.Result.Ok dot)
+semantic : List Bytes
+q : Fin 22 → Fin 262144
+tr : RawCutTranscriptRun.ErasedPrefix
+i : SourceInputs
+hi : OraclePortStoredDecisionDraftC4.input { wire := bytesOf ↑proof, semantic := semantic } q tr = some i
+hq : queries tr = some q
+read : LiteralMatchingData.read (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) = some i.data
+decoded : LiteralQueryRead.decode i.queryBytes = some q
+pairing : Port4D_Pairing.PairingLaws (Port3_FinishStage.release finish) CheckpointBytes5Output.ofE v p i.data
+⊢ (∀ (j : Fin 22), MatchingSupport.match0 i.data (q j)) →
+    R3SemanticRemainingJoins.EquationEndpoint i.decoded
+        (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i.data →
+      CheckpointBytes5Output.ofE dot =
+          ∑ l,
+            i.data.f l *
+              LiteralOpeningView.eK
+                ((CheckpointBytes5Output.accumulator
+                      { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                        next := returned.next }).weights
+                  l) →
+        (∀
+            x ∈
+              [r0.lhs, r0.rhs, r1.lhs, r1.rhs, pair, r1.value, dot,
+                { weights := back flushed, rhs := returned.rhs, power := returned.power, next := returned.next }.rhs],
+            CheckpointBytes4ReaderFields.sourceE (CheckpointBytes5Output.ofE x) = x) →
+          ∀ (c : Context),
+            Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared tx1p) i.data q
+                (SelectedChallengeMap.rhoOf i.rho) →
+              savedVec =
+                  Tx2N_Reader.writer H stored publicBytes (prepared c i.data (SelectedChallengeMap.rhoOf i.rho) q)
+                    (OraclePortCheckpointStateC3.write
+                        (model i.data (SelectedChallengeMap.rhoOf i.rho) q)).accumulator →
+                Collision H trace parsed q ∨
+                  decide
+                        (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native finish) v p
+                            { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                              next := returned.next }
+                            none =
+                          ok (core.result.Result.Ok ())) =
+                      OraclePortFrozen2.finish { wire := bytesOf ↑proof, semantic := semantic } q tr i
+                        (CheckpointBytes5Output.accumulator
+                          { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                            next := returned.next }) ∧
+                    decide
+                          (Port4D_FinishInstall.finish finish v p
+                              { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                                next := returned.next }
+                              none =
+                            ok (core.result.Result.Ok ())) =
+                        D0TypedChecks.verify (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i ∧
+                      D0TypedChecks.verify (typedRows { wire := bytesOf ↑proof, semantic := semantic } q tr) i = true
+AuS1_Finish.lean:101:12: error: unexpected token 'matches'; expected command
+'AspisR1.AuS1_Finish.strengthen' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

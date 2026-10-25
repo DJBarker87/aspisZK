@@ -1,0 +1,133 @@
+AuS1_Trace.lean:18:25: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisR1PublicPreparation.PreparedHashCode.bind : Code ?m.29 → (?m.29 → Code ?m.30) → Code ?m.30
+  
+  Std.bind : Result ?m.29 → (?m.29 → Result ?m.30) → Result ?m.30
+AuS1_Trace.lean:25:27: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisR1PublicPreparation.PreparedHashCode.bind : Code ?m.106 → (?m.106 → Code ?m.107) → Code ?m.107
+  
+  Std.bind : Result ?m.106 → (?m.106 → Result ?m.107) → Result ?m.107
+  
+  Bind.bind : ?m.106 ?m.108 → (?m.108 → ?m.106 ?m.109) → ?m.106 ?m.109
+AuS1_Trace.lean:25:56: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts (fail e)], fail e)
+
+case digest.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+e : Error
+reply : D.digest hash parts = fail e
+⊢ run (Code.digest D hash parts next >>= k) = ([Event.digest D hash parts (fail e)], fail e)
+AuS1_Trace.lean:26:24: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisR1PublicPreparation.PreparedHashCode.bind : Code ?m.117 → (?m.117 → Code ?m.118) → Code ?m.118
+  
+  Std.bind : Result ?m.117 → (?m.117 → Result ?m.118) → Result ?m.118
+  
+  Bind.bind : ?m.117 ?m.119 → (?m.119 → ?m.117 ?m.120) → ?m.117 ?m.120
+AuS1_Trace.lean:26:53: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash parts next >>= k)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts div], div)
+
+case digest.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+reply : D.digest hash parts = div
+⊢ run (Code.digest D hash parts next >>= k) = ([Event.digest D hash parts div], div)
+AuS1_Trace.lean:28:17: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisR1PublicPreparation.PreparedHashCode.bind : Code ?m.130 → (?m.130 → Code ?m.131) → Code ?m.131
+  
+  Std.bind : Result ?m.130 → (?m.130 → Result ?m.131) → Result ?m.131
+  
+  Bind.bind : ?m.130 ?m.132 → (?m.132 → ?m.130 ?m.133) → ?m.130 ?m.133
+AuS1_Trace.lean:27:11: error: unsolved goals
+case digest.ok.ok
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+v✝ : A
+h : (run (next a)).2 = ok v✝
+⊢ run (Code.digest D hash parts next >>= k) =
+    (Event.digest D hash parts (ok a) :: ((run (next a)).1 ++ (run (k v✝)).1), (run (k v✝)).2)
+
+case digest.ok.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+e✝ : Error
+h : (run (next a)).2 = fail e✝
+⊢ run (Code.digest D hash parts next >>= k) = (Event.digest D hash parts (ok a) :: (run (next a)).1, fail e✝)
+
+case digest.ok.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+h : (run (next a)).2 = div
+⊢ run (Code.digest D hash parts next >>= k) = (Event.digest D hash parts (ok a) :: (run (next a)).1, div)
+AuS1_Trace.lean:28:32: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [bind, ̲run, ̲reply,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:30:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continueRun,h̵,̵ ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:47:14: error: Application type mismatch: The argument
+  hp
+has type
+  erase p = ok a
+but is expected to have type
+  ok a = ok a
+in the application
+  And.intro hp
+'AspisR1.AuS1_Trace.run_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.observe_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.success_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

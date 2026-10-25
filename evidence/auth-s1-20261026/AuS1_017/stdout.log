@@ -1,0 +1,76 @@
+AuS1_Trace.lean:26:98: error: No goals to be solved
+AuS1_Trace.lean:27:95: error: No goals to be solved
+AuS1_Trace.lean:28:11: error: unsolved goals
+case digest.ok.ok
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+v✝ : A
+h : (run (next a)).2 = ok v✝
+⊢ (Event.digest D hash parts (ok a) :: (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).1,
+      (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).2) =
+    (Event.digest D hash parts (ok a) :: ((run (next a)).1 ++ (run (k v✝)).1), (run (k v✝)).2)
+
+case digest.ok.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+e✝ : Error
+h : (run (next a)).2 = fail e✝
+⊢ (Event.digest D hash parts (ok a) :: (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).1,
+      (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).2) =
+    (Event.digest D hash parts (ok a) :: (run (next a)).1, fail e✝)
+
+case digest.ok.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+next : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (next a >>= k) = continueRun (run (next a)).1 (run (next a)).2 k
+a : Std.Array U8 32#usize
+reply : D.digest hash parts = ok a
+h : (run (next a)).2 = div
+⊢ (Event.digest D hash parts (ok a) :: (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).1,
+      (run (AspisR1PublicPreparation.PreparedHashCode.bind (next a) k)).2) =
+    (Event.digest D hash parts (ok a) :: (run (next a)).1, div)
+AuS1_Trace.lean:18:25: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:29:74: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.PreparedHashCode.bind, ̲run, ̲reply,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Trace.lean:31:31: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [continueRun,h̵,̵ ̲List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_Trace.run_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.observe_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_Trace.success_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

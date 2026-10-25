@@ -1,0 +1,25 @@
+AuS1_Frame.lean:21:4: error: 'change' tactic failed, pattern
+  bytesOf ↑state ++ ([0, 190] ++ ([0, 1, 0, 0] ++ (bytesOf ↑payload ++ []))) = ?m.105
+is not definitionally equal to target
+  List.map decodeByte
+      (List.flatMap (fun part => ↑part)
+        ↑(Array.make 4#usize
+            [⟨↑state, ⋯⟩, ⟨↑(Array.make 2#usize [0#u8, 190#u8] ⋯), ⋯⟩, ⟨↑(core.num.U32.to_le_bytes 256#u32), ⋯⟩,
+              payload]
+            ⋯)) =
+    bytes (decodeState state) ++ [0, 190, 0, 1, 0, 0] ++ bytes (decodeState root) ++ bytesOf tail
+AuS1_Frame.lean:20:56: warning: This simp argument is unused:
+  List.flatMap_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵A̵b̵s̵o̵r̵b̵.̵p̵a̵r̵t̵s̵,̵f̵l̵a̵t̵t̵e̵n̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲A̲b̲s̲o̲r̲b̲.̲p̲a̲r̲t̲s̲,̲ ̲f̲l̲a̲t̲t̲e̲n̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_Frame.lean:20:74: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵A̵b̵s̵o̵r̵b̵.̵p̵a̵r̵t̵s̵,̵f̵l̵a̵t̵t̵e̵n̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲A̲b̲s̲o̲r̲b̲.̲p̲a̲r̲t̲s̲,̲ ̲f̲l̲a̲t̲t̲e̲n̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_Frame.folded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

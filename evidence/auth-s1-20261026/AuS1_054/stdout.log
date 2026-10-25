@@ -1,0 +1,73 @@
+AuS1_RootSource.lean:35:89: error: unsolved goals
+proof semantic y1 : Slice U8
+view : verifier.View
+accepted : sourceView proof semantic y1 = ok (core.result.Result.Ok view)
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+root : Std.Array U8 32#usize
+part : Slice U8
+field : view.folded_root = some root
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok part
+bytes : ↑root = ↑part
+bounds : ↑7751#usize ≤ ↑7783#usize ∧ ↑7783#usize ≤ proof.length ∧ part.length = ↑7783#usize - ↑7751#usize
+len : 7783 ≤ (↑proof).length
+actual :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok (sub proof 7751#usize 7783#usize)
+same : part = sub proof 7751#usize 7783#usize
+⊢ OraclePortCompactDraft.slice (bytesOf ↑proof) (↑7751#usize) (↑7783#usize - ↑7751#usize) =
+    OraclePortCompactDraft.slice (bytesOf ↑proof) 7751 32
+AuS1_RootSource.lean:38:55: error: Function expected at
+  bytes
+but this term has type
+  ↑root = ↑part
+
+Note: Expected a function because this term is being applied to the argument
+  (decodeState root)
+AuS1_RootSource.lean:29:72: error: unsolved goals
+proof semantic y1 : Slice U8
+view : verifier.View
+accepted : sourceView proof semantic y1 = ok (core.result.Result.Ok view)
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+root : Std.Array U8 32#usize
+part : Slice U8
+field : view.folded_root = some root
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok part
+bytes : ↑root = ↑part
+bounds : ↑7751#usize ≤ ↑7783#usize ∧ ↑7783#usize ≤ proof.length ∧ part.length = ↑7783#usize - ↑7751#usize
+len : 7783 ≤ (↑proof).length
+actual :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok (sub proof 7751#usize 7783#usize)
+same : part = sub proof 7751#usize 7783#usize
+physical : bytesOf ↑root = OraclePortCompactDraft.slice parsed.wire 7751 32
+rootBytes : AspisV8R19.SourceDuplexStep.bytes (decodeState root) = bytesOf ↑root
+decoded : OraclePortCompactDraft.root2 parsed = sorry
+⊢ decodeState root = (SemanticRecordCodec.decodeState sorry).getD fun x => 0
+AuS1_RootSource.lean:41:47: warning: This simp argument is unused:
+  SemanticRecordCodec.decodeState_bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵B̵a̵t̵c̵h̵D̵r̵a̵f̵t̵.̵c̵o̵m̵m̵i̵t̵t̵e̵d̵R̵o̵o̵t̵,̵s̵h̵o̵w̵ ̵¬̵(̵2̵:̵N̵a̵t̵)̵=̵0̵[̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲B̲a̲t̲c̲h̲D̲r̲a̲f̲t̲.̲c̲o̲m̲m̲i̲t̲t̲e̲d̲R̲o̲o̲t̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by decide,
+      show ¬̵(̵2̵:̵N̵a̵t̵)̵=̵1̵¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲1̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵o̵d̵e̵d̵,̵S̵e̵m̵a̵n̵t̵i̵c̵R̵e̵c̵o̵r̵d̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵S̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+AuS1_RootSource.lean:41:85: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵B̵a̵t̵c̵h̵D̵r̵a̵f̵t̵.̵c̵o̵m̵m̵i̵t̵t̵e̵d̵R̵o̵o̵t̵,̵s̵h̵o̵w̵ ̵¬̵(̵2̵:̵N̵a̵t̵)̵=̵0̵[̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲B̲a̲t̲c̲h̲D̲r̲a̲f̲t̲.̲c̲o̲m̲m̲i̲t̲t̲e̲d̲R̲o̲o̲t̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by decide,
+      show ¬̵(̵2̵:̵N̵a̵t̵)̵=̵1̵¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲1̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵o̵d̵e̵d̵,̵S̵e̵m̵a̵n̵t̵i̵c̵R̵e̵c̵o̵r̵d̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵S̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲o̲d̲e̲d̲,̲ ̲S̲e̲m̲a̲n̲t̲i̲c̲R̲e̲c̲o̲r̲d̲C̲o̲d̲e̲c̲.̲d̲e̲c̲o̲d̲e̲S̲t̲a̲t̲e̲_̲b̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.AuS1_RootSource.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.AuS1_RootSource.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
