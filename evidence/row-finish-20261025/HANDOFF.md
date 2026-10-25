@@ -16,3 +16,15 @@ These are unchanged repository sources, not replacements of proved modules.
 The build order and caps are in preflight.json. Budget initially 0/100 Lean,
 0/60 Kani. No shipped source changed; ELF rebuild trigger does not apply.
 No release/security target is established by this preflight.
+
+Stage 2: all 93 unchanged predecessor modules compiled successfully on the
+pinned SInt2 workspace, in individual 6G/8G/Swap0/Tasks64 scopes with -M7000.
+No historical source or object was overwritten: these module objects were
+absent in that workspace. Full per-target receipts, stdout and time logs are
+retained under RowFinish_BUILD001 through RowFinish_BUILD093. The originals
+remain unchanged in this repository. No package-wide replay ran.
+
+RowFinish_Finalization.returned also passed (RowFinish_001): actual returned
+slice equals the certificate's selected output, so all certified row reads
+apply to THAT return. Standard axioms only; 1.424s, 3,839,504 KiB, swap 0.
+Budget after dependencies plus finalization: 94/100 Lean, 0/60 Kani.
