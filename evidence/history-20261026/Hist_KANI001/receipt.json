@@ -1,0 +1,66 @@
+{
+  "kind": "kani",
+  "source_revision": "f3285332d64c6057443f7950d64ed26c786def0c",
+  "timeout": 240,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "Hist_Fixture/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "Hist_proofs::Hist_initialized_never_rewritten",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "old",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-history-20261026/Hist_kani-target",
+    "CARGO_BUILD_JOBS": "4",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "sources": "Immutable copy of retained WAdm src, checked against Hist_source-pins.json; no shipped edit",
+    "reason": "RUST001 selected fresh transitive versions; input lock is now exact production Cargo.lock (root package update only)"
+  },
+  "expected_time": "Optimized Kani compilation then literal source initialized-checkpoint guard; no arithmetic gate",
+  "attempt": "Hist_KANI001",
+  "sources": [
+    "Hist_Fixture/Cargo.toml",
+    "Hist_Fixture/Hist_lib.rs",
+    "Hist_Fixture/Cargo.lock"
+  ],
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 7.508373490010854,
+  "peak_rss_kib": "419028",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/Hist_KANI001.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "694476800",
+  "source_hashes": {
+    "Hist_Fixture/Cargo.toml": "add47dbc013c71fe3cd700e6eb653a2e795d3e15b9fbcc7f576304d10b089c51",
+    "Hist_Fixture/Hist_lib.rs": "f76c61c1e471852bf69b87a031c6a59824b60c14be1dc613011176ce58e3e6a0",
+    "Hist_Fixture/Cargo.lock": "fa5c32cde04cf40c7d9527793716ce51c5209732a735eca88360d185a1cc2963"
+  },
+  "print_axioms": "N/A: kani"
+}

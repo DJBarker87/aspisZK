@@ -1,0 +1,116 @@
+'AspisR1.Hist_ByteCausal.accepted_pair_causal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.Hist_ByteCausal.accepted_pair_causal : ∀ {W A E M Cv CoreError : Type} {N : ℕ}
+  (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (initial final : Hist_Store.Store) (layout1 layout2 : Hist_RuntimeEntry.Layout)
+          (w1 w2 : W),
+          RuntimeEntrypointAdmission L (Hist_RuntimeEntry.load initial layout1) w1 3 →
+            RuntimeEntrypointAdmission L (Hist_RuntimeEntry.load final layout2) w2 7 →
+              ∀ (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops)
+                (geoOps : Port3_NativeGeometryBody.Ops CoreError) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+                (claimsStd : ClaimsUnrolledFinish.StdCalls),
+                WAdm_Domain.SessionAPrepare (Tx1Q_Execution.actual ops reserved queryOps geoOps B claimsStd) →
+                  Port5Q1_QueryPorts.SessionAPrimitives queryOps →
+                    ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+                      (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+                      S2W_DigestExtraction.AeneasExtraction
+                          (sdkOps (Hist_Authority.install adapterOps)
+                            (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                          native1 native2 hashv →
+                        ∀ (sourceProgram : Program Bytes State Hist_ByteExperiment.BytesPair) (iv : State) (Q : ℕ),
+                          (∀ (H : Bytes → State), firstReads emptyTable (eval H sourceProgram).1 ≤ Q) →
+                            ∀ (sha256 H : Bytes → State),
+                              S2W_ExtractionBoundary.P1 sha256 H →
+                                S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                                  ∀ (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+                                    (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                                    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)),
+                                    first native1 copy allocator (Hist_RuntimeEntry.load initial layout1) program data1
+                                          state1 =
+                                        ok (core.result.Result.Ok (saved, post1, final1)) →
+                                      second native2 allocator (Hist_RuntimeEntry.load final layout2) program data2 slot
+                                            state2 =
+                                          ok (core.result.Result.Ok (post2, final2)) →
+                                        ∀ (events : List S2X.AccountEvent),
+                                          Hist_Store.Trace
+                                              (sdkOps (Hist_Authority.install adapterOps)
+                                                (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B claimsStd)
+                                              program (Hist_RuntimeEntry.commit initial (layout1.handles 2).1 saved)
+                                              events final →
+                                            (layout2.handles 6).1 = (layout1.handles 2).1 →
+                                              ∀ (p : Params M Cv N) (root : Std.Array U8 32#usize) (length : U32)
+                                                (port :
+                                                  ChildConeJoin E
+                                                    (sdkOps (Hist_Authority.install adapterOps)
+                                                      (Tx1Q_SameCut.dictionary ops reserved queryOps geoOps) B
+                                                      claimsStd)),
+                                                FirstMarks port → SecondMarks port → ∃ f s, ⋯ :=
+fun {W A E M Cv CoreError} {N} L sdk copy std allocator initial final layout1 layout2 w1 w2 admission1 admission2
+    adapterOps ops reserved queryOps geoOps B claimsStd prepareOwner primitiveOwner native1 native2 hashv extraction
+    sourceProgram iv Q sourceBudget sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1
+    post2 accepted1 accepted2 events historyTrace sameKey p root length port firstMarks secondMarks =>
+  let ⟨f, h✝⟩ :=
+    Hist_AcceptedStrong.accepted_pair_claims_tx1 L sdk copy std allocator (Hist_RuntimeEntry.load initial layout1)
+      (Hist_RuntimeEntry.load final layout2) w1 w2 admission1 admission2 (Hist_Authority.install adapterOps) ops
+      reserved queryOps geoOps B claimsStd prepareOwner primitiveOwner native1 native2 hashv extraction sha256 H p1
+      syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length
+      port firstMarks secondMarks
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨validated, h✝²⟩ := h✝¹
+  let ⟨outer, h✝³⟩ := h✝²
+  let ⟨pre, h✝⁴⟩ := h✝³
+  let ⟨middle, h✝⁵⟩ := h✝⁴
+  let ⟨fs, h✝⁶⟩ := h✝⁵
+  let ⟨ss, h✝⁷⟩ := h✝⁶
+  let ⟨cuts, right✝⟩ := h✝⁷
+  let ⟨getter, right✝¹⟩ := right✝
+  let ⟨validation, right✝²⟩ := right✝¹
+  let ⟨encoder, right✝³⟩ := right✝²
+  let ⟨execution, right✝⁴⟩ := right✝³
+  let ⟨header, right✝⁵⟩ := right✝⁴
+  let ⟨scan, right✝⁶⟩ := right✝⁵
+  let ⟨writerInfo, right✝⁷⟩ := right✝⁶
+  let ⟨expanded, right✝⁸⟩ := right✝⁷
+  let ⟨owned, right✝⁹⟩ := right✝⁸
+  let ⟨layout, right✝¹⁰⟩ := right✝⁹
+  let ⟨unchanged, right✝¹¹⟩ := right✝¹⁰
+  let ⟨before1, right✝¹²⟩ := right✝¹¹
+  let ⟨before2, right✝¹³⟩ := right✝¹²
+  let ⟨claims, caller⟩ := right✝¹³
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro validated
+        (Exists.intro outer
+          (Exists.intro pre
+            (Exists.intro middle
+              (Exists.intro fs
+                (Exists.intro ss
+                  ⟨cuts,
+                    ⟨getter,
+                      ⟨validation,
+                        ⟨encoder,
+                          ⟨execution,
+                            ⟨header,
+                              ⟨scan,
+                                ⟨writerInfo,
+                                  ⟨expanded,
+                                    ⟨owned,
+                                      ⟨layout,
+                                        ⟨unchanged,
+                                          ⟨before1,
+                                            ⟨before2,
+                                              ⟨claims,
+                                                fun decode nodes y1 writer reader associated entry multiproof
+                                                  childScan =>
+                                                let runtime :=
+                                                  Hist_CommittedSdk.version adapterOps ops reserved queryOps geoOps B
+                                                    claimsStd prepareOwner primitiveOwner native1 native2 hashv
+                                                    extraction copy std allocator program initial final layout1 layout2
+                                                    data1 state1 final1 saved post1 accepted1 events historyTrace
+                                                    sameKey f s cuts;
+                                                Or.casesOn
+                                                  (Hist_ByteExperiment.binding_or_collision iv sourceProgram Q
+                                                    sourceBudget H f s associated)
+                                                  (fun bad => ⋯) fun p2prime => ⋯⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))

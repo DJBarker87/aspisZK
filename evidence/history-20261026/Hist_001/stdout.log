@@ -1,0 +1,21 @@
+Hist_ZeroHead.lean:13:103: error: unsolved goals
+bytes : Slice U8
+head : U8
+nonempty : 0 < (↑bytes).length
+read : bytes.index_usize 0#usize = ok head
+nonzero : head ≠ 0#u8
+within : 0#usize < bytes.len
+⊢ (if head ≠ 0#u8 then
+      ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+    else do
+      let index1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+      ok (cont index1)) =
+    ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+Hist_ZeroHead.lean:16:63: warning: This simp argument is unused:
+  nonzero
+
+Hint: Omit it from the simp argument list.
+  simp only [within, ↓reduceIte, read, bind_tc_ok, bne_iff_ne,̵ ̵n̵o̵n̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hist_ZeroHead.body_rejects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,33 @@
+Hist_Authority.lean:28:4: error: Tactic `unfold` failed to unfold `core.cmp.PartialEq.ne.trait_default` in
+  (do
+      let p ← ok account.owner
+      let b ←
+        { eq := (install base).op36,
+                ne := fun self other => core.cmp.PartialEq.ne.default (install base).op36 self other }.ne
+            p program
+      if b = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if account.is_signer = true then
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if account.executable = true then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else
+              if (account.is_writable != writable) = true then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              else do
+                let r ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (install base) account
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let i ← (install base).op12 AdapterRw.aspis_r1_cost_probe.transport.Variant.S2
+                    if (val != i) = true then
+                        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      else ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.Hist_Authority.keyEq_true' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Hist_Authority.checkpoint_owner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_Authority.accepted_owner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

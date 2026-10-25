@@ -1,0 +1,74 @@
+Hist_DistinctOuter.lean:30:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ok ?x ⦃ ?m.177 ⦄
+in the target expression
+  (match none with
+    | none => do
+      let index1 ← lift (p.wrapping_add 1#usize)
+      ok (cont index1)
+    | some val => ok (done none)) ⦃
+    r =>
+    match r with
+    | done y => Post accounts (↑index) y
+    | cont x' =>
+      (↑x' ≤ ↑N ∧ ∀ (i j : Fin ↑N), ↑index ≤ ↑i → ↑i < ↑x' → ↑j < ↑i → keyAt accounts j ≠ keyAt accounts i) ∧
+        ↑N - ↑x' < ↑N - ↑p ⦄
+
+case pos.none
+N : Usize
+base : AdapterRw.Ops
+accounts : Std.Array Account N
+index : Usize
+bound : ↑index ≤ ↑N
+p : Usize
+inv : ↑p ≤ ↑N ∧ ∀ (i j : Fin ↑N), ↑index ≤ ↑i → ↑i < ↑p → ↑j < ↑i → keyAt accounts j ≠ keyAt accounts i
+running : p < N
+run :
+  AdapterRw.r1_pool_adapter.owned.require_distinct_accounts_loop0_loop0 (Hist_Authority.install base) accounts p
+      0#usize =
+    ok none
+post : Hist_DistinctInner.Post accounts ⟨↑p, ⋯⟩ (↑0#usize) none
+⊢ (match none with
+    | none => do
+      let index1 ← lift (p.wrapping_add 1#usize)
+      ok (cont index1)
+    | some val => ok (done none)) ⦃
+    r =>
+    match r with
+    | done y => Post accounts (↑index) y
+    | cont x' =>
+      (↑x' ≤ ↑N ∧ ∀ (i j : Fin ↑N), ↑index ≤ ↑i → ↑i < ↑x' → ↑j < ↑i → keyAt accounts j ≠ keyAt accounts i) ∧
+        ↑N - ↑x' < ↑N - ↑p ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r =>
+      match r with
+      | done y => Post accounts (↑index) y
+      | cont x' =>
+        (↑x' ≤ ↑N ∧ ∀ (i j : Fin ↑N), ↑index ≤ ↑i → ↑i < ↑x' → ↑j < ↑i → keyAt accounts j ≠ keyAt accounts i) ∧
+          ↑N - ↑x' < ↑N - ↑p
+  has type
+    ControlFlow Usize (Option (core.result.Result Unit PE)) → Prop
+  but is expected to have type
+    WP.Post (ControlFlow Usize (Option (core.result.Result Unit PE)))
+  in the application
+    (match none with
+      | none => do
+        let index1 ← lift (p.wrapping_add 1#usize)
+        ok (cont index1)
+      | some val => ok (done none)) ⦃
+      r =>
+      match r with
+      | done y => Post accounts (↑index) y
+      | cont x' =>
+        (↑x' ≤ ↑N ∧ ∀ (i j : Fin ↑N), ↑index ≤ ↑i → ↑i < ↑x' → ↑j < ↑i → keyAt accounts j ≠ keyAt accounts i) ∧
+          ↑N - ↑x' < ↑N - ↑p ⦄
+Hist_DistinctOuter.lean:46:13: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+Hist_DistinctOuter.lean:66:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.Hist_DistinctOuter.outer_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hist_DistinctOuter.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
