@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v8'
+RELEASE=D/'prospective-data-v8-r2'
 STAGE='/home/dombarker/final-native-gate-v8-20261025/'
 ENTRY='c03e7860d3bc6b8e2bf1af961bffa779bfc7126a'
 

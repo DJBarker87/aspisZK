@@ -17,6 +17,7 @@ for path in list(p['files']):
 p['job_source_sizes']={}
 for x in source:
     value=pin(x.read_bytes());p['files'][STAGE+x.name]=value['sha256'];p['job_source_sizes'][STAGE+x.name]=value['size']
+# Source025 adds only cd7d bounded complete-capture retries.
 p['job_revision']='c03e7860d3bc6b8e2bf1af961bffa779bfc7126a plus v8 reviewed shared collector source-024 overlay'
 p['setup_environment']=dict(HOME='/home/dombarker',USER='dombarker',LOGNAME='dombarker',PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8')
 p['bootstrap_source_boundary']='Plan excludes own/seal/bootstrap hashes. Bootstrap manifest pins plan+plan seal+finite job transfer source; bootstrap seal excluded. Both root seal bytes require independent transfer/source-manifest review. Operational pin observation is not executed-bytecode semantics.'
