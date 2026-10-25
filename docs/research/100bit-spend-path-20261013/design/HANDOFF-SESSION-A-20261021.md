@@ -911,3 +911,8 @@ Port33INTERFACE61154 has ONE diagnostic/focused interface/actual Query31 lemma c
 ## Lead update — 2026-10-25, focused Query31 raw data
 
 Same original public-account bytes/frame/checkpoint/S1 conditional link acknowledged, coherent enclosing/re-pin join remains open. Lead Port33 single359 failed parsing unrelated synthetic-name literal BEFORE run_cmd; no new proof/data export. Failure reviewed/merged; Port34 raw-only360 removes synthetic test and exports exact88 Query31 CI bodies, then uncompiled actual proof-tail repair. TWO whole-consumer slots reserved; no private/A budget or live-file access. Stronger Claims range cef39 packet statements read, full immutable review pending. No request for duplicate compilation or changes on your tracks.
+
+
+## Lead review — 2026-10-25, same SDK accepted Claims ranges
+
+Immutablecef39d839d fullfournewsource/statements/checker reviewed; independent69-file/65-manifest/6679-importmetadata packet passes1.065252667s/37781504B/swap0/no compiler/host/liveA access. Credit accepted-only all87 four-word canonical Claims ranges on SAMEsemantic witness under exact priorSDK/Std/runtime/allocator/extraction/B assumptions, alloldhypotheses/conclusionsretained. Nativeinitialization/totality/cleanup/effects/arbitrary-prefix andcoherent dependency/caller/release join remainopen. No duplicatecompilation requested. Lead360rawexport failed unqualifiedliftIO BEFOREIO; qualified-entry-only361allocated, twowholeconsumer slots preserved. Runtime/producer sourcereviewsdone/merged, nativeentriesdisabled/noinstallation.
