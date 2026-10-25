@@ -15,18 +15,9 @@ open S2W_D189Consolidation S2W_NativeConsolidation S2W_AuthenticatedInputs S2W_I
 open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 
-def sdkOps (adapterOps : AdapterRw.Ops) (ops : Ops)
-    (B : AspisR1PublicPreparation.FinishModel.Boundaries)
-    (claimsStd : ClaimsUnrolledFinish.StdCalls) : AdapterRw.Ops :=
-  AspisS6CurrentFirstInstallation.install adapterOps
-    (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children
-      (ClaimsUnrolledFinish.install claimsStd B))
-
-/-- Reuse the established D189 conditional boundary, including ALL fourteen
-caller facts and the exact f,s it produces. This actual pair's same proof,
-public and semantic source call supply the Claims result; SourceCuts is an
-output, never a new premise. No native/extraction/crypto/effect/adoption
-obligation is discharged by pretending this candidate is the frozen source. -/
+/-- Specialize only TX1 op3 to the existing extracted body. D188 associates
+this installed dictionary with the same accepted native wrappers. Derive the
+header on the original theorem's exact f,s; retain every other conclusion. -/
 theorem accepted_pair_claims_op3 {W A E M Cv : Type} {N : Nat}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
     (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
