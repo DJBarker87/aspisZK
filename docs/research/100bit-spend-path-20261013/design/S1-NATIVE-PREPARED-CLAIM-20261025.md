@@ -210,3 +210,22 @@ Kani has no Lean #print axioms result (N/A), and adds no Lean axiom. Native
 historical25866 context remains distinct from current whole4bb3 source, as
 specified by the freeze reconciliation above. S1/S6 and the security target
 remain OPEN. The next running target is the complementary hi4 partition.
+
+
+## 2026-10-25: complete before_z1 error row checked
+
+The complementary hi4 partition PASSED0/3027checks,2/3covers,
+381.409964603s/12682572KiB maximum process RSS/14216757248B cgroup peak,
+swaps0 and zero high/max/OOM events. Source/tool pins are identical to lo4.
+Together lo4+hi4 cover all29 before_z1 error columns; the checker explicitly
+checks the two symbolic modulo ranges have that union. Before: point4 had
+15 unchecked columns. After: no unchecked point4 column remains, under the
+same nine primitive normal-return cuts and historical native context. No
+SDK/extraction/native primitive or enclosing source premise is discharged
+by this union.
+
+The source-only completed-v1 packet includes ONLY terminated jobs and checks
+32pins. The queued point5 halves remain pending. The proposed next step uses
+the real field32 decoder in the same controller; see
+S1-NATIVE-PREPARED-FIELD-20261025.md for its changed canonical-byte input domain,
+passing focused compilation, failed first draft and explicit remaining gates.
