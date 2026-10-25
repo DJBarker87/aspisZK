@@ -175,7 +175,7 @@ class MountTests(unittest.TestCase):
         self.calls=0
     def tablefn(self,*args):
         self.calls+=1
-        return {} if self.calls<=2 else self.table
+        return {} if self.calls==1 else self.table
     def runmount(self):
         with patch.object(B,'mount_table',side_effect=self.tablefn),patch.object(
                 B,'subdirectory',side_effect=lambda root,name,api: self.target(root,name)):
@@ -187,8 +187,6 @@ class MountTests(unittest.TestCase):
         self.assertEqual(self.runmount(),(20,{'root':2,'tmp':3,'proc':4}))
         attach=[r for r in self.a.events if r[0]=='attach']
         self.assertEqual(attach,[('attach',20,10),('attach',30,40),('attach',31,41)])
-        self.assertEqual(self.a.events[0][0],'attr')
-        self.assertEqual(self.a.events[0][-1],{'propagation':A.PRIVATE,'recursive':True})
         self.assertIn(('attr',20,7,{}),self.a.events)
     def test_underlying_fd_clone_rejected(self):
         self.a.ids[20]=1
@@ -198,6 +196,11 @@ class MountTests(unittest.TestCase):
         self.a.ids[40]=1
         with self.assertRaises(Denied):self.runmount()
         self.assertNotIn(('filesystem','tmpfs'),self.a.events)
+    def test_private_propagation_before_capture_mount(self):
+        with patch.object(B,'mount_table',return_value={}):
+            B.private_propagation(self.a,self.api)
+        self.assertEqual(self.a.events,[('attr',5,{'propagation':A.PRIVATE,'recursive':True})])
+        self.assertFalse(any(e[0]=='tree' for e in self.a.events))
     def test_mount_failures_close_new_root(self):
         for failure in ('attr','tree','attach','filesystem'):
             self.setUp();self.a.fail=failure
@@ -256,7 +259,7 @@ class GuestTests(unittest.TestCase):
         self.abi=Mock();self.abi.mount_id.return_value=2
         for name in ('close_escape_fds','guest_limits','drop'):
             getattr(self.abi,name).side_effect=lambda *a,n=name:self.events.append(n)
-        self.stages={'child_namespaces':{},'mount_guest':(20,{'root':2}),
+        self.stages={'child_namespaces':{},'private_propagation':None,'capture_runtime':None,'mount_guest':(20,{'root':2}),
                      'stdio_install':{},'private_proc_check':None,'stdio_check':None,
                      'dropped_check':None}
     def run_guest(self,fail=None):
@@ -271,6 +274,8 @@ class GuestTests(unittest.TestCase):
             B.guest(10,Mock(),12,{},b'0::/test\n',40,self.abi,self.api)
     def test_fixed_exec_after_all_checks(self):
         with self.assertRaises(ChildExit):self.run_guest()
+        self.assertLess(self.events.index('private_propagation'),self.events.index('capture_runtime'))
+        self.assertLess(self.events.index('capture_runtime'),self.events.index('mount_guest'))
         self.assertLess(self.events.index('close_escape_fds'),self.events.index('guest_limits'))
         self.assertLess(self.events.index('drop'),self.events.index('dropped_check'))
         self.assertLess(self.events.index('dropped_check'),self.events.index('exec'))
@@ -402,9 +407,32 @@ class DropAndStdioTests(unittest.TestCase):
         api.write.assert_not_called();output.collect.assert_not_called()
         abi.kill_owned.assert_not_called();api.close.assert_any_call(51)
 
+class CaptureJoinTests(unittest.TestCase):
+    def test_capture_seals_then_closes_all_copy_handles(self):
+        cap=Mock();manifest={'files':[dict(logical='/usr/bin/python3',physical='/public/python3',sha256='a'*64,size=3,mode=0o555)]}
+        with patch.object(B,'validate_runtime'),patch.object(B,'open_safe_ancestry',return_value=8),patch.object(B.os,'fstat',return_value=types.SimpleNamespace(st_dev=1,st_ino=2)),patch.object(B.os,'close') as close,patch.object(B,'Capture',return_value=cap),patch.object(B,'open_source',return_value=9):
+            B.capture_runtime(10,manifest)
+        self.assertEqual([c.args[0] for c in cap.parent.call_args_list],['/tmp/.anchor','/proc/.anchor','/dev/.anchor'])
+        cap.copy.assert_called_once_with(9,'/usr/bin/python3',dict(sha256='a'*64,size=3,mode=0o555))
+        self.assertLess([c[0] for c in cap.method_calls].index('seal'),[c[0] for c in cap.method_calls].index('close'))
+        close.assert_any_call(8);close.assert_any_call(9)
+    def test_capture_failure_closes_and_never_seals(self):
+        cap=Mock();cap.copy.side_effect=Denied('copy')
+        manifest={'files':[dict(logical='/usr/bin/python3',physical='/public/python3',sha256='a'*64,size=3,mode=0o555)]}
+        with patch.object(B,'validate_runtime'),patch.object(B,'open_safe_ancestry',return_value=8),patch.object(B.os,'fstat',return_value=types.SimpleNamespace(st_dev=1,st_ino=2)),patch.object(B.os,'close'),patch.object(B,'Capture',return_value=cap),patch.object(B,'open_source',return_value=9):
+            with self.assertRaises(Denied):B.capture_runtime(10,manifest)
+        cap.close.assert_called_once();cap.seal.assert_not_called()
+    def test_fixed_body_wires_only_fixed_layout_and_closes(self):
+        output=Mock();abi=Mock();manifest={}
+        with patch.object(B,'RUNTIME_APPROVAL',manifest),patch.object(B,'validate_runtime'),patch.object(B,'LinuxABI',return_value=abi),patch.object(B,'create_fixed_layout',return_value=(10,11,12)),patch.object(B,'PublicOutput',return_value=output),patch.object(B,'fixed_null',return_value=13),patch.object(B,'internal_backend',return_value='public') as run,patch.object(B.os,'close') as close:
+            self.assertEqual(B.fixed_backend_body(),'public')
+        run.assert_called_once_with(11,output,13,abi,manifest=manifest)
+        self.assertEqual([c.args[0] for c in close.call_args_list],[13,12,11,10])
+        output.close.assert_called_once()
+
 class DisabledTests(unittest.TestCase):
     def test_all_entrypoints_unconditionally_deny(self):
-        for fn in (B.privileged_entrypoint,B.fresh_host_admission):
+        for fn in (B.privileged_entrypoint,B.fresh_host_admission,B.fixed_backend_body):
             with patch.object(A.C,'CDLL',side_effect=AssertionError('native load')):
                 with self.assertRaises(Denied):fn()
         self.assertIsNone(B.RUNTIME_APPROVAL);self.assertIsNone(B.PRODUCER_ASSEMBLY)

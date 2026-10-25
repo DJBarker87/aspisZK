@@ -49,3 +49,16 @@ and unconditionally _exit, then parent reaps it without numeric-PID signalling.
 After release all cancellation uses retained own pidfd. No raw-clone ABI or
 hand-written Python hook sequence remains. This changed source justifies the
 new v3 mock run and v2 package audit; previous evidence is preserved.
+
+## Concrete capture join review
+
+v3's 50 mock cases and v2 audit are preserved at revision 350de3a43928f6fe2ec625797aff16ea187e2168.
+Final composition review found capture existed as a separate pre-fork helper,
+not as the required post-private-propagation child step. Final source now joins
+actual SbfSeal capture inside guest: namespace verification -> propagation ->
+fixed ancestry recheck/copy/seal/close -> readonly mount. A parameterless fixed
+body creates the exact root/output layout and null stdin, then enters lifecycle;
+its null runtime manifest denies before native loading. Privileged CLI still
+always denies independently. Dedicated capture/cleanup/composition mock tests
+and new v4/v3 audit are warranted by this source change. No copied primitive
+was modified and no new real ordinary-FD suite was needed.

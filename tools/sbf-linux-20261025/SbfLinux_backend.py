@@ -128,26 +128,30 @@ def root_helper_preflight(api=os):
     return namespaces(api), cg, 40
 
 
-def capture_runtime(manifest):
-    """Fixed SbfSeal capture subset; caller authority is NOT supplied here.
-
-    Review-only implementation. Entry never calls it while approval is null.
-    Exact manifest (including every public source hash) must be separately pinned
-    and independently approved before any future source/helper route exists.
-    """
+def validate_runtime(manifest):
     require(type(manifest) is dict and manifest.get('version') == 'SbfLinux-tiny-v1'
             and manifest.get('argv') == list(FIXED_PROBE), 'fixed Linux manifest')
     reused_shape = dict(manifest,version='SbfSeal-tiny-v1',argv=list(PROBE))
     validate_manifest(reused_shape)
-    own, root, outputs = create_fixed_layout()
-    capture = None
-    output = None
+
+
+def capture_runtime(rootfd,manifest):
+    """Guest-only after private propagation; no inherited capture write fds.
+
+    Recheck fixed root ancestry, copy exact finite public manifest, seal and
+    close every capture descriptor. Retain only independently owned rootfd.
+    """
+    validate_runtime(manifest)
+    anchor = open_safe_ancestry(ROOT)
     try:
-        capture = Capture(root,0)
+        require(inode(os.fstat(anchor)) == inode(os.fstat(rootfd)), 'fixed capture root identity')
+    finally:
+        os.close(anchor)
+    capture = Capture(rootfd,0)
+    try:
         for directory in ('tmp','proc','dev'):
             capture.parent('/'+directory+'/.anchor')
         for row in manifest['files']:
-            # Disallow runtime entries overlaying setup-only directories.
             require(row['logical'].split('/')[1] not in ('tmp','proc','dev'),
                     'reserved mount target')
             fd = open_source(row['physical'])
@@ -155,18 +159,35 @@ def capture_runtime(manifest):
                 capture.copy(fd,row['logical'],{k:row[k] for k in ('sha256','size','mode')})
             finally:
                 os.close(fd)
-        capture.seal()  # all write-capable capture descriptors closed before fork
+        capture.seal()
+    finally:
+        capture.close()
+
+
+def fixed_backend_body():
+    """Concrete future body, no input parameters or usable entrypoint.
+
+    Null runtime approval blocks before effects. A future approved manifest
+    alone does not enable CLI; the separate unconditional entry denial remains.
+    No current producer/admission continuation calls this internal body.
+    """
+    require(type(RUNTIME_APPROVAL) is dict, 'complete pinned runtime missing')
+    manifest = RUNTIME_APPROVAL
+    validate_runtime(manifest)
+    abi = LinuxABI()
+    own = root = outputs = nullfd = None
+    output = None
+    try:
+        own,root,outputs = create_fixed_layout()
         output = PublicOutput(outputs,0)
-        return own, root, capture, output
-    except BaseException:
-        if capture is not None:
-            capture.close()
+        nullfd = fixed_null()
+        return internal_backend(root,output,nullfd,abi,manifest=manifest)
+    finally:
         if output is not None:
             output.close()
-        os.close(root); os.close(own)
-        raise
-    finally:
-        os.close(outputs)
+        for fd in (nullfd,outputs,root,own):
+            if fd is not None:
+                os.close(fd)
 
 
 def fixed_null(api=os):
@@ -201,20 +222,23 @@ def subdirectory(rootfd, name, api=os):
         raise
 
 
-def mount_guest(rootfd, abi, api=os):
-    """Use only NEW mount object fd for subtargets and eventual chroot.
-
-    mount_setattr propagation applies to namespace / before open_tree/fsopen.
-    open_tree is NONrecursive; source must have no submounts (checked below).
-    move_mount targets are descriptor-only. Retained tree fd refers to attached
-    clone, never the old covered directory. No name reopen or /proc/fd magic.
-    """
+def private_propagation(abi,api=os):
     hostroot = api.open('/', DIR_FLAGS)
     try:
         abi.attr(hostroot, propagation=PRIVATE, recursive=True)
         mount_table(api)  # deny any remaining shared/master propagation
     finally:
         api.close(hostroot)
+
+
+def mount_guest(rootfd, abi, api=os):
+    """Use only NEW mount object fd for subtargets and eventual chroot.
+
+    mount_setattr propagation applies to namespace / in private_propagation before capture/open_tree/fsopen.
+    open_tree is NONrecursive; source must have no submounts (checked below).
+    move_mount targets are descriptor-only. Retained tree fd refers to attached
+    clone, never the old covered directory. No name reopen or /proc/fd magic.
+    """
     old_id = abi.mount_id(rootfd)
     table = mount_table(api)
     require(not any(r['path'].startswith(ROOT+'/') for r in table.values()),
@@ -352,10 +376,12 @@ print(json.dumps(''')
 FIXED_PROBE = PROBE[:-1]+(POSTEXEC,)
 
 
-def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os):
+def guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api=os,manifest=None):
     """Child-only branch. Every exception exits, never host fallback exec."""
     try:
         ns = child_namespaces(before,api)
+        private_propagation(abi,api)
+        capture_runtime(rootfd,manifest)
         newroot, mount_ids = mount_guest(rootfd,abi,api)
         try:
             root_inode = inode(api.fstat(newroot))
@@ -418,7 +444,7 @@ def owned_wait(pid,pidfd,abi,api=os,clock=time):
     raise Denied('deadline; own child killed and reaped; no output')
 
 
-def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
+def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time,manifest=None):
     """Future helper continuation, deliberately no CLI/admission connection.
 
     Must run only once in a disposable independently scoped root helper. Parent
@@ -446,7 +472,7 @@ def internal_backend(rootfd,output,nullfd,abi,api=os,clock=time):
             token = api.read(gate_r,2)
             api.close(gate_r)
             require(token == b'G', 'parent lifecycle gate closed')
-            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api)
+            guest(rootfd,output,nullfd,before,cgroup,last_cap,abi,api,manifest)
         except BaseException:
             try:
                 abi.close_escape_fds()
