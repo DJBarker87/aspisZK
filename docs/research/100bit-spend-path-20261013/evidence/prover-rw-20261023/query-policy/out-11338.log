@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQuerySourceWindow.lean:37:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => readWord blocks ki s.draws = ok (queryMaskWord (blockRankWord (↑blocks)[_a] (↑s.draws % 8)))
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < 8
+but is expected to have type
+  ¬↑ki < 8
+in the application
+  window_source._proof_8 k hk fuel i s hpart hd ki hkiv kval remval a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+blocks advances : Blocks
+k : ℕ
+hk : k < 8
+fuel : ℕ
+ih :
+  ∀ (i : ℕ) (s : CurrentScan),
+    i + fuel = 8 →
+      ↑s.draws = 8 * k + i →
+        ↑s.accepted_len ≤ 22 →
+          run blocks advances s = do
+            let p ← window (blockWord blocks k hk) fuel i s
+            run blocks advances p.2
+i : ℕ
+s : CurrentScan
+hpart : i + (fuel + 1) = 8
+hd : ↑s.draws = 8 * k + i
+hlen : ↑s.accepted_len ≤ 22
+full : ¬s.accepted_len = 22#usize
+id : i < 8
+db : ↑s.draws < 64
+cap : s.draws ≠ 64#usize
+active : ↑s.accepted_len < 22
+ki : UScalar UScalarTy.Usize
+hki : s.draws / 8#usize = ok ki
+hkiv : ↑ki = ↑s.draws / ↑8#usize
+kval : ↑ki = k
+remval : ↑s.draws % 8 = i
+read : readWord blocks ki s.draws = ok (queryMaskWord (blockRankWord (↑blocks)[↑ki] (↑s.draws % 8)))
+⊢ run blocks advances s = do
+    let p ← window (blockWord blocks k hk) (fuel + 1) i s
+    run blocks advances p.2
+'R1Z.ProverRwQuerySourceWindow.window_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

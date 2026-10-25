@@ -131,3 +131,24 @@ revision labels, dependency hashes, errors and raw timing are committed under
 5G/7G, swap 0, TasksMax 64 and -M7000; populated reservation 24 GiB before
 launch. Stage 1 removes the caller-factorisation obligation, not the grouped
 policy, materialization correspondence or conjunct-1 experiment premise.
+
+## Grouped query policy transport (11333–11349)
+
+`ProverRwQueryPolicy.policy_transport` removes the grouped-policy correspondence
+obligation: for every arbitrary block/advance array, actual `queries_from_pairs`
+equals the existing `ProverCommitQuery26.policy.queries`, with only the nominal
+error-constructor transport. No successful read/output premise, supplied decoder,
+or external dictionary equation is assumed. Duplicate handling, all 64 words,
+exhaustion and exact selected advance state are included. The bounded-window
+proof checks the policy's pre-word stop boundary, including full count reached
+on a block's last word. The eight-block driver composes those symbolic windows.
+
+Seventeen compiles: ten pass and seven retained elaboration failures; no
+resource failures. The dependency preflight for the proposed window rejected
+an absent ListStep object before launching Lean; ID11336 was subsequently used
+for the fixed ListStep, not an unchanged compile. Receipts are in `query-policy`.
+Final transport11349: exit0, 2.11s, 4,100,136KiB RSS, swaps0, standard axioms.
+No prior shared module/object overwritten. The source revisions are the prior
+stage commits (11333 predates the stage1 commit); snapshots pin every input.
+The new 100-attempt budget has used24 Lean compiles, no Kani runs. Conjunct1,
+full materialization/publication correspondence and native ROM effects remain.

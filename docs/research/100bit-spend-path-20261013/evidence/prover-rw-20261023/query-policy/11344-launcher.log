@@ -1,0 +1,31 @@
+reservation: populated 24 GiB + 7 GiB; window=1 (London 2234); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwQueryBlock.lean:21:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Result (Bool × CurrentScan))
+    (do
+      let (sf, pending) ← Query31ExplicitListLoop.scanListLoop (List.map (blockWord blocks k hk) (List.range 8)) s
+      ok (Query31ExplicitListLoop.optionStop pending, sf))
+    (window (blockWord blocks k hk) 8 0 s)
+but is expected to have type
+  @Eq (Result (Bool × QueryScan))
+    (do
+      let __x ←
+        Query31ExplicitListLoop.scanListLoop
+            (List.map
+              (fun j =>
+                AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                  (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord (↑blocks)[k] j))
+              (List.range 8))
+            s
+      ok (Query31ExplicitListLoop.optionStop __x.2, __x.1))
+    (window (blockWord blocks k hk) 8 0 s)
+'R1Z.ProverRwQueryBlock.model_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwQueryBlock.block_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.84
+	Maximum resident set size (kbytes): 4074936
+	Swaps: 0
+	Exit status: 1
