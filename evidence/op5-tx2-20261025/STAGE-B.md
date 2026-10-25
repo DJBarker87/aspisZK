@@ -16,7 +16,7 @@ BOTH dictionaries. It retains all predecessor conclusions and hypotheses.
 The machine comparison in premise-audit.json reverses only those dictionary
 specialisations and the theorem name; the statements are byte-identical.
 It initially retains the OLD marks; a success-conditioned continuation is
-being checked separately, not assumed by this theorem.
+checked separately in STAGE-C.md; it is not assumed by this older theorem.
 
 `Op5T_SamePair.batches` derives both actual batch calls from the SAME f/s
 SourceCuts exported by that theorem. No successful batch or new cut is input.

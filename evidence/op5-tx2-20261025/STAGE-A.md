@@ -72,3 +72,6 @@ Remaining: the source-derived site theorem is not yet an implementation of
 the success-conditioned ChildConeJoin port for the top SDK dictionary. The
 original accepted-pair theorem is unchanged and still requires its old marks.
 Stage B must make that association concrete before claiming batch/Q1 closure.
+
+The success-conditioned enclosing continuation is now checked in STAGE-C.md;
+its new modules leave all original theorem modules unchanged.
