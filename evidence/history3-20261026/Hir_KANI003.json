@@ -1,0 +1,46 @@
+{
+  "attempt": "Hir_KANI003",
+  "kind": "kani",
+  "source_revision": "792ab44a6e65fe005221758774656cd5bfcdf239",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "Hir_checkpoint_cannot_close_as_plan",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "Hir_pool_harness.rs",
+    "Hir_PoolPins.json",
+    "Hir_src/programs/aspis-pool/src/pair_forest.rs",
+    "Hir_close_harness.rs",
+    "Hir_src/programs/aspis-pool/src/processor.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual source close_program_account_v1, no stubs. Both actual prepared-plan size constants, all192 checkpoint bytes and both balances arbitrary. Early rejection preserves data and funds. Complete dispatch enumeration remains."
+  },
+  "expected_time": "One named optimized native close-helper verification;192-byte Pool checkpoint cannot satisfy either prepared-plan length. No CPI/realloc branch expected."
+}
