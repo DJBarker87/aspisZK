@@ -3,8 +3,8 @@
 from pathlib import Path
 import os,sys,json,hashlib,subprocess,time,signal,resource
 W=Path(__file__).resolve().parent
-G=2**30;CAP=8*G;HIGH=6*G
-UNIT='aspis-s126-claims-extract-20261025-r1'
+G=2**30;CAP=6*G;HIGH=4*G
+UNIT='aspis-s126-claims-extract-20261025-r2'
 def sha(p):
  with p.open('rb')as f:return hashlib.file_digest(f,'sha256').hexdigest()
 def save(name,value):(W/name).write_text(json.dumps(value,indent=2)+'\n')
@@ -71,7 +71,7 @@ if '--inside' not in sys.argv:
  before=inventory();save('admission-before-scope.json',before)
  if not before['admitted']:raise SystemExit('Fresh admission denied; no scope/compiler launched')
  signal.alarm(0);resource.setrlimit(resource.RLIMIT_AS,original_limit)
- cmd=['systemd-run','--user','--scope','--unit='+UNIT,'--property=MemoryHigh=6G','--property=MemoryMax=8G',
+ cmd=['systemd-run','--user','--scope','--unit='+UNIT,'--property=MemoryHigh=4G','--property=MemoryMax=6G',
  '--property=MemorySwapMax=0','--property=MemoryOOMGroup=yes','--property=RuntimeMaxSec=600',
  '--property=TasksMax=64','/usr/bin/python3','-I','-S','-B',str(W/'run.py'),'--inside']
  save('launch.json',dict(command=cmd,runner_sha256=sha(W/'run.py'),time=time.time(),address_limit_at_launch=resource.getrlimit(resource.RLIMIT_AS)))
