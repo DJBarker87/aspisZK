@@ -14,3 +14,9 @@ and premise ledger. Use coherent SInt2 host workspace and existing launchers.
 Host initial inspection: no populated build scope besides init.scope.
 Next: structural association laws, concrete preparation association, global
 program construction and budget, raw canonical/runtime composition.
+
+Final:100 charged attempts (97 Lean invocations +3 prelaunches),0/20 Kani.
+Final audit100 passes. All70 current GExp_ modules match successful source
+receipts, standard axioms only. Targeted global rows removed:NONE. See HANDOFF.md
+for exact same-witness extension, conservative query/collision loss, non-vacuity
+scope and remaining global association/raw canonical/runtime obligations.
