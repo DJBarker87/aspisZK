@@ -1,0 +1,242 @@
+SdkD_First.lean:121:72: error: unsolved goals
+case isTrue
+ops : Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+obs : Option (verifier.Phase → Result Unit)
+h✝ : (split != compact.SPLIT) = true
+⊢ erase (pure (core.result.Result.Err verifier.Error.Parse)) = ok (core.result.Result.Err verifier.Error.Parse)
+
+case isFalse
+ops : Ops
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+semantic : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+pub proof : Slice U8
+split : Usize
+obs : Option (verifier.Phase → Result Unit)
+h✝ : ¬(split != compact.SPLIT) = true
+⊢ (do
+      let a ← erase (liftM (ops.op3 proof))
+      let a ← erase (liftM (core.result.Result.Insts.CoreOpsTry.branch a))
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let r1 ← liftM (ops.op4 proof)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                liftM (verifier.mark obs verifier.Phase.Parsed)
+                let we ← liftM (aspis_core.field.wide_exact.WideExact.ZERO ops)
+                let __x ← liftM (verifier.candidate.prepare ops D semantic proof hash obs (Array.repeat 29#usize we))
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let r3 ← liftM (ops.op20 transport.Variant.S2)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                        liftM (verifier.mark obs verifier.Phase.Prepare)
+                        let i ← liftM (compact.OFF_FOLDED_ROOT ops)
+                        let i1 ← liftM (compact.OFF_ROUND1 ops)
+                        let s ←
+                          liftM
+                              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i, «end» := i1 })
+                        let r4 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s)
+                        let folded_root ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4)
+                        let r5 ← emit S2LeadInterface.Site.batch0 (ops.op6 D proof val folded_root 0#usize hash)
+                        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            liftM (verifier.mark obs (verifier.Phase.Merkle 0#usize))
+                            let r6 ← liftM (ops.op19 val.queries 0#usize split)
+                            let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                let r7 ← liftM (ops.op18 val1.weights.deref)
+                                let cf6 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                match cf6 with
+                                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                    let r8 ←
+                                      emit S2LeadInterface.Site.query0
+                                          (ops.op7 proof val val1 __x.2 obs val2 val3 split)
+                                    let cf7 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r8)
+                                    match cf7 with
+                                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                        let __x ← liftM (lift val4.1.weights.deref_mut)
+                                        let s3 ← liftM (ops.op17 val4.2 __x.1)
+                                        let bytes ←
+                                          emit S2LeadInterface.Site.save
+                                              (ops.op16 D val
+                                                { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power,
+                                                  next := val4.1.next }
+                                                proof pub hash)
+                                        liftM (verifier.mark obs verifier.Phase.CheckpointWrite)
+                                        pure (core.result.Result.Ok bytes)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let r ← ops.op3 proof
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let r1 ← ops.op4 proof
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            verifier.mark obs verifier.Phase.Parsed
+            let we ← aspis_core.field.wide_exact.WideExact.ZERO ops
+            let (r2, g1) ← verifier.candidate.prepare ops D semantic proof hash obs (Array.repeat 29#usize we)
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let r3 ← ops.op20 transport.Variant.S2
+                let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    verifier.mark obs verifier.Phase.Prepare
+                    let i ← compact.OFF_FOLDED_ROOT ops
+                    let i1 ← compact.OFF_ROUND1 ops
+                    let s ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := i, «end» := i1 }
+                    let r4 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s
+                    let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4
+                    let r5 ← ops.op6 D proof val folded_root 0#usize hash
+                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                    match cf4 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        verifier.mark obs (verifier.Phase.Merkle 0#usize)
+                        let r6 ← ops.op19 val.queries 0#usize split
+                        let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                        match cf5 with
+                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                            let r7 ← ops.op18 val1.weights.deref
+                            let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                            match cf6 with
+                              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                let r8 ← ops.op7 proof val val1 g1 obs val2 val3 split
+                                let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r8
+                                match cf7 with
+                                  | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                    let (a, pending) := val4
+                                    do
+                                    let (s2, deref_mut_back) ← lift a.weights.deref_mut
+                                    let s3 ← ops.op17 pending s2
+                                    let bytes ←
+                                      ops.op16 D val
+                                          { weights := deref_mut_back s3, rhs := a.rhs, power := a.power,
+                                            next := a.next }
+                                          proof pub hash
+                                    verifier.mark obs verifier.Phase.CheckpointWrite
+                                    ok (core.result.Result.Ok bytes)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+SdkD_First.lean:122:41: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵d̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵t̵x̵1̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵]̵[̲c̲o̲d̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲t̲x̲1̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲e̲m̲i̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:122:52: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵d̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵t̵x̵1̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵]̵[̲c̲o̲d̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲t̲x̲1̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲e̲m̲i̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:122:63: warning: This simp argument is unused:
+  erase_emit
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵d̵e̵,̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵t̵x̵1̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵]̵[̲c̲o̲d̲e̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲t̲x̲1̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:125:49: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵,̵e̵r̵a̵s̵e̵,̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲e̲m̲i̲t̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:125:60: warning: This simp argument is unused:
+  erase_emit
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵,̵e̵r̵a̵s̵e̵,̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲,̲ ̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:125:71: warning: This simp argument is unused:
+  erase
+
+Hint: Omit it from the simp argument list.
+  simp only [erase_bind, ̲erase_lift, ̲erase_emit,e̵r̵a̵s̵e̵,̵ ̲liftResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_First.lean:125:77: warning: This simp argument is unused:
+  liftResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵e̵m̵i̵t̵,̵e̵r̵a̵s̵e̵,̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲e̲m̲i̲t̲,̲ ̲e̲r̲a̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_First.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

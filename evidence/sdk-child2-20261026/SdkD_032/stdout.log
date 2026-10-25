@@ -1,0 +1,81 @@
+SdkD_ParserRoot.lean:20:6: error: Dependent elimination failed: Failed to solve equation
+  some rs =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            if List.take 5 b ≠ ⟨tag % 256, ⋯⟩ :: le32 size then none
+            else
+              if 14 ≤ row ∧ ¬canonical (slice b 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then
+                none
+              else do
+                let tail ← semanticRows fuel (row + 1) (List.drop (5 + size / 2) b)
+                pure ((List.take 5 b ++ expand (size / 32) (slice b 5 (size / 2))) :: tail))
+          h)
+      (fun h => (fun x => none) h) ((List.length b).decLt (5 + size / 2))
+SdkD_ParserRoot.lean:27:17: error: unsolved goals
+case mk.isFalse.isFalse.isFalse.none
+fuel row : ℕ
+b : Bytes
+rs : List Bytes
+tag size : ℕ
+shape : rowShape row = (tag, size)
+h✝² : ¬14 ≤ row
+h✝¹ : ¬List.length b < 5 + size
+h✝ : ¬List.take 5 b ≠ ⟨tag % 256, ⋯⟩ :: le32 size
+h : semanticRows fuel (row + 1) (List.drop (5 + if 14 ≤ row then size / 2 else size) b) = none
+success :
+  (14 ≤ row → canonical (slice b 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2))) ∧
+    ((semanticRows fuel (row + 1) (List.drop (5 + size) b)).bind fun tail =>
+        some ((List.take 5 b ++ slice b 5 size) :: tail)) =
+      some rs
+⊢ ∃ tail,
+    rs = (List.take 5 b ++ if 14 ≤ row then expand (size / 32) (slice b 5 (size / 2)) else slice b 5 size) :: tail ∧
+      none = some tail
+SdkD_ParserRoot.lean:30:24: error: Application type mismatch: The argument
+  Eq.symm success
+has type
+  some rs =
+    if 14 ≤ row ∧ ¬canonical (slice b 5 (if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2)) then none
+    else do
+      let tail ← semanticRows fuel (row + 1) (List.drop (5 + size) b)
+      some ((List.take 5 b ++ slice b 5 size) :: tail)
+but is expected to have type
+  rs = (List.take 5 b ++ if 14 ≤ row then expand (size / 32) (slice b 5 (size / 2)) else slice b 5 size) :: tail
+in the application
+  And.intro (Eq.symm success)
+SdkD_ParserRoot.lean:18:21: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [shape,̵P̵r̵o̵d̵.̵s̵n̵d̵] at *
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRoot.lean:27:26: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵]̵ ̵at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRoot.lean:29:23: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵Option.bind_some, ̲Option.pure_def, ̲Option.some.injEq] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRoot.lean:29:25: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRoot.lean:29:58: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵p̵u̵r̵e̵_̵d̵e̵f̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲p̲u̲r̲e̲_̲d̲e̲f̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_ParserRoot.semantic_head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

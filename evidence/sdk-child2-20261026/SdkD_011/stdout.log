@@ -1,0 +1,85 @@
+SdkD_FirstOrder.lean:24:4: error: Type mismatch: After simplification, term
+  Eq.symm same
+ has type
+  after =
+    (run
+        (Code.step (ops.op3 proof) fun r =>
+          Code.step (core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+            match cf with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              Code.step (ops.op4 proof) fun r1 =>
+                Code.step (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                  match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a =>
+                    Code.step (verifier.mark obs verifier.Phase.Parsed) fun __r =>
+                      Code.step (aspis_core.field.wide_exact.WideExact.ZERO ops) fun we =>
+                        Code.step (verifier.candidate.prepare ops D semantic proof hash obs (Array.repeat 29#usize we))
+                          fun __x =>
+                          Code.step (core.result.Result.Insts.CoreOpsTry.branch __x.1) fun cf2 =>
+                            match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              Code.step (ops.op20 transport.Variant.S2) fun r3 =>
+                                Code.step (core.result.Result.Insts.CoreOpsTry.branch r3) fun cf3 =>
+                                  match cf3 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                    Code.step (verifier.mark obs verifier.Phase.Prepare) fun __r =>
+                                      Code.step (compact.OFF_FOLDED_ROOT ops) fun i =>
+                                        Code.step (compact.OFF_ROUND1 ops) fun i1 =>
+                                          Code.step
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                              { start := i, «end» := i1 })
+                                            fun s =>
+                                            Code.step
+                                              (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s)
+                                              fun r4 =>
+                                              Code.step (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4)
+                                                fun folded_root =>
+                                                Code.mark S2LeadInterface.Site.batch0
+                                                  (Code.step (ops.op6 D proof val folded_root 0#usize hash) fun r5 =>
+                                                    Code.step (core.result.Result.Insts.CoreOpsTry.branch r5) fun cf4 =>
+                                                      match cf4 with
+                                                      | core.ops.control_flow.ControlFlow.Continue a =>
+                                                        Code.step (verifier.mark obs (verifier.Phase.Merkle 0#usize))
+                                                          fun __r =>
+                                                          Code.step (ops.op19 val.queries 0#usize split) fun r6 =>
+                                                            Code.step (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                                              fun cf5 => ⋯
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Code.step
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error)
+                                                            residual)
+                                                          Code.done)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    Code.step
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                      Code.done
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              Code.step
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                Code.done
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    Code.step
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      Code.done
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              Code.step
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame verifier.Error) residual)
+                Code.done)
+        before).2
+but is expected to have type
+  after = before ++ [S2LeadInterface.Site.batch0, S2LeadInterface.Site.query0, S2LeadInterface.Site.save]
+SdkD_FirstOrder.lean:18:36: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵u̵n̵,̵Bind.bind, ̲SdkD_Control.bind, ̲emit, ̲liftResult, ̲liftM,
+  ̲ ̲ ̲ ̲ ̲MonadLift.monadLift, ̲MonadLiftT.monadLift] at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_FirstOrder.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

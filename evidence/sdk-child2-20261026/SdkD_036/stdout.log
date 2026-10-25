@@ -1,0 +1,113 @@
+SdkD_ParserRows.lean:19:66: error: Application type mismatch: The argument
+  success
+has type
+  (do
+      let rs ← semanticRows 27 0 (slice stored 48 6983)
+      pure { wire := stored, semantic := rs }) =
+    some p
+but is expected to have type
+  some { wire := stored, semantic := rs } = some p
+in the application
+  Option.some.inj success
+SdkD_ParserRows.lean:27:4: error: Type mismatch: After simplification, term
+  s0
+ has type
+  @Eq (Option (List Bytes))
+    (semanticRows 26 (0 + 1)
+      (List.drop
+        (5 +
+          (if 0 = 2 then (1, 32)
+            else
+              if 0 = 14 then (3, 32)
+              else
+                if 15 ≤ 0 ∧ 0 ≤ 24 then (2, 896)
+                else if 0 = 25 then (4, 3712) else if 0 = 26 then (5, 928) else (0, 0)).2)
+        b))
+    (some r1)
+but is expected to have type
+  @Eq (Option (List Bytes)) (semanticRows 26 1 (List.drop 5 b)) (some r1)
+SdkD_ParserRows.lean:30:4: error: Type mismatch: After simplification, term
+  s1
+ has type
+  @Eq (Option (List Bytes))
+    (semanticRows 25 (1 + 1)
+      (List.drop
+        (5 +
+          (5 +
+            (if 1 = 2 then (1, 32)
+              else
+                if 1 = 14 then (3, 32)
+                else
+                  if 15 ≤ 1 ∧ 1 ≤ 24 then (2, 896)
+                  else if 1 = 25 then (4, 3712) else if 1 = 26 then (5, 928) else (0, 0)).2))
+        b))
+    (some r2)
+but is expected to have type
+  @Eq (Option (List Bytes)) (semanticRows 25 2 (List.drop 10 b)) (some r2)
+SdkD_ParserRows.lean:36:6: error: Dependent elimination failed: Failed to solve equation
+  some r2 =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            if List.take 5 (List.drop 10 b) ≠ ⟨1 % 256, ⋯⟩ :: le32 32 then none
+            else
+              if 14 ≤ 2 ∧ ¬canonical (slice (List.drop 10 b) 5 (32 / 2)) then none
+              else do
+                let tail ← semanticRows 24 (2 + 1) (List.drop (5 + 32 / 2) (List.drop 10 b))
+                pure ((List.take 5 (List.drop 10 b) ++ expand (32 / 32) (slice (List.drop 10 b) 5 (32 / 2))) :: tail))
+          h)
+      (fun h => (fun x => none) h) ((List.drop 10 b).length.decLt (5 + 32 / 2))
+SdkD_ParserRows.lean:37:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 4
+where
+ e := ↑(List.drop 10 b).length
+SdkD_ParserRows.lean:40:65: error(lean.unknownIdentifier): Unknown constant `List.drop_self`
+SdkD_ParserRows.lean:24:56: error: unsolved goals
+b : Bytes
+rs : List Bytes
+success : semanticRows 27 0 b = some rs
+r1 : List (List AspisV8R19.DuplexFrames.Byte)
+h0 : rs = (List.take 5 b ++ slice b 5 (rowShape 0).2) :: r1
+s0 : semanticRows 26 (0 + 1) (List.drop (5 + (rowShape 0).2) b) = some r1
+s0' : semanticRows 26 1 (List.drop 5 b) = some r1
+r2 : List (List AspisV8R19.DuplexFrames.Byte)
+h1 : r1 = (List.take 5 (List.drop 5 b) ++ slice (List.drop 5 b) 5 (rowShape 1).2) :: r2
+s1 : semanticRows 25 (1 + 1) (List.drop (5 + (rowShape 1).2) (List.drop 5 b)) = some r2
+s1' : semanticRows 25 2 (List.drop 10 b) = some r2
+r3 : List (List AspisV8R19.DuplexFrames.Byte)
+h2 : r2 = (List.take 5 (List.drop 10 b) ++ slice (List.drop 10 b) 5 (rowShape 2).2) :: r3
+s2 : semanticRows 24 (2 + 1) (List.drop (5 + (rowShape 2).2) (List.drop 10 b)) = some r3
+len : (List.drop 10 b).length ≥ 5
+⊢ List.take 0 (List.drop 5 (List.drop 10 b)) ++ slice (List.drop 10 b) 5 32 = slice (List.drop 10 b) 5 32
+SdkD_ParserRows.lean:34:35: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲ at s1'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:40:24: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:41:4: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_ParserRows.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SdkD_ParserRows.row2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
