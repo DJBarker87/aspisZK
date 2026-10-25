@@ -9,7 +9,7 @@ import stat
 import time
 
 HERE=Path(__file__).resolve().parent
-STAGE=Path('/home/dombarker/final-native-gate-v8-20261025')
+STAGE=Path('/home/dombarker/final-native-gate-v9-20261025')
 PACKET=STAGE/'FinalNativeGate-setup-packet'
 UNIT='FinalNativeGate-pin-setup'
 TRANSPORT_SECONDS=120
@@ -178,7 +178,7 @@ def _collect():
         if Path(control['path']).name!=UNIT+'.scope':raise ValueError('setup actual unit drift')
         controls.append(dict(phase='inside-scope',control=control,raw_receipts=report.get('raw_receipts',[])))
         guard.check()
-        acquisition=Acquisition(deadline)
+        acquisition=Acquisition(deadline,data_only=True)
         runtime=runtime_proposal()
         proposal=environment()
         acquisition.add(proposal['XDG_RUNTIME_DIR'])
@@ -204,7 +204,7 @@ def _collect():
         for path in sorted(acquisition.files):
             e=acquisition.rows.get(path)
             if e is None or e['kind']=='link' or e['mode']&0o111 or '.so' in Path(path).name:
-                item=dependencies(Reader(acquisition.catalog()),path);elf.append(item)
+                item=dependencies(Reader(acquisition.catalog(),data_only=True),path);elf.append(item)
                 for loader in item.get('interpreter',[]):acquisition.add(loader)
                 for name in item.get('needed',[]):
                     if '/' in name:

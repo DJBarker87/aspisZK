@@ -1,0 +1,102 @@
+FFEFFFFF
+======================================================================
+ERROR: test_json_cannot_enable_reader_mode (__main__.DataTraversal.test_json_cannot_enable_reader_mode)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 50, in test_json_cannot_enable_reader_mode
+    with self.assertRaisesRegex(b.CatalogError,'writable'):b.Reader(catalog).pin(path)
+                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_bounded.py", line 101, in pin
+    with self.opened(path) as (fd,canonical,e):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_bounded.py", line 66, in opened
+    held.append((fd,stamp(os.fstat(fd)))); self.assess('/',os.fstat(fd))
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_bounded.py", line 48, in assess
+    self.tick(); e=self.entries[path]
+                   ~~~~~~~~~~~~^^^^^^
+KeyError: '/'
+
+======================================================================
+FAIL: test_all_ancestors_and_unknown_are_rechecked (__main__.DataTraversal.test_all_ancestors_and_unknown_are_rechecked)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 47, in test_all_ancestors_and_unknown_are_rechecked
+    with self.assertRaisesRegex(b.CatalogError,'drift|changed'):a.snapshot()
+AssertionError: CatalogError not raised
+
+======================================================================
+FAIL: test_data_775_hash_and_record_and_strict_default (__main__.DataTraversal.test_data_775_hash_and_record_and_strict_default)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 29, in test_data_775_hash_and_record_and_strict_default
+    self.assertIn(path,s['pins']);row=s['trusted_group_directories'][0]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: '/home/dombarker/.cargo/file' not found in {}
+
+======================================================================
+FAIL: test_other_permissions_and_owners_rejected (__main__.DataTraversal.test_other_permissions_and_owners_rejected) (mode=16895, uid=1000, gid=1000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 44, in test_other_permissions_and_owners_rejected
+    self.assertNotIn(path,a.snapshot()['pins']);self.assertEqual(a.unresolved[-1]['outcome'],'rejected')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'excluded' != 'rejected'
+- excluded
++ rejected
+
+
+======================================================================
+FAIL: test_other_permissions_and_owners_rejected (__main__.DataTraversal.test_other_permissions_and_owners_rejected) (mode=16893, uid=999, gid=1000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 44, in test_other_permissions_and_owners_rejected
+    self.assertNotIn(path,a.snapshot()['pins']);self.assertEqual(a.unresolved[-1]['outcome'],'rejected')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'excluded' != 'rejected'
+- excluded
++ rejected
+
+
+======================================================================
+FAIL: test_other_permissions_and_owners_rejected (__main__.DataTraversal.test_other_permissions_and_owners_rejected) (mode=16893, uid=1000, gid=999)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 44, in test_other_permissions_and_owners_rejected
+    self.assertNotIn(path,a.snapshot()['pins']);self.assertEqual(a.unresolved[-1]['outcome'],'rejected')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'excluded' != 'rejected'
+- excluded
++ rejected
+
+
+======================================================================
+FAIL: test_other_permissions_and_owners_rejected (__main__.DataTraversal.test_other_permissions_and_owners_rejected) (mode=33204, uid=1000, gid=1000)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 44, in test_other_permissions_and_owners_rejected
+    self.assertNotIn(path,a.snapshot()['pins']);self.assertEqual(a.unresolved[-1]['outcome'],'rejected')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'excluded' != 'rejected'
+- excluded
++ rejected
+
+
+======================================================================
+FAIL: test_strict_acquisition_rejects_775 (__main__.DataTraversal.test_strict_acquisition_rejects_775)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "tools/prover-rw-20261023/final-native-gate/FinalNativeGate-source028-tests.py", line 39, in test_strict_acquisition_rejects_775
+    self.assertNotIn(path,a.snapshot()['pins']);self.assertEqual(a.unresolved[-1]['outcome'],'rejected')
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'excluded' != 'rejected'
+- excluded
++ rejected
+
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.002s
+
+FAILED (failures=7, errors=1)

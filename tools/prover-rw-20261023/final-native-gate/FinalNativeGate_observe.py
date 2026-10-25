@@ -29,7 +29,7 @@ def digest(data):
 
 def filepin(path,catalog):
     from FinalNativeGate_bounded import Reader
-    return Reader(catalog).pin(path)
+    return Reader(catalog,data_only=False).pin(path)
 
 
 def runtime_pins(catalog):
@@ -51,7 +51,7 @@ def runtime_pins(catalog):
             if parts[5].endswith(' (deleted)'):raise ValueError('deleted runtime mapping')
             mapped.add(parts[5])
     if mapped!=set(catalog['mapped_libraries']):raise ValueError('runtime mapping catalog drift')
-    pins=Reader(catalog).inventory(catalog['roots'])
+    pins=Reader(catalog,data_only=False).inventory(catalog['roots'])
     if not mapped.issubset(pins) or not set(catalog['tools'].values()).issubset(pins):
         raise ValueError('runtime/tool catalog coverage gap')
     return dict(executable=sys.executable,version=sys.version,files=pins,tools=catalog['tools'],mapped_libraries=sorted(mapped))

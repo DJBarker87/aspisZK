@@ -17,8 +17,19 @@ def stamp(s):
             s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
 
 
+DATA_TRUST = 'retained installed OS/CPython/tools and no-concurrent-untrusted-writer operational trust; no permission isolation or writer discharge'
+
+def trusted_group_directory(s, data_only=False):
+    return (data_only is True and stat.S_ISDIR(s.st_mode) and
+            s.st_uid==1000 and s.st_gid==1000 and not s.st_mode&0o002)
+
+def writable_rejected(s, data_only=False):
+    return bool(s.st_mode&0o022) and not trusted_group_directory(s,data_only)
+
 class Reader:
-    def __init__(self, catalog):
+    def __init__(self, catalog, *, data_only=False):
+        if type(data_only) is not bool:raise CatalogError('fixed DATA option must be bool')
+        self.data_only=data_only
         if not catalog or not catalog.get('rationale'):
             raise CatalogError('missing reviewed finite catalog/bound rationale')
         self.catalog=catalog; self.entries=catalog['entries']; self.bounds=catalog['bounds']
@@ -40,7 +51,7 @@ class Reader:
         kind='dir' if stat.S_ISDIR(s.st_mode) else 'file' if stat.S_ISREG(s.st_mode) else 'link' if stat.S_ISLNK(s.st_mode) else 'unknown'
         if kind!=e['kind'] or any(getattr(s,'st_'+k)!=e[k] for k in ('uid','gid','mode')):
             raise CatalogError('entry type/owner/group/mode drift: '+path)
-        if kind!='link' and s.st_mode & 0o022:raise CatalogError('group/world writable input: '+path)
+        if kind!='link' and writable_rejected(s,self.data_only):raise CatalogError('group/world writable input: '+path)
         if kind=='file' and s.st_size!=e['size']:raise CatalogError('planned size drift: '+path)
         if kind=='unknown':raise CatalogError('unknown entry type')
 

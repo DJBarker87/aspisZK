@@ -17,7 +17,7 @@ import time
 import zoneinfo
 
 HERE = Path(__file__).resolve().parent
-STAGE = Path('/home/dombarker/final-native-gate-v8-20261025')
+STAGE = Path('/home/dombarker/final-native-gate-v9-20261025')
 PACKET = STAGE/'FinalNativeGate-packet'
 UNIT = 'FinalNativeGate-060'
 PROOF = '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/resume-scalar/proof/Cargo.toml'
@@ -71,13 +71,13 @@ def _plan():
 
 def _tree(roots, catalog):
     from FinalNativeGate_bounded import Reader
-    return Reader(catalog).inventory(roots)
+    return Reader(catalog,data_only=False).inventory(roots)
 
 
 def _file_pins(p):
     from FinalNativeGate_bounded import Reader
     catalog=p['catalogs']['source']
-    snapshot=Reader(catalog).inventory(catalog['roots'])
+    snapshot=Reader(catalog,data_only=False).inventory(catalog['roots'])
     if set(snapshot)!=set(p['files']):raise Denied('source inventory coverage drift')
     files={path:snapshot[path]['sha256'] for path in p['files']}
     if files!=p['files']:raise Denied('fixed source/package/tool drift')
@@ -237,7 +237,7 @@ def _cache_after(p):
     catalog,missing=discover(p['cache_roots'],b['files'],time.monotonic()+b['seconds'])
     if missing or catalog['bounds']['bytes']>b['bytes']:raise Denied('cache output alias/type/size envelope')
     catalog['bounds']=b
-    return dict(catalog=catalog,files=Reader(catalog).inventory(p['cache_roots']))
+    return dict(catalog=catalog,files=Reader(catalog,data_only=False).inventory(p['cache_roots']))
 
 
 def _pins_after():
