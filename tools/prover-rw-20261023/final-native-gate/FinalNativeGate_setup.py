@@ -213,8 +213,8 @@ def _collect():
                         for directory in p['setup_library_search']:acquisition.add(str(Path(directory)/name))
                 if item['format']!='ELF64LE' or item.get('search'):
                     acquisition.unresolved.append(dict(path=path,reason='native/script/search role requires review'))
-        missing=sorted(set(p['files'])-acquisition.files)
-        if missing:raise ValueError('missing fixed source files: '+json.dumps(missing))
+        unacquired=sorted(set(p['files'])-acquisition.files)
+        if unacquired:raise ValueError('unacquired fixed source files (absence not established; see unresolved metadata): '+json.dumps(unacquired))
         before=acquisition.snapshot();verify_expected(before,p['files'])
         # Bootstrap covers collection. Acquired metadata/hash interval begins
         # at this snapshot; initial per-entry stamps and known source hashes
@@ -244,6 +244,7 @@ def _collect():
     except BaseException as exc:
         errors.append(repr(exc))
         if acquisition is not None:
+            unresolved=list(acquisition.unresolved)
             try:data.append(_publish('FinalNativeGate-candidate-partial-failure.json',dict(catalog=acquisition.catalog(),unresolved=acquisition.unresolved,error=repr(exc))))
             except BaseException as write_error:errors.append('partial failure receipt: '+repr(write_error))
     finally:

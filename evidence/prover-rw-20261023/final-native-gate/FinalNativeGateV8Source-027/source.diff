@@ -1,0 +1,64 @@
+diff --git a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_candidate.py b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_candidate.py
+index 434b10f415..3c29257c81 100644
+--- a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_candidate.py
++++ b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_candidate.py
+@@ -15,7 +15,8 @@ FILE_LIMIT=256*2**20
+ BYTE_LIMIT=2*2**30
+ ALIAS_LIMIT=32
+ MAPS_LIMIT=2**20
+-ADMITTED=('/usr/bin','/usr/lib','/usr/lib64','/usr/local/lib','/lib','/lib64','/run/user',
++STAGE='/home/dombarker/final-native-gate-v8-20261025'
++ADMITTED=(STAGE,'/usr/bin','/usr/lib','/usr/lib64','/usr/local/lib','/lib','/lib64','/run/user',
+           '/home/dombarker/.kani','/home/dombarker/.rustup','/home/dombarker/.cargo/bin',
+           '/home/dombarker/.cargo/registry/src',
+           '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023')
+@@ -60,7 +61,7 @@ class Acquisition:
+         while True:
+             self.tick();fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+             try:
+-                self.record('/',os.fstat(fd));parts=pending.split('/')[1:];current='';restart=False
++                self.record('/',os.fstat(fd));parts=[] if pending=='/' else pending.split('/')[1:];current='';restart=False
+                 for i,name in enumerate(parts):
+                     current+='/'+name
+                     s=os.stat(name,dir_fd=fd,follow_symlinks=False);e=self.record(current,s)
+@@ -85,12 +86,14 @@ class Acquisition:
+ 
+     def add(self,path,recurse=False):
+         if not admit(path):
+-            self.unresolved.append(dict(path=path,reason='candidate path outside fixed root admission; no read'))
++            self.unresolved.append(dict(path=path,outcome='excluded',reason='candidate path outside fixed root admission; no read'))
+             return
+         try:canonical=self.resolve(path)
+         except FileNotFoundError:
+-            self.unresolved.append(dict(path=path,reason='missing candidate role'));return
+-        if canonical is None:return
++            self.unresolved.append(dict(path=path,outcome='observed_missing',reason='missing candidate role (ENOENT during admitted resolution)'));return
++        if canonical is None:
++            self.unresolved.append(dict(path=path,outcome='rejected',reason='candidate not acquired; ancestor/type/alias policy rejection, absence not established'))
++            return
+         e=self.rows[canonical]
+         if e['kind']=='file':self.files.add(path);return
+         if not recurse or canonical in self.expanded:return
+diff --git a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
+index 2cc740923e..5fdbbf3ff2 100644
+--- a/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
++++ b/tools/prover-rw-20261023/final-native-gate/FinalNativeGate_setup.py
+@@ -213,8 +213,8 @@ def _collect():
+                         for directory in p['setup_library_search']:acquisition.add(str(Path(directory)/name))
+                 if item['format']!='ELF64LE' or item.get('search'):
+                     acquisition.unresolved.append(dict(path=path,reason='native/script/search role requires review'))
+-        missing=sorted(set(p['files'])-acquisition.files)
+-        if missing:raise ValueError('missing fixed source files: '+json.dumps(missing))
++        unacquired=sorted(set(p['files'])-acquisition.files)
++        if unacquired:raise ValueError('unacquired fixed source files (absence not established; see unresolved metadata): '+json.dumps(unacquired))
+         before=acquisition.snapshot();verify_expected(before,p['files'])
+         # Bootstrap covers collection. Acquired metadata/hash interval begins
+         # at this snapshot; initial per-entry stamps and known source hashes
+@@ -244,6 +244,7 @@ def _collect():
+     except BaseException as exc:
+         errors.append(repr(exc))
+         if acquisition is not None:
++            unresolved=list(acquisition.unresolved)
+             try:data.append(_publish('FinalNativeGate-candidate-partial-failure.json',dict(catalog=acquisition.catalog(),unresolved=acquisition.unresolved,error=repr(exc))))
+             except BaseException as write_error:errors.append('partial failure receipt: '+repr(write_error))
+     finally:

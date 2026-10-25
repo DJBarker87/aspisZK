@@ -15,7 +15,8 @@ FILE_LIMIT=256*2**20
 BYTE_LIMIT=2*2**30
 ALIAS_LIMIT=32
 MAPS_LIMIT=2**20
-ADMITTED=('/usr/bin','/usr/lib','/usr/lib64','/usr/local/lib','/lib','/lib64','/run/user',
+STAGE='/home/dombarker/final-native-gate-v8-20261025'
+ADMITTED=(STAGE,'/usr/bin','/usr/lib','/usr/lib64','/usr/local/lib','/lib','/lib64','/run/user',
           '/home/dombarker/.kani','/home/dombarker/.rustup','/home/dombarker/.cargo/bin',
           '/home/dombarker/.cargo/registry/src',
           '/home/dombarker/project-offloads/codex-cx-prover-rw-20261023')
@@ -60,7 +61,7 @@ class Acquisition:
         while True:
             self.tick();fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
             try:
-                self.record('/',os.fstat(fd));parts=pending.split('/')[1:];current='';restart=False
+                self.record('/',os.fstat(fd));parts=[] if pending=='/' else pending.split('/')[1:];current='';restart=False
                 for i,name in enumerate(parts):
                     current+='/'+name
                     s=os.stat(name,dir_fd=fd,follow_symlinks=False);e=self.record(current,s)
@@ -85,12 +86,14 @@ class Acquisition:
 
     def add(self,path,recurse=False):
         if not admit(path):
-            self.unresolved.append(dict(path=path,reason='candidate path outside fixed root admission; no read'))
+            self.unresolved.append(dict(path=path,outcome='excluded',reason='candidate path outside fixed root admission; no read'))
             return
         try:canonical=self.resolve(path)
         except FileNotFoundError:
-            self.unresolved.append(dict(path=path,reason='missing candidate role'));return
-        if canonical is None:return
+            self.unresolved.append(dict(path=path,outcome='observed_missing',reason='missing candidate role (ENOENT during admitted resolution)'));return
+        if canonical is None:
+            self.unresolved.append(dict(path=path,outcome='rejected',reason='candidate not acquired; ancestor/type/alias policy rejection, absence not established'))
+            return
         e=self.rows[canonical]
         if e['kind']=='file':self.files.add(path);return
         if not recurse or canonical in self.expanded:return
