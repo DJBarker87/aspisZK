@@ -1,0 +1,25 @@
+WAdm_SourceBody.lean:53:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceBody.lean:58:63: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceBody.lean:64:6: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (List.ofFn fun i => bytesOf ↑(core.num.U32.to_le_bytes (↑p.queries)[↑i])) =
+    List.ofFn fun i => OraclePortCompactDraft.le32 ↑(↑p.queries)[↑i]
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.61} {β : α → Sort ?u.60} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+p : Prepared
+a : Accumulator
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+⊢ (List.ofFn fun i => bytesOf ↑(core.num.U32.to_le_bytes (↑p.queries)[↑i])) =
+    List.ofFn fun i => OraclePortCompactDraft.le32 ↑(↑p.queries)[↑i]
+'AspisR1.WAdm_SourceBody.ofFn_array' depends on axioms: [propext, Quot.sound]
+'AspisR1.WAdm_SourceBody.two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceBody.flatMap_ofFn' depends on axioms: [propext, Quot.sound]
+'AspisR1.WAdm_SourceBody.queries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

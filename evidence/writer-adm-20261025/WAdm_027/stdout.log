@@ -1,0 +1,37 @@
+WAdm_SourceWriter.lean:31:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceWriter.lean:56:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceWriter.lean:72:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+WAdm_SourceWriter.lean:99:4: error: Tactic `rfl` failed: The left-hand side
+  (toPrepared p).variant
+is not definitionally equal to the right-hand side
+  aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2
+
+case variant
+H : Type
+D : VTop_Stages.aspis_core.digest.Digest32 H
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+proof pub : Slice U8
+hash : H
+fields : Port5Q2_Prepared.PreparedFields p
+size : (↑a.weights).length = 64
+canonical : CheckpointBytesBlocks.CanonicalFields (Port3_DecodeCoherence.inventory p a size ⋯)
+next : ↑a.next = 10
+⊢ (toPrepared p).variant = aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2
+WAdm_SourceWriter.lean:100:4: error: 'change' tactic failed, pattern
+  toVariant p.variant = ?m.32
+is not definitionally equal to target
+  ↑(toAccumulator a).next = 10
+WAdm_SourceWriter.lean:103:2: error: No goals to be solved
+'AspisR1.WAdm_SourceWriter.writer_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceWriter.materialize' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceWriter.u8_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceWriter.map_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceWriter.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.WAdm_SourceWriter.erase_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
