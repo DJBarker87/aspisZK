@@ -24,6 +24,9 @@ SbfProducer-20261025-tiny-v1.scope with MemoryHigh=3G, MemoryMax=4G,
 MemorySwapMax=0 and TasksMax=64. Inside it the user producer's sole subprocess
 argv is `/usr/bin/sudo -n -- /usr/local/libexec/SbfProducer-20261025-tiny-root`.
 The root operation takes no arguments, reports, runtime path or code input.
+It rejects inherited descriptors beyond 0/1/2 and verifies fixed null-device
+stdio access; the producer opens readonly stdin and write-only null outputs
+explicitly instead of subprocess.DEVNULL's shared read/write descriptor.
 No scope command was executed. Future scheduling must check aggregate populated
 reservations below 55GiB and obey the lead's shared-lock/window rules.
 

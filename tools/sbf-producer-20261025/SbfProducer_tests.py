@@ -38,6 +38,10 @@ def synthetic():
 
 class Suite(unittest.TestCase):
     def test_exact_copy_and_operational_functions(self):
+        from SbfProducer_pins import FILES
+        for name,row in FILES.items():
+            self.assertEqual(pkg.digest((HERE/name).read_bytes()),row['pin'])
+            self.assertEqual(row['mode'],0o444)
         mapping = json.loads((HERE.parents[1]/'evidence/sbf-producer-20261025/SbfProducer-identity.json').read_text())
         for name, record in mapping['files'].items():
             raw = (HERE/name).read_bytes()
@@ -116,6 +120,7 @@ class Suite(unittest.TestCase):
         with patch.dict(sys.modules,SbfProducer_backend_candidate=candidate), \
              patch.object(flow.os,'getresuid',return_value=(0,0,0),create=True), \
              patch.object(flow.os,'getresgid',return_value=(0,0,0),create=True), \
+             patch.object(flow,'host_stdio'), \
              patch.object(flow,'approval',return_value=approved), \
              patch.object(flow.proc,'lineage',side_effect=lambda _:events.append('lineage') or before), \
              patch.object(flow,'fresh',side_effect=lambda *_:events.append('full fresh')), \
@@ -286,6 +291,33 @@ class Suite(unittest.TestCase):
                 self.assertIn(30,[c.args[0] for c in api.close.call_args_list])
                 self.assertIn(21,[c.args[0] for c in api.close.call_args_list])
                 api.fork.assert_called_once()
+
+    def test_inherited_descriptor_and_stdio_access_fail_closed(self):
+        from types import SimpleNamespace as NS
+        from SbfProducerLinux_backend import inventory
+        api=Mock();api.listdir.return_value=['0','1','2']
+        api.fstat.return_value=NS(st_mode=0o020666,st_uid=0,st_rdev=123)
+        api.major.return_value=1;api.minor.return_value=3
+        api.flags.side_effect=lambda fd:os.O_RDONLY if fd==0 else os.O_WRONLY
+        flow.host_stdio(api)
+        api.listdir.return_value=['0','1','2','50']
+        with self.assertRaises(Denied):flow.host_stdio(api)
+        import SbfProducerLinux_capture as capture
+        for valid in (True,False):
+            with patch.object(capture,'open_safe_ancestry',return_value=10), \
+                 patch.object(flow.os,'open',return_value=11), \
+                 patch.object(flow.os,'fstat',return_value=NS(st_mode=0o020666,st_uid=0 if valid else 1000,st_rdev=123)), \
+                 patch.object(flow.os,'major',return_value=1), \
+                 patch.object(flow.os,'minor',return_value=3), \
+                 patch.object(flow.os,'close') as close:
+                if valid:
+                    self.assertEqual(flow.null_writers(),11)
+                    self.assertEqual([c.args[0] for c in close.call_args_list],[10])
+                else:
+                    with self.assertRaises(Denied):flow.null_writers()
+                    self.assertEqual([c.args[0] for c in close.call_args_list],[11,10])
+        api.listdir.return_value=['0','1','2'];api.flags.side_effect=lambda _:os.O_RDWR
+        with self.assertRaises(Denied):flow.host_stdio(api)
 
 
 if __name__ == '__main__':

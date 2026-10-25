@@ -33,13 +33,23 @@ if __name__ == '__main__':
     start = time.monotonic()
     stream = Bounded()
     import SbfProducer_tests
-    suite = unittest.defaultTestLoader.loadTestsFromModule(SbfProducer_tests)
+    followup = sys.argv[2:] == ['--fd-followup']
+    if sys.argv[2:] and not followup:
+        raise SystemExit('unknown selection')
+    label = 'SbfProducer-fd-focused' if followup else 'SbfProducer-focused'
+    if followup:
+        names = ['test_exact_copy_and_operational_functions',
+                 'test_inherited_descriptor_and_stdio_access_fail_closed',
+                 'test_root_order_no_backend_on_any_guard_failure']
+        suite = unittest.TestSuite(SbfProducer_tests.Suite(name) for name in names)
+    else:
+        suite = unittest.defaultTestLoader.loadTestsFromModule(SbfProducer_tests)
     result = unittest.TextTestRunner(stream=stream,verbosity=2).run(suite)
     elapsed = time.monotonic()-start
     usage = resource.getrusage(resource.RUSAGE_SELF)
     peak = usage.ru_maxrss*(1 if sys.platform == 'darwin' else 1024)
     passed = result.wasSuccessful() and peak < 512*2**20
-    with (OUT/'SbfProducer-focused.log').open('x') as f:
+    with (OUT/(label+'.log')).open('x') as f:
         f.write(stream.getvalue())
     dependencies = {}
     for name,module in sorted(sys.modules.items()):
@@ -51,11 +61,11 @@ if __name__ == '__main__':
         exit=0 if passed else 1, wall_seconds=elapsed, peak_rss_bytes=peak,swap=usage.ru_nswap,
         interpreter=dict(path=sys.executable,version=sys.version,**pin(Path(sys.executable).resolve())),
         dependencies=dependencies, tests=result.testsRun, failures=len(result.failures),errors=len(result.errors),
-        log=pin(OUT/'SbfProducer-focused.log'), print_axioms='N/A; no Lean/theorems',
+        log=pin(OUT/(label+'.log')), print_axioms='N/A; no Lean/theorems',
         mode='PURE/EXPLICIT MOCKS ONLY; no backend/native/process/host operations',
         historical='SbfLinux 54 cases REUSED from 9f50be799e, not rerun; no old full report replay',
         host_budget_used=0, native_budget_used=0, source_only=True)
-    with (OUT/'SbfProducer-focused-receipt.json').open('x') as f:
+    with (OUT/(label+'-receipt.json')).open('x') as f:
         json.dump(receipt,f,sort_keys=True,indent=2);f.write('\n')
     print(stream.getvalue(),end='')
     print('peak_rss_bytes='+str(peak)+'; swap='+str(usage.ru_nswap))

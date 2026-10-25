@@ -4,7 +4,9 @@ No public entry calls these functions. Tests mock reads and the final backend;
 there is no report/GO/manifest parameter at either entry.
 """
 import os
+import fcntl
 import signal
+import stat
 import subprocess
 import time
 from SbfProducerLinux_capture import require, Denied
@@ -12,6 +14,35 @@ from SbfProducerRss_guard import Guard, inherited_limits, check_limits
 import SbfProducer_observe as observation
 import SbfProducer_process as proc
 from SbfProducer_package import (approval, verify_package, journal, ENV, SUDO, UNIT)
+
+
+def host_stdio(api=os):
+    from SbfProducerLinux_backend import inventory
+    require(inventory(api) == [0,1,2], 'unexpected inherited helper descriptor')
+    for fd in (0,1,2):
+        s = api.fstat(fd)
+        require(stat.S_ISCHR(s.st_mode) and s.st_uid == 0 and
+                (api.major(s.st_rdev),api.minor(s.st_rdev)) == (1,3), 'helper stdio null identity')
+        flags = fcntl.fcntl(fd,fcntl.F_GETFL) if api is os else api.flags(fd)
+        require(flags & os.O_ACCMODE == (os.O_RDONLY if fd == 0 else os.O_WRONLY),
+                'helper stdio access')
+
+
+def null_writers():
+    from SbfProducerLinux_capture import open_safe_ancestry
+    parent = open_safe_ancestry('/dev')
+    try:
+        fd = os.open('null',os.O_WRONLY|os.O_NOFOLLOW|os.O_CLOEXEC,dir_fd=parent)
+        try:
+            s = os.fstat(fd)
+            require(stat.S_ISCHR(s.st_mode) and s.st_uid == 0 and
+                    (os.major(s.st_rdev),os.minor(s.st_rdev)) == (1,3), 'fixed null writers')
+            return fd
+        except BaseException:
+            os.close(fd)
+            raise
+    finally:
+        os.close(parent)
 
 
 def pins(approved, role):
@@ -67,6 +98,7 @@ def fresh(approved, role):
 def root_continuation():
     """Fixed operation, no arguments; all metadata FDs close before setup."""
     require(os.getresuid() == os.getresgid() == (0,0,0), 'root continuation IDs')
+    host_stdio()
     approved = approval()
     before = proc.lineage(approved)
     fresh(approved, 'helper')
@@ -104,9 +136,17 @@ def user_producer():
         guard.check()
         # Fixed literal sudo command only; no stdin, arbitrary output, retries,
         # shell, user environment forwarding or scope creation here.
-        child = subprocess.Popen(SUDO, stdin=subprocess.DEVNULL,
-                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                                 env=ENV, close_fds=True)
+        from SbfProducerLinux_backend import fixed_null
+        null0 = fixed_null()
+        null12 = None
+        try:
+            null12 = null_writers()
+            child = subprocess.Popen(SUDO, stdin=null0, stdout=null12, stderr=null12,
+                                     env=ENV, close_fds=True)
+        finally:
+            os.close(null0)
+            if null12 is not None:
+                os.close(null12)
         code = child.wait(timeout=115)
         guard.check()
         require(code == 0, 'root continuation failed')
