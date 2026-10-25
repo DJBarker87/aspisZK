@@ -1,0 +1,33 @@
+PSem_Expand.lean:38:6: error: unsolved goals
+case pos
+n : ℕ
+ih :
+  ∀ (b : Bytes),
+    List.length b = 16 * n → ∀ j < 32 * n, (expand n b)[j]? = if j % 32 < 16 then b[j / 32 * 16 + j % 32]? else some 0
+b : Bytes
+length : List.length b = 16 * (n + 1)
+j : ℕ
+bound : j < 32 * (n + 1)
+enough : 16 ≤ List.length b
+firstLength : (List.take 16 b).length = 16
+zeroLength : (List.replicate 16 0).length = 16
+low : ¬j < 16
+middle : j < 32
+jm : j % 32 = j
+⊢ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0][j - 16] = 0
+PSem_Expand.lean:36:12: warning: This simp argument is unused:
+  List.getElem?_take
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵t̵a̵k̵e̵,̵l̵o̵w̵,̵j̵m̵,̵j̵d̵]̵[̲l̲o̲w̲,̲ ̲j̲m̲,̲ ̲j̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PSem_Expand.lean:41:14: warning: This simp argument is unused:
+  List.getElem?_replicate
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵,̵j̵m̵,̵l̵o̵w̵,̵s̵h̵o̵w̵ ̵j̵-̵1̵6̵<̵1̵6̵[̲j̲m̲,̲ ̲l̲o̲w̲,̲ ̲s̲h̲o̲w̲ ̲j̲ ̲-̲ ̲1̲6̲ ̲<̲ ̲1̲6̲ by omega]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PSem_Expand.expand_length' depends on axioms: [propext, Quot.sound]
+'AspisR1.PSem_Expand.expand_byte' depends on axioms: [propext, sorryAx, Quot.sound]

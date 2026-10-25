@@ -1,0 +1,60 @@
+PSem_Y1.lean:35:19: error(lean.unknownIdentifier): Unknown identifier `PSem_Slices.range_bytes`
+PSem_Y1.lean:28:64: error: unsolved goals
+CoreError H : Type
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+D : aspis_core.digest.Digest32 H
+hash : H
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+publicBytes proof : Slice U8
+split : Usize
+saved : alloc.vec.Vec U8
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo D hash pub publicBytes
+    proof split saved
+stored initial semantic : Slice U8
+view : verifier.View
+sem : r1_semantic.Verified H
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7031#usize, «end» := 7495#usize } =
+    ok stored
+expanded : expandValues stored initial = ok (core.result.Result.Ok (), view.y1)
+storedLength : stored.length = 464
+initialLength : initial.length = 928
+y1Length : view.y1.length = 928
+formula : ∀ j < 928, (↑view.y1)[j]? = if j % 32 < 16 then (↑stored)[j / 32 * 16 + j % 32]? else some 0#u8
+wide : sourceView proof semantic view.y1 = ok (core.result.Result.Ok view)
+verify :
+  (NativeBuffers.install
+          (withValues (Op3I_Install.install (Op4P_Install.install (Tx1Q_Execution.base ops reserved query geo))))
+          nativeValues AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B)).op9
+      D pub view.semantic hash none =
+    ok (core.result.Result.Ok sem)
+prepare :
+  (NativeBuffers.install
+          (withValues (Op3I_Install.install (Op4P_Install.install (Tx1Q_Execution.base ops reserved query geo))))
+          nativeValues AspisS1ExtractedRoundChildren.children (ClaimsUnrolledFinish.install std B)).op8
+      D sem view hash (Array.repeat 29#usize run.zero) =
+    ok (core.result.Result.Ok run.p, run.scratch)
+fields :
+  ∀ (l : Usize),
+    ↑l < 29 →
+      ∃ parsed,
+        AspisR1CurrentPreparedClaim.ClaimParser.field view.y1 l = ok parsed ∧
+          AspisR1CurrentPreparedClaim.Concrete.Canonical parsed
+bytes : bytesOf ↑view.y1 = expand (stored.length / 16) (bytesOf ↑stored)
+⊢ ∃ semantic view,
+    sourceView proof semantic view.y1 = ok (core.result.Result.Ok view) ∧
+      bytesOf ↑view.y1 = expand 29 (slice (bytesOf ↑proof) 7031 464) ∧
+        view.y1.length = 928 ∧
+          ∀ (l : Usize),
+            ↑l < 29 →
+              ∃ value,
+                AspisR1CurrentPreparedClaim.ClaimParser.field view.y1 l = ok value ∧
+                  AspisR1CurrentPreparedClaim.Concrete.Canonical value
+'AspisR1.PSem_Y1.on_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

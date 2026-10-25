@@ -1,0 +1,405 @@
+PSem_Shapes.lean:12:2: error: Tactic `rfl` failed: The left-hand side
+  match row with
+  | 0#8#uscalar => ok (some (0#u8, 0#usize))
+  | 1#8#uscalar => ok (some (0#u8, 0#usize))
+  | 2#8#uscalar => ok (some (1#u8, 32#usize))
+  | 14#8#uscalar => ok (some (3#u8, 32#usize))
+  | 25#8#uscalar => do
+    let i ← AspisS1NativeCompact.r1_wire.CLAIMS
+    let i1 ← i + AspisS1NativeCompact.r1_wire.LANES
+    let i2 ← i1 * 32#usize
+    ok (some (4#u8, i2))
+  | 26#8#uscalar => do
+    let i ← AspisS1NativeCompact.r1_wire.LANES * 32#usize
+    ok (some (5#u8, i))
+  | x =>
+    if 3#u8 ≤ row then
+      if row ≤ 13#u8 then ok (some (0#u8, 0#usize))
+      else
+        if 15#u8 ≤ row then
+          if row ≤ 24#u8 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none
+    else
+      if 15#u8 ≤ row then
+        if row ≤ 24#u8 then do
+          let i ← 28#usize * 32#usize
+          ok (some (2#u8, i))
+        else ok none
+      else ok none
+is not definitionally equal to the right-hand side
+  match row with
+  | 0#8#uscalar => ok (some (0#u8, 0#usize))
+  | 1#8#uscalar => ok (some (0#u8, 0#usize))
+  | 2#8#uscalar => ok (some (1#u8, 32#usize))
+  | 14#8#uscalar => ok (some (3#u8, 32#usize))
+  | 25#8#uscalar => do
+    let i ← AspisR1RowShape.r1_wire.CLAIMS
+    let i1 ← i + AspisR1RowShape.r1_wire.LANES
+    let i2 ← i1 * 32#usize
+    ok (some (4#u8, i2))
+  | 26#8#uscalar => do
+    let i ← AspisR1RowShape.r1_wire.LANES * 32#usize
+    ok (some (5#u8, i))
+  | x =>
+    if 3#u8 ≤ row then
+      if row ≤ 13#u8 then ok (some (0#u8, 0#usize))
+      else
+        if 15#u8 ≤ row then
+          if row ≤ 24#u8 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none
+    else
+      if 15#u8 ≤ row then
+        if row ≤ 24#u8 then do
+          let i ← 28#usize * 32#usize
+          ok (some (2#u8, i))
+        else ok none
+      else ok none
+
+row : U8
+⊢ (match row with
+    | 0#8#uscalar => ok (some (0#u8, 0#usize))
+    | 1#8#uscalar => ok (some (0#u8, 0#usize))
+    | 2#8#uscalar => ok (some (1#u8, 32#usize))
+    | 14#8#uscalar => ok (some (3#u8, 32#usize))
+    | 25#8#uscalar => do
+      let i ← AspisS1NativeCompact.r1_wire.CLAIMS
+      let i1 ← i + AspisS1NativeCompact.r1_wire.LANES
+      let i2 ← i1 * 32#usize
+      ok (some (4#u8, i2))
+    | 26#8#uscalar => do
+      let i ← AspisS1NativeCompact.r1_wire.LANES * 32#usize
+      ok (some (5#u8, i))
+    | x =>
+      if 3#u8 ≤ row then
+        if row ≤ 13#u8 then ok (some (0#u8, 0#usize))
+        else
+          if 15#u8 ≤ row then
+            if row ≤ 24#u8 then do
+              let i ← 28#usize * 32#usize
+              ok (some (2#u8, i))
+            else ok none
+          else ok none
+      else
+        if 15#u8 ≤ row then
+          if row ≤ 24#u8 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none) =
+    match row with
+    | 0#8#uscalar => ok (some (0#u8, 0#usize))
+    | 1#8#uscalar => ok (some (0#u8, 0#usize))
+    | 2#8#uscalar => ok (some (1#u8, 32#usize))
+    | 14#8#uscalar => ok (some (3#u8, 32#usize))
+    | 25#8#uscalar => do
+      let i ← AspisR1RowShape.r1_wire.CLAIMS
+      let i1 ← i + AspisR1RowShape.r1_wire.LANES
+      let i2 ← i1 * 32#usize
+      ok (some (4#u8, i2))
+    | 26#8#uscalar => do
+      let i ← AspisR1RowShape.r1_wire.LANES * 32#usize
+      ok (some (5#u8, i))
+    | x =>
+      if 3#u8 ≤ row then
+        if row ≤ 13#u8 then ok (some (0#u8, 0#usize))
+        else
+          if 15#u8 ≤ row then
+            if row ≤ 24#u8 then do
+              let i ← 28#usize * 32#usize
+              ok (some (2#u8, i))
+            else ok none
+          else ok none
+      else
+        if 15#u8 ≤ row then
+          if row ≤ 24#u8 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none
+PSem_Shapes.lean:20:68: error: unsolved goals
+case «0».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 0
+bound : 0 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «1».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 1
+bound : 1 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «2».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 2
+bound : 2 < 27
+left✝ : 1#u8 = tag
+right✝ : 32#usize = size
+⊢ ↑tag = 1 ∧ ↑size = 32
+
+case «3».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 3
+bound : 3 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «4».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 4
+bound : 4 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «5».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 5
+bound : 5 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «6».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 6
+bound : 6 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «7».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 7
+bound : 7 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «8».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 8
+bound : 8 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «9».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 9
+bound : 9 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «10».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 10
+bound : 10 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «11».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 11
+bound : 11 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «12».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 12
+bound : 12 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «13».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 13
+bound : 13 < 27
+left✝ : 0#u8 = tag
+right✝ : 0#usize = size
+⊢ ↑tag = 0 ∧ ↑size = 0
+
+case «14».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 14
+bound : 14 < 27
+left✝ : 3#u8 = tag
+right✝ : 32#usize = size
+⊢ ↑tag = 3 ∧ ↑size = 32
+
+case «15».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 15
+bound : 15 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «16».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 16
+bound : 16 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «17».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 17
+bound : 17 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «18».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 18
+bound : 18 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «19».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 19
+bound : 19 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «20».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 20
+bound : 20 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «21».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 21
+bound : 21 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «22».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 22
+bound : 22 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «23».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 23
+bound : 23 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «24».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 24
+bound : 24 < 27
+left✝ : 2#u8 = tag
+right✝ : 896#usize = size
+⊢ ↑tag = 2 ∧ ↑size = 896
+
+case «25».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 25
+bound : 25 < 27
+left✝ : 4#u8 = tag
+right✝ : 3712#usize = size
+⊢ ↑tag = 4 ∧ ↑size = 3712
+
+case «26».intro
+row tag : U8
+size : Usize
+h : ok (ExtractedRowShape.table row) = ok (some (tag, size))
+hv : ↑row = 26
+bound : 26 < 27
+left✝ : 5#u8 = tag
+right✝ : 928#usize = size
+⊢ ↑tag = 5 ∧ ↑size = 928
+PSem_Shapes.lean:25:80: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp [OraclePortCompactDraft.rowShape,̵h̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PSem_Shapes.source_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Shapes.table_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Shapes.valid_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Shapes.compact_flag' depends on axioms: [propext, Classical.choice, Quot.sound]
