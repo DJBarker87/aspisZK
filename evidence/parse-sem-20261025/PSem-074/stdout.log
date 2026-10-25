@@ -1,0 +1,55 @@
+PSem_Strict.lean:57:38: error: Type mismatch: After simplification, term
+  tailValid
+ has type
+  PSem_Rows.ValidRows fuel (row + 1)
+    (List.drop
+      (5 +
+        (if row = 2 then (1, 32)
+            else
+              if row = 14 then (3, 32)
+              else
+                if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0)).2 /
+          2)
+      b)
+but is expected to have type
+  PSem_Rows.ValidRows fuel (row + 1)
+    (List.drop
+      (5 +
+        (Decidable.rec
+              (fun h =>
+                if row = 14 then (3, 32)
+                else
+                  if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                  else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+              (fun h => (1, 32)) (instDecidableEqNat row 2)).2 /
+          2)
+      b)
+PSem_Strict.lean:57:38: error: Type mismatch: After simplification, term
+  tailValid
+ has type
+  PSem_Rows.ValidRows fuel (row + 1)
+    (List.drop
+      (5 +
+        (if row = 2 then (1, 32)
+          else
+            if row = 14 then (3, 32)
+            else
+              if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+              else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0)).2)
+      b)
+but is expected to have type
+  PSem_Rows.ValidRows fuel (row + 1)
+    (List.drop
+      (5 +
+        (Decidable.rec
+            (fun h =>
+              if row = 14 then (3, 32)
+              else
+                if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+            (fun h => (1, 32)) (instDecidableEqNat row 2)).2)
+      b)
+'AspisR1.PSem_Strict.head_checks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PSem_Strict.valid_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PSem_Strict.semantic_rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
