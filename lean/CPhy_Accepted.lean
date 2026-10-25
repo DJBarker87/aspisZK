@@ -66,6 +66,14 @@ theorem accepted_pair_unified {W A M Cv F CoreError : Type} {N : Nat}
           (Tx1Q_Carriers.prepared run.p)
           (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
           f.proof f.pub () = ok saved ∧
+        WAdm_Domain.Admitted (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) f.proof f.pub ∧
+        WAdm_Carrier.WideInputs (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) ∧
+        WAdm_SourceWriter.writer (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd))
+          (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
+          f.proof f.pub () = ok saved ∧
         (WAdm_NativeInstall.install (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)).op16
           (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)
           run.p {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}
@@ -195,8 +203,14 @@ theorem accepted_pair_unified {W A M Cv F CoreError : Type} {N : Nat}
       extraction sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2
       accepted1 accepted2 p root length
   obtain ⟨run,r,sp,n,w,can,writer,bound⟩ := tx1
+  have proofLength : f.proof.val.length = 57607 := by
+    simpa only [MultiproofConeCanonical.bytesOf,List.length_map] using cuts.proofLength
+  have publicLength := (WAdm_Public.reached _ _ B claimsStd e1 _ saved f s cuts).2
+  have domain := WAdm_Domain.on_run _ _ _ _ _ _ _ _ _ _ _ run prepareOwner primitiveOwner proofLength publicLength
+  obtain ⟨fields,size,canonical⟩ := WAdm_Inventory.on_run _ _ _ _ _ _ _ _ _ _ _ run prepareOwner primitiveOwner
+  have content := (WAdm_SourceWriter.writer_eq _ _ _ _ _ _ fields size canonical n).trans writer
   have native := WAdm_NativeInstall.on_run _ _ _ _ _ _ _ _ _ _ _ run prepareOwner primitiveOwner
-  exact ⟨f,s,outer,pre,middle,fs,ss,cuts,scan,⟨run,r,sp,n,w,can,writer,native,bound⟩,
+  exact ⟨f,s,outer,pre,middle,fs,ss,cuts,scan,⟨run,r,sp,n,w,can,writer,domain,WAdm_Carrier.wide _ _ _ _ domain,content,native,bound⟩,
     batches,tx2,first,expanded,owned,layout,unchanged,before1,before2,claims,caller⟩
 
 #print axioms accepted_pair_unified

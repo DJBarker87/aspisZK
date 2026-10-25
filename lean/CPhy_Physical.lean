@@ -74,6 +74,14 @@ theorem accepted_pair_unified {W A M Cv F CoreError : Type} {N : Nat}
           (Tx1Q_Carriers.prepared run.p)
           (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
           f.proof f.pub () = ok saved ∧
+        WAdm_Domain.Admitted (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) f.proof f.pub ∧
+        WAdm_Carrier.WideInputs (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) ∧
+        WAdm_SourceWriter.writer (Tx1Q_Install.digest (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd))
+          (Tx1Q_Carriers.prepared run.p)
+          (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩})
+          f.proof f.pub () = ok saved ∧
         (WAdm_NativeInstall.install (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)).op16
           (Tx1Q_SameCut.callerDigest (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps) (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)
           run.p {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}
@@ -201,7 +209,7 @@ theorem accepted_pair_unified {W A M Cv F CoreError : Type} {N : Nat}
       prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot
       state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 p root length
   have oracle := S2W_DigestExtraction.native_oracle _ native1 native2 hashv extraction sha256 H p1 syscall
-  obtain ⟨run,r,sp,n,w,can,write,native,bound⟩ := tx1
+  obtain ⟨run,r,sp,n,w,can,write,domain,wide,content,native,bound⟩ := tx1
   have written := CPhy_Header.writer _ () H oracle _ _ f.proof f.pub saved write
   have writer : CheckpointWriterConeJoin (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control stageBase reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd) CPhy_Header.decode H f.semantic f.pub f.proof f.split := by
     constructor
@@ -224,7 +232,7 @@ theorem accepted_pair_unified {W A M Cv F CoreError : Type} {N : Nat}
   have multiproof := CPhy_Ranges.multiproof f.proof s.proof length0 length1
   have scanned := CPhy_Ranges.scan f.proof length0 scan.2.1
   refine ⟨f,s,outer,pre,middle,fs,ss,cuts,writer,reader,multiproof,scanned.1,scanned.2,
-    scan,⟨run,r,sp,n,w,can,write,native,bound⟩,batches,tx2,first,expanded,owned,
+    scan,⟨run,r,sp,n,w,can,write,domain,wide,content,native,bound⟩,batches,tx2,first,expanded,owned,
     layout,unchanged,before1,before2,claims,?_⟩
   dsimp only
   intro runtime p2prime entry
