@@ -35,7 +35,7 @@ V='(NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChi
 codec=codec.replace('decode f.pub', 'AspisS6CurrentCodecInstallation.decode f.pub')
 codec=codec.replace('toPoolV1PairForestTerminalStatementV1 f.statement','AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatementV1 f.statement')
 codec=codec.replace('(install ops vops)',I).replace('vops',V)
-codec=codec.replace('(toDigest ', '(AspisS6CurrentVerifierCarrier.toDigest ').replace('(fromError error)', '(AspisS6CurrentVerifierCarrier.fromError error)').replace('ops.op44', 'adapterOps.op44')
+codec=codec.replace('(toDigest ', '(AspisS6CurrentFirstInstallation.toDigest ').replace('(fromError error)', '(AspisS6CurrentVerifierCarrier.fromError error)').replace('ops.op44', 'adapterOps.op44')
 # f is the selected cut in the final continuation; rawCut is explicit provenance.
 con=''' :
     post = writeBracket e.heap 2 0 0 (source (nativeBytes out)) ∧

@@ -1,0 +1,24 @@
+"""Focused regular public sysroot API/source pins, no CLI or object loading."""
+import pathlib,hashlib,json,stat
+base=pathlib.Path('/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/src/lean')
+checks={
+'Lean/Replay.lean':['Declaration.inductDecl','checkPostponedConstructors','checkPostponedRecursors','env.addDeclCore'],
+'Lean/Declaration.lean':['mutualDefnDecl','structure OpaqueVal','structure RecursorVal','def value?','def all'],
+'Lean/Environment.lean':['def addDeclCore','def readModuleDataParts','def readModuleData','unsafe def Environment.freeRegions'],
+'Lean/Util/FoldConsts.lean':['def getUsedConstantsAsSet','allowOpaque := true'],
+'Lean/CoreM.lean':['def getMaxHeartbeats'],
+'Lean/Expr.lean':['def equal','eqv'],
+}
+rows=[]
+for rel,needles in checks.items():
+ p=base/rel
+ for a in reversed([p,*p.parents]): assert not stat.S_ISLNK(a.lstat().st_mode), str(a)
+ assert stat.S_ISREG(p.lstat().st_mode)
+ b=p.read_bytes();s=b.decode();hits={}
+ for needle in needles:
+  hit=[i+1 for i,line in enumerate(s.splitlines()) if needle in line]
+  assert hit,(p,needle);hits[needle]=hit
+ rows.append(dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest(),hits=hits))
+pathlib.Path('evidence/port30join-20261025/api-pins.json').write_text(json.dumps(dict(
+ status='source API presence only; not typechecking or runtime-object identity',lean='4.32.0',files=rows),indent=2)+'\n')
+print('public regular sysroot API presence checks:',len(rows))

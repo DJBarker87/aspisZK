@@ -69,7 +69,7 @@ theorem accepted_original_sdk_s2_s1 {W A E M Cv : Type} {N : Nat}
         f.split = AspisR1CurrentCaller.compact.SPLIT ∧
         AspisR1CurrentCaller.FirstComposition.firstCurrent
           AdapterRw.solana_program_error.ProgramError.InvalidAccountData (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B)
-          (AspisS6CurrentVerifierCarrier.toDigest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (AspisS6CurrentFirstInstallation.install adapterOps
+          (AspisS6CurrentFirstInstallation.toDigest (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (AspisS6CurrentFirstInstallation.install adapterOps
         (NativeBuffers.install (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B))))
           (fun error => adapterOps.op44 (AspisS6CurrentVerifierCarrier.fromError error)) f.pub f.proof f.split = ok (.Ok out)) ∧
       (f.pub = e.buffers (e.handles 1).1 ∧ f.pub.val.length = 1880 ∧

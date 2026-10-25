@@ -12,6 +12,7 @@ groups=[(A,P+'lean-candidates/s126-caller-boundary-20261021/',[
 'S2W_D189Consolidation','S2W_D189Wrappers','S2W_D189Entry','S2W_TrustedStd',
 'S2W_ExtractionBoundary','S2W_DigestExtraction','S2W_NativeConsolidation',
 'S2TrustedSdkBorrow','S2W_ExpandedChildren','S2W_ScheduledConsolidation',
+'S2W_TraceSplice','OraclePortCompactDraft','S2W_FirstOccurrence','S2W_OuterOccurrences','ImportUnionNamedDiscriminant',
 'S2W_InputSchedule','S2W_AuthenticatedInputs','S2W_ChildJoins',
 'S8OwnedP6/Types','S8OwnedP6/Funs'])]
 rows=[]
