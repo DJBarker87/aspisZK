@@ -25,3 +25,8 @@ D189Consolidation.accepted_run is absent from the actual Name map; the exact
 three-root union is incomplete. No historical Bool raw application was observed.
 The two CURRENT roots still yielded data observations. Even107 S8 observations
 including all35 old printed gaps are NOT a resolved body-closure result.
+
+The noncompiler next-input draft failed before writing its result: local
+variable a (audit path) was shadowed by a constructor-encoded Name string in
+an endpoint loop. FileNotFoundError at pin(a). Failed draft is retained;
+renamed auditpath in the corrected processor. No Lean/host calls or charges.
