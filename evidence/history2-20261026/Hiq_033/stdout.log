@@ -1,0 +1,24 @@
+Hiq_RuntimeNonvacuity.lean:12:115: error: unsolved goals
+ops : AdapterRw.Ops
+owner : (original 1).owner = key 1#u8
+step :
+  apply ops (key 0#u8) original (Action.foreign (key 1#u8) 1 changed) =
+    (put original 1 changed, S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data))
+⊢ ((if key 1#u8 ≠ key 0#u8 ∧ (original 1).owner = key 1#u8 then
+          (put original 1 changed, S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data))
+        else (original, S2X.AccountEvent.rollback)).1,
+      [(if key 1#u8 ≠ key 0#u8 ∧ (original 1).owner = key 1#u8 then
+            (put original 1 changed, S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data))
+          else (original, S2X.AccountEvent.rollback)).2,
+        S2X.AccountEvent.rollback]) =
+    (put original 1 changed,
+      [S2X.AccountEvent.committedWrite 1 (MultiproofConeCanonical.bytesOf ↑changed.data), S2X.AccountEvent.rollback])
+Hiq_RuntimeNonvacuity.lean:17:44: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [actions, ̲Hiq_RuntimeHistory.run,s̵t̵e̵p̵,̵ ̲Hiq_RuntimeAction.apply]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Hiq_RuntimeNonvacuity.run_eval' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.Hiq_RuntimeNonvacuity.nonempty' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
