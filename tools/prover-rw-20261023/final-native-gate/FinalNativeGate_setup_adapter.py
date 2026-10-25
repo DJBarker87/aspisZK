@@ -55,6 +55,32 @@ def visibility(requested):
         allowed=True,reserve_check=True,
         compatibility_flags='visibility/inventory completed only; no legacy reserve/accounting decision')
 
+def operational_admission(decision, failures):
+    """Historical reservation admission plus explicit OS/control reserve.
+
+    Full hierarchy/membership/control validation still comes from the reviewed
+    evaluator. Its stronger adjusted-memory estimate remains diagnostic. This
+    is ordinary bounded build admission, not a worst-case physical-memory proof.
+    """
+    decision['conservative_adjusted_policy_allowed'] = decision['allowed']
+    decision['operational_policy'] = 'frontier cap<55GiB; available>full projected caps+7GiB; available>request+2GiB; complete validated dual scans/visibility'
+    if failures or decision.get('error') is not None:
+        decision['allowed'] = False
+        return decision
+    required_keys = ('cap_ok','available_ok','legacy_nonreserve_gate_ok')
+    if any(decision.get(k) is not True for k in required_keys):
+        decision['allowed'] = False
+        return decision
+    try:
+        minimum = c.uint(decision['min_mem_available_bytes'])
+        projected = c.uint(decision['projected_reserved_bytes'])
+        requested = c.uint(decision['requested_bytes'])
+        decision['operational_margin_bytes'] = minimum-c.add((projected,7*c.GIB))
+        decision['allowed'] = projected<c.LIMIT and minimum>c.add((requested,2*c.GIB)) and minimum>c.add((projected,7*c.GIB))
+    except (KeyError,ValueError,TypeError,OverflowError):
+        decision['allowed'] = False
+    return decision
+
 def read_only_admission(*,phase):
     if phase not in ('prospective','inside-scope'):raise ValueError('unknown phase')
     requested=c.GIB if phase=='prospective' else 0
@@ -72,5 +98,6 @@ def read_only_admission(*,phase):
         expected=EXPECTED if phase=='inside-scope' else None,
         expected_unit=UNIT+'.scope' if phase=='inside-scope' else None)
     if failures:decision.update(allowed=False,collection_failures=failures)
+    decision=operational_admission(decision,failures)
     return dict(api_version='ResourceRssGOv320261025-v1',collector_pid=os.getpid(),decision=decision,
                 snapshots=snapshots,original_legacy=old,print_axioms='N/A; formal budget ZERO')

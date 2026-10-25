@@ -1,0 +1,25 @@
+{
+  "base": "c4a4816d937f5632e47358e54bcdde99db6fa545",
+  "caller_functions_identical": true,
+  "lead_policy_rationale": {
+    "immutable_git": "63a206f509:evidence/port36transport-20261025/linux367/operational-policy-v5/before-after-policy.json",
+    "sha256": "49790df2a29140566ea1761f079474d6428680857005e89e94159e94d11f2337",
+    "size": 1573
+  },
+  "old_release_bytes_untouched": true,
+  "operational": {
+    "function": "def operational_admission(decision, failures):\n    \"\"\"Historical reservation admission plus explicit OS/control reserve.\n\n    Full hierarchy/membership/control validation still comes from the reviewed\n    evaluator. Its stronger adjusted-memory estimate remains diagnostic. This\n    is ordinary bounded build admission, not a worst-case physical-memory proof.\n    \"\"\"\n    decision['conservative_adjusted_policy_allowed'] = decision['allowed']\n    decision['operational_policy'] = 'frontier cap<55GiB; available>full projected caps+7GiB; available>request+2GiB; complete validated dual scans/visibility'\n    if failures or decision.get('error') is not None:\n        decision['allowed'] = False\n        return decision\n    required_keys = ('cap_ok','available_ok','legacy_nonreserve_gate_ok')\n    if any(decision.get(k) is not True for k in required_keys):\n        decision['allowed'] = False\n        return decision\n    try:\n        minimum = c.uint(decision['min_mem_available_bytes'])\n        projected = c.uint(decision['projected_reserved_bytes'])\n        requested = c.uint(decision['requested_bytes'])\n        decision['operational_margin_bytes'] = minimum-c.add((projected,7*c.GIB))\n        decision['allowed'] = projected<c.LIMIT and minimum>c.add((requested,2*c.GIB)) and minimum>c.add((projected,7*c.GIB))\n    except (KeyError,ValueError,TypeError,OverflowError):\n        decision['allowed'] = False\n    return decision",
+    "path": "tools/port36transport-20261025/linux367/Port36LINUX_rss_adapter.py",
+    "revision": "63a206f50953ae39b8464c488ea8c25317dd32c3",
+    "sha256": "7cc2122aa11f7017e81dfcbd257477b134722b391368044047b4df5f29ab5f2b",
+    "size": 6213
+  },
+  "pid": {
+    "path": "tools/port36transport-20261025/linux367/Port36LINUX_pid_candidate.py",
+    "revision": "fe3e1689179edb7d1e8a9aa847aa97a3b3202360",
+    "sha256": "98382278ab4de78f16f68a178e1d231790a3d52797e5129f3819b237d1b29d32",
+    "size": 18304
+  },
+  "rationale": "Explicit less conservative ordinary bounded operational admission; adjusted inequality diagnostic only. No algebraic equivalence or no-OOM theorem. Trusted Linux/CPython boundary unchanged.",
+  "reproduction_byte_identical": true
+}
