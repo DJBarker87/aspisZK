@@ -1,0 +1,201 @@
+Op3I_Nonvacuity.lean:38:94: error: unsolved goals
+proof : Slice U8
+length : (↑proof).length = 57607
+magic : List.take 8 ↑proof = ↑Op3I_Source.compact.MAGIC
+tag : (↑proof)[8]? = some 2#u8
+tail : List.take 7 (List.drop 9 ↑proof) = List.replicate 7 0#u8
+len : proof.len = 57607#usize
+bound8 : ↑8#usize ≤ proof.length
+bound16 : 9#usize ≤ 16#usize ∧ ↑16#usize ≤ proof.length
+n : ℕ
+hn :
+  Op3I_Std.anyList Op3I_Header.nonzero (List.replicate 7 0#u8) () =
+    ok ((List.replicate 7 0#u8).any fun x => x != 0#u8, n)
+⊢ (if ↑(↑proof)[8] = 2 then do
+      let x ←
+        Op3I_Std.anyList Op3I_Source.verifier.candidate.parse_shape.closure.Insts.CoreOpsFunctionFnMutTupleSharedU8Bool
+            [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ()
+      let (b1, _) ←
+        let (b, n) := x
+          ok (b, { slice := ⟨[0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8], ⋯⟩, i := n })
+      if b1 = true then ok (core.result.Result.Err Op3I_Source.verifier.Error.Parse)
+        else ok (core.result.Result.Ok Op3I_Source.transport.Variant.S2)
+    else ok (core.result.Result.Err Op3I_Source.verifier.Error.Parse)) =
+    ok (core.result.Result.Ok Op3I_Source.transport.Variant.S2)
+Op3I_Nonvacuity.lean:42:6: warning: This simp argument is unused:
+  bound8
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:42:13: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ show (8#usize).val = 8 by scalar_tac,
+  ̲  ̲ ̲ ̲ ̲ ̲show (9#usize).val = 9 by scalar_tac, show (16#usize).val = 16 by scalar_tac, Nat.sub_zero,
+        show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide, L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:46:52: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:47:6: warning: This simp argument is unused:
+  Bool.not_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:47:38: warning: This simp argument is unused:
+  tag
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:49:33: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:49:36: warning: This simp argument is unused:
+  List.any_replicate
+
+Hint: Omit it from the simp argument list.
+  simp only [̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵v̵e̵r̵i̵f̵i̵e̵r̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵.̵p̵a̵r̵s̵e̵_̵s̵h̵a̵p̵e̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵p̵r̵o̵o̵f̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵o̵u̵n̵d̵8̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵S̵h̵a̵r̵e̵d̵.̵n̵e̵,̵O̵p̵3̵I̵_̵S̵t̵d̵.̵o̵p̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵O̵p̵3̵I̵_̵S̵t̵d̵.̵e̵q̵L̵i̵s̵t̵_̵u̵8̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵[̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲v̲e̲r̲i̲f̲i̲e̲r̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲.̲p̲a̲r̲s̲e̲_̲s̲h̲a̲p̲e̲,̲ ̲O̲p̲3̲I̲_̲H̲e̲a̲d̲e̲r̲.̲p̲r̲o̲o̲f̲_̲b̲y̲t̲e̲s̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲8̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲S̲h̲a̲r̲e̲d̲.̲n̲e̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲o̲p̲s̲,̲ ̲O̲p̲3̲I̲_̲S̲t̲d̲.̲e̲q̲L̲i̲s̲t̲_̲u̲8̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲
+        show (8#usize).val = 8 by scalar_tac, show (9#usize).val = 9 by scalar_tac,
+        show (16#usize).val = 16 by scalar_tac, Nat.sub_zero, show 1̵6̵-̵9̵1̲6̲ ̲-̲ ̲9̲ = 7 by decide,
+  ̲  ̲ ̲ ̲ ̲ ̲L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵,̵m̵a̵g̵i̵c̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵u̵s̵i̵z̵e̵,̵t̵a̵g̵,̵O̵p̵3̵I̵_̵S̵o̵u̵r̵c̵e̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵t̵a̵g̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵b̵o̵u̵n̵d̵1̵6̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵i̵t̵e̵r̵,̵t̵a̵i̵l̵,̵h̵n̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵]̵L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲u̲s̲i̲z̲e̲,̲ ̲t̲a̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲O̲p̲3̲I̲_̲S̲o̲u̲r̲c̲e̲.̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲t̲a̲g̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ ̲b̲o̲u̲n̲d̲1̲6̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲i̲t̲e̲r̲,̲ ̲t̲a̲i̲l̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:50:30: warning: This simp argument is unused:
+  tag
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, ̲length,t̵a̵g̵,̵ ̲hn, ̲Op3I_Header.nonzero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:50:34: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, ̲length, ̲tag,h̵n̵,̵ ̲Op3I_Header.nonzero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Op3I_Nonvacuity.lean:50:37: warning: This simp argument is unused:
+  Op3I_Header.nonzero
+
+Hint: Omit it from the simp argument list.
+  simp [̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵l̵e̵n̵g̵t̵h̵,̵t̵a̵g̵,̵h̵n̵,̵O̵p̵3̵I̵_̵H̵e̵a̵d̵e̵r̵.̵n̵o̵n̵z̵e̵r̵o̵]̵[̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲l̲e̲n̲g̲t̲h̲,̲ ̲t̲a̲g̲,̲ ̲h̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Op3I_Nonvacuity.extraction_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.Op3I_Nonvacuity.source_of_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
