@@ -1,0 +1,11 @@
+Attempt config: Tx1Q-005.json (first invocation, before any Tx1Q-005 receipt).
+Working directory: /home/dombarker/project-offloads/codex-cx-sound-int2-20261025.
+Command: systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py Tx1Q-005.json
+Unit: run-r0781d6b4c2384139899f0065c6d6fe28.scope
+Exit: 1. No Lean process spawned and no per-compile metrics or axioms exist.
+Error: FileNotFoundError: Tx1Q_PrefixInstall
+Cause: dependent submitted before predecessor had passed. This was an input
+ordering error, not launcher misbehavior. Predecessor source was repaired and
+compiled as Tx1Q-007 before invoking Cuts. Its new object changed dependencies.
+The later Tx1Q-005 receipt is an actual failed Cuts proof; its repaired source
+passed as Tx1Q-009. Both source versions/receipts remain in this directory.

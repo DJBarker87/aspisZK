@@ -1,0 +1,85 @@
+Tx1Q_Execution.lean:80:89: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'AspisR1.Tx1Q_Execution.actual_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+Tx1Q_Execution.lean:104:14: error(lean.unknownIdentifier): Unknown constant `accepted_generic`
+structure AspisR1.Tx1Q_Execution.Run {CoreError H : Type} (installed : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Slice U8) (split : Usize) (saved : alloc.vec.Vec U8) : Type
+number of parameters: 13
+fields:
+  AspisR1.Tx1Q_Execution.Run.p : C.P
+  AspisR1.Tx1Q_Execution.Run.zero : C.E
+  AspisR1.Tx1Q_Execution.Run.scratch : Std.Array C.E 29#usize
+  AspisR1.Tx1Q_Execution.Run.initial : C.A
+  AspisR1.Tx1Q_Execution.Run.root : Std.Array U8 32#usize
+  AspisR1.Tx1Q_Execution.Run.geometry : C.G
+  AspisR1.Tx1Q_Execution.Run.pending : C.B
+  AspisR1.Tx1Q_Execution.Run.out : C.A
+  AspisR1.Tx1Q_Execution.Run.after : C.B
+  AspisR1.Tx1Q_Execution.Run.flushed : Slice C.K
+  AspisR1.Tx1Q_Execution.Run.split_eq : split = 10#usize
+  AspisR1.Tx1Q_Execution.Run.prepare_call : AspisR1CurrentCaller.verifier.candidate.prepare installed D semantic proof
+        hash none (Array.repeat 29#usize self.zero) =
+      ok (core.result.Result.Ok self.p, self.scratch)
+  AspisR1.Tx1Q_Execution.Run.initial_call : Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 =
+      ok (core.result.Result.Ok (accumulator self.initial))
+  AspisR1.Tx1Q_Execution.Run.batch_call : installed.op6 D proof self.p self.root 0#usize hash =
+      ok (core.result.Result.Ok ())
+  AspisR1.Tx1Q_Execution.Run.geometry_call : Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geo)
+        self.p.queries 0#usize 10#usize =
+      ok (core.result.Result.Ok (geometry self.geometry))
+  AspisR1.Tx1Q_Execution.Run.pending_call : Port3_NativePendingInstall.source reserved
+        (accumulator self.initial).weights.deref =
+      ok (core.result.Result.Ok (pending self.pending))
+  AspisR1.Tx1Q_Execution.Run.query_call : Port3_NativeQueryBody.verifier.candidate.query_loop
+        (Tx1Q_QueryBridge.leaves query) proof (prepared self.p) (accumulator self.initial) (arr e self.scratch) none
+        (geometry self.geometry) (pending self.pending) 10#usize =
+      ok (core.result.Result.Ok (accumulator self.out, pending self.after))
+  AspisR1.Tx1Q_Execution.Run.flush_call : Port3_FlushInstall.flush (pending self.after)
+        (accumulator self.out).weights.deref =
+      ok (slice k self.flushed)
+  AspisR1.Tx1Q_Execution.Run.writer_call : Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (prepared self.p)
+        (accumulator
+          { weights := ⟨↑self.flushed, ⋯⟩, rhs := self.out.rhs, power := self.out.power, next := self.out.next })
+        proof pub hash =
+      ok saved
+constructor:
+  AspisR1.Tx1Q_Execution.Run.mk {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8} (p : C.P) (zero : C.E)
+    (scratch : Std.Array C.E 29#usize) (initial : C.A) (root : Std.Array U8 32#usize) (geometry : C.G) (pending : C.B)
+    (out : C.A) (after : C.B) (flushed : Slice C.K) (split_eq : split = 10#usize)
+    (prepare_call :
+      AspisR1CurrentCaller.verifier.candidate.prepare installed D semantic proof hash none
+          (Array.repeat 29#usize zero) =
+        ok (core.result.Result.Ok p, scratch))
+    (initial_call :
+      Port3_Initial.constructor reserved AspisR1Stage2.transport.Variant.S2 =
+        ok (core.result.Result.Ok (accumulator initial)))
+    (batch_call : installed.op6 D proof p root 0#usize hash = ok (core.result.Result.Ok ()))
+    (geometry_call :
+      Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geo) p.queries 0#usize 10#usize =
+        ok (core.result.Result.Ok (Tx1Q_Carriers.geometry geometry)))
+    (pending_call :
+      Port3_NativePendingInstall.source reserved (accumulator initial).weights.deref =
+        ok (core.result.Result.Ok (Tx1Q_Carriers.pending pending)))
+    (query_call :
+      Port3_NativeQueryBody.verifier.candidate.query_loop (Tx1Q_QueryBridge.leaves query) proof (prepared p)
+          (accumulator initial) (arr e scratch) none (Tx1Q_Carriers.geometry geometry) (Tx1Q_Carriers.pending pending)
+          10#usize =
+        ok (core.result.Result.Ok (accumulator out, Tx1Q_Carriers.pending after)))
+    (flush_call :
+      Port3_FlushInstall.flush (Tx1Q_Carriers.pending after) (accumulator out).weights.deref = ok (slice k flushed))
+    (writer_call :
+      Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (prepared p)
+          (accumulator { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next }) proof pub
+          hash =
+        ok saved) :
+    Run installed reserved query geo D hash semantic pub proof split saved
