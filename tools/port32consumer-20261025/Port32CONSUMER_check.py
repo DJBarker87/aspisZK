@@ -24,7 +24,7 @@ if __name__=='__main__':
  for banned in ['sorry','admit','native_decide','implemented_by','#eval!','doCheck := false','maxHeartbeats','maxRecDepth','region.free','kernel insertion disabled','calls disabled']:
   # getMaxHeartbeats is the required default API, not an option change.
   assert banned not in src.replace('No region.free','No release of regions'),banned
- assert src.count('.env.addDeclCore')==1
+ assert src.count('env.addDeclCore')==2
  assert '#print axioms accepted_original_sdk_s2_s1' in src
  assert 'namespace Port32CONSUMER' in src and 'theorem accepted_original_sdk_s2_s1' in src
  assert 'setEnv checked' in src and 'strict checked-CI/source readback' in src and 'PORT32_COMPLETE' in src

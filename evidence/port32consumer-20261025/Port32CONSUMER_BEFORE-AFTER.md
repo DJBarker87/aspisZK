@@ -66,3 +66,12 @@ helper substituted, then checked under the factored dependency context. Its
 ordinary first_eq_original proof is valid reused scoped evidence. Rechecking the
 old accepted_run proof in that chosen current context would be a NEW RE-PIN,
 not literal original closure. All13 computational conflicts remain explicit.
+
+Material357 has two explicit elaboration-only expansions in the actual
+Port32CONSUMER_ComposedSource.lean.txt: `{rawCut with semantic := selectedPublic}`
+becomes `FirstCut.mk rawCut.proofAccount rawCut.publicAccount rawCut.raw rawCut.pub
+rawCut.statement selectedPublic rawCut.proof rawCut.split`; the power operation
+becomes explicit HPow.hPow at the unique closed original S1 type's power instance,
+ordinarily kernel-checked as Port32CONSUMER.widePow. No binder, premise or output
+changes. Definitional compatibility with the actual SDK/S1 theorem is checked
+by the normal source theorem elaboration; it is not presumed as a new premise.

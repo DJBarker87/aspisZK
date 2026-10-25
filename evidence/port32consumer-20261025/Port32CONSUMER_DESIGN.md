@@ -66,3 +66,15 @@ Port32CONSUMER_ComposedSource.lean.txt is the complete actual source elaborated
 inside the command, and is embedded verbatim in the Consumer source strings.
 The original make.py describes356; material357.py is its explicit replacement.
 No theorem premise, quantifier, carrier or conclusion is weakened.
+
+The `decode gamma ^ i.val` notation also requires project class/instance
+metadata absent from raw transports. Material357 extracts the unique closed
+HPow instance expression already present in the actual pinned S1 theorem TYPE,
+checks that it has no loose binders/free variables/metavariables, and submits
+a new named definition with type HPow AspisWideTower.WideExact Nat
+AspisWideTower.WideExact through ordinary addDeclCore. The actual theorem
+uses explicit HPow.hPow with that checked value; no instance/class extension
+is trusted. This is a syntax/implicit-argument expansion, with full value/type
+#print and axioms audit in the same CLI, not a new hypothesis or new axiom.
+Strict comparator visibility alone is made public for exact instance uniqueness.
+An ambiguity or kernel mismatch rejects rather than guessing a replacement.

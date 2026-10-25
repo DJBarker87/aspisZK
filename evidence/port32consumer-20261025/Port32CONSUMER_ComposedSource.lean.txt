@@ -100,7 +100,7 @@ theorem accepted_original_sdk_s2_s1 {W A E M Cv : Type} {N : Nat}
           (mapArray toClaimE scratch) ∧
         (∀ i : Usize, i.val<29 → ∃ value : AspisR1CurrentPreparedClaim.Concrete.E,
           Array.index_usize (mapArray toClaimE scratch) i=ok value ∧
-          Canonical value ∧ decode value=decode (toClaimE prepared.gamma)^i.val) ∧
+          Canonical value ∧ decode value=(@HPow.hPow AspisWideTower.WideExact Nat AspisWideTower.WideExact Port32CONSUMER.widePow (decode (toClaimE prepared.gamma)) i.val)) ∧
         ExactSerializedRankTrace (retainedDigest (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B)) p f.pub root length
           (retainedSem sem) (AspisR1SelectedWideViewV1.preparedView v) () prepared scratch ∧
         Row31QueryProgramMeaning (retainedDigest (NativeBuffers.callerDigest adapterOps (withValues ops) nativeValues AspisS1ExtractedRoundChildren.children B)) (AspisR1SelectedWideViewV1.preparedView v) prepared ∧
