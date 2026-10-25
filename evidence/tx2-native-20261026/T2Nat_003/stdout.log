@@ -1,0 +1,233 @@
+T2Nat_FinishCode.lean:131:71: error: unsolved goals
+W : Type
+ops : Port3_NativeFinishBody.Ops W
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+obs : Option (verifier.Phase → Result Unit)
+⊢ (do
+      let a_1 ← p.alpha.index_usize 0#usize
+      let a_2 ← ops.op5 v.round0 a_1 p.claim 0#usize
+      let a_3 ← core.result.Result.Insts.CoreOpsTry.branch a_2
+      erase
+          (match a_3 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let i ← call (ops.op6 p.variant)
+            if i = 2#usize then do
+                let we1 ← call (p.alpha.index_usize 1#usize)
+                let r1 ← call (ops.op5 v.round1 we1 val 1#usize)
+                let cf1 ← call (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let r2 ← call (ops.op3 p.variant p.semantic_alpha p.z)
+                    let cf2 ← call (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let s ←
+                          call
+                              (core.array.Array.index
+                                (core.ops.index.IndexSlice
+                                  (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                                p.alpha { «end» := i })
+                        let r3 ← call (ops.op2 val2 s v.final_message p.kappa)
+                        let cf3 ← call (core.result.Result.Insts.CoreOpsTry.branch r3)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            call (ops.op0 16#u16 0#usize val3)
+                            call (ops.op0 16#u16 1#usize val1)
+                            let b ← call (ops.ne val3 val1)
+                            if b = true then pure (core.result.Result.Err verifier.Error.Relation)
+                              else do
+                                call (ops.op1 obs verifier.Phase.Relation)
+                                let r4 ← call (ops.op4 v.final_message a.weights.deref)
+                                let cf4 ← call (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                match cf4 with
+                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                    call (ops.op0 17#u16 0#usize val4)
+                                    call (ops.op0 17#u16 1#usize a.rhs)
+                                    if (a.next != 22#usize) = true then
+                                        pure (core.result.Result.Err verifier.Error.Query)
+                                      else do
+                                        let b1 ← call (ops.ne val4 a.rhs)
+                                        if b1 = true then pure (core.result.Result.Err verifier.Error.Query)
+                                          else do
+                                            call (ops.op1 obs verifier.Phase.Final)
+                                            pure (core.result.Result.Ok ())
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    call
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            call
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        call
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    call
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              else do
+                let r1 ← call (ops.op3 p.variant p.semantic_alpha p.z)
+                let cf1 ← call (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let s ←
+                      call
+                          (core.array.Array.index
+                            (core.ops.index.IndexSlice
+                              (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                            p.alpha { «end» := i })
+                    let r2 ← call (ops.op2 val1 s v.final_message p.kappa)
+                    let cf2 ← call (core.result.Result.Insts.CoreOpsTry.branch r2)
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        call (ops.op0 16#u16 0#usize val2)
+                        call (ops.op0 16#u16 1#usize val)
+                        let b ← call (ops.ne val2 val)
+                        if b = true then pure (core.result.Result.Err verifier.Error.Relation)
+                          else do
+                            call (ops.op1 obs verifier.Phase.Relation)
+                            let r4 ← call (ops.op4 v.final_message a.weights.deref)
+                            let cf4 ← call (core.result.Result.Insts.CoreOpsTry.branch r4)
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                call (ops.op0 17#u16 0#usize val4)
+                                call (ops.op0 17#u16 1#usize a.rhs)
+                                if (a.next != 22#usize) = true then pure (core.result.Result.Err verifier.Error.Query)
+                                  else do
+                                    let b1 ← call (ops.ne val4 a.rhs)
+                                    if b1 = true then pure (core.result.Result.Err verifier.Error.Query)
+                                      else do
+                                        call (ops.op1 obs verifier.Phase.Final)
+                                        pure (core.result.Result.Ok ())
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                call
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        call
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    call
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            call
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let we ← p.alpha.index_usize 0#usize
+    let r ← ops.op5 v.round0 we p.claim 0#usize
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i ← ops.op6 p.variant
+        if i = 2#usize then do
+            let we1 ← p.alpha.index_usize 1#usize
+            let r1 ← ops.op5 v.round1 we1 val 1#usize
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r2 ← ops.op3 p.variant p.semantic_alpha p.z
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let s ←
+                      core.array.Array.index
+                          (core.ops.index.IndexSlice
+                            (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                          p.alpha { «end» := i }
+                    let r3 ← ops.op2 val2 s v.final_message p.kappa
+                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                        ops.op0 16#u16 0#usize val3
+                        ops.op0 16#u16 1#usize val1
+                        let b ← ops.ne val3 val1
+                        if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+                          else do
+                            ops.op1 obs verifier.Phase.Relation
+                            let r4 ← ops.op4 v.final_message a.weights.deref
+                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                            match cf4 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                ops.op0 17#u16 0#usize val4
+                                ops.op0 17#u16 1#usize a.rhs
+                                if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                                  else do
+                                    let b1 ← ops.ne val4 a.rhs
+                                    if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                                      else do
+                                        ops.op1 obs verifier.Phase.Final
+                                        ok (core.result.Result.Ok ())
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+          else do
+            let r1 ← ops.op3 p.variant p.semantic_alpha p.z
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let s ←
+                  core.array.Array.index
+                      (core.ops.index.IndexSlice
+                        (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.wide_exact.WideExact))
+                      p.alpha { «end» := i }
+                let r2 ← ops.op2 val1 s v.final_message p.kappa
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    ops.op0 16#u16 0#usize val2
+                    ops.op0 16#u16 1#usize val
+                    let b ← ops.ne val2 val
+                    if b = true then ok (core.result.Result.Err verifier.Error.Relation)
+                      else do
+                        ops.op1 obs verifier.Phase.Relation
+                        let r4 ← ops.op4 v.final_message a.weights.deref
+                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                            ops.op0 17#u16 0#usize val4
+                            ops.op0 17#u16 1#usize a.rhs
+                            if (a.next != 22#usize) = true then ok (core.result.Result.Err verifier.Error.Query)
+                              else do
+                                let b1 ← ops.ne val4 a.rhs
+                                if b1 = true then ok (core.result.Result.Err verifier.Error.Query)
+                                  else do
+                                    ops.op1 obs verifier.Phase.Final
+                                    ok (core.result.Result.Ok ())
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+          (core.convert.FromSame verifier.Error) residual
+T2Nat_FinishCode.lean:133:26: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [parent, ̲Port3_NativeFinishBody.verifier.finish_relation,
+  ̵  ̵ ̵ ̵erase_bind, ̲erase_call,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.T2Nat_FinishCode.parent_erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_FinishCode.parent_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

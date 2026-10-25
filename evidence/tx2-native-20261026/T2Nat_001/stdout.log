@@ -1,0 +1,44 @@
+T2Nat_Silent.lean:37:16: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ok v✝
+    erase (bind (c b) k)
+is not definitionally equal to the right-hand side
+  do
+    let a ←
+      do
+        let b ← ok v✝
+        erase (c b)
+    erase (k a)
+
+case step.ok
+A B : Type
+k : A → Silent B
+B✝ : Type
+c : B✝ → Silent A
+ih :
+  ∀ (a : B✝),
+    erase (c a >>= k) = do
+      let a ← erase (c a)
+      erase (k a)
+v✝ : B✝
+⊢ (do
+      let b ← ok v✝
+      erase (bind (c b) k)) =
+    do
+    let a ←
+      do
+        let b ← ok v✝
+        erase (c b)
+    erase (k a)
+T2Nat_Silent.lean:36:15: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵h̵,̵erase]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.T2Nat_Silent.erase_bind' depends on axioms: [sorryAx]
+'AspisR1.T2Nat_Silent.erase_call' does not depend on any axioms
+'AspisR1.T2Nat_Silent.erase_pure' does not depend on any axioms
+'AspisR1.T2Nat_Silent.code_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.T2Nat_Silent.ordered_log' depends on axioms: [propext, Classical.choice, Quot.sound]
