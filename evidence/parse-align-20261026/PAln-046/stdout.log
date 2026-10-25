@@ -1,0 +1,78 @@
+PAln_SemanticLayout.lean:27:4: error: Tactic `subst` failed: did not find equation for eliminating 'rs'
+
+case zero
+row : ℕ
+b : Bytes
+rs : List Bytes
+valid : PSem_Rows.ValidRows 0 row b
+empty : b = []
+expanded : (if True then some [] else none) = some rs
+⊢ Frames row rs
+PAln_SemanticLayout.lean:32:47: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ g ≤ 13
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 5
+where
+ e := ↑(List.length b)
+ f := ↑(if 14 ≤ row then
+    (Decidable.rec
+          (fun h =>
+            (fun x =>
+                if row = 14 then (3, 32)
+                else
+                  if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                  else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+              h)
+          (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2 /
+      2
+  else
+    (Decidable.rec
+        (fun h =>
+          (fun x =>
+              if row = 14 then (3, 32)
+              else
+                if 15 ≤ row ∧ row ≤ 24 then (2, 896)
+                else if row = 25 then (4, 3712) else if row = 26 then (5, 928) else (0, 0))
+            h)
+        (fun h => (fun x => (1, 32)) h) (instDecidableEqNat row 2)).2)
+ g := ↑row
+PAln_SemanticLayout.lean:33:64: error: Application type mismatch: The argument
+  expanded
+has type
+  (if List.length b < 5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2 then none
+    else do
+      let tail ←
+        PSem_Rows.expandRows fuel (row + 1)
+            (List.drop (5 + if 14 ≤ row then (rowShape row).2 / 2 else (rowShape row).2) b)
+      pure (PSem_Rows.expandedRow row b :: tail)) =
+    some rs
+but is expected to have type
+  Option.bind ?m.74 ?m.75 = some ?m.72
+in the application
+  Option.bind_eq_some_iff.mp expanded
+PAln_SemanticLayout.lean:26:42: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [PSem_Rows.expandRows, ̲empty,i̵f̵_̵p̵o̵s̵ r̵f̵l̵,̵Option.some.injEq] at expanded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_SemanticLayout.lean:26:53: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵S̵e̵m̵_̵R̵o̵w̵s̵.̵e̵x̵p̵a̵n̵d̵R̵o̵w̵s̵,̵e̵m̵p̵t̵y̵,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲P̲S̲e̲m̲_̲R̲o̲w̲s̲.̲e̲x̲p̲a̲n̲d̲R̲o̲w̲s̲,̲ ̲e̲m̲p̲t̲y̲,̲ ̲i̲f̲_̲p̲o̲s̲ ̲r̲f̲l̲]̲ at expanded
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PAln_SemanticLayout.lean:51:26: error: Application type mismatch: The argument
+  b
+has type
+  Bytes
+of sort `Type` but is expected to have type
+  tail[j]? = some b
+of sort `Prop` in the application
+  ih j b
+'AspisR1.PAln_SemanticLayout.layout' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PAln_SemanticLayout.at_index' depends on axioms: [propext, sorryAx, Quot.sound]

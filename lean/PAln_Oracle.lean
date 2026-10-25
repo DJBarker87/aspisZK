@@ -33,6 +33,25 @@ theorem installed_backend {CoreError : Type} (adapterOps : AdapterRw.Ops)
   rw [extraction.digestSource,S2W_DigestExtraction.digest_eq_hashv] at returned
   exact (syscall.returningValue input output returned).trans (p1.realization _)
 
+theorem digest_dictionary {CoreError : Type} (adapterOps : AdapterRw.Ops)
+    (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+    (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops CoreError)
+    (B : FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+    (extraction : S2W_DigestExtraction.AeneasExtraction
+      (ClaimsUnrolledSdk.sdkOps adapterOps (Tx1Q_SameCut.dictionary ops reserved query geo) B std)
+      native1 native2 hashv)
+    : ∀ (self : Unit) (parts : S2Z.Oracle.Parts),
+      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+        (Tx1Q_SameCut.callerDigest adapterOps ops reserved query geo B std)).digest self parts=hashv parts := by
+  intro self parts
+  cases self
+  change (ClaimsUnrolledSdk.sdkOps adapterOps
+    (Tx1Q_SameCut.dictionary ops reserved query geo) B std).op43 () parts=hashv parts
+  rw [extraction.digestSource,S2W_DigestExtraction.digest_eq_hashv]
+
+#print axioms digest_dictionary
 #print axioms installed_backend
 end AspisR1.PAln_Oracle
 end
