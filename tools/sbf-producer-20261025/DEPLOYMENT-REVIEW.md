@@ -6,6 +6,13 @@ destination paths, byte hashes and modes describe a proposed installation,
 not an observation that those paths exist or have those properties. Directory
 ancestry must be root:root and not group/other writable, opened nofollow.
 Regular package files require nlink=1, root:root, exact published modes/hash.
+Installation must create fresh inodes under the checked root-owned directory,
+copy reviewed published bytes through root-only exclusive descriptors, verify
+bytes, close writers and seal modes. Never rename/chown/adopt user staging
+files into the package: owner/mode/nlink alone cannot exclude a previously
+opened unprivileged writer. The same fresh-copy rule applies to runtime files.
+This installation procedure is a future review prerequisite, not executed or
+certified by the present path checks.
 The two installed Python entries unconditionally deny before any import.
 
 ## Fixed invocations and installation prerequisites
