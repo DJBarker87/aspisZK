@@ -1,0 +1,23 @@
+F3_Counts.lean:61:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d - e ≤ -1162
+  c ≥ 0
+  0 ≤ b ≤ 1161
+  a ≥ 0
+  a - d ≤ 0
+  a + b - c ≥ 0
+where
+ a := ↑(eval H P).1.length
+ b := ↑(eval H (F3_Model.verifier D (eval H P).2)).1.length
+ c := ↑(firstReads emptyTable ((eval H P).1 ++ (eval H (F3_Model.verifier D (eval H P).2)).1))
+ d := ↑Q
+ e := ↑(firstReads emptyTable
+    (have first := eval H P;
+      have second := eval H (F3_Model.verifier D first.2);
+      (first.1 ++ second.1, second.2)).1)
+'AspisR1.F3_Counts.after_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3_Counts.decision_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3_Counts.verifier_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3_Counts.original_distinct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
