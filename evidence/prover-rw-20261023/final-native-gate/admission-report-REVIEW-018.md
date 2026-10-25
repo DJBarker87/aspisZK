@@ -168,3 +168,9 @@ Next deliverable belongs to lead review: assess the new fixed source/payload/
 transport, semantic projection and explicit oversized-hash limitation; only a
 later separately authorized read-only query could reveal the actual reason.
 Both security targets NOT ESTABLISHED. STOP FOR LEAD REVIEW; NO ACTUAL QUERY.
+
+Packaging note: source-only git diff --check passed. The staged evidence
+whitespace check reported15 blank context lines in admission-report-source-diff-018.txt
+(the literal space prefix required by a unified diff). The complete diff is
+retained byte-for-byte; these are patch context, not trailing spaces in source.
+No source or fixture changed after the passing017/018 results.
