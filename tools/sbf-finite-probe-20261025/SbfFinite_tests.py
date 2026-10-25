@@ -421,7 +421,7 @@ class SourceInventoryTests(unittest.TestCase):
                     self.assertEqual(ast.unparse(t.body[0].test),"__name__ == '__main__'")
                     self.assertIsInstance(t.body[0].body[0],ast.Raise)
         self.assertNotIn('SbfFinite_package_pins.py',package_pins.FILES)
-        self.assertEqual(set(package_pins.FILES)|{'SbfFinite_package_pins.py'},{r['name'] for r in rows})
+        self.assertEqual(set(package_pins.FILES)|{'SbfFinite_package_pins.py','SbfFinite_entry.py','SbfFinite_user_entry.py'},{r['name'] for r in rows})
         self.assertEqual(launcher.LAUNCHER_PIN,digest((H/'SbfFinite_root_launcher.sh.txt').read_bytes()))
         self.assertLess(sum(r['pin']['size'] for r in rows),2**20)
     def test_all_catalog_chains_are_complete_and_exact_to_canonical_endpoint(self):
@@ -462,3 +462,67 @@ class InstallerInventoryTests(unittest.TestCase):
             fs.open=badopen
             with self.subTest(key=key),self.assertRaises(Denied):t.copy(s,'/a',dict(digest(b'abc'),mode=0o444))
             self.assertFalse(t.writers);t.close();s.close();fs.close(root)
+
+class DormantLoaderTests(unittest.TestCase):
+    def env(self):
+        import importlib.abc,importlib.util
+        fs=FS();fs.add('/sealed',stat.S_IFDIR|0o555);fs.add('/sealed/a.py',stat.S_IFREG|0o444,b'value=7\n')
+        for key in ('O_RDONLY','O_DIRECTORY','O_NOFOLLOW','O_CLOEXEC','O_NONBLOCK'):setattr(fs,key,getattr(os,key))
+        pins={'a.py':digest(b'value=7\n')}
+        env=dict(os=fs,stat=stat,hashlib=hashlib,importlib=importlib,SbfFinite_ROOT='/sealed',SbfFinite_PINS=pins)
+        selected('SbfFinite_entry.py',['SbfFinite_require','SbfFinite_identity','SbfFinite_read','SbfFinite_loader'],env)
+        return env,fs
+    def test_concrete_sealed_reader_hash_size_chain_writer_alias_and_drift(self):
+        for variant in ('ok','uid','gid','writable','hardlink','symlink','ancestry','hash','size','growth','entryrace','path'):
+            e,fs=self.env();pin=e['SbfFinite_PINS']['a.py'];n=fs.nodes['/sealed/a.py'];name='a.py'
+            if variant=='uid':n.st_uid=1000
+            if variant=='gid':n.st_gid=1000
+            if variant=='writable':n.st_mode=stat.S_IFREG|0o644
+            if variant=='hardlink':n.st_nlink=2
+            if variant=='symlink':n.st_mode=stat.S_IFLNK|0o777
+            if variant=='ancestry':fs.nodes['/sealed'].st_mode|=0o002
+            if variant=='hash':n.data=b'value=8\n'
+            if variant=='size':n.st_size+=1
+            if variant=='growth':n.data+=b'x'
+            if variant=='path':name='../a.py'
+            if variant=='entryrace':
+                def mutate(api,fd):
+                    if api.handles[fd]['path']=='/sealed/a.py':api.add('/sealed/a.py',stat.S_IFREG|0o444,b'value=7\n')
+                fs.onread=mutate
+            if variant=='ok':self.assertEqual(e['SbfFinite_read'](name,pin),b'value=7\n')
+            else:
+                with self.subTest(variant=variant),self.assertRaises((RuntimeError,OSError)):e['SbfFinite_read'](name,pin)
+            self.assertEqual(fs.handles,{})
+    def test_concrete_importer_unknown_prefix_and_tiny_ast_execution(self):
+        e,fs=self.env();loader=e['SbfFinite_loader']({'SbfFiniteTiny.py':b'value=7\n'})
+        self.assertIsNone(loader.find_spec('os'))
+        self.assertIsNotNone(loader.find_spec('SbfFiniteTiny'))
+        with self.assertRaises(RuntimeError):loader.find_spec('SbfFiniteUnlisted')
+        m=types.ModuleType('SbfFiniteTiny');loader.exec_module(m);self.assertEqual(m.value,7)
+        self.assertEqual(m.__file__,'/sealed/SbfFiniteTiny.py')
+    def test_noargument_main_env_preloaded_bounds_and_complete_pinmaps(self):
+        # Dormant main executes against isolated synthetic sys/import surfaces,
+        # not the real import machinery or any operational module.
+        for variant in ('ok','argv','env','preloaded','bounds'):
+            e,fs=self.env();fake=types.SimpleNamespace(argv=['/sealed/SbfFinite_entry.py'],modules={},meta_path=[])
+            fs.environ={'HOME':'/probe','LC_ALL':'C','PATH':'/usr/bin','TMPDIR':'/tmp'}
+            e.update(sys=fake,SbfFinite_ENV=dict(fs.environ),SbfFinite_MODULE='SbfFinite_continue',SbfFinite_FUNCTION='root_continuation')
+            calls=[]
+            e['__import__']=lambda n: (calls.append(n) or types.SimpleNamespace(root_continuation=lambda:0))
+            if variant=='argv':fake.argv.append('userpath')
+            if variant=='env':fs.environ['PYTHONPATH']='/untrusted'
+            if variant=='preloaded':fake.modules['SbfFinite_untrusted']=object()
+            if variant=='bounds':e['SbfFinite_PINS']={}
+            selected('SbfFinite_entry.py',['SbfFinite_main'],e)
+            if variant=='ok':self.assertEqual(e['SbfFinite_main'](),0);self.assertEqual(calls,['SbfFinite_continue'])
+            else:
+                with self.assertRaises(RuntimeError):e['SbfFinite_main']()
+                self.assertEqual(calls,[])
+            self.assertEqual(fake.meta_path,[])
+        # Installed entries pin core+package-pins but never themselves. Installer
+        # pins its full fixed bootstrap input catalog; no hash fixed point.
+        for name in ('SbfFinite_entry.py','SbfFinite_user_entry.py','SbfFinite_install_entry.py'):
+            tree=ast.parse((H/name).read_text());values={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign)}
+            self.assertNotIn(name,values['SbfFinite_PINS'])
+            for source,pin in values['SbfFinite_PINS'].items():self.assertEqual(pin,digest((H/source).read_bytes()))
+            self.assertEqual(values['SbfFinite_FUNCTION'],{'SbfFinite_entry.py':'root_continuation','SbfFinite_user_entry.py':'user_producer','SbfFinite_install_entry.py':'fixed_install'}[name])

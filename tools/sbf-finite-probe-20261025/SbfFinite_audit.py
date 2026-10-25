@@ -38,26 +38,42 @@ for p in sorted(O.glob('*.baseline.txt')):
  patches.extend(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile=n+'.baseline',tofile=n))
 (O/'SbfFinite-delta.patch.txt').write_text(''.join(patches))
 save(O/'SbfFinite-statements-and-identities.json',records)
-# Finite package includes only concrete operative modules and fixed reviewed data.
+# Noncircular source graph: core -> package pins -> dormant user/root entries
+# -> literal package inventory -> dormant installer entry. Entries are externally
+# authenticated bootstrap roots, not their own hash authority.
 names=['SbfFinite_fixed.py','SbfFinite_validate.py','SbfFiniteLinux_capture.py','SbfFiniteLinux_abi.py',
  'SbfFiniteLinux_backend.py','SbfFinite_backend_candidate.py','SbfFinite_continue.py','SbfFinite_observe.py',
  'SbfFinite_process.py','SbfFinite_package.py','SbfFiniteRss_adapter.py','SbfFiniteRss_guard.py',
- 'SbfFiniteRss_sources.py','SbfFiniteRss_reviewed.json','SbfFinite_entry.py','SbfFinite_user_entry.py']
+ 'SbfFiniteRss_sources.py','SbfFiniteRss_reviewed.json']
 launcher=pin((H/'SbfFinite_root_launcher.sh.txt').read_bytes())
 (H/'SbfFinite_launcher_pin.py').write_text("if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\nLAUNCHER_PIN = "+repr(launcher)+'\n')
 names.append('SbfFinite_launcher_pin.py')
 files={n:pin((H/n).read_bytes()) for n in names}
-(H/'SbfFinite_package_pins.py').write_text("if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\n\"\"\"External bootstrap pins this file; it cannot self-certify.\"\"\"\nFILES = "+repr(files)+'\n')
+(H/'SbfFinite_package_pins.py').write_text("if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\n\"\"\"External entry/bootstrap pins this file; it cannot self-certify.\"\"\"\nFILES = "+repr(files)+'\n')
 names.append('SbfFinite_package_pins.py')
+template=(H/'SbfFinite_sealed_entry.py.template.txt').read_text()
+def entry(name,root,module,function,pins):
+ text=template
+ for key,value in {'ROOT':root,'PINS':pins,'MODULE':module,'FUNCTION':function,'ENTRY':name}.items():
+  text=text.replace('@'+key+'@',repr(value))
+ assert '@ROOT@' not in text
+ ast.parse(text);(H/name).write_text(text)
+entrypins={n:pin((H/n).read_bytes()) for n in names}
+for name,function in [('SbfFinite_entry.py','root_continuation'),('SbfFinite_user_entry.py','user_producer')]:
+ entry(name,'/opt/aspis/SbfFinite-20261025-v1','SbfFinite_continue',function,entrypins)
+ names.append(name)
 cat=[dict(name=n,pin=dict(pin((H/n).read_bytes()),mode=0o444),payload=(H/n).read_bytes()) for n in names]
 (H/'SbfFinite_inventory.py').write_text("if __name__ == '__main__':\n    raise SystemExit('SbfFinite SOURCE ONLY: disabled before imports')\n\"\"\"Externally reviewed bootstrap payload; never adopted from staging.\"\"\"\nPACKAGE_CATALOG = "+repr(cat)+'\n')
+bootstrap_names=list(entrypins)+['SbfFinite_inventory.py','SbfFinite_install.py']
+entry('SbfFinite_install_entry.py','/opt/aspis/SbfFinite-20261025-bootstrap-v1','SbfFinite_install','fixed_install',
+ {n:pin((H/n).read_bytes()) for n in bootstrap_names})
 save(O/'SbfFinite-installation.json',dict(schema='SbfFinite-installation-source-v1',
  package='/opt/aspis/SbfFinite-20261025-v1',root='/var/lib/SbfFinite-20261025-v1',
  package_files={n:dict(pin((H/n).read_bytes()),mode=0o444) for n in names},
  proposed_external_launcher=dict(path='/usr/local/libexec/SbfFinite-20261025-tiny-root',mode=0o555,**launcher),
  launcher_install='not installed by this finite installer; separate future lead-reviewed administrative publication, no sudoers grant',
- bootstrap={n:pin((H/n).read_bytes()) for n in ['SbfFinite_inventory.py','SbfFinite_install.py','SbfFinite_install_entry.py']},
- bootstrap_boundary='External exact bytes/interpreter/source-loader review required; selfpin does not authenticate itself',
+ bootstrap={n:dict(pin((H/n).read_bytes()),mode=0o444) for n in bootstrap_names+['SbfFinite_install_entry.py']},
+ bootstrap_boundary='External exact entry/interpreter authentication required; dormant fixed sealed loader implemented; selfpin does not authenticate itself',
  runtime_rows=92,runtime_copied_bytes=35655597,
  no_install=True,no_native=True,axioms='N/A'))
-print('source statements/deltas sealed; fixed package literal payload generated')
+print('source statements/deltas sealed; fixed package and dormant sealed entries generated')
