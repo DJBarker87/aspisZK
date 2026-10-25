@@ -1,0 +1,22 @@
+F3J_PrefixWitness.lean:22:43: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (F3J_SamplerRun.program pf (row + a) b middle)
+in the target expression
+  (have first := (left, middle);
+    have second := eval H (F3J_SamplerRun.program pf (row + a) b first.2);
+    (first.1 ++ second.1, second.2)) =
+    (left ++ right, last)
+
+H : Bytes → State
+pf : RawCutProverCompiler.Proof
+row a b : ℕ
+P middle last : LiteralTranscript.Prefix
+left right : List (Bytes × State)
+first : eval H (F3J_SamplerRun.program pf row a P) = (left, middle)
+second : eval H (F3J_SamplerRun.program pf (row + a) b middle) = (right, last)
+⊢ (have first := (left, middle);
+    have second := eval H (F3J_SamplerRun.program pf (row + a) b first.2);
+    (first.1 ++ second.1, second.2)) =
+    (left ++ right, last)
+'AspisR1.F3J_PrefixWitness.pack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3J_PrefixWitness.through' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3J_PrefixWitness.carried_statement' depends on axioms: [propext, Classical.choice, Quot.sound]

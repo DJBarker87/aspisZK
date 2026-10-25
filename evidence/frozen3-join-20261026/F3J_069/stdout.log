@@ -1,0 +1,82 @@
+F3J_First27.lean:41:111: error: unsolved goals
+case this
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+trace : SourceFull25.Trace D pre before after cs
+count : cs.length = 25
+pubInput : pool_v1.pair_forest_semantic_terminal.r0.Public
+root : TranscriptStep.Bytes32
+init : PublicInitCall D pubInput root before
+B : FinishModel.Boundaries
+r25 r26 : r1_wire.ValidatedRecord
+t26 t27 : r1_wire.SemanticTranscript Hash
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D after r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+hash : Hash
+out : transcript.Transcript Hash
+reseed : transcript.Transcript.new D hash t27.state transport.Variant.S2 = ok out
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+rows : semanticRows 27 0 (slice p.wire 48 6983) = some p.semantic
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+tag : P.statement.tag = 2
+publicBytes : P.statement.pubBytes = rawBytes init.encoded.deref
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p (decodeState root) w bound
+⊢ ?m.154
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+trace : SourceFull25.Trace D pre before after cs
+count : cs.length = 25
+pubInput : pool_v1.pair_forest_semantic_terminal.r0.Public
+root : TranscriptStep.Bytes32
+init : PublicInitCall D pubInput root before
+B : FinishModel.Boundaries
+r25 r26 : r1_wire.ValidatedRecord
+t26 t27 : r1_wire.SemanticTranscript Hash
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D after r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+hash : Hash
+out : transcript.Transcript Hash
+reseed : transcript.Transcript.new D hash t27.state transport.Variant.S2 = ok out
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+rows : semanticRows 27 0 (slice p.wire 48 6983) = some p.semantic
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+tag : P.statement.tag = 2
+publicBytes : P.statement.pubBytes = rawBytes init.encoded.deref
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p (decodeState root) w bound
+this : ?m.154
+⊢ let pf := F3J_InputRows.proof p (decodeState root) w bound;
+  (eval H (F3J_SamplerRun.program pf 0 27 P)).1 =
+      initPair init :: sourceLog cs ++
+        (observe (run (S1SemanticCode.circleValidated B D after r25)).1 ++
+          (observe (run (S1SemanticCode.circleValidated B D t26 r26)).1 ++
+            observe (run (PreparedHashEffects.new effects D hash t27.state transport.Variant.S2)).1)) ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 0 27 P)).2) =
+      decodeState out.state
+F3J_First27.lean:43:13: error: unexpected token ':='; expected ':'
+F3J_First27.lean:50:106: error: unexpected token '.'; expected ':'
+F3J_First27.lean:55:37: error: unexpected token '.'; expected ':'
+'AspisR1.F3J_First27.sampler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

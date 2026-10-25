@@ -1,0 +1,89 @@
+F3J_PreparedInput27.lean:49:8: error: don't know how to synthesize placeholder for argument `aspis_coreDigest32Inst`
+context:
+CoreError : Type
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+accounts1 accounts2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : S2W_NativeConsolidation.FirstCut
+s : S2W_NativeConsolidation.SecondCut
+cuts :
+  S2W_NativeConsolidation.SourceCuts
+    (ClaimsUnrolledSdk.sdkOps adapter (Tx1Q_SameCut.dictionary ops reserved query geo) B std) accounts1 accounts2 saved
+    f s
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo
+    (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std) ()
+    (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+header : OraclePortHeader.accepts (bytesOf ↑f.proof) = true
+H : Bytes → State
+backend :
+  Tx1DigestLog.ByteOracleBackend (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) H
+w : CanonicalCutEnrichedTranscript.Words
+i : F3_Model.Input
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : AspisR1PublicPreparation.r1_wire.SemanticTranscript Unit
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+start : transcript.Transcript Unit
+cs : List (SourceFull25.Call (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) pre)
+init :
+  PublicInitCall (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+    (FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) pre.c1_root t0
+⊢ aspis_core.Digest32 Unit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+F3J_PreparedInput27.lean:46:8: error: don't know how to synthesize placeholder for argument `aspis_coreDigest32Inst`
+context:
+CoreError : Type
+adapter : AdapterRw.Ops
+ops : Ops
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops CoreError
+B : FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+accounts1 accounts2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : S2W_NativeConsolidation.FirstCut
+s : S2W_NativeConsolidation.SecondCut
+cuts :
+  S2W_NativeConsolidation.SourceCuts
+    (ClaimsUnrolledSdk.sdkOps adapter (Tx1Q_SameCut.dictionary ops reserved query geo) B std) accounts1 accounts2 saved
+    f s
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+run :
+  Tx1Q_Execution.Run (Tx1Q_Execution.actual ops reserved query geo B std) reserved query geo
+    (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std) ()
+    (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+header : OraclePortHeader.accepts (bytesOf ↑f.proof) = true
+H : Bytes → State
+backend :
+  Tx1DigestLog.ByteOracleBackend (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) H
+w : CanonicalCutEnrichedTranscript.Words
+i : F3_Model.Input
+pre : r1_wire.Prefix
+t0 t25 t26 t27 : AspisR1PublicPreparation.r1_wire.SemanticTranscript Unit
+r25 r26 : r1_wire.ValidatedRecord
+z0 z1 : AspisR1PublicPreparation.aspis_core.circle.SecureCirclePoint
+start : transcript.Transcript Unit
+cs : List (SourceFull25.Call (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std)) pre)
+init :
+  PublicInitCall (retainedDigest (Tx1Q_SameCut.callerDigest adapter ops reserved query geo B std))
+    (FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic f.semantic)) pre.c1_root t0
+⊢ aspis_core.Digest32 Unit
+
+Note: All parameter types and holes (e.g., `_`) in the header of a theorem are resolved before the proof is processed; information from the proof cannot be used to infer what these values should be
+'AspisR1.F3J_PreparedInput27.from_cut' depends on axioms: [propext, Classical.choice, Quot.sound]

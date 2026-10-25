@@ -1,0 +1,234 @@
+F3J_CircleCode.lean:26:2: error: Type mismatch
+  F3J_BlockCode.sample c
+has type
+  observe (run (S1SemanticCode.sampleBlock D before 25#u8 record.framed)).1 = F3J_BlockCalls.log c
+but is expected to have type
+  List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run (S1SemanticCode.sampleBlock D before 25#u8 record.framed)).1 ++
+      List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run
+            (Code.step (B.circle ?m.57 FinishModel.CircleRow.First) fun scp =>
+              Code.done (core.result.Result.Ok scp, ?m.54))).1 =
+    F3J_BlockCalls.log c
+F3J_CircleCode.lean:23:36: warning: This simp argument is unused:
+  Bind.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun,B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵ ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:23:46: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pu̵re.̵pu̵r̵e̵,̵P̵r̵e̵p̵aredHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:23:56: warning: This simp argument is unused:
+  PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲c̲i̲r̲c̲l̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:23:82: warning: This simp argument is unused:
+  liftM
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run,l̵i̵f̵t̵M̵,̵
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:24:4: warning: This simp argument is unused:
+  MonadLift.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle, ̲observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:24:24: warning: This simp argument is unused:
+  MonadLiftT.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift,M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle, ̲observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:25:4: warning: This simp argument is unused:
+  circle
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:25:39: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.f̵l̵at̵M̵a̵p_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:25:56: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲c̲i̲r̲c̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:44:2: error: Type mismatch
+  F3J_BlockCode.sample c
+has type
+  observe (run (S1SemanticCode.sampleBlock D before 26#u8 record.framed)).1 = F3J_BlockCalls.log c
+but is expected to have type
+  List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run (S1SemanticCode.sampleBlock D before 26#u8 record.framed)).1 ++
+      List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run
+            (Code.step (B.circle ?m.57 FinishModel.CircleRow.Second) fun scp =>
+              Code.done (core.result.Result.Ok scp, ?m.54))).1 =
+    F3J_BlockCalls.log c
+F3J_CircleCode.lean:41:36: warning: This simp argument is unused:
+  Bind.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun,B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵ ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:41:46: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pu̵re.̵pu̵r̵e̵,̵P̵r̵e̵p̵aredHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:41:56: warning: This simp argument is unused:
+  PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲c̲i̲r̲c̲l̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:41:82: warning: This simp argument is unused:
+  liftM
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run,l̵i̵f̵t̵M̵,̵
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:42:4: warning: This simp argument is unused:
+  MonadLift.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle, ̲observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:42:24: warning: This simp argument is unused:
+  MonadLiftT.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift,M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle, ̲observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:43:4: warning: This simp argument is unused:
+  circle
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵observe,
+  ̲ ̲ ̲ ̲ ̲List.flatMap_append, ̲List.flatMap_nil, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:43:39: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲Bind.bind, ̲Pure.pure, ̲PreparedHashCode.bind, ̲run, ̲liftM,
+      MonadLift.monadLift, ̲MonadLiftT.monadLift, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵circle,
+  ̲ ̲ ̲ ̲ ̲observe, ̲List.flatMap_append, ̲List.f̵l̵at̵M̵a̵p_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵pp̵end_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3J_CircleCode.lean:43:56: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵M̵,̵
+  ̵ ̵ ̵ ̵ ̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵i̵r̵c̵l̵e̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲c̲i̲r̲c̲l̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3J_CircleCode.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3J_CircleCode.second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
