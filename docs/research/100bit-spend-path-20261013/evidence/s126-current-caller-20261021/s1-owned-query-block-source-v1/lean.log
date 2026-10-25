@@ -1,0 +1,73 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceV1.lean:29:19: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (sf, pending) ← Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block 0) s
+    ok (Query31ExplicitListLoop.optionStop pending, sf)
+is not definitionally equal to the right-hand side
+  ok (false, sf)
+
+case refine_2.false
+s : CurrentScan
+block : Std.Array U8 32#usize
+hlen : ↑s.accepted_len ≤ 22
+hd : ↑s.draws ≤ 64
+sf : CurrentScan
+valid : Query31ExplicitListLoop.validState sf
+words : Std.Array U32 8#usize
+decoded : AspisR1QueryScanUnrolled.r0_transcript.query_words block = ok words
+values :
+  ↑words =
+    List.ofFn fun j =>
+      AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+        (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑j)
+values' : ↑words = sourceWordsFrom block 0
+called :
+  owned_block_loop s.accepted s.accepted_len s.draws block 0#usize =
+    ok (sf.accepted, sf.accepted_len, sf.draws, if false = true then some (pack sf true) else none)
+source :
+  Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block ↑0#usize) s =
+    ok (sf, if false = true then none else some false)
+⊢ (do
+      let (sf, pending) ← Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block 0) s
+      ok (Query31ExplicitListLoop.optionStop pending, sf)) =
+    ok (false, sf)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceV1.lean:29:19: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (sf, pending) ← Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block 0) s
+    ok (Query31ExplicitListLoop.optionStop pending, sf)
+is not definitionally equal to the right-hand side
+  ok (true, sf)
+
+case refine_2.true
+s : CurrentScan
+block : Std.Array U8 32#usize
+hlen : ↑s.accepted_len ≤ 22
+hd : ↑s.draws ≤ 64
+sf : CurrentScan
+valid : Query31ExplicitListLoop.validState sf
+words : Std.Array U32 8#usize
+decoded : AspisR1QueryScanUnrolled.r0_transcript.query_words block = ok words
+values :
+  ↑words =
+    List.ofFn fun j =>
+      AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+        (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block ↑j)
+values' : ↑words = sourceWordsFrom block 0
+called :
+  owned_block_loop s.accepted s.accepted_len s.draws block 0#usize =
+    ok (sf.accepted, sf.accepted_len, sf.draws, if true = true then some (pack sf true) else none)
+source :
+  Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block ↑0#usize) s =
+    ok (sf, if true = true then none else some false)
+⊢ (do
+      let (sf, pending) ← Query31ExplicitListLoop.scanListLoop (sourceWordsFrom block 0) s
+      ok (Query31ExplicitListLoop.optionStop pending, sf)) =
+    ok (true, sf)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceV1.lean:28:34: warning: This simp argument is unused:
+  source
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵v̵a̵l̵u̵e̵s̵'̵,̵s̵o̵u̵r̵c̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲v̲a̲l̲u̲e̲s̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Meaning.block_source_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisS1OwnedQueryBlock.Meaning.block_eq_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,29 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceLoopV1.lean:79:8: error: Type mismatch: After simplification, term
+  tailModel
+ has type
+  @Eq (Result (Query31ExplicitListLoop.CurrentScan × Option Bool)) (scanListLoop (sourceWordsFrom block (↑i + 1)) s1)
+    (ok (sf, if last = true then none else some false))
+but is expected to have type
+  @Eq (Result (Query31ExplicitListLoop.CurrentScan × Option Bool))
+    (do
+      let out ← ok (pack s1 false)
+      if out.2.2.2 = true then ok ({ accepted := out.1, accepted_len := out.2.1, draws := out.2.2.1 }, none)
+        else
+          scanListLoop (sourceWordsFrom block (↑i + 1))
+            { accepted := out.1, accepted_len := out.2.1, draws := out.2.2.1 })
+    (ok (sf, if last = true then none else some false))
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceLoopV1.lean:78:19: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1OwnedQueryBlockSourceLoopV1.lean:78:38: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [Bool.false_eq_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS1OwnedQueryBlock.Meaning.block_loop_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

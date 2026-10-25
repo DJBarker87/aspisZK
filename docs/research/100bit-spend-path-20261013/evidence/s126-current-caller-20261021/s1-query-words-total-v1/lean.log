@@ -1,0 +1,56 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryWordsTotalV1.lean:27:17: error: unsolved goals
+case cons
+x : U32
+xs : List U32
+ih :
+  AspisV8R19.TraversalRuntime.mapState query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32.call_mut xs () =
+    ok (List.map queryMaskWord xs, ())
+⊢ (do
+      let __x ← ok (List.map queryMaskWord xs, ())
+      ok (queryMaskWord x :: __x.1, __x.2)) =
+    ok (queryMaskWord x :: List.map queryMaskWord xs, ())
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryWordsTotalV1.lean:40:9: error: don't know how to synthesize implicit argument `b`
+  @And.intro (query_words block = ok ?m.51) (↑?m.51 = List.ofFn fun j => queryMaskWord (blockRankWord block ↑j)) ?m.54
+    ?m.55
+context:
+block : Std.Array U8 32#usize
+ranks : Std.Array U32 8#usize
+called : block_rank block = ok ranks
+values : ↑ranks = List.map (blockRankWord block) (List.range 8)
+mapped :
+  core.array.Array.map query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks () =
+    ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ Prop
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryWordsTotalV1.lean:40:9: error: don't know how to synthesize implicit argument `a`
+  @And.intro (query_words block = ok ?m.51) (↑?m.51 = List.ofFn fun j => queryMaskWord (blockRankWord block ↑j)) ?m.54
+    ?m.55
+context:
+block : Std.Array U8 32#usize
+ranks : Std.Array U32 8#usize
+called : block_rank block = ok ranks
+values : ↑ranks = List.map (blockRankWord block) (List.range 8)
+mapped :
+  core.array.Array.map query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks () =
+    ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ Prop
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryWordsTotalV1.lean:40:10: error: don't know how to synthesize placeholder for argument `w`
+context:
+block : Std.Array U8 32#usize
+ranks : Std.Array U32 8#usize
+called : block_rank block = ok ranks
+values : ↑ranks = List.map (blockRankWord block) (List.range 8)
+mapped :
+  core.array.Array.map query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks () =
+    ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ Std.Array U32 8#usize
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S1QueryWordsTotalV1.lean:35:88: error: unsolved goals
+block : Std.Array U8 32#usize
+ranks : Std.Array U32 8#usize
+called : block_rank block = ok ranks
+values : ↑ranks = List.map (blockRankWord block) (List.range 8)
+mapped :
+  core.array.Array.map query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks () =
+    ok ⟨List.map queryMaskWord ↑ranks, ⋯⟩
+⊢ ∃ out, query_words block = ok out ∧ ↑out = List.ofFn fun j => queryMaskWord (blockRankWord block ↑j)
+'AspisS1QueryWordsTotal.rank_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisS1QueryWordsTotal.words_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
