@@ -1,0 +1,102 @@
+--- FullLoader.before
++++ FullLoader.after
+@@ -56,13 +56,23 @@
+     throw <| IO.userError "binding record changed"
+   return j
+ 
+-def coreFile (binding : Json) (path : String) (size : Nat) (sha : String) : IO Port36TRANSPORT.PinnedFile := do
+-  let rows ← arr (← obj binding "files")
+-  let selectedRows ← rows.filterM fun x => do pure ((← str (← obj x "path")) == path)
+-  unless selectedRows.size == 1 && (← nat (← obj selectedRows[0]! "bytes")) == size &&
+-      (← str (← obj selectedRows[0]! "sha256")) == sha do
++-- Validate every row once; record bytes remain demands, never hash authority.
++def fileIndex (rows : Array Json) : IO (Std.HashMap String (Nat × String)) := do
++  let mut index : Std.HashMap String (Nat × String) := {}
++  for row in rows do
++    let path ← str (← obj row "path")
++    let size ← nat (← obj row "bytes")
++    let sha ← str (← obj row "sha256")
++    if index.contains path then throw <| IO.userError "duplicate artifact pin path"
++    index := index.insert path (size, sha)
++  return index
++
++def coreFile (bindingIndex : Std.HashMap String (Nat × String)) (entries : Json)
++    (path : String) (size : Nat) (sha : String) : IO Port36TRANSPORT.PinnedFile := do
++  let some (boundSize, boundSHA) := bindingIndex[path]?
++    | throw <| IO.userError "missing binding artifact pin"
++  unless boundSize == size && boundSHA == sha do
+     throw <| IO.userError "record differs from literal expected bytes"
+-  let entries ← obj binding "entries"
+   let mut chain := #[]
+   let mut pathAccumulator := ""
+   let components := path.splitOn "/"
+@@ -94,6 +104,9 @@
+       (← str (← obj j "module")) == toString moduleName do
+     throw <| IO.userError "fixed root/module/artifact"
+   let pins ← arr (← obj j "core_pins")
++  let pinIndex ← fileIndex pins
++  let bindingIndex ← fileIndex (← arr (← obj binding "files"))
++  let entries ← obj binding "entries"
+   let modules ← unwrap (← obj j "modules").getObj?
+   let mut core : Array Port36TRANSPORT.CoreModule := #[]
+   for (text,_) in modules.toArray do
+@@ -105,11 +118,9 @@
+     let paths := #[base++".olean",base++".ir",base++".olean.server",base++".olean.private"]
+     let mut files : Array Port36TRANSPORT.PinnedFile := #[]
+     for path in paths do
+-      let selectedRows ← pins.filterM fun x => do pure ((← str (← obj x "path")) == path)
+-      unless selectedRows.size == 1 do throw <| IO.userError "core exact artifact pin"
+-      let size ← nat (← obj selectedRows[0]! "bytes")
+-      let sha ← str (← obj selectedRows[0]! "sha256")
+-      files := files.push (← coreFile binding path size sha)
++      let some (size, sha) := pinIndex[path]?
++        | throw <| IO.userError "core exact artifact pin"
++      files := files.push (← coreFile bindingIndex entries path size sha)
+     core := core.push {name := n, files, artifacts := .ofArray (paths.map (⟨·⟩))}
+   unless core.size == 2270 && pins.size == 9080 do throw <| IO.userError "full core closure count"
+   return {profile := .lean,core,artifact,moduleName}
+@@ -196,20 +207,44 @@
+ 
+ -- Concrete same-invocation pipeline: core admission -> baseline -> raw DATA ->
+ -- fresh prereqs -> strong -> Bridge -> remaining -> HPow -> publication -> Elab.
++-- Fixed, payload-free diagnostics only; no success or logical claim.
++def phase (label : String) : IO Unit := do
++  let err ← IO.getStderr
++  err.putStrLn ("PORT36_PHASE " ++ label)
++  err.flush
++
+ def driver : Elab.Command.CommandElabM Unit := do
++  Elab.Command.liftIO <| phase "loadPlan:begin"
+   let p ← Elab.Command.liftIO loadPlan
++  Elab.Command.liftIO <| phase "loadPlan:end"
++  Elab.Command.liftIO <| phase "baseline:begin"
+   let (base,coreHeld) ← Elab.Command.liftIO <| Port36TRANSPORT.baseline p
++  Elab.Command.liftIO <| phase "baseline:end"
+   let baselineOwner ← Elab.Command.liftIO <| IO.mkRef (base,coreHeld)
++  Elab.Command.liftIO <| phase "loadSelected:begin"
+   let (selected,rawHeld) ← Elab.Command.liftIO <| loadSelected base
++  Elab.Command.liftIO <| phase "loadSelected:end"
++  Elab.Command.liftIO <| phase "loadDelta:begin"
+   let (delta,deltaHeld) ← Elab.Command.liftIO loadDelta
++  Elab.Command.liftIO <| phase "loadDelta:end"
++  Elab.Command.liftIO <| phase "reconstruct:begin"
+   let (k,added) ← Elab.Command.liftIO <| Port36TRANSPORT.reconstruct base selected delta
++  Elab.Command.liftIO <| phase "reconstruct:end"
++  Elab.Command.liftIO <| phase "widePow:begin"
+   let k ← Elab.Command.liftIO <| Port36TRANSPORT_Recover.widePow k
++  Elab.Command.liftIO <| phase "widePow:end"
+   let some power := k.find? `Port36TRANSPORT.widePow | throwError "missing checked power"
+   let all := added.push power
++  Elab.Command.liftIO <| phase "exactKernel:begin"
+   Elab.Command.liftIO <| Port36TRANSPORT.exactKernel base.toKernelEnv k all
++  Elab.Command.liftIO <| phase "exactKernel:end"
++  Elab.Command.liftIO <| phase "publish:begin"
+   let (env,publicationHeld) ← Elab.Command.liftIO <| Port36TRANSPORT.publish p base coreHeld k all
++  Elab.Command.liftIO <| phase "publish:end"
+   let publicationOwner ← Elab.Command.liftIO <| IO.mkRef (env,publicationHeld)
++  Elab.Command.liftIO <| phase "consumer:begin"
+   Port36TRANSPORT.elaborateConsumer env
++  Elab.Command.liftIO <| phase "consumer:end"
+   let (base,coreHeld) ← Elab.Command.liftIO baselineOwner.get
+   let (env,publicationHeld) ← Elab.Command.liftIO publicationOwner.get
+   Elab.Command.liftIO <| IO.println s!"PORT36_FULL_REGION_OWNER {coreHeld.raw.partCount + rawHeld.size + 2} DELTA={deltaHeld.1.constants.size} P={publicationHeld.bytes.size} NORMAL_REGIONS={env.header.regions.size} BASE_REGIONS={base.header.regions.size}"
