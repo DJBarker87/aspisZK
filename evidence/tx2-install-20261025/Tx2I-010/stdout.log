@@ -1,0 +1,108 @@
+base : VTop_Stages.Ops
+x : E
+p0 : verifier.Prepared
+a0 : verifier.Accumulator
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+Hash : Type
+D : VTop_Stages.aspis_core.digest.Digest32 Hash
+hash : Hash
+pub checkpoint : Slice U8
+len : Op3I_Witness.proof.length = 57607
+bound : ↑32#usize ≤ Op3I_Witness.proof.length
+⊢ (let (p, a) :=
+      ({ variant := transport.Variant.S2, roots := p0.roots, gamma := p0.gamma, kappa := p0.kappa,
+          alpha := Array.repeat 2#usize x, rho := p0.rho, queries := p0.queries, semantic_alpha := p0.semantic_alpha,
+          z := p0.z, claim := p0.claim, state := p0.state },
+        { weights := a0.weights, rhs := a0.rhs, power := a0.power, next := 10#usize })
+    if (a.next != 10#usize) = true then
+      ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+    else do
+      let _ ← if True ∧ True then ok ⟨List.slice ↑0#usize ↑0#usize ↑Op3I_Witness.proof, ⋯⟩ else fail Error.panic
+      let s1 ← if True ∧ True then ok ⟨List.slice ↑0#usize ↑32#usize ↑Op3I_Witness.proof, ⋯⟩ else fail Error.panic
+      let r2 ←
+        if h0 : s1.length = ↑32#usize then ok (core.result.Result.Ok ⟨↑s1, ⋯⟩) else ok (core.result.Result.Err ())
+      let _ ←
+        match r2 with
+          | core.result.Result.Ok a => ok a
+          | core.result.Result.Err a => div
+      let (a1, pending) := ({ weights := a0.weights, rhs := x, power := a0.power, next := 22#usize }, pending)
+        do
+        let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+        let s5 ← lift (Std.Array.empty U8).to_slice
+        let s6 ← lift (Std.Array.empty U8).to_slice
+        let s7 ← if True ∧ True then ok ⟨List.slice ↑0#usize ↑0#usize ↑Op3I_Witness.proof, ⋯⟩ else fail Error.panic
+        let s8 ← if True ∧ True then ok ⟨List.slice ↑32#usize ↑32#usize ↑Op3I_Witness.proof, ⋯⟩ else fail Error.panic
+        let s9 ← if True ∧ True then ok ⟨List.slice ↑32#usize ↑32#usize ↑Op3I_Witness.proof, ⋯⟩ else fail Error.panic
+        let s10 ← lift (Std.Array.empty U8).to_slice
+        Port4D_FinishInstall.finish (Tx2I_Nonvacuity.leaves x)
+            { variant := transport.Variant.S2, semantic := s5, y1 := s6, inactive := x, round0 := s7,
+              folded_root := none, round1 := s8, final_message := s9, query_bytes := s10 }
+            p { weights := deref_mut_back s3, rhs := a1.rhs, power := a1.power, next := a1.next } none) =
+    ok (core.result.Result.Ok ())
+Tx2I_Witness.lean:46:47: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Stages.verifier.candidate.tx2_authenticated, ̲Tx2I_Install.stage,
+      Tx2I_Nonvacuity.shape_success, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲fixture,
+      VTop_Stages.verifier.candidate.tx2_common, b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeUsizeSlice.index,
+      show 0#usize ≤ 0#usize ∧ 0#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 0#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 32#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+  ̵  ̵ ̵ ̵if_true,
+  ̲ ̲ ̲ ̲ ̲core.array.TryFromArrayCopySlice.try_from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tx2I_Witness.lean:46:66: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Stages.verifier.candidate.tx2_authenticated, ̲Tx2I_Install.stage,
+      Tx2I_Nonvacuity.shape_success, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲fixture,
+      VTop_Stages.verifier.candidate.tx2_common, bne_self_eq_false, B̵o̵o̵l̵.̵i̲f_̲f̲alse_̵e̵q̵_̵t̵r̵u̵e̵,
+      i̵f̵_̵f̵a̵l̵s̵e̵,̵core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeUsizeSlice.index,
+      show 0#usize ≤ 0#usize ∧ 0#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 0#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 32#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+  ̵  ̵ ̵ ̵if_true,
+  ̲ ̲ ̲ ̲ ̲core.array.TryFromArrayCopySlice.try_from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tx2I_Witness.lean:47:4: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Stages.verifier.candidate.tx2_authenticated, ̲Tx2I_Install.stage,
+      Tx2I_Nonvacuity.shape_success, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲fixture,
+      VTop_Stages.verifier.candidate.tx2_common, bne_self_eq_false, Bool.false_eq_true,
+      i̵f̵_̵f̵a̵l̵s̵e̵,̵core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeUsizeSlice.index,
+      show 0#usize ≤ 0#usize ∧ 0#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 0#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 32#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+  ̵  ̵ ̵ ̵if_true,
+  ̲ ̲ ̲ ̲ ̲core.array.TryFromArrayCopySlice.try_from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tx2I_Witness.lean:51:4: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_Stages.verifier.candidate.tx2_authenticated, ̲Tx2I_Install.stage,
+      Tx2I_Nonvacuity.shape_success, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, ̲fixture,
+      VTop_Stages.verifier.candidate.tx2_common, bne_self_eq_false, Bool.false_eq_true,
+  ̵  ̵ ̵ ̵if_false,
+  ̲ ̲ ̲ ̲ ̲core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeUsizeSlice.index,
+      show 0#usize ≤ 0#usize ∧ 0#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 0#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      show 32#usize ≤ 32#usize ∧ 32#usize ≤ Op3I_Witness.proof.length by scalar_tac,
+      i̵f̵_̵t̵r̵u̵e̵,̵core.array.TryFromArrayCopySlice.try_from]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.Tx2I_Witness.authenticated_success' depends on axioms: [propext, Classical.choice, Quot.sound]
