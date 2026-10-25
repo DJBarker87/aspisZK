@@ -10,9 +10,9 @@ import re
 from pathlib import Path
 
 D=Path(__file__).resolve().parent
-RELEASE=D/'prospective-data-v12'
-STAGE='/home/dombarker/final-native-gate-v12-20261025/'
-ENTRY='1448fc482453edf943c26d8d68f9100233f80a8b'
+RELEASE=D/'prospective-data-v13'
+STAGE='/home/dombarker/final-native-gate-v13-20261025/'
+ENTRY='a639c6893723b9317dff04084de2715db7dfa147'
 
 def pin(raw):return dict(size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
 def dump(value):return (json.dumps(value,sort_keys=True,indent=2)+'\n').encode()
@@ -59,7 +59,7 @@ def prepare(release=None):
     for name,raw in sorted(rows.items()):
         if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py'):
             p['files'][STAGE+name]=pin(raw)['sha256'];p['job_source_sizes'][STAGE+name]=len(raw)
-    p['job_revision']=ENTRY+' plus Source031 prospective-data-v12 exact transfer-manifest overlay (activated DATA bytes only)'
+    p['job_revision']=ENTRY+' plus Source032 prospective-data-v13 exact transfer-manifest overlay (activated DATA bytes only)'
     p['setup_catalog_roots']=sorted(set(p['native_roots'])|set(p['files']))
     rows['FinalNativeGate-plan.json']=dump(p)
     rows['FinalNativeGate_seal.py']=('PLAN_SHA256 = '+repr(pin(rows['FinalNativeGate-plan.json'])['sha256'])+'\n').encode()
@@ -84,12 +84,12 @@ def prepare(release=None):
     assert len(receiver)<4*2**20
     with (release/'FinalNativeGate-data-transfer.py').open('xb') as f:f.write(receiver)
     template=source['FinalNativeGate-transport-template.txt'].decode()
-    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v12/FinalNativeGate-data-transfer.py')"
+    old_receiver="RECEIVER=Path('/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v13/FinalNativeGate-data-transfer.py')"
     assert template.count(old_receiver)==1
     template=template.replace(old_receiver,'RECEIVER=Path('+repr(str(RELEASE/'FinalNativeGate-data-transfer.py'))+')')
     transport=template.replace('__RECEIVER_PIN__',repr(pin(receiver))).encode()
     # Source-only preflight: bind canonical NEW receiver, exact length and hash.
-    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v12/FinalNativeGate-data-transfer.py'
+    canonical='/Users/dominic/ZK/.worktrees/cx-prover-rw/tools/prover-rw-20261023/final-native-gate/prospective-data-v13/FinalNativeGate-data-transfer.py'
     assignments={n.targets[0].id:n.value for n in ast.parse(transport).body
                  if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name)}
     assert ast.literal_eval(assignments['RECEIVER'].args[0])==canonical

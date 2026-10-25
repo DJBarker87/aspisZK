@@ -13,7 +13,7 @@ import subprocess
 import time
 from FinalNativeGate_guard import Proc
 
-STAGE=Path('/home/dombarker/final-native-gate-v12-20261025')
+STAGE=Path('/home/dombarker/final-native-gate-v13-20261025')
 PROFILES={
     'final':('FinalNativeGate-060',3*2**30,4*2**30,'FinalNativeGate-packet','FinalNativeGate_inside.py'),
     'setup':('FinalNativeGate-pin-setup',768*2**20,2**30,'FinalNativeGate-setup-packet','FinalNativeGate_setup_inside.py')}
@@ -264,10 +264,33 @@ class FixedScope:
             return self.binding
         raise TimeoutError('fixed scope binding deadline20s')
 
+    def deleted_handle(self):
+        # kernfs directories can retain nlink=subdirs+2 after deletion. Trust the
+        # OS/procfs/cgroup kernel observation, not an ordinary-filesystem nlink rule.
+        if self.group_identity()!=self.binding['group']:raise ValueError('removed scope identity drift')
+        cg=self.binding['unit']['ControlGroup']
+        if not cg.startswith('/') or '..' in cg.split('/') or not cg.endswith('/'+self.unit+'.scope'):
+            raise ValueError('invalid bound removal path')
+        target='/sys/fs/cgroup'+cg+' (deleted)'
+        link=os.readlink('/proc/self/fd/'+str(self.fd))
+        if len(link)>4096 or link!=target:return None
+        rows={}
+        for line in bounded('/proc/self/fdinfo/'+str(self.fd),limit=4096).splitlines():
+            key,value=line.split(':',1)
+            if key in rows:raise ValueError('duplicate fdinfo field')
+            rows[key]=value.strip()
+        inode=rows.get('ino','');mount=rows.get('mnt_id','')
+        if not inode.isdecimal() or int(inode)!=self.binding['group'][1]:raise ValueError('removed fdinfo inode drift')
+        if not mount.isdecimal():raise ValueError('missing fdinfo mount identity')
+        if self.group_identity()!=self.binding['group']:raise ValueError('removed scope identity drift')
+        if os.readlink('/proc/self/fd/'+str(self.fd))!=target:raise ValueError('removed descriptor marker drift')
+        return (link,inode,mount)
+
     def removed(self):
         # Kernel removal of a retained cgroup requires no live tasks/descendants.
         # Treat replacement or unreadable unit metadata as unresolved, not absence.
-        if os.fstat(self.fd).st_nlink!=0:return False
+        evidence=self.deleted_handle()
+        if evidence is None:return False
         row=self.show();old=self.binding['unit']
         same_inactive=(row['InvocationID']==old['InvocationID'] and
             row['ActiveEnterTimestampMonotonic']==old['ActiveEnterTimestampMonotonic'] and
@@ -275,7 +298,9 @@ class FixedScope:
         if row['LoadState']!='not-found' and not same_inactive:return False
         try:os.stat('/sys/fs/cgroup'+old['ControlGroup'],follow_symlinks=False)
         except FileNotFoundError:
-            self.events.append(dict(terminal='verified removed retained inode and unit absent/same invocation inactive'))
+            if self.deleted_handle()!=evidence:raise ValueError('removed handle evidence drift')
+            self.events.append(dict(terminal='verified removed retained inode and unit absent/same invocation inactive',deleted_handle=evidence))
+            del self.events[:-8]
             return True
         return False
 

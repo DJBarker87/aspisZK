@@ -1,0 +1,184 @@
+"""Prospective fixed DATA receiver. Lead review + new allocation required.
+No final producer/charge. Embedded reviewed bytes only, retained failures.
+"""
+import base64
+import hashlib
+import json
+import os
+import stat
+import subprocess
+import sys
+import time
+
+STAGE='/home/dombarker/final-native-gate-v13-20261025'
+FILES=__FILES_LITERAL__
+TRANSFER_ROOT_SHA256=__ROOT_LITERAL__
+COUNT_LIMIT=128
+BYTE_LIMIT=16*2**20
+
+
+def identity(s):return (s.st_dev,s.st_ino,s.st_mode,s.st_uid,s.st_gid)
+
+def source_stamp(s):
+    return (*identity(s),s.st_size,s.st_mtime_ns,s.st_ctime_ns,s.st_nlink)
+
+
+def check_directory(s):
+    if not stat.S_ISDIR(s.st_mode) or s.st_uid not in (0,os.getuid()) or s.st_mode&0o022:
+        raise ValueError('transfer ancestor owner/type/permissions')
+
+
+def decoded():
+    if len(FILES)>COUNT_LIMIT:raise ValueError('transfer count')
+    rows={};total=0;manifest={}
+    for name,row in sorted(FILES.items()):
+        if not name or name in ('.','..') or '/' in name:raise ValueError('transfer basename')
+        if type(row['size']) is not int or not 0<=row['size']<=4*2**20:raise ValueError('transfer per-file bound')
+        total+=row['size']
+        if total>BYTE_LIMIT:raise ValueError('transfer total bound')
+        if len(row['b85'])>5*2**20:raise ValueError('transfer encoded bound')
+        raw=base64.b85decode(row['b85'])
+        if len(raw)!=row['size'] or hashlib.sha256(raw).hexdigest()!=row['sha256']:raise ValueError('transfer pinned bytes')
+        rows[name]=raw;manifest[name]=dict(size=len(raw),sha256=row['sha256'])
+    if hashlib.sha256(json.dumps(manifest,sort_keys=True).encode()).hexdigest()!=TRANSFER_ROOT_SHA256:
+        raise ValueError('transfer manifest root')
+    return rows
+
+
+def verify(rows):
+    plan=json.loads(rows['FinalNativeGate-plan.json'])
+    expected='PLAN_SHA256 = '+repr(hashlib.sha256(rows['FinalNativeGate-plan.json']).hexdigest())+'\n'
+    if rows['FinalNativeGate_seal.py']!=expected.encode():raise ValueError('transfer plan seal')
+    expected='BOOTSTRAP_SHA256 = '+repr(hashlib.sha256(rows['FinalNativeGate-bootstrap.json']).hexdigest())+'\n'
+    if rows['FinalNativeGate_bootstrap_seal.py']!=expected.encode():raise ValueError('transfer bootstrap seal')
+    bootstrap=json.loads(rows['FinalNativeGate-bootstrap.json'])
+    if set(bootstrap)!=set(rows)-{'FinalNativeGate-bootstrap.json','FinalNativeGate_bootstrap_seal.py'}:
+        raise ValueError('transfer exact bootstrap coverage')
+    for name,pin in bootstrap.items():
+        if dict(size=len(rows[name]),sha256=hashlib.sha256(rows[name]).hexdigest())!=pin:raise ValueError('transfer bootstrap source')
+    sources={STAGE+'/'+name for name in rows if name.endswith('.py') and name not in ('FinalNativeGate_seal.py','FinalNativeGate_bootstrap_seal.py')}
+    if {p for p in plan['files'] if p.startswith(STAGE+'/')}!=sources:raise ValueError('transfer plan source coverage')
+    for path in sources:
+        raw=rows[path.rsplit('/',1)[1]]
+        if hashlib.sha256(raw).hexdigest()!=plan['files'][path] or len(raw)!=plan['job_source_sizes'][path]:raise ValueError('transfer plan source')
+
+
+def install():
+    if STAGE!='/home/dombarker/final-native-gate-v13-20261025':raise ValueError('fixed v10 stage/leaf mismatch')
+    rows=decoded();verify(rows)
+    held=[];ancestors=[]
+    try:
+        fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);held.append(fd)
+        check_directory(os.fstat(fd))
+        for part in STAGE.split('/')[1:-1]:
+            before=os.stat(part,dir_fd=fd,follow_symlinks=False);check_directory(before)
+            sub=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(sub)
+            if identity(os.fstat(sub))!=identity(before):raise ValueError('transfer ancestry race')
+            ancestors.append((fd,part,identity(before)));fd=sub
+        if os.fstat(fd).st_uid!=os.getuid():raise ValueError('transfer parent must be user owned')
+        # No preexisting leaf adoption, including dangling aliases. Retain any
+        # newly created partial leaf on ALL failures. Never delete/chown.
+        os.mkdir('final-native-gate-v13-20261025',mode=0o700,dir_fd=fd)
+        leaf=os.open('final-native-gate-v13-20261025',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(leaf)
+        owned=os.fstat(leaf)
+        if owned.st_uid!=os.getuid() or stat.S_IMODE(owned.st_mode)!=0o700:raise ValueError('transfer leaf0700')
+        leaf_id=identity(owned)
+        for name,raw in sorted(rows.items()):
+            out=os.open(name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=leaf)
+            try:
+                at=0
+                while at<len(raw):
+                    n=os.write(out,raw[at:at+65536])
+                    if n<=0:raise ValueError('transfer short write')
+                    at+=n
+                os.fsync(out)
+                s=os.fstat(out)
+                if not stat.S_ISREG(s.st_mode) or s.st_nlink!=1 or s.st_uid!=os.getuid() or stat.S_IMODE(s.st_mode)!=0o600:
+                    raise ValueError('transfer new regular single-link private file')
+            finally:os.close(out)
+            # Reopen after writer closes; pin known bytes before execution.
+            src=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=leaf)
+            try:
+                before=os.fstat(src)
+                if identity(before)!=identity(s) or before.st_nlink!=1 or before.st_size!=len(raw):raise ValueError('transfer reopen identity')
+                h=hashlib.sha256();left=len(raw)
+                while left:
+                    piece=os.read(src,min(left,65536))
+                    if not piece:raise ValueError('transfer short source')
+                    left-=len(piece);h.update(piece)
+                if os.read(src,1) or h.hexdigest()!=FILES[name]['sha256'] or source_stamp(os.fstat(src))!=source_stamp(before):
+                    raise ValueError('transfer closed-writer source drift')
+            finally:os.close(src)
+        os.fsync(leaf);os.fsync(fd)
+        for parent,name,expected in ancestors:
+            if identity(os.stat(name,dir_fd=parent,follow_symlinks=False))!=expected:raise ValueError('transfer final ancestry drift')
+        if identity(os.stat('final-native-gate-v13-20261025',dir_fd=fd,follow_symlinks=False))!=leaf_id:raise ValueError('transfer leaf replaced')
+        return dict(status='FIXED_DATA_SOURCE_TRANSFERRED',files=len(rows),bytes=sum(map(len,rows.values())),root=TRANSFER_ROOT_SHA256,execution_authority=False,print_axioms='N/A')
+    finally:
+        for fd in reversed(held):os.close(fd)
+
+
+def packet_summary():
+    # Fixed own DATA packet only; no arbitrary report reader or directory scan.
+    names=('FinalNativeGate-setup-terminal.json','FinalNativeGate-setup-parent-terminal.json',
+           'FinalNativeGate-candidate-controls.json','FinalNativeGate-setup-parent-cleanup.json',
+           'FinalNativeGate-setup-parent-guard.json')
+    public=set(names[:3]);result={};held=[]
+    try:
+        fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW);held.append(fd)
+        for part in (*STAGE.split('/')[1:],'FinalNativeGate-setup-packet'):
+            before=os.stat(part,dir_fd=fd,follow_symlinks=False);check_directory(before)
+            sub=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd);held.append(sub)
+            if identity(os.fstat(sub))!=identity(before):raise ValueError('summary ancestry race')
+            fd=sub
+        owner=os.fstat(fd)
+        if owner.st_uid!=os.getuid() or stat.S_IMODE(owner.st_mode)!=0o700:raise ValueError('summary private packet0700')
+        for name in names:
+            src=None
+            try:
+                src=os.open(name,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=fd)
+                before=os.fstat(src)
+                if not stat.S_ISREG(before.st_mode) or before.st_nlink!=1 or before.st_uid!=os.getuid() or before.st_mode&0o022:
+                    raise ValueError('summary regular single-link owner/permissions')
+                if not 0<=before.st_size<=512*2**20:raise ValueError('summary512MiB file bound')
+                h=hashlib.sha256();left=before.st_size;pieces=[]
+                include=name in public and before.st_size<=4*2**20
+                while left:
+                    raw=os.read(src,min(left,65536))
+                    if not raw:raise ValueError('summary short read')
+                    left-=len(raw);h.update(raw)
+                    if include:pieces.append(raw)
+                if os.read(src,1) or source_stamp(os.fstat(src))!=source_stamp(before):raise ValueError('summary file drift')
+                result[name]=dict(size=before.st_size,sha256=h.hexdigest())
+                if include:result[name]['record']=json.loads(b''.join(pieces))
+                elif name in public:result[name]['error']='public record exceeds4MiB; retained remote'
+            except (OSError,ValueError) as exc:result[name]=dict(error=repr(exc))
+            finally:
+                if src is not None:os.close(src)
+        return result
+    finally:
+        for fd in reversed(held):os.close(fd)
+
+
+def main():
+    if len(sys.argv)!=1:raise ValueError('no receiver arguments')
+    start=time.monotonic()
+    receipt=install()
+    # Only the activated DATA setup path. Targets/harness/registry are NOT
+    # uploaded; missing fixed files become exact partial collection failures.
+    env=dict(HOME='/home/dombarker',USER='dombarker',LOGNAME='dombarker',PATH='/usr/bin:/bin',LANG='C.UTF-8',LC_ALL='C.UTF-8')
+    result=subprocess.run(['/usr/bin/python3','-I','-B',STAGE+'/FinalNativeGate_setup.py'],
+                          cwd=STAGE,env=env,stdin=subprocess.DEVNULL,timeout=max(.001,120-(time.monotonic()-start)))
+    receipt['setup_exit']=result.returncode
+    try:receipt['packet']=packet_summary()
+    except (OSError,ValueError) as exc:receipt['packet_error']=repr(exc)
+    failed=bool(receipt.get('packet_error')) or any('error' in row for row in receipt.get('packet',{}).values())
+    raw=json.dumps(receipt,sort_keys=True)
+    if len(raw.encode())>4*2**20:
+        raw=json.dumps(dict(status='PUBLIC_SUMMARY_LIMIT',setup_exit=result.returncode,
+            packet_retained=STAGE+'/FinalNativeGate-setup-packet',execution_authority=False,print_axioms='N/A'))
+        failed=True
+    print(raw)
+    return 78 if failed else result.returncode
+
+if __name__=='__main__':raise SystemExit(main())

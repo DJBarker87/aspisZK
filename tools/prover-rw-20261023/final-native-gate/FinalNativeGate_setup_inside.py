@@ -6,7 +6,7 @@ def main():
 def _bound_body():
     import sys
     from pathlib import Path
-    stage=Path('/home/dombarker/final-native-gate-v12-20261025')
+    stage=Path('/home/dombarker/final-native-gate-v13-20261025')
     if Path(__file__).resolve().parent!=stage:raise ValueError('wrong fixed bootstrap path')
     sys.path.insert(0,str(stage))  # explicit fixed source bootstrap under -I
     from FinalNativeGate_scope import child_wait

@@ -1,0 +1,167 @@
+{
+  "schema": "FinalNativeGate-receipt-layout-v1",
+  "status": "prospective source layout; no actual host receipts",
+  "charge": {
+    "filename": "FinalNativeGate-Kani060-CHARGED.json",
+    "exclusive": true,
+    "fields": [
+      "schema",
+      "previous",
+      "charged",
+      "command",
+      "monotonic_ns",
+      "rule"
+    ],
+    "constants": {
+      "previous": 59,
+      "charged": 60
+    },
+    "command": "literal FinalNativeGate.COMMAND only"
+  },
+  "pins": {
+    "files": "finite sealed plan file map: path -> SHA256",
+    "native": "exact fixed native root inventory: path -> SHA256",
+    "cache": "fixed cache inventory: path -> SHA256",
+    "environment": "exact sealed allowlist values",
+    "inherited_limits": "exact pinned rlimit pairs",
+    "source_revision": "fixed source revision",
+    "caveat": "identity observation only"
+  },
+  "controls": {
+    "fields": [
+      "path",
+      "pid",
+      "self_observation",
+      "values"
+    ],
+    "values": [
+      "memory.high",
+      "memory.max",
+      "memory.current",
+      "memory.peak",
+      "memory.swap.max",
+      "memory.swap.current",
+      "memory.events",
+      "pids.max",
+      "pids.current",
+      "cgroup.procs",
+      "cgroup.threads",
+      "cgroup.events"
+    ],
+    "errors": "raw errno/error records retained; failure denies"
+  },
+  "admission": {
+    "phases": [
+      "prospective",
+      "inside-scope",
+      "go"
+    ],
+    "policy_phase_for_go": "inside-scope",
+    "fields": [
+      "api_version",
+      "collector_pid",
+      "decision",
+      "snapshots",
+      "original_legacy",
+      "print_axioms"
+    ],
+    "nested": "complete unchanged reviewed collector/policy schema; no projection"
+  },
+  "ordered_reads": {
+    "record_kinds": [
+      "read",
+      "command",
+      "scandir"
+    ],
+    "fields_by_kind": {
+      "read": [
+        "kind",
+        "path",
+        "content",
+        "errno",
+        "sha256",
+        "size",
+        "error"
+      ],
+      "command": [
+        "kind",
+        "command",
+        "exit",
+        "stdout",
+        "stderr",
+        "error",
+        "errno"
+      ],
+      "scandir": [
+        "kind",
+        "path",
+        "entries",
+        "error",
+        "errno"
+      ]
+    },
+    "optional_fields": "success/error variants remain raw"
+  },
+  "child": {
+    "fields": [
+      "identity",
+      "command",
+      "pidfd_opened"
+    ],
+    "identity": [
+      "pid",
+      "ppid",
+      "starttime",
+      "rss_bytes"
+    ]
+  },
+  "terminal": {
+    "fields": [
+      "schema",
+      "terminal",
+      "actual_command_exit",
+      "child_spawned",
+      "charged",
+      "wall_seconds",
+      "errors",
+      "peak_rss_kib",
+      "swaps",
+      "missing_metrics",
+      "print_axioms",
+      "security_targets_established"
+    ],
+    "terminal_values": [
+      "FAILED",
+      "COMMAND_EXIT_ZERO_PENDING_PROOF_REVIEW"
+    ],
+    "unobserved_metrics": null,
+    "security_targets_established": false
+  },
+  "guard": {
+    "fields": [
+      "kind",
+      "budget_bytes",
+      "interval_seconds",
+      "max_samples",
+      "max_lineage",
+      "peak_sampled_rss_bytes",
+      "samples",
+      "lineage",
+      "error",
+      "cancellations",
+      "started",
+      "stopped",
+      "cgroup_peak"
+    ],
+    "bounds": {
+      "budget_bytes": 4294967296,
+      "max_samples": 32768,
+      "max_lineage": 256
+    },
+    "failure_variant": {
+      "error": "string"
+    },
+    "limitation": "sampled process/TGID RSS only"
+  },
+  "retention": "all raw on host; JSON>5000000 bytes external hash+size only; no native binary/object in Git"
+}
