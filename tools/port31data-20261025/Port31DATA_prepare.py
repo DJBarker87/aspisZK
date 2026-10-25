@@ -12,7 +12,7 @@ def base(n):
  paths=[Path(r['path']) for r in old['runtime']]+[src,T/'Port31DATA_run.py',Path('/Users/dominic/ZK/AGENTS.md')]
  rules=Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad')
  paths += [rules/'r1p-common.txt',rules/'local-lean.txt']
- for name in ['Init.lean','Lean/Environment.lean','Lean/Declaration.lean','Lean/Expr.lean','Lean/Data/KVMap.lean','Init/Data/Bool/Basic.lean','Init/Grind/Lemmas.lean']:
+ for name in ['Init.lean','Lean/Environment.lean','Lean/Declaration.lean','Lean/Expr.lean','Lean/Data/KVMap.lean','Init/Data/Bool.lean','Init/Grind/Lemmas.lean']:
   paths.append(SYS/'src/lean'/name)
  paths += [p for p in (SYS/'lib/lean').glob('Init.olean*')]
  fresh=[pin(safe(p)) for p in paths]
