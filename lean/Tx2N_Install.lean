@@ -1,3 +1,4 @@
+import Tx2N_Powers
 import Tx2I_Install
 import Port4A_ReaderInstall
 import Port5Q1_QueryPorts
@@ -12,16 +13,18 @@ def inner (base : Ops) (reserved : Bool) (query : Port3_NativeQueryBody.Ops) : O
   {base with
     op18 := Port4A_ReaderInstall.reader reserved
     op6 := Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install query))
-    op9 := Port3_FlushInstall.flush}
+    op9 := Port3_FlushInstall.flush
+    op17 := Tx2N_Powers.powers}
 
 theorem slots (base : Ops) (reserved : Bool) (query : Port3_NativeQueryBody.Ops) :
     @(inner base reserved query).op18 = @Port4A_ReaderInstall.reader reserved ∧
     (inner base reserved query).op6 =
       Port3_QueryStage.query (Port4C_RowStd.install (Port5Q1_QueryPorts.install query)) ∧
-    (inner base reserved query).op9 = Port3_FlushInstall.flush := ⟨rfl,rfl,rfl⟩
+    (inner base reserved query).op9 = Port3_FlushInstall.flush ∧
+    (inner base reserved query).op17 = Tx2N_Powers.powers := ⟨rfl,rfl,rfl,rfl⟩
 
 theorem retained (base : Ops) (reserved : Bool) (query : Port3_NativeQueryBody.Ops) :
-    {inner base reserved query with op18 := base.op18, op6 := base.op6, op9 := base.op9} = base := by
+    {inner base reserved query with op18 := base.op18, op6 := base.op6, op9 := base.op9, op17 := base.op17} = base := by
   cases base; rfl
 
 theorem reader_success (base : Ops) (reserved : Bool) (query : Port3_NativeQueryBody.Ops)

@@ -30,7 +30,7 @@ theorem common {CoreError Hash : Type} (base : Ops) (reserved : Bool)
       (v : verifier.View),
       Port4A_ReaderInstall.reader reserved D checkpoint proof pub .S2 hash = ok (.Ok (p,saved)) ∧
       saved.next = 10#usize ∧
-      base.op17 29#usize p.gamma = ok g ∧
+      Tx2N_Powers.powers 29#usize p.gamma = ok g ∧
       Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install geometryOps)
         p.queries saved.next 22#usize = ok (.Ok geometry) ∧
       Port3_NativePendingInstall.source reserved saved.weights.deref = ok (.Ok pending) ∧
