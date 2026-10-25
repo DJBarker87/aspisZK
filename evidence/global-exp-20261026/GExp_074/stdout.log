@@ -1,0 +1,19 @@
+def AspisR1.GExp_Experiment.program : AspisR1CurrentCaller.Ops →
+  VTop_Stages.Ops →
+    Bool →
+      AspisR1PublicPreparation.FinishModel.Boundaries →
+        ClaimsUnrolledFinish.StdCalls →
+          (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+            AspisR1CurrentCaller.aspis_core.digest.Digest32 Unit →
+              VTop_Stages.aspis_core.digest.Digest32 Unit →
+                Program Bytes State FirstInputs →
+                  (FirstInputs → alloc.vec.Vec U8 → Program Bytes State SecondInputs) → Program Bytes State Outcome :=
+fun current stage reserved B std hashv D1 D2 adversary chooseSecond =>
+  AspisV8R19.OracleProgramOps.bind adversary fun input =>
+    AspisV8R19.OracleProgramOps.bind (first current B std hashv D1 input) fun reply =>
+      match reply with
+      | ok (core.result.Result.Ok saved) =>
+        AspisV8R19.OracleProgramOps.bind (chooseSecond input saved) fun next =>
+          AspisV8R19.OracleProgramOps.bind (second stage reserved hashv D2 next) fun out =>
+            Program.done (input, reply, some (next, out))
+      | x => Program.done (input, reply, none)
