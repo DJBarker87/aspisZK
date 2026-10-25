@@ -34,10 +34,16 @@ if __name__ == '__main__':
     stream = Bounded()
     import SbfProducer_tests
     followup = sys.argv[2:] == ['--fd-followup']
-    if sys.argv[2:] and not followup:
+    package_followup = sys.argv[2:] == ['--package-followup']
+    if sys.argv[2:] and not (followup or package_followup):
         raise SystemExit('unknown selection')
-    label = 'SbfProducer-fd-focused' if followup else 'SbfProducer-focused'
-    if followup:
+    label = ('SbfProducer-package-focused' if package_followup else
+             'SbfProducer-fd-focused' if followup else 'SbfProducer-focused')
+    if package_followup:
+        names = ['test_exact_copy_and_operational_functions',
+                 'test_launcher_and_root_policy_are_pinned_by_live_reads']
+        suite = unittest.TestSuite(SbfProducer_tests.Suite(name) for name in names)
+    elif followup:
         names = ['test_exact_copy_and_operational_functions',
                  'test_launcher_and_root_policy_are_pinned_by_live_reads',
                  'test_inherited_descriptor_and_stdio_access_fail_closed',
