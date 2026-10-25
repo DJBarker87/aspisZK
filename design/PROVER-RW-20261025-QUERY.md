@@ -451,3 +451,9 @@ unchanged rng-owner launcher was used directly for unused11460up. Its caps,
 locks and retry checks are unchanged. The read-only input receipt collector
 only hashes/snapshots proof inputs; no launch/monitor infrastructure was built
 or repaired. No resource failure, Rust, Kani, native, timing, ELF or full replay.
+
+Evidence correction: the first stage-6 collector ran before SFTP finished and
+stopped on missing out11470. No compile was repeated. The completed transfer
+was then validated,11470's receipt and raw logs added, and the full12-attempt
+summary regenerated. Source snapshots/hashes and accepted proof claims are
+unchanged; the earlier partial evidence commit is retained in history.
