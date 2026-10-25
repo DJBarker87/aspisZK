@@ -1,0 +1,85 @@
+"""One precharged DATA transport. Local evidence collector, no receiver replacement."""
+import datetime,hashlib,json,os,resource,shutil,signal,subprocess,sys,time
+from pathlib import Path
+PREFIX='FinalNativeGateDataV5Action'
+E=Path('evidence/prover-rw-20261023/final-native-gate')
+P=Path('tools/prover-rw-20261023/final-native-gate/prospective-data-v5')
+L=json.loads((E/(PREFIX+'-ledger.json')).read_text());C=Path(L['capture'])
+def pin(p):
+    b=Path(p).read_bytes();return dict(size=len(b),sha256=hashlib.sha256(b).hexdigest())
+def write(n,v):
+    with (C/n).open('x') as f:json.dump(v,f,indent=2,sort_keys=True);f.write('\n');f.flush();os.fsync(f.fileno())
+def utc():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def snapshot():
+    # Inspect process metadata, retain only caller descendants. Never read others' files.
+    r=subprocess.run(['/bin/ps','-axo','pid=,ppid=,rss=,lstart=,comm='],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=2,check=True,text=True)
+    rows={}
+    for line in r.stdout.splitlines():
+        w=line.split(None,8)
+        if len(w)!=9:raise ValueError('process sample shape')
+        rows[int(w[0])]=dict(pid=int(w[0]),ppid=int(w[1]),rss_bytes=int(w[2])*1024,start=' '.join(w[3:8]),command=w[8])
+    own={os.getpid()};before=set()
+    while own!=before:
+        before=set(own);own.update(pid for pid,row in rows.items() if row['ppid'] in own)
+    return [rows[x] for x in sorted(own) if x in rows]
+def main():
+    start=time.monotonic();child=None;errors=[];samples=0;peak=0;ident=None;ssh_seen={};actual='UNKNOWN';rc=None
+    # This exclusive marker consumes the allocation even if a later preparation fails.
+    write('main-exclusive-charge.json',dict(utc=utc(),main_precharged=1,ledger=pin(E/(PREFIX+'-ledger.json')),print_axioms='N/A'))
+    argv=['python3','-B',str(P/'FinalNativeGate-data-transport.py')]
+    try:
+        assert L['main_precharged']==1
+        rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+        assert subprocess.run(['git','diff','--quiet','HEAD','--',str(E/(PREFIX+'-ledger.json')),str(E/(PREFIX+'-criteria.txt')),str(E/(PREFIX+'-caller.py'))]).returncode==0
+        assert subprocess.run(['git','cat-file','-e',rev+':'+str(E/(PREFIX+'-ledger.json'))]).returncode==0
+        d=json.loads((P/'FinalNativeGate-release-identities.json').read_text())
+        assert d['transfer_manifest_root']=='63d1c9087fe936618d506f7c1c6dcb01a1222973f2e022df892d10cfcbff0032'
+        assert pin(P/'FinalNativeGate-data-transfer.py')==dict(size=877610,sha256='2aec50ced21005cfb6117bb83f4670ba56f703ab0b55840e793091be7c410835')
+        assert pin(P/'FinalNativeGate-data-transport.py')==dict(size=3854,sha256='5f397a25a3873755b58f97400cb336bae065dae9681df6a2f34c43f21964f3dd')
+        assert {x.name for x in (P/'payload').iterdir()}==set(d['transfer_manifest'])
+        for n,p in d['transfer_manifest'].items():assert pin(P/'payload'/n)==p,n
+        exe=Path(shutil.which('python3')).resolve()
+        write('inputs.json',dict(utc=utc(),argv=argv,source_revision=L['source_revision'],evidence_revision=rev,interpreter=str(exe),interpreter_pin=pin(exe),interpreter_version=sys.version,ssh_pin=pin('/usr/bin/ssh'),caller_pin=pin(__file__),release_identities_pin=pin(P/'FinalNativeGate-release-identities.json'),receiver=d['receiver'],transport=d['transport'],transfer_manifest=d['transfer_manifest'],transfer_manifest_root=d['transfer_manifest_root'],print_axioms='N/A'))
+        with (C/'caller.stdout').open('xb') as out,(C/'caller.stderr').open('xb') as err,(C/'samples.jsonl').open('x') as log:
+            # Admission sample of caller itself before any transport child.
+            rows=snapshot();assert sum(r['rss_bytes'] for r in rows)<512*2**20
+            child=subprocess.Popen(argv,stdout=out,stderr=err,start_new_session=True)
+            while True:
+                rows=snapshot();total=sum(r['rss_bytes'] for r in rows);peak=max(peak,total);samples+=1
+                log.write(json.dumps(dict(elapsed=time.monotonic()-start,aggregate_rss_bytes=total,processes=rows))+'\n');log.flush()
+                for r in rows:
+                    if r['pid']==child.pid:
+                        if ident is None:ident=r
+                        elif (r['start'],r['command'])!=(ident['start'],ident['command']):raise ValueError('transport identity drift')
+                    if r['command']=='/usr/bin/ssh':ssh_seen[(r['pid'],r['start'])]=r
+                if total>=512*2**20:raise MemoryError('own sampled aggregate512MiB ceiling')
+                if sum((C/n).stat().st_size for n in ('caller.stdout','caller.stderr'))>4*2**20:raise ValueError('caller public output4MiB bound')
+                if child.poll() is not None:rc=child.returncode;break
+                if time.monotonic()-start>135:raise TimeoutError('caller135s monitoring deadline')
+                time.sleep(.05)
+        # Returned packet path is generated by the exact pinned transport.
+        result=json.loads((C/'caller.stdout').read_text());packet=Path(result['packet'])
+        assert str(packet).startswith('/private/tmp/FinalNativeGate-future-data-transport-')
+        receipt=json.loads((packet/'receipt.json').read_text())
+        # A complete transport receipt with no Popen error and returned SSH result
+        # proves one Popen; packet content/SSH observations further qualify it.
+        if ssh_seen or not receipt['errors']:actual=1
+        write('transport-artifacts.json',dict(packet=str(packet),files={x.name:pin(x) for x in packet.iterdir() if x.is_file()},receipt=receipt,result=result))
+    except BaseException as exc:errors.append(repr(exc))
+    finally:
+        if child is not None and child.poll() is None:
+            # Only own new session; check root start identity before signalling.
+            try:
+                rows=snapshot();root=next((r for r in rows if r['pid']==child.pid),None)
+                if ident and root and root['start']==ident['start'] and os.getpgid(child.pid)==child.pid:
+                    os.killpg(child.pid,signal.SIGKILL)
+                else:errors.append('local group cleanup identity unresolved')
+            except BaseException as exc:errors.append('local cleanup '+repr(exc))
+            try:rc=child.wait(timeout=3)
+            except BaseException as exc:errors.append('local wait '+repr(exc))
+        if ssh_seen:actual=1
+        u=resource.getrusage(resource.RUSAGE_SELF);v=resource.getrusage(resource.RUSAGE_CHILDREN)
+        write('caller-receipt.json',dict(utc=utc(),argv=argv,exit=rc,errors=errors,wall_seconds=time.monotonic()-start,caller_peak_rss_bytes=u.ru_maxrss,serial_children_peak_rss_bytes=v.ru_maxrss,sampled_aggregate_peak_rss_bytes=peak,sample_count=samples,swap=u.ru_nswap,children_swap=v.ru_nswap,actual_main_ssh=actual,ssh_observations=list(ssh_seen.values()),transport_identity=ident,main_allocation_spent=1,conditional_ssh=0,print_axioms='N/A',remote_closure='assess returned terminal; local exit alone is insufficient'))
+    print(json.dumps(dict(capture=str(C),exit=rc,errors=errors,actual_main_ssh=actual)))
+    return 0 if not errors else 1
+if __name__=='__main__':raise SystemExit(main())
