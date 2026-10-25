@@ -1,0 +1,210 @@
+T2Nat_ReaderSuffix.lean:246:101: error: unsolved goals
+case h_1.Ok
+ops : ResumeOps
+bytes : Slice U8
+v : transport.Variant
+i4 : U8
+end1 : Usize
+state a3 a4 : Std.Array U8 32#usize
+val val1 val2 val3 : E
+val4 : K
+queries : Std.Array U32 22#usize
+semantic_alpha : Std.Array K 10#usize
+r b✝⁸ : verifier.Reader
+value✝ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁸ : aspis_core.field.QM31
+hx✝⁸ : ops.readK r = ok (core.result.Result.Ok a✝⁸, b✝⁸)
+b✝⁷ : verifier.Reader
+x✝⁵ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁷ : aspis_core.field.QM31
+hx✝⁷ : ops.readK b✝⁸ = ok (core.result.Result.Ok a✝⁷, b✝⁷)
+b✝⁶ : verifier.Reader
+x✝⁴ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁶ : aspis_core.field.QM31
+hx✝⁶ : ops.readK b✝⁷ = ok (core.result.Result.Ok a✝⁶, b✝⁶)
+b✝⁵ : verifier.Reader
+x✝³ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁵ : aspis_core.field.QM31
+hx✝⁵ : ops.readK b✝⁶ = ok (core.result.Result.Ok a✝⁵, b✝⁵)
+b✝⁴ : verifier.Reader
+x✝² : core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error
+a✝⁴ : aspis_core.field.wide_exact.WideExact
+hx✝⁴ : ops.readE b✝⁵ = ok (core.result.Result.Ok a✝⁴, b✝⁴)
+b✝³ : verifier.Reader
+x✝¹ : core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error
+a✝³ : aspis_core.field.wide_exact.WideExact
+hx✝³ : ops.readE b✝⁴ = ok (core.result.Result.Ok a✝³, b✝³)
+b✝² : verifier.Reader
+x✝ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝² : aspis_core.field.QM31
+hx✝² : ops.readK b✝³ = ok (core.result.Result.Ok a✝², b✝²)
+a✝¹ : ℕ
+b✝¹ : a✝¹ < 2 ^ UScalarTy.Usize.numBits
+hx✝¹ : ops.finalLen v = ok ({ toFin := ⟨a✝¹, b✝¹⟩ }#uscalar)
+a✝ b✝ : aspis_core.field.CM31
+hx✝ : ops.zeroK = ok { c0 := a✝, c1 := b✝ }
+a : List aspis_core.field.QM31
+b : a.length ≤ Usize.max
+hx : ops.filled ({ toFin := ⟨a✝¹, b✝¹⟩ }#uscalar) { c0 := a✝, c1 := b✝ } = ok (core.result.Result.Ok ⟨a, b⟩)
+⊢ (do
+      let cf14 ← ok (core.ops.control_flow.ControlFlow.Continue ⟨a, b⟩)
+      match cf14 with
+        | core.ops.control_flow.ControlFlow.Continue val13 => do
+          let r53 ← ops.readWeights bytes b✝².at val13
+          let cf15 ←
+            match r53 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf15 with
+            | core.ops.control_flow.ControlFlow.Continue val14 =>
+              if (val14.2 != end1) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+              else do
+                let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                ok
+                    (core.result.Result.Ok
+                      ({ variant := v, roots := Array.make 2#usize [a3, a4] ⋯, gamma := val, kappa := val1,
+                          alpha := Array.make 2#usize [val2, val3] ⋯, rho := val4, queries := queries,
+                          semantic_alpha := semantic_alpha,
+                          z := Array.make 2#usize [{ x := a✝⁸, y := a✝⁷ }, { x := a✝⁶, y := a✝⁵ }] ⋯, claim := a✝⁴,
+                          state := state },
+                        { weights := val14.1, rhs := a✝³, power := a✝², next := i31 }))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    do
+    let value ← ops.readWeights bytes b✝².at ⟨a, b⟩
+    match value with
+      | core.result.Result.Err v => ok (core.result.Result.Err v)
+      | core.result.Result.Ok val14 =>
+        if (val14.2 != end1) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+        else do
+          let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+          ok
+              (core.result.Result.Ok
+                ({ variant := v, roots := Array.make 2#usize [a3, a4] ⋯, gamma := val, kappa := val1,
+                    alpha := Array.make 2#usize [val2, val3] ⋯, rho := val4, queries := queries,
+                    semantic_alpha := semantic_alpha,
+                    z := Array.make 2#usize [{ x := a✝⁸, y := a✝⁷ }, { x := a✝⁶, y := a✝⁵ }] ⋯, claim := a✝⁴,
+                    state := state },
+                  { weights := val14.1, rhs := a✝³, power := a✝², next := i31 }))
+
+case h_1.Err
+ops : ResumeOps
+bytes : Slice U8
+v : transport.Variant
+i4 : U8
+end1 : Usize
+state a3 a4 : Std.Array U8 32#usize
+val val1 val2 val3 : E
+val4 : K
+queries : Std.Array U32 22#usize
+semantic_alpha : Std.Array K 10#usize
+r b✝⁷ : verifier.Reader
+value✝ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁸ : aspis_core.field.QM31
+hx✝⁸ : ops.readK r = ok (core.result.Result.Ok a✝⁸, b✝⁷)
+b✝⁶ : verifier.Reader
+x✝⁵ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁷ : aspis_core.field.QM31
+hx✝⁷ : ops.readK b✝⁷ = ok (core.result.Result.Ok a✝⁷, b✝⁶)
+b✝⁵ : verifier.Reader
+x✝⁴ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁶ : aspis_core.field.QM31
+hx✝⁶ : ops.readK b✝⁶ = ok (core.result.Result.Ok a✝⁶, b✝⁵)
+b✝⁴ : verifier.Reader
+x✝³ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝⁵ : aspis_core.field.QM31
+hx✝⁵ : ops.readK b✝⁵ = ok (core.result.Result.Ok a✝⁵, b✝⁴)
+b✝³ : verifier.Reader
+x✝² : core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error
+a✝⁴ : aspis_core.field.wide_exact.WideExact
+hx✝⁴ : ops.readE b✝⁴ = ok (core.result.Result.Ok a✝⁴, b✝³)
+b✝² : verifier.Reader
+x✝¹ : core.result.Result aspis_core.field.wide_exact.WideExact verifier.Error
+a✝³ : aspis_core.field.wide_exact.WideExact
+hx✝³ : ops.readE b✝³ = ok (core.result.Result.Ok a✝³, b✝²)
+b✝¹ : verifier.Reader
+x✝ : core.result.Result aspis_core.field.QM31 verifier.Error
+a✝² : aspis_core.field.QM31
+hx✝² : ops.readK b✝² = ok (core.result.Result.Ok a✝², b✝¹)
+a✝¹ : ℕ
+b✝ : a✝¹ < 2 ^ UScalarTy.Usize.numBits
+hx✝¹ : ops.finalLen v = ok ({ toFin := ⟨a✝¹, b✝⟩ }#uscalar)
+a b : aspis_core.field.CM31
+hx✝ : ops.zeroK = ok { c0 := a, c1 := b }
+a✝ : verifier.Error
+hx : ops.filled ({ toFin := ⟨a✝¹, b✝⟩ }#uscalar) { c0 := a, c1 := b } = ok (core.result.Result.Err a✝)
+⊢ (do
+      let cf14 ←
+        match core.result.Result.Err a✝ with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf14 with
+        | core.ops.control_flow.ControlFlow.Continue val13 => do
+          let r53 ← ops.readWeights bytes b✝¹.at val13
+          let cf15 ←
+            match r53 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf15 with
+            | core.ops.control_flow.ControlFlow.Continue val14 =>
+              if (val14.2 != end1) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+              else do
+                let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+                ok
+                    (core.result.Result.Ok
+                      ({ variant := v, roots := Array.make 2#usize [a3, a4] ⋯, gamma := val, kappa := val1,
+                          alpha := Array.make 2#usize [val2, val3] ⋯, rho := val4, queries := queries,
+                          semantic_alpha := semantic_alpha,
+                          z := Array.make 2#usize [{ x := a✝⁸, y := a✝⁷ }, { x := a✝⁶, y := a✝⁵ }] ⋯, claim := a✝⁴,
+                          state := state },
+                        { weights := val14.1, rhs := a✝³, power := a✝², next := i31 }))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x => Result (core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error)) x
+          | core.result.Result.Err v => ok (core.result.Result.Err v)) =
+    match core.result.Result.Err a✝ with
+    | core.result.Result.Err v => ok (core.result.Result.Err v)
+    | core.result.Result.Ok a => do
+      let value ← ops.readWeights bytes b✝¹.at a
+      match value with
+        | core.result.Result.Err v => ok (core.result.Result.Err v)
+        | core.result.Result.Ok val14 =>
+          if (val14.2 != end1) = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+          else do
+            let i31 ← lift (UScalar.cast UScalarTy.Usize i4)
+            ok
+                (core.result.Result.Ok
+                  ({ variant := v, roots := Array.make 2#usize [a3, a4] ⋯, gamma := val, kappa := val1,
+                      alpha := Array.make 2#usize [val2, val3] ⋯, rho := val4, queries := queries,
+                      semantic_alpha := semantic_alpha,
+                      z := Array.make 2#usize [{ x := a✝⁸, y := a✝⁷ }, { x := a✝⁶, y := a✝⁵ }] ⋯, claim := a✝⁴,
+                      state := state },
+                    { weights := val14.1, rhs := a✝³, power := a✝², next := i31 }))
+T2Nat_ReaderSuffix.lean:255:35: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+         ̵ ̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+         ̵ ̵core.convert.FromSame.from,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.T2Nat_ReaderSuffix.normalize' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
