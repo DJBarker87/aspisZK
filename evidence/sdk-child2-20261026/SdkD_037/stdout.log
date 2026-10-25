@@ -1,0 +1,359 @@
+SdkD_ParserRows.lean:33:43: error: unsolved goals
+b : Bytes
+rs : List Bytes
+success : semanticRows 27 0 b = some rs
+r1 : List (List AspisV8R19.DuplexFrames.Byte)
+h0 : rs = (List.take 5 b ++ slice b 5 (rowShape 0).2) :: r1
+s0 : semanticRows 26 (0 + 1) (List.drop (5 + (rowShape 0).2) b) = some r1
+s0' : semanticRows 26 1 (List.drop 5 b) = some r1
+r2 : List (List AspisV8R19.DuplexFrames.Byte)
+h1 : r1 = (List.take 5 (List.drop 5 b) ++ slice (List.drop 5 b) 5 (rowShape 1).2) :: r2
+s1 : semanticRows 25 (1 + 1) (List.drop (5 + (rowShape 1).2) (List.drop 5 b)) = some r2
+r3 : List (List AspisV8R19.DuplexFrames.Byte)
+h2 : r2 = (List.take 5 (List.drop 10 b) ++ slice (List.drop 10 b) 5 (rowShape 2).2) :: r3
+s2 : semanticRows 24 (2 + 1) (List.drop (5 + (rowShape 2).2) (List.drop 10 b)) = some r3
+bad : (List.drop 10 b).length < 37
+s1' :
+  37 ≤ List.length b - 10 ∧
+    List.take 5 (List.drop 10 b) = 1 :: le32 32 ∧
+      ((if List.length b - 47 < 5 then none
+            else
+              if List.take 5 (List.drop 47 b) = 0 :: le32 0 then
+                (if List.length b - 52 < 5 then none
+                    else
+                      if List.take 5 (List.drop 52 b) = 0 :: le32 0 then
+                        (if List.length b - 57 < 5 then none
+                            else
+                              if List.take 5 (List.drop 57 b) = 0 :: le32 0 then
+                                (if List.length b - 62 < 5 then none
+                                    else
+                                      if List.take 5 (List.drop 62 b) = 0 :: le32 0 then
+                                        (if List.length b - 67 < 5 then none
+                                            else
+                                              if List.take 5 (List.drop 67 b) = 0 :: le32 0 then
+                                                (if List.length b - 72 < 5 then none
+                                                    else
+                                                      if List.take 5 (List.drop 72 b) = 0 :: le32 0 then
+                                                        (if List.length b - 77 < 5 then none
+                                                            else
+                                                              if List.take 5 (List.drop 77 b) = 0 :: le32 0 then
+                                                                (if List.length b - 82 < 5 then none
+                                                                    else
+                                                                      if List.take 5 (List.drop 82 b) = 0 :: le32 0 then
+                                                                        (if List.length b - 87 < 5 then none
+                                                                            else
+                                                                              if
+                                                                                  List.take 5 (List.drop 87 b) =
+                                                                                    0 :: le32 0 then
+                                                                                (if List.length b - 92 < 5 then none
+                                                                                    else
+                                                                                      if
+                                                                                          List.take 5 (List.drop 92 b) =
+                                                                                            0 :: le32 0 then
+                                                                                        (if List.length b - 97 < 5 then
+                                                                                              none
+                                                                                            else
+                                                                                              if
+                                                                                                  List.take 5
+                                                                                                      (List.drop 97 b) =
+                                                                                                    0 :: le32 0 then
+                                                                                                (if
+                                                                                                        List.length b -
+                                                                                                            102 <
+                                                                                                          21 then
+                                                                                                      none
+                                                                                                    else
+                                                                                                      if
+                                                                                                          List.take 5
+                                                                                                              (List.drop
+                                                                                                                102 b) =
+                                                                                                            3 ::
+                                                                                                              le32
+                                                                                                                32 then
+                                                                                                        if
+                                                                                                            canonical
+                                                                                                              (slice
+                                                                                                                (List.drop
+                                                                                                                  102 b)
+                                                                                                                5
+                                                                                                                16) then
+                                                                                                          (if
+                                                                                                                  List.length
+                                                                                                                        b -
+                                                                                                                      123 <
+                                                                                                                    453 then
+                                                                                                                none
+                                                                                                              else
+                                                                                                                if
+                                                                                                                    List.take
+                                                                                                                        5
+                                                                                                                        (List.drop
+                                                                                                                          123
+                                                                                                                          b) =
+                                                                                                                      2 ::
+                                                                                                                        le32
+                                                                                                                          896 then
+                                                                                                                  if
+                                                                                                                      canonical
+                                                                                                                        (slice
+                                                                                                                          (List.drop
+                                                                                                                            123
+                                                                                                                            b)
+                                                                                                                          5
+                                                                                                                          448) then
+                                                                                                                    (if
+                                                                                                                            List.length
+                                                                                                                                  b -
+                                                                                                                                576 <
+                                                                                                                              453 then
+                                                                                                                          none
+                                                                                                                        else
+                                                                                                                          if
+                                                                                                                              List.take
+                                                                                                                                  5
+                                                                                                                                  (List.drop
+                                                                                                                                    576
+                                                                                                                                    b) =
+                                                                                                                                2 ::
+                                                                                                                                  le32
+                                                                                                                                    896 then
+                                                                                                                            if
+                                                                                                                                canonical
+                                                                                                                                  (slice
+                                                                                                                                    (List.drop
+                                                                                                                                      576
+                                                                                                                                      b)
+                                                                                                                                    5
+                                                                                                                                    448) then
+                                                                                                                              (if
+                                                                                                                                      List.length
+                                                                                                                                            b -
+                                                                                                                                          1029 <
+                                                                                                                                        453 then
+                                                                                                                                    none
+                                                                                                                                  else
+                                                                                                                                    if
+                                                                                                                                        List.take
+                                                                                                                                            5
+                                                                                                                                            (List.drop
+                                                                                                                                              1029
+                                                                                                                                              b) =
+                                                                                                                                          2 ::
+                                                                                                                                            le32
+                                                                                                                                              896 then
+                                                                                                                                      ⋯
+                                                                                                                                    else
+                                                                                                                                      none).bind
+                                                                                                                                fun
+                                                                                                                                  tail =>
+                                                                                                                                some
+                                                                                                                                  ⋯
+                                                                                                                            else
+                                                                                                                              none
+                                                                                                                          else
+                                                                                                                            none).bind
+                                                                                                                      fun
+                                                                                                                        tail =>
+                                                                                                                      some
+                                                                                                                        ((List.take
+                                                                                                                              5
+                                                                                                                              (List.drop
+                                                                                                                                123
+                                                                                                                                b) ++
+                                                                                                                            expand
+                                                                                                                              28
+                                                                                                                              (slice
+                                                                                                                                (List.drop
+                                                                                                                                  123
+                                                                                                                                  b)
+                                                                                                                                5
+                                                                                                                                448)) ::
+                                                                                                                          tail)
+                                                                                                                  else
+                                                                                                                    none
+                                                                                                                else
+                                                                                                                  none).bind
+                                                                                                            fun tail =>
+                                                                                                            some
+                                                                                                              ((List.take
+                                                                                                                    5
+                                                                                                                    (List.drop
+                                                                                                                      102
+                                                                                                                      b) ++
+                                                                                                                  expand
+                                                                                                                    1
+                                                                                                                    (slice
+                                                                                                                      (List.drop
+                                                                                                                        102
+                                                                                                                        b)
+                                                                                                                      5
+                                                                                                                      16)) ::
+                                                                                                                tail)
+                                                                                                        else none
+                                                                                                      else none).bind
+                                                                                                  fun tail =>
+                                                                                                  some
+                                                                                                    ((List.take 5
+                                                                                                          (List.drop 97
+                                                                                                            b) ++
+                                                                                                        slice
+                                                                                                          (List.drop 97
+                                                                                                            b)
+                                                                                                          5 0) ::
+                                                                                                      tail)
+                                                                                              else none).bind
+                                                                                          fun tail =>
+                                                                                          some
+                                                                                            ((List.take 5
+                                                                                                  (List.drop 92 b) ++
+                                                                                                slice (List.drop 92 b) 5
+                                                                                                  0) ::
+                                                                                              tail)
+                                                                                      else none).bind
+                                                                                  fun tail =>
+                                                                                  some
+                                                                                    ((List.take 5 (List.drop 87 b) ++
+                                                                                        slice (List.drop 87 b) 5 0) ::
+                                                                                      tail)
+                                                                              else none).bind
+                                                                          fun tail =>
+                                                                          some
+                                                                            ((List.take 5 (List.drop 82 b) ++
+                                                                                slice (List.drop 82 b) 5 0) ::
+                                                                              tail)
+                                                                      else none).bind
+                                                                  fun tail =>
+                                                                  some
+                                                                    ((List.take 5 (List.drop 77 b) ++
+                                                                        slice (List.drop 77 b) 5 0) ::
+                                                                      tail)
+                                                              else none).bind
+                                                          fun tail =>
+                                                          some
+                                                            ((List.take 5 (List.drop 72 b) ++
+                                                                slice (List.drop 72 b) 5 0) ::
+                                                              tail)
+                                                      else none).bind
+                                                  fun tail =>
+                                                  some
+                                                    ((List.take 5 (List.drop 67 b) ++ slice (List.drop 67 b) 5 0) ::
+                                                      tail)
+                                              else none).bind
+                                          fun tail =>
+                                          some ((List.take 5 (List.drop 62 b) ++ slice (List.drop 62 b) 5 0) :: tail)
+                                      else none).bind
+                                  fun tail =>
+                                  some ((List.take 5 (List.drop 57 b) ++ slice (List.drop 57 b) 5 0) :: tail)
+                              else none).bind
+                          fun tail => some ((List.take 5 (List.drop 52 b) ++ slice (List.drop 52 b) 5 0) :: tail)
+                      else none).bind
+                  fun tail => some ((List.take 5 (List.drop 47 b) ++ slice (List.drop 47 b) 5 0) :: tail)
+              else none).bind
+          fun tail => some ((List.take 5 (List.drop 10 b) ++ slice (List.drop 10 b) 5 32) :: tail)) =
+        some r2
+⊢ False
+SdkD_ParserRows.lean:40:65: error(lean.unknownIdentifier): Unknown constant `List.drop_self`
+SdkD_ParserRows.lean:25:56: error: unsolved goals
+b : Bytes
+rs : List Bytes
+success : semanticRows 27 0 b = some rs
+r1 : List (List AspisV8R19.DuplexFrames.Byte)
+h0 : rs = (List.take 5 b ++ slice b 5 (rowShape 0).2) :: r1
+s0 : semanticRows 26 (0 + 1) (List.drop (5 + (rowShape 0).2) b) = some r1
+s0' : semanticRows 26 1 (List.drop 5 b) = some r1
+r2 : List (List AspisV8R19.DuplexFrames.Byte)
+h1 : r1 = (List.take 5 (List.drop 5 b) ++ slice (List.drop 5 b) 5 (rowShape 1).2) :: r2
+s1 : semanticRows 25 (1 + 1) (List.drop (5 + (rowShape 1).2) (List.drop 5 b)) = some r2
+s1' : semanticRows 25 2 (List.drop 10 b) = some r2
+r3 : List (List AspisV8R19.DuplexFrames.Byte)
+h2 : r2 = (List.take 5 (List.drop 10 b) ++ slice (List.drop 10 b) 5 (rowShape 2).2) :: r3
+s2 : semanticRows 24 (2 + 1) (List.drop (5 + (rowShape 2).2) (List.drop 10 b)) = some r3
+short : ¬(List.drop 10 b).length < 37
+len : (List.drop 10 b).length ≥ 5
+⊢ List.drop (5 - min 5 (List.length b - 10)) (slice (List.drop 10 b) 5 32) = slice (List.drop 10 b) 5 32
+SdkD_ParserRows.lean:36:19: warning: This simp argument is unused:
+  bad
+
+Hint: Omit it from the simp argument list.
+  simp [rowShape,̵b̵a̵d̵] at s1'
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:39:8: warning: This simp argument is unused:
+  List.getElem?_cons_succ
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:39:32: warning: This simp argument is unused:
+  List.getElem?_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:40:24: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:40:50: warning: This simp argument is unused:
+  List.drop_take
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:41:37: warning: This simp argument is unused:
+  Nat.min_eq_left len
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:41:57: warning: This simp argument is unused:
+  Nat.sub_self
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SdkD_ParserRows.lean:41:70: warning: This simp argument is unused:
+  List.drop_zero
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵o̵w̵S̵h̵a̵p̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵P̵r̵o̵d̵.̵s̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵t̵a̵k̵e̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵s̵e̵l̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵t̵a̵k̵e̵,̵N̵a̵t̵.̵m̵i̵n̵_̵e̵q̵_̵l̵e̵f̵t̵ ̵l̵e̵n̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵e̵l̵f̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵z̵e̵r̵o̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲,̲ ̲r̲o̲w̲S̲h̲a̲p̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲r̲o̲d̲.̲s̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲t̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲s̲e̲l̲f̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲m̲i̲n̲_̲e̲q̲_̲l̲e̲f̲t̲ ̲l̲e̲n̲,̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲e̲l̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SdkD_ParserRows.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SdkD_ParserRows.row2' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

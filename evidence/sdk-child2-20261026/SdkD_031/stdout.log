@@ -1,0 +1,18 @@
+SdkD_ParserRoot.lean:17:4: error: Dependent elimination failed: Failed to solve equation
+  some rs =
+    Decidable.rec
+      (fun h =>
+        (fun x =>
+            if List.take 5 b ≠ ⟨tag✝ % 256, ⋯⟩ :: le32 size✝ then none
+            else
+              have payload := slice b 5 (if 14 ≤ row then size✝ / 2 else size✝);
+              if 14 ≤ row ∧ ¬canonical payload then none
+              else
+                have logical := if 14 ≤ row then expand (size✝ / 32) payload else payload;
+                do
+                let tail ← semanticRows fuel (row + 1) (List.drop (5 + if 14 ≤ row then size✝ / 2 else size✝) b)
+                pure ((List.take 5 b ++ logical) :: tail))
+          h)
+      (fun h => (fun x => none) h) ((List.length b).decLt (5 + if 14 ≤ row then size✝ / 2 else size✝))
+SdkD_ParserRoot.lean:18:2: error: No goals to be solved
+'AspisR1.SdkD_ParserRoot.semantic_head' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
