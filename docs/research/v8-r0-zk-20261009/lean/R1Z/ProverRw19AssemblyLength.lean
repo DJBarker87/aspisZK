@@ -14,7 +14,9 @@ theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
   cases front with
   | error e => cases success
   | ok first =>
-    dsimp only [Except.bind] at success
+    change (if (queries ps first).length ≠ offset then Except.error Error.parse else
+      (slots ss (queries ps first)).bind (fun final =>
+        if final.length ≠ size then Except.error Error.parse else Except.ok final)) = Except.ok result at success
     split at success
     · cases success
     · cases hs : slots ss (queries ps first) with
@@ -22,7 +24,8 @@ theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
         rw [hs] at success
         cases success
       | ok final =>
-        simp only [hs, Except.bind] at success
+        rw [hs] at success
+        change (if final.length ≠ size then Except.error Error.parse else Except.ok final) = Except.ok result at success
         split at success
         · cases success
         · have same : final = result := Except.ok.inj success

@@ -1,5 +1,4 @@
 import R1Z.ProverCommitCompactRows46
-import R1Z.ProverCommitMultiproof46
 /-! Ordered native proof front and final byte assembly. All codec errors
 precede query/node publication; both fixed byte-length guards are retained. -/
 set_option autoImplicit false

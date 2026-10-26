@@ -8,6 +8,8 @@ for p in files:by.setdefault(p.name,[]).append(p)
 base=r/'docs/research/v8-r0-zk-20261009/lean';generated=r/'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023';sources={};unresolved={}
 def resolve(name):
  if name in sources:return sources[name]
+ retained=r/'evidence/pv-rw19-resume-20261026/retained-source-inputs'/(name+'.lean.txt')
+ if retained.is_file():sources[name]=retained;return retained
  p=base/(name.replace('.','/')+'.lean')
  if p.is_file():sources[name]=p;return p
  if name.startswith('R1Z.ProverRwFull') and (generated/(name.split('.')[-1]+'.lean')).is_file():p=generated/(name.split('.')[-1]+'.lean');sources[name]=p;return p
@@ -23,7 +25,7 @@ def visit(name):
  if p:
   for dep in imports(p.read_text()):visit(dep)
  order.append(name)
-for target in ['R1Z.ProverRw19P6ContextIdentity','R1Z.ProverRw19P6Join','R1Z.ProverRw19P6Caller','R1Z.ProverRw19AuditCaller','R1Z.ProverRw19AssemblyLength','R1Z.ProverRw19MathematicalAssembly']:visit(target)
+for target in ['R1Z.ProverRw19P6ContextIdentity','R1Z.ProverRw19P6Join','R1Z.ProverRw19P6Caller','R1Z.ProverRw19AuditCaller','R1Z.ProverRw19AssemblyLength','R1Z.ProverRw19ReferenceLength','R1Z.ProverRw19MathematicalAssembly']:visit(target)
 code="""from pathlib import Path
 import sys,json
 names=json.load(sys.stdin);j=Path('/home/dombarker/project-offloads/aspis-joint-20261019');env=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text());roots=[j/'objects']+[Path(p) for p in env['LEAN_PATH'].split(':')]
