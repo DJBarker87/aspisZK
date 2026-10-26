@@ -22,6 +22,7 @@ base+='theorem lengths : ∀ c ∈ chunks,c.length=32 := by\n  intro c hc\n  sim
 base+=''.join('  · subst c;rfl\n' for _ in range(116))+'#print axioms lengths\n'
 for i,v in enumerate(vals):base+=f'def q{i:03} : aspis_core.field.QM31 := {q(v)}\n'
 for i in range(4):base+=f'def a{i} : Array aspis_core.field.QM31 29#usize := ⟨['+','.join(f'q{j:03}' for j in range(29*i,29*(i+1)))+'],by rfl⟩\n'
+base+='def claims : ClaimsUnrolledFinish.MainClaims := ⟨[a0,a1,a2],by rfl⟩\n'
 base+='end AspisR1.JFu_ClaimsData\n';files[R/'lean/JFu_ClaimsData.lean']=base
 for group in range(4):
  text='''import JFu_ClaimsData
@@ -48,6 +49,43 @@ theorem parser{i:03} : AspisR1DecodeKFullV10.aspis_core.field.QM31.from_le_bytes
 #print axioms parser{i:03}
 '''
  text+='end AspisR1.JFu_ClaimsData\n';files[R/f'lean/JFu_ClaimsBytes{group}.lean']=text
+for group in range(4):
+ offset=29*group
+ text=f"""import JFu_ClaimsBytes{group}
+import JFv_MainDecode
+set_option autoImplicit false
+namespace AspisR1.JFu_ClaimsData
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation AspisS1ExtractedRoundChildren
+
+theorem decode{group} : decodeMain 29#usize JFu_Q25Source.record {offset}#usize=ok (.Ok a{group}) := by
+  have canonical := PSem_FieldCanonical.source_payload 25#u8 JFw_NativeRow25.record JFw_NativeRow25.payload
+    (by change 14≤25;omega) JFw_NativeRow25.accepted
+  have shape : JFu_Q25Source.record.framed.length=3717 := by
+    simp only [JFu_Q25Source.record,JFw_NativeRow25.record,JFw_Frames.frame,Slice.length,List.length_cons]
+    have size : JFw_NativeRow25.payload.val.length=3712 := JFw_NativeRow25.payload_length
+    omega
+  obtain ⟨out,call⟩ := JFv_MainDecode.success 29#usize JFu_Q25Source.record {offset}#usize
+    (by change 14≤25;omega) (by rw [shape];change 5+32*({offset}+29)≤3717;omega)
+    (by rw [shape];omega) canonical
+  have cells : ∀ j : Fin 29,out.val[j.val]'(by rw [out.property];exact j.isLt)=
+      a{group}.val[j.val]'(by rw [a{group}.property];exact j.isLt) := by
+    intro j
+    fin_cases j
+"""
+ for j in range(29):
+  i=offset+j
+  text+=f'    · exact JFu_DecodeAt.source JFu_Q25Source.record out {offset}#usize (by change {offset}≤116;omega) call ⟨{j},by change {j}<29;omega⟩ cell{i:03} _ window{i:03} parser{i:03}\n'
+ text+=f"""  have same : out=a{group} := by
+    apply Subtype.ext
+    apply List.ext_getElem
+    · rw [out.property,a{group}.property]
+    · intro i hi hj
+      exact cells ⟨i,by rw [out.property] at hi;exact hi⟩
+  exact same ▸ call
+#print axioms decode{group}
+end AspisR1.JFu_ClaimsData
+"""
+ files[R/f'lean/JFu_ClaimsDecode{group}.lean']=text
 for f,s in files.items():
  if '--check' in sys.argv:assert f.read_text()==s,f
  else:f.write_text(s)
