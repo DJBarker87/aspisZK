@@ -60,6 +60,23 @@ mod checks {
         assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
     }
     #[kani::proof]
+    #[kani::unwind(1026)]
+    fn helper_sum1024() {
+        let raw:[[u32;4];1024]=kani::any();let mut h1=[QM31::ZERO;1024];
+        for i in 0..1024 {h1[i]=q(raw[i]);}
+        let n:usize=kani::any();kani::assume(n<=1024);
+        let a=aspis_statement::state_only_semantic::state_only_copy_helper_sum(&h1[..n]);
+        let b=super::reference_p6::helper_sum(&h1[..n]);
+        match (a,b) {
+            (None,None)=>{},
+            (Some(x),Some(y))=>{
+                assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+                assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
+            },
+            _=>assert!(false),
+        }
+    }
+    #[kani::proof]
     fn pole_equal() {
         let a=q(kani::any());let b=q(kani::any());
         assert_eq!(super::ct_pole::equal(a,b),super::reference::equal(a,b));
