@@ -1,0 +1,18 @@
+import JFx_NativeBytes
+import CPhy_Ranges
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFn_BatchSlots
+open Aeneas Aeneas.Std Result
+
+/-- All three real TX2 multiproof-node reads execute the installed source
+slot function. This does not assert node authentication or batch success. -/
+theorem source (kind : Fin 3) : Port4B_Install.leaves.op3 JFx_NativeBytes.proof
+    (Usize.ofNat (3+kind.val) (by have := kind.isLt;scalar_tac))=
+      ok (CPhy_Ranges.node JFx_NativeBytes.proof (3+kind.val)) := by
+  simpa only [Nat.mul_one] using (CPhy_Ranges.physical JFx_NativeBytes.proof
+    JFx_NativeBytes.proofBytes_length 1 kind.val (by decide) kind.isLt).2
+
+#print axioms source
+end AspisR1.JFn_BatchSlots
+end

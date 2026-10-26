@@ -1,0 +1,58 @@
+JFn_Accumulate.lean:36:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    (JFn_ArrayBuilder.ops seed).op15 11#u16 JFo_Prepared.accumulator.next rhs
+    ok
+        ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power,
+            next := JFo_Prepared.accumulator.next.wrapping_add 1#usize },
+          { raw := (Port3_RowsInstall.fromBW rows).raw,
+            terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })
+is not definitionally equal to the right-hand side
+  ok
+    ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power, next := 11#usize },
+      { raw := (Port3_RowsInstall.fromBW rows).raw,
+        terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })
+
+seed : Port3_NativeQueryBody.Ops
+node : U32
+value : SAQ_WideABI.E
+canonical : Port4C_QueryArithmetic.CanonE value
+basis : Port4C_BasisMeaning.Basis
+hbasis : Port4C_BasisMeaning.source (JFn_ArrayBuilder.ops seed) node = ok basis
+cbasis : S7JoinBasisCanonical.Canonical basis
+right✝ :
+  ∀ (i : Fin 64),
+    S7JoinBasisMachine.decode (S7JoinBasisBlock.cell basis ↑i) =
+      AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) ↑i
+rows : S7Kani2AccumulatorLoop.BatchedWeights
+sumOut : S7Kani3CallerTrace.Sum
+hrows :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1 (JFn_ArrayBuilder.ops seed)
+      { start := 0#usize, «end» := 64#usize } JFo_Prepared.accumulator.weights JFo_Prepared.accumulator.power
+      JFo_Prepared.accumulator.next JFo_Pending.value 64#usize basis =
+    ok (Port3_RowsInstall.fromBW rows)
+left✝ : S7Kani3CallerTrace.PushTrace JFn_PendingHistory.old rows sumOut
+progress : S7JoinRowsTrace.Progress 0 64 rows
+product : SAQ_WideABI.E
+hproduct : SAQ_MixedSource.mulE value JFo_Prepared.accumulator.power = ok product
+cproduct : Port4C_QueryArithmetic.CanonE product
+rhs : SAQ_WideABI.E
+hrhs : SAQ_Arithmetic.add JFo_Prepared.accumulator.rhs product = ok rhs
+crhs : Port4C_QueryArithmetic.CanonE rhs
+power : SAQ_WideABI.K
+hpower : SAQ_Arithmetic.mulK JFo_Prepared.accumulator.power JFo_Prepared.value.rho = ok power
+cpower : Port3_FlushInstall.Canonical power
+hp : (JFn_ArrayBuilder.ops seed).op3 value JFo_Prepared.accumulator.power = ok product
+hr : (JFn_ArrayBuilder.ops seed).op2 JFo_Prepared.accumulator.rhs product = ok rhs
+hq : (JFn_ArrayBuilder.ops seed).op9 JFo_Prepared.accumulator.power JFo_Prepared.value.rho = ok power
+⊢ (do
+      (JFn_ArrayBuilder.ops seed).op15 11#u16 JFo_Prepared.accumulator.next rhs
+      ok
+          ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power,
+              next := JFo_Prepared.accumulator.next.wrapping_add 1#usize },
+            { raw := (Port3_RowsInstall.fromBW rows).raw,
+              terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := JFo_Prepared.accumulator.weights, rhs := rhs, power := power, next := 11#usize },
+        { raw := (Port3_RowsInstall.fromBW rows).raw,
+          terms := (Port3_RowsInstall.fromBW rows).terms.wrapping_add 1#usize })
+'AspisR1.JFn_Accumulate.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
