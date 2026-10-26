@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessInverseZero.lean:21:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1ProducerRelease47.field.M31.mul ?x ?y
+in the target expression
+  ProverRwSuccessInverseSource.field.M31.mul 0#u32 0#u32 = ok 0#u32
+
+⊢ ProverRwSuccessInverseSource.field.M31.mul 0#u32 0#u32 = ok 0#u32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessInverseZero.lean:23:81: error: unsolved goals
+mul : ProverRwSuccessInverseSource.field.M31.mul 0#u32 0#u32 = ok 0#u32
+⊢ U32.wrapping_add 0#u32 0#u32 = 0#u32
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessInverseZero.lean:28:2: error: 'change' tactic failed, pattern
+  (do
+      let a ← ProverRwSuccessInverseSource.field.M31.mul 0#u32 0#u32
+      let b ← ProverRwSuccessInverseSource.field.M31.mul 0#u32 0#u32
+      let n ← ProverRwSuccessInverseSource.field.M31.add a b
+      let o ← ProverRwSuccessInverseSource.field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv n
+      let cf ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          ?m.143 a PUnit.unit b PUnit.unit n PUnit.unit o PUnit.unit cf PUnit.unit val
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          ?m.144 a PUnit.unit b PUnit.unit n PUnit.unit o PUnit.unit cf PUnit.unit residual) =
+    ?m.57
+is not definitionally equal to target
+  (do
+      let m ←
+        ProverRwSuccessInverseSource.field.M31.mul
+            (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).a
+            (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).a
+      let m1 ←
+        ProverRwSuccessInverseSource.field.M31.mul
+            (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).b
+            (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).b
+      let norm ← ProverRwSuccessInverseSource.field.M31.add m m1
+      let o ← ProverRwSuccessInverseSource.field.M31.Insts.Aspis_r1_encoder53ScalarCodeField.try_inv norm
+      let cf ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let m2 ←
+            ProverRwSuccessInverseSource.field.M31.mul
+                (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).a val
+          let m3 ←
+            ProverRwSuccessInverseSource.field.M31.neg
+                (ProverRwSuccessComplexInverseExact.input { a := 0#u32, b := 0#u32 }).b
+          let m4 ← ProverRwSuccessInverseSource.field.M31.mul m3 val
+          ok (some { a := m2, b := m4 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            ProverRwSuccessInverseSource.field.CM31 residual) =
+    ok none
+'R1Z.ProverRwSuccessInverseZero.m_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessInverseZero.c_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

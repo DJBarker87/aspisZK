@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessWideInverseExact.lean:63:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode hi
+in the target expression
+  (value (lo, hi)).im =
+    { re := decode x.1 * (QuadraticAlgebra.norm (value x))⁻¹,
+        im := -decode x.2 * (QuadraticAlgebra.norm (value x))⁻¹ }.im
+
+case im
+inst✝ : ExternalTypes
+ops : ExternalFuns
+x : Raw
+hx : canonical x
+hn : value x ≠ 0
+a : Old.Q
+ha :
+  ProverRwDictionaryTower.qMul (ProverRwSuccessQuarticInverseExact.input x.1)
+      (ProverRwSuccessQuarticInverseExact.input x.1) =
+    ok (ProverRwSuccessQuarticInverseExact.input a)
+hca : Canonical a
+hva : decode a = decode x.1 * decode x.1
+b : Old.Q
+hb :
+  ProverRwDictionaryTower.qMul (ProverRwSuccessQuarticInverseExact.input x.2)
+      (ProverRwSuccessQuarticInverseExact.input x.2) =
+    ok (ProverRwSuccessQuarticInverseExact.input b)
+hcb : Canonical b
+hvb : decode b = decode x.2 * decode x.2
+ub : Old.Q
+hub :
+  ProverRwDictionaryTower.qMul (ProverRwSuccessQuarticInverseExact.input u)
+      (ProverRwSuccessQuarticInverseExact.input b) =
+    ok (ProverRwSuccessQuarticInverseExact.input ub)
+hcub : Canonical ub
+hdub : decode ub = decode u * decode b
+n : Old.Q
+hnn :
+  ProverRwDictionaryTower.qSub (ProverRwSuccessQuarticInverseExact.input a)
+      (ProverRwSuccessQuarticInverseExact.input ub) =
+    ok (ProverRwSuccessQuarticInverseExact.input n)
+hcn : Canonical n
+hvn : decode n = decode a - decode ub
+hnorm : decode n = QuadraticAlgebra.norm (value x)
+nonzero : decode n ≠ 0
+ni : Old.Q
+hcni : Canonical ni
+hvni : decode ni = (QuadraticAlgebra.norm (value x))⁻¹
+lo : Old.Q
+hlo :
+  ProverRwDictionaryTower.qMul (ProverRwSuccessQuarticInverseExact.input x.1)
+      (ProverRwSuccessQuarticInverseExact.input ni) =
+    ok (ProverRwSuccessQuarticInverseExact.input lo)
+hclo : Canonical lo
+hvlo : decode lo = decode x.1 * decode ni
+nb : Old.Q
+hnb :
+  ProverRwSuccessInverseInstall.Src.qNeg (ProverRwSuccessQuarticInverseExact.input x.2) =
+    ok (ProverRwSuccessQuarticInverseExact.input nb)
+hcnb : Canonical nb
+hvnb : decode nb = -decode x.2
+hi : Old.Q
+hhi :
+  ProverRwDictionaryTower.qMul (ProverRwSuccessQuarticInverseExact.input nb)
+      (ProverRwSuccessQuarticInverseExact.input ni) =
+    ok (ProverRwSuccessQuarticInverseExact.input hi)
+hchi : Canonical hi
+hvhi : decode hi = decode nb * decode ni
+hni : ProverRwSuccessInverseInstall.Src.qInv (qinput n) = ok (some (qinput ni))
+coords :
+  { re := (value x).re * (QuadraticAlgebra.norm (value x))⁻¹,
+      im := -(value x).im * (QuadraticAlgebra.norm (value x))⁻¹ } =
+    (value x)⁻¹
+⊢ (value (lo, hi)).im =
+    { re := decode x.1 * (QuadraticAlgebra.norm (value x))⁻¹,
+        im := -decode x.2 * (QuadraticAlgebra.norm (value x))⁻¹ }.im
+'R1Z.ProverRwSuccessWideInverseExact.u_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.u_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.norm_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.inverse' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

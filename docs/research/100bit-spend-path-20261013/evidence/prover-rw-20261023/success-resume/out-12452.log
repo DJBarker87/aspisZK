@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:16:26: error: unsupported `do` element (kind: Lean.Parser.Term.doIf)
+  if h : xs.length = n.val then 
+    .ok ⟨xs, h⟩
+  else
+    .fail .panic
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run f is c
+in the target expression
+  (let (x, c') := (g i, c)
+    do
+    let (xs, c'') ← run f is c'
+    ok (x :: xs, c'')) =
+    ok (List.map g (i :: is), c)
+
+case cons
+T C : Type
+f : core.ops.function.FnMut C Usize T
+g : Usize → T
+c : C
+i : Usize
+is : List Usize
+ih : (∀ i ∈ is, f.call_mut c i = ok (g i, c)) → run f is c = ok (List.map g is, c)
+calls : ∀ i_1 ∈ i :: is, f.call_mut c i_1 = ok (g i_1, c)
+⊢ (let (x, c') := (g i, c)
+    do
+    let (xs, c'') ← run f is c'
+    ok (x :: xs, c'')) =
+    ok (List.map g (i :: is), c)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:31:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:39:2: warning: 'rw [run_pure f g c _ hh]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:40:2: warning: 'simp only [bind_tc_ok]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:41:2: warning: 'have len : ((indices n).map g).length = n.val := by simp [indices]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:42:2: warning: 'simp only [dif_pos len]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:43:2: warning: 'exact ⟨_, rfl, rfl⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:40:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:41:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:42:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessArrayFromFn.lean:43:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.ProverRwSuccessArrayFromFn.run_pure' depends on axioms: [sorryAx]
+'R1Z.ProverRwSuccessArrayFromFn.fromFn_pure' depends on axioms: [propext, sorryAx]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh

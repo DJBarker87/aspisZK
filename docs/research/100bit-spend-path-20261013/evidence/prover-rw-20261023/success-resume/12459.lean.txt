@@ -1,0 +1,69 @@
+import R1Z.ProverRwSuccessWideNormalize
+import R1Z.ProverRwSuccessWideInverseExecution
+import R1Z.ProverRwSuccessWideInverseAlgebra
+import R1Z.ProverCommitWideOps48
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwSuccessWideInverseExact
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open ProverCommitWideOps48
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+abbrev qinput := ProverRwSuccessQuarticInverseExact.input
+abbrev input (x : Raw) : ProverRwDictionaryTower.W := ⟨qinput x.1,qinput x.2⟩
+abbrev u : Old.Q := ⟨⟨0#u32,0#u32⟩,⟨1#u32,0#u32⟩⟩
+theorem u_canonical : Canonical u := by constructor <;> constructor <;> decide
+theorem u_value : decode u=AspisWideTower.wideU := rfl
+theorem norm_value (x : Exact) :
+    QuadraticAlgebra.norm x=x.re*x.re-AspisWideTower.wideU*x.im*x.im := by
+  simp only [QuadraticAlgebra.norm_def]
+  ring
+variable [ExternalTypes]
+theorem inverse (ops : ExternalFuns) (x : Raw) (hx : canonical x) (hn : value x≠0) :
+    ∃ z : Raw, (ProverRwSuccessWideSource.selected ops).op109 (input x)=.ok (some (input z)) ∧
+      canonical z ∧ value z=(value x)⁻¹ := by
+  obtain ⟨a,ha,hca,hva⟩ := ProverRwSuccessQuarticOperations.mul x.1 x.1 hx.1 hx.1
+  obtain ⟨b,hb,hcb,hvb⟩ := ProverRwSuccessQuarticOperations.mul x.2 x.2 hx.2 hx.2
+  obtain ⟨ub,hub,hcub,hdub⟩ := ProverRwSuccessQuarticOperations.mul u b u_canonical hcb
+  obtain ⟨n,hnn,hcn,hvn⟩ := ProverRwSuccessQuarticOperations.sub a ub hca hcub
+  have hnorm : decode n=QuadraticAlgebra.norm (value x) := by
+    rw [hvn,hva,hdub,hvb,u_value,norm_value]
+    change decode x.1*decode x.1-AspisWideTower.wideU*(decode x.2*decode x.2)=
+      decode x.1*decode x.1-AspisWideTower.wideU*decode x.2*decode x.2
+    ring
+  have nonzero : decode n≠0 := by
+    intro he;apply hn
+    exact QuadraticAlgebra.norm_eq_zero_iff_eq_zero.mp (hnorm.symm.trans he)
+  obtain ⟨ni,hni,hcni,hvni⟩ := ProverRwSuccessQuarticInverseExact.inverse ops n hcn nonzero
+  obtain ⟨lo,hlo,hclo,hvlo⟩ := ProverRwSuccessQuarticOperations.mul x.1 ni hx.1 hcni
+  obtain ⟨nb,hnb,hcnb,hvnb⟩ := ProverRwSuccessQuarticOperations.neg x.2 hx.2
+  obtain ⟨hi,hhi,hchi,hvhi⟩ := ProverRwSuccessQuarticOperations.mul nb ni hcnb hcni
+  unfold ProverRwSuccessQuarticOperations.input at ha hb hub hnn hlo hnb hhi
+  change ProverRwSuccessInverseInstall.Src.qInv (qinput n)=.ok (some (qinput ni)) at hni
+  refine ⟨(lo,hi),?_,⟨hclo,hchi⟩,?_⟩
+  · change ProverRwSuccessWideSource.inverse (input x)=_
+    apply ProverRwSuccessWideInverseExecution.execute (input x) (input (lo,hi))
+      (qinput a) (qinput b) (qinput ub) (qinput n) (qinput ni) (qinput lo) (qinput nb) (qinput hi)
+    · exact ha
+    · exact hb
+    · exact hub
+    · exact hnn
+    · exact hni
+    · exact hlo
+    · exact hnb
+    · exact hhi
+    · exact ProverRwSuccessWideNormalize.construct lo hi hclo hchi
+  · rw [hnorm] at hvni
+    have coords := ProverRwSuccessWideInverseAlgebra.inverse_coordinates (value x)
+    have result : value (lo,hi)=
+        (⟨decode x.1*(QuadraticAlgebra.norm (value x))⁻¹,
+          -decode x.2*(QuadraticAlgebra.norm (value x))⁻¹⟩ : Exact) := by
+      apply QuadraticAlgebra.ext
+      · exact hvlo.trans (congrArg (fun t => decode x.1*t) hvni)
+      · rw [hvhi,hvnb,hvni]
+    exact result.trans coords
+#print axioms u_canonical
+#print axioms u_value
+#print axioms norm_value
+#print axioms inverse
+end R1Z.ProverRwSuccessWideInverseExact

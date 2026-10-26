@@ -1073,3 +1073,36 @@ use27/85, native11/11. Focused receipts/snapshots/full axiom reports are in
 2s and4.3GiB RSS,zero swaps. No resource failure, infrastructure edit or unchanged
 regression. Native ABI/extraction, complete body/prefix, ordered oracle/TLS
 and real RunJoin are retained: zero root premises removed; target not yet established.
+
+## Wide inverse and value-operation ports (12443–12461)
+
+`ProverRwSuccessWideInverseExact.inverse` proves the canonical nonzero wide
+norm/multiply inverse port, including both constructor normalizations, exact
+Result and field-inverse value. No success/value premise is supplied. The
+12454 monolithic elaboration hit its heartbeat limit; it was split into named
+source execution, coordinate algebra and constructor lemmas, then composed.
+No limit was changed or unchanged failed input retried. Scalar/complex zero
+rejection is also proved; no large exponent is reduced in a zero case.
+
+`ProverRwSuccessVectors` gives total logical Vec pop/empty/default and exact
+length-sensitive array conversion. Allocation op32 is retained, not replaced
+by guaranteed success. `ProverRwSuccessWideSource` adds value-level ports of
+wide negation and generic inversion. **These six new ports are candidate
+interpretations, not literal extraction/native library certificates.** Their
+native source/feature/allocator/Drop association remains open; they do not
+remove six native hypotheses or establish whole-body equivalence. The current
+candidate selector108/262 has38 remaining successful-body references. The
+last literal-source selector remains102/262 with44 open source associations.
+Keeping these counts separate avoids promoting a logical port to native proof.
+`ProverRwSuccessArrayFromFn` proves the ordered callback/array model for bounded
+pure callbacks; its native-library correspondence is explicitly retained.
+
+Nineteen compiles:8pass,11changed failures(including the split elaboration
+limit); resumed total46/85 Lean,11/11 Kani. Receipts and every failed snapshot
+are retained in `success-resume`; standard accepted axioms,zero swaps,no OOM.
+A premature coefficient dependency preflight did not launch Lean or consume
+12446; that ID was used for the changed vector proof. No infrastructure edit
+or release replay. Root/headline premises removed0; target not yet established.
+Next: retained S2 coefficient traversal, statement-point source control, and
+remaining ordered effects/reservation/body association. Types/off-path entries
+stay with the sibling owner. Current Rust/artifact pins and root remain unchanged.

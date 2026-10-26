@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessWideInverseExact.lean:44:4: error: 'change' tactic failed, pattern
+  (do
+      let a ← ProverRwDictionaryTower.qMul (qinput x.1) (qinput x.1)
+      let b ← ProverRwDictionaryTower.qMul (qinput x.2) (qinput x.2)
+      let ub ← ProverRwDictionaryTower.qMul (qinput u) b
+      let norm ← ProverRwDictionaryTower.qSub a ub
+      let inverse ← ProverRwSuccessInverseInstall.Src.qInv norm
+      let cf ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch inverse
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue ni =>
+          ?m.446 a PUnit.unit b PUnit.unit ub PUnit.unit norm PUnit.unit inverse PUnit.unit cf PUnit.unit ni
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          ?m.447 a PUnit.unit b PUnit.unit ub PUnit.unit norm PUnit.unit inverse PUnit.unit cf PUnit.unit residual) =
+    ?m.360
+is not definitionally equal to target
+  (do
+      let a ← ProverRwDictionaryTower.qMul (input x).c0 (input x).c0
+      let b ← ProverRwDictionaryTower.qMul (input x).c1 (input x).c1
+      let ub ← ProverRwDictionaryTower.qMul ProverRwSuccessWideSource.u b
+      let norm ← ProverRwDictionaryTower.qSub a ub
+      let inverse ← ProverRwSuccessInverseInstall.Src.qInv norm
+      let cf ← ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch inverse
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue ni => do
+          let lo ← ProverRwDictionaryTower.qMul (input x).c0 ni
+          let nb ← ProverRwSuccessInverseInstall.Src.qNeg (input x).c1
+          let hi ← ProverRwDictionaryTower.qMul nb ni
+          let out ← ProverRwSuccessWideSource.construct lo hi
+          ok (some out)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+            ProverRwDictionaryTower.W residual) =
+    ok (some (input (lo, hi)))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessWideInverseExact.lean:77:6: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessWideInverseExact.lean:72:2: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'R1Z.ProverRwSuccessWideInverseExact.u_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.u_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.norm_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessWideInverseExact.inverse' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
