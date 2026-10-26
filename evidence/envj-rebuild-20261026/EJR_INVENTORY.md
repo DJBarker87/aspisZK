@@ -2099,3 +2099,6 @@ Highest numeric env-J attempt recoverable by this scan: J23102. Stream B reports
 
 ## Source selection limits
 The table is the explicitly source-attested set recoverable from committed structured receipts/manifests, not an assertion that every disk entry at deletion is known. Objects-only census includes library copies and cannot establish source byte identity. Selected unresolved sources: 26. All historical unresolved hashes, including obsolete failed attempts, are retained above.
+
+## Supplement
+[EJR_SUPPLEMENT_INVENTORY.md](EJR_SUPPLEMENT_INVENTORY.md) includes source paths embedded in launcher_stdout_head arrays. It adds 29 modules (28 hash-resolved); four alternative source selections are recorded but will not overwrite the initial recovery selection. No already compiled source is changed.
