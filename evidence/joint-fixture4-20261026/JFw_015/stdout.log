@@ -1,0 +1,63 @@
+JFw_Entry.lean:21:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+hi : input.length = 7015
+ho : out.length = 13831
+x✝⁷ : Usize
+_✝¹² : [> let x✝⁷ ← 10#usize * 28#usize <]
+x_post✝⁷ : ↑x✝⁷ = 10 * 28
+x✝⁶ : Usize
+_✝¹¹ : [> let x✝⁶ ← 1#usize + x✝⁷ <]
+x_post✝⁶ : ↑x✝⁶ = 1 + ↑x✝⁷
+x✝⁵ : Usize
+_✝¹⁰ : [> let x✝⁵ ← 87#usize + 29#usize <]
+x_post✝⁵ : ↑x✝⁵ = 87 + 29
+x✝⁴ : Usize
+_✝⁹ : [> let x✝⁴ ← x✝⁶ + x✝⁵ <]
+x_post✝⁴ : ↑x✝⁴ = ↑x✝⁶ + ↑x✝⁵
+x✝³ : Usize
+_✝⁸ : [> let x✝³ ← x✝⁴ + 29#usize <]
+x_post✝³ : ↑x✝³ = ↑x✝⁴ + 29
+x✝² : Usize
+_✝⁷ : [> let x✝² ← 16#usize * x✝³ <]
+x_post✝² : ↑x✝² = 16 * ↑x✝³
+x✝¹ : Usize
+_✝⁶ : [> let x✝¹ ← 29#usize * 32#usize <]
+x_post✝¹ : ↑x✝¹ = 29 * 32
+x✝ : Usize
+_✝⁵ : [> let x✝ ← 12903#usize + x✝¹ <]
+x_post✝ : ↑x✝ = 12903 + ↑x✝¹
+i1 : Usize
+_✝⁴ : [> let i1 ← x✝ - x✝² <]
+i1_post1 : ↑i1 = ↑x✝ - ↑x✝²
+i1_post2 : ↑x✝² ≤ ↑x✝
+h✝¹ : ¬(input.len != i1) = true
+x : Usize
+_✝³ : [> let x ← 29#usize * 32#usize <]
+x_post : ↑x = 29 * 32
+i3 : Usize
+_✝² : [> let i3 ← 12903#usize + x <]
+i3_post : ↑i3 = 12903 + ↑x
+h✝ : ¬(out.len != i3) = true
+s : Slice U8
+index_mut_back : Slice U8 → Slice U8
+_✝¹ : [> let(s, index_mut_back) ← core.slice.index.SliceIndexRangeToUsizeSlice.index_mut { «end» := 32#usize } out <]
+s_post3 : ∀ (s' : Slice U8), ↑(index_mut_back s') = (↑out).setSlice! 0 ↑s'
+s_post1 : ↑s = List.slice 0 32 ↑out
+s_post2 : s.length = 32
+s1 : Slice U8
+_✝ : [> let s1 ← core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 32#usize } input <]
+s1_post1 : ↑s1 = List.slice 0 32 ↑input
+s1_post2 : s1.length = 32
+s2 : Slice U8
+_ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1 <]
+s2_post : s2 = s1
+⊢ compact.expand_semantic_loop nativeValues { start := 0#u8, «end» := compact.SEMANTIC_ROWS } input (index_mut_back s2)
+      32#usize 32#usize ⦃
+    result => result.1 = core.result.Result.Ok () ⦄
+'AspisR1.JFw_Entry.loop_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Entry.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

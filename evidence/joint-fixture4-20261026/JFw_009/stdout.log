@@ -1,0 +1,87 @@
+JFw_Row.lean:80:18: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.2217 = ?m.2217
+but is expected to have type
+  done
+      (core.result.Result.Err x✝¹,
+        (out.setSlice! (↑dst) (List.slice (↑src) (↑src + 5) ↑input)).setSlice! (↑dst + 5) ↑x✝².2) =
+    cont (iter nextRow, ?m.2207, ?m.2210, ?m.2213)
+in the application
+  And.intro rfl
+JFw_Row.lean:81:35: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ input.length
+outBound : ↑dst + 5 + ↑size ≤ out.length
+smallInput : input.length ≤ 20000
+smallOut : out.length ≤ 20000
+i : Usize
+_✝¹⁴ : [> let i ← dst + 5#usize <]
+i_post : ↑i = ↑dst + 5
+x✝¹ : Slice U8 × (Slice U8 → Slice U8)
+_✝¹³ : [> let x✝¹ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+i1 : Usize
+_✝¹² : [> let i1 ← src + 5#usize <]
+s1 : Slice U8
+_✝¹¹ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s2 : Slice U8
+_✝¹⁰ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝¹.1 s1 <]
+destEnd : Usize
+_✝⁹ : [> let destEnd ← i + size <]
+x✝ : Slice U8 × (Slice U8 → Slice U8)
+_✝⁸ : [> let x✝ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝¹.2 s2) <]
+sourceEnd : Usize
+_✝⁷ : [> let sourceEnd ← i1 + size <]
+payload : Slice U8
+_✝⁶ : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+updated : Slice U8
+_ : [> let updated ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝.1 payload <]
+_✝⁵ : ↑x✝¹.1 = List.slice (↑dst) (↑dst + 5) ↑out
+_✝⁴ : x✝¹.1.length = ↑dst + 5 - ↑dst
+_✝³ : ∀ (s2 : Slice U8), x✝¹.2 s2 = out.setSlice! ↑dst ↑s2
+i1_post : ↑i1 = ↑src + 5
+s1_post1 : ↑s1 = List.slice (↑src) (↑src + 5) ↑input
+s1_post2 : s1.length = ↑src + 5 - ↑src
+s2_post : s2 = s1
+h✝ : ¬row ≥ 14#u8
+destEnd_post : ↑destEnd = ↑dst + 5 + ↑size
+_✝² : ↑x✝.1 = List.slice (↑dst + 5) (↑dst + 5 + ↑size) ↑(out.setSlice! (↑dst) (List.slice (↑src) (↑src + 5) ↑input))
+_✝¹ : x✝.1.length = ↑dst + 5 + ↑size - (↑dst + 5)
+_✝ : ∀ (s2 : Slice U8), x✝.2 s2 = (out.setSlice! (↑dst) (List.slice (↑src) (↑src + 5) ↑input)).setSlice! (↑dst + 5) ↑s2
+sourceEnd_post : ↑sourceEnd = ↑src + 5 + ↑size
+payload_post1 : ↑payload = List.slice (↑src + 5) (↑src + 5 + ↑size) ↑input
+payload_post2 : payload.length = ↑src + 5 + ↑size - (↑src + 5)
+updated_post : updated = payload
+⊢ ↑sourceEnd = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size
+JFw_Row.lean:77:70: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp_all only [core.result.Result.Insts.CoreOpsTry.branch,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵  ̵ ̵ ̵Result.ok.injEq,
+  ̲ ̲ ̲ ̲ ̲Slice.setSlice!_length, ̲decide_eq_true_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Row.lean:78:20: warning: This simp argument is unused:
+  Slice.setSlice!_length
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵_̵l̵e̵n̵g̵t̵h̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲o̲k̲.̲i̲n̲j̲E̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲t̲r̲u̲e̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Row.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Row.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,19 @@
+JFw_Prefix.lean:36:97: error: unsolved goals
+expanded : Slice U8
+expand :
+  compact.expand_semantic nativeValues JFw_RealExpansion.stored JFw_RealExpansion.initial =
+    ok (core.result.Result.Ok (), expanded)
+tail : bytesOf (List.drop 32 ↑expanded) = JFz_Parsed.rows00.flatten
+root : List.take 32 ↑expanded = List.take 32 ↑JFw_RealExpansion.stored
+flattened : bytesOf (List.map (fun s => ↑s) JFw_Records.frames).flatten = JFz_Parsed.rows00.flatten
+suffix : List.drop 32 ↑expanded = (List.map (fun s => ↑s) JFw_Records.frames).flatten
+storedLength : (List.take 32 ↑JFw_RealExpansion.stored).length = 32
+bound : 32 ≤ expanded.length
+finish : Usize
+chain : ExtractedPrefixTrace.RecordChain expanded ExtractedPrefixTrace.rowOrder 32#usize JFw_Records.frames finish
+last : ↑finish = expanded.length
+old : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse expanded = ok (core.result.Result.Ok old)
+pre : AspisR1PublicPreparation.r1_wire.Prefix := AspisR1PublicPreparation.PrefixAdapter.fromOld old
+⊢ ok (core.result.Result.Ok (AspisR1PublicPreparation.PrefixAdapter.fromOld old)) = ok (core.result.Result.Ok pre)
+'AspisR1.JFw_Prefix.inhabited' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

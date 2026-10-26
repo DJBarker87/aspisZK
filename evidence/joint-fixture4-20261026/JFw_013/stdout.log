@@ -1,0 +1,177 @@
+JFw_Loop.lean:20:54: error: Application type mismatch: The argument
+  Eq.symm inputLength
+has type
+  7015 = input.length
+but is expected to have type
+  sourcePos ↑row = ?m.66
+in the application
+  Eq.trans source (Eq.symm inputLength)
+JFw_Loop.lean:24:50: error: Application type mismatch: The argument
+  Eq.symm outLength
+has type
+  13831 = out.length
+but is expected to have type
+  destPos ↑row = ?m.91
+in the application
+  Eq.trans dest (Eq.symm outLength)
+JFw_Loop.lean:15:9: error: unsolved goals
+case zero
+input : Slice U8
+inputLength : input.length = 7015
+row : U8
+count : ↑row + 0 = 27
+out : Slice U8
+src dst : Usize
+outLength : out.length = 13831
+source : ↑src = sourcePos ↑row
+dest : ↑dst = destPos ↑row
+atEnd : ↑row = 27
+hs : src = input.len
+hd : dst = out.len
+⊢ (match
+      let (o, iter1) := (none, iter row)
+      match o with
+      | none =>
+        if false = true then ok (done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+        else
+          if false = true then ok (done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, out))
+          else ok (done (core.result.Result.Ok (), out))
+      | some row => do
+        let o1 ← r1_wire.row_shape row
+        let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (_, size) := val
+            do
+            let i ← out.len + 5#usize
+            let (s, index_mut_back) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+                  { start := out.len, «end» := i }
+            let i1 ← input.len + 5#usize
+            let s1 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                  { start := input.len, «end» := i1 }
+            let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+            let b ← compact.compact_row row
+            if b = true then do
+                let i2 ← size / 2#usize
+                let i3 ← i1 + i2
+                let s3 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                      { start := i1, «end» := i3 }
+                let i4 ← i + size
+                let (s4, index_mut_back1) ←
+                  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                      { start := i, «end» := i4 }
+                let (r1, s5) ← nativeValues.expandValues s3 s4
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let src1 ← i1 + i2
+                    ok (cont (iter1, index_mut_back1 s5, src1, i4))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r2 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame compact.CodecError) residual
+                    ok (done (r2, index_mut_back1 s5))
+              else do
+                let i2 ← i + size
+                let (s3, index_mut_back1) ←
+                  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+                      { start := i, «end» := i2 }
+                let i3 ← i1 + size
+                let s4 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                      { start := i1, «end» := i3 }
+                let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                ok (cont (iter1, index_mut_back1 s5, i3, i2))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame compact.CodecError) residual
+            ok (done (r1, out)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU8 x.1
+            match o with
+              | none =>
+                if (x.2.2.1 != input.len) = true then
+                  ok (done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, x.2.1))
+                else
+                  if (x.2.2.2 != x.2.1.len) = true then
+                    ok (done (core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length, x.2.1))
+                  else ok (done (core.result.Result.Ok (), x.2.1))
+              | some row => do
+                let o1 ← r1_wire.row_shape row
+                let r ← core.option.Option.ok_or o1 AspisR1CurrentCaller.compact.CodecError.Length
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (_, size) := val
+                    do
+                    let i ← x.2.2.2 + 5#usize
+                    let (s, index_mut_back) ←
+                      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) x.2.1
+                          { start := x.2.2.2, «end» := i }
+                    let i1 ← x.2.2.1 + 5#usize
+                    let s1 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                          { start := x.2.2.1, «end» := i1 }
+                    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+                    let b ← compact.compact_row row
+                    if b = true then do
+                        let i2 ← size / 2#usize
+                        let i3 ← i1 + i2
+                        let s3 ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                              { start := i1, «end» := i3 }
+                        let i4 ← i + size
+                        let (s4, index_mut_back1) ←
+                          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                              (index_mut_back s2) { start := i, «end» := i4 }
+                        let (r1, s5) ← nativeValues.expandValues s3 s4
+                        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            let src1 ← i1 + i2
+                            ok (cont (iter1, index_mut_back1 s5, src1, i4))
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r2 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame compact.CodecError) residual
+                            ok (done (r2, index_mut_back1 s5))
+                      else do
+                        let i2 ← i + size
+                        let (s3, index_mut_back1) ←
+                          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                              (index_mut_back s2) { start := i, «end» := i2 }
+                        let i3 ← i1 + size
+                        let s4 ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) input
+                              { start := i1, «end» := i3 }
+                        let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+                        ok (cont (iter1, index_mut_back1 s5, i3, i2))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r1 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame compact.CodecError) residual
+                    ok (done (r1, x.2.1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (), out)
+JFw_Loop.lean:28:30: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵m̵p̵a̵c̵t̵.̵e̵x̵p̵a̵n̵d̵_̵s̵e̵m̵a̵n̵t̵i̵c̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵f̵i̵n̵i̵s̵h̵e̵d̵[̲c̲o̲m̲p̲a̲c̲t̲.̲e̲x̲p̲a̲n̲d̲_̲s̲e̲m̲a̲n̲t̲i̲c̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲f̲i̲n̲i̲s̲h̲e̲d̲ row a̵t̵E̵n̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵s̵,̵h̵d̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵a̲t̲E̲n̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲s̲,̲ ̲h̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Loop.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
