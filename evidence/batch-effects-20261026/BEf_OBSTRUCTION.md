@@ -27,3 +27,29 @@ The two open tasks are distinct: correct/justify all-Result lowering of the
 rejected tails, and establish native mutable-carrier/effect association on
 both batch calls and their prefixes. The generic BEf interpreter rules and
 native fixtures are support for those tasks; neither supplies that endpoint.
+
+## Reachability strengthened by BEf_R002/R003
+
+The earlier direct-call limitation is now resolved for native verifier
+reachability. The pinned adopted transfer-13 compact proof and public bytes
+succeed in both native verifier transactions. From that same pair, actual
+prepared queries give first-tree node counts138 and163. Mutating only the
+first padding byte at32775 causes TX1 to reject with Parse after10 leaf
+hashes. Mutating only batch1 padding at47015 still lets TX1 succeed with the
+changed proof; its returned checkpoint then passes resume and TX2 rejects
+with Parse after12 leaf hashes. Complete verifier entry functions are linked
+unchanged from the shipped crate; no source child or hash stub is used.
+The SHA backend is real host sha2, not a new source-to-Solana-ELF claim.
+
+K006/K007 additionally check the exact terminal source slice with arbitrary
+scratch values/suffix and a singleton live index; both prove Parse, scratch
+frame and no suffix digest, with a reached non-vacuity cover. K008/K009 are
+scoped to the ACTUAL captured fixture index sets and arbitrary roots; their
+results must be read from their receipts, not inferred from K006/K007.
+
+The Lean result BEf_Counterexample.rejected_batch_tail is explicitly LOCAL:
+it compares the two pending-return encodings, not an evaluated full concrete
+57607-byte fixture. Combined native fixture and source-slice evidence locates
+a real all-Result lowering discrepancy. It is not a formal kernel replay of
+the complete native-to-Lean execution, and it does not establish a shipped
+acceptance vulnerability. L166 remains retained, with zero premise credit.
