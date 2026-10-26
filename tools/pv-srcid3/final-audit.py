@@ -20,7 +20,7 @@ def closure(m,seen):
 rows=[];checks=set()
 for m,p in sorted(sources.items()):
  s=p.read_text();ns=re.findall(r'^namespace (\S+)',s,re.M)
- theorems=re.findall(r'^(?:@\[[^\n]*\]\s*)?(?:theorem|lemma)\s+(\S+)',s,re.M)
+ theorems=re.findall(r'^[ \t]*(?:@\[[^\n]*\]\s*)?(?:theorem|lemma)\s+(\S+)',s,re.M)
  assert not theorems or len(ns)==1,(m,ns)
  names=[ns[0]+'.'+n for n in theorems]
  checks.update(names)
