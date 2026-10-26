@@ -9950,3 +9950,24 @@ the independent rows V152–V154 (`BuilderSource.SourceIdentification`: public_e
 transport_eq), consumed by the headline via `builder_premises`: job pv-srcid (`codex/pv-srcid-20261026`,
 prefix PV_Src_, IDs 22550–22799). Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, l1b.
 Privacy target not yet established.
+
+## D202 (Stream B, 2026-10-26 17:20): L1 paused on the shared native obstruction; independent callback job
+
+pv-l1b (`codex/pv-l1-20261026`, head 6351160ce6, from the merged candidate; 100/100 Lean, 54 passed,
+0/15 Kani; audit J21698 exit 0, 2.28 s, 4,291,916 KiB, swap 0, 121 declarations standard-only):
+ordered source attempt/count correspondence, retry-origin and failure prefixes, conditional joint
+source/raw-input transport, contiguous RNG ordinals, and the exact seventeen-digest eager-query abort
+prefix. Rows V347–V351 and V366: open → open; `PV_L1_Premises` holds one unproved field per row.
+Its next deliverable is "the complete native callback producer for the operational proof-account
+client", i.e. the same native interpretation that L2 (D200) and RunJoin (D199) wait on. Per AGENTS.md
+§7 (investigate a shared obstruction rather than commission more wrappers) the L1 slot is paused;
+the branch is kept as an unmerged sibling of the candidate and its worktree removed for disk.
+
+The three paused/converging tracks (L1, L2, RunJoin) all need the effect-aware interpretation of the
+extracted deployed caller; pv-runjoin3 carries that route (D199 ruling), with pv-rw16 and pv-dict8
+supplying the callbacks and dictionary it consumes. The freed slot goes to the recount's largest
+independent bucket, the ~70 selected-callback rows V169–V267 (`ProverRwFull.ExternalFuns.opN`),
+as pv-cb (`codex/pv-cb-20261026`, from the candidate, prefix PV_CB_, IDs 22800–23099), ascending
+op order, skipping ops a sibling installs first and deferring effectful ops to the RunJoin route.
+Six jobs running: rw16, dict8, runjoin3, srcid, rebase2, cb. Mac disk: 24 GiB free. Privacy target
+not yet established.
