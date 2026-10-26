@@ -1,0 +1,54 @@
+{"attempt": "JFr_054", "exit_status": 1, "wall_seconds": 2.2889941629837267, "peak_rss_kib": "5598348", "swaps": "0", "print_axioms": ["'AspisR1.JFr_DecodeCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_DecodeCell.lean:29:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ↑trace.payloadStart = ↑_a + ↑(UScalar.ofNatCore ↑j ⋯) * 32
+Error: Application type mismatch: The argument
+  trace
+has type
+  ParserTrace (recordToDecoder record) byteOffset (UScalar.ofNatCore ↑j ⋯) 0#usize q
+but is expected to have type
+  ParserTrace (recordToDecoder record) _a (UScalar.ofNatCore ↑j ⋯) 0#usize q
+in the application
+  trace.payloadStart
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', cal
+...
+able' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+N : Usize
+record : r1_wire.ValidatedRecord
+out : Std.Array MainQM N
+call : decodeMain N record 0#usize = ok (core.result.Result.Ok out)
+j : Fin ↑N
+arr : Std.Array U8 16#usize
+expected : DecodeQM
+bytes : List.take 16 (List.drop (32 * ↑j) (List.drop 5 ↑record.framed)) = ↑arr
+parser : AspisR1DecodeKFullV10.aspis_core.field.QM31.from_le_bytes arr.to_slice = ok (some expected)
+decoded : Std.Array DecodeQM N
+run :
+  AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k N (recordToDecoder record) 0#usize =
+    ok (core.result.Result.Ok decoded)
+same : decoderArrayToMain decoded = out
+byteOffset : AspisR1DecodeKFullSuccessIndexedParser.US
+offset : lift (Usize.checked_mul 0#usize 32#usize) = ok (some byteOffset)
+values :
+  ∀ (j : Fin ↑N),
+    ↑j < ↑N →
+      ∃ q,
+        AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value (recordToDecoder record) byteOffset
+              (UScalar.ofNatCore ↑j ⋯) 0#usize =
+            ok (core.result.Result.Ok q) ∧
+          (↑decoded)[↑j] = q ∧
+            Nonempty (ParserTrace (recordToDecoder record) byteOffset (UScalar.ofNatCore ↑j ⋯) 0#usize q)
+hzero : byteOffset = 0#usize
+q : AspisR1DecodeKFullSuccessIndexedParser.QM
+qcall :
+  AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k_value (recordToDecoder record) byteOffset
+      (UScalar.ofNatCore ↑j ⋯) 0#usize =
+    ok (core.result.Result.Ok q)
+qcell : (↑decoded)[↑j] = q
+trace : ParserTrace (recordToDecoder record) byteOffset (UScalar.ofNatCore ↑j ⋯) 0#usize q
+h : ↑trace.payloadStart = ↑byteOffset + ↑(UScalar.ofNatCore ↑j ⋯) * 32
+⊢ ↑trace.payloadStart = 32 * ↑j
+'AspisR1.JFr_DecodeCell.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5baa1b41d38e4576b581c12bfcceea8f.scope; invocation ID: 69d95f2306d34bf1a53a237c4c138cea

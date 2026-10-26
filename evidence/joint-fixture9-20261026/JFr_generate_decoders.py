@@ -22,14 +22,14 @@ def record : r1_wire.ValidatedRecord := ⟨{15+r}#u8,{native}.record⟩
   s+=f'''theorem window{i:02} : ((record.framed.val.drop 5).drop (32*{i})).take 16=cell{i:02}.val := by
   change (((JFw_Blocks.blocks 28 (JFw_Frames.window {off} 448).val).flatten).drop (32*{i})).take 16=cell{i:02}.val
   have same : (JFw_Frames.window {off} 448).val=raw := selected
-  rw [same,JFr_BlockWindow.source 28 raw (by rfl) {i} (by omega)]
-  rfl
+  rw [same,JFr_BlockWindow.source 28 raw rawLength {i} (by omega)]
+  exact rawCell{i:02}
 #print axioms window{i:02}
 '''
  s+=f'''theorem source : decodeMain 28#usize record 0#usize=ok (.Ok {roundm}.polynomial) := by
-  have canonical := PSem_FieldCanonical.source_payload {15+r}#u8 {native}.record {native}.payload (by omega) {native}.accepted
+  have canonical := PSem_FieldCanonical.source_payload {15+r}#u8 {native}.record {native}.payload (by change 14≤{15+r};omega) {native}.accepted
   have shape : record.framed.length=901 := by
-    change 5+{native}.payload.val.length=901
+    simp only [record,{native}.record,JFw_Frames.frame,Slice.length,List.length_cons]
     have size : {native}.payload.val.length=896 := {native}.payload_length
     omega
   obtain ⟨out,call⟩ := JFv_MainDecode.success 28#usize record 0#usize (by change 14≤{15+r};omega)
@@ -40,7 +40,7 @@ def record : r1_wire.ValidatedRecord := ⟨{15+r}#u8,{native}.record⟩
     fin_cases j
 '''
  for i in range(28):
-  s+=f'    · exact JFr_DecodeCell.source record out call ⟨{i},by omega⟩ cell{i:02} _ window{i:02} parser{i:02}\n'
+  s+=f'    · exact JFr_DecodeCell.source record out call ⟨{i},by change {i}<28;omega⟩ cell{i:02} _ window{i:02} parser{i:02}\n'
  s+=f'''  have same : out={roundm}.polynomial := by
     apply Subtype.ext
     apply List.ext_getElem
