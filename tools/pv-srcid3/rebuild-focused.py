@@ -7,6 +7,8 @@ a=[json.loads(x) for x in (e/'attempts.jsonl').read_text().splitlines()]
 for r in a:
  if r['attempt']>=27400 and r['exit']==0 and not r.get('nonstandard_axioms'):
   missing.discard(r['module'].replace('/','.'))
+if not any(r['module'].replace('/','.')==sys.argv[1] and r['attempt']>=27400 and r['exit']==0 and not r.get('nonstandard_axioms') for r in a):
+ missing.add(sys.argv[1])
 order=[];seen=set()
 def visit(m):
  if m in seen or m not in missing:return

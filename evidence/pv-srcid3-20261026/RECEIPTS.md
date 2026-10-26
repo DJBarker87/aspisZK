@@ -126,6 +126,13 @@ This table is a rendering of existing evidence, not a final kernel replay.
 | 27429 | R1Z/PV_Src_CheckedCanonical | 0 | 0:01.60 | 4107288 | 0 | 030f4f4d03 | standard only |
 | 27430 | R1Z/PV_Src_PackedSelection | 0 | 0:01.56 | 4104956 | 0 | 030f4f4d03 | standard only |
 | 27432 | R1Z/PV_Src_FocusedAudit | 0 | 0:01.53 | 4082320 | 0 | 052d91aa6c | standard only |
+| 27433 | R1Z/PV_Src_ZeroDigest | 0 | 0:01.51 | 4098092 | 0 | 41ed89b339 | standard only |
+| 27434 | R1Z/PV_Src_ReferenceWithdrawal | 0 | 0:01.64 | 4104984 | 0 | 41ed89b339 | standard only |
+| 27435 | R1Z/PV_Src_CanonicalWithdrawalRecord | 0 | 0:01.58 | 4104596 | 0 | 41ed89b339 | standard only |
+| 27436 | R1Z/PV_Src_CanonicalDecode | 0 | 0:01.49 | 4090308 | 0 | 41ed89b339 | standard only |
+| 27437 | R1Z/PV_Src_RecordAdmission | 0 | 0:01.57 | 4098544 | 0 | 41ed89b339 | standard only |
+| 27438 | R1Z/PV_Src_CanonicalPrivateRecord | 1 | 0:01.48 | 4089280 | 0 | 41ed89b339 | FAILED — not accepted |
+| 27439 | R1Z/PV_Src_CanonicalPrivateRecord | 1 | 0:01.71 | 4086172 | 0 | 41ed89b339 | FAILED — not accepted |
 
 ## Kani
 
@@ -146,3 +153,6 @@ All commands optimized via explicit MIR/Rust flags, 6G/8G/swap0/tasks64; exact c
 | 10 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_common_sibling | 0 | 21.655 | 909784 | 1036906496 | 0 | 8daf67c70f | 0/451 |
 | 11 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_common_pair_words | 0 | 21.897 | 888856 | 1018671104 | 0 | 8daf67c70f | 0/452 |
 | 12 | pool_v1::pair_forest_copy_builder::records_proofs::empty_roots::pv_srcid3_empty_roots_full | 124 | 180.008 | 15300 | 2510073856 | 0 | 8daf67c70f | no verification result |
+| 13 | metadata | 0 | 9.126 | 1353168 | 1416273920 | 0 | 5c3c92afaf | no verification result |
+| 14 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_full_dynamic_mapper | 124 | 300.008 | 15300 | 3238948864 | 0 | 5c3c92afaf | no verification result |
+| 15 | metadata | 0 | 12.742 | 1410840 | 1491873792 | 0 | 41ed89b339 | no verification result |
