@@ -111,3 +111,15 @@ the pinned srcid source/copy theorem with the existing generic field proof;
 neither assumes source success or canonical input. They are predecessors to
 ParentRefinement, not proofs of the full source parent or compiler theorem.
 Ten draft modules now pass the compile-free inventory check; none has run.
+
+ExternalBlocksCopy prepares an exact source/copy loop equation with an
+unprocessed-lane suffix invariant. At entry it needs no success/canonicality
+hypothesis. It addresses the in-place versus separate-original-array
+representation difference before the external sums/reduction stages; the
+complete external layer and source parent refinement remain open. Eleven
+draft modules are now recorded. No compiler invocation has occurred.
+
+inherited-receipts.json rechecks all nine current accepted trust-module source
+hashes against the historical green receipts and retains their exact metrics,
+revisions and axiom lines. This is source/evidence consistency only, not a
+fresh kernel audit or dependency closure replay.
