@@ -1,0 +1,36 @@
+{"attempt": "SCK_007", "exit_status": 0, "wall_seconds": 2.222507837053854, "peak_rss_kib": "5358400", "swaps": "0", "print_axioms": ["'AspisR1.CPH_Game.next' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.CPR_DataPersistence.of_full' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.CPH_Game.next {Tx A : Type} {p : AspisR1.CPG_Projection.Observations Tx A} {t u : Tx}
+  {e1 e2 : AspisR1.S2W_D189Entry.Entry} {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8}
+  {actions : List (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  (game : AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id)
+...
+
+  {actions : List (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  (game : AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id) :
+  AspisR1.CPG_Projection.adjacent p t u
+'AspisR1.CPH_Game.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.CPR_DataPersistence.visible_projection (image : AspisR1.CPR_Persistence.Image) :
+  AspisR1.CPR_DataPersistence.visible (AspisR1.CPR_DataPersistence.project image) =
+    Option.map (fun a => AspisR1.MultiproofConeCanonical.bytesOf ↑a.cell.data) (AspisR1.CPR_Persistence.visible image)
+'AspisR1.CPR_DataPersistence.visible_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.CPR_DataPersistence.of_full {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → AspisR1.CPR_Persistence.Image) (success : Tx → Bool)
+  (loaded : Tx → Key → Option AspisR1.CPR_Persistence.Image)
+  (law : AspisR1.CPR_Persistence.TwoTransactionLaw next ordinary before tentative success loaded) :
+  AspisR1.CPR_DataPersistence.TwoTransactionLaw next ordinary
+    (fun t k => AspisR1.CPR_DataPersistence.project (before t k))
+    (fun t k => AspisR1.CPR_DataPersistence.project (tentative t k)) success fun t k =>
+    Option.map (fun a => AspisR1.MultiproofConeCanonical.bytesOf ↑a.cell.data) (loaded t k)
+'AspisR1.CPR_DataPersistence.of_full' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f268cedd2ea461098060161344983eb.scope; invocation ID: ac9e4531f7a74c6885c003cf37c08248

@@ -1,0 +1,48 @@
+{"attempt": "SCK_028", "exit_status": 0, "wall_seconds": 2.3502559780026786, "peak_rss_kib": "5255736", "swaps": "0", "print_axioms": ["'AspisR1.F3S_ModelLog.schedule' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.F3S_ModelLog.schedule (D : AspisR1.LiteralByteProtocol.Decoder)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (i : AspisR1.F3_Model.Input)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (input : AspisR1.RecordedBinaryExperimentBin.SourceInputs) (v : AspisR1.LiteralOpeningView.View)
+  (guard :
+    AspisR1.OraclePortAdmission.Guard
+      (AspisR1.LiteralTranscript.erasePrefix
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2))
+  (parser :
+    AspisR1.OraclePortStoredParserC4.parseReached i.stored
+        (AspisR1.LiteralTranscript.erasePrefix
+...
+          (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2) =
+      some q)
+  (found :
+    AspisR1.OraclePortStoredDecisionDraftC4.input p q
+        (AspisR1.LiteralTranscript.erasePrefix
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2) =
+      some input)
+  (opening :
+    AspisR1.LiteralOpeningView.read
+        (AspisR1.OraclePortStoredDecisionDraftC4.typedRows p q
+          (AspisR1.LiteralTranscript.erasePrefix
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)) =
+      some v)
+  (batch0 :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)).2 =
+      true) :
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D i)).1 =
+    (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).1 ++
+      ((AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch0)).1 ++
+        ((AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3_Model.checkpoint i.physical i.stored p q
+                (AspisR1.LiteralTranscript.erasePrefix
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+                input v)).1 ++
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.OraclePortFrozen2.batch p q AspisR1.OraclePortFrozen2.batch1)).1))
+'AspisR1.F3S_ModelLog.schedule' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r17661410711f4f7ba20328bad0ca3d72.scope; invocation ID: c02e35c65bc34b108dbe562b2b456a40

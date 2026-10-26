@@ -1,0 +1,5 @@
+R1/R2 definitions type-check on actual carriers (001); two reduced association countermodels type-check (003), using only propext. The exact inherited five-target collision and first-order countermodels are re-audited, with standard axioms. These refute generic shortcuts, not the fully instantiated accepted deployment. No proof of full logical independence of R1/R2 from every retained release premise is claimed. No new transport attempted.
+
+Excluded development attempts: 002 omitted required explicit types on theorem aliases; replaced by auditing the existing named results directly. 004 and 005 used unsupported pp.maxDepth / pp.width printer options respectively; both were removed. Their exit1 receipts, errors and snapshots are retained. No resource timeout, memory kill or unchanged resource-failure retry.
+
+Fresh root type/axioms audit006 confirms latest endpoint Rc8_Top.deployed, still with StoredCarrierBinding. Further distinct dependency inventories are ongoing, to ground the decision's verbatim-reuse assessment; these earn no premise-removal credit.

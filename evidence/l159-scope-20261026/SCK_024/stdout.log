@@ -1,0 +1,132 @@
+AspisR1.SCI_Recovery.model_agreement (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (success :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))).2.2 = true) :
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement
+    (AspisR1.F3T_Experiment.view
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))))
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P)))
+'AspisR1.SCI_Recovery.model_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.account_agreement {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView)
+  (observed :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a)).2 = some run)
+  (success : run.2.2 = true)
+  (modelSuccess :
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_Experiment.original D
+              (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).2.2 =
+      true)
+  (ordered :
+    run.1 =
+      (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3T_Experiment.original D
+            (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).1) :
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view run)
+    (AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.F3T_Charged.projected D
+        (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)))))
+'AspisR1.SCI_Recovery.account_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.account_extract {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView)
+  (observed :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a)).2 = some run)
+  (success : run.2.2 = true)
+  (modelSuccess :
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_Experiment.original D
+              (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).2.2 =
+      true)
+  (ordered :
+    run.1 =
+      (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3T_Experiment.original D
+            (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).1)
+  (coins : AspisR1.GSConcreteByteDecoderBank.RawCoins) :
+  AspisR1.RawRecordedPublicSpendExtractorBin.extract (AspisR1.F3T_Experiment.view run) coins =
+    AspisR1.RawRecordedPublicSpendExtractorBin.extract
+      (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.F3T_Charged.projected D
+          (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)))))
+      coins
+'AspisR1.SCI_Recovery.account_extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.account_of_join {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView)
+  (observed :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a)).2 = some run)
+  (success : run.2.2 = true)
+  (sourceSuccess :
+    (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3T_Installed.source c hashv
+            (AspisR1.F3T_ByteCarrier.input c
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).2 =
+      true)
+  (raw :
+    AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.F3T_Installed.source c hashv
+          (AspisR1.F3T_ByteCarrier.input c
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) =
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.F3_Model.verifier D
+          (AspisR1.F3T_ByteCarrier.input c
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)))
+  (ordered :
+    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_Installed.source c hashv
+              (AspisR1.F3T_ByteCarrier.input c
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).1) :
+  (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_Charged.projected D
+              (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).2.2 =
+      true ∧
+    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view run)
+      (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.F3T_Charged.projected D
+          (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)))))
+'AspisR1.SCI_Recovery.account_of_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.ObserverBoundary.extract_none (coins : AspisR1.GSConcreteByteDecoderBank.RawCoins) :
+  AspisR1.RawRecordedPublicSpendExtractorBin.extract
+      (AspisR1.F3T_Experiment.view AspisR1.SCI_Recovery.ObserverBoundary.run) coins =
+    none
+'AspisR1.SCI_Recovery.ObserverBoundary.extract_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.ObserverBoundary.failure_one :
+  AspisR1.RawRecordedOracleExtractionMassBin.failureMass
+      (AspisR1.F3T_Experiment.view AspisR1.SCI_Recovery.ObserverBoundary.run) =
+    1
+'AspisR1.SCI_Recovery.ObserverBoundary.failure_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.ObserverBoundary.unrestricted_runtime :
+  AspisR1.F3T_Runtime.deployedFailure AspisR1.SCI_Recovery.ObserverBoundary.runtime = 1
+'AspisR1.SCI_Recovery.ObserverBoundary.unrestricted_runtime' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_Recovery.ObserverBoundary.not_all_runtime_bounds (bound : ℚ) (small : bound < 1) :
+  ¬∀ (r : AspisR1.F3T_Runtime.Runtime), AspisR1.F3T_Runtime.deployedFailure r ≤ bound
+'AspisR1.SCI_Recovery.ObserverBoundary.not_all_runtime_bounds' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+AspisR1.SCI_Recovery.ObserverBoundary.not_zero_query_conclusion :
+  ¬AspisR1.F3T_RuntimeBound.failureModel AspisR1.SCI_Recovery.ObserverBoundary.runtime ≤ AspisR1.F3T_Numeric.total 0
+'AspisR1.SCI_Recovery.ObserverBoundary.not_zero_query_conclusion' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,38 @@
+{"attempt": "SCK_011", "exit_status": 0, "wall_seconds": 2.4691594800096937, "peak_rss_kib": "5427616", "swaps": "0", "print_axioms": ["'AspisR1.SCJ_NativeLoaded.entry_loaded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCJ_NativeLoaded.ideal_cut' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCJ_NativeLoaded.entry_loaded {Tx A F C : Type} (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (actions : List (AspisR1.CPP_BankState.Action A)) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (keyLaw : (AspisR1.DrvC_Installation.sdk c).op36 = AspisR1.Hist_Authority.keyEq)
+  (n1 : AspisR1.S2W_ExtractionBoundary.First) (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction : AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) n1 n2 hashv)
+  (copy :
+    AspisR1.S2Trust
+...
+tallation.sdk c) n1 n2 hashv)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (id system : AspisR1.S2W_ExtractionBoundary.Program) (notSystem : id ≠ system)
+  (game : AspisR1.CPG_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id)
+  (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+  (state1 state2 final1 final2 : A) (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first n1 copy allocator e1 id data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second n2 allocator e2 id data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (RuntimePersistence :
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+      (AspisR1.CPG_Projection.ordinary p system) (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p))
+  (ideal : AdapterRw.Ops) (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut)
+  (cuts :
+    AspisR1.S2W_NativeConsolidation.SourceCuts ideal e1.first (e2.second AspisR1.S2W_D189Wrappers.secondSizes) saved f
+      s) :
+  AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint = AspisR1.MultiproofConeCanonical.bytesOf ↑saved
+'AspisR1.SCJ_NativeLoaded.ideal_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2e03a3c5e7134bbf9547bd2832c1518c.scope; invocation ID: 726dd816aae9423f90edfc96430b6ef5

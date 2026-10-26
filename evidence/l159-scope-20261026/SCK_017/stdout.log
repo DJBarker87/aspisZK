@@ -1,0 +1,30 @@
+AspisR1.F3X_Account.prior_log {A : Type}
+  (account : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.prior account)).1 =
+    (AspisV8R19.MemoizedProgramLaw.eval H account).1
+'AspisR1.F3X_Account.prior_log' depends on axioms: [propext]
+AspisR1.F3X_Account.accepted {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (s : AspisR1.F3T_ByteCarrier.Submission)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (e : AspisR1.F3V_RunEvidence.Evidence c B s H)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (success :
+    (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s))).2 =
+      true) :
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.submitted c hashv s) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s))).1 ++
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Preparation.program c s)).1,
+      s, some e.run.p)
+'AspisR1.F3X_Account.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.F3X_Account.output {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P) =
+    ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3X_Account.submitted c hashv (AspisV8R19.MemoizedProgramLaw.eval H P).2)).1,
+      (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.F3X_Account.submitted c hashv (AspisV8R19.MemoizedProgramLaw.eval H P).2)).2)
+'AspisR1.F3X_Account.output' depends on axioms: [propext, Classical.choice, Quot.sound]

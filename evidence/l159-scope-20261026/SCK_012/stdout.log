@@ -1,0 +1,67 @@
+AspisR1.SCI_SameWorld.assoc {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C) (err : C)
+  (reservation : AspisR1.NP6_StdModel.Reservation)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  have r := AspisR1.Rc5_Install.configuration err c reservation;
+  AspisR1.SCE_Experiment.accepted
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account r hashv copy allocator id a)).2 =
+      true →
+    ∃ saved post final f s,
+      AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.SCH_IdealSdk.dictionary r hashv H)
+          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry.first
+          ((AspisV8R19.MemoizedProgramLaw.eval H
+                    (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)).2.entry.second
+            AspisR1.S2W_D189Wrappers.secondSizes)
+          saved f s ∧
+        AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk r) f.pub =
+            Aeneas.Std.Result.ok (some f.semantic) ∧
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2 =
+              { publicBytes := AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub,
+                stored := AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof } ∧
+            AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint =
+              AspisR1.MultiproofConeCanonical.bytesOf
+                ↑((AspisV8R19.MemoizedProgramLaw.eval H
+                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post
+                              final)).2.entry.buffers
+                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post
+                                  final)).2.entry.handles
+                        6).1)
+'AspisR1.SCI_SameWorld.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_SameWorld.arbitrary_second {A : Type} (i : AspisR1.GExq_AccountExperiment.FirstInputs A)
+  (j : AspisR1.GExq_AccountExperiment.SecondInputs A) :
+  ∃ a,
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+      (final : A),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 = i ∧
+        (AspisV8R19.MemoizedProgramLaw.eval H (a.second i saved post final)).2 = j
+'AspisR1.SCI_SameWorld.arbitrary_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCI_SameWorld.game_does_not_select_second (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) :
+  AspisR1.CPH_Game.DeployedPairExecution AspisR1.SCE_FixtureData.observations false true AspisR1.SCE_FixtureData.e1
+      AspisR1.SCE_FixtureData.e2 AspisR1.SCE_FixtureData.saved AspisR1.SCE_FixtureData.suffix AspisR1.SCE_FixtureData.n1
+      AspisR1.SCE_FixtureData.n2 AspisR1.SCE_FixtureData.copy AspisR1.SCE_FixtureData.allocator
+      AspisR1.SCE_FixtureData.id ∧
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent AspisR1.SCE_FixtureData.observations)
+        (AspisR1.CPG_Projection.ordinary AspisR1.SCE_FixtureData.observations (AspisR1.Hist_Nonvacuity.key 0#u8))
+        (AspisR1.CPG_Projection.before AspisR1.SCE_FixtureData.observations)
+        (AspisR1.CPG_Projection.tentative AspisR1.SCE_FixtureData.observations)
+        (AspisR1.CPG_Projection.success AspisR1.SCE_FixtureData.observations)
+        (AspisR1.CPG_Projection.loaded AspisR1.SCE_FixtureData.observations) ∧
+      ∃ a,
+        ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+          (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+          (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : Unit),
+          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 = AspisR1.SCE_FixtureSubmission.firstInput data1 ∧
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                      (a.second (AspisR1.SCE_FixtureSubmission.firstInput data1) saved post final)).2.entry =
+                AspisR1.SCI_SameWorld.emptyCheckpoint ∧
+              AspisR1.MultiproofConeCanonical.bytesOf
+                  ↑(AspisR1.SCI_SameWorld.emptyCheckpoint.buffers (AspisR1.SCI_SameWorld.emptyCheckpoint.handles 6).1) ≠
+                AspisR1.MultiproofConeCanonical.bytesOf ↑AspisR1.SCE_FixtureData.saved
+'AspisR1.SCI_SameWorld.game_does_not_select_second' depends on axioms: [propext, Classical.choice, Quot.sound]
