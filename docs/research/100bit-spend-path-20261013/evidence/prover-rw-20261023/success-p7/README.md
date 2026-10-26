@@ -225,3 +225,21 @@ infrastructure stop, not budget exhaustion. Root/headline premises removed0;
 target not yet established. Whole data equality, compression correspondence,
 33 callbacks and the previously listed experiment/physical adequacy obligations
 remain open. No source, artifact, key, security contract, push or merge changed.
+
+
+## Automatic capacity resume4: launcher conflict still unresolved
+
+Read-only host verification finds the same launcher hash
+`e6979aa097a0ebc34642608a594dfce081b40fdb814f526163dca1f69069661d`,
+the73-byte out-14835 marker and no time-14835.log. The sent-input and
+existing-marker guards still precede admission; the prior required retry
+failed exit65, `attempt 14835 already used`. Local-lean rule5 requires
+stop/report on launcher misbehavior. The vanished-cgroup exception does not
+cover this error. No proof/native launch, infrastructure change, guard bypass
+or replacement-ID substitution occurred. Receipt:capacity-resume-4.json.
+
+Budget remains35/100 Lean and3/15 Kani used;65Lean/12Kani remain, next unused
+ID14836. Lead resolution of the admission/replay-marker conflict is required.
+Root/headline premises removed0; target not yet established. Whole proof/audit
+data equality, compression correspondence,33 callbacks and native/experiment
+adequacy remain open as listed above. No push, merge, artifact or key change.
