@@ -148,3 +148,53 @@ retry/L1/ROM-history joint endpoint. No trace-agreement assumption was added.
 candidates, fixes the unique rejecting cell P, and proves complete bounded
 scalar rejection-control preservation under any canonical-value permutation.
 It is a candidate-word lemma, not yet a Rust-word/ROM/E1/L1 source join.
+
+### Stage F3 and F6 focused evidence
+
+J20113 `PV_L2_F3Schedule`: scalar/tower values move by a canonical-value
+permutation; full cap-16 rejection histories, cursors, refill offsets and
+four-limb partial-failure prefixes stay. This is candidate-level semantics.
+J20116 `PV_L2_F3Adaptive`: a genuine finite-stream equivalence advances the
+logical permutation index only at accepted scalars, preserves every accept
+bit and the exact uniform input law. J20129 `PV_L2_F3WordCarrier` transports
+it to the ACTUAL `CommitReadsR1.Word`/`ProverCommitWordCarrier.accepted`:
+retained high bit, identical rejection Boolean, canonical output permutation.
+The whole block-byte decoder/owned-caller/witness-translation join is not yet
+proved by these separate facts.
+
+J20123 `PV_L2_F3Recorded.qm31_erases` records the ACTUAL extracted owned
+`next`/cap-16 scalar and four-limb caller. Erasure is proved by induction,
+including hash failure/divergence and scalar partial failure; no scalar stub.
+Read records contain raw proof inputs, not an assertion that all answer
+values are public side-channel leakage. It is not a native-machine trace.
+
+J20118 `PV_L2_F3SeedObstruction.lifted_position_changes` is a CHECKED
+COUNTEREXAMPLE TO AN INFERENCE, not to valid-spend witness privacy. Swapping
+successful seed pairs with nonzero bytes in positions 0 versus 1 preserves
+`SideChannelEntropy.count_history_preserved` for every public nonce and
+byte-blind fault schedule, but changes `firstNonzero`. This forbids using
+arbitrary successful-seed relabeling for the stronger observer. No row is
+marked witness-dependent on this evidence; the rows remain open.
+
+J20126 `PV_L2_F5Machine`: recursive instrumented parser erases to Q22 scan,
+its history equals the F5 observation, and the existing source-shaped
+`Query31ExplicitListLoop.scanListLoop_q22` consumes that recorded result.
+The array IntoIter/std cost boundaries of Query31 remain explicit.
+
+J20120 `PV_L2_F6Openings`: the actual `PhaseWireLog2Bin.opens` factors
+through queries, with complete `PhaseSamplerParserBin` prefix transport.
+J20124 `PV_L2_F6Sharing`: source-linked binary group/cursor structural
+record and symbolic singleton sibling count; no native std cost claim.
+
+Kani budget: 20/20 used, 11 successes, eight 50-second timeouts, one
+proof-side memcmp unwind failure (k05). Exact source items from current
+QueryScan/sampler/multiproof bodies are pinned by tools/.../source-binding.json;
+proof harnesses are cfg(kani)-only and contain NO stubs. Standalone Kani
+0.67 with bundled sysroot, -j4, one 6G/8G/swap0/TasksMax64 scope at a time.
+This is bounded symbolic checking, not an unoptimized arithmetic gate.
+All raw logs/times/receipts are k01–k20. Timeout GNU-time wrapper peaks
+can undercount descendants; actual peaks are null rather than invented.
+No timed-out target was rerun unchanged or at a raised cap. Larger scan/count
+scopes moved to the source-shaped Lean references at their stated scope.
+Reservation preflight before k18 saw a vanished cgroup; it was retried after
+30 seconds once and succeeded. No reservation barrier was bypassed.

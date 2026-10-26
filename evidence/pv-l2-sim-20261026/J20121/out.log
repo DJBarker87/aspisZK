@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Recorded.lean:91:17: error: unsolved goals
+case succ.ok.Ok
+hash : Hash
+domain : Slice U8
+n : ℕ
+ih :
+  ∀ (state : State),
+    (collect hash domain n state).1 =
+      ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n state
+state after : State
+value : aspis_core.field.M31
+hn : (scalar hash domain 16 state).1 = ok (core.result.Result.Ok value, after)
+⊢ (do
+      let (values, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+      match values with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+        | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final)) =
+    do
+    let (tail, final) ← ProverCommitFourSteps.collect (prover_commit_reference.limb_caller hash domain) n after
+    match tail with
+      | core.result.Result.Err e => ok (core.result.Result.Err e, final)
+      | core.result.Result.Ok values => ok (core.result.Result.Ok (value :: values), final)
+'R1Z.PV_L2_F3Recorded.scalar_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.source_scalar_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.collect_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Recorded.qm31_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
