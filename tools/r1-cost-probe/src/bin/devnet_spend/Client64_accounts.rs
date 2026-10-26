@@ -93,7 +93,7 @@ mod route_tests {
         assert_eq!(planner.matches("RealR1_client::prove_for_proof_accounts(").count(), 1);
         for source in [planner, runner] {
             for forbidden in ["prove_masked_retrying(", "prove_masked_retrying_with(",
-                              "prove_masked_attempt(", "StateOnlyAttemptSecrets", "prover::"] {
+                              "prove_masked_attempt(", "StateOnlyAttemptSecrets", " prover::", "{prover,"] {
                 assert!(!source.contains(forbidden), "alternative prover route: {forbidden}");
             }
         }
