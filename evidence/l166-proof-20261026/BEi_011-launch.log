@@ -1,0 +1,49 @@
+{"attempt": "BEi_011", "exit_status": 1, "wall_seconds": 3.3192660249769688, "peak_rss_kib": "5212788", "swaps": "0", "print_axioms": ["'AspisR1.BEi_BatchPrefix.export_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+BEi_BatchPrefix.lean:33:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) (run hashv code []).2
+in the target expression
+  List.map Prod.fst (eval H (SdkC_Oracle.program code)).1 =
+    RPx_AttemptPrefix.addresses (run hashv code []).2 ++ remaining
+
+S A : Type
+call : Parts → S → Result Digest × S
+hashv : Parts → Result Digest
+binding : ∀ (parts : Parts) (state : S), (call parts state).1 = hashv parts
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+code : Code A
+n : ℕ
+count : GExp_CountLaws.count n code
+state after : S
+be
+...
+BEi_BatchPrefix.lean:33:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) (run hashv code []).2
+in the target expression
+  List.map Prod.fst (eval H (SdkC_Oracle.program code)).1 =
+    RPx_AttemptPrefix.addresses (run hashv code []).2 ++ remaining
+
+S A : Type
+call : Parts → S → Result Digest × S
+hashv : Parts → Result Digest
+binding : ∀ (parts : Parts) (state : S), (call parts state).1 = hashv parts
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+code : Code A
+n : ℕ
+count : GExp_CountLaws.count n code
+state after : S
+before log : Log
+value : Result A
+execution : Executes call code state before value after log
+exactCut : BEi_RecorderCut.issued before log = (run hashv code []).2
+kept remaining : List Bytes
+same : List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) (run hashv code []).2 = kept
+ideal : List.map Prod.fst (eval H (SdkC_Oracle.program code)).1 = kept ++ remaining
+⊢ List.map Prod.fst (eval H (SdkC_Oracle.program code)).1 =
+    RPx_AttemptPrefix.addresses (run hashv code []).2 ++ remaining
+'AspisR1.BEi_BatchPrefix.export_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r836aa834ab5945be9fa5626f2a10b1bc.scope; invocation ID: cd4f4992f60b42968c4f856b4f2b1f5a
