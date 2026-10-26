@@ -1,0 +1,22 @@
+FIr_LiteralValues.lean:17:9: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+values : SemanticPrefixCodec.Full
+rs : List (Message × Challenge)
+view : LiteralOpeningView.View
+read : LiteralOpeningView.read rs = some view
+frames : SemanticPrefixCodec.encodeFull values = records (List.take 25 rs)
+length : (List.take 25 rs).length = 25
+left✝¹ : LiteralTranscript.c1At (List.take 25 rs) = some view.c1
+left✝ : LiteralTranscript.c2At (List.take 25 rs) = some view.c2
+semantic : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some view.semantic
+right✝ : view.word = LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK view.c1 view.c2
+c : LiteralSemanticPrefix.E
+slot :
+  view.semantic[↑14] =
+    (SemanticPayloadView.toMessage (callback LiteralOpeningView.eK (List.take 25 rs)[↑14].1) ↑(values 14), c)
+⊢ 14 < view.semantic.length
+'AspisR1.FIr_LiteralValues.claim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIr_LiteralValues.polynomials' depends on axioms: [propext, Classical.choice, Quot.sound]

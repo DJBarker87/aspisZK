@@ -1,0 +1,40 @@
+FIr_SourceInitial.lean:34:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    Polynomial.map (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+        (polynomialOf entry.coefficients) =
+      SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑_a, ⋯⟩)
+Error: Application type mismatch: The argument
+  RawActualAnnotatedTypedRows.entry_schedule_round_lt run entry List.mem_cons_self
+has type
+  ↑entry.round < 10
+but is expected to have type
+  ↑_a < 10
+in the application
+  ⟨↑_a, ⋯⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case cons
+H : Type
+D : aspis_core.Digest32 H
+pre : r1_wire.Prefix
+initial final : Outcome H
+values : SemanticPrefixCodec.Full
+full : SemanticPrefixCodec.encodeFull values = PrefixAdapter.completedRecords pre
+entry : RoundEvidence D pre
+rest : List (RoundEvidence D pre)
+run : AnnotatedRun D pre SemanticRoundsCheckedTrace.schedule initial final (entry :: rest)
+events : List.map (fun entry => (entry.round, entry.row)) (entry :: rest) = SemanticRoundsCheckedTrace.schedule
+first : entry.round = 0#usize
+poly :
+  Polynomial.map (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+      (polynomialOf entry.coefficients) =
+    SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values ⟨↑entry.round, ⋯⟩)
+ix : ⟨↑0#usize, ⋯⟩ = 0
+⊢ Polynomial.eval 0 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) +
+      Polynomial.eval 1 (SemanticCoefficientCodec.polynomial (SemanticPayloadView.coeffAt values 0)) =
+    (algebraMap ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact) (DecodeMain initial.1)
+'AspisR1.FIr_SourceInitial.head_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIr_SourceInitial.first_boundary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

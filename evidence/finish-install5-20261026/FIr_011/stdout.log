@@ -1,0 +1,22 @@
+Polynomial.eval_map.{u, v} {R : Type u} {S : Type v} [Semiring R] {p : Polynomial R} [Semiring S] (f : R →+* S)
+  (x : S) : Polynomial.eval x (Polynomial.map f p) = Polynomial.eval₂ f x p
+Polynomial.eval₂_at_apply.{u, u_1} {R : Type u} [Semiring R] {p : Polynomial R} {S : Type u_1} [Semiring S]
+  (f : R →+* S) (r : R) : Polynomial.eval₂ f (f r) p = f (Polynomial.eval r p)
+FIr_EvalAudit.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Polynomial.eval₂_at`
+Polynomial.eval₂_hom.{u, v} {R : Type u} {S : Type v} [Semiring R] {p : Polynomial R} [Semiring S] (f : R →+* S)
+  (x : R) : Polynomial.eval₂ f (f x) p = f (Polynomial.eval x p)
+Polynomial.hom_eval₂.{u, v, w} {R : Type u} {S : Type v} {T : Type w} [Semiring R] (p : Polynomial R) [Semiring S]
+  [Semiring T] (f : R →+* S) (g : S →+* T) (x : S) : g (Polynomial.eval₂ f x p) = Polynomial.eval₂ (g.comp f) (g x) p
+Polynomial.eval₂_eq_eval_map.{u, v} {R : Type u} {S : Type v} [Semiring R] {p : Polynomial R} [Semiring S] (f : R →+* S)
+  {x : S} : Polynomial.eval₂ f x p = Polynomial.eval x (Polynomial.map f p)
+Polynomial.eval₂_comp.{u, v} {R : Type u} {S : Type v} [Semiring R] {p q : Polynomial R} [CommSemiring S] (f : R →+* S)
+  {x : S} : Polynomial.eval₂ f x (p.comp q) = Polynomial.eval₂ f (Polynomial.eval₂ f x q) p
+Polynomial.aeval_algebraMap_apply.{u_1, u_2, u_3} {R : Type u_1} {A : Type u_2} (B : Type u_3) [CommSemiring R]
+  [CommSemiring A] [Semiring B] [Algebra R A] [Algebra A B] [Algebra R B] [IsScalarTower R A B] (x : A)
+  (p : Polynomial R) : (Polynomial.aeval ((algebraMap A B) x)) p = (algebraMap A B) ((Polynomial.aeval x) p)
+Polynomial.eval₂_at_apply.{u, u_1} {R : Type u} [Semiring R] {p : Polynomial R} {S : Type u_1} [Semiring S]
+  (f : R →+* S) (r : R) : Polynomial.eval₂ f (f r) p = f (Polynomial.eval r p)
+FIr_EvalAudit.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Polynomial.map_eval`
+FIr_EvalAudit.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Polynomial.eval₂_hom_apply`
+Polynomial.eval_map_apply.{u, v} {R : Type u} {S : Type v} [Semiring R] {p : Polynomial R} [Semiring S] (f : R →+* S)
+  (x : R) : Polynomial.eval (f x) (Polynomial.map f p) = f (Polynomial.eval x p)

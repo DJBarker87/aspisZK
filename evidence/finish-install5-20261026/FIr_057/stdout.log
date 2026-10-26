@@ -1,0 +1,21 @@
+FIr_EqualityValue.lean:14:48: error: unsolved goals
+left right : Std.Array NQ 10#usize
+hl : ∀ x ∈ ↑left, Canon x
+hr : ∀ x ∈ ↑right, Canon x
+out : NQ
+run✝ : FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value left right = ok out
+a b : NQ
+product : FIq_Native.field.QM31
+ha : left.index_usize 0#usize = ok a
+hb : right.index_usize 0#usize = ok b
+hp : FIr_EqualityCell.call () (a, b) = ok product
+run : FIr_EqualityLoop.loop left right product 1#usize = ok out
+va : Canon a
+vb : Canon b
+vp : Canon product ∧ decode product = decode a * decode b + (1 - decode a) * (1 - decode b)
+rest : Canon out ∧ decode out = decode product * FIr_EqualityLoop.tail left right (↑1#usize) 9
+⊢ (value left ↑0#usize * value right ↑0#usize + (1 - value left ↑0#usize) * (1 - value right ↑0#usize)) *
+      ((value left ↑1#usize * value right ↑1#usize + (1 - value left ↑1#usize) * (1 - value right ↑1#usize)) *
+        FIr_EqualityLoop.tail left right (↑1#usize + 1) 8) =
+    FIr_EqualityLoop.tail left right 0 10
+'AspisR1.FIr_EqualityValue.exact_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
