@@ -59,7 +59,7 @@ theorem value_conserved (base radix n : Nat) (words : List Nat) :
         _ = value radix words := by
           have hpv := PV_CB3_SamplerDivision.value_conserved base radix words
           rw [hp] at hpv
-          omega
+          simpa only [Nat.add_comm] using hpv
 
 #print axioms digits_length
 #print axioms quotient_length
