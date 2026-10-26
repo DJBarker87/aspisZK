@@ -1,0 +1,9 @@
+# FIq stage 2: checked source-round and typed-decoder dependencies
+
+The29 missing modules59-87 all compile individually with -M7000 and the unchanged6G/8G/swap0/tasks64 scopes. Existing JFv_ arithmetic and the canonical SInt2 objects are imported read-only. New FIq_S_ copies preserve the original declarations and proofs, changing only import module names and removing old resource-option overrides. FIq_semantic-order.json and the per-attempt snapshots identify each original source. No proof count or dependency rebuild is counted as security progress.
+
+These modules retain the SAME source polynomial arrays, records, challenges and before/after states in the actual ten-round AnnotatedRun; every step has its boundary and value equation and degree guard. All-input decoder canonicality, exact byte/limb interpretation, typed polynomial payload equality and same-entry row agreement are available for the next composition. The actual installed S1 round dictionary is definitionally the same dictionary used by these source theorems (children_same audit088 passes). The first verified-composition attempt088 failed an over-qualified namespace and is replaced, not accepted.
+
+Compile089 was admitted by the reservation script, then the existing lead systemd-run shim waited OUTSIDE any scope because QUIET_WINDOW.json appeared. Read-only process inspection confirmed its20s sleep loop and the existing marker's expiry. No marker/launcher/admission code was changed and no parallel scope was launched. This is not a compiler timeout or proof failure. The normal existing launcher resumes after expiry.
+
+Ledger: five assigned rows L142-L146 remain at this stage. The literal full25 view/challenge transport and actual terminal value proof are still required; no caller-provided successful semantic trace is added to the deployed theorem. FIq_recount.py computes unchanged counts from the immutable FIp ledger, preserving row IDs, classifications and scopes.
