@@ -51,7 +51,7 @@ theorem source_roots [ExternalLinear] (parent : ParentRefinement) :
       decide
     obtain ⟨out,run,canonical,meaning⟩ := parent _ _ hz hz
     have same : model out = model PV_Src_CanonicalRoots.table.val[0]! := by
-      rw [meaning,zero_model,table_model]
+      simp only [meaning,zero_model,table_model]
       exact AspisR1.FrozenEmptyRoots.initial.symm
     rw [canonical_injective out _ canonical (PV_Src_CanonicalRoots.canonical 0) same] at run
     exact run
@@ -59,7 +59,7 @@ theorem source_roots [ExternalLinear] (parent : ParentRefinement) :
     obtain ⟨out,run,canonical,meaning⟩ := parent _ _
       (PV_Src_CanonicalRoots.canonical l.castSucc) (PV_Src_CanonicalRoots.canonical l.castSucc)
     have same : model out = model PV_Src_CanonicalRoots.table.val[l.val+1]! := by
-      rw [meaning,table_model l.castSucc,table_model l.succ]
+      simp only [meaning,table_model]
       exact (AspisR1.FrozenEmptyRoots.successor l).symm
     rw [canonical_injective out _ canonical (PV_Src_CanonicalRoots.canonical l.succ) same] at run
     exact run
