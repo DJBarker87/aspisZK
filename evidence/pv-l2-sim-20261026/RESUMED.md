@@ -2,7 +2,7 @@
 
 Branch `codex/pv-l2-sim-20261026`. Fresh allocation: 100 Lean attempts,
 20 Kani runs; Env-J 21900–22199. The predecessor's 100/20 is separate.
-This file records the continuation; REPORT.md retains the historical report.
+This file records interim continuation notes; REPORT.md is the final continuation report and REPORT-predecessor.md retains the historical report.
 
 ## Fixed target and row identities
 
