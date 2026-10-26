@@ -1,0 +1,29 @@
+@R1Z.PV_RunJoin_LedgerSourceBody.provider_frame : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C : Type}
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (d : R1Z.PV_RunJoin_LedgerBody.Inputs N C) (secret : R1Z.ProverRwRetryModel.Secret)
+  (s next : R1Z.PV_RunJoin_LedgerBody.State N C)
+  (status : Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+  R1Z.PV_RunJoin_LedgerBody.body schedule unix address d secret s = Aeneas.Std.Result.ok (status, next) →
+    next.provider = s.provider
+'R1Z.PV_RunJoin_LedgerSourceBody.provider_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+       19.44 real         1.28 user         3.11 sys
+          3034660864  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              287980  page reclaims
+               82578  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11595  voluntary context switches
+              163220  involuntary context switches
+           342225523  instructions retired
+           133655412  cycles elapsed
+            11387576  peak memory footprint
+
+exit=0

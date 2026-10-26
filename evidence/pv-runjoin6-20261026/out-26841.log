@@ -1,0 +1,28 @@
+@R1Z.PV_RunJoin_NativeEffectTransport.worker_iff : ∀ {E File Reply Time Worker : Type} [inst : DecidableEq File]
+  (native : R1Z.PV_RunJoin_NativeEffectInterface.Native E File Reply Time Worker)
+  (laws : R1Z.PV_RunJoin_OsWorld.Laws E File Reply Time Worker),
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity native laws →
+    ∀ (world next : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker) (outcome : Worker),
+      R1Z.PV_RunJoin_OsWorld.workerStep world = some (outcome, next) ∧ native.worker world outcome ↔
+        R1Z.PV_RunJoin_OsWorld.WorkerAllowed laws world outcome next
+'R1Z.PV_RunJoin_NativeEffectTransport.worker_iff' depends on axioms: [propext]
+       44.33 real         1.67 user         5.40 sys
+          2201223168  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              419579  page reclaims
+              153336  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20451  voluntary context switches
+              307058  involuntary context switches
+           393161986  instructions retired
+           160522089  cycles elapsed
+            11649768  peak memory footprint
+
+exit=0

@@ -1,0 +1,26 @@
+@R1Z.PV_RunJoin_MapErrInstalled.pure_parametric : ∀ [ProverRwFull.ExternalTypes] {S T E F A : Type}
+  (left : Aeneas.Std.core.ops.function.FnOnce S E F) (right : Aeneas.Std.core.ops.function.FnOnce T E F) (s : S) (t : T)
+  (value : Aeneas.Std.core.result.Result A E),
+  (∀ (e : E), left.call_once s e = right.call_once t e) →
+    R1Z.ProverRwOuterMapErr.map_err left value s = R1Z.ProverRwOuterMapErr.map_err right value t
+'R1Z.PV_RunJoin_MapErrInstalled.pure_parametric' depends on axioms: [propext]
+       25.90 real         1.51 user         3.42 sys
+          3322953728  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              134275  page reclaims
+              172246  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               47346  voluntary context switches
+              180358  involuntary context switches
+           340228241  instructions retired
+           180019328  cycles elapsed
+            12092208  peak memory footprint
+
+exit=0

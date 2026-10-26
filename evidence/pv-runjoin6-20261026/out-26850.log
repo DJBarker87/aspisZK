@@ -1,0 +1,34 @@
+@R1Z.PV_RunJoin_CallerProjection.caller : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns],
+  R1Z.PV_RunJoin_StoreContinuationResidual.MapErrParametric →
+    ∀ {S T : Type} (project : S → T) (left : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+      (right : ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T) (pub : R1Z.ProverRwRetryModel.Pub)
+      (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+      (hash : R1Z.ProverRwRetryModel.Hash) (secret : R1Z.ProverRwRetryModel.Secret) (s : S),
+      (∀ (statement nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+          R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+              (left.reserve s statement nonce) =
+            right.reserve (project s) statement nonce) →
+        R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+            (R1Z.PV_RunJoin_GenericSourceCaller.caller left pub compiled variant hash secret s) =
+          R1Z.PV_RunJoin_GenericSourceCaller.caller right pub compiled variant hash secret (project s)
+'R1Z.PV_RunJoin_CallerProjection.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+       12.40 real         1.41 user         2.04 sys
+          3311697920  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              261869  page reclaims
+               33529  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11983  voluntary context switches
+               70320  involuntary context switches
+           353559731  instructions retired
+           136352915  cycles elapsed
+            11666200  peak memory footprint
+
+exit=0

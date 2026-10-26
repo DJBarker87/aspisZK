@@ -1,0 +1,28 @@
+@R1Z.PV_RunJoin_LedgerSourceBody.source_law : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns] {N C : Type}
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (d : R1Z.PV_RunJoin_LedgerBody.Inputs N C),
+  (∀ (s : R1Z.PV_RunJoin_LedgerBody.State N C), R1Z.PV_RunJoin_MapErrInstalled.Identity (d.ops s)) →
+    R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw (R1Z.PV_RunJoin_LedgerSourceBody.sourceBody d)
+      (R1Z.PV_RunJoin_LedgerBody.body schedule unix address d)
+'R1Z.PV_RunJoin_LedgerSourceBody.source_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+       15.35 real         1.46 user         2.46 sys
+          3164258304  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              275256  page reclaims
+               48106  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               11911  voluntary context switches
+              101155  involuntary context switches
+           402127257  instructions retired
+           160338184  cycles elapsed
+            11371240  peak memory footprint
+
+exit=0

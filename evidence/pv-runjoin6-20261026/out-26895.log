@@ -1,0 +1,29 @@
+@R1Z.PV_RunJoin_OsWorldFrames.worker_frame : ∀ {E File Reply Time Worker : Type} [DecidableEq File]
+  (world next : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker) (outcome : Worker),
+  R1Z.PV_RunJoin_OsWorld.workerStep world = some (outcome, next) →
+    next.entropy = world.entropy ∧
+      next.entropyUsed = world.entropyUsed ∧
+        next.files = world.files ∧
+          next.fileUsed = world.fileUsed ∧
+            next.time = world.time ∧ next.timeUsed = world.timeUsed ∧ next.workerUsed = world.workerUsed + 1
+'R1Z.PV_RunJoin_OsWorldFrames.worker_frame' depends on axioms: [propext]
+        3.68 real         1.16 user         1.31 sys
+          3433644032  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              286213  page reclaims
+                2137  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                9103  voluntary context switches
+               10659  involuntary context switches
+           329083461  instructions retired
+           118450893  cycles elapsed
+            11141840  peak memory footprint
+
+exit=0

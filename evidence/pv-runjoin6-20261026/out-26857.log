@@ -1,0 +1,32 @@
+@R1Z.PV_RunJoin_EnteredBody.body : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+  (variant : ProverRwFull.transport.Variant) (secret : R1Z.ProverRwRetryModel.Secret)
+  (hash : R1Z.ProverRwRetryModel.Hash) (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) (s : R1Z.PV_RunJoin_LedgerWorld.World),
+  s.entered = none →
+    R1Z.PV_RunJoin_Follows.Follows (fun out => out.2.entered)
+      (R1Z.PV_RunJoin_PublicReservation.guards address secret.mask_nonce context)
+      (ProverRwFull.prover.prove_masked_with_attempt (R1Z.PV_RunJoin_LedgerWorld.dictionary ops schedule unix address)
+        pub compiled variant hash context binding secret s)
+'R1Z.PV_RunJoin_EnteredBody.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+       22.86 real         1.41 user         3.35 sys
+          3010330624  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              320098  page reclaims
+               61676  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10877  voluntary context switches
+              185948  involuntary context switches
+           371557900  instructions retired
+           147941969  cycles elapsed
+            11748096  peak memory footprint
+
+exit=0

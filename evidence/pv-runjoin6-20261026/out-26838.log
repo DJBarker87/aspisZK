@@ -1,0 +1,39 @@
+R1Z.PV_RunJoin_SelectedErrorPrelude.source_prelude_error : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns) {S W : Type} (account : R1Z.ProverRwEffectCallback.Account S) (state next : S)
+  (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  account.call_mut state 0#usize = Aeneas.Std.Result.ok (nonce, next) →
+    ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32 nonce = Aeneas.Std.Result.ok true →
+      ∃ input back,
+        R1Z.ProverRwEffectSource.before = Aeneas.Std.Result.ok (input, back) ∧
+          ∀ (err : ProverRwFull.getrandom.error.Error) (written : Aeneas.Std.Slice Aeneas.Std.U8),
+            ProverRwFull.getrandom.fill input = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err err, written) →
+              ∀ (pub : W → R1Z.ProverRwRetryModel.Pub) (compiled : W → R1Z.ProverRwRetryModel.Compiled)
+                (hash : W → R1Z.ProverRwRetryModel.Hash) (store : R1Z.ProverRwRetryModel.Store) (w u : W),
+                ProverRwFull.RealR1_client.prove_for_proof_accounts account (pub w) (compiled w) (hash w) store state =
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Entropy, store) ∧
+                  ProverRwFull.RealR1_client.prove_for_proof_accounts account (pub w) (compiled w) (hash w) store
+                      state =
+                    ProverRwFull.RealR1_client.prove_for_proof_accounts account (pub u) (compiled u) (hash u) store
+                      state
+'R1Z.PV_RunJoin_SelectedErrorPrelude.source_prelude_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+       45.25 real         1.56 user         5.22 sys
+          2136227840  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              397859  page reclaims
+              168190  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               17066  voluntary context switches
+              320240  involuntary context switches
+           436618234  instructions retired
+           215793405  cycles elapsed
+            11928368  peak memory footprint
+
+exit=0

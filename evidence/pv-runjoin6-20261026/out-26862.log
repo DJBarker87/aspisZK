@@ -1,0 +1,25 @@
+@R1Z.PV_RunJoin_Follows.bind_common : ∀ {A B C : Type} (project : C → B) (initialResult : Aeneas.Std.Result A)
+  (small : A → Aeneas.Std.Result B) (large : A → Aeneas.Std.Result C),
+  (∀ (a : A), R1Z.PV_RunJoin_Follows.Follows project (small a) (large a)) →
+    R1Z.PV_RunJoin_Follows.Follows project (initialResult >>= small) (initialResult >>= large)
+'R1Z.PV_RunJoin_Follows.bind_common' does not depend on any axioms
+       25.98 real         1.41 user         3.73 sys
+          2949169152  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              317098  page reclaims
+               72447  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               17363  voluntary context switches
+              207981  involuntary context switches
+           386307502  instructions retired
+           154218411  cycles elapsed
+            11666224  peak memory footprint
+
+exit=0

@@ -1,0 +1,32 @@
+@R1Z.PV_RunJoin_OsFailurePure.client_map_error : ∀ [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns),
+  R1Z.PV_RunJoin_MapErrInstalled.Identity ops →
+    ∀ {S : Type} (account : R1Z.ProverRwEffectCallback.Account S) (err : ProverRwFull.getrandom.error.Error),
+      ProverRwFull.core.result.Result.map_err
+          (ProverRwFull.RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+            account)
+          (Aeneas.Std.core.result.Result.Err
+            (ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+          () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Entropy)
+'R1Z.PV_RunJoin_OsFailurePure.client_map_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+       43.17 real         1.58 user         4.62 sys
+          2478407680  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              365752  page reclaims
+              126426  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               16042  voluntary context switches
+              327691  involuntary context switches
+           361166920  instructions retired
+           156285546  cycles elapsed
+            11617048  peak memory footprint
+
+exit=0

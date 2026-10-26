@@ -34,10 +34,19 @@ semantically distinct contracts, not a trick counting conjunctions as one.
 
 ## Options, both UNADOPTED
 
-A (native availability) would add a separate premise that every reached
-factory/kernel operation succeeds (and excludes the first-error branch), or
-would restrict the theorem to that availability event. It does not follow
-from `entropy_law`, `entropy_kernel`, or the observation correspondence. It is absent from T.
+A would add `PV_RunJoin_AvailableOption.OsAvailable` as an extra trust
+field or an explicit theorem premise:
+
+```lean
+∀ p, p.used.val < p.replies.val.length →
+  ∃ after bytes, boundary.draw.fill p (Array.repeat 64#usize 0#u8) =
+    .ok ((after,.Ok ()),bytes)
+```
+
+This is the prior in-capacity 64-byte OS-draw option; it excludes OS failure,
+interpreter failure and divergence for those draws. It does not assert
+nonzero seeds, E1, E2 or native/source association, and availability by itself
+does not prove V038. It is absent from T and the new headline statements.
 B would change the experiment/conclusion to feed the SAME public error signal
 and full error observation to real and ideal, as in PublicFailureEndpoint.
 It belongs in the statement, not in a hidden observation equality. It is absent.

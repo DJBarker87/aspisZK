@@ -81,3 +81,59 @@ TrustSeparation formally exhibits a model of T whose extracted payload differs
 from a specified model payload, proving that source trace refinement cannot be
 inferred merely from native/extracted observation equality. This is an
 interface countermodel, not a counterexample against shipped privacy.
+
+Non-vacuity limit: the checked fixture models use the generic trust signature
+and canonical fixture fibres. They do NOT inhabit the as-yet-undefined actual
+deployed `trustData` specialization, nor the conjunction P ∧ T at that instance.
+The requested deployed-fixture non-vacuity remains part of P-runtime/P-release.
+No claim of an actual Linux world or actual compiled fixture instance is made.
+
+## Final validation, budget, stop and next deliverable
+
+100/100 Lean attempts 26800–26899: 22 proof/statement-development attempts,
+77 split cached exact-statement/axioms audits, and one final cached import audit.
+91 accepted, 9 elaboration failures retained. The 77 audits are validation,
+not 77 new proofs or premise removals. There were no memory kills, no cap
+increases, no unchanged failed reruns and no dependency build. Local small-new-
+module exception, lake env lean -M7000, pinned inherited cache. Maximum RSS
+3,597,533,184 bytes; swaps 0. Every attempt has source snapshot/hash, exact
+command/target/status/wall/RSS/swap/revision/import-object hashes and complete
+axiom lines. The final index's fingerprint hashes the DIRECT dependency object
+map; it is not evidence of a full source closure replay.
+
+Final 26899: R1Z/PV_RunJoin_TrustFinalAudit, exit 0, wall 24.711662041954696 s,
+peak RSS 3,408,789,504 bytes, swaps 0, revision 961d528cb3 plus the exact
+uncommitted source snapshot/hash recorded in receipt-26899.json. Both
+privacy_headline_deployed_candidate declarations audit to precisely
+[propext, Classical.choice, Quot.sound]. All nine current new module sources
+match accepted receipts (accepted-source-audit.json). No forbidden proof
+mechanism appears in accepted source. git diff --check passes.
+
+The 77 source-handoff audits pass. Source/runtime, compiler/admission and
+complete trace equations remain explicit in their checked statements. The
+later read-only caller update f6a75dbc86 still retains the reservation and whole
+proof/audit data equation; its callback joins are not a deployed RunJoin
+instance. This update was read with git show and not added to our dependency
+cone. The four published RunJoin interfaces are unchanged from 87a332c140.
+
+No complete frozen source manifest, release dependency replay, native fixture
+execution, native CPU measurement, or verifier ELF rebuild ran. Shipped
+crates/programs are unchanged. No account/key creation, funding, cleanup,
+refund, or external message occurred. The completed Kani workspace's Cargo
+cache target was removed per local-lean rule 9; Lean caches are retained.
+
+Stopped on exhausted Lean (100/100) and Kani (11/11) allocations. Kani's foreign
+call rejection did not stop the Lean work. There is no checked counterexample
+against the shipped privacy target and no claimed native premise removal.
+
+Next concrete deliverable: install the SAME actual proof-account selected
+compiler/admission family (SourceSelectionContract.Data and
+SelectedAdmission.Remainder), actual native carrier/initializer/decoder data,
+and prove TrustLedger.RemainingProofs.initial, .causal and .trace, including
+D159/D166 complete observations and OS errors with A/B still unadopted.
+Then instantiate the conditional construction at that data, exhibit its exact
+P ∧ T fixture worlds, and perform the coherent release source closure replay.
+Do not replace these P proofs with new trust fields. Target not yet established.
+
+COMMITS.txt records git log --oneline 87a332c140..HEAD before the final evidence
+commit; that final commit follows this report.

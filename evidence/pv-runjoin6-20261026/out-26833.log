@@ -1,0 +1,70 @@
+@R1Z.PV_RunJoin_SourceBoundary.source_V045 : ∀ [inst : ProverRwFull.ExternalTypes]
+  {CommitHandle Aux Coins N C Context Rest : Type}
+  (world : R1Z.PV_RunJoin_CompletedWorld.Data Coins N R1Z.ProverRwRetryModel.Store C)
+  (policy : R1Z.ProverRwEffectCallback.Account N)
+  (inputs :
+    (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K) →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        h.Instance → R1Z.PV_RunJoin_PureSourceLift.Inputs N C)
+  (disclosed :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.ProverRwRetryModel.Store C) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (oracle :
+    R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        Aeneas.Std.Result (R1Z.PV_RunJoin_Deployed.Output N R1Z.ProverRwRetryModel.Store C) →
+          List (R0Z.FsStatement.Bytes × R0Z.FsStatement.OracleAnswer))
+  (ideal :
+    (R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K →
+        R0Z.JointView.Tape R1Z.PrivacyR1AcctBasis.K R1Z.PrivacyR1AcctBasis.F →
+          R0Z.JointView.View R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat) →
+      R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CommitHandle Aux →
+        R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+          R0Z.FsStatement.ROMView R1Z.PrivacyR1AcctBasis.K CommitHandle Aux R1Z.Batched.R1Bat)
+  (d :
+    R1Z.PV_RunJoin_Boundary.Data (R1Z.PV_RunJoin_SourceConstructor.runtime world policy inputs disclosed oracle ideal)
+      Context Rest)
+  (h : R0Z.JointView.HonestProver R1Z.PrivacyR1AcctBasis.K)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle),
+  (∀ (w : h.Instance),
+      h.public w = x.1 →
+        R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+          ((R1Z.PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal d).sourceBody h x w)
+          ((R1Z.PV_RunJoin_SourceConstructor.runtime world policy inputs disclosed oracle ideal).body h x w)) ∧
+    (∀ (s : R1Z.PV_RunJoin_UnifiedRetry.State N R1Z.ProverRwRetryModel.Store C) (k : Aeneas.Std.Usize)
+        (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+        (next : R1Z.PV_RunJoin_Deployed.State N R1Z.ProverRwRetryModel.Store C),
+        (R1Z.PV_RunJoin_SourceConstructor.runtime world policy inputs disclosed oracle ideal).account.call_mut s k =
+            Aeneas.Std.Result.ok (nonce, next) →
+          next.provider = s.provider) ∧
+      ∀ (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (secret : R1Z.ProverRwRetryModel.Secret)
+            (s next : R1Z.PV_RunJoin_UnifiedRetry.State N R1Z.ProverRwRetryModel.Store C)
+            (status : Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+            (R1Z.PV_RunJoin_SourceConstructor.runtime world policy inputs disclosed oracle ideal).body h x w secret s =
+                Aeneas.Std.Result.ok (status, next) →
+              next.provider = s.provider
+'R1Z.PV_RunJoin_SourceBoundary.source_V045' depends on axioms: [propext, Classical.choice, Quot.sound]
+       27.49 real         1.49 user         4.27 sys
+          2624405504  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              291144  page reclaims
+              163548  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20880  voluntary context switches
+              185794  involuntary context switches
+           464777650  instructions retired
+           198447673  cycles elapsed
+            11715304  peak memory footprint
+
+exit=0

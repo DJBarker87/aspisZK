@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_EnteredCaller.caller : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (schedule : R1Z.ProverCommitLedger36.Schedule) (unix : Bool) (address : R1Z.PV_RunJoin_LedgerWorld.Address)
+  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+  (variant : ProverRwFull.transport.Variant) (secret : R1Z.ProverRwRetryModel.Secret)
+  (hash : R1Z.ProverRwRetryModel.Hash) (s : R1Z.PV_RunJoin_LedgerWorld.World),
+  s.entered = none →
+    R1Z.PV_RunJoin_Follows.Follows (fun out => out.2.entered)
+      (R1Z.PV_RunJoin_PublicReservation.entry address pub variant hash secret.mask_nonce)
+      (R1Z.PV_RunJoin_GenericSourceCaller.caller (R1Z.PV_RunJoin_LedgerWorld.dictionary ops schedule unix address) pub
+        compiled variant hash secret s)
+'R1Z.PV_RunJoin_EnteredCaller.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+       20.11 real         1.55 user         2.98 sys
+          2980102144  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              277302  page reclaims
+               66854  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               15222  voluntary context switches
+              146646  involuntary context switches
+           378008419  instructions retired
+           149170728  cycles elapsed
+            11600592  peak memory footprint
+
+exit=0

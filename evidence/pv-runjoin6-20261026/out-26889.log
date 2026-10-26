@@ -1,0 +1,31 @@
+@R1Z.PV_RunJoin_OsWorld.file_at : ∀ {E File Reply Time Worker : Type} [inst : DecidableEq File]
+  (world : R1Z.PV_RunJoin_OsWorld.World E File Reply Time Worker)
+  (event : R1Z.PV_RunJoin_OsWorld.Event (R1Z.PV_RunJoin_OsWorld.Request File) Reply),
+  world.files[world.fileUsed]? = some event →
+    R1Z.PV_RunJoin_OsWorld.fileStep event.request world =
+      some
+        (event.reply,
+          { entropy := world.entropy, entropyUsed := world.entropyUsed, files := world.files,
+            fileUsed := world.fileUsed + 1, time := world.time, timeUsed := world.timeUsed, workers := world.workers,
+            workerUsed := world.workerUsed })
+'R1Z.PV_RunJoin_OsWorld.file_at' depends on axioms: [propext]
+        2.94 real         1.12 user         1.16 sys
+          3533586432  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              281924  page reclaims
+                6507  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                   2  voluntary context switches
+               12523  involuntary context switches
+           315096798  instructions retired
+           109180057  cycles elapsed
+            10961568  peak memory footprint
+
+exit=0
