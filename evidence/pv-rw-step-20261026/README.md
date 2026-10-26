@@ -298,3 +298,12 @@ shortened source filenames against the original receipt's full-path content
 hashes. `llbc-source-resolution.json` resolves every recorded source binding;
 it supplements, and does not modify, the conservative original receipt fields.
 The fission translator failure remains a failure, with no accepted whole output.
+
+Final audit preflight237/23807 (ID23807) refused locally before invoking Lean:
+IteratorMeasure had been checked in23735 without an emitted object. Zero
+attempts charged. The uncompiled two-stage audit proposal is archived verbatim;
+no accepted leaf source changed.23808 emits that exact existing prerequisite
+into the local pinned cache (3.33s,659,587,072 RSS bytes,0swap,standard axioms).
+The last compile will combine the complete axioms audit and frozen focused
+manifest into a single invocation. `final-focused-source-manifest-v2.json`
+explicitly supersedes the preflight-only proposal, retaining its original pins.
