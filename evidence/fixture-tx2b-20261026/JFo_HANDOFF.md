@@ -27,9 +27,13 @@ weights. `JFo_Powers.source` derives a successful actual powers return and its
 canonical exact powers, from computed canonical gamma limbs, without a powers-
 success premise. `JFo_Opening.call/selected` identify actual source opening
 returns with their real proof ranges, with no opening-success premise.
-The individual `JFo_Opening10_0`–`JFo_Opening21_3` candidates target all48
-installed native field reads for the remaining12 query openings; the final
-validation manifest, not this candidate range, determines which are checked.
+All48 `JFo_Opening10_0`–`JFo_Opening21_3` modules have accepted exact-current-
+hash receipts. They compute the installed native field reads for the remaining12
+query openings. `JFo_QueryFixture.decoded/inhabited` (099, source JFo_TX2.lean)
+compose all48 calls with pending allocation and powers on the SAME inputs.
+`JFo_TX2.reader_on_saved` transports the installed reader to any TX1 saved Vec
+whose bytes equal this retained checkpoint, retaining the three hash equations.
+It is reader-only transport, not JFo_TX2.accepted2.
 
 Full query folding/equality checks, geometry, accumulator updates and post-query
 flush are still unproved here, as are batch1, installed finish and the second
@@ -87,3 +91,38 @@ inference, reader cursor/projection matching, finite index representation and
 small-window arithmetic normalization. All original failures remain visible;
 recovery sorryAx output is never accepted. No cap or heartbeat/depth option was
 raised. No memory-killed job was rerun.
+
+## Final budget and remaining deliverable
+
+**100/100 charged requests:99 Lean processes,74 pass/25 reject, plus1
+pre-Lean dependency-inventory failure;0/10 Kani. No further compile was run.**
+All74 delivered current modules have accepted exact-hash receipts and printed
+axioms in subsets of [propext, Classical.choice, Quot.sound]. Total Lean wall
+317.3389444957138s; maximum RSS5450824KiB; swap0. All launched scopes are terminal.
+No scope cap increase or memory kill occurred. The one default-heartbeat failure
+was replaced by a changed, explicitly typed source, not rerun unchanged.
+
+**The final composed audit100 FAILED.** I omitted the JFo_ReaderFixture import,
+so the two print commands for JFo_DecodedAccumulator.source and
+JFo_ReaderFixture.inhabited found unknown constants. Their individual accepted
+receipts028/029 stand. The other eleven root prints returned standard axioms.
+This is an avoidable audit-source error, not a passing audit or infrastructure
+failure.100:exit1,wall2.3437191389966756s,RSS5294212KiB,swap0,revision
+f8e62db317 (full revision/hash in receipt). The exact failed source is retained
+as JFo_UNCHECKED_Audit.lean.txt and100/sources/JFo_Audit.lean; no corrected
+unchecked audit is shipped and the exhausted budget was not exceeded.
+
+Generator --check, fresh three-hash byte preflight, current-source/receipt/axiom
+validation, changed-path audit and git diff --check passed. Exact evidence is
+JFo_VALIDATION.json, JFo_RECORDS_MANIFEST.json, JFo_SUMMARY.json,
+JFo_SOURCE_MANIFEST.json and JFo_STATIC_CHECKS.json. Per-stage commits are in
+JFo_STAGE_COMMITS.txt; the final evidence commit follows that list. No push.
+
+Next: clean composed audit with the missing import; inhabit the three actual
+hash calls on the intended same oracle/syscall dictionary; then prove actual
+TX2 batch1, geometry, query equality/folding and state updates, returned flush,
+and installed finish on these bytes. Derive JFo_TX2.accepted2 on the actual
+second wrapper, then compose JFp_/TX1's accepted1 and SAME saved Vec equality.
+The actual source/runtime/game/frozen3 joins remain required at those SAME
+witnesses. No joint top-premise satisfiability or100-bit conclusion follows from
+this partial honest-run fixture work.
