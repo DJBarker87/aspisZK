@@ -14,6 +14,8 @@ for m in plan['order']:
  x=plan['modules'][m];new='snapshot' in x;rows.append(dict(module=m,imports=x['imports'],repository_source=x['source'],source=('RPz2_sources/' if new else 'RPz_sources/')+m.replace('.','/')+'.lean',object='RPz_objects/'+m.replace('.','/')+'.olean'))
 rows.sort(key=lambda r:-plan['distance_to_top'].get(r['module'],0))
 state=json.loads((E.parent/'replay-dry2-20261026/RPz_state.json').read_text())['state'];state={m:v for m,v in state.items() if v in ['passed','failed']};attempt=0;blocked=[]
+if (E/'RPz2_state.json').exists():
+ prior=json.loads((E/'RPz2_state.json').read_text());state.update({m:v for m,v in prior['state'].items() if v in ['passed','failed']});attempt=prior['attempts']
 # Dynamic ready scheduling in critical-distance order. A blocked predecessor never launches.
 ordered=[];pending=rows[:];sim=state.copy()
 while pending:
