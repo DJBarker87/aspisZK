@@ -45,3 +45,41 @@ barrier: 51,942,260,736 reserved bytes plus 8 GiB exceeds the 55 GiB limit.
 Zero charge; next ID is 27420 after the required three-minute wait.
 CanonicalNormalize compiled at 27402 with standard axioms. The rebuilt
 launcher uses TasksMax=64 (stricter than accepted 128), memory caps unchanged.
+
+## Validated resume checkpoints
+
+The flag was first observed/read at 22:08:24 UTC. Task lean-objects was absent;
+only two historical snapshot objects survived, neither reused. Missing task
+dependencies were replayed against the restored shared aspis-joint objects,
+through run-joint.sh, without changing infrastructure or caps.
+
+CanonicalNormalize 27402, CanonicalTransferRecord 27427, generalized
+PackedSelection 27430 and CanonicalWithdrawalRecord 27435 are accepted.
+FocusedAudit 27432 prints 153 standard-axiom reports. Full FinalAudit 27431
+never reached Lean: imported objects were absent, as the preflight log records.
+
+PackedSelection now quantifies over CheckedCanonical.Data, with arbitrary
+supplied snapshot, and constructs records plus WitnessOk for every root table.
+The prior stronger frozen-bank draft is retained separately; its bank-stage
+claim is not credited to this generalized module. No endpoint premise count
+or original target changed.
+
+CanonicalPrivateRecord is UNACCEPTED and only in resume-drafts. Attempt 27438
+failed wrapper unfolding; 27439 checked its two proof bodies with standard
+axioms but failed the added audit commands because PackedSelection was not
+imported. The import is fixed only in the uncompiled draft. Lean is 130/130
+overall, all 37 resumed attempts charged. No further Lean scope is authorized.
+
+Kani transfer decomposition preflight at 22:30:19 UTC was refused for aggregate
+reservation, zero charged. The required next retry is after 22:33:19 UTC with
+a fresh run name, retaining the first refusal receipt. No configuration error.
+
+## Terminal state
+
+All 37 resumed Lean attempts and all 8 resumed Kani runs are consumed. Full
+FinalAudit remains blocked, FocusedAudit 27432 passed153 standard reports.
+Final path-cell check also timed out; no new equivalence or row counterexample.
+All new Kani scopes are inactive. The own Rust build cache was removed after
+teardown, while source/receipts and shared Lean objects are retained.
+REPORT.md is authoritative for the final status; prior checkpoint text above
+is chronological. Next unused Env-J ID27440 has no current budget authority.

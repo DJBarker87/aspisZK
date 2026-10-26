@@ -26,9 +26,9 @@ for p in e.glob('reservation-*.json'):
 previous=json.loads((e/'BUDGET.json').read_text())
 resume=previous.get('resume')
 limit=130 if resume else 100
-budget=dict(new_lean=len(a),predecessor_lean=4,total_lean=len(a)+4,authorized_lean_total=limit,remaining_lean=limit-4-len(a),new_kani=len(k),authorized_new_kani=20 if resume else 12,completed_kani=len(results),results=results,zero_charge_resource_refusals=refusals,other_zero_charge_preflights=[25401])
+budget=dict(new_lean=len(a),predecessor_lean=4,total_lean=len(a)+4,authorized_lean_total=limit,remaining_lean=limit-4-len(a),new_kani=len(k),authorized_new_kani=20 if resume else 12,completed_kani=len(results),results=results,zero_charge_resource_refusals=refusals,other_zero_charge_preflights=sorted(set(previous.get('other_zero_charge_preflights',[25401]))|({27400,27431} if resume else set())))
 if resume:
- resume.update(charged_lean=len(a)-89,charged_kani=len(k)-12)
+ resume.update(charged_lean=len(a)-89,charged_kani=len(k)-12,next_env_J_id=max([r['attempt'] for r in a if r['attempt']>=27400]+[27400,27431])+1)
  budget['resume']=resume
 (e/'BUDGET.json').write_text(json.dumps(budget,indent=2)+'\n')
 print(json.dumps({key:value for key,value in budget.items() if key not in ['results','zero_charge_resource_refusals']}))

@@ -1,197 +1,150 @@
-# Resume checkpoint — 2026-10-26 21:47 UTC
+# pv-srcid3 resumed result
 
-This resume supersedes the historical stop/budget/next-ID instructions below.
-Read `RESUME.md`, `DEPENDENCY-CLOSURE.md`, and `BUDGET.json` for current state.
-The restoration flag remains absent through 21:47 UTC; ruling (f) prevents
-host scopes and local Lean compiles. This resume has charged **0/37 Lean**
-and **0/8 Kani**; next unused Env-J ID is **27400**, range 27400–27699.
-The entire old range 25300–25599 is spent. No ROW counterexample was found.
+Branch: `codex/pv-srcid3-20261026`. Base: `52a0f8acee` (research).
+Resume head: `2311884064`. Target not yet established.
+`COMMITS.txt` records the branch history; no push or merge was performed.
 
-Compile-free work is committed: pending PackedSelection now carries public
-preservation and primitive existence for every selected canonical input;
-FinalAudit covers all 127 PV_Src modules, 547 theorem declarations and 573
-unique axiom checks; dependency-closure.json pins their source imports.
-All new proof text remains outside the formal module tree until host checks.
-A follow-on canonical withdrawal proof and a full unstubbed dynamic-mapper
-Kani harness are drafts queued after the requested first audit. No new theorem
-or Kani result is claimed. Full compiler-success fixture fibres remain open.
+## Established and retained
 
-Family status remains unchanged by drafts:
+Accepted new modules in this resume:
 
-| Family | Current status |
+- CanonicalNormalize: withdrawal erasure preserves the original public and
+  admitted relation; transfer witness unchanged.
+- CanonicalTransferRecord: every private transfer record field equals the
+  path-packed canonical witness, using the actual canonical request.
+- PackedSelection: generalized from the draft's FrozenInput.Data to
+  CheckedCanonical.Data, allowing arbitrary supplied snapshots. It preserves
+  the public, packs all membership bits, proves Checked for every admitted
+  canonical instance, and constructs a reference record plus WitnessOk for
+  every root table. It does not assert bank or full compiler success.
+- CanonicalWithdrawalRecord: admission determines the actual public withdrawal
+  amount; private records equal the recipient-erased canonical witness.
+- FocusedAudit: 153 axiom checks over the restored focused dependency cone,
+  all subsets of {propext, Classical.choice, Quot.sound}.
+
+All 60 current module sources added since the base match successful focused
+receipts and standard reported axioms (resume-accepted-axioms-audit.json).
+That receipt/source audit is not an all-branch kernel replay.
+
+Actual deployed PV_Src_Premises: **5 → 5**. Existing selected fixed-root
+reference: **5 → 3**, conditional on its retained Remainder. No endpoint premise
+was removed, added or weakened in this resume. The unchanged BuilderPremises
+consumer remains the original consumer; no newly instantiated full smaller
+Remainder or endpoint installation is claimed.
+
+## Per-family status
+
+| Family | Status and exact retained boundary |
 | --- | --- |
-| words | REDUCED to full unstubbed shipped mapper = owned dynamic reference and installed canonical input selection; canonical Checked is already discharged |
-| publicCorr | REDUCED to canonical snapshot/root selection and the exact pure `pair_empty_roots = ok CanonicalRoots.table` equation (fixed-root reference result already proved) |
-| compile_call | OPEN for full successful forest compilation with the supplied payload; owned ExternalLinear implementation already supplied, Records dynamic association queued |
-| admission | REDUCED to the exact selected-record RspendPlus/public association interface in PV_Src_NativeIdentification.PV_Src_Premises.admission |
+| words | REDUCED to full unstubbed shipped mapper = owned dynamic reference (`PV_Src_RecordDynamic.dictionary`) and installed canonical input selection; Checked on every admitted canonical encoding is DISCHARGED |
+| publicCorr | REDUCED to canonical snapshot/root selection and the pure source equation `pair_empty_roots = ok PV_Src_CanonicalRoots.table`; the fixed-root reference theorem is retained |
+| compile_call | OPEN: `∀ i, run (inputs i) = ok (.Ok (inputs i).compiled)`; owned ExternalLinear implementation was already supplied, pure Records association remains unverified |
+| admission | REDUCED to the exact original `PV_Src_NativeIdentification.PV_Src_Premises.admission` RspendPlus statement on the returned record and selected public; the combined stronger bridge is unaccepted |
 | row_call | REDUCED to `∀ j, transport j = PV_Src_Transport.row j` |
 
-Deployed PV_Src_Premises count **5 → 5**; selected fixed-root reference
-**5 → 3**, with unchanged BuilderPremises consumer. Neither installed full
-fixture fibre nor a full smaller Remainder is newly instantiated. RunJoin
-read-only pin 3478e00a58970c2480a1b20451dc107cfb1ac98f retains the free
-`PV_RunJoin_SourceEndpoint.inputs` family; no native selection is installed
-by these drafts. Final kernel audit: **PENDING**, no new receipt. Target not
-yet established. Next deliverable: read the restoration flag, record cache
-provenance, and compile CanonicalNormalize first at ID 27400, then the two
-other pending proofs, then the exhaustive FinalAudit, smallest-first.
+The read-only RunJoin pin is `3478e00a58970c2480a1b20451dc107cfb1ac98f`.
+`PV_RunJoin_SourceEndpoint.inputs` remains a free family into
+`PV_RunJoin_PureSourceLift.Inputs`; it does not install a PV_Src input selector.
+Exact hashes and interface are in runjoin-resume-read-only.json. No foreign
+worktree or soundness/ledger file was edited.
 
----
+## Non-vacuity and failed draft
 
-# pv-srcid3 continuation report — blocked on shared Lean infrastructure
+The prior transfer/withdrawal canonical carriers and primitive bank-stage
+non-vacuity remain as previously proved. The new generalized selection has
+constructive record-stage non-vacuity for every supplied canonical carrier,
+including both fixture carriers. Full compiler-success/installed fixture
+fibres remain OPEN; neither is inferred from primitive-stage success.
+The stronger frozen-bank selection draft is retained separately and uncompiled.
 
-Branch: codex/pv-srcid3-20261026. Base: 52a0f8acee (research, includes
-pv-srcid and pv-srcid2). This report distinguishes the deployed endpoint from
-explicit selected/reference candidates. The privacy target is not established.
+CanonicalPrivateRecord is only an UNACCEPTED draft. 27438 failed to unfold its
+wrapper in the withdrawal branch. 27439 checked its witness/admission proof
+bodies and printed standard axioms, but the module exited 1: I added audit
+checks for PackedSelection without importing it. The import is corrected
+only in resume-drafts; no further Lean attempt was authorized. It is excluded
+from the formal module tree and all accepted-result counts. The 27438
+error-recovery sorryAx lines are retained, not accepted as a theorem.
 
-## Input condition and caller chain
+## Verification, cache and audit limits
 
-The excluded boundary is exactly
-`PV_Src_RecordReference.Checked.values.2.1`:
-`(PV_Src_NativeInput.outputValue i.request).val < 2^30`.
-The mapper copies this output into merged[10][1010]. Thus the previous raw
-out=2^30 diagnostic is outside this domain; it is not a counterexample to
-V152–V154 or the selected-input words row.
+The restoration flag was absent until first observed/read at 22:08:24 UTC.
+No host scope or Mac Lean compile ran before then. host-gate-checks.jsonl
+records the ten-minute checks. The task's lean-objects directory was absent;
+two historical snapshot objects existed but were not reused. Missing task
+objects were rebuilt against restored aspis-joint-20261019 objects through the
+unchanged launcher. The existing task Rust/Kani cache was reused.
 
-The proof-account adapter RealR1_client::prove_for_proof_accounts accepts a
-compilation; it does not itself establish the numeric bounds. The planner
-`tools/r1-cost-probe/src/bin/devnet_spend/plan.rs` constructs transfer
-(input1000, output600, change400) or withdrawal (1000,250,750), calls the forest
-entry compiler and propagates rejection before handing the result to the
-adapter. The source transfer wrapper rejects output/change >=2^30; the
-withdrawal wrapper combines bounded input from validate_common with checked
-Nat conservation. Both paths validate pair words and membership. The forest
-entry also rejects noncanonical super-root siblings. Canonical BuilderCanonical
-witness values are Fin(2^30); digest encoding supplies canonical M31 words.
-D162/PV-CLIENT-ROUTE establishes route intent; it is not a proof of arbitrary
-caller bytes or an installed RunJoin selection.
+Full FinalAudit 27431 was blocked at dependency preflight; no Lean scope ran
+and it was uncharged. The final source inventory has 129 PV_Src modules,
+549 theorem declarations and 575 axiom-check requests. The read-only inventory
+still finds 92 missing objects among 470 research modules in that proposed
+closure (final-missing-objects.json). The complete final kernel audit and
+coherent release replay were NOT completed. DEPENDENCY-CLOSURE.md and its JSON
+name each theorem's source imports; this is not a missing-axioms substitute.
 
-## Proved stages
+Lean used every resumed attempt: **37/37**, giving **130/130 overall**.
+Thirty-five resumed exits were 0; two were errors in the unaccepted combined
+draft. Maximum resumed RSS was 4,114,632 KiB; all recorded swaps were zero.
+The restored launcher used -M7000, MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64. receipt-cap-correction.json records correction
+of the client's stale historical TasksMax=128 annotation; no launch/cap changed.
+Only one task scope ran at a time. No memory cap was raised.
 
-* Generic Checked from successful extracted validate_common, wrapper value
-  guards and canonical super-root siblings (PV_Src_CheckedValidation).
-* Checked for every encoded canonical instance (PV_Src_CheckedCanonical),
-  preserving its RspendPlus request, not overwriting the public output.
-* Both fixture pair records and common-validator calls succeed in the extracted
-  validator, with matching runtime binding and a fresh spent-nullifier set.
-  PV_Src_FixtureCheckedSource derives Checked from these source calls and the
-  entry value guards/conservation. Primitive fixture and bank stages are
-  inhabited. Supplied compilation/snapshot parameters do not assert full
-  compiler success or installed bytes.
-* Selected reference words follow Checked; a four-field Remainder fills the
-  original five-field PV_Src_Premises. The unchanged BuilderPremises consumer
-  accepts it (SelectedFour/SelectedConsumer).
-* All successful extracted compiler branches preserve the supplied snapshot.
-  Public variant/asset/next-index/frontier and remaining root/frontier interfaces
-  are factored in PublicHeader/PublicParts.
-* The owned extracted external callback is total, including symbolic scalar
-  reduction, block matrices, sums and lanes. The unstubbed shipped=owned Kani
-  external harness passes all571 checks, unwind17, no stubs. The source/ref
-  connection follows the stated P6/extraction route; no Lean axiom imports a
-  tool result. Exact matrix=retained modulo copy and canonical output lanes
-  are also proved for arbitrary inputs (ExternalMat4Copy/ExternalCanonical).
+| ID | Target suffix | Exit | Wall | Peak RSS KiB | Swap | Revision | Axioms |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 27402 | CanonicalNormalize | 0 | 1.64 s | 4090916 | 0 | 18c180a456 | standard |
+| 27427 | CanonicalTransferRecord | 0 | 1.53 s | 4100392 | 0 | 030f4f4d03 | standard |
+| 27430 | PackedSelection | 0 | 1.56 s | 4104956 | 0 | 030f4f4d03 | standard |
+| 27432 | FocusedAudit | 0 | 1.53 s | 4082320 | 0 | 052d91aa6c | 153 standard reports |
+| 27435 | CanonicalWithdrawalRecord | 0 | 1.58 s | 4104596 | 0 | 41ed89b339 | standard |
 
-## Family status and exact outstanding interfaces
+Targets have prefix `R1Z/PV_Src_`. attempts.jsonl and RECEIPTS.md contain every
+attempt's full target, exit, wall, peak RSS, swap, revision, source SHA,
+imported object hashes and complete printed axioms/errors. Refused reservations
+were uncharged and retried after at least three minutes with fresh IDs/names.
+Old IDs 25300–25599 were never reused; next unused Env-J ID is 27440, with
+zero remaining Lean budget.
 
-| Family | Status |
-| --- | --- |
-| words | REDUCED to actual full Records mapper=owned reference equality plus the installed selected-input encoding; Checked is discharged on the canonical encoding and both fixture source-validation carriers |
-| publicCorr | REDUCED to canonical snapshot/root encoding selection and the pure pair_empty_roots result equation; pure sub-obligations are separated |
-| compile_call | OPEN for full forest compiler success; ExternalLinear source/ref callback boundary discharged; Records source/ref boundary pending |
-| admission | REDUCED to BuilderSpendRelation.RspendPlus on `mapPub (canonicalPublic (publicInput selected))` and `BuilderCanonical.liftWitness (BuilderRecordCanonical.witness (wordWitness records.w))` for successful selected newRecords |
-| row_call | REDUCED to `∀ j, transport j = PV_Src_Transport.row j`, the installed transport equality |
+No shipped source changed under crates/ or programs/. Rust changes are in the
+cfg(kani)-only harness module. No ELF rebuild or pin update was claimed.
+No wallet key was created, removed or destroyed. No ROW counterexample was
+found. The historical raw out=2^30 diagnostic is outside Checked and is not
+used as a stop or a refutation of V152–V154.
 
-Actual deployed PV_Src_Premises fields: **5 → 5**. Selected/reference instance:
-**5 → 3**, standard axioms, unchanged consumer (SelectedThree/ThreeConsumer).
-The fixed-root reference publicCorr is discharged using canonical frontier
-encoding, the frozen root table and the retained compiler-success field.
-FrozenStages proves primitive non-vacuity and public correspondence conditional
-on that retained success input. The installed full-compiler fixture fibres
-remain open. The deployed source join remains required. No endpoint installation
-is claimed. No replacement admission or transport premise has been hidden. The three-field
-consumer is a compatibility theorem conditional on its Remainder; no full
-compiler-success Remainder is instantiated for either released fixture.
+One procedural deviation is retained in RESERVATION-WAIT-DEVIATION.md:
+the public-record retry's scope started at 22:43:15 UTC, about 28 seconds
+before the required full three-minute wait boundary. It was charged normally;
+no cap or source was changed, and it will not be rerun unchanged. A local
+pre-host timestamp guard now enforces future waits. This is not concealed by
+other successful proof receipts.
 
-## Evidence and limits
+## Final Kani result and stopping point
 
-Every charged Lean attempt is in attempts.jsonl, including exact target,
-exit/wall/peak RSS/swap/revision/source hash/dependency objects/#print axioms.
-Individual out/time/sha/source files retain failures as well as successes.
-Failed Lean elaborations may print sorryAx as Lean's error recovery; they are
-not accepted theorems and must not enter the final accepted-module audit.
+All **8/8 resumed Kani invocations** completed: two successful metadata
+compilations and six timeouts (full dynamic mapper 300 seconds, then transfer,
+withdrawal, private record, public record and path-cell decompositions 120
+seconds each). All six verification jobs are unstubbed with unwind33 and
+unwinding assertions. No new verification success, configuration failure, or
+checked ROW counterexample occurred. No source-equivalence conclusion is
+credited to these timeouts. The earlier completed ExternalLinear/common-validator
+certificates remain historical evidence, not new replay results.
 
-Kani invocation commands and harness names are listed before charging in
-kani-invocations.jsonl; per-run receipt.json records pinned source hashes,
-revision, command, wall/RSS/cgroup peaks/swap and limits. Full mapper run1
-hit its480-second review timeout; all four values/path/digest/public projections also reached
-their180-second focused caps: no equivalence conclusion from any of these. The external
-callback run succeeded. The shipped common-validator gates passed448/451/452 checks for values,
-siblings and pair words, unwind33, no stubs. Their wall times were
-23.505/21.655/21.897sec; aggregate peaks1029947392/1036906496/1018671104bytes;
-swap0. Exact source hashes and revisions are pinned in their receipts.
-No row counterexample has been found.
+Commands/harnesses were listed before charging and source pins are in each
+receipt. Actual Cargo compiler fingerprints confirm opt-level=3,
+mir-opt-level=4 and MIR inlining; expected heavy time was CBMC symbolic
+execution, not unoptimized arithmetic. All new run swaps are zero and all
+eight task scopes are inactive (final-scope-state.log). The task's 1,643,251,807-byte
+Rust build cache was removed after teardown under the disk-hygiene rule;
+no key filename candidates were found. Receipts, source, metadata inventory
+and shared restored Lean objects are retained. No identifiable open solver
+temporary paths were found in the recorded own-scope process scan.
 
-QUIET-WINDOW.md records the25301 quiet-window violation; RESOURCE-WAITS.md
-records the immediate second refused reservation. Neither is concealed by
-successful theorem results. No wallet key was created or destroyed.
-
-Next deliverable: restore the authorized pinned Lean cache/launcher, compile
-CanonicalNormalize/PackedSelection/CanonicalTransferRecord and perform one final
-import/axioms replay; discharge the actual full-mapper P6 equality, then attach
-installed selection/RspendPlus/transport at the exact interfaces above.
-Frozen-reference public correspondence and the unchanged consumer are already
-compiled, not future deliverables.
-The current receipt audit covers55 accepted modules with standard axioms only
-(accepted-axioms-audit.json), each matching its tested source hash. This is
-not a new kernel replay. Shared Lean cache and launcher disappeared at19:50UTC;
-HOST-CACHE-MISSING.md records the exact error and the lead-restoration request.
-Seven Lean attempts remain uncharged; three further source drafts await the
-restored environment. Kani is now12/12, all completed. New Lean89 plus predecessor4 =93/100;
-7 remain uncharged. The final roots-only unstubbed check timed out180.008sec,
-aggregate peak2510073856bytes, swap0. No unchanged failed gate was retried
-with a larger cap. No Kani configuration failure occurred.
-
-The12 Kani invocations comprise2 metadata compiles,4 successful verification
-harnesses (external and3 common-validator projections), and6 timeouts
-(full mapper,4 mapper projections, full root helper). No checked row
-counterexample was found. BUDGET.json and RECEIPTS.md summarize the exact runs.
-
-Work is blocked rather than complete: the final read-only host check still
-found the shared source cache/launcher absent; all own scopes are inactive.
-The local-lean rule5 prohibits repairing infrastructure, and LEAD ruling(c)
-requires useful compile-free work meanwhile. That work and all12 Kani runs are
-now finished. The remaining7 Lean attempts cannot be spent on genuine project
-checks until the lead restores the authorized environment. The task cache is
-retained for the pending continuation. No blanket cleanup or key deletion.
-
-Three uncompiled drafts and the prepared final import/axioms audit are retained
-as `.lean.txt` under pending-proof-sources; they are excluded from the formal
-module tree and all claims. No final manifest replay was run. The55 accepted
-module sources all match successful focused receipts with standard axioms.
-The final kernel audit/replay remains a required next step, not an implied
-consequence of the receipt audit.
-
-Read-only RunJoin cross-check: runjoin-read-only.json pins the other branch
-revision and SourceBoundary/SourceEndpoint blobs. SourceEndpoint explicitly
-retains an `inputs` family and world/observer data, rather than installing a
-PV_Src_NativeInput.Input selection. No foreign-worktree file was edited or
-copied into the proof dependency cone.
-
-
-## Commit history and resume order
-
-`COMMITS.txt` records `git log --oneline 52a0f8acee..HEAD` through the last
-proof/harness commit; the final evidence commit follows it. No push or merge.
-Production-source audit confirms no change under crates/ or programs/. All
-Rust additions are reachable only under cfg(kani); release implementation and
-reviewed soundness/ledger files were untouched.
-
-Resume with next unused Env-J ID25402. Restore the pinned shared sources and
-objects (do not cold-build/recreate shared infrastructure in this worker),
-copy pending CanonicalNormalize into the module tree and compile it first;
-then PackedSelection, CanonicalTransferRecord, and the final accepted-module
-import/axioms audit. Seven attempts remain; no Kani invocations remain.
-A broader manifest replay needs the approved restored environment and budget.
-The full source Records equality still requires a new symbolic/compositional
-solution to the actual root helper, respecting the unstubbed P6 requirement;
-raising the cap or rerunning the same aggregate is not the next step.
+Stopping reason: **both authorized allocations are exhausted**, not vanished
+host paths, a source-domain diagnostic, or an established privacy target.
+The corrected combined bridge remains a draft and the complete FinalAudit
+remains missing. Next concrete deliverable under a new budget: compile the
+corrected CanonicalPrivateRecord draft at next unused ID27440; restore the
+named missing dependency objects; run the exhaustive all-branch FinalAudit;
+then discharge the full mapper P6 equation symbolically/compositionally and
+attach the installed RunJoin input/public/transport joins. No unchanged failed
+aggregate should be relaunched with larger caps. Target not yet established.

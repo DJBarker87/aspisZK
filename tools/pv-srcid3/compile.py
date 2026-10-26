@@ -9,6 +9,10 @@ job='/home/dombarker/project-offloads/codex-pv-srcid-20261026'
 joint='/home/dombarker/project-offloads/aspis-joint-20261019'
 t='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 e=root/'evidence/pv-srcid3-20261026';e.mkdir(exist_ok=True)
+ledger=e/'attempts.jsonl'
+if ledger.is_file() and len(ledger.read_text().splitlines())+4>=130:
+ print('LEAN BUDGET EXHAUSTED: no host action; zero charge')
+ sys.exit(75)
 flag=pathlib.Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag')
 if not flag.is_file():
  print('HOST REBUILD GATE CLOSED: no host access or compile; zero charge')
@@ -46,7 +50,7 @@ time=(e/f'time-{a}.log').read_text() if (e/f'time-{a}.log').exists() else ''
 def metric(pattern):
  x=re.search(pattern,time);return x.group(1) if x else None
 ex=re.search(r'exit=(\d+)',out)
-record=dict(attempt=a,module='R1Z/'+m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=d.stdout.splitlines(),exit=int(ex.group(1)) if ex else r.returncode,wall=metric(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),peak_rss_kib=metric(r'Maximum resident set size \(kbytes\): (\d+)'),swaps=metric(r'Swaps: (\d+)'),axioms=[' '.join(s.split()) for s in re.findall(r"^('[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))",out,re.M|re.S)],errors=[s for s in out.splitlines() if 'error' in s],caps=dict(lean_M=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128))
+record=dict(attempt=a,module='R1Z/'+m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),deps_fingerprint=fp,dependency_objects=d.stdout.splitlines(),exit=int(ex.group(1)) if ex else r.returncode,wall=metric(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): (.+)'),peak_rss_kib=metric(r'Maximum resident set size \(kbytes\): (\d+)'),swaps=metric(r'Swaps: (\d+)'),axioms=[' '.join(s.split()) for s in re.findall(r"^('[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))",out,re.M|re.S)],errors=[s for s in out.splitlines() if 'error' in s],caps=dict(lean_M=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 allowed_axioms={'propext','Classical.choice','Quot.sound'}
 reported_axioms={name.strip() for line in record['axioms'] for group in re.findall(r'depends on axioms: \[([^\]]*)\]',line) for name in group.split(',') if name.strip()}
 record['nonstandard_axioms']=sorted(reported_axioms-allowed_axioms)

@@ -156,3 +156,8 @@ All commands optimized via explicit MIR/Rust flags, 6G/8G/swap0/tasks64; exact c
 | 13 | metadata | 0 | 9.126 | 1353168 | 1416273920 | 0 | 5c3c92afaf | no verification result |
 | 14 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_full_dynamic_mapper | 124 | 300.008 | 15300 | 3238948864 | 0 | 5c3c92afaf | no verification result |
 | 15 | metadata | 0 | 12.742 | 1410840 | 1491873792 | 0 | 41ed89b339 | no verification result |
+| 16 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_dynamic_transfer | 124 | 120.003 | 15300 | 2237485056 | 0 | f462bebc10 | no verification result |
+| 17 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_dynamic_withdrawal | 124 | 120.008 | 15124 | 2090614784 | 0 | f462bebc10 | no verification result |
+| 18 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_dynamic_witness | 124 | 120.014 | 15300 | 1980538880 | 0 | f462bebc10 | no verification result |
+| 19 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_dynamic_public | 124 | 120.003 | 15128 | 2131767296 | 0 | f462bebc10 | no verification result |
+| 20 | pool_v1::pair_forest_copy_builder::records_proofs::pv_srcid3::pv_srcid3_dynamic_path_cell | 124 | 120.007 | 15304 | 1921114112 | 0 | f462bebc10 | no verification result |

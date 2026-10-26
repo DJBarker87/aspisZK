@@ -204,3 +204,31 @@ All three run through actual validate_common with exact runtime binding and an
 empty spent-nullifier set. These independently corroborate the extracted
 validation interface; they do not establish mapper equality, entry compiler
 success, super-root validation or installed input/public associations.
+
+## Resume disposition (supersedes draft-only checkpoints above)
+
+The actual PV_Src_Premises structure and all five family statements are
+byte-for-byte unchanged; no endpoint assumption was removed or added.
+CanonicalNormalize (27402), CanonicalTransferRecord (27427), PackedSelection
+(27430), CanonicalWithdrawalRecord (27435), and FocusedAudit (27432) compile
+with standard axioms. Native five-field count remains 5; the earlier explicit
+fixed-root reference reduction to three retained fields remains conditional.
+
+PackedSelection's proposed FrozenInput.Data/bank-stage theorem was generalized
+for the accepted proof: CheckedCanonical.Data supplies arbitrary snapshot data;
+select normalizes unused recipient fields and packs the membership index. Its
+primitive theorem constructs records and WitnessOk for every root table. The
+stronger frozen-bank draft is preserved separately, uncompiled. No full-native
+fixture success or installed selection is inferred from the generalization.
+
+CanonicalWithdrawalRecord.request identifies the actual canonical withdrawal
+request with the reference amount projection using admission, without changing
+public input values; witness then identifies the recipient-erased private
+record for every canonical withdrawal input. These are pure source-reference
+helper facts, not the full unstubbed shipped mapper P6 equality.
+
+CanonicalPrivateRecord's combined bridge remains UNACCEPTED: its corrected
+proofs printed standard axioms at 27439 but the module failed added audit
+commands for missing imports. Corrected import is only in resume-drafts.
+FinalAudit remains blocked at dependency preflight; FocusedAudit's 153 reports
+are not an all-branch audit. See REPORT.md for final budgets and Kani results.

@@ -11,6 +11,16 @@ if not flag.is_file():
 print('Host restoration instructions: '+flag.read_text(),flush=True)
 now=datetime.datetime.now(datetime.timezone.utc)
 assert not (datetime.datetime(2026,10,26,17,45,tzinfo=datetime.timezone.utc)<=now<datetime.datetime(2026,10,26,18,15,tzinfo=datetime.timezone.utc))
+for receipt in e.glob('reservation-*.json'):
+ try:
+  prior=json.loads(receipt.read_text())
+  if prior.get('allowed') is not False or not prior.get('utc'):continue
+  elapsed=(now-datetime.datetime.fromisoformat(prior['utc'].replace('Z','+00:00'))).total_seconds()
+  if elapsed<180:
+   hold=dict(charged=False,reason='mandatory three-minute reservation wait',prior=str(receipt),remaining_seconds=180-elapsed,utc=now.isoformat())
+   (e/f'local-reservation-hold-{name}.json').write_text(json.dumps(hold)+'\n')
+   print(json.dumps(hold));sys.exit(78)
+ except (ValueError,KeyError):continue
 def ssh(cmd):return subprocess.run(['ssh',host,cmd],capture_output=True,text=True)
 g=ssh(f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {job}/reservation-{name}.json > {job}/reservation-{name}.log 2>&1; cat {job}/reservation-{name}.log; python3 -c '+shlex.quote(f'import json;raise SystemExit(0 if json.load(open("{job}/reservation-{name}.json"))["allowed"] else 78)'))
 (e/f'reservation-{name}.log').write_text(g.stdout+g.stderr)
