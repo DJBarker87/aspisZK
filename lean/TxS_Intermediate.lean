@@ -107,7 +107,7 @@ theorem deployed {W A F CoreError : Type}
     DrvC_Installation.aus1_dictionary (DrvC_FirstConstants.configuration c),?_,?_⟩
   · exact DrvC_SourceHeadline.deployed_headline_source c D P Q0 Q1 hqueries hashv runtime raw binding
       adversary chooseSecond prefixBound choiceBound project
-  · obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,caller⟩ :=
+  · obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoded,base,publicFacts,caller⟩ :=
       TxS_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase
       (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
@@ -119,7 +119,7 @@ theorem deployed {W A F CoreError : Type}
 
     have ⟨cuts,writer,reader,multiproof,scanY,checkY,scanned,tx1,batches,header2,header1,rest⟩ := base
     have sourceFacts := T2R_Parser.on_run _ _ _ _ _ _ _ _ _ _ _ _ _ run header1.2.2.1 scanned.2.2
-    refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,sourceFacts,?_,caller⟩
+    refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoded,base,publicFacts,sourceFacts,?_,caller⟩
     exact T2R_Nonvacuity.same_cuts L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       c native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
       program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2

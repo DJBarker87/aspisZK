@@ -21,7 +21,7 @@ theorem forget {F C : Type} (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCa
     (new : TxS_ContSource.Outcome adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd prior H f s saved run tx2) :
     T2R_ContSource.Outcome adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd prior H f s saved run tx2 := by
   intro queryLeaves geoLeaves domain multiply one inverse
-  obtain ⟨parsed,frame,parser,frameRead,target,ten,finish⟩ := new queryLeaves geoLeaves domain multiply one inverse
+  obtain ⟨parsed,frame,parser,frameRead,target,ten,encoding,finish⟩ := new queryLeaves geoLeaves domain multiply one inverse
   exact ⟨parsed,frame,parser,frameRead,target,
     TxS_RawTen.to_typed run H _ parsed ten,
     TxS_LegacyFinish.forget finishOps _ _ _ s.proof saved H _ _ run.p parsed _ finish⟩

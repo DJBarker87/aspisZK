@@ -124,12 +124,12 @@ theorem deployed {W A F CoreError : Type}
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
     D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound choiceBound project
   refine ⟨driverEq,sdkEq,headline,?_,?_,?_,?_⟩
-  · obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,parser,acceptance,caller⟩ := original
+  · obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoded,base,publicFacts,parser,acceptance,caller⟩ := original
     have cuts := base.1
     have strong := Rc2_Base.strengthen L e1 e2 w1 w2 _ _ _ _ _ _ _ _ reservation program
       data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run base
     have initial := NP6_Constructors.on_run _ _ _ _ _ _ _ _ _ _ _ run
-    exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,strong,initial,publicFacts,parser,acceptance,caller⟩
+    exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoded,strong,initial,publicFacts,parser,acceptance,caller⟩
   · exact PoolT_Write.accepted_verifier_writes_copy _ native1 native2 hashv extraction copy std allocator
       e1 program data1 state1 final1 saved post1 accepted1
   · exact Rc2_Events.derive _ hashv native1 native2 extraction copy allocator program sha256 H p1 syscall saved

@@ -63,7 +63,7 @@ theorem forget {W A F CoreError : Type}
     (allocator : Allocator A)
     (new : TxS_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H driver prior configuration hashv native1 native2 copy allocator) :
     Rc2_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H driver prior configuration hashv native1 native2 copy allocator := by
-  obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,initial,publicFacts,parser,acceptance,caller⟩ := new
+  obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoded,base,initial,publicFacts,parser,acceptance,caller⟩ := new
   refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,initial,
     TxS_RawPublic.to_typed f.pub f.proof publicFacts,parser,acceptance,?_⟩
   intro history p2prime entry

@@ -106,9 +106,20 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
       (Tx1Q_Carriers.accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}) f.proof f.pub () = ok saved := by
     rw [WAdm_SourceWriter.writer_eq _ _ _ _ _ _ fields size canonical control.2.2.1]
     exact run.writer_call
+  have oracle : CheckpointBytes5Inputs.Oracle
+      (VTop_Checkpoint.digest (Tx1Q_Install.digest
+        (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd))) () H := by
+    intro parts digest returned
+    change (SdkD_PairBatches.dictionary adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd).op43 () parts=ok digest at returned
+    rw [pairExtraction.digestSource,S2W_DigestExtraction.digest_eq_hashv] at returned
+    exact (syscall.returningValue parts digest returned).trans (p1.realization _)
+  have encoded : TxS_Encoding.Facts run H :=
+    ⟨_,TxS_Writer.saved _ () H oracle (Tx1Q_Carriers.prepared run.p)
+      (Tx1Q_Carriers.accumulator {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩})
+      f.proof f.pub saved size fields.queries canonical control.2.2.1 run.writer_call⟩
   obtain ⟨tx2run,calls,aux⟩ := Cons_Second.accepted adapterOps ops stageBase finishOps reserved queryOps geoOps
     B claimsStd e1.first (e2.second secondSizes) saved f s cuts
-  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2run,calls,?_,?_⟩
+  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2run,calls,encoded,?_,?_⟩
   · unfold Cons_Base.Outcome
     refine ⟨cuts,writer,reader,multiproof,scanY,checkY,scan,?_,batches,?_,first,expanded,owned,layout,
       unchanged,before1,before2,claims⟩
@@ -133,8 +144,11 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
     unfold TxS_ContSource.Outcome
     intro queryLeaves geoLeaves domain multiply one inverse
     have old := oldOutcome queryLeaves geoLeaves domain multiply one inverse
-    refine ⟨authParsed,frame,parser,frameRead,target,?_,?_⟩
-    · apply TxS_RawTen.of_typed
+    have ten : TxS_RawTen.Outcome run H
+        ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
+          (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
+          (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) authParsed := by
+      apply TxS_RawTen.of_typed
       intro ports q tr data rho prepare read geo domain multiply one inverse
       rcases auth data rho q prepare with collision | indexed
       · exact Or.inl collision
@@ -143,16 +157,10 @@ theorem accepted {W A M Cv F CoreError : Type} {N : Nat}
           authParsed q tr data rho prepare read (OraclePortCompactDraft.parse_header _ _ parser).2 proofLength
           (OraclePortAllSelectedRecoveryC6.recovered _ frame authParsed 2) indexed
           geo domain multiply one inverse)
+    refine ⟨authParsed,frame,parser,frameRead,target,ten,TxS_Encoding.model run H _ authParsed encoded ten,?_⟩
     · have proofLength2 : s.proof.val.length = 57607 := by
         have lengths := congrArg List.length sameProof
         simpa only [bytesOf,List.length_map,proofLength] using lengths
-      have oracle : CheckpointBytes5Inputs.Oracle
-          (VTop_Checkpoint.digest (Tx1Q_Install.digest
-            (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd))) () H := by
-        intro parts digest returned
-        change (SdkD_PairBatches.dictionary adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd).op43 () parts=ok digest at returned
-        rw [pairExtraction.digestSource,S2W_DigestExtraction.digest_eq_hashv] at returned
-        exact (syscall.returningValue parts digest returned).trans (p1.realization _)
       have physical := TxS_Reader.saved (AuS1_Install.base stageBase) reserved queryOps _ ()
         s.checkpoint s.proof s.pub saved (Tx1Q_Carriers.prepared run.p) tx2run.p2
         (Tx1Q_Carriers.accumulator {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩}) tx2run.saved2

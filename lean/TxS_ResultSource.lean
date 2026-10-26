@@ -1,3 +1,4 @@
+import TxS_Encoding
 import TxS_RawTen
 import TxS_RawFinish
 import TxS_RawPublic
@@ -57,6 +58,7 @@ def Outcome {W F CoreError : Type}
     ∃ tx2 : Cons_Native.Witness,
       Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
         (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B claimsStd)) () s.pub s.proof s.checkpoint tx2 ∧
+      TxS_Encoding.Facts run H ∧
       Cons_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
       TxS_RawPublic.Facts f.pub f.proof ∧
       TxS_CallerSource.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B claimsStd program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
