@@ -135,3 +135,26 @@ The native source/owned association remains the sibling's separate retained
 Kani evidence; no Kani result is injected as a Lean axiom. The source parent,
 full compiler, full trace and deployed fixture instances are still open.
 Fourteen draft modules are now inventoried; 0 Lean / 0 Kani charged.
+
+## Gate opened and focused validation began
+
+The restoration flag is retained verbatim: runjoin8 IDs 35000-35299, restored
+lead launcher, unchanged 6G/8G/swap0 caps. Existing surviving own cache files
+were restored only where missing; all 195 paths/hashes are in
+runjoin8-cache-restoration.json, and nine existing identical files were
+preserved. No existing shared source/object was overwritten by that restore;
+no new infrastructure, cap change or cold package build was introduced.
+
+35000 attempted CausalPrefix first. Lean exited 1 at missing imported
+ProverRwRngOwnerCertificate.olean, wall .08 s, peak 195,883,008 bytes, swap 0.
+No new declaration checked; this is a charged import failure. The complete
+receipt includes the source snapshot, direct import hashes and exact launcher.
+Local recursive source preflight identifies 21 missing RNG/caller predecessor
+modules, with no unknown source, before CausalPrefix can retry with changed
+dependency inputs. The pure prefix proof has now been split into Prefix so
+it can be checked independently of the operational-world closure.
+
+35001 was refused at the pre-transfer reservation gate: populated
+51,942,260,736 bytes + requested 8,589,934,592 > safe 59,055,800,320.
+No scope/Lean/Kani run occurred; zero charge; next ID is 35002 after the
+required three-minute wait. No barrier bypass or cap increase is used.

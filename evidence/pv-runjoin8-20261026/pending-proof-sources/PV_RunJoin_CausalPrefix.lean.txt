@@ -1,13 +1,12 @@
 import R1Z.PV_RunJoin_CompletedWorld
 import R1Z.PV_RunJoin_LedgerWorld
-import R1Z.ProverCommitPublicNonce40
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_CausalPrefix
 local instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes
 variable [ProverRwFull.ExternalTypes]
 
-abbrev Raw := ProverCommitPublicNonce40.Raw
+abbrev Raw := Fin 2 → R0Z.FsStatement.OracleAnswer
 abbrev Tape := Fin 128 → Raw
 
 /-- A context can inspect exactly the draws strictly before i. Its dependent
