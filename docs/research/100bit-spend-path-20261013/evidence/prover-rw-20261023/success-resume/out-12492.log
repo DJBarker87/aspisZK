@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwBodyReservationTransport.lean:34:43: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwBodyReservationTransport.lean:34:62: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwBodyReservationTransport.lean:34:71: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲Bool.false_eq_true, ̲if_false,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwBodyReservationTransport.lean:57:2: error: Tactic `apply` failed: could not unify the conclusion of `@transfer`
+  Keeps ?after do
+    let x ← ?r
+    match x with
+      | (a, s) => ?f a s
+with the goal
+  Keeps after do
+    let (r, after) ←
+      aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+          store attempt hash binding (ProverRwOuterContextModel.context digest attempt.mask_nonce) s
+    ProverRwBodyStoreSource.afterReserve store pub compiled v hash
+        (ProverRwOuterContextModel.context digest attempt.mask_nonce) binding attempt r after
+
+Note: The full type of `@transfer` is
+  ∀ {A B S : Type} (after : S) (r : Result (A × S)) (f : A → S → Result (B × S)),
+    Keeps after r →
+      (∀ (a : A) (s : S), Keeps s (f a s)) →
+        Keeps after do
+          let x ← r
+          match x with
+            | (a, s) => f a s
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+S : Type
+store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+v : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+binding digest : Std.Array U8 32#usize
+attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+s after : S
+accepted : Bool
+reservation : store.reserve s digest attempt.mask_nonce = ok (accepted, after)
+this : ExternalFuns := ProverRwOuterGuardLeaves.selected ops
+⊢ Keeps after do
+    let (r, after) ←
+      aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+          store attempt hash binding (ProverRwOuterContextModel.context digest attempt.mask_nonce) s
+    ProverRwBodyStoreSource.afterReserve store pub compiled v hash
+        (ProverRwOuterContextModel.context digest attempt.mask_nonce) binding attempt r after
+'R1Z.ProverRwBodyReservationTransport.transfer' does not depend on any axioms
+'R1Z.ProverRwBodyReservationTransport.callback_writeback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwBodyReservationTransport.body_writeback' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

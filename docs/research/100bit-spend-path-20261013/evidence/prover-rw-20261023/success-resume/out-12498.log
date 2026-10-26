@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwBodyCandidateData.lean:38:2: error: Tactic `apply` failed: could not unify the conclusion of `eq_of_data after`
+  data ?left = data ?right → ?left = ?right
+with the goal
+  data same = model → same = withState after model
+
+Note: The full type of `eq_of_data after` is
+  ∀ (left right : Result (?m.39 × S)), Keeps after left → Keeps after right → data left = data right → left = right
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+S : Type
+store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S
+pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+v : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+binding digest : Std.Array U8 32#usize
+attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+s after : S
+accepted : Bool
+reservation : store.reserve s digest attempt.mask_nonce = ok (accepted, after)
+model : Result (core.result.Result (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) verifier.Error)
+this : ExternalFuns := ProverRwBodyCandidateStore.selected ops
+same : Result (core.result.Result (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) verifier.Error × S) :=
+  prover.prove_masked_with_attempt store pub compiled v hash
+    (ProverRwOuterContextModel.context digest attempt.mask_nonce) binding attempt s
+⊢ data same = model → same = withState after model
+'R1Z.ProverRwBodyCandidateData.data_withState' does not depend on any axioms
+'R1Z.ProverRwBodyCandidateData.keeps_withState' does not depend on any axioms
+'R1Z.ProverRwBodyCandidateData.refinement_of_data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

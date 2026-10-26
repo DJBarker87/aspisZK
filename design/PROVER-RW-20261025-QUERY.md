@@ -1145,3 +1145,30 @@ elaborations were changed;12467 had a pre-launch fingerprint-path typo then
 one corrected launch, not a failed-proof retry.12485 had a local generator
 parse failure before any launch, fixed before its single compile. Infrastructure
 and caps are unchanged; full snapshots and standard axiom reports are retained.
+
+## Reservation and complete-body returned-store transport (12486–12499)
+
+`ProverRwBodyStore.factor` isolates the exact first reservation bind. The
+retained278-line continuation now proves its returned store equals the supplied
+post-reservation store for all statuses and raw arithmetic values. No arithmetic
+success, proof-output equality or success-only execution premise is used.
+`ProverRwBodyReservationTransport.body_writeback` composes the real reserve
+callback and checked guards; both accepted/rejected reservation booleans are
+covered. `ProverRwBodyCandidateStore` installs this invariant with the success
+candidate and preserves the statement-points implementation.
+
+`ProverRwBodyCandidateData.refinement_of_data` concludes full Result equality
+with a model that attaches that store to every returned result, assuming only
+the actual reservation result and the remaining proof/audit Result equality.
+The source-store and model-store hypotheses have therefore been discharged
+for this local criterion. **The data equality remains unproved**, as do concrete
+BodyContract/native effect adequacy and the root refinement. No root or headline
+premise is removed. Returning no source state on fail/div is preserved; no
+native crash/durable-storage claim is implied.
+
+The changed12499 input reduces the local let before introducing the equality
+hypothesis;12498's elaboration failure and sorryAx diagnostic are retained only
+as failed evidence, never imported. All accepted theorem axioms are standard.
+Resumed use84/85 Lean,11/11 Kani. The final focused combined axioms audit remains;
+there is no unchanged full regression or artifact rebuild. Read-only source
+generator checks passed for the changed retained sources and proof generators.
