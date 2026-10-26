@@ -1,0 +1,22 @@
+import R1Z.ProverRw18FoldAppend
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18Checkpoint
+open Aeneas Aeneas.Std Result ProverRw18FieldMeaning
+
+theorem split (values : List U32) (n : Nat) (lambda : Q) (state : Q × Q) :
+    PV_RW_CompressClosedFold.owned values lambda state=(do
+      let middle ← PV_RW_CompressClosedFold.owned (values.take n) lambda state
+      PV_RW_CompressClosedFold.owned (values.drop n) lambda middle) := by
+  rw [← ProverRw18FoldAppend.owned,List.take_append_drop]
+
+theorem resume (values : List U32) (n : Nat) (lambda : Q) (state middle : Q × Q)
+    (checkpoint : PV_RW_CompressClosedFold.owned (values.take n) lambda state=ok middle) :
+    PV_RW_CompressClosedFold.owned values lambda state=
+      PV_RW_CompressClosedFold.owned (values.drop n) lambda middle := by
+  rw [split values n lambda state,checkpoint]
+  rfl
+
+#print axioms split
+#print axioms resume
+end R1Z.ProverRw18Checkpoint

@@ -236,3 +236,41 @@ processes from this job overlapped.25958 used a fresh ID after the predecessor
 finished. Together with25901, this explains why the ID range has two more
 entries than the charged compile count. No cap or shared infrastructure was
 changed.
+
+## Stage 5: whole-body residual criterion and final component gate
+
+`ProverRw18ContextDataIff.criterion` is the exact iff version of the whole
+body refinement criterion after source/context transport. Both proof-byte and
+audit observations remain on the right side, and `model` remains supplied
+data. No model is defined to be the actual body output, and neither comparison
+is promoted to a proved security-model equation. Before/after ledger status:
+V163 OPEN; no endpoint premise is removed, retained premises are unchanged.
+
+`ComponentGate.gate` consumes the source/context identities through the
+existing Copy polynomial, emitted final power and extracted byte writer.
+`FixturePolynomial`, `FixturePower`, `FixtureWrite`, and `FixtureDecode` give
+checked nonempty sample specializations for both measured release fixtures.
+These are compression-component theorems and do not assert whole-fixture
+proof-byte/audit equality. Native non-vacuity remains816 full Result/state
+comparisons per fixture across all136 copy links, including270/264 nonzero
+producer/consumer tuples respectively.
+
+The first ContextSuffix proof25987 exhausted the default200000 heartbeat
+budget at implicit dictionary matching.25988 explicitly instantiates the
+induction theorem and composes already checked control equalities; it passes
+with the same limits. No unchanged failed compile was retried.25985 was a
+reserved-keyword parser error, repaired by renaming the binder. All retained
+source modules now have a successful matching SHA receipt.
+
+All32 recorded native cgroup paths are absent at final inventory. The pinned
+Charon executable is still absent. Three anonymous DIMACS temp files remain
+on the shared host, but none has an explicit task ownership marker or a
+recorded PID association in our receipts; they were not deleted on an
+ambiguous ownership guess. The host cache is retained per the user's explicit
+reuse instruction. No wallet/account keys were touched.
+
+The frozen component audit imports only the checked retained objects, with
+no dependency build or concrete recurrence reduction. It does not constitute
+a deployed release manifest or a source identity for the original Rust loop.
+The exact next consumers remain the sibling op223 join, followed by
+`ProverRwP6BodyData.refinement_of_data` for a concrete whole-model instance.

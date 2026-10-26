@@ -1,0 +1,37 @@
+import R1Z.ProverRw18FieldSuffix
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18ContextSuffix
+open Aeneas Aeneas.Std Result ProverRw18FieldMeaning
+variable [ProverRwFull.ExternalTypes]
+
+theorem owned (ops : ProverRwFull.ExternalFuns) (values : Slice U32) (i : Nat) (lambda out power : Q) :
+    @ProverRw18InlineContext.run _ (PV_CurrentScaleInstall.selected ops) lambda
+      (⟨values,i⟩ : core.slice.iter.Iter U32) out power=(do
+        let final ← PV_RW_CompressClosedFold.owned (values.val.drop i) lambda (out,power)
+        ok final.1) := by
+  have result := @ProverRw18ContextInduction.run _ (PV_CurrentScaleInstall.selected ops)
+    lambda values i out power
+  change @ProverRw18InlineContext.run _ (PV_CurrentScaleInstall.selected ops) lambda
+    (⟨values,i⟩ : core.slice.iter.Iter U32) out power=(do
+      let final ← PV_RW_NativeForSource.run (PV_RW_CompressNativeState.step ops lambda)
+        (⟨values,i⟩ : core.slice.iter.Iter U32) (out,power)
+      ok final.1) at result
+  have loops := (PV_RW_IteratorStateLoop.control ops lambda
+    (⟨values,i⟩ : core.slice.iter.Iter U32) (out,power)).symm.trans
+      (ProverRw18FieldSuffix.control ops values i lambda (out,power))
+  rw [loops] at result
+  exact result
+
+theorem value (ops : ProverRwFull.ExternalFuns) (values : Slice U32) (i : Nat)
+    (lambda out power : Raw) (hlambda : Canonical lambda) (hout : Canonical out) (hpower : Canonical power) :
+    @ProverRw18InlineContext.run _ (PV_CurrentScaleInstall.selected ops) (full lambda)
+      (⟨values,i⟩ : core.slice.iter.Iter U32) (full out) (full power)=
+        ok (full (ProverRw18FieldEncode.encode
+          (decode out+decode power*ProverRw18FieldModel.eval (values.val.drop i) (decode lambda)))) := by
+  rw [owned,ProverRw18FieldStateReference.owned _ lambda out power hlambda hout hpower]
+  simp only [ProverRw18FieldStateReference.reference,ProverRw18FieldModel.output,bind_tc_ok]
+
+#print axioms owned
+#print axioms value
+end R1Z.ProverRw18ContextSuffix
