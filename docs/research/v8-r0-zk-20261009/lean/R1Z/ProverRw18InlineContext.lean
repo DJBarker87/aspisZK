@@ -1,4 +1,5 @@
-import R1Z.PV_RW_IteratorStateBound
+import R1Z.PV_RW_IteratorStateSource
+import R1Z.ProverRw19LoopBind
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.ProverRw18InlineContext
@@ -38,7 +39,7 @@ theorem unfold_run (lambda : Q) (iterator : Iter) (out power : Q) :
       | .done final => ok final
       | .cont (next,out1,power1) => run lambda next out1 power1) := by
   unfold run
-  rw [ProverRwSuccessPowerTotal.loop_bind]
+  rw [ProverRw19LoopBind.loop_bind]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro flow _
   cases flow with

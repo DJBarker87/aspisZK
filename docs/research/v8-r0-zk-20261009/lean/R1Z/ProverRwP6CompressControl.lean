@@ -1,5 +1,5 @@
 import R1Z.ProverRwP6CompressSource
-import R1Z.ProverRwSuccessPowerTotal
+import R1Z.ProverRw19LoopBind
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.ProverRwP6CompressControl
@@ -22,7 +22,7 @@ def dispatch (recur : Q → Q → Usize → Result Q) (values : Slice M)
 theorem source_unfold (values : Slice M) (lambda out power : Q) (i : Usize) :
     Src values lambda out power i = dispatch (Src values lambda) values lambda out power i := by
   unfold Src ProverRwP6CompressSource.compress_loop
-  rw [ProverRwSuccessPowerTotal.loop_bind]
+  rw [ProverRw19LoopBind.loop_bind]
   unfold ProverRwP6CompressSource.compress_loop.body dispatch
   dsimp only
   by_cases h : i < Slice.len values

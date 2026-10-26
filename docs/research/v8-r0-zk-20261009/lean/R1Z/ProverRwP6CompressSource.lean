@@ -1,4 +1,4 @@
-import R1Z.ProverRwSuccessNativeWideInstall
+import R1Z.ProverRwFullFuns
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.ProverRwP6CompressSource

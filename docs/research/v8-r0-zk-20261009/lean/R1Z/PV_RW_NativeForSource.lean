@@ -1,5 +1,5 @@
 import R1Z.PV_RW_IteratorSource
-import R1Z.ProverRwSuccessPowerTotal
+import R1Z.ProverRw19LoopBind
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RW_NativeForSource
@@ -49,7 +49,7 @@ theorem run_unfold {S : Type} (step : U32 → S → Result S) (iterator : Iter) 
       | .done out => ok out
       | .cont (nextIterator,nextState) => run step nextIterator nextState) := by
   unfold run
-  rw [ProverRwSuccessPowerTotal.loop_bind]
+  rw [ProverRw19LoopBind.loop_bind]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro flow _
   cases flow with
