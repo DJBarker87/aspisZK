@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6CompressControl.lean:28:2: error: unsolved goals
+case h_1
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+values : Slice M
+lambda out power : Q
+i : Usize
+x✝ : aspis_core.field.QM31 × aspis_core.field.QM31 × Usize
+out1✝ power1✝ : aspis_core.field.QM31
+i1✝ : Usize
+heq✝ : (out, power, i) = (out1✝, power1✝, i1✝)
+⊢ (do
+      let cf ←
+        if i1✝ < values.len then do
+            let m ← values.index_usize i1✝
+            let q ← power1✝.mul_m31 m
+            let out1 ← out1✝.add q
+            let power1 ← power1✝.mul lambda
+            ok (cont (out1, power1, i1✝.wrapping_add 1#usize))
+          else ok (done out1✝)
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              if x.2.2 < values.len then do
+                let m ← values.index_usize x.2.2
+                let q ← x.2.1.mul_m31 m
+                let out1 ← x.1.add q
+                let power1 ← x.2.1.mul lambda
+                ok (cont (out1, power1, x.2.2.wrapping_add 1#usize))
+              else ok (done x.1))
+            next
+        | done out => ok out) =
+    if i < values.len then do
+      let m ← values.index_usize i
+      let q ← aspis_core.field.QM31.mul_m31 power m
+      let out1 ← aspis_core.field.QM31.add out q
+      let power1 ← aspis_core.field.QM31.mul power lambda
+      loop
+          (fun x =>
+            if x.2.2 < values.len then do
+              let m ← values.index_usize x.2.2
+              let q ← x.2.1.mul_m31 m
+              let out1 ← x.1.add q
+              let power1 ← x.2.1.mul lambda
+              ok (cont (out1, power1, x.2.2.wrapping_add 1#usize))
+            else ok (done x.1))
+          (out1, power1, i.wrapping_add 1#usize)
+    else ok out
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6CompressControl.lean:29:2: error: No goals to be solved
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6CompressControl.lean:28:15: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵ ̵lift, bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6CompressControl.lean:78:2: error: Tactic `rfl` failed: The left-hand side
+  ↑0#usize + ↑values.len
+is not definitionally equal to the right-hand side
+  ↑values.len
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+tag : M
+values : Slice M
+lambda : Q
+v✝¹ : aspis_core.field.CM31
+a✝¹ : aspis_core.field.CM31.from_m31 tag = ok v✝¹
+v✝ : aspis_core.field.QM31
+a✝ : aspis_core.field.QM31.from_cm31 v✝¹ = ok v✝
+⊢ ↑0#usize + ↑values.len = ↑values.len
+'R1Z.ProverRwP6CompressControl.source_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP6CompressControl.dispatch_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwP6CompressControl.loop_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP6CompressControl.compress_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,97 @@
+//! Owned safe references only; never compiled into the shipped prover.
+use aspis_core::field::{M31, CM31, QM31};
+#[path = "../../../../crates/aspis-r1-cost-probe/src/ct_pole.rs"]
+mod shipped_pole;
+
+pub fn compress(tag: M31, values: &[M31], lambda: QM31) -> QM31 {
+    let mut out = QM31::from_cm31(CM31::from_m31(tag));
+    let mut power = lambda;
+    let mut i = 0usize;
+    while i < values.len() {
+        out = out.add(power.mul_m31(values[i]));
+        power = power.mul(lambda);
+        i += 1;
+    }
+    out
+}
+
+pub fn all_slots_clear(values: &[[[QM31;2];2]], masks: &[u16;64], chi: QM31) -> bool {
+    let mut clear = true;
+    let mut row = 0usize;
+    while row < values.len() {
+        let active = masks[row >> 4] & (1u16 << (row & 15)) != 0;
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][0][0]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][0][1]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][1][0]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][1][1]));
+        row += 1;
+    }
+    clear
+}
+
+#[cfg(kani)]
+mod checks {
+    use super::*;
+    fn q() -> QM31 {
+        let x: [u32;4] = kani::any();
+        QM31 { c0: CM31 { a:M31(x[0]), b:M31(x[1]) }, c1:CM31 { a:M31(x[2]), b:M31(x[3]) } }
+    }
+    fn raw(q:QM31) -> [u32;4] { [q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0] }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn compression16() {
+        let tag=M31(kani::any()); let lambda=q();
+        let words: [u32;16]=kani::any();
+        let mut values=[M31(0);16];
+        let mut i=0;
+        while i<16 {values[i]=M31(words[i]);i+=1;}
+        let len:usize=kani::any(); kani::assume(len<=16);
+        let before=words;
+        let actual=aspis_statement::logup::compress_tagged_tuple(tag,&values[..len],lambda);
+        let reference=compress(tag,&values[..len],lambda);
+        assert_eq!(raw(actual),raw(reference));
+        let mut j=0; while j<16 {assert_eq!(values[j].0,before[j]);j+=1;}
+    }
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn pole_row() {
+        let row=[ [q(),q()], [q(),q()] ]; let chi=q();
+        let mut masks=[0u16;64]; masks[0]=kani::any();
+        let values=[row];
+        assert_eq!(shipped_pole::all_slots_clear(&values,&masks,chi),all_slots_clear(&values,&masks,chi));
+    }
+}
+
+pub fn wide_bytes(x: aspis_core::field::WideExact) -> [u8;32] { x.to_le_bytes() }
+
+/// Indexed serialization reference retaining to_limbs and native LE conversion.
+pub fn wide_bytes_reference(x: aspis_core::field::WideExact) -> [u8;32] {
+    let limbs=x.to_limbs(); let mut out=[0u8;32];
+    let mut i=0usize;
+    while i<8 {
+        let bytes=limbs[i].to_le_bytes();
+        out[4*i]=bytes[0]; out[4*i+1]=bytes[1];
+        out[4*i+2]=bytes[2]; out[4*i+3]=bytes[3]; i+=1;
+    }
+    out
+}
+
+#[cfg(kani)]
+mod split_checks {
+    use super::*;
+    fn q() -> QM31 { let x:[u32;4]=kani::any(); QM31 {c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}} }
+    fn raw(q:QM31) -> [u32;4] { [q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0] }
+    #[kani::proof]
+    #[kani::unwind(18)]
+    fn compression16_fixed() {
+        let tag=M31(kani::any());let lambda=q();let words:[u32;16]=kani::any();
+        let values=words.map(M31);
+        assert_eq!(raw(aspis_statement::logup::compress_tagged_tuple(tag,&values,lambda)),raw(compress(tag,&values,lambda)));
+    }
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn wide_serialization() {
+        let x=aspis_core::field::WideExact::new(q(),q());
+        assert_eq!(x.to_le_bytes(),wide_bytes_reference(x));
+    }
+}
