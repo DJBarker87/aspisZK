@@ -1,0 +1,31 @@
+PoolS2_PdaLane.lean:14:28: error: unexpected token 'have'; expected ':=', 'where' or '|'
+PoolS2_PdaLane.lean:12:72: error: unsupported `do` element (kind: Lean.Parser.Term.doReassign)
+   ok (.Ok matched) := by
+PoolS2_PdaLane.lean:22:76: error: unsolved goals
+ops : Ops
+program master key : Key
+lane bump : U8
+outside : 8 ≤ ↑lane
+guard : core.convert.num.FromUsizeU8.from lane ≥ 8#usize
+⊢ ↑lane < 8 →
+    (do
+        let s ← laneSeed
+        let s1 ← asRef master
+        let b ←
+          registry.stored_bump_address_matches ops
+              (Array.make 4#usize
+                  [s, s1, (Array.make 1#usize [lane] ⋯).to_slice, (Array.make 1#usize [bump] ⋯).to_slice] ⋯).to_slice
+              program key
+        ok (core.result.Result.Ok b)) =
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidSeeds)
+PoolS2_PdaLane.lean:24:51: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp [pair_forest.lane_address_matches, ̲laneCount,g̵u̵a̵r̵d̵,̵ ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolS2_PdaLane.widen' depends on axioms: [propext, Quot.sound]
+'AspisR1.PoolS2_PdaLane.valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_PdaLane.invalid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_PdaLane.accepted_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
