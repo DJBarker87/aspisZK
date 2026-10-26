@@ -1,0 +1,19 @@
+BEg_Terminal.lean:37:20: error: Application type mismatch: The argument
+  transport call code state before
+has type
+  observe (BEf_Carrier.run call (terminal code) state before) = observe (BEf_Carrier.run call code state before)
+but is expected to have type
+  BEf_Carrier.run call (terminal code) state before = BEf_Carrier.run call code state before
+in the application
+  congrArg Prod.snd (transport call code state before)
+BEg_Terminal.lean:44:2: error: Type mismatch
+  congrArg (fun x => x.1 = some a) (transport call code state before)
+has type
+  ((observe (BEf_Carrier.run call (terminal code) state before)).1 = some a) =
+    ((observe (BEf_Carrier.run call code state before)).1 = some a)
+but is expected to have type
+  BEg_Observation.accepted (BEf_Carrier.run call (terminal code) state before).1 = some a ↔
+    BEg_Observation.accepted (BEf_Carrier.run call code state before).1 = some a
+'AspisR1.BEg_Terminal.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.BEg_Terminal.effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.BEg_Terminal.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
