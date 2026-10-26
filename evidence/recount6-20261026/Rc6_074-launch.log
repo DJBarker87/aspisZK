@@ -1,0 +1,25 @@
+{"attempt": "Rc6_074", "exit_status": 0, "wall_seconds": 3.60354343499057, "peak_rss_kib": "5374036", "swaps": "0", "print_axioms": []}
+@AspisR1.CPH_Game.DeployedPairExecution.checkpoint : ∀ {Tx A : Type} {p : AspisR1.CPG_Projection.Observations Tx A}
+  {t u : Tx} {e1 e2 : AspisR1.S2W_D189Entry.Entry} {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8}
+  {sourceActions : List (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program},
+  AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved s
+...
+@AspisR1.CPH_Game.DeployedPairExecution.checkpoint : ∀ {Tx A : Type} {p : AspisR1.CPG_Projection.Observations Tx A}
+  {t u : Tx} {e1 e2 : AspisR1.S2W_D189Entry.Entry} {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8}
+  {sourceActions : List (AspisR1.CPP_BankState.Action A)} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program},
+  AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved sourceActions n1 n2 copy allocator id →
+    ((p.layout t).handles 2).1 = ((p.layout u).handles 6).1 ∧
+      AspisR1.CPS_PhysicalKey.key e1 2 = AspisR1.CPS_PhysicalKey.key e2 6 ∧
+        ((p.layout t).handles 2).1 ∉ p.intervening t u
+
+Running as unit: run-raa738857c798476cb92c0de731944c23.scope; invocation ID: 712effe958894933bdbb9a38d392b366
