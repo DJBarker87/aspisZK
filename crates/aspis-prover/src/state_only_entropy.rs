@@ -1594,3 +1594,421 @@ mod prover_commit_four8 {
 #[cfg(kani)]
 #[path="state_only_entropy_prover_rw_kani.rs"]
 mod prover_rw_kani;
+
+// Local native contracts for the frozen entropy owner. These harnesses are
+// absent from ordinary builds and make no claim about RNG distributions.
+#[cfg(kani)]
+mod prover_rw_entropy_native_contracts {
+    use super::*;
+
+    fn nonzero_kernel(bytes:&[u8;32])->bool {
+        let a=u64::from_le_bytes([bytes[0],bytes[1],bytes[2],bytes[3],bytes[4],bytes[5],bytes[6],bytes[7]]);
+        let b=u64::from_le_bytes([bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15]]);
+        let c=u64::from_le_bytes([bytes[16],bytes[17],bytes[18],bytes[19],bytes[20],bytes[21],bytes[22],bytes[23]]);
+        let d=u64::from_le_bytes([bytes[24],bytes[25],bytes[26],bytes[27],bytes[28],bytes[29],bytes[30],bytes[31]]);
+        (a|b|c|d)!=0
+    }
+
+    static mut REPLIES: [[u8; 64]; 16] = [[0; 64]; 16];
+    static mut FAILURES: u16 = 0;
+    static mut PARTIAL: [u8; 16] = [0; 16];
+    static mut ERROR_WORDS: [i32; 16] = [1; 16];
+    static mut CALLS: usize = 0;
+
+    // All nonzero representations of the Linux getrandom error carrier.
+    // Transmute is confined to this harness; size is checked by rustc and the
+    // type's sole validity restriction is its NonZeroI32 field.
+    fn error(word: i32) -> getrandom::Error {
+        let raw = core::num::NonZeroI32::new(word)
+            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());
+        unsafe { core::mem::transmute(raw) }
+    }
+
+    fn fill(destination: &mut [u8]) -> Result<(), getrandom::Error> {
+        let call = unsafe { CALLS };
+        assert!(call < 16);
+        assert_eq!(destination.len(), 64);
+        assert!(destination.iter().all(|byte| *byte == 0));
+        unsafe { CALLS = call + 1; }
+        let failed = (unsafe { FAILURES } & (1u16 << call)) != 0;
+        // A completely arbitrary post-fill buffer includes every partial
+        // error-write pattern; the caller cannot distinguish how it arose.
+        destination.copy_from_slice(&unsafe { REPLIES[call] });
+        if failed { Err(error(unsafe { ERROR_WORDS[call] })) } else { Ok(()) }
+    }
+
+    fn initialize(replies: [[u8; 64]; 16], failures: u16, error_words: [i32; 16]) {
+        unsafe {
+            REPLIES = replies;
+            FAILURES = failures;
+            PARTIAL = kani::any();
+            ERROR_WORDS = error_words;
+            CALLS = 0;
+        }
+    }
+
+    // This parameterization covers every rejected full reply: at least one
+    // half is zero, and the other half is unrestricted. No law on the tape
+    // distribution, inter-call independence or provider availability is used.
+    fn rejected_prefix(replies: &mut [[u8; 64]; 16], count: usize) {
+        for reply in replies.iter_mut().take(count) { *reply = bad_reply(*reply); }
+    }
+
+    fn first_success<const LOW: usize, const HIGH: usize>() {
+        let index: usize = kani::any();
+        kani::assume(LOW <= index && index < HIGH);
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce.iter().any(|byte| *byte != 0));
+        let mut replies: [[u8; 64]; 16] = kani::any();
+        rejected_prefix(&mut replies, index);
+        kani::assume(replies[index][..32].iter().any(|byte| *byte != 0));
+        kani::assume(replies[index][32..].iter().any(|byte| *byte != 0));
+        let through = if index == 15 { u16::MAX } else { (1u16 << (index + 1)) - 1 };
+        let failures: u16 = kani::any::<u16>() & !through;
+        initialize(replies, failures, kani::any());
+        match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+            Ok(secret) => {
+                assert_eq!(secret.mask_nonce, nonce);
+                assert_eq!(&secret.field_mask_entropy[..], &replies[index][..32]);
+                assert_eq!(&secret.leaf_salt_seed[..], &replies[index][32..]);
+            }
+            Err(_) => assert!(false, "first accepted reply must be returned"),
+        }
+        assert_eq!(unsafe { CALLS }, index + 1);
+    }
+
+    fn first_error<const LOW: usize, const HIGH: usize>() {
+        let index: usize = kani::any();
+        kani::assume(LOW <= index && index < HIGH);
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce.iter().any(|byte| *byte != 0));
+        let mut replies: [[u8; 64]; 16] = kani::any();
+        rejected_prefix(&mut replies, index);
+        let failures = (kani::any::<u16>() & !((1u16 << index) - 1)) | (1u16 << index);
+        let errors: [i32; 16] = kani::any();
+        initialize(replies, failures, errors);
+        match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+            Err(StateOnlyAttemptEntropyError::Os(actual)) => assert_eq!(actual, error(errors[index])),
+            _ => assert!(false, "first provider error must preserve its payload"),
+        }
+        assert_eq!(unsafe { CALLS }, index + 1);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn success_0_3() { first_success::<0, 4>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn success_4_7() { first_success::<4, 8>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn success_8_11() { first_success::<8, 12>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn success_12_15() { first_success::<12, 16>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn error_0_3() { first_error::<0, 4>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn error_4_7() { first_error::<4, 8>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn error_8_11() { first_error::<8, 12>(); }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn error_12_15() { first_error::<12, 16>(); }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn exhausted_sixteen() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce.iter().any(|byte| *byte != 0));
+        let mut replies: [[u8; 64]; 16] = kani::any();
+        rejected_prefix(&mut replies, 16);
+        initialize(replies, 0, kani::any());
+        assert!(matches!(StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce),
+            Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+        assert_eq!(unsafe { CALLS }, 16);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn zero_nonce_no_callback() {
+        initialize(kani::any(), kani::any(), kani::any());
+        assert!(matches!(StateOnlyAttemptSecrets::generate_for_mask_nonce([0; 32]),
+            Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+        assert_eq!(unsafe { CALLS }, 0);
+    }
+
+    #[kani::proof]
+    fn zeroizing64_native_abi() {
+        assert_eq!(core::mem::size_of::<Zeroizing<[u8; 64]>>(), 64);
+        assert_eq!(core::mem::align_of::<Zeroizing<[u8; 64]>>(), 1);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn zeroizing64_native_drop_at_byte() {
+        let bytes: [u8; 64] = kani::any();
+        let byte: usize = usize::from(kani::any::<u8>() & 63);
+        let mut storage = core::mem::MaybeUninit::new(Zeroizing::new(bytes));
+        let pointer = storage.as_mut_ptr();
+        unsafe {
+            core::ptr::drop_in_place(pointer);
+            // Read initialized raw bytes in retained MaybeUninit storage,
+            // without reconstituting or accessing a dropped owner value.
+            let after = pointer.cast::<u8>().add(byte).read();
+            assert_eq!(after, 0);
+        }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(33)]
+    fn zeroizing32_native_drop() {
+        let bytes: [u8; 32] = kani::any();
+        assert_eq!(core::mem::size_of::<Zeroizing<[u8; 32]>>(), 32);
+        assert_eq!(core::mem::align_of::<Zeroizing<[u8; 32]>>(), 1);
+        let mut storage = core::mem::MaybeUninit::new(Zeroizing::new(bytes));
+        let pointer = storage.as_mut_ptr();
+        unsafe {
+            core::ptr::drop_in_place(pointer);
+            let after = pointer.cast::<[u8; 32]>().read();
+            assert_eq!(after, [0; 32]);
+        }
+    }
+
+    static mut SMALL_REPLIES: [[u8; 64]; 2] = [[0; 64]; 2];
+    static mut SMALL_FAIL_AT: usize = 2;
+    static mut SMALL_ERROR: i32 = 1;
+    static mut SMALL_PARTIAL: u8 = 0;
+    static mut SMALL_CALLS: usize = 0;
+
+    fn small_fill(destination: &mut [u8]) -> Result<(), getrandom::Error> {
+        let call = unsafe { SMALL_CALLS };
+        assert!(call < 2);
+        assert_eq!(destination.len(), 64);
+        assert!(destination.iter().all(|byte| *byte == 0));
+        unsafe { SMALL_CALLS = call + 1; }
+        let failed = call == unsafe { SMALL_FAIL_AT };
+        destination.copy_from_slice(&unsafe { SMALL_REPLIES[call] });
+        if failed { Err(error(unsafe { SMALL_ERROR })) } else { Ok(()) }
+    }
+
+    fn small_setup(replies: [[u8; 64]; 2], fail_at: usize, error_word: i32) {
+        unsafe {
+            SMALL_REPLIES = replies;
+            SMALL_FAIL_AT = fail_at;
+            SMALL_ERROR = error_word;
+            SMALL_PARTIAL = kani::any();
+            SMALL_CALLS = 0;
+        }
+    }
+
+    fn bad_reply(mut reply: [u8; 64]) -> [u8; 64] {
+        if kani::any::<bool>() { reply[..32].fill(0); }
+        else { reply[32..].fill(0); }
+        reply
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, small_fill)]
+    fn first_error_compact() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        let replies: [[u8; 64]; 2] = kani::any();
+        let code: i32 = kani::any();
+        small_setup(replies, 0, code);
+        match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+            Err(StateOnlyAttemptEntropyError::Os(actual)) => assert_eq!(actual, error(code)),
+            _ => assert!(false),
+        }
+        assert_eq!(unsafe { SMALL_CALLS }, 1);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, small_fill)]
+    fn first_success_compact() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        let replies: [[u8; 64]; 2] = kani::any();
+        kani::assume(replies[0][..32].iter().any(|byte| *byte != 0));
+        kani::assume(replies[0][32..].iter().any(|byte| *byte != 0));
+        small_setup(replies, 2, kani::any());
+        let secret = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();
+        assert_eq!(secret.mask_nonce, nonce);
+        assert_eq!(&secret.field_mask_entropy[..], &replies[0][..32]);
+        assert_eq!(&secret.leaf_salt_seed[..], &replies[0][32..]);
+        assert_eq!(unsafe { SMALL_CALLS }, 1);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, small_fill)]
+    fn error_after_one_rejection() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        let first = bad_reply(kani::any());
+        let code: i32 = kani::any();
+        small_setup([first, kani::any()], 1, code);
+        match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+            Err(StateOnlyAttemptEntropyError::Os(actual)) => assert_eq!(actual, error(code)),
+            _ => assert!(false),
+        }
+        assert_eq!(unsafe { SMALL_CALLS }, 2);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, small_fill)]
+    fn success_after_one_rejection() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        let first = bad_reply(kani::any());
+        let last: [u8; 64] = kani::any();
+        kani::assume(last[..32].iter().any(|byte| *byte != 0));
+        kani::assume(last[32..].iter().any(|byte| *byte != 0));
+        small_setup([first, last], 2, kani::any());
+        let secret = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();
+        assert_eq!(secret.mask_nonce, nonce);
+        assert_eq!(&secret.field_mask_entropy[..], &last[..32]);
+        assert_eq!(&secret.leaf_salt_seed[..], &last[32..]);
+        assert_eq!(unsafe { SMALL_CALLS }, 2);
+    }
+
+    fn zero_fill(destination: &mut [u8]) -> Result<(), getrandom::Error> {
+        assert_eq!(destination.len(), 64);
+        assert!(destination.iter().all(|byte| *byte == 0));
+        unsafe { SMALL_CALLS += 1; }
+        Ok(())
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, zero_fill)]
+    fn zero_tape_cap() {
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        unsafe { SMALL_CALLS = 0; }
+        assert!(matches!(StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce),
+            Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)));
+        assert_eq!(unsafe { SMALL_CALLS }, 16);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn error_abi_and_from() {
+        assert_eq!(core::mem::size_of::<getrandom::Error>(), 4);
+        assert_eq!(core::mem::align_of::<getrandom::Error>(), 4);
+        let raw = core::num::NonZeroI32::new(kani::any())
+            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());
+        let input = error(raw.get());
+        let after: core::num::NonZeroI32 = unsafe { core::mem::transmute(input) };
+        assert_eq!(after, raw);
+        match StateOnlyAttemptEntropyError::from(input) {
+            StateOnlyAttemptEntropyError::Os(value) => assert_eq!(value, input),
+            _ => assert!(false),
+        }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn zeroizing64_borrow_writeback() {
+        let initial: [u8; 64] = kani::any();
+        let replacement: [u8; 64] = kani::any();
+        let mut owner = Zeroizing::new(initial);
+        assert_eq!(*owner, initial);
+        {
+            let view: &mut [u8] = owner.as_mut();
+            assert_eq!(view.len(), 64);
+            view.copy_from_slice(&replacement);
+        }
+        assert_eq!(*owner, replacement);
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn attempt_owner_drop_frame() {
+        let nonce: [u8; 32] = kani::any();
+        let value = StateOnlyAttemptSecrets {
+            mask_nonce: nonce,
+            field_mask_entropy: Zeroizing::new(kani::any()),
+            leaf_salt_seed: Zeroizing::new(kani::any()),
+        };
+        let mut storage = core::mem::MaybeUninit::new(value);
+        let pointer = storage.as_mut_ptr();
+        unsafe {
+            let public = core::ptr::addr_of!((*pointer).mask_nonce);
+            let field = core::ptr::addr_of!((*pointer).field_mask_entropy).cast::<[u8; 32]>();
+            let leaf = core::ptr::addr_of!((*pointer).leaf_salt_seed).cast::<[u8; 32]>();
+            core::ptr::drop_in_place(pointer);
+            assert_eq!(public.read(), nonce);
+            assert_eq!(field.read(), [0; 32]);
+            assert_eq!(leaf.read(), [0; 32]);
+        }
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(super::entropy_nonzero32, nonzero_kernel)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn all_terminal_positions() {
+        let index = usize::from(kani::any::<u8>() & 15);
+        let is_error: bool = kani::any();
+        let nonce: [u8; 32] = kani::any();
+        kani::assume(nonce != [0; 32]);
+        let mut replies: [[u8; 64]; 16] = kani::any();
+        rejected_prefix(&mut replies, index);
+        if !is_error {
+            kani::assume(replies[index][..32].iter().any(|byte| *byte != 0));
+            kani::assume(replies[index][32..].iter().any(|byte| *byte != 0));
+        }
+        let before = (1u16 << index) - 1;
+        let mut failures: u16 = kani::any::<u16>() & !before;
+        if is_error { failures |= 1u16 << index; }
+        else { failures &= !(1u16 << index); }
+        let codes: [i32; 16] = kani::any();
+        initialize(replies, failures, codes);
+        match StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce) {
+            Ok(secret) => {
+                assert!(!is_error);
+                assert_eq!(secret.mask_nonce, nonce);
+                assert_eq!(&secret.field_mask_entropy[..], &replies[index][..32]);
+                assert_eq!(&secret.leaf_salt_seed[..], &replies[index][32..]);
+            }
+            Err(StateOnlyAttemptEntropyError::Os(value)) => {
+                assert!(is_error);
+                assert_eq!(value, error(codes[index]));
+            }
+            Err(_) => assert!(false),
+        }
+        assert_eq!(unsafe { CALLS }, index + 1);
+    }
+}

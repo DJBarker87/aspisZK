@@ -737,7 +737,57 @@ Q-proof timeout was split, and failed layout reduction was replaced by named
 symbolic arithmetic. All accepted new reports use only standard axioms.
 Receipts/commands/source/dependency hashes/RSS/wall/swap/axioms are in
 `native-install/*-receipt.json`; no full manifest or native regression rerun.
-The ordinary Rust/program sources still match all2915 relevant prior build
-pins(`production-source-before-kani.json` gives the authoritative count).
+The prior normal-build receipt has393 relevant Rust/program/Cargo pins.
+The first audit stopped on a relocated example path before producing a result;
+its earlier all2915 wording was incorrect and is superseded. The corrected
+read-only audit maps that one historical example path to examples/ and records
+every match or mismatch in `production-source-before-kani.json`.
 The next stage inspects native callback/Drop contracts via cfg(kani) only;
 no complete native extraction or entropy probability result is claimed.
+
+## Native entropy contracts and artifact gate (owner continuation)
+
+Twenty actual Kani runs exhausted the20-run allocation:12pass,1 compile
+failure(missing stubbing flag),7timeouts,0OOM. Immutable source snapshots,
+commands, source/dependency hashes, cgroup caps/events/peaks, GNU time RSS,
+wall/swap and error logs are retained under `native-install/native/`;
+`native-summary.json` indexes them. Timeout GNU time RSS may undercount children;
+use the separately recorded cgroup peak. All native jobs used existing6G/8G,
+swap0,Tasks64 scopes and optimized profile3,j4. Failed queries were changed or
+split; no cap increased and no unchanged failure rerun. All new Rust is one
+appended cfg(kani) module; every original production byte is an exact prefix.
+
+Passing contracts cover Zeroizing32/64 selected-byte Drop,64-byte ABI/borrow,
+Linux getrandom error representation/conversion, entropy-owner Drop/public
+nonce preservation, the actual OR32 predicate, zero nonce/no callback, arbitrary
+first success/error, and success/error after one rejected reply. Error post-
+buffers are arbitrary complete64-byte values, including every partial-write
+outcome. Provider callbacks are nondeterministic tape stubs, not an OS measure.
+Native16-reply coverage timed out; extractor/ABI/effect/Drop *composition* and
+history-conditioned E1 association are still open. The new Lean rejection
+surjection covers all bad halves/prefixes without assuming independence or
+uniformity; it is not a probability law. The conditional2^-4080/2^-4077 results
+remain conditional. No root refinement/headline premise has been removed.
+
+The assigned native host snapshot had four production files stale relative to
+this worktree. Their before/source hashes are retained. The fresh proverw116
+three-ELF matches used that stale snapshot and are REJECTED as current-branch
+evidence. After copying the four exact frozen worktree files to this owned host
+snapshot, proverw117 was refused at reservation. Proverw118 then built the
+current-source default SBF successfully(26.24s,646836KiB GNU time RSS,swap0),
+but identity FAILED: actual
+`f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4`
+(1563728bytes) versus pinned
+`d7d42f770883401e0104fb6e044f61a132fea7359943db225d581c5740fcffd0`
+(1511216bytes). The existing gate stopped there. Fresh current-source devnet/
+pool and +10% timing gates were not run. Pins/production were not changed.
+Read-only rehash of the retained three pinned artifacts matched; it is not a
+current-source rebuild. Historical +10% evidence has five mismatched source
+pins(after mapping the relocated example), so cannot be reused. Generated
+keypairs remain retained on the host with restrictive permissions.
+
+Lean11629 audits110 reports;11630 proves selector compatibility;11632 proves
+three rejection-coverage lemmas. All accepted reports use only standard axioms.
+11631 was prepared only and never launched. Budget now30actual Lean compiles
+(25pass,5changed failures),one reservation refusal;20actual Kani runs.
+No release replay or privacy/adoption claim is made.

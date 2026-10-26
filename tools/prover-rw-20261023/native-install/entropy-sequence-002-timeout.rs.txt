@@ -1,0 +1,47 @@
+    #[kani::proof]
+    #[kani::unwind(65)]
+    #[kani::stub(getrandom::fill, fill)]
+    fn selected64_sequence_and_error_payload() {
+        let replies: [[u8; 64]; 16] = kani::any();
+        let failures: u16 = kani::any();
+        let error_words: [i32; 16] = kani::any();
+        let nonce: [u8; 32] = kani::any();
+        unsafe {
+            REPLIES = replies;
+            FAILURES = failures;
+            PARTIAL = kani::any();
+            ERROR_WORDS = error_words;
+            CALLS = 0;
+        }
+        // Declarative first terminal event. A failed fill has arbitrary
+        // partial writes; only successful full buffers are decoded.
+        let terminal = if nonce.iter().any(|byte| *byte != 0) {
+            (0..16).find(|index| {
+                failures & (1u16 << index) != 0 ||
+                (replies[*index][..32].iter().any(|byte| *byte != 0) &&
+                 replies[*index][32..].iter().any(|byte| *byte != 0))
+            })
+        } else { None };
+        let expected_calls = if nonce.iter().all(|byte| *byte == 0) { 0 }
+            else { terminal.map_or(16, |index| index + 1) };
+        let actual = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce);
+        assert_eq!(unsafe { CALLS }, expected_calls);
+        match actual {
+            Ok(secret) => {
+                let index = terminal.unwrap();
+                assert_eq!(failures & (1u16 << index), 0);
+                assert_eq!(secret.mask_nonce, nonce);
+                assert_eq!(&secret.field_mask_entropy[..], &replies[index][..32]);
+                assert_eq!(&secret.leaf_salt_seed[..], &replies[index][32..]);
+            }
+            Err(StateOnlyAttemptEntropyError::Os(actual_error)) => {
+                let index = terminal.unwrap();
+                assert_ne!(failures & (1u16 << index), 0);
+                assert_eq!(actual_error, error(error_words[index]));
+            }
+            Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock) => {
+                assert!(terminal.is_none());
+            }
+        }
+    }
+
