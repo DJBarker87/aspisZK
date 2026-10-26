@@ -1,3 +1,7 @@
+# Historical cache stop — superseded after lead repair ruling
+
+Resumed at045 with the d18 v5 package FIRST in LEAN_PATH. See JFv_TX2_CIRCLE_CACHE.json, OBSTRUCTION70 and the final handoff. The original044 failure below is retained verbatim.
+
 # Infrastructure stop before attempt 70
 
 Attempt JFv_TX2_044, JFv_TX2_Rows.lean, exit 1, wall 0.7064691510167904 s, peak RSS 1534784 KiB, swaps 0, revision d787df486c574e9eb87f5b5bd96243830f81500d with dirty sources (exact SHA in receipt), produced no #print axioms lines. Exact error:

@@ -35,3 +35,5 @@ updates/flush, batch1 authentication, finish and accepted2 remain OPEN. Actual
 top before/after and ledger delta remain unchanged (0T/0P/0G/0C removed/added/
 changed). Full real-hash/native-pair/top non-vacuity and 100-bit target remain
 not established. 30 Lean attempts remain after070; no Kani run is used.
+
+Final follow-up:100/100 charged attempts exhausted. Geometry, scalar-head sums, native four-dot decomposition and tail finishing equations are checked (see final HANDOFF). Query0 equality is still unchecked; no mismatch or vacuity finding is asserted.

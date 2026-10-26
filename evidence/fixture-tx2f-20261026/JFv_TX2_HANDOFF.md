@@ -1,100 +1,118 @@
-# TX2 f handoff
+# TX2 f final handoff
 
-Status: infrastructure-stopped; accepted2 and the 100-bit target NOT established.
-Branch codex/cx-fixture-tx2f-20261026. Own only new JFv_TX2_ modules and this
-receipt directory. No push, merge, shipped/cfg(kani) edit, key operation,
-session A worktree/candidate edit or security-contract change.
+Status: budget exhausted; accepted2 and the100-bit target NOT established.
+Branch codex/cx-fixture-tx2f-20261026. No push or merge. All changes are new
+JFv_TX2_ Lean modules and this receipt directory; inherited modules, session A
+worktrees/candidates, shipped files, wallet/account keys and artifacts are untouched.
 
-## Checked result and limits
+## Exact checked result and references
 
-Stage 1 computes all 36 real native endpoint/query line_node calls from JFs_'s
-checked fibre-point leaves. Stage 2 computes all twelve five-word rows and
-line_z arithmetic calls and proves canonical raw nonzero coordinates. The
-source calls use the installed point/line/index/field dictionary; no success
-callback substitutes for actual arithmetic. Generic ZeroTest, GatherStep and
-Terminal source theorems derive the native zero scan, append/push gather body,
-and complete inverse/reverse/grouping terminal return. See STAGE1 and STAGE2
-for exact hypotheses and accepted attempt numbers. No full real constructor
-or inverse-array instance is composed yet. No equality or mismatch is checked.
+The complete native geometry constructor now returns on the SAME retained
+real bytes and actual installed point/line/field/inverse dictionary:
+Geometry.native/stage/meaning (061). Its ordered twelve inverse arrays are
+proved reciprocal to the exact60 gathered words; line_z is the exact12-word
+list. GeometryReads.source (064) derives every actual inverse/node accessor.
+Query0Inverse.source (090) computes the first two inverse FIELD values as
+243259912 and1029545577. Query0Formula.source (097) gives the actual returning
+circle call and its exact field formula with those numeric inverses.
 
-All inherited JFx_ through JFs_ sources/objects remain read-only. The actual
-dot returns and canonicality are reused; their classically selected outputs
-are not reducible numeric certificates. Query 0's circle gate still needs
-exact numeric/semantic identification of those dot values and geometry inverse.
-Do not replace its equality by mere return/canonicality.
+HeadFlat.source (089) identifies all eight native scalar-head coordinates with
+the corresponding26-term sums modulo2147483647, using symbolic inner/outer
+loop and fold invariants. DotsMeaning.source (093) identifies the SAME inherited
+native four-dot result with the four actual slot returns, each decomposed into
+that exact scalar head plus the actual returning three-pair tail. CanonicalMeaning
+(095), DotFinishMeaning (096), EbyKFinishMeaning (099) identify the exact tail
+finish reduction/grouping coordinates. The three preceding raw pairing pushes
+still need numeric/field identification; no full tail value is claimed.
 
-## Before/after and ledger
+The first acceptance gate, Query0Obligation.Goal, remains UNPROVED. It compares
+the actual circle return to the independently decoded lane3 of query132355:
+[2028222263,814288248,354118641,1376248873,1642244954,2101120408,22065465,1602413776].
+There is no checked full circle value, equality, mismatch or false real-byte
+premise. OBSTRUCTION70 was written at070 and names the exact non-reducing
+Classical.choose definitions in JFs_TX2_Dots.value and JFr_TX2_Powers.value.
+No attempt to normalize these choices or a whole buffer/recurrence is made.
+The later symbolic value lemmas advance that boundary without proving Goal.
 
-Full deployed statements are retained in JFv_TX2_BEFORE_Rc10_Top.lean.txt and
-JFv_TX2_AFTER_Rc10_Top.lean.txt. They are byte-identical to entry revision
- da89b76b646216f31175b1c93a5640cbfb5a3e96, SHA256
-c5c85966b83fbaf24626724fe9becdef92214389fb4286d6ba0d304f486e1527.
-The ledger uses quantified atomic-law families and conjunction leaves with
-common witnesses, guards, quantifiers, carriers, dictionaries and deployment
-rows retained. Actual before/after: 83T/12P/13G/0C. Distinct combined:
-89T/16P/13G/0C. Removed, added and changed: EACH 0T/0P/0G/0C. See
-JFv_TX2_LEDGER_DELTA.json. Local helper facts receive zero actual-top removal
-credit. No conclusion, failure event, frozen3 adoption, approved game,
-RuntimePersistence, trust item, metric or constant changed.
+Next: derive the actual three canonical raw-pairing push values and combine
+with099's finish equations and089's head sum; identify the real gamma power
+coordinates via their existing source theorem; compute QUERY0's complete circle
+value and check the single equality gate. Only after that extend gates to all
+queries, chained accumulation/flush, batch1 Merkle authentication, installed
+finish and accepted2. Then compose JFr_'s TX1 accepted1 plus SAME saved-checkpoint
+bytes into the joint pair, followed by actual frozen3/runtime/global joins.
+No work on the later acceptance stages is credited.
 
-The local comparison adds computed endpoint/row facts and generic control
-execution lemmas to JFs_'s point/dot-return results. This does not weaken the
-deployed theorem or discharge its arbitrary-adversary source laws. Terminal
-still has explicit index/size/field-nonzero conditions. GatherStep still takes
-its primitive-call facts; the real instantiation is an uncompiled draft.
+## Before/after statements and ledger
 
-## Non-vacuity and open work
+The actual top is Rc10_Top.deployed. BEFORE and AFTER complete sources are
+byte-identical to entry da89b76b646216f31175b1c93a5640cbfb5a3e96 and current
+checkout, SHA256 c5c85966b83fbaf24626724fe9becdef92214389fb4286d6ba0d304f486e1527.
+JFv_TX2_LEDGER_DELTA.json follows the Rc10 ledger's quantified atomic-law family/
+conjunction-leaf method, retaining shared witnesses, guards, quantifiers,
+carriers, dictionaries and deployment rows. Actual before/after83T/12P/13G/0C;
+deduplicated combined89T/16P/13G/0C. Removed, added and changed are EACH
+0T/0P/0G/0C. Local helpers receive ZERO actual-top premise-removal credit.
+Fresh audit100 prints standard axioms for the unchanged deployed theorem.
+No failure event, conclusion, target, metric, constant, approved game,
+RuntimePersistence trust item or frozen3 adoption changed.
 
-The twelve row source facts and regularity theorems are closed fixture facts
-for every seed/error carrier. They do not require any hash, decoded output,
-accepted-query, or accepted-wrapper hypothesis. This supplies local geometry
-call non-vacuity only. Inherited JFs_TX2_GeometryPoints.inhabited remains the
-reader/dot/point consistency result for the finite model oracle; its Realizes H
-covers three checkpoint digest equations, not actual SHA256. No real-byte
-premise is proved false or uninhabitable. Full real-hash/native-pair/deployed-top
-non-vacuity remains open.
+Local comparison: JFs_'s on_saved statement returned actual dots/circle calls
+with a free inverse parameter and only fibre-point geometry leaves. The new
+GeometryFixture.on_saved derives the complete same-byte geometry constructor
+and reciprocal groups beside that SAME saved-checkpoint reader/native-dot path.
+DotsMeaning/HeadFlat additionally derive exact scalar-head values and actual
+whole-dot head/tail decompositions. This specializes local source calls to the
+fixture; it does not weaken or discharge arbitrary-adversary deployed-top laws.
 
-Next deliverable after lead-owned cache repair: validate the corrected Rows
-aggregation and the UNCHECKED GatherShape/Active/Loop/Geometry drafts, then
-actual returned inverse arrays and query node. Check query 0's named equality
-before extending to all twelve queries and chained accumulation/flush. Batch1
-Merkle authentication, installed finish, accepted2, TX1 accepted1 plus SAME
-saved checkpoint equality, and global frozen3/runtime joins remain open.
+## Non-vacuity
 
-## Validation, budget and mandatory stop
+GeometryFixture.inhabited is a checked local consistency result, now including
+the complete real-byte constructor, beside the saved-checkpoint reader and
+installed dot returns. It uses the inherited finite model oracle for exactly
+three checkpoint digest equations. Realizes H stays explicit on_saved; this
+model is NOT a SHA256 realization, all Merkle/transcript authentication, either
+accepted wrapper, same native pair or deployed-top non-vacuity. The actual
+constructor and HeadFlat/DotsMeaning value facts have no hash/accepted-query/
+accepted-wrapper premises. No real-byte vacuity counterexample is established.
+Full real-hash/native-pair/top satisfiability remains open.
 
-44/100 charged attempts, 43 Lean processes: 31 pass / 12 reject; 042 did not
-start Lean. Kani 0/10. Total measured Lean wall 106.14644648513058 s; maximum
-RSS 5644828 KiB; swaps 0. Each process used the unchanged coherent SInt2
-launcher/admission, one scope at a time, -j1 -M7000, MemoryHigh6G/MemoryMax8G/
-MemorySwapMax0/TasksMax64. No timeout, memory kill, cap increase, unchanged
-killed-job rerun, heartbeat/depth override, package replay, Rust/Kani/SBF or
-unrelated runtime suite occurred. Receipt/source/theorem/scope audits and the
-three generators' --check modes pass. Raw rejected logs remain verbatim;
-whitespace in raw prover output is not a source-layout change.
+## Validation, exact pins and budget
 
-JFv_TX2_VALIDATION.json maps all 31 delivered modules to passing receipts at
-current hashes and every new theorem's printed standard-only axioms. No final
-composed top replay/audit is credited after the cache failure. The last useful
-source result, GatherStep 043, exits0 in2.539636007975787s, peakRSS5052296KiB,
-swap0, source revision d787df486c574e9eb87f5b5bd96243830f81500d, dirty flag and
-exact SHA in its receipt. Full per-attempt section6 fields are retained.
+100/100 charged attempts:99 Lean processes,64 pass/35 reject, plus042 preflight
+without Lean;0/10 Kani. All64 delivered current modules have passing exact-hash
+receipts and every new theorem's standard-only printed axioms. See VALIDATION
+and RECORDS_MANIFEST. Final100 passes: target JFv_TX2_FinalAudit.lean,exit0,
+wall2.5265147059690207s,peakRSS5618308KiB,swap0,source revision
+3b90c0fd9b (full revision and dirty-source/hash/dependency pins in receipt).
+Total measured Lean wall278.4912081420189s;maximumRSS5701840KiB;swap0.
+The final root audit imports geometry/reader non-vacuity, full-dot decomposition,
+query0 formula, exact tail finish and actual top. No101st compile is permitted.
 
-044 fails before elaboration on missing inherited
-AspisR1CircleSampleWrapper.RawCircleSampleActualSamplerCanonicalV1.olean,
-despite the d18 v5 object directory in LEAN_PATH since001. See
-JFv_TX2_OBSTRUCTION.md and044/stdout.log for exact error/path/metrics. Local-lean
-rule5 requires stopping and reporting for lead-owned infrastructure repair.
-No repair, changed search path, overwrite, retry,045 or070 ran. 56 Lean attempts
-and10 Kani runs remain; the budget is not exhausted. This infrastructure stop
-is the explicit reason the whole-budget instruction could not be completed.
+All attempts reuse coherent SInt2 objects/unchanged launchers/admission,
+one scope at a time,-j1,-M7000,MemoryHigh6G/MemoryMax8G/SwapMax0/TasksMax64.
+From045 EVERY LEAN_PATH has d18 v5 FIRST, before aspis-joint; every receipt
+retains the full order. CIRCLE_CACHE pins the59016-byte sampler object hash
+fd825243f7231d3ecdd78d59b7384bf32d5cdfdf70e805849a1f2d567a59ef64.
+No rebuilt59208-byte package is used. The historical044 path-race error is
+retained; the lead's explicit ruling authorizes this path-order correction.
+No host infrastructure repair, inherited object overwrite or dependency rebuild.
 
-No new task Cargo target, scratch corpus or copied build workspace was created.
-Objects in the inherited coherent workspace remain reusable cache. No shipped
-source/cfg(kani) change triggers ELF rebuilding. INHERITED pins only:
+No wall timeout,memory kill,cap/heartbeat/depth increase,parallel job scopes,
+unchanged killed-job rerun,package replay,Rust/Kani/SBF or unrelated runtime
+suite occurred.083's generic recursion-depth failure was replaced by explicit
+Nat remainder rewrites, not a higher option. All rejected recovery diagnostics
+remain uncredited. Generator --check, current source/receipt and individual-axiom
+checks, d18-first order, changed-path scope and source-layout checks pass.
 
+No new Cargo target, corpus or compiled scratch workspace was created. The
+coherent shared proof objects remain reusable cache, not copied scratch.
+No shipped/cfg(kani) change triggers ELF rebuilding. INHERITED pins only:
 - default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4
-- devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
-- Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
+- devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
+- Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
 
-Stage commits remain local. The 100-bit target remains not established.
+FinalFixture_UNCHECKED is an unused text draft. The old UNCHECKED geometry/
+gather texts are historical candidates superseded by the accepted Lean modules,
+not additional results. Stage commits remain local; no push. Target not yet
+established.
