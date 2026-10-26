@@ -1,0 +1,39 @@
+structure R1Z.PV_RunJoin_TrustItems {E File Reply Time Worker Context Coins Rest Observation : Type} [DecidableEq File]
+  [Fintype Rest] (d : Data E File Reply Time Worker Context Coins Rest Observation) : Prop
+number of parameters: 12
+fields:
+  R1Z.PV_RunJoin_TrustItems.entropy_law : ProverCommitPublicNonce40.E1 d.law
+  R1Z.PV_RunJoin_TrustItems.entropy_kernel : ∀ (c : Coins),
+      d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c
+  R1Z.PV_RunJoin_TrustItems.outcomes : ∀ (w : PV_RunJoin_OsWorld.World E File Reply Time Worker)
+      (call : Call E File Reply Time Worker), nativeCall d.native w call ↔ sourceCall d.laws w call
+  R1Z.PV_RunJoin_TrustItems.observation : ∀ (c : Coins), d.nativeObservation c = d.extractedObservation c
+constructor:
+  R1Z.PV_RunJoin_TrustItems.mk {E File Reply Time Worker Context Coins Rest Observation : Type} [DecidableEq File]
+    [Fintype Rest] {d : Data E File Reply Time Worker Context Coins Rest Observation}
+    (entropy_law : ProverCommitPublicNonce40.E1 d.law)
+    (entropy_kernel : ∀ (c : Coins), d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c)
+    (outcomes :
+      ∀ (w : PV_RunJoin_OsWorld.World E File Reply Time Worker) (call : Call E File Reply Time Worker),
+        nativeCall d.native w call ↔ sourceCall d.laws w call)
+    (observation : ∀ (c : Coins), d.nativeObservation c = d.extractedObservation c) : PV_RunJoin_TrustItems d
+       69.11 real         2.03 user         6.81 sys
+          2550202368  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              163988  page reclaims
+              319481  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               74560  voluntary context switches
+              364438  involuntary context switches
+           627818667  instructions retired
+           370583296  cycles elapsed
+            12010264  peak memory footprint
+
+exit=0
