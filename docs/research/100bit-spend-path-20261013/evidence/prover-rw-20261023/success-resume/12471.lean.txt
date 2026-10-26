@@ -1,0 +1,47 @@
+import R1Z.ProverRwOrderedOracle
+set_option autoImplicit false
+namespace R1Z.ProverRwOrderedPrefix
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverRwOrderedOracle ProverRwOuterFrames
+
+def prefix (val : alloc.vec.Vec U8) (v : transport.Variant)
+    (hash : Request → Result Answer) (nonce : Answer) :
+    Execution (ProverRwOuterContext.Context × Answer) := do
+  let digest ← query hash (digestInput val)
+  let binding ← query hash (bindingInput val v digest nonce)
+  pure (ProverRwOuterContextModel.context digest nonce,binding)
+
+theorem erase (val : alloc.vec.Vec U8) (v : transport.Variant)
+    (hash : Request → Result Answer) (nonce : Answer) :
+    (prefix val v hash nonce).result=ProverRwOuterFrames.run val v hash nonce := by
+  simp only [prefix,result_bind,result_query,result_pure,ProverRwOuterFrames.run]
+
+theorem source (val : alloc.vec.Vec U8) (v : transport.Variant)
+    (hash : Request → Result Answer) (nonce : Answer) :
+    ProverRwOuterPrepare.direct val v hash nonce=(prefix val v hash nonce).result := by
+  rw [ProverRwOuterFrames.direct_run,erase]
+
+theorem ordered (val : alloc.vec.Vec U8) (v : transport.Variant)
+    (hash : Request → Result Answer) (nonce : Answer) :
+    (prefix val v hash nonce).history=
+      match first : hash (digestInput val) with
+      | .ok digest => [⟨digestInput val,.ok digest⟩,
+          ⟨bindingInput val v digest nonce,hash (bindingInput val v digest nonce)⟩]
+      | result => [⟨digestInput val,result⟩] := by
+  cases first : hash (digestInput val) with
+  | ok digest =>
+    cases second : hash (bindingInput val v digest nonce) <;>
+      simp [prefix,bind,query,pure,first,second]
+  | fail e => simp [prefix,bind,query,pure,first]
+  | div => simp [prefix,bind,query,pure,first]
+
+theorem bound (val : alloc.vec.Vec U8) (v : transport.Variant)
+    (hash : Request → Result Answer) (nonce : Answer) :
+    (prefix val v hash nonce).history.length≤2 := by
+  rw [ordered]
+  cases hash (digestInput val) <;> simp
+#print axioms erase
+#print axioms source
+#print axioms ordered
+#print axioms bound
+end R1Z.ProverRwOrderedPrefix

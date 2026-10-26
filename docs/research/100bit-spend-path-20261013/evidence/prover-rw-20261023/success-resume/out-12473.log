@@ -1,0 +1,144 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:16:84: error: unsolved goals
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce : Answer
+⊢ (do
+        let digest ← query hash (digestInput val)
+        let binding ← query hash (bindingInput val v digest nonce)
+        ProverRwOrderedOracle.pure (ProverRwOuterContextModel.context digest nonce, binding)).result =
+    do
+    let digest ← hash (digestInput val)
+    let binding ← hash (bindingInput val v digest nonce)
+    ok (ProverRwOuterContextModel.context digest nonce, binding)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:17:23: warning: This simp argument is unused:
+  result_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵r̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵_̵q̵u̵e̵r̵y̵,̵r̵e̵s̵u̵l̵t̵_̵p̵u̵r̵e̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵u̵t̵e̵r̵F̵r̵a̵m̵e̵s̵.̵r̵u̵n̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲q̲u̲e̲r̲y̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲p̲u̲r̲e̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲u̲t̲e̲r̲F̲r̲a̲m̲e̲s̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:17:35: warning: This simp argument is unused:
+  result_query
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵r̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵_̵q̵u̵e̵r̵y̵,̵r̵e̵s̵u̵l̵t̵_̵p̵u̵r̵e̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵u̵t̵e̵r̵F̵r̵a̵m̵e̵s̵.̵r̵u̵n̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲p̲u̲r̲e̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲u̲t̲e̲r̲F̲r̲a̲m̲e̲s̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:17:48: warning: This simp argument is unused:
+  result_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵r̵e̵s̵u̵l̵t̵_̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵_̵q̵u̵e̵r̵y̵,̵r̵e̵s̵u̵l̵t̵_̵p̵u̵r̵e̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵u̵t̵e̵r̵F̵r̵a̵m̵e̵s̵.̵r̵u̵n̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲_̲q̲u̲e̲r̲y̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲u̲t̲e̲r̲F̲r̲a̲m̲e̲s̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:32:14: error: unsolved goals
+case ok.ok
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce digest : Answer
+first : hash (digestInput val) = ok digest
+v✝ : Answer
+second : hash (bindingInput val v digest nonce) = ok v✝
+⊢ (do
+        let digest ← { result := ok digest, history := [{ request := digestInput val, answer := ok digest }] }
+        let binding ←
+          { result := hash (bindingInput val v digest nonce),
+              history :=
+                [{ request := bindingInput val v digest nonce, answer := hash (bindingInput val v digest nonce) }] }
+        { result := ok (ProverRwOuterContextModel.context digest nonce, binding), history := [] }).history =
+    [{ request := digestInput val, answer := ok digest },
+      { request := bindingInput val v digest nonce, answer := ok v✝ }]
+
+case ok.fail
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce digest : Answer
+first : hash (digestInput val) = ok digest
+e✝ : Error
+second : hash (bindingInput val v digest nonce) = fail e✝
+⊢ (do
+        let digest ← { result := ok digest, history := [{ request := digestInput val, answer := ok digest }] }
+        let binding ←
+          { result := hash (bindingInput val v digest nonce),
+              history :=
+                [{ request := bindingInput val v digest nonce, answer := hash (bindingInput val v digest nonce) }] }
+        { result := ok (ProverRwOuterContextModel.context digest nonce, binding), history := [] }).history =
+    [{ request := digestInput val, answer := ok digest },
+      { request := bindingInput val v digest nonce, answer := fail e✝ }]
+
+case ok.div
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce digest : Answer
+first : hash (digestInput val) = ok digest
+second : hash (bindingInput val v digest nonce) = div
+⊢ (do
+        let digest ← { result := ok digest, history := [{ request := digestInput val, answer := ok digest }] }
+        let binding ←
+          { result := hash (bindingInput val v digest nonce),
+              history :=
+                [{ request := bindingInput val v digest nonce, answer := hash (bindingInput val v digest nonce) }] }
+        { result := ok (ProverRwOuterContextModel.context digest nonce, binding), history := [] }).history =
+    [{ request := digestInput val, answer := ok digest }, { request := bindingInput val v digest nonce, answer := div }]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:35:11: error: unsolved goals
+case fail
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce : Answer
+e : Error
+first : hash (digestInput val) = fail e
+⊢ (do
+        let digest ← { result := fail e, history := [{ request := digestInput val, answer := fail e }] }
+        let binding ←
+          { result := hash (bindingInput val v digest nonce),
+              history :=
+                [{ request := bindingInput val v digest nonce, answer := hash (bindingInput val v digest nonce) }] }
+        { result := ok (ProverRwOuterContextModel.context digest nonce, binding), history := [] }).history =
+    [{ request := digestInput val, answer := fail e }]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:36:8: error: unsolved goals
+case div
+val : alloc.vec.Vec U8
+v : transport.Variant
+hash : Request → Result Answer
+nonce : Answer
+first : hash (digestInput val) = div
+⊢ (do
+        let digest ← { result := div, history := [{ request := digestInput val, answer := div }] }
+        let binding ←
+          { result := hash (bindingInput val v digest nonce),
+              history :=
+                [{ request := bindingInput val v digest nonce, answer := hash (bindingInput val v digest nonce) }] }
+        { result := ok (ProverRwOuterContextModel.context digest nonce, binding), history := [] }).history =
+    [{ request := digestInput val, answer := div }]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:34:22: warning: This simp argument is unused:
+  ProverRwOrderedOracle.bind
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵p̵u̵r̵e̵,̵f̵i̵r̵s̵t̵,̵s̵e̵c̵o̵n̵d̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲r̲d̲e̲r̲e̲d̲O̲r̲a̲c̲l̲e̲.̲p̲u̲r̲e̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲s̲e̲c̲o̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:35:30: warning: This simp argument is unused:
+  ProverRwOrderedOracle.bind
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵p̵u̵r̵e̵,̵f̵i̵r̵s̵t̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲r̲d̲e̲r̲e̲d̲O̲r̲a̲c̲l̲e̲.̲p̲u̲r̲e̲,̲ ̲f̲i̲r̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedPrefix.lean:36:27: warning: This simp argument is unused:
+  ProverRwOrderedOracle.bind
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵u̵n̵P̵r̵e̵f̵i̵x̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵,̵P̵r̵o̵v̵e̵r̵R̵w̵O̵r̵d̵e̵r̵e̵d̵O̵r̵a̵c̵l̵e̵.̵p̵u̵r̵e̵,̵f̵i̵r̵s̵t̵]̵[̲r̲u̲n̲P̲r̲e̲f̲i̲x̲,̲ ̲q̲u̲e̲r̲y̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲O̲r̲d̲e̲r̲e̲d̲O̲r̲a̲c̲l̲e̲.̲p̲u̲r̲e̲,̲ ̲f̲i̲r̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwOrderedPrefix.erase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwOrderedPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwOrderedPrefix.ordered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwOrderedPrefix.bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

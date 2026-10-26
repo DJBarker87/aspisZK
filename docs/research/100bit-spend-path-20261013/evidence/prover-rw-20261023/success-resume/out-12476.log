@@ -1,0 +1,428 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedMonad.lean:17:21: error: Tactic `rfl` failed: The left-hand side
+  ({
+            map := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+            pure := fun {α} => ProverRwOrderedOracle.pure,
+            seq := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                f fun y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+            seqLeft := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun a =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+            seqRight := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun x => y (),
+            bind := fun {α β} x f =>
+              match x.result with
+              | ok a =>
+                have next := f a;
+                { result := next.result, history := x.history ++ next.history }
+              | fail e => { result := fail e, history := x.history }
+              | div => { result := div, history := x.history } }.toBind.1
+      x f).history
+is not definitionally equal to the right-hand side
+  match ok v✝ with
+  | ok a => x.history ++ (f a).history
+  | x_1 => x.history
+
+case ok
+A B : Type
+x : Execution A
+f : A → Execution B
+v✝ : A
+⊢ ({
+              map := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+              pure := fun {α} => ProverRwOrderedOracle.pure,
+              seq := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  f fun y =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+              seqLeft := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun a =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+              seqRight := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun x => y (),
+              bind := fun {α β} x f =>
+                match x.result with
+                | ok a =>
+                  have next := f a;
+                  { result := next.result, history := x.history ++ next.history }
+                | fail e => { result := fail e, history := x.history }
+                | div => { result := div, history := x.history } }.toBind.1
+        x f).history =
+    match ok v✝ with
+    | ok a => x.history ++ (f a).history
+    | x_1 => x.history
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedMonad.lean:17:21: error: Tactic `rfl` failed: The left-hand side
+  ({
+            map := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+            pure := fun {α} => ProverRwOrderedOracle.pure,
+            seq := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                f fun y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+            seqLeft := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun a =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+            seqRight := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun x => y (),
+            bind := fun {α β} x f =>
+              match x.result with
+              | ok a =>
+                have next := f a;
+                { result := next.result, history := x.history ++ next.history }
+              | fail e => { result := fail e, history := x.history }
+              | div => { result := div, history := x.history } }.toBind.1
+      x f).history
+is not definitionally equal to the right-hand side
+  match fail e✝ with
+  | ok a => x.history ++ (f a).history
+  | x_1 => x.history
+
+case fail
+A B : Type
+x : Execution A
+f : A → Execution B
+e✝ : Error
+⊢ ({
+              map := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+              pure := fun {α} => ProverRwOrderedOracle.pure,
+              seq := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  f fun y =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+              seqLeft := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun a =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+              seqRight := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun x => y (),
+              bind := fun {α β} x f =>
+                match x.result with
+                | ok a =>
+                  have next := f a;
+                  { result := next.result, history := x.history ++ next.history }
+                | fail e => { result := fail e, history := x.history }
+                | div => { result := div, history := x.history } }.toBind.1
+        x f).history =
+    match fail e✝ with
+    | ok a => x.history ++ (f a).history
+    | x_1 => x.history
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwOrderedMonad.lean:17:21: error: Tactic `rfl` failed: The left-hand side
+  ({
+            map := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+            pure := fun {α} => ProverRwOrderedOracle.pure,
+            seq := fun {α β} f x =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                f fun y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+            seqLeft := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun a =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+            seqRight := fun {α β} x y =>
+              (fun {α β} x f =>
+                  match x.result with
+                  | ok a =>
+                    have next := f a;
+                    { result := next.result, history := x.history ++ next.history }
+                  | fail e => { result := fail e, history := x.history }
+                  | div => { result := div, history := x.history })
+                x fun x => y (),
+            bind := fun {α β} x f =>
+              match x.result with
+              | ok a =>
+                have next := f a;
+                { result := next.result, history := x.history ++ next.history }
+              | fail e => { result := fail e, history := x.history }
+              | div => { result := div, history := x.history } }.toBind.1
+      x f).history
+is not definitionally equal to the right-hand side
+  match div with
+  | ok a => x.history ++ (f a).history
+  | x_1 => x.history
+
+case div
+A B : Type
+x : Execution A
+f : A → Execution B
+⊢ ({
+              map := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+              pure := fun {α} => ProverRwOrderedOracle.pure,
+              seq := fun {α β} f x =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  f fun y =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+              seqLeft := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun a =>
+                  (fun {α β} x f =>
+                      match x.result with
+                      | ok a =>
+                        have next := f a;
+                        { result := next.result, history := x.history ++ next.history }
+                      | fail e => { result := fail e, history := x.history }
+                      | div => { result := div, history := x.history })
+                    (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+              seqRight := fun {α β} x y =>
+                (fun {α β} x f =>
+                    match x.result with
+                    | ok a =>
+                      have next := f a;
+                      { result := next.result, history := x.history ++ next.history }
+                    | fail e => { result := fail e, history := x.history }
+                    | div => { result := div, history := x.history })
+                  x fun x => y (),
+              bind := fun {α β} x f =>
+                match x.result with
+                | ok a =>
+                  have next := f a;
+                  { result := next.result, history := x.history ++ next.history }
+                | fail e => { result := fail e, history := x.history }
+                | div => { result := div, history := x.history } }.toBind.1
+        x f).history =
+    match div with
+    | ok a => x.history ++ (f a).history
+    | x_1 => x.history
+@[implicit_reducible] def R1Z.ProverRwOrderedOracle.instMonadExecution : Monad Execution :=
+{ map := fun {α β} f x => (fun {α β} => ProverRwOrderedOracle.bind) x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+  pure := fun {α} => ProverRwOrderedOracle.pure,
+  seq := fun {α β} f x =>
+    (fun {α β} => ProverRwOrderedOracle.bind) f fun y =>
+      (fun {α β} => ProverRwOrderedOracle.bind) (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+  seqLeft := fun {α β} x y =>
+    (fun {α β} => ProverRwOrderedOracle.bind) x fun a =>
+      (fun {α β} => ProverRwOrderedOracle.bind) (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+  seqRight := fun {α β} x y => (fun {α β} => ProverRwOrderedOracle.bind) x fun x => y (),
+  bind := fun {α β} => ProverRwOrderedOracle.bind }
+'R1Z.ProverRwOrderedMonad.result_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwOrderedMonad.history_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

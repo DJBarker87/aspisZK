@@ -1,0 +1,15 @@
+@[implicit_reducible] def R1Z.ProverRwOrderedOracle.instMonadExecution : Monad Execution :=
+{ map := fun {α β} f x => (fun {α β} => ProverRwOrderedOracle.bind) x ((fun {α} => ProverRwOrderedOracle.pure) ∘ f),
+  pure := fun {α} => ProverRwOrderedOracle.pure,
+  seq := fun {α β} f x =>
+    (fun {α β} => ProverRwOrderedOracle.bind) f fun y =>
+      (fun {α β} => ProverRwOrderedOracle.bind) (x ()) ((fun {α} => ProverRwOrderedOracle.pure) ∘ y),
+  seqLeft := fun {α β} x y =>
+    (fun {α β} => ProverRwOrderedOracle.bind) x fun a =>
+      (fun {α β} => ProverRwOrderedOracle.bind) (y ()) fun x => (fun {α} => ProverRwOrderedOracle.pure) a,
+  seqRight := fun {α β} x y => (fun {α β} => ProverRwOrderedOracle.bind) x fun x => y (),
+  bind := fun {α β} => ProverRwOrderedOracle.bind }
+'R1Z.ProverRwOrderedMonad.result_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwOrderedMonad.history_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

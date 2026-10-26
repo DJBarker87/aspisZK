@@ -1126,3 +1126,22 @@ The exact root privacy conjunct and headline are unchanged: premises removed0.
 Failed elaborations were changed/split; failed local cMax reducibility in12482
 was removed in12484, without enabling unsafe reducibility or changing limits.
 All accepted top theorems have standard axioms and immutable focused receipts.
+
+## Ordered explicit oracle instrumentation (12467–12495)
+
+The two actual public digest/binding frames and the seventeen explicit
+transcript Digest32 calls have ordered Execution histories. Erasure is proved
+against the retained source including failure/divergence; publication preserves
+the materialization history. The transcript bound is17 and the outer bound2.
+The literal query generator reifies hash calls and preserves other Result
+callbacks; the bounds generator proves the retained callback control rather
+than normalizing a concrete transcript. Both support --check.
+
+These histories cover explicit source Digest32 requests. They are not a proof
+of physical native ROM/TLS observation, callback extraction, or the joint E1/E2
+law. Native publication is retained as an unchanged Result continuation.
+No root assumption is removed by defining this instrumentation. Failed source
+elaborations were changed;12467 had a pre-launch fingerprint-path typo then
+one corrected launch, not a failed-proof retry.12485 had a local generator
+parse failure before any launch, fixed before its single compile. Infrastructure
+and caps are unchanged; full snapshots and standard axiom reports are retained.
