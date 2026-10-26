@@ -86,3 +86,33 @@ hashes and sizes. The workspace has no default `.lake/build/lib/lean` directory;
 only the explicit RPz object and trusted-library paths are selected. This is
 artifact identity/stability evidence, not independent source reproduction of
 the owner-approved trusted base.
+
+## Final audited subset
+
+All 600 allocated Lean attempts are consumed (597 pass, 3 fail); zero Kani.
+The 527 successful source modules have complete explicit audits covering
+19,970 distinct declarations. No declaration has any nonstandard type/body
+axiom dependency. The two source failures and the 108 unresolved source choices
+leave 3,612 selected modules blocked, including Rc7_Top. L187 is open.
+
+Every audited import closure includes the twelve nonstandard Init axioms listed
+in `RPz_HANDOFF.md`. Additionally, 239 contain all nine Aeneas axioms below;
+seven contain only the seven non-test ones; 281 contain no additional axioms:
+
+- `Aeneas.Command.Decompose.TestsRec.recAxOp` (test axiom)
+- `Aeneas.Std.core.panic.panic_info.PanicInfo`
+- `Aeneas.Std.core.pin.Pin`
+- `Aeneas.Std.core.pin.helper.PinHelper`
+- `Aeneas.Std.core.sync.atomic.AtomicBool`
+- `Aeneas.Std.core.sync.atomic.AtomicU32`
+- `Aeneas.Std.get_target`
+- `Aeneas.Std.get_target.spec`
+- `Aeneas.StepArraySpec.Tests.const_array_spec._native.native_decide.ax_1_1` (test axiom)
+
+These are import-presence findings in the explicitly trusted library base;
+none is a dependency of an audited repository declaration. The module names,
+exact sets and axiom owners are indexed in `RPz_axiom-audit.json`. The top's
+proof-term reachability and reached FunsExternal-to-Rust mapping remain unknown.
+Full before/after statement, ledger delta, non-vacuity limitation, resource
+summary and next concrete deliverable are in `RPz_HANDOFF.md` and
+`RPz_before-after.md`. Do not launch more attempts under the exhausted budget.

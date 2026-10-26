@@ -1,7 +1,7 @@
 # L187 coherent repository replay handoff
 
 L187 remains open; target not yet established. Branch
-`codex/cx-replay-dry2-20261026`. This handoff is finalized after the receipts.
+`codex/cx-replay-dry2-20261026`. Final receipts and consistency checks are complete.
 The only edited files are RPz job evidence under this directory. No push.
 
 ## Claim and scope
@@ -67,3 +67,71 @@ Inherited historical ELF pins, not newly reproduced: default
 f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+## Final result and budget
+
+Budget exhausted: **600/600 Lean attempts, 0/0 Kani**. Attempts RPz_001 through
+RPz_600 are contiguous and have unique target module names. RPy's 361 historical
+Init compilations remain excluded under the explicit owner scope correction.
+
+- Source replay: 529 attempts, 527 passed, 2 failed; 3,612 selected repository
+  modules blocked. Last source module: RPz_529, Hist_Metadata.
+- Explicit audit: 71 attempts, 70 passed, 1 failed. RPz_530 failed before any
+  query because the counter lacked an explicit Nat type. Its original source
+  and diagnostics are retained. Corrected, uniquely named RPz_Audit531 through
+  RPz_Audit600 cover all 527 passed source modules with no duplicate declaration
+  queries: **19,970 declarations and 19,970 explicit #print axioms results**.
+- Overall: 597 passed / 3 failed. Compiler wall sum 1666.0221998049528 s;
+  maximum peak RSS 3,873,736 KiB; swap 0. No timeout or memory kill; no increased
+  cap; no unchanged compiler rerun. Every source attempt hash matches its
+  input manifest. Final process inspection found no live job-specific compiler
+  or runner. Reservation and scope receipts are retained per attempt.
+
+`RPz_summary.json` indexes all target/command/source/dependency/resource receipts.
+`RPz_state.json` is the source phase only (529 attempts), not the total budget.
+`RPz_final-verification.json` records the final coverage/consistency checks.
+The post-source-replay object inventory contains 542 fresh object/sidecar files;
+all 22,637 trusted-base artifacts were present and hash-identical to their pins.
+
+## Requested axiom findings, with exact scope
+
+(a) `RPz_axiom-audit.json` names **all 527 audited repository modules** and each
+module's nonstandard import-closure axiom names, declaration dependency names,
+and declaration count. No audited import header is unknown. All 527 import
+closures include these 12 nonstandard Init axioms:
+`Lean.ofReduceBool`, `Lean.ofReduceNat`, `Lean.trustCompiler`, `Quot.lcInv`,
+`isScalarObj`, `lcAny`, `lcCast`, `lcErased`, `lcProof`, `lcUnreachable`, `lcVoid`,
+`sorryAx`. Of these modules, 281 have exactly that set; 239 also import nine
+Aeneas axioms; seven also import the seven non-test Aeneas axioms. The exact
+per-module lists and axiom owners are in the JSON, with stdout evidence.
+This is the complete result for the successfully replayed subset, **not** for
+all 4,141 selected source modules or any unresolved extension of the graph.
+
+Every one of the 19,970 audited repository declarations has only a subset of
+`propext`, `Classical.choice`, `Quot.sound` as its reported dependencies.
+None depends on a nonstandard axiom under Lean's type-and-body traversal.
+The presence of an axiom in an import closure is not proof-term use.
+
+(b) Nonstandard axiom reachability from **Rc7_Top.deployed's fresh proof term
+remains unknown**: that module was not reached. No historical cached top audit
+is substituted for the missing coherent replay.
+
+(c) **The set of FunsExternal axioms reached by Rc7_Top.deployed, and its Rust
+external mapping, remains unknown**, not verified empty. No such dependency
+occurs in the audited repository declarations, but the blocked top cannot
+inherit that partial conclusion.
+
+## Next concrete deliverable
+
+Do not launch another Lean attempt under this exhausted allocation. The next
+scoped plan must resolve the 108 source selections, including the nine
+hash-matched immutable candidate recoveries; explicitly reconcile the amended
+library selection for ImportUnionNamedDiscriminant; and isolate the two
+R1NaturalProjection unsolved goals. Extend the committed-source graph and
+continue the dependency-order replay using these retained objects. Do not
+silently import historical repository objects or change theorem statements to
+skip blockers. Then compile Rc7_Top, query its actual fresh proof term, complete
+the remaining module audits and map every reached generated external to Rust.
+Only that can close the outstanding coherent-replay and top-reachability rows.
+No premise-removal, fresh joint non-vacuity, source-to-ELF reproduction or
+100-bit release conclusion is claimed by this partial run.
