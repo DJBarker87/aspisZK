@@ -68,7 +68,7 @@ no characteristic premise because the sums do not overflow. -/
 theorem field_value {K : Type} [Field K] (state : State) (c : Fin 4) :
     (((target state).val[c.val]!).val : K) =
       liftN state c.val + liftN state (c.val+4) + liftN state (c.val+8) + liftN state (c.val+12) := by
-  rw [tabulate_get _ _ _ c.isLt,word_value]
+  rw [target,tabulate_get _ _ _ c.isLt,word_value]
   simp only [Nat.cast_add,liftN,liftU]
 
 #print axioms word_value

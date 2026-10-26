@@ -30,13 +30,17 @@ theorem owned (state : Array U32 16#usize) :
     have G1 := hG 1 ⟨i.val%4,by omega⟩
     have G2 := hG 2 ⟨i.val%4,by omega⟩
     have G3 := hG 3 ⟨i.val%4,by omega⟩
+    change liftU (K := K) grouped.val[4*0+i.val%4]! = PM state ⟨0,by decide⟩ ⟨i.val%4,by omega⟩ at G0
+    change liftU (K := K) grouped.val[4*1+i.val%4]! = PM state ⟨1,by decide⟩ ⟨i.val%4,by omega⟩ at G1
+    change liftU (K := K) grouped.val[4*2+i.val%4]! = PM state ⟨2,by decide⟩ ⟨i.val%4,by omega⟩ at G2
+    change liftU (K := K) grouped.val[4*3+i.val%4]! = PM state ⟨3,by decide⟩ ⟨i.val%4,by omega⟩ at G3
     rw [Nat.div_add_mod] at G
     rw [show 4*0+i.val%4 = i.val%4 by omega] at G0
     rw [show 4*1+i.val%4 = i.val%4+4 by omega] at G1
     rw [show 4*2+i.val%4 = i.val%4+8 by omega] at G2
     rw [show 4*3+i.val%4 = i.val%4+12 by omega] at G3
-    rw [←G,←G0,←G1,←G2,←G3]
     unfold liftN
+    rw [←G,←G0,←G1,←G2,←G3]
     ring
 
 /-- The SAME source dictionary consumed by FrozenInput's actual forest

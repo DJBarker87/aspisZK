@@ -220,3 +220,7 @@ SourceScalar prepares exact actual-forest reducer/multiplication and
 canonical add/sub Result transports, separately from the owned callback's
 namespace. These additional source leaves are drafts, with no added trust
 item, source-success hypothesis, or claimed compiler/trace closure.
+
+### Complete owned external layer (35042–35057)
+SourceScalar, ExternalBlocksCopy, ExternalSums, ExternalLanes, and ExternalRefinement now compile independently. ExternalRefinement.owned proves unconditional totality, canonical U32 outputs and the complete field-model equation for every raw 16-word input; dictionary transports this to the SAME owned dictionary consumed by FrozenInput. Only standard axioms are printed (propext, Classical.choice, Quot.sound). Accepted final composition 35057: exit 0, 1.96 s, peak RSS 4,215,644,160 bytes, swap 0; source revision and exact source hash are in its receipt. Debug failures 35043/45–48/50/53/55–56 remain recorded and rejected.
+This closes the owned external-layer arithmetic subgoal, not the equality of the deployed dictionaries/input family or compiler installation. The exact endpoint P list and three T fields are unchanged; deployed P-and-T non-vacuity remains open for both fixtures. Headline preflight finds 120 missing cached dependency objects, including explicitly prohibited dedicated-job targets; no package-wide replay or forbidden target will be launched.

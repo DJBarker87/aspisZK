@@ -23,7 +23,7 @@ theorem forest_mul (a b : U32) :
   let product := U64.wrapping_mul (UScalar.cast .U64 a) (UScalar.cast .U64 b)
   refine ⟨PV_Src_ScalarReduce.value product,?_,PV_Src_ScalarReduce.canonical product,?_⟩
   · rw [BuilderForestAdmissionPort.aspis_core.field.M31.mul]
-    simp only [lift,bind_tc_ok,forest_reduce_eq]
+    simp only [lift,bind_tc_ok,forest_reduce_eq,product]
   · change ((PV_Src_ScalarReduce.value (U64.wrapping_mul (UScalar.cast .U64 a)
       (UScalar.cast .U64 b))).val : K) = _
     rw [PV_Src_ScalarReduce.modulo,cast_mod,mul2_val]

@@ -29,26 +29,53 @@ theorem loop (original state : State) (block : Usize) (hb : block.val ≤ 4)
         rw [umul _ _ (by simp;omega),umul _ _ (by simp;omega)]
         simp only [UScalar.ofNatCore_val_eq]
         omega
-      simp only [lift,bind_tc_ok,mulcomm]
+      rw [mulcomm]
+      simp only [lift,bind_tc_ok]
       let i0 := Usize.wrapping_mul 4#usize block
       let i1 := Usize.wrapping_add i0 1#usize
       let i2 := Usize.wrapping_add i0 2#usize
       let i3 := Usize.wrapping_add i0 3#usize
-      have h0 : i0.val = 4*block.val := by rw [i0,umul _ _ (by simp;omega)];rfl
-      have h1 : i1.val = 4*block.val+1 := by rw [i1,uadd _ _ (by rw [h0];simp;omega),h0];rfl
-      have h2 : i2.val = 4*block.val+2 := by rw [i2,uadd _ _ (by rw [h0];simp;omega),h0];rfl
-      have h3 : i3.val = 4*block.val+3 := by rw [i3,uadd _ _ (by rw [h0];simp;omega),h0];rfl
+      have h0 : i0.val = 4*block.val := by
+        dsimp only [i0]
+        rw [umul _ _ (by simp;omega)]
+        rfl
+      have h1 : i1.val = 4*block.val+1 := by
+        dsimp only [i1]
+        rw [uadd _ _ (by rw [h0];simp;omega),h0]
+        rfl
+      have h2 : i2.val = 4*block.val+2 := by
+        dsimp only [i2]
+        rw [uadd _ _ (by rw [h0];simp;omega),h0]
+        rfl
+      have h3 : i3.val = 4*block.val+3 := by
+        dsimp only [i3]
+        rw [uadd _ _ (by rw [h0];simp;omega),h0]
+        rfl
       have b0 : i0.val < (16#usize : Usize).val := by rw [h0];simp;omega
       have b1 : i1.val < (16#usize : Usize).val := by rw [h1];simp;omega
       have b2 : i2.val < (16#usize : Usize).val := by rw [h2];simp;omega
       have b3 : i3.val < (16#usize : Usize).val := by rw [h3];simp;omega
-      have s0 := suffix i0.val (by simpa using b0) (by rw [h0];omega)
+      have s0 := suffix i0.val (by simpa using b0) (by omega)
       have s1 := suffix i1.val (by simpa using b1) (by rw [h1];omega)
       have s2 := suffix i2.val (by simpa using b2) (by rw [h2];omega)
       have s3 := suffix i3.val (by simpa using b3) (by rw [h3];omega)
-      simp only [index_ok state i0 b0,index_ok state i1 b1,index_ok state i2 b2,index_ok state i3 b3,
-        index_ok original i0 b0,index_ok original i1 b1,index_ok original i2 b2,index_ok original i3 b3,
-        lift,bind_tc_ok,s0,s1,s2,s3]
+      rw [index_ok state i0 b0]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok state i1 b1]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok state i2 b2]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok state i3 b3]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok original i0 b0]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok original i1 b1]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok original i2 b2]
+      simp only [lift,bind_tc_ok]
+      rw [index_ok original i3 b3]
+      simp only [lift,bind_tc_ok]
+      rw [s0,s1,s2,s3]
       rw [PV_Src_ExternalMat4Copy.equals_copy]
       apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro m hm
@@ -57,8 +84,15 @@ theorem loop (original state : State) (block : Usize) (hb : block.val ≤ 4)
       have u2 : ∀ (v : State) x, Array.update v i2 x = ok (v.set i2 x) := fun v x => update_ok v i2 x b2
       have u3 : ∀ (v : State) x, Array.update v i3 x = ok (v.set i3 x) := fun v x => update_ok v i3 x b3
       simp only [index_ok m 0#usize (by decide),index_ok m 1#usize (by decide),
-        index_ok m 2#usize (by decide),index_ok m 3#usize (by decide),
-        lift,bind_tc_ok,u0,u1,u2,u3]
+        index_ok m 2#usize (by decide),index_ok m 3#usize (by decide),bind_tc_ok]
+      rw [u0]
+      simp only [bind_tc_ok]
+      rw [u1]
+      simp only [bind_tc_ok]
+      rw [u2]
+      simp only [bind_tc_ok]
+      rw [u3]
+      simp only [bind_tc_ok]
       have hn := next_val block (by omega)
       apply ih (4-(Usize.wrapping_add block 1#usize).val) (by omega)
         _ (Usize.wrapping_add block 1#usize) (by omega)

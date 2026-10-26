@@ -48,7 +48,7 @@ theorem loop (original current : State) (lane : Usize) (hl : lane.val ≤ 16)
         _ (Usize.wrapping_add lane 1#usize) (by omega)
       · simpa only [hn] using prefix_step current (target original) lane (by simpa using hit) prior
       · intro j hj hafter
-        rw [set_get _ _ _ _ (by simpa using hit),if_neg (by rw [hn] at hafter;omega)]
+        rw [BuilderRecordsArray.set_get _ _ _ _ (by simpa using hit),if_neg (by rw [hn] at hafter;omega)]
         exact suffix j hj (by rw [hn] at hafter;omega)
       · rfl
     · rw [if_neg (by simpa [UScalar.lt_equiv] using hit)]
@@ -62,7 +62,7 @@ theorem entry (original : State) :
 
 theorem canonical (original : State) (j : Nat) (hj : j < 16) :
     ((target original).val[j]!).val < 2147483647 := by
-  rw [tabulate_get _ _ _ (by simpa using hj)]
+  rw [target,tabulate_get _ _ _ (by simpa using hj)]
   exact PV_Src_ScalarReduce.canonical _
 
 /-- The U64 addition cannot wrap: each term is one U32 plus four U32s. -/
@@ -89,7 +89,7 @@ theorem field_value {K : Type} [Field K] [CharP K 2147483647]
     (PV_RunJoin_ExternalSums.target original).val[j%4]!
     original.val[j]!.val ((PV_RunJoin_ExternalSums.target original).val[j%4]!).val
     (c64 _) rfl bound
-  rw [tabulate_get _ _ _ (by simpa using hj)]
+  rw [target,tabulate_get _ _ _ (by simpa using hj)]
   change ((PV_Src_ScalarReduce.value _).val : K) = _
   rw [PV_Src_ScalarReduce.modulo,cast_mod,added]
   simp only [Nat.cast_add,liftN,liftU]
