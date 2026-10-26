@@ -1,3 +1,4 @@
+import CPH_Program
 import CPH_Game
 import CPR_AdmissionGap
 set_option autoImplicit false
@@ -8,7 +9,7 @@ open CPG_Projection CPP_BankState Hist_RuntimeEntry Hist_Store
 
 def byte (n : Nat) : U8 := U8.ofNat (n % 256) (by change n % 256 ≤ 255; have := Nat.mod_lt n (by decide : 0 < 256); omega)
 def key (n : Nat) : S2W_ExtractionBoundary.Program := Hist_Nonvacuity.key (byte n)
-def id : S2W_ExtractionBoundary.Program := Hist_Nonvacuity.key 255#u8
+def id : S2W_ExtractionBoundary.Program := CPH_Program.verifier
 
 def zeros (n : Nat) (bound : n < 65536) : Slice U8 :=
   ⟨List.replicate n (0#u8),by simp only [List.length_replicate]; scalar_tac⟩
@@ -46,15 +47,11 @@ def observations : Observations Bool Unit where
   intervening := fun _ _ => []
   parentReply := fun _ => .ok (.Ok ())
   copied := fun _ => saved
-  actions := fun _ => suffix
-  parentTentative := fun t =>
+  actions := fun t => if t then [] else suffix
+  parentTentative := fun t => if t then cached final else final
+  physicalEvents := fun t => if t then [] else
     (CPP_BankHistory.run n1 n2 copy allocator id
-      (CPR_SourceBank.afterCopy (cached (if t then final else initial))
-        ((if t then layout2 else layout1).handles 2).1 saved) suffix).1
-  physicalEvents := fun t =>
-    (CPP_BankHistory.run n1 n2 copy allocator id
-      (CPR_SourceBank.afterCopy (cached (if t then final else initial))
-        ((if t then layout2 else layout1).handles 2).1 saved) suffix).2
+      (CPR_SourceBank.afterCopy (cached initial) 2 saved) suffix).2
 
 def e1 : Entry := entry observations false
 def e2 : Entry := entry observations true

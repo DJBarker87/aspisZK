@@ -47,7 +47,7 @@ theorem derive {Tx A F C : Type} (p : Observations Tx A) (t u : Tx)
     (fun id accounts data => (extraction.stage1 id accounts data).symm) copy std allocator id
     (CPR_SourceBank.afterCopy (cached (p.bank t)) ((p.layout t).handles 2).1 saved)
     actions ((p.layout t).handles 2).1 owner marker positive
-  rw [CPG_RuntimeTrace.result game.recorded.2.2] at frame
+  rw [CPG_RuntimeTrace.result game.recorded.1.2.2] at frame
   exact ⟨owner,marker,positive,frame⟩
 
 #print axioms derive

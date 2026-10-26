@@ -1,3 +1,5 @@
+import CPH_Rc2Source
+import CPH_Close
 import CPH_Game
 import CPH_Install
 import CPH_Result
@@ -95,48 +97,14 @@ theorem accepted {W A F CoreError Tx : Type}
       reservation program data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (CPH_Install.configuration input reservation)) prior (CPH_Install.configuration input reservation) hashv native1 native2 copy allocator
       (p.physicalEvents t) := by
-  let c := CPH_Install.select input reservation
-  have oldGame := CPH_Game.recordedInstance game
-  obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,caller⟩ :=
-    T2R_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
-    (CPH_Install.configuration input reservation).adapter (CPH_Install.configuration input reservation).currentBase
-    (CPH_Install.configuration input reservation).reserved (CPH_Install.configuration input reservation).query
-    (CPH_Install.configuration input reservation).geometry (CPH_Install.configuration input reservation).stageBase
-    (CPH_Install.configuration input reservation).finish (CPH_Install.configuration input reservation).boundaries
-    (CPH_Install.configuration input reservation).std native1 native2 prepareOwner primitiveOwner hashv extraction
-    prior sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2
-    saved post1 post2 accepted1 accepted2 Par_Parameters.deployed root length
-
-  have ⟨cuts,writer,reader,multiproof,scanY,checkY,scanned,tx1,batches,header2,header1,rest⟩ := base
-  have sourceFacts := T2R_Parser.on_run _ _ _ _ _ _ _ _ _ _ _ _ _ run header1.2.2.1 scanned.2.2
-  have acceptance := T2R_Nonvacuity.same_cuts L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
-    c native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
-    program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
-    f s cuts writer reader
-  let version := CPG_History.on_cuts (game := oldGame)
-    (c := DrvC_FirstConstants.configuration c) (keyLaw := keyLaw) (extraction := extraction)
-    (std := std) (notSystem := programNotSystem) (accepted1 := accepted1) (accepted2 := accepted2)
-    (RuntimePersistence := RuntimePersistence) (f := f) (s := s) (cuts := cuts)
-  have writerKey : version.key = (e1.handles 2).1 := by
-    change ((p.layout t).handles 2).1 = _
-    rw [game.consecutive.2.1]
-    rfl
-  have readerKey : version.key = (e2.handles 6).1 := by
-    change ((p.layout t).handles 2).1 = _
-    rw [game.consecutive.2.2]
-    exact game.checkpoint.1
-  have events : version.events = p.physicalEvents t := by
-    change (CPP_BankHistory.run native1 native2 copy allocator program
-      (CPR_SourceBank.afterCopy (CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved) actions).2 = _
-    exact congrArg Prod.snd (CPG_RuntimeTrace.result game.recorded.2.2)
-  have strong := Rc2_Base.strengthen L e1 e2 w1 w2 _ _ _ _ _ _ _ _ reservation program
-    data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run base
-  have initial := NP6_Constructors.on_run _ _ _ _ _ _ _ _ _ _ _ run
-  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,strong,initial,publicFacts,sourceFacts,
-    version,writerKey,readerKey,events,S2X.checkpoint_persistence _ _ version,?_,?_⟩
-  · obtain ⟨i,pub,proof,tag,size,fit,yes⟩ := acceptance
-    exact ⟨i,pub,proof,tag,size,fit,fun p2prime => yes version p2prime⟩
-  · exact caller version
+  obtain ⟨driverEq,sdkEq,original,copied,events,protection⟩ := CPH_Rc2Source.source
+    L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 (CPP_Install.configuration input) reservation
+    native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot
+    state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
+  exact CPH_Close.from_rc2 L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+    input reservation native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
+    program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
+    prior p t u actions game system programNotSystem keyLaw RuntimePersistence original
 
 #print axioms accepted
 end AspisR1.CPH_Pair

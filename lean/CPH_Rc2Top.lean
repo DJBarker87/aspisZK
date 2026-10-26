@@ -1,3 +1,4 @@
+import CPH_Trace
 import CPH_Program
 import CPH_Close
 import CPH_Protection
@@ -128,13 +129,14 @@ theorem deployed {W A F CoreError Tx : Type}
       post1.counter = e1.heap.counter ∧
       (∀ cell, cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell)) ∧
     Rc2_Events.Facts (CPH_Install.configuration c reservation) hashv native1 native2 copy allocator CPH_Program.verifier H saved ∧
-    CPH_Protection.Facts p t saved CPH_Program.verifier := by
+    CPH_Protection.Facts p t saved CPH_Program.verifier ∧
+    CPH_Trace.Facts p t u saved native1 native2 copy allocator CPH_Program.verifier := by
   obtain ⟨driverEq,sdkEq,headline,original,copied,events,oldProtection⟩ := Rc2_Top.deployed
     L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 (CPP_Install.configuration c) reservation
     native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall CPH_Program.verifier data1 data2 slot
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
     D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound choiceBound project
-  refine ⟨driverEq,sdkEq,headline,?_,copied,events,?_⟩
+  refine ⟨driverEq,sdkEq,headline,?_,copied,events,?_,?_⟩
   · exact CPH_Close.from_rc2 L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       c reservation native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
       CPH_Program.verifier data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
@@ -143,6 +145,7 @@ theorem deployed {W A F CoreError Tx : Type}
   · exact CPH_Protection.derive p t u e1 e2 saved actions (CPH_Install.configuration c reservation)
       (CPH_Install.key c reservation) native1 native2 hashv extraction copy std allocator CPH_Program.verifier game
       data1 state1 final1 post1 accepted1
+  · exact CPH_Trace.derive game
 
 #print axioms deployed
 end AspisR1.CPH_Rc2Top

@@ -25,10 +25,12 @@ structure DeployedPairExecution {Tx A : Type} (p : Observations Tx A)
   /-- (c) "TX1's final parent status is success;" -/
   parent : success p t = true
   /-- (d) "the recorded checkpoint actions are the physical runtime actions of these two transactions." -/
-  recorded : p.copied t = saved ∧ p.actions t = sourceActions ∧
+  recorded : (p.copied t = saved ∧ p.actions t = sourceActions ∧
     CPG_RuntimeTrace.Executes n1 n2 copy allocator id
       (CPR_SourceBank.afterCopy (cached (p.bank t)) ((p.layout t).handles 2).1 saved)
-      sourceActions (p.parentTentative t) (p.physicalEvents t)
+      sourceActions (p.parentTentative t) (p.physicalEvents t)) ∧
+    CPG_RuntimeTrace.Executes n1 n2 copy allocator id
+      (cached (p.bank u)) (p.actions u) (p.parentTentative u) (p.physicalEvents u)
 
 /-- Field (d) is the runtime-to-CPP instance. No fifth game clause is required. -/
 def recordedInstance {Tx A : Type} {p : Observations Tx A} {t u : Tx}
@@ -38,7 +40,7 @@ def recordedInstance {Tx A : Type} {p : Observations Tx A} {t u : Tx}
     {allocator : Allocator A} {id : S2W_ExtractionBoundary.Program}
     (game : DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id) :
     CPG_Game.DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id :=
-  ⟨game.consecutive,game.checkpoint,game.parent,game.recorded⟩
+  ⟨game.consecutive,game.checkpoint,game.parent,game.recorded.1⟩
 
 #print axioms recordedInstance
 

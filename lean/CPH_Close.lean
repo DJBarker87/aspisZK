@@ -124,7 +124,7 @@ theorem from_rc2 {W A F CoreError Tx : Type}
   have events : version.events = p.physicalEvents t := by
     change (CPP_BankHistory.run native1 native2 copy allocator program
       (CPR_SourceBank.afterCopy (CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved) actions).2 = _
-    exact congrArg Prod.snd (CPG_RuntimeTrace.result game.recorded.2.2)
+    exact congrArg Prod.snd (CPG_RuntimeTrace.result game.recorded.1.2.2)
   refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,initial,publicFacts,sourceFacts,
     version,writerKey,readerKey,events,S2X.checkpoint_persistence _ _ version,?_,?_⟩
   · obtain ⟨i,pub,proof,tag,size,fit,yes⟩ := acceptance

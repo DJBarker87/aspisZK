@@ -6,9 +6,10 @@ open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
 open CPG_Projection CPP_BankState Hist_RuntimeEntry CPH_FixtureData
 
 theorem game : CPH_Game.DeployedPairExecution observations false true e1 e2 saved suffix n1 n2 copy allocator id := by
-  refine ⟨⟨⟨rfl,rfl⟩,rfl,rfl⟩,⟨rfl,rfl,List.not_mem_nil⟩,rfl,⟨rfl,rfl,?_⟩⟩
-  exact CPG_RuntimeTrace.executes n1 n2 copy allocator id
-    (CPR_SourceBank.afterCopy (cached initial) 2 saved) suffix
+  refine ⟨⟨⟨rfl,rfl⟩,rfl,rfl⟩,⟨rfl,rfl,List.not_mem_nil⟩,rfl,⟨⟨rfl,rfl,?_⟩,?_⟩⟩
+  · exact CPG_RuntimeTrace.executes n1 n2 copy allocator id
+      (CPR_SourceBank.afterCopy (cached initial) 2 saved) suffix
+  · exact CPG_RuntimeTrace.Executes.nil (cached final)
 
 theorem persistence (system : S2W_ExtractionBoundary.Program) :
     CPR_DataPersistence.TwoTransactionLaw
