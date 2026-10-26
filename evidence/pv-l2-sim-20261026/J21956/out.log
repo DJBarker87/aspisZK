@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5SparseWidth.lean:30:4: error: unsolved goals
+case neg
+point : Std.Array field.QM31 10#usize
+fuel : ℕ
+ih : ∀ (left : U8), ↑left ≤ fuel → (width fuel point left).value = sparse_scan50.width point left
+left : U8
+enough : ↑left ≤ fuel + 1
+hz : ¬left = 0#u8
+hpos : 0 < ↑left
+hdec : ↑(left.wrapping_sub 1#u8) ≤ fuel
+⊢ (do
+      let x ← point.index_usize (core.convert.num.FromUsizeU8.from (left.wrapping_sub 1#u8))
+      let x ← sparse_scan50.boolean x
+      (if x = true then width fuel point (left.wrapping_sub 1#u8) else PV_L2_Record.pure left).value) =
+    do
+    let value ← point.index_usize (core.convert.num.FromUsizeU8.from (left.wrapping_sub 1#u8))
+    let b ← sparse_scan50.boolean value
+    if b = true then sparse_scan50.width point (left.wrapping_sub 1#u8) else ok left
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5SparseWidth.lean:36:42: warning: This simp argument is unused:
+  PV_L2_Record.pure_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵2̵_̵R̵e̵c̵o̵r̵d̵C̵o̵m̵p̵a̵c̵t̵.̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵v̵a̵l̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵2̵_̵F̵5̵S̵p̵a̵r̵s̵e̵P̵r̵e̵d̵.̵b̵o̵o̵l̵e̵a̵n̵_̵e̵r̵a̵s̵e̵s̵,̵P̵V̵_̵L̵2̵_̵R̵e̵c̵o̵r̵d̵.̵p̵u̵r̵e̵_̵v̵a̵l̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲P̲V̲_̲L̲2̲_̲R̲e̲c̲o̲r̲d̲C̲o̲m̲p̲a̲c̲t̲.̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲v̲a̲l̲u̲e̲,̲ ̲P̲V̲_̲L̲2̲_̲F̲5̲S̲p̲a̲r̲s̲e̲P̲r̲e̲d̲.̲b̲o̲o̲l̲e̲a̲n̲_̲e̲r̲a̲s̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ih _ hdec]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F5SparseWidth.lean:37:8: warning: This simp argument is unused:
+  ih _ hdec
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵2̵_̵R̵e̵c̵o̵r̵d̵C̵o̵m̵p̵a̵c̵t̵.̵b̵i̵n̵d̵_̵v̵a̵l̵u̵e̵,̵o̵p̵e̵r̵a̵t̵i̵o̵n̵_̵v̵a̵l̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵L̵2̵_̵F̵5̵S̵p̵a̵r̵s̵e̵P̵r̵e̵d̵.̵b̵o̵o̵l̵e̵a̵n̵_̵e̵r̵a̵s̵e̵s̵,̵P̵V̵_̵L̵2̵_̵R̵e̵c̵o̵r̵d̵.̵p̵u̵r̵e̵_̵v̵a̵l̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵h̵ ̵_̵ ̵h̵d̵e̵c̵]̵[̲P̲V̲_̲L̲2̲_̲R̲e̲c̲o̲r̲d̲C̲o̲m̲p̲a̲c̲t̲.̲b̲i̲n̲d̲_̲v̲a̲l̲u̲e̲,̲ ̲o̲p̲e̲r̲a̲t̲i̲o̲n̲_̲v̲a̲l̲u̲e̲,̲ ̲P̲V̲_̲L̲2̲_̲F̲5̲S̲p̲a̲r̲s̲e̲P̲r̲e̲d̲.̲b̲o̲o̲l̲e̲a̲n̲_̲e̲r̲a̲s̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲2̲_̲R̲e̲c̲o̲r̲d̲.̲p̲u̲r̲e̲_̲v̲a̲l̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_L2_F5SparseWidth.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F5SparseWidth.source_width' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

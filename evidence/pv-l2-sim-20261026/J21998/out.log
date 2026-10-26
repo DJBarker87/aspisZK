@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:19:105: error: unsolved goals
+case case5.ok
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+n : ℕ
+answers : Fin n → OracleAnswer
+domain : Slice U8
+seed : Bytes32
+L r : ℕ
+state : State
+answer : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next (blockHash answers) domain state
+v✝ : U32 × prover_commit_reference.State
+impossible : ∀ (word : U32) (after : prover_commit_reference.State), ¬v✝ = (word, after)
+hn : prover_commit_reference.next (blockHash answers) domain state = ok v✝
+⊢ (if ↑v✝.1 &&& 2147483647 < ↑aspis_core.field.P then
+      (Option.map (fun x => (fieldValue (v✝.1 &&& 2147483647#u32), 16 - r) :: x)
+          (PV_L2_F3FullSource.produce (blockHash answers) domain L 16 (reseed seed v✝.2)).1,
+        { before := reseed seed state, answer := ok (v✝.1, reseed seed v✝.2) } ::
+          (PV_L2_F3FullSource.produce (blockHash answers) domain L 16 (reseed seed v✝.2)).2)
+    else
+      ((PV_L2_F3FullSource.produce (blockHash answers) domain (L + 1) r (reseed seed v✝.2)).1,
+        { before := reseed seed state, answer := ok (v✝.1, reseed seed v✝.2) } ::
+          (PV_L2_F3FullSource.produce (blockHash answers) domain (L + 1) r (reseed seed v✝.2)).2)) =
+    (none, [{ before := reseed seed state, answer := ok (v✝.1, reseed seed v✝.2) }])
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:29:25: warning: This simp argument is unused:
+  mapAfter
+
+Hint: Omit it from the simp argument list.
+  simp_all +zetaDelta [m̵a̵p̵A̵f̵t̵e̵r̵,̵PV_L2_F3SeedFrames.read]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3SeedPrefix.lean:29:34: warning: This simp argument is unused:
+  PV_L2_F3SeedFrames.read
+
+Hint: Omit it from the simp argument list.
+  simp_all +zetaDelta [mapAfter,̵P̵V̵_̵L̵2̵_̵F̵3̵S̵e̵e̵d̵F̵r̵a̵m̵e̵s̵.̵r̵e̵a̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_L2_F3SeedPrefix.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

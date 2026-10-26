@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6IdentityRow.lean:9:27: error: Application type mismatch: The argument
+  recorded c co i w
+has type
+  Recorded Bool
+but is expected to have type
+  Bool → Usize → Recorded (Bool × Usize)
+in the application
+  PV_L2_F6FlagLoop.loop 10 (recorded c co i w)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6IdentityRow.lean:14:2: error: Tactic `apply` failed: could not unify the conclusion of `PV_L2_F6FlagLoop.erases 10
+  (PV_L2_F6IdentityRowStep.recorded c co i w) w (id_row_ok_loop c co i w)`
+  (PV_L2_F6FlagLoop.loop 10 (PV_L2_F6IdentityRowStep.recorded c co i w) w ?fuel ?flag ?index).value =
+    id_row_ok_loop c co i w ?flag ?index
+with the goal
+  (recorded c co i w).value = id_row_ok c co i w
+
+Note: The full type of `PV_L2_F6FlagLoop.erases 10 (PV_L2_F6IdentityRowStep.recorded c co i w) w
+  (id_row_ok_loop c co i w)` is
+  (∀ (flag : Bool) (index : Usize),
+      id_row_ok_loop c co i w flag index =
+        if index < w then do
+          let __x ← (PV_L2_F6IdentityRowStep.recorded c co i w flag index).value
+          match __x with
+            | (flag1, index1) => id_row_ok_loop c co i w flag1 index1
+        else ok flag) →
+    (∀ (flag : Bool) (index : Usize) (after : Bool × Usize),
+        (PV_L2_F6IdentityRowStep.recorded c co i w flag index).value = ok after → ↑after.2 = ↑index + 1) →
+      ∀ (fuel : ℕ) (flag : Bool) (index : Usize),
+        ↑w ≤ ↑index + fuel →
+          (PV_L2_F6FlagLoop.loop 10 (PV_L2_F6IdentityRowStep.recorded c co i w) w fuel flag index).value =
+            id_row_ok_loop c co i w flag index
+
+c : Slice U32
+co i w : Usize
+⊢ (recorded c co i w).value = id_row_ok c co i w
+'R1Z.PV_L2_F6IdentityRow.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
