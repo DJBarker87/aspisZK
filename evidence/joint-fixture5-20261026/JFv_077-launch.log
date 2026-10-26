@@ -1,0 +1,44 @@
+{"attempt": "JFv_077", "exit_status": 1, "wall_seconds": 4.187219056999311, "peak_rss_kib": "5605788", "swaps": "0", "print_axioms": ["'AspisR1.JFv_Begin.pair' does not depend on any axioms", "'AspisR1.JFv_Begin.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_Begin.lean:59:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  r1_wire.SemanticTranscript.semantic_validated D t0 r0
+in the target expression
+  ∃ challenges after,
+    (do
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok r0)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue vr => do
+              let (r1, transcript1) ← r1_wire.SemanticTranscript.semantic_validated D t0 vr
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let r2 ← pre.validated_record 1#u8
+...
+sTryTraitFromResidualResultInfallible.from_residual
+                                    r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                              ok (r5, transcript2)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r4 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                          ok (r4, transcript2)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r3 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                      ok (r3, transcript1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        r1_wire.Challenges (core.convert.FromSame r1_wire.Error) residual
+                  ok (r2, transcript1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual r1_wire.Challenges
+                    (core.convert.FromSame r1_wire.Error) residual
+              ok (r1, t0)) =
+        ok (core.result.Result.Ok challenges, after) ∧
+      ↑after.next_row = 15
+'AspisR1.JFv_Begin.pair' does not depend on any axioms
+'AspisR1.JFv_Begin.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb469bb050bb648ebad74d629932f6035.scope; invocation ID: 81a7b9ba386d46d1a5929d9b065bab0a
