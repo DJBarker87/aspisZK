@@ -1,0 +1,129 @@
+# Continuation receipts
+
+100 fresh Lean attempts and 20 fresh Kani runs. Source revisions describe the committed baseline; submitted source hashes identify proof edits. Direct dependency hashes were collected after runs, not a frozen transitive replay. Not all failed source versions are retained.
+
+| Attempt | Target | Exit | Wall | Peak RSS KiB | Swap | Receipt |
+|---|---|---|---|---|---|---|
+| J21900 | R1Z/PV_L2_F3FullSource | 1 | 0:03.62 | 4208000 | 0 | [receipt](J21900/receipt.json) |
+| J21901 | R1Z/PV_L2_F3FullSource | 1 | 0:04.62 | 4216064 | 0 | [receipt](J21901/receipt.json) |
+| J21902 | R1Z/PV_L2_F3FullSource | 1 | 0:04.02 | 4214300 | 0 | [receipt](J21902/receipt.json) |
+| J21903 | R1Z/PV_L2_F3FullSource | 1 | 0:06.56 | 4214176 | 0 | [receipt](J21903/receipt.json) |
+| J21904 | R1Z/PV_L2_F3FullSource | 1 | 0:04.16 | 4210628 | 0 | [receipt](J21904/receipt.json) |
+| J21905 | R1Z/PV_L2_F3FullSource | 0 | 0:03.95 | 4233976 | 0 | [receipt](J21905/receipt.json) |
+| J21906 | R1Z/PV_L2_F3FullRetry | 1 | 0:02.33 | 4256240 | 0 | [receipt](J21906/receipt.json) |
+| J21907 | R1Z/PV_L2_F3FullRetry | 1 | 0:02.27 | 4256432 | 0 | [receipt](J21907/receipt.json) |
+| J21908 | R1Z/PV_L2_F3FullRetry | 1 | 0:02.51 | 4255148 | 0 | [receipt](J21908/receipt.json) |
+| J21909 | R1Z/PV_L2_F3FullRetry | 0 | 0:02.95 | 4278492 | 0 | [receipt](J21909/receipt.json) |
+| J21910 | R1Z/PV_L2_Premises | 0 | 0:06.83 | 4278544 | 0 | [receipt](J21910/receipt.json) |
+| J21911 | R1Z/PV_L2_InversionQ | 0 | 0:02.65 | 4077276 | 0 | [receipt](J21911/receipt.json) |
+| J21912 | R1Z/PV_L2_F6FlagLoop | 0 | 0:01.96 | 2600004 | 0 | [receipt](J21912/receipt.json) |
+| J21913 | R1Z/PV_L2_F6IdentityRowStep | 0 | 0:02.07 | 2598164 | 0 | [receipt](J21913/receipt.json) |
+| J21914 | R1Z/PV_L2_F6EchelonRowStep | 0 | 0:03.07 | 2598388 | 0 | [receipt](J21914/receipt.json) |
+| J21915 | R1Z/PV_L2_F6PermutationLeftStep | 0 | 0:02.37 | 2596548 | 0 | [receipt](J21915/receipt.json) |
+| J21916 | R1Z/PV_L2_F6PermutationRightStep | 0 | 0:02.95 | 2591172 | 0 | [receipt](J21916/receipt.json) |
+| J21917 | R1Z/PV_L2_F6NullRowStep | 143 | 0:51.25 | 7168588 | 0 | [receipt](J21917/receipt.json) |
+| J21918 | R1Z/PV_L2_InversionPole | 0 | 0:05.11 | 4120128 | 0 | [receipt](J21918/receipt.json) |
+| J21919 | R1Z/PV_L2_F6IdentityRow | 1 | 0:02.49 | 2582772 | 0 | [receipt](J21919/receipt.json) |
+| J21920 | R1Z/PV_L2_F6EchelonRow | 1 | 0:02.41 | 2582544 | 0 | [receipt](J21920/receipt.json) |
+| J21921 | R1Z/PV_L2_F6PermutationLeft | 1 | 0:01.49 | 2582596 | 0 | [receipt](J21921/receipt.json) |
+| J21922 | R1Z/PV_L2_F6PermutationRight | 1 | 0:02.00 | 2580792 | 0 | [receipt](J21922/receipt.json) |
+| J21923 | R1Z/PV_L2_F6IdentityRow | 0 | 0:03.49 | 2590272 | 0 | [receipt](J21923/receipt.json) |
+| J21924 | R1Z/PV_L2_F6NullEntry | 0 | 0:01.52 | 2596504 | 0 | [receipt](J21924/receipt.json) |
+| J21925 | R1Z/PV_L2_F6NullWant | 0 | 0:01.88 | 2595688 | 0 | [receipt](J21925/receipt.json) |
+| J21926 | R1Z/PV_L2_F6NullRowStep | 143 | 0:44.53 | 7168556 | 0 | [receipt](J21926/receipt.json) |
+| J21927 | R1Z/PV_L2_F6NullRowStep | 143 | 0:36.30 | 7168528 | 0 | [receipt](J21927/receipt.json) |
+| J21928 | R1Z/PV_L2_F6NullRowStep | 1 | 0:01.78 | 2588752 | 0 | [receipt](J21928/receipt.json) |
+| J21929 | R1Z/PV_L2_F6NullRowStep | 1 | 0:44.89 | 7168664 | 0 | [receipt](J21929/receipt.json) |
+| J21930 | R1Z/PV_L2_F6NullRowStep | 1 | 0:35.22 | 7169924 | 0 | [receipt](J21930/receipt.json) |
+| J21931 | R1Z/PV_L2_RecordCompact | 0 | 0:02.29 | 2591656 | 0 | [receipt](J21931/receipt.json) |
+| J21932 | R1Z/PV_L2_F6NullRowStep | 1 | 0:33.17 | 7170472 | 0 | [receipt](J21932/receipt.json) |
+| J21933 | R1Z/PV_L2_RecordRefinement | 0 | 0:01.46 | 2587192 | 0 | [receipt](J21933/receipt.json) |
+| J21934 | R1Z/PV_L2_F6NullFinish | 0 | 0:01.62 | 2596072 | 0 | [receipt](J21934/receipt.json) |
+| J21935 | R1Z/PV_L2_F6NullRowStep | 0 | 0:02.42 | 2597244 | 0 | [receipt](J21935/receipt.json) |
+| J21936 | R1Z/PV_L2_F6EchelonRow | 0 | 0:03.52 | 2589208 | 0 | [receipt](J21936/receipt.json) |
+| J21937 | R1Z/PV_L2_F6PermutationLeft | 0 | 0:02.47 | 2590584 | 0 | [receipt](J21937/receipt.json) |
+| J21938 | R1Z/PV_L2_F6PermutationRight | 0 | 0:02.52 | 2590016 | 0 | [receipt](J21938/receipt.json) |
+| J21939 | R1Z/PV_L2_F6NullRow | 0 | 0:02.21 | 2590696 | 0 | [receipt](J21939/receipt.json) |
+| J21940 | R1Z/PV_L2_F6IdentityStep | 0 | 0:02.99 | 2596164 | 0 | [receipt](J21940/receipt.json) |
+| J21941 | R1Z/PV_L2_F6Callers | 0 | 0:01.55 | 2591780 | 0 | [receipt](J21941/receipt.json) |
+| J21942 | R1Z/PV_L2_F6Identity | 0 | 0:01.50 | 2589708 | 0 | [receipt](J21942/receipt.json) |
+| J21943 | R1Z/PV_L2_F6EchelonStep | 0 | 0:01.41 | 2597436 | 0 | [receipt](J21943/receipt.json) |
+| J21944 | R1Z/PV_L2_F6NullStep | 0 | 0:01.83 | 2599924 | 0 | [receipt](J21944/receipt.json) |
+| J21945 | R1Z/PV_L2_F6Echelon | 0 | 0:01.52 | 2590140 | 0 | [receipt](J21945/receipt.json) |
+| J21946 | R1Z/PV_L2_F6Null | 0 | 0:02.85 | 2591096 | 0 | [receipt](J21946/receipt.json) |
+| J21947 | R1Z/PV_L2_F6LiftsStep | 0 | 0:01.85 | 2602740 | 0 | [receipt](J21947/receipt.json) |
+| J21948 | R1Z/PV_L2_F6Lifts | 0 | 0:01.47 | 2593156 | 0 | [receipt](J21948/receipt.json) |
+| J21949 | R1Z/PV_L2_F6EntriesStep | 0 | 0:01.95 | 2606540 | 0 | [receipt](J21949/receipt.json) |
+| J21950 | R1Z/PV_L2_F6Entries | 0 | 0:01.59 | 2594080 | 0 | [receipt](J21950/receipt.json) |
+| J21951 | R1Z/PV_L2_F6MM | 1 | 0:02.26 | 2582648 | 0 | [receipt](J21951/receipt.json) |
+| J21952 | R1Z/PV_L2_F6MM | 0 | 0:01.53 | 2595816 | 0 | [receipt](J21952/receipt.json) |
+| J21953 | R1Z/PV_L2_F5SparsePred | 1 | 0:02.57 | 2631208 | 0 | [receipt](J21953/receipt.json) |
+| J21954 | R1Z/PV_L2_F6HalfShift | 0 | 0:01.41 | 2596188 | 0 | [receipt](J21954/receipt.json) |
+| J21955 | R1Z/PV_L2_F5SparsePred | 0 | 0:02.41 | 2642072 | 0 | [receipt](J21955/receipt.json) |
+| J21956 | R1Z/PV_L2_F5SparseWidth | 1 | 0:03.30 | 4076932 | 0 | [receipt](J21956/receipt.json) |
+| J21957 | R1Z/PV_L2_F3PrefixBounds | 1 | 0:04.82 | 4205992 | 0 | [receipt](J21957/receipt.json) |
+| J21958 | R1Z/PV_L2_F5SparseWidth | 0 | 0:03.54 | 4094976 | 0 | [receipt](J21958/receipt.json) |
+| J21959 | R1Z/PV_L2_F3PrefixBounds | 0 | 0:03.76 | 4227740 | 0 | [receipt](J21959/receipt.json) |
+| J21960 | R1Z/PV_L2_F5SparseSuffix | 1 | 0:02.13 | 4076432 | 0 | [receipt](J21960/receipt.json) |
+| J21961 | R1Z/PV_L2_F6HalfInputs | 0 | 0:02.44 | 2595992 | 0 | [receipt](J21961/receipt.json) |
+| J21962 | R1Z/PV_L2_F6HalfPQ | 0 | 0:02.38 | 2595180 | 0 | [receipt](J21962/receipt.json) |
+| J21963 | R1Z/PV_L2_F6HalfR0 | 0 | 0:02.61 | 2595352 | 0 | [receipt](J21963/receipt.json) |
+| J21964 | R1Z/PV_L2_F6HalfR1 | 0 | 0:03.10 | 2595856 | 0 | [receipt](J21964/receipt.json) |
+| J21965 | R1Z/PV_L2_F6HalfR2 | 0 | 0:02.35 | 2595856 | 0 | [receipt](J21965/receipt.json) |
+| J21966 | R1Z/PV_L2_F6HalfR3 | 0 | 0:02.27 | 2594456 | 0 | [receipt](J21966/receipt.json) |
+| J21967 | R1Z/PV_L2_F6Half | 0 | 0:02.02 | 2605116 | 0 | [receipt](J21967/receipt.json) |
+| J21968 | R1Z/PV_L2_F5SparseSuffix | 0 | 0:02.68 | 4097644 | 0 | [receipt](J21968/receipt.json) |
+| J21969 | R1Z/PV_L2_BoolTrace | 0 | 0:01.52 | 2598820 | 0 | [receipt](J21969/receipt.json) |
+| J21970 | R1Z/PV_L2_F6QPrime | 0 | 0:02.31 | 2598936 | 0 | [receipt](J21970/receipt.json) |
+| J21971 | R1Z/PV_L2_HeadlineJoint | 1 | 0:38.74 | 4298544 | 0 | [receipt](J21971/receipt.json) |
+| J21972 | R1Z/PV_L2_F6BCond | 0 | 0:02.64 | 2607396 | 0 | [receipt](J21972/receipt.json) |
+| J21973 | R1Z/PV_L2_F6Checker | 0 | 0:01.37 | 2602608 | 0 | [receipt](J21973/receipt.json) |
+| J21974 | R1Z/PV_L2_F5SparseWeight | 0 | 0:02.89 | 4098644 | 0 | [receipt](J21974/receipt.json) |
+| J21975 | R1Z/PV_L2_HeadlineJoint | 1 | 0:53.41 | 4305576 | 0 | [receipt](J21975/receipt.json) |
+| J21976 | R1Z/PV_L2_F3AttemptSource | 0 | 0:03.02 | 4295808 | 0 | [receipt](J21976/receipt.json) |
+| J21977 | R1Z/PV_L2_F5SparseSum | 0 | 0:02.55 | 4099172 | 0 | [receipt](J21977/receipt.json) |
+| J21978 | R1Z/PV_L2_HeadlineJoint | 1 | 0:56.17 | 4307160 | 0 | [receipt](J21978/receipt.json) |
+| J21979 | R1Z/PV_L2_HeadlineJoint | 1 | 0:21.82 | 4312048 | 0 | [receipt](J21979/receipt.json) |
+| J21980 | R1Z/PV_L2_F5Mle | 0 | 0:02.27 | 4081068 | 0 | [receipt](J21980/receipt.json) |
+| J21981 | R1Z/PV_L2_F5DivStep | 0 | 0:02.03 | 2600036 | 0 | [receipt](J21981/receipt.json) |
+| J21982 | R1Z/PV_L2_HeadlineJoint | 1 | 0:59.48 | 4311952 | 0 | [receipt](J21982/receipt.json) |
+| J21983 | R1Z/PV_L2_F3SeedFrames | 1 | 0:02.49 | 4204780 | 0 | [receipt](J21983/receipt.json) |
+| J21984 | R1Z/PV_L2_HeadlineJoint | 1 | 1:02.71 | 4311744 | 0 | [receipt](J21984/receipt.json) |
+| J21985 | R1Z/PV_L2_F3SeedFrames | 1 | 0:04.66 | 4204240 | 0 | [receipt](J21985/receipt.json) |
+| J21986 | R1Z/PV_L2_HeadlineJoint | 1 | 0:56.28 | 4312984 | 0 | [receipt](J21986/receipt.json) |
+| J21987 | R1Z/PV_L2_F3SeedFrames | 1 | 0:02.31 | 4204492 | 0 | [receipt](J21987/receipt.json) |
+| J21988 | R1Z/PV_L2_F5DivPass | 1 | 0:01.81 | 2600604 | 0 | [receipt](J21988/receipt.json) |
+| J21989 | R1Z/PV_L2_HeadlineJoint | 1 | 0:38.46 | 4309744 | 0 | [receipt](J21989/receipt.json) |
+| J21990 | R1Z/PV_L2_F3SeedFrames | 0 | 0:02.34 | 4228836 | 0 | [receipt](J21990/receipt.json) |
+| J21991 | R1Z/PV_L2_F5DivPass | 1 | 0:02.08 | 2602372 | 0 | [receipt](J21991/receipt.json) |
+| J21992 | R1Z/PV_L2_F3SeedPrefix | 1 | 0:03.37 | 4206312 | 0 | [receipt](J21992/receipt.json) |
+| J21993 | R1Z/PV_L2_HeadlineJoint | 0 | 0:18.33 | 4345344 | 0 | [receipt](J21993/receipt.json) |
+| J21994 | R1Z/PV_L2_PremisesBound | 0 | 0:03.42 | 4261452 | 0 | [receipt](J21994/receipt.json) |
+| J21995 | R1Z/PV_L2_F5DivPass | 1 | 0:02.53 | 2601108 | 0 | [receipt](J21995/receipt.json) |
+| J21996 | R1Z/PV_L2_F3SeedPrefix | 1 | 0:02.69 | 4202456 | 0 | [receipt](J21996/receipt.json) |
+| J21997 | R1Z/PV_L2_F5DivPass | 0 | 0:01.95 | 2610280 | 0 | [receipt](J21997/receipt.json) |
+| J21998 | R1Z/PV_L2_F3SeedPrefix | 1 | 0:03.22 | 4207648 | 0 | [receipt](J21998/receipt.json) |
+| J21999 | R1Z/PV_L2_F3SeedPrefix | 0 | 0:03.87 | 4304812 | 0 | [receipt](J21999/receipt.json) |
+
+| Kani | Harness | Result | Exit | Wall | RSS KiB | Receipt |
+|---|---|---|---|---|---|---|
+| z01 | PV_L2_zero::m31_zero | CLI rejection | 2 | 0:00.00 | 4576 | [receipt](z01/receipt.json) |
+| z02 | PV_L2_zero::m31_zero | source assembly rejection | 1 | 0:00.06 | 114356 | [receipt](z02/receipt.json) |
+| z03 | PV_L2_zero::m31_zero | passed | 0 | 0:00.23 | 132936 | [receipt](z03/receipt.json) |
+| z04 | PV_L2_zero::cm31_zero | passed | 0 | 0:00.38 | 134480 | [receipt](z04/receipt.json) |
+| z05 | PV_L2_zero::qm31_zero | passed | 0 | 0:00.33 | 134640 | [receipt](z05/receipt.json) |
+| z06 | PV_L2_zero::wide_zero | passed | 0 | 0:00.51 | 135540 | [receipt](z06/receipt.json) |
+| z07 | PV_L2_zero::limbs_success | memcmp unwind failure | 1 | 0:00.81 | 148456 | [receipt](z07/receipt.json) |
+| z08 | PV_L2_zero::limbs_complete | passed | 0 | 0:00.80 | 147600 | [receipt](z08/receipt.json) |
+| z09 | PV_L2_zero::limbs_success_pointwise | passed | 0 | 0:01.19 | 149440 | [receipt](z09/receipt.json) |
+| z10 | PV_L2_zero::limbs_zero | passed | 0 | 0:00.66 | 143072 | [receipt](z10/receipt.json) |
+| z11 | PV_L2_zero::bytes_success | passed | 0 | 0:05.72 | 271164 | [receipt](z11/receipt.json) |
+| z12 | PV_L2_zero::bytes_canonical | passed | 0 | 0:01.47 | 152948 | [receipt](z12/receipt.json) |
+| z13 | PV_L2_zero::bytes_zero | passed | 0 | 0:01.18 | 141264 | [receipt](z13/receipt.json) |
+| z14 | PV_L2_zero::wrong_length | passed | 0 | 0:02.08 | 256036 | [receipt](z14/receipt.json) |
+| z15 | PV_L2_zero::reject_limb_0 | passed | 0 | 0:00.29 | 136140 | [receipt](z15/receipt.json) |
+| z16 | PV_L2_zero::reject_limb_3 | passed | 0 | 0:00.29 | 135952 | [receipt](z16/receipt.json) |
+| z17 | PV_L2_zero::reject_limb_7 | passed | 0 | 0:00.31 | 136052 | [receipt](z17/receipt.json) |
+| z18 | PV_L2_zero::nonzero_limb | passed | 0 | 0:00.34 | 136324 | [receipt](z18/receipt.json) |
+| z19 | PV_L2_zero::reject_limb_6 | passed | 0 | 0:00.32 | 136172 | [receipt](z19/receipt.json) |
+| z20 | PV_L2_zero::reject_limb_4 | passed | 0 | 0:00.30 | 135600 | [receipt](z20/receipt.json) |

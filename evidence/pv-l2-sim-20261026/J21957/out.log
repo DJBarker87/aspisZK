@@ -1,0 +1,98 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3PrefixBounds.lean:19:76: error: unsolved goals
+case case1
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+x✝¹ : ℕ
+x✝ : State
+⊢ ∀ (read : PV_L2_F3Recorded.Read), True
+
+case case2
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+n✝ : ℕ
+x✝ : State
+⊢ ∀ (read : PV_L2_F3Recorded.Read), True
+
+case case3
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+rest✝ : Option (List (↥ProverCommitWordCarrier.sourceBase × ℕ)) × List PV_L2_F3Recorded.Read :=
+  produce hash domain L✝ 16 after✝
+x✝ : prover_commit_reference.next hash domain state✝ = ok (word✝, after✝)
+h✝ : word✝ &&& 2147483647#u32 < aspis_core.field.P
+ih1✝ : ∀ read ∈ (produce hash domain L✝ 16 after✝).2, read.answer = prover_commit_reference.next hash domain read.before
+⊢ True ∧ ∀ a ∈ (produce hash domain L✝ 16 after✝).2, True
+
+case case4
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+word✝ : U32
+after✝ : prover_commit_reference.State
+rest✝ : Option (List (↥ProverCommitWordCarrier.sourceBase × ℕ)) × List PV_L2_F3Recorded.Read :=
+  produce hash domain (L✝ + 1) r✝ after✝
+x✝ : prover_commit_reference.next hash domain state✝ = ok (word✝, after✝)
+h✝ : ¬word✝ &&& 2147483647#u32 < aspis_core.field.P
+ih1✝ :
+  ∀ read ∈ (produce hash domain (L✝ + 1) r✝ after✝).2,
+    read.answer = prover_commit_reference.next hash domain read.before
+⊢ True ∧ ∀ a ∈ (produce hash domain (L✝ + 1) r✝ after✝).2, True
+
+case case5
+K : Type
+inst✝¹ : Field K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+hash : Hash
+domain : Slice U8
+L✝ r✝ : ℕ
+state✝ : State
+answer✝ : Result (U32 × prover_commit_reference.State) := prover_commit_reference.next hash domain state✝
+x✝ :
+  ∀ (word : U32) (after : prover_commit_reference.State),
+    prover_commit_reference.next hash domain state✝ = ok (word, after) → False
+⊢ True ∧ ∀ (a : PV_L2_F3Recorded.Read), True
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3PrefixBounds.lean:22:6: warning: This simp argument is unused:
+  forall_const
+
+Hint: Omit it from the simp argument list.
+  simp_all +zetaDelta only [̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵n̵o̵t̵_̵m̵e̵m̵_̵n̵i̵l̵,̵f̵a̵l̵s̵e̵_̵i̵m̵p̵l̵i̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵o̵r̵a̵l̵l̵_̵c̵o̵n̵s̵t̵,̵f̵o̵r̵a̵l̵l̵_̵e̵q̵_̵o̵r̵_̵i̵m̵p̵]̵[̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲n̲o̲t̲_̲m̲e̲m̲_̲n̲i̲l̲,̲ ̲f̲a̲l̲s̲e̲_̲i̲m̲p̲l̲i̲e̲s̲,̲ ̲f̲o̲r̲a̲l̲l̲_̲e̲q̲_̲o̲r̲_̲i̲m̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3PrefixBounds.lean:41:62: error: Type mismatch
+  rfl
+has type
+  ?m.19 = ?m.19
+but is expected to have type
+  produce hash domain (L + 1) 0 state = (none, [])
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3PrefixBounds.lean:40:8: error: Not a definitional equality: the left-hand side
+  produce hash domain (L + 1) 0 state
+is not definitionally equal to the right-hand side
+  (none, [])
+'R1Z.PV_L2_F3PrefixBounds.read_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3PrefixBounds.actual_answers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3PrefixBounds.request_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3PrefixBounds.failed_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3PrefixBounds.diverging_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3PrefixBounds.exhausted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
