@@ -45,7 +45,9 @@ theorem derive {A F C : Type} (c : DrvC_Installation.Configuration F C)
   · intro initial code
     have value := CPP_AtomicSource.native c hashv n1 copy allocator id initial code n2 extraction sha256 H p1 syscall
     have trace := CPP_AtomicSource.evaluation c hashv n1 copy allocator id initial code H
-    exact Prod.ext (congrArg Prod.fst trace) value
+    apply Prod.ext
+    · exact congrArg (fun x => x.1) trace
+    · exact value
   · intro initial actions
     rfl
 
