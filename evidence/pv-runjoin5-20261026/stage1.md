@@ -36,3 +36,21 @@ for that Unix source leaf. Time and worker schedules need separate fields.
 Quiet window honored through 18:15 UTC: no capped host scope before then.
 New small local modules use only retained compiled caches and lake env lean.
 Attempt IDs used locally are still globally unique within 25600–25899.
+
+## Checked continuation result
+
+PV_RunJoin_ContinuationProjection.after_reserve proves full proof/error status
+and retained-header projection through the emitted post-reservation caller,
+for arbitrary state carriers and projections, under MapErrParametric.
+PV_RunJoin_MapErrInstalled.installed discharges that law under the sibling's
+exact op12 identity. Attempt25609 exit0;34.5433s;3160014848bytes RSS;swap0;
+standard axioms [propext, Classical.choice, Quot.sound]. This replaces the
+failed23505 continuation proof. Attempts25602–25606 are changed-source
+elaboration failures;25607 hit the default heartbeat limit. Replacement uses
+separately checked bind/conditional congruence (25608, no axioms), no overrides.
+
+Before: continuation/header projection unproved even with parametricity.
+After: post-reservation continuation projection proved generally; full caller
+projection and actual installed native dictionary remain next. Residual6→6,
+endpoint8→8, runtime/boundary2→2. No quantifier/carrier/failure-event or observer
+change to the original endpoint. No whole native row discharged.
