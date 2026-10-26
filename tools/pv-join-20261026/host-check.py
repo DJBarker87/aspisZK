@@ -47,13 +47,21 @@ for p in [dst,obj]:
  if p.is_file():shutil.copy2(p,b/p.name)
 dst.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,dst)
 env=json.loads((H/'env/J.json').read_text());paths=[J/'objects']+[Path(p) for p in env['LEAN_PATH'].split(':')];ds=[]
+seen=set()
+def visit(mod):
+ if mod in seen:return
+ seen.add(mod);rel=mod.replace('.','/');base=next((p for p in paths if (p/rel.split('/')[0]).is_dir()),None);p=base/(rel+'.olean') if base else None
+ ds.append(dict(module=mod,path=str(p) if p and p.is_file() else None,sha256=sha(p) if p and p.is_file() else None))
+ source=J/'sources'/(rel+'.lean')
+ if source.is_file():
+  for line in source.read_text().splitlines():
+   if line.startswith('import '):
+    for child in line[7:].split():visit(child)
 for line in src.read_text().splitlines():
  if line.startswith('import '):
-  for mod in line[7:].split():
-   rel=mod.replace('.','/');base=next((p for p in paths if (p/rel.split('/')[0]).is_dir()),None);p=base/(rel+'.olean') if base else None
-   ds.append(dict(module=mod,path=str(p) if p and p.is_file() else None,sha256=sha(p) if p and p.is_file() else None))
+  for mod in line[7:].split():visit(mod)
 fp=hashlib.sha256(json.dumps(ds,sort_keys=True).encode()).hexdigest();(O/'receipts'/f'{{a}}-fp.txt').write_text(fp)
-x=dict(attempt=a,module=m,source_sha256=expected,source_revision={rev!r},source_origin={origin!r},deps=ds,deps_fingerprint=fp,old_source_sha256=old,command=[str(H/'tools/run-joint.sh'),str(a),m,'J','7000','8',fp],caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000))
+x=dict(attempt=a,module=m,source_sha256=expected,source_revision={rev!r},source_origin={origin!r},deps=ds,deps_fingerprint=fp,old_source_sha256=old,fingerprint_kind='transitive project import context',command=[str(H/'tools/run-joint.sh'),str(a),m,'J','7000','8',fp],caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000))
 (O/'receipts'/f'{{a}}-input.json').write_text(json.dumps(x,indent=2)+'\\n');print(json.dumps(x))
 '''
 p=py(code)

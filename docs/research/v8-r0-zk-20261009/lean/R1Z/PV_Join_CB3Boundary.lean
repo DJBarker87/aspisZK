@@ -26,7 +26,7 @@ theorem step (x : aspis_core.field.QM31) (s : S) :
 /-- All 28 inputs stay symbolic; no finite-array enumeration or numeral reduction. -/
 theorem body (p : Array aspis_core.field.QM31 28#usize) :
     PV_CB3_Op120Source.Raw.boundary_flat p = ProverRwP6BoundarySource.boundary_flat p := by
-  simp only [PV_CB3_Op120Source.Raw.boundary_flat,ProverRwP6BoundarySource.boundary_flat,
+  simp (maxSteps := 1000000) only [PV_CB3_Op120Source.Raw.boundary_flat,ProverRwP6BoundarySource.boundary_flat,
     PV_CB3_Op120Source.Raw.boundary_acc_step,ProverRwP6BoundarySource.boundary_acc_step,
     PV_CB3_Op120Source.Raw.aspis_core.field.M31.reduce_u64,
     ProverRwP6BoundarySource.aspis_core.field.M31.reduce_u64,reduce,
