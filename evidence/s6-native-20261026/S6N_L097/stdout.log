@@ -1,0 +1,592 @@
+def AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 : Aeneas.Std.Slice
+    Aeneas.Std.U8 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) :=
+fun bytes =>
+  have i := bytes.len;
+  if (i != AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES) = true then
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongLength)
+  else do
+    let s ←
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8)
+          bytes { «end» := 8#usize }
+    let s1 ←
+      Aeneas.Std.core.array.Array.index
+          (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC
+          { start := 0#usize, «end» := 8#usize }
+    let b ←
+      Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+          (AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice Aeneas.Std.core.cmp.PartialEqU8) s s1
+    if b = true then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongMagic)
+      else do
+        let i1 ← bytes.index_usize 8#usize
+        if (i1 != AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION) = true then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongVersion)
+          else do
+            let i2 ← bytes.index_usize 9#usize
+            if (i2 != 0#u8) = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+              else do
+                let i3 ← bytes.index_usize 10#usize
+                if (i3 != 0#u8) = true then
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err
+                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                  else do
+                    let i4 ← bytes.index_usize 11#usize
+                    if (i4 != 0#u8) = true then
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Err
+                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                      else do
+                        let i5 ← bytes.index_usize 12#usize
+                        if (i5 != 0#u8) = true then
+                            Aeneas.Std.Result.ok
+                              (Aeneas.Std.core.result.Result.Err
+                                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                          else do
+                            let i6 ← bytes.index_usize 13#usize
+                            if (i6 != 0#u8) = true then
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err
+                                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                              else do
+                                let i7 ← bytes.index_usize 14#usize
+                                if (i7 != 0#u8) = true then
+                                    Aeneas.Std.Result.ok
+                                      (Aeneas.Std.core.result.Result.Err
+                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                                  else do
+                                    let i8 ← bytes.index_usize 15#usize
+                                    if (i8 != 0#u8) = true then
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Err
+                                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonZeroReserved)
+                                      else do
+                                        let s2 ←
+                                          Aeneas.Std.core.slice.index.Slice.index
+                                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                              bytes { start := 16#usize, «end» := 48#usize }
+                                        let a ←
+                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_FORMAT_BINDING
+                                        let s3 ←
+                                          Aeneas.Std.core.array.Array.index
+                                              (Aeneas.Std.core.ops.index.IndexSlice
+                                                (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+                                              a { start := 0#usize, «end» := 32#usize }
+                                        let b1 ←
+                                          Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                              (AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice
+                                                Aeneas.Std.core.cmp.PartialEqU8)
+                                              s2 s3
+                                        if b1 = true then
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.core.result.Result.Err
+                                                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.WrongFormatBinding)
+                                          else do
+                                            let s4 ←
+                                              Aeneas.Std.core.slice.index.Slice.index
+                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                                                  bytes { start := 128#usize, «end» := 160#usize }
+                                            let r ← Aeneas.Std.core.array.TryFromSharedArraySlice.try_from 32#usize s4
+                                            let a1 ←
+                                              AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                  (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                    (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                  r
+                                            let r1 ← AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical a1
+                                            let r2 ←
+                                              AspisR1TerminalDecoder.core.result.Result.map_err
+                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                  r1 ()
+                                            let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r2
+                                            match cf with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                                                let s5 ←
+                                                  Aeneas.Std.core.slice.index.Slice.index
+                                                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                        Aeneas.Std.U8)
+                                                      bytes { start := 160#usize, «end» := 192#usize }
+                                                let r3 ←
+                                                  Aeneas.Std.core.array.TryFromSharedArraySlice.try_from 32#usize s5
+                                                let a2 ←
+                                                  AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                      (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                        (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                      r3
+                                                let r4 ←
+                                                  AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical a2
+                                                let r5 ←
+                                                  AspisR1TerminalDecoder.core.result.Result.map_err
+                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                      r4 ()
+                                                let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5
+                                                match cf1 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+                                                    let s6 ←
+                                                      Aeneas.Std.core.slice.index.Slice.index
+                                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                            Aeneas.Std.U8)
+                                                          bytes { start := 192#usize, «end» := 224#usize }
+                                                    let r6 ←
+                                                      Aeneas.Std.core.array.TryFromSharedArraySlice.try_from 32#usize s6
+                                                    let a3 ←
+                                                      AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                          (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                            (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                          r6
+                                                    let r7 ←
+                                                      AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical a3
+                                                    let r8 ←
+                                                      AspisR1TerminalDecoder.core.result.Result.map_err
+                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_2.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                          r7 ()
+                                                    let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r8
+                                                    match cf2 with
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                        let s7 ←
+                                                          Aeneas.Std.core.slice.index.Slice.index
+                                                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                Aeneas.Std.U8)
+                                                              bytes { start := 224#usize, «end» := 256#usize }
+                                                        let r9 ←
+                                                          Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                              32#usize s7
+                                                        let a4 ←
+                                                          AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                              (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                              r9
+                                                        let r10 ←
+                                                          AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                              a4
+                                                        let r11 ←
+                                                          AspisR1TerminalDecoder.core.result.Result.map_err
+                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_3.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                              r10 ()
+                                                        let cf3 ←
+                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r11
+                                                        match cf3 with
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 =>
+                                                            do
+                                                            let s8 ←
+                                                              Aeneas.Std.core.slice.index.Slice.index
+                                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                    Aeneas.Std.U8)
+                                                                  bytes { start := 256#usize, «end» := 288#usize }
+                                                            let r12 ←
+                                                              Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                  32#usize s8
+                                                            let a5 ←
+                                                              AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                  (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                    (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                                  r12
+                                                            let r13 ←
+                                                              AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                  a5
+                                                            let r14 ←
+                                                              AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                  r13 ()
+                                                            let cf4 ←
+                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r14
+                                                            match cf4 with
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                  val4 =>
+                                                                do
+                                                                let s9 ←
+                                                                  Aeneas.Std.core.slice.index.Slice.index
+                                                                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                        Aeneas.Std.U8)
+                                                                      bytes { start := 288#usize, «end» := 320#usize }
+                                                                let r15 ←
+                                                                  Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                      32#usize s9
+                                                                let a6 ←
+                                                                  AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                      (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                        (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                                      r15
+                                                                let r16 ←
+                                                                  AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                      a6
+                                                                let r17 ←
+                                                                  AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_5.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                      r16 ()
+                                                                let cf5 ←
+                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                      r17
+                                                                match cf5 with
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      val5 =>
+                                                                    do
+                                                                    let s10 ←
+                                                                      Aeneas.Std.core.slice.index.Slice.index
+                                                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                            Aeneas.Std.U8)
+                                                                          bytes
+                                                                          { start := 320#usize, «end» := 352#usize }
+                                                                    let r18 ←
+                                                                      Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                          32#usize s10
+                                                                    let a7 ←
+                                                                      AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                          (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                            (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+                                                                          r18
+                                                                    let r19 ←
+                                                                      AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                          a7
+                                                                    let r20 ←
+                                                                      AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_6.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                          r19 ()
+                                                                    let cf6 ←
+                                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                          r20
+                                                                    match cf6 with
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                          val6 =>
+                                                                        do
+                                                                        let s11 ←
+                                                                          Aeneas.Std.core.slice.index.Slice.index
+                                                                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                Aeneas.Std.U8)
+                                                                              bytes
+                                                                              { start := 352#usize, «end» := 384#usize }
+                                                                        let r21 ←
+                                                                          Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                              32#usize s11
+                                                                        let a8 ←
+                                                                          AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                              (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                (Aeneas.Std.Array Aeneas.Std.U8
+                                                                                  32#usize))
+                                                                              r21
+                                                                        let r22 ←
+                                                                          AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                              a8
+                                                                        let r23 ←
+                                                                          AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_7.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                              r22 ()
+                                                                        let cf7 ←
+                                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                              r23
+                                                                        match cf7 with
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                              val7 =>
+                                                                            do
+                                                                            let s12 ←
+                                                                              Aeneas.Std.core.slice.index.Slice.index
+                                                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                    Aeneas.Std.U8)
+                                                                                  bytes
+                                                                                  { start := 384#usize,
+                                                                                    «end» := 416#usize }
+                                                                            let r24 ←
+                                                                              Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                  32#usize s12
+                                                                            let a9 ←
+                                                                              AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                  (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                    (Aeneas.Std.Array Aeneas.Std.U8
+                                                                                      32#usize))
+                                                                                  r24
+                                                                            let r25 ←
+                                                                              AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                  a9
+                                                                            let r26 ←
+                                                                              AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_8.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                  r25 ()
+                                                                            let cf8 ←
+                                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                  r26
+                                                                            match cf8 with
+                                                                              |
+                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                  val8 =>
+                                                                                do
+                                                                                let s13 ←
+                                                                                  Aeneas.Std.core.slice.index.Slice.index
+                                                                                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                        Aeneas.Std.U8)
+                                                                                      bytes
+                                                                                      { start := 416#usize,
+                                                                                        «end» := 448#usize }
+                                                                                let r27 ←
+                                                                                  Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                      32#usize s13
+                                                                                let a10 ←
+                                                                                  AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                      (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                        (Aeneas.Std.Array Aeneas.Std.U8
+                                                                                          32#usize))
+                                                                                      r27
+                                                                                let r28 ←
+                                                                                  AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                      a10
+                                                                                let r29 ←
+                                                                                  AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_9.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                      r28 ()
+                                                                                let cf9 ←
+                                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                      r29
+                                                                                match cf9 with
+                                                                                  |
+                                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                      val9 =>
+                                                                                    do
+                                                                                    let s14 ←
+                                                                                      Aeneas.Std.core.slice.index.Slice.index
+                                                                                          (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                            Aeneas.Std.U8)
+                                                                                          bytes
+                                                                                          { start := 448#usize,
+                                                                                            «end» := 480#usize }
+                                                                                    let r30 ←
+                                                                                      Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                          32#usize s14
+                                                                                    let a11 ←
+                                                                                      AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                          (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                            (Aeneas.Std.Array
+                                                                                              Aeneas.Std.U8 32#usize))
+                                                                                          r30
+                                                                                    let r31 ←
+                                                                                      AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                          a11
+                                                                                    let r32 ←
+                                                                                      AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_10.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                          r31 ()
+                                                                                    let cf10 ←
+                                                                                      Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                          r32
+                                                                                    match cf10 with
+                                                                                      |
+                                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                          val10 =>
+                                                                                        do
+                                                                                        let s15 ←
+                                                                                          Aeneas.Std.core.slice.index.Slice.index
+                                                                                              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                                Aeneas.Std.U8)
+                                                                                              bytes
+                                                                                              { start := 480#usize,
+                                                                                                «end» := 512#usize }
+                                                                                        let r33 ←
+                                                                                          Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                              32#usize s15
+                                                                                        let a12 ←
+                                                                                          AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                              (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                                (Aeneas.Std.Array
+                                                                                                  Aeneas.Std.U8
+                                                                                                  32#usize))
+                                                                                              r33
+                                                                                        let r34 ←
+                                                                                          AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                              a12
+                                                                                        let r35 ←
+                                                                                          AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_11.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                              r34 ()
+                                                                                        let cf11 ←
+                                                                                          Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                              r35
+                                                                                        match cf11 with
+                                                                                          |
+                                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                              val11 =>
+                                                                                            do
+                                                                                            let s16 ←
+                                                                                              Aeneas.Std.core.slice.index.Slice.index
+                                                                                                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                                    Aeneas.Std.U8)
+                                                                                                  bytes
+                                                                                                  { start := 512#usize,
+                                                                                                    «end» := 544#usize }
+                                                                                            let r36 ←
+                                                                                              Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                                  32#usize s16
+                                                                                            let a13 ←
+                                                                                              AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                                  (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                                    (Aeneas.Std.Array
+                                                                                                      Aeneas.Std.U8
+                                                                                                      32#usize))
+                                                                                                  r36
+                                                                                            let r37 ←
+                                                                                              AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                                  a13
+                                                                                            let r38 ←
+                                                                                              AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_12.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                                  r37 ()
+                                                                                            let cf12 ←
+                                                                                              Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                  r38
+                                                                                            match cf12 with
+                                                                                              |
+                                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                                                  val12 =>
+                                                                                                do
+                                                                                                let s17 ←
+                                                                                                  Aeneas.Std.core.slice.index.Slice.index
+                                                                                                      (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice
+                                                                                                        Aeneas.Std.U8)
+                                                                                                      bytes
+                                                                                                      {
+                                                                                                        start :=
+                                                                                                          544#usize,
+                                                                                                        «end» :=
+                                                                                                          576#usize }
+                                                                                                let r39 ←
+                                                                                                  Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+                                                                                                      32#usize s17
+                                                                                                let a14 ←
+                                                                                                  AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                                                                                                      (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy
+                                                                                                        (Aeneas.Std.Array
+                                                                                                          Aeneas.Std.U8
+                                                                                                          32#usize))
+                                                                                                      r39
+                                                                                                let r40 ←
+                                                                                                  AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical
+                                                                                                      a14
+                                                                                                let r41 ←
+                                                                                                  AspisR1TerminalDecoder.core.result.Result.map_err
+                                                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_13.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1
+                                                                                                      r40 ()
+                                                                                                let cf13 ←
+                                                                                                  Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                                                      r41
+                                                                                                match cf13 with
+                                                                                                  | ⋯ => ⋯
+                                                                                                  | ⋯ =>
+                                                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                                      (Aeneas.Std.core.convert.FromSame
+                                                                                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                                      residual
+                                                                                              |
+                                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                                  residual =>
+                                                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                                                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                                  residual
+                                                                                          |
+                                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                              residual =>
+                                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                              (Aeneas.Std.core.convert.FromSame
+                                                                                                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                              residual
+                                                                                      |
+                                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                          residual =>
+                                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                          (Aeneas.Std.core.convert.FromSame
+                                                                                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                          residual
+                                                                                  |
+                                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                      residual =>
+                                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                      (Aeneas.Std.core.convert.FromSame
+                                                                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                      residual
+                                                                              |
+                                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                                  residual
+                                                                          |
+                                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                              (Aeneas.Std.core.convert.FromSame
+                                                                                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                              residual
+                                                                      |
+                                                                      Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                          (Aeneas.Std.core.convert.FromSame
+                                                                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                          residual
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      residual =>
+                                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                      (Aeneas.Std.core.convert.FromSame
+                                                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                      residual
+                                                              |
+                                                              Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                  residual =>
+                                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                                  (Aeneas.Std.core.convert.FromSame
+                                                                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                                  residual
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                              (Aeneas.Std.core.convert.FromSame
+                                                                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                              residual
+                                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                          (Aeneas.Std.core.convert.FromSame
+                                                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                          residual
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                      (Aeneas.Std.core.convert.FromSame
+                                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                      residual
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1
+                                                  (Aeneas.Std.core.convert.FromSame
+                                                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)
+                                                  residual
+'AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

@@ -1,0 +1,12 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.exact : (N : Aeneas.Std.Usize) →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 N)
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :=
+fun N bytes => do
+  let r ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from N Aeneas.Std.core.marker.CopyU8 bytes
+  AspisR1TerminalDecoder.core.result.Result.map_err
+      (AspisR1TerminalDecoder.pool_v1.pair_terminal.exact.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairVerifierTransportErrorV1
+        N)
+      r ()
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.exact' depends on axioms: [propext, Quot.sound]

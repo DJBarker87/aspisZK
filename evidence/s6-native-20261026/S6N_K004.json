@@ -1,0 +1,49 @@
+{
+  "attempt": "S6N_K004",
+  "kind": "kani",
+  "source_revision": "9566554995240c7ff8e721680faf28cf86abdf68",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "S6N_native/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "S6N_getters::S6N_transfer_getter_owned_cleanup",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "cadical",
+    "--output-format",
+    "regular",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions",
+    "--symex-cache-dereferences",
+    "--memory-leak-check",
+    "--memory-cleanup-check"
+  ],
+  "sources": [
+    "S6N_native/Cargo.toml",
+    "S6N_native/src/lib.rs",
+    "S6N_native/src/S6N_getters.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s6-native-20261026/S6N_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "source_tree": "S6N_source: exact current crates and extracted writer sources, metadata workspace only"
+  },
+  "expected_time": "Split out complete pointer identity and cleanup, avoiding large structural memcmp; arbitrary full native statement, no stubs",
+  "source_tree_dirty": true
+}

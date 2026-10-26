@@ -1,0 +1,67 @@
+{
+  "attempt": "S6N_K001",
+  "kind": "kani",
+  "source_revision": "e4c335d5cf750436fc17568d37e784ce75568db4",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "S6N_native/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "S6N_getters::S6N_transfer_getter_owned_cleanup",
+    "--no-assertion-reach-checks",
+    "--solver",
+    "cadical",
+    "--output-format",
+    "regular",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--object-bits",
+    "16",
+    "--unwinding-assertions",
+    "--symex-cache-dereferences",
+    "--memory-leak-check",
+    "--memory-cleanup-check"
+  ],
+  "sources": [
+    "S6N_native/Cargo.toml",
+    "S6N_native/src/lib.rs",
+    "S6N_native/src/S6N_getters.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-s6-native-20261026/S6N_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "source_tree": "S6N_source: exact current crates and extracted writer sources, metadata workspace only"
+  },
+  "expected_time": "Optimized compile of actual source; arbitrary full statement getter, allocation ownership and cleanup step",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 3.6405357369803824,
+  "peak_rss_kib": "294316",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf5eb42fa85b547d684a20102cd382b53.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "226791424",
+  "source_hashes": {
+    "S6N_native/Cargo.toml": "8546156c2fcb047ca008646bc5ec4243137dc7fc74acd109b1a241b2ce30b4dd",
+    "S6N_native/src/lib.rs": "a99c946f81b64efa3f2ae5ea56402fa71ecb4b939f276ad89997786e3055f72d",
+    "S6N_native/src/S6N_getters.rs": "10002b253251637580769887663af138c26279655de7d05cfe1920deb1c29827"
+  },
+  "print_axioms": "N/A: kani"
+}

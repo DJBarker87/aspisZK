@@ -1,0 +1,27 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result Unit
+      AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :=
+fun afterstate =>
+  if afterstate.next_pair_index = 0#u64 then
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)
+  else do
+    let i ← AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY
+    if afterstate.next_pair_index > i then
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)
+      else do
+        let b ← AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical afterstate.next_root
+        if b = true then
+            AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate_loop afterstate.next_frontier
+              0#usize
+          else
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate)
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
