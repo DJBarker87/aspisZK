@@ -1,0 +1,43 @@
+FIv_FoldsTotal.lean:30:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIv_Horner24.loop { iter := ↑semantic } p seed
+in the target expression
+  (do
+      let middle ← FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop0 { iter := ↑semantic } p seed
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop1 { iter := ↑poseidon } p middle) =
+    ok out
+
+case refine_1
+semantic : Std.Array NQ 24#usize
+poseidon : Std.Array NQ 4#usize
+theta seed : NQ
+ht : Canon theta
+hs : Canon seed
+hsem : ∀ x ∈ ↑semantic, Canon x
+hpos : ∀ x ∈ ↑poseidon, Canon x
+p : FIv_PreparedNew.NP
+hp : FIq_Native.field.PreparedQm31Multiplier.new theta = ok p
+hvalid : ExtractedMaskPreparedState.PreparedFor (FIv_PreparedNew.prepared p) (FIv_NativeArithmetic.qm theta)
+middle : FIq_Native.field.QM31
+hmc : Canon middle
+hmv : decode middle = FIv_Horner24.model (decode theta) (↑semantic).reverse (decode seed)
+out : FIq_Native.field.QM31
+hoc : Canon out
+hov : decode out = FIv_Horner4.model (decode theta) (↑poseidon).reverse (decode middle)
+hm : FIv_Horner24.loop { iter := ↑semantic } p seed = ok middle
+ho : FIv_Horner4.loop { iter := ↑poseidon } p middle = ok out
+⊢ (do
+      let middle ← FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop0 { iter := ↑semantic } p seed
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts_loop1 { iter := ↑poseidon } p middle) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    semantic
+  has type
+    Std.Array NQ 24#usize
+  but is expected to have type
+    { l // l.length = ↑24#usize }
+  in the application
+    ↑semantic
+'AspisR1.FIv_FoldsTotal.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

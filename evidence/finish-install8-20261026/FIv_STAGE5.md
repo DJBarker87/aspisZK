@@ -1,0 +1,9 @@
+# Forward fold success and local non-vacuity
+
+FIv_PreparedNewTotal.value proves the actual native prepared constructor succeeds for canonical theta. FIv_PreparedTotal proves canonical prepared multiplication and addition succeed with their exact values. FIv_HornerTotal and FIv_Horner4Total prove forward success/value by list induction; FIv_FoldsTotal composes the actual two fold calls with native preparation and gives the polynomial value. FIv_LowSum identifies the symbolic low polynomial with its indexed power sum, without enumerating any field or concrete recurrence.
+
+FIv_FoldNonvacuity.value supplies an actual successful native-fold fixture with zero theta/seed and zero24/4 coefficient arrays, canonical output and decoded output0. The concrete source loops are not kernel-evaluated; the forward totality theorem supplies success. This is component non-vacuity only. It does not instantiate the deployed accepted source/runtime fixture or discharge any semantic coefficient/copy meaning.
+
+Successful exact current source attempts:061 PreparedTotal,064 HornerTotal,066 LowSum,067 PreparedNewTotal,068 Horner4Total,070 FoldsTotal,072 FoldNonvacuity. Every new theorem has a standard-only printed axioms audit.062/063 had local elaboration failures;065 needed symbolic list-length normalization;069 needed explicit native-loop aliases;071 reached the default recursion limit while rewriting the array-polynomial definition.072 replaced that rewrite with an explicit symbolic expression and algebraic normalization. No limit was raised, and no timed-out or memory-killed run was repeated. All failed sorryAx reports are excluded from proof evidence.
+
+Budget72/100 Lean charged;66 compiler starts;0/20 Kani. The remaining27 focused dependency attempts are planned073-099, with100 reserved for the combined new-module statement/axioms audit. The actual top, ledger and owner predicates remain unchanged.

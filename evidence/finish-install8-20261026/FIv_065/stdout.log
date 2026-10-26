@@ -1,0 +1,23 @@
+FIv_LowSum.lean:13:8: error: unsolved goals
+case nil
+theta : K
+⊢ 0 = ∑ j, theta ^ ↑j * decode [][↑j]
+FIv_LowSum.lean:15:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ i, ?f i
+in the target expression
+  decode x + theta * FIv_HornerAlgebra.low theta xs = ∑ j, theta ^ ↑j * decode (x :: xs)[↑j]
+
+case cons
+theta : K
+x : NQ
+xs : List NQ
+ih : FIv_HornerAlgebra.low theta xs = ∑ j, theta ^ ↑j * decode xs[↑j]
+⊢ decode x + theta * FIv_HornerAlgebra.low theta xs = ∑ j, theta ^ ↑j * decode (x :: xs)[↑j]
+FIv_LowSum.lean:13:44: warning: This simp argument is unused:
+  Fin.sum_univ_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [FIv_HornerAlgebra.low,̵F̵i̵n̵.̵s̵u̵m̵_̵u̵n̵i̵v̵_̵z̵e̵r̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIv_LowSum.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
