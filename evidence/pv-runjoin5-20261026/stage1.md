@@ -84,3 +84,20 @@ read pins in sibling-read-pins.json. Flush is the source Unix no-op; actual
 durability uses sync and its fallible outcome. No extra availability premise
 is adopted. The complete source source/header theorem does not erase these
 native effect obligations.
+
+## Exact printer and transfer
+
+ResidualPrint25624 prints each of the original six field declarations at its
+full elaborated type, and audits both unadopted A/B theorem constants against
+the retained cache (standard axioms only). Original endpoint statements stay
+unchanged. SourceTypes25623 prints the actual source store and reserve trait
+body; the complete source store has only directory and last_error, confirming
+why source-header equality alone cannot recover filesystem history.
+
+The previously refused archive transfer was completed after18:15UTC using
+fresh admission02 (allowed=true at18:16:15UTC, requested0bytes, reserved
+26172456960bytes). Host and local SHA256 agree: cache-transfer-01.json and
+cache-transfer-01-host.sha. Archive6062708bytes, kept only locally and in the
+assigned host directory; no archive/object/binary committed. This retains
+focused cache evidence and is not a frozen release replay. No host compile
+was launched during or after the quiet window for this transfer.
