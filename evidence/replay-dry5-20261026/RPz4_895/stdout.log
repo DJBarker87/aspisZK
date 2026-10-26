@@ -1,0 +1,9 @@
+'AspisR1.OraclePortCkptAbi3OwnedIter.into_iter_exact' depends on axioms: [propext]
+'AspisR1.OraclePortCkptAbi3OwnedIter.drain_exact' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortCkptAbi3OwnedIter.owned_contents' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.alloc.vec.into_iter.IteratorIntoIter.next : {T : Type} →
+  alloc.vec.into_iter.IntoIter T → Result (Option T × alloc.vec.into_iter.IntoIter T) :=
+fun {T} it =>
+  match it with
+  | ⟨[], property⟩ => ok (none, it)
+  | ⟨hd :: tl, property⟩ => ok (some hd, ⟨tl, ⋯⟩)

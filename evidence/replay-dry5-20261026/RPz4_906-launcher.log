@@ -1,0 +1,53 @@
+{"attempt": "RPz4_906", "exit_status": 0, "wall_seconds": 1.311613459023647, "peak_rss_kib": "2647356", "swaps": "0", "print_axioms": ["'AspisR1.OraclePortCkptAbi4Std.shared_interval' depends on axioms: [propext, Quot.sound]", "'AspisR1.OraclePortCkptAbi4Std.shared_exhausted' depends on axioms: [propext, Quot.sound]", "'AspisR1.OraclePortCkptAbi4Std.mutable_writeback' depends on axioms: [propext, Quot.sound]", "'AspisR1.OraclePortCkptAbi4Std.no_requested_capacity' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Aeneas.Std.Result.ok (some x, it)
+  else Aeneas.Std.Result.ok (none, it)
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.IterMut T →
+    Aeneas.Std.Result
+      (Option T ×
+        Aeneas.Std.core.slice.iter.IterMut T ×
+          (Aeneas.Std.core.slice.iter.IterMut T → Option T → Aeneas.Std.core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if
+...
+one, it)
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.IterMut T →
+    Aeneas.Std.Result
+      (Option T ×
+        Aeneas.Std.core.slice.iter.IterMut T ×
+          (Aeneas.Std.core.slice.iter.IterMut T → Option T → Aeneas.Std.core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    Aeneas.Std.Result.ok (some x, it, back)
+  else Aeneas.Std.Result.ok (none, it, fun it x => it)
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Aeneas.Std.Usize → Aeneas.Std.alloc.vec.Vec T :=
+fun T x => Aeneas.Std.alloc.vec.Vec.new T
+@[reducible] def Aeneas.Std.alloc.vec.Vec.new.{u} : (α : Type u) → Aeneas.Std.alloc.vec.Vec α :=
+fun α => ⟨[], Aeneas.Std.alloc.vec.Vec.new._proof_1⟩
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.slice.iter.IterMut T × (Aeneas.Std.core.slice.iter.IterMut T → Aeneas.Std.Slice T)) :=
+fun {T} slice => Aeneas.Std.Result.ok ({ slice := slice }, fun it => it.slice)
+def Aeneas.Std.Slice.setAtNat.{u} : {α : Type u} → Aeneas.Std.Slice α → ℕ → α → Aeneas.Std.Slice α :=
+fun {α} v i x => ⟨(↑v).set i x, ⋯⟩
+'AspisR1.OraclePortCkptAbi4Std.shared_interval' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortCkptAbi4Std.shared_exhausted' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortCkptAbi4Std.mutable_writeback' depends on axioms: [propext, Quot.sound]
+'AspisR1.OraclePortCkptAbi4Std.no_requested_capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc5b611e4605b453fa82dea8f5ec98660.scope; invocation ID: f3dd852a49244eb3881c3786cae0c67c

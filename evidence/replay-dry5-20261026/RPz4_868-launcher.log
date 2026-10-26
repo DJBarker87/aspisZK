@@ -1,0 +1,25 @@
+{"attempt": "RPz4_868", "exit_status": 0, "wall_seconds": 1.0938889679964632, "peak_rss_kib": "2625104", "swaps": "0", "print_axioms": ["'AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ Aeneas.Std.U32.max) || decide (nlen ≤ Aeneas.Std.Usize.max)) = true then
+    Aeneas.Std.Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.maximumSizeExceeded
+'AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ Aeneas.Std.U32.max) || decide (nlen ≤ Aeneas.Std.Usize.max)) = true then
+    Aeneas.Std.Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.maximumSizeExceeded
+'AspisR1.OraclePortCkptAbi2Unwrap.savedTen_panic_unreachable' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb54b73d3a5f444e989c4e839f106e6cb.scope; invocation ID: e04e56b6a8db4232ba3a5b9556c5e26f

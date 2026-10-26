@@ -1,0 +1,7 @@
+# Literal transcript explicit-import repair
+
+RPz4_023 failed with exact selected source 2b76b95f... and selected fresh dependencies. The complete errors and resource receipt remain at RPz4_023. R1SelectedTranscriptParams has been factored to import R1UnifiedSamplerPublic/Core instead of R1UnifiedSampler, so it no longer transitively supplies TranscriptView.Challenge/Message or UnifiedSampler.Prefix/samp. The selected source still uses those names. Its historical object header matches the original two direct imports, so no passing unrelated source is substituted.
+
+RPz4_LiteralTranscript.lean is exactly the original selected source bytes with one leading `import R1UnifiedSampler`. No declaration, statement, proof, quantifier, carrier or conclusion is edited. The changed source receives a fresh attempt; the failed receipt remains. No original proved module, candidate or other worktree is edited. This is the permitted trivial import repair in a job-prefixed evidence snapshot. The canonical LiteralTranscript source independently has the same explicit import, but is not used as a substitute or attributed to the historical object.
+
+This supplies no security premise-removal credit: before/after top statements and ledger remain unchanged. Diagnostic sorryAx from 023 remains rejected. The initial stage report said all 61 source attempts passed; the actual count is 60 passed, one failed. This correction is explicit and receipt-based.
