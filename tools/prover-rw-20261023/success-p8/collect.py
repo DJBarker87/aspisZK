@@ -22,5 +22,10 @@ for p in sorted((e/'translation').glob('*/receipt.json')):
  x=json.loads(p.read_text())
  native.append(dict(attempt=x['attempt'],kind='Kani' if 'kani' in x['target'] else 'extraction',command=x['target'],exit=x['exit_status'],wall=x['wall_seconds'],peak_rss_kib=x['peak_rss_kib'],swaps=x['swaps'],cgroup_memory_peak_bytes=x['cgroup_memory_peak_bytes'],source_revision_label=x['source_revision'],scope='Exact source hashes pin inputs; historical host revision label is not this branch revision'))
 result=dict(attempts=rows,native=native,lean_compiles=sum(x['exit'] is not None for x in rows),lean_passes=sum(x['exit']==0 for x in rows),kani_runs=sum(x['kind']=='Kani' for x in native),lean_budget=65,kani_budget=12,root_premises_removed=0,target_established=False)
+local=[json.loads(p.read_text()) for p in sorted((e/'local').glob('*-receipt.json'))]
+result['local_attempts']=[{k:x[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_bytes','swaps']} for x in local]
+result['host_lean_compiles']=result['lean_compiles']
+result['lean_compiles']+=len(local)
+result['lean_passes']+=sum(x['exit_status']==0 for x in local)
 (e/'summary.json').write_text(json.dumps(result,indent=2)+'\n')
 print({k:result[k] for k in ['lean_compiles','lean_passes','kani_runs','root_premises_removed']})

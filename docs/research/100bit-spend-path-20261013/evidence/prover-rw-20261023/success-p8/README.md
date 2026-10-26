@@ -197,3 +197,67 @@ a nominal QM31 alias only. No observer or side-channel transport is implied.
 generalized from U32 to all unsigned scalar widths, including U16 mask words.
 Source/FP markers are not removed or bypassed. Arithmetic stage current actual
 Lean count26/65, Kani5/12; 39Lean/7Kani remain. Source-callback remainder31.
+
+## Reservation retries and generic raw-word proof
+
+21333 refuses12:19:20UTC after the required wait from21332,64.375GiB reserved.
+21334 is admitted12:22:32UTC and rejects generic numeral-zero elaboration.
+21335's corrected explicit-zero input refuses12:22:57UTC,48.375GiB reserved
+(projected55.375GiB).21336 admits12:26:12UTC after the required wait and proves
+width-polymorphic or/xor zero laws, four-word decomposition and xor reflexivity;
+all four axioms reports are standard.21337 source-only leaf refuses12:26:44UTC,
+48.375GiB reserved/projected55.375GiB. No time/compiler for refused IDs; no
+markers, fingerprints, launchers or caps changed. Genuine strengthened sources
+are pinned per input; never an unchanged failed Lean rerun.
+Current28/65Lean,5/12Kani;37Lean/7Kani remain. The next unused ID is21338 after
+12:29:44UTC. While waiting, source-only leaf totality is added explicitly.
+
+21338 admits12:30:01UTC and checks literal current pole source totality.
+21339 refuses12:30:18UTC;21340 refuses12:33:46UTC after the180s wait.
+21341 admits12:37:03UTC after the next wait. Its raw four-coordinate equality,
+zero symmetry and self-difference proofs elaborate with standard axioms, but
+its Result equation infers Prop instead of Bool. This is a rejected module,
+not an accepted source/value bridge. Corrected21342 explicitly uses decide
+and is refused12:37:32UTC before Lean. All refusals projected55.375GiB from
+48.375GiB reserved. No time result is inferred for them.30/65actual Lean,
+5/12Kani used;35Lean/7Kani remain. Next admission after12:40:32UTC.
+
+The proposed compression arithmetic-refinement check is refused at12:41:08UTC
+before preflight/GNU time/Kani: `host-run.py` reservation assertion,56.375GiB
+including its newly requested8GiB scope. Its reservation JSON and a marked
+zero-run receipt are in refused-native/success-p8-compress-refinement-004.
+No Kani result exists; use stays5/12,Lean30/65. Retry after12:44:08UTC with a
+fresh immutable native receipt name; no wrapper, monitor or barrier is edited.
+
+## Standard-library symbolic bounds stage and changed native solver
+
+Four small NEW Std-only modules compile locally with `lake env lean -M7000`
+using the existing dependency-free s2d_errors Lake workspace and installed
+Lean4.32. No dependency is built. The generated empty Lake manifest is retained
+as an invocation artifact only, not an infrastructure change. Exact new source
+snapshots and compiler/Std-root/project pins are under local/*-receipt.json.
+Wall3.39–3.92s,peak RSS631144448–640466944bytes,zero swaps,all15 theorem reports
+standard (only propext/Quot.sound where needed). No local cgroup is available;
+these <1GiB focused checks use the explicit local allowance, not an uncapped
+large build. No host scope is run concurrently with these local proof checks.
+
+Before: pole mask address/bit ranges and row reconstruction, polynomial block
+read bounds and descending-loop order were pending reference proof steps.
+After: PV_PoleIndexBounds,PV_PoleMaskPartition,PV_PolyIndexBounds andPV_Countdown
+prove these Nat/Fin/control facts for symbolic inputs, including inverse maps
+Fin1024↔Fin64×Fin16, without enumerating1024 cells. Machine-carrier/native
+instantiation is still required. V220,V240,V264 remain open; no complete
+callback or endpoint premise is removed by these preparatory facts.
+
+Native compress-refinement-005 refuses12:44:58UTC before Kani. After180s,
+006 is admitted and times out240s (exit124,192.336MiB cgroup peak,zero swaps).
+This changes from direct bit-blasting to CBMC arithmetic refinement, with the
+same all-raw single-element goal and same caps/timeout. No verified harness
+result. Its exact used Rust snapshot is native-components-reference.rs.txt;
+postrun scope is removed. Full-pole Aeneas002 is refused12:53:32UTC before
+Aeneas. Refused-native receipts charge zero proof/verification runs. No guard,
+marker,launcher,backend,monitor or cap was changed.
+
+Current usage34/65Lean (30host+4local),6/12Kani;31Lean/6Kani remain.
+Successful-body callback remainder31;V163/V164,V036–V038,V161–V168 retained.
+Root premises removed0,added0,weakened0; target not yet established.

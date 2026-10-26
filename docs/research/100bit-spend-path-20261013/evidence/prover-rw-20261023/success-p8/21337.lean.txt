@@ -1,0 +1,38 @@
+import R1Z.PV_CurrentScaleInstall
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_PoleLeafSource
+open Aeneas Aeneas.Std Result ControlFlow Error
+abbrev aspis_core.field.QM31 := ProverRwFull.aspis_core.field.QM31
+/-- [aspis_r1_cost_probe::ct_pole::equal]:
+    Source: 'crates/aspis-r1-cost-probe/src/ct_pole.rs', lines 5:0-11:1 -/
+def ct_pole.equal
+  (a : aspis_core.field.QM31) (b : aspis_core.field.QM31) : Result Bool := do
+  let i := a.c0.a
+  let i1 := b.c0.a
+  let i2 ← lift (i ^^^ i1)
+  let i3 := a.c0.b
+  let i4 := b.c0.b
+  let i5 ← lift (i3 ^^^ i4)
+  let i6 ← lift (i2 ||| i5)
+  let i7 := a.c1.a
+  let i8 := b.c1.a
+  let i9 ← lift (i7 ^^^ i8)
+  let i10 ← lift (i6 ||| i9)
+  let i11 := a.c1.b
+  let i12 := b.c1.b
+  let i13 ← lift (i11 ^^^ i12)
+  let different ← lift (i10 ||| i13)
+  ok (different = 0#u32)
+
+/-- [aspis_r1_cost_probe::ct_pole::keep_clear]:
+    Source: 'crates/aspis-r1-cost-probe/src/ct_pole.rs', lines 14:0-16:1 -/
+def ct_pole.keep_clear
+  (clear : Bool) (active : Bool) (chi : aspis_core.field.QM31)
+  (value : aspis_core.field.QM31) :
+  Result Bool
+  := do
+  let b ← ct_pole.equal chi value
+  ok (clear && (¬ (active && b)))
+
+end R1Z.PV_PoleLeafSource

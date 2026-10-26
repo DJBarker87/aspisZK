@@ -1,0 +1,16 @@
+import R1Z.PV_CurrentScaleInstall
+set_option autoImplicit false
+namespace R1Z.PV_WordZero
+open Aeneas Aeneas.Std
+-- Width-polymorphic: the same facts also discharge the U16 public-mask layer.
+theorem or_zero {ty : UScalarTy} (a b : UScalar ty) :
+    (a ||| b)=0 ↔ a=0 ∧ b=0 := by
+  simp only [UScalar.eq_equiv_bv_eq,UScalar.bv_or]
+  exact BitVec.or_eq_zero_iff
+
+theorem xor_zero {ty : UScalarTy} (a b : UScalar ty) : (a ^^^ b)=0 ↔ a=b := by
+  simp only [UScalar.eq_equiv_bv_eq,UScalar.bv_xor]
+  exact BitVec.xor_eq_zero_iff
+#print axioms or_zero
+#print axioms xor_zero
+end R1Z.PV_WordZero
