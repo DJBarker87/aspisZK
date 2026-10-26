@@ -17,7 +17,7 @@ theorem current :
 theorem stage :
     Op5T_Install.mapResult Op5T_Install.stageError
       (.fail .panic : Result (core.result.Result Unit AspisR1Stage2.verifier.Error)) ≠
-      .ok (.Err VTop_Stages.verifier.Error.Parse) := by
+      .ok (.Err (Op5T_Install.stageError AspisR1Stage2.verifier.Error.Parse)) := by
   intro same
   cases same
 
