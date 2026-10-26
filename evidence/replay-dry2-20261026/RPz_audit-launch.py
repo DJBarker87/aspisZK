@@ -7,6 +7,7 @@ def collect(name):
  p=E/name;p.parent.mkdir(parents=True,exist_ok=True)
  r=subprocess.run(['scp','-q',H+':'+B+'/'+name,str(p)],capture_output=True,text=True)
  if r.returncode:raise SystemExit('STOP collection: '+r.stderr)
+audit_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 state=json.loads((E/'RPz_state.json').read_text());used=state['attempts'];remaining=600-used
 passed=[m for m,s in state['state'].items() if s=='passed'];groups=[]
 # Nonoverlapping query groups. If necessary partition a module's declarations by
@@ -37,7 +38,7 @@ for i,(ms,bucket,buckets) in enumerate(groups,1):
  else:raise SystemExit('STOP audit admission retries exhausted')
  r=subprocess.run(['scp','-q',str(E/rel),H+':'+B+'/'+rel],capture_output=True,text=True)
  if r.returncode:raise SystemExit(r.stderr)
- cfg=dict(attempt=a,kind='lean',module=name,audit_modules=ms,audit_bucket=bucket,audit_buckets=buckets,sources=[rel],source_revision='new RPz audit input after committed research replay',source_tree_dirty=True,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz_objects:'+B+'/RPz_trusted'},command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',name+'.olean',rel],timeout=540,deps_fingerprint={'scope':'Fresh-object #print axioms via standard Lean API for a disjoint declaration partition'},expected_time='Precomputed exported axiom queries; no source replay or arithmetic generation',reservation_retries=retry)
+ cfg=dict(attempt=a,kind='lean',module=name,audit_modules=ms,audit_bucket=bucket,audit_buckets=buckets,sources=[rel],source_revision=audit_revision,source_tree_dirty=True,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz_objects:'+B+'/RPz_trusted'},command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',name+'.olean',rel],timeout=540,deps_fingerprint={'scope':'Fresh-object #print axioms via standard Lean API for a disjoint declaration partition'},expected_time='Precomputed exported axiom queries; no source replay or arithmetic generation',reservation_retries=retry)
  payload="""import json,hashlib
 from pathlib import Path
 B=Path(%r);T=Path(%r);ms=json.loads(%r);cfg=json.loads(%r);objs={}

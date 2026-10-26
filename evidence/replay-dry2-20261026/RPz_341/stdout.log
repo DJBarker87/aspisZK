@@ -1,0 +1,14 @@
+'AspisS2OwnedStage1.SdkReference.PrimitivesTotal.bytes_clone_total' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.alloc.vec.CloneVec.clone : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v => Slice.clone cloneInst.clone v
+def Aeneas.Std.core.num.checked_add_IScalar : {ty : IScalarTy} → IScalar ty → IScalar ty → Option (IScalar ty) :=
+fun {ty} x y => Option.ofResult (x + y)
+def Aeneas.Std.Isize.checked_add : Isize → Isize → Option Isize :=
+fun x y => core.num.checked_add_IScalar x y
+'AspisS2OwnedStage1.SdkReference.PrimitivesTotal.shared_allowed_exact' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'AspisS2OwnedStage1.SdkReference.PrimitivesTotal.shared_allowed_true' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
