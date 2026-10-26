@@ -243,3 +243,21 @@ ID14836. Lead resolution of the admission/replay-marker conflict is required.
 Root/headline premises removed0; target not yet established. Whole proof/audit
 data equality, compression correspondence,33 callbacks and native/experiment
 adequacy remain open as listed above. No push, merge, artifact or key change.
+
+
+## Automatic capacity resume5: unresolved admission conflict verified
+
+Read-only SSH inspection confirms launcher SHA-256
+`e6979aa097a0ebc34642608a594dfce081b40fdb814f526163dca1f69069661d`,
+the existing73-byte out-14835 marker, and absent time-14835.log. The existing
+marker and sent-input guards still precede admission. The prior required retry
+failed exit65, `attempt 14835 already used`; no resolution is present.
+Local-lean rule5 requires stop/report. No proof/native launch, infrastructure
+edit, marker deletion, guard bypass or replacement-ID substitution occurred.
+Receipt:capacity-resume-5.json. Lead resolution remains necessary.
+
+Budget remains35/100 Lean and3/15 Kani used;65Lean/12Kani remain, next unused
+ID14836. This is an infrastructure stop, not budget exhaustion. Root/headline
+premises removed0; target not yet established. Whole data equality, compression
+correspondence,33 callbacks and native/experiment adequacy remain open. No
+artifact, key, security-contract change, push or merge occurred.
