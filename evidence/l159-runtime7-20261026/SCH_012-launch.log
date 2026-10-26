@@ -1,0 +1,58 @@
+{"attempt": "SCH_012", "exit_status": 1, "wall_seconds": 3.289139371016063, "peak_rss_kib": "5284924", "swaps": "0", "print_axioms": ["'AspisR1.SCH_WrapperFirst.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+SCH_WrapperFirst.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SdkC_Oracle.program (?p >>= ?k)
+in the target expression
+  (eval H
+        (match (eval H (Program.done (ok allocated))).2 with
+        | ok a =>
+          SdkC_Oracle.program do
+            let result ← code
+            match result with
+              | core.result.Result.Err error => pure (core.result.Result.Err error)
+              | core.result.Result.Ok saved =>
+                match
+                  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+                    (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) with
+
+...
+           pure (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))
+        | fail e => Program.done (fail e)
+        | div => Program.done div)).2 =
+    ok (core.result.Result.Ok (saved, post, final))
+
+case ok
+A : Type
+code : SdkC_Source.Code S2W_Observation.Answer
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state final : A
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+H : Bytes → State
+allocated : A
+hr : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+success :
+  (eval H
+        (match (eval H (Program.done (ok allocated))).2 with
+        | ok a =>
+          SdkC_Oracle.program do
+            let result ← code
+            match result with
+              | core.result.Result.Err error => pure (core.result.Result.Err error)
+              | core.result.Result.Ok saved =>
+                match
+                  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+                    (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) with
+                | Outcome.panic => CheckpointBytes5Effect.liftResult (fail Error.assertionFailure)
+                | Outcome.returned written => do
+                  let cleaned ← liftM (allocator.cleanup a)
+                  pure (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))
+        | fail e => Program.done (fail e)
+        | div => Program.done div)).2 =
+    ok (core.result.Result.Ok (saved, post, final))
+⊢ ∃ allocated_1,
+    ok allocated = ok allocated_1 ∧ (eval H (SdkC_Oracle.program code)).2 = ok (core.result.Result.Ok saved)
+'AspisR1.SCH_WrapperFirst.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfb7187d1f436497398558cd6d1574bb9.scope; invocation ID: a0cd8fc0ef1748f3af8845e256f4b5c2
