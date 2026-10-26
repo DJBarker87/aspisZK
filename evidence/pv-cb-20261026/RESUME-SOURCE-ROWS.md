@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 9/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 14/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -21,3 +21,8 @@ Before: 0/73 discharged; current: 9/73. No endpoint removal claimed.
 |83|V205|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op83Source.op83_source|24008.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
 |84|V206|PARTIAL(extracted callee equation)|R1Z.PV_CB_Op84Source.op84_source|24009.json; Lean equation to emitted leaf_with_digest with extracted LegacyHashFn implementation passes. Aeneas emission omitted leaf wrapper despite its presence in LLBC; require exact wrapper extraction equation before claiming row discharge.|
 |86|V208|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op86Source.op86_source|24010.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
+|100|V209|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op100Source.op100_source|24011.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|101|V210|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op101Source.op101_source|24012.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|105|V211|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op105Source.op105_source|24013.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|107|V212|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op107Source.op107_source|24014.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|109|V213|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op109Source.op109_source|24015.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
