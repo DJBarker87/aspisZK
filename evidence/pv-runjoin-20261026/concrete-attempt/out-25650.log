@@ -1,0 +1,71 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_ReserveClassification.lean:18:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (true, after).2
+in the target expression
+  after.last_error = none
+
+case Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+self after : Store
+statement nonce : Std.Array U8 32#usize
+run :
+  (do
+      let (r, self1) ←
+        aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible self statement nonce
+      match r with
+        | core.result.Result.Ok reserved => Result.ok (reserved, self1)
+        | core.result.Result.Err error => do
+          let ek ← error.kind
+          Result.ok (false, { directory := self1.directory, last_error := some ek })) =
+    Result.ok (true, after)
+middle : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+accepted : Bool
+called :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible self statement nonce =
+    Result.ok (core.result.Result.Ok accepted, middle)
+tail :
+  (let (r, self1) := (core.result.Result.Ok accepted, middle)
+    match r with
+    | core.result.Result.Ok reserved => Result.ok (reserved, self1)
+    | core.result.Result.Err error => do
+      let ek ← error.kind
+      Result.ok (false, { directory := self1.directory, last_error := some ek })) =
+    Result.ok (true, after)
+same : (accepted, middle) = (true, after)
+⊢ after.last_error = none
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_ReserveClassification.lean:34:4: error: Type mismatch: After simplification, term
+  called
+ has type
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible self statement nonce =
+    Result.ok (core.result.Result.Ok accepted, middle)
+but is expected to have type
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible self statement nonce =
+    Result.ok (core.result.Result.Ok false, after)
+'R1Z.PV_RunJoin_ReserveClassification.accepted_clean' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_ReserveClassification.rejected_without_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       39.90 real         1.53 user         5.39 sys
+          2558705664  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              148152  page reclaims
+              264487  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               60800  voluntary context switches
+              280703  involuntary context switches
+           631986203  instructions retired
+           322173517  cycles elapsed
+            11502360  peak memory footprint
+
+exit=1
