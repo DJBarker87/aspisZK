@@ -1,10 +1,5 @@
 # Recorded receipts
 
-Resume through 2026-10-26 21:47 UTC: no new host run or local Lean compile.
-The restoration flag is absent (host-gate-checks.jsonl). No compile receipt
-is invented for draft/static inventory work. Lean 37 and Kani 8 remain;
-Env-J next ID 27400. The following tables retain historical receipts.
-
 Exact source hashes, dependency objects and complete #print axioms are in attempts.jsonl.
 This table is a rendering of existing evidence, not a final kernel replay.
 
@@ -101,6 +96,8 @@ This table is a rendering of existing evidence, not a final kernel replay.
 | 25398 | R1Z/PV_Src_CanonicalDecode | 0 | 0:02.51 | 4080944 | 0 | cef0887322 | standard only |
 | 25399 | R1Z/PV_Src_RecordAdmission | 1 | 0:02.25 | 4062876 | 0 | cef0887322 | FAILED — not accepted |
 | 25400 | R1Z/PV_Src_RecordAdmission | 0 | 0:02.22 | 4097864 | 0 | cef0887322 | standard only |
+| 27401 | R1Z/PV_Src_WithdrawalRecipient | 0 | 0:01.64 | 4091888 | 0 | 18c180a456 | standard only |
+| 27402 | R1Z/PV_Src_CanonicalNormalize | 0 | 0:01.64 | 4090916 | 0 | 18c180a456 | standard only |
 
 ## Kani
 
