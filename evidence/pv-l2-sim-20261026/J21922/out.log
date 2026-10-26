@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6PermutationRight.lean:9:27: error: Application type mismatch: The argument
+  recorded lst tag n
+has type
+  Recorded Bool
+but is expected to have type
+  Bool → Usize → Recorded (Bool × Usize)
+in the application
+  PV_L2_F6FlagLoop.loop 13 (recorded lst tag n)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6PermutationRight.lean:14:2: error: Tactic `apply` failed: could not unify the conclusion of `PV_L2_F6FlagLoop.erases 13
+  (PV_L2_F6PermutationRightStep.recorded lst tag n) n (perm_right_ok_loop lst tag n)`
+  (PV_L2_F6FlagLoop.loop 13 (PV_L2_F6PermutationRightStep.recorded lst tag n) n ?fuel ?flag ?index).value =
+    perm_right_ok_loop lst tag n ?flag ?index
+with the goal
+  (recorded lst tag n).value = perm_right_ok lst tag n
+
+Note: The full type of `PV_L2_F6FlagLoop.erases 13 (PV_L2_F6PermutationRightStep.recorded lst tag n) n
+  (perm_right_ok_loop lst tag n)` is
+  (∀ (flag : Bool) (index : Usize),
+      perm_right_ok_loop lst tag n flag index =
+        if index < n then do
+          let __x ← (PV_L2_F6PermutationRightStep.recorded lst tag n flag index).value
+          match __x with
+            | (flag1, index1) => perm_right_ok_loop lst tag n flag1 index1
+        else ok flag) →
+    (∀ (flag : Bool) (index : Usize) (after : Bool × Usize),
+        (PV_L2_F6PermutationRightStep.recorded lst tag n flag index).value = ok after → ↑after.2 = ↑index + 1) →
+      ∀ (fuel : ℕ) (flag : Bool) (index : Usize),
+        ↑n ≤ ↑index + fuel →
+          (PV_L2_F6FlagLoop.loop 13 (PV_L2_F6PermutationRightStep.recorded lst tag n) n fuel flag index).value =
+            perm_right_ok_loop lst tag n flag index
+
+lst tag : Slice U32
+n : Usize
+⊢ (recorded lst tag n).value = perm_right_ok lst tag n
+'R1Z.PV_L2_F6PermutationRight.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

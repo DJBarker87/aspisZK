@@ -1,0 +1,60 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F6NullRowStep.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_L2_Record.bind ?a ?f).value
+in the target expression
+  (do
+        let __x ← PV_L2_F6NullEntry.recorded e n tag r ff t
+        match __x with
+          | (isf, ip, ev) => do
+            let want ← PV_L2_F6NullWant.recorded isf ip ev
+            let i9 ← operation (Event.mul ↑f ↑n) (f * n)
+            let i10 ← operation (Event.add ↑i9 ↑t) (i9 + t)
+            let i11 ← operation (Event.index 0 ↑i10) (nm.index_usize i10)
+            have i12 : UScalar UScalarTy.U64 := UScalar.cast UScalarTy.U64 i11
+            let t1 ← operation (Event.add ↑t ↑1#usize) (t + 1#usize)
+            operation (Event.guard 14 0 0 (decide (i12 = want))) (ok (ok1 && decide (i12 = want), t1))).value =
+    do
+    let __x ← PV_L2_F6NullEntry.source e n tag r ff t
+    match __x with
+      | (isf, ip, ev) => do
+        let want ← PV_L2_F6NullWant.source isf ip ev
+        let i9 ← f * n
+        let i10 ← i9 + t
+        let i11 ← nm.index_usize i10
+        let i12 ← lift (UScalar.cast UScalarTy.U64 i11)
+        let t1 ← t + 1#usize
+        ok (ok1 && decide (i12 = want), t1)
+
+nm e : Slice U32
+n : Usize
+tag : Slice U32
+r f ff : Usize
+ok1 : Bool
+t : Usize
+⊢ (do
+        let __x ← PV_L2_F6NullEntry.recorded e n tag r ff t
+        match __x with
+          | (isf, ip, ev) => do
+            let want ← PV_L2_F6NullWant.recorded isf ip ev
+            let i9 ← operation (Event.mul ↑f ↑n) (f * n)
+            let i10 ← operation (Event.add ↑i9 ↑t) (i9 + t)
+            let i11 ← operation (Event.index 0 ↑i10) (nm.index_usize i10)
+            have i12 : UScalar UScalarTy.U64 := UScalar.cast UScalarTy.U64 i11
+            let t1 ← operation (Event.add ↑t ↑1#usize) (t + 1#usize)
+            operation (Event.guard 14 0 0 (decide (i12 = want))) (ok (ok1 && decide (i12 = want), t1))).value =
+    do
+    let __x ← PV_L2_F6NullEntry.source e n tag r ff t
+    match __x with
+      | (isf, ip, ev) => do
+        let want ← PV_L2_F6NullWant.source isf ip ev
+        let i9 ← f * n
+        let i10 ← i9 + t
+        let i11 ← nm.index_usize i10
+        let i12 ← lift (UScalar.cast UScalarTy.U64 i11)
+        let t1 ← t + 1#usize
+        ok (ok1 && decide (i12 = want), t1)
+'R1Z.PV_L2_F6NullRowStep.recorded_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6NullRowStep.recorded_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6NullRowStep.unroll' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F6NullRowStep.increment' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
