@@ -1,0 +1,14 @@
+def Aeneas.Std.Usize.checked_sub : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_sub_UScalar x y
+def Aeneas.Std.core.num.checked_sub_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x - y)
+def Aeneas.Std.UScalar.sub : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => if ↑x < ↑y then fail Error.integerOverflow else ok (BitVec.ofNat ty.numBits (↑x - ↑y)#uscalar)
+Aeneas.Std.Usize.div_spec (x : Usize) {y : Usize} (hnz : ↑y ≠ 0) : x / y ⦃ z => ↑z = ↑x / ↑y ⦄
+Aeneas.Std.Usize.mul_spec {x y : Usize} (hmax : ↑x * ↑y ≤ Usize.max) : x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.UScalar.sub_spec {ty : UScalarTy} {x y : UScalar ty} (h : ↑y ≤ ↑x) : x - y ⦃ z => ↑z = ↑x - ↑y ∧ ↑y ≤ ↑x ⦄
+theorem Aeneas.Std.UScalar.eq_of_val_eq : ∀ {ty : UScalarTy} {i j : UScalar ty}, ↑i = ↑j → i = j :=
+fun {ty} x x_1 x_2 =>
+  match x, x_1, x_2 with
+  | { toFin := ⟨val, isLt⟩ }#uscalar, { toFin := ⟨.(val), isLt_1⟩ }#uscalar,
+    Eq.refl ↑({ toFin := ⟨.(val), .(isLt)⟩ }#uscalar) => rfl

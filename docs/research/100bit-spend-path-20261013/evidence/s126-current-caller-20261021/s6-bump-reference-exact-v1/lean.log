@@ -1,0 +1,66 @@
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6BumpReferenceExactV1.lean:41:4: error: unsolved goals
+case pos.refine_1
+initial length bytes alignment : Usize
+positive : 0 < ↑alignment
+cursor : Usize := if initial = 0#usize then length else initial
+pick : (if initial = 0#usize then ok length else ok initial) = ok cursor
+cursorVal : ↑cursor = if initial = 0#usize then ↑length else ↑initial
+fits : ↑bytes ≤ ↑cursor
+available : UScalar UScalarTy.Usize
+subtract : cursor - bytes = ok available
+availableVal : ↑available = ↑cursor - ↑bytes ∧ ↑bytes ≤ ↑cursor
+checked : cursor.checked_sub bytes = some available
+quotient : UScalar UScalarTy.Usize
+divide : available / alignment = ok quotient
+quotientVal : ↑quotient = ↑available / ↑alignment
+productBound : ↑quotient * ↑alignment ≤ Usize.max
+next : UScalar UScalarTy.Usize
+multiply : quotient * alignment = ok next
+nextVal : ↑next = ↑quotient * ↑alignment
+value : ↑next = (↑cursor - ↑bytes) / ↑alignment * ↑alignment
+⊢ (if next < 8#usize then ok none else ok (some next)) = ok (if next < 8#usize then none else some next)
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6BumpReferenceExactV1.lean:59:60: error: unsolved goals
+initial length bytes alignment : Usize
+positive : 0 < ↑alignment
+cursor : Usize := if initial = 0#usize then length else initial
+pick : (if initial = 0#usize then ok length else ok initial) = ok cursor
+cursorVal : ↑cursor = if initial = 0#usize then ↑length else ↑initial
+fits : ¬↑bytes ≤ ↑cursor
+underflow : ↑cursor < ↑bytes
+⊢ (match cursor - bytes with
+    | ok x => some x
+    | x => none) =
+    none
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6BumpReferenceExactV1.lean:66:6: error: Tactic `rfl` failed: The left-hand side
+  AspisS6BumpOwnedReference.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual Usize
+    none
+is not definitionally equal to the right-hand side
+  ok none
+
+case neg.refine_1
+initial length bytes alignment : Usize
+positive : 0 < ↑alignment
+cursor : Usize := if initial = 0#usize then length else initial
+pick : (if initial = 0#usize then ok length else ok initial) = ok cursor
+cursorVal : ↑cursor = if initial = 0#usize then ↑length else ↑initial
+fits : ¬↑bytes ≤ ↑cursor
+underflow : ↑cursor < ↑bytes
+checked : cursor.checked_sub bytes = none
+⊢ AspisS6BumpOwnedReference.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual Usize
+      none =
+    ok none
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6BumpReferenceExactV1.lean:60:59: warning: This simp argument is unused:
+  UScalar.sub
+
+Hint: Omit it from the simp argument list.
+  simp [Usize.checked_sub, ̲core.num.checked_sub_UScalar,U̵S̵c̵a̵l̵a̵r̵.̵s̵ ̲ub̵,̵u̵nderflow, ̲Option.ofResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/dominic/ZK/.worktrees/s126-caller-20261021/docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/S6BumpReferenceExactV1.lean:60:71: warning: This simp argument is unused:
+  underflow
+
+Hint: Omit it from the simp argument list.
+  simp [Usize.checked_sub, ̲core.num.checked_sub_UScalar, ̲UScalar.sub,u̵n̵d̵e̵r̵f̵l̵o̵w̵,̵ ̲Option.ofResult]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisS6BumpReferenceExact.step_total_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
