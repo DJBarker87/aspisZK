@@ -10053,3 +10053,18 @@ the observer complete (an attacker who can induce EIO sees the failure in both w
 runjoin5 proves the failure event witness-independent; (A) otherwise. pv-runjoin5 relaunched with the
 remaining 89 Lean / 15 Kani to state the disagreement exactly, prepare both options as separate stated
 theorems, and continue the concrete instance. Six jobs running. Privacy target not yet established.
+
+## D207 (Stream B, 2026-10-26 20:40): rw16 done, two callback rows supplied; rw17 on compression by split steps
+
+pv-rw16 (`codex/cx-prover-rw-20261023`, head 5d97a425c5; 65/65 Lean, 48 passes, standard axioms;
+12/12 Kani: nine timeouts, three driver/compiler/check failures; focused audit over 1,224 cached
+dependency hashes): callbacks V262/op255 and V255/op247 supplied through the complete caller
+(33 → 31 remain); current complex/quartic arithmetic transports, owned compression structure, symbolic
+pole/polynomial bounds and the indexed ordinary-reference policy proved. V163 (whole proof/audit data
+equality) and V164 (shipped arity-16 compression correspondence) stay OPEN: the Kani harnesses over the
+shipped compression and sampler loops time out. Root premises removed: 0; two ledger callback rows
+move to CLOSED-ON-CANDIDATE at the next recount. pv-rw17 relaunched with a fresh budget and a ruling:
+no unchanged reruns; V164 by the P6 route decomposed per step (owned reference, per-step Kani with a
+proved-sufficient bound, Lean induction over steps, the route that worked for parts 47-48), then V163,
+then callbacks outside pv-cb's list. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2, cb.
+Privacy target not yet established.
