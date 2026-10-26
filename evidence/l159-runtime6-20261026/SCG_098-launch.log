@@ -1,0 +1,37 @@
+{"attempt": "SCG_098", "exit_status": 0, "wall_seconds": 6.484312566986773, "peak_rss_kib": "5498472", "swaps": "0", "print_axioms": []}
+@AspisR1.SCG_SharedNative.accepted : ∀ {W A F CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (a : AspisR1.SCE_Experiment.Adversary A) (w1 w2 : W)
+          (c : AspisR1.DrvC_Installation.Configuration F CoreError) (indexError : CoreError)
+          (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : Aspi
+...
+.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program) (ops : AdapterRw.Ops)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (final : A),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) →
+    AspisR1.Hiq_ByteSelection.select ops id
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).2 =
+      have i := (AspisV8R19.MemoizedProgramLaw.eval H a.first).2;
+      have next := (AspisV8R19.MemoizedProgramLaw.eval H (a.second i saved post final)).2;
+      AspisR1.P2P_NativeSelection.pair ops id i.entry next.entry next.data next.slot
+@AspisR1.SCG_Recorder.select_congr : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (project : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+  (left right : A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  left (AspisV8R19.MemoizedProgramLaw.eval H source).2 = right (AspisV8R19.MemoizedProgramLaw.eval H source).2 →
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program source project left) =
+      AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program source project right)
+
+Running as unit: run-r54dd5be0d4b84803aa976f938e827017.scope; invocation ID: 5464c65ee3d1464a81cbd8d9811db2e0

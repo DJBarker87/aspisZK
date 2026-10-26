@@ -1,0 +1,36 @@
+SCG_FirstTraceLog.lean:23:22: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.sdk`
+SCG_FirstTraceLog.lean:24:31: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.sdk`
+SCG_FirstTraceLog.lean:28:32: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.child`
+SCG_FirstTraceLog.lean:33:17: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.sdk`
+SCG_FirstTraceLog.lean:35:13: error(lean.unknownIdentifier): Unknown identifier `GExq_Caller.sdk`
+SCG_FirstTraceLog.lean:34:88: error: unsolved goals
+F C : Type
+adapter : Ops
+base : AspisR1CurrentCaller.Ops
+stage : VTop_Stages.Ops
+finish : AspisR1Stage2.Stage2Finish.FinishOps F
+reserved : Bool
+query : Port3_NativeQueryBody.Ops
+geo : Port3_NativeGeometryBody.Ops C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+program : solana_pubkey.Pubkey
+accounts : Slice Cuts.Account
+data : Slice U8
+saved : alloc.vec.Vec U8
+log : Log
+execution :
+  run sorry (S2W_Outer.stage1_owned sorry S2W_Outer.traceEffects program accounts data) [] =
+    ok (core.result.Result.Ok saved, log)
+⊢ ∃ semantic pub proof split,
+    GExq_RecordTrace.projectLog log =
+        [GExq_OuterRecord.Event.first semantic pub proof split (core.result.Result.Ok saved)] ∧
+      SCG_OuterLog.trace hashv (fun {A} => sorry) log =
+        SdkC_Source.readLog
+          (SdkC_Source.run hashv
+              (GExp_FirstCode.code (GExp_FirstPair.base base reserved query geo) B std hashv
+                (AspisS6CurrentFirstInstallation.toDigest (SolanaDigest.Insts.Aspis_coreDigestDigest32 sorry))
+                (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof split)
+              []).2
+'AspisR1.SCG_FirstTraceLog.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

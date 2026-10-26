@@ -1,0 +1,31 @@
+SCG_BatchDictionary.lean:45:70: error: unsolved goals
+H K : Type
+D : aspis_core.digest.Digest32 H
+E : aspis_core.digest.Digest32 K
+hash : H
+key : K
+proof : Slice U8
+queries : Std.Array U32 22#usize
+roots : Std.Array SdkC_Source.Digest 2#usize
+folded : SdkC_Source.Digest
+batch : Usize
+⊢ (do
+      let root0 ← CheckpointBytes5Effect.liftResult (roots.index_usize 0#usize)
+      let root1 ← CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)
+      Port9OR_Batch.values Port4B_Install.leaves D hash proof queries (Array.make 3#usize [root0, root1, folded] ⋯)
+          batch) =
+    do
+    let root0 ← CheckpointBytes5Effect.liftResult (roots.index_usize 0#usize)
+    let root1 ← CheckpointBytes5Effect.liftResult (roots.index_usize 1#usize)
+    Port9OR_Batch.values Port4B_Install.leaves E key proof queries (Array.make 3#usize [root0, root1, folded] ⋯) batch
+SCG_BatchDictionary.lean:46:35: warning: This simp argument is unused:
+  values Port4B_Install.leaves D E hash
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkC_BatchSource.code,̵v̵a̵l̵u̵e̵s̵ ̵P̵o̵r̵t̵4̵B̵_̵I̵n̵s̵t̵a̵l̵l̵.̵l̵e̵a̵v̵e̵s̵ ̵D̵ ̵E̵ ̵h̵a̵s̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SCG_BatchDictionary.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_BatchDictionary.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_BatchDictionary.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_BatchDictionary.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

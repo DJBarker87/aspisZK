@@ -1,0 +1,38 @@
+{"attempt": "SCG_084", "exit_status": 0, "wall_seconds": 2.893468105001375, "peak_rss_kib": "5484632", "swaps": "0", "print_axioms": []}
+AspisR1.P6C_Accepted.issued_calls_ok : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log) (value : A),
+  (AspisR1.SdkC_Source.run hashv code before).1 = Aeneas.Std.Result.ok value →
+    (∀ q ∈ before, ∃ digest, q.returned = Aeneas.Std.Result.ok digest) →
+      ∀ q ∈ (AspisR1.SdkC_Source.run hashv code before).2, ∃ digest, q.returned = Aeneas.Std.Result.ok digest
+@AspisR1.P6C_CarrierGap.independent : ∀ {F : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPrepara
+...
+as.Std.Result AspisR1.SdkC_Source.Digest)
+              (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+              AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                  ∀ (a : AspisV8R19.DuplexFrames.Bytes) (d : AspisV8R19.SourceDuplexStep.State),
+                    d ≠ H a →
+                      AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.P6C_Extension.dictionary hashv H) () H
+                          AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                          AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                        ∃ fake,
+                          AspisR1.Op5T_Marks.FirstMarks fake ∧
+                            AspisR1.Op5T_Marks.SecondMarks fake ∧
+                              (∃ before after,
+                                  AspisR1.S2W_ExpandedChildren.events fake event =
+                                    before ++
+                                        [AspisR1.S2W_ExpandedTrace.Event.site AspisR1.S2LeadInterface.Site.batch0,
+                                          AspisR1.S2W_ExpandedTrace.Event.child (a, d)] ++
+                                      after) ∧
+                                ∀ (R : Type)
+                                  (code :
+                                    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                      AspisV8R19.SourceDuplexStep.State R),
+                                  AspisR1.Op5I_AcceptedCarrierCounterexample.readEvents
+                                      (AspisR1.S2W_ExpandedChildren.events fake event) ≠
+                                    (AspisV8R19.MemoizedProgramLaw.eval H code).1
+
+Running as unit: run-r358d21eca651403885c5a02c25a77fd3.scope; invocation ID: 79417b552f0944a99ee0521001bb179a

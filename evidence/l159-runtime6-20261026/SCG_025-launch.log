@@ -1,0 +1,47 @@
+{"attempt": "SCG_025", "exit_status": 1, "wall_seconds": 2.4559237500070594, "peak_rss_kib": "5340916", "swaps": "0", "print_axioms": ["'AspisR1.SCG_WrapperLog.lifted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCG_WrapperLog.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+SCG_WrapperLog.lean:30:35: error(lean.unknownIdentifier): Unknown identifier `eval_bind`
+SCG_WrapperLog.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SdkC_Oracle.program (?p >>= ?k)
+in the target expression
+  (eval H
+        (AspisV8R19.OracleProgramOps.bind (Program.done (ok allocated)) fun r =>
+          match r with
+          | ok a =>
+            SdkC_Oracle.program do
+              let result ← body
+              match result with
+                | core.result.Result.Err error => pure (core.result.Result.Err error)
+                | core.result.Result.Ok saved =>
+                  match
+                    copy (acquire e.heap (e.heap.accounts 2)
+...
+core.result.Result.Ok saved =>
+                  match
+                    copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+                      (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) with
+                  | Outcome.panic => CheckpointBytes5Effect.liftResult (fail Error.assertionFailure)
+                  | Outcome.returned written => do
+                    let cleaned ← liftM (allocator.cleanup a)
+                    pure (core.result.Result.Ok (saved, release written (exclusiveGuard e.heap 2 0 0), cleaned))
+          | fail e => Program.done (fail e)
+          | div => Program.done div)).1 =
+    (eval H (SdkC_Oracle.program body)).1
+SCG_WrapperLog.lean:30:83: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_OraclePort.bindR, ̲eval_bind, ̲reserved, ̲VTop_OracleCode.continueWith,e̵v̵a̵l̵,̵
+  ̲ ̲ ̲ ̲ ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:30:88: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵D̵r̵v̵C̵_̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵.̵b̵i̵n̵d̵R̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵r̵e̵s̵e̵r̵v̵e̵d̵,̵V̵T̵o̵p̵_̵O̵r̵a̵c̵l̵e̵C̵o̵d̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵W̵i̵t̵h̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲D̲r̲v̲C̲_̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲.̲b̲i̲n̲d̲R̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲V̲T̲o̲p̲_̲O̲r̲a̲c̲l̲e̲C̲o̲d̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲W̲i̲t̲h̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SCG_WrapperLog.lifted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_WrapperLog.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6ea09043e4f843b6b406e8481cd0c758.scope; invocation ID: c12df94d10354359a0455fc745722d62

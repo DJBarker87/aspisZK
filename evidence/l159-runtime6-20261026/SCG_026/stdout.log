@@ -1,0 +1,182 @@
+SCG_WrapperLog.lean:38:16: error: unsolved goals
+case ok.Err
+A : Type
+body : SdkC_Source.Code S2W_Observation.Answer
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state allocated : A
+reserved : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+H : Bytes → State
+error : S2W_Observation.PE
+hb : (eval H (SdkC_Oracle.program body)).2 = ok (core.result.Result.Err error)
+⊢ (eval H (SdkC_Oracle.program body)).1 ++ (eval H (SdkC_Oracle.program (pure (core.result.Result.Err error)))).1 =
+    (eval H (SdkC_Oracle.program body)).1
+SCG_WrapperLog.lean:46:46: error: Tactic `rfl` failed: The left-hand side
+  (eval H (SdkC_Oracle.program body)).1 ++
+    ([] ++
+      (eval H
+          (VTop_OracleCode.continueWith (ok v✝) fun a =>
+            SdkC_Oracle.program
+              (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1)
+is not definitionally equal to the right-hand side
+  (eval H (SdkC_Oracle.program body)).1
+
+case h_2.ok
+A : Type
+body : SdkC_Source.Code S2W_Observation.Answer
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state allocated : A
+reserved : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+H : Bytes → State
+saved : alloc.vec.Vec U8
+hb : (eval H (SdkC_Oracle.program body)).2 = ok (core.result.Result.Ok saved)
+x✝ : Outcome (ℕ → Record)
+written✝ : Heap (ℕ → Record)
+heq✝ :
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+      (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) =
+    Outcome.returned written✝
+v✝ : A
+⊢ (eval H (SdkC_Oracle.program body)).1 ++
+      ([] ++
+        (eval H
+            (VTop_OracleCode.continueWith (ok v✝) fun a =>
+              SdkC_Oracle.program
+                (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1) =
+    (eval H (SdkC_Oracle.program body)).1
+SCG_WrapperLog.lean:46:46: error: Tactic `rfl` failed: The left-hand side
+  (eval H (SdkC_Oracle.program body)).1 ++
+    ([] ++
+      (eval H
+          (VTop_OracleCode.continueWith (fail e✝) fun a =>
+            SdkC_Oracle.program
+              (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1)
+is not definitionally equal to the right-hand side
+  (eval H (SdkC_Oracle.program body)).1
+
+case h_2.fail
+A : Type
+body : SdkC_Source.Code S2W_Observation.Answer
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state allocated : A
+reserved : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+H : Bytes → State
+saved : alloc.vec.Vec U8
+hb : (eval H (SdkC_Oracle.program body)).2 = ok (core.result.Result.Ok saved)
+x✝ : Outcome (ℕ → Record)
+written✝ : Heap (ℕ → Record)
+heq✝ :
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+      (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) =
+    Outcome.returned written✝
+e✝ : Error
+⊢ (eval H (SdkC_Oracle.program body)).1 ++
+      ([] ++
+        (eval H
+            (VTop_OracleCode.continueWith (fail e✝) fun a =>
+              SdkC_Oracle.program
+                (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1) =
+    (eval H (SdkC_Oracle.program body)).1
+SCG_WrapperLog.lean:46:46: error: Tactic `rfl` failed: The left-hand side
+  (eval H (SdkC_Oracle.program body)).1 ++
+    ([] ++
+      (eval H
+          (VTop_OracleCode.continueWith div fun a =>
+            SdkC_Oracle.program
+              (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1)
+is not definitionally equal to the right-hand side
+  (eval H (SdkC_Oracle.program body)).1
+
+case h_2.div
+A : Type
+body : SdkC_Source.Code S2W_Observation.Answer
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state allocated : A
+reserved : reserve allocator (admittedSizes e 3 firstSizes) state = ok allocated
+H : Bytes → State
+saved : alloc.vec.Vec U8
+hb : (eval H (SdkC_Oracle.program body)).2 = ok (core.result.Result.Ok saved)
+x✝ : Outcome (ℕ → Record)
+written✝ : Heap (ℕ → Record)
+heq✝ :
+  copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+      (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved)) =
+    Outcome.returned written✝
+⊢ (eval H (SdkC_Oracle.program body)).1 ++
+      ([] ++
+        (eval H
+            (VTop_OracleCode.continueWith div fun a =>
+              SdkC_Oracle.program
+                (pure (core.result.Result.Ok (saved, release written✝ (exclusiveGuard e.heap 2 0 0), a))))).1) =
+    (eval H (SdkC_Oracle.program body)).1
+SCG_WrapperLog.lean:34:29: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b̵,̵VTop_OracleCode.continueWith, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:35:22: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b̵,̵VTop_OracleCode.continueWith, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:38:30: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b̵,̵VTop_OracleCode.continueWith, ̲SdkC_Oracle.program, ̲eval,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:38:62: warning: This simp argument is unused:
+  SdkC_Oracle.program
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵b̵,̵V̵T̵o̵p̵_̵O̵r̵a̵c̵l̵e̵C̵o̵d̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵W̵i̵t̵h̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲h̲b̲,̲ ̲V̲T̲o̲p̲_̲O̲r̲a̲c̲l̲e̲C̲o̲d̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲W̲i̲t̲h̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:38:82: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [hb, ̲VTop_OracleCode.continueWith, ̲SdkC_Oracle.program,e̵v̵a̵l̵,̵
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:38:87: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵b̵,̵V̵T̵o̵p̵_̵O̵r̵a̵c̵l̵e̵C̵o̵d̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵W̵i̵t̵h̵,̵S̵d̵k̵C̵_̵O̵r̵a̵c̵l̵e̵.̵p̵r̵o̵g̵r̵a̵m̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲h̲b̲,̲ ̲V̲T̲o̲p̲_̲O̲r̲a̲c̲l̲e̲C̲o̲d̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲W̲i̲t̲h̲,̲ ̲S̲d̲k̲C̲_̲O̲r̲a̲c̲l̲e̲.̲p̲r̲o̲g̲r̲a̲m̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:40:17: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵b̵,̵VTop_OracleCode.continueWith]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCG_WrapperLog.lean:45:56: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵D̵r̵v̵C̵_̵O̵r̵a̵c̵l̵e̵P̵o̵r̵t̵.̵b̵i̵n̵d̵R̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲D̲r̲v̲C̲_̲O̲r̲a̲c̲l̲e̲P̲o̲r̲t̲.̲b̲i̲n̲d̲R̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.SCG_WrapperLog.lifted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCG_WrapperLog.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

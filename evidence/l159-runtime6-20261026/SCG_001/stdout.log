@@ -1,0 +1,849 @@
+def AspisR1.SCF_RequiredTransport.CleanAccountTransport : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+            ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+          AspisR1.S2W_D189Wrappers.Allocator A →
+            AspisR1.S2W_ExtractionBoundary.Program →
+              AspisR1.SCE_Experiment.Adversary A →
+                ℕ →
+                  ℕ →
+                    (AspisR1.GExq_AccountExperiment.Outcome A →
+                        AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) →
+                      (AspisR1.GExq_AccountExperiment.Outcome A →
+                          AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs) →
+                        Prop :=
+fun {A F C} c D hashv copy allocator id a Q0 Q1 project select =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    have v := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a);
+    have physical :=
+      AspisR1.F3T_Experiment.view
+        (v.1, AspisR1.F3T_Canon.canonInput (AspisR1.F3T_ByteCarrier.input c (AspisR1.SCE_Experiment.submitted v.2.1)),
+          AspisR1.SCE_Experiment.accepted v.2);
+    have model :=
+      AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.F3T_Charged.projected D
+          (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))));
+    physical.2.2 = true →
+      ¬AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+            (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.Hiq_RecordedJoint.program (AspisR1.SCE_Experiment.account c hashv copy allocator id a) project
+                select)) →
+        model.2.2 = true ∧ AspisR1.OraclePortRefineJoin.RecoveredInputAgreement physical model
+theorem AspisR1.DrvC_CutAcceptance.source_accepts : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) accounts1 accounts2 saved f s →
+              AspisR1.MultiproofConeCanonical.bytesOf ↑s.proof = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof →
+                AspisR1.MultiproofConeCanonical.bytesOf ↑s.pub = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub →
+                  AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint =
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑saved →
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.DrvC_PairProgram.source c hashv f.semantic f.pub f.proof)).2 =
+                      true :=
+fun {F C} c native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f s cuts proof pub
+    checkpoint =>
+  have sp := AspisR1.DrvC_AcceptedCalls.split c f.semantic f.pub f.proof f.split saved cuts.first;
+  have first := cuts.first;
+  have one :=
+    AspisR1.DrvC_AcceptedCalls.first c native1 native2 hashv extraction sha256 H p1 syscall f.semantic f.pub f.proof
+      saved
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            AdapterRw.first_decoded (AspisR1.DrvC_Installation.sdk c) f.semantic f.pub f.proof _a =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved))
+          sp)
+        first);
+  have two :=
+    AspisR1.DrvC_AcceptedCalls.second c native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f
+      s cuts;
+  have hp := AspisR1.DrvC_Bytes.slice_injective s.proof f.proof proof;
+  have hu := AspisR1.DrvC_Bytes.slice_injective s.pub f.pub pub;
+  have hc := AspisR1.DrvC_Bytes.slice_injective s.checkpoint saved.deref checkpoint;
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg Prod.snd
+            (Eq.trans
+              (AspisV8R19.OracleProgramOps.eval_bind
+                (AspisR1.GExp_Experiment.first (AspisR1.GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry)
+                  c.boundaries c.std hashv (AspisR1.DrvC_Installation.currentDigest c)
+                  { semantic := AspisS6CurrentVerifierCarrier.toPublic f.semantic, pub := f.pub, proof := f.proof,
+                    split := 10#usize })
+                (fun first =>
+                  match first with
+                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+                    AspisV8R19.OracleProgramOps.bind
+                      (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                        (AspisR1.DrvC_Installation.digest c)
+                        { pub := f.pub, proof := f.proof, checkpoint := saved.deref })
+                      fun second =>
+                      AspisV8R19.MemoizedProgramLaw.Program.done
+                        (match second with
+                        | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                        | x => false)
+                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                H)
+              (congr
+                (congrArg Prod.mk
+                  (congrArg
+                    (HAppend.hAppend
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.GExp_Experiment.first
+                            (AspisR1.GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                            hashv (AspisR1.DrvC_Installation.currentDigest c)
+                            { semantic := AspisS6CurrentVerifierCarrier.toPublic f.semantic, pub := f.pub,
+                              proof := f.proof, split := 10#usize })).1)
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (Eq.trans
+                          (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+                                  AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                                      (AspisR1.DrvC_Installation.digest c)
+                                      { pub := f.pub, proof := f.proof, checkpoint := saved.deref })
+                                    fun second =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                      (match second with
+                                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                      | x => false)
+                                | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                              one))
+                          (AspisV8R19.OracleProgramOps.eval_bind
+                            (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                              (AspisR1.DrvC_Installation.digest c)
+                              { pub := f.pub, proof := f.proof, checkpoint := saved.deref })
+                            (fun second =>
+                              AspisV8R19.MemoizedProgramLaw.Program.done
+                                (match second with
+                                | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                | x => false))
+                            H))
+                        (congr
+                          (congrArg Prod.mk
+                            (congrArg
+                              (HAppend.hAppend
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                                      (AspisR1.DrvC_Installation.digest c)
+                                      { pub := f.pub, proof := f.proof, checkpoint := saved.deref })).1)
+                              (congrArg Prod.fst
+                                (congrArg (Prod.mk [])
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                      | x => false)
+                                    (Eq.mp
+                                      (congrArg
+                                        (fun _a =>
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                  c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                  { pub := f.pub, proof := f.proof, checkpoint := _a })).2 =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                        hc)
+                                      (Eq.mp
+                                        (congrArg
+                                          (fun _a =>
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                    c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                    { pub := _a, proof := f.proof, checkpoint := s.checkpoint })).2 =
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                          hu)
+                                        (Eq.mp
+                                          (congrArg
+                                            (fun _a =>
+                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                    (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                      c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                      { pub := s.pub, proof := _a, checkpoint := s.checkpoint })).2 =
+                                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                            hp)
+                                          two))))))))
+                          (congrArg Prod.snd
+                            (congrArg (Prod.mk [])
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                  | x => false)
+                                (Eq.mp
+                                  (congrArg
+                                    (fun _a =>
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                              c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                              { pub := f.pub, proof := f.proof, checkpoint := _a })).2 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                    hc)
+                                  (Eq.mp
+                                    (congrArg
+                                      (fun _a =>
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                { pub := _a, proof := f.proof, checkpoint := s.checkpoint })).2 =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                      hu)
+                                    (Eq.mp
+                                      (congrArg
+                                        (fun _a =>
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                  c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                  { pub := s.pub, proof := _a, checkpoint := s.checkpoint })).2 =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                        hp)
+                                      two)))))))))))
+                (congrArg Prod.snd
+                  (Eq.trans
+                    (Eq.trans
+                      (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                                  (AspisR1.DrvC_Installation.digest c)
+                                  { pub := f.pub, proof := f.proof, checkpoint := saved.deref })
+                                fun second =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  (match second with
+                                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                  | x => false)
+                            | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                          one))
+                      (AspisV8R19.OracleProgramOps.eval_bind
+                        (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                          (AspisR1.DrvC_Installation.digest c)
+                          { pub := f.pub, proof := f.proof, checkpoint := saved.deref })
+                        (fun second =>
+                          AspisV8R19.MemoizedProgramLaw.Program.done
+                            (match second with
+                            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                            | x => false))
+                        H))
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg
+                          (HAppend.hAppend
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                                  (AspisR1.DrvC_Installation.digest c)
+                                  { pub := f.pub, proof := f.proof, checkpoint := saved.deref })).1)
+                          (congrArg Prod.fst
+                            (congrArg (Prod.mk [])
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                                  | x => false)
+                                (Eq.mp
+                                  (congrArg
+                                    (fun _a =>
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                              c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                              { pub := f.pub, proof := f.proof, checkpoint := _a })).2 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                    hc)
+                                  (Eq.mp
+                                    (congrArg
+                                      (fun _a =>
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                { pub := _a, proof := f.proof, checkpoint := s.checkpoint })).2 =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                      hu)
+                                    (Eq.mp
+                                      (congrArg
+                                        (fun _a =>
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                                  c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                                  { pub := s.pub, proof := _a, checkpoint := s.checkpoint })).2 =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                        hp)
+                                      two))))))))
+                      (congrArg Prod.snd
+                        (congrArg (Prod.mk [])
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PUnit.unit) => true
+                              | x => false)
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved
+                                          hashv (AspisR1.DrvC_Installation.digest c)
+                                          { pub := f.pub, proof := f.proof, checkpoint := _a })).2 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                hc)
+                              (Eq.mp
+                                (congrArg
+                                  (fun _a =>
+                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c) c.reserved
+                                            hashv (AspisR1.DrvC_Installation.digest c)
+                                            { pub := _a, proof := f.proof, checkpoint := s.checkpoint })).2 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                  hu)
+                                (Eq.mp
+                                  (congrArg
+                                    (fun _a =>
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.GExp_Experiment.second (AspisR1.DrvC_Installation.stage c)
+                                              c.reserved hashv (AspisR1.DrvC_Installation.digest c)
+                                              { pub := s.pub, proof := _a, checkpoint := s.checkpoint })).2 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()))
+                                    hp)
+                                  two)))))))))))))
+        true)
+      (eq_self true))
+theorem AspisR1.DrvC_SourceEntry.same_program : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.DrvC_Implementation.driver (AspisR1.DrvC_FirstConstants.configuration c) =
+    AspisR1.DrvC_SourceEntry.source (AspisR1.DrvC_FirstConstants.configuration c) hashv :=
+fun {F C} c hashv =>
+  funext fun i =>
+    id
+      (id
+        (id
+          (Option.casesOn (motive := fun t =>
+            AspisR1.Port1_Driver.asSlice i.statement.pubBytes = t →
+              (match AspisR1.Port1_Driver.asSlice i.statement.pubBytes, AspisR1.Port1_Driver.asSlice i.stored with
+                | some pub, some proof =>
+                  match
+                    AspisR1.Port1_Driver.decodeSemantic
+                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                  | Aeneas.Std.Result.ok (some semantic) =>
+                    AspisR1.Port1_Driver.stages
+                      (fun {A} {A} =>
+                        AspisR1.DrvC_Implementation.implementation (AspisR1.DrvC_FirstConstants.configuration c))
+                      (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) () semantic pub
+                      proof
+                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                match AspisR1.Port1_Driver.asSlice i.statement.pubBytes, AspisR1.Port1_Driver.asSlice i.stored with
+                | some pub, some proof =>
+                  match
+                    AspisR1.Port1_Driver.decodeSemantic
+                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                  | Aeneas.Std.Result.ok (some semantic) =>
+                    AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub
+                      proof
+                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+            (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1.Port1_Driver.asSlice i.statement.pubBytes = x →
+                  (match x, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match
+                        AspisR1.Port1_Driver.decodeSemantic
+                          (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.Port1_Driver.stages
+                          (fun {A} {A} =>
+                            AspisR1.DrvC_Implementation.implementation (AspisR1.DrvC_FirstConstants.configuration c))
+                          (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) () semantic
+                          pub proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                    match x, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match
+                        AspisR1.Port1_Driver.decodeSemantic
+                          (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub
+                          proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                (fun hp =>
+                  Eq.refl
+                    (match none, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match
+                        AspisR1.Port1_Driver.decodeSemantic
+                          (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.Port1_Driver.stages
+                          (fun {A} {A} =>
+                            AspisR1.DrvC_Implementation.implementation (AspisR1.DrvC_FirstConstants.configuration c))
+                          (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) () semantic
+                          pub proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false))
+                (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)))
+            (fun pub h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1.Port1_Driver.asSlice i.statement.pubBytes = x →
+                  (match x, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match
+                        AspisR1.Port1_Driver.decodeSemantic
+                          (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.Port1_Driver.stages
+                          (fun {A} {A} =>
+                            AspisR1.DrvC_Implementation.implementation (AspisR1.DrvC_FirstConstants.configuration c))
+                          (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) () semantic
+                          pub proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                    match x, AspisR1.Port1_Driver.asSlice i.stored with
+                    | some pub, some proof =>
+                      match
+                        AspisR1.Port1_Driver.decodeSemantic
+                          (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                      | Aeneas.Std.Result.ok (some semantic) =>
+                        AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub
+                          proof
+                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                    | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                (fun hp =>
+                  Option.casesOn (motive := fun t =>
+                    AspisR1.Port1_Driver.asSlice i.stored = t →
+                      (match some pub, AspisR1.Port1_Driver.asSlice i.stored with
+                        | some pub, some proof =>
+                          match
+                            AspisR1.Port1_Driver.decodeSemantic
+                              (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                          | Aeneas.Std.Result.ok (some semantic) =>
+                            AspisR1.Port1_Driver.stages
+                              (fun {A} {A} =>
+                                AspisR1.DrvC_Implementation.implementation
+                                  (AspisR1.DrvC_FirstConstants.configuration c))
+                              (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) ()
+                              semantic pub proof
+                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                        match some pub, AspisR1.Port1_Driver.asSlice i.stored with
+                        | some pub, some proof =>
+                          match
+                            AspisR1.Port1_Driver.decodeSemantic
+                              (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                          | Aeneas.Std.Result.ok (some semantic) =>
+                            AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic
+                              pub proof
+                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                        | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                    (AspisR1.Port1_Driver.asSlice i.stored)
+                    (fun h =>
+                      Eq.ndrec (motive := fun x =>
+                        AspisR1.Port1_Driver.asSlice i.stored = x →
+                          (match some pub, x with
+                            | some pub, some proof =>
+                              match
+                                AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    AspisR1.DrvC_Implementation.implementation
+                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                  (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) ()
+                                  semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                            match some pub, x with
+                            | some pub, some proof =>
+                              match
+                                AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv
+                                  semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                        (fun hs =>
+                          Eq.refl
+                            (match some pub, none with
+                            | some pub, some proof =>
+                              match
+                                AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    AspisR1.DrvC_Implementation.implementation
+                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                  (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) ()
+                                  semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false))
+                        (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)))
+                    (fun proof h =>
+                      Eq.ndrec (motive := fun x =>
+                        AspisR1.Port1_Driver.asSlice i.stored = x →
+                          (match some pub, x with
+                            | some pub, some proof =>
+                              match
+                                AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.Port1_Driver.stages
+                                  (fun {A} {A} =>
+                                    AspisR1.DrvC_Implementation.implementation
+                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                  (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c)) ()
+                                  semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                            match some pub, x with
+                            | some pub, some proof =>
+                              match
+                                AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub with
+                              | Aeneas.Std.Result.ok (some semantic) =>
+                                AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv
+                                  semantic pub proof
+                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false
+                            | x, x_1 => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                        (fun hs =>
+                          id
+                            (Aeneas.Std.Result.casesOn (motive := fun t =>
+                              AspisR1.Port1_Driver.decodeSemantic
+                                    (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub =
+                                  t →
+                                (match
+                                    AspisR1.Port1_Driver.decodeSemantic
+                                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                      pub with
+                                  | Aeneas.Std.Result.ok (some semantic) =>
+                                    AspisR1.Port1_Driver.stages
+                                      (fun {A} =>
+                                        AspisR1.DrvC_Implementation.implementation
+                                          (AspisR1.DrvC_FirstConstants.configuration c))
+                                      (AspisR1.DrvC_Installation.digest (AspisR1.DrvC_FirstConstants.configuration c))
+                                      () semantic pub proof
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                  match
+                                    AspisR1.Port1_Driver.decodeSemantic
+                                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                      pub with
+                                  | Aeneas.Std.Result.ok (some semantic) =>
+                                    AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c) hashv
+                                      semantic pub proof
+                                  | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                              (AspisR1.Port1_Driver.decodeSemantic
+                                (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub)
+                              (fun semantic h =>
+                                Eq.ndrec (motive := fun x =>
+                                  AspisR1.Port1_Driver.decodeSemantic
+                                        (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                        pub =
+                                      x →
+                                    (match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} =>
+                                            AspisR1.DrvC_Implementation.implementation
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                          (AspisR1.DrvC_Installation.digest
+                                            (AspisR1.DrvC_FirstConstants.configuration c))
+                                          () semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                      match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c)
+                                          hashv semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                  (fun hd =>
+                                    Option.casesOn (motive := fun t =>
+                                      semantic = t →
+                                        (match Aeneas.Std.Result.ok semantic with
+                                          | Aeneas.Std.Result.ok (some semantic) =>
+                                            AspisR1.Port1_Driver.stages
+                                              (fun {A} =>
+                                                AspisR1.DrvC_Implementation.implementation
+                                                  (AspisR1.DrvC_FirstConstants.configuration c))
+                                              (AspisR1.DrvC_Installation.digest
+                                                (AspisR1.DrvC_FirstConstants.configuration c))
+                                              () semantic pub proof
+                                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                          match Aeneas.Std.Result.ok semantic with
+                                          | Aeneas.Std.Result.ok (some semantic) =>
+                                            AspisR1.DrvC_PairProgram.source
+                                              (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                                          | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                      semantic
+                                      (fun h =>
+                                        Eq.ndrec (motive := fun semantic =>
+                                          AspisR1.Port1_Driver.decodeSemantic
+                                                (AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.DrvC_FirstConstants.configuration c))
+                                                pub =
+                                              Aeneas.Std.Result.ok semantic →
+                                            (match Aeneas.Std.Result.ok semantic with
+                                              | Aeneas.Std.Result.ok (some semantic) =>
+                                                AspisR1.Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    AspisR1.DrvC_Implementation.implementation
+                                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  (AspisR1.DrvC_Installation.digest
+                                                    (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  () semantic pub proof
+                                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                              match Aeneas.Std.Result.ok semantic with
+                                              | Aeneas.Std.Result.ok (some semantic) =>
+                                                AspisR1.DrvC_PairProgram.source
+                                                  (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                          (fun hd =>
+                                            Eq.refl
+                                              (match Aeneas.Std.Result.ok none with
+                                              | Aeneas.Std.Result.ok (some semantic) =>
+                                                AspisR1.Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    AspisR1.DrvC_Implementation.implementation
+                                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  (AspisR1.DrvC_Installation.digest
+                                                    (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  () semantic pub proof
+                                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                          (Eq.symm h) hd)
+                                      (fun semantic_1 h =>
+                                        Eq.ndrec (motive := fun semantic =>
+                                          AspisR1.Port1_Driver.decodeSemantic
+                                                (AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.DrvC_FirstConstants.configuration c))
+                                                pub =
+                                              Aeneas.Std.Result.ok semantic →
+                                            (match Aeneas.Std.Result.ok semantic with
+                                              | Aeneas.Std.Result.ok (some semantic) =>
+                                                AspisR1.Port1_Driver.stages
+                                                  (fun {A} =>
+                                                    AspisR1.DrvC_Implementation.implementation
+                                                      (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  (AspisR1.DrvC_Installation.digest
+                                                    (AspisR1.DrvC_FirstConstants.configuration c))
+                                                  () semantic pub proof
+                                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                              match Aeneas.Std.Result.ok semantic with
+                                              | Aeneas.Std.Result.ok (some semantic) =>
+                                                AspisR1.DrvC_PairProgram.source
+                                                  (AspisR1.DrvC_FirstConstants.configuration c) hashv semantic pub proof
+                                              | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                          (fun hd => AspisR1.DrvC_PairProgram.stages c hashv semantic_1 pub proof)
+                                          (Eq.symm h) hd)
+                                      (Eq.refl semantic))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (AspisR1.Port1_Driver.decodeSemantic
+                                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                      pub)))
+                              (fun e h =>
+                                Eq.ndrec (motive := fun x =>
+                                  AspisR1.Port1_Driver.decodeSemantic
+                                        (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                        pub =
+                                      x →
+                                    (match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} =>
+                                            AspisR1.DrvC_Implementation.implementation
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                          (AspisR1.DrvC_Installation.digest
+                                            (AspisR1.DrvC_FirstConstants.configuration c))
+                                          () semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                      match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c)
+                                          hashv semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                  (fun hd =>
+                                    Eq.refl
+                                      (match Aeneas.Std.Result.fail e with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} =>
+                                            AspisR1.DrvC_Implementation.implementation
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                          (AspisR1.DrvC_Installation.digest
+                                            (AspisR1.DrvC_FirstConstants.configuration c))
+                                          () semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (AspisR1.Port1_Driver.decodeSemantic
+                                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                      pub)))
+                              (fun h =>
+                                Eq.ndrec (motive := fun x =>
+                                  AspisR1.Port1_Driver.decodeSemantic
+                                        (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                        pub =
+                                      x →
+                                    (match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} =>
+                                            AspisR1.DrvC_Implementation.implementation
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                          (AspisR1.DrvC_Installation.digest
+                                            (AspisR1.DrvC_FirstConstants.configuration c))
+                                          () semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false) =
+                                      match x with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.DrvC_PairProgram.source (AspisR1.DrvC_FirstConstants.configuration c)
+                                          hashv semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false)
+                                  (fun hd =>
+                                    Eq.refl
+                                      (match Aeneas.Std.Result.div with
+                                      | Aeneas.Std.Result.ok (some semantic) =>
+                                        AspisR1.Port1_Driver.stages
+                                          (fun {A} =>
+                                            AspisR1.DrvC_Implementation.implementation
+                                              (AspisR1.DrvC_FirstConstants.configuration c))
+                                          (AspisR1.DrvC_Installation.digest
+                                            (AspisR1.DrvC_FirstConstants.configuration c))
+                                          () semantic pub proof
+                                      | x => AspisV8R19.MemoizedProgramLaw.Program.done false))
+                                  (Eq.symm h)
+                                  (Eq.refl
+                                    (AspisR1.Port1_Driver.decodeSemantic
+                                      (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c))
+                                      pub)))
+                              (Eq.refl
+                                (AspisR1.Port1_Driver.decodeSemantic
+                                  (AspisR1.DrvC_Installation.sdk (AspisR1.DrvC_FirstConstants.configuration c)) pub))))
+                        (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)))
+                    (Eq.refl (AspisR1.Port1_Driver.asSlice i.stored)))
+                (Eq.symm h) (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)))
+            (Eq.refl (AspisR1.Port1_Driver.asSlice i.statement.pubBytes)))))
+theorem AspisR1.F3X_Join.accepted_raw_join_or_collision : ∀ {F C : Type}
+  (base : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (w : AspisR1.CanonicalCutEnrichedTranscript.Words)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H prior).1.length ≤ Q) →
+    ∀
+      (select :
+        AspisR1.F3X_Projection.Output → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+      have c := AspisR1.F3V_Install.configuration base;
+      AspisR1.WAdm_Domain.SessionAPrepare
+          (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current c.currentBase) c.reserved c.query c.geometry
+            c.boundaries c.std) →
+        AspisR1.Port5Q1_QueryPorts.SessionAPrimitives c.query →
+          AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives c.geometry →
+            AspisR1.Port5Q1_Domain.SessionADomain c.geometry →
+              c.geometry.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                c.geometry.op7 = Aeneas.Std.Result.ok 1#u32 →
+                  c.geometry.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                    AspisR1.F3X_PreparedAt.Owners c base.boundaries →
+                      ∀ (s : AspisR1.F3T_ByteCarrier.Submission)
+                        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s))).2 =
+                            true →
+                          AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s)) =
+                              AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.F3_Model.verifier D (AspisR1.F3T_ByteCarrier.input c s)) ∨
+                            AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv
+                              (Q + 2965)
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.Hiq_RecordedJoint.program (AspisR1.F3X_AccountPrior.program c hashv prior s)
+                                  AspisR1.F3X_Projection.project select)) :=
+fun {F C} base hashv D w prior Q queries select =>
+  id
+    (let c := AspisR1.F3V_Install.configuration base;
+    fun prepareOwner primitiveOwner canonicalOwner domainOwner multiply one inverse finishOwners s H success =>
+    let account := AspisR1.F3X_AccountPrior.program c hashv prior s;
+    let ⟨e, h✝⟩ :=
+      AspisR1.F3X_Canonical.accepted base hashv s H w (AspisR1.F3X_Account.prior account) prepareOwner D primitiveOwner
+        canonicalOwner domainOwner multiply one inverse success
+    let ⟨i, h✝¹⟩ := h✝
+    let ⟨p, h✝²⟩ := h✝¹
+    let ⟨q, h✝³⟩ := h✝²
+    let ⟨data, h✝⁴⟩ := h✝³
+    let ⟨t, h✝⁵⟩ := h✝⁴
+    let ⟨physical, right✝⟩ := h✝⁵
+    let ⟨stored, right✝¹⟩ := right✝
+    let ⟨parser, right✝²⟩ := right✝¹
+    let ⟨query, right✝³⟩ := right✝²
+    let ⟨found, right✝⁴⟩ := right✝³
+    let ⟨calls, right✝⁵⟩ := right✝⁴
+    let ⟨atPrepared, result⟩ := right✝⁵
+    have parsed :=
+      have firstParser :=
+        (AspisR1.OraclePortStoredParserC4.parsed i.stored
+            (AspisR1.LiteralTranscript.erasePrefix
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+            p parser).left;
+      Eq.mp (congrArg (fun _a => AspisR1.OraclePortCompactDraft.parse _a = some p) e.proofBytes)
+        (Eq.mp (congrArg (fun _a => AspisR1.OraclePortCompactDraft.parse _a = some p) stored) firstParser);
+    have port := atPrepared.right.right.right.right.right.left;
+    have charge := fun collision =>
+      AspisR1.F3X_Charge.prefix_collision c base.boundaries s H e hashv prior Q select
+        (AspisR1.F3X_AccountReads.bound base hashv prior s Q queries D w) success p q data.data
+        (AspisR1.SelectedChallengeMap.rhoOf data.rho) parsed port collision;
+    Or.casesOn result (fun collision => Or.inr (charge collision)) fun h =>
+      let ⟨x, continuation⟩ := h
+      Or.casesOn (continuation (finishOwners s H e i p q data t atPrepared calls x))
+        (fun collision => Or.inr (charge collision)) fun same => Or.inl same)
+theorem AspisR1.SCF_Recovery.agreement : ∀ (left right : AspisR1.RawCutProverCompiler.RunView),
+  left.2.1.1 = right.2.1.1 →
+    (∀ (row : ℕ),
+        row = 0 ∨ row = 2 ∨ row = 30 →
+          AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+            AspisR1.RawCommitmentFrameReplay.frameFromView right row) →
+      (∀ (row : ℕ),
+          row = 0 ∨ row = 2 ∨ row = 30 →
+            AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+              AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) →
+        AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right :=
+fun left right pub frames cuts =>
+  have words := AspisR1.SCF_Cuts.recovered left right frames cuts;
+  { decoded_public := congrArg (fun p => AspisR1.SemanticPublicWire.parsePublic p.pubBytes) pub,
+    initial :=
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1.LiteralTypedWords.word AspisR1.ExactBaseProjection.embed
+                    (algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact) _a.c1 _a.c2 =
+                  AspisR1.LiteralTypedWords.word AspisR1.ExactBaseProjection.embed
+                    (algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+                    (AspisR1.RawCutWordsFromRunExecutableBin.wordsFromRun right).c1
+                    (AspisR1.RawCutWordsFromRunExecutableBin.wordsFromRun right).c2)
+              words))
+          (Eq.refl
+            (AspisR1.LiteralTypedWords.word AspisR1.ExactBaseProjection.embed
+              (algebraMap AspisV8R15.ExactTowerBase.QM31Exact AspisWideTower.WideExact)
+              (AspisR1.RawCutWordsFromRunExecutableBin.wordsFromRun right).c1
+              (AspisR1.RawCutWordsFromRunExecutableBin.wordsFromRun right).c2))),
+    final := congrArg AspisR1.CanonicalCutEnrichedTranscript.Words.final words }
+SCG_Interfaces.lean:11:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.SCE_NativeAccepted.accepted`
+'AspisR1.Rc7_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
