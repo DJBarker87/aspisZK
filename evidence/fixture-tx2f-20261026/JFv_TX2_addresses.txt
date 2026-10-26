@@ -1,0 +1,165 @@
+theorem addresses (i : Fin 12) :
+    lift (UScalar.cast .Usize (query i))=ok (input i 0) ∧
+    input i 0/4#usize=ok (parent i) ∧
+    Usize.wrapping_mul (parent i) 4#usize=input i 1 ∧
+    Usize.wrapping_add (input i 1) 3#usize=input i 2 := by
+  have cap : 262144 < UScalar.size .Usize := by
+    cases System.Platform.numBits_eq <;> norm_num [UScalar.size,Usize.size,Usize.numBits,UScalarTy.Usize_numBits_eq, *]
+  fin_cases i
+  · change lift (UScalar.cast .Usize 132355#u32)=ok 132355#usize ∧
+      132355#usize/4#usize=ok 33088#usize ∧
+      Usize.wrapping_mul 33088#usize 4#usize=132352#usize ∧
+      Usize.wrapping_add 132352#usize 3#usize=132355#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 132355#u32=132355#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 132352<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 132355<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 218094#u32)=ok 218094#usize ∧
+      218094#usize/4#usize=ok 54523#usize ∧
+      Usize.wrapping_mul 54523#usize 4#usize=218092#usize ∧
+      Usize.wrapping_add 218092#usize 3#usize=218095#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 218094#u32=218094#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 218092<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 218095<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 178080#u32)=ok 178080#usize ∧
+      178080#usize/4#usize=ok 44520#usize ∧
+      Usize.wrapping_mul 44520#usize 4#usize=178080#usize ∧
+      Usize.wrapping_add 178080#usize 3#usize=178083#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 178080#u32=178080#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 178080<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 178083<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 149624#u32)=ok 149624#usize ∧
+      149624#usize/4#usize=ok 37406#usize ∧
+      Usize.wrapping_mul 37406#usize 4#usize=149624#usize ∧
+      Usize.wrapping_add 149624#usize 3#usize=149627#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 149624#u32=149624#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 149624<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 149627<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 166165#u32)=ok 166165#usize ∧
+      166165#usize/4#usize=ok 41541#usize ∧
+      Usize.wrapping_mul 41541#usize 4#usize=166164#usize ∧
+      Usize.wrapping_add 166164#usize 3#usize=166167#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 166165#u32=166165#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 166164<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 166167<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 42158#u32)=ok 42158#usize ∧
+      42158#usize/4#usize=ok 10539#usize ∧
+      Usize.wrapping_mul 10539#usize 4#usize=42156#usize ∧
+      Usize.wrapping_add 42156#usize 3#usize=42159#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 42158#u32=42158#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 42156<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 42159<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 179622#u32)=ok 179622#usize ∧
+      179622#usize/4#usize=ok 44905#usize ∧
+      Usize.wrapping_mul 44905#usize 4#usize=179620#usize ∧
+      Usize.wrapping_add 179620#usize 3#usize=179623#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 179622#u32=179622#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 179620<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 179623<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 21248#u32)=ok 21248#usize ∧
+      21248#usize/4#usize=ok 5312#usize ∧
+      Usize.wrapping_mul 5312#usize 4#usize=21248#usize ∧
+      Usize.wrapping_add 21248#usize 3#usize=21251#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 21248#u32=21248#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 21248<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 21251<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 63860#u32)=ok 63860#usize ∧
+      63860#usize/4#usize=ok 15965#usize ∧
+      Usize.wrapping_mul 15965#usize 4#usize=63860#usize ∧
+      Usize.wrapping_add 63860#usize 3#usize=63863#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 63860#u32=63860#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 63860<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 63863<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 55377#u32)=ok 55377#usize ∧
+      55377#usize/4#usize=ok 13844#usize ∧
+      Usize.wrapping_mul 13844#usize 4#usize=55376#usize ∧
+      Usize.wrapping_add 55376#usize 3#usize=55379#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 55377#u32=55377#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 55376<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 55379<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 185637#u32)=ok 185637#usize ∧
+      185637#usize/4#usize=ok 46409#usize ∧
+      Usize.wrapping_mul 46409#usize 4#usize=185636#usize ∧
+      Usize.wrapping_add 185636#usize 3#usize=185639#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 185637#u32=185637#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 185636<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 185639<UScalar.size .Usize;omega)
+  · change lift (UScalar.cast .Usize 14297#u32)=ok 14297#usize ∧
+      14297#usize/4#usize=ok 3574#usize ∧
+      Usize.wrapping_mul 3574#usize 4#usize=14296#usize ∧
+      Usize.wrapping_add 14296#usize 3#usize=14299#usize
+    refine ⟨?_,rfl,?_,?_⟩
+    · have hc : UScalar.cast .Usize 14297#u32=14297#usize := by scalar_tac
+      rw [hc];rfl
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_mul_val_eq]
+      exact Nat.mod_eq_of_lt (by change 14296<UScalar.size .Usize;omega)
+    · apply UScalar.eq_of_val_eq
+      rw [Usize.wrapping_add_val_eq]
+      exact Nat.mod_eq_of_lt (by change 14299<UScalar.size .Usize;omega)
+

@@ -1,0 +1,59 @@
+import JFv_TX2_DotsMeaning
+import JFv_TX2_Query0Formula
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFv_TX2_FinalFixture
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open JFv_TX2_ArrayMeaning (cell)
+abbrev NE := FIo_Install.NE
+
+def DotValues (i : Fin 12) : Prop :=
+    ∃ head tail out : Fin 4 → NE,
+      JFs_TX2_Dots.nativeValue i=Array.make 4#usize [out 0,out 1,out 2,out 3] ∧
+      ∀ slot : Fin 4,
+        JFs_TX2_DotSuffix.tail (JFr_TX2_Windows.array (JFn_Values.position i)) JFr_TX2_FirstLane.native
+          (Usize.ofNat slot.val (by have:=slot.isLt;scalar_tac))=ok (tail slot) ∧
+        FIo_WideValues.Canon (head slot) ∧ FIo_WideValues.Canon (tail slot) ∧ FIo_WideValues.Canon (out slot) ∧
+        AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (out slot))=
+          AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (head slot))+
+          AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide (tail slot)) ∧
+        ∀ j : Fin 8, (cell (JFv_TX2_FromLimbsMeaning.limbs (head slot)) j).val=
+          JFv_TX2_InnerMeaning.sum i slot j 0 26%2147483647
+
+def Circle0 {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) : Prop :=
+    ∃ out, FIp_CircleQuery.circle JFq_Alpha0.scalar (JFs_TX2_Dots.value 0)
+        (JFv_TX2_CircleGeometry.inverse err seed 0)=ok out ∧ Port4C_QueryArithmetic.CanonE out ∧
+      CheckpointBytes5Output.ofE out=FoldRuntimeAlgebra.circleWithInverses
+        (CheckpointBytes5Output.ofE JFq_Alpha0.scalar)
+        (algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 243259912)
+        (algebraMap Port5Q1_QueryPorts.FP Port5Q1_QueryPorts.FE 1029545577)
+        (Port5Q1_OpeningValues.values (JFs_TX2_Dots.value 0))
+
+def Facts {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) : Prop :=
+  JFv_TX2_GeometryFixture.Calls err seed ∧ (∀ i : Fin 12,DotValues i) ∧ Circle0 err seed
+
+theorem facts {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) : Facts err seed :=
+  ⟨JFv_TX2_GeometryFixture.calls err seed,JFv_TX2_DotsMeaning.source,JFv_TX2_Query0Formula.source err seed⟩
+
+theorem on_saved (saved : alloc.vec.Vec U8) (same : saved.val=JFx_NativeBytes.checkpoint.val)
+    {Hash : Type} (H : Bytes → State) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (realizes : JFn_HashBoundary.Realizes H) {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) :
+    Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D)
+      (⟨saved.val,saved.property⟩ : Slice U8) JFx_NativeBytes.proof JFx_NativeBytes.publicInput .S2 hash=
+      ok (.Ok (JFo_Prepared.value,JFo_Prepared.accumulator)) ∧ Facts err seed :=
+  ⟨JFn_Resume.on_saved saved same H D hash realizes,facts err seed⟩
+
+theorem inhabited {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+    (background : Bytes → State) {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C) :
+    ∃ H : Bytes → State, JFn_HashBoundary.Realizes H ∧
+      Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D)
+        JFx_NativeBytes.checkpoint JFx_NativeBytes.proof JFx_NativeBytes.publicInput .S2 hash=
+        ok (.Ok (JFo_Prepared.value,JFo_Prepared.accumulator)) ∧ Facts err seed :=
+  ⟨JFn_HashModelNonvacuity.extension background,JFn_HashModelNonvacuity.realizes background,
+    JFn_HashModelNonvacuity.reader D hash background,facts err seed⟩
+#print axioms facts
+#print axioms on_saved
+#print axioms inhabited
+end AspisR1.JFv_TX2_FinalFixture
+end

@@ -1,0 +1,77 @@
+JFv_TX2_ZeroTest.lean:9:31: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+JFv_TX2_ZeroTest.lean:9:28: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LT j
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+JFv_TX2_ZeroTest.lean:9:57: error: Type mismatch
+  j
+has type
+  Type ?u.19
+of sort `Type (?u.19 + 1)` but is expected to have type
+  ℕ
+of sort `Type`
+JFv_TX2_ZeroTest.lean:10:23: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem (List T) (Type ?u.19) ?m.26 ?m.27
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+JFv_TX2_ZeroTest.lean:10:23: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+T : Type
+pred : core.ops.function.FnMut Unit T Bool
+it : core.slice.iter.Iter T
+fuel : ℕ
+remaining : it.i + fuel = (↑it.slice).length
+j : Type ?u.19
+hj : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ?m.27 (↑it.slice) j
+JFv_TX2_ZeroTest.lean:17:19: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬it.i
+JFv_TX2_ZeroTest.lean:17:25: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+JFv_TX2_ZeroTest.lean:17:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+where
+ e := ↑(↑it.slice).length
+JFv_TX2_ZeroTest.lean:24:18: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.70
+of sort `Type (?u.70 + 1)` in the application
+  @PrincipalSeg it.i
+JFv_TX2_ZeroTest.lean:24:24: error(lean.unknownIdentifier): Unknown identifier `t.slice.val.length`
+JFv_TX2_ZeroTest.lean:24:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  e - f ≤ -1
+where
+ e := ↑fuel
+ f := ↑(↑it.slice).length
+JFv_TX2_ZeroTest.lean:25:28: error: Application type mismatch: The argument
+  it.i
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type u_1
+of sort `Type (u_1 + 1)` in the application
+  falseCalls it.i
+JFv_TX2_ZeroTest.lean:19:59: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_BatchStd.anyBody, ̲core.iter.traits.iterator.IteratorSliceIter,
+        core.slice.iter.IteratorSliceIter.next, ̲if_neg ending,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_TX2_ZeroTest.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

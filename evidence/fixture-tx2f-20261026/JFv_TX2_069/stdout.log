@@ -1,0 +1,63 @@
+JFv_TX2_TermMeaning.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFr_TX2_DotStep.update JFr_TX2_FirstLane.native (JFr_TX2_DotTerm.cursor ↑t ⋯) (JFv_TX2_UpdateMeaning.scalar i slot t)
+    sums
+in the target expression
+  FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body (JFr_TX2_Windows.array (JFn_Values.position i))
+      JFr_TX2_FirstLane.native (↑slot)#usize { start := JFr_TX2_DotTerm.cursor ↑t ⋯, «end» := iter.end } sums =
+    do
+    let out ←
+      JFr_TX2_DotStep.update JFr_TX2_FirstLane.native (JFr_TX2_DotTerm.cursor ↑t ⋯)
+          (↑(JFr_TX2_Scalars.values i slot))[↑t] sums
+    ok (cont (next, out))
+
+i : Fin 12
+slot : Fin 4
+iter : core.ops.range.Range Usize
+sums : Std.Array U64 8#usize
+n : ℕ
+hn : n < 4
+hs : JFs_TX2_ArrayEight.Bound sums n
+order : ↑iter.start < ↑iter.end
+stop : ↑iter.end ≤ 26
+t : Fin 26 := ⟨↑iter.start, ⋯⟩
+cursor : JFr_TX2_DotTerm.cursor ↑t ⋯ = iter.start
+next : core.ops.range.Range Usize
+inc : ↑next.start = ↑t + 1
+he : next.end = iter.end
+body :
+  FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body (JFr_TX2_Windows.array (JFn_Values.position i))
+      JFr_TX2_FirstLane.native (↑slot)#usize { start := JFr_TX2_DotTerm.cursor ↑t ⋯, «end» := iter.end } sums =
+    do
+    let out ←
+      JFr_TX2_DotStep.update JFr_TX2_FirstLane.native (JFr_TX2_DotTerm.cursor ↑t ⋯)
+          (↑(JFr_TX2_Scalars.values i slot))[↑t] sums
+    ok (cont (next, out))
+out : Std.Array U64 8#usize
+run :
+  JFr_TX2_DotStep.update JFr_TX2_FirstLane.native (JFr_TX2_DotTerm.cursor ↑t ⋯) (JFv_TX2_UpdateMeaning.scalar i slot t)
+      sums =
+    ok out
+bound : JFs_TX2_ArrayEight.Bound out (n + 1)
+values :
+  ∀ (j : Fin 8),
+    ↑(cell out j) = ↑(cell sums j) + ↑(cell (JFr_TX2_FirstLane.limbs t) j) * ↑(JFv_TX2_UpdateMeaning.scalar i slot t)
+⊢ ∃ next out,
+    ↑next.start = ↑iter.start + 1 ∧
+      next.end = iter.end ∧
+        FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body (JFr_TX2_Windows.array (JFn_Values.position i))
+              JFr_TX2_FirstLane.native (↑slot)#usize iter sums =
+            ok (cont (next, out)) ∧
+          JFs_TX2_ArrayEight.Bound out (n + 1) ∧
+            ∀ (j : Fin 8), ↑(cell out j) = ↑(cell sums j) + product i slot j ↑iter.start
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFv_TX2_TermMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

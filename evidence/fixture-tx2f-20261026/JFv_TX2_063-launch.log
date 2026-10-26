@@ -1,0 +1,54 @@
+{"attempt": "JFv_TX2_063", "exit_status": 1, "wall_seconds": 2.998979995958507, "peak_rss_kib": "5626712", "swaps": "0", "print_axioms": ["'AspisR1.JFv_TX2_GeometryReads.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_TX2_GeometryReads.lean:35:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => inverse = (↑g.inverses)[_a]
+Error: Application type mismatch: The argument
+  offset
+has type
+  ↑((cursor i).wrapping_sub g.start) = ↑i
+but is expected to have type
+  _a = ↑i
+in the application
+  congrArg (fun _a => _a < (↑g.inverses).length) offset
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe t
+...
+and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+C : Type
+err : C
+seed : Ops C
+i : Fin 12
+g : verifier.QueryGeometry := JFv_TX2_Geometry.value err seed
+start : (JFv_TX2_Geometry.value err seed).start = 10#usize
+line : ↑(JFv_TX2_Geometry.value err seed).line_z = JFv_TX2_GatherShape.zs 12
+inv : alloc.vec.Vec U32
+len : (↑inv).length = 60
+values :
+  ∀ j < 60,
+    S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑inv) j) =
+      (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (JFv_TX2_GatherShape.flat 12) j))⁻¹
+groups : ↑(JFv_TX2_Geometry.value err seed).inverses = List.map (Port4C_CollectLoop.record inv) (List.range 12)
+offset : ↑((cursor i).wrapping_sub g.start) = ↑i
+ilen : (↑g.inverses).length = 12
+zlen : (↑g.line_z).length = 12
+inverse : Std.Array aspis_core.field.M31 5#usize
+ir : g.inverses.index_usize ((cursor i).wrapping_sub g.start) = ok inverse
+iv : inverse = (↑g.inverses)[↑((cursor i).wrapping_sub g.start)]
+z : aspis_core.field.M31
+zr : g.line_z.index_usize ((cursor i).wrapping_sub g.start) = ok z
+zv : z = (↑g.line_z)[↑((cursor i).wrapping_sub g.start)]
+⊢ inverse = Port4C_CollectLoop.record inv ↑i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFv_TX2_GeometryReads.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rff84e28203d547eaa6307e5728efe016.scope; invocation ID: bffba31ec33144ed86316602e4a981e2

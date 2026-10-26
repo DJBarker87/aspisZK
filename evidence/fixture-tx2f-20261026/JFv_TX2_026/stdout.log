@@ -1,0 +1,458 @@
+JFv_TX2_GatherStep.lean:41:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool.call_mut
+    (Port4C_GeometryStd.install ?ops) () ?x
+in the target expression
+  (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+          (Port4C_GeometryStd.install ops)).call_mut
+      () (↑{ slice := row.slice, i := 0 }.slice)[j] =
+    ok (false, ())
+
+C : Type
+ops : Ops C
+start : Usize
+it it1 : core.slice.iter.Iter U32
+query : U32
+u parent left right : Usize
+row : Port4C_GeometryGather.Row
+zs flat : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next it = ok (some query, it1)
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+div : u / 4#usize = ok parent
+lo : parent.wrapping_mul 4#usize = left
+hi : left.wrapping_add 3#usize = right
+fu : ops.op12 u = ok (core.result.Result.Ok u)
+fl : ops.op12 left = ok (core.result.Result.Ok left)
+fr : ops.op12 right = ok (core.result.Result.Ok right)
+point : ops.op15 u = ok { x := row.x, y := row.y }
+lx : ops.op14 left = ok row.lineX
+ly : ops.op14 right = ok row.lineY
+node✝¹ :
+  (do
+      let square ← ops.op9 row.lineX row.lineX
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+nonzero : ∀ x ∈ row.words, x ≠ 0#u32
+zbound : (↑zs).length ≤ 22
+fbound : (↑flat).length ≤ 110
+square : aspis_core.field.M31
+hs : ops.op9 row.lineX row.lineX = ok square
+node✝ :
+  (do
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+doubled : aspis_core.field.M31
+hd : ops.op10 square = ok doubled
+node :
+  (do
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+one : aspis_core.field.M31
+ho : ops.op7 = ok one
+hz : ops.op8 doubled one = ok row.lineZ
+j : ℕ
+hj : j < (↑{ slice := row.slice, i := 0 }.slice).length
+a✝ : { slice := row.slice, i := 0 }.i ≤ j
+⊢ (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+          (Port4C_GeometryStd.install ops)).call_mut
+      () (↑{ slice := row.slice, i := 0 }.slice)[j] =
+    ok (false, ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    { slice := row.slice, i := 0 }.slice
+  has type
+    Slice aspis_core.field.M31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑{ slice := row.slice, i := 0 }.slice
+JFv_TX2_GatherStep.lean:56:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h' : _a with
+      | ok s' => ok ⟨↑flat ++ ↑s', ⋯⟩
+      | fail e => fail e
+      | Result.div => Result.div) =
+      ok flat1
+Error: Application type mismatch: The argument
+  h'
+has type
+  _a = ok s'
+but is expected to have type
+  Slice.clone core.marker.CopyU32.cloneInst.clone row.slice = ok s'
+in the application
+  alloc.vec.Vec.extend_from_slice._proof_1 core.marker.CopyU32.cloneInst flat row.slice h✝ s' h'
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case isTrue
+C : Type
+ops : Ops C
+start : Usize
+it it1 : core.slice.iter.Iter U32
+query : U32
+u parent left right : Usize
+row : Port4C_GeometryGather.Row
+zs flat : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next it = ok (some query, it1)
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+div : u / 4#usize = ok parent
+lo : parent.wrapping_mul 4#usize = left
+hi : left.wrapping_add 3#usize = right
+fu : ops.op12 u = ok (core.result.Result.Ok u)
+fl : ops.op12 left = ok (core.result.Result.Ok left)
+fr : ops.op12 right = ok (core.result.Result.Ok right)
+point : ops.op15 u = ok { x := row.x, y := row.y }
+lx : ops.op14 left = ok row.lineX
+ly : ops.op14 right = ok row.lineY
+node✝¹ :
+  (do
+      let square ← ops.op9 row.lineX row.lineX
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+nonzero : ∀ x ∈ row.words, x ≠ 0#u32
+zbound : (↑zs).length ≤ 22
+fbound : (↑flat).length ≤ 110
+square : aspis_core.field.M31
+hs : ops.op9 row.lineX row.lineX = ok square
+node✝ :
+  (do
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+doubled : aspis_core.field.M31
+hd : ops.op10 square = ok doubled
+node :
+  (do
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+one : aspis_core.field.M31
+ho : ops.op7 = ok one
+hz : ops.op8 doubled one = ok row.lineZ
+zeros :
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)
+      (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+        (Port4C_GeometryStd.install ops))
+      { slice := row.slice, i := 0 } () =
+    ok (false, { slice := { slice := row.slice, i := 0 }.slice, i := (↑{ slice := row.slice, i := 0 }.slice).length })
+zs1 : alloc.vec.Vec U32
+push : zs.push row.lineZ = ok zs1
+pushed : ↑zs1 = ↑zs ++ [row.lineZ]
+room : (↑flat).length + (↑row.slice).length ≤ Usize.max
+flat1 : alloc.vec.Vec U32 := ⟨↑flat ++ row.words, ⋯⟩
+h✝ : flat.length + row.slice.length ≤ Usize.max
+⊢ (match h' : Slice.clone core.marker.CopyU32.cloneInst.clone row.slice with
+    | ok s' => ok ⟨↑flat ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | Result.div => Result.div) =
+    ok flat1
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    flat
+  has type
+    alloc.vec.Vec U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑flat
+JFv_TX2_GatherStep.lean:61:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lift (UScalar.cast UScalarTy.Usize query)
+in the target expression
+  (let (o, iter1) := (some query, it1)
+    match o with
+    | none => do
+      let b ← (Port4C_GeometryStd.install ops).op4 Global flat
+      if b = true then
+          ok
+            (done
+              (core.result.Result.Ok
+                { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                  line_z := zs }))
+        else
+          have s := flat.deref;
+          do
+          let (prefixes, product) ← (Port4C_GeometryStd.install ops).op13 s
+          let suffix_inverse ← (Port4C_GeometryStd.install ops).op11 product
+          have i : Usize := flat.len
+          have flat_inverse : alloc.vec.Vec aspis_core.field.M31 := alloc.vec.Vec.with_capacity aspis_core.field.M31 i
+          have i1 : Usize := flat.len
+          let m ← (Port4C_GeometryStd.install ops).op6
+          let flat_inverse1 ← alloc.vec.Vec.resize core.marker.CopyU32.cloneInst flat_inverse i1 m
+          have i2 : Usize := flat.len
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := i2 }
+          let flat_inverse2 ←
+            verifier.QueryGeometry.for_range_loop0_loop0 (Port4C_GeometryStd.install ops) iter2 flat prefixes
+                suffix_inverse flat_inverse1
+          have i3 : Usize := zs.len
+          let m1 ←
+            (Port4C_GeometryStd.install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  (Port4C_GeometryStd.install ops))
+                { start := 0#usize, «end» := i3 } flat_inverse2
+          let inverses ←
+            core.iter.traits.iterator.Iterator.collect.default
+                ((Port4C_GeometryStd.install ops).mapIterator
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                    (Port4C_GeometryStd.install ops)))
+                (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+          ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (Port4C_GeometryStd.install ops).op12 u
+      let r1 ←
+        (Port4C_GeometryStd.install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Port4C_GeometryStd.install ops))
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (Port4C_GeometryStd.install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (Port4C_GeometryStd.install ops).op12 i1
+          let r3 ←
+            (Port4C_GeometryStd.install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  (Port4C_GeometryStd.install ops))
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (Port4C_GeometryStd.install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (Port4C_GeometryStd.install ops).op12 i3
+              let r5 ←
+                (Port4C_GeometryStd.install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (Port4C_GeometryStd.install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (Port4C_GeometryStd.install ops).op14 val2
+                  let m ← (Port4C_GeometryStd.install ops).op9 line_x line_x
+                  let m1 ← (Port4C_GeometryStd.install ops).op10 m
+                  let m2 ← (Port4C_GeometryStd.install ops).op7
+                  let line_z ← (Port4C_GeometryStd.install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (Port4C_GeometryStd.install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (Port4C_GeometryStd.install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.marker.CopyU32.cloneInst flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (it1, zs1, flat1))
+
+C : Type
+ops : Ops C
+start : Usize
+it it1 : core.slice.iter.Iter U32
+query : U32
+u parent left right : Usize
+row : Port4C_GeometryGather.Row
+zs flat : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next it = ok (some query, it1)
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+div : u / 4#usize = ok parent
+lo : parent.wrapping_mul 4#usize = left
+hi : left.wrapping_add 3#usize = right
+fu : ops.op12 u = ok (core.result.Result.Ok u)
+fl : ops.op12 left = ok (core.result.Result.Ok left)
+fr : ops.op12 right = ok (core.result.Result.Ok right)
+point : ops.op15 u = ok { x := row.x, y := row.y }
+lx : ops.op14 left = ok row.lineX
+ly : ops.op14 right = ok row.lineY
+node✝¹ :
+  (do
+      let square ← ops.op9 row.lineX row.lineX
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+nonzero : ∀ x ∈ row.words, x ≠ 0#u32
+zbound : (↑zs).length ≤ 22
+fbound : (↑flat).length ≤ 110
+square : aspis_core.field.M31
+hs : ops.op9 row.lineX row.lineX = ok square
+node✝ :
+  (do
+      let doubled ← ops.op10 square
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+doubled : aspis_core.field.M31
+hd : ops.op10 square = ok doubled
+node :
+  (do
+      let one ← ops.op7
+      ops.op8 doubled one) =
+    ok row.lineZ
+one : aspis_core.field.M31
+ho : ops.op7 = ok one
+hz : ops.op8 doubled one = ok row.lineZ
+zeros :
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)
+      (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+        (Port4C_GeometryStd.install ops))
+      { slice := row.slice, i := 0 } () =
+    ok (false, { slice := { slice := row.slice, i := 0 }.slice, i := (↑{ slice := row.slice, i := 0 }.slice).length })
+zs1 : alloc.vec.Vec U32
+push : zs.push row.lineZ = ok zs1
+pushed : ↑zs1 = ↑zs ++ [row.lineZ]
+room : (↑flat).length + (↑row.slice).length ≤ Usize.max
+flat1 : alloc.vec.Vec U32 := ⟨↑flat ++ row.words, ⋯⟩
+extend : alloc.vec.Vec.extend_from_slice core.marker.CopyU32.cloneInst flat row.slice = ok flat1
+⊢ (let (o, iter1) := (some query, it1)
+    match o with
+    | none => do
+      let b ← (Port4C_GeometryStd.install ops).op4 Global flat
+      if b = true then
+          ok
+            (done
+              (core.result.Result.Ok
+                { start := start, inverses := alloc.vec.Vec.new (Std.Array aspis_core.field.M31 5#usize),
+                  line_z := zs }))
+        else
+          have s := flat.deref;
+          do
+          let (prefixes, product) ← (Port4C_GeometryStd.install ops).op13 s
+          let suffix_inverse ← (Port4C_GeometryStd.install ops).op11 product
+          have i : Usize := flat.len
+          have flat_inverse : alloc.vec.Vec aspis_core.field.M31 := alloc.vec.Vec.with_capacity aspis_core.field.M31 i
+          have i1 : Usize := flat.len
+          let m ← (Port4C_GeometryStd.install ops).op6
+          let flat_inverse1 ← alloc.vec.Vec.resize core.marker.CopyU32.cloneInst flat_inverse i1 m
+          have i2 : Usize := flat.len
+          let iter2 ←
+            core.iter.traits.iterator.Iterator.rev.trait_default
+                (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                { start := 0#usize, «end» := i2 }
+          let flat_inverse2 ←
+            verifier.QueryGeometry.for_range_loop0_loop0 (Port4C_GeometryStd.install ops) iter2 flat prefixes
+                suffix_inverse flat_inverse1
+          have i3 : Usize := zs.len
+          let m1 ←
+            (Port4C_GeometryStd.install ops).op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  (Port4C_GeometryStd.install ops))
+                { start := 0#usize, «end» := i3 } flat_inverse2
+          let inverses ←
+            core.iter.traits.iterator.Iterator.collect.default
+                ((Port4C_GeometryStd.install ops).mapIterator
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                    (Port4C_GeometryStd.install ops)))
+                (core.iter.traits.collect.FromIteratorVec (Std.Array aspis_core.field.M31 5#usize)) m1
+          ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := zs }))
+    | some query => do
+      let u ← lift (UScalar.cast UScalarTy.Usize query)
+      let r ← (Port4C_GeometryStd.install ops).op12 u
+      let r1 ←
+        (Port4C_GeometryStd.install ops).op2
+            (verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+              (Port4C_GeometryStd.install ops))
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let p ← (Port4C_GeometryStd.install ops).op15 val
+          let i ← u / 4#usize
+          let i1 ← lift (Usize.wrapping_mul i 4#usize)
+          let r2 ← (Port4C_GeometryStd.install ops).op12 i1
+          let r3 ←
+            (Port4C_GeometryStd.install ops).op2
+                (verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  (Port4C_GeometryStd.install ops))
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let line_x ← (Port4C_GeometryStd.install ops).op14 val1
+              let i2 ← lift (Usize.wrapping_mul i 4#usize)
+              let i3 ← lift (i2.wrapping_add 3#usize)
+              let r4 ← (Port4C_GeometryStd.install ops).op12 i3
+              let r5 ←
+                (Port4C_GeometryStd.install ops).op2
+                    (verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      (Port4C_GeometryStd.install ops))
+                    r4 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let line_y ← (Port4C_GeometryStd.install ops).op14 val2
+                  let m ← (Port4C_GeometryStd.install ops).op9 line_x line_x
+                  let m1 ← (Port4C_GeometryStd.install ops).op10 m
+                  let m2 ← (Port4C_GeometryStd.install ops).op7
+                  let line_z ← (Port4C_GeometryStd.install ops).op8 m1 m2
+                  let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                  let i4 ← core.slice.Slice.iter s
+                  let (b, _) ←
+                    (Port4C_GeometryStd.install ops).op3
+                        (verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          (Port4C_GeometryStd.install ops))
+                        i4 ()
+                  if b = true then ok (done (core.result.Result.Err verifier.Error.Query))
+                    else do
+                      let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let flat1 ← alloc.vec.Vec.extend_from_slice core.marker.CopyU32.cloneInst flat s1
+                      let line_z_values1 ← zs.push line_z
+                      ok (cont (iter1, line_z_values1, flat1))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    verifier.QueryGeometry (core.convert.FromSame verifier.Error) residual
+              ok (done r4)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r2 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.QueryGeometry
+                (core.convert.FromSame verifier.Error) residual
+          ok (done r2)) =
+    ok (cont (it1, zs1, flat1))
+'AspisR1.JFv_TX2_GatherStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

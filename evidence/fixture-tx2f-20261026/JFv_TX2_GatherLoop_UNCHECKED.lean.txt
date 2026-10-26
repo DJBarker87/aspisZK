@@ -1,0 +1,52 @@
+import JFv_TX2_GatherActive
+import JFv_TX2_Terminal
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFv_TX2_GatherLoop
+open Aeneas Aeneas.Std Result ControlFlow AspisR1Stage2
+open Port3_NativeGeometryBody
+abbrev State := core.slice.iter.Iter U32 × alloc.vec.Vec U32 × alloc.vec.Vec U32
+
+def Inv (s : State) : Prop := s.1.slice=JFv_TX2_GatherShape.selected ∧ s.1.i≤12 ∧
+  s.2.1.val=JFv_TX2_GatherShape.zs s.1.i ∧ s.2.2.val=JFv_TX2_GatherShape.flat s.1.i
+
+def Post (out : core.result.Result verifier.QueryGeometry verifier.Error) : Prop :=
+  ∃ g, out=.Ok g ∧ g.start=10#usize ∧
+    g.line_z.val=JFv_TX2_GatherShape.zs 12 ∧ g.inverses.val.length=12
+
+theorem source {C : Type} (err : C) (seed : Ops C) :
+    ∃ out : verifier.QueryGeometry,
+      verifier.QueryGeometry.for_range_loop0 (JFv_TX2_GeometryOps.install err seed)
+        ⟨JFv_TX2_GatherShape.selected,0⟩ 10#usize (alloc.vec.Vec.new U32) (alloc.vec.Vec.new U32)=ok (.Ok out) ∧
+      out.start=10#usize ∧ out.line_z.val=JFv_TX2_GatherShape.zs 12 ∧ out.inverses.val.length=12 := by
+  have spec : verifier.QueryGeometry.for_range_loop0 (JFv_TX2_GeometryOps.install err seed)
+      ⟨JFv_TX2_GatherShape.selected,0⟩ 10#usize (alloc.vec.Vec.new U32) (alloc.vec.Vec.new U32)
+      ⦃ out => Post out ⦄ := by
+    unfold verifier.QueryGeometry.for_range_loop0
+    refine loop.spec_decr_nat (fun s : State => 12-s.1.i) Inv Post
+      (fun (it,zs,flat) => verifier.QueryGeometry.for_range_loop0.body
+        (JFv_TX2_GeometryOps.install err seed) 10#usize it zs flat)
+      (⟨JFv_TX2_GatherShape.selected,0⟩,alloc.vec.Vec.new U32,alloc.vec.Vec.new U32) ?_ ?_
+    · rintro ⟨it,zs,flat⟩ ⟨slice,bound,hzs,hflat⟩
+      dsimp only at slice bound hzs hflat ⊢
+      by_cases active : it.i<12
+      · obtain ⟨zs1,flat1,run,zval,fval⟩ := JFv_TX2_GatherActive.source err seed it zs flat slice active hzs hflat
+        rw [run,WP.spec_ok]
+        refine ⟨⟨slice,by change it.i+1≤12;omega,zval,fval⟩,?_⟩
+        change 12-(it.i+1)<12-it.i
+        omega
+      · have done : it.i=12 := by omega
+        have ending : it.i=it.slice.val.length := by rw [slice];simp [JFv_TX2_GatherShape.selected,done]
+        have zlen : zs.val.length=12 := by rw [hzs,(JFv_TX2_GatherShape.lengths _).1,done]
+        have flen : flat.val.length=60 := by rw [hflat,(JFv_TX2_GatherShape.lengths _).2,done]
+        obtain ⟨out,run,start,line,size⟩ := JFv_TX2_Terminal.source err seed 10#usize it zs flat ending
+          (by omega) (by omega) (by omega) (by rw [hflat];exact JFv_TX2_GatherShape.nonzero _)
+        rw [run,WP.spec_ok]
+        exact ⟨out,rfl,start,by rw [line,hzs,done],by rw [size,zlen]⟩
+    · exact ⟨rfl,by omega,rfl,rfl⟩
+  obtain ⟨result,run,out,he,start,line,size⟩ := WP.spec_imp_exists spec
+  subst result
+  exact ⟨out,run,start,line,size⟩
+#print axioms source
+end AspisR1.JFv_TX2_GatherLoop
+end

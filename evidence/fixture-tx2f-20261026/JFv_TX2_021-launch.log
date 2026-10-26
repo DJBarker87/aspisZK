@@ -1,0 +1,67 @@
+{"attempt": "JFv_TX2_021", "exit_status": 1, "wall_seconds": 2.4635620979825035, "peak_rss_kib": "5016244", "swaps": "0", "print_axioms": ["'AspisR1.JFv_TX2_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_TX2_Terminal.lean:60:92: error: don't know how to synthesize implicit argument `E`
+  @core.result.Result.Ok verifier.QueryGeometry ?m.405 out
+context:
+C : Type
+err : C
+seed : Ops C
+start : Usize
+it : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : it.i = (↑it.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+ops : Ops C := ⋯
+resized : alloc.vec.Vec U32
+resize :
+  alloc.vec.Vec.resize core.marker.CopyU32.cloneInst (alloc.vec.Vec.with_capacity U32 flat.len) flat.len 0#u32 =
+    ok resized
+hresize : ↑resized = (↑(alloc.vec.Vec.with_capacity U32 flat.len)).resize (↑
+...
+ier.QueryGeometry := ⋯
+next : core.slice.iter.IteratorSliceIter.next it = ok (none, it)
+empty : ops.op4 Global flat = ok false
+⊢ Type
+JFv_TX2_Terminal.lean:60:86: error: don't know how to synthesize implicit argument `α`
+  @done ?m.398 (core.result.Result verifier.QueryGeometry ?m.405) (core.result.Result.Ok out)
+context:
+C : Type
+err : C
+seed : Ops C
+start : Usize
+it : core.slice.iter.Iter U32
+zs flat : alloc.vec.Vec U32
+ending : it.i = (↑it.slice).length
+count : (↑zs).length ≤ 22
+size : (↑flat).length = 5 * (↑zs).length
+positive : 0 < (↑zs).length
+nonzero : ∀ x ∈ ↑flat, S7JoinBasisMachine.decode x ≠ 0
+ops : Ops C := ⋯
+resized : alloc.vec.Vec U32
+resize :
+  alloc.vec.Vec.resize core.marker.CopyU32.cloneInst (alloc.vec.Vec.with_capacity U32 flat.len) flat.len 0#u32 =
+    ok resized
+hresize : ↑resized = (↑(alloc.vec.Vec.with_capacity U32 flat.len)).resize (↑flat.len) 0#u32
+rsize : (↑resized).length = (↑flat).length
+inverse : alloc.vec.Vec U32
+invert : Port4C_GeometryInverse.pipeline ops flat resized = ok inverse
+len : (↑inverse).length = (↑flat).length
+values :
+  ∀ j < (↑flat).length,
+    S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑inverse) j) =
+      (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell (↑flat) j))⁻¹
+groups : alloc.vec.Vec Port4C_CollectLoop.Group
+collect :
+  Port4C_CollectLoop.collect (Port4C_GeometryInverse.install (SAQ_Constructor.install err seed)) inverse zs.len =
+    ok groups
+contents : ↑groups = List.map (Port4C_CollectLoop.record inverse) (List.range ↑zs.len)
+glen : (↑groups).length = ↑zs.len
+out : verifier.QueryGeometry := ⋯
+next : core.slice.iter.IteratorSliceIter.next it = ok (none, it)
+empty : ops.op4 Global flat = ok false
+⊢ Type
+'AspisR1.JFv_TX2_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re9a10325437a4420aa29ddf3b5d7d082.scope; invocation ID: 38c9e2923cc342309022e9b8e8a242c3
