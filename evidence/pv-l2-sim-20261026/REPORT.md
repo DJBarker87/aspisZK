@@ -134,3 +134,17 @@ Passing top theorems use only propext, Classical.choice, Quot.sound.
 No shipped file changed, no existing proved module overwritten.
 Endpoint premises removed: NONE at this stage. Deployment L1/L2, source
 refinement, E1/E2 and the simulator leg remain retained in full.
+
+Stage F5 absorption: `PV_L2_F5Absorption.fixed_coins_joint` (J20108)
+uses the actual `SimulatorR1.hvzk_R1S` and unchanged `RefPayload.simE`.
+For a fixed full attempt-coin vector and selected P_R1/VR1-valid challenge,
+every test of (all raw QueryScan histories, selected honest view) has the
+same mean as (the same histories, simE view). PackField, PublicBase,
+BuilderSoundOn, P_R1, VR1 and public-instance equality are explicit inherited
+hypotheses. This supplies a fixed-coins absorption leg, not the native
+retry/L1/ROM-history joint endpoint. No trace-agreement assumption was added.
+
+`PV_L2_F3Words` (J20110) constructs a symbolic equivalence on all 31-bit
+candidates, fixes the unique rejecting cell P, and proves complete bounded
+scalar rejection-control preservation under any canonical-value permutation.
+It is a candidate-word lemma, not yet a Rust-word/ROM/E1/L1 source join.
