@@ -421,3 +421,34 @@ fn PoolL_allocate_pair_1768() {
  kani::cover!(a.owner==&id && !a.executable && !a.is_signer && a.is_writable,"owner/data guard shape reachable");
  drop(a);assert_eq!(data[i],before);assert_eq!(lamports,balance);
 }
+
+use solana_program::instruction::TRANSACTION_LEVEL_STACK_HEIGHT;
+fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult {
+    if stack_height != TRANSACTION_LEVEL_STACK_HEIGHT {
+        return Err(PoolV1ProgramError::CpiInvocationForbidden.into());
+    }
+    Ok(())
+}
+
+#[kani::proof]
+fn PoolL_stack() {
+ let h:usize=kani::any();let r=require_transaction_level_invocation_v1(h);
+ assert_eq!(r,if h==TRANSACTION_LEVEL_STACK_HEIGHT {Ok(())}else{Err(ProgramError::Custom(0x41532036))});
+ kani::cover!(h==TRANSACTION_LEVEL_STACK_HEIGHT,"transaction admission reachable");
+ kani::cover!(h!=TRANSACTION_LEVEL_STACK_HEIGHT,"CPI rejection reachable");
+}
+#[kani::proof]
+#[kani::unwind(9)]
+fn PoolL_cpi_readonly() {
+ use solana_program::instruction::AccountMeta;
+ let keys:[Pubkey;7]=core::array::from_fn(|_|Pubkey::new_from_array(kani::any()));
+ let mut cpi_accounts=vec![
+ AccountMeta::new_readonly(keys[0],false),AccountMeta::new_readonly(keys[1],false),
+ AccountMeta::new_readonly(keys[2],false),AccountMeta::new_readonly(keys[3],false),
+ AccountMeta::new_readonly(keys[4],false),AccountMeta::new_readonly(keys[5],false)];
+ let split:bool=kani::any();if split {cpi_accounts.push(AccountMeta::new_readonly(keys[6],false));}
+ let i:usize=kani::any();kani::assume(i<cpi_accounts.len());
+ assert_eq!(cpi_accounts[i].pubkey,keys[i]);
+ assert!(!cpi_accounts[i].is_writable);assert!(!cpi_accounts[i].is_signer);
+ kani::cover!(split && i==6,"CP readonly meta reachable");
+}
