@@ -19,7 +19,7 @@
     "--harness-timeout",
     "60s",
     "--harness",
-    "PoolN_zero_page_192",
+    "PoolN_AS8I_prefix_",
     "--output-format",
     "terse"
   ],
@@ -27,7 +27,10 @@
     "PoolN_processor_harness.rs",
     "PoolN_forest_harness.rs",
     "PoolN_misc_harness.rs",
-    "PoolN_source-pins.json"
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json"
   ],
   "timeout": 300,
   "env": {
@@ -39,7 +42,7 @@
     "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
   },
   "deps_fingerprint": {
-    "scope": "assert_eq!(account_is_zeroed_program_page(&account,&id),Ok(false));"
+    "scope": "Literal contiguous actual-source prefix, stop immediately after rejecting primary-role guard; arbitrary exact-length instruction and checkpoint bytes, symbolic signer/writable; source offsets/hashes in prefix manifest; first-byte and balance frames; cover checks guard reachability."
   },
-  "expected_time": "Optimized native guard/handler verification, no intended arithmetic/CPI. PoolN_zero_page_192"
+  "expected_time": "Optimized prefix AS8I; no intended arithmetic, CPI or suffix execution;192/1768 pairs."
 }
