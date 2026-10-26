@@ -27,6 +27,9 @@ assert len(audits)>=2
 for kind,r in [('BEFORE',audits[0]),('AFTER',audits[-1])]:
  text=(P/r['attempt']/'stdout.log').read_text();start=text.index('theorem AspisR1.Rc10_Top.deployed');kernel=text[start:].split("'AspisR1.Rc10_Top.deployed' depends on axioms:")[0].rstrip()+'\n';(P/f'JFp_{kind}_Rc10_KERNEL.txt').write_text(kernel)
 old=audits[0]['deps_fingerprint']['selected_objects']['Rc10_Top.olean'];new=audits[-1]['deps_fingerprint']['selected_objects']['Rc10_Top.olean'];assert old['sha256']==new['sha256']
+raw_before=(P/'JFp_BEFORE_Rc10_KERNEL.txt').read_bytes();after_kernel=(P/'JFp_AFTER_Rc10_KERNEL.txt').read_bytes()
+(P/'JFp_082_RAW_Rc10_KERNEL.txt').write_bytes(raw_before)
+if len(after_kernel)>len(raw_before):(P/'JFp_BEFORE_Rc10_KERNEL.txt').write_bytes(after_kernel)
 counts=dict(T=89,P=16,G=13,C=0);zero=dict(T=0,P=0,G=0,C=0)
 ledger=dict(target='AspisR1.Rc10_Top.deployed',method='design/PREMISE-LEDGER-20261025.md: Rc10 quantified atomic-law families, conjunction leaves, guarded conditional laws and common witnesses, with deployment rows; L185 aliases L159; native/global copies remain distinct',before=counts,after=counts,actual_distinct=dict(T=83,P=12,G=13,C=0),deployment_non_alias=dict(T=6,P=4,G=0,C=0),removed=zero,added=zero,changed=zero,before_source_sha256=sha(before),after_source_sha256=sha(source),source_statements_identical=True,before_object=old,after_object=new,target_object_hash_unchanged=True,limitations='No complete accepted native pair or actual-top premise removal; partial fixture and concrete SHA checks do not imply acceptance or source/syscall/artifact refinement. No quantifier, carrier, failure event, numerical constant, game clause or trust item changed.')
 (P/'JFp_LEDGER_DELTA.json').write_text(json.dumps(ledger,indent=2)+'\n')
