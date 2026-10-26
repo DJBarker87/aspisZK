@@ -19,6 +19,12 @@ retries=[]
 for retry in range(11):
  r=ssh(barrier+' > '+B+'/'+attempt+'-barrier.log 2>&1; reservation_status=$?; cat '+B+'/'+attempt+'-barrier.log; exit $reservation_status',capture_output=True,text=True)
  (P/(attempt+'-barrier.log')).write_text(r.stdout+r.stderr)
+ exists=ssh('test -f '+B+'/'+attempt+'-reservation.json',capture_output=True).returncode==0
+ if not exists and retry==0:
+  retries.append(dict(retry=retry,wait_seconds=30,reason='missing reservation receipt; transient rule7'))
+  time.sleep(30);continue
+ if not exists:
+  print('Reservation receipt missing after one rule7 retry',flush=True);sys.exit(79)
  if r.returncode==0:break
  if r.returncode==78 and retry<10:
   retries.append(dict(retry=retry,wait_seconds=180,reason='reservation refused'))
