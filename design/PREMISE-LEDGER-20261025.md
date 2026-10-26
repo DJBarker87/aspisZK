@@ -1677,3 +1677,56 @@ No wallet/key/account cleanup, release-scope change, foreign module change or
 push. Next deliverables are the owner decisions above, same saved-Vec/Context
 and source/model bindings, concrete primitive instances, then source/artifact
 association and coherent release audit. The 100-bit target remains open.
+
+
+### SAQ_ source-selected candidate, 2026-10-26 (not integrated)
+
+The actual generic `AspisR1.Rc2_Top.deployed` is unchanged: **literal actual-top
+delta 0**. `AspisR1.SAQ_CompleteTop.deployed` is a checked source-selected
+replacement at `SAQ_CompleteInstall.configuration indexError c reservation`.
+It discharges the following Rc2 atomic P leaves, including the guards nested
+inside the returned continuation. Do not subtract these from the generic
+Rc2 totals until the lead integrates this dictionary and strengthened result.
+
+| Session A owner | Rc2 rows | Selected-instance P leaves removed |
+|---|---|---:|
+| Query SessionAPrimitives, including decoder, line and line_canonical | N047–N088 | 42 |
+| GeometryCanonical.SessionAPrimitives | N089–N095 | 7 |
+| Domain.SessionADomain | N096–N104 | 9 |
+| Explicit geometry mul/one/inverse equations | N105–N107 | 3 |
+| Total | N047–N107 | 61 |
+
+By the Rc2 recount method (atomic conjuncts, quantified families counted once,
+shared-dictionary deduplication, unchanged witness/guard correspondence):
+actual antecedents 82T+171P → 82T+110P; actual plus non-alias deployment
+88T+184P → 88T+123P; all retained audit rows 88T+189P → 88T+128P.
+Actual Session A leaves 145 → 84; deduplicated actual/deployment 146 → 85.
+These are **selected-instance candidate counts**. T/C deltas are zero.
+`indexError : CoreError` is new data choosing the source IndexOutOfRange
+constructor in the existing carrier; it is not a correctness-law premise.
+The theorem does not prove arbitrary callback dictionaries satisfy these laws.
+
+`SAQ_Forget.result` erases the strengthened outcome to the original Rc2
+outcome with the same f/s/outer/pre/middle/fs/ss/run/tx2 witnesses. No new
+source hypothesis is needed for erasure. SessionAPrepare remains for SAP_.
+The extraction/native/P6/source-to-ELF boundaries, including L178, remain.
+The inherited Rc2 frozen2 headline is preserved; adoption of owner-approved
+frozen3 still requires integration. No full S2, release or 100-bit claim.
+
+Non-vacuity: `SAQ_Nonvacuity.contracts` derives the three owner contracts for
+every input configuration/error value; constructor examples accept index 0
+and reject 262144, and source inverse succeeds at 1. This does not construct
+an entire accepted native two-transaction execution.
+
+All 100/100 Lean compile attempts are terminal; 0/20 Kani runs. Final audit
+SAQ_107: exit 0, 4.960137286 seconds, peak RSS 5308064 KiB, swap 0,
+source revision 33f52eda6f7dbc8d85a293119bd4bae6050052c4 plus the pinned
+SAQ_Audit source snapshot. Axioms: propext, Classical.choice, Quot.sound.
+Each host compile used MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64 and -M7000; no timeout/memory kill or package replay.
+No shipped source changed and no ELF rebuild was triggered; historical ELF
+pins are inherited, not freshly reproduced.
+
+Full before/after printed statements, exact per-attempt commands/revisions,
+source/tool/object hashes, failed attempts, resource receipts, recount and
+source association limits: [SAQ handoff](../evidence/sessa-prim-20261026/SAQ_HANDOFF.md).
