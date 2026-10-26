@@ -171,3 +171,36 @@ are still OPEN for an arbitrary/deployed runtime unless the actual source
 initializer/context producer are installed as these exact constructors.
 Consequently the accepted deployed P AFTER list and record counts remain
 unchanged. No runtime/observer binding was manufactured to instantiate P.
+
+## Accepted source reduction (35068)
+
+SelectedSourceCore.words_and_public proves BOTH original record predicates
+for every selected input family, from the following exact retained joins:
+
+```lean
+external_eq : actualExternal = PV_Src_FrozenInput.external
+records_eq : actualRecords = PV_Src_FrozenInput.records
+selected_eq : ∀ w, selected w = PV_Src_FrozenInput.input (canonical w)
+compile_call : ∀ w, @run actualExternal actualRecords (selected w) =
+  ok (.Ok (selected w).compiled)
+```
+
+Its conclusion is the exact conjunction of words and publicCorr in the
+pending SelectedSourceReduction adapter; the checked theorem is generic in
+the SAME selected family and source dictionaries. No actual equality join or
+compile call is inferred from the name `canonical`. The deployed P AFTER
+list above remains unchanged until those source joins are installed.
+
+## Accepted candidate constructor reduction (35085)
+
+For exactly the CausalPrefix.world constructor and exactly the boundary
+with its coordinates and strict-prefix frame, the original P record changes
+from `RemainingProofs` (initial ∧ causal ∧ trace) to its unchanged `trace`
+premise. The source theorem `CausalTrustLedger.initial_and_causal` proves the
+first two fields, rather than transferring either into T. The exact expanded
+trace and constructor signatures are retained in source snapshot 35085.
+
+This specializes the mathematical candidate. The exact deployed AFTER list
+remains unchanged: actual initializer/context association, actual caller and
+complete observer installation, and complete extracted trace have not been
+proved. The record types and runtime/boundary binders are unchanged (2/8/6).

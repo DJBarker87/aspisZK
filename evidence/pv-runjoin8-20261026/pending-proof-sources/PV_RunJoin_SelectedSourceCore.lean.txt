@@ -5,10 +5,8 @@ namespace R1Z.PV_RunJoin_SelectedSourceCore
 open Aeneas Aeneas.Std Result R0P R0Z.ZkStatement R0Z.WriterRefine R1J.SpendWitnessMap
 open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
 open PV_Src_Forest_PrimitiveArguments PV_Src_NativeInput
-local notation "K" => PrivacyR1AcctBasis.K
-local instance : CharP K 2147483647 :=
-  charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective AspisCircleGroupOrder.P
-variable {W : Type}
+variable {K W : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
 
 /-- Two source joins remain indispensable: the actual dictionaries must equal
 these owned references, and the actual selected record must equal the encoded

@@ -80,11 +80,15 @@ variable (inputs : (honest : HonestProver K) → (statement : Statement K Commit
     (common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client)
 local notation "runtime" => PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal
 variable (boundaryData : PV_RunJoin_Boundary.Data
-  (PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy inputs disclosed oracle ideal) Context Rest)
+  (PV_RunJoin_LedgerConstructor.runtime schedule unix address
+    (PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody)
+    policy inputs disclosed oracle ideal) Context Rest)
 variable (produce : (i : Fin 128) → PV_RunJoin_CausalPrefix.Prefix i → Rest → Context)
-local notation "causalData" => ({boundaryData with
-  coordinates := coordinates
-  frame := PV_RunJoin_CausalPrefix.frame produce} : PV_RunJoin_Boundary.Data runtime Context Rest)
+local notation "causalData" => (PV_RunJoin_Boundary.Data.mk
+  boundaryData.sourceBody boundaryData.draw boundaryData.law
+  (PV_RunJoin_CausalPrefix.frame produce) coordinates boundaryData.nativeWeight
+  boundaryData.ledger boundaryData.reservation boundaryData.schedule boundaryData.unix boundaryData.fault :
+    PV_RunJoin_Boundary.Data runtime Context Rest)
 local notation "boundary" => PV_RunJoin_LedgerBoundary.boundary schedule unix address world policy inputs common disclosed oracle ideal x causalData
 local notation "rust" => PV_RunJoin_Deployed.rust runtime
 local notation "observer_program" => PV_RunJoin_Deployed.observer_program runtime
@@ -99,14 +103,15 @@ variable (extracted : ModelCoins template outputs x → R1Adv K CommitHandle Aux
 /-- Initial ledger independence and prior causality are proved for the
 specified constructed data. Trace remains the exact original obligation. No
 claim that a deployed native initializer equals these data is implicit. -/
-theorem remaining
+theorem initial_and_causal
     (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →
       ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →
         extracted r.coins adv w =
           (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :
     PV_RunJoin_TrustLedger.RemainingProofs template outputs x schedule unix address
-      world policy inputs disclosed oracle ideal common causalData extracted where
-  initial := by
+      world policy inputs disclosed oracle ideal common causalData extracted := by
+  refine { initial := ?_, causal := PV_RunJoin_CausalPrefix.causal produce, trace := trace }
+  ·
     intro t u rest
     change ((PV_RunJoin_CausalPrefix.world coordinates replies initialPolicy initialLedger initialBody).ledger
       (coordinates.symm (t,rest))).model =
@@ -114,59 +119,6 @@ theorem remaining
           (coordinates.symm (u,rest))).model
     exact congrArg PV_RunJoin_LedgerWorld.World.model
       (PV_RunJoin_CausalPrefix.initial_ledger coordinates replies initialPolicy initialLedger initialBody t u rest)
-  causal := PV_RunJoin_CausalPrefix.causal produce
-  trace := trace
 
-theorem proofs
-    (identity : ∀ hh xx ww ss, PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss))
-    (common_public : ∀ (w : (h).Instance), (h).public w = x.1 → ∀ s : State,
-      (inputs h x w).ops s = (common x).ops s ∧
-      (inputs h x w).pub s = (common x).pub s ∧
-      (inputs h x w).hash s = (common x).hash s)
-    (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →
-      ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →
-        extracted r.coins adv w =
-          (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :
-    PV_RunJoin_TrustEndpoint.ProofObligations template outputs x runtime boundary extracted :=
-  PV_RunJoin_TrustLedger.candidate_proofs template outputs x schedule unix address world policy inputs
-    disclosed oracle ideal common causalData extracted identity common_public
-    (remaining template outputs x schedule unix address coordinates replies initialPolicy initialLedger initialBody
-      policy disclosed oracle ideal inputs common boundaryData produce extracted trace)
-
-variable {E File Reply Time Worker : Type} [DecidableEq File]
-variable (nativeEvents extractedEvents : ModelCoins template outputs x →
-  PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Unit)
-
-/-- Exact headline at the candidate ledger construction. Initial-ledger
-independence, causal contexts and extracted complete trace refinement remain
-P work. No actual native runtime/boundary installation is claimed. -/
-theorem privacy_headline_deployed_candidate
-    (identity : ∀ hh xx ww ss, PV_RunJoin_MapErrInstalled.Identity ((inputs hh xx ww).ops ss))
-    (common_public : ∀ (w : (h).Instance), (h).public w = x.1 → ∀ s : State,
-      (inputs h x w).ops s = (common x).ops s ∧
-      (inputs h x w).pub s = (common x).pub s ∧
-      (inputs h x w).hash s = (common x).hash s)
-    (trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →
-      ∀ r : World, ¬ (∃ i, ProverCommitFuelJoin22.bad (oldBad w) (queries adv w) i r.coins) →
-        extracted r.coins adv w =
-          (source).real h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1)
-    (T : PV_RunJoin_TrustItems
-      (PV_RunJoin_TrustEndpoint.trustData template outputs x runtime boundary nativeEvents extractedEvents extracted))
- :
-    (∀ (adv : R1Adv K CommitHandle Aux) (w : (h).Instance), (h).public w = x.1 →
-      |mean (realTest h B outputs rust adv x w) -
-        mean (idealTestS source (RomObserverBin.observerMap rust observer_program adv) x
-          (simE (h).transport B outputs x))| ≤
-      (modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge)) ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
-      1 / 2^109 + 1 / 2^137 + 1 / 2^454 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
-    modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge < 1 / 2^100 := by
-  exact PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate
-    template outputs x runtime boundary nativeEvents extractedEvents extracted
-    (proofs template outputs x schedule unix address coordinates replies initialPolicy initialLedger initialBody
-      policy disclosed oracle ideal inputs common boundaryData produce extracted identity common_public trace) T
-
-#print axioms proofs
-#print axioms privacy_headline_deployed_candidate
-#print axioms remaining
+#print axioms initial_and_causal
 end R1Z.PV_RunJoin_CausalTrustLedger

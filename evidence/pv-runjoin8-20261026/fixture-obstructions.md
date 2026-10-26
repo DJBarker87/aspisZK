@@ -36,3 +36,17 @@ compilation/hash/store, and a callback that calls proof_account(k) BEFORE
 StateOnlyAttemptSecrets::generate_for_mask_nonce. The adapter does not run or
 prove the compiler; success belongs to the caller/planner source join.
 Keys are public inputs here; no private key or account was created or touched.
+
+## Per-fixture status after native root checks
+
+| Fixture | Canonical witness fibre | Actual selected compiler/admission | Concrete Runtime/Boundary and all remaining P | T | Deployed P ∧ T |
+|---|---|---|---|---|---|
+| Transfer | Historical both_fibres evidence retained | OPEN: same actual selection/dictionaries, successful compile, admission | OPEN: actual caller/carrier/initializer/complete observer association and trace | Same three fields, hypothetical | OPEN |
+| Withdrawal | Historical both_fibres evidence retained | OPEN: same actual selection/dictionaries, successful compile, admission | OPEN: actual caller/carrier/initializer/complete observer association and trace | Same three fields, hypothetical | OPEN |
+
+Seven fixed native root cells are verified; they supply no fixture compiler
+success, admission instance, or complete source trace. The generic causal
+constructor provides initial-ledger independence and strict-prefix frames
+without deleting OS-error outcomes, but its equality to the actual deployed
+initializer/context producer is still an installation obligation. Neither
+fixture is being declared vacuous or non-vacuous from those generic facts.
