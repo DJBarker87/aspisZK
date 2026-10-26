@@ -1,0 +1,288 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullRetry.lean:57:22: error: Tactic `rfl` failed: The left-hand side
+  (erase
+      (match (record, after) with
+        | (record, after) =>
+          match record.l1.result with
+          | Step.done proof =>
+            ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+          | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+          | Step.retry =>
+            match run owner fuel (index + 1) after with
+            | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1,
+    (match (record, after) with
+      | (record, after) =>
+        match record.l1.result with
+        | Step.done proof =>
+          ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+        | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+        | Step.retry =>
+          match run owner fuel (index + 1) after with
+          | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2)
+is not definitionally equal to the right-hand side
+  match
+    match (record, after) with
+    | (record, after) => (record.l1, after) with
+  | (record, after) =>
+    match record.result with
+    | Step.done proof =>
+      ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+    | Step.stop e => ({ attempts := [record], result := Step.stop e }, after)
+    | Step.retry =>
+      match
+        SideChannelL1AttemptRecord.run
+          (fun index state =>
+            match owner index state with
+            | (record, after) => (record.l1, after))
+          fuel (index + 1) after with
+      | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)
+
+case succ.mk.done
+State Proof : Type
+owner : Owner State Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : State),
+    (erase (run owner fuel index state).1, (run owner fuel index state).2) =
+      SideChannelL1AttemptRecord.run (ownerL1 owner) fuel index state
+index : ℕ
+state : State
+record : Attempt Proof
+after : State
+h : owner index state = (record, after)
+proof : Proof
+hr : record.l1.result = Step.done proof
+⊢ (erase
+        (match (record, after) with
+          | (record, after) =>
+            match record.l1.result with
+            | Step.done proof =>
+              ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+            | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+            | Step.retry =>
+              match run owner fuel (index + 1) after with
+              | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1,
+      (match (record, after) with
+        | (record, after) =>
+          match record.l1.result with
+          | Step.done proof =>
+            ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+          | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+          | Step.retry =>
+            match run owner fuel (index + 1) after with
+            | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2) =
+    match
+      match (record, after) with
+      | (record, after) => (record.l1, after) with
+    | (record, after) =>
+      match record.result with
+      | Step.done proof =>
+        ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+      | Step.stop e => ({ attempts := [record], result := Step.stop e }, after)
+      | Step.retry =>
+        match
+          SideChannelL1AttemptRecord.run
+            (fun index state =>
+              match owner index state with
+              | (record, after) => (record.l1, after))
+            fuel (index + 1) after with
+        | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullRetry.lean:58:22: error: Tactic `rfl` failed: The left-hand side
+  (erase
+      (match (record, after) with
+        | (record, after) =>
+          match record.l1.result with
+          | Step.done proof =>
+            ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+          | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+          | Step.retry =>
+            match run owner fuel (index + 1) after with
+            | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1,
+    (match (record, after) with
+      | (record, after) =>
+        match record.l1.result with
+        | Step.done proof =>
+          ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+        | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+        | Step.retry =>
+          match run owner fuel (index + 1) after with
+          | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2)
+is not definitionally equal to the right-hand side
+  match
+    match (record, after) with
+    | (record, after) => (record.l1, after) with
+  | (record, after) =>
+    match record.result with
+    | Step.done proof =>
+      ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+    | Step.stop e => ({ attempts := [record], result := Step.stop e }, after)
+    | Step.retry =>
+      match
+        SideChannelL1AttemptRecord.run
+          (fun index state =>
+            match owner index state with
+            | (record, after) => (record.l1, after))
+          fuel (index + 1) after with
+      | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)
+
+case succ.mk.stop
+State Proof : Type
+owner : Owner State Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : State),
+    (erase (run owner fuel index state).1, (run owner fuel index state).2) =
+      SideChannelL1AttemptRecord.run (ownerL1 owner) fuel index state
+index : ℕ
+state : State
+record : Attempt Proof
+after : State
+h : owner index state = (record, after)
+error : ProverCommitRetry34.Error
+hr : record.l1.result = Step.stop error
+⊢ (erase
+        (match (record, after) with
+          | (record, after) =>
+            match record.l1.result with
+            | Step.done proof =>
+              ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+            | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+            | Step.retry =>
+              match run owner fuel (index + 1) after with
+              | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1,
+      (match (record, after) with
+        | (record, after) =>
+          match record.l1.result with
+          | Step.done proof =>
+            ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+          | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+          | Step.retry =>
+            match run owner fuel (index + 1) after with
+            | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2) =
+    match
+      match (record, after) with
+      | (record, after) => (record.l1, after) with
+    | (record, after) =>
+      match record.result with
+      | Step.done proof =>
+        ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+      | Step.stop e => ({ attempts := [record], result := Step.stop e }, after)
+      | Step.retry =>
+        match
+          SideChannelL1AttemptRecord.run
+            (fun index state =>
+              match owner index state with
+              | (record, after) => (record.l1, after))
+            fuel (index + 1) after with
+        | (rest, final) => ({ attempts := record :: rest.attempts, result := rest.result }, final)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullRetry.lean:65:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  SideChannelL1AttemptRecord.run (ownerL1 owner) fuel (index + 1) after
+in the target expression
+  ({
+        attempts :=
+          List.map Attempt.l1
+            (match record.l1.result with
+                | Step.done proof =>
+                  ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+                | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+                | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1.attempts,
+        result :=
+          (match record.l1.result with
+              | Step.done proof =>
+                ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+              | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+              | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1.result },
+      (match record.l1.result with
+        | Step.done proof =>
+          ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+        | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+        | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2) =
+    match record.l1.result with
+    | Step.done proof =>
+      ({ attempts := [record.l1], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+    | Step.stop e => ({ attempts := [record.l1], result := Step.stop e }, after)
+    | Step.retry =>
+      ({
+          attempts :=
+            record.l1 ::
+              (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2))
+                    fuel (index + 1) after).1.attempts,
+          result :=
+            (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2)) fuel
+                  (index + 1) after).1.result },
+        (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2)) fuel
+            (index + 1) after).2)
+
+case succ.mk.retry.mk
+State Proof : Type
+owner : Owner State Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : State),
+    (erase (run owner fuel index state).1, (run owner fuel index state).2) =
+      SideChannelL1AttemptRecord.run (ownerL1 owner) fuel index state
+index : ℕ
+state : State
+record : Attempt Proof
+after : State
+h : owner index state = (record, after)
+hr : record.l1.result = Step.retry
+rest : Run Proof
+final : State
+hrest : run owner fuel (index + 1) after = (rest, final)
+tail :
+  ({ attempts := List.map Attempt.l1 rest.attempts, result := rest.result }, final) =
+    SideChannelL1AttemptRecord.run (ownerL1 owner) fuel (index + 1) after
+⊢ ({
+        attempts :=
+          List.map Attempt.l1
+            (match record.l1.result with
+                | Step.done proof =>
+                  ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+                | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+                | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1.attempts,
+        result :=
+          (match record.l1.result with
+              | Step.done proof =>
+                ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+              | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+              | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).1.result },
+      (match record.l1.result with
+        | Step.done proof =>
+          ({ attempts := [record], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+        | Step.stop error => ({ attempts := [record], result := Step.stop error }, after)
+        | Step.retry => ({ attempts := record :: rest.attempts, result := rest.result }, final)).2) =
+    match record.l1.result with
+    | Step.done proof =>
+      ({ attempts := [record.l1], result := Step.done { proof := proof, attempts := index + 1 } }, after)
+    | Step.stop e => ({ attempts := [record.l1], result := Step.stop e }, after)
+    | Step.retry =>
+      ({
+          attempts :=
+            record.l1 ::
+              (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2))
+                    fuel (index + 1) after).1.attempts,
+          result :=
+            (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2)) fuel
+                  (index + 1) after).1.result },
+        (SideChannelL1AttemptRecord.run (fun index state => ((owner index state).1.l1, (owner index state).2)) fuel
+            (index + 1) after).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullRetry.lean:61:25: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [erase,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵] at tail ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3FullRetry.lean:75:79: error: Ambiguous term
+  Error
+Possible interpretations:
+  ProverCommitRetry34.Error : Type
+  
+  SideChannelL1AttemptRecord.Error : Type
+'R1Z.PV_L2_F3FullRetry.full_l1_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullRetry.rejected_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullRetry.stopping_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullRetry.rejected_rom_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3FullRetry.l1_events' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
