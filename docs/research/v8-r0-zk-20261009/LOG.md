@@ -9985,3 +9985,24 @@ interpretation obstruction as L1/L2/RunJoin (D199, D200, D202), now owned by pv-
 relaunched refocused on what moves counts: types 3 and 27 by the Kani-first quotient route (15 unused
 runs), the open pure entries outside pv-cb's op list, and the V270 Formatter quotient. Six jobs
 running: rw16, dict9, runjoin3, srcid, rebase2, cb. Privacy target not yet established.
+
+## D204 (Stream B, 2026-10-26 19:00): deployed endpoint reduced to an 8-field premise record
+
+pv-runjoin3 (`codex/pv-runjoin-20261026`, head 92a6c256a6, unmerged sibling of the candidate; 50/50
+Lean, 31 passed; 10/10 Kani, 8 passing harnesses; axioms audit standard-only; swaps 0) delivered the
+structure Stream B is measured against: `PV_RunJoin_Endpoint.privacy_headline_from_premises :
+PV_RunJoin_Premises → <the exact conclusion of privacy_headline_deployed at the deployed rust>`, with
+the original conclusion, public-equality guard, bad event, simulator simE and complete observer
+preserved, and axioms exactly propext, Classical.choice, Quot.sound. The deployed instance is the
+shared-world retry interpretation of the selected client retry owner (explicit entropy tape/cursor,
+policy and ledger state), retaining the full native audit; both coupling marginals are proved on one
+coupling, so `uniform_V037` is now a theorem for the interpreted world; the concrete fixture fibres
+need no assumption (2→0). The record `PV_RunJoin_Premises` has 8 fields / 12 conjunct families:
+`source_V045`, `E1_V329` (trust item, stated exactly), `native_fill_V336`, `native_ledger_V337`,
+`byte_blind_V338`, `kernels_V339`, `disclosed_V038`, `observerOracle_V038`. The field count rose
+3→8 because the abstract premise was unfolded into its native obligations; that is exposure, not
+reduction, and whole deployed rows removed is still 0. Lead review pending on the exact statements
+(no forbidden tokens; no crates/programs change). pv-runjoin4 relaunched with a fresh budget to
+discharge the fields in order of least native dependence (kernels, byte-blind, ledger/fill, then
+source/V038 by composing pv-rw16/pv-cb/pv-dict9 results as they land), splitting any remainder into
+finer named fields so the record tracks the ledger. Six jobs running. Privacy target not yet established.
