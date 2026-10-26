@@ -245,3 +245,5 @@ base-four digit boundaries0,1,2,3,4,15,16,63,64,255,256,1023. These local gates
 retain all arbitrary raw cell words, no stubs, and unwind1025. The fixed-cell
 checks do not constitute a universal QM31 wrapper theorem. Expected heavy
 step is CBMC symbolic array-copy checking, not native field arithmetic.
+
+Kani3 fullM31 wrapper timed out124 after600.0017629069625s, peak cgroup6445043712bytes, swap0. No proof/counterexample. Kani4 fixed-cell split waits for fresh reservation after refusal. This changes the quantified index scope, never substitutes a stub or raises limits.

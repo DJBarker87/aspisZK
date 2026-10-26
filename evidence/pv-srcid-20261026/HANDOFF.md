@@ -42,3 +42,12 @@ extra Lean or unchanged full regression. List full git log base..HEAD in
 report artifact. Next deliverable: extract/associate Records and external
 linear native callees and instantiate all5families for both real release
 fixtures, then deployed RunJoin installation. No release target established.
+
+## 16:53 UTC quiet-window update
+
+Kani3 timed out124 at600.002s, peak6,445,043,712bytes, swap0. Receipt copied.
+Kani4-launch-0 refused due cross-stream quiet window until17:20UTC, not capacity.
+Queue51418 remains active, retries183s, up to10. Do not bypass quiet window.
+No Kani4 has launched. Remaining12runs; budget100Lean/3Kani used.
+Proof/report commit19716063e9, proof audit1ab2e984e7. Current REPORT.md has
+full proof-stage log and clear native fixture/callee/deployment gaps.
