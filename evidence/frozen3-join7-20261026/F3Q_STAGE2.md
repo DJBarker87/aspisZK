@@ -42,3 +42,14 @@ reused; no dependency build, package replay, Rust, Kani or ELF rebuild.
 Each scope high6G/max8G/swap0/tasks64, Lean-M7000. Up to3 own scopes (24GiB)
 concurrent; inspected host had no unrelated build scope, below55GiB safe limit.
 UK time04:04, within authorized parallel night window. No keys/funds touched.
+
+Stage 2 native composition: F3Q_PairBatches.accepted (attempt074, exit0,
+2.8220759260002524s, RSS5369056KiB, swap0) applies BOTH whole-batch source-log
+equalities on the SAME native pair/run/input as the checkpoint result. Actual
+second resumed Prepared/Accumulator are identified by deterministic equality
+of the two normalized reads of the SAME checkpoint, not another accepted run.
+The theorem retains history and proof retention; both batch model verdicts
+are derived. No arbitrary decoder/model acceptance premise added. Prepared
+and ten-state remain the explicit circle-install and collision qualifications
+recorded in Stage1. Attempt073 exports preparation and folded-root provenance
+from the same witness so this composition does not choose another TX1.

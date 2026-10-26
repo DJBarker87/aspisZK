@@ -63,7 +63,8 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
         (AspisV8R19.MemoizedProgramLaw.eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)=some q ∧
       OraclePortStoredDecisionDraftC4.input p q (LiteralTranscript.erasePrefix
         (AspisV8R19.MemoizedProgramLaw.eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)=some input ∧
-      currentPrepared out=run.p ∧
+      Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared run.p) input.data q
+        (SelectedChallengeMap.rhoOf input.rho) ∧ currentPrepared out=run.p ∧
       F3L_SourcePrepared.numeric out=OraclePortCheckpointResumeC5.prepared
         (OraclePortAcceptedContextC6.context p input v) input.data (SelectedChallengeMap.rhoOf input.rho) q ∧
       Cons_Native.Calls (AuS1_Install.base stage) finish reserved query geo
@@ -122,7 +123,7 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
     run owner ports H oracle out output
   obtain ⟨tx2,calls,aux⟩ := F3N_SameSecond.from_cut a ops stage finish reserved query geo B std
     accounts1 accounts2 saved f s cuts
-  refine ⟨f,s,log,cuts,recorded,ran,run,view,range,copy,i,p,q,input,out,v,tx2,physical,stored,parser,queries,found,output,prepared,calls,writer,?_⟩
+  refine ⟨f,s,log,cuts,recorded,ran,run,view,range,copy,i,p,q,input,out,v,tx2,physical,stored,parser,queries,found,prepare,output,prepared,calls,writer,?_⟩
   intro prior history sameProof
   have same := S2X.checkpoint_persistence _ _ history
   have parserSource : OraclePortStoredParserC4.parseReached (bytesOf f.proof.val) (LiteralTranscript.erasePrefix
