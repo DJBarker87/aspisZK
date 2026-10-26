@@ -1,0 +1,27 @@
+PoolW_ZeroArithmetic.lean:11:87: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+bytes : Slice U8
+i : Usize
+within : i < bytes.len
+size : (↑bytes).length ≤ Usize.max
+range : ↑i + 1 ≤ Usize.max
+⊢ ↑((i.bv + 1#System.Platform.numBits)#uscalar) = ↑i + 1
+PoolW_ZeroArithmetic.lean:11:50: warning: This simp argument is unused:
+  UScalar.ofNat
+
+Hint: Omit it from the simp argument list.
+  simp [Usize.wrapping_add, UScalar.wrapping_add, U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵,̵ ̵Nat.mod_eq_of_lt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolW_ZeroArithmetic.lean:11:65: warning: This simp argument is unused:
+  Nat.mod_eq_of_lt
+
+Hint: Omit it from the simp argument list.
+  simp [Usize.wrapping_add, UScalar.wrapping_add, UScalar.ofNat,̵ ̵N̵a̵t̵.̵m̵o̵d̵_̵e̵q̵_̵o̵f̵_̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolW_ZeroArithmetic.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
