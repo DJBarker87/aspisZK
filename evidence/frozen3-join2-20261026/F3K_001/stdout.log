@@ -1,0 +1,34 @@
+F3K_ArrayFacts.lean:12:59: warning: This simp argument is unused:
+  Array.set_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.index_usize, Array.getElem?_Usize_eq,̵ ̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_ArrayFacts.lean:27:20: error: could not synthesize default value for parameter 'h' using tactics
+F3K_ArrayFacts.lean:27:20: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+α : Type
+n : Usize
+a : Std.Array α n
+i : Usize
+old : α
+put : α → Std.Array α n
+x : α
+x✝¹ : Option α
+x✝ : α
+heq✝ : a[i]? = some x✝
+h : ok (x✝, a.set i) = ok (old, put)
+v✝ : ?m.78
+⊢ ↑i < Array.size ?m.79
+F3K_ArrayFacts.lean:27:37: error: Type mismatch
+  Eq.symm (congrArg Prod.snd (ok.inj h))
+has type
+  (old, put).2 = (x✝, a.set i).2
+but is expected to have type
+  put = ?m.83
+'AspisR1.F3K_ArrayFacts.updated' depends on axioms: [propext]
+'AspisR1.F3K_ArrayFacts.mutated' depends on axioms: [propext, sorryAx]

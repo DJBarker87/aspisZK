@@ -1,0 +1,59 @@
+F3K_QueryRowOutput.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  id
+    (QueryFirstRead.result SelectedTranscriptParams.params (fun a => H a.toBytes)
+      (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (H a.toBytes)))
+in the target expression
+  UnifiedSampler.liftQuery
+      (QueryFirstRead.result SelectedTranscriptParams.params (fun a => H a.toBytes)
+        (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+          (H (UnifiedSampler.absorb SelectedTranscriptParams.params 31 (LiteralTranscript.erasePrefix P) b).toBytes))) =
+    (TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑out)), decodeState after.state)
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+before after : transcript.Transcript Hash
+payload : Slice U8
+out : Std.Array U32 22#usize
+success :
+  QueriesModel.queries
+      (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+      D before 31#u8 payload =
+    ok (core.result.Result.Ok out, after)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+fits : (↑payload).length < 4294967296
+P : LiteralTranscript.Prefix
+m : LiteralTranscript.Message
+b : LiteralTranscript.BytesMessage
+erased : LiteralTranscript.erase m = TranscriptView.Message.payload b
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+frame : ↑b = OraclePortCompactDraft.framed (MultiproofConeCanonical.bytesOf ↑payload)
+a : Addr SelectedTranscriptParams.L :=
+  UnifiedSampler.absorb SelectedTranscriptParams.params 31 (LiteralTranscript.erasePrefix P) b
+address :
+  (UnifiedSampler.absorb SelectedTranscriptParams.params 31 (LiteralTranscript.erasePrefix P) b).toBytes =
+    flatten (CallerStep.openingAbsorbParts before.state 191#u8 (UScalar.cast UScalarTy.U32 payload.len) payload)
+raw :
+  id
+      (QueryFirstRead.result SelectedTranscriptParams.params (fun a => H a.toBytes)
+        (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (H a.toBytes))) =
+    (Except.ok (List.map (fun x => ↑x) ↑out), decodeState after.state)
+⊢ UnifiedSampler.liftQuery
+      (QueryFirstRead.result SelectedTranscriptParams.params (fun a => H a.toBytes)
+        (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+          (H (UnifiedSampler.absorb SelectedTranscriptParams.params 31 (LiteralTranscript.erasePrefix P) b).toBytes))) =
+    (TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑out)), decodeState after.state)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3K_QueryRowOutput.output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,83 @@
+F3K_OpeningQuery.lean:41:53: error(lean.unknownIdentifier): Unknown identifier `bind_some`
+F3K_OpeningQuery.lean:23:68: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+v : verifier.View
+p : Parsed
+c : F3K_OpeningCalls.Calls D B embed v p
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+length : P.rounds.length = 27
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.t0.state
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+P31 : LiteralTranscript.Prefix := (eval H (F3J_SamplerRun.program pf 27 4 P)).2
+first :
+  have pf := F3J_InputRows.proof p root w bound;
+  (eval H (F3J_SamplerRun.program pf 27 4 P)).1 =
+      PreparedHashCode.observe
+              (PreparedHashCode.run
+                  (PreparedScalarEffects.scalar PreparedHashCode.effects B D c.t0 27#u8 v.y1 true)).1 ++
+            PreparedHashCode.observe
+              (PreparedHashCode.run
+                  (PreparedScalarEffects.scalar PreparedHashCode.effects B D c.t1 28#u8 c.inactive.to_slice false)).1 ++
+          PreparedHashCode.observe
+            (PreparedHashCode.run
+                (PreparedScalarEffects.scalar PreparedHashCode.effects B D c.t2 29#u8 v.round0 false)).1 ++
+        PreparedHashCode.observe
+          (PreparedHashCode.run
+              (PreparedScalarEffects.scalar PreparedHashCode.effects B D c.t3 30#u8 c.second.deref false)).1 ∧
+    UnifiedSampler.stateOf SelectedTranscriptParams.params
+        (LiteralTranscript.erasePrefix (eval H (F3J_SamplerRun.program pf 27 4 P)).2) =
+      decodeState c.t4.state
+len31 : P31.rounds.length = 31
+row31 :
+  eval H (LiteralByteSampler.samp 31 P31 (pf 31)).toProgram =
+    (PreparedHashCode.observe
+        (PreparedHashCode.run
+            (PreparedQueryEffects.queries PreparedHashCode.effects
+              (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+                embed)
+              D c.t4 31#u8 v.final_message)).1,
+      TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state)
+entry :
+  (eval H (F3J_SamplerRun.program pf 31 (1 + 1) P31)).2.rounds[31]? =
+    some
+      (pf 31,
+        (PreparedHashCode.observe
+              (PreparedHashCode.run
+                  (PreparedQueryEffects.queries PreparedHashCode.effects
+                    (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                      Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                    D c.t4 31#u8 v.final_message)).1,
+            TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state).2)
+⊢ (do
+      let __x ←
+        Option.map (fun mc => (LiteralTranscript.erase mc.1, mc.2))
+            (eval H (F3J_SamplerRun.program pf (27 + 4) 2 (eval H (F3J_SamplerRun.program pf 27 4 P)).2)).2.rounds[31]?
+      match __x.2.1 with
+        | TranscriptView.Value.queries (Except.ok bs) => LiteralQueryRead.decode bs
+        | x => none) =
+    LiteralQueryRead.decode (List.map (fun x => ↑x) ↑c.queries)
+F3K_OpeningQuery.lean:41:31: warning: This simp argument is unused:
+  entry
+
+Hint: Omit it from the simp argument list.
+  simp only [List.getElem?_map,e̵n̵t̵r̵y̵,̵ ̲Option.map_some, ̲bind_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_OpeningQuery.lean:41:37: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵e̵n̵t̵r̵y̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲e̲n̲t̲r̲y̲,̲ ̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3K_OpeningQuery.queries' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_OpeningQuery.decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

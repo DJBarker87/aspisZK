@@ -1,0 +1,52 @@
+F3K_QueryWords.lean:15:43: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 7
+  e ≥ 0
+  e - 4*f ≤ 0
+where
+ e := ↑↑32#usize
+ f := ↑↑j
+F3K_QueryWords.lean:16:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 7
+  e ≥ 0
+  e - 4*f ≤ 1
+where
+ e := ↑↑32#usize
+ f := ↑↑j
+F3K_QueryWords.lean:17:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 7
+  e ≥ 0
+  e - 4*f ≤ 2
+where
+ e := ↑↑32#usize
+ f := ↑↑j
+F3K_QueryWords.lean:18:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 7
+  e ≥ 0
+  e - 4*f ≤ 3
+where
+ e := ↑↑32#usize
+ f := ↑↑j
+F3K_QueryWords.lean:35:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.map_congr_left`
+  List.map ?f ?l = List.map ?g ?l
+with the goal
+  List.map ((fun x => ↑x) ∘ fun j => queryMaskWord (blockRankWord b j)) (List.range 8) =
+    List.map (fun j => AspisV8R19.SamplerWords.masked 18 (AspisV8R19.SamplerWords.word (decodeState b) j))
+      (List.finRange 8)
+
+Note: The full type of `@List.map_congr_left` is
+  ∀ {α : Type ?u.25} {l : List α} {α_1 : Type ?u.24} {f g : α → α_1}, (∀ a ∈ l, f a = g a) → List.map f l = List.map g l
+
+b : Std.Array U8 32#usize
+ws : Std.Array U32 8#usize
+h : Query31ConcreteWordsDriverChain.actualQueryWords b = ok ws
+shape : ↑ws = List.map (fun j => queryMaskWord (blockRankWord b j)) (List.range 8)
+⊢ List.map ((fun x => ↑x) ∘ fun j => queryMaskWord (blockRankWord b j)) (List.range 8) =
+    List.map (fun j => AspisV8R19.SamplerWords.masked 18 (AspisV8R19.SamplerWords.word (decodeState b) j))
+      (List.finRange 8)
+'AspisR1.F3K_QueryWords.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3K_QueryWords.mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3K_QueryWords.decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

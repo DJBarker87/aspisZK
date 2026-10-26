@@ -1,0 +1,98 @@
+F3K_OpeningSuffix.lean:79:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (LiteralByteSampler.samp (↑27#u8) P27 (F3J_InputRows.proof p root w bound ↑27#u8)).toProgram).1
+in the target expression
+  (eval H (LiteralByteSampler.samp 27 P27 (pf 27)).toProgram).1 ++
+              (eval H (LiteralByteSampler.samp 28 P28 (pf 28)).toProgram).1 ++
+            (eval H (LiteralByteSampler.samp 29 P29 (pf 29)).toProgram).1 ++
+          (eval H (LiteralByteSampler.samp 30 P30 (pf 30)).toProgram).1 ++
+        (eval H (LiteralByteSampler.samp 31 P31 (pf 31)).toProgram).1 ++
+      (eval H (LiteralByteSampler.samp 32 P32 (pf 32)).toProgram).1 =
+    F3K_OpeningCalls.log c
+
+case left
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+v : verifier.View
+p : Parsed
+c : F3K_OpeningCalls.Calls D B embed v p
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.t0.state
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+P27 : LiteralTranscript.Prefix := P
+P28 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 27 P27
+P29 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 28 P28
+P30 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 29 P29
+P31 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 30 P30
+P32 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 31 P31
+P33 : LiteralTranscript.Prefix := F3K_SamplerOne.next H pf 32 P32
+row27 :
+  (eval H (LiteralByteSampler.samp (↑27#u8) P27 (F3J_InputRows.proof p root w bound ↑27#u8)).toProgram).1 =
+      observe (run (PreparedScalarEffects.scalar effects B D c.t0 27#u8 v.y1 true)).1 ∧
+    (eval H (LiteralByteSampler.samp (↑27#u8) P27 (F3J_InputRows.proof p root w bound ↑27#u8)).toProgram).2.2 =
+      decodeState c.t1.state
+state28 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P28) = decodeState c.t1.state
+row28 :
+  (eval H (LiteralByteSampler.samp (↑28#u8) P28 (F3J_InputRows.proof p root w bound ↑28#u8)).toProgram).1 =
+      observe (run (PreparedScalarEffects.scalar effects B D c.t1 28#u8 c.inactive.to_slice false)).1 ∧
+    (eval H (LiteralByteSampler.samp (↑28#u8) P28 (F3J_InputRows.proof p root w bound ↑28#u8)).toProgram).2.2 =
+      decodeState c.t2.state
+state29 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P29) = decodeState c.t2.state
+row29 :
+  (eval H (LiteralByteSampler.samp (↑29#u8) P29 (F3J_InputRows.proof p root w bound ↑29#u8)).toProgram).1 =
+      observe (run (PreparedScalarEffects.scalar effects B D c.t2 29#u8 v.round0 false)).1 ∧
+    (eval H (LiteralByteSampler.samp (↑29#u8) P29 (F3J_InputRows.proof p root w bound ↑29#u8)).toProgram).2.2 =
+      decodeState c.t3.state
+state30 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P30) = decodeState c.t3.state
+row30 :
+  (eval H (LiteralByteSampler.samp (↑30#u8) P30 (F3J_InputRows.proof p root w bound ↑30#u8)).toProgram).1 =
+      observe (run (PreparedScalarEffects.scalar effects B D c.t3 30#u8 c.second.deref false)).1 ∧
+    (eval H (LiteralByteSampler.samp (↑30#u8) P30 (F3J_InputRows.proof p root w bound ↑30#u8)).toProgram).2.2 =
+      decodeState c.t4.state
+state31 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P31) = decodeState c.t4.state
+row31 :
+  eval H (LiteralByteSampler.samp 31 P31 (pf 31)).toProgram =
+    (observe
+        (run
+            (PreparedQueryEffects.queries effects
+              (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+                embed)
+              D c.t4 31#u8 v.final_message)).1,
+      TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state)
+state32 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P32) = decodeState c.t5.state
+row32 :
+  (eval H (LiteralByteSampler.samp 32 P32 (F3J_InputRows.proof p root w bound 32)).toProgram).1 =
+      observe (run (PreparedScalarEffects.scalar_k effects B D c.t5 32#u8 PreparedScratchReachability.emptyPayload)).1 ∧
+    (eval H (LiteralByteSampler.samp 32 P32 (F3J_InputRows.proof p root w bound 32)).toProgram).2.2 =
+      decodeState c.t6.state
+state33 :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P33) = decodeState c.t6.state
+logs31 :
+  (eval H (LiteralByteSampler.samp 31 P31 (pf 31)).toProgram).1 =
+    (observe
+          (run
+              (PreparedQueryEffects.queries effects
+                (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                  Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                D c.t4 31#u8 v.final_message)).1,
+        TranscriptView.Value.queries (Except.ok (List.map (fun x => ↑x) ↑c.queries)), decodeState c.t5.state).1
+⊢ (eval H (LiteralByteSampler.samp 27 P27 (pf 27)).toProgram).1 ++
+              (eval H (LiteralByteSampler.samp 28 P28 (pf 28)).toProgram).1 ++
+            (eval H (LiteralByteSampler.samp 29 P29 (pf 29)).toProgram).1 ++
+          (eval H (LiteralByteSampler.samp 30 P30 (pf 30)).toProgram).1 ++
+        (eval H (LiteralByteSampler.samp 31 P31 (pf 31)).toProgram).1 ++
+      (eval H (LiteralByteSampler.samp 32 P32 (pf 32)).toProgram).1 =
+    F3K_OpeningCalls.log c
+'AspisR1.F3K_OpeningSuffix.sampler' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,93 @@
+F3K_QueryValues.lean:57:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  H (FS2.Duplex.squeezeA p (decodeState s)).toBytes
+in the target expression
+  decodeState b :: List.map decodeState bs =
+      H
+          (FS2.Duplex.squeezeA SelectedTranscriptParams.params
+              (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (decodeState s) 0)).toBytes ::
+        List.map
+          (fun k =>
+            H
+              (FS2.Duplex.squeezeA SelectedTranscriptParams.params
+                  (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+                    (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes) k)).toBytes)
+          (List.range n) ∧
+    decodeState x :: List.map decodeState xs =
+      QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+          (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes) 0 ::
+        List.map
+          (fun k =>
+            QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+              (H
+                (FS2.Duplex.advanceA SelectedTranscriptParams.params
+                    (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes)).toBytes)
+              k)
+          (List.range n)
+
+case cons
+Hash : Type
+D : aspis_core.Digest32 Hash
+hash : Hash
+n✝ : ℕ
+s✝ : RawState
+bs✝ xs✝ : List RawState
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+n : ℕ
+s b x : RawState
+bs xs : List RawState
+squeeze : D.digest hash (TranscriptStep.readParts s 1#u8) = ok b
+advance : D.digest hash (TranscriptStep.readParts s 2#u8) = ok x
+rest : Values D hash n x bs xs
+ih :
+  List.map decodeState bs =
+      List.map
+        (fun k =>
+          H
+            (FS2.Duplex.squeezeA SelectedTranscriptParams.params
+                (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (decodeState x) k)).toBytes)
+        (List.range n) ∧
+    List.map decodeState xs =
+      List.map
+        (fun k => QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (decodeState x) (k + 1))
+        (List.range n)
+p : FS2.Duplex.Params SelectedTranscriptParams.Message AspisWideTower.WideExact SelectedTranscriptParams.L :=
+  SelectedTranscriptParams.params
+hb : decodeState b = H (FS2.Duplex.squeezeA p (decodeState s)).toBytes
+hx : decodeState x = H (FS2.Duplex.advanceA p (decodeState s)).toBytes
+⊢ decodeState b :: List.map decodeState bs =
+      H
+          (FS2.Duplex.squeezeA SelectedTranscriptParams.params
+              (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes) (decodeState s) 0)).toBytes ::
+        List.map
+          (fun k =>
+            H
+              (FS2.Duplex.squeezeA SelectedTranscriptParams.params
+                  (QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+                    (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes) k)).toBytes)
+          (List.range n) ∧
+    decodeState x :: List.map decodeState xs =
+      QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+          (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes) 0 ::
+        List.map
+          (fun k =>
+            QuerySampler.state SelectedTranscriptParams.params (fun a => H a.toBytes)
+              (H
+                (FS2.Duplex.advanceA SelectedTranscriptParams.params
+                    (H (FS2.Duplex.advanceA SelectedTranscriptParams.params (decodeState s)).toBytes)).toBytes)
+              k)
+          (List.range n)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3K_QueryValues.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3K_QueryValues.pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3K_QueryValues.deterministic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

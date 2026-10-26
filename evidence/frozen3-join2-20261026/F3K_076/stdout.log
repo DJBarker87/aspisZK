@@ -1,0 +1,73 @@
+F3K_OuterPrepareSplice.lean:116:38: error: Application type mismatch: The argument
+  sub22
+has type
+  Eq.{2}
+    (run do
+        let r5 ← S1SemanticCodeInstallation.code R B D pub view.semantic hash
+        let r6 ←
+          liftM
+              (core.result.Result.map_err
+                (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ())
+        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+        match cf4 with
+          | core.ops.control_flow.ControlFlow.Continue val2 => do
+            liftM (verifier.mark none verifier.Phase.Semantic)
+            BorrowedClaimPrepared.closedPreparationCode D val2 view hash input
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r7 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (r7, input)).1
+    ((run (S1SemanticCodeInstallation.code R B D pub view.semantic hash)).1 ++
+      (run do
+          let r6 ←
+            liftM
+                (core.result.Result.map_err
+                  (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) semanticResult ())
+          let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+          match cf4 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              liftM (verifier.mark none verifier.Phase.Semantic)
+              BorrowedClaimPrepared.closedPreparationCode D val2 view hash input
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r7 ←
+                liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+              pure (r7, input)).1)
+but is expected to have type
+  Eq.{1}
+    (observe
+      (run
+          (match core.ops.control_flow.ControlFlow.Continue view with
+          | core.ops.control_flow.ControlFlow.Continue v => do
+            let r5 ← S1SemanticCodeInstallation.code R B D pub v.semantic hash
+            let r6 ←
+              liftM
+                  (core.result.Result.map_err
+                    (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError D) r5 ())
+            let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+            match cf4 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                liftM (verifier.mark none verifier.Phase.Semantic)
+                BorrowedClaimPrepared.closedPreparationCode D val2 v hash input
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r7 ←
+                  liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                pure (r7, input)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r5 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (r5, input))).1)
+    ?m.2343
+in the application
+  Eq.trans logs21 sub22
+F3K_OuterPrepareSplice.lean:80:15: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.F3K_OuterPrepareSplice.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

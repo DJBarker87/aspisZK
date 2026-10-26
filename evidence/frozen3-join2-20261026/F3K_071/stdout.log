@@ -1,0 +1,261 @@
+F3K_PrepareLog.lean:43:58: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+variant : v.variant = transport.Variant.S2
+input : Std.Array aspis_core.field.WideExact 29#usize
+hn : erase (PreparedHashEffects.new effects D hash sem.transcript.state v.variant) = ok s.c.t0
+h27 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t0 27#u8 v.y1 true) = ok (s.c.gamma, s.c.t1)
+h28 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t1 28#u8 s.c.inactive.to_slice false) =
+    ok (s.c.kappa, s.c.t2)
+h29 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t2 29#u8 v.round0 false) = ok (s.c.alpha0, s.c.t3)
+h30 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t3 30#u8 s.c.second.deref false) =
+    ok (s.c.alpha1, s.c.t4)
+hq :
+  erase
+      (PreparedQueryEffects.queries effects
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D s.c.t4 31#u8 v.final_message) =
+    ok (core.result.Result.Ok s.c.queries, s.c.t5)
+hr :
+  erase (PreparedScalarEffects.scalar_k effects B.sampling D s.c.t5 32#u8 PreparedScratchReachability.emptyPayload) =
+    ok (s.c.rho, s.c.t6)
+folds : v.variant.folds = ok 2#usize
+⊢ 32#usize + 224#usize = ok 256#usize
+F3K_PrepareLog.lean:22:34: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+s : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+variant : v.variant = transport.Variant.S2
+input : Std.Array aspis_core.field.WideExact 29#usize
+hn : erase (PreparedHashEffects.new effects D hash sem.transcript.state v.variant) = ok s.c.t0
+h27 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t0 27#u8 v.y1 true) = ok (s.c.gamma, s.c.t1)
+h28 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t1 28#u8 s.c.inactive.to_slice false) =
+    ok (s.c.kappa, s.c.t2)
+h29 : erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t2 29#u8 v.round0 false) = ok (s.c.alpha0, s.c.t3)
+h30 :
+  erase (PreparedScalarEffects.scalar effects B.sampling D s.c.t3 30#u8 s.c.second.deref false) =
+    ok (s.c.alpha1, s.c.t4)
+hq :
+  erase
+      (PreparedQueryEffects.queries effects
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D s.c.t4 31#u8 v.final_message) =
+    ok (core.result.Result.Ok s.c.queries, s.c.t5)
+hr :
+  erase (PreparedScalarEffects.scalar_k effects B.sampling D s.c.t5 32#u8 PreparedScratchReachability.emptyPayload) =
+    ok (s.c.rho, s.c.t6)
+folds : v.variant.folds = ok 2#usize
+capacity : 32#usize + 224#usize = ok 256#usize
+row32 : 31#u8 + 1#u8 = ok 32#u8
+⊢ List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run (PreparedHashEffects.new effects D hash sem.transcript.state v.variant)).1 ++
+      (List.flatMap
+          (fun e =>
+            match e with
+            | Event.digest D hash parts (ok out) =>
+              [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+            | Event.digest D hash parts (fail e) => []
+            | Event.digest D hash parts div => [])
+          (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t0 27#u8 v.y1 true)).1 ++
+        (List.flatMap
+            (fun e =>
+              match e with
+              | Event.digest D hash parts (ok out) =>
+                [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+              | Event.digest D hash parts (fail e) => []
+              | Event.digest D hash parts div => [])
+            (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t1 28#u8 s.c.inactive.to_slice false)).1 ++
+          (List.flatMap
+              (fun e =>
+                match e with
+                | Event.digest D hash parts (ok out) =>
+                  [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                | Event.digest D hash parts (fail e) => []
+                | Event.digest D hash parts div => [])
+              (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t2 29#u8 v.round0 false)).1 ++
+            (List.flatMap
+                (fun e =>
+                  match e with
+                  | Event.digest D hash parts (ok out) =>
+                    [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                  | Event.digest D hash parts (fail e) => []
+                  | Event.digest D hash parts div => [])
+                (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t3 30#u8 s.c.second.deref false)).1 ++
+              (List.flatMap
+                  (fun e =>
+                    match e with
+                    | Event.digest D hash parts (ok out) =>
+                      [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                    | Event.digest D hash parts (fail e) => []
+                    | Event.digest D hash parts div => [])
+                  (run
+                      (PreparedQueryEffects.queries effects
+                        (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                          Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                        D s.c.t4 31#u8 v.final_message)).1 ++
+                (List.flatMap
+                    (fun e =>
+                      match e with
+                      | Event.digest D hash parts (ok out) =>
+                        [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                      | Event.digest D hash parts (fail e) => []
+                      | Event.digest D hash parts div => [])
+                    (run
+                        (PreparedScalarEffects.scalar_k effects B.sampling D s.c.t5 32#u8
+                          PreparedScratchReachability.emptyPayload)).1 ++
+                  List.flatMap
+                    (fun e =>
+                      match e with
+                      | Event.digest D hash parts (ok out) =>
+                        [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                      | Event.digest D hash parts (fail e) => []
+                      | Event.digest D hash parts div => [])
+                    (run do
+                        let cf1 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue s.claimValue))
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 =>
+                            Code.done
+                              (core.result.Result.Ok
+                                  { variant := v.variant, roots := sem.roots, gamma := s.c.gamma, kappa := s.c.kappa,
+                                    alpha := Array.make 2#usize [s.c.alpha0, s.c.alpha1] ⋯, rho := s.c.rho,
+                                    queries := s.c.queries, semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                                    state := s.c.t6.state },
+                                scratch)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r2 ←
+                              liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                            Code.done (r2, scratch)).1)))))) =
+    List.flatMap
+        (fun e =>
+          match e with
+          | Event.digest D hash parts (ok out) =>
+            [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+          | Event.digest D hash parts (fail e) => []
+          | Event.digest D hash parts div => [])
+        (run (PreparedHashEffects.new effects D hash sem.transcript.state v.variant)).1 ++
+      (List.flatMap
+          (fun e =>
+            match e with
+            | Event.digest D hash parts (ok out) =>
+              [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+            | Event.digest D hash parts (fail e) => []
+            | Event.digest D hash parts div => [])
+          (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t0 27#u8 v.y1 true)).1 ++
+        (List.flatMap
+            (fun e =>
+              match e with
+              | Event.digest D hash parts (ok out) =>
+                [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+              | Event.digest D hash parts (fail e) => []
+              | Event.digest D hash parts div => [])
+            (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t1 28#u8 s.c.inactive.to_slice false)).1 ++
+          (List.flatMap
+              (fun e =>
+                match e with
+                | Event.digest D hash parts (ok out) =>
+                  [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                | Event.digest D hash parts (fail e) => []
+                | Event.digest D hash parts div => [])
+              (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t2 29#u8 v.round0 false)).1 ++
+            (List.flatMap
+                (fun e =>
+                  match e with
+                  | Event.digest D hash parts (ok out) =>
+                    [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                  | Event.digest D hash parts (fail e) => []
+                  | Event.digest D hash parts div => [])
+                (run (PreparedScalarEffects.scalar effects B.sampling D s.c.t3 30#u8 s.c.second.deref false)).1 ++
+              (List.flatMap
+                  (fun e =>
+                    match e with
+                    | Event.digest D hash parts (ok out) =>
+                      [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                    | Event.digest D hash parts (fail e) => []
+                    | Event.digest D hash parts div => [])
+                  (run
+                      (PreparedQueryEffects.queries effects
+                        (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                          Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                        D s.c.t4 31#u8 v.final_message)).1 ++
+                List.flatMap
+                  (fun e =>
+                    match e with
+                    | Event.digest D hash parts (ok out) =>
+                      [(AspisV8R19.SqueezeOracleBridge.flatten parts, AspisV8R19.SqueezeOracleBridge.decodeState out)]
+                    | Event.digest D hash parts (fail e) => []
+                    | Event.digest D hash parts div => [])
+                  (run
+                      (PreparedScalarEffects.scalar_k effects B.sampling D s.c.t5 32#u8
+                        PreparedScratchReachability.emptyPayload)).1)))))
+F3K_PrepareLog.lean:55:13: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_PrepareLog.lean:70:13: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_PrepareLog.lean:72:23: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [Pure.pure,r̵u̵n̵,̵ ̲observe, ̲List.flatMap_nil, ̲List.append_nil, ̲F3K_OpeningCalls.log,
+  ̲ ̲ ̲ ̲ ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_PrepareLog.lean:72:35: warning: This simp argument is unused:
+  List.flatMap_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵r̵u̵n̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵F̵3̵K̵_̵O̵p̵e̵n̵i̵n̵g̵C̵a̵l̵l̵s̵.̵l̵o̵g̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲F̲3̲K̲_̲O̲p̲e̲n̲i̲n̲g̲C̲a̲l̲l̲s̲.̲l̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3K_PrepareLog.lean:72:52: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵r̵u̵n̵,̵o̵b̵s̵e̵r̵v̵e̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵F̵3̵K̵_̵O̵p̵e̵n̵i̵n̵g̵C̵a̵l̵l̵s̵.̵l̵o̵g̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲n̲i̲l̲,̲ ̲F̲3̲K̲_̲O̲p̲e̲n̲i̲n̲g̲C̲a̲l̲l̲s̲.̲l̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3K_PrepareLog.spine' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
