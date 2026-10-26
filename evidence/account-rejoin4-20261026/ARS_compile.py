@@ -8,6 +8,7 @@ n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('ARS_'
 a=f'ARS_{n:03}'; assert not (P/a).exists()
 assert len(list(P.glob('ARS_*/receipt.json'))) < 100, 'Lean budget exhausted'
 cfg=json.loads((R/'evidence/account-rejoin2-20261026/ARQ_095.json').read_text())
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache'
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time=('Compilation of one missing unchanged SCE/ARQ/Rc10 dependency; no generation or elimination' if len(sys.argv)==4 else 'Compilation of one focused ARS proof; no generation or elimination'))
 cfg['deps_fingerprint']={'scope':'ARS focused account interface / same-run composition on coherent SInt2 cached closure'}
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
