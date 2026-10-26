@@ -1,3 +1,43 @@
+# Resume checkpoint — 2026-10-26 21:47 UTC
+
+This resume supersedes the historical stop/budget/next-ID instructions below.
+Read `RESUME.md`, `DEPENDENCY-CLOSURE.md`, and `BUDGET.json` for current state.
+The restoration flag remains absent through 21:47 UTC; ruling (f) prevents
+host scopes and local Lean compiles. This resume has charged **0/37 Lean**
+and **0/8 Kani**; next unused Env-J ID is **27400**, range 27400–27699.
+The entire old range 25300–25599 is spent. No ROW counterexample was found.
+
+Compile-free work is committed: pending PackedSelection now carries public
+preservation and primitive existence for every selected canonical input;
+FinalAudit covers all 127 PV_Src modules, 547 theorem declarations and 573
+unique axiom checks; dependency-closure.json pins their source imports.
+All new proof text remains outside the formal module tree until host checks.
+A follow-on canonical withdrawal proof and a full unstubbed dynamic-mapper
+Kani harness are drafts queued after the requested first audit. No new theorem
+or Kani result is claimed. Full compiler-success fixture fibres remain open.
+
+Family status remains unchanged by drafts:
+
+| Family | Current status |
+| --- | --- |
+| words | REDUCED to full unstubbed shipped mapper = owned dynamic reference and installed canonical input selection; canonical Checked is already discharged |
+| publicCorr | REDUCED to canonical snapshot/root selection and the exact pure `pair_empty_roots = ok CanonicalRoots.table` equation (fixed-root reference result already proved) |
+| compile_call | OPEN for full successful forest compilation with the supplied payload; owned ExternalLinear implementation already supplied, Records dynamic association queued |
+| admission | REDUCED to the exact selected-record RspendPlus/public association interface in PV_Src_NativeIdentification.PV_Src_Premises.admission |
+| row_call | REDUCED to `∀ j, transport j = PV_Src_Transport.row j` |
+
+Deployed PV_Src_Premises count **5 → 5**; selected fixed-root reference
+**5 → 3**, with unchanged BuilderPremises consumer. Neither installed full
+fixture fibre nor a full smaller Remainder is newly instantiated. RunJoin
+read-only pin 3478e00a58970c2480a1b20451dc107cfb1ac98f retains the free
+`PV_RunJoin_SourceEndpoint.inputs` family; no native selection is installed
+by these drafts. Final kernel audit: **PENDING**, no new receipt. Target not
+yet established. Next deliverable: read the restoration flag, record cache
+provenance, and compile CanonicalNormalize first at ID 27400, then the two
+other pending proofs, then the exhaustive FinalAudit, smallest-first.
+
+---
+
 # pv-srcid3 continuation report — blocked on shared Lean infrastructure
 
 Branch: codex/pv-srcid3-20261026. Base: 52a0f8acee (research, includes
