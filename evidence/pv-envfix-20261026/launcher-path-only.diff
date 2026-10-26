@@ -1,0 +1,27 @@
+--- shared/run-joint.sh
++++ private/run-private.sh
+@@ -14,12 +14,12 @@
+ # dependent rebuild after a dependency changed a new input, never an unchanged rerun.
+ set -u
+ [ "${4:-7000}" = 7000 ] && [ "${5:-8}" = 8 ] || { echo "caps must be -M7000 / 8G"; exit 64; }
+-T=/home/dombarker/project-offloads/aspis-fs-generic-20261006
+-H=/home/dombarker/project-offloads/r1-privacy-build-integration-20261019
++T=/home/dombarker/project-offloads/codex-pv-envfix-20261026
++H=/home/dombarker/project-offloads/codex-pv-envfix-20261026
+ A=$1; M=$2; E=$3; ML=${4:-7000}; MX=${5:-8}; FP=${6:-none}; NSLOTS=4
+ if [ "$E" = J ]; then
+   case "$A" in 5[0-7][0-9][0-9]|[6-9][0-9][0-9][0-9]|1[0-9][0-9][0-9][0-9]|2[0-9][0-9][0-9][0-9]|3[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+-  J=/home/dombarker/project-offloads/aspis-joint-20261019; SRCROOT="$J/sources"; OBJ="$J/objects"
++  J=/home/dombarker/project-offloads/codex-pv-envfix-20261026; SRCROOT="$J/sources"; OBJ="$J/objects"
+ else
+   case "$A" in 45[2-9][0-9]) ;; *) echo "attempt $A outside 4520-4599"; exit 64;; esac
+   SRCROOT="$H/sources"; OBJ="$H/objects-$E"
+@@ -40,7 +40,7 @@
+ echo "$S $E $A $M $FP" >> "$H/evidence/sent.txt"
+ run() {
+   systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
+-    /usr/bin/time -v -o "$T/evidence/time-$A.log" timeout 900 python3 "$T/evidence/run2.py" "$ENVJ" "$OBJ" "$SRCROOT" "$OBJ/$M.olean" "$SRC" "$ML" > "$T/evidence/out-$A.log" 2>&1
++    /usr/bin/time -v -o "$T/evidence/time-$A.log" timeout 900 python3 "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py" "$ENVJ" "$OBJ" "$SRCROOT" "$OBJ/$M.olean" "$SRC" "$ML" > "$T/evidence/out-$A.log" 2>&1
+   echo "exit=$?" >> "$T/evidence/out-$A.log"
+ }
+ if [ "$inwin" = 1 ]; then

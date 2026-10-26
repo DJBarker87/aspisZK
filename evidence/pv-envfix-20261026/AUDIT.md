@@ -135,8 +135,9 @@ EventsR1P2 fails, isolate with PV_Env_ prefixes before further attempts.
 
 Host directory created: /home/dombarker/project-offloads/codex-pv-envfix-20261026.
 No proof source or shared host source/object/launcher has been changed.
-The shared launcher currently hardcodes shared output paths; private launcher
-routing clarification is pending before any compiler invocation.
+The shared launcher hardcodes shared output paths. A path-only private copy
+was used under the task's explicit private-directory authorization; see
+launcher-path-only.diff. Shared infrastructure was not edited.
 
 PrivacyR1HeadlineDeployedReal.privacy_headline_deployed remains conditional:
 zero premises removed, added or changed by this diagnosis. Target not yet
