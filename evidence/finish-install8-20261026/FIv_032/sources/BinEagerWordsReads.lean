@@ -1,0 +1,126 @@
+import BinRecordedRecoveryReads
+import BinFrameReplayReads
+import RawRecordedPublicSpendExtractorBoundedBin
+
+/-! Eager materialization fixes the log-demand schedule. Downstream GS calls
+receive cached functions only. This accounts record reads, not field/bit work.
+Finite cardinalities are used symbolically; no concrete tables are reduced. -/
+set_option autoImplicit false
+namespace AspisR1.BinEagerWordsReads
+open BinMerkle32Path
+open CanonicalCutEnrichedTranscript (Words wordsFromMaps)
+abbrev RunView := RawCutProverCompiler.RunView
+abbrev Leaf := Option (List Byte)
+
+/-- Evaluate each request once, then retain both lists of projections. -/
+def materialize {n : Nat} (f : Fin n → Leaf × Nat) : List Leaf × Nat :=
+  let entries := List.ofFn f
+  (entries.map Prod.fst, (entries.map Prod.snd).sum)
+
+def cached {n : Nat} (table : List Leaf) (i : Fin n) : Leaf :=
+  (table[i.val]?).getD none
+
+theorem materialize_value {n : Nat} (f : Fin n → Leaf × Nat) (i : Fin n) :
+    cached (materialize f).1 i = (f i).1 := by
+  simp only [cached, materialize, List.map_ofFn, List.getElem?_ofFn, dif_pos i.isLt]
+  rfl
+
+theorem sum_bound (xs : List Nat) (B : Nat) (h : ∀ x ∈ xs, x ≤ B) :
+    xs.sum ≤ xs.length * B := by
+  induction xs with
+  | nil => simp
+  | cons x xs ih =>
+    have hh := h x List.mem_cons_self
+    have ht := ih (fun x hx => h x (List.mem_cons_of_mem _ hx))
+    simp only [List.sum_cons, List.length_cons]
+    calc
+      _ ≤ B + xs.length * B := Nat.add_le_add hh ht
+      _ = _ := by ring
+
+theorem materialize_reads {n : Nat} (f : Fin n → Leaf × Nat) (B : Nat)
+    (h : ∀ i, (f i).2 ≤ B) : (materialize f).2 ≤ n * B := by
+  have hs := sum_bound ((List.ofFn f).map Prod.snd) B (by
+    intro x hx
+    obtain ⟨y, hy, rfl⟩ := List.mem_map.mp hx
+    obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hy
+    exact h i)
+  simpa only [materialize, List.length_map, List.length_ofFn] using hs
+
+def leafRead (tag : Byte) (width : Nat) (log : BinMerkleRecordedLog.Log)
+    (frame : List Byte) (root : Digest) (i : Nat) : Leaf × Nat :=
+  let r := BinRecordedRecoveryReads.cutRecover tag width log frame (BinMultiproof.slots 18 i) root
+  (r.1.map Prod.fst, r.2)
+
+theorem leafRead_value (tag : Byte) (width : Nat) (log : BinMerkleRecordedLog.Log)
+    (frame : List Byte) (root : Digest) (i : Nat) :
+    (leafRead tag width log frame root i).1 =
+      (RawCutRecordedWordsBoundedBin.recoverAtExec tag width
+        (RawCutRecordedWordsBoundedBin.cutBeforeExec log frame)
+        (BinMultiproof.slots 18 i) root).map Prod.fst := by
+  simp only [leafRead, BinRecordedRecoveryReads.cutRecover_value]
+
+theorem leafRead_reads (tag : Byte) (width : Nat) (log : BinMerkleRecordedLog.Log)
+    (frame : List Byte) (root : Digest) (i : Nat) :
+    (leafRead tag width log frame root i).2 ≤ 22 * log.length := by
+  simpa only [leafRead, BinMultiproof.slots_length] using
+    BinRecordedRecoveryReads.cutRecover_reads tag width log frame (BinMultiproof.slots 18 i) root
+
+def words (run : RunView) : Words × Nat :=
+  let f0 := BinFrameReplayReads.frameCount run 0
+  let f2 := BinFrameReplayReads.frameCount run 2
+  let f30 := BinFrameReplayReads.frameCount run 30
+  let t1 := materialize (fun i : Fin 262144 =>
+    leafRead 0x71 480 run.1 f0.1 (RawCutWordsFromView.rootFrom 8 f0.1) i.val)
+  let t2 := materialize (fun i : Fin 262144 =>
+    leafRead 0xf1 128 run.1 f2.1 (RawCutWordsFromView.rootFrom 8 f2.1) i.val)
+  let tf := materialize (fun i : Fin 65536 =>
+    leafRead 0x72 128 run.1 f30.1 (RawCutWordsFromView.rootFrom 9 f30.1) i.val)
+  (wordsFromMaps (cached t1.1) (cached t2.1) (cached tf.1),
+    f0.2 + f2.2 + f30.2 + t1.2 + t2.2 + tf.2)
+
+theorem maps_congr (a b : Fin 262144 → Leaf) (c : Fin 65536 → Leaf)
+    (a' b' : Fin 262144 → Leaf) (c' : Fin 65536 → Leaf)
+    (ha : a = a') (hb : b = b') (hc : c = c') :
+    wordsFromMaps a b c = wordsFromMaps a' b' c' := by
+  cases ha
+  cases hb
+  cases hc
+  rfl
+
+theorem words_value (run : RunView) :
+    (words run).1 = RawRecordedPublicSpendExtractorBoundedBin.wordsFromRun run := by
+  unfold words RawRecordedPublicSpendExtractorBoundedBin.wordsFromRun
+    RawCutRecordedWordsBoundedBin.wordsFromRecordedCutsExec
+  simp only [BinFrameReplayReads.frame_value]
+  apply maps_congr
+  all_goals funext i
+  all_goals rw [materialize_value, leafRead_value]
+  all_goals rfl
+
+theorem words_reads (run : RunView) :
+    (words run).2 ≤ 12976224 * run.1.length := by
+  have hf := BinFrameReplayReads.three_frames_reads run
+  have h1 := materialize_reads (fun i : Fin 262144 =>
+    leafRead 0x71 480 run.1 (BinFrameReplayReads.frameCount run 0).1
+      (RawCutWordsFromView.rootFrom 8 (BinFrameReplayReads.frameCount run 0).1) i.val)
+    (22 * run.1.length) (fun i => leafRead_reads _ _ _ _ _ _)
+  have h2 := materialize_reads (fun i : Fin 262144 =>
+    leafRead 0xf1 128 run.1 (BinFrameReplayReads.frameCount run 2).1
+      (RawCutWordsFromView.rootFrom 8 (BinFrameReplayReads.frameCount run 2).1) i.val)
+    (22 * run.1.length) (fun i => leafRead_reads _ _ _ _ _ _)
+  have h3 := materialize_reads (fun i : Fin 65536 =>
+    leafRead 0x72 128 run.1 (BinFrameReplayReads.frameCount run 30).1
+      (RawCutWordsFromView.rootFrom 9 (BinFrameReplayReads.frameCount run 30).1) i.val)
+    (22 * run.1.length) (fun i => leafRead_reads _ _ _ _ _ _)
+  change _ + _ + _ + _ + _ + _ ≤ _
+  omega
+
+#print axioms materialize_value
+#print axioms sum_bound
+#print axioms materialize_reads
+#print axioms leafRead_value
+#print axioms leafRead_reads
+#print axioms maps_congr
+#print axioms words_value
+#print axioms words_reads
+end AspisR1.BinEagerWordsReads
