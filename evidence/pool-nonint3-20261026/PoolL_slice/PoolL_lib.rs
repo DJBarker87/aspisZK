@@ -79,3 +79,11 @@ pub fn PoolL_length_prefix(data: &[u8], expected: usize) -> ProgramResult {
     }
     Ok(())
 }
+
+pub fn PoolL_allocate_prefix(payer: &AccountInfo<'_>, account: &AccountInfo<'_>, system_program_account: &AccountInfo<'_>) -> ProgramResult {
+    require_payer_and_system_program(payer, system_program_account)?;
+    if account.owner != &system_program::id() || !account.data_is_empty() {
+        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+    }
+    Ok(())
+}
