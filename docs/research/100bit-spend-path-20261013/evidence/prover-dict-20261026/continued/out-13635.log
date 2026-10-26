@@ -1,0 +1,200 @@
+def ProverRwFull.host_sumcheck.prove_sumcheck_rounds.mutual : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    {H F : Type} →
+      ProverRwFull.aspis_core.digest.Digest32 H →
+        ProverRwFull.host_sumcheck.Oracle F →
+          F →
+            ProverRwFull.host_wire.SemanticTranscript H →
+              Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize →
+                  ProverRwFull.aspis_core.field.QM31 →
+                    Aeneas.Std.Usize →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                            (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize ×
+                              ProverRwFull.aspis_core.field.QM31)
+                            ProverRwFull.r1_wire.Error ×
+                          ProverRwFull.host_wire.SemanticTranscript H × Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F} aspis_coredigestDigest32Inst OracleInst oracle =>
+  Lean.Order.fix
+    (fun f transcript output point running round =>
+      if round = 10#usize then do
+        let r ← OracleInst.evaluate oracle point
+        let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+            let b ←
+              Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                  ProverRwFull.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+            if b = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err ProverRwFull.r1_wire.Error.Terminal, transcript, output)
+              else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (point, running), transcript, output)
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                  (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+            Aeneas.Std.Result.ok (r1, transcript, output)
+      else do
+        let (r, transcript1, output1) ←
+          ProverRwFull.host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output
+              point running round oracle
+        let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+            let (point1, running1) := val
+            do
+            let i ← Aeneas.Std.lift (round.wrapping_add 1#usize)
+            f transcript1 output1 point1 running1 i
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                  (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+            Aeneas.Std.Result.ok (r1, transcript1, output1))
+    ⋯
+theorem ProverRwFull.host_sumcheck.prove_sumcheck_rounds.eq_def : ∀ [inst : ProverRwFull.ExternalTypes]
+  [inst_1 : ProverRwFull.ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle F) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) (running : ProverRwFull.aspis_core.field.QM31)
+  (round : Aeneas.Std.Usize) (oracle : F),
+  ProverRwFull.host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript output point
+      running round oracle =
+    if round = 10#usize then do
+      let r ← OracleInst.evaluate oracle point
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            Aeneas.Std.core.cmp.PartialEq.ne.trait_default ProverRwFull.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+                val running
+          if b = true then
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err ProverRwFull.r1_wire.Error.Terminal, transcript, output)
+            else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (point, running), transcript, output)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+          Aeneas.Std.Result.ok (r1, transcript, output)
+    else do
+      let (r, transcript1, output1) ←
+        ProverRwFull.host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point
+            running round oracle
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+          let (point1, running1) := val
+          do
+          let i ← Aeneas.Std.lift (round.wrapping_add 1#usize)
+          ProverRwFull.host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript1 output1
+              point1 running1 i oracle
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+          Aeneas.Std.Result.ok (r1, transcript1, output1) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F} aspis_coredigestDigest32Inst OracleInst transcript
+    output point running round oracle =>
+  id
+    (Eq.trans
+      (congrFun
+        (congrFun
+          (congrFun
+            (congrFun
+              (congrFun
+                (Lean.Order.fix_eq
+                  (ProverRwFull.host_sumcheck.prove_sumcheck_rounds.mutual._proof_1 aspis_coredigestDigest32Inst
+                    OracleInst oracle))
+                transcript)
+              output)
+            point)
+          running)
+        round)
+      (Eq.refl
+        (if round = 10#usize then do
+          let r ← OracleInst.evaluate oracle point
+          let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+              let b ←
+                Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                    ProverRwFull.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+              if b = true then
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err ProverRwFull.r1_wire.Error.Terminal, transcript, output)
+                else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (point, running), transcript, output)
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                    (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+              Aeneas.Std.Result.ok (r1, transcript, output)
+        else do
+          let (r, transcript1, output1) ←
+            ProverRwFull.host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output
+                point running round oracle
+          let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+              let (point1, running1) := val
+              do
+              let i ← Aeneas.Std.lift (round.wrapping_add 1#usize)
+              Lean.Order.fix
+                  (fun f transcript output point running round =>
+                    if round = 10#usize then do
+                      let r ← OracleInst.evaluate oracle point
+                      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+                          let b ←
+                            Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                ProverRwFull.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+                          if b = true then
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Err ProverRwFull.r1_wire.Error.Terminal, transcript,
+                                  output)
+                            else
+                              Aeneas.Std.Result.ok
+                                (Aeneas.Std.core.result.Result.Ok (point, running), transcript, output)
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize ×
+                                  ProverRwFull.aspis_core.field.QM31)
+                                (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+                          Aeneas.Std.Result.ok (r1, transcript, output)
+                    else do
+                      let (r, transcript1, output1) ←
+                        ProverRwFull.host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst
+                            transcript output point running round oracle
+                      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+                          let (point1, running1) := val
+                          do
+                          let i ← Aeneas.Std.lift (round.wrapping_add 1#usize)
+                          f transcript1 output1 point1 running1 i
+                        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+                          let r1 ←
+                            Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize ×
+                                  ProverRwFull.aspis_core.field.QM31)
+                                (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+                          Aeneas.Std.Result.ok (r1, transcript1, output1))
+                  (ProverRwFull.host_sumcheck.prove_sumcheck_rounds.mutual._proof_1 aspis_coredigestDigest32Inst
+                    OracleInst oracle)
+                  transcript1 output1 point1 running1 i
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize × ProverRwFull.aspis_core.field.QM31)
+                    (Aeneas.Std.core.convert.FromSame ProverRwFull.r1_wire.Error) residual
+              Aeneas.Std.Result.ok (r1, transcript1, output1))))
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

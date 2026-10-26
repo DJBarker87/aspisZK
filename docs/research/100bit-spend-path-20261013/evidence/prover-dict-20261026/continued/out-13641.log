@@ -1,0 +1,181 @@
+'R1Z.PDict_FmtErase.erase_272' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:21:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:21:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_273' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_274' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_275' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[irreducible] def ProverRwFull.host_commitment.EncodingDomain.evaluate : [inst : ExternalTypes] →
+  [ExternalFuns] →
+    {T : Type} →
+      aspis_core.r0.scalar.CodeField T →
+        host_commitment.EncodingDomain →
+          Slice T → Usize → Result (core.result.Result (alloc.vec.Vec T) aspis_core.r0.Error) :=
+fun [ExternalTypes] [ExternalFuns] {T} aspis_corer0scalarCodeFieldInst self =>
+  Lean.Order.fix
+    (fun f coefficients depth => do
+      let v ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) self.levels
+            depth
+      let count : Usize := v.len
+      let i : Usize := coefficients.len
+      if i = 1#usize then do
+          let t ← coefficients.index_usize 0#usize
+          aspis_core.r0.heap.filled aspis_corer0scalarCodeFieldInst.coremarkerCopyInst count t
+        else do
+          let r ← host_commitment.split_coefficients aspis_corer0scalarCodeFieldInst coefficients
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (even, odd) := val
+              let s := even.deref;
+              do
+              let i1 ← lift (depth.wrapping_add 1#usize)
+              let r1 ← f s i1
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  let s1 := odd.deref;
+                  do
+                  let i2 ← lift (depth.wrapping_add 1#usize)
+                  let r2 ← f s1 i2
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      let s2 := v.deref;
+                      let s3 := val1.deref;
+                      let s4 := val2.deref;
+                      host_commitment.merge_evaluations aspis_corer0scalarCodeFieldInst s2 s3 s4
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec T) (core.convert.FromSame aspis_core.r0.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                    (core.convert.FromSame aspis_core.r0.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                (core.convert.FromSame aspis_core.r0.Error) residual)
+    ⋯
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:41:119: error: unsolved goals
+inst✝ : ExternalTypes
+ops other : ExternalFuns
+T : Type
+code : aspis_core.r0.scalar.CodeField T
+self : host_commitment.EncodingDomain
+recur : Slice T → Usize → Result (core.result.Result (alloc.vec.Vec T) aspis_core.r0.Error)
+coefficients : Slice T
+depth : Usize
+⊢ (do
+      let v ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) self.levels
+            depth
+      if coefficients.len = 1#usize then do
+          let t ← coefficients.index_usize 0#usize
+          aspis_core.r0.heap.filled code.coremarkerCopyInst v.len t
+        else do
+          let r ← host_commitment.split_coefficients code coefficients
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (even, odd) := val
+              do
+              let i1 ← lift (depth.wrapping_add 1#usize)
+              let r1 ← recur even.deref i1
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← lift (depth.wrapping_add 1#usize)
+                  let r2 ← recur odd.deref i2
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      host_commitment.merge_evaluations code v.deref val1.deref val2.deref
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec T) (core.convert.FromSame aspis_core.r0.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                    (core.convert.FromSame aspis_core.r0.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                (core.convert.FromSame aspis_core.r0.Error) residual) =
+    do
+    let v ←
+      alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) self.levels depth
+    if coefficients.len = 1#usize then do
+        let t ← coefficients.index_usize 0#usize
+        aspis_core.r0.heap.filled code.coremarkerCopyInst v.len t
+      else do
+        let r ← host_commitment.split_coefficients code coefficients
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (even, odd) := val
+            do
+            let i1 ← lift (depth.wrapping_add 1#usize)
+            let r1 ← recur even.deref i1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let i2 ← lift (depth.wrapping_add 1#usize)
+                let r2 ← recur odd.deref i2
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 =>
+                    host_commitment.merge_evaluations code v.deref val1.deref val2.deref
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                      (core.convert.FromSame aspis_core.r0.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                  (core.convert.FromSame aspis_core.r0.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+              (core.convert.FromSame aspis_core.r0.Error) residual
+'R1Z.PDict_FmtErase.erase_276' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:54:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:54:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_277' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_278' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:69:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:69:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_279' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:77:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:77:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_280' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_281' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_282' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:100:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:100:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_283' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_284' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_285' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:123:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtErase17.lean:123:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_FmtErase.erase_286' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_FmtErase.erase_287' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

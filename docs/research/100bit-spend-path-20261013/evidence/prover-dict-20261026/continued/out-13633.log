@@ -1,0 +1,23 @@
+@[irreducible] def ProverRwFull.host_sumcheck.prove_sumcheck_rounds : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    {H F : Type} →
+      ProverRwFull.aspis_core.digest.Digest32 H →
+        ProverRwFull.host_sumcheck.Oracle F →
+          ProverRwFull.host_wire.SemanticTranscript H →
+            Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+              Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize →
+                ProverRwFull.aspis_core.field.QM31 →
+                  Aeneas.Std.Usize →
+                    F →
+                      Aeneas.Std.Result
+                        (Aeneas.Std.core.result.Result
+                            (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize ×
+                              ProverRwFull.aspis_core.field.QM31)
+                            ProverRwFull.r1_wire.Error ×
+                          ProverRwFull.host_wire.SemanticTranscript H × Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F} aspis_coredigestDigest32Inst OracleInst transcript
+    output point running round oracle =>
+  ProverRwFull.host_sumcheck.prove_sumcheck_rounds.mutual aspis_coredigestDigest32Inst OracleInst oracle transcript
+    output point running round
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

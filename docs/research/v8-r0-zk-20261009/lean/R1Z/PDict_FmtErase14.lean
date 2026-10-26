@@ -4,6 +4,14 @@ noncomputable section
 namespace R1Z.PDict_FmtErase
 open Aeneas Aeneas.Std ProverRwFull
 variable [ExternalTypes]
+universe u
+/-- Equality of the symbolic functionals suffices; no fixed-point unfolding. -/
+theorem fixed_equal {α : Type u} [Lean.Order.CCPO α]
+    {f g : α → α} (hf : Lean.Order.monotone f) (hg : Lean.Order.monotone g)
+    (h : f = g) : Lean.Order.fix f hf = Lean.Order.fix g hg := by
+  cases h
+  rfl
+#print axioms fixed_equal
 
 /-- Full symbolic source-function equality for `host_sumcheck.merge_evaluations_loop.body`. -/
 theorem erase_224 (ops other : ExternalFuns) :
@@ -115,7 +123,7 @@ theorem erase_237 (ops other : ExternalFuns) :
       @host_sumcheck.prove_sumcheck_rounds.mutual _ ops := by
     funext H F digest oracle state
     delta host_sumcheck.prove_sumcheck_rounds.mutual
-    congr 1
+    apply fixed_equal
     funext recur transcript output point running round
     simp only [erase_60 ops other, erase_236 ops other]
   delta host_sumcheck.prove_sumcheck_rounds
