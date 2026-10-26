@@ -1,0 +1,12 @@
+def AspisS6SourceCodec.DigestContents.chunks : Std.Array U32 8#usize → List U8 :=
+fun digest =>
+  ↑(core.num.U32.to_le_bytes (↑digest)[0]) ++ ↑(core.num.U32.to_le_bytes (↑digest)[1]) ++
+              ↑(core.num.U32.to_le_bytes (↑digest)[2]) ++
+            ↑(core.num.U32.to_le_bytes (↑digest)[3]) ++
+          ↑(core.num.U32.to_le_bytes (↑digest)[4]) ++
+        ↑(core.num.U32.to_le_bytes (↑digest)[5]) ++
+      ↑(core.num.U32.to_le_bytes (↑digest)[6]) ++
+    ↑(core.num.U32.to_le_bytes (↑digest)[7])
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())

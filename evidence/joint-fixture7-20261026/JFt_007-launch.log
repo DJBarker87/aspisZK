@@ -1,0 +1,46 @@
+{"attempt": "JFt_007", "exit_status": 1, "wall_seconds": 3.566154350002762, "peak_rss_kib": "5345796", "swaps": "0", "print_axioms": ["'AspisR1.JFt_DigestInjective.from_to' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JFt_DigestInjective.word_length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFt_DigestInjective.injective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFt_DigestInjective.lean:8:83: error: unsolved goals
+x : U32
+⊢ List.map (fun x => U8.bv (x#uscalar)) x.bv.toLEBytes = x.bv.toLEBytes
+JFt_DigestInjective.lean:11:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => BitVec.cast ⋯ (BitVec.fromLEBytes _a) = x.bv
+Error: Application type mismatch: The argument
+  core.num.U32.from_le_bytes._proof_1 (core.num.U32.to_le_bytes x)
+has type
+  8 * (List.map U8.bv ↑(core.num.U32.to_le_bytes x)).length = 32
+but is expected to have type
+  8 * _a.length = UScalarTy.U32.numBits
+in the application
+  BitVec.cast ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks
+...
+                 (List.drop 16 ↑(core.num.U32.to_le_bytes (↑b)[3])).length +
+                (List.drop 12 ↑(core.num.U32.to_le_bytes (↑b)[4])).length))
+            (List.drop 8 ↑(core.num.U32.to_le_bytes (↑b)[5])) ++
+        List.take
+          (4 -
+            ((List.drop 28 ↑(core.num.U32.to_le_bytes (↑b)[0])).length +
+                      (List.drop 24 ↑(core.num.U32.to_le_bytes (↑b)[1])).length +
+                    (List.drop 20 ↑(core.num.U32.to_le_bytes (↑b)[2])).length +
+                  (List.drop 16 ↑(core.num.U32.to_le_bytes (↑b)[3])).length +
+                (List.drop 12 ↑(core.num.U32.to_le_bytes (↑b)[4])).length +
+              (List.drop 8 ↑(core.num.U32.to_le_bytes (↑b)[5])).length))
+          (List.drop 4 ↑(core.num.U32.to_le_bytes (↑b)[6])) ++
+      List.take
+        (4 -
+          ((List.drop 28 ↑(core.num.U32.to_le_bytes (↑b)[0])).length +
+                      (List.drop 24 ↑(core.num.U32.to_le_bytes (↑b)[1])).length +
+                    (List.drop 20 ↑(core.num.U32.to_le_bytes (↑b)[2])).length +
+                  (List.drop 16 ↑(core.num.U32.to_le_bytes (↑b)[3])).length +
+                (List.drop 12 ↑(core.num.U32.to_le_bytes (↑b)[4])).length +
+              (List.drop 8 ↑(core.num.U32.to_le_bytes (↑b)[5])).length +
+            (List.drop 4 ↑(core.num.U32.to_le_bytes (↑b)[6])).length))
+        ↑(core.num.U32.to_le_bytes (↑b)[7])
+but is expected to have type
+  ↑(core.num.U32.to_le_bytes (↑a)[7]) = ↑(core.num.U32.to_le_bytes (↑b)[7])
+'AspisR1.JFt_DigestInjective.from_to' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFt_DigestInjective.word_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFt_DigestInjective.injective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc9bf926251e449e5a2f56c7779ab00db.scope; invocation ID: 42ae119c4b564e3cb9c28352903f771e

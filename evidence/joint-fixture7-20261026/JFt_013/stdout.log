@@ -1,0 +1,7 @@
+@[irreducible] def BitVec.toLEBytes : {w : ℕ} → BitVec w → List Byte :=
+fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+@[reducible] def Aeneas.Std.U32.bv : U32 → BitVec 32 :=
+fun x => x.bv
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty :=
+fun {ty} x hInBounds => UScalar.ofNatCore x ⋯
