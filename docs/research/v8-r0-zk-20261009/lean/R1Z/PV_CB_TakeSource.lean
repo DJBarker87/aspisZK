@@ -38,8 +38,6 @@ def shipped.take
 
 end PV_CB_ShippedTake
 
-set_option maxHeartbeats 200000
-set_option maxRecDepth 1000
 namespace R1Z.PV_CB_TakeSource
 open Aeneas Aeneas.Std Result ProverRwFull
 set_option autoImplicit false

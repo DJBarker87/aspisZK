@@ -78,3 +78,7 @@ pub fn mask(c1:[QM31;16],mask_only:[QM31;10],g:QM31,point:[QM31;10])->QM31 {
     let x2=explicit_linear.square();let x4=x2.square();let x8=x4.square();let x16=x8.square();
     shared.add(QM31::ONE.add(x16.mul(x8).mul(x2)).mul(g))
 }
+
+#[cfg(kani)]
+#[path="../step-proof/reference_steps.rs"]
+pub mod steps;
