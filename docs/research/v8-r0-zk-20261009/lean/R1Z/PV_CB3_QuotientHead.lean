@@ -10,7 +10,8 @@ theorem high_words_zero (radix head : Nat) (tail : List Nat)
   have positive : 0 < radix := by
     simp only [value] at small
     omega
-  by_contra h
+  by_cases h : value radix tail = 0
+  · exact h
   have hm := Nat.mul_le_mul_left radix (Nat.one_le_iff_ne_zero.mpr h)
   simp only [Nat.mul_one] at hm
   simp only [value] at small
