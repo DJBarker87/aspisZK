@@ -1,0 +1,54 @@
+{"attempt": "JFr_TX2_006", "exit_status": 1, "wall_seconds": 2.3800143010448664, "peak_rss_kib": "5439620", "swaps": "0", "print_axioms": ["'AspisR1.JFr_TX2_Windows.length' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFr_TX2_Windows.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JFr_TX2_Windows.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_TX2_Windows.lean:28:2: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    JFo_Opening.value i
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑(JFo_Opening.value i)
+JFr_TX2_Windows.lean:42:6: error(lean.unknownIdentifier): Unknown identifier `core.slice.index.SliceIndexRangeToUsize.ge
+...
+ left-hand side
+  do
+    let r ←
+      if h : (prefix608 i).len = 608#usize then ok (core.result.Result.Ok ⟨↑(prefix608 i), ⋯⟩)
+        else ok (core.result.Result.Err ())
+    core.result.Result.unwrap core.fmt.DebugTryFromSliceError r
+is not definitionally equal to the right-hand side
+  ok (array i)
+
+i : Fin 22
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) (JFo_Opening.value i)
+      { «end» := 608#usize } =
+    ok (prefix608 i)
+⊢ (do
+      let r ←
+        if h : (prefix608 i).len = 608#usize then ok (core.result.Result.Ok ⟨↑(prefix608 i), ⋯⟩)
+          else ok (core.result.Result.Err ())
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r) =
+    ok (array i)
+JFr_TX2_Windows.lean:41:44: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeToUsizeSlice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲,̲ core.slice.index.SliceIndexRangeToUsize.get]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFr_TX2_Windows.lean:46:57: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.TryFromSharedArraySlice.try_from,̵l̵e̵n̵g̵t̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFr_TX2_Windows.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFr_TX2_Windows.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFr_TX2_Windows.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8edd6a02b8574997810cb935189c4558.scope; invocation ID: a12b2383f51b4dca801baf11e07884fb

@@ -1,0 +1,63 @@
+{"attempt": "JFr_TX2_075", "exit_status": 1, "wall_seconds": 2.1901184640009888, "peak_rss_kib": "5494560", "swaps": "0", "print_axioms": ["'AspisR1.JFr_TX2_DotTerm.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_TX2_DotTerm.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  JFr_TX2_ScalarRead.read (JFr_TX2_Windows.array (JFn_Values.position ?i)) (↑?slot)#usize (↑?term)#usize
+in the target expression
+  (let (o, next) := (some iter.start, next)
+    match o with
+    | none => ok (done sums)
+    | some term_1 => do
+      let scalar ← JFr_TX2_ScalarRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (↑slot)#usize term_1
+      let out ← JFr_TX2_DotStep.update g term_1 scalar sums
+      ok (cont (next, out))) =
+    do
+    let out ← JFr_TX2_DotStep.update g (cursor ↑term ⋯) (↑(JFr_TX2_Scalars.values i slot))[↑term] sums
+    ok (cont (next, out))
+
+i : Fin 12
+slot
+...
+m_1 scalar sums
+      ok (cont (next, out))) =
+    do
+    let out ← JFr_TX2_DotStep.update g (cursor ↑term ⋯) (↑(JFr_TX2_Scalars.values i slot))[↑term] sums
+    ok (cont (next, out))
+
+i : Fin 12
+slot : Fin 4
+term : Fin 26
+stop : Usize
+order : ↑term < ↑stop
+g : Std.Array FIo_Install.NE 29#usize
+sums : Std.Array U64 8#usize
+iter : core.ops.range.Range Usize := { start := cursor ↑term ⋯, «end» := stop }
+next : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑next.start = ↑iter.start + 1
+he : next.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, next)
+⊢ (let (o, next) := (some iter.start, next)
+    match o with
+    | none => ok (done sums)
+    | some term_1 => do
+      let scalar ← JFr_TX2_ScalarRead.read (JFr_TX2_Windows.array (JFn_Values.position i)) (↑slot)#usize term_1
+      let out ← JFr_TX2_DotStep.update g term_1 scalar sums
+      ok (cont (next, out))) =
+    do
+    let out ← JFr_TX2_DotStep.update g (cursor ↑term ⋯) (↑(JFr_TX2_Scalars.values i slot))[↑term] sums
+    ok (cont (next, out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JFr_TX2_DotTerm.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf32c6d13c7a84ba298164ccfef7e55d0.scope; invocation ID: d8f1ad5cf9ac49528868eff6240dc1a9
