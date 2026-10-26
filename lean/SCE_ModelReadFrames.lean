@@ -21,13 +21,16 @@ theorem frames (D : LiteralByteProtocol.Decoder) (P : Prover) (H : Bytes → Sta
   let v := view (eval H (original D CP))
   have valid : RawCutWordsFromRunExecutableBin.ValidPrefix v := by
     intro row small
-    exact F3T_CanonicalChecks.canonical_valid D P H accepted row (by omega)
+    simpa only [v,CP,view,original_eval] using
+      F3T_CanonicalChecks.canonical_valid D P H accepted row (by omega)
   have equal := RawCommitmentFrameReplayCorrect.frameFromView_commitments_eq D v valid
   dsimp only
   rw [equal.1,equal.2.1,equal.2.2]
   have read (row : Nat) (small : row < 33) :
       Read v.1 (RawCutWordsFromView.frameFromView D v row) := by
+    dsimp only [v]
     rw [F3T_Projection.original_view]
+    simp only [OraclePortExperiment.original,OracleDecisionFeasibilityCore.original]
     rw [OraclePortReplay.frameFromView_eq D _ _ H row (by omega)]
     exact OraclePortReplay.frame_read D _ _ H row small
   exact ⟨read 0 (by decide),read 2 (by decide),read 30 (by decide)⟩

@@ -1,0 +1,37 @@
+SCE_ModelReadFrames.lean:33:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawCutWordsFromView.frameFromView D
+    (eval H (RawCutProverCompiler.experiment ?m.96 (OracleDecisionFeasibilityCore.verifier D ?m.95))) row
+in the target expression
+  Read
+    (eval H
+        (OraclePortExperiment.original D (F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored)
+          (F3T_Projection.project CP))).1
+    (RawCutWordsFromView.frameFromView D
+      (eval H
+        (OraclePortExperiment.original D (F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored)
+          (F3T_Projection.project CP)))
+      row)
+
+D : LiteralByteProtocol.Decoder
+P : Prover
+H : Bytes → State
+accepted : (eval H (original D (F3T_Canon.canon P))).2.2 = true
+CP : Prover := F3T_Canon.canon P
+v : RawCutProverCompiler.RunView := view (eval H (original D CP))
+valid : RawCutWordsFromRunExecutableBin.ValidPrefix v
+equal :
+  RawCommitmentFrameReplay.frameFromView v 0 = RawCutWordsFromView.frameFromView D v 0 ∧
+    RawCommitmentFrameReplay.frameFromView v 2 = RawCutWordsFromView.frameFromView D v 2 ∧
+      RawCommitmentFrameReplay.frameFromView v 30 = RawCutWordsFromView.frameFromView D v 30
+row : ℕ
+small : row < 33
+⊢ Read
+    (eval H
+        (OraclePortExperiment.original D (F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored)
+          (F3T_Projection.project CP))).1
+    (RawCutWordsFromView.frameFromView D
+      (eval H
+        (OraclePortExperiment.original D (F3_Model.decision (eval H CP).2.physical (eval H CP).2.stored)
+          (F3T_Projection.project CP)))
+      row)
+'AspisR1.SCE_ModelReadFrames.frames' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -3,6 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace AspisR1.SCE_FailureZero
 open AspisV8R19.OracleResampling AspisV8R19.UniformStateFirstHit
+open AspisV8R19.CausalFirstHitUnionBound
 open RawRecordedOracleExtractionMassBin
 attribute [local instance] Classical.propDecidable
 

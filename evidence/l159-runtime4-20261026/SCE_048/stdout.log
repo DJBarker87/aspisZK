@@ -1,0 +1,158 @@
+'AspisR1.SCE_ConditionalTop.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.SCE_ConditionalTop.deployed : ∀ {W A F CoreError Tx : Type} (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)),
+      TrustedStd copy →
+        ∀ (allocator : Allocator A) (c : DrvC_Installation.Configuration F CoreError) (indexError : CoreError)
+          (reservation : NP6_StdModel.Reservation) (native1 : S2W_ExtractionBoundary.First)
+          (native2 : S2W_ExtractionBoundary.Second) (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest),
+          S2W_DigestExtraction.AeneasExtraction
+              (DrvC_Installation.sdk (Rc5_Install.configuration indexError c reservation)) native1 native2 hashv →
+            ∀ (experiment : SCE_Experiment.Adversary A) (sha256 H : Bytes → State),
+              S2W_ExtractionBoundary.P1 sha256 H →
+                S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                  ∀ (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A) (w1 w2 : W),
+                    RuntimeEntrypointAdmission L (eval H experiment.first).2.entry w1 3 →
+                      RuntimeEntrypointAdmission L
+                          (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.entry w2 7 →
+                        first native1 copy allocator (eval H experiment.first).2.entry CPH_Program.verifier
+                              (eval H experiment.first).2.data (eval H experiment.first).2.state =
+                            ok (core.result.Result.Ok (saved, post1, final1)) →
+                          second native2 allocator
+                                (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.entry
+                                CPH_Program.verifier
+                                (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.data
+                                (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.slot
+                                (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.state =
+                              ok (core.result.Result.Ok (post2, final2)) →
+                            ∀ (root : Std.Array U8 32#usize) (length : U32) (prior : Program Bytes State Unit)
+                              (words : CanonicalCutEnrichedTranscript.Words) (p : CPG_Projection.Observations Tx A)
+                              (t u : Tx) (actions : List (CPP_BankState.Action A)),
+                              CPH_Game.DeployedPairExecution p t u (eval H experiment.first).2.entry
+                                  (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.entry
+                                  saved actions native1 native2 copy allocator CPH_Program.verifier →
+                                CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+                                    (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
+                                    (CPG_Projection.tentative p) (CPG_Projection.success p) (CPG_Projection.loaded p) →
+                                  ∀ (D : LiteralByteProtocol.Decoder) (Q0 Q1 : ℕ),
+                                    AcceptedVerifierJoin (Rc5_Install.configuration indexError c reservation) D
+                                        (F3T_Installed.source (Rc5_Install.configuration indexError c reservation)
+                                          hashv) →
+                                      F3T_Runtime.StoredCarrierBinding
+                                          (Rc5_Install.configuration indexError c reservation) D
+                                          (F3T_Installed.source (Rc5_Install.configuration indexError c reservation)
+                                            hashv)
+                                          (SCE_Experiment.submission experiment)
+                                          (SCE_Experiment.runtime (Rc5_Install.configuration indexError c reservation)
+                                            hashv copy allocator CPH_Program.verifier experiment) →
+                                        (∀ (H : Bytes → State), (eval H experiment.first).1.length ≤ Q0) →
+                                          (∀ (input : GExq_AccountExperiment.FirstInputs A) (saved : alloc.vec.Vec U8)
+                                              (post : Heap (ℕ → Record)) (final : A) (H : Bytes → State),
+                                              (eval H (experiment.second input saved post final)).1.length ≤ Q1) →
+                                            ∀
+                                              (project :
+                                                GExq_AccountExperiment.Outcome A →
+                                                  OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+                                              (select :
+                                                GExq_AccountExperiment.Outcome A →
+                                                  R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs),
+                                              DrvC_Implementation.driver
+                                                    (Rc5_Install.configuration indexError c reservation) =
+                                                  DrvC_SourceEntry.source
+                                                    (Rc5_Install.configuration indexError c reservation) hashv ∧
+                                                DrvC_Installation.sdk
+                                                      (Rc5_Install.configuration indexError c reservation) =
+                                                    SdkD_PairBatches.dictionary
+                                                      (Rc5_Install.configuration indexError c reservation).adapter
+                                                      (Rc5_Install.configuration indexError c reservation).currentBase
+                                                      (Rc5_Install.configuration indexError c reservation).stageBase
+                                                      (Rc5_Install.configuration indexError c reservation).finish
+                                                      (Rc5_Install.configuration indexError c reservation).reserved
+                                                      (Rc5_Install.configuration indexError c reservation).query
+                                                      (Rc5_Install.configuration indexError c reservation).geometry
+                                                      (Rc5_Install.configuration indexError c reservation).boundaries
+                                                      (Rc5_Install.configuration indexError c reservation).std ∧
+                                                  Rc5_Result.Outcome L (eval H experiment.first).2.entry
+                                                      (eval H
+                                                            (experiment.second (eval H experiment.first).2 saved post1
+                                                              final1)).2.entry
+                                                      w1 w2 (Rc5_Install.configuration indexError c reservation).adapter
+                                                      (Rc5_Install.configuration indexError c reservation).currentBase
+                                                      (Rc5_Install.configuration indexError c reservation).reserved
+                                                      (Rc5_Install.configuration indexError c reservation).query
+                                                      (Rc5_Install.configuration indexError c reservation).geometry
+                                                      (Rc5_Install.configuration indexError c reservation).stageBase
+                                                      (Rc5_Install.configuration indexError c reservation).finish
+                                                      c.boundaries reservation CPH_Program.verifier
+                                                      (eval H experiment.first).2.data
+                                                      (eval H
+                                                            (experiment.second (eval H experiment.first).2 saved post1
+                                                              final1)).2.data
+                                                      (eval H
+                                                            (experiment.second (eval H experiment.first).2 saved post1
+                                                              final1)).2.slot
+                                                      saved post1 post2 H
+                                                      (DrvC_Implementation.driver
+                                                        (Rc5_Install.configuration indexError c reservation))
+                                                      prior (p.physicalEvents t) ∧
+                                                    ((∀ (H : Bytes → State),
+                                                          (eval H
+                                                                    (F3T_TwoPass.annotatedWith D
+                                                                      (F3T_Installed.source
+                                                                        (Rc5_Install.configuration indexError c
+                                                                          reservation)
+                                                                        hashv)
+                                                                      (F3T_Canon.canon
+                                                                        (F3T_ByteCarrier.lift
+                                                                          (Rc5_Install.configuration indexError c
+                                                                            reservation)
+                                                                          (SCE_Experiment.submission
+                                                                            experiment))))).2.2 =
+                                                              true →
+                                                            mean ⋯ ≤
+                                                              ↑(CostedAllocationLedgerM10.params
+                                                                    (Q0 + Q1 + 1161)).attemptBudget) ∧
+                                                        (∀ (run : RawCutProverCompiler.RunView) (coins : Coins)
+                                                            (w : SpendRelation.Wspend),
+                                                            (ActualCostedExtractorM10.extractor.eval run coins).1 =
+                                                                some w →
+                                                              LiteralProtocol.relation run.2.1.1 w) ∧
+                                                          1 / 2 ^ 126 + 1 / 2 ^ 454 ≤ 1 / 2 ^ 120 ∧
+                                                            ⋯ ≤ StartChargeNumeric.totalBound (Q0 + Q1) ∧
+                                                              (Q0 + Q1 ≤ OraclePortHeadlineFrozen2.Qmax → ⋯)) ∧
+                                                      (have r := Rc5_Install.configuration indexError c reservation;
+                                                        F3T_RuntimeBound.failureModel
+                                                              (SCE_Experiment.runtime
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv copy allocator CPH_Program.verifier experiment) +
+                                                            F3T_AccountCharge.mass
+                                                              (CPG_Account.source r hashv copy allocator
+                                                                CPH_Program.verifier experiment.first experiment.second)
+                                                              project select (Q0 + Q1) ≤
+                                                          F3T_Numeric.total (Q0 + Q1)) ∧
+                                                        (have r := Rc5_Install.configuration indexError c reservation;
+                                                          Q0 + Q1 = 0 → ⋯ < 1 / 2 ^ 100) ∧
+                                                          (native1 CPH_Program.verifier
+                                                                  (eval H experiment.first).2.entry.first
+                                                                  (eval H experiment.first).2.data =
+                                                                ok (core.result.Result.Ok saved) ∧
+                                                              (↑saved).length = 1768 ∧ ⋯) ∧
+                                                            Rc2_Events.Facts
+                                                                (Rc5_Install.configuration indexError c reservation)
+                                                                hashv native1 native2 copy allocator
+                                                                CPH_Program.verifier H saved ∧
+                                                              CPH_Protection.Facts p t saved CPH_Program.verifier ∧ ⋯ :=
+fun {W A F CoreError Tx} L sdk copy std allocator c indexError reservation native1 native2 hashv extraction experiment
+    sha256 H p1 syscall saved post1 post2 final1 final2 w1 w2 admission1 admission2 accepted1 accepted2 root length
+    prior words p t u actions game RuntimePersistence D Q0 Q1 raw binding prefixBound choiceBound project select =>
+  Rc5_Top.deployed L sdk copy std allocator (eval H experiment.first).2.entry
+    (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.entry w1 w2 admission1 admission2 c
+    indexError reservation native1 native2 hashv extraction sha256 H p1 syscall (eval H experiment.first).2.data
+    (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.data
+    (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.slot (eval H experiment.first).2.state
+    (eval H (experiment.second (eval H experiment.first).2 saved post1 final1)).2.state final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D
+    (SCE_Experiment.submission experiment) Q0 Q1 (SCE_SubmissionBound.queries experiment Q0 Q1 prefixBound)
+    (SCE_Experiment.runtime (Rc5_Install.configuration indexError c reservation) hashv copy allocator
+      CPH_Program.verifier experiment)
+    raw binding experiment.first experiment.second prefixBound choiceBound project select

@@ -47,8 +47,17 @@ for r in receipts:
     for obj in r['deps_fingerprint']['selected_objects'].values():
         assert len(obj['sha256']) == 64 and obj['bytes'] > 0
 
+manifest = json.loads((E / 'SCE_HOST_MANIFEST.json').read_text())
+last = json.loads((E / 'SCE_100/receipt.json').read_text())
+for obj in last['deps_fingerprint']['selected_objects'].values():
+    name = Path(obj['path']).name
+    if name.startswith('SCE_'):
+        assert obj['sha256'] == manifest['objects'][name]['sha256']
 modules = sorted((R / 'lean').glob('SCE_*.lean'))
 for p in modules:
+    assert sha(p) == manifest['sources'][p.name]['sha256']
+    for theorem in re.findall(r'^theorem\s+([\w]+)', p.read_text(), flags=re.M):
+        assert '#print axioms ' + theorem in p.read_text(), (p.name, theorem)
     assert (p.name, sha(p)) in green, 'No exact-current-source passing receipt: ' + p.name
     code = re.sub(r'/\-.*?\-/', '', p.read_text(), flags=re.S)
     assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b', code), p.name
