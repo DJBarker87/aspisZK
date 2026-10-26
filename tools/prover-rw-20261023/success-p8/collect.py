@@ -20,6 +20,8 @@ for p in sorted(e.glob('*-input.json')):
 native=[]
 for p in sorted((e/'translation').glob('*/receipt.json')):
  x=json.loads(p.read_text())
+ if x['wall_seconds'] is None and (p.parent/'supplemental-time.json').exists():
+  x['wall_seconds']=json.loads((p.parent/'supplemental-time.json').read_text())['wall_seconds']
  native.append(dict(attempt=x['attempt'],kind='Kani' if 'kani' in x['target'] else 'extraction',command=x['target'],exit=x['exit_status'],wall=x['wall_seconds'],peak_rss_kib=x['peak_rss_kib'],swaps=x['swaps'],cgroup_memory_peak_bytes=x['cgroup_memory_peak_bytes'],source_revision_label=x['source_revision'],scope='Exact source hashes pin inputs; historical host revision label is not this branch revision'))
 result=dict(attempts=rows,native=native,lean_compiles=sum(x['exit'] is not None for x in rows),lean_passes=sum(x['exit']==0 for x in rows),kani_runs=sum(x['kind']=='Kani' for x in native),lean_budget=65,kani_budget=12,root_premises_removed=0,target_established=False)
 local=[json.loads(p.read_text()) for p in sorted((e/'local').glob('*-receipt.json'))]

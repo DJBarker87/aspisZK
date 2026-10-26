@@ -331,3 +331,73 @@ simulator or observer changed. Three-ELF/fixture evidence is reused from the
 lead's pv-rebase2 result; no unchanged artifact/performance suite is repeated.
 Native budget remains to be spent; subsequent receipts below determine its
 final count/results. No push or merge.
+
+## Final native continuation: isolated checks retained without promotion
+
+Native9 `success-p8-division-pass-001` compares all eight quotient words and
+remainder of one reverse-iterator division pass against the indexed pass, for
+arbitrary raw rank words. It times out at240s (cgroup peak209698816bytes).
+Native10 `success-p8-polynomial-full-001` compares all four raw output words of
+the shipped degree27 evaluator against its owned helper factoring for arbitrary
+28coefficients/challenge. It times out at240s (peak3736088576bytes). These are
+not successful native certificates and remove no ledger rows. All native runs
+retain6G/8G/swap0/Tasks64 limits, optimized profile3, unwinding assertions, and
+release wrapping behavior; each previous scope is inactive before its successor.
+
+Read-only final cache comparison matches all1224 object hashes recorded as
+inputs to21385. This establishes cache identity for that focused audit, not a
+coherent release replay. The missing raw log for21301 is expected: its launcher
+guard rejected before Lean; the immutable input/source is retained separately
+under guard-only-21301, and the explicit launcher receipt counts zero compiles.
+An initial21377 invocation used a nonexistent launcher path omitting src/tools;
+it never entered the launcher or created an attempt marker. The corrected call
+used the still-unused21377 with its existing input fingerprint; it adds no extra
+compiler invocation. No launcher, admission guard or sent marker was changed.
+
+Native11 `success-p8-pole-prefix16-001` compares the actual shipped pole slice
+iterator with the owned indexed reference for every public length0..16, all raw
+values/masks/challenge. It times out at240s (peak1189408768bytes). This restricted
+domain was never promoted to the whole1024-row callback. Native12 changes the
+ordinary harness unwind bound10→40 to include32-byte ABI copies and switches to
+CBMC arithmetic refinement; source and solver mode both differ from Native8.
+Only proof-harness code changes. No crate/program or backend change is made.
+
+## Final stop: both allowances exhausted
+
+Native12 `success-p8-ordinary-refine-003` times out at240.00399174698396s,
+peak1311952896bytes,zero swap,exit124. Its previous scope is inactive; no own
+job remains. It does not establish shipped ordinary=reference, so op250 stays
+open and the source callback remainder stays31. No counterexample against the
+shipped source is inferred from any timeout, translation/compiler failure, or
+release/debug overflow-check mismatch.
+
+Final totals:65/65Lean (61host+4local,48passes,17rejected/terminated) and12/12Kani
+invocations, including recovered WIP and failed driver/compiler invocations.
+Reservation/guard refusals consume IDs but zero compiler attempts. Native1/4/7
+fail before a valid native equality result; the other nine time out. No new
+native equality certificate is supplied by these12invocations.
+
+`final-validate.py` passes:44accepted host source snapshots (43modules+audit),
+4local source snapshots,65/12budget reconciliation, unchanged security roots,
+unchanged crates/programs, pinned native/proof-harness hashes and1224unchanged
+cached dependency objects. Source generators/checks and git diff --check pass.
+The accepted host axioms remain propext/Classical.choice/Quot.sound only; local
+axioms separately satisfy the same standard. Raw failures remain available.
+
+Stop reason is budget exhaustion, not Kani exhaustion alone or host admission.
+V262/op255 and V255/op247 source subobligations move unsupplied→supplied through
+the complete caller (33→31); full rows retain native adequacy. V163 remains
+whole-data-equality antecedent→same antecedent. V164/V240 remains uninstalled
+native compression→uninstalled native compression, with owned symbolic support
+and a site-local arity16 fact. Ordinary op250 remains arbitrary/unassociated
+live callback→same, despite the accepted auxiliary-reference policy theorem.
+No endpoint/root premise was removed, added, weakened or renamed. Full
+Result/state equations here do not establish bytes+side-channel observer laws.
+
+Next concrete deliverable: a native arity16 compression certificate linked to
+its owned fold (then whole-caller applicability), and a shipped ordinary sampler
+certificate linked to the accepted indexed reference. Compose the remaining31
+callbacks with an actual security-model carrier/body association to discharge
+V163, then Prefix/Body/E1/E2/real RunJoin and L1/L2/L3. This continuation supplies
+neither a release replay nor privacy closure. Branch remains unmerged and
+unpushed; the final commit contains this handoff and immutable text receipts.

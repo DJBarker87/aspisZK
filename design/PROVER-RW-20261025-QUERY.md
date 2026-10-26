@@ -1467,3 +1467,51 @@ success-p7/{README.md,final-state.json,denied-14835/,pending/}. Proof checkpoint
 415017b9eb. Pending coefficient source has the corrected count API normalization;
 its last corrected input never ran. The uncompiled complex bridge is separate
 pending text. No new premise hides the missing data equality or native adequacy.
+
+### 2026-10-26 resumed P8: accepted scope and retained obligations
+
+The lead resolved the P7 admission stop: barrier refusals consume attempt IDs,
+not compiler budget; wait180s and use the next unused ID. No marker deletion or
+launcher/guard bypass was used. Assigned range21300–21599, budget65Lean/12Kani
+is the unused remainder from the previous handoff; the recovered WIP attempts
+are included, not reset. The final Lean total is65 (61host and4small local
+Std-only checks), with48passes. Final focused audit21385 exits0 in2.16s,
+peak4301932KiB,swap0. All109new host theorem reports and the headline use only
+standard axioms; local15reports are audited separately. All1224cached object
+hashes match the final audit input. This is not a coherent release replay.
+
+V262/op255 and V255/op247 source subobligations are supplied through the actual
+complete prover caller:33remaining source callbacks become31. This does not
+close the native effect/feature/representation parts of those ledger rows.
+Current CT complex/quartic/scale/square primitives have exact all-raw Result
+transports. Owned compression has indexed/list, append, totality and final
+unused-power-update lemmas; its explicit copy_tuple_values caller site has
+length16, without claiming a whole-caller domain restriction. Pole equal/
+keep_clear/row/fold and symbolic public mask bounds are checked. Ordinary owned
+reference decoding/division/normalization equals the retained sampler policy;
+two auxiliary installed dictionaries and their complete callers are equal.
+The attempted equality to the arbitrary prior live op250 is rejected and
+retained outside accepted Lean. No assumption was added to hide that gap.
+
+V163's arbitrary-model whole proof/audit data equality remains an antecedent;
+no actual source/security-model association is proved. V164/V240 native
+compression is still open after the retained solver/translation failures.
+V036–V038, V161–V168, E1/E2, PrefixContract/BodyContract, native ownership/effects,
+ordered ROM/TLS, real RunJoin and L1/L2/L3 remain. Root/headline premises
+removed0; no model/observer/security-root changes. Three release ELFs and fixture
+identity are reused from the lead's pv-rebase2 result; crates/programs are
+unchanged, so no redundant rebuild or runtime regression was run.
+
+Accepted proof checkpoint bf63a9602a; full per-attempt inputs, source/dependency
+hashes, time/RSS/swap/axioms, failures and final native continuation are in
+`docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/success-p8/`.
+The final README/summary supersede intermediate budget counts. No push or merge.
+
+Final P8 native outcome:12/12Kani consumed; the final arithmetic-refinement
+ordinary sampler check times out240s (exit124,cgroup peak1311952896bytes,swap0).
+The isolated division pass, full polynomial and prefix0..16pole checks also time
+out; no native correspondence is installed. Both budgets are exhausted, not
+reset by the interruption. Final read-only validator passes; callback remainder31,
+root premises removed0. Next: native arity16 compression=owned and fullordinary
+=accepted indexed reference, then actual whole-model/body association. See
+success-p8/{README.md,summary.json,final-state.json,final-cache-check.json}.

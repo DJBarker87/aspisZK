@@ -123,7 +123,8 @@ pub mod sampler_owned;
 #[cfg(kani)]
 mod ordinary_checks {
  #[kani::proof]
- #[kani::unwind(10)]
+ // Cover 32-byte input and returned value copies as well as eight-step loops.
+ #[kani::unwind(40)]
  fn ordinary_all_blocks() {
   let bytes:[u8;32]=kani::any();
   let a=super::shipped_sampler::ordinary_sample(&bytes);
