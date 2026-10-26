@@ -1,6 +1,6 @@
 # Entry and reachability table
 
-Unchanged:172 selected /83 open /255 sufficient source fields; exact feasible-native invocation denominator unestablished. Transport proofs do not install source operation bodies or native types. Root premises removed:0. Ledger rows refer to research revision `918c2c83da6278a1862121cd1c23f44a6e449a2a`.
+Unchanged:172 selected /83 open /255 sufficient source fields; exact feasible-native invocation denominator unestablished. Transport proofs do not install source operation bodies or native types. Root premises removed:0. Ledger rows refer to research revision `e97cb3923c111d0c3f49968bd76ba05417d158c7`.
 
 | Field | Operation | Required source bound | Selection | Ledger |
 |---:|---|---|---|---|

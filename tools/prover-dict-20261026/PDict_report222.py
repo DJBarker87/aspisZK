@@ -3,8 +3,8 @@ from pathlib import Path
 import json,re,subprocess,hashlib
 r=Path(__file__).resolve().parents[2];d=r/'docs/research/100bit-spend-path-20261013/evidence/prover-dict-20261026';e=d/'lift222'
 y=json.loads((d/'installed-and-remaining.json').read_text());summary=json.loads((e/'lean-summary.json').read_text())
-ledger=subprocess.check_output(['git','show','research:design/PRIVACY-LEDGER-20261026.md'],text=True)
 rev=subprocess.check_output(['git','rev-parse','research'],text=True).strip()
+ledger=subprocess.check_output(['git','show',rev+':design/PRIVACY-LEDGER-20261026.md'],text=True)
 ops={int(op):vid for vid,op in re.findall(r'\| (V\d+) / `op(\d+) ',ledger)}
 rows=[]
 for row in y['functions']:
