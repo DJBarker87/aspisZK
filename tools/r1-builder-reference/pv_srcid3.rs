@@ -118,3 +118,27 @@ fn pv_srcid3_common_pair_words() {
         assert!(input.pair.pair_leaf.second_commitment[lane].0 < P);
     }
 }
+
+// Resume: full source association for the dynamic extracted dictionary.
+// Both sides execute the actual pure root helper. No fixed table, stubs,
+// assumed output equality, or restricted input domain is used.
+#[kani::proof]
+#[kani::unwind(33)]
+fn pv_srcid3_full_dynamic_mapper() {
+    let (input, out, recipient, change, snapshot, asset) = arbitrary_inputs();
+    let (w, p) = records(&input, out, recipient.as_ref(), &change, &snapshot, asset);
+    let (v, q) = super::records_reference(
+        &input, out, recipient.as_ref(), &change, &snapshot, asset);
+    assert_eq!(w.input_value,v.input_value);
+    assert_eq!(w.output_value,v.output_value);
+    assert_eq!(w.change_value,v.change_value);
+    assert_eq!(w.sk,v.sk); assert_eq!(w.salt,v.salt);
+    assert_eq!(w.bits,v.bits); assert_eq!(w.sibs,v.sibs);
+    assert_eq!(w.pair_first,v.pair_first); assert_eq!(w.pair_occupied,v.pair_occupied);
+    assert_eq!(w.pair_second,v.pair_second); assert_eq!(w.pair_inverse,v.pair_inverse);
+    assert_eq!(w.recipient_owner,v.recipient_owner); assert_eq!(w.recipient_salt,v.recipient_salt);
+    assert_eq!(w.change_owner,v.change_owner); assert_eq!(w.change_salt,v.change_salt);
+    assert_eq!(p.transfer,q.transfer); assert_eq!(p.asset,q.asset);
+    assert_eq!(p.next_pair_index,q.next_pair_index);
+    assert_eq!(p.frontier,q.frontier); assert_eq!(p.empty,q.empty);
+}
