@@ -73,3 +73,14 @@ fabricated. No OS/world association inferred from the header projection.
 Original six native residuals remain6→6; endpoint8→8;runtime/boundary2→2.
 This permits constructing a ledger-world interpreter with a proved source
 field; it is not yet the actual proof-account Runtime/Boundary instance.
+
+## Named effect world checked
+
+PV_RunJoin_OsWorld (25620) prints the exact entropyDraw/open64/read/write/sync/
+close/time/worker predicate fields and their Allowed statements. These are
+predicate data, never axioms and never declared valid for a native world.
+World matching obligations are in world-identity-obligation.md, with sibling
+read pins in sibling-read-pins.json. Flush is the source Unix no-op; actual
+durability uses sync and its fallible outcome. No extra availability premise
+is adopted. The complete source source/header theorem does not erase these
+native effect obligations.
