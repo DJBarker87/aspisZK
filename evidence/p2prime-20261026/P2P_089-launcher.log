@@ -1,0 +1,40 @@
+{"attempt": "P2P_089", "exit_status": 0, "wall_seconds": 2.3019262260058895, "peak_rss_kib": "5424464", "swaps": "0", "print_axioms": []}
+def AspisR1.Rc5_Install.configuration : {F C : Type} →
+  C →
+    AspisR1.DrvC_Installation.Configuration F C →
+      AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c r => AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r
+def AspisR1.Rc5_Install.seed : {F C : Type} →
+  C → AspisR1.DrvC_Installation.Configuration F C → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c => AspisR1.SAQ_CompleteInstall.select err (AspisR1.CPP_Install.configuration c)
+@AspisR1.Rc5_Install.rc4 : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.conf
+...
+def AspisR1.Rc5_Install.configuration : {F C : Type} →
+  C →
+    AspisR1.DrvC_Installation.Configuration F C →
+      AspisR1.NP6_StdModel.Reservation → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c r => AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r
+def AspisR1.Rc5_Install.seed : {F C : Type} →
+  C → AspisR1.DrvC_Installation.Configuration F C → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c => AspisR1.SAQ_CompleteInstall.select err (AspisR1.CPP_Install.configuration c)
+@AspisR1.Rc5_Install.rc4 : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r =
+    AspisR1.Rc4_Install.configuration err (AspisR1.CPP_Install.configuration c) r
+@AspisR1.Rc5_Install.saf : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r = AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r
+@AspisR1.Rc5_Install.cph : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r =
+    AspisR1.CPH_Install.configuration
+      (have __src := AspisR1.SAQ_CompleteInstall.select err c;
+      { adapter := __src.adapter, currentBase := __src.currentBase, stageBase := __src.stageBase,
+        finish := __src.finish, reserved := __src.reserved, query := __src.query, geometry := __src.geometry,
+        boundaries := AspisR1.F3M_CircleSource.install c.boundaries, std := __src.std })
+      r
+
+Running as unit: run-r429d8a53b9f0429d905be0738c35e013.scope; invocation ID: 90256ea91bcb4d4688535b00e0f28ba4
+

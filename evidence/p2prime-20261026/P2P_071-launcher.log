@@ -1,0 +1,48 @@
+{"attempt": "P2P_071", "exit_status": 0, "wall_seconds": 2.4840740030049346, "peak_rss_kib": "5426052", "swaps": "0", "print_axioms": []}
+structure AspisR1.Port5Q1_NodeModel.SessionAM31 (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_NodeModel.SessionAM31.multiply : ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+      ops.op7 x y = Aeneas.Std.Result.ok z →
+        AspisR1.S7JoinBasisMachine.decode z = AspisR1.S7JoinBasisMachine.decode x * AspisR1.S7JoinBasisMachine.decode y
+  AspisR1.Port5Q1_NodeModel.SessionAM31.double : ∀ (x y : AspisR1Stage2.aspis_core.field.M31),
+      ops.op8 x = Aeneas.Std.Result.ok y → AspisR1.S7JoinBasisMachine.decode y = 2 * AspisR1.S7JoinBasisMachine.decode x
+  AspisR1.Port5Q1_NodeModel.SessionAM31.one : ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+ 
+...
+isR1.S7JoinBasisMachine.decode x)
+    (one :
+      ∀ (x : AspisR1Stage2.aspis_core.field.M31),
+        ops.op5 = Aeneas.Std.Result.ok x → AspisR1.S7JoinBasisMachine.decode x = 1)
+    (subtract :
+      ∀ (x y z : AspisR1Stage2.aspis_core.field.M31),
+        ops.op6 x y = Aeneas.Std.Result.ok z →
+          AspisR1.S7JoinBasisMachine.decode z =
+            AspisR1.S7JoinBasisMachine.decode x - AspisR1.S7JoinBasisMachine.decode y) :
+    AspisR1.Port5Q1_NodeModel.SessionAM31 ops
+structure AspisR1.Port5Q1_OpeningValues.SessionAS3 (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port5Q1_OpeningValues.SessionAS3.decode : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+      (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ↑i < 4 →
+        (↑bytes).length = 128 →
+          ops.op21 bytes i = Aeneas.Std.Result.ok value →
+            AspisR1.FoldedLeafCodec.decodeWide
+                (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes) (32 * ↑i) 32) =
+              Option.some (AspisR1.CheckpointBytes5Output.ofE value)
+constructor:
+  AspisR1.Port5Q1_OpeningValues.SessionAS3.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (decode :
+      ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+        (value : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ↑i < 4 →
+          (↑bytes).length = 128 →
+            ops.op21 bytes i = Aeneas.Std.Result.ok value →
+              AspisR1.FoldedLeafCodec.decodeWide
+                  (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes) (32 * ↑i) 32) =
+                Option.some (AspisR1.CheckpointBytes5Output.ofE value)) :
+    AspisR1.Port5Q1_OpeningValues.SessionAS3 ops
+
+Running as unit: run-rfb84351a707a4a5b92f8749b6ac074c1.scope; invocation ID: 7c8a48577d3f4186a913d426281afaea
+
