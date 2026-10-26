@@ -29,6 +29,15 @@ a model parameter; the literal SHA256 seed is not a kernel SHA256 theorem.
 `JFs_SerializedDigests` (095) symbolically binds all47 digest word serializations
 to their exact retained native byte cells, using native decode inverses.
 
+`JFs_ExactSerialization.source` (098) now identifies the return with the exact
+retained1455-byte vector. `JFs_SerializedBytes.source` (097) proves its complete
+byte formula using symbolic native decode inverses. The byte-inventory preflight
+matches the inherited diagnostic exactly, SHA256
+5a362c09d7cbfc0861062a0eb79576eb0d27ade5af4391e83bdc71bdcfdfbfb2.
+`JFs_ExactInitialization.source` (099) fixes initialization to this exact vector,
+le32(1455),root and row0, without a serializer,length-conversion or seed premise.
+The literal SHA256 output seed e4a92261… remains inherited diagnostic evidence.
+
 ## Before/after and ledger
 
 The actual Rc8 top source, quantifiers, guards, dictionaries, common witnesses,
@@ -69,3 +78,27 @@ rebuild trigger fired. INHERITED pins only:
 - default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4
 - devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299
 - Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
+
+## Final budget and audit outcome
+
+**100/100 Lean processes:62 pass,38 reject;62 final new Lean sources each have
+an accepted exact-current-hash receipt;0/10 Kani. No further compile is permitted
+under this job.** JFs_VALIDATION.json maps every delivered module to its passing
+receipt. JFs_RECORDS_MANIFEST.json preserves all successful and rejected attempts.
+Total Lean wall240.2568497066968s; maximum RSS5656796KiB; total swap0.
+
+100 imported Rc8 and all requested strongest new roots, and printed their full
+axioms lines with only propext/Classical.choice/Quot.sound. It nevertheless
+**EXITED1 because `pp.maxDepth` is an unsupported display option**. This is an
+avoidable audit-source error, not an infrastructure failure or an accepted audit.
+The100 budget is exhausted, so it was NOT rerun or silently corrected.
+The exact rejected source is JFs_UNCHECKED_FinalAudit.lean.txt (also retained in
+100/sources); it is NOT a delivered checked .lean module. All62 delivered modules
+remain independently accepted, but a clean final composed audit is still required
+under a new budget. 100: wall2.6504272280144505s,RSS5633620KiB,swap0,source revision
+80ca694414 with dirty-tree flag; the receipt pins the exact full revision/hash.
+
+BEFORE/AFTER top source statements are byte-identical; the selected Rc8 object
+hash is unchanged between001 and100. 100's print diagnostics are retained in
+JFs_AFTER_Rc8_KERNEL.txt with their rejected-run status explicitly recorded.
+This does not count as a passing final manifest or composed audit.
