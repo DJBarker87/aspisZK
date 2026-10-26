@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_EncoderFill.lean:25:8: error: Failed to rewrite using equation theorems for `PV_CB_OwnedEncoder.owned.basis_fill`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_EncoderFill.lean:30:8: error: Failed to rewrite using equation theorems for `PV_CB_OwnedEncoder.owned.basis_fill`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_EncoderFill.lean:53:57: error: Tactic `rfl` failed: The left-hand side
+  ↑0#usize + ↑width
+is not definitionally equal to the right-hand side
+  ↑width
+
+E : Type
+inst : aspis_core.r0.scalar.CodeField E
+mul_total : ∀ (a b : E), ProverRwSuccessArithmeticTotal.Total (inst.mul a b)
+width : Usize
+factor : E
+out : Std.Array E 512#usize
+half : 2 * ↑width ≤ 512
+⊢ ↑0#usize + ↑width = ↑width
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_EncoderFill.lean:54:71: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.38 = ?m.38
+but is expected to have type
+  ↑0#usize + ↑width = ↑width
+in the application
+  finite_total inst mul_total width factor (↑width) 0#usize out rfl
+'R1Z.PV_CB_EncoderFill.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CB_EncoderFill.finite_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CB_EncoderFill.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

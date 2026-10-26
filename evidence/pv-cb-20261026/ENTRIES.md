@@ -208,3 +208,65 @@ used before retries. The only successful translation launch after a wait was
 the earlier take translation. No reservation or launcher guard was bypassed.
 Current Kani use remains2/20. Source snapshot is isolated in the assigned host
 directory; shipped crates/programs and all sibling worktrees remain unchanged.
+
+## Native std gates and finite mask controls
+
+Kani3/20 (`string_path16`) timed out after180 seconds. The 16-byte arbitrary
+UTF-8 scope remains open; it is not rerun unchanged. Prepared replacements
+separate ASCII strings from single Unicode scalars. The timeout scope was
+checked after completion: its cgroup was gone and no own child survived.
+Kani4/20 (`path_join8`) passed, no stubs: every Unix byte prefix and suffix
+with lengths0–8; source reference preserves absolute suffix replacement and
+separator insertion. This is a bounded native value law, not an allocator
+or whole-world proof. Receipt: kani-join-004/collected-receipt.json.
+
+Encoder translation did launch after admission retry8; exit2 is Aeneas
+`Not_found` in InterpReduceCollapse/collapse_ctx_following_sequence while
+joining a loop. Its full trace and exact inputs are retained. No tool or
+launcher repair is attempted; an owned index-based reference is prepared.
+
+Mask preparation: PV_CB_CurrentTotal (22839) and PV_CB_PreparedTotal (22840)
+prove machine-field and prepared-multiplier totality without success premises.
+PV_CB_MaskLeaves (22842) proves the prepared power/tower leaves total.
+PV_CB_MaskLinearsFinite.source (22847) relates the reverse linear loop to a
+symbolic finite recurrence. Failed22837/38/41/43–46 are retained; no failure
+is accepted. Current source audit is still required before op117 installation.
+
+## Finite mask checkpoint
+
+PV_CB_MaskLinearsTotal (22848) proves both finite-loop totality and the
+complete two-linear-form result for all ten QM31 inputs. PV_CB_MaskIndices
+(22850) proves coordinate masking gives0–3 and every literal factor exponent
+lies below27, then transports these bounds through symbolic array reads.
+Only tiny numeral inequalities are decided; no concrete field recurrence
+or large domain is reduced. All accepted audits use standard axioms.
+
+Direct current-mask Charon extraction succeeds, but Aeneas translation exits2
+with the same loop-join `Not_found`; both receipts are retained. No op117
+installation is claimed. Owned reference source is cfg(kani)-only, changes
+iteration/storage shape while preserving call order, and still needs native
+Kani correspondence plus extraction/control transport. The candidate's shipped
+Rust, verifier artifacts, observer, simulator and headline are unchanged.
+
+## Recursive encoder reference and checked cells
+
+The bounded recursive encoder reference extracts/translates successfully
+(charon-owned-encoder-002; aeneas-owned-encoder-002). The original loop-based
+reference failure is retained byte-for-byte by its recorded hash.
+PV_CB_OwnedEncoder compiles22854. Its raw Types/Funs and structural carrier
+comparison are in owned-encoder-rec-generated/. PV_CB_EncoderInstall(22855)
+installs this owned reference and removes the original op79 field from that
+selected result, **but native correspondence is pending; full op79 stays OPEN**.
+
+PV_CB_EncoderCell(22857) and PV_CB_EncoderFill(22859) prove bounds and the fill
+recurrence, with an explicit primitive-multiplication-total premise. That
+premise is not claimed discharged for every generic CodeField.
+PV_CB_MaskCell(22860) proves both fixed coefficient-cell families total from
+the checked literal exponent and tower-index bounds.
+
+Kani remains4/20 until ASCII gate005 actually runs. Four further native
+admission scans are retained; these refusals do not charge Kani runs.
+Native collectors record post-run object/input snapshots. For changed proof
+inputs, use the explicit retained per-run source snapshot; do not attribute
+a current file hash to an earlier execution. No coherent release replay or
+artifact equality is claimed by the focused checks.

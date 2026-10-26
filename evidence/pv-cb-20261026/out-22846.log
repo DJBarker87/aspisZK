@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskLinearsFinite.lean:51:6: error: Type mismatch: After simplification, term
+  ih (pred e) s weighted rank
+ has type
+  @Eq (Result (ProverRwP7CurrentFieldSource.aspis_core.field.QM31 × ProverRwP7CurrentFieldSource.aspis_core.field.QM31))
+    (loop (fun x => PV_CB_MaskSource.state_only_hiding.selected_mask_linears_loop.body point x.1 x.2.1 x.2.2)
+      (before 0#usize, s, weighted))
+    (finite point fuel 0#usize s weighted)
+but is expected to have type
+  @Eq (Result (ProverRwP7CurrentFieldSource.aspis_core.field.QM31 × ProverRwP7CurrentFieldSource.aspis_core.field.QM31))
+    (loop
+      (fun x => do
+        let (o, iter1) ←
+          core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+              (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) x.1
+        match o with
+          | none => ok (done (x.2.1, x.2.2))
+          | some variable1 => do
+            let q ← Array.index_usize point variable1
+            let suffix1 ← x.2.1.add q
+            if (variable1 != 0#usize) = true then do
+                let weighted1 ← x.2.2.add suffix1
+                ok (cont (iter1, suffix1, weighted1))
+              else ok (cont (iter1, suffix1, x.2.2)))
+      (before 0#usize, s, weighted))
+    (finite point fuel 0#usize s weighted)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskLinearsFinite.lean:43:15: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskLinearsFinite.lean:43:48: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CB_MaskLinearsFinite.lean:50:82: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [zero, bne_self_eq_false, Bool.false_eq_true, if_false, ̲bind_tc_ok,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_CB_MaskLinearsFinite.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
