@@ -1,0 +1,29 @@
+import JFq_WeightReads
+import JFq_WeightRestore
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFq_Weights
+open Aeneas Aeneas.Std Result AspisR1Stage2
+
+theorem length : JFq_WeightReads.tail00.length=64 := by
+  simp only [JFq_WeightReads.tail00,JFq_WeightBlock00.values,JFq_WeightReads.tail01,JFq_WeightBlock01.values,JFq_WeightReads.tail02,JFq_WeightBlock02.values,JFq_WeightReads.tail03,JFq_WeightBlock03.values,JFq_WeightReads.tail04,JFq_WeightBlock04.values,JFq_WeightReads.tail05,JFq_WeightBlock05.values,JFq_WeightReads.tail06,JFq_WeightBlock06.values,JFq_WeightReads.tail07,JFq_WeightBlock07.values,JFq_WeightReads.tail08,JFq_WeightBlock08.values,JFq_WeightReads.tail09,JFq_WeightBlock09.values,JFq_WeightReads.tail10,JFq_WeightBlock10.values,JFq_WeightReads.tail11,JFq_WeightBlock11.values,JFq_WeightReads.tail12,JFq_WeightBlock12.values,JFq_WeightReads.tail13,JFq_WeightBlock13.values,JFq_WeightReads.tail14,JFq_WeightBlock14.values,JFq_WeightReads.tail15,JFq_WeightBlock15.values,
+    List.length_append,List.length_cons,List.length_nil]
+
+def value : alloc.vec.Vec aspis_core.field.QM31 :=
+  ⟨JFq_WeightReads.tail00,by rw [length];scalar_tac⟩
+
+theorem source (initial : alloc.vec.Vec aspis_core.field.QM31) (size : initial.val.length=64) :
+    CheckpointBytes4Ops.readWeights JFx_NativeBytes.checkpoint 712#usize initial=
+      ok (.Ok (value,1736#usize)) := by
+  have run : Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK
+      JFx_NativeBytes.checkpoint initial.val.length 712#usize=
+        ok (.Ok (JFq_WeightReads.tail00,1736#usize)) := by
+    rw [size]
+    exact JFq_WeightReads.source00
+  exact (T2Nat_WeightSequence.weights JFx_NativeBytes.checkpoint 712#usize initial).symm.trans
+    (JFq_WeightRestore.source _ _ _ initial JFq_WeightReads.tail00 (by rw [length,size]) run)
+
+#print axioms length
+#print axioms source
+end AspisR1.JFq_Weights
+end

@@ -1,0 +1,29 @@
+import JFq_ReadSequence
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFq_WeightRestore
+open Aeneas Aeneas.Std Result AspisR1Stage2
+
+theorem source (bytes : Slice U8) (start finish : Usize)
+    (initial : alloc.vec.Vec aspis_core.field.QM31)
+    (xs : List aspis_core.field.QM31) (size : xs.length=initial.val.length)
+    (run : Port5Q2_ReaderWeights.reads CheckpointBytes3Reader.readK bytes initial.val.length start=
+      ok (.Ok (xs,finish))) :
+    Port5Q2_ReaderWeights.weights CheckpointBytes3Reader.readK bytes start initial=
+      ok (.Ok (⟨xs,by rw [size];exact initial.property⟩,finish)) := by
+  rw [Port5Q2_ReaderWeights.exact,run]
+  simp only [bind_tc_ok,Aeneas.Std.uncurry]
+  have contents:=Port5Q2_ReaderWeights.write_shape [] initial.val xs
+    (by simpa only [List.nil_append] using initial.property) size
+  have same : (⟨(Port5Q2_ReaderWeights.write initial.deref 0 xs).val,
+      (Port5Q2_ReaderWeights.write initial.deref 0 xs).property⟩ : alloc.vec.Vec aspis_core.field.QM31)=
+      ⟨xs,by rw [size];exact initial.property⟩ := by
+    apply Subtype.ext
+    simpa only [List.nil_append,List.length_nil,alloc.vec.Vec.deref] using contents
+  exact congrArg (fun v : alloc.vec.Vec aspis_core.field.QM31 =>
+    (ok (.Ok (v,finish)) : Result (core.result.Result
+      (alloc.vec.Vec aspis_core.field.QM31 × Usize) verifier.Error))) same
+
+#print axioms source
+end AspisR1.JFq_WeightRestore
+end
