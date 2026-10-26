@@ -41,7 +41,16 @@ for r in rows:
  if r['recount_status']=='CLOSED-ON-CANDIDATE':
   line=next(x for x in lines if x.startswith("'"+r['theorem']+"' "));assert 'sorryAx' not in line
   if 'depends on axioms:' in line:assert set(re.search(r'\[(.*)\]',line)[1].split(', '))<={'propext','Classical.choice','Quot.sound'}
+# Bind actual source snapshots to successful compile inputs, not theorem names alone.
+summary=json.loads((P/'inputs/dict/docs/research/100bit-spend-path-20261013/evidence/prover-dict-20261026/reach7/lean-summary.json').read_text())
+source_bindings=[]
+for name in ['PDict_PureDictionary','PDict_CodecDictionary','PDict_CurrentCaller','PDict_PureSource','PDict_ConstantsSource','PDict_CodecSource']:
+ source=P/'inputs/dict/docs/research/v8-r0-zk-20261009/lean/R1Z'/(name+'.lean.txt')
+ sha=hashlib.sha256(source.read_bytes()).hexdigest()
+ matched=[a for a in summary['attempts'] if a['module']=='R1Z/'+name and a['exit_status']==0 and a['source_sha256']==sha]
+ assert matched,name
+ source_bindings.append({'module':'R1Z/'+name,'source_sha256':sha,'successful_attempt':matched[-1]['attempt']})
 changed=git('diff','--name-only',base).decode().splitlines()
 assert all(f=='design/PRIVACY-LEDGER-20261026.md' or f.startswith('evidence/privacy-recount-20261026/') for f in changed)
-result=dict(result='PASS',source_revision=git('rev-parse','HEAD').decode().strip(),baseline_revision=base,original_ledger_sha256=hashlib.sha256(old).hexdigest(),original_ledger_bytes=len(old),original_rows_preserved=399,audit_rows=400,source_objects_checked=captured,candidate_closure_axiom_lines_checked=13,lean_invocations=0,kani_invocations=0,host_runs=0,final_manifest_replay=False,claims='bookkeeping, original preservation and pinned evidence provenance only',totals=tot)
+result=dict(result='PASS',source_revision=git('rev-parse','HEAD').decode().strip(),baseline_revision=base,original_ledger_sha256=hashlib.sha256(old).hexdigest(),original_ledger_bytes=len(old),original_rows_preserved=399,audit_rows=400,source_objects_checked=captured,candidate_closure_axiom_lines_checked=13,source_compile_bindings=source_bindings,lean_invocations=0,kani_invocations=0,host_runs=0,final_manifest_replay=False,claims='bookkeeping, original preservation and pinned evidence provenance only',totals=tot)
 (P/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k] for k in ['result','original_rows_preserved','audit_rows','source_objects_checked','candidate_closure_axiom_lines_checked','lean_invocations','kani_invocations']}))
