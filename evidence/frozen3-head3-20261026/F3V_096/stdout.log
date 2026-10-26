@@ -1,0 +1,95 @@
+F3V_PairLog.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).2,
+      (SdkC_Source.run (F3U_Oracle.hashv H)
+          (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+          []).1).2
+in the target expression
+  eval H
+      (SdkC_Oracle.program
+        (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+          (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).2,
+      (SdkC_Source.run (F3U_Oracle.hashv H)
+          (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+          []).1)
+
+F C : Type
+c : Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+semantic : Port1_Driver.Semantic
+pub proof : Slice U8
+H : Bytes → State
+accepted : (eval H (DrvC_PairProgram.source c hashv semantic pub proof)).2 = true
+saved : alloc.vec.Vec U8
+first :
+  (eval H
+        (GExp_Experiment.first (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+          hashv (currentDigest c)
+          { semantic := AspisS6CurrentVerifierCarrier.toPublic semantic, pub := pub, proof := proof,
+            split := 10#usize })).2 =
+    ok (core.result.Result.Ok saved)
+second :
+  (eval H
+        (GExp_Experiment.second (stage c) c.reserved hashv (digest c)
+          { pub := pub, proof := proof, checkpoint := saved.deref })).2 =
+    ok (core.result.Result.Ok ())
+one :
+  eval H
+      (SdkC_Oracle.program
+        (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+          (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).2,
+      (SdkC_Source.run (F3U_Oracle.hashv H)
+          (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+          []).1)
+two :
+  eval H (SdkC_Oracle.program (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref)) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+      (SdkC_Source.run (F3U_Oracle.hashv H)
+          (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).1)
+oneValue :
+  (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+              []).2,
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+            []).1).2 =
+    ok (core.result.Result.Ok saved)
+twoValue :
+  (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+        (SdkC_Source.run (F3U_Oracle.hashv H)
+            (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).1).2 =
+    ok (core.result.Result.Ok ())
+⊢ eval H (DrvC_PairProgram.source c hashv semantic pub proof) =
+    (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) pub proof saved.deref) []).2,
+      true)
+'AspisR1.F3V_PairLog.evaluated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
