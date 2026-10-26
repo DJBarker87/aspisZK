@@ -13,6 +13,6 @@ for a in map(int,sys.argv[1:]):
  x=json.loads((d/f'{a}-input.json').read_text());log=(d/f'out-{a}.log').read_text();tim=(d/f'time-{a}.log').read_text()
  assert hashlib.sha256((d/f'{a}.lean.txt').read_bytes()).hexdigest()==x['source_sha256']
  reports=re.findall(r"'([^'\n]+)' (depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",log)
- x.update(exit_status=int(re.search(r'^exit=(\d+)',log,re.M)[1]),wall=re.search(r'Elapsed \(wall clock\) time.*?: (.*)',tim)[1],peak_rss_kib=int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',tim)[1]),swaps=int(re.search(r'Swaps: (\d+)',tim)[1]),print_axioms=[dict(name=n,axioms=re.findall(r'[\w.]+',s.split('[',1)[1][:-1]) if '[' in s else [],report=s) for n,s in reports],errors=[z for z in log.splitlines() if 'error:' in z],qualification='Focused cached axiom audit or proof, not a full frozen manifest replay.')
+ x.update(exit_status=int(re.search(r'^exit=(\d+)',log,re.M)[1]),wall=re.search(r'Elapsed \(wall clock\) time.*?: (.*)',tim)[1],peak_rss_kib=int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',tim)[1]),swaps=int(re.search(r'Swaps: (\d+)',tim)[1]),print_axioms=[dict(name=n,axioms=re.findall(r'[\w.]+',s.split('[',1)[1][:-1]) if '[' in s else [],report=s) for n,s in reports],errors=[z for z in log.splitlines() if re.search(r'error[:(]',z)],qualification='Focused cached axiom audit or proof, not a full frozen manifest replay.')
  (d/'receipt.json').write_text(json.dumps(x,indent=2)+'\n')
  print(a,x['exit_status'],x['wall'],x['peak_rss_kib'],'reports',len(reports),'errors',len(x['errors']))

@@ -24,8 +24,13 @@ Audited 321 selected family modules in 1188 source modules. Every declaration ow
 |---|---|---|
 | Backend diagnostic `Aeneas.Std.core.fmt.Formatter` | forbidden axiom itself | unchanged; unselected |
 | 12920 candidate/root/type-slot reports | subset of `propext`, `Classical.choice`, `Quot.sound` | unchanged; no dependency to eliminate |
-| `ProverRwFull.ExternalFuns` | none | none |
+| `ProverRwFull.ExternalFuns` | `propext, Classical.choice, Quot.sound` | unchanged |
 | `ProverRwP6BodyData.refinement_of_data` | standard subset (full exact list in receipt) | unchanged |
+
+| Attempt / target | Exit | Wall | Peak RSS KiB | Swaps | Revision | Axioms |
+|---|---:|---|---:|---:|---|---|
+| J26202 `R1Z/PDict_FormatterRoots262` | 1 | 0:01.98 | 4309320 | 0 | 41e05299e9 | nine standard-only reports; four unavailable-name errors |
+| J26203 `R1Z/PDict_FormatterRoots262` | 0 | 0:01.76 | 4317144 | 0 | 41e05299e9 | nine standard-only/empty reports, including headline |
 
 ## Ledger disposition
 
@@ -35,7 +40,7 @@ Before: both OPEN under recount 2; D203 did not justify native type27 reduction.
 
 ## Route and existing symbolic obligations
 
-Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mechanical axiom target. The preferred avoidance route already exists in the pinned candidate: `PDict_FmtPublicationFrame.publication_frame` (namespace `R1Z.PDict_FmtErase`) factors publication before `erase_420`; `PDict_FmtRetryComplete.erase_425` uses `fixed_equal`. Both are in the audited closure. The stale failed `PDict_FmtErase26` source is not imported; its split successors are. No large-term reduction was attempted.
+Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mechanical axiom target. The preferred avoidance route already exists in the pinned candidate: `PDict_FmtPublicationFrame.publication_frame` (namespace `R1Z.PDict_FmtErase`) factors publication before `erase_420`; `PDict_FmtRetryComplete.erase_425` uses `fixed_equal`. Those files exist on the candidate branch but are not imported by the selected dictionary closure; no audit credit is claimed for those unimported files. The stale failed `PDict_FmtErase26` source is not imported; its split successors are. No large-term reduction was attempted.
 
 ## Receipts and budget
 
@@ -46,7 +51,7 @@ Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mecha
 
 J26200 is charged. J26201 changed the audit algorithm, not proof declarations. Caps: Lean -M7000, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax128 through the unchanged shared launcher. One scope at a time. Raw stdout, GNU time, SHA, dependency fingerprint and full axiom reports are retained per attempt. Admission logs are retained separately. No Kani invocation yet.
 
-The focused explicit headline/symbolic-root audit is pending reservation admission; J26201 already checks every candidate family declaration. Target not yet established.
+J26203 completes the focused explicit endpoint check: all nine reports are standard-only or empty, including `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`. J26202 was rejected solely for four unimported older symbolic-route names; those names were removed, no proof changed. All 321 family source hashes match this worktree (213) or the pinned read-only sibling git revisions (108), with zero mismatches; see `worktree-source-binding.json`. Target not yet established.
 
 ## Candidate family modules
 
