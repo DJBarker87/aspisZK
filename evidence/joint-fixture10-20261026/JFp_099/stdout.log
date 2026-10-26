@@ -1,0 +1,28 @@
+'AspisR1.JFp_Query00Sample.word00' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word01' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word02' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word03' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word04' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word05' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word06' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.word07' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFp_Query00Sample.rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFp_Query00Sample.digits' depends on axioms: [propext]
+JFp_Query00Sample.lean:34:75: error: Type mismatch
+  ok value
+has type
+  Result aspis_core.field.QM31
+but is expected to have type
+  Result AspisR1CircleSampleWrapper.field.QM31
+JFp_Query00Sample.lean:35:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+x✝ :
+  ∃ q,
+    AspisR1PublicPreparation.sampler.qm31_sample (encodeState JFp_Query00Source.block) = ok q ∧
+      ExtractedQM31SamplerCarrier.CurrentCanonicalQM
+          (ExtractedQM31SamplerCarrier.toCurrent (SamplerTransport.toOld q)) ∧
+        ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) =
+          SamplerNatModel.qm31Digits (SourceSamplerByteRank.rank (encodeState JFp_Query00Source.block))
+⊢ sorry
+JFp_Query00Sample.lean:48:14: error(lean.unknownIdentifier): Unknown constant `source`
