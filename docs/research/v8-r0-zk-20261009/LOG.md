@@ -10189,3 +10189,24 @@ Kani) to classify each family as pure-source or native-association and discharge
 both fixtures. Six jobs running: rw17, dict10, runjoin5, srcid2, cb2, cb3. Second quiet window
 17:45-18:15 UTC agreed (Stream A's systemd-run shim covers every bare launch; owner bypass for the
 timing driver). Privacy target not yet established.
+
+## D214 (Stream B, 2026-10-26 17:50): srcid2 stopped on a source-domain fact that is not a row counterexample; ruling, srcid3 launched
+
+pv-srcid2 (`codex/pv-srcid2-20261026`, merged into research; 4/100 Lean, 11 Kani invocations with two
+timeouts and one configuration waste, no completed verification; standard axioms; no crates/programs
+change; one appended cfg(kani) diagnostic harness in tools/r1-builder-reference/records.rs): the five
+`PV_Src_Premises` families stay 5 → 5. publicCorr is REDUCED to the exact seven-field PubCorr of the
+returned record, admission to RspendPlus on the selected record, row_call to the installed-transport
+equality; compile_call and words stay OPEN. The worker stopped on a "checked source counterexample":
+an optimized native diagnostic importing the exact mapper, pair_trace, poseidon2 and spend files with
+no stubs shows CopyRecords::new and banks succeed with merged[10][1010] = 2^30, outside WitnessOk's
+range. Lead ruling (D214): that refutes only the UNCONDITIONAL raw-mapper lemma the worker chose; the
+ledger rows V152-V154 and the words family are statements about the selected inputs of the deployed
+caller, so words is REDUCED to `PV_Src_RecordReference.Checked` on those inputs and the condition is
+to be discharged from the deployed input validation (client route D162 and/or canonical admission),
+not treated as a stop. The counterexample harness is retained as evidence (AGENTS §7). pv-srcid3
+launched from research with the unused 96 + 4 Lean and 12 Kani (IDs 25300-25599): discharge Checked
+for both fixtures and the canonical instance, then words by unstubbed P6 equality, then publicCorr's
+pure sub-obligations and compile_call's pure callees. No endpoint premise removed. Six jobs running:
+rw17, dict10, runjoin5, srcid3, cb2, cb3. Quiet window 2 (17:45-18:15 UTC) in progress. Privacy
+target not yet established.
