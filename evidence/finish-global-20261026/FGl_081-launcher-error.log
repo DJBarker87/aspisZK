@@ -1,0 +1,19 @@
+At the reservation step, before systemd-run or any compiler launch:
+scp: /home/dombarker/project-offloads/codex-cx-sound-int2-20261025/FGl_081-reservation.json: No such file or directory
+Traceback (most recent call last):
+  File "<stdin>", line 13, in <module>
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['scp', '-q', 'dombarker@100.108.41.90:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/FGl_081-reservation.json', 'evidence/finish-global-20261026']' returned non-zero exit status 1.
+
+Reservation command:
+ssh dombarker@100.108.41.90 'python3 /home/dombarker/project-offloads/codex-cx-s2x-20261023/S2X_reservation.py /home/dombarker/project-offloads/codex-cx-sound-int2-20261025/FGl_081-reservation.json'
+
+The orchestration captured the reservation process stdout/stderr in memory,
+then failed during scp before persisting those streams. They are unavailable.
+Therefore the original barrier exception/cause is UNKNOWN. In particular,
+no FileNotFoundError on a vanished cgroup or aggregate-reservation refusal
+can be asserted as the cause. No authorised retry exception is established.
+No FGl_081 compiler command or capped scope was launched. No infrastructure
+repair, bypass, retry, or cap increase was attempted. Stop required by
+local-lean.txt rule 5; lead must investigate the launcher/admission issue.
