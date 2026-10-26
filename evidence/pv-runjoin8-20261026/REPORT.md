@@ -158,3 +158,24 @@ it can be checked independently of the operational-world closure.
 51,942,260,736 bytes + requested 8,589,934,592 > safe 59,055,800,320.
 No scope/Lean/Kani run occurred; zero charge; next ID is 35002 after the
 required three-minute wait. No barrier bypass or cap increase is used.
+
+## Accepted pure prefix proof and dependency replay
+
+Prefix passed at 35003: wall .63 s, peak 1,500,651,520 bytes, swap 0;
+its five theorem axiom sets are subsets of propext/Quot.sound. It proves
+strict-prefix causality and its exact factorization characterization, not
+actual deployed frame installation. 35002's reserved-keyword parser failure
+and its recovery sorryAx output are retained and excluded from accepted results.
+The function/binders were renamed before 35003; no failed source was resent.
+
+The missing owner/caller prerequisites passed as focused individual replays.
+35006 found the additional missing ProverRwSampler.Funs; the exact archived
+Types and tracked adapted Funs were restored by charged 35007/35008 compiles,
+then arithmetic/caller dependents passed with changed import inputs. No new
+maxHeartbeats/maxRecDepth option was added; generated source options were
+preserved unchanged. Every accepted axiom report is standard.
+
+35015 and 35029 were pre-transfer reservation refusals, zero charge. Each
+triggers a three-minute wait and a new ID. At the 35029 checkpoint: 27 Lean
+attempts, 24 accepted, three retained failures; 0 Kani. The dependency replay
+is not a new privacy premise removal or a frozen manifest/closure release.

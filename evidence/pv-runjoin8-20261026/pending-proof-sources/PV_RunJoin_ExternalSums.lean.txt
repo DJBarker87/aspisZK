@@ -20,10 +20,10 @@ theorem word_value (state : State) (c : Nat) :
       state.val[c+8]!.val + state.val[c+12]!.val :=
   sum4_val _ _ _ _
 
-/-- Exact source sums, by a four-write prefix induction. No arithmetic table,
+/-- Exact source sums, by a four-write prior induction. No arithmetic table,
 input canonicality, callee-success or source callback hypothesis is used. -/
 theorem loop (state : State) (sums : Sums) (col : Usize) (hc : col.val ≤ 4)
-    (prefix : Prefix sums (target state) col.val) :
+    (prior : Prefix sums (target state) col.val) :
     AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop1 state sums col =
       ok (target state) := by
   generalize he : 4-col.val = remaining
@@ -52,11 +52,11 @@ theorem loop (state : State) (sums : Sums) (col : Usize) (hc : col.val ≤ 4)
       have hn := next_val col (by omega)
       apply ih (4-(Usize.wrapping_add col 1#usize).val) (by omega)
         _ (Usize.wrapping_add col 1#usize) (by omega)
-      · simpa only [hn] using prefix_step sums (target state) col (by simpa using hit) prefix
+      · simpa only [hn] using prefix_step sums (target state) col (by simpa using hit) prior
       · rfl
     · rw [if_neg (by simpa [UScalar.lt_equiv] using hit)]
       have equal : col.val = (4#usize : Usize).val := by simp;omega
-      rw [prefix_done sums (target state) (by simpa only [equal] using prefix)]
+      rw [prefix_done sums (target state) (by simpa only [equal] using prior)]
 
 theorem entry (state : State) :
     AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop1 state

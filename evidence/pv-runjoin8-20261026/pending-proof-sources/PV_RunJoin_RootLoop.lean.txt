@@ -21,7 +21,7 @@ theorem step (target roots : Roots)
     (hit : iter.start.val < 20)
     (next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter =
       ok (some iter.start,after))
-    (prefix : Prefix roots target (iter.start.val+1)) :
+    (prior : Prefix roots target (iter.start.val+1)) :
     pair_trace.pair_empty_roots_loop iter roots =
       pair_trace.pair_empty_roots_loop after
         (roots.set (Usize.wrapping_add iter.start 1#usize)
@@ -30,7 +30,7 @@ theorem step (target roots : Roots)
   simp only [bind_tc_ok]
   rw [index_ok_gen roots iter.start (by simp;omega)]
   simp only [bind_tc_ok]
-  rw [prefix iter.start.val (by omega) (by simp;omega),parent ⟨iter.start.val,hit⟩]
+  rw [prior iter.start.val (by omega) (by simp;omega),parent ⟨iter.start.val,hit⟩]
   simp only [bind_tc_ok,lift]
   rw [update_gen _ _ _ (by rw [next_val iter.start (by omega)];simp;omega)]
   rfl
@@ -41,7 +41,7 @@ theorem loop (target : Roots)
         ok target.val[l.val+1]!)
     (iter : core.ops.range.Range Usize) (roots : Roots)
     (hend : iter.end = 20#usize) (hstart : iter.start.val ≤ 20)
-    (prefix : Prefix roots target (iter.start.val+1)) :
+    (prior : Prefix roots target (iter.start.val+1)) :
     pair_trace.pair_empty_roots_loop iter roots = ok target := by
   generalize he : 20-iter.start.val = remaining
   induction remaining using Nat.strong_induction_on generalizing iter roots with
@@ -49,14 +49,14 @@ theorem loop (target : Roots)
     by_cases hit : iter.start.val < 20
     · obtain ⟨after,hnext,hval,hafterend⟩ :=
         PV_Src_Forest_BankRange.next_some iter (by simpa [hend] using hit)
-      rw [step target roots parent iter after hit hnext prefix]
+      rw [step target roots parent iter after hit hnext prior]
       have index_val := next_val iter.start (by omega)
       have value : target.val[iter.start.val+1]! =
           target.val[(Usize.wrapping_add iter.start 1#usize).val]! := by rw [index_val]
       rw [value]
       apply ih (20-after.start.val) (by omega) after _ (hafterend.trans hend) (by omega)
       · have pref : Prefix roots target (Usize.wrapping_add iter.start 1#usize).val := by
-          simpa only [index_val] using prefix
+          simpa only [index_val] using prior
         simpa only [index_val,hval] using prefix_step roots target
           (Usize.wrapping_add iter.start 1#usize) (by rw [index_val];simp;omega) pref
       · rfl
@@ -64,7 +64,7 @@ theorem loop (target : Roots)
         PV_Src_Forest_BankRange.next_none iter (by simpa [hend] using (show 20 ≤ iter.start.val by omega))]
       simp only [bind_tc_ok]
       have hv : iter.start.val+1 = (21#usize : Usize).val := by simp;omega
-      rw [prefix_done roots target (by simpa only [hv] using prefix)]
+      rw [prefix_done roots target (by simpa only [hv] using prior)]
 
 /-- Only the initial node and a uniform twenty-level parent law remain. The
 loop, writes, indices and final table equality are ordinary source theorems. -/

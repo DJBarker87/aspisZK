@@ -15,7 +15,7 @@ def Suffix (original current : State) (lane : Usize) : Prop :=
   ∀ j, j < 16 → lane.val ≤ j → current.val[j]! = original.val[j]!
 
 theorem loop (original current : State) (lane : Usize) (hl : lane.val ≤ 16)
-    (prefix : Prefix current (target original) lane.val)
+    (prior : Prefix current (target original) lane.val)
     (suffix : Suffix original current lane) :
     AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop2 current
       (PV_RunJoin_ExternalSums.target original) lane = ok (target original) := by
@@ -46,14 +46,14 @@ theorem loop (original current : State) (lane : Usize) (hl : lane.val ≤ 16)
       have hn := next_val lane (by omega)
       apply ih (16-(Usize.wrapping_add lane 1#usize).val) (by omega)
         _ (Usize.wrapping_add lane 1#usize) (by omega)
-      · simpa only [hn] using prefix_step current (target original) lane (by simpa using hit) prefix
+      · simpa only [hn] using prefix_step current (target original) lane (by simpa using hit) prior
       · intro j hj hafter
         rw [set_get _ _ _ _ (by simpa using hit),if_neg (by rw [hn] at hafter;omega)]
         exact suffix j hj (by rw [hn] at hafter;omega)
       · rfl
     · rw [if_neg (by simpa [UScalar.lt_equiv] using hit)]
       have equal : lane.val = (16#usize : Usize).val := by simp;omega
-      rw [prefix_done current (target original) (by simpa only [equal] using prefix)]
+      rw [prefix_done current (target original) (by simpa only [equal] using prior)]
 
 theorem entry (original : State) :
     AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop2 original

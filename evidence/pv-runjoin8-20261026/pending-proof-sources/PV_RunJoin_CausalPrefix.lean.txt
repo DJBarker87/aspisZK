@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_Prefix
 import R1Z.PV_RunJoin_CompletedWorld
 import R1Z.PV_RunJoin_LedgerWorld
 set_option autoImplicit false
@@ -13,44 +14,42 @@ abbrev Tape := Fin 128 → Raw
 function argument has no address for the current or any future raw draw. -/
 abbrev Prefix (i : Fin 128) := {j : Fin 128 // j.val < i.val} → Raw
 
-def prefix (i : Fin 128) (t : Tape) : Prefix i := fun j => t j.val
+def restrictTape (i : Fin 128) (t : Tape) : Prefix i := fun j => t j.val
 
 theorem prefix_eq (i : Fin 128) (t u : Tape)
     (same : ∀ j : Fin 128, j.val < i.val → t j = u j) :
-    prefix i t = prefix i u := by
-  funext j
-  exact same j.val j.property
+    restrictTape i t = restrictTape i u := by
+  exact PV_RunJoin_Prefix.prefix_eq i t u same
 
 /-- The residual world may include all fixed prior public context, oracle
 state, failure tags, files, time and worker replies. This construction does
 not assert that the actual extracted producer factors through Prefix. -/
 def frame {Rest Context : Type}
     (produce : (i : Fin 128) → Prefix i → Rest → Context)
-    (i : Fin 128) (c : Tape × Rest) : Context := produce i (prefix i c.1) c.2
+    (i : Fin 128) (c : Tape × Rest) : Context := produce i (restrictTape i c.1) c.2
 
 theorem causal {Rest Context : Type}
     (produce : (i : Fin 128) → Prefix i → Rest → Context)
     (i : Fin 128) (t u : Tape) (rest : Rest)
     (same : ∀ j : Fin 128, j.val < i.val → t j = u j) :
     frame produce i (t,rest) = frame produce i (u,rest) := by
-  exact congrArg (fun p => produce i p rest) (prefix_eq i t u same)
+  exact PV_RunJoin_Prefix.causal produce i t u rest same
 
-/-- Fill only coordinates absent from the prefix with a fixed zero. This is
+/-- Fill only coordinates absent from the restrictTape with a fixed zero. This is
 used to prove an equivalence, not to change any runtime's execution tape. -/
 def extend (i : Fin 128) (p : Prefix i) : Tape :=
   fun j => if h : j.val < i.val then p ⟨j,h⟩ else 0
 
 theorem extend_prefix (i : Fin 128) (t : Tape)
     (j : Fin 128) (before : j.val < i.val) :
-    extend i (prefix i t) j = t j := by
-  simp only [extend,dif_pos before,prefix]
+    extend i (restrictTape i t) j = t j := by
+  exact PV_RunJoin_Prefix.extend_prefix i t j before
 
 theorem prefix_extend (i : Fin 128) (p : Prefix i) :
-    prefix i (extend i p) = p := by
-  funext j
-  simp only [prefix,extend,dif_pos j.property]
+    restrictTape i (extend i p) = p := by
+  exact PV_RunJoin_Prefix.prefix_extend i p
 
-/-- Causality is exactly factorization through the strict prefix. This can be
+/-- Causality is exactly factorization through the strict restrictTape. This can be
 used to audit an existing frame without quietly replacing it by a new one. -/
 theorem causal_iff_factor {Rest Context : Type}
     (original : Fin 128 → Tape × Rest → Context) :
@@ -58,13 +57,8 @@ theorem causal_iff_factor {Rest Context : Type}
       (∀ j : Fin 128, j.val < i.val → t j = u j) →
         original i (t,rest) = original i (u,rest)) ↔
     (∀ (i : Fin 128) (t : Tape) (rest : Rest),
-      original i (t,rest) = original i (extend i (prefix i t),rest)) := by
-  constructor
-  · intro causal i t rest
-    exact causal i t (extend i (prefix i t)) rest
-      (fun j before => (extend_prefix i t j before).symm)
-  · intro factor i t u rest same
-    rw [factor i t rest,factor i u rest,prefix_eq i t u same]
+      original i (t,rest) = original i (extend i (restrictTape i t),rest)) := by
+  exact PV_RunJoin_Prefix.causal_iff_factor original
 
 /-- Construct the initialized world with the ledger taken from the residual
 coordinate. Replies may retain error tags and partial writes. No availability,
