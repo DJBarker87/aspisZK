@@ -1,0 +1,105 @@
+NP6_ClaimsModel.lean:71:13: error: unsolved goals
+case ok.Ok.Ok.unit
+pre : r1_wire.Prefix
+vr : r1_wire.ValidatedRecord
+h :
+  (ClaimsUnrolledFinish.external (calls (core.result.Result.Ok PUnit.unit))).validated pre 25#u8 =
+    ok (core.result.Result.Ok vr)
+⊢ (do
+      let r1 ←
+        aspis_core.r0.heap.filled
+            { reserve := fun {T} x before x_1 => ok (core.result.Result.Ok PUnit.unit, before),
+              intoBox := fun {T} x before => ok before, validated := ClaimsUnrolledFinish.sourceRecord,
+              decode := ClaimsUnrolledFinish.sourceDecode }
+            (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy) 3#usize
+            (Array.repeat 29#usize { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+      let r2 ←
+        match r1 with
+          | core.result.Result.Ok value => ok (core.result.Result.Ok value)
+          | core.result.Result.Err error => do
+            let mapped ← candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once () error
+            ok (core.result.Result.Err mapped)
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r3 ←
+            if h : (↑val).length = 3 then ok (core.result.Result.Ok ⟨↑val, ⋯⟩) else ok (core.result.Result.Err val)
+          let r4 ←
+            match r3 with
+              | core.result.Result.Ok value => ok (core.result.Result.Ok value)
+              | core.result.Result.Err error => do
+                let mapped ←
+                  candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error.call_once
+                      () error
+                ok (core.result.Result.Err mapped)
+          let cf2 ←
+            match r4 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              decodeRows
+                { reserve := fun {T} x before x_1 => ok (core.result.Result.Ok PUnit.unit, before),
+                  intoBox := fun {T} x before => ok before, validated := ClaimsUnrolledFinish.sourceRecord,
+                  decode := ClaimsUnrolledFinish.sourceDecode }
+                vr
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+            residual) =
+    decodeRows
+      { reserve := fun {T} x before x_1 => ok (core.result.Result.Ok PUnit.unit, before),
+        intoBox := fun {T} x before => ok before, validated := ClaimsUnrolledFinish.sourceRecord,
+        decode := ClaimsUnrolledFinish.sourceDecode }
+      vr
+NP6_ClaimsModel.lean:59:20: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ClaimsModel.lean:60:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ClaimsModel.lean:67:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵ ̵zero, row_filled, mapError,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+            candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ClaimsModel.lean:73:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵,̵ ̵z̵e̵r̵o̵,̵[̲z̲e̲r̲o̲,̲ row_filled, mapError, ClaimsUnrolledFinish.external, calls, alloc.vec.Vec.deref,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲boxArray, core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NP6_ClaimsModel.lean:73:23: warning: This simp argument is unused:
+  row_filled
+
+Hint: Omit it from the simp argument list.
+  simp [h, zero, r̵o̵w̵_̵f̵i̵l̵l̵e̵d̵,̵ ̵mapError, ClaimsUnrolledFinish.external, calls, alloc.vec.Vec.deref,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲boxArray, core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NP6_ClaimsModel.filled_contents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NP6_ClaimsModel.row_clone' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NP6_ClaimsModel.row_filled' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NP6_ClaimsModel.reference_normalized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

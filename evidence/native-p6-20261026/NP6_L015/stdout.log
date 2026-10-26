@@ -1,0 +1,155 @@
+NP6_RecordShape.lean:29:104: error: unsolved goals
+claims : AspisR1PrefixAggregateParser.r1_wire.CLAIMS = ok 87#usize
+plus : 87#usize + 29#usize = ok 116#usize
+times : 116#usize * 32#usize = ok 3712#usize
+⊢ (match 25#u8 with
+    | 0#8#uscalar => ok (some (0#u8, 0#usize))
+    | 1#8#uscalar => ok (some (0#u8, 0#usize))
+    | 2#8#uscalar => ok (some (1#u8, 32#usize))
+    | 14#8#uscalar => ok (some (3#u8, 32#usize))
+    | 25#8#uscalar => ok (some (4#u8, 3712#usize))
+    | 26#8#uscalar => do
+      let i ← 29#usize * 32#usize
+      ok (some (5#u8, i))
+    | x =>
+      if 3#u8 ≤ 25#u8 then
+        if 25#u8 ≤ 13#u8 then ok (some (0#u8, 0#usize))
+        else
+          if 15#u8 ≤ 25#u8 then
+            if 25#u8 ≤ 24#u8 then do
+              let i ← 28#usize * 32#usize
+              ok (some (2#u8, i))
+            else ok none
+          else ok none
+      else
+        if 15#u8 ≤ 25#u8 then
+          if 25#u8 ≤ 24#u8 then do
+            let i ← 28#usize * 32#usize
+            ok (some (2#u8, i))
+          else ok none
+        else ok none) =
+    ok (some (4#u8, 3712#usize))
+NP6_RecordShape.lean:42:24: error(lean.unknownIdentifier): Unknown identifier `core.option.Option.ok_or`
+NP6_RecordShape.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  5#usize + 3712#usize
+in the target expression
+  (do
+      let r ←
+        AspisR1PrefixAggregateParser.core.option.Option.ok_or (some (4#u8, 3712#usize))
+            AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (tag, size) := val
+          do
+          let i1 ← 5#usize + size
+          if (frame.len != i1) = true then
+              ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+            else do
+              let i2 ← frame.index_usize 0#usize
+              if (i2 != tag) = true then
+                  ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag 25#u8))
+                else do
+                  let i3 ← frame.index_usize 1#usize
+                  let i4 ← frame.index_usize 2#usize
+                  let i5 ← frame.index_usize 3#usize
+                  let i6 ← frame.index_usize 4#usize
+                  let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+                  let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+                  if (i8 != size) = true then
+                      ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+                    else do
+                      let payload ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                            { start := 5#usize }
+                      if 25#u8 ≥ 14#u8 then do
+                          let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields 25#u8 payload
+                          let cf1 ←
+                            match r1 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf1 with
+                            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Slice U8) (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                        else ok (core.result.Result.Ok payload)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual) =
+    ok (core.result.Result.Ok payload)
+
+frame payload : Slice U8
+parsed :
+  (do
+      let r ←
+        AspisR1PrefixAggregateParser.core.option.Option.ok_or (some (4#u8, 3712#usize))
+            AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (tag, size) := val
+          do
+          let i1 ← 5#usize + size
+          if (frame.len != i1) = true then
+              ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+            else do
+              let i2 ← frame.index_usize 0#usize
+              if (i2 != tag) = true then
+                  ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag 25#u8))
+                else do
+                  let i3 ← frame.index_usize 1#usize
+                  let i4 ← frame.index_usize 2#usize
+                  let i5 ← frame.index_usize 3#usize
+                  let i6 ← frame.index_usize 4#usize
+                  let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+                  let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+                  if (i8 != size) = true then
+                      ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+                    else do
+                      let payload ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                            { start := 5#usize }
+                      if 25#u8 ≥ 14#u8 then do
+                          let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields 25#u8 payload
+                          let cf1 ←
+                            match r1 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf1 with
+                            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Slice U8) (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                        else ok (core.result.Result.Ok payload)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual) =
+    ok (core.result.Result.Ok payload)
+summed : 5#usize + 3712#usize = ok 3717#usize
+⊢ (↑frame).length = 3717
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (4 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.checked' depends on axioms: [propext]
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.add' depends on axioms: [propext]
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.mul' depends on axioms: [propext]
+'AspisR1.NP6_RecordShape.shape25' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NP6_RecordShape.record25_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NP6_RecordShape.on_parsed_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

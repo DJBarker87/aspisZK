@@ -1,0 +1,95 @@
+NP6_RecordShape.lean:45:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  5#usize + 3712#usize
+in the target expression
+  (let (tag, size) := (4#u8, 3712#usize)
+    do
+    let i1 ← 5#usize + size
+    if (frame.len != i1) = true then
+        ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+      else do
+        let i2 ← frame.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag 25#u8))
+          else do
+            let i3 ← frame.index_usize 1#usize
+            let i4 ← frame.index_usize 2#usize
+            let i5 ← frame.index_usize 3#usize
+            let i6 ← frame.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                      { start := 5#usize }
+                if 25#u8 ≥ 14#u8 then do
+                    let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields 25#u8 payload
+                    let cf1 ←
+                      match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+
+frame payload : Slice U8
+parsed :
+  (let (tag, size) := (4#u8, 3712#usize)
+    do
+    let i1 ← 5#usize + size
+    if (frame.len != i1) = true then
+        ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+      else do
+        let i2 ← frame.index_usize 0#usize
+        if (i2 != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag 25#u8))
+          else do
+            let i3 ← frame.index_usize 1#usize
+            let i4 ← frame.index_usize 2#usize
+            let i5 ← frame.index_usize 3#usize
+            let i6 ← frame.index_usize 4#usize
+            let i7 ← lift (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯))
+            let i8 ← lift (UScalar.cast UScalarTy.Usize i7)
+            if (i8 != size) = true then
+                ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length 25#u8))
+              else do
+                let payload ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame
+                      { start := 5#usize }
+                if 25#u8 ≥ 14#u8 then do
+                    let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields 25#u8 payload
+                    let cf1 ←
+                      match r1 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                          (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+                  else ok (core.result.Result.Ok payload)) =
+    ok (core.result.Result.Ok payload)
+summed : 5#usize + 3712#usize = ok 3717#usize
+⊢ (↑frame).length = 3717
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (25 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.checked' depends on axioms: [propext]
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.add' depends on axioms: [propext]
+'_private.NP6_RecordShape.0.AspisR1.NP6_RecordShape.mul' depends on axioms: [propext]
+'AspisR1.NP6_RecordShape.shape25' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NP6_RecordShape.record25_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NP6_RecordShape.on_parsed_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
