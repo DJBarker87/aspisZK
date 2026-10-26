@@ -197,3 +197,10 @@ run-joint.sh path absent. No compile ran, so25401 is zero charged. The task's
 own repo/kani-target and reservation scanner remain present. Awaiting lead
 replacement/restoration while continuing independent Kani obligations. No
 shared infrastructure is recreated or edited to bypass the missing launcher.
+
+Kani9–11 discharge the shipped common-validator projections, all unstubbed
+and unwind33: values448 checks, sibling words451, pair words452, zero failures.
+All three run through actual validate_common with exact runtime binding and an
+empty spent-nullifier set. These independently corroborate the extracted
+validation interface; they do not establish mapper equality, entry compiler
+success, super-root validation or installed input/public associations.

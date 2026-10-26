@@ -1,0 +1,41 @@
+import R1Z.PV_Src_CanonicalNormalize
+import R1Z.PV_Src_FrozenInput
+import R1Z.PV_Src_PathBits
+
+/-! A canonical selected carrier with path-consistent membership index. This
+supplies representation data, not equality to the installed native caller. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Src_PackedSelection
+open Aeneas Aeneas.Std Result R1J.SpendWitnessMap
+open BuilderForestAdmissionPort.pool_v1
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+def select (i : PV_Src_FrozenInput.Data (K := K)) : PV_Src_FrozenInput.Data (K := K) where
+  canonical := PV_Src_CanonicalNormalize.normalize i.canonical
+  index := PV_Src_PathIndex.index (PV_Src_CanonicalNormalize.normalize i.canonical).val.2
+  indexBound := by rw [PV_Src_CanonicalNormalize.public_eq]; exact i.indexBound
+  compiled := i.compiled
+  laneAnchor := i.laneAnchor
+  pool := i.pool
+  domain := i.domain
+  destination := i.destination
+
+theorem index_bound (i : PV_Src_FrozenInput.Data (K := K)) : (select i).index.val < 2^20 :=
+  PV_Src_PathIndex.bound _
+
+theorem checked (i : PV_Src_FrozenInput.Data (K := K)) :
+    PV_Src_RecordReference.Checked (PV_Src_FrozenInput.input (select i)) :=
+  PV_Src_FrozenInput.checked _
+
+theorem bits (i : PV_Src_FrozenInput.Data (K := K)) :
+    BuilderRecordsPath.bits (PV_Src_NativeDirections.reference
+      (PV_Src_FrozenInput.input (select i)).witness) =
+      (BuilderCanonical.rustWitness (select i).canonical.val.2).bits :=
+  PV_Src_PathBits.bits _
+
+#print axioms index_bound
+#print axioms checked
+#print axioms bits
+end R1Z.PV_Src_PackedSelection
