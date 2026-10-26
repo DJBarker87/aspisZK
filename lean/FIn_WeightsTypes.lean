@@ -35,27 +35,27 @@ structure circle.SecureCirclePoint where
   x : field.QM31
   y : field.QM31
 
-/-- [s9_actual_weights_new_box_candidate::Variant]
+/-- [s9_actual_weights_new_box_candidate::FInVariant]
     Source: 'src/lib.rs', lines 14:0-14:30
     Visibility: public -/
 @[discriminant isize]
-inductive Variant where
-| S1 : Variant
-| S2 : Variant
-| D : Variant
+inductive FInVariant where
+| S1 : FInVariant
+| S2 : FInVariant
+| D : FInVariant
 
-/-- [s9_actual_weights_new_box_candidate::Error]
+/-- [s9_actual_weights_new_box_candidate::FInError]
     Source: 'src/lib.rs', lines 17:0-17:29
     Visibility: public -/
 @[discriminant isize]
-inductive Error where
-| Allocation : Error
+inductive FInError where
+| Allocation : FInError
 
 /-- [s9_actual_weights_new_box_candidate::Weights]
     Source: 'src/lib.rs', lines 22:0-27:1
     Visibility: public -/
 structure Weights where
-  variant : Variant
+  variant : FInVariant
   factors : Array (Array (Array field.QM31 4#usize) 5#usize) 5#usize
   points : Array (Array field.QM31 10#usize) 3#usize
   extra : Array field.QM31 2#usize

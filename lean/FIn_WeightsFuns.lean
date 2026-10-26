@@ -262,7 +262,7 @@ def state_only_prefix.r0.statement_points
 /-- [s9_actual_weights_new_box_candidate::{s9_actual_weights_new_box_candidate::Weights}::box_from_parts]:
     Source: 'src/lib.rs', lines 51:4-53:9 -/
 def Weights.box_from_parts
-  (variant : Variant)
+  (variant : FInVariant)
   (factors : Array (Array (Array field.QM31 4#usize) 5#usize) 5#usize)
   (points : Array (Array field.QM31 10#usize) 3#usize)
   (extra : Array field.QM31 2#usize) :
@@ -452,9 +452,9 @@ def weights_new_loop1
     Source: 'src/lib.rs', lines 31:0-47:1
     Visibility: public -/
 def weights_new
-  (variant : Variant) (alpha : Array field.QM31 10#usize)
+  (variant : FInVariant) (alpha : Array field.QM31 10#usize)
   (z : Array circle.SecureCirclePoint 2#usize) :
-  Result (core.result.Result Weights Error)
+  Result (core.result.Result Weights FInError)
   := do
   let points ← state_only_prefix.r0.statement_points alpha
   let q ← Array.index_usize alpha 8#usize

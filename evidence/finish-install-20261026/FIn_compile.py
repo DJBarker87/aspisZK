@@ -10,7 +10,7 @@ attempt=f'FIn_{n:03}'
 assert not (P/attempt).exists(),attempt
 src=R/'lean'/f'{mod}.lean'; assert mod.startswith('FIn_')
 cfg=json.loads((R/'evidence/recount5-20261026/Rc5_001.json').read_text())
-paths=cfg['env']['LEAN_PATH'].split(':');paths.insert(1,'/home/dombarker/project-offloads/codex-cx-parse-final-20261026')
+paths=cfg['env']['LEAN_PATH'].split(':');paths.insert(1,'/home/dombarker/project-offloads/codex-cx-parse-final-20261026');paths.insert(1,B+'/F3Y_delivered')
 cfg.update(attempt=attempt,sources=[src.name],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused Rc6 same-witness proof or fresh atomic inventory; no arithmetic aggregation')
 cfg['env']['LEAN_PATH']=':'.join(paths);cfg['command'][-3:]=['-o',mod+'.olean',src.name]
 (P/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
