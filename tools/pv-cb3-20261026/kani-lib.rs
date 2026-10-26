@@ -48,6 +48,12 @@ mod checks {
     }
     #[kani::proof]
     #[kani::unwind(65)]
+    fn gamma_complete_split() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
     fn gamma_words_split() {
         let block:[u8;32]=kani::any();
         assert_eq!(super::source_fragments::words(&block),super::reference_split::words(block));
