@@ -10255,3 +10255,19 @@ refinement / V038 RunJoin), E1/E2, the L2 simulatable-trace rows (paused on the 
 interpretation) and the L3 receipt. Ledger effect at the next recount: the timing rows move to
 EVIDENCED. Six jobs running: rw17, dict10, runjoin6, srcid3, cb2, cb3. Privacy target not yet
 established.
+
+## D217 (Stream B, 2026-10-26 18:20): rw17 done: compression loop equals the owned reference, helper association still open; rw18 launched
+
+pv-rw17 (`codex/cx-prover-rw-20261023`, head c4eb7e74cb; 100/100 Lean, 73 passes; 20/20 Kani, 12
+passes, 8 timeouts; final frozen manifest 212 theorem reports plus the unchanged headline audit,
+standard axioms, 24.1 s, peak RSS 3.2 GiB, no swap; no production-source or pin change): V164 progressed
+to "the composed emitted iterator/arithmetic loop equals the closed owned reference for arbitrary
+slices and arity 16, preserving the full Result, accumulator, final power and bounds", consumed through
+the auxiliary caller into `BodyData.refinement_of_data` with an exact proof-byte/audit split criterion
+(V163). Still open: the association of the emitted combined-transition loop with the ORIGINAL whole
+Rust helper (V164) and the concrete model instance with both data comparisons (V163). Rows removed: 0;
+no endpoint premise weakened. pv-rw18 relaunched in the same worktree (IDs 25900-26199, 100 Lean/20
+Kani): prove the original helper's for-loop context equals the emitted loop by induction over the
+extracted definition (D188), perform the op223 join using pv-cb3's source law (op223/V240 is in cb3's
+list; no duplication), then V163's concrete instance for both fixtures. Six jobs running: rw18, dict10,
+runjoin6, srcid3, cb2, cb3. Privacy target not yet established.
