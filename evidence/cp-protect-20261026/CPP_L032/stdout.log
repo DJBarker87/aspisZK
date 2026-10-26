@@ -1,0 +1,56 @@
+CPP_Origin.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  CPP_Schedule.run ?n1 ?n2 ?copy ?allocator ?id ?H ?store ?schedule
+in the target expression
+  S2W_D189Wrappers.second n2 allocator (load out.1 { call := out.2.2, count := count2 }.call.layout) id
+      { call := out.2.2, count := count2 }.call.data { call := out.2.2, count := count2 }.call.slot
+      { call := out.2.2, count := count2 }.call.state =
+    ok (core.result.Result.Ok (post2, final2))
+
+A F C : Type
+c : DrvC_Installation.Configuration F C
+law : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (DrvC_Installation.sdk c) n1 n2 hashv
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+initial : Store
+schedule : Schedule A (Call A)
+count2 : ℕ
+genesis : ∀ (key : ℕ), (initial key).owner = id → ¬Initialized (initial key).data
+allowed : admissible n1 n2 copy allocator id H initial (erase schedule)
+post2 : Heap (ℕ → Record)
+final2 : A
+accepted2 :
+  let out := CPP_Schedule.run n1 n2 copy allocator id H initial schedule;
+  CPP_Invocation.second n2 allocator id out.1 { call := out.2.2, count := count2 } =
+    ok (core.result.Result.Ok (post2, final2))
+out : Hir_Schedule.Output (Call A) := CPP_Schedule.run n1 n2 copy allocator id H initial schedule
+magic : Hiq_ReleaseRoute.asq8 { call := out.2.2, count := count2 }.call.data
+count : { call := out.2.2, count := count2 }.count = 7
+native2 ordinary2 :
+  S2W_D189Wrappers.second n2 allocator (load out.1 { call := out.2.2, count := count2 }.call.layout) id
+      { call := out.2.2, count := count2 }.call.data { call := out.2.2, count := count2 }.call.slot
+      { call := out.2.2, count := count2 }.call.state =
+    ok (core.result.Result.Ok (post2, final2))
+⊢ let out := CPP_Schedule.run n1 n2 copy allocator id H initial schedule;
+  count2 = 7 ∧
+    ∃ writer,
+      search n1 copy allocator id (out.2.2.layout.handles 6).1 (out.1 (out.2.2.layout.handles 6).1).data
+            (Hir_ProvenanceModel.calls n1 n2 copy allocator id H initial (erase schedule)) =
+          some writer ∧
+        writer.site ∈ Hir_ProvenanceModel.calls n1 n2 copy allocator id H initial (erase schedule) ∧
+          Birth n1 copy allocator id (out.2.2.layout.handles 6).1 (out.1 (out.2.2.layout.handles 6).1).data
+              writer.site ∧
+            S2W_D189Wrappers.first n1 copy allocator (load writer.site.before writer.site.call.layout) id
+                  writer.site.call.data writer.site.call.state =
+                ok (core.result.Result.Ok (writer.saved, writer.post, writer.final)) ∧
+              S2W_D189Wrappers.second n2 allocator (load out.1 out.2.2.layout) id out.2.2.data out.2.2.slot
+                  out.2.2.state =
+                ok (core.result.Result.Ok (post2, final2))
+'AspisR1.CPP_Origin.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
