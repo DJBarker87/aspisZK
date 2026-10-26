@@ -4,8 +4,9 @@ import json,subprocess,sys,time,shlex,os
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
-n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('ARR_') or len(sys.argv)==4)
+n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=101 and (mod.startswith('ARR_') or len(sys.argv)==4)
 a=f'ARR_{n:03}'; assert not (P/a).exists()
+assert len(list(P.glob('ARR_*/receipt.json'))) < 100, 'Lean budget exhausted'
 cfg=json.loads((R/'evidence/account-rejoin2-20261026/ARQ_095.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time=('Compilation of one missing unchanged SCE/ARQ/Rc10 dependency; no generation or elimination' if len(sys.argv)==4 else 'Compilation of one focused ARR proof; no generation or elimination'))
 cfg['deps_fingerprint']={'scope':'ARR focused account interface / same-run composition on coherent SInt2 cached closure'}
