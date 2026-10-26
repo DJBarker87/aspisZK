@@ -19,3 +19,17 @@ mod compression_split {
 }
 
 pub fn trace_clone(x:&aspis_statement::state_only_trace::StateOnlyTraceFoundation)->aspis_statement::state_only_trace::StateOnlyTraceFoundation {x.clone()}
+
+pub fn reverse32(mut x:u32)->u32 {
+ let mut out=0u32;let mut i=0usize;
+ while i<32 {out=(out<<1)|(x&1);x>>=1;i=i.wrapping_add(1);}
+ out
+}
+#[cfg(kani)]
+mod reverse_checks {
+ #[kani::proof]
+ #[kani::unwind(34)]
+ fn all_raw_reverse() {
+  let x:u32=kani::any();assert_eq!(x.reverse_bits(),super::reverse32(x));
+ }
+}

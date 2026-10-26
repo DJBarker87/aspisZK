@@ -52,3 +52,23 @@ Late-public equality extraction succeeds, but Full's afterstate is the opaque
 `ExternalTypes.op20`. The emitted comparator reads its fields. No accessor map
 or equality-preservation premise is silently supplied to install op229. Its
 fresh source is retained for the representation owner; installation remains open.
+
+## Stage3: current trace clone supplied and consumed by actual body
+
+`TraceCloneSource` is the literal current derived clone, retaining native
+array/Vec clone calls and scalar trait binding. `TraceCloneTotal.source` proves
+its exact Result is `ok x` under the inherited library clone interpretation,
+with no read/success/output hypothesis. `TraceCloneInstall` supplies231 and
+proves independence of the old231 callback. The full caller now factors through
+`BodyCloneSource.afterReserve`, with exactly the proved clone substitution;
+`body-clone.py --check` pins every other line. `BodyClone.caller` passes14811.
+This removes one of the35 supplied source callbacks;34 remain. It does not
+prove allocation, native Drop, experiment or whole proof/audit model adequacy.
+
+14803–14811 include5passes,3changed elaboration failures and1intentional TERM.
+14804 spent124.06s in an unnecessary dictionary definitional comparison;
+replacement14805/14806 proves the exact clone value first and then composes
+that value equality, passing in1.80/1.82s. No unchanged rerun or cap increase.
+14808–14810 reject rewrite/simplifier attempts;14811 uses explicit alias unfolding
+and a final definitional join. All accepted theorem audits are standard.
+Root/headline premises removed0. The data equation from Stage1 remains open.
