@@ -2,7 +2,7 @@
 
 Both before and after use the identical statement below, from committed source
 `evidence/recount7-20261026/Rc7_002/sources/Rc7_Top.lean`, SHA256 `f471ed2a3eaa6ba76d483fa9201a0f33df5b1cd6d732ef3d4335fd9dd716d38e`.
-No quantifier, carrier, failure event, conclusion or trust item changed.
+No intentional quantifier, failure-event, conclusion or trust-item change is made. This is an identical source-text comparison: the fresh top has not elaborated, and semantic carrier identity across historical object cohorts is not certified. The selected PreparedModel/c16 incompatibility is recorded separately.
 
 Premises removed/added/changed: **0/0/0**. Ledger-method delta:
 **T 0 / P 0 / G 0 / C 0**. No new absolute recount is claimed.
