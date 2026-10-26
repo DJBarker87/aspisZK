@@ -25,6 +25,7 @@ for i in range(10,22):
   lit=','.join(f'{b}#u8' for b in bs)
   ws=','.join(f'{w}#u32' for w in words)
   s=f'''import JFo_QueryRead
+import JFo_QueryIndex
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.{mod}
@@ -44,6 +45,9 @@ theorem selected : ((JFo_Opening.value ⟨{i},by decide⟩).val.drop {32*j}).tak
 '''
   for a,w in enumerate(words):s+=f'theorem word{a} : wordLE arr {a}={w}#u32 := rfl\n#print axioms word{a}\n'
   s+='\ntheorem decode : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes (Array.to_slice arr)=ok (some value) := by\n  apply (fixed_success_iff arr value).mpr\n  constructor\n  · intro n\n    fin_cases n <;> simp only ['+','.join(f'word{a}' for a in range(8))+'] <;> scalar_tac\n  · simp only ['+','.join(f'word{a}' for a in range(8))+']\n    rfl\n'
+  if j==0:
+   query=[93499,147529,216823,245899,209371,192317,65593,183859,193093,159813,132355,218094,178080,149624,166165,42158,179622,21248,63860,55377,185637,14297][i]
+   s+=f'\ntheorem query : Array.index_usize JFo_Prepared.value.queries {i}#usize=ok {query}#u32 :=\n  JFo_QueryIndex.source _ _ (by decide) {query}#u32 rfl\n#print axioms query\n'
   s+=f'''\ntheorem source : SAQ_Decoder.read (JFo_Opening.value ⟨{i},by decide⟩) {j}#usize=
     ok (SAQ_RecordDecode.fromRecord value) :=
   JFo_QueryRead.source _ {j}#usize (by decide) (JFo_Opening.length _) arr value selected decode
