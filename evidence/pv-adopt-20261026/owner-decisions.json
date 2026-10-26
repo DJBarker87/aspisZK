@@ -1,0 +1,328 @@
+[
+  {
+    "id": "V344",
+    "title": "Absolute timing / Docker-cap barrier",
+    "exact_recount2_row": {
+      "id": "V344",
+      "group": "G",
+      "name": "absolute timing",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D169/D191",
+      "meaning": "Quiet-host, pinned candidate proof time median <15s; report samples/profile/CPU",
+      "classification": "P",
+      "owner": "stream B",
+      "job": "pv-rebase \u00b7 assigned pv-rebase job (branch pin not supplied)",
+      "evidence": "LOG-excerpts.md; rw-query.md; dict-design.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "barrier: reserve quiet host for preregistered median gate. No complete gate/theorem yet.",
+      "residual_fields": [
+        "barrier: reserve quiet host for preregistered median gate"
+      ],
+      "theorem": null,
+      "audit_evidence": "rebase-evidence/fixture-comparison.json",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "No qualified timing gate completed. Owner quiet-host/Docker-cap scheduling barrier remains; no permission to bypass it. Invalidated sample/queue retained, no median or successful dudect gate inferred.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "rebase-evidence/fixture-comparison.json",
+        "recount2/rebase/design/PV-REBASE-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D199 recommends shrinking Docker caps to their real profile; alternatives are excluding Docker from projection or accepting the ceiling. D209/D212 hold timing to strict quiet admission; D216 passes the absolute timing gate.",
+    "first_ruling_consequence": "Keep the quiet-window method: D216 supplies EVIDENCED (<15 s), not a universal cost law. Docker-cap changes affect scheduling only and need host-owner action.",
+    "alternative_ruling_consequence": "Keep present caps/ceiling: D216 still supplies the completed gate. No permission to bypass reservation or repeat the passed gate unchanged."
+  },
+  {
+    "id": "V345",
+    "title": "Relative timing / Docker-cap barrier",
+    "exact_recount2_row": {
+      "id": "V345",
+      "group": "G",
+      "name": "relative timing",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D169/D191",
+      "meaning": "Median regression \u226410% against relevant pinned baseline; historical fixture ratios alone do not settle absolute gate",
+      "classification": "P",
+      "owner": "stream B",
+      "job": "pv-rebase \u00b7 assigned pv-rebase job (branch pin not supplied)",
+      "evidence": "LOG-excerpts.md; rw-query.md; dict-design.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "barrier: quiet SAME-profile baseline/candidate comparison. No complete gate/theorem yet.",
+      "residual_fields": [
+        "barrier: quiet SAME-profile baseline/candidate comparison"
+      ],
+      "theorem": null,
+      "audit_evidence": "rebase-evidence/fixture-comparison.json",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "No qualified timing gate completed. Owner quiet-host/Docker-cap scheduling barrier remains; no permission to bypass it. Invalidated sample/queue retained, no median or successful dudect gate inferred.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "rebase-evidence/fixture-comparison.json",
+        "recount2/rebase/design/PV-REBASE-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "Same D199 scheduling recommendation; D216 passes <=1.10x research in a valid quiet window.",
+    "first_ruling_consequence": "D216 ratios 0.353/0.350 supply EVIDENCED. Choosing a Docker remedy authorizes scheduling, not privacy closure.",
+    "alternative_ruling_consequence": "Retain ceiling and existing D216 evidence; no unresolved timing comparison is manufactured from recount-2 historical OPEN status."
+  },
+  {
+    "id": "V370",
+    "title": "Pinned compiler-preservation trust",
+    "exact_recount2_row": {
+      "id": "V370",
+      "group": "T",
+      "name": "L3.compiler preservation",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D162",
+      "meaning": "Pinned compiler/flags preserve proved source constant-time properties",
+      "classification": "T",
+      "owner": "external",
+      "job": "retained D162 compiler/CPU constant-time trust",
+      "evidence": "LOG-excerpts.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "owner accept pinned compiler-preservation trust law. No complete gate/theorem yet.",
+      "residual_fields": [
+        "owner accept pinned compiler-preservation trust law"
+      ],
+      "theorem": null,
+      "audit_evidence": "l3.txt",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "owner accept pinned compiler-preservation trust law. No complete gate/theorem yet. Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "l3.txt",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D197 records partial disassembly/platform evidence; D216 still requires the L3 receipt. No distinct accept/reject recommendation for V370 is recorded in D197\u2013D216. Retained D162 trust boundary is the relevant policy, not an inferred owner acceptance.",
+    "first_ruling_consequence": "Accept explicitly for the final pinned compiler/flags/platform: V370 becomes named retained external trust; artifact association, complete audit and V371/V373/V374 remain.",
+    "alternative_ruling_consequence": "Decline the trust boundary: V370 stays OPEN; require an accepted compiler-preservation proof or a newly approved platform/toolchain route. A measurement cannot discharge this trust law."
+  },
+  {
+    "id": "V371",
+    "title": "DOITM / CPU latency",
+    "exact_recount2_row": {
+      "id": "V371",
+      "group": "T",
+      "name": "L3.CPU latency",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D162",
+      "meaning": "Used instructions on pinned x86_64 Linux CPU have data-independent latency",
+      "classification": "T",
+      "owner": "external",
+      "job": "retained D162 compiler/CPU constant-time trust",
+      "evidence": "LOG-excerpts.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "DOITM V371: owner select/authorize CPU timing mode and latency trust. No complete gate/theorem yet.",
+      "residual_fields": [
+        "DOITM V371: owner select/authorize CPU timing mode and latency trust"
+      ],
+      "theorem": null,
+      "audit_evidence": "l3.txt",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "DOITM V371: owner select/authorize CPU timing mode and latency trust. No complete gate/theorem yet. Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "l3.txt",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D197 recommends enabling DOITM on the pinned host before L3 measurement, recording the mode as a platform pin, and accepting V371 only in that mode. DOITM was supported but disabled.",
+    "first_ruling_consequence": "Authorize enablement and accept the mode-scoped latency trust: repin mode and collect the final L3 receipt. The decision alone neither changes the machine nor proves all callers constant time.",
+    "alternative_ruling_consequence": "Leave mode disabled: V371 remains substantive explicit trust/open decision; branchless disassembly alone does not close it. Any alternative contract needs explicit owner approval."
+  },
+  {
+    "id": "V373",
+    "title": "Disassembly / inversion-domain call sites",
+    "exact_recount2_row": {
+      "id": "V373",
+      "group": "G",
+      "name": "L3.disassembly audit",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D162",
+      "meaning": "Audit actual compiled witness/pole kernels and call sites",
+      "classification": "P",
+      "owner": "stream B",
+      "job": "pv-rebase \u00b7 assigned pv-rebase job (branch pin not supplied) + pv-l2-sim \u00b7 assigned pv-l2-sim job (branch pin not supplied)",
+      "evidence": "LOG-excerpts.md; ct-kernels.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "inversion zero-boundary: owner settle reachable zero-domain handling; finish actual call-site audit. No complete gate/theorem yet.",
+      "residual_fields": [
+        "inversion zero-boundary: owner settle reachable zero-domain handling; finish actual call-site audit"
+      ],
+      "theorem": null,
+      "audit_evidence": "l3.txt",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "inversion zero-boundary: owner settle reachable zero-domain handling; finish actual call-site audit. No complete gate/theorem yet. Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "l3.txt",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D197 recommends L2 prove every witness-bearing try_inv operand nonzero outside already charged bad events; escalate a reachable witness-dependent zero as a protocol leak. D200 proves only the LogUp NoPole fragment.",
+    "first_ruling_consequence": "Approve the nonzero/outside-fixed-bad policy: enumerate native reached calls/slots and audit all call sites before V373 can close. L1 pole-verdict retry branch remains modelled; the recommendation is not a nonzero proof.",
+    "alternative_ruling_consequence": "If a witness-dependent zero is reached, retain the obstruction and decide a protocol/implementation repair; do not waive it, weaken the observer or silently charge a new bad event. V373 remains OPEN."
+  },
+  {
+    "id": "V374",
+    "title": "Quiet L3 dudect measurement",
+    "exact_recount2_row": {
+      "id": "V374",
+      "group": "G",
+      "name": "L3.dudect measurement",
+      "definition": "docs/research/v8-r0-zk-20261009/LOG.md#D162",
+      "meaning": "Run and retain timing tests with sample setup/statistics; measurements never prove absence of leakage",
+      "classification": "P",
+      "owner": "stream B",
+      "job": "pv-rebase \u00b7 assigned pv-rebase job (branch pin not supplied) + pv-l2-sim \u00b7 assigned pv-l2-sim job (branch pin not supplied)",
+      "evidence": "LOG-excerpts.md; ct-kernels.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "barrier: quiet timing host; retain fixed preregistered experiment. No complete gate/theorem yet.",
+      "residual_fields": [
+        "barrier: quiet timing host; retain fixed preregistered experiment"
+      ],
+      "theorem": null,
+      "audit_evidence": "l3.txt",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "No qualified timing gate completed. Owner quiet-host/Docker-cap scheduling barrier remains; no permission to bypass it. Invalidated sample/queue retained, no median or successful dudect gate inferred.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "l3.txt",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D197 records zero samples and a collector waiting for quiet. D199 recommends cap reduction; D209\u2013D216 enforce quiet windows for prover timing. No completed L3 dudect verdict is supplied by D216.",
+    "first_ruling_consequence": "Authorize an appropriate quiet slot and final pinned mode/binary: run the preregistered L3 collector and retain setup/statistics/receipt. A successful test gives measurement evidence only.",
+    "alternative_ruling_consequence": "Keep current admission ceiling/wait for a valid quiet slot: V374 stays OPEN until qualified L3 collection. D216 fixture medians cannot substitute for leakage testing."
+  },
+  {
+    "id": "V396",
+    "title": "Client bundle / signer / storage / publication pin",
+    "exact_recount2_row": {
+      "id": "V396",
+      "group": "G",
+      "name": "client.client integration receipt",
+      "definition": "crates/aspis-r1-cost-probe/src/RealR1_client.rs#prove_for_proof_accounts",
+      "meaning": "Pin and exercise actual caller/upload route and key retention, including failure/retry paths",
+      "classification": "P",
+      "owner": "stream B",
+      "job": "pv-client \u00b7 assigned pv-client job (branch pin not supplied)",
+      "evidence": "client-source.rs.txt; REAL-R1.md; LOG-excerpts.md",
+      "status": "open",
+      "duplicate": null,
+      "baseline_status": "OPEN",
+      "dependency_bucket": "c",
+      "rationale": "client bundle pin: owner signer/storage/install adoption and live publication receipt. No complete gate/theorem yet.",
+      "residual_fields": [
+        "client bundle pin: owner signer/storage/install adoption and live publication receipt"
+      ],
+      "theorem": null,
+      "audit_evidence": "client.txt",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "client bundle pin: owner signer/storage/install adoption and live publication receipt. No complete gate/theorem yet. Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "client.txt",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D216 records the D196 proof-account route as merged; D209 retains the client obligation. Exact recorded recommendation to pin client-pins.json is D196 (outside D197\u2013D216); no contrary or new bundle recommendation is recorded inside the requested interval.",
+    "first_ruling_consequence": "Owner pins/adopts the exact signer, storage, retained-key mapping and caller/upload bundle, then supplies the actual publication/lifecycle receipt. V396 can become EVIDENCED for that scope; universal V045/V167/E1/E2 remain.",
+    "alternative_ruling_consequence": "Decline or select a different bundle: retain V396 OPEN, rebind and exercise the chosen route; existing selected64 fixtures/source pins do not authorize publishing or deleting keys."
+  },
+  {
+    "id": "V380-inversion",
+    "title": "All reached inversions / zero boundary",
+    "exact_recount2_row": {
+      "id": "V380-inversion",
+      "name": "D197 all reached inversions / original L2 V380 alias",
+      "classification": "P",
+      "group": "L",
+      "baseline_status": "NOT-IN-BASELINE",
+      "dependency_bucket": "c",
+      "rationale": "Owner inversion zero-boundary decision required. Also depends on actual native reached-call/slot enumeration and SAME headline coupling; classify c by owner-first precedence. LogUp nonzero theorem is partial only.",
+      "residual_fields": [
+        "PV_L2_Premises.PV_L2_Premises.V380_inversion"
+      ],
+      "theorem": "R1Z.PV_L2_InversionQ.logup_operand (partial; NoPole/slot correspondence)",
+      "audit_evidence": "l2.txt; inputs/l2/",
+      "recount1_status": "OPEN",
+      "recount2_status": "OPEN",
+      "recount1_bucket": "c",
+      "recount2_basis": "Owner inversion zero-boundary decision required. Also depends on actual native reached-call/slot enumeration and SAME headline coupling; classify c by owner-first precedence. LogUp nonzero theorem is partial only. Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.",
+      "recount2_evidence": [
+        "recount2/definition-audit.json",
+        "recount2/resolved-definitions.json",
+        "l2.txt; inputs/l2/",
+        "recount2/l3/design/PV-L3-20261026.md"
+      ]
+    },
+    "lead_recorded_recommendation": "D197 recommendation as V373; D200 LogUp non-pole theorem is partial. Recount 2 keeps the alias distinct from V380 TrustedStd.btree_entry_or_insert_with.",
+    "first_ruling_consequence": "Approve fixed-bad/nonzero handling: enumerate every M31/QM31/WideExact/circle/interpolation/certificate reached slot, prove native correspondence and SAME-coupling simulation. Only completion of these proofs closes the whole row.",
+    "alternative_ruling_consequence": "Reachable witness-dependent zero requires owner protocol/implementation decision and retained counterexample. No finding of such a zero is asserted by current partial evidence; row remains OPEN."
+  },
+  {
+    "id": "V400",
+    "title": "OS entropy failure repair A / B",
+    "exact_recount2_row": {
+      "id": "V400",
+      "name": "OS entropy failure / D206 model coverage repair (C/T-suspect)",
+      "classification": "C",
+      "group": "NEW",
+      "recount1_status": "NOT-PREVIOUSLY-SEPARATE",
+      "recount2_status": "OPEN",
+      "recount1_bucket": null,
+      "dependency_bucket": "c",
+      "residual_fields": [
+        "owner model repair A/B",
+        "concrete runtime/fault/decoder association; outside-bad coordinate witness"
+      ],
+      "theorem": null,
+      "recount2_basis": "Selected OS EIO fault yields a pre-body error with empty oracle log. Conditional disagreement and first-draw witness independence have explicit runtime/fault/decoder/model-success hypotheses; no concrete outside-bad witness or privacy attack. Owner must choose A OsAvailable trust or B public failure in both experiments; neither adopted. Native association remains secondary. Do not invent new trust before adoption.",
+      "recount2_evidence": [
+        "LOG D206",
+        "recount2/runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_OsFailure.lean.txt",
+        "recount2/runjoin/evidence/pv-runjoin-20261026/concrete-attempt/receipt-23434.json"
+      ],
+      "meaning": "OS entropy failure / D206 model coverage repair (C/T-suspect)"
+    },
+    "lead_recorded_recommendation": "D206 recommends B; D215 repeats recommendation B and says neither repair is adopted. The failure/model disagreement theorem is conditional, not a concrete outside-bad native attack.",
+    "first_ruling_consequence": "A: accept named OsAvailable (every in-capacity draw succeeds), retain the original conclusion and eight fields. This adds an explicit deployment trust/availability condition; does not prove E1/E2 or native association.",
+    "alternative_ruling_consequence": "B (recommended): give BOTH experiments the same public failure signal, including common finite signal law. This changes the model statement with owner approval; bind actual faults/decoder and prove the common law before claiming closure. Reject both: V400 stays OPEN."
+  }
+]
