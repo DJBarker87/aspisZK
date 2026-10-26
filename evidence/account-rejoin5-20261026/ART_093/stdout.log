@@ -1,0 +1,32 @@
+@AspisR1.RPx_ChargeBudget.charge : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H source).1.length ≤ Q + 1921) →
+    ∀ (project : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+      (select : A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program source project select)).1 ≤
+            Q + 2965) ∧
+        AspisR1.F3T_AccountCharge.mass source project select Q ≤ AspisR1.F3T_Numeric.accountLoss Q
+theorem AspisR1.RPx_ChargeBudget.charge : ∀ {A : Type}
+  (source : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State A)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H source).1.length ≤ Q + 1921) →
+    ∀ (project : A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+      (select : A → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.Hiq_RecordedJoint.program source project select)).1 ≤
+            Q + 2965) ∧
+        AspisR1.F3T_AccountCharge.mass source project select Q ≤ AspisR1.F3T_Numeric.accountLoss Q :=
+fun {A} source Q queries project select =>
+  have bound := fun H =>
+    LE.le.trans
+      (AspisR1.VerifierCallBudget.firstReads_le_length FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H source).1)
+      (queries H);
+  ⟨AspisR1.F3T_AccountCharge.reads source project select Q bound,
+    AspisR1.F3T_AccountCharge.bound source project select Q bound⟩
+'AspisR1.RPx_ChargeBudget.charge' depends on axioms: [propext, Classical.choice, Quot.sound]

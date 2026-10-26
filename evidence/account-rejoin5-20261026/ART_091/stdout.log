@@ -1,0 +1,342 @@
+@AspisR1.RPx_AttemptPrefix.transport : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+            List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+              kept ++ remaining
+theorem AspisR1.RPx_AttemptPrefix.transport : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+            List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+              kept ++ remaining :=
+fun {A} code hashv sha256 H p1 syscall before =>
+  AspisR1.CheckpointBytes5Effect.Code.rec (motive := fun code =>
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      ∃ kept remaining,
+        AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+            AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+          List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1 =
+            kept ++ remaining)
+    (fun a before =>
+      Exists.intro []
+        (Exists.intro []
+          ⟨Eq.symm
+              (List.append_nil
+                (AspisR1.RPx_AttemptPrefix.addresses
+                  (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.done a) before).2)),
+            rfl⟩))
+    (fun {B} r k ih before =>
+      Aeneas.Std.Result.casesOn (motive := fun t =>
+        r = t →
+          ∃ kept remaining,
+            AspisR1.RPx_AttemptPrefix.addresses
+                  (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.step r k) before).2 =
+                AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+              List.map Prod.fst
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.step r k))).1 =
+                kept ++ remaining)
+        r (fun a h => Eq.symm h ▸ ih a before)
+        (fun e h =>
+          Eq.symm h ▸
+            Exists.intro []
+              (Exists.intro []
+                ⟨Eq.symm
+                    (List.append_nil
+                      (AspisR1.RPx_AttemptPrefix.addresses
+                        (AspisR1.SdkC_Source.run hashv
+                            (AspisR1.CheckpointBytes5Effect.Code.step (Aeneas.Std.Result.fail e) k) before).2)),
+                  rfl⟩))
+        (fun h =>
+          Eq.symm h ▸
+            Exists.intro []
+              (Exists.intro []
+                ⟨Eq.symm
+                    (List.append_nil
+                      (AspisR1.RPx_AttemptPrefix.addresses
+                        (AspisR1.SdkC_Source.run hashv
+                            (AspisR1.CheckpointBytes5Effect.Code.step Aeneas.Std.Result.div k) before).2)),
+                  rfl⟩))
+        (Eq.refl r))
+    (fun parts k ih before =>
+      Aeneas.Std.Result.casesOn (motive := fun t =>
+        hashv parts = t →
+          ∃ kept remaining,
+            AspisR1.RPx_AttemptPrefix.addresses
+                  (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.read parts k) before).2 =
+                AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+              List.map Prod.fst
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+                kept ++ remaining)
+        (hashv parts)
+        (fun digest h =>
+          Eq.ndrec (motive := fun x =>
+            hashv parts = x →
+              ∃ kept remaining,
+                AspisR1.RPx_AttemptPrefix.addresses
+                      (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.read parts k) before).2 =
+                    AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+                  List.map Prod.fst
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+                    kept ++ remaining)
+            (fun actual =>
+              have decoded :=
+                Eq.trans (syscall.returningValue parts digest actual)
+                  (p1.realization (AspisV8R19.SqueezeOracleBridge.flatten parts));
+              have encoded :=
+                Eq.mpr
+                  (id (congrArg (fun _a => AspisV8R19.SqueezeOracleBridge.encodeState _a = digest) (Eq.symm decoded)))
+                  (AspisV8R19.SqueezeOracleBridge.array_roundtrip digest);
+              let ⟨kept, h✝⟩ := ih digest (before ++ [{ parts := parts, returned := Aeneas.Std.Result.ok digest }])
+              let ⟨remaining, h✝¹⟩ := h✝
+              let ⟨native, ideal⟩ := h✝¹
+              Exists.intro (AspisV8R19.SqueezeOracleBridge.flatten parts :: kept)
+                (Exists.intro remaining
+                  ⟨Eq.mpr
+                      (id
+                        (congrFun'
+                          (congrArg Eq
+                            (congrArg AspisR1.RPx_AttemptPrefix.addresses
+                              (congrArg Prod.snd
+                                (Eq.trans (AspisR1.SdkC_Source.run.eq_5 hashv before parts k)
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | Aeneas.Std.Result.ok digest =>
+                                          AspisR1.SdkC_Source.run hashv (k digest)
+                                            (before ++ [{ parts := parts, returned := hashv parts }])
+                                        | Aeneas.Std.Result.fail e =>
+                                          (Aeneas.Std.Result.fail e,
+                                            before ++ [{ parts := parts, returned := hashv parts }])
+                                        | Aeneas.Std.Result.div =>
+                                          (Aeneas.Std.Result.div,
+                                            before ++ [{ parts := parts, returned := hashv parts }]))
+                                      actual)
+                                    (congrArg (AspisR1.SdkC_Source.run hashv (k digest))
+                                      (congrArg (HAppend.hAppend before)
+                                        (congrFun'
+                                          (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) actual))
+                                          []))))))))
+                          (AspisR1.RPx_AttemptPrefix.addresses before ++
+                            AspisV8R19.SqueezeOracleBridge.flatten parts :: kept)))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              _a =
+                                AspisR1.RPx_AttemptPrefix.addresses before ++
+                                  AspisV8R19.SqueezeOracleBridge.flatten parts :: kept)
+                            native))
+                        (of_eq_true
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans (congrFun' (congrArg HAppend.hAppend List.map_append) kept)
+                                  (List.append_assoc
+                                    (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before)
+                                    [AspisV8R19.SqueezeOracleBridge.flatten parts] kept)))
+                              (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                                AspisV8R19.SqueezeOracleBridge.flatten parts :: kept))
+                            (eq_self
+                              (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                                AspisV8R19.SqueezeOracleBridge.flatten parts :: kept))))),
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg (List.map Prod.fst)
+                                (congrArg Prod.fst
+                                  (Eq.trans
+                                    (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H
+                                      (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                                      AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d)))
+                                    (congr
+                                      (congrArg Prod.mk
+                                        (congrArg
+                                          (List.cons
+                                            (AspisV8R19.SqueezeOracleBridge.flatten parts,
+                                              H (AspisV8R19.SqueezeOracleBridge.flatten parts)))
+                                          (congrArg Prod.fst
+                                            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                              (congrArg AspisR1.SdkC_Oracle.program (congrArg k encoded))))))
+                                      (congrArg Prod.snd
+                                        (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                                          (congrArg AspisR1.SdkC_Oracle.program (congrArg k encoded))))))))
+                              (congrArg (List.cons (AspisV8R19.SqueezeOracleBridge.flatten parts)) ideal)))
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts :: (kept ++ remaining)))
+                        (eq_self (AspisV8R19.SqueezeOracleBridge.flatten parts :: (kept ++ remaining))))⟩))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (fun error h =>
+          Eq.ndrec (motive := fun x =>
+            hashv parts = x →
+              ∃ kept remaining,
+                AspisR1.RPx_AttemptPrefix.addresses
+                      (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.read parts k) before).2 =
+                    AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+                  List.map Prod.fst
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+                    kept ++ remaining)
+            (fun actual =>
+              Exists.intro [AspisV8R19.SqueezeOracleBridge.flatten parts]
+                (Exists.intro
+                  (List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)
+                  ⟨of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg (List.map fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+                                (congrArg Prod.snd
+                                  (Eq.trans (AspisR1.SdkC_Source.run.eq_5 hashv before parts k)
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | Aeneas.Std.Result.ok digest =>
+                                            AspisR1.SdkC_Source.run hashv (k digest)
+                                              (before ++ [{ parts := parts, returned := hashv parts }])
+                                          | Aeneas.Std.Result.fail e =>
+                                            (Aeneas.Std.Result.fail e,
+                                              before ++ [{ parts := parts, returned := hashv parts }])
+                                          | Aeneas.Std.Result.div =>
+                                            (Aeneas.Std.Result.div,
+                                              before ++ [{ parts := parts, returned := hashv parts }]))
+                                        actual)
+                                      (congrArg (Prod.mk (Aeneas.Std.Result.fail error))
+                                        (congrArg (HAppend.hAppend before)
+                                          (congrFun'
+                                            (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) actual))
+                                            [])))))))
+                              List.map_append))
+                          (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                            [AspisV8R19.SqueezeOracleBridge.flatten parts]))
+                        (eq_self
+                          (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                            [AspisV8R19.SqueezeOracleBridge.flatten parts]))),
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (congrArg (List.map Prod.fst)
+                              (congrArg Prod.fst
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H
+                                  (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                                  AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d))))))
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))
+                        (eq_self
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)))⟩))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            hashv parts = x →
+              ∃ kept remaining,
+                AspisR1.RPx_AttemptPrefix.addresses
+                      (AspisR1.SdkC_Source.run hashv (AspisR1.CheckpointBytes5Effect.Code.read parts k) before).2 =
+                    AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+                  List.map Prod.fst
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SdkC_Oracle.program (AspisR1.CheckpointBytes5Effect.Code.read parts k))).1 =
+                    kept ++ remaining)
+            (fun actual =>
+              Exists.intro [AspisV8R19.SqueezeOracleBridge.flatten parts]
+                (Exists.intro
+                  (List.map Prod.fst
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SdkC_Oracle.program
+                          (k
+                            (AspisV8R19.SqueezeOracleBridge.encodeState
+                              (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)
+                  ⟨of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg (List.map fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts)
+                                (congrArg Prod.snd
+                                  (Eq.trans (AspisR1.SdkC_Source.run.eq_5 hashv before parts k)
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | Aeneas.Std.Result.ok digest =>
+                                            AspisR1.SdkC_Source.run hashv (k digest)
+                                              (before ++ [{ parts := parts, returned := hashv parts }])
+                                          | Aeneas.Std.Result.fail e =>
+                                            (Aeneas.Std.Result.fail e,
+                                              before ++ [{ parts := parts, returned := hashv parts }])
+                                          | Aeneas.Std.Result.div =>
+                                            (Aeneas.Std.Result.div,
+                                              before ++ [{ parts := parts, returned := hashv parts }]))
+                                        actual)
+                                      (congrArg (Prod.mk Aeneas.Std.Result.div)
+                                        (congrArg (HAppend.hAppend before)
+                                          (congrFun'
+                                            (congrArg List.cons (congrArg (AspisR1.SdkC_Source.Query.mk parts) actual))
+                                            [])))))))
+                              List.map_append))
+                          (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                            [AspisV8R19.SqueezeOracleBridge.flatten parts]))
+                        (eq_self
+                          (List.map (fun q => AspisV8R19.SqueezeOracleBridge.flatten q.parts) before ++
+                            [AspisV8R19.SqueezeOracleBridge.flatten parts]))),
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (congrArg (List.map Prod.fst)
+                              (congrArg Prod.fst
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H
+                                  (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                                  AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d))))))
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))
+                        (eq_self
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)))⟩))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (Eq.refl (hashv parts)))
+    code before
+'AspisR1.RPx_AttemptPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]

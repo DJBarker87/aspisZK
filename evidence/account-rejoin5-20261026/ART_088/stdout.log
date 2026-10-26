@@ -1,0 +1,56 @@
+AspisR1.F3T_Charged.starts : ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.DecodedFirstReadUnionBound.decoderFirstReads AspisR1.RecordedBinaryExperimentBin.dec FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.charged D P)).1 ≤
+        Q + 34
+theorem AspisR1.F3T_Charged.starts : ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover)
+  (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.DecodedFirstReadUnionBound.decoderFirstReads AspisR1.RecordedBinaryExperimentBin.dec FS.emptyTable
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.charged D P)).1 ≤
+        Q + 34 :=
+fun D P Q hq H =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.DecodedFirstReadUnionBound.decoderFirstReads AspisR1.RecordedBinaryExperimentBin.dec FS.emptyTable
+              _a.1 ≤
+            Q + 34)
+        (AspisR1.F3T_Charged.charged_eval D P H)))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.DecodedFirstReadUnionBound.decoderFirstReads AspisR1.RecordedBinaryExperimentBin.dec FS.emptyTable
+                  (_a.1, (_a.2.1.1, AspisR1.RawCutTranscriptRun.proof (AspisR1.F3T_Charged.build D _a) _a.2.1.2),
+                      Bool.true).1 ≤
+                Q + 34)
+            (AspisR1.RawCutProverCompiler.experiment_eval (AspisR1.F3T_Projection.project P)
+              (AspisR1.RawCutProverCompiler.verifier D fun x x_1 => Bool.true) H)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a ≤ Q + 34)
+              (AspisR1.DecodedFirstReadUnionBound.decoderFirstReads_append AspisR1.RecordedBinaryExperimentBin.dec
+                FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).1
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.RawCutProverCompiler.verifier D (fun x x_1 => Bool.true)
+                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).2.1
+                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).2.2)).1)))
+          (have hp :=
+            AspisR1.DecoderQueryAccounting.starts_le_queries AspisR1.RecordedBinaryExperimentBin.dec FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).1;
+          have hlen :=
+            Eq.mpr (id (congrArg (fun _a => _a.1.length ≤ Q) (AspisR1.F3T_Projection.project_eval P H))) (hq H);
+          Nat.add_le_add (LE.le.trans hp hlen)
+            (AspisR1.BinHonestQueryBudget.verifier_starts D (fun x x_1 => Bool.true) H
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).2.1
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).2.2
+              (AspisR1.DecodedFirstReadUnionBound.applyTrace FS.emptyTable
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Projection.project P)).1))))))
+'AspisR1.F3T_Charged.starts' depends on axioms: [propext, Classical.choice, Quot.sound]

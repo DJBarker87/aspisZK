@@ -1,0 +1,38 @@
+{"attempt": "ART_074", "exit_status": 0, "wall_seconds": 1.8040888339746743, "peak_rss_kib": "4380372", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ExtractionBoundary.P1' does not depend on any axioms", "'AspisR1.S2W_ExtractionBoundary.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2Z.Oracle.P1Realization' does not depend on any axioms", "'AspisR1.S2Z.Oracle.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.S2W_ExtractionBoundary.P1 : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+structure AspisR1.S2W_ExtractionBoundary.P1
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.P1.realization : AspisR1.S2Z.Oracle.P1Realization sha256 H
+constructor:
+  AspisR1.S2W_ExtractionBoundary.P1.mk {sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (realization : AspisR1.S2Z.Oracle.P1Realization sha256 H) : AspisR1.S2W_ExtractionBoundary.P1 sha256 H
+'AspisR1.S2W_Extraction
+...
+imeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+'AspisR1.S2W_ExtractionBoundary.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+def AspisR1.S2Z.Oracle.P1Realization : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun sha256 H => ∀ (bytes : AspisV8R19.DuplexFrames.Bytes), sha256 bytes = H bytes
+'AspisR1.S2Z.Oracle.P1Realization' does not depend on any axioms
+AspisR1.S2Z.Oracle.RuntimeSyscall : (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+def AspisR1.S2Z.Oracle.RuntimeSyscall : (AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun hashv sha256 =>
+  ∀ (parts : AspisR1.S2Z.Oracle.Parts) (digest : AspisR1.S2Z.Oracle.Digest),
+    hashv parts = Aeneas.Std.Result.ok digest →
+      AspisV8R19.SqueezeOracleBridge.decodeState digest = sha256 (AspisV8R19.SqueezeOracleBridge.flatten parts)
+'AspisR1.S2Z.Oracle.RuntimeSyscall' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r02083ae8529346adab9db023e3be06cb.scope; invocation ID: 42f7a5fbfd304254aa079bbe11e008e3

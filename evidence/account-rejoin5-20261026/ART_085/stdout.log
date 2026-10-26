@@ -1,0 +1,459 @@
+@AspisR1.ARS_ReachedBudget.ChoiceBound : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_ExtractionBoundary.Program → AspisR1.SCE_Experiment.Adversary A → ℕ → Prop
+def AspisR1.ARS_ReachedBudget.ChoiceBound : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_ExtractionBoundary.Program → AspisR1.SCE_Experiment.Adversary A → ℕ → Prop :=
+fun {A F C} c hashv copy allocator id a Q1 =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+    (final : A),
+    (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) →
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)).1.length ≤
+        Q1
+'AspisR1.ARS_ReachedBudget.ChoiceBound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.ARS_ReachedBudget.issued : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q0) →
+    AspisR1.ARS_ReachedBudget.ChoiceBound c hashv copy allocator id a Q1 →
+      ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1.length ≤
+          Q0 + Q1 + 1921
+theorem AspisR1.ARS_ReachedBudget.issued : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q0) →
+    AspisR1.ARS_ReachedBudget.ChoiceBound c hashv copy allocator id a Q1 →
+      ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1.length ≤
+          Q0 + Q1 + 1921 :=
+fun {A F C} c hashv copy allocator id a Q0 Q1 prefixBound choiceBound H =>
+  have head := prefixBound H;
+  have firstCost :=
+    AspisR1.RawJ_InstalledBudget.first c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+      c.boundaries c.std hashv copy allocator (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.entry id
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.data (AspisV8R19.MemoizedProgramLaw.eval H a.first).2.state H;
+  have secondCost := fun i =>
+    AspisR1.RawJ_InstalledBudget.second c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry
+      c.boundaries c.std hashv allocator i.entry id i.data i.slot i.state H;
+  Eq.mpr
+    (_root_.id
+      (congrArg (fun _a => (AspisV8R19.MemoizedProgramLaw.eval H _a).1.length ≤ Q0 + Q1 + 1921)
+        (AspisR1.SCE_Execution.account_def c hashv copy allocator id a)))
+    (Eq.mpr
+      (_root_.id
+        (congrFun'
+          (congrArg LE.le
+            (congrArg List.length
+              (congrArg Prod.fst
+                (Eq.trans
+                  (AspisV8R19.OracleProgramOps.eval_bind a.first
+                    (fun i =>
+                      AspisV8R19.OracleProgramOps.bind (AspisR1.SCE_Execution.firstCode c hashv copy allocator id i)
+                        fun reply =>
+                        match reply with
+                        | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                          AspisV8R19.OracleProgramOps.bind (a.second i saved post final) fun next =>
+                            AspisV8R19.OracleProgramOps.bind
+                              (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                              AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.some (next, out))
+                        | x => AspisV8R19.MemoizedProgramLaw.Program.done (i, reply, Option.none))
+                    H)
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H a.first).1)
+                        (congrArg Prod.fst
+                          (AspisV8R19.OracleProgramOps.eval_bind
+                            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                            (fun reply =>
+                              match reply with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                AspisV8R19.OracleProgramOps.bind
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                  fun next =>
+                                  AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.some (next, out))
+                              | x =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                            H))))
+                    (congrArg Prod.snd
+                      (AspisV8R19.OracleProgramOps.eval_bind
+                        (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                          (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)
+                        (fun reply =>
+                          match reply with
+                          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                            AspisV8R19.OracleProgramOps.bind
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final) fun next =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.some (next, out))
+                          | x =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done
+                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, reply, Option.none))
+                        H)))))))
+          (Q0 + Q1 + 1921)))
+      (Aeneas.Std.Result.casesOn (motive := fun t =>
+        (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+            t →
+          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                ((AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                        (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (match
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        AspisV8R19.OracleProgramOps.bind
+                          (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final) fun next =>
+                          AspisV8R19.OracleProgramOps.bind (AspisR1.SCE_Execution.secondCode c hashv allocator id next)
+                            fun out =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done
+                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2,
+                                Option.some (next, out))
+                      | x =>
+                        AspisV8R19.MemoizedProgramLaw.Program.done
+                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2,
+                            Option.none))).1)).length ≤
+            Q0 + Q1 + 1921)
+        (AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2
+        (fun result h =>
+          Eq.ndrec (motive := fun x =>
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+                x →
+              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (match x with
+                          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                            AspisV8R19.OracleProgramOps.bind
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final) fun next =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.some (next, out))
+                          | x_1 =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done
+                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.none))).1)).length ≤
+                Q0 + Q1 + 1921)
+            (fun reply =>
+              Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+                result = t →
+                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                        ((AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (match Aeneas.Std.Result.ok result with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                AspisV8R19.OracleProgramOps.bind
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                  fun next =>
+                                  AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, Aeneas.Std.Result.ok result,
+                                        Option.some (next, out))
+                              | x =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, Aeneas.Std.Result.ok result,
+                                    Option.none))).1)).length ≤
+                    Q0 + Q1 + 1921)
+                result
+                (fun value h =>
+                  Eq.ndrec (motive := fun result =>
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+                        Aeneas.Std.Result.ok result →
+                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                            ((AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (match Aeneas.Std.Result.ok result with
+                                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                    AspisV8R19.OracleProgramOps.bind
+                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                      fun next =>
+                                      AspisV8R19.OracleProgramOps.bind
+                                        (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                            Aeneas.Std.Result.ok result, Option.some (next, out))
+                                  | x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, Aeneas.Std.Result.ok result,
+                                        Option.none))).1)).length ≤
+                        Q0 + Q1 + 1921)
+                    (fun reply =>
+                      let ⟨saved, snd✝, reply⟩ := value
+                      let ⟨post, final, reply⟩ := snd✝
+                      have choice := choiceBound H saved post final reply;
+                      have tail :=
+                        secondCost
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)).2;
+                      Eq.mpr
+                        (_root_.id
+                          (congrFun'
+                            (congrArg LE.le
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrArg List.length
+                                    (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H a.first).1)
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1)
+                                        (congrArg Prod.fst
+                                          (Eq.trans
+                                            (AspisV8R19.OracleProgramOps.eval_bind
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post
+                                                final)
+                                              (fun next =>
+                                                AspisV8R19.OracleProgramOps.bind
+                                                  (AspisR1.SCE_Execution.secondCode c hashv allocator id next)
+                                                  fun out =>
+                                                  AspisV8R19.MemoizedProgramLaw.Program.done
+                                                    ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                      Aeneas.Std.Result.ok
+                                                        (Aeneas.Std.core.result.Result.Ok (saved, post, final)),
+                                                      Option.some (next, out)))
+                                              H)
+                                            (congr
+                                              (congrArg Prod.mk
+                                                (congrArg
+                                                  (HAppend.hAppend
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                          post final)).1)
+                                                  (congrArg Prod.fst
+                                                    (AspisV8R19.OracleProgramOps.eval_bind
+                                                      (AspisR1.SCE_Execution.secondCode c hashv allocator id
+                                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                              saved post final)).2)
+                                                      (fun out =>
+                                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                            Aeneas.Std.Result.ok
+                                                              (Aeneas.Std.core.result.Result.Ok (saved, post, final)),
+                                                            Option.some
+                                                              ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (a.second
+                                                                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2
+                                                                      saved post final)).2,
+                                                                out)))
+                                                      H))))
+                                              (congrArg Prod.snd
+                                                (AspisV8R19.OracleProgramOps.eval_bind
+                                                  (AspisR1.SCE_Execution.secondCode c hashv allocator id
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                          post final)).2)
+                                                  (fun out =>
+                                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                                        Aeneas.Std.Result.ok
+                                                          (Aeneas.Std.core.result.Result.Ok (saved, post, final)),
+                                                        Option.some
+                                                          ((AspisV8R19.MemoizedProgramLaw.eval H
+                                                                (a.second
+                                                                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved
+                                                                  post final)).2,
+                                                            out)))
+                                                  H))))))))
+                                  List.length_append)
+                                (congrArg (HAdd.hAdd (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length)
+                                  (Eq.trans List.length_append
+                                    (congrArg
+                                      (HAdd.hAdd
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1.length)
+                                      (Eq.trans List.length_append
+                                        (congrArg
+                                          (HAdd.hAdd
+                                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post
+                                                    final)).1.length)
+                                          List.length_append)))))))
+                            (Q0 + Q1 + 1921)))
+                        (Decidable.byContradiction fun a_1 =>
+                          AspisR1.ARS_ReachedBudget.issued._proof_3 c hashv copy allocator id a Q0 Q1 H head firstCost
+                            saved post final choice tail a_1))
+                    (Eq.symm h) reply)
+                (fun error h =>
+                  Eq.ndrec (motive := fun result =>
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                              (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+                        Aeneas.Std.Result.ok result →
+                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                            ((AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (match Aeneas.Std.Result.ok result with
+                                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                    AspisV8R19.OracleProgramOps.bind
+                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)
+                                      fun next =>
+                                      AspisV8R19.OracleProgramOps.bind
+                                        (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                        AspisV8R19.MemoizedProgramLaw.Program.done
+                                          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2,
+                                            Aeneas.Std.Result.ok result, Option.some (next, out))
+                                  | x =>
+                                    AspisV8R19.MemoizedProgramLaw.Program.done
+                                      ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, Aeneas.Std.Result.ok result,
+                                        Option.none))).1)).length ≤
+                        Q0 + Q1 + 1921)
+                    (fun reply =>
+                      Eq.mpr
+                        (_root_.id
+                          (congrFun'
+                            (congrArg LE.le
+                              (Eq.trans List.length_append
+                                (congrArg (HAdd.hAdd (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length)
+                                  List.length_append)))
+                            (Q0 + Q1 + 1921)))
+                        (Decidable.byContradiction fun a_1 =>
+                          AspisR1.ARS_ReachedBudget.issued._proof_2 c hashv copy allocator id a Q0 Q1 H head firstCost
+                            a_1))
+                    (Eq.symm h) reply)
+                (Eq.refl result))
+            (Eq.symm h)
+            (Eq.refl
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2))
+        (fun error h =>
+          Eq.ndrec (motive := fun x =>
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+                x →
+              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (match x with
+                          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                            AspisV8R19.OracleProgramOps.bind
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final) fun next =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.some (next, out))
+                          | x_1 =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done
+                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.none))).1)).length ≤
+                Q0 + Q1 + 1921)
+            (fun reply =>
+              Eq.mpr
+                (_root_.id
+                  (congrFun'
+                    (congrArg LE.le
+                      (Eq.trans List.length_append
+                        (congrArg (HAdd.hAdd (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length)
+                          List.length_append)))
+                    (Q0 + Q1 + 1921)))
+                (Decidable.byContradiction fun a_1 =>
+                  AspisR1.ARS_ReachedBudget.issued._proof_2 c hashv copy allocator id a Q0 Q1 H head firstCost a_1))
+            (Eq.symm h)
+            (Eq.refl
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+                x →
+              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                    ((AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                          (match x with
+                          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                            AspisV8R19.OracleProgramOps.bind
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final) fun next =>
+                              AspisV8R19.OracleProgramOps.bind
+                                (AspisR1.SCE_Execution.secondCode c hashv allocator id next) fun out =>
+                                AspisV8R19.MemoizedProgramLaw.Program.done
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.some (next, out))
+                          | x_1 =>
+                            AspisV8R19.MemoizedProgramLaw.Program.done
+                              ((AspisV8R19.MemoizedProgramLaw.eval H a.first).2, x, Option.none))).1)).length ≤
+                Q0 + Q1 + 1921)
+            (fun reply =>
+              Eq.mpr
+                (_root_.id
+                  (congrFun'
+                    (congrArg LE.le
+                      (Eq.trans List.length_append
+                        (congrArg (HAdd.hAdd (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length)
+                          List.length_append)))
+                    (Q0 + Q1 + 1921)))
+                (Decidable.byContradiction fun a_1 =>
+                  AspisR1.ARS_ReachedBudget.issued._proof_2 c hashv copy allocator id a Q0 Q1 H head firstCost a_1))
+            (Eq.symm h)
+            (Eq.refl
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                    (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2))
+        (Eq.refl
+          (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2)))
+'AspisR1.ARS_ReachedBudget.issued' depends on axioms: [propext, Classical.choice, Quot.sound]

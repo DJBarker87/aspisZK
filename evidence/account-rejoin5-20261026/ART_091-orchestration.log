@@ -1,0 +1,45 @@
+{"attempt": "ART_091", "exit_status": 0, "wall_seconds": 2.0142415820155293, "peak_rss_kib": "5270932", "swaps": "0", "print_axioms": ["'AspisR1.RPx_AttemptPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.RPx_AttemptPrefix.transport : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        ∃ kept remaining,
+          AspisR1.RPx_AttemptPrefix.addresses (AspisR1.SdkC_Source.run hashv code before).2 =
+              AspisR1.RPx_AttemptPrefix.addresses before ++ kept ∧
+            List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.pr
+...
+q.parts) before ++
+                            [AspisV8R19.SqueezeOracleBridge.flatten parts]))),
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (congrArg (List.map Prod.fst)
+                              (congrArg Prod.fst
+                                (AspisV8R19.MemoizedProgramLaw.eval.eq_2 H
+                                  (AspisV8R19.SqueezeOracleBridge.flatten parts) fun d =>
+                                  AspisR1.SdkC_Oracle.program (k (AspisV8R19.SqueezeOracleBridge.encodeState d))))))
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1))
+                        (eq_self
+                          (AspisV8R19.SqueezeOracleBridge.flatten parts ::
+                            List.map Prod.fst
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.SdkC_Oracle.program
+                                    (k
+                                      (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisV8R19.SqueezeOracleBridge.flatten parts)))))).1)))⟩))
+            (Eq.symm h) (Eq.refl (hashv parts)))
+        (Eq.refl (hashv parts)))
+    code before
+'AspisR1.RPx_AttemptPrefix.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6328100e754451ca211ae1b83f010fd.scope; invocation ID: 30349ae800b24096a5e884575fea83d8
+

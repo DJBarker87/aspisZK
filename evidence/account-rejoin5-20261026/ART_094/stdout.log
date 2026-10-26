@@ -1,0 +1,820 @@
+@AspisR1.ARS_NativeOutcome.source : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+        c.std)
+      native1 native2 hashv →
+    (AspisR1.ARS_NativeAccount.run c hashv copy allocator id a native).2 =
+      AspisR1.ARS_NativeOutcome.wrappers copy allocator id a native1 native2 native
+theorem AspisR1.ARS_NativeOutcome.source : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+        c.std)
+      native1 native2 hashv →
+    (AspisR1.ARS_NativeAccount.run c hashv copy allocator id a native).2 =
+      AspisR1.ARS_NativeOutcome.wrappers copy allocator id a native1 native2 native :=
+fun {A F C} c hashv copy allocator id a native1 native2 native extraction =>
+  have one :=
+    Eq.trans
+      (AspisR1.SdkC_Source.erasure hashv
+        (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+        [])
+      (AspisR1.GExq_InstalledWrapper.first_source c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+        c.geometry c.boundaries c.std hashv copy allocator (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry
+        id (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state native1 native2 extraction);
+  have two := fun j =>
+    Eq.trans (AspisR1.SdkC_Source.erasure hashv (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id j) [])
+      (AspisR1.GExq_InstalledWrapper.second_source c.adapter c.currentBase c.stageBase c.finish c.reserved c.query
+        c.geometry c.boundaries c.std hashv allocator j.entry id j.data j.slot j.state native1 native2 extraction);
+  _root_.id
+    (_root_.id
+      (_root_.id
+        (Eq.mpr
+          (_root_.id
+            (congrArg
+              (fun _a =>
+                (match _a with
+                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                      ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                          (AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2 ++
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                    final)).1 ++
+                              AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2)
+                                    []).2)),
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, _a,
+                        Option.some
+                          ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                            (AspisR1.SdkC_Source.run hashv
+                                (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                  (AspisV8R19.MemoizedProgramLaw.eval native
+                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                        final)).2)
+                                []).1))
+                    | x =>
+                      ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                          AspisR1.SdkC_Source.readLog
+                            (AspisR1.SdkC_Source.run hashv
+                                (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                []).2,
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, _a, Option.none)).2 =
+                  match
+                    AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state with
+                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                    ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                      AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                      Option.some
+                        ((AspisV8R19.MemoizedProgramLaw.eval native
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                          AspisR1.S2W_D189Wrappers.second native2 allocator
+                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                    final)).2.entry
+                            id
+                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                    final)).2.data
+                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                    final)).2.slot
+                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                    final)).2.state))
+                  | x =>
+                    ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                      AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                      Option.none))
+              one))
+          (Aeneas.Std.Result.casesOn (motive := fun t =>
+            AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                t →
+              (match
+                    AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state with
+                  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                    ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                        (AspisR1.SdkC_Source.readLog
+                            (AspisR1.SdkC_Source.run hashv
+                                (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                []).2 ++
+                          ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).2)),
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                      AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                      Option.some
+                        ((AspisV8R19.MemoizedProgramLaw.eval native
+                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                          (AspisR1.SdkC_Source.run hashv
+                              (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2)
+                              []).1))
+                  | x =>
+                    ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                        AspisR1.SdkC_Source.readLog
+                          (AspisR1.SdkC_Source.run hashv
+                              (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                              []).2,
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                      AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                      Option.none)).2 =
+                match
+                  AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state with
+                | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                  ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                    AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                    Option.some
+                      ((AspisV8R19.MemoizedProgramLaw.eval native
+                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                        AspisR1.S2W_D189Wrappers.second native2 allocator
+                          (AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                  final)).2.entry
+                          id
+                          (AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                  final)).2.data
+                          (AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                  final)).2.slot
+                          (AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                  final)).2.state))
+                | x =>
+                  ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                    AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state,
+                    Option.none))
+            (AspisR1.S2W_D189Wrappers.first native1 copy allocator
+              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state)
+            (fun result h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                    x →
+                  (match x with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            (AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    []).2 ++
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).2)),
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                          Option.some
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).1))
+                      | x_1 =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none)).2 =
+                    match x with
+                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                      ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                        Option.some
+                          ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                            AspisR1.S2W_D189Wrappers.second native2 allocator
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.entry
+                              id
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.data
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.slot
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.state))
+                    | x_1 => ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none))
+                (fun reply =>
+                  Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+                    result = t →
+                      (match Aeneas.Std.Result.ok result with
+                          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                            ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                (AspisR1.SdkC_Source.readLog
+                                    (AspisR1.SdkC_Source.run hashv
+                                        (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                        []).2 ++
+                                  ((AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).1 ++
+                                    AspisR1.SdkC_Source.readLog
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2)
+                                          []).2)),
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                              Option.some
+                                ((AspisV8R19.MemoizedProgramLaw.eval native
+                                      (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                        final)).2,
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).1))
+                          | x =>
+                            ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                      []).2,
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                              Option.none)).2 =
+                        match Aeneas.Std.Result.ok result with
+                        | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                          ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                            Option.some
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2,
+                                AspisR1.S2W_D189Wrappers.second native2 allocator
+                                  (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2.entry
+                                  id
+                                  (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2.data
+                                  (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2.slot
+                                  (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2.state))
+                        | x =>
+                          ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                            Option.none))
+                    result
+                    (fun value h =>
+                      Eq.ndrec (motive := fun result =>
+                        AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                            Aeneas.Std.Result.ok result →
+                          (match Aeneas.Std.Result.ok result with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    (AspisR1.SdkC_Source.readLog
+                                        (AspisR1.SdkC_Source.run hashv
+                                            (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                            []).2 ++
+                                      ((AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).1 ++
+                                        AspisR1.SdkC_Source.readLog
+                                          (AspisR1.SdkC_Source.run hashv
+                                              (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                                (AspisV8R19.MemoizedProgramLaw.eval native
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2
+                                                      saved post final)).2)
+                                              []).2)),
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                  Option.some
+                                    ((AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2,
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2)
+                                          []).1))
+                              | x =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    AspisR1.SdkC_Source.readLog
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                          []).2,
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                  Option.none)).2 =
+                            match Aeneas.Std.Result.ok result with
+                            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                              ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                Option.some
+                                  ((AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2,
+                                    AspisR1.S2W_D189Wrappers.second native2 allocator
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.entry
+                                      id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.data
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.slot
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.state))
+                            | x =>
+                              ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                Option.none))
+                        (fun reply =>
+                          let ⟨saved, snd✝, reply⟩ := value
+                          let ⟨post, final, reply⟩ := snd✝
+                          of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (congrArg (Prod.mk (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    (congrArg
+                                      (Prod.mk
+                                        (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final))))
+                                      (congrArg Option.some
+                                        (congrArg
+                                          (Prod.mk
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2)
+                                          ((fun j => two j)
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2))))))
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)),
+                                  Option.some
+                                    ((AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2,
+                                      AspisR1.S2W_D189Wrappers.second native2 allocator
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.entry
+                                        id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.data
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.slot
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.state)))
+                              (eq_self
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)),
+                                  Option.some
+                                    ((AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2,
+                                      AspisR1.S2W_D189Wrappers.second native2 allocator
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.entry
+                                        id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.data
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.slot
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                              (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                                final)).2.state)))))
+                        (Eq.symm h) reply)
+                    (fun error h =>
+                      Eq.ndrec (motive := fun result =>
+                        AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                            Aeneas.Std.Result.ok result →
+                          (match Aeneas.Std.Result.ok result with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    (AspisR1.SdkC_Source.readLog
+                                        (AspisR1.SdkC_Source.run hashv
+                                            (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                            []).2 ++
+                                      ((AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).1 ++
+                                        AspisR1.SdkC_Source.readLog
+                                          (AspisR1.SdkC_Source.run hashv
+                                              (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                                (AspisV8R19.MemoizedProgramLaw.eval native
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2
+                                                      saved post final)).2)
+                                              []).2)),
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                  Option.some
+                                    ((AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2,
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2)
+                                          []).1))
+                              | x =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    AspisR1.SdkC_Source.readLog
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                          []).2,
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                  Option.none)).2 =
+                            match Aeneas.Std.Result.ok result with
+                            | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                              ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                Option.some
+                                  ((AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2,
+                                    AspisR1.S2W_D189Wrappers.second native2 allocator
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.entry
+                                      id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.data
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.slot
+                                      (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2.state))
+                            | x =>
+                              ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.ok result,
+                                Option.none))
+                        (fun reply =>
+                          Eq.refl
+                            (match Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error) with
+                              | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    (AspisR1.SdkC_Source.readLog
+                                        (AspisR1.SdkC_Source.run hashv
+                                            (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                              (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                            []).2 ++
+                                      ((AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).1 ++
+                                        AspisR1.SdkC_Source.readLog
+                                          (AspisR1.SdkC_Source.run hashv
+                                              (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                                (AspisV8R19.MemoizedProgramLaw.eval native
+                                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2
+                                                      saved post final)).2)
+                                              []).2)),
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error),
+                                  Option.some
+                                    ((AspisV8R19.MemoizedProgramLaw.eval native
+                                          (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                            final)).2,
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native
+                                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved
+                                                  post final)).2)
+                                          []).1))
+                              | x =>
+                                ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                                    AspisR1.SdkC_Source.readLog
+                                      (AspisR1.SdkC_Source.run hashv
+                                          (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                            (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                          []).2,
+                                  (AspisV8R19.MemoizedProgramLaw.eval native a.first).2,
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error), Option.none)).2)
+                        (Eq.symm h) reply)
+                    (Eq.refl result))
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state)))
+            (fun error h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                    x →
+                  (match x with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            (AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    []).2 ++
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).2)),
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                          Option.some
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).1))
+                      | x_1 =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none)).2 =
+                    match x with
+                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                      ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                        Option.some
+                          ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                            AspisR1.S2W_D189Wrappers.second native2 allocator
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.entry
+                              id
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.data
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.slot
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.state))
+                    | x_1 => ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none))
+                (fun reply =>
+                  Eq.refl
+                    (match Aeneas.Std.Result.fail error with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            (AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    []).2 ++
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).2)),
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.fail error,
+                          Option.some
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).1))
+                      | x =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.fail error,
+                          Option.none)).2)
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state)))
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state =
+                    x →
+                  (match x with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            (AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    []).2 ++
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).2)),
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                          Option.some
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).1))
+                      | x_1 =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none)).2 =
+                    match x with
+                    | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                      ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x,
+                        Option.some
+                          ((AspisV8R19.MemoizedProgramLaw.eval native
+                                (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                            AspisR1.S2W_D189Wrappers.second native2 allocator
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.entry
+                              id
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.data
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.slot
+                              (AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).2.state))
+                    | x_1 => ((AspisV8R19.MemoizedProgramLaw.eval native a.first).2, x, Option.none))
+                (fun reply =>
+                  Eq.refl
+                    (match Aeneas.Std.Result.div with
+                      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            (AspisR1.SdkC_Source.readLog
+                                (AspisR1.SdkC_Source.run hashv
+                                    (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                      (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                    []).2 ++
+                              ((AspisV8R19.MemoizedProgramLaw.eval native
+                                    (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                      final)).1 ++
+                                AspisR1.SdkC_Source.readLog
+                                  (AspisR1.SdkC_Source.run hashv
+                                      (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                        (AspisV8R19.MemoizedProgramLaw.eval native
+                                            (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                              final)).2)
+                                      []).2)),
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.div,
+                          Option.some
+                            ((AspisV8R19.MemoizedProgramLaw.eval native
+                                  (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post final)).2,
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.secondSyntax c hashv allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native
+                                        (a.second (AspisV8R19.MemoizedProgramLaw.eval native a.first).2 saved post
+                                          final)).2)
+                                  []).1))
+                      | x =>
+                        ((AspisV8R19.MemoizedProgramLaw.eval native a.first).1 ++
+                            AspisR1.SdkC_Source.readLog
+                              (AspisR1.SdkC_Source.run hashv
+                                  (AspisR1.ARS_NativeAccount.firstSyntax c hashv copy allocator id
+                                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2)
+                                  []).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval native a.first).2, Aeneas.Std.Result.div, Option.none)).2)
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                    (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state)))
+            (Eq.refl
+              (AspisR1.S2W_D189Wrappers.first native1 copy allocator
+                (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.entry id
+                (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.data
+                (AspisV8R19.MemoizedProgramLaw.eval native a.first).2.state))))))
+'AspisR1.ARS_NativeOutcome.source' depends on axioms: [propext, Classical.choice, Quot.sound]

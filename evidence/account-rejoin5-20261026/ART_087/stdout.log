@@ -1,0 +1,427 @@
+@AspisR1.ARS_ReachedNumeric.numeric : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q0) →
+    AspisR1.ARS_ReachedBudget.ChoiceBound c hashv copy allocator id a Q1 →
+      AspisR1.SCF_RequiredTransport.CleanAccountTransport c D hashv copy allocator id a Q0 Q1
+          AspisR1.ARQ_Observer.project (AspisR1.ARQ_Observer.select c id) →
+        AspisR1.F3T_RuntimeBound.failureModel (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ≤
+          AspisR1.F3T_Numeric.total (Q0 + Q1)
+theorem AspisR1.ARS_ReachedNumeric.numeric : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q0) →
+    AspisR1.ARS_ReachedBudget.ChoiceBound c hashv copy allocator id a Q1 →
+      AspisR1.SCF_RequiredTransport.CleanAccountTransport c D hashv copy allocator id a Q0 Q1
+          AspisR1.ARQ_Observer.project (AspisR1.ARQ_Observer.select c id) →
+        AspisR1.F3T_RuntimeBound.failureModel (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ≤
+          AspisR1.F3T_Numeric.total (Q0 + Q1) :=
+fun {A F C} c D hashv copy allocator id a Q0 Q1 prefixBound choiceBound law =>
+  have mass := AspisR1.ARS_ReachedMass.bound c D hashv copy allocator id a Q0 Q1 prefixBound choiceBound law;
+  have lifted := fun H =>
+    Eq.mpr
+      (_root_.id
+        (congrArg (fun _a => _a.1.length ≤ Q0 + Q1)
+          (AspisR1.F3T_ByteCarrier.lift_eval c (AspisR1.SCE_Experiment.submission a) H)))
+      (Eq.mpr
+        (_root_.id
+          (congrArg (fun _a => (_a.1, AspisR1.F3T_ByteCarrier.input c _a.2).1.length ≤ Q0 + Q1)
+            (AspisR1.SCE_Experiment.submission_eval a H)))
+        (LE.le.trans (prefixBound H) (Nat.le_add_right Q0 Q1)));
+  have model :=
+    add_le_add
+      (AspisR1.F3T_ModelClaims.failure_bound D (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))
+        (Q0 + Q1) lifted)
+      (le_refl (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1)));
+  _root_.id
+    (le_of_not_gt fun a_1 =>
+      Mathlib.Tactic.Linarith.lt_irrefl
+        (Eq.mp
+          (congrArg (fun _a => _a < 0)
+            (Mathlib.Tactic.Ring.of_eq
+              (Mathlib.Tactic.Ring.Common.add_congr
+                (Mathlib.Tactic.Ring.Common.add_congr
+                  (Mathlib.Tactic.Ring.Common.sub_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf
+                      (AspisR1.F3T_Runtime.deployedFailure (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a))
+                      rfl
+                      (Eq.mpr
+                        (_root_.id
+                          (congrArg
+                            (fun _a =>
+                              AspisR1.F3T_Runtime.deployedFailure
+                                      (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                                    Nat.rawCast 1 *
+                                  Nat.rawCast 1 =
+                                AspisR1.F3T_Runtime.deployedFailure
+                                      (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                                    Nat.rawCast 1 *
+                                  _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl
+                          (AspisR1.F3T_Runtime.deployedFailure
+                                (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.add_congr
+                      (Mathlib.Tactic.Ring.Common.atom_pf
+                        (AspisV8R19.MemoizedProgramLaw.lazyMean
+                          (AspisR1.F3T_Charged.projected D
+                            (AspisR1.F3T_Canon.canon
+                              (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                          FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+                        rfl
+                        (Eq.mpr
+                          (_root_.id
+                            (congrArg
+                              (fun _a =>
+                                AspisV8R19.MemoizedProgramLaw.lazyMean
+                                        (AspisR1.F3T_Charged.projected D
+                                          (AspisR1.F3T_Canon.canon
+                                            (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                        FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                      Nat.rawCast 1 *
+                                    Nat.rawCast 1 =
+                                  AspisV8R19.MemoizedProgramLaw.lazyMean
+                                        (AspisR1.F3T_Charged.projected D
+                                          (AspisR1.F3T_Canon.canon
+                                            (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                        FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                      Nat.rawCast 1 *
+                                    _a)
+                              (Eq.symm rfl)))
+                          (Eq.refl
+                            (AspisV8R19.MemoizedProgramLaw.lazyMean
+                                  (AspisR1.F3T_Charged.projected D
+                                    (AspisR1.F3T_Canon.canon
+                                      (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                  FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                Nat.rawCast 1 *
+                              Nat.rawCast 1))))
+                      (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1)) rfl
+                        (Eq.mpr
+                          (_root_.id
+                            (congrArg
+                              (fun _a =>
+                                AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                  AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * _a)
+                              (Eq.symm rfl)))
+                          (Eq.refl (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (AspisV8R19.MemoizedProgramLaw.lazyMean
+                              (AspisR1.F3T_Charged.projected D
+                                (AspisR1.F3T_Canon.canon
+                                  (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                              FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1)
+                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                          (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                    (Mathlib.Tactic.Ring.Common.sub_pf
+                      (Mathlib.Tactic.Ring.Common.neg_add
+                        (Mathlib.Tactic.Ring.Common.neg_mul
+                          (AspisV8R19.MemoizedProgramLaw.lazyMean
+                            (AspisR1.F3T_Charged.projected D
+                              (AspisR1.F3T_Canon.canon
+                                (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                            FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+                          (Nat.rawCast 1)
+                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                            (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                              (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                              (Eq.refl (Int.negOfNat 1)))))
+                        (Mathlib.Tactic.Ring.Common.neg_add
+                          (Mathlib.Tactic.Ring.Common.neg_mul (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1))
+                            (Nat.rawCast 1)
+                            (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                              (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                                (Eq.refl (Int.negOfNat 1)))))
+                          Mathlib.Tactic.Ring.Common.neg_zero))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (AspisR1.F3T_Runtime.deployedFailure
+                              (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1)
+                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                          (AspisV8R19.MemoizedProgramLaw.lazyMean
+                                  (AspisR1.F3T_Charged.projected D
+                                    (AspisR1.F3T_Canon.canon
+                                      (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                  FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                Nat.rawCast 1 *
+                              (Int.negOfNat 1).rawCast +
+                            (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast +
+                              0))))))
+                  (Mathlib.Tactic.Ring.Common.sub_congr
+                    (Mathlib.Tactic.Ring.Common.add_congr
+                      (Mathlib.Tactic.Ring.Common.add_congr
+                        (Mathlib.Tactic.Ring.Common.atom_pf
+                          (AspisV8R19.MemoizedProgramLaw.lazyMean
+                            (AspisR1.F3T_Charged.projected D
+                              (AspisR1.F3T_Canon.canon
+                                (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                            FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+                          rfl
+                          (Eq.mpr
+                            (_root_.id
+                              (congrArg
+                                (fun _a =>
+                                  AspisV8R19.MemoizedProgramLaw.lazyMean
+                                          (AspisR1.F3T_Charged.projected D
+                                            (AspisR1.F3T_Canon.canon
+                                              (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                          FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                        Nat.rawCast 1 *
+                                      Nat.rawCast 1 =
+                                    AspisV8R19.MemoizedProgramLaw.lazyMean
+                                          (AspisR1.F3T_Charged.projected D
+                                            (AspisR1.F3T_Canon.canon
+                                              (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                          FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                        Nat.rawCast 1 *
+                                      _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl
+                              (AspisV8R19.MemoizedProgramLaw.lazyMean
+                                    (AspisR1.F3T_Charged.projected D
+                                      (AspisR1.F3T_Canon.canon
+                                        (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                    FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                                  Nat.rawCast 1 *
+                                Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18))
+                          rfl
+                          (Eq.mpr
+                            (_root_.id
+                              (congrArg
+                                (fun _a =>
+                                  AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 *
+                                      Nat.rawCast 1 =
+                                    AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl
+                              (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 *
+                                Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                          (AspisV8R19.MemoizedProgramLaw.lazyMean
+                                (AspisR1.F3T_Charged.projected D
+                                  (AspisR1.F3T_Canon.canon
+                                    (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                                FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1)
+                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                            (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                              0))))
+                      (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1)) rfl
+                        (Eq.mpr
+                          (_root_.id
+                            (congrArg
+                              (fun _a =>
+                                AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                  AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * _a)
+                              (Eq.symm rfl)))
+                          (Eq.refl (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (AspisV8R19.MemoizedProgramLaw.lazyMean
+                              (AspisR1.F3T_Charged.projected D
+                                (AspisR1.F3T_Canon.canon
+                                  (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                              FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1)
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                          (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                              0)))))
+                    (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.F3T_Numeric.total (Q0 + Q1)) rfl
+                      (Eq.mpr
+                        (_root_.id
+                          (congrArg
+                            (fun _a =>
+                              AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl (AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.sub_pf
+                      (Mathlib.Tactic.Ring.Common.neg_add
+                        (Mathlib.Tactic.Ring.Common.neg_mul (AspisR1.F3T_Numeric.total (Q0 + Q1)) (Nat.rawCast 1)
+                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                            (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                              (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                              (Eq.refl (Int.negOfNat 1)))))
+                        Mathlib.Tactic.Ring.Common.neg_zero)
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (AspisV8R19.MemoizedProgramLaw.lazyMean
+                              (AspisR1.F3T_Charged.projected D
+                                (AspisR1.F3T_Canon.canon
+                                  (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                              FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass ^
+                            Nat.rawCast 1 *
+                          Nat.rawCast 1)
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                          (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                            (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                              (AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                    (AspisR1.F3T_Runtime.deployedFailure (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                        Nat.rawCast 1 *
+                      Nat.rawCast 1)
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                      (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero
+                        (AspisV8R19.MemoizedProgramLaw.lazyMean
+                          (AspisR1.F3T_Charged.projected D
+                            (AspisR1.F3T_Canon.canon
+                              (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))
+                          FS.emptyTable AspisR1.RawRecordedOracleExtractionMassBin.failureMass)
+                        (Nat.rawCast 1)
+                        (Mathlib.Meta.NormNum.IsInt.to_isNat
+                          (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                            (Mathlib.Meta.NormNum.IsInt.of_raw ℚ (Int.negOfNat 1))
+                            (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                            (Eq.refl (Int.ofNat 0)))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                        (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (AspisR1.F3T_Numeric.accountLoss (Q0 + Q1))
+                          (Nat.rawCast 1)
+                          (Mathlib.Meta.NormNum.IsInt.to_isNat
+                            (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                              (Mathlib.Meta.NormNum.IsInt.of_raw ℚ (Int.negOfNat 1))
+                              (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                              (Eq.refl (Int.ofNat 0)))))
+                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                          (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                            (AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * (Int.negOfNat 1).rawCast + 0)))))))
+                (Mathlib.Tactic.Ring.Common.sub_congr
+                  (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.F3T_Numeric.total (Q0 + Q1)) rfl
+                    (Eq.mpr
+                      (_root_.id
+                        (congrArg
+                          (fun _a =>
+                            AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                              AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * _a)
+                          (Eq.symm rfl)))
+                      (Eq.refl (AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                  (Mathlib.Tactic.Ring.Common.add_congr
+                    (Mathlib.Tactic.Ring.Common.atom_pf
+                      (AspisR1.F3T_Runtime.deployedFailure (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a))
+                      rfl
+                      (Eq.mpr
+                        (_root_.id
+                          (congrArg
+                            (fun _a =>
+                              AspisR1.F3T_Runtime.deployedFailure
+                                      (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                                    Nat.rawCast 1 *
+                                  Nat.rawCast 1 =
+                                AspisR1.F3T_Runtime.deployedFailure
+                                      (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                                    Nat.rawCast 1 *
+                                  _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl
+                          (AspisR1.F3T_Runtime.deployedFailure
+                                (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                              Nat.rawCast 1 *
+                            Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.atom_pf (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18)) rfl
+                      (Eq.mpr
+                        (_root_.id
+                          (congrArg
+                            (fun _a =>
+                              AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 *
+                                  Nat.rawCast 1 =
+                                AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * _a)
+                            (Eq.symm rfl)))
+                        (Eq.refl
+                          (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                      (AspisR1.F3T_Runtime.deployedFailure
+                            (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                          Nat.rawCast 1 *
+                        Nat.rawCast 1)
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                        (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                          0))))
+                  (Mathlib.Tactic.Ring.Common.sub_pf
+                    (Mathlib.Tactic.Ring.Common.neg_add
+                      (Mathlib.Tactic.Ring.Common.neg_mul
+                        (AspisR1.F3T_Runtime.deployedFailure
+                          (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a))
+                        (Nat.rawCast 1)
+                        (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                          (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                            (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                            (Eq.refl (Int.negOfNat 1)))))
+                      (Mathlib.Tactic.Ring.Common.neg_add
+                        (Mathlib.Tactic.Ring.Common.neg_mul (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18))
+                          (Nat.rawCast 1)
+                          (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                            (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                              (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                              (Eq.refl (Int.negOfNat 1)))))
+                        Mathlib.Tactic.Ring.Common.neg_zero))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                      (AspisR1.F3T_Runtime.deployedFailure
+                            (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a) ^
+                          Nat.rawCast 1 *
+                        (Int.negOfNat 1).rawCast)
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_gt
+                        (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18) ^ Nat.rawCast 1 *
+                          (Int.negOfNat 1).rawCast)
+                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                          (AspisR1.F3T_Numeric.total (Q0 + Q1) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))
+                (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                  (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero
+                    (AspisR1.F3T_Runtime.deployedFailure (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a))
+                    (Nat.rawCast 1)
+                    (Mathlib.Meta.NormNum.IsInt.to_isNat
+                      (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                        (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                        (Mathlib.Meta.NormNum.IsInt.of_raw ℚ (Int.negOfNat 1)) (Eq.refl (Int.ofNat 0)))))
+                  (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                    (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero
+                      (AspisR1.QueryScanModelFailure.failureProbability (2 ^ 18)) (Nat.rawCast 1)
+                      (Mathlib.Meta.NormNum.IsInt.to_isNat
+                        (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                          (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                          (Mathlib.Meta.NormNum.IsInt.of_raw ℚ (Int.negOfNat 1)) (Eq.refl (Int.ofNat 0)))))
+                    (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                      (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (AspisR1.F3T_Numeric.total (Q0 + Q1))
+                        (Nat.rawCast 1)
+                        (Mathlib.Meta.NormNum.IsInt.to_isNat
+                          (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                            (Mathlib.Meta.NormNum.IsInt.of_raw ℚ (Int.negOfNat 1))
+                            (Mathlib.Meta.NormNum.IsNat.to_isInt (Mathlib.Meta.NormNum.IsNat.of_raw ℚ 1))
+                            (Eq.refl (Int.ofNat 0)))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add 0)))))
+              (Mathlib.Tactic.Ring.cast_zero (Mathlib.Meta.NormNum.isNat_ofNat ℚ (Eq.refl 0)))))
+          (Mathlib.Tactic.Linarith.add_lt_of_le_of_neg
+            (Mathlib.Tactic.Linarith.add_nonpos (Mathlib.Tactic.Linarith.sub_nonpos_of_le mass)
+              (Mathlib.Tactic.Linarith.sub_nonpos_of_le
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      AspisR1.F3T_ModelClaims.failure D
+                            (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)) +
+                          AspisR1.F3T_Numeric.accountLoss (Q0 + Q1) ≤
+                        _a)
+                    (AspisR1.F3T_Combined.arithmetic (Q0 + Q1)))
+                  model)))
+            (Mathlib.Tactic.Linarith.sub_neg_of_lt a_1))))
+'AspisR1.ARS_ReachedNumeric.numeric' depends on axioms: [propext, Classical.choice, Quot.sound]
