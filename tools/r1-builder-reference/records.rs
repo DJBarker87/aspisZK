@@ -402,3 +402,7 @@ fn pv_src_words_range_counterexample() {
     assert_eq!(w.output_value, 1 << 30);
     assert!(w.output_value < (1 << 30), "PV_Src words is not an unconditional mapper law");
 }
+
+// Continuation 5: all-field P6 with the actual root helper and no stubs.
+#[path = "pv_srcid3.rs"]
+mod pv_srcid3;

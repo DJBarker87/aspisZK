@@ -207,3 +207,14 @@ fn external_owned_call_trace_and_outputs() {
     }
     assert_eq!(actual, expected);
 }
+
+// Unstubbed full external-layer association for the extracted owned callback.
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(17)]
+fn pv_srcid3_external_owned_unstubbed() {
+    let mut actual = kani::any::<[u32; 16]>().map(M31);
+    let expected = external_owned(actual);
+    external_linear_lazy(&mut actual);
+    assert_eq!(actual, expected);
+}
