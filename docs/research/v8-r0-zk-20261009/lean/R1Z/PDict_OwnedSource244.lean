@@ -8,7 +8,7 @@ open Aeneas Aeneas.Std Result ControlFlow Error
     Source: '/home/dombarker/project-offloads/codex-cx-prover-dict-20261026/src/crates/aspis-r1-cost-probe/src/transport.rs', lines 3:0-3:16
     Name pattern: [aspis_r1_cost_probe::transport::Variant]
     Visibility: public -/
-@[discriminant isize, rust_type "aspis_r1_cost_probe::transport::Variant"]
+@[rust_type "aspis_r1_cost_probe::transport::Variant"]
 inductive aspis_r1_cost_probe.transport.Variant where
 | S1 : aspis_r1_cost_probe.transport.Variant
 | S2 : aspis_r1_cost_probe.transport.Variant

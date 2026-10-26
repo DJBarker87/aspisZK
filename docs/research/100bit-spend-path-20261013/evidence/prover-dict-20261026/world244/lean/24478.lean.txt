@@ -1,0 +1,58 @@
+import R1Z.PDict_RemainingDictionary231
+import R1Z.PDict_OwnedSource244
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_ArrayReference244
+open Aeneas Aeneas.Std Result ProverRwFull
+abbrev Variant := PDict_OwnedSource244.aspis_r1_cost_probe.transport.Variant
+
+def toReference : transport.Variant → Variant
+  | .S1 => .S1
+  | .S2 => .S2
+  | .D => .D
+
+def fromReference : Variant → transport.Variant
+  | .S1 => .S1
+  | .S2 => .S2
+  | .D => .D
+
+theorem from_to (variant : transport.Variant) : fromReference (toReference variant) = variant := by
+  cases variant <;> rfl
+
+theorem to_from (variant : Variant) : toReference (fromReference variant) = variant := by
+  cases variant <;> rfl
+
+abbrev native := PDict_RemainingDictionary231.native
+
+/-- An installed OWNED REFERENCE, not a proof that shipped from_fn has been
+replaced. Native equivalence must be checked for the actual monomorphic types;
+the outstanding identity is recorded in the receipt rather than an axiom. -/
+@[reducible] def selected (base : ExternalTypes)
+    (ops : @ExternalFuns (native base)) : @ExternalFuns (native base) :=
+  letI : ExternalTypes := native base
+  { PDict_RemainingDictionary231.selected base ops with
+    op255 := fun copy variant rows =>
+      PDict_OwnedSource244.coefficients.owned copy (toReference variant) rows }
+
+theorem op255_reference (base : ExternalTypes)
+    (ops : @ExternalFuns (native base)) {T : Type} (copy : core.marker.Copy T)
+    (variant : transport.Variant) (rows : Array T 1024#usize) :
+    (selected base ops).op255 copy variant rows =
+      PDict_OwnedSource244.coefficients.owned copy (toReference variant) rows := rfl
+
+theorem file_open_retained (base : ExternalTypes) (ops : @ExternalFuns (native base)) :
+    (selected base ops).op14 = (PDict_RemainingDictionary231.selected base ops).op14 := rfl
+
+theorem io_kind_retained (base : ExternalTypes) (ops : @ExternalFuns (native base)) :
+    (selected base ops).op23 = (PDict_RemainingDictionary231.selected base ops).op23 := rfl
+
+theorem entropy_retained (base : ExternalTypes) (ops : @ExternalFuns (native base)) :
+    (selected base ops).op129 = (PDict_RemainingDictionary231.selected base ops).op129 := rfl
+
+#print axioms from_to
+#print axioms to_from
+#print axioms op255_reference
+#print axioms file_open_retained
+#print axioms io_kind_retained
+#print axioms entropy_retained
+end R1Z.PDict_ArrayReference244

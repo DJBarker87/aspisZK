@@ -138,7 +138,7 @@ No external templates/axioms selected. See emission-*,row-chunks244.json and
 row-reference244.json. The rejected006emission is preserved separately.
 
 10/10new Kani runs used:5pass/5timeouts, no assertion counterexample. Passed:
-OSraw-code/kind/retry, complete reserve-branch projection, one/two Formatter
+OSraw-code/kind/retry, inline reserve-style projection (success=true orOSerror), one/two Formatter
 write delegation for ASCII≤4bytes with options/failure/frame, M31from_fn.
 Timed out:QM31/WideExactfrom_fn and ALLTHREE actual coefficient/reference
 contracts. ThusV262/native shipped=reference is NOT removed. No timeout was
@@ -155,3 +155,25 @@ is prepared but not yet checked; its identity obligation stays explicit.
 A further outer final-Lean reservation refused18:37:39UTC (48.4+8>55GiB).
 No launcher bypass, cap increase, backend/source/observer/key/pin change.
 Continue after the required wait; target not yet established.
+
+## Final audit and budget stop
+
+J24460–24477check the needed local predecessors inJ. J24478's import collision
+was isolated to an unused generated discriminant instance name. J24479checks
+its name-only removal; J24480's polymorphicop14retention header needed explicit
+@arguments. J24481combines the corrected reference selector and final selected-
+closure audit, rather than spending an unallocated extra attempt.
+
+Final81/81Lean:57accepted/24rejected,43local/38host.10/10Kani:5pass/5timeouts.
+J24481exit0,2.79s,4341468KiB RSS,swap0,235standard-onlyreports. No further
+proof invocation authorized. All1304final inputs and31latest own source hashes
+match;30selected own modules have zero dependency-input conflicts. Unused
+RowShape is historical, excluded after the name fix. Fourrawsourcesmatch.
+Reference255selector is NOW CHECKED; native identity is still NOT established.
+Counts175/80/255,native26/28,root removals0remain unchanged. No endpoint premise
+or native association is credited from reference installation. Both real OS
+source/world and Error/Formatter/native joins remain open.
+
+Read HANDOFF.md,world-fields.json,final-object-binding.json,raw-source-binding.json,
+lean-summary.json,native-summary.json andbudget.json for the final state.
+Target not yet established. Stop is budget exhaustion, never a clarification.
