@@ -862,3 +862,22 @@ checks every current new Dictionary module against its accepted immutable
 snapshot and pins the unchanged root. Section6 receipts record exact commands,
 source/dependency hashes, status, wall/RSS/swap and complete axioms. All stages
 committed locally; no push, merge, key deletion or other worktree mutation.
+
+## Successful-body continuation: selector stage 1 (12400–12402)
+
+New selector `ProverRwSuccessConstants.selected` extends the inherited74 with
+12 on-body interpretations: Option callback/borrow/equality, Result.map,
+WideExact clone/equality/projections, multiproof and wire numeric constants.
+All callback failure/divergence is retained. `eq_total` proves exact structural
+wide equality for arbitrary raw limbs using the already proved QM31 equality;
+no canonicality, operation-success or output-equality hypothesis is supplied.
+These selector/source-model equations do not prove native Rust library/ABI
+association. Whole BodyContract, PrefixContract and root conjunct1 remain open;
+zero root premises removed. No type associations or OFF-path entries touched.
+
+Three focused host compiles pass, standard axioms only; receipts with exact
+snapshots, source revision, transitive object hashes, exit/wall/RSS/swap and
+complete axioms are in `success-install`. Existing stricter5G/7G scopes,swap0,
+Tasks64 and-M7000 unchanged. Authorized launcher edit adds only12400–12799;
+its exact one-line diff/hashes are recorded. No ELF rebuild/pin change.
+Budget this continuation:3/100 Lean compiles, native Kani work in progress.
