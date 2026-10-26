@@ -1,0 +1,37 @@
+{"attempt": "SCJ_098", "exit_status": 0, "wall_seconds": 2.167983549006749, "peak_rss_kib": "5494636", "swaps": "0", "print_axioms": ["'AspisR1.P6C_FullBoundary.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop
+def AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aenea
+...
+@AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop
+def AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H saved f s =>
+  AspisR1.P6C_Whole.SafePair c hashv H saved f s ∧
+    AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.firstLog c hashv f) ∧
+      AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.secondLog c hashv s) ∧
+        ∀ q ∈ AspisR1.P6C_FullBoundary.firstLog c hashv f ++ AspisR1.P6C_FullBoundary.secondLog c hashv s,
+          ∀ (self : AdapterRw.SolanaDigest),
+            (AspisR1.DrvC_Installation.sdk c).op43 self q.parts =
+              Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts)
+'AspisR1.P6C_FullBoundary.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9abdbea2f5974821823a860a58653a3e.scope; invocation ID: c3879dd8a9dd459fafbf6fad33279ee9
+

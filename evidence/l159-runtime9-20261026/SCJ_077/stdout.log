@@ -1,0 +1,350 @@
+@AspisR1.Rc5_LiteralForget.forget : ∀ {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stage : VTop_Stages.Ops) {F : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+  (s : AspisR1.S2W_NativeConsolidation.SecondCut)
+  (run :
+    AspisR1.Tx1Q_Execution.Run
+      (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+        (AspisR1.F3M_CircleSource.install B) std)
+      reserved query geo
+      (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo (AspisR1.F3M_CircleSource.install B)
+        std)
+      () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (authParsed : AspisR1.OraclePortCompactDraft.Parsed) (tx2 : AspisR1.Cons_Native.Witness),
+  AspisR1.Rc5_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed tx2 →
+    AspisR1.Rc4_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed tx2
+theorem AspisR1.Rc5_LiteralForget.forget : ∀ {CoreError : Type} (adapter : AdapterRw.Ops)
+  (ops : AspisR1CurrentCaller.Ops) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError) (stage : VTop_Stages.Ops) {F : Type}
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (std : AspisR1.ClaimsUnrolledFinish.StdCalls) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut)
+  (run :
+    AspisR1.Tx1Q_Execution.Run
+      (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+        (AspisR1.F3M_CircleSource.install B) std)
+      reserved query geo
+      (AspisR1.SdkD_PairBatches.current adapter ops stage finish reserved query geo (AspisR1.F3M_CircleSource.install B)
+        std)
+      () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (authParsed : AspisR1.OraclePortCompactDraft.Parsed) (tx2 : AspisR1.Cons_Native.Witness),
+  AspisR1.Rc5_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed tx2 →
+    AspisR1.Rc4_Literal.Outcome adapter ops reserved query geo stage finish B std saved f s run H trace authParsed
+      tx2 :=
+fun {CoreError} adapter ops reserved query geo stage {F} finish B std saved f s run H trace authParsed tx2 strong =>
+  let ⟨rawModel, h✝⟩ := strong
+  let ⟨parsed, h✝¹⟩ := h✝
+  let ⟨q, h✝²⟩ := h✝¹
+  let ⟨metadata, h✝³⟩ := h✝²
+  let ⟨view, h✝⁴⟩ := h✝³
+  let ⟨physical, right✝⟩ := h✝⁴
+  let ⟨stored, right✝¹⟩ := right✝
+  let ⟨parser, right✝²⟩ := right✝¹
+  let ⟨queries, right✝³⟩ := right✝²
+  let ⟨found, right✝⁴⟩ := right✝³
+  let ⟨read, right✝⁵⟩ := right✝⁴
+  let ⟨opened, right✝⁶⟩ := right✝⁵
+  let ⟨fields, right✝⁷⟩ := right✝⁶
+  let ⟨numeric, right✝⁸⟩ := right✝⁷
+  let ⟨prepare, right✝⁹⟩ := right✝⁸
+  let ⟨prepared, right✝¹⁰⟩ := right✝⁹
+  let ⟨source, h✝⁵⟩ := right✝¹⁰
+  let ⟨output, right✝¹¹⟩ := h✝⁵
+  let ⟨sourceNumeric, remaining⟩ := right✝¹¹
+  Exists.intro rawModel
+    (Exists.intro parsed
+      (Exists.intro q
+        (Exists.intro metadata
+          (Exists.intro view
+            ⟨physical,
+              ⟨stored,
+                ⟨parser,
+                  ⟨queries,
+                    ⟨found,
+                      ⟨read,
+                        ⟨opened,
+                          ⟨fields,
+                            ⟨numeric,
+                              ⟨prepare,
+                                ⟨prepared,
+                                  Exists.intro source
+                                    ⟨output,
+                                      ⟨sourceNumeric,
+                                        Or.casesOn remaining (fun collision => Or.inl collision) fun good =>
+                                          Or.inr
+                                            (let ⟨acc, right✝¹²⟩ := good
+                                            let ⟨writer, right✝¹³⟩ := right✝¹²
+                                            let ⟨len, right✝¹⁴⟩ := right✝¹³
+                                            let ⟨next, right✝¹⁵⟩ := right✝¹⁴
+                                            let ⟨savedEq, finishing⟩ := right✝¹⁵
+                                            ⟨acc,
+                                              ⟨writer,
+                                                ⟨len,
+                                                  ⟨next,
+                                                    ⟨savedEq,
+                                                      AspisR1.SAF_ForgetFinish.forget finish tx2.v2 tx2.p2
+                                                        (have __src := tx2.returned2;
+                                                        { weights := tx2.back2 tx2.flushed2, rhs := __src.rhs,
+                                                          power := __src.power, next := __src.next })
+                                                        s.proof saved H
+                                                        (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof)
+                                                        (AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub) run.p
+                                                        authParsed trace parsed.semantic q
+                                                        (AspisR1.LiteralTranscript.erasePrefix
+                                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                                              (AspisR1.F3J_SamplerRun.program
+                                                                (AspisR1.Rc4_Model.typed rawModel).proof 0 33
+                                                                (FS.emptyPrefix
+                                                                  (AspisR1.Rc4_Model.typed
+                                                                        rawModel).semantic.value))).2)
+                                                        (AspisR1.TxS_Carriers.source metadata
+                                                          (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q
+                                                            (AspisR1.LiteralTranscript.erasePrefix
+                                                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                  (AspisR1.F3J_SamplerRun.program
+                                                                    (AspisR1.Rc4_Model.typed rawModel).proof 0 33
+                                                                    (FS.emptyPrefix
+                                                                      (AspisR1.Rc4_Model.typed
+                                                                            rawModel).semantic.value))).2)))
+                                                        (AspisR1.OraclePortAcceptedContextC6.context parsed
+                                                          (AspisR1.TxS_Carriers.source metadata
+                                                            (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q
+                                                              (AspisR1.LiteralTranscript.erasePrefix
+                                                                (AspisV8R19.MemoizedProgramLaw.eval H
+                                                                    (AspisR1.F3J_SamplerRun.program
+                                                                      (AspisR1.Rc4_Model.typed rawModel).proof 0 33
+                                                                      (FS.emptyPrefix
+                                                                        (AspisR1.Rc4_Model.typed
+                                                                              rawModel).semantic.value))).2)))
+                                                          view)
+                                                        finishing⟩⟩⟩⟩⟩)⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))))
+'AspisR1.Rc5_LiteralForget.forget' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.S2Trust.S2TrustedSdkBorrow : {W F : Type} → AspisR1.S2Trust.Library W F → Prop
+structure AspisR1.S2Trust.S2TrustedSdkBorrow {W F : Type} (L : AspisR1.S2Trust.Library W F) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.account_data_cell : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (a b : ℕ),
+            L.accountData w a = (s.accounts a).1 ∧
+              L.accountLamports w a = (s.accounts a).2 ∧
+                ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                  (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_payload : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c
+  AspisR1.S2Trust.S2TrustedSdkBorrow.cell_counter : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            0 ≤ s.counter (s.accounts a).1 →
+              s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                    AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+            s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_ok : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 = 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                  AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_err : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+            s.counter (s.accounts a).1 ≠ 0 →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o) (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell))
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_deref : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                ∀ (i : ℕ) (v : UInt8),
+                  i < (s.payload g.cell).descriptor.length →
+                    AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                      (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_move : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+            AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+              (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.shared_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.shared →
+              0 < s.counter g.cell →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.exclusive_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            g.kind = AspisR1.S2Trust.Kind.exclusive →
+              s.counter g.cell = -1 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                  (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.error_move_drop : ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.borrow_frame : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op)
+  AspisR1.S2Trust.S2TrustedSdkBorrow.guard_liveness : ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ)
+      (g : AspisR1.S2Trust.Guard),
+      L.related w s →
+        AspisR1.S2Trust.Valid s →
+          AspisR1.S2Trust.lookup s t = Option.some g →
+            L.liveGuard w t = Option.some g ∧
+              L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor
+constructor:
+  AspisR1.S2Trust.S2TrustedSdkBorrow.mk {W F : Type} {L : AspisR1.S2Trust.Library W F}
+    (account_data_cell :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (a b : ℕ),
+              L.accountData w a = (s.accounts a).1 ∧
+                L.accountLamports w a = (s.accounts a).2 ∧
+                  ((s.accounts a).1 = (s.accounts b).1 → L.accountData w a = L.accountData w b) ∧
+                    (s.ownerLive a = Bool.true → L.accountData w a ≠ L.accountLamports w a))
+    (cell_payload :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s → AspisR1.S2Trust.Valid s → ∀ (c : ℕ), L.cellPayload w c = s.payload c)
+    (cell_counter :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            ∀ (c : ℕ), L.cellCounter w c = s.counter c ∧ ∀ (t : ℕ), L.liveGuard w t = AspisR1.S2Trust.lookup s t)
+    (shared_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              0 ≤ s.counter (s.accounts a).1 →
+                s.counter (s.accounts a).1 < AspisR1.S2Trust.maxCounter →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o)
+                    (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.shared,
+                      AspisR1.S2Trust.Reply.guard t))
+    (shared_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.shared a t o) →
+              s.counter (s.accounts a).1 < 0 ∨ s.counter (s.accounts a).1 = AspisR1.S2Trust.maxCounter →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.shared a t o) (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (exclusive_ok :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 = 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (AspisR1.S2Trust.acquire s (s.accounts a).1 t o AspisR1.S2Trust.Kind.exclusive,
+                    AspisR1.S2Trust.Reply.guard t))
+    (exclusive_err :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (a t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.exclusive a t o) →
+              s.counter (s.accounts a).1 ≠ 0 →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.exclusive a t o)
+                  (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (shared_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                  (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)))
+    (exclusive_deref :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.deref t)
+                    (s, AspisR1.S2Trust.Reply.payload (s.payload g.cell)) ∧
+                  ∀ (i : ℕ) (v : UInt8),
+                    i < (s.payload g.cell).descriptor.length →
+                      AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.write t i v)
+                        (AspisR1.S2Trust.writeAt s g i v, AspisR1.S2Trust.Reply.unit))
+    (guard_move :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t o : ℕ),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s (AspisR1.S2Trust.Op.move t o) →
+              AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.move t o)
+                (AspisR1.S2Trust.relocate s t o, AspisR1.S2Trust.Reply.guard t))
+    (shared_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              L.liveGuard w t = Option.some g ∧
+                L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L
+'AspisR1.S2Trust.S2TrustedSdkBorrow' does not depend on any axioms

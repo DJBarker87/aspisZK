@@ -1,0 +1,43 @@
+{"attempt": "SCJ_028", "exit_status": 0, "wall_seconds": 2.1894813599647023, "peak_rss_kib": "5496020", "swaps": "0", "print_axioms": ["'AspisR1.Rc2_Protection.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.T2R_Parser.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Rc2_Protection.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.S2W_ExtractionBoundary.First →
+      AspisR1.S2W_ExtractionBoundary.Second →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+            ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+          AspisR1.S2W_D189Wrappers.Allocator A → AspisR1.S2W_ExtractionBoundary.Program → Prop
+def AspisR1.Rc2_Protection.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.S2W_ExtractionBoundary.First →
+      AspisR1.S2W_ExtractionBoundary.Second →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189E
+...
+tore.byteLedger before.cells)
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2 ∧
+        ∀ (key : ℕ),
+          (before.cells key).owner = id →
+            AspisR1.Hist_Store.Initialized (before.cells key).data →
+              0 < before.lamports key →
+                (∀ event ∈ (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2,
+                    AspisR1.S2X.Preserves key event) ∧
+                  (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells key =
+                      before.cells key ∧
+                    before.lamports key ≤
+                      (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.lamports key
+'AspisR1.Rc2_Protection.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.T2R_Parser.Facts : Aeneas.Std.Slice Aeneas.Std.U8 → Prop
+def AspisR1.T2R_Parser.Facts : Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun proof =>
+  ∃ expanded pre,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      AspisR1.OraclePortCompactDraft.semanticRows 27 0
+            (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) 48 6983) =
+          Option.some (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records) ∧
+        AspisR1.OraclePortCompactDraft.parse (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) =
+          Option.some
+            { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+              semantic := List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records }
+'AspisR1.T2R_Parser.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra37328feab954e9e90e9d11980a19ed8.scope; invocation ID: 841e0dc357e94c66a116046819fe2989

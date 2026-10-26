@@ -1,0 +1,42 @@
+{"attempt": "SCJ_032", "exit_status": 0, "wall_seconds": 2.1639884390169755, "peak_rss_kib": "5495804", "swaps": "0", "print_axioms": ["'AspisR1.S2W_ExpandedChildren.ChildConeJoin' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SAQ_Constructor.fibre' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.S2W_ExpandedChildren.ChildConeJoin : Type → AdapterRw.Ops → Type 1
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+      (AspisR1.S2W_Trace.thenResult (self.execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+        AspisR1.S2W_Trace.invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : Adapt
+...
+AspisR1.S2W_ExpandedChildren.ChildConeJoin : Type → AdapterRw.Ops → Type 1
+structure AspisR1.S2W_ExpandedChildren.ChildConeJoin (E : Type) (ops : AdapterRw.Ops) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.execute : {A : Type} →
+      AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E))
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.erasure : ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+      (AspisR1.S2W_Trace.thenResult (self.execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+        AspisR1.S2W_Trace.invoke ops call
+constructor:
+  AspisR1.S2W_ExpandedChildren.ChildConeJoin.mk {E : Type} {ops : AdapterRw.Ops}
+    (execute : {A : Type} → AspisR1.S2W_Trace.Call A → Aeneas.Std.Result (A × List (AspisR1.S2W_ExpandedTrace.Event E)))
+    (erasure :
+      ∀ {A : Type} (call : AspisR1.S2W_Trace.Call A),
+        (AspisR1.S2W_Trace.thenResult (execute call) fun answer => Aeneas.Std.Result.ok answer.1) =
+          AspisR1.S2W_Trace.invoke ops call) :
+    AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops
+'AspisR1.S2W_ExpandedChildren.ChildConeJoin' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SAQ_Constructor.fibre : {C : Type} →
+  C → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.result.Result Aeneas.Std.Usize C)
+def AspisR1.SAQ_Constructor.fibre : {C : Type} →
+  C → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.result.Result Aeneas.Std.Usize C) :=
+fun {C} indexError u =>
+  if u < 262144#usize then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok u)
+  else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err indexError)
+'AspisR1.SAQ_Constructor.fibre' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1cf2b99352ce489686fb4ab685812616.scope; invocation ID: 77024b7752f84b89af44ffb91831e6d8
+

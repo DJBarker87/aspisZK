@@ -1,0 +1,49 @@
+{"attempt": "SCJ_077", "exit_status": 0, "wall_seconds": 2.5596466349670663, "peak_rss_kib": "5501372", "swaps": "0", "print_axioms": ["'AspisR1.Rc5_LiteralForget.forget' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.S2Trust.S2TrustedSdkBorrow' does not depend on any axioms"]}
+@AspisR1.Rc5_LiteralForget.forget : ∀ {CoreError : Type} (adapter : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stage : VTop_Stages.Ops) {F : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+  (s : AspisR1.S2W_NativeConsolidation.SecondCut)
+  (run :
+    AspisR1.Tx1Q_Execution.Run
+      (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved quer
+...
+elated w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.shared →
+                0 < s.counter g.cell →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (exclusive_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              g.kind = AspisR1.S2Trust.Kind.exclusive →
+                s.counter g.cell = -1 →
+                  AspisR1.S2Trust.Matches L w (AspisR1.S2Trust.Op.drop t)
+                    (AspisR1.S2Trust.release s g, AspisR1.S2Trust.Reply.unit))
+    (error_move_drop :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Matches L w AspisR1.S2Trust.Op.errorMoveDrop (s, AspisR1.S2Trust.Reply.borrowFailed))
+    (borrow_frame :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (op : AspisR1.S2Trust.Op),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.Enabled s op → AspisR1.S2Trust.Matches L w op (AspisR1.S2Trust.run s op))
+    (guard_liveness :
+      ∀ (w : W) (s : AspisR1.S2Trust.Heap F) (t : ℕ) (g : AspisR1.S2Trust.Guard),
+        L.related w s →
+          AspisR1.S2Trust.Valid s →
+            AspisR1.S2Trust.lookup s t = Option.some g →
+              L.liveGuard w t = Option.some g ∧
+                L.allocated w g.cell = Bool.true ∧ (L.cellPayload w g.cell).descriptor = g.descriptor) :
+    AspisR1.S2Trust.S2TrustedSdkBorrow L
+'AspisR1.S2Trust.S2TrustedSdkBorrow' does not depend on any axioms
+
+Running as unit: run-r741294f2a428413091851620f84058aa.scope; invocation ID: 37629f23e17a47739d6451c1b3144063
+

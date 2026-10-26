@@ -1,0 +1,46 @@
+@AspisR1.Rc2_Protection.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.S2W_ExtractionBoundary.First →
+      AspisR1.S2W_ExtractionBoundary.Second →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+            ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+          AspisR1.S2W_D189Wrappers.Allocator A → AspisR1.S2W_ExtractionBoundary.Program → Prop
+def AspisR1.Rc2_Protection.Facts : {A F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.S2W_ExtractionBoundary.First →
+      AspisR1.S2W_ExtractionBoundary.Second →
+        (AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+            ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)) →
+          AspisR1.S2W_D189Wrappers.Allocator A → AspisR1.S2W_ExtractionBoundary.Program → Prop :=
+fun {A F C} c n1 n2 copy allocator id =>
+  (AspisR1.DrvC_Installation.sdk c).op36 = AspisR1.Hist_Authority.keyEq →
+    ∀ (before : AspisR1.CPP_BankState.Bank) (actions : List (AspisR1.CPP_BankState.Action A)) (success : Bool),
+      AspisR1.Hist_Store.byteLedger
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells =
+          AspisR1.S2X.history (AspisR1.Hist_Store.byteLedger before.cells)
+            (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2 ∧
+        ∀ (key : ℕ),
+          (before.cells key).owner = id →
+            AspisR1.Hist_Store.Initialized (before.cells key).data →
+              0 < before.lamports key →
+                (∀ event ∈ (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).2,
+                    AspisR1.S2X.Preserves key event) ∧
+                  (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.cells key =
+                      before.cells key ∧
+                    before.lamports key ≤
+                      (AspisR1.CPR_AtomicBank.run n1 n2 copy allocator id before actions success).1.lamports key
+'AspisR1.Rc2_Protection.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.T2R_Parser.Facts : Aeneas.Std.Slice Aeneas.Std.U8 → Prop
+def AspisR1.T2R_Parser.Facts : Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun proof =>
+  ∃ expanded pre,
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      AspisR1.OraclePortCompactDraft.semanticRows 27 0
+            (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) 48 6983) =
+          Option.some (List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records) ∧
+        AspisR1.OraclePortCompactDraft.parse (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) =
+          Option.some
+            { wire := AspisR1.MultiproofConeCanonical.bytesOf ↑proof,
+              semantic := List.map (fun s => AspisR1.MultiproofConeCanonical.bytesOf ↑s) ↑pre.records }
+'AspisR1.T2R_Parser.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]

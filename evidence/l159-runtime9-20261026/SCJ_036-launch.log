@@ -1,0 +1,41 @@
+{"attempt": "SCJ_036", "exit_status": 0, "wall_seconds": 2.1658250450273044, "peak_rss_kib": "5494388", "swaps": "0", "print_axioms": ["'AspisR1.Rc5_Install.seed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.PFin_Packet.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Rc5_Install.seed : {F C : Type} →
+  C → AspisR1.DrvC_Installation.Configuration F C → AspisR1.DrvC_Installation.Configuration F C
+def AspisR1.Rc5_Install.seed : {F C : Type} →
+  C → AspisR1.DrvC_Installation.Configuration F C → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c => AspisR1.SAQ_CompleteInstall.select err (AspisR1.CPP_Install.configuration c)
+'AspisR1.Rc5_Install.seed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.PFin_Packet.Facts : AspisV8R19.DuplexFrames.Bytes →
+  AspisV8R19.DuplexFrames.Bytes →
+    AspisR1Stage2.verifier.Prepared → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+def AspisR1.PFin_Packet.Fac
+...
+allation.Configuration F C → AspisR1.DrvC_Installation.Configuration F C :=
+fun {F C} err c => AspisR1.SAQ_CompleteInstall.select err (AspisR1.CPP_Install.configuration c)
+'AspisR1.Rc5_Install.seed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.PFin_Packet.Facts : AspisV8R19.DuplexFrames.Bytes →
+  AspisV8R19.DuplexFrames.Bytes →
+    AspisR1Stage2.verifier.Prepared → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop
+def AspisR1.PFin_Packet.Facts : AspisV8R19.DuplexFrames.Bytes →
+  AspisV8R19.DuplexFrames.Bytes →
+    AspisR1Stage2.verifier.Prepared → (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → Prop :=
+fun publicBytes stored prepared H =>
+  ∃ i p q source,
+    i.physical.bytes = publicBytes ∧
+      i.stored = stored ∧
+        have tr :=
+          AspisR1.LiteralTranscript.erasePrefix
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2;
+        AspisR1.OraclePortStoredParserC4.parseReached stored tr = Option.some p ∧
+          AspisR1.OraclePortCompactDraft.Aligned p tr ∧
+            AspisR1.OraclePortSelectedDraft.queries tr = Option.some q ∧
+              AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some source ∧
+                AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows p q tr) =
+                    Option.some source.data ∧
+                  AspisR1.LiteralQueryRead.decode source.queryBytes = Option.some q ∧
+                    AspisR1.Port5Q1_QueryPorts.SessionAPrepare prepared source.data q
+                      (AspisR1.SelectedChallengeMap.rhoOf source.rho)
+'AspisR1.PFin_Packet.Facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rda7c0cbe875048f7966dc22475d334a6.scope; invocation ID: 0ebbd31c5f094191aa37d35952c87316

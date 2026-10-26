@@ -1,0 +1,51 @@
+@AspisR1.Port4D_Pairing.RoundLaws : {F W : Type} →
+  [inst : Field F] →
+    AspisR1Stage2.Stage2Finish.FinishOps W →
+      (AspisR1Stage2.Stage2Finish.E → F) → Aeneas.Std.Slice Aeneas.Std.U8 → Polynomial F → Prop
+structure AspisR1.Port4D_Pairing.RoundLaws {F W : Type} [Field F] (ops : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (decode : AspisR1Stage2.Stage2Finish.E → F) (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (poly : Polynomial F) : Prop
+number of parameters: 7
+fields:
+  AspisR1.Port4D_Pairing.RoundLaws.boundary : ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+      ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+        ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+          ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly
+  AspisR1.Port4D_Pairing.RoundLaws.quarter : ∀ (m : AspisR1Stage2.Stage2Finish.M)
+      (claim rhs : AspisR1Stage2.Stage2Finish.E),
+      ops.quarter = Aeneas.Std.Result.ok m →
+        ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim
+  AspisR1.Port4D_Pairing.RoundLaws.eval : ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+      ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly
+constructor:
+  AspisR1.Port4D_Pairing.RoundLaws.mk {F W : Type} [Field F] {ops : AspisR1Stage2.Stage2Finish.FinishOps W}
+    {decode : AspisR1Stage2.Stage2Finish.E → F} {bytes : Aeneas.Std.Slice Aeneas.Std.U8} {poly : Polynomial F}
+    (boundary :
+      ∀ (c0 c4 lhs : AspisR1Stage2.Stage2Finish.E),
+        ops.field bytes 0#usize = Aeneas.Std.Result.ok c0 →
+          ops.field bytes 4#usize = Aeneas.Std.Result.ok c4 →
+            ops.add c0 c4 = Aeneas.Std.Result.ok lhs → decode lhs = AspisR1.TwoRoundComparison.boundary poly)
+    (quarter :
+      ∀ (m : AspisR1Stage2.Stage2Finish.M) (claim rhs : AspisR1Stage2.Stage2Finish.E),
+        ops.quarter = Aeneas.Std.Result.ok m →
+          ops.mulM claim m = Aeneas.Std.Result.ok rhs → decode rhs = AspisR1.RoundPairing.quarter * decode claim)
+    (eval :
+      ∀ (alpha value : AspisR1Stage2.Stage2Finish.E),
+        ops.polynomial bytes alpha = Aeneas.Std.Result.ok value → decode value = Polynomial.eval (decode alpha) poly) :
+    AspisR1.Port4D_Pairing.RoundLaws ops decode bytes poly
+'AspisR1.Port4D_Pairing.RoundLaws' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder →
+      AspisR1.F3T_TwoPass.Verifier → AspisR1.F3T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+'AspisR1.F3T_Runtime.StoredCarrierBinding' depends on axioms: [propext, Classical.choice, Quot.sound]

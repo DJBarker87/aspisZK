@@ -1,0 +1,28 @@
+@AspisR1.Rc5_Install.saf : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r = AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r
+@[defeq] theorem AspisR1.Rc5_Install.saf : ∀ {F C : Type} (err : C) (c : AspisR1.DrvC_Installation.Configuration F C)
+  (r : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.Rc5_Install.configuration err c r = AspisR1.Rc3_Install.configuration (AspisR1.Rc5_Install.seed err c) r :=
+fun {F C} err c r => rfl
+'AspisR1.Rc5_Install.saf' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = Bool.true then tentative t key else before t key)
+'AspisR1.CPR_DataPersistence.TwoTransactionLaw' does not depend on any axioms

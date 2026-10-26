@@ -1,0 +1,42 @@
+{"attempt": "SCJ_099", "exit_status": 0, "wall_seconds": 2.2526092280168086, "peak_rss_kib": "5495028", "swaps": "0", "print_axioms": ["'AspisR1.P6C_FullBoundary.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.P6C_FullBoundary.same_cuts : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : A
+...
+W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) accounts1 accounts2 saved f s →
+              AspisR1.P6C_FullBoundary.Facts c hashv H saved f s :=
+fun {F C} c native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f s cuts =>
+  have safe :=
+    AspisR1.P6C_Whole.same_cuts c native1 native2 hashv extraction sha256 H p1 syscall accounts1 accounts2 saved f s
+      cuts;
+  have first :=
+    AspisR1.P6C_Issued.derive hashv sha256 H p1 syscall (AspisR1.P6C_Whole.firstCode c hashv f)
+      (Aeneas.Std.core.result.Result.Ok saved) safe.left.left.left;
+  have second :=
+    AspisR1.P6C_Issued.derive hashv sha256 H p1 syscall (AspisR1.P6C_Whole.secondCode c hashv s)
+      (Aeneas.Std.core.result.Result.Ok ()) safe.right.left.left;
+  ⟨safe,
+    ⟨first,
+      ⟨second, fun q member =>
+        Or.casesOn (motive := fun x =>
+          ∀ (self : AdapterRw.SolanaDigest),
+            (AspisR1.DrvC_Installation.sdk c).op43 self q.parts =
+              Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts))
+          (List.mem_append.mp member)
+          (fun left =>
+            AspisR1.P6C_Issued.installed (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv extraction H
+              (AspisR1.SdkC_Source.run hashv (AspisR1.P6C_Whole.firstCode c hashv f) []).2 first q left)
+          fun right =>
+          AspisR1.P6C_Issued.installed (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv extraction H
+            (AspisR1.SdkC_Source.run hashv (AspisR1.P6C_Whole.secondCode c hashv s) []).2 second q right⟩⟩⟩
+'AspisR1.P6C_FullBoundary.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r059661ee1aae4e4c9fc0ee8f714119fa.scope; invocation ID: 17edb9e2f2834084b4f753d01d5ec1a7

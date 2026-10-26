@@ -1,0 +1,48 @@
+@AspisR1.S2W_TraceSplice.SecondMarks : {E : Type} →
+  {ops : AdapterRw.Ops} → AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops → Prop
+structure AspisR1.S2W_TraceSplice.SecondMarks {E : Type} {ops : AdapterRw.Ops}
+  (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops) : Prop
+number of parameters: 3
+fields:
+  AspisR1.S2W_TraceSplice.SecondMarks.source : ∀ (event : AspisR1.S2W_Trace.Event),
+      AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+        ∃ ss,
+          List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+            AspisR1.S2W_SiteSchedule.secondTrace ss
+constructor:
+  AspisR1.S2W_TraceSplice.SecondMarks.mk {E : Type} {ops : AdapterRw.Ops}
+    {port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops}
+    (source :
+      ∀ (event : AspisR1.S2W_Trace.Event),
+        AspisR1.S2W_OuterOccurrences.mark event = Option.some Bool.true →
+          ∃ ss,
+            List.map AspisR1.S2W_TraceSplice.project (AspisR1.S2W_ExpandedChildren.events port event) =
+              AspisR1.S2W_SiteSchedule.secondTrace ss) :
+    AspisR1.S2W_TraceSplice.SecondMarks port
+'AspisR1.S2W_TraceSplice.SecondMarks' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.PFin_Gates.decoded : ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+  AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some i →
+    AspisR1.OraclePortSelectedDraft.queries tr = Option.some q →
+      AspisR1.LiteralQueryRead.decode i.queryBytes = Option.some q
+theorem AspisR1.PFin_Gates.decoded : ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix) (i : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+  AspisR1.OraclePortStoredDecisionDraftC4.input p q tr = Option.some i →
+    AspisR1.OraclePortSelectedDraft.queries tr = Option.some q →
+      AspisR1.LiteralQueryRead.decode i.queryBytes = Option.some q :=
+fun p q tr i found queries =>
+  have fields := (AspisR1.OraclePortStoredDecisionDraftC4.input_fields p q tr i found).left;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        (do
+            let __x ← _a
+            match __x with
+              | (fst, c) =>
+                match c.1 with
+                | AspisR1.TranscriptView.Value.queries (Except.ok bs) => AspisR1.LiteralQueryRead.decode bs
+                | x => Option.none) =
+          Option.some q)
+      fields.right.left)
+    queries
+'AspisR1.PFin_Gates.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
