@@ -1,0 +1,9 @@
+# Native terminal value, conditional local result
+
+FIv_SubMap transports subtraction directly to the proved selected-mask subtraction adapter. FIv_NativeArray, FIv_EqualityCell/Loop/Reach/Shape/Value/Product and FIv_TerminalTrace/Value isolate existing native arithmetic proofs from the missing headline imports. The product lemma identifies the SAME native equality loop with R0P.SemSource.eqValue. These isolation copies are not counted as premise-removal progress.
+
+FIv_CompositionExact.value strengthens the fold-value result by exporting the actual selector, Poseidon, semantic_packed and copy calls for its coefficients. FIv_PartsValue.value composes the folds with the native equality/mu/h/active arithmetic. FIv_NativeTerminal.value starts from the actual FIq_Native terminal_qm31 call, obtains its actual84-cell gather, public semantic conversion and successful terminal_parts call, and derives the decoded arithmetic expression under explicitly retained coefficient/copy/h canonicality conditions. It does NOT establish the coefficient meanings or SAME literal masked-terminal transport; L146 remains open. The FIq_Terminal carrier wrapper and accepted-run context have not been connected in a new theorem.
+
+FIv_PreparedTotal.mul/add proves forward success as well as value for canonical native operands and a valid prepared multiplier. The Horner-total proof failed062 on an ambiguous loop identifier, with no timeout/memory kill; corrected source is awaiting a new check. Failed sorryAx output is excluded.
+
+Attempts043/045/046 rebuild unchanged EqualityValue dependencies;041/042/044 stopped at missing direct objects before the compiler.047-061 all pass, standard axioms only. Complete receipts contain exact target/revision/source/dependencies/exit/wall/RSS/swap/caps/audits. Budget62/100 charged Lean,56 compiler starts,0/20 Kani. No shipped or existing proved source changed.
