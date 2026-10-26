@@ -599,3 +599,113 @@ All five L1 rows and all eighteen inherited L2 rows remain OPEN in (b). The adde
 **Single most valuable next non-native-dependent row: V164**, complete current shipped compression ↔ owned indexed/list reference correspondence, preserving full Result/failure/divergence, arbitrary slices and the final multiplication/power update. The reference/list substep is already proved; shipped/reference correspondence remains. This is an independent source equation feeding the complete proof/audit body, not a substitute for V038.
 
 Validation: zero new Lean invocations (0/15), zero Kani (0 allowed), no new proof/theorem/helper module, no host run or regression replay. Existing standard-axiom/source/fixture receipts were inspected and reused. Snapshot Lean sources are inert `.lean.txt` audit copies, not new compilable modules. Mechanical validation checks 400 unique audit keys, original-row preservation, class/status/bucket totals, exact candidate-closure axiom lines, source hashes against pinned git objects, and allowed changed paths. No root or sibling worktree was edited; no merge, push, wallet/key/fund operation or implementation edit. Premises removed/added/weakened by this recount: **0/0/0**.
+
+
+## Recount 2 2026-10-26 (B)
+
+**Privacy target not established.** All 400 inherited obligations have been re-derived against pinned research and unmerged branch statements. No endpoint premise, proof, implementation, observer, simulator or bad event changed. Original rows and Recount 1 remain intact. [Every row and OPEN dependency](../evidence/privacy-recount-20261026/ROWS2.md), [statement method and LOG corrections](../evidence/privacy-recount-20261026/recount2/METHOD2.md), [immutable pins](../evidence/privacy-recount-20261026/recount2/pins.json), [machine-readable rows](../evidence/privacy-recount-20261026/recount2/rows2.json), [totals](../evidence/privacy-recount-20261026/recount2/totals2.json), and [15 focused Lean receipts](../evidence/privacy-recount-20261026/recount2/receipts.json) are the evidence of record.
+
+The same 400 comparison is separate from three newly explicit rows: V400 OS-entropy-failure model coverage (C/T-suspect, OPEN); V401 fixture byte equality and V402 corrected 1000-pair differential (P, EVIDENCED). The latter two were not distinct original rows and overlap V340/V399; they are measured deliverables, not extra universal gates. V380 and V380-inversion retain their original distinct identities.
+
+|Inventory / status|Recount 1|Recount 2 same 400|Recount 2 incl. new rows|
+|---|---:|---:|---:|
+|Rows|400|400|403|
+|T|26|26|26|
+|P|370|370|372|
+|C|4|4|5|
+|OPEN|138|109|110|
+|REDUCED|152|154|154|
+|EVIDENCED|10|10|12|
+|CLOSED-ON-RESEARCH|87|87|87|
+|CLOSED-ON-CANDIDATE|13|40|40|
+
+CLOSED-ON-CANDIDATE credits complete extracted source-value equations under D188, including arbitrary inputs and complete Result. It does not adopt or combine sibling selectors, prove native effects or close the endpoint. REDUCED retains all named fields and free-instance obligations. The endpoint record earns the requested REDUCED contract disposition only: runtime/boundary 2→2, fields 8→8; no field was discharged. V036/V037 stay OPEN for the SAME actual deployed coupling. V152–V154 remain OPEN despite canonical source-stage progress.
+
+Per-row status changes since Recount 1 (all other inherited statuses unchanged):
+
+|Row|Recount 1 → recount 2|Exact basis / retained limit|
+|---|---|---|
+|V038|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `disclosed_V038`, `observerOracle_V038`; frozen Runtime/Boundary still missing.|
+|V045|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `source_V045`; frozen Runtime/Boundary still missing.|
+|V169|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_TakeSource.op3_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V197|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op71Source.op71_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V198|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op72Source.op72_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V199|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op77Source.op77_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V200|REDUCED → CLOSED-ON-CANDIDATE|`R1Z.PDict_RemainingDictionary231.op78_installed`; complete extracted source equation. Native composition remains V165–V167.|
+|V202|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op80Source.op80_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V203|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op81Source.op81_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V204|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op82Source.op82_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V205|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op83Source.op83_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V206|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op84Source.op84_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V208|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op86Source.op86_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V209|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op100Source.op100_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V210|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op101Source.op101_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V211|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op105Source.op105_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V212|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op107Source.op107_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V213|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op109Source.op109_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V214|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op110Source.op110_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V215|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op111Source.op111_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V216|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op114Source.op114_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V218|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op118Source.op118_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V223|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op127Source.op127_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V224|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op128Source.op128_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V226|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op130Source.op130_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V227|OPEN → CLOSED-ON-CANDIDATE|`R1Z.PV_CB_Op131Source.op131_source`; complete extracted source equation. Native composition remains V165–V167.|
+|V248|REDUCED → CLOSED-ON-CANDIDATE|`R1Z.PDict_RemainingDictionary231.op231_installed`; complete extracted source equation. Native composition remains V165–V167.|
+|V255|REDUCED → CLOSED-ON-CANDIDATE|`R1Z.PV_TraceValueInstall.source`; complete extracted source equation. Native composition remains V165–V167.|
+|V262|REDUCED → CLOSED-ON-CANDIDATE|`R1Z.PV_ProverRwP7CoefficientsInstall.source`; complete extracted source equation. Native composition remains V165–V167.|
+|V336|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `native_fill_V336`; frozen Runtime/Boundary still missing.|
+|V337|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `native_ledger_V337`; frozen Runtime/Boundary still missing.|
+|V338|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `byte_blind_V338`; frozen Runtime/Boundary still missing.|
+|V339|OPEN → REDUCED|`PV_RunJoin_Endpoint.PV_RunJoin_Premises`: `kernels_V339`; frozen Runtime/Boundary still missing.|
+
+These 27 candidate closures are 23 newly committed PV_CB source equations, V200/V248 dictionary fibre/clone equations, and V255/V262 rw source callbacks (op247 counted once even though dictionary also supplies it). D208's earlier 30 value interpretations alone and seven sibling-reuse notes are not closures. Remaining source rewrites/reference policies and bounded Kani gates remain OPEN.
+
+New rows (no original renumbering):
+
+|ID / class|Statement and status|Evidence / retained obligation|
+|---|---|---|
+|V400 / C (T-suspect alternative)|OS entropy failure coverage: OPEN/c|Literal selected EIO fault and conditional first-draw error/model-success disagreement. Owner repair A OsAvailable trust or B public failure in both experiments, neither adopted. Concrete outside-bad coin/native decoder association remains; no witness leak proved.|
+|V401 / P|Fixed-coin fixture byte equality: EVIDENCED|Pinned control/candidate transfer and withdrawal proof/public/status/attempt/callback/audit equality. Does not rebind universal proofs or establish arbitrary-x fibres.|
+|V402 / P|Corrected1000-pair differential: EVIDENCED|v3 cohort 1000/1000, 600 successful proof pairs, 100 rejected-prefix pairs (within the successful cohort), 400 error tapes; four full oracle-stream comparisons. Invalidated v2 pressure mismatch retained; no universal trace law inferred.|
+
+V341–V343 remain EVIDENCED: all three candidate/control ELF pins and sizes match release requirements. V344/V345 remain OPEN: no qualified quiet median for either source (n=0), no absolute/relative timing verdict. V372 remains scoped platform evidence; DOITM disabled. V374 has no valid final timing verdict. V340/V346/V397–V399 retain proof rebinding and coherent release replay/axioms/association.
+
+For every OPEN row, ROWS2.md gives its primary bucket and reason, with owner-first precedence where native work is also needed. REDUCED/EVIDENCED residuals remain explicit and are not counted as resolved native work.
+
+|OPEN dependency|Recount 1|Recount 2 same 400|Recount 2 all 403|Change all rows|
+|---|---:|---:|---:|---:|
+|(a) independent source obligation|79|51|51|−28|
+|(b) native extracted deployed caller / V038 / V165–V167|51|50|50|−1|
+|(c) owner decision|8|8|9|+1|
+|Total OPEN|138|109|110|−28|
+
+Bucket reconciliation: 23 a callbacks close; V221/V222/V249/V263/V267 move a→b because actual erasure/fence, Instant, worker/panic and filesystem world effects require the native interpreter; six b rows become explicit REDUCED contracts; V400 adds one c row. The four pre-existing REDUCED callbacks become candidate closures and do not affect OPEN buckets. The b reduction is contract exposure, not native premise removal.
+
+Owner decisions: V344/V345 quiet-host/Docker-cap scheduling; V370 compiler trust; V371 DOITM/CPU latency; V373/V380-inversion inversion zero-boundary/reached-call policy; V374 quiet L3 measurement; V396 client bundle/signing/storage/publication; V400 OS-failure repair A/B. No authorization to alter caps, CPU mode, protocol, model, trust or publication is inferred. All L1/L2 whole native rows remain OPEN/b; inversion remains OPEN/c.
+
+**Corrections to lead claims (LOG left intact):** D203's “V269 reduced” is unsupported for the whole Formatter/type27 row: fallible store transport is not native Formatter sink/value/state association; V269 remains OPEN and native types remain26/28. D199's V047 “discharged for shipped statements” supports mathematical fixture fibres, not CLOSED for the arbitrary-x/native ledger row; V047 remains EVIDENCED. D201's “29 left OPEN” is a counting error:7+10+13=30 and original 399 OPEN167→137, then inversion adds one. D204's concrete-runtime claim was already corrected by D205; runtime/boundary remain parameters. D206's categorical outside-model/outside-bad description exceeds the exact conditional theorem, which still assumes fault schedule/decoder, model firstGood success and old/seed/fuel safety; no concrete outside-bad counterexample or privacy attack is constructed. The EIO fault/model-gap escalation is supported as V400 C/T-suspect. D196/D197 scoped evidence, D198/D200/D202 OPEN L1/L2, D207 two supplied callbacks, and D208's historical zero closures stand. Later CB source equations are new evidence, not retroactive credit to its value equations.
+
+**Most valuable independent next row: V164**, the complete shipped arity16 compression ↔ owned indexed/list reference equation, arbitrary slices and every Result/failure/divergence branch including the final multiplication/power update. Reference/list/primitive substeps are available; shipped correspondence remains absent and feeds V163.
+
+Validation: 15/15 Lean compiler invocations (Env-J24300–24314), 0 Kani, 13 exit 0 and 2 recorded diagnostic failures. All accepted printed axioms are standard only; exact source revisions, commands, wall/RSS/swap and full errors/axioms are retained. Every run used -M7000, MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, standing TasksMax 128, one scope at a time. No admission refusal or cap change. The endpoint helper saw an older shared object without uniform_V037; the OS helper lacked a dependency object. Neither was rerun, repaired or reported passing. Pinned original branch receipts support the source inspection; these cached checks are not a coherent release replay.
+
+|Env-J / helper|Exit|Wall|Peak RSS KiB|Swap|
+|---|---:|---|---:|---:|
+|24300 / Callbacks1|0|0:02.40|4259800|0|
+|24301 / Callbacks2|0|0:01.89|4269144|0|
+|24302 / Callbacks3|0|0:01.82|4268940|0|
+|24303 / Callbacks4|0|0:02.17|4264876|0|
+|24304 / Callbacks5|0|0:01.86|4267532|0|
+|24305 / Callbacks6|0|0:01.81|4269552|0|
+|24306 / Callbacks7|0|0:02.28|4263036|0|
+|24307 / Callbacks8|0|0:01.93|4269192|0|
+|24308 / Dictionary|0|0:02.00|4280548|0|
+|24309 / Endpoint|1|0:03.55|4209060|0|
+|24310 / OsFailure|1|0:00.74|1295992|0|
+|24311 / SourceIdentification|0|0:02.40|4079152|0|
+|24312 / Rw|0|0:02.26|4273396|0|
+|24313 / Model|0|0:02.83|4196596|0|
+|24314 / Trust|0|0:02.28|4223436|0|
+
+No new theorem/proof, runtime experiment, Kani/Rust/SBF build, timing suite or full manifest replay. Mechanical validation checks all 403 unique rows, preserved 400 statements/classes, bucket/status sums, exact git snapshots, helper-only commands and 15 receipts. No root/sibling worktree, soundness file, implementation, key/account/fund, push or merge operation. Premises removed/added/weakened: **0/0/0**. Stop: every row reviewed and all 15 statement-check slots used.

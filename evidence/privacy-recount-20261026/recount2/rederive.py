@@ -7,7 +7,7 @@ base=json.loads((OUT/'rows.json').read_text());rows=copy.deepcopy(base);by={r['i
 checks=json.loads((P/'checks.json').read_text())
 for r in rows:
  r['recount1_status']=r.pop('recount_status');r['recount2_status']=r['recount1_status'];r['recount1_bucket']=r.get('dependency_bucket')
- r['recount2_basis']='Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.'
+ r['recount2_basis']=r['rationale']+' Re-read original statement and retained residual/model scope. Research-present defining sources are unchanged except LOG; candidate-only definitions are resolved to pinned git objects in resolved-definitions.json. Original model/guard/overlap/trust scope remains supported; no installed label alone is credited.'
  r['recount2_evidence']=['recount2/definition-audit.json','recount2/resolved-definitions.json',r['audit_evidence']]
 def change(key,status,why,fields=None,ev=None,theorem=None,bucket=None):
  r=by[key];r['recount2_status']=status;r['recount2_basis']=why
@@ -56,5 +56,7 @@ lines=['# Recount 2 2026-10-26 (B): every row','','All400 inherited statements w
 for r in rows:
  detail='; '.join(([r['theorem']] if r.get('theorem') else [])+r['residual_fields'])+'. '+r['recount2_basis']
  lines.append('|'+r['id']+' / '+r['classification']+'|'+r['recount1_status']+' → '+r['recount2_status']+'|'+(r['dependency_bucket'] or '—')+'|'+detail.replace('|','\\|')+'|'+'; '.join(r['recount2_evidence'])+'|')
-(OUT/'ROWS2.md').write_text('\n'.join(lines)+'\n')
+rendered='\n'.join(lines)+'\n'
+for a,b in {'All400':'All 400','all400':'all 400','all403':'all 403','Recount1':'Recount 1','types26/28':'types 26/28','cohort1000':'cohort 1000','pairs,100':'pairs, 100','pairs,400':'pairs, 400'}.items(): rendered=rendered.replace(a,b)
+(OUT/'ROWS2.md').write_text(rendered)
 print(json.dumps(summary,indent=2))
