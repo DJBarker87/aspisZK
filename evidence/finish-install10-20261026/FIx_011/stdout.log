@@ -1,0 +1,31 @@
+FIx_Builder.lean:53:2: error: unsolved goals
+case isTrue
+T C V : Type
+n : Usize
+f : core.ops.function.FnMut C Usize T
+P : T → Prop
+observe : T → V
+model : ℕ → V
+c : C
+out : Std.Array T n
+step : ∀ (i : Usize), ↑i < ↑n → ∀ (x : T) (c' : C), f.call_mut c i = ok (x, c') → P x ∧ observe x = model ↑i ∧ c' = c
+run :
+  (do
+      let __x ← OraclePortStdBuilder.fromFnLoop f (OraclePortStdBuilder.indices n) c
+      match __x with
+        | (xs, snd) => if h : xs.length = ↑n then ok ⟨xs, h⟩ else fail Error.panic) =
+    ok out
+xs : List T
+last : C
+called : OraclePortStdBuilder.fromFnLoop f (OraclePortStdBuilder.indices n) c = ok (xs, last)
+hstep :
+  ∀ i ∈ OraclePortStdBuilder.indices n,
+    ∀ (x : T) (c' : C), f.call_mut c i = ok (x, c') → P x ∧ observe x = model ↑i ∧ c' = c
+values :
+  (∀ x ∈ xs, P x) ∧ List.map observe xs = List.map (fun i => model ↑i) (OraclePortStdBuilder.indices n) ∧ last = c
+h✝ : xs.length = ↑n
+r1 : ok ⟨xs, h✝⟩ = ok out
+eq : ↑⟨xs, h✝⟩ = ↑out
+⊢ (List.ofFn fun x => model ↑(Usize.ofNatCore ↑x ⋯)) = List.ofFn fun i => model ↑i
+'AspisR1.FIx_Builder.loop' depends on axioms: [propext, Quot.sound]
+'AspisR1.FIx_Builder.fromFn' depends on axioms: [propext, sorryAx, Quot.sound]

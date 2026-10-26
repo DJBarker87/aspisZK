@@ -1,0 +1,106 @@
+FIx_InitialArray.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if i < poseidon2.RATE then ?m.52 else ?m.53
+in the target expression
+  (let (pqm, sopo, pqm1) := (pRate, o, pFull)
+    if i < poseidon2.RATE then do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm.mul q
+      ok (q1, pRate, o, pFull)
+    else do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm1.mul q
+      ok (q1, pRate, o, pFull)) =
+    ok (result, last)
+
+case pos
+fullRate full : NQ
+pRate pFull : NP
+o : Openings
+i : Usize
+result : NQ
+last : pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure
+hfr : Canon fullRate
+hf : Canon full
+hpr : ExtractedMaskPreparedState.PreparedFor (prepared pRate) (qm fullRate)
+hpf : ExtractedMaskPreparedState.PreparedFor (prepared pFull) (qm full)
+ho : ∀ x ∈ ↑o.z, Canon x
+run :
+  (let (pqm, sopo, pqm1) := (pRate, o, pFull)
+    if i < poseidon2.RATE then do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm.mul q
+      ok (q1, pRate, o, pFull)
+    else do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm1.mul q
+      ok (q1, pRate, o, pFull)) =
+    ok (result, last)
+hi : i < poseidon2.RATE
+⊢ Canon result ∧
+    decode result = (if ↑i < 8 then decode fullRate else decode full) * FIv_NativeArray.value o.z ↑i ∧
+      last = (pRate, o, pFull)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (pRate, o, pFull)
+  has type
+    field.PreparedQm31Multiplier × state_only_poseidon.StateOnlyPoseidonOpenings × field.PreparedQm31Multiplier
+  but is expected to have type
+    pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure
+  in the application
+    (q1, pRate, o, pFull)
+FIx_InitialArray.lean:37:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if i < poseidon2.RATE then ?m.57 else ?m.58
+in the target expression
+  (let (pqm, sopo, pqm1) := (pRate, o, pFull)
+    if i < poseidon2.RATE then do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm.mul q
+      ok (q1, pRate, o, pFull)
+    else do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm1.mul q
+      ok (q1, pRate, o, pFull)) =
+    ok (result, last)
+
+case neg
+fullRate full : NQ
+pRate pFull : NP
+o : Openings
+i : Usize
+result : NQ
+last : pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure
+hfr : Canon fullRate
+hf : Canon full
+hpr : ExtractedMaskPreparedState.PreparedFor (prepared pRate) (qm fullRate)
+hpf : ExtractedMaskPreparedState.PreparedFor (prepared pFull) (qm full)
+ho : ∀ x ∈ ↑o.z, Canon x
+run :
+  (let (pqm, sopo, pqm1) := (pRate, o, pFull)
+    if i < poseidon2.RATE then do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm.mul q
+      ok (q1, pRate, o, pFull)
+    else do
+      let q ← sopo.z.index_usize i
+      let q1 ← pqm1.mul q
+      ok (q1, pRate, o, pFull)) =
+    ok (result, last)
+hi : ¬i < poseidon2.RATE
+⊢ Canon result ∧
+    decode result = (if ↑i < 8 then decode fullRate else decode full) * FIv_NativeArray.value o.z ↑i ∧
+      last = (pRate, o, pFull)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (pRate, o, pFull)
+  has type
+    field.PreparedQm31Multiplier × state_only_poseidon.StateOnlyPoseidonOpenings × field.PreparedQm31Multiplier
+  but is expected to have type
+    pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure
+  in the application
+    (q1, pRate, o, pFull)
+'AspisR1.FIx_InitialArray.callback_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIx_InitialArray.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

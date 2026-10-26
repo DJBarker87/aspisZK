@@ -1,0 +1,230 @@
+FIx_ValueBitPrefix.lean:44:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 20 + 0 ≤ ↑j ∧ ↑j < 20 + 0 + 10 then ?m.253 else ?m.254
+in the target expression
+  (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.z ↑j
+
+case pos
+o returned : Openings
+range out : Std.Array NQ 33#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hr : canonical range
+success✝¹ :
+  (do
+      let (o1, r1) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize
+      let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+r1 r2 : Std.Array field.QM31 33#usize
+h1 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize = ok (o, r1)
+success✝ :
+  (let (o1, r1) := (o, r1)
+    do
+    let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+v1 : o = o ∧ canonical r1 ∧ decoded r1 = FIx_ValueBitModel.model o.z 0 10 (↑0#usize) (decoded range)
+success :
+  (let (o2, r2) := (o, r2)
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+h2 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o r1 0#usize = ok (o, r2)
+v2 : o = o ∧ canonical r2 ∧ decoded r2 = FIx_ValueBitModel.model o.succ_z 10 10 (↑0#usize) (decoded r1)
+v3 : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.xor12_z 20 10 (↑0#usize) (decoded r2)
+j : Fin ↑33#usize
+h10 : ↑j < 10
+⊢ (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.z ↑j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIx_ValueBitPrefix.lean:50:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 20 + 0 ≤ ↑j ∧ ↑j < 20 + 0 + 10 then ?m.317 else ?m.318
+in the target expression
+  (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+
+case pos
+o returned : Openings
+range out : Std.Array NQ 33#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hr : canonical range
+success✝¹ :
+  (do
+      let (o1, r1) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize
+      let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+r1 r2 : Std.Array field.QM31 33#usize
+h1 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize = ok (o, r1)
+success✝ :
+  (let (o1, r1) := (o, r1)
+    do
+    let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+v1 : o = o ∧ canonical r1 ∧ decoded r1 = FIx_ValueBitModel.model o.z 0 10 (↑0#usize) (decoded range)
+success :
+  (let (o2, r2) := (o, r2)
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+h2 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o r1 0#usize = ok (o, r2)
+v2 : o = o ∧ canonical r2 ∧ decoded r2 = FIx_ValueBitModel.model o.succ_z 10 10 (↑0#usize) (decoded r1)
+v3 : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.xor12_z 20 10 (↑0#usize) (decoded r2)
+j : Fin ↑33#usize
+h10 : ¬↑j < 10
+h20 : ↑j < 20
+⊢ (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIx_ValueBitPrefix.lean:54:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 20 + 0 ≤ ↑j ∧ ↑j < 20 + 0 + 10 then ?m.381 else ?m.382
+in the target expression
+  (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+
+case pos
+o returned : Openings
+range out : Std.Array NQ 33#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hr : canonical range
+success✝¹ :
+  (do
+      let (o1, r1) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize
+      let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+r1 r2 : Std.Array field.QM31 33#usize
+h1 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize = ok (o, r1)
+success✝ :
+  (let (o1, r1) := (o, r1)
+    do
+    let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+v1 : o = o ∧ canonical r1 ∧ decoded r1 = FIx_ValueBitModel.model o.z 0 10 (↑0#usize) (decoded range)
+success :
+  (let (o2, r2) := (o, r2)
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+h2 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o r1 0#usize = ok (o, r2)
+v2 : o = o ∧ canonical r2 ∧ decoded r2 = FIx_ValueBitModel.model o.succ_z 10 10 (↑0#usize) (decoded r1)
+v3 : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.xor12_z 20 10 (↑0#usize) (decoded r2)
+j : Fin ↑33#usize
+h10 : ¬↑j < 10
+h20 : ¬↑j < 20
+h30 : ↑j < 30
+⊢ (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIx_ValueBitPrefix.lean:55:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 20 + 0 ≤ ↑j ∧ ↑j < 20 + 0 + 10 then ?m.422 else ?m.423
+in the target expression
+  (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    decoded range j
+
+case neg
+o returned : Openings
+range out : Std.Array NQ 33#usize
+hz : canonical o.z
+hs : canonical o.succ_z
+hx : canonical o.xor12_z
+hr : canonical range
+success✝¹ :
+  (do
+      let (o1, r1) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize
+      let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+      pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+r1 r2 : Std.Array field.QM31 33#usize
+h1 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 o range 0#usize = ok (o, r1)
+success✝ :
+  (let (o1, r1) := (o, r1)
+    do
+    let (o2, r2) ← pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o1 r1 0#usize
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+v1 : o = o ∧ canonical r1 ∧ decoded r1 = FIx_ValueBitModel.model o.z 0 10 (↑0#usize) (decoded range)
+success :
+  (let (o2, r2) := (o, r2)
+    pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 o2 r2 0#usize) =
+    ok (returned, out)
+h2 : pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 o r1 0#usize = ok (o, r2)
+v2 : o = o ∧ canonical r2 ∧ decoded r2 = FIx_ValueBitModel.model o.succ_z 10 10 (↑0#usize) (decoded r1)
+v3 : returned = o ∧ canonical out ∧ decoded out = FIx_ValueBitModel.model o.xor12_z 20 10 (↑0#usize) (decoded r2)
+j : Fin ↑33#usize
+h10 : ¬↑j < 10
+h20 : ¬↑j < 20
+h30 : ¬↑j < 30
+⊢ (if 20 + ↑0#usize ≤ ↑j ∧ ↑j < 20 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+    else
+      if 10 + ↑0#usize ≤ ↑j ∧ ↑j < 10 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.succ_z (↑j - 10)
+      else if 0 + ↑0#usize ≤ ↑j ∧ ↑j < 0 + ↑0#usize + 10 then FIx_ValueBitModel.bit o.z (↑j - 0) else decoded range j) =
+    decoded range j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FIx_ValueBitPrefix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
