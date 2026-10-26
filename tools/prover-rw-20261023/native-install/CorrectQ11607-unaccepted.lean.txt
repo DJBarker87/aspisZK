@@ -1,0 +1,52 @@
+import R1Z.ProverRwDictionaryScalar
+import R1Z.ProverCommitNativeQ48
+
+/-! The installed arithmetic discharges the operation/model equality slot.
+Canonical source operands remain the explicit existing domain condition;
+there is no supplied operation-success or output-equality hypothesis. -/
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwDictionaryCorrectQ
+open Aeneas Aeneas.Std Result ProverRwFull ProverRwDictionaryTower
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47
+open AspisR1.ExtractedCurrentQM31Exact (decode)
+variable [ExternalTypes]
+abbrev input (x : Old.Q) : Q := fromQ (ProverCommitNativeQ48.source x)
+
+theorem add (ops : ExternalFuns) (x y : Old.Q) (hx : Canonical x) (hy : Canonical y) :
+    ∃ z : Old.Q,
+      (ProverRwDictionaryScalar.selected ops).op67 (input x) (input y) = .ok (input z) ∧
+      Canonical z ∧ decode z = decode x + decode y := by
+  obtain ⟨z,hz,hc,hd⟩ := ProverCommitNativeQ48.add x y hx hy
+  refine ⟨z,?_,hc,hd⟩
+  change mapResult fromQ (AspisR1ProducerRelease47.field.QM31.add
+    (toQ (fromQ _)) (toQ (fromQ _))) = _
+  rw [native_q_roundtrip,native_q_roundtrip,hz]
+  rfl
+
+theorem sub (ops : ExternalFuns) (x y : Old.Q) (hx : Canonical x) (hy : Canonical y) :
+    ∃ z : Old.Q,
+      (ProverRwDictionaryScalar.selected ops).op68 (input x) (input y) = .ok (input z) ∧
+      Canonical z ∧ decode z = decode x - decode y := by
+  obtain ⟨z,hz,hc,hd⟩ := ProverCommitNativeQ48.sub x y hx hy
+  refine ⟨z,?_,hc,hd⟩
+  change mapResult fromQ (AspisR1ProducerRelease47.field.QM31.sub
+    (toQ (fromQ _)) (toQ (fromQ _))) = _
+  rw [native_q_roundtrip,native_q_roundtrip,hz]
+  rfl
+
+theorem mul (ops : ExternalFuns) (x y : Old.Q) (hx : Canonical x) (hy : Canonical y) :
+    ∃ z : Old.Q,
+      (ProverRwDictionaryScalar.selected ops).op69 (input x) (input y) = .ok (input z) ∧
+      Canonical z ∧ decode z = decode x * decode y := by
+  obtain ⟨z,hz,hc,hd⟩ := ProverCommitNativeQ48.mul x y hx hy
+  refine ⟨z,?_,hc,hd⟩
+  change mapResult fromQ (AspisR1ProducerRelease47.field.QM31.mul
+    (toQ (fromQ _)) (toQ (fromQ _))) = _
+  rw [native_q_roundtrip,native_q_roundtrip,hz]
+  rfl
+
+#print axioms add
+#print axioms sub
+#print axioms mul
+end R1Z.ProverRwDictionaryCorrectQ

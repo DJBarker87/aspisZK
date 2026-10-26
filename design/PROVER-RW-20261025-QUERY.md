@@ -701,3 +701,43 @@ entropy rate is promoted to a native statement; no trust premise is added.
 `native-install/native-entropy-obstruction.json` pins the reviewed inputs.
 Continue independent selected-source dictionary installations. Root conjunct1
 and both concrete caller contracts remain open; zero root premises removed.
+
+## Selected dictionary continuation (11600–11627)
+
+`ProverRwDictionaryDomain.selected` now selects62/262 source entries;
+200 and all28 native type representations remain open. Relative to the prior
+8 entries this adds54 source interpretations. Exact entry lists and scope are
+in `native-install/dictionary-stage-b.json`. Digest/clone and salted-leaf
+callbacks use the retained extracted bodies; `private_leaf` preserves the same
+callback and its three ordered slices, including failure/divergence. Field
+operations use retained extracted release bodies and reversible structural maps.
+The final selector supersedes the early checked M31 interpretation with release
+wrapping operations; no unrestricted checked/release identity is asserted.
+Layout declarations are copied literally from the retained actual extraction
+and checked by `native-install/layout.py --check`; symbolic arithmetic proves
+13831 semantic bytes,10055 opening offset,28359 node offset,57607 proof bytes.
+Derived M31/QM31 equality is proved exact for every raw field structure.
+
+Installed operation/model equalities for QM31 add/sub/mul and full-width
+WideExact add/sub/mul retain only their existing canonical-operand invariants,
+not supplied operation-success/output-equality hypotheses. Wide-by-base-scalar
+is total on arbitrary raw operands; Wide-by-QM31 normalizes an arbitrary RHS.
+These are lower source obligations, not complete successful-body refinement.
+Both original caller contracts, all bad events/carriers/observers and root
+conjunct1 are unchanged: zero headline premises removed.
+
+The separately compiled `ProverRwDictionarySamplers` proves rank/totality for
+two retained policy interpretations. It is deliberately excluded from the
+final selector and count: its native checked/wrapping traversal association
+is still open. No model result is silently installed as a native callback law.
+
+27 Lean compiles(22pass,5changed failures),one pre-Lean reservation refusal;
+0Kani so far. Failures and immutable snapshots are retained; the combined
+Q-proof timeout was split, and failed layout reduction was replaced by named
+symbolic arithmetic. All accepted new reports use only standard axioms.
+Receipts/commands/source/dependency hashes/RSS/wall/swap/axioms are in
+`native-install/*-receipt.json`; no full manifest or native regression rerun.
+The ordinary Rust/program sources still match all2915 relevant prior build
+pins(`production-source-before-kani.json` gives the authoritative count).
+The next stage inspects native callback/Drop contracts via cfg(kani) only;
+no complete native extraction or entropy probability result is claimed.
