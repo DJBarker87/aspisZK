@@ -53,7 +53,7 @@ theorem source{slot} : JFr_TX2_TailRead.read (JFr_TX2_Windows.array ⟨{i},by de
 #print axioms decode{slot}
 #print axioms source{slot}
 '''
-   manifest.append(dict(module=mod,slot=slot,kind=kind,offset=off,count=16,sha256=hashlib.sha256(bytes(bs)).hexdigest()))
+   manifest.append(dict(module=f'JFr_TX2_Tails{i:02}',slot=slot,kind=kind,offset=off,count=16,sha256=hashlib.sha256(bytes(bs)).hexdigest()))
   s+=f'end AspisR1.{mod}\nend\n'
   collected[mod]=s
 for i in range(10,22):

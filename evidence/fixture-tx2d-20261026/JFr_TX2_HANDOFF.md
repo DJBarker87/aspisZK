@@ -147,3 +147,38 @@ No JFr_TX2.accepted2 is delivered. The100-bit target and full joint/deployed-top
 non-vacuity remain not established. No real-byte premise was proved false or
 uninhabitable. The arbitrary-oracle and free-callback counterexamples inherited
 from JFn_ retain their precise local scope, not a SHA256/real-fixture vacuity claim.
+
+## Final budget, audit and stop
+
+**100/100 Lean processes:81 pass/19 reject;0/10 Kani. Budget exhausted.**
+No101st process ran. All81 delivered new Lean modules have exact-current-hash
+passing receipts and printed theorem axioms in subsets of propext,Classical.choice,
+Quot.sound. Final audit100 PASSES with Rc10 and every strongest new root.
+Exact target JFr_TX2_FinalAudit.lean;exit0;wall2.1566212839679793s;
+peakRSS5604620KiB;swap0;revision
+90473c549ba0ba3611463ce9d6e04edffbba02e1;dirty-tree flag and source hash are in its receipt.
+Across all100:Lean wall434.52422745799413s;maximumRSS
+5632200KiB;total swap0. The final source/receipt
+hash and individual-axiom audit, both generator --check modes, source whitespace
+and changed-path scope checks pass. Raw prover logs are preserved verbatim,
+including their whitespace and rejected recovery diagnostics.
+
+097 rejected one opaque numeral-bound normalization in the new first-lane
+instance;098 makes that29-element bound explicit and passes.
+JFr_TX2_FirstLane.source instantiates the native first multiply/add/write lane
+with the inherited real powers, every real scalar and the actual zero allocation;
+it is not an eight-lane, complete inner-batch or full dot-loop execution.
+099 checks CircleAfterDots.source: an ACTUAL dot return supplies its own
+canonicality to the installed circle arithmetic. The dot-return premise and
+geometric inverse remain; it is not a computed dot or gate success.
+The unused DotsHead draft is retained as UNCHECKED .lean.txt only.
+
+No timeout,memory kill,cap/heartbeat/recursion increase,unchanged timed-out rerun,
+parallel scope,package replay or shipped-source change occurred. Existing shared
+coherent-workspace objects are reusable cache, not a new copied scratch corpus.
+No task-specific Cargo target or compiled scratch directory was created.
+All launched scopes are terminal. The job stops for its exhausted proof budget,
+not successful completion of accepted2. No actual-top premise was removed.
+Before/after actual83T/12P/13G/0C and combined89T/16P/13G/0C remain unchanged,
+with zero removed/added/changed law families. Full SHA256/native-pair/top
+non-vacuity and the100-bit target remain not established.
