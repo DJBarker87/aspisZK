@@ -25,6 +25,8 @@ Inventory invocations also count conservatively against the 12 Kani budget.
 Additional source validator leaves (to list in metadata before verification):
 `pv_srcid3_common_values`, `pv_srcid3_common_sibling`, and
 `pv_srcid3_common_pair_words`. These call the shipped validate_common with
-matching context/fresh spent set, arbitrary raw pair inputs, and unwind 21.
+matching context/fresh spent set, arbitrary raw pair inputs, and unwind 33. The 32-byte context arrays require that bound as well as
+the 20-sibling scan. This shape was corrected before launching any validator
+verification; metadata must be refreshed for the changed bound.
 Success implies the exact primitive range/canonicality facts. They do not
 claim a full forest run, output-bound check, or mapper equivalence.

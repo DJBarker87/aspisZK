@@ -90,7 +90,7 @@ fn checked_common() -> (PoolV1PairForestInputNoteWitnessV1, bool) {
 }
 
 #[kani::proof]
-#[kani::unwind(21)]
+#[kani::unwind(33)]
 fn pv_srcid3_common_values() {
     let (input, success) = checked_common();
     if success {
@@ -100,7 +100,7 @@ fn pv_srcid3_common_values() {
 }
 
 #[kani::proof]
-#[kani::unwind(21)]
+#[kani::unwind(33)]
 fn pv_srcid3_common_sibling() {
     let (input, success) = checked_common();
     let level: usize = kani::any(); let lane: usize = kani::any();
@@ -109,7 +109,7 @@ fn pv_srcid3_common_sibling() {
 }
 
 #[kani::proof]
-#[kani::unwind(21)]
+#[kani::unwind(33)]
 fn pv_srcid3_common_pair_words() {
     let (input, success) = checked_common();
     let lane: usize = kani::any(); kani::assume(lane < 8);

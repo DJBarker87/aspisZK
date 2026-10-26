@@ -115,3 +115,19 @@ selected-record RspendPlus and exact installed transport equality. This is a
 proposed reference-side 5→3 reduction until those new modules compile and the
 unstubbed P6/installed-caller joins have their evidence. No endpoint row is
 credited here on the basis of a draft or historical root evidence alone.
+
+## Pure external callback closure
+
+`PV_Src_ExternalReference.dictionary` calls the already extracted owned external
+layer, and `PV_Src_ExternalTotal.total` proves it returns successfully on every
+16-word raw state. Kani `srcid3-external1` verifies the shipped complete layer
+against that exact owned source: 571 checks, zero failures, no stubs,
+unwind 17 with unwinding assertions. Exit 0, wall 154.121883 s, peak RSS
+703936 KiB / cgroup peak 758218752 bytes, zero swap. This closes the pure
+ExternalLinear source/reference implementation boundary under the existing
+P6/extraction trust, not full compiler success or a native RunJoin installation.
+
+`srcid3-full1` is retained separately: full unstubbed mapper against the frozen
+reference, timeout 480s, cgroup peak 3857346560 bytes, zero swap, no verdict.
+It is not source-equivalence evidence. No cap was raised and its inactive scope
+was checked before starting another scope. Decomposition remains necessary.
