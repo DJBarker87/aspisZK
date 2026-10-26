@@ -32,3 +32,11 @@ pub fn new_weights(variant:aspis_r1_cost_probe::transport::Variant,alpha:&[aspis
 pub fn materialize(weights:&aspis_r1_cost_probe::weights::Weights,kappa:aspis_core::field::WideExact)->Result<alloc::vec::Vec<aspis_core::field::WideExact>,aspis_r1_cost_probe::verifier::Error> {
     weights.materialize(kappa)
 }
+#[cfg(kani)]
+pub fn helper_sum(h1:&[aspis_core::field::QM31])->Option<aspis_core::field::QM31> {
+    aspis_statement::state_only_semantic::state_only_copy_helper_sum(h1)
+}
+#[cfg(kani)]
+pub fn statement_eq(a:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1,b:&aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1)->bool {
+    a==b
+}

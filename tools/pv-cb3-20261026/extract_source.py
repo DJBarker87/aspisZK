@@ -13,9 +13,12 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  name=f'{stage}-source-op{op}-{sys.argv[4] if len(sys.argv)>4 else "001"}';dest=f'{base}/{name}';local=root/'evidence/pv-cb3-20261026'/name
  local.mkdir(exist_ok=True)
  assert not (local/'target.json').exists()
- out=ssh(f'mkdir -p {dest}; now=$(date +%s); if [ "$now" -lt 1793035200 ]; then echo "QUIET WINDOW HOLD until 2026-10-26 17:20 UTC" > {dest}/reservation.log; cat {dest}/reservation.log; exit 78; fi; python3 {scanner} {dest}/admission-before.json > {dest}/reservation.log 2>&1')
+ quiet_code="import json,time,pathlib; p=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json'); until=float(json.loads(p.read_text()).get('until',0)) if p.exists() else 0; held=time.time()<until; print(('QUIET WINDOW HOLD until '+str(until)) if held else 'quiet-window marker permits admission'); raise SystemExit(78 if held else 0)"
+ out=ssh(f'mkdir -p {dest}; python3 -c {shlex.quote(quiet_code)} > {dest}/reservation.log 2>&1 && python3 {scanner} {dest}/admission-before.json >> {dest}/reservation.log 2>&1; result=$?; cat {dest}/reservation.log; exit $result')
  (local/'reservation-transport.log').write_text(out.stdout)
- if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
+ if out.returncode:
+  (local/'refusal.json').write_text(json.dumps(dict(target=entry,exit=out.returncode,attempt_charged=False,lean_attempts=0,kani_runs=0,reason=out.stdout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()),indent=2)+'\n')
+  print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon':
   args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof'] else []),'--sysroot','default','--start-from',entry]
   if include:

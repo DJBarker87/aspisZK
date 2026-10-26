@@ -14,9 +14,12 @@ source grep are retained separately for each op. Host snapshot copied only
 into this worker's own directory; 782 tracked files match this worktree exactly
 (`source-identity.json`). The sibling snapshot/cache were read only.
 
-The initial extraction admission was refused with exit 78 for the agreed
-16:50–17:20 UTC quiet window, including while the marker was absent.
+The initial two extraction preparations were self-held with exit 78 for the
+announced 16:50–17:20 UTC window while the marker was absent. This was stricter
+than ruling (e), and is corrected: only a live quiet-window marker or resource
+reservation refusal prevents launch. Attempt 003 reached the actual reservation
+scanner and was refused at 66.4 GiB reserved (8 GiB requested, 55 GiB safe limit).
 No capped scope launched, no Lean/Kani attempt charged. Receipt:
-`charon-source-op258-001/reservation-transport.log`. Resume after 17:20 UTC
-with a new extraction receipt suffix; host launchers and reservation gates
+`charon-source-op258-001/reservation-transport.log`. Retry after the required three-minute wait with a new extraction receipt
+suffix; host launchers and reservation gates
 remain authoritative. No shared infrastructure edited.

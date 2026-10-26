@@ -1,0 +1,28 @@
+-- Provisional statement template, pending fresh Charon/Aeneas output comparison.
+import R1Z.ProverRwSuccessHashes
+open Aeneas Aeneas.Std Result
+namespace PV_CB3_ShippedOp246
+abbrev aspis_core.digest.Digest32 := ProverRwFull.aspis_core.digest.Digest32
+-- Replace/verify this declaration from the retained generated Funs.lean.
+def multiproof.binary_parent {H : Type}
+    (inst : aspis_core.digest.Digest32 H) (hash : H)
+    (left right : Array U8 32#usize) : Result (Array U8 32#usize) := do
+  let s ← lift (Array.to_slice (Array.make 1#usize [18#u8]))
+  let s1 ← lift (Array.to_slice left)
+  let s2 ← lift (Array.to_slice right)
+  let s3 ← lift (Array.to_slice (Array.make 3#usize [s,s1,s2]))
+  inst.digest hash s3
+end PV_CB3_ShippedOp246
+namespace R1Z.PV_CB3_Op246Source
+set_option autoImplicit false
+noncomputable section
+open ProverRwFull
+variable [ExternalTypes]
+theorem op246_source (ops : ExternalFuns) {H : Type}
+    (inst : aspis_core.digest.Digest32 H) (hash : H)
+    (left right : Array U8 32#usize) :
+    (ProverRwSuccessHashes.selected ops).op246 inst hash left right =
+      PV_CB3_ShippedOp246.multiproof.binary_parent inst hash left right := rfl
+#print axioms op246_source
+end
+end R1Z.PV_CB3_Op246Source
