@@ -1,0 +1,123 @@
+@AspisR1.F3U_AllWorldMachine.accepted : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s))).2 =
+      Bool.true →
+    ∃ pub proof semantic saved,
+      AspisR1.MultiproofConeCanonical.bytesOf ↑pub = s.publicBytes ∧
+        AspisR1.MultiproofConeCanonical.bytesOf ↑proof = s.stored ∧
+          AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk c) pub =
+              Aeneas.Std.Result.ok (Option.some semantic) ∧
+            AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary (AspisR1.F3U_Oracle.hashv H)) ()
+                  (AspisR1.GExp_FirstCode.code (AspisR1.GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry)
+                    c.boundaries c.std hashv (AspisR1.DrvC_Installation.currentDigest c)
+                    (AspisS6CurrentVerifierCarrier.toPublic semantic) pub proof 10#usize) =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+              AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary (AspisR1.F3U_Oracle.hashv H)) ()
+                  (AspisR1.GExp_SecondCode.code (AspisR1.DrvC_Installation.stage c) c.reserved hashv
+                    (AspisR1.DrvC_Installation.digest c) pub proof saved.deref) =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+@AspisR1.F3U_BytePreparation.accepted : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Installed.source c hashv (AspisR1.F3T_ByteCarrier.input c s))).2 =
+      Bool.true →
+    ∃ pub proof semantic zero p scratch,
+      AspisR1.MultiproofConeCanonical.bytesOf ↑pub = s.publicBytes ∧
+        AspisR1.MultiproofConeCanonical.bytesOf ↑proof = s.stored ∧
+          AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk c) pub =
+              Aeneas.Std.Result.ok (Option.some semantic) ∧
+            AspisR1PublicPreparation.PreparedHashCode.erase
+                (AspisR1.F3U_Rehash.code H
+                  (AspisR1.SdkD_PrepareSource.code
+                    (AspisR1.Op5T_Concrete.current
+                      (have __src := AspisR1.GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry;
+                      { op0 := __src.op0, op1 := @AspisR1CurrentCaller.Ops.op1 __src, op2 := __src.op2,
+                        op3 := __src.op3, op4 := __src.op4, op5 := __src.op5,
+                        op6 := @AspisR1CurrentCaller.Ops.op6 __src, op7 := __src.op7,
+                        op8 := @AspisR1CurrentCaller.Ops.op8 __src, op9 := @AspisR1CurrentCaller.Ops.op9 __src,
+                        op10 := __src.op10, op11 := __src.op11, op12 := __src.op12, op13 := __src.op13,
+                        op14 := __src.op14, op15 := __src.op15, op16 := fun {H} => AspisR1.Tx1Q_Install.writer,
+                        op17 := __src.op17, op18 := __src.op18, op19 := __src.op19, op20 := __src.op20,
+                        op21 := __src.op21 }))
+                    c.boundaries c.std (AspisR1.DrvC_Installation.currentDigest c)
+                    (AspisS6CurrentVerifierCarrier.toPublic semantic) proof ()
+                    (Aeneas.Std.Array.repeat 29#usize zero))) =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, scratch)
+@AspisR1.F3U_PublicOracleValue.initial : ∀ {Hash : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 Hash) (hash : Hash) (pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1PublicPreparation.PreparedHashCode.oracleProgram
+          (AspisR1PublicPreparation.S1SemanticCode.newTranscript D hash pub root))).2 =
+    AspisR1PublicPreparation.PreparedHashCode.erase
+      (AspisR1PublicPreparation.S1SemanticCode.newTranscript (AspisR1.F3U_Rehash.dictionary H D) hash pub root)
+@AspisR1.F3U_PublicOracleValue.public_value : ∀ {Hash : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 Hash) (hash : Hash)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1PublicPreparation.PreparedHashCode.oracleProgram
+          (AspisR1PublicPreparation.S1SemanticCode.publicTranscript D pub hash root))).2 =
+    AspisR1PublicPreparation.PreparedHashCode.erase
+      (AspisR1PublicPreparation.S1SemanticCode.publicTranscript (AspisR1.F3U_Rehash.dictionary H D) pub hash root)
+def AspisR1.F3U_Rehash.dictionary : (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+  {Hash : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 Hash → AspisR1PublicPreparation.aspis_core.Digest32 Hash :=
+fun H {Hash} D =>
+  { coremarkerCopyInst := D.coremarkerCopyInst, digest := fun x parts => AspisR1.F3U_Oracle.hashv H parts }
+structure AspisR1.S2W_ExtractionBoundary.AeneasExtraction (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) : Prop
+number of parameters: 4
+fields:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage1 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8),
+      native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.stage2 : ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+      (accounts : AspisR1.S2W_ExtractionBoundary.Accounts) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+      (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+      native2 program accounts data slot = AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.digest : ∀ (self : AdapterRw.SolanaDigest)
+      (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)), ops.op43 self parts = hashv parts
+constructor:
+  AspisR1.S2W_ExtractionBoundary.AeneasExtraction.mk {ops : AdapterRw.Ops}
+    {native1 : AspisR1.S2W_ExtractionBoundary.First} {native2 : AspisR1.S2W_ExtractionBoundary.Second}
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    (stage1 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8),
+        native1 program accounts data = AdapterRw.r1_pool_adapter.owned.stage1_owned ops program accounts data)
+    (stage2 :
+      ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts : AspisR1.S2W_ExtractionBoundary.Accounts)
+        (data : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot),
+        native2 program accounts data slot =
+          AdapterRw.r1_pool_adapter.owned.stage2_owned ops program accounts data slot)
+    (digest :
+      ∀ (self : AdapterRw.SolanaDigest) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+        ops.op43 self parts = hashv parts) :
+    AspisR1.S2W_ExtractionBoundary.AeneasExtraction ops native1 native2 hashv
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+def AspisR1.F3U_CollisionJoin.Join : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder → AspisR1.F3T_TwoPass.Verifier → AspisR1.F3U_CollisionJoin.Exception → Prop :=
+fun {F C} c D rust bad =>
+  ∀ (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.F3T_ByteCarrier.input c s))).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.F3T_ByteCarrier.input c s)) =
+          AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D (AspisR1.F3T_ByteCarrier.input c s)) ∨
+        bad H s.publicBytes s.stored
+'AspisR1.F3U_BytePreparation.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]

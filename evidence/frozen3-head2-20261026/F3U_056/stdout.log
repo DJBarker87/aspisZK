@@ -1,0 +1,61 @@
+F3U_CanonicalNative.lean:34:4: error: Type mismatch
+  congrArg F3_Model.PhysicalPublic.mk physical
+has type
+  { bytes := i.physical.bytes } = { bytes := bytesOf ↑pub }
+but is expected to have type
+  (eval H
+          (F3T_Installed.source c hashv
+            { semantic := { value := semantic c { publicBytes := bytesOf ↑pub, stored := stored } },
+              physical := { bytes := bytesOf ↑pub }, proof := Port1_StoredCarrier.proof stored,
+              stored := stored })).1.head? =
+    some
+      (PublicInitFrame.frame (semantic c { publicBytes := bytesOf ↑pub, stored := stored }).pubBytes root,
+        H (PublicInitFrame.frame (semantic c { publicBytes := bytesOf ↑pub, stored := stored }).pubBytes root))
+F3U_CanonicalNative.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (input c { publicBytes := bytesOf ↑pub, stored := stored }).semantic.value.pubBytes
+in the target expression
+  i.physical = (input c { publicBytes := bytesOf ↑pub, stored := stored }).physical
+
+F C : Type
+c : DrvC_Installation.Configuration F C
+D : LiteralByteProtocol.Decoder
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+H : Bytes → State
+pub : Slice U8
+stored : Bytes
+v : Port1_Driver.Semantic
+decoded : Port1_Driver.decodeSemantic (DrvC_Installation.sdk c) pub = ok (some v)
+encoded : alloc.vec.Vec U8
+serialized :
+  AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+      (AspisR1CurrentCaller.FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic v)) =
+    ok (core.result.Result.Ok encoded)
+i : F3_Model.Input
+sourceAccepted :
+  (eval H (F3T_Installed.source c hashv (input c { publicBytes := bytesOf ↑pub, stored := stored }))).2 = true
+accepted : (eval H (F3_Model.verifier D i)).2 = true
+logs :
+  (eval H (F3T_Installed.source c hashv (input c { publicBytes := bytesOf ↑pub, stored := stored }))).1 =
+    (eval H (F3_Model.verifier D i)).1
+physical : i.physical.bytes = bytesOf ↑pub
+proof : i.stored = stored
+root : State
+head :
+  (eval H (F3T_Installed.source c hashv (input c { publicBytes := bytesOf ↑pub, stored := stored }))).1.head? =
+    some (PublicInitFrame.frame (bytesOf ↑encoded) root, H (PublicInitFrame.frame (bytesOf ↑encoded) root))
+sem : i.semantic.value.pubBytes = bytesOf ↑encoded
+fits : 75 + List.length (bytesOf ↑encoded) ≤ SelectedTranscriptParams.L
+canonical : (input c { publicBytes := bytesOf ↑pub, stored := stored }).semantic.value.pubBytes = bytesOf ↑encoded
+⊢ i.physical = (input c { publicBytes := bytesOf ↑pub, stored := stored }).physical
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    pub
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑pub
+'AspisR1.F3U_CanonicalNative.joined' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

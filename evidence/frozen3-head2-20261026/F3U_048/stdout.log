@@ -1,0 +1,70 @@
+F3U_PairLog.lean:28:111: error: unsolved goals
+F C : Type
+c : Configuration F C
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+extraction : S2W_DigestExtraction.AeneasExtraction (sdk c) native1 native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+accounts1 accounts2 : S2W_ExtractionBoundary.Accounts
+saved : alloc.vec.Vec U8
+f : FirstCut
+s : SecondCut
+cuts : SourceCuts (sdk c) accounts1 accounts2 saved f s
+proof : bytesOf ↑s.proof = bytesOf ↑f.proof
+pub : bytesOf ↑s.pub = bytesOf ↑f.pub
+checkpoint : bytesOf ↑s.checkpoint = bytesOf ↑saved
+first :
+  AspisR1CurrentCaller.verifier.candidate.tx1
+      (GExp_FirstCode.installed (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std)
+      (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split () none =
+    ok (core.result.Result.Ok saved)
+hp : s.proof = f.proof
+hu : s.pub = f.pub
+hc : s.checkpoint = saved.deref
+split : f.split = 10#usize
+one :
+  eval H
+      (GExp_Experiment.first (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+        (currentDigest c)
+        { semantic := AspisS6CurrentVerifierCarrier.toPublic f.semantic, pub := f.pub, proof := f.proof,
+          split := 10#usize }) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+              hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof 10#usize)
+            []).2,
+      ok (core.result.Result.Ok saved))
+two :
+  eval H
+      (GExp_Experiment.second (stage c) c.reserved hashv (digest c)
+        { pub := f.pub, proof := f.proof, checkpoint := saved.deref }) =
+    (SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_SecondPair.code c.adapter c.currentBase (AuS1_Install.base c.stageBase) c.finish c.reserved c.query
+              c.geometry c.boundaries c.std hashv s)
+            []).2,
+      ok (core.result.Result.Ok ()))
+⊢ (SdkC_Source.readLog
+          (SdkC_Source.run hashv
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof 10#usize)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run hashv
+              (GExp_SecondPair.code c.adapter c.currentBase (AuS1_Install.base c.stageBase) c.finish c.reserved c.query
+                c.geometry c.boundaries c.std hashv s)
+              []).2,
+      true) =
+    (SdkC_Source.readLog
+          (SdkC_Source.run hashv
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof 10#usize)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run hashv (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) f.pub f.proof saved.deref)
+              []).2,
+      true)
+'AspisR1.F3U_PairLog.evaluated' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
