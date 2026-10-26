@@ -1,0 +1,29 @@
+import Rc2_Install
+import SAQ_LineQuery
+import SAQ_GeometrySource
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.SAQ_LineInstall
+/-- Instantiate only the scalar query slots of the actual Rc2 configuration. -/
+def select {F C : Type} (c : DrvC_Installation.Configuration F C) :
+    DrvC_Installation.Configuration F C :=
+  {c with query := SAQ_LineQuery.install c.query, geometry := SAQ_GeometrySource.install c.geometry}
+
+def configuration {F C : Type} (c : DrvC_Installation.Configuration F C)
+    (reservation : NP6_StdModel.Reservation) :=
+  Rc2_Install.configuration (select c) reservation
+
+theorem query {F C : Type} (c : DrvC_Installation.Configuration F C)
+    (reservation : NP6_StdModel.Reservation) :
+    (configuration c reservation).query=SAQ_LineQuery.install c.query := rfl
+
+theorem primitives {F C : Type} (c : DrvC_Installation.Configuration F C)
+    (reservation : NP6_StdModel.Reservation)
+    (rest : SAQ_LineQuery.Remaining (configuration c reservation).query) :
+    Port5Q1_QueryPorts.SessionAPrimitives (configuration c reservation).query :=
+  SAQ_LineQuery.primitives c.query rest
+
+#print axioms query
+#print axioms primitives
+end AspisR1.SAQ_LineInstall
+end

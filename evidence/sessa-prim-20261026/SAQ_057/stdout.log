@@ -1,0 +1,25 @@
+@R1ZCircleFoldMathV1.sourceLineFold : {K : Type u_1} →
+  [inst : Field K] →
+    [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+      K → (Fin 4 → K) → ZMod AspisCircleGroupOrder.P → ZMod AspisCircleGroupOrder.P → ZMod AspisCircleGroupOrder.P → K
+def R1ZCircleFoldMathV1.sourceLineFold.{u_1} : {K : Type u_1} →
+  [inst : Field K] →
+    [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+      K →
+        (Fin 4 → K) → ZMod AspisCircleGroupOrder.P → ZMod AspisCircleGroupOrder.P → ZMod AspisCircleGroupOrder.P → K :=
+fun {K} [Field K] [Algebra (ZMod AspisCircleGroupOrder.P) K] alpha a ix iy iz =>
+  have h0 := (a 0 + a 1 + a 2 + a 3) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) R1ZCircleFoldMathV1.rustQuarter;
+  have h2 :=
+    (a 0 + a 1 - a 2 - a 3) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) (R1ZCircleFoldMathV1.rustQuarter * iz);
+  have c0 := (a 0 - a 1) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) (R1ZCircleFoldMathV1.rustHalf * ix);
+  have c1 := (a 3 - a 2) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) (R1ZCircleFoldMathV1.rustHalf * iy);
+  have h1 := (c0 + c1) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) R1ZCircleFoldMathV1.rustHalf;
+  have h3 := (c0 - c1) * (algebraMap (ZMod AspisCircleGroupOrder.P) K) (R1ZCircleFoldMathV1.rustHalf * iz);
+  h0 + alpha * (h1 + alpha * (h2 + alpha * h3))
+def R1ZCircleFoldMathV1.rustHalf : ZMod AspisCircleGroupOrder.P :=
+1073741824
+def AspisR1.SAQ_LineSource.decodeBase : U32 → AspisR1.SAQ_LineSource.FP :=
+fun x => ↑↑x
+QuadraticAlgebra.instField
+QuadraticAlgebra.instAlgebra
+QuadraticAlgebra.instAlgebra

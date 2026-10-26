@@ -1,0 +1,32 @@
+SAQ_LineJoin.lean:13:17: error: Type mismatch
+  SAQ_LineAlgebra.compose (decodeWide alpha) (decodeWide a) (decodeWide b)
+has type
+  ∀ (c d : AspisWideTower.WideExact) (ix iy iz : SAQ_LineAlgebra.FP) (h0 h1 h2 h3 out : AspisWideTower.WideExact),
+    h0 =
+        (decodeWide a + decodeWide b + c + d) *
+          (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) R1ZCircleFoldMathV1.rustQuarter →
+      h1 =
+          ((decodeWide a - decodeWide b) *
+                (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustHalf * ix) +
+              (d - c) * (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustHalf * iy)) *
+            (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) R1ZCircleFoldMathV1.rustHalf →
+        h2 =
+            (decodeWide a + decodeWide b - c - d) *
+              (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustQuarter * iz) →
+          h3 =
+              ((decodeWide a - decodeWide b) *
+                    (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustHalf * ix) -
+                  (d - c) *
+                    (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustHalf * iy)) *
+                (algebraMap SAQ_LineAlgebra.FP AspisWideTower.WideExact) (R1ZCircleFoldMathV1.rustHalf * iz) →
+            out = h0 + decodeWide alpha * (h1 + decodeWide alpha * (h2 + decodeWide alpha * h3)) →
+              out =
+                R1ZCircleFoldMathV1.sourceLineFold (decodeWide alpha) (values4 (decodeWide a) (decodeWide b) c d) ix iy
+                  iz
+but is expected to have type
+  decodeWide out =
+    R1ZCircleFoldMathV1.sourceLineFold (decodeWide alpha)
+      (values4 (decodeWide a) (decodeWide b) (decodeWide c) (decodeWide d)) (decodeBase lx) (decodeBase ly)
+      (decodeBase lz)
+SAQ_LineJoin.lean:14:4: error: unexpected token '('; expected command
+'AspisR1.SAQ_LineJoin.on_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
