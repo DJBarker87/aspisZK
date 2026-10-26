@@ -1,0 +1,45 @@
+{"attempt": "ARW_006", "exit_status": 1, "wall_seconds": 2.223082302021794, "peak_rss_kib": "5531860", "swaps": "0", "print_axioms": ["'AspisR1.ARW_Carrier.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARW_Carrier.lean:40:25: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval ?H (ARW_Induced.program ?native1 ?copy ?allocator ?id ?a)).2
+in the target expression
+  run.2.1.stored = (eval H (submission a)).2.stored ∧
+    run.2.1.physical.bytes = (eval H (submission a)).2.publicBytes ∧
+      ∃ saved post final f s,
+        (eval H
+                (SCE_Execution.firstCode (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+                  (eval H a.first).2)).2 =
+            ok (core.result.Result.Ok (saved, post, final)) ∧
+          SourceCuts (SCH_IdealSdk.dictionary (FIp_Install.configuration err c r) hashv H)
+              (eval H a.
+...
+me.runtime (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)).2 =
+    some run
+same :
+  eval H (ART_PartialAccount.account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a) =
+    eval H (account (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)
+source : (eval H (runtime (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier a)).2 = some run
+⊢ run.2.1.stored = (eval H (submission a)).2.stored ∧
+    run.2.1.physical.bytes = (eval H (submission a)).2.publicBytes ∧
+      ∃ saved post final f s,
+        (eval H
+                (SCE_Execution.firstCode (FIp_Install.configuration err c r) hashv copy allocator CPH_Program.verifier
+                  (eval H a.first).2)).2 =
+            ok (core.result.Result.Ok (saved, post, final)) ∧
+          SourceCuts (SCH_IdealSdk.dictionary (FIp_Install.configuration err c r) hashv H)
+              (eval H a.first).2.entry.first
+              ((eval H (a.second (eval H a.first).2 saved post final)).2.entry.second secondSizes) saved f s ∧
+            MultiproofConeCanonical.bytesOf ↑s.checkpoint = MultiproofConeCanonical.bytesOf ↑saved
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s.checkpoint
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s.checkpoint
+'AspisR1.ARW_Carrier.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re58a14eefc2646f08374cf5e43b7925b.scope; invocation ID: 0be948dc612040b9946b5fc2e942fba4

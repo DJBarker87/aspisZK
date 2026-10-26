@@ -1,0 +1,331 @@
+@AspisR1.JFm_ChallengeFixture.inhabited : ∀ {Hash : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (hash : Hash),
+  have D0 :=
+    AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+      (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D);
+  have t0 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFr_SeedBoundary.numeric, hash := hash,
+      next_row := 0#u8 };
+  have t15 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+      next_row := 15#u8 };
+  have t25 :=
+    { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q24Source.ratchet, hash := hash,
+      next_row := 25#u8 };
+  ∃ expanded y1 pre view claims cs r25 r26 z0 t26 z1 t27,
+    AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+          AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+          y1.length = 928 ∧
+            AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+              AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                    pre =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) ∧
+                AspisR1PublicPreparation.r1_semantic.public_transcript D0 AspisR1.JFs_PublicSerialization.value hash
+                      pre.c1_root =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok t0) ∧
+                  AspisR1PublicPreparation.r1_wire.begin D0 pre t0 =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFm_Begin.challenges, t15) ∧
+                    AspisR1PublicPreparation.RoundModel.rounds AspisS1ExtractedRoundChildren.children D0 pre t15 =
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                            (AspisS1ExtractedRoundChildren.genToMain AspisR1.JFr_Data09.output,
+                              AspisR1.JFm_PartialAlpha.a10, t25)) ∧
+                      AspisR1PublicPreparation.SourceFull25.Trace D0 pre t0 t25 cs ∧
+                        List.map AspisR1PublicPreparation.SourceFull25.Call.row cs = AspisR1.JFm_RealTrace.rows ∧
+                          List.map AspisR1PublicPreparation.SourceFull25.Call.q cs = AspisR1.JFm_RealTrace.values ∧
+                            List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records ∧
+                              pre.validated_record 25#u8 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r25) ∧
+                                AspisR1PublicPreparation.FinishModel.circle_validated
+                                      (AspisR1.F3M_CircleSource.install B) D0 t25 r25 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                  pre.validated_record 26#u8 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r26) ∧
+                                    AspisR1PublicPreparation.FinishModel.circle_validated
+                                          (AspisR1.F3M_CircleSource.install B) D0 t26 r26 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                      ↑t27.next_row = 27 ∧
+                                        (AspisR1.SAP_CanonicalCarrier.CanonK z0.x ∧
+                                            AspisR1.SAP_CanonicalCarrier.CanonK z0.y) ∧
+                                          AspisR1.SAP_CanonicalCarrier.CanonK z1.x ∧
+                                            AspisR1.SAP_CanonicalCarrier.CanonK z1.y
+'AspisR1.JFm_ChallengeFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFn_TX2.partial_on_saved : ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑saved = ↑AspisR1.JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      AspisR1.JFn_HashBoundary.Realizes H →
+        ∀ (seed : AspisR1.Port3_NativeQueryBody.Ops),
+          AspisR1.Port4A_ReaderInstall.reader Bool.true (AspisR1.JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩
+                AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2
+                hash =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok (AspisR1.JFo_Prepared.value, AspisR1.JFo_Prepared.accumulator)) ∧
+            AspisR1.OraclePortCheckpointResumeC5.decodeAccumulator
+                  (AspisR1.MultiproofConeCanonical.bytesOf ↑AspisR1.JFx_NativeBytes.checkpoint) =
+                Option.some (AspisR1.CheckpointBytes5Output.accumulator AspisR1.JFo_Prepared.accumulator) ∧
+              (∃ g, AspisR1.Tx2N_Powers.powers 29#usize AspisR1.JFo_Prepared.value.gamma = Aeneas.Std.Result.ok g) ∧
+                AspisR1.Port3_NativePendingInstall.source Bool.true AspisR1.JFo_Prepared.accumulator.weights.deref =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFo_Pending.value) ∧
+                  ∀ (i : Fin 12),
+                    (AspisR1.JFn_ArrayBuilder.ops seed).op0 4#usize
+                          (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                            (AspisR1.JFn_ArrayBuilder.ops seed))
+                          (AspisR1.JFo_Opening.value (AspisR1.JFn_Values.position i)) =
+                        Aeneas.Std.Result.ok (AspisR1.JFn_Values.value i) ∧
+                      ∀ (inverse : Aeneas.Std.Array Aeneas.Std.U32 5#usize),
+                        ∃ out,
+                          AspisR1.SAQ_LineQuery.line AspisR1.JFq_Alpha1.scalar (AspisR1.JFn_Values.value i) inverse =
+                              Aeneas.Std.Result.ok out ∧
+                            AspisR1.Port4C_QueryArithmetic.CanonE out
+'AspisR1.JFn_TX2.partial_on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFn_Nonvacuity.inhabited : ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (background : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (seed : AspisR1.Port3_NativeQueryBody.Ops),
+  ∃ H,
+    AspisR1.JFn_HashBoundary.Realizes H ∧
+      AspisR1.Port4A_ReaderInstall.reader Bool.true (AspisR1.JFn_HashBoundary.dictionary H D)
+            AspisR1.JFx_NativeBytes.checkpoint AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.publicInput
+            AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok (AspisR1.JFo_Prepared.value, AspisR1.JFo_Prepared.accumulator)) ∧
+        ∀ (i : Fin 12),
+          (AspisR1.JFn_ArrayBuilder.ops seed).op0 4#usize
+                (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                  (AspisR1.JFn_ArrayBuilder.ops seed))
+                (AspisR1.JFo_Opening.value (AspisR1.JFn_Values.position i)) =
+              Aeneas.Std.Result.ok (AspisR1.JFn_Values.value i) ∧
+            ∀ (inverse : Aeneas.Std.Array Aeneas.Std.U32 5#usize),
+              ∃ out,
+                AspisR1.SAQ_LineQuery.line AspisR1.JFq_Alpha1.scalar (AspisR1.JFn_Values.value i) inverse =
+                    Aeneas.Std.Result.ok out ∧
+                  AspisR1.Port4C_QueryArithmetic.CanonE out
+'AspisR1.JFn_Nonvacuity.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFr_ArithmeticFixture.inhabited : ∀ {Hash : Type}
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (hash : Hash),
+  have D0 := AspisR1CurrentCaller.InstalledPreparation.retainedDigest (AspisR1.F3V_OracleDictionary.current H D);
+  ∃ expanded y1 pre view claims t0,
+    AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+          AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+      AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+        AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+          y1.length = 928 ∧
+            AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+              AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                    pre =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) ∧
+                AspisR1PublicPreparation.r1_semantic.public_transcript D0 AspisR1.JFs_PublicSerialization.value hash
+                      pre.c1_root =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok t0) ∧
+                  ↑t0.next_row = 0 ∧
+                    (∃ t25 cs r25 r26 z0 t26 z1 t27,
+                        AspisR1PublicPreparation.SourceFull25.Trace D0 pre t0 t25 cs ∧
+                          List.map (fun c => ↑c.row) cs = List.range 25 ∧
+                            List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records ∧
+                              (∀ q ∈ List.map AspisR1PublicPreparation.SourceFull25.Call.q cs,
+                                  AspisR1.JFv_RoundArithmetic.Canonical q) ∧
+                                pre.validated_record 25#u8 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r25) ∧
+                                  AspisR1PublicPreparation.FinishModel.circle_validated
+                                        (AspisR1.F3M_CircleSource.install B) D0 t25 r25 =
+                                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                    pre.validated_record 26#u8 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r26) ∧
+                                      AspisR1PublicPreparation.FinishModel.circle_validated
+                                            (AspisR1.F3M_CircleSource.install B) D0 t26 r26 =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                        ↑t27.next_row = 27 ∧
+                                          (AspisR1.SAP_CanonicalCarrier.CanonK z0.x ∧
+                                              AspisR1.SAP_CanonicalCarrier.CanonK z0.y) ∧
+                                            AspisR1.SAP_CanonicalCarrier.CanonK z1.x ∧
+                                              AspisR1.SAP_CanonicalCarrier.CanonK z1.y) ∧
+                      ∀ (r : Fin 10),
+                        ∃ vr,
+                          pre.validated_record (AspisR1.JFv_SemanticDecode.roundRow r) =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok vr) ∧
+                            AspisS1ExtractedRoundChildren.decodeMain 28#usize vr 0#usize =
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Ok (AspisR1.JFr_RealRounds.polynomial r)) ∧
+                              AspisS1ExtractedRoundChildren.generatedMainBoundary
+                                    (AspisR1.JFr_RealRounds.polynomial r) =
+                                  Aeneas.Std.Result.ok (AspisR1.JFr_RealRounds.running r) ∧
+                                AspisS1ExtractedRoundChildren.generatedMainValue (AspisR1.JFr_RealRounds.polynomial r)
+                                    (AspisR1.JFr_RealRounds.challenges r) (Aeneas.Std.UScalar.ofNatCore ↑r ⋯) =
+                                  Aeneas.Std.Result.ok (AspisR1.JFr_RealRounds.output r)
+'AspisR1.JFr_ArithmeticFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFr_TX2_Partial.on_saved : ∀ (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑saved = ↑AspisR1.JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+      (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      AspisR1.JFn_HashBoundary.Realizes H →
+        ∀ (seed : AspisR1.Port3_NativeQueryBody.Ops),
+          AspisR1.Port4A_ReaderInstall.reader Bool.true (AspisR1.JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩
+                AspisR1.JFx_NativeBytes.proof AspisR1.JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2
+                hash =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok (AspisR1.JFo_Prepared.value, AspisR1.JFo_Prepared.accumulator)) ∧
+            AspisR1.Tx2N_Powers.powers 29#usize AspisR1.JFo_Prepared.value.gamma =
+                Aeneas.Std.Result.ok AspisR1.JFr_TX2_Powers.value ∧
+              AspisR1.Port3_NativePendingInstall.source Bool.true AspisR1.JFo_Prepared.accumulator.weights.deref =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFo_Pending.value) ∧
+                (∀ (i : Fin 12),
+                    (AspisR1.JFr_TX2_DotsBinding.ops seed).op0 4#usize
+                        (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                          (AspisR1.JFr_TX2_DotsBinding.ops seed))
+                        (AspisR1.JFo_Opening.value (AspisR1.JFn_Values.position i)) =
+                      Aeneas.Std.Result.ok (AspisR1.JFn_Values.value i)) ∧
+                  ∀ (i : Fin 12) (slot : Fin 4) (term : Fin 26),
+                    ∃ scalar,
+                      AspisR1.JFr_TX2_ScalarRead.read (AspisR1.JFr_TX2_Windows.array (AspisR1.JFn_Values.position i))
+                            (↑slot)#usize (↑term)#usize =
+                          Aeneas.Std.Result.ok scalar ∧
+                        ↑scalar < 2147483647
+'AspisR1.JFr_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFs_PublicFixture.inhabited : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1
+      AspisR1.JFx_NativeBytes.publicInput =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFs_PublicValue.value) ∧
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+        AspisR1.JFs_PublicValue.value =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+    ∃ encoded,
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+            (AspisR1CurrentCaller.FirstComposition.toRetainedPublic
+              (AspisS6CurrentVerifierCarrier.toPublic
+                (AspisR1.S6N_Getters.publicValue
+                  (AspisS6CurrentAdapterCarrier.fromPoolV1PairForestTerminalStatementV1
+                    AspisR1.JFs_PublicValue.value)))) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok encoded) ∧
+        (↑encoded).length = 1455
+'AspisR1.JFs_PublicFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFs_ExactSerialization.source : AspisR1.JFs_PublicSerialization.value.public_bytes =
+  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok AspisR1.JFs_ExactSerialization.encoded)
+'AspisR1.JFs_ExactSerialization.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFu_Installation.extraction : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C) (err : C)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+    (AspisR1.DrvC_Installation.sdk (AspisR1.JFu_Installation.configuration c err H))
+    (AspisR1.JFu_Installation.first c err H) (AspisR1.JFu_Installation.second c err H) (AspisR1.F3U_Oracle.hashv H)
+'AspisR1.JFu_Installation.extraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFu_Installation.oracle : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 H H ∧ AspisR1.S2W_ExtractionBoundary.RuntimeSyscall (AspisR1.F3U_Oracle.hashv H) H
+'AspisR1.JFu_Installation.oracle' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFu_AfterstateValidator.source : ∀
+  (s : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1),
+  ↑s.next_pair_index > 0 →
+    ↑s.next_pair_index ≤ 1048576 →
+      AspisR1.JFu_DigestCanonical.Canonical s.next_root →
+        (∀ (i : Fin 20), AspisR1.JFu_DigestCanonical.Canonical (↑s.next_frontier)[↑i]) →
+          AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate s =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.JFu_AfterstateValidator.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFv_RuntimeWitness.compatible : ∀ (proofAccount : Aeneas.Std.Slice Aeneas.Std.U8)
+  (n1 : AspisR1.S2W_ExtractionBoundary.First) (n2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2Trust.S2TrustedSdkBorrow (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) ∧
+    AspisR1.S2W_TrustedStd.TrustedStd AspisR1.CPH_FixtureData.copy ∧
+      AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission
+          (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) (AspisR1.JFv_World.e1 proofAccount)
+          (AspisR1.JFv_World.e1 proofAccount).heap 3 ∧
+        AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission
+            (AspisR1.S2Trust.model (ℕ → AspisR1.S2W_D189Entry.Record)) (AspisR1.JFv_World.e2 proofAccount)
+            (AspisR1.JFv_World.e2 proofAccount).heap 7 ∧
+          AspisR1.CPH_Game.DeployedPairExecution (AspisR1.JFv_World.observations proofAccount) Bool.false Bool.true
+              (AspisR1.JFv_World.e1 proofAccount) (AspisR1.JFv_World.e2 proofAccount) AspisR1.JFv_World.saved [] n1 n2
+              AspisR1.CPH_FixtureData.copy AspisR1.CPH_FixtureData.allocator AspisR1.CPH_Program.verifier ∧
+            AspisR1.CPR_DataPersistence.TwoTransactionLaw
+              (AspisR1.CPG_Projection.adjacent (AspisR1.JFv_World.observations proofAccount))
+              (AspisR1.CPG_Projection.ordinary (AspisR1.JFv_World.observations proofAccount)
+                (AspisR1.Hist_Nonvacuity.key 0#u8))
+              (AspisR1.CPG_Projection.before (AspisR1.JFv_World.observations proofAccount))
+              (AspisR1.CPG_Projection.tentative (AspisR1.JFv_World.observations proofAccount))
+              (AspisR1.CPG_Projection.success (AspisR1.JFv_World.observations proofAccount))
+              (AspisR1.CPG_Projection.loaded (AspisR1.JFv_World.observations proofAccount))
+'AspisR1.JFv_RuntimeWitness.compatible' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFv_SampledFixture.inhabited : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (B : AspisR1PublicPreparation.FinishModel.Boundaries) (hash : H),
+      ∃ expanded y1 pre view claims t0,
+        AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+              AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+          AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+            AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+              y1.length = 928 ∧
+                AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+                  AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ()))
+                        pre =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok claims) ∧
+                    t0.state = pre.c1_root ∧
+                      t0.hash = hash ∧
+                        ↑t0.next_row = 0 ∧
+                          ∃ t25 cs r25 r26 z0 t26 z1 t27,
+                            AspisR1PublicPreparation.SourceFull25.Trace D pre t0 t25 cs ∧
+                              List.map (fun c => ↑c.row) cs = List.range 25 ∧
+                                List.map (fun c => c.record.framed) cs = List.take 25 ↑pre.records ∧
+                                  (∀ q ∈ List.map AspisR1PublicPreparation.SourceFull25.Call.q cs,
+                                      AspisR1.JFv_RoundArithmetic.Canonical q) ∧
+                                    pre.validated_record 25#u8 =
+                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r25) ∧
+                                      AspisR1PublicPreparation.FinishModel.circle_validated
+                                            (AspisR1.F3M_CircleSource.install B) D t25 r25 =
+                                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z0, t26) ∧
+                                        pre.validated_record 26#u8 =
+                                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok r26) ∧
+                                          AspisR1PublicPreparation.FinishModel.circle_validated
+                                                (AspisR1.F3M_CircleSource.install B) D t26 r26 =
+                                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok z1, t27) ∧
+                                            ↑t27.next_row = 27 ∧
+                                              (AspisR1.SAP_CanonicalCarrier.CanonK z0.x ∧
+                                                  AspisR1.SAP_CanonicalCarrier.CanonK z0.y) ∧
+                                                AspisR1.SAP_CanonicalCarrier.CanonK z1.x ∧
+                                                  AspisR1.SAP_CanonicalCarrier.CanonK z1.y
+'AspisR1.JFv_SampledFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.JFv_ClaimsFixture.inhabited : ∃ expanded y1 pre view out,
+  AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+        AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) ∧
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) ∧
+      AspisS1ValuesOwnedInstallation.expandValues AspisR1.JFw_Y1.stored AspisR1.JFw_Y1.initial =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), y1) ∧
+        y1.length = 928 ∧
+          AspisR1CurrentCaller.InstalledPreparation.sourceView AspisR1.JFx_NativeBytes.proof expanded y1 =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) ∧
+            AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) pre =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out)
+'AspisR1.JFv_ClaimsFixture.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFv_SemanticCall.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+      (vr : AspisR1PublicPreparation.r1_wire.ValidatedRecord),
+      vr.row = t.next_row →
+        ↑vr.row < 25 →
+          ∃ q after,
+            AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated D t vr =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok q, after) ∧
+              ↑after.next_row = ↑vr.row + 1 ∧ AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticCall.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.JFv_SemanticChain.success : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H),
+  AspisR1.JFv_TranscriptTotal.Total D →
+    ∀ (pre : AspisR1PublicPreparation.r1_wire.Prefix) (rows : List Aeneas.Std.U8) (start : ℕ)
+      (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+      ↑t.next_row = start →
+        List.map Aeneas.Std.UScalar.val rows = List.range' start rows.length →
+          start + rows.length ≤ 25 →
+            ∃ after qs,
+              AspisR1PublicPreparation.BeginCalls.SemanticRun D pre rows t after qs ∧
+                ∀ q ∈ qs, AspisR1.JFv_RoundArithmetic.Canonical q
+'AspisR1.JFv_SemanticChain.success' depends on axioms: [propext, Classical.choice, Quot.sound]
