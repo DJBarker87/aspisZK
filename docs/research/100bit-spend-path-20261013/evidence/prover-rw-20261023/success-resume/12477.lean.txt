@@ -1,0 +1,50 @@
+import R1Z.ProverRwSuccessReverseRange
+import R1Z.ProverRwSuccessQuarticTotal
+import R1Z.ProverRwSuccessPowerTotal
+set_option autoImplicit false
+namespace R1Z.ProverRwSuccessPointsFinite
+open Aeneas Aeneas.Std Result ControlFlow
+open ProverRwSuccessReverseRange
+abbrev Q := ProverRwDictionaryTower.Q
+abbrev Points := Array Q 10#usize
+namespace S
+abbrev body := ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body
+abbrev loop := ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop
+end S
+
+def finite (z : Points) : Nat → Usize → Points → Q → Result Points
+  | 0,_,out,_ => .ok out
+  | fuel+1,e,out,carry => do
+    let coordinate := pred e
+    let bit ← Array.index_usize z coordinate
+    let bc ← ProverRwDictionaryTower.qMul bit carry
+    let sum ← ProverRwDictionaryTower.qAdd bit carry
+    let twice ← ProverRwDictionaryTower.qAdd bc bc
+    let value ← ProverRwDictionaryTower.qSub sum twice
+    let next ← Array.update out coordinate value
+    finite z fuel coordinate next bc
+
+theorem source (z out : Points) (carry : Q) (fuel : Nat) (e : Usize) (size : e.val=fuel) :
+    S.loop (before e) z out carry=finite z fuel e out carry := by
+  unfold S.loop ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop
+  induction fuel generalizing e out carry with
+  | zero =>
+    have zero : e=0#usize := UScalar.eq_of_val_eq size
+    subst e
+    rw [ProverRwSuccessPowerTotal.loop_bind]
+    simp only [S.body,ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body,
+      next_zero,bind_tc_ok,finite]
+    try rfl
+  | succ fuel ih =>
+    have step := next_pos e (by omega)
+    unfold next at step
+    rw [ProverRwSuccessPowerTotal.loop_bind]
+    simp only [ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body,
+      step,bind_tc_ok,finite,ProverRwSuccessPointsSource.field.QM31.mul,
+      ProverRwSuccessPointsSource.field.QM31.add,ProverRwSuccessPointsSource.field.QM31.sub]
+    try dsimp only
+    simp only [bind_assoc_eq,bind_tc_ok]
+    repeat' (apply (Aeneas.Std.bind_eq_iff _ _ _).mpr; intro v hv)
+    exact ih _ _ (pred e) (by rw [pred_val];omega)
+#print axioms source
+end R1Z.ProverRwSuccessPointsFinite

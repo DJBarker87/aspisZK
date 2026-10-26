@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:49:4: error: Type mismatch
+  ih ?m.62 ?m.63 (pred e)
+    (Eq.mpr (id (congrArg (fun _a => _a = fuel) (pred_val e)))
+      (Decidable.byContradiction fun a => source._proof_8 fuel e size a))
+has type
+  loop
+      (fun x =>
+        match x with
+        | (iter1, successor1, carry1) =>
+          ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body z iter1 successor1 carry1)
+      (before (pred e), ?m.62, ?m.63) =
+    finite z fuel (pred e) ?m.62 ?m.63
+but is expected to have type
+  (do
+      let cf ←
+        let (o, iter1) := (some (pred e), before (pred e))
+          match o with
+          | none => ok (done out)
+          | some coordinate => do
+            let bit ← Array.index_usize z coordinate
+            let bit_and_carry ← ProverRwDictionaryTower.qMul bit carry
+            let q ← ProverRwDictionaryTower.qAdd bit carry
+            let q1 ← ProverRwDictionaryTower.qAdd bit_and_carry bit_and_carry
+            let q2 ← ProverRwDictionaryTower.qSub q q1
+            let a ← Array.update out coordinate q2
+            ok (cont (iter1, a, bit_and_carry))
+      match cf with
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2.1)
+                | some coordinate => do
+                  let bit ← Array.index_usize z coordinate
+                  let bit_and_carry ← ProverRwDictionaryTower.qMul bit x.2.2
+                  let q ← ProverRwDictionaryTower.qAdd bit x.2.2
+                  let q1 ← ProverRwDictionaryTower.qAdd bit_and_carry bit_and_carry
+                  let q2 ← ProverRwDictionaryTower.qSub q q1
+                  let a ← x.2.1.update coordinate q2
+                  ok (cont (iter1, a, bit_and_carry)))
+            next
+        | done out => ok out) =
+    do
+    let bit ← Array.index_usize z (pred e)
+    let bc ← ProverRwDictionaryTower.qMul bit carry
+    let sum ← ProverRwDictionaryTower.qAdd bit carry
+    let twice ← ProverRwDictionaryTower.qAdd bc bc
+    let value ← ProverRwDictionaryTower.qSub sum twice
+    let next ← Array.update out (pred e) value
+    finite z fuel (pred e) next bc
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:36:15: warning: This simp argument is unused:
+  S.body
+
+Hint: Omit it from the simp argument list.
+  simp only [S̵.̵b̵o̵d̵y̵,̵ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body,
+        next_zero, ̲bind_tc_ok, ̲finite]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwSuccessPointsFinite.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

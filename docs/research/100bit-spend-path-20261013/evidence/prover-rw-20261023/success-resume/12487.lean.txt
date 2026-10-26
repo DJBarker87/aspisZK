@@ -1,0 +1,37 @@
+import R1Z.ProverRwSuccessPointsFinite
+set_option autoImplicit false
+namespace R1Z.ProverRwSuccessPointsTotal
+open Aeneas Aeneas.Std Result
+open ProverRwSuccessPointsFinite ProverRwSuccessReverseRange
+open ProverRwSuccessArithmeticTotal
+
+theorem update_total {T : Type} {N : Usize} (a : Array T N) (i : Usize) (x : T)
+    (hi : i.val<N.val) : Total (Array.update a i x) := by
+  obtain ⟨out,hout,_⟩ := WP.spec_imp_exists
+    (Array.update_spec a i x (by rw [a.property];exact hi))
+  exact ⟨out,hout⟩
+
+theorem finite_total (z out : Points) (carry : Q) (fuel : Nat) (e : Usize)
+    (size : e.val=fuel) (bound : fuel≤10) : Total (finite z fuel e out carry) := by
+  induction fuel generalizing e out carry with
+  | zero => exact ok_total _
+  | succ fuel ih =>
+    have hi : (pred e).val<(10#usize).val := by rw [pred_val];change e.val-1<10;omega
+    have read := ProverCommitArrayIndex25.array_index_usize_ok z (pred e) hi
+    simp only [finite]
+    apply bind_total ⟨_,read⟩;intro bit
+    apply bind_total (ProverRwSuccessQuarticTotal.mul _ _);intro bc
+    apply bind_total (ProverRwSuccessQuarticTotal.add _ _);intro sum
+    apply bind_total (ProverRwSuccessQuarticTotal.add _ _);intro twice
+    apply bind_total (ProverRwSuccessQuarticTotal.sub _ _);intro value
+    apply bind_total (update_total _ _ _ hi);intro updated
+    exact ih updated bc (pred e) (by rw [pred_val];omega) (by omega)
+
+theorem loop_total (z out : Points) (carry : Q) :
+    Total (S.loop (before 10#usize) z out carry) := by
+  rw [source z out carry 10 10#usize rfl]
+  exact finite_total z out carry 10 10#usize rfl (by decide)
+#print axioms update_total
+#print axioms finite_total
+#print axioms loop_total
+end R1Z.ProverRwSuccessPointsTotal

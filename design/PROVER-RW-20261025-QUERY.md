@@ -1106,3 +1106,23 @@ or release replay. Root/headline premises removed0; target not yet established.
 Next: retained S2 coefficient traversal, statement-point source control, and
 remaining ordered effects/reservation/body association. Types/off-path entries
 stay with the sibling owner. Current Rust/artifact pins and root remain unchanged.
+
+## Retained point control and common coefficient branch (12462–12493)
+
+The new literal-source statement-points interpretation installs op118. Its ten
+reverse-range steps and the two final updates are now proved total on arbitrary
+raw quartic inputs, without canonicality or arithmetic-success premises. The
+reverse iterator is proved structurally, avoiding concrete recurrence reduction.
+The common S1/S2 coefficient branch is copied and selected; D retains its old
+callback. Its ordered array-from-function model still needs native library
+association, so partial op255 is not counted as a fully supplied source entry.
+The source generators pin their retained extractions and support --check.
+
+Conservative full-entry counts: literal/source selector103/262,43 successful-body
+references open; logical candidate109/262,37 unselected, plus partial op255.
+The six value ports still carry their source/native adequacy obligations. These
+counts describe interpretations, not removed deployed refinement premises.
+The exact root privacy conjunct and headline are unchanged: premises removed0.
+Failed elaborations were changed/split; failed local cMax reducibility in12482
+was removed in12484, without enabling unsafe reducibility or changing limits.
+All accepted top theorems have standard axioms and immutable focused receipts.

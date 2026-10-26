@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:31:9: error: unsolved goals
+case zero
+z out : Points
+carry : Q
+size : ↑0#usize = 0
+⊢ (do
+      let cf ←
+        let (o, iter1) := (none, before 0#usize)
+          match o with
+          | none => ok (done out)
+          | some coordinate => do
+            let bit ← Array.index_usize z coordinate
+            let bit_and_carry ← ProverRwSuccessPointsSource.field.QM31.mul bit carry
+            let q ← ProverRwSuccessPointsSource.field.QM31.add bit carry
+            let q1 ← ProverRwSuccessPointsSource.field.QM31.add bit_and_carry bit_and_carry
+            let q2 ← ProverRwSuccessPointsSource.field.QM31.sub q q1
+            let a ← Array.update out coordinate q2
+            ok (cont (iter1, a, bit_and_carry))
+      match cf with
+        | cont next =>
+          loop
+            (fun x => do
+              let (o, iter1) ←
+                core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) x.1
+              match o with
+                | none => ok (done x.2.1)
+                | some coordinate => do
+                  let bit ← Array.index_usize z coordinate
+                  let bit_and_carry ← ProverRwSuccessPointsSource.field.QM31.mul bit x.2.2
+                  let q ← ProverRwSuccessPointsSource.field.QM31.add bit x.2.2
+                  let q1 ← ProverRwSuccessPointsSource.field.QM31.add bit_and_carry bit_and_carry
+                  let q2 ← ProverRwSuccessPointsSource.field.QM31.sub q q1
+                  let a ← x.2.1.update coordinate q2
+                  ok (cont (iter1, a, bit_and_carry)))
+            next
+        | done out => ok out) =
+    ok out
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:45:13: error: Application type mismatch: The argument
+  pred e
+has type
+  Usize
+but is expected to have type
+  Points
+in the application
+  ih (pred e)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:45:44: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 1
+  a ≥ 0
+  a - b ≥ 0
+where
+ a := ↑fuel
+ b := ↑↑?m.65
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPointsFinite.lean:35:15: warning: This simp argument is unused:
+  S.body
+
+Hint: Omit it from the simp argument list.
+  simp only [S̵.̵b̵o̵d̵y̵,̵ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop.body,
+        next_zero, ̲bind_tc_ok, ̲finite]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwSuccessPointsFinite.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
