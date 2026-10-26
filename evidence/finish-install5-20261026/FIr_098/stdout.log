@@ -1,0 +1,133 @@
+@AspisR1.FIr_AlphaTerminal.reached : ∀ {H : Type} (B : AspisR1PublicPreparation.FinishModel.Boundaries)
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (pub : AspisR1.FIr_AcceptedTerminal.MainPub)
+  (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (sem : AspisR1CurrentCaller.r1_semantic.Verified H),
+  AspisR1CurrentCaller.S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children
+        (AspisR1.FIq_Terminal.install B) D pub bytes hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+    ∃ challenges terminal,
+      AspisR1.FIq_Terminal.terminal (AspisR1CurrentCaller.FirstComposition.toRetainedPublic pub)
+            (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).claims
+            (AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha challenges =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok terminal) ∧
+        ∀ q ∈ ↑(AspisR1CurrentCaller.InstalledPreparation.retainedSem sem).alpha, AspisR1.FIp_SemanticValues.Canon q
+AspisR1.FIr_RootRefined.parts : ∀ (pub : AspisR1.FIr_TerminalTrace.SemPub)
+  (claims : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 84#usize)
+  (point zc : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 10#usize)
+  (lambda chi theta mu out : AspisR1.FIr_TerminalTrace.NQ) (c1 : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 16#usize)
+  (mask : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 10#usize) (g : AspisR1.FIr_TerminalTrace.NQ),
+  AspisR1.FIr_TerminalTrace.parts pub claims point lambda chi theta zc mu =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, c1, mask, g)) →
+    (∀ x ∈ ↑claims, AspisR1.FIr_NativeValue.Canon x) →
+      (∀ x ∈ ↑zc, AspisR1.FIr_NativeValue.Canon x) →
+        (∀ x ∈ ↑point, AspisR1.FIr_NativeValue.Canon x) →
+          AspisR1.FIr_NativeValue.Canon mu →
+            ∃ comp h active,
+              AspisR1.FIr_TerminalTrace.composition pub claims point lambda chi theta =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) ∧
+                AspisR1.FIr_NativeValue.Canon h ∧
+                  (AspisR1.FIr_NativeValue.Canon comp →
+                    AspisR1.FIr_NativeValue.Canon active →
+                      AspisR1.FIr_NativeValue.Canon out ∧
+                        AspisR1.FIr_NativeValue.decode out =
+                          AspisR1.FIr_TerminalValue.formula
+                            (R0P.SemSource.eqValue (fun j => AspisR1.FIr_NativeArray.value zc ↑j) fun j =>
+                              AspisR1.FIr_NativeArray.value point ↑j)
+                            (AspisR1.FIr_NativeValue.decode comp) (AspisR1.FIr_NativeValue.decode mu)
+                            (AspisR1.FIr_NativeValue.decode h) (AspisR1.FIr_NativeValue.decode active))
+AspisR1.FIr_RootValue.reached : ∀ (pub : AspisR1.FIq_Carriers.Public)
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array AspisR1.FIq_Carriers.MQ 29#usize) 3#usize)
+  (alpha : Aeneas.Std.Array AspisR1.FIq_Carriers.MQ 10#usize) (c : AspisR1PublicPreparation.r1_wire.Challenges)
+  (out : AspisR1.FIq_Carriers.MQ),
+  AspisR1.FIq_Terminal.terminal pub claims alpha c = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+    (∀ row ∈ ↑claims, ∀ x ∈ ↑row, AspisR1.FIp_SemanticValues.Canon x) →
+      (∀ x ∈ ↑alpha, AspisR1.FIp_SemanticValues.Canon x) →
+        (∀ x ∈ ↑c.zc, AspisR1.FIp_SemanticValues.Canon x) →
+          AspisR1.FIp_SemanticValues.Canon c.mu →
+            ∃ selected sem comp h active g c1 mask,
+              FIq_Native.array_from_fn_copy 84#usize FIq_Native.field.QM31.Insts.CoreMarkerCopy
+                    AspisR1.FIr_GatherCanonical.callback FIq_Native.field.QM31.ZERO
+                    (AspisR1.FIq_Carriers.mapArray (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ) claims) =
+                  Aeneas.Std.Result.ok selected ∧
+                (∀ x ∈ ↑selected, AspisR1.FIr_NativeValue.Canon x) ∧
+                  FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.semantic
+                        (AspisR1.FIq_Carriers.toPublic pub) =
+                      Aeneas.Std.Result.ok sem ∧
+                    AspisR1.FIr_TerminalTrace.composition sem selected
+                          (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ alpha)
+                          (AspisR1.FIq_Carriers.toQ c.lambda) (AspisR1.FIq_Carriers.toQ c.chi)
+                          (AspisR1.FIq_Carriers.toQ c.theta) =
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) ∧
+                      (AspisR1.FIr_NativeValue.Canon comp →
+                        AspisR1.FIr_NativeValue.Canon h →
+                          AspisR1.FIr_NativeValue.Canon active →
+                            AspisR1.FIp_SemanticValues.Canon out ∧
+                              AspisR1.FIp_SemanticValues.decode out =
+                                AspisR1.FIr_TerminalValue.formula
+                                  (R0P.SemSource.eqValue
+                                    (fun j =>
+                                      AspisR1.FIr_NativeArray.value
+                                        (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ c.zc) ↑j)
+                                    fun j =>
+                                    AspisR1.FIr_NativeArray.value
+                                      (AspisR1.FIq_Carriers.mapArray AspisR1.FIq_Carriers.toQ alpha) ↑j)
+                                  (AspisR1.FIr_NativeValue.decode comp) (AspisR1.FIp_SemanticValues.decode c.mu)
+                                  (AspisR1.FIr_NativeValue.decode h) (AspisR1.FIr_NativeValue.decode active))
+AspisR1.FIr_GCanonical.canonical : ∀ (pub : AspisR1.FIr_TerminalTrace.SemPub)
+  (claims : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 84#usize)
+  (point : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 10#usize)
+  (lambda chi theta comp g h active : AspisR1.FIr_TerminalTrace.NQ)
+  (c1 : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 16#usize)
+  (mask : Aeneas.Std.Array AspisR1.FIr_TerminalTrace.NQ 10#usize),
+  AspisR1.FIr_TerminalTrace.composition pub claims point lambda chi theta =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (comp, c1, mask, g, h, active)) →
+    (∀ x ∈ ↑claims, AspisR1.FIr_NativeValue.Canon x) → AspisR1.FIr_NativeValue.Canon g
+@AspisR1.FIr_LastLiteral.value : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix)
+  (initial final : AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.Outcome H)
+  (entries : List (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence D pre)),
+  AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.AnnotatedRun D pre
+      AspisR1PublicPreparation.SemanticRoundsCheckedTrace.schedule initial final entries →
+    ∀ (values : AspisR1.SemanticPrefixCodec.Full),
+      AspisR1.SemanticPrefixCodec.encodeFull values = AspisR1PublicPreparation.PrefixAdapter.completedRecords pre →
+        ∀ (alpha : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize),
+          List.map AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.RoundEvidence.q entries = ↑alpha →
+            ∀ (rs : List (AspisR1.LiteralTranscript.Message × AspisR1.LiteralTranscript.Challenge))
+              (view : AspisR1.LiteralOpeningView.View),
+              AspisR1.SemanticPrefixCodec.encodeFull values =
+                  AspisR1.LiteralSemanticCodecBridge.records (List.take 25 rs) →
+                AspisR1.LiteralOpeningView.read rs = some view →
+                  ∀ (out : AspisR1PublicPreparation.verifier.Prepared),
+                    out.semantic_alpha = alpha →
+                      ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                        (data : AspisR1.RecordedBinaryExperimentBin.SourceInputs),
+                        AspisR1.F3L_SourcePrepared.numeric out =
+                            AspisR1.OraclePortCheckpointResumeC5.prepared
+                              (AspisR1.OraclePortAcceptedContextC6.context p data view) data.data
+                              (AspisR1.SelectedChallengeMap.rhoOf data.rho) q →
+                          AspisR1.FIr_SampleRange.InBase ((List.map Prod.snd view.semantic).getD 24 0) →
+                            ∀ (polys : Fin 10 → Polynomial AspisWideTower.WideExact),
+                              R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = some polys →
+                                Polynomial.eval ((List.map Prod.snd view.semantic).getD 24 0) (polys 9) =
+                                  (algebraMap AspisR1.ExtractedMaskQM31Exact.QM31Exact AspisWideTower.WideExact)
+                                    (AspisR1PublicPreparation.RawActualAnnotatedPolynomialRun.DecodeMain final.1)
+AspisR1.FIr_LastMasked.value : ∀ (literal : AspisR1.FIr_LastMasked.W)
+  (eta terminal extra mask etaTerminal masked running : AspisR1.FIp_SemanticArithmetic.MQ),
+  literal = (algebraMap AspisR1.FIr_LastMasked.K AspisR1.FIr_LastMasked.W) (AspisR1.FIp_SemanticValues.decode running) →
+    AspisR1.FIp_SemanticValues.Canon eta →
+      AspisR1.FIp_SemanticValues.Canon terminal →
+        AspisR1.FIp_SemanticValues.Canon extra →
+          AspisR1.FIp_SemanticValues.Canon mask →
+            AspisR1.FIp_SemanticArithmetic.mul eta terminal = Aeneas.Std.Result.ok etaTerminal →
+              AspisR1.FIp_SemanticArithmetic.add mask etaTerminal = Aeneas.Std.Result.ok masked →
+                AspisR1.FIp_SemanticArithmetic.add masked extra = Aeneas.Std.Result.ok running →
+                  literal =
+                    (algebraMap AspisR1.FIr_LastMasked.K AspisR1.FIr_LastMasked.W)
+                          (AspisR1.FIp_SemanticValues.decode mask) +
+                        (algebraMap AspisR1.FIr_LastMasked.K AspisR1.FIr_LastMasked.W)
+                            (AspisR1.FIp_SemanticValues.decode eta) *
+                          (algebraMap AspisR1.FIr_LastMasked.K AspisR1.FIr_LastMasked.W)
+                            (AspisR1.FIp_SemanticValues.decode terminal) +
+                      (algebraMap AspisR1.FIr_LastMasked.K AspisR1.FIr_LastMasked.W)
+                        (AspisR1.FIp_SemanticValues.decode extra)
+FIr_TerminalStatements.lean:11:14: error(lean.unknownIdentifier): Unknown constant `_private.FIr_FinishComparison`
+FIr_TerminalStatements.lean:11:43: error: unexpected token '.'; expected command

@@ -112,7 +112,7 @@ theorem composed {W A CoreError Tx : Type}
       (CPG_Projection.tentative p)
       (CPG_Projection.success p) (CPG_Projection.loaded p))
     (D : LiteralByteProtocol.Decoder) (submission : F3T_ByteCarrier.Submission)
-    (finishOwners : FIr_GlobalOwners.Owners
+    (finishOwners : FIr_GlobalOwners2.Owners
       (FIq_Install.configuration indexError c reservation)
       (Rc2_Install.configuration (Rc5_Install.seed indexError (FIq_Install.select reservation c)) reservation).boundaries)
     (snapshots : ∀ f s,SourceCuts
@@ -130,7 +130,7 @@ theorem composed {W A CoreError Tx : Type}
   exact FIq_Nonvacuity.composed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
     c indexError reservation native1 native2 hashv extraction sha256 H p1 syscall
     data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
-    prior words p t u actions game RuntimePersistence D submission (FIr_GlobalOwners.complete _ _ finishOwners) snapshots
+    prior words p t u actions game RuntimePersistence D submission (FIr_GlobalOwners.complete _ _ (FIr_GlobalOwners2.complete _ _ finishOwners)) snapshots
 
 #print axioms composed
 end AspisR1.FIr_Nonvacuity

@@ -1,5 +1,5 @@
 import FIq_Top
-import FIr_GlobalOwners
+import FIr_GlobalOwners2
 import FIq_Install
 import FIp_Top
 import FIp_Core
@@ -28,8 +28,8 @@ open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
-/-- FIq deployed conclusions with L144 derived from the same accepted source
-preparation and literal view. Pair, matching, chain, terminal and native-local
+/-- FIq deployed conclusions with L144/L145 derived from the same accepted source
+preparation and literal view. Pair, matching, terminal and native-local
 obligations remain explicit. -/
 theorem deployed {W A CoreError Tx : Type}
     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
@@ -66,7 +66,7 @@ theorem deployed {W A CoreError Tx : Type}
     (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : Nat)
     (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
     (runtime : F3T_Runtime.Runtime)
-    (finishOwners : FIr_GlobalOwners.Owners
+    (finishOwners : FIr_GlobalOwners2.Owners
       (FIq_Install.configuration indexError c reservation)
       (Rc2_Install.configuration (Rc5_Install.seed indexError (FIq_Install.select reservation c)) reservation).boundaries)
     (binding : F3T_Runtime.StoredCarrierBinding
@@ -118,7 +118,7 @@ theorem deployed {W A CoreError Tx : Type}
   exact FIq_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
     c indexError reservation native1 native2 hashv extraction sha256 H p1 syscall
     data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length
-    prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime (FIr_GlobalOwners.complete _ _ finishOwners) binding
+    prior words p t u actions game RuntimePersistence D P Q0 Q1 queries runtime (FIr_GlobalOwners.complete _ _ (FIr_GlobalOwners2.complete _ _ finishOwners)) binding
 
 #print axioms deployed
 end AspisR1.FIr_Top
