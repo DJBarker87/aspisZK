@@ -69,3 +69,11 @@ the original trust/obligation records. It has not run. Compile smallest-first:
 CausalPrefix, EndpointSelection, then the source and callback joins after their
 read-only sibling prerequisites are restored; InstalledTrustLedger before
 CausalTrustLedger; the final audit last. No new release result exists yet.
+
+Preparation-check correction: the first check including InstallationFinalAudit
+failed twice because a literal-token scan treated the word "axiom" in its
+comment as a declaration. Commit 7b1b6397f0 therefore had an outdated draft
+hash inventory, not a successful preparation check. The scanner now ignores
+comments and detects actual axiom declarations; the seven-draft inventory was
+regenerated and --check passes. This was not a Lean attempt, source theorem
+failure, or a changed accepted proof. No failed kernel result was concealed.
