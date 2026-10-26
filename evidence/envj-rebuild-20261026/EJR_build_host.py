@@ -156,7 +156,8 @@ while pending and len(past)<budget:
  s=out.read_text();ts=tim.read_text();em=re.search(r'Exit status:\s*(\d+)',ts);ec=int(em[1]) if em else outer
  axioms=[l for l in s.splitlines() if 'axioms' in l]
  lean_exit=ec
- if any('sorryAx' in l for l in axioms):ec=90
+ unsupported={a for block in re.findall(r'depends on axioms:\s*\[([^]]*)\]',s,re.S) for a in block.replace(',',' ').split()}-{'propext','Classical.choice','Quot.sound'}
+ if unsupported:ec=90
  record=dict(key=r['key'],attempt=attempt,module=r['module'],workspace=r['workspace'],source_sha256=r['source_sha256'],source_revision=REV,source_blob_revision=r['revision'],command=cmd,driver_command=[env['LEAN'],'-j1','-M7000','-DElab.async=false','-R',str(root/'sources'),'-o',str(obj),str(src)],deps=ds,deps_fingerprint=fp,exit=ec,lean_exit=lean_exit,validation_exit=ec,outer_exit=outer,wall_seconds=time.monotonic()-start,time_log=ts,peak_rss_kib=int(re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',ts)[1]) if 'Maximum resident' in ts else None,swaps=int(re.search(r'Swaps:\s*(\d+)',ts)[1]) if 'Swaps:' in ts else None,axioms=axioms,errors=[l for l in s.splitlines() if 'error:' in l],admission=admission,caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,lean_M=7000),object_sha256=sha(obj) if obj.exists() and ec==0 else None,object_bytes=obj.stat().st_size if obj.exists() and ec==0 else None,namespace_loader_repair=r['key'] in repair_keys,physical_library_context=context)
  with results.open('a') as f:f.write(json.dumps(record)+'\n')
  past.append(record);attempted.add(r['key']);pending.remove(r)

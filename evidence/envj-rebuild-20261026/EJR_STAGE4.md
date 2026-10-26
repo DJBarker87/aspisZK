@@ -20,7 +20,7 @@ Peak recorded RSS: 7,168,572 KiB; all recorded process swaps: zero. Exact
 commands, source revisions/hashes, selected dependencies/fingerprints, GNU
 wall/RSS/swap/status and full printed axioms/errors are in receipts/.
 `lean_exit` is the actual compiler status; `validation_exit`/`exit` also reject
-printed sorryAx. No failed object is accepted as a dependency. Compiler error
+printed sorryAx. No compiler-failed object is accepted as a dependency. Compiler error
 placeholders are retained in logs, not credited as proved axioms.
 
 ## Infrastructure corrections and retained failures
@@ -69,3 +69,18 @@ are supplied separately: zero T/P/C delta, no premise removed, added or changed.
 Security non-vacuity is not newly established by cache recovery. S2 remains
 OPEN; target not yet established. The stage-5 smoke theorem tests infrastructure
 on inhabited Nat and is not a security conclusion.
+
+## Final multiline audit correction (stage 5)
+
+The initial stage-4 gate checked compiler status and sorryAx. The complete
+multiline audit found `core.fmt.Formatter` in two compiler-successful
+SamplerWordRead modules (30628, 30791), inherited from the exact archived
+Fmt source (`EJR_library-Fmt.lean.txt:13`). They are now validation_exit=90,
+with lean_exit=0 preserved. Stage 4 therefore has 766 compiler successes,
+764 results not rejected by the complete printed-axioms gate. Stage 5 adds
+one standard-axiom smoke result: final totals 767 compiler successes, 765
+not rejected, 35 validation failures including the 33 compiler failures.
+Legacy objects remain retained as excluded evidence; the cache is not an
+approved standard-axiom release closure. Select the authoritative formatter
+repair profile and replay affected consumers under a new budget. No source
+rewrite, further Lean run or theorem-premise removal was performed here.
