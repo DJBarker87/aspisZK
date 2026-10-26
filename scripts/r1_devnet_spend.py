@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""Config-driven R1 devnet setup and spends; wallet files stay in host keys/.
+"""Config-driven R1 devnet setup and spends; wallet files stay in retained host private directories.
 Run inside r1_devnet_receipt.sh and the documented capped scope.
 """
 import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
 from concurrent.futures import ThreadPoolExecutor
 from r1_devnet_rpc import rpc
+from Client64_proof_accounts import proof_plan, retain_key, key_public
 C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
 URL=C['rpc_url'];SIGNER=C.get('signer','native-target/release/devnet_spend')
 CLI=pathlib.Path.home()/'.local/share/solana/install/active_release/bin'
 SYSTEM='11111111111111111111111111111111';TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
 def write(name,v):
     p=O/(name+'.json');p.write_text(json.dumps(v,indent=2)+'\n')
-def key(name):
+def key(name,require_existing=False):
     namespace=C.get('key_namespace','')
     assert re.fullmatch(r'[A-Za-z0-9_-]*',namespace), 'invalid key namespace'
     p=pathlib.Path('keys')/((namespace+'-' if namespace else '')+name+'.json')
+    if require_existing and not p.exists():raise RuntimeError('missing retained key; manual recovery required: '+str(p))
     if not p.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(p)],stdout=subprocess.DEVNULL,check=True)
     os.chmod(p,0o600)
     return str(p),subprocess.check_output([str(CLI/'solana-keygen'),'pubkey',str(p)],text=True).strip()
@@ -160,12 +162,20 @@ for n in range(2):
     write(f'deposit-{n}-plan',d);send(f'deposit-{n}',[d['instruction']],['keys/payer.json',govkey]);deposits.append(d)
 cp=plan('checkpoint',sequence=0);send('forest-checkpoint',[cp['instruction']]);write('forest-checkpoint-plan',cp)
 for n,label in enumerate(['transfer','withdrawal']):
-    proofkey,proofaccount=key(label+'-proof');publickey,publicaccount=key(label+'-public');cpkey,verifiercp=key(label+'-checkpoint')
     saved=O/(label+'-proof-plan.json')
-    if saved.exists():p=json.load(open(saved))
-    else:
-        p=plan('prove',note=n,withdrawal=n==1,destination=dest,checkpoint=cp['checkpoint'],lane_bytes=readhex(deposits[n]['output_lane'],C['programs']['pool']),checkpoint_bytes=readhex(cp['checkpoint'],C['programs']['pool']),proof_dir=str(O/(label+'-proof-private')),proof_account=proofaccount,public_account=publicaccount,verifier_checkpoint=verifiercp);write(label+'-proof-plan',p)
-    proof=(O/(label+'-proof-private')/'proof.bin').read_bytes();public=(O/(label+'-proof-private')/'statement.bin').read_bytes()
+    resuming=(O/(label+'-client64-proof-private')).exists() or saved.exists()
+    publickey,publicaccount=key(label+'-public',require_existing=resuming);cpkey,verifiercp=key(label+'-checkpoint',require_existing=resuming)
+    identity={**C['programs'],'payer':C['payer'],'mint':mint,'action':'prove',
+              'note':n,'withdrawal':n==1,'destination':dest,'checkpoint':cp['checkpoint'],
+              'public_account':publicaccount,'verifier_checkpoint':verifiercp}
+    p,proofkey=proof_plan(O/(label+'-client64-proof-private'),identity,
+        lambda: {'lane_bytes':readhex(deposits[n]['output_lane'],C['programs']['pool']),
+                 'checkpoint_bytes':readhex(cp['checkpoint'],C['programs']['pool'])},
+        invoke,lambda address: account(address)['value'] is None,
+        lambda path: retain_key(path,CLI),lambda path: key_public(path,CLI),saved)
+    proofaccount=p['proof_account'];write(label+'-proof-plan',p)
+    proofdir=O/(label+'-client64-proof-private')/'proof'
+    proof=(proofdir/'proof.bin').read_bytes();public=(proofdir/'statement.bin').read_bytes()
     create(label+'-proof-create',proofaccount,C['carrier'],len(proof),proofkey);create(label+'-public-create',publicaccount,C['carrier'],len(public),publickey)
     t=time.monotonic();proof_stats=upload(label+'-proof-upload',proofaccount,proofkey,proof);statement_stats=upload(label+'-statement-upload',publicaccount,publickey,public)
     assert (proof_stats['count'],statement_stats['count'])==(16,1), 'frozen upload count changed'
