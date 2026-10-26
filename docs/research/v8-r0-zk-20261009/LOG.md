@@ -10271,3 +10271,22 @@ Kani): prove the original helper's for-loop context equals the emitted loop by i
 extracted definition (D188), perform the op223 join using pv-cb3's source law (op223/V240 is in cb3's
 list; no duplication), then V163's concrete instance for both fixtures. Six jobs running: rw18, dict10,
 runjoin6, srcid3, cb2, cb3. Privacy target not yet established.
+
+## D218 (Stream B, 2026-10-26 19:15): dict10 done, counts unchanged, OS world fields named; dict11 refocused on the Formatter axiom blocker
+
+pv-dict10 (`codex/cx-prover-dict-20261026`, head af96787aa3; 81/81 Lean, 57 accepted; 10/10 Kani, 5
+passed, 5 timeouts; final audit J24481 standard axioms across 235 reports, 1,304 object hashes
+matched; no shipped-source change, no stubs, no backend patch): ordered tape replay, request matching,
+safe sink observation frames, owned reference loops and safe reference carriers proved; the OS world
+signature now has named contextual law fields open64, read, write, sync and close (their laws unproved,
+for pv-runjoin6 to associate; no axiom, no E1/E2 change). Counts unchanged for the third round: 175 of
+255 entries selected, 80 open, types 26 of 28; root premises removed 0; native obligations V262, V268,
+V269, V271 retained. Per AGENTS §7 the lead stops commissioning dictionary rounds against the same
+native obstruction. pv-dict11 relaunched in the same worktree (IDs 26200-26499, 100 Lean/10 Kani) on
+one target only: the Formatter release blocker (V269/V270, both treated as OPEN since recount 2 found
+D203 unsupported): stage 0 a mechanical #print axioms inventory of every root in the candidate's
+privacy closure naming the non-standard axiom and its importing modules; stage 1 elimination by the
+avoidance route (chunk 26's publish_compact reduction and retry fixed point as symbolic lemmas, rule
+2) or by a proved safe Formatter quotient as type 27; success criterion is mechanical (only propext,
+Classical.choice, Quot.sound on every root). Six jobs running: rw18, dict11, runjoin6, srcid3, cb2,
+cb3. Privacy target not yet established.
