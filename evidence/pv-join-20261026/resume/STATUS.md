@@ -56,3 +56,18 @@ All 30 remain in this allocation. Canonical mathematical fixtures on srcid3
 and runjoin are recorded as such, not as identification of native released
 records. The successful-audit guard is not a replacement for a complete audit
 observation equation, which also preserves errors/failures/divergence.
+
+## Source/cache preflight
+
+The first static audit import preflight found 575 locally available source
+modules absent from the restored J objects directory alone. This is NOT a
+missing-object count for the full configured LEAN_PATH: commit54/commit53/union
+overlays still exist and contain additional historical objects. Aeneas.olean
+is available in several overlays and in restored J even though the final
+backend path in J.json is absent. Cache reuse must select and pin coherent
+objects, not infer failure from the absence of one backend path.
+
+The op110 draft was simplified further after finding the existing arbitrary
+raw-word normalization transport ProverRwSuccessNativeNormalize.transport.
+EmbeddingWord now reuses it rather than reproving canonical-word arithmetic.
+All new drafts are still uncompiled. Static forbidden-feature scan is clear.

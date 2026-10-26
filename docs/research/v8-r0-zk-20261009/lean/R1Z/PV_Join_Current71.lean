@@ -27,7 +27,7 @@ theorem complex (bytes : Slice U8) :
     ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
     ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
     bind_assoc_eq,bind_tc_ok]
-  repeat' first | rfl | (progress (congr 1)) | split
+  repeat' first | rfl | funext value | (progress (congr 1)) | split
   all_goals simp only [bind_tc_ok,Option.map,decodeC]
 
 theorem quartic (bytes : Slice U8) :
@@ -42,7 +42,7 @@ theorem quartic (bytes : Slice U8) :
     ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
     ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
     bind_assoc_eq,bind_tc_ok]
-  repeat' first | rfl | (progress (congr 1)) | split
+  repeat' first | rfl | funext value | (progress (congr 1)) | split
   all_goals simp only [bind_tc_ok,Option.map,decode]
 variable [ExternalTypes]
 theorem selected_bridge (ops : ExternalFuns) (bytes : Slice U8) :
