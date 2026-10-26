@@ -1,0 +1,58 @@
+{"attempt": "BEg_K028", "exit_status": 0, "wall_seconds": 0.3893235049908981, "peak_rss_kib": "162944", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-batch-effects3-20261026/repo/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` 
+...
+s:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> /home/dombarker/project-offloads/codex-cx-batch-effects3-20261026/repo/crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+   Compiling beg-native-effects v0.1.0 (/home/dombarker/project-offloads/codex-cx-batch-effects3-20261026/repo/evidence/batch-effects3-20261026/BEg_native)
+warning: type `BEg_Hash` should have an upper camel case name
+  --> src/BEg_lib.rs:12:8
+   |
+12 | struct BEg_Hash<'a>(&'a core::cell::Cell<usize>);
+   |        ^^^^^^^^ help: convert the identifier to upper camel case: `BegHash`
+   |
+   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: type `BEg_LogHash` should have an upper camel case name
+  --> src/BEg_lib.rs:94:8
+   |
+94 | struct BEg_LogHash<'a>(&'a core::cell::RefCell<Vec<Vec<Vec<u8>>>>);
+   |        ^^^^^^^^^^^ help: convert the identifier to upper camel case: `BegLogHash`
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.14s
+Thread 0: Checking harness BEg_split::BEg_key_at...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 11 failed
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.0860787s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r1182d88f8a1243858616c8f1cd0989ca.scope; invocation ID: d01fb1ba802e48d79e70c1310a2e5ffc

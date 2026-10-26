@@ -1,0 +1,56 @@
+{"attempt": "BEg_K009", "exit_status": 0, "wall_seconds": 3.6039964910014533, "peak_rss_kib": "309428", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-batch-effects3-20261026/repo/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` 
+...
+|         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+   Compiling beg-native-effects v0.1.0 (/home/dombarker/project-offloads/codex-cx-batch-effects3-20261026/repo/evidence/batch-effects3-20261026/BEg_native)
+warning: type `BEg_Hash` should have an upper camel case name
+  --> src/BEg_lib.rs:12:8
+   |
+12 | struct BEg_Hash<'a>(&'a core::cell::Cell<usize>);
+   |        ^^^^^^^^ help: convert the identifier to upper camel case: `BegHash`
+   |
+   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: type `BEg_LogHash` should have an upper camel case name
+  --> src/BEg_lib.rs:94:8
+   |
+94 | struct BEg_LogHash<'a>(&'a core::cell::RefCell<Vec<Vec<Vec<u8>>>>);
+   |        ^^^^^^^^^^^ help: convert the identifier to upper camel case: `BegLogHash`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.46s
+Thread 0: Checking harness BEg_split::BEg_pad1_exact...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 486 failed (3 unreachable)
+
+ ** 1 of 2 cover properties satisfied (1 unreachable)
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.0086687s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r89f6ba0280044e5f930093f352010a11.scope; invocation ID: 568b9f1b7fd4441b8e52b1e2217fcbcb
