@@ -1,0 +1,21 @@
+FIp_DotsAllCanonical.lean:10:60: error(lean.unknownIdentifier): Unknown identifier `FIo_ArrayCanon.Holds`
+FIp_DotsAllCanonical.lean:11:9: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+q : Slice U8
+g : Std.Array NE 29#usize
+out : Std.Array NE 4#usize
+run : FIp_NativeDots.fast_dots.four_dots q g = ok out
+x✝ :
+  ∃ selected prefix608 v0 v1 v2 v3 converted,
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) q { «end» := 608#usize } =
+        ok selected ∧
+      core.array.TryFromSharedArraySlice.try_from 608#usize selected = ok converted ∧
+        core.result.Result.unwrap core.fmt.DebugTryFromSliceError converted = ok prefix608 ∧
+          FIp_NativeDots.fast_dots.four_dots_one prefix608 g 0#usize = ok v0 ∧
+            FIp_NativeDots.fast_dots.four_dots_one prefix608 g 1#usize = ok v1 ∧
+              FIp_NativeDots.fast_dots.four_dots_one prefix608 g 2#usize = ok v2 ∧
+                FIp_NativeDots.fast_dots.four_dots_one prefix608 g 3#usize = ok v3 ∧
+                  out = Array.make 4#usize [v0, v1, v2, v3] ⋯
+⊢ sorry
+FIp_DotsAllCanonical.lean:21:14: error(lean.unknownIdentifier): Unknown constant `four`

@@ -85,7 +85,7 @@ theorem deployed {W A CoreError Tx : Type}
       (FIp_Install.configuration indexError c reservation).adapter (FIp_Install.configuration indexError c reservation).currentBase
       (FIp_Install.configuration indexError c reservation).reserved (FIp_Install.configuration indexError c reservation).query
       (FIp_Install.configuration indexError c reservation).geometry (FIp_Install.configuration indexError c reservation).stageBase
-      (FIp_Install.configuration indexError c reservation).finish (FIp_SemanticArithmetic.install c.boundaries)
+      (FIp_Install.configuration indexError c reservation).finish (FIp_Install.boundaries c.boundaries)
       reservation CPH_Program.verifier data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (FIp_Install.configuration indexError c reservation)) prior
       (p.physicalEvents t) hashv

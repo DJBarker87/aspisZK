@@ -1,0 +1,43 @@
+def AspisS1ExtractedRoundChildren.generatedRoundBoundaries : ((N : Aeneas.Std.Usize) →
+    AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisS1ExtractedRoundChildren.MainQM N)
+            AspisR1PublicPreparation.r1_wire.Error)) →
+  AspisR1PublicPreparation.RoundModel.Boundaries :=
+fun decodeMain =>
+  { decode := decodeMain, boundary := AspisS1ExtractedRoundChildren.generatedMainBoundary,
+    value := AspisS1ExtractedRoundChildren.generatedMainValue }
+def AspisS1ExtractedRoundChildren.decodeMain : (n : Aeneas.Std.Usize) →
+  AspisS1ExtractedRoundChildren.MainRecord →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisS1ExtractedRoundChildren.MainQM n)
+          AspisS1ExtractedRoundChildren.MainError) :=
+fun n r offset =>
+  AspisS1ExtractedRoundChildren.decoderResultToMain n
+    (AspisR1DecodeKFullV10.r1_wire.ValidatedRecord.decode_k n (AspisS1ExtractedRoundChildren.recordToDecoder r) offset)
+def AspisR1.FIp_Install.boundaries : AspisR1.FIp_SemanticArithmetic.B → AspisR1.FIp_SemanticArithmetic.B :=
+fun seed =>
+  have __src := AspisR1.FIp_SemanticArithmetic.install seed;
+  { fromFn := fun {T F} => AspisR1.OraclePortStdBuilder.fromFn, mask := __src.mask, add := __src.add, mul := __src.mul,
+    terminal := __src.terminal, circle := __src.circle, unwrapRoot := __src.unwrapRoot, claims := __src.claims }
+def AspisR1.OraclePortStdBuilder.fromFn : {T C : Type} →
+  (n : Aeneas.Std.Usize) →
+    Aeneas.Std.core.ops.function.FnMut C Aeneas.Std.Usize T → C → Aeneas.Std.Result (Aeneas.Std.Array T n) :=
+fun {T C} n f c => do
+  let __x ← AspisR1.OraclePortStdBuilder.fromFnLoop f (AspisR1.OraclePortStdBuilder.indices n) c
+  match __x with
+    | (xs, snd) =>
+      if h : xs.length = ↑n then Aeneas.Std.Result.ok ⟨xs, h⟩ else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def AspisR1.R3SemanticRemainingJoins.EquationEndpoint : R0P.Public AspisR1.SemanticPublicWire.M31 →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+    AspisR1.MatchingSupport.Data AspisR1.LiteralAcceptanceTerminal.E → Prop :=
+fun pub rs data =>
+  ∀ (view : AspisR1.LiteralOpeningView.View) (claim : AspisR1.LiteralAcceptanceTerminal.E)
+    (polynomials : Fin 10 → Polynomial AspisR1.LiteralAcceptanceTerminal.E),
+    AspisR1.LiteralOpeningView.read rs = some view →
+      R0P.Mask.claimOf (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = some claim →
+        R0P.Mask.semPolysZ (AspisR1.SelectedSemanticPrefixFacts.lift view.semantic) = some polynomials →
+          AspisR1.R3SemanticEquationCore.Equations claim (AspisR1.R3SemanticRemainingJoins.terminal pub view data)
+            (fun j => (List.map Prod.snd view.semantic).getD (15 + ↑j) 0) polynomials
