@@ -50,3 +50,15 @@ constructor provides initial-ledger independence and strict-prefix frames
 without deleting OS-error outcomes, but its equality to the actual deployed
 initializer/context producer is still an installation obligation. Neither
 fixture is being declared vacuous or non-vacuous from those generic facts.
+
+## Why public binding is not inferred from canonical input data
+
+The pinned PV_Src_NativeInput.publicInput definition projects the request AND
+`transition i.compiled.public_statement`. FrozenInput.Data carries `compiled`
+as data, and does not prove that it is returned by `run`. Consequently an
+abstract public equality on the honest witness does not by itself install
+the selected native public statement. Actual compiler success and the
+compiler/public refinement must be supplied for the SAME compiled record.
+A convenient selected family or a generic T model cannot fill this join.
+This is a source-definition obstruction to an unsupported inference, not a
+checked shipped ROW counterexample or a claim that the fixture is vacuous.

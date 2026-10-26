@@ -13,6 +13,7 @@ def visit(m):
  is_cached=m in cached
  rel=m.replace('.','/')+'.lean'
  candidates=[root/prefix/rel,root/'docs/research/v8-r0-sem-proof-20261008/lean'/rel, root/'docs/research/100bit-spend-path-20261013/evidence/lean-append-tree-20261013/final-sources'/rel]
+ candidates.append(e/'pending-proof-sources'/(m.split('.')[-1]+'.lean.txt'))
  candidates+=list((e/'read-only').glob('*/'+rel+'.txt'))
  p=next((p for p in candidates if p.is_file()),None)
  if p is None:

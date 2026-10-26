@@ -204,3 +204,8 @@ This specializes the mathematical candidate. The exact deployed AFTER list
 remains unchanged: actual initializer/context association, actual caller and
 complete observer installation, and complete extracted trace have not been
 proved. The record types and runtime/boundary binders are unchanged (2/8/6).
+
+Public-binding precision: the `PV_Src_NativeInput.publicInput` equality above
+includes the selected compilation's actual returned `public_statement` and
+its late transition. It cannot be inferred from abstract witness public
+equality while the same-record compiler-success join remains open.
