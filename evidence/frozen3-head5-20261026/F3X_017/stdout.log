@@ -1,0 +1,55 @@
+F3X_Charge.lean:50:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+        (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero),
+      some e.run.p).1
+in the target expression
+  AuS1_Finish.Collision H
+    ((eval H (F3X_AccountPrior.program c hashv prior s)).1 ++
+      AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+        (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero))
+    p q
+
+F C : Type
+c : Configuration F C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+s : Submission
+H : Bytes → State
+e : Evidence c B s H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+prior : Program Bytes State Unit
+Q : ℕ
+select : F3X_Projection.Output → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs
+budget :
+  ∀ (H : Bytes → State), FS.firstReads FS.emptyTable (eval H (F3X_AccountPrior.program c hashv prior s)).1 ≤ Q + 1921
+success : (eval H (F3T_Installed.source c hashv (input c s))).2 = true
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+data : MatchingSupport.Data OraclePortCheckpointAbiC5.E
+rho : OraclePortCheckpointAbiC5.K
+parser : OraclePortCompactDraft.parse s.stored = some p
+port : Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared e.run.p) data q rho
+collision :
+  AuS1_Finish.Collision H
+    ((eval H (F3X_AccountPrior.program c hashv prior s)).1 ++
+      AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+        (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero))
+    p q
+account : Program Bytes State F3X_Projection.Output := F3X_AccountPrior.program c hashv prior s
+accountEval :
+  eval H (F3X_AccountPrior.program c hashv prior s) =
+    ((eval H prior).1 ++
+        ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+            some e.run.p).1,
+      ((eval H (F3T_Installed.source c hashv (input c s))).1 ++ (eval H (F3X_Preparation.program c s)).1, s,
+          some e.run.p).2)
+project : F3X_Projection.project (eval H account).2 = (p, q)
+prep : List (Bytes × State) := (eval H (F3X_Preparation.program c s)).1
+included : ∀ (a : Bytes), FS2.Duplex.Read prep a → FS2.Duplex.Read (eval H account).1 a
+erase : AuS1_Finish.Collision H ((eval H account).1 ++ prep) p q ↔ AuS1_Finish.Collision H (eval H account).1 p q
+prepEval :
+  (eval H (F3X_Preparation.program c s)).1 =
+    (AuS1_Recovery.log (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std (D1 c H)
+          (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.proof () (Array.repeat 29#usize e.run.zero),
+        some e.run.p).1
+⊢ AuS1_Finish.Collision H ((eval H account).1 ++ prep) p q
+'AspisR1.F3X_Charge.prefix_collision' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
