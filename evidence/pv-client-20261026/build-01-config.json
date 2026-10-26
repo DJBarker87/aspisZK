@@ -1,0 +1,41 @@
+{
+  "attempt": "build-01",
+  "kind": "optimized Rust client gate",
+  "source_revision": "7c63aed20f07a52bfcfb4b6978891e229423b805",
+  "source_tree_dirty": true,
+  "expected_time": "Optimized incremental compilation, actual planner proof generation, then named pinned-ELF stage1/stage2/Pool execution",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "build",
+    "--manifest-path",
+    "src/tools/r1-cost-probe/Cargo.toml",
+    "--release",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check",
+    "--bin",
+    "devnet_spend",
+    "--bin",
+    "pv_client_gate"
+  ],
+  "timeout": 1800,
+  "sources": [
+    "src/tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "src/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-client-20261026/native-target",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4",
+    "CARGO_BUILD_JOBS": "4"
+  },
+  "deps_fingerprint": {
+    "manifest_sha256": "ab5febcb318b46e8108d0ee33c61e71aa90c836cf353ed121626a4f6e7e30916",
+    "manifest": "build-01-inputs.json"
+  }
+}

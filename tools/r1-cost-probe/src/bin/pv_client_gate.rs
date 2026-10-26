@@ -6,7 +6,9 @@ use aspis_pool::{
     pool_v1_pair_forest_checkpoint_address, pool_v1_pair_forest_lane_address,
     pool_v1_pair_forest_master_address, POOL_V1_PAIR_EMPTY_ROOTS,
 };
+use aspis_pool::{pool_v1_vault_authority_address, pool_v1_vault_token_account_address};
 use aspis_registry::{pool_v1_verifier_entry_v2_address, pool_v1_verifier_registry_v2_address};
+use aspis_statement::pool_v1::root_history::initialize_root_history_page_bytes_v1;
 use aspis_statement::pool_v1::*;
 use litesvm::LiteSVM;
 use serde_json::{json, Value};
