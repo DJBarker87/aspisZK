@@ -1,0 +1,127 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtPublicationOnly.lean:14:12: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+inst✝ : ExternalTypes
+ops other : ExternalFuns
+⊢ (fun variant p => do
+      let i ← compact.PROOF_BYTES
+      let a ← compact.MAGIC
+      let s ← lift a.to_slice
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s
+      let i1 ← variant.tag
+      let s1 ← lift (Array.make 8#usize [i1, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice
+      let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s1
+      let (r, out3) ← host_compact.compact_semantic p.semantic_bytes.deref out2
+      let r1 ←
+        core.result.Result.map_err prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, out4) ← host_compact.compact_values p.y1.deref out3
+          let r3 ←
+            core.result.Result.map_err prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError
+                r2 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let a1 ← p.inactive.to_le_bytes
+              let s4 ← lift a1.to_slice
+              let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 s4
+              let out6 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out5 p.c0bytes.deref
+              let s6 ← lift p.root.to_slice
+              let out7 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s6
+              let out8 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 p.c1bytes.deref
+              let out9 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 p.fbytes.deref
+              let right_val ← compact.OFF_OPENINGS
+              massert (out9.len = right_val)
+              let (o, _) := core.option.Option.take p.backend.c1
+                do
+                let cc1 ← core.option.Option.unwrap o
+                let (o1, _) := core.option.Option.take p.backend.c2
+                  do
+                  let cc2 ← core.option.Option.unwrap o1
+                  let out10 ← prover.append_query_openings out9 cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+                  let right_val1 ← compact.OFF_NODES
+                  massert (out10.len = right_val1)
+                  let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      massert (val.len = i)
+                      Result.ok (core.result.Result.Ok val)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    fun variant p => do
+    let i ← compact.PROOF_BYTES
+    let a ← compact.MAGIC
+    let s ← lift a.to_slice
+    let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i) s
+    let i1 ← variant.tag
+    let s1 ← lift (Array.make 8#usize [i1, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice
+    let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s1
+    let (r, out3) ← host_compact.compact_semantic p.semantic_bytes.deref out2
+    let r1 ←
+      core.result.Result.map_err prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let (r2, out4) ← host_compact.compact_values p.y1.deref out3
+        let r3 ←
+          core.result.Result.map_err prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r2
+              ()
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let a1 ← p.inactive.to_le_bytes
+            let s4 ← lift a1.to_slice
+            let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 s4
+            let out6 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out5 p.c0bytes.deref
+            let s6 ← lift p.root.to_slice
+            let out7 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 s6
+            let out8 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 p.c1bytes.deref
+            let out9 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 p.fbytes.deref
+            let right_val ← compact.OFF_OPENINGS
+            massert (out9.len = right_val)
+            let (o, _) := core.option.Option.take p.backend.c1
+              do
+              let cc1 ← core.option.Option.unwrap o
+              let (o1, _) := core.option.Option.take p.backend.c2
+                do
+                let cc2 ← core.option.Option.unwrap o1
+                let out10 ← prover.append_query_openings out9 cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+                let right_val1 ← compact.OFF_NODES
+                massert (out10.len = right_val1)
+                let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    massert (val.len = i)
+                    Result.ok (core.result.Result.Ok val)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_FmtPublicationOnly.lean:12:59: warning: This simp argument is unused:
+  erase_419 ops other
+
+Hint: Omit it from the simp argument list.
+  simp only [erase_396 ops other, erase_405 ops other,̵ ̵e̵r̵a̵s̵e̵_̵4̵1̵9̵ ̵o̵p̵s̵ ̵o̵t̵h̵e̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PDict_FmtErase.erase_420' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
