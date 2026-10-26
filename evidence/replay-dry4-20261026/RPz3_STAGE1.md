@@ -50,3 +50,20 @@ committed variant with neither override (no source edit). The final selection
 currently has 4545 repository modules, 142 trusted direct imports, 36 unresolved
 names. Of the original 45, 22 now resolve and 23 remain unresolved. Remaining
 conflicting declaration/import/budget variants stay explicit ambiguities.
+
+## Committed alias recovery
+
+The 45908-file read-only scan found renamed source snapshots. Explicit aliases
+and source hashes are in RPz3_aliases.json; RPz3_generic-scan.json retains all
+import-signature leads, which are not themselves historical source proofs.
+R1FirstFold's canonical FirstFold.lean matches the original retained source
+hash 674a9e12...; other aliases have matching named namespaces/import signatures
+and require fresh replay. No historical object is substituted. D68 fixes the
+PublicPreparation.Funs module of record to the c16 e98bb123... source; that
+explicit ruling resolves its conflicting source variants. No candidate edited.
+
+Current partial closure: 4673 repository modules, 143 trusted direct imports,
+24 unresolved vertices. Of the original 45 names, 28 are now selected and 17
+remain unresolved. Seven further unresolved names are exposed by actual imports.
+The exact complete closure size is unavailable until those sources resolve.
+All previously scheduled modules remain in the expanded target closure.

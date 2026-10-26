@@ -18,7 +18,7 @@ run_cmd do
         logInfo m!"RPZ3_AXIOM {(Json.mkObj [("module", toJson owner.toString), ("name", toJson n.toString)]).compress}"
       if selected.contains owner then
         let debugPrefixes := #["AspisR1RecordParser.r1_wire.Error.Insts.CoreFmtDebug", "AspisR1PrefixAggregateParser.r1_wire.Error.Insts.CoreFmtDebug"]
-        let refs := c.type.getUsedConstants ++ (c.value? true |>.map Expr.getUsedConstants |>.getD #[])
+        let refs := c.type.getUsedConstants ++ (((c.value? true).map (fun e => e.getUsedConstants)).getD #[])
         for ref in refs do
           if debugPrefixes.any (fun p => ref.toString == p || ref.toString.startsWith (p ++ ".")) then
             logInfo m!"RPZ3_DEBUG_REF {(Json.mkObj [("module", toJson owner.toString), ("name", toJson n.toString), ("reference", toJson ref.toString)]).compress}"

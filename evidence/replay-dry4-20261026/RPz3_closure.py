@@ -28,6 +28,7 @@ def strip(s):
   else:out.append(s[i]);i+=1
  return ''.join(out)
 trusted={'Init','Lean','Std','Lake','Mathlib','Aeneas','AeneasMeta','Batteries','Qq','Aesop','ProofWidgets','ImportGraph','LeanSearchClient','Plausible','Cli'}
+aliases=json.loads((E/'RPz3_aliases.json').read_text()) if (E/'RPz3_aliases.json').exists() else {}
 mods={};order=[];active=set();selections={}
 def visit(m):
  if m in active:raise ValueError('cycle '+m)
@@ -36,9 +37,16 @@ def visit(m):
  suffix=m.replace('.','/')+'.lean';cs=[p for p in idx[Path(suffix).name] if p==suffix or p.endswith('/'+suffix)]
  if not cs and m.rsplit('.',1)[-1] not in {'Funs','Types','FunsExternal','TypesExternal','Basic','Impl','Equiv','Degree','Proofs','Modular'}:
   cs=idx[Path(suffix).name][:] # committed flat source snapshots may retain a qualified import name
+ if not cs:
+  leaf=m.rsplit('.',1)[-1]
+  stems={leaf,re.sub(r'^AspisR1','',leaf)}
+  for base,paths in idx.items():
+   if any(re.fullmatch(re.escape(stem)+r'(?:-v\d+|V\d+)?\.lean',base) for stem in stems):cs.extend(paths)
  canonical=[p for p in ['lean/'+suffix,'docs/research/100bit-spend-path-20261013/lean/'+suffix,'docs/research/v8-full-view-zk-20260912/lean/'+suffix,'docs/research/v8-r0-zk-20261009/lean/'+suffix] if p in cs]
  prior=old['modules'].get(m,{})
- if canonical:p=canonical[0];why='committed canonical research source'
+ if m in aliases:
+  p=aliases[m]['path'];why=aliases[m]['reason'];assert h(checked(p))==aliases[m]['sha256']
+ elif canonical:p=canonical[0];why='committed canonical research source'
  elif prior.get('kind')=='repository':
   p=prior.get('snapshot',prior['source']);why='committed predecessor selection'
   assert p in blobs,(m,p)
