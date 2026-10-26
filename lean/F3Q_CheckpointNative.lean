@@ -1,3 +1,4 @@
+import F3Q_BodyOnRun
 import F3Q_ConsPrepared
 import F3N_SameRunTen
 import F3N_WriterOnRun
@@ -88,7 +89,16 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
             (SelectedChallengeMap.rhoOf input.rho) q)).accumulator ∧
          CheckpointBytes5Output.accumulator tx2.saved2=
           (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model input.data
-            (SelectedChallengeMap.rhoOf input.rho) q)).accumulator) := by
+            (SelectedChallengeMap.rhoOf input.rho) q)).accumulator ∧
+         ∀ hp hu, CheckpointBytesDecodeC5.sourceBody (F3K_CheckpointPreparedFields.writerPrepared out)
+          (CheckpointBytes3Namespaces.toAccumulator (Tx1Q_Carriers.accumulator
+            {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩})) hp hu=
+          OraclePortCheckpointAbiC5.body
+            (OraclePortCheckpointResumeC5.prepared (OraclePortAcceptedContextC6.context p input v)
+              input.data (SelectedChallengeMap.rhoOf input.rho) q)
+            (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model input.data
+              (SelectedChallengeMap.rhoOf input.rho) q)).accumulator
+            (CheckpointBytesDigest.stateOf hp) (CheckpointBytesDigest.stateOf hu)) := by
   let B := F3M_CircleSource.install B0
   obtain ⟨f,s,log,cuts,recorded,ran,run,view,oldInput,range,copy,facts,ten⟩ :=
     F3N_SameRunTen.accepted a ops stage finish reserved query geo B std native1 native2 hashv extraction
@@ -126,7 +136,12 @@ theorem accepted {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Op
       s.checkpoint s.proof s.pub saved tx2.p2 tx2.saved2 H (bytesOf f.proof.val) (bytesOf f.pub.val)
       (F3L_SourcePrepared.numeric out) _ next same encoded calls.1
     rw [prepared,checked.1] at encoded reader
-    exact Or.inr ⟨by rw [stored,physical];exact encoded,reader.1,reader.2.1⟩
+    refine Or.inr ⟨by rw [stored,physical];exact encoded,reader.1,reader.2.1,?_⟩
+    intro hp hu
+    have body := F3Q_BodyOnRun.body _ reserved query geo _ () _ f.pub f.proof f.split saved
+      run owner ports out output hp hu
+    rw [prepared,checked.1] at body
+    exact body
 
 #print axioms accepted
 end AspisR1.F3Q_CheckpointNative

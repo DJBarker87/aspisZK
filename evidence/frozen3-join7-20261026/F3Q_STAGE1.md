@@ -28,3 +28,9 @@ Per-attempt receipts preserve source revision/dirty/hash, selected dependency
 objects/sidecars, command/target, exit/wall/RSS/swap/cgroup and full audit lines.
 No resource failures, replay, Kani, shipped edits or artifact rebuild trigger.
 Inherited ELF pins are not newly validated. Sources/objects reused from SInt2.
+
+Stage 1 extension: F3Q_012 adds complete sourceBody equality for arbitrary
+hp/hu to the same collision-OR-checkpoint branch, using F3Q_BodyOnRun.body.
+The admission inventory/canonical fields are derived from the SAME run and
+retained WAdm/query owners. No new canonical/body premise. F3Q_010 and012 pass
+with standard axioms; F3Q_012 wall2.414681018970441s, RSS5357344KiB, swap0.
