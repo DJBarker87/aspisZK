@@ -10,8 +10,8 @@ def collect(name):
 audit_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 state=json.loads((E/'RPz2_state.json').read_text());used=max(int(f.parent.name.split('_')[1]) for f in E.glob('RPz2_*/receipt.json'));remaining=600-used
 passed=[r['module'] for f in sorted(E.glob('RPz2_*/receipt.json')) for r in [json.loads(f.read_text())] if r['exit_status']==0 and not r['module'].startswith('RPz2_Audit')];groups=[]
-# Nonoverlapping query groups. If necessary partition a module's declarations by
-# name hash; no declaration's axioms are queried twice in the explicit audit.
+# Disjoint selected module groups. Generated global names may have different
+# reported owners in separate import contexts; final evidence counts those repeats.
 if remaining<=len(passed):
  for i in range(remaining):groups.append((passed[i*len(passed)//remaining:(i+1)*len(passed)//remaining],0,1))
 else:

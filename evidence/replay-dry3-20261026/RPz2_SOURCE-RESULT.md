@@ -17,8 +17,9 @@ sources are unchanged and were not retried. Independent modules continued.
 No timeout, memory kill, cap increase or swap occurred.
 
 The remaining 297 attempts audit all declarations owned by these 301 passing
-modules in disjoint groups of one or two modules. No inherited declaration is
-queried again. Top reachability and the top's FunsExternal-to-Rust mapping remain
+modules in disjoint groups of one or two modules. Only new selected module owners are queried; generated global names can
+recur under different owners/import contexts. See the final audit findings
+for actual repeated-name counts. Top reachability and the top's FunsExternal-to-Rust mapping remain
 unknown; a subset audit does not establish them. No premise was removed, added
 or changed. Before/after Rc7_Top statements remain identical. No fresh joint
 non-vacuity or release security result is established.
