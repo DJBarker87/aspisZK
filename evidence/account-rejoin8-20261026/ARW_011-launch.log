@@ -1,0 +1,62 @@
+{"attempt": "ARW_011", "exit_status": 1, "wall_seconds": 2.7847037989995442, "peak_rss_kib": "5530348", "swaps": "0", "print_axioms": ["'AspisR1.ARW_QueryAgreement.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARW_QueryAgreement.lean:28:18: error: Tactic `rfl` failed: The left-hand side
+  (have i := eval H a.first;
+    i.1 ++
+      match first native1 copy allocator i.2.entry id i.2.data i.2.state with
+      | ok (core.result.Result.Ok (saved, post, final)) => (eval H (a.second i.2 saved post final)).1
+      | x => []).length
+is not definitionally equal to the right-hand side
+  (eval H a.first).1.length +
+    match fail error with
+    | ok (core.result.Result.Ok (saved, post, final)) =>
+      (eval H (a.second (eval H a.first).2 saved post final)).1.length
+    | x => 0
+
+case fail
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap 
+...
+ocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+extraction :
+  S2W_DigestExtraction.AeneasExtraction
+    (GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries c.std)
+    native1 native2 hashv
+a : Adversary A
+H : Bytes → State
+agrees :
+  ARS_QueryTransport.Agrees H
+    (SdkC_Source.run hashv (ARS_NativeAccount.firstSyntax c hashv copy allocator id (eval H a.first).2) []).2
+same :
+  (eval H
+        (ART_PartialAccount.wrapper hashv
+          (ARS_NativeAccount.firstSyntax c hashv copy allocator id (eval H a.first).2))).2 =
+    first native1 copy allocator (eval H a.first).2.entry id (eval H a.first).2.data (eval H a.first).2.state
+error : AdapterRw.Cuts.PE
+reply :
+  first native1 copy allocator (eval H a.first).2.entry id (eval H a.first).2.data (eval H a.first).2.state =
+    ok (core.result.Result.Err error)
+⊢ (have i := eval H a.first;
+      i.1 ++
+        match first native1 copy allocator i.2.entry id i.2.data i.2.state with
+        | ok (core.result.Result.Ok (saved, post, final)) => (eval H (a.second i.2 saved post final)).1
+        | x => []).length =
+    (eval H a.first).1.length +
+      match ok (core.result.Result.Err error) with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        (eval H (a.second (eval H a.first).2 saved post final)).1.length
+      | x => 0
+ARW_QueryAgreement.lean:35:12: error: Function expected at
+  List.length_append
+but this term has type
+  (?m.185 ++ ?m.186).length = List.length ?m.185 + List.length ?m.186
+
+Note: Expected a function because this term is being applied to the argument
+  _
+'AspisR1.ARW_QueryAgreement.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2dc85837d2f54f3299c9d8aff6ac8eea.scope; invocation ID: ed139cf050f141bbbfb967fd1f46a256
