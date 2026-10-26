@@ -9777,3 +9777,28 @@ IDs 20900-21199): define the deployed FSExperiments instance from the candidate'
 proof-account prover with an explicit entropy world as RealRand, prove non-vacuity for the two release
 fixtures, build the coupling with both marginals, and reduce `agreement` to a named premise structure
 with one field per ledger row. Six jobs running. Privacy target not yet established; rows removed: 0.
+
+## D196 (Stream B, 2026-10-26 11:20): operational client wired to the proof-account route (D162); L3 job
+
+Merged `codex/pv-client-20261026` into research. This implements the owner's D162 decision 1: the
+operational R1 runner (`tools/r1-cost-probe/src/bin/devnet_spend`, planner `plan.rs`, account helper
+`Client64_accounts.rs`, and the `scripts/` retention/inventory/driver helpers) now calls
+`RealR1_client::prove_for_proof_accounts`; publication is bound to the successful retained key; a
+regression test excludes the Generic96 fallback. No file under `crates/` or `programs/` changed
+(`git diff --stat research.. -- crates programs` empty), so the release pins are untouched.
+Validation: 31 Python tests and three optimized Rust tests; transfer and withdrawal proofs produced
+through the wired route are accepted by both pinned verifier ELFs and the pinned Pool in four signed
+LiteSVM cases; duplicate nonces return `Semantic` and leave the durable ledgers unchanged. Integration
+run: exit 0, 195.957 s, 547,352 KiB peak RSS, swap 0 (`evidence/pv-client-20261026/runtime-02-public/
+acceptance.json`); 1,295 source pins and the exact entry/call chain in `client-pins.json`. Process
+deviation recorded by the worker: one barrier retry after 110.6 s instead of 180 s; the retry passed
+admission independently. Reversible by reverting the merge if the owner objects. What this closes:
+the operational routing mismatch found in D194. What it does not: the release ledger still pins no
+client bundle (a soundness-stream file; recommendation to the owner: pin `client-pins.json`), and
+`RustRealRefinement`, E1/E2, RunJoin and L1/L2/L3 stay open. Ledger rows removed: 0 until recount.
+
+New job pv-l3 (`codex/pv-l3-20261026`, branched from the merged candidate, prefix PV_L3_, IDs
+21200-21299): V372 platform pins, V373 disassembly audit of the CT kernels and witness-bearing call
+sites, V374 dudect-style two-class measurement with pre-registered criteria, and the exact statements
+of the V370/V371 trust items for owner acceptance. All labelled measurement, never proof. Six jobs
+running. Privacy target not yet established.
