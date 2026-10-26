@@ -919,3 +919,112 @@ mod pdict_typenum_contracts {
         assert_eq!(<Greater as sha2::digest::typenum::Ord>::to_ordering(),core::cmp::Ordering::Greater);
     }
 }
+
+#[cfg(kani)]
+mod pdict_numeric_contracts {
+    use sha2::digest::typenum::{Unsigned,Bit,UInt,B0,B1,consts::*};
+    fn numeric<U:Unsigned,B:Bit>() {
+        assert_eq!(UInt::<U,B>::to_isize(), (B::to_u8() as isize) | U::to_isize().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::ISIZE, (B::U8 as isize) | U::ISIZE.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i64(), (B::to_u8() as i64) | U::to_i64().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I64, (B::U8 as i64) | U::I64.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i32(), (B::to_u8() as i32) | U::to_i32().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I32, (B::U8 as i32) | U::I32.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i16(), (B::to_u8() as i16) | U::to_i16().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I16, (B::U8 as i16) | U::I16.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_i8(), (B::to_u8() as i8) | U::to_i8().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::I8, (B::U8 as i8) | U::I8.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_usize(), (B::to_u8() as usize) | U::to_usize().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::USIZE, (B::U8 as usize) | U::USIZE.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u64(), (B::to_u8() as u64) | U::to_u64().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U64, (B::U8 as u64) | U::U64.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u32(), (B::to_u8() as u32) | U::to_u32().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U32, (B::U8 as u32) | U::U32.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u16(), (B::to_u8() as u16) | U::to_u16().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U16, (B::U8 as u16) | U::U16.wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::to_u8(), (B::to_u8() as u8) | U::to_u8().wrapping_shl(1));
+        assert_eq!(UInt::<U,B>::U8, (B::U8 as u8) | U::U8.wrapping_shl(1));
+    }
+    #[kani::proof]
+    fn numeric_source_recursion() {
+        numeric::<U0,B0>(); numeric::<U0,B1>();
+        numeric::<U1,B0>(); numeric::<U1,B1>();
+        numeric::<U2,B0>(); numeric::<U2,B1>();
+        numeric::<U4,B0>(); numeric::<U4,B1>();
+        numeric::<U8,B0>(); numeric::<U8,B1>();
+        numeric::<U16,B0>(); numeric::<U16,B1>();
+        numeric::<U32,B0>(); numeric::<U32,B1>();
+        numeric::<U64,B0>(); numeric::<U64,B1>();
+        numeric::<U128,B0>(); numeric::<U128,B1>();
+        numeric::<U256,B0>(); numeric::<U256,B1>();
+        numeric::<U512,B0>(); numeric::<U512,B1>();
+    }
+}
+
+#[cfg(kani)]
+mod pdict_comparison_contracts {
+    use sha2::digest::typenum::{UTerm,UInt,B0,B1,Equal,Greater,Less,consts::U512};
+    use sha2::digest::typenum::private::{PrivateCmp,IsLessOrEqualPrivate,IsLessPrivate};
+    #[kani::proof]
+    fn terminal_comparison_entries() {
+        assert_eq!(UTerm.private_cmp(&UTerm,Equal),Equal);
+        assert_eq!(UTerm.private_cmp(&UTerm,Greater),Greater);
+        assert_eq!(UTerm.private_cmp(&UTerm,Less),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<U512,B0>::default(),Equal),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<U512,B1>::default(),Greater),Less);
+        assert_eq!(UTerm.private_cmp(&UInt::<UTerm,B0>::default(),Less),Less);
+        let a:u64=kani::any(); let b:u64=kani::any();
+        assert_eq!(a.is_less_or_equal_private(b,Equal),B1);
+        assert_eq!(a.is_less_private(b,Less),B1);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_primitive_contracts {
+    use sha2::digest::{block_buffer::{BlockBuffer,Eager},typenum::consts::U64};
+    #[kani::proof]
+    fn truncation_and_eager_default() {
+        use sha2::digest::core_api::{TruncSide,VariableOutputCore};
+        assert!(matches!(<sha2::Sha256VarCore as VariableOutputCore>::TRUNC_SIDE,TruncSide::Left));
+        let _:Eager=Default::default();
+        assert_eq!(core::mem::size_of::<Eager>(),0);
+    }
+    #[kani::proof]
+    #[kani::unwind(67)]
+    fn eager_sha_block_boundary() {
+        let data:[u8;65]=kani::any();
+        let pos:usize=kani::any(); kani::assume(pos<=65);
+        let buffer=BlockBuffer::<U64,Eager>::try_new(&data[..pos]);
+        assert_eq!(buffer.is_ok(),pos<64);
+        if let Ok(buffer)=buffer { assert_eq!(buffer.get_pos(),pos); }
+    }
+    #[kani::proof]
+    fn slice_and_shared_as_ref() {
+        let data:[u8;4]=kani::any();
+        let n:usize=kani::any(); kani::assume(n<=4);
+        let slice=&data[..n];
+        let returned:&[u8]=slice.as_ref();
+        assert!(core::ptr::eq(slice,returned));
+        let value:u64=kani::any();
+        struct Probe { value:u64 }
+        impl AsRef<u64> for Probe { fn as_ref(&self)->&u64 { &self.value } }
+        let probe=Probe{value}; let shared=&probe;
+        let actual:&u64=shared.as_ref();
+        assert!(core::ptr::eq(actual,&probe.value));
+        assert_eq!(*actual,value);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_ordering_contracts {
+    use sha2::digest::typenum::{B0,B1,consts::*,IsLess,IsLessOrEqual};
+    #[kani::proof]
+    fn source_ordering_instances() {
+        assert_eq!(U64::default().is_less(U256::default()),B1);
+        assert_eq!(U64::default().is_less_or_equal(U256::default()),B1);
+        assert_eq!(U64::default().is_less(U64::default()),B0);
+        assert_eq!(U64::default().is_less_or_equal(U64::default()),B1);
+        assert_eq!(U512::default().is_less(U256::default()),B0);
+        assert_eq!(U512::default().is_less_or_equal(U256::default()),B0);
+    }
+}

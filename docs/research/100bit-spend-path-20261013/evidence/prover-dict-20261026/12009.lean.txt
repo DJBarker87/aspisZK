@@ -1,0 +1,68 @@
+import R1Z.PDict_Compare
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_Abort
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+
+abbrev installed := PDict_Compare.selected
+
+theorem wire_retained (ops : ExternalFuns) :
+    (installed ops).op256 = PDict_WireError.equal := rfl
+
+theorem semantic_error (ops : ExternalFuns) (e : r1_wire.Error) :
+    @prover.semantic_error _ (installed ops) e =
+      .ok (match e with
+        | .ActivePole => verifier.Error.Rejected
+        | _ => verifier.Error.Semantic) := by
+  unfold prover.semantic_error
+  change (do
+    let b ← (installed ops).op256 e .ActivePole
+    if b then .ok verifier.Error.Rejected else .ok verifier.Error.Semantic) = _
+  rw [wire_retained]
+  cases e <;> rfl
+
+theorem mask_error (ops : ExternalFuns)
+    (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) :
+    @prover.mask_error e =
+      .ok (match e with
+        | .MaskSampleExhausted => verifier.Error.Rejected
+        | _ => verifier.Error.Semantic) := by
+  cases e <;> rfl
+
+/-- Keeps the actual P_R1 call and both outer machine failures; no assumption
+about that checker or its returned decision is required. -/
+theorem public_check (ops : ExternalFuns) (v : transport.Variant)
+    (ch : aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)
+    (root : Array U8 32#usize) :
+    @prover.public_check _ (installed ops) v ch root =
+      (match v with
+       | .S2 => do
+         let (accepted,_) ← (installed ops).op232 ch
+         if accepted then .ok (.Ok ()) else .ok (.Err verifier.Error.Rejected)
+       | _ => .ok (.Err verifier.Error.Semantic)) := by
+  cases v <;> rfl
+
+/-- Source cap stops before requesting entropy or executing any proof body. -/
+theorem cap {C : Type} (ops : ExternalFuns)
+    (entropy : core.ops.function.FnMut C Usize (core.result.Result
+      aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))
+    (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (v : transport.Variant)
+    (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+    (callback : C) (k : Usize) (hk : 8 ≤ k.val) :
+    @prover.retry_attempt _ (installed ops) C entropy pub compiled v hash store callback k =
+      .ok (.Err verifier.Error.AttemptsExhausted,store) := by
+  have guard : k >= prover.ATTEMPT_CAP := hk
+  rw [prover.retry_attempt]
+  simp only [guard,if_true]
+
+#print axioms wire_retained
+#print axioms semantic_error
+#print axioms mask_error
+#print axioms public_check
+#print axioms cap
+end R1Z.PDict_Abort
