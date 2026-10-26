@@ -1,0 +1,38 @@
+{"attempt": "Rc10_052", "exit_status": 0, "wall_seconds": 2.3949082830222324, "peak_rss_kib": "5503368", "swaps": "0", "print_axioms": ["'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Rc10_Top.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c 
+...
+ ∀ {W F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (queryOps : AspisR1.Port3_NativeQueryBody.Ops) (geoOps : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (reservation : AspisR1.NP6_StdModel.Reservation)
+  (program : AspisR1.S2W_ExtractionBoundary.Program) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (driver :
+    AspisR1.OraclePortStoredExperimentC4.Input →
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (events : List AspisR1.S2X.AccountEvent)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest) (bad : Prop),
+  AspisR1.P2P_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation
+      program data1 data2 slot saved post1 post2 H driver prior events hashv bad →
+    ¬bad →
+      AspisR1.Rc6_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation
+        program data1 data2 slot saved post1 post2 H driver prior events hashv
+'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd2a0fba43929485a8cd81a6ad90640dd.scope; invocation ID: 0a06bdc36fba4326ad36cd4a722e600b
