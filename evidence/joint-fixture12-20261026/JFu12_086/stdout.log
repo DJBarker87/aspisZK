@@ -1,0 +1,25 @@
+def FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 : FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public →
+  Aeneas.Std.Array (Aeneas.Std.Array FIq_Native.field.QM31 29#usize) 3#usize →
+    Aeneas.Std.Array FIq_Native.field.QM31 10#usize →
+      FIq_Native.state_only_prefix.r0.Challenges →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result FIq_Native.field.QM31 FIq_Native.state_only_prefix.r0.Error) :=
+fun self claims alpha c => do
+  let selected ←
+    FIq_Native.array_from_fn_copy 84#usize FIq_Native.field.QM31.Insts.CoreMarkerCopy
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+        FIq_Native.field.QM31.ZERO claims
+  let sp ← self.semantic
+  let r ←
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts sp selected alpha c.lambda c.chi c.theta c.zc c.mu
+  let r1 ←
+    FIq_Native.core.result.Result.map
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+        r ()
+  FIq_Native.core.result.Result.map_err
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+      r1 ()
+def FIq_Native.array_from_fn_copy : {T F : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.core.marker.Copy T →
+      Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T → T → F → Aeneas.Std.Result (Aeneas.Std.Array T N) :=
+fun {T F} N _copy fn _dummy f => AspisR1.OraclePortStdBuilder.fromFn N fn f

@@ -1,0 +1,8 @@
+import F3M_CircleSourceCall
+import FIr_FinishComparison
+set_option pp.fullNames true
+#print AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.sampler_qm31_sample_eq_public
+#print AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72
+#print AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.success_returns_point
+#print AspisR1CircleSampleWrapper.sampler.circle_sample
+#print AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.circle_total_coordinates

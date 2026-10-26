@@ -1,0 +1,43 @@
+import JFu_TerminalCallbackCanonical
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFu_TerminalSelectedCanonical
+open Aeneas Aeneas.Std Result FIq_Native
+open JFu_TerminalCallback
+abbrev fn := pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+
+theorem loop (is : List Usize) (bound : ∀ i ∈ is,i.val<84) :
+    ∃ xs,OraclePortStdBuilder.fromFnLoop fn is claims=ok (xs,claims) ∧
+      xs.length=is.length ∧ ∀ q ∈ xs,JFu_TerminalCanonical.Canon q := by
+  induction is with
+  | nil => exact ⟨[],rfl,rfl,by simp⟩
+  | cons i is ih =>
+    obtain ⟨q,call,canonical⟩ := JFu_TerminalCallbackCanonical.source i (bound i (by simp))
+    obtain ⟨xs,tail,length,allCanonical⟩ := ih (by intro j hj;exact bound j (by simp only [List.mem_cons];exact Or.inr hj))
+    refine ⟨q::xs,?_,by simp only [List.length_cons,length],?_⟩
+    · simp only [OraclePortStdBuilder.fromFnLoop,fn,call,bind_tc_ok,Aeneas.Std.uncurry,tail]
+    · intro x hx
+      rcases List.mem_cons.mp hx with same|mem
+      · exact same ▸ canonical
+      · exact allCanonical x mem
+
+theorem source : ∃ out,array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy fn field.QM31.ZERO claims=ok out ∧
+    ∀ q ∈ out.val,JFu_TerminalCanonical.Canon q := by
+  have bound : ∀ i ∈ OraclePortStdBuilder.indices 84#usize,i.val<84 := by
+    intro i hi
+    unfold OraclePortStdBuilder.indices at hi
+    rw [List.mem_ofFn] at hi
+    obtain ⟨j,rfl⟩ := hi
+    exact j.isLt
+  obtain ⟨xs,call,length,canonical⟩ := loop (OraclePortStdBuilder.indices 84#usize) bound
+  have size : xs.length=(84#usize).val := by
+    simpa only [OraclePortStdBuilder.indices,List.length_ofFn] using length
+  refine ⟨⟨xs,size⟩,?_,canonical⟩
+  unfold array_from_fn_copy OraclePortStdBuilder.fromFn
+  rw [call,bind_tc_ok]
+  simp only [Aeneas.Std.uncurry,dif_pos size]
+
+#print axioms loop
+#print axioms source
+end AspisR1.JFu_TerminalSelectedCanonical
+end
