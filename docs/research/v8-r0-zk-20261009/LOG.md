@@ -10154,3 +10154,20 @@ discharged. Endpoint premises removed: 0. The 51 independent OPEN rows are all o
 (`codex/pv-cb3-20261026` from the candidate, prefix PV_CB3_, IDs 24700-24999, 100 Lean/20 Kani) on
 the stage-2 callback rows from the top down (ops 258, 253-251, 230-205) while cb2 works upward.
 Six jobs running: rw17, dict10, runjoin5, srcid, cb2, cb3. Privacy target not yet established.
+
+## D212 (Stream B, 2026-10-26 17:05): first quiet window broken after one sample; second window requested
+
+The 16:50-17:20 UTC quiet window (D210) opened on time: the marker was written at 16:50:00, the strict
+preflight found the host quiet at 16:50:40, and the timing driver started in one 6G/8G/no-swap/64-task
+scope. The first research sample completed (transfer 48.5 s, withdrawal 46.4 s, 16 workers, load 2.5;
+proof hashes as pinned), but the post-sample preflight found a new capped scope from Stream A's
+`codex-cx-sound-int2-20261025/S2W_run_host.py` (a launcher outside the S2X_/S2H_ reservation scripts
+Stream A had patched), refused with exit 78, and the driver stopped by design (receipt
+candidate/quiet-timing-2/receipt on the host; exit 1, 95 s, peak RSS 0.57 GiB). The marker was removed
+at 16:52:15 so Stream A lost about two minutes. The sample is UNQUALIFIED and no timing number is
+claimed; for context only, D172 measured the CT-kernels-v2 candidate at 13.6/14.0 s medians against
+about 37-39 s before it, and research has not adopted that candidate, so a large candidate/research
+ratio below 1 is expected rather than a regression signal. Stream A has been asked to patch the
+remaining launcher(s) and name a second 30-minute window from 17:40 UTC; the orchestration script will
+be re-pointed at the new epoch with the same early-release rule. Six jobs running: rw17, dict10,
+runjoin5, srcid, cb2, cb3. Privacy target not yet established.
