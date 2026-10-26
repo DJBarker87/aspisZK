@@ -1,0 +1,80 @@
+import R1Z.PDict_World244
+import R1Z.PDict_SinkCore244
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_FormatterQuotient244
+open Aeneas Aeneas.Std ProverRwFull
+
+/-- A safe observation quotient with arbitrary sink state and options. The sink
+transition is retained even on failure. Its native association remains separate.
+There is no Formatter axiom, raw-pointer model, or assumption of atomic writes. -/
+abbrev Formatter (O S : Type) := PDict_SinkCore244.Formatter UInt8 O S
+
+abbrev write {O S : Type} := @PDict_SinkCore244.write UInt8 O S
+
+def label : aspis_core.r0.Error → String
+  | .IndexOutOfRange => "IndexOutOfRange"
+  | .WrongLength => "WrongLength"
+  | .ZeroDenominator => "ZeroDenominator"
+  | .Allocation => "Allocation"
+  | .NonCanonical => "NonCanonical"
+  | .WrongField => "WrongField"
+  | .InvalidPoints => "InvalidPoints"
+  | .QuotientNotInImage => "QuotientNotInImage"
+  | .RankDeficient => "RankDeficient"
+  | .Parse => "Parse"
+  | .Semantic => "Semantic"
+  | .Schedule => "Schedule"
+  | .Sampler => "Sampler"
+  | .Commitment => "Commitment"
+  | .Authentication => "Authentication"
+  | .V1 => "V1"
+  | .V2 => "V2"
+
+def debug {O S : Type} (error : aspis_core.r0.Error) (f : Formatter O S) :
+    Result ((core.result.Result Unit core.fmt.Error) × Formatter O S) :=
+  let (failed,next) := write (label error).toUTF8.data.toList f
+  .ok ((if failed then .Err () else .Ok ()),next)
+
+/-- Reference carrier installation, not an unconditional native adequacy claim. -/
+@[reducible] def types (base : ExternalTypes) (O S : Type) : ExternalTypes :=
+  PDict_RemainingDictionary231.native
+    { base with op3 := PDict_World244.Error, op27 := Formatter O S }
+
+theorem type3 (base : ExternalTypes) (O S : Type) :
+    (types base O S).op3 = PDict_World244.Error := rfl
+
+theorem type27 (base : ExternalTypes) (O S : Type) :
+    (types base O S).op27 = Formatter O S := rfl
+
+@[reducible] def selected (base : ExternalTypes) (O S : Type)
+    (ops : @ExternalFuns (types base O S)) : @ExternalFuns (types base O S) :=
+  letI : ExternalTypes := types base O S
+  { PDict_RemainingDictionary231.selected
+      {base with op3 := PDict_World244.Error,op27 := Formatter O S} ops with
+    op23 := fun e => .ok (PDict_World244.Error.kind e)
+    op85 := debug }
+
+theorem op23 (base : ExternalTypes) (O S : Type)
+    (ops : @ExternalFuns (types base O S)) (e : PDict_World244.Error) :
+    (selected base O S ops).op23 e = .ok (PDict_World244.Error.kind e) := rfl
+
+theorem op85 (base : ExternalTypes) (O S : Type)
+    (ops : @ExternalFuns (types base O S)) :
+    (selected base O S ops).op85 = @debug O S := rfl
+
+theorem debug_calls {O S : Type} (error : aspis_core.r0.Error) (f : Formatter O S) :
+    debug error f =
+      .ok ((if (f.emit f.sink (label error).toUTF8.data.toList).1 then .Err () else .Ok ()),
+        {f with sink := (f.emit f.sink (label error).toUTF8.data.toList).2, calls := f.calls ++ [(label error).toUTF8.data.toList]}) := rfl
+
+#print axioms PDict_SinkCore244.options_frame
+#print axioms PDict_SinkCore244.sink_exact
+#print axioms PDict_SinkCore244.calls_exact
+#print axioms PDict_SinkCore244.emit_frame
+#print axioms type3
+#print axioms type27
+#print axioms op23
+#print axioms op85
+#print axioms debug_calls
+end R1Z.PDict_FormatterQuotient244
