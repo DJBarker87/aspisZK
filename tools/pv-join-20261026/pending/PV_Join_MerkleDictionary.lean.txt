@@ -1,0 +1,31 @@
+import R1Z.PV_Join_Merkle
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_Join_MerkleDictionary
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+@[reducible] def selected (ops : ExternalFuns) : ExternalFuns :=
+  {ProverRwP6BodyStore.selected ops with
+    op82 := @ExternalFuns.op82 _ (PV_CB_Merkle.selected ops),
+    op83 := @ExternalFuns.op83 _ (PV_CB_Merkle.selected ops),
+    op84 := @ExternalFuns.op84 _ (PV_CB_Merkle.selected ops),
+    op86 := @ExternalFuns.op86 _ (PV_CB_Merkle.selected ops)}
+theorem dictionary (ops : ExternalFuns) : selected ops = ProverRwP6BodyStore.selected ops := by
+  have h82 : @ExternalFuns.op82 _ (PV_CB_Merkle.selected ops) =
+      @ExternalFuns.op82 _ (ProverRwP6BodyStore.selected ops) := by
+    exact (PV_CB_Op82Source.op82_source ops ).trans (PV_Join_Merkle.op82_source ops ).symm
+  have h83 : @ExternalFuns.op83 _ (PV_CB_Merkle.selected ops) =
+      @ExternalFuns.op83 _ (ProverRwP6BodyStore.selected ops) := by
+    exact (PV_CB_Op83Source.op83_source ops ).trans (PV_Join_Merkle.op83_source ops ).symm
+  have h84 : @ExternalFuns.op84 _ (PV_CB_Merkle.selected ops) =
+      @ExternalFuns.op84 _ (ProverRwP6BodyStore.selected ops) := by
+    funext hash tag values
+    exact (PV_CB_Op84Source.op84_source ops hash tag values).trans (PV_Join_Merkle.op84_source ops hash tag values).symm
+  have h86 : @ExternalFuns.op86 _ (PV_CB_Merkle.selected ops) =
+      @ExternalFuns.op86 _ (ProverRwP6BodyStore.selected ops) := by
+    exact (PV_CB_Op86Source.op86_source ops ).trans (PV_Join_Merkle.op86_source ops ).symm
+  unfold selected
+  rw [h82, h83, h84, h86]
+  rfl
+#print axioms dictionary
+end R1Z.PV_Join_MerkleDictionary
