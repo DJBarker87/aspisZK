@@ -46,3 +46,6 @@ mod checks {
 
 #[cfg(kani)]
 pub fn point_clone<E:Clone>(p:&aspis_core::r0::domain::Point<E>)->aspis_core::r0::domain::Point<E> {p.clone()}
+
+#[cfg(kani)]
+pub fn c1_tag()->u8 {aspis_core::r0::merkle::C1_TAG}

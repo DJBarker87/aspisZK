@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 5/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 9/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -16,3 +16,8 @@ Before: 0/73 discharged; current: 5/73. No endpoint removal claimed.
 |72|V198|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op72Source.op72_source|24002.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
 |77|V199|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op77Source.op77_source|24004.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
 |80|V202|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op80Source.op80_source|24005.json; Exact extracted function equation; all Result cases and arbitrary callback instances retained. D188 extraction trust only.|
+|81|V203|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op81Source.op81_source|24006.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
+|82|V204|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op82Source.op82_source|24007.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
+|83|V205|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op83Source.op83_source|24008.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
+|84|V206|PARTIAL(extracted callee equation)|R1Z.PV_CB_Op84Source.op84_source|24009.json; Lean equation to emitted leaf_with_digest with extracted LegacyHashFn implementation passes. Aeneas emission omitted leaf wrapper despite its presence in LLBC; require exact wrapper extraction equation before claiming row discharge.|
+|86|V208|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op86Source.op86_source|24010.json; Exact extracted source equation. Existing pure callbacks retained explicitly; no V165/V167 boundary charged to this row.|
