@@ -1,0 +1,42 @@
+{"attempt": "Rc8_042", "exit_status": 0, "wall_seconds": 2.8103886200115085, "peak_rss_kib": "5490564", "swaps": "0", "print_axioms": []}
+structure AspisR1.Port4C_BasisOuter.SessionABasis (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_mul : ops.op7 = AspisR1Qm31ArithmeticProbe.field.M31.mul
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_sub : ops.op6 = AspisR1Qm31ArithmeticProbe.field.M31.sub
+  AspisR1.Port4C_BasisOuter.SessionABasis.s3_s4_double : ops.op8 = S7Kani3BasisOuter.double
+  AspisR1.Port4C_BasisOuter.SessionABasis.zero : ops.op4 = Aeneas.Std.Result.ok 0#u32
+  AspisR1.Port4C_BasisOuter.SessionABasis.one : ops.op5 = Aeneas.Std.Result.ok 1#u32
+constructor:
+  AspisR1.Port4C_BasisOuter.SessionABasis.mk {ops : AspisR1.Port3_NativeQueryBody.O
+...
+Arithmetic.SessionABackends.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (s3_s4_s5_mulE :
+      ∀ (value : AspisR1.Port4C_QueryValues.E) (power : AspisR1.Port3_FlushInstall.K)
+        (product : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE value →
+          AspisR1.Port3_FlushInstall.Canonical power →
+            ops.op3 value power = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofE product =
+                  AspisR1.CheckpointBytes5Output.ofE value *
+                    AspisR1.LiteralOpeningView.eK (AspisR1.CheckpointBytes5Output.ofK power) ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE product)
+    (s3_s4_s5_addE :
+      ∀ (left right : AspisR1.Port4C_QueryValues.E) (sum : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        AspisR1.Port4C_QueryArithmetic.CanonE left →
+          AspisR1.Port4C_QueryArithmetic.CanonE right →
+            ops.op2 left right = Aeneas.Std.Result.ok sum →
+              AspisR1.CheckpointBytes5Output.ofE sum =
+                  AspisR1.CheckpointBytes5Output.ofE left + AspisR1.CheckpointBytes5Output.ofE right ∧
+                AspisR1.Port4C_QueryArithmetic.CanonE sum)
+    (s3_s4_s9_mulK :
+      ∀ (left right : AspisR1.Port3_FlushInstall.K) (product : AspisR1Stage2.aspis_core.field.QM31),
+        AspisR1.Port3_FlushInstall.Canonical left →
+          AspisR1.Port3_FlushInstall.Canonical right →
+            ops.op9 left right = Aeneas.Std.Result.ok product →
+              AspisR1.CheckpointBytes5Output.ofK product =
+                  AspisR1.CheckpointBytes5Output.ofK left * AspisR1.CheckpointBytes5Output.ofK right ∧
+                AspisR1.Port3_FlushInstall.Canonical product) :
+    AspisR1.Port4C_QueryArithmetic.SessionABackends ops
+
+Running as unit: run-r3ed1e33dcc2f4836921fe5ec646eaa80.scope; invocation ID: 6b452d98a0894ae0a536d436341b673a

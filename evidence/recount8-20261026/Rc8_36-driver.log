@@ -1,0 +1,38 @@
+{"attempt": "Rc8_036", "exit_status": 0, "wall_seconds": 2.3839739119866863, "peak_rss_kib": "5491972", "swaps": "0", "print_axioms": []}
+def AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H saved f s =>
+  AspisR1.P6C_Whole.SafePair c hashv H saved f s ∧
+    AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.firstLog c hashv f) ∧
+      AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.secondLog c hashv s) ∧
+        ∀ q ∈ AspisR1.P6C_
+...
+pisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H saved f s =>
+  AspisR1.P6C_Whole.SafePair c hashv H saved f s ∧
+    AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.firstLog c hashv f) ∧
+      AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.secondLog c hashv s) ∧
+        ∀ q ∈ AspisR1.P6C_FullBoundary.firstLog c hashv f ++ AspisR1.P6C_FullBoundary.secondLog c hashv s,
+          ∀ (self : AdapterRw.SolanaDigest),
+            (AspisR1.DrvC_Installation.sdk c).op43 self q.parts =
+              Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts)
+@AspisR1.P6C_FullBoundary.same_cuts : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction (AspisR1.DrvC_Installation.sdk c) native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+            (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (f : AspisR1.S2W_NativeConsolidation.FirstCut)
+            (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+            AspisR1.S2W_NativeConsolidation.SourceCuts (AspisR1.DrvC_Installation.sdk c) accounts1 accounts2 saved f s →
+              AspisR1.P6C_FullBoundary.Facts c hashv H saved f s
+
+Running as unit: run-r6762d1f543d547ecbb9c3a6d07c0c63d.scope; invocation ID: 8bc8d8ccc06f4d0dbc632e5de6a6a930
