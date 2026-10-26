@@ -1,0 +1,43 @@
+{"attempt": "Rc10_048", "exit_status": 0, "wall_seconds": 2.4309973060153425, "peak_rss_kib": "5504864", "swaps": "0", "print_axioms": []}
+structure AspisR1.Rc4_Model.Input : Type
+number of parameters: 0
+fields:
+  AspisR1.Rc4_Model.Input.publicBytes : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.Rc4_Model.Input.tag : AspisV8R19.DuplexFrames.Byte
+  AspisR1.Rc4_Model.Input.physical : AspisR1.F3_Model.PhysicalPublic
+  AspisR1.Rc4_Model.Input.proof : AspisR1.RawCutProverCompiler.Proof
+  AspisR1.Rc4_Model.Input.stored : AspisV8R19.DuplexFrames.Bytes
+constructor:
+  AspisR1.Rc4_Model.Input.mk (publicBytes : AspisV8R19.DuplexFrames.Bytes) (tag : AspisV8R19.DuplexFrames.Byte)
+    (physical : AspisR1.F3_Model.PhysicalPublic) (proof : AspisR1.RawCutProverCompiler.Proof)
+    (stored : AspisV8R19.DuplexFrames.Bytes) : AspisR1.Rc4_Model.Input
+def
+...
+ers.Metadata.m31 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.queryBytes : List ℕ
+  AspisR1.TxS_Carriers.Metadata.state31 : AspisV8R19.SourceDuplexStep.State
+  AspisR1.TxS_Carriers.Metadata.m32 : AspisR1.LiteralTranscript.Message
+  AspisR1.TxS_Carriers.Metadata.rho : AspisR1.LiteralTranscript.E
+  AspisR1.TxS_Carriers.Metadata.state32 : AspisV8R19.SourceDuplexStep.State
+constructor:
+  AspisR1.TxS_Carriers.Metadata.mk (decoded : R0P.Public AspisR1.SemanticPublicWire.M31)
+    (m31 : AspisR1.LiteralTranscript.Message) (queryBytes : List ℕ) (state31 : AspisV8R19.SourceDuplexStep.State)
+    (m32 : AspisR1.LiteralTranscript.Message) (rho : AspisR1.LiteralTranscript.E)
+    (state32 : AspisV8R19.SourceDuplexStep.State) : AspisR1.TxS_Carriers.Metadata
+def AspisR1.TxS_Carriers.source : AspisR1.TxS_Carriers.Metadata →
+  AspisR1.LiteralAcceptanceTerminal.TranscriptRounds → AspisR1.R1FinalSoundness.SourceInputs :=
+fun m rs =>
+  { decoded := m.decoded, data := AspisR1.TxS_Carriers.data rs, m31 := m.m31, queryBytes := m.queryBytes,
+    state31 := m.state31, m32 := m.m32, rho := m.rho, state32 := m.state32 }
+def AspisR1.TxS_Carriers.data : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+  AspisR1.MatchingSupport.Data AspisR1.LiteralTranscript.E :=
+fun rs => (AspisR1.LiteralMatchingData.read rs).getD AspisR1.TxS_Carriers.zeroData
+def AspisR1.TxS_Carriers.toTyped : AspisR1.TxS_Carriers.Prefix → AspisR1.RawCutTranscriptRun.ErasedPrefix :=
+fun p =>
+  if h : 75 + List.length p.publicBytes ≤ AspisR1.SelectedTranscriptParams.L then
+    { statement := { pubBytes := p.publicBytes, initFits := h, tag := p.tag }, rounds := p.rounds }
+  else
+    { statement := { pubBytes := [], initFits := AspisR1.TxS_Carriers.toTyped._proof_1, tag := p.tag },
+      rounds := p.rounds }
+
+Running as unit: run-r4313646b9ca248d090749b844b47ebcd.scope; invocation ID: 7a87689554e04cba9f4bf9431fe0781c
