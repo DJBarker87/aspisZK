@@ -1,0 +1,46 @@
+{"attempt": "JFo_007", "exit_status": 1, "wall_seconds": 2.302195156982634, "peak_rss_kib": "5295296", "swaps": "0", "print_axioms": ["'AspisR1.JFo_Suffix.allocated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFo_Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFo_Suffix.lean:36:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+    ok
+        (core.result.Result.Ok
+          ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+              gamma := JFq_Gamma.scalar, kappa := JFq_Kappa.scalar,
+              alpha := Array.make 2#usize [JFq_Alpha0.scalar, JFq_Alpha1.scalar] ⋯, rho := JFq_Rho.scalar,
+              queries := JFq_Queries.value, semantic_alpha := JFq_Semantic.value,
+              z :=
+                Array.make 2#usize
+                  [{ x := JFq_Z0.scalar, y := JFq_Z1.scalar }, { x := JFq_Z2.scalar, y := JFq_Z3.scalar }]
+...
+heckpointBytes3Reader.readK (JFq_Raw.reader 600#usize) =
+    ok (core.result.Result.Ok JFq_Z2.scalar, JFq_Raw.reader 616#usize)
+step3 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 616#usize) =
+    ok (core.result.Result.Ok JFq_Z3.scalar, JFq_Raw.reader 632#usize)
+step4 :
+  CheckpointBytes3Reader.readE (JFq_Raw.reader 632#usize) =
+    ok (core.result.Result.Ok JFq_Claim.scalar, JFq_Raw.reader 664#usize)
+step5 :
+  CheckpointBytes3Reader.readE (JFq_Raw.reader 664#usize) =
+    ok (core.result.Result.Ok JFq_Rhs.scalar, JFq_Raw.reader 696#usize)
+step6 :
+  CheckpointBytes3Reader.readK (JFq_Raw.reader 696#usize) =
+    ok (core.result.Result.Ok JFq_Power.scalar, JFq_Raw.reader 712#usize)
+⊢ (do
+      let cursor ← lift (UScalar.cast UScalarTy.Usize 10#u8)
+      ok
+          (core.result.Result.Ok
+            ({ variant := transport.Variant.S2, roots := Array.make 2#usize [JFq_Root0.value, JFq_Root1.value] ⋯,
+                gamma := JFq_Gamma.scalar, kappa := JFq_Kappa.scalar,
+                alpha := Array.make 2#usize [JFq_Alpha0.scalar, JFq_Alpha1.scalar] ⋯, rho := JFq_Rho.scalar,
+                queries := JFq_Queries.value, semantic_alpha := JFq_Semantic.value,
+                z :=
+                  Array.make 2#usize
+                    [{ x := JFq_Z0.scalar, y := JFq_Z1.scalar }, { x := JFq_Z2.scalar, y := JFq_Z3.scalar }] ⋯,
+                claim := JFq_Claim.scalar, state := JFq_State.value },
+              { weights := JFo_Weights.value, rhs := JFq_Rhs.scalar, power := JFq_Power.scalar, next := cursor }))) =
+    ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator))
+'AspisR1.JFo_Suffix.allocated' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFo_Suffix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r58c1b3adff1149b68620927be84965c4.scope; invocation ID: 9f19aceda50c4f90be3e8f4b16d78bf4
