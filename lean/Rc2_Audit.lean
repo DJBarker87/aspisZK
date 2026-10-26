@@ -11,7 +11,6 @@ set_option format.width 120
 #print AspisR1.Rc2_Install.configuration
 #print AspisR1.Rc2_Result.Outcome
 #print AspisR1.Rc2_Base.Outcome
-#print AspisR1.Rc2_History.Facts
 #print AspisR1.Rc2_Events.Facts
 #print AspisR1.Rc2_Protection.Facts
 #print AspisR1.NP6_StdModel.calls
@@ -30,11 +29,13 @@ set_option format.width 120
 #print AspisR1.T2R_CallerSource.Outcome
 #print AspisR1.T2R_ContSource.Outcome
 #print AspisR1.T2R_Acceptance.Facts
-#print AspisR1.CPR_DataPersistence.TwoTransactionLaw
 #print axioms AspisR1.Rc2_Install.standard
 #print axioms AspisR1.Rc2_Install.dictionary
 #print axioms AspisR1.Rc2_Base.strengthen
 #print axioms AspisR1.Rc2_Events.derive
 #print axioms AspisR1.Rc2_Protection.derive
-#print axioms AspisR1.Rc2_History.derive
 #print axioms AspisR1.Rc2_Top.deployed
+
+#check @AspisR1.Cons_Top.deployed
+#print AspisR1.DrvC_Installation.Configuration
+#print AspisR1.DrvC_FirstConstants.configuration

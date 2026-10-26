@@ -32,3 +32,16 @@ changed; no ELF rebuild trigger or release claim. No push.
 Rc2_generate.py is the retained interrupted-run development generator; the
 accepted source snapshots are authoritative (the subsequent explicit edits
 are not reproduced by that early generator).
+
+Resume correction (authoritative final selection): Rc2_018/019/020 remove
+Rc2_History.Facts from the top/result and its runtime-law guarded corollary.
+This follows the job's explicit exclusion of the unadopted runtime law; the
+standalone development module remains recorded but is NOT a selected conclusion
+or dependency. CPS source events remain. Original L094-L096 history guards
+remain unchanged. Bank protection still has its explicit keyLaw, owner,
+Initialized and positive-lamports guards; recount these as new P families.
+Rc2_019 top passed (2.165615717 s,5328524 KiB,swap0); Rc2_020 complete statement
+and six selected axiom audits passed (2.054282921 s,5303808 KiB,swap0).
+All six use only propext, Classical.choice, Quot.sound. Rc2_016 failed due to
+one wrong namespace in a diagnostic print, corrected in 017. 20/60 Lean
+attempts used, 0 dependency builds, 0 Kani. No full/package replay.
