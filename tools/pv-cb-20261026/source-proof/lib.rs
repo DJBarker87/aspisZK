@@ -66,3 +66,20 @@ pub fn zeroizing_new<Z:zeroize::Zeroize>(x:Z)->zeroize::Zeroizing<Z> {zeroize::Z
 pub fn zeroizing_zeroize<Z:zeroize::Zeroize>(x:&mut zeroize::Zeroizing<Z>) {zeroize::Zeroize::zeroize(x)}
 #[cfg(kani)]
 pub fn zeroizing_asref<T:?Sized,Z:zeroize::Zeroize+AsRef<T>>(x:&zeroize::Zeroizing<Z>)->&T {x.as_ref()}
+
+#[cfg(kani)]
+extern crate aspis_statement;
+
+#[cfg(kani)]
+pub fn mask_cells()->Result<Vec<aspis_statement::trace_v4::TraceCell>,aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1> {
+ aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_relation_free_mask_cells_v1()
+}
+
+#[cfg(kani)]
+pub fn active_rows()->Result<Vec<u16>,aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1> {
+ aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1()
+}
+#[cfg(kani)]
+pub fn row_masks()->Result<[u16;64],aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairHidingLayoutErrorV1> {
+ aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_row_masks_v1()
+}

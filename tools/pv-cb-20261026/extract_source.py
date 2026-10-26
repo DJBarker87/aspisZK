@@ -16,7 +16,7 @@ for stage in ['charon','aeneas']:
  (local/'reservation-transport.log').write_text(out.stdout)
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon':
-  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg kani --cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built','--sysroot','default','--start-from',entry]
+  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry]
   if include:args+=['--include',include]
   args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{"source-proof" if int(op)>=71 else "proof"}/Cargo.toml','--release','--offline','--lib','--jobs','4']
  else:
