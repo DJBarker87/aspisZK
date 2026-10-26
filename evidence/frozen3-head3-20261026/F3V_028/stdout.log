@@ -1,0 +1,107 @@
+F3V_PreparedGeneric.lean:22:111: error: unsolved goals
+case h_1.next.next.next.next.first
+Hash : Type
+H : Bytes → State
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+claimLaw :
+  ∀ (sem : r1_semantic.Verified Hash) (y1 : Slice U8) (inactive : aspis_core.field.WideExact)
+    (powers : Std.Array aspis_core.field.WideExact 29#usize) (kappa : aspis_core.field.WideExact),
+    B.claim D sem y1 inactive powers kappa = B.claim (F3U_Rehash.dictionary H D) sem y1 inactive powers kappa
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹⁷ : Std.Array U8 32#usize
+x✝¹⁶ : transcript.Transcript Hash
+x✝¹⁵ : aspis_core.field.WideExact × transcript.Transcript Hash
+x✝¹⁴ : Std.Array U8 32#usize
+x✝¹³ : Slice U8
+x✝¹² x✝¹¹ : aspis_core.field.WideExact × transcript.Transcript Hash
+x✝¹⁰ : Usize
+h✝ : x✝¹⁰ = 2#usize
+x✝⁹ : UScalar UScalarTy.Usize
+x✝⁸ : Std.Array U8 32#usize
+x✝⁷ : Slice U8
+x✝⁶ x✝⁵ : alloc.vec.Vec U8
+x✝⁴ : aspis_core.field.WideExact × transcript.Transcript Hash
+x✝³ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript Hash
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝² : UScalar UScalarTy.U8
+x✝¹ : Slice U8
+x✝ : aspis_core.field.QM31 × transcript.Transcript Hash
+x : Std.Array aspis_core.field.WideExact 29#usize
+⊢ F3U_Rehash.code H
+      ({ newTranscript := fun {H} => PreparedHashEffects.new effects,
+            scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+            toBytes := fun x => monadLift (B.sampling.toBytes x),
+            queries := fun {H} => PreparedQueryEffects.queries effects Q,
+            rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+            powers := fun N x => monadLift (B.powers N x),
+            claim := fun {H} D sem bytes inactive powers kappa =>
+              monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+        D sem v.y1 v.inactive x x✝¹².1) =
+    { newTranscript := fun {H} => PreparedHashEffects.new effects,
+          scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+          toBytes := fun x => monadLift (B.sampling.toBytes x),
+          queries := fun {H} => PreparedQueryEffects.queries effects Q,
+          rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+          powers := fun N x => monadLift (B.powers N x),
+          claim := fun {H} D sem bytes inactive powers kappa =>
+            monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+      (F3U_Rehash.dictionary H D) sem v.y1 v.inactive x x✝¹².1
+
+case h_1.next.next.next.next.first
+Hash : Type
+H : Bytes → State
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+Q : QueriesModel.Boundaries
+claimLaw :
+  ∀ (sem : r1_semantic.Verified Hash) (y1 : Slice U8) (inactive : aspis_core.field.WideExact)
+    (powers : Std.Array aspis_core.field.WideExact 29#usize) (kappa : aspis_core.field.WideExact),
+    B.claim D sem y1 inactive powers kappa = B.claim (F3U_Rehash.dictionary H D) sem y1 inactive powers kappa
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+scratch : Std.Array aspis_core.field.WideExact 29#usize
+x✝¹² : Std.Array U8 32#usize
+x✝¹¹ : transcript.Transcript Hash
+x✝¹⁰ : aspis_core.field.WideExact × transcript.Transcript Hash
+x✝⁹ : Std.Array U8 32#usize
+x✝⁸ : Slice U8
+x✝⁷ x✝⁶ : aspis_core.field.WideExact × transcript.Transcript Hash
+x✝⁵ : Usize
+h✝ : ¬x✝⁵ = 2#usize
+x✝⁴ : aspis_core.field.WideExact
+x✝³ : core.result.Result (Std.Array U32 22#usize) verifier.Error × transcript.Transcript Hash
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) (Std.Array U32 22#usize)
+val✝ : Std.Array U32 22#usize
+x✝² : UScalar UScalarTy.U8
+x✝¹ : Slice U8
+x✝ : aspis_core.field.QM31 × transcript.Transcript Hash
+x : Std.Array aspis_core.field.WideExact 29#usize
+⊢ F3U_Rehash.code H
+      ({ newTranscript := fun {H} => PreparedHashEffects.new effects,
+            scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+            toBytes := fun x => monadLift (B.sampling.toBytes x),
+            queries := fun {H} => PreparedQueryEffects.queries effects Q,
+            rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+            powers := fun N x => monadLift (B.powers N x),
+            claim := fun {H} D sem bytes inactive powers kappa =>
+              monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+        D sem v.y1 v.inactive x x✝⁷.1) =
+    { newTranscript := fun {H} => PreparedHashEffects.new effects,
+          scalar := fun {H} => PreparedScalarEffects.scalar effects B.sampling,
+          toBytes := fun x => monadLift (B.sampling.toBytes x),
+          queries := fun {H} => PreparedQueryEffects.queries effects Q,
+          rho := fun {H} => PreparedScalarEffects.scalar_k effects B.sampling,
+          powers := fun N x => monadLift (B.powers N x),
+          claim := fun {H} D sem bytes inactive powers kappa =>
+            monadLift (B.claim D sem bytes inactive powers kappa) }.claim
+      (F3U_Rehash.dictionary H D) sem v.y1 v.inactive x x✝⁷.1
+'AspisR1.F3V_PreparedGeneric.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

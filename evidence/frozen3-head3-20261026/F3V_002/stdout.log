@@ -1,0 +1,51 @@
+F3V_SemanticValidated.lean:14:82: error: unsolved goals
+case isFalse
+Hash : Type
+H : Bytes → State
+D : aspis_core.Digest32 Hash
+self : r1_wire.SemanticTranscript Hash
+record : r1_wire.ValidatedRecord
+x✝ : U8
+h✝ : ¬x✝ > 24#u8
+x : Slice U8
+⊢ (F3U_Rehash.code H do
+      let __x ← S1SemanticCode.sampleBlock D self x✝ x
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← liftM (sampler.qm31_sample val)
+          pure (core.result.Result.Ok q, __x.2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
+          pure (r1, __x.2)) =
+    do
+    let __x ← S1SemanticCode.sampleBlock (F3U_Rehash.dictionary H D) self x✝ x
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← liftM (sampler.qm31_sample val)
+        pure (core.result.Result.Ok q, __x.2)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+                (core.convert.FromSame r1_wire.Error) residual)
+        pure (r1, __x.2)
+F3V_SemanticValidated.lean:15:86: warning: This simp argument is unused:
+  F3U_RehashBind.digest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵1̵S̵e̵m̵a̵n̵t̵i̵c̵C̵o̵d̵e̵.̵s̵e̵m̵a̵n̵t̵i̵c̵V̵a̵l̵i̵d̵a̵t̵e̵d̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵l̵i̵f̵t̵,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵B̵i̵n̵d̵.̵d̵i̵g̵e̵s̵t̵]̵[̲S̲1̲S̲e̲m̲a̲n̲t̲i̲c̲C̲o̲d̲e̲.̲s̲e̲m̲a̲n̲t̲i̲c̲V̲a̲l̲i̲d̲a̲t̲e̲d̲,̲ ̲F̲3̲U̲_̲R̲e̲h̲a̲s̲h̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲F̲3̲U̲_̲R̲e̲h̲a̲s̲h̲B̲i̲n̲d̲.̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3V_SemanticValidated.lean:19:60: warning: This simp argument is unused:
+  F3U_Rehash.code
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedHashCode.bind,̵F̵3̵U̵_̵R̵e̵h̵a̵s̵h̵.̵c̵o̵d̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3V_SemanticValidated.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
