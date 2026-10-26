@@ -1,0 +1,59 @@
+import R1Z.PV_RW_SamplerLimbTotal
+set_option autoImplicit false
+namespace R1Z.PV_RW_SamplerPass
+open Aeneas Aeneas.Std Result
+abbrev Step := U32 → U64 → Result (U32 × U64)
+
+def run (step : Step) : List U32 → U64 → Result (List U32 × U64)
+  | [], remainder => ok ([],remainder)
+  | word::words, remainder => do
+    let (quotient,next) ← step word remainder
+    let (quotients,last) ← run step words next
+    ok (quotient::quotients,last)
+
+theorem congr (left right : Step)
+    (same : ∀ word remainder, left word remainder = right word remainder)
+    (words : List U32) (remainder : U64) :
+    run left words remainder = run right words remainder := by
+  induction words generalizing remainder with
+  | nil => rfl
+  | cons word words ih =>
+    simp only [run,same]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    rintro ⟨quotient,next⟩ _
+    rw [ih]
+
+theorem source_owned (words : List U32) (remainder : U64) :
+    run PV_RW_SamplerLimbSource.sampler_step.shipped_limb words remainder =
+      run PV_RW_SamplerLimbSource.owned words remainder :=
+  congr _ _ PV_RW_SamplerLimbSource.limb words remainder
+
+theorem total (words : List U32) (remainder : U64)
+    (bound : remainder.val < PV_RW_SamplerLimbBounds.p) :
+    ∃ quotients last,
+      run PV_RW_SamplerLimbSource.sampler_step.shipped_limb words remainder = ok (quotients,last) ∧
+      quotients.length = words.length ∧ last.val < PV_RW_SamplerLimbBounds.p := by
+  induction words generalizing remainder with
+  | nil => exact ⟨[],remainder,rfl,rfl,bound⟩
+  | cons word words ih =>
+    obtain ⟨quotient,next,hs,hbound⟩ := PV_RW_SamplerLimbTotal.source_total word remainder
+    obtain ⟨quotients,last,hr,hlen,hlast⟩ := ih next hbound
+    refine ⟨quotient::quotients,last,?_,?_,hlast⟩
+    · simp only [run,hs,bind_tc_ok,hr]
+    · simp only [List.length_cons,hlen]
+
+-- Reverse iteration leaves quotients at the original array positions.
+def pass (step : Step) (rank : List U32) : Result (List U32 × U32) := do
+  let (quotients,remainder) ← run step rank.reverse 0#u64
+  ok (quotients.reverse,UScalar.cast .U32 remainder)
+
+theorem pass_source_owned (rank : List U32) :
+    pass PV_RW_SamplerLimbSource.sampler_step.shipped_limb rank =
+      pass PV_RW_SamplerLimbSource.owned rank := by
+  unfold pass
+  rw [source_owned]
+#print axioms congr
+#print axioms source_owned
+#print axioms total
+#print axioms pass_source_owned
+end R1Z.PV_RW_SamplerPass

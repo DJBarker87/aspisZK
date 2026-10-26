@@ -10,6 +10,7 @@ pub fn compress_tagged_tuple(tag: M31, values: &[M31], lambda: QM31) -> QM31 {
     }
     compressed
 }
+#[inline(always)]
 pub fn shipped_step(mut compressed:QM31,mut power:QM31,value:&M31,lambda:QM31)->(QM31,QM31) {
         compressed = compressed.add(power.mul_m31(*value));
         power = power.mul(lambda);
@@ -22,4 +23,10 @@ pub fn reference16(tag:M31,values:[M31;16],lambda:QM31)->QM31 {
     let mut state=(lift(tag),lambda);let mut i=0usize;
     while i<16 {state=reference_step(state.0,state.1,values[i],lambda);i+=1;}
     state.0
+}
+#[inline(always)]
+pub fn owned_step_matched(mut compressed:QM31,mut power:QM31,value:&M31,lambda:QM31)->(QM31,QM31) {
+        compressed = compressed.add(power.mul_m31(*value));
+        power = power.mul(lambda);
+    (compressed,power)
 }

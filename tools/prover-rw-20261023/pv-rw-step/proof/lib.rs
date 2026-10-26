@@ -114,3 +114,54 @@ mod actual_shape {
   assert_eq!(compressed.c1.a.0,0);assert_eq!(compressed.c1.b.0,0);
  }
 }
+#[inline(always)]
+pub fn scalar_product_owned(a:u32,b:u32)->u64 {a as u64 * b as u64}
+#[inline(always)]
+pub fn scalar_mul_owned(a:u32,b:u32)->u32 {aspis_core::field::ct::reduce64(scalar_product_owned(a,b))}
+#[cfg(kani)]
+mod scalar_product_split {
+ #[kani::proof] #[kani::unwind(2)]
+ fn scalar_product_casts() {
+  let a:u32=kani::any();let b:u32=kani::any();
+  assert_eq!(u64::from(a)*u64::from(b),super::scalar_product_owned(a,b));
+ }
+ #[kani::proof] #[kani::unwind(2)]
+ fn scalar_mul_literal_body() {
+  let a:u32=kani::any();let b:u32=kani::any();
+  assert_eq!(aspis_core::field::M31(a).mul(aspis_core::field::M31(b)).0,super::scalar_mul_owned(a,b));
+ }
+}
+#[cfg(kani)]
+mod matched_steps {
+ use super::generated::*;
+ use aspis_core::field::{M31,CM31,QM31};
+ fn q()->QM31 {let r:[u32;4]=kani::any();QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
+ #[kani::proof] #[kani::unwind(2)]
+ fn compression_step_matched_borrow() {
+  let out=q();let power=q();let value=M31(kani::any());let lambda=q();
+  let a=shipped_step(out,power,&value,lambda);let b=owned_step_matched(out,power,&value,lambda);
+  assert_eq!(a.0.c0.a.0,b.0.c0.a.0);assert_eq!(a.0.c0.b.0,b.0.c0.b.0);
+  assert_eq!(a.0.c1.a.0,b.0.c1.a.0);assert_eq!(a.0.c1.b.0,b.0.c1.b.0);
+  assert_eq!(a.1.c0.a.0,b.1.c0.a.0);assert_eq!(a.1.c0.b.0,b.1.c0.b.0);
+  assert_eq!(a.1.c1.a.0,b.1.c1.a.0);assert_eq!(a.1.c1.b.0,b.1.c1.b.0);
+ }
+}
+#[cfg(kani)]
+mod matched_coordinates {
+ use super::generated::*;
+ use aspis_core::field::{M31,CM31,QM31};
+ fn q()->QM31 {let r:[u32;4]=kani::any();QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
+ #[kani::proof] #[kani::unwind(2)]
+ fn compression_matched_accumulator_c0a() {
+  let out=q();let power=q();let value=M31(kani::any());let lambda=q();
+  assert_eq!(shipped_step(out,power,&value,lambda).0.c0.a.0,owned_step_matched(out,power,&value,lambda).0.c0.a.0);
+ }
+ #[kani::proof] #[kani::unwind(2)]
+ fn compression_matched_power_c0a() {
+  let out=q();let power=q();let value=M31(kani::any());let lambda=q();
+  assert_eq!(shipped_step(out,power,&value,lambda).1.c0.a.0,owned_step_matched(out,power,&value,lambda).1.c0.a.0);
+ }
+}
+pub mod parse_step;
+#[path="../../success-p8/proof/sampler_owned.rs"]
+pub mod sampler_owned;

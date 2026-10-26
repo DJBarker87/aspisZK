@@ -81,3 +81,99 @@ revision label is retained and explicitly distinguished from the branch pin.
 This is not an artifact/release association. The full task scope still requires
 actual source/native/effect adequacy, full proof/audit model equality and the
 privacy endpoint/deployment conditions; none is silently dropped.
+
+## Emission association and sampler steps
+
+23703/PV_RW_CompressEmission passes2.22s/4311868KiB/zero swaps/two standard
+axioms reports: literal emitted source step = modeled step, and fold equation.
+The invocation revision-label typo is corrected explicitly in23703-revision-
+correction.json; immutable source/dependency hashes and snapshots are unchanged.
+23704/PV_RW_SamplerLimbBounds passes0.59s/763304KiB/zero swaps/five standard
+reports: remainder<P and word<2^32 imply dividend<2^63<2^64; mathematical
+remainder preservation and reverse-iterator prefix bound10.
+
+Actual-M31 suffix-next007 passes2.78s; initial lifting008 passes0.30s;
+reduce64 wrapper009 passes0.31s. Single sampler limb010 passes28.57s with
+remainder<P, all raw words. Reverse iterator011 passes0.60s for every prefix
+0..8. No stubs; all include unwinding assertions. Charon and Aeneas both
+successfully process the literal sampler limb (separate receipts).
+
+The raw external template for compression is archived as uncompiled text;
+its emitted axiom placeholders are never imported. The accepted source module
+uses the pre-existing parameterized primitive meanings instead. All accepted
+kernel theorem audits contain only standard axioms. No new trusted axiom.
+
+Native012 isolates just u32→u64 cast/product equality (no reducer/field carrier),
+adds standard MIR optimization4, and passes13.55s. Native013 tests the smaller
+literal scalar multiply/reducer factoring with that environment and times out
+240s; no scalar correspondence claim. Native014 changes the compression
+reference argument to a matched borrowed-value interface and exact statement
+factoring, adds inline attributes, and checks the complete step with unchanged
+resource/time limits. Earlier sources and rejected runs are retained.
+
+23705/PV_RW_SamplerLimbSource passes2.48s/4304148KiB/zero swap,one standard
+axiom report. Literal emitted source (with the retained shift32 API adaptation)
+= owned machine operation sequence for all U32/U64 inputs, preserving Results.
+No remainder bound is needed for this equation; bounds are separately proved.
+
+Read-only pv-cb head recheck at15:41UTC:3c7d1a083101e71a000a71cb0ae0e10a0a1e113a.
+No callbacks assigned there have been edited or installed here.
+
+## Iterator source-model induction
+
+23706 rejects one bind-normalization join in the cons theorem; exact rejected
+source/log retained. No theorem from it is accepted (its error-generated
+sorryAx reports are rejected).23707 destructures the returned pair explicitly
+and passes1.97s/4316924KiB/zero swaps,all five reports standard. This proves
+Aeneas.loop on the chosen remaining-list iterator model equals the extracted
+owned compression for all inputs, including typed arity16. It does not claim
+that failed Kani014 establishes the native step. No live op223 installation.
+
+Native014 (matched borrowed interface/full step) times out240s. Its successor
+015 is a single accumulator coordinate (a strict output/dependency split).
+No caps/timeouts raised. V164 native full-step equality remains unsupplied.
+
+## Sampler invariant, pass and array step
+
+23708/PV_RW_SamplerLimbTotal passes1.92s/4297144KiB/zero swap/three standard
+reports. The machine source leaf is total for every U32/U64 input; its next
+remainder is strictly below P. No quotient/canonicality/output hypothesis.
+
+Native016 passes52.11s: actual reverse-iterator array update equals owned full
+array-state step for arbitrary eight raw words,1≤j≤8,remainder<P. Every updated
+and untouched array slot, next remainder and index is checked; unwind10, no
+stubs. Charon/Aeneas separately succeed for this complete array step.
+23710/PV_RW_SamplerArraySource passes1.96s/4305780KiB/zero swap/three standard
+reports: literal emitted array step+iterator control body equals retained
+indexed body, hence the complete Result loop/pass equals retained reference.
+
+23709 rejects pair-let rewriting;23711 rejects no-progress dsimp. Both exact
+failed inputs retained and not accepted.23712 uses explicit congruence under
+the remaining monadic continuation and passes1.79s/4305200KiB/zero swap/four
+standard reports. Complete reverse-list pass source=owned plus per-step
+remainder invariant/totality and output-length preservation are proved.
+No op250/callback installation is claimed from these auxiliary source models.
+
+## Final native allocation and bounded-source continuation
+
+All20/20 Kani invocations are now used:12 passes,8 timeouts,zero counterexamples.
+Native017 (power coordinate) times out240s. Native018 one-byte-word parser cell
+passes1.27s;019 complete eight-word parser passes1.40s;020 literal decoder vs
+retained owned decoder passes0.51s,all raw inputs. The latter three use bound34
+to cover32-byte ABI/input copies; all unwinding assertions remain enabled.
+No complete ordinary/compression native certificate is inferred merely by
+counting component gates. Native Kani exhaustion is not a Lean stop.
+
+23713 rejects a scalar numeral-bound normalization;23714 makes the Nat1 bound
+explicit and passes1.99s/4298000KiB/zero swaps,four standard reports. It links
+the complete new array loop to the proved old indexed machine source, and
+transports actual step index-decrement/remainder invariants and totality.
+23715 passes1.88s/4307828KiB/zero swap,four standard reports: the actual array
+loop model equals finite(j+1),specializes to9 evaluations at arity8,and proves
+that the native bound10 exceeds the user-loop evaluation count.
+
+Read-only sibling check before source-model compression dictionary work:
+pv-cb head3a16c923fddca9f2d48004fdff6318587ea237e1. Its final status marks op223
+OPEN and op250 as a skipped earlier source-policy installation,with native
+correspondence retained. No sibling-installed callback is edited or replaced.
+The new compression dictionaries are auxiliary; no live callback installed.

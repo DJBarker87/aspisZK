@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_SamplerPass.lean:24:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run left words ?remainder
+in the target expression
+  (let (quotient, next) := (quotient, next)
+    do
+    let (quotients, last) ← run left words next
+    ok (quotient :: quotients, last)) =
+    let (quotient, next) := (quotient, next)
+    do
+    let (quotients, last) ← run right words next
+    ok (quotient :: quotients, last)
+
+case cons
+left right : Step
+same : ∀ (word : U32) (remainder : U64), left word remainder = right word remainder
+word : U32
+words : List U32
+ih : ∀ (remainder : U64), run left words remainder = run right words remainder
+remainder : U64
+quotient : U32
+next : U64
+a✝ : right word remainder = ok (quotient, next)
+⊢ (let (quotient, next) := (quotient, next)
+    do
+    let (quotients, last) ← run left words next
+    ok (quotient :: quotients, last)) =
+    let (quotient, next) := (quotient, next)
+    do
+    let (quotients, last) ← run right words next
+    ok (quotient :: quotients, last)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_SamplerPass.lean:42:4: error: unsolved goals
+case cons.refine_1
+word : U32
+words : List U32
+ih :
+  ∀ (remainder : U64),
+    ↑remainder < PV_RW_SamplerLimbBounds.p →
+      ∃ quotients last,
+        run PV_RW_SamplerLimbSource.sampler_step.shipped_limb words remainder = ok (quotients, last) ∧
+          quotients.length = words.length ∧ ↑last < PV_RW_SamplerLimbBounds.p
+remainder : U64
+bound : ↑remainder < PV_RW_SamplerLimbBounds.p
+quotient : U32
+next : U64
+hs : PV_RW_SamplerLimbSource.sampler_step.shipped_limb word remainder = ok (quotient, next)
+hbound : ↑next < PV_RW_SamplerLimbBounds.p
+quotients : List U32
+last : U64
+hr : run PV_RW_SamplerLimbSource.sampler_step.shipped_limb words next = ok (quotients, last)
+hlen : quotients.length = words.length
+hlast : ↑last < PV_RW_SamplerLimbBounds.p
+⊢ (let (quotient, next) := (quotient, next)
+    do
+    let (quotients, last) ← run PV_RW_SamplerLimbSource.sampler_step.shipped_limb words next
+    ok (quotient :: quotients, last)) =
+    ok (quotient :: quotients, last)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RW_SamplerPass.lean:42:35: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲hs, ̲bind_tc_ok,̵h̵r̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RW_SamplerPass.congr' depends on axioms: [sorryAx]
+'R1Z.PV_RW_SamplerPass.source_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_SamplerPass.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_SamplerPass.pass_source_owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

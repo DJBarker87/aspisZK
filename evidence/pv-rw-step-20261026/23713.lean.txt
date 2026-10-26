@@ -1,0 +1,54 @@
+import R1Z.PV_RW_SamplerArraySource
+import ExtractedQM31SamplerDivision
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RW_SamplerArrayLegacy
+open Aeneas Aeneas.Std Result ControlFlow ProverRwSamplerArithmetic
+open AspisR1.SamplerMachineBounds
+
+theorem body (rank : Array U32 8#usize) (remainder : U64) (j : Usize) :
+    PV_RW_SamplerArraySource.iterator_body rank remainder j =
+      AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body rank remainder j := by
+  rw [PV_RW_SamplerArraySource.body]
+  unfold PV_OrdinarySource.sampler_owned.qm31_div_pass_loop.body
+    AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body
+  by_cases h : j > 0#usize
+  · have hj : (1#usize).val ≤ j.val := by change 0 < j.val at h; omega
+    simp only [if_pos h,sub_exact j 1#usize hj,shift_exact,
+      PV_OrdinarySource.aspis_core.field.P,AspisR1Qm31SamplerIndex.field.P,lift]
+  · simp only [if_neg h]
+
+theorem loop (rank : Array U32 8#usize) (remainder : U64) (j : Usize) :
+    PV_RW_SamplerArraySource.iterator_loop rank remainder j =
+      AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop rank remainder j := by
+  unfold PV_RW_SamplerArraySource.iterator_loop
+    AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop
+  have same : (fun (rank,remainder,j) => PV_RW_SamplerArraySource.iterator_body rank remainder j) =
+      (fun (rank,remainder,j) => AspisR1Qm31SamplerIndex.sampler.qm31_div_pass_loop.body rank remainder j) := by
+    funext ⟨rank,remainder,j⟩
+    exact body rank remainder j
+  rw [same]
+
+theorem step_invariant (rank : Array U32 8#usize) (remainder : U64) (j : Usize)
+    (hr : remainder.val < P) (positive : 0 < j.val) (bound : j.val ≤ 8) :
+    ∃ (nextIndex : Usize) (quotient : U32) (nextRemainder : U64),
+      PV_RW_SamplerArraySource.iterator_body rank remainder j =
+        ok (cont (rank.set nextIndex quotient,nextRemainder,nextIndex)) ∧
+      nextIndex.val = j.val-1 ∧ nextRemainder.val < P := by
+  obtain ⟨nextIndex,quotient,nextRemainder,hs,hj,_,_,hr⟩ :=
+    AspisR1.ExtractedQM31SamplerPass.body_success rank remainder j hr positive bound
+  exact ⟨nextIndex,quotient,nextRemainder,(body rank remainder j).trans hs,hj,hr⟩
+
+theorem total (rank : Array U32 8#usize) (remainder : U64) (j : Usize)
+    (hr : remainder.val < P) (bound : j.val ≤ 8) :
+    ∃ (quotient : Array U32 8#usize) (nextRemainder : U64),
+      PV_RW_SamplerArraySource.iterator_loop rank remainder j = ok (quotient,nextRemainder) ∧
+      nextRemainder.val < P := by
+  obtain ⟨quotient,nextRemainder,hs,_,_,hr⟩ :=
+    AspisR1.ExtractedQM31SamplerPassLoop.loop_correct rank remainder j hr bound
+  exact ⟨quotient,nextRemainder,(loop rank remainder j).trans hs,hr⟩
+#print axioms body
+#print axioms loop
+#print axioms step_invariant
+#print axioms total
+end R1Z.PV_RW_SamplerArrayLegacy

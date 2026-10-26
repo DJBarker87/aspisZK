@@ -22,6 +22,8 @@ pub fn reference16(tag:M31,values:[M31;16],lambda:QM31)->QM31 {
     state.0
 }
 '''
+text=text.replace('pub fn shipped_step(', '#[inline(always)]\npub fn shipped_step(')
+text+='#[inline(always)]\npub fn owned_step_matched(mut compressed:QM31,mut power:QM31,value:&M31,lambda:QM31)->(QM31,QM31) {\n'+body+'\n    (compressed,power)\n}\n'
 p=d/'proof/generated.rs'
 if '--check' in sys.argv:assert p.read_text()==text
 else:p.write_text(text)

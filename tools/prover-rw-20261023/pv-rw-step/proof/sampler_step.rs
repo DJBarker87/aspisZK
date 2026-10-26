@@ -35,3 +35,29 @@ mod checks {
   if consumed<8 {assert_eq!(iter.next(),Some(&rank[7-consumed]));} else {assert_eq!(iter.next(),None);}
  }
 }
+// One complete owned array-state iteration, preserving original update order.
+pub fn array_limb(mut rank:[u32;8],mut remainder:u64,mut j:usize)->([u32;8],u64,usize) {
+    j-=1;
+    let dividend=(remainder<<32u32)|u64::from(rank[j]);
+    rank[j]=(dividend/u64::from(P)) as u32;
+    remainder=dividend%u64::from(P);
+    (rank,remainder,j)
+}
+#[cfg(kani)]
+mod array_checks {
+ use super::*;
+ #[kani::proof] #[kani::unwind(10)]
+ fn sampler_array_state_step() {
+  let rank:[u32;8]=kani::any();let remainder:u64=kani::any();let j:usize=kani::any();
+  kani::assume(j>0 && j<=8);kani::assume(remainder<u64::from(P));
+  let expected=array_limb(rank,remainder,j);
+  let mut actual=rank;let mut next_remainder=remainder;
+  let mut iter=actual[..j].iter_mut().rev();
+  let limb=iter.next().unwrap();
+  let dividend=(next_remainder<<32)|u64::from(*limb);
+  *limb=(dividend/u64::from(P)) as u32;
+  next_remainder=dividend%u64::from(P);
+  assert_eq!(next_remainder,expected.1);assert_eq!(j-1,expected.2);
+  let mut i=0usize;while i<8 {assert_eq!(actual[i],expected.0[i]);i+=1;}
+ }
+}
