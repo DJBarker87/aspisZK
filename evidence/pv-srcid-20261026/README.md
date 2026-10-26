@@ -211,3 +211,18 @@ Charged Lean count before this resume:83; Kani count2, including one missing-inc
 CompilerTactic22671 passes after explicit theorem import/hygienic quotation fix. ForestCompilation22672 exposed unreduced Boolean branches;22673 traverses both outer variants but fails existential elaboration. The revised witness construction is pending22675 after reservation refusal22674 (zero charged attempts, wait183s). Only kernel-checked successful attempts may be cited as proofs; failed diagnostic `sorryAx` output is not accepted evidence. Shared successful CompilerTactic source/object were snapshotted before its import change, hashes/sizes in compiler-tactic-before-import.log.
 
 Fixtures22662 passed all printed axioms, including both canonical release fibres and successful actual forest bank/column stages. Native compile_call fixture inhabitance remains unproved.
+
+## Native returned-column composition validated (16:29 UTC)
+
+ForestCompilation22675 proves that every successful actual compiler return
+contains the merged bank from the same actual CopyRecords.new/banks calls,
+for both public variants. No hash or recurrence cell is normalized. The
+finite Result/Bool/ControlFlow proof replaces failed broad normalization
+22667 (heartbeat timeout43.10s); no options or caps raised.
+
+NativeIdentification22676 passes existence, record/bank selections, exact
+compiled columns, public_eq/build_eq/transport_eq and identification, all
+standard axioms. NativeConsumer22677 passes original and phased BuilderPremises
+contracts without editing their consumers. Five named primitive premise
+families remain explicit, including successful native execution; this is a
+REDUCTION of V152–V154, not native premise removal or deployed installation.

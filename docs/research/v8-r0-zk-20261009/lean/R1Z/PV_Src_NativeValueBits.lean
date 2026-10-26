@@ -14,8 +14,9 @@ def bitAt (value : U32) (n : Nat) : U32 :=
 theorem cast_index (i : Usize) (hi : i.val < 30) :
     UScalar.cast .U32 i = U32.ofNatCore i.val (by simp; omega) := by
   apply UScalar.eq_of_val_eq
-  rw [UScalar.cast_val_eq,UScalar.ofNatCore_val_eq]
-  exact Nat.mod_eq_of_lt (by simp [UScalar.size_def]; omega)
+  rw [UScalar.cast_val_eq]
+  change i.val % 2^32 = i.val
+  exact Nat.mod_eq_of_lt (by omega)
 
 theorem helper (value : U32) : pair_trace.value_bits value =
     ok (BuilderRecordsArray.tabulate 30#usize (bitAt value)) := by
@@ -30,7 +31,7 @@ theorem helper (value : U32) : pair_trace.value_bits value =
 theorem bit_value (value : U32) (n : Nat) (hn : n < 30) :
     (bitAt value n).val = value.val / 2^n % 2 := by
   rw [bitAt,dif_pos hn,bit_val _ _ (by simp; omega)]
-  simp only [UScalar.ofNatCore_val_eq]
+  rfl
 
 theorem bit_boolean (value : U32) (n : Nat) (hn : n < 30) :
     (bitAt value n).val = 0 ∨ (bitAt value n).val = 1 := by

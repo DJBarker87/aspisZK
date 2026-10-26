@@ -8,7 +8,9 @@ namespace R1Z.PV_Src_LowBits
 theorem sum (v n : Nat) :
     (∑ i ∈ Finset.range n, 2^i * (v / 2^i % 2)) = v % 2^n := by
   induction n with
-  | zero => simp
+  | zero =>
+    change 0 = v % 1
+    exact (Nat.mod_one v).symm
   | succ n ih =>
     rw [Finset.sum_range_succ,ih]
     let a := 2^n
