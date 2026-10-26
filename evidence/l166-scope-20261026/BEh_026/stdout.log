@@ -1,0 +1,15 @@
+@AspisR1.BEg_Events.event : ∀ {S A E F : Type}
+  (left : Aeneas.Std.Result (Aeneas.Std.core.result.Result A E) × S × AspisR1.SdkC_Source.Log)
+  (right : Aeneas.Std.Result (Aeneas.Std.core.result.Result A F) × S × AspisR1.SdkC_Source.Log),
+  AspisR1.BEg_Observation.observe left = AspisR1.BEg_Observation.observe right →
+    ∀ (failure : Option A × S × AspisR1.SdkC_Source.Log → Prop),
+      failure (AspisR1.BEg_Observation.observe left) ↔ failure (AspisR1.BEg_Observation.observe right)
+'AspisR1.BEg_Events.event' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.BEg_Events.accounting : ∀ {S A E F : Type}
+  (left : Aeneas.Std.Result (Aeneas.Std.core.result.Result A E) × S × AspisR1.SdkC_Source.Log)
+  (right : Aeneas.Std.Result (Aeneas.Std.core.result.Result A F) × S × AspisR1.SdkC_Source.Log),
+  AspisR1.BEg_Observation.observe left = AspisR1.BEg_Observation.observe right →
+    left.2.2 = right.2.2 ∧
+      List.length left.2.2 = List.length right.2.2 ∧
+        AspisR1.SdkC_Source.readLog left.2.2 = AspisR1.SdkC_Source.readLog right.2.2
+'AspisR1.BEg_Events.accounting' depends on axioms: [propext, Classical.choice, Quot.sound]
