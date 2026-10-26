@@ -89,3 +89,23 @@ serializer then run its denied Kani check; split compression into smaller proved
 source transitions. Continue pole/Vec through owned P6 references. Native effects,
 whole proof/audit model equality, PrefixContract/BodyContract, E1/E2, ordered
 ROM/TLS, real RunJoin and frozen artifact association remain unchanged and open.
+
+## Resumed stage: transition225
+
+14005 proves exact current-source transition transport for arbitrary payment
+payload maps. Both extracted branches return the unchanged transition field;
+no payment accessor, canonicality, surjectivity or output-equivalence premise
+is required. `ProverRwP6TransitionInstall.selected` installs this projection
+in the complete candidate caller, and `source` connects it to current extraction.
+The pointwise callback equation removes the supplied op225 implementation.
+Physical representation/ABI/compiler association remains open as before.
+
+14006 was deliberately stopped after71.73s at4,363,368KiB, zero swap (Lean
+exit143): a whole262-entry dictionary definitional equality was unnecessary
+and remained expensive. The replacement narrows the statement to op225 and
+passes at14007 in1.71s,4,295,320KiB,zero swap.14005 takes1.73s. All five
+accepted new theorem audits use standard axioms only. Exact failed and accepted
+inputs, dependencies and logs are retained. No caps raised or unchanged retry.
+No old proved module/object changed. New continuation use3/65 Lean,0/7 Kani.
+One of39 source callbacks now supplied;38 remain. Root/headline premises
+removed0; target not established. No shipped Rust, frozen artifact or key changed.
