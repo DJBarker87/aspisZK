@@ -140,3 +140,119 @@ mod flat_checks {
   let mut i=0;while i<8 {let mut j=0;while j<4 {assert_eq!(a[4*i+j],b[4*i+j]);j+=1;}i+=1;}
  }
 }
+
+/// One owned accumulator avoids the backend's four-scalar loop join.
+pub struct BoundaryAcc { pub a:u64, pub b:u64, pub c:u64, pub d:u64 }
+pub fn boundary_acc_step(x:QM31,s:BoundaryAcc)->BoundaryAcc {
+ BoundaryAcc { a:s.a+u64::from(x.c0.a.0), b:s.b+u64::from(x.c0.b.0), c:s.c+u64::from(x.c1.a.0), d:s.d+u64::from(x.c1.b.0) }
+}
+pub fn boundary_owned(p:&[QM31;28])->QM31 {
+ let x=p[0];
+ let mut s=BoundaryAcc {a:2*u64::from(x.c0.a.0),b:2*u64::from(x.c0.b.0),c:2*u64::from(x.c1.a.0),d:2*u64::from(x.c1.b.0)};
+ let mut i=1usize;
+ while i<28 { s=boundary_acc_step(p[i],s);i+=1; }
+ QM31{c0:CM31::new(M31::reduce_u64(s.a),M31::reduce_u64(s.b)),c1:CM31::new(M31::reduce_u64(s.c),M31::reduce_u64(s.d))}
+}
+#[cfg(kani)]
+mod owned_checks {
+ use super::*;
+ fn q()->QM31 {let x:[u32;4]=kani::any();QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+ fn raw(x:QM31)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+ #[kani::proof]
+ #[kani::unwind(30)]
+ fn boundary_owned28() {
+  let mut p=[QM31::ZERO;28];let mut i=0;while i<28 {p[i]=q();i+=1;}
+  assert_eq!(raw(aspis_core::state_only_sumcheck::state_only_boundary_sum(&p)),raw(boundary_owned(&p)));
+ }
+ #[kani::proof]
+ #[kani::unwind(3)]
+ fn compression_one() {
+  let tag=M31(kani::any());let x=M31(kani::any());let lambda=q();
+  assert_eq!(raw(aspis_statement::logup::compress_tagged_tuple(tag,&[x],lambda)),raw(compress(tag,&[x],lambda)));
+ }
+}
+
+/// Fixed 28-coefficient boundary, unrolled at the proof-reference source.
+pub fn boundary_flat(p:&[QM31;28])->QM31 {
+ let x=p[0];
+ let s=BoundaryAcc{a:2*u64::from(x.c0.a.0),b:2*u64::from(x.c0.b.0),c:2*u64::from(x.c1.a.0),d:2*u64::from(x.c1.b.0)};
+ let s=boundary_acc_step(p[1],s);
+ let s=boundary_acc_step(p[2],s);
+ let s=boundary_acc_step(p[3],s);
+ let s=boundary_acc_step(p[4],s);
+ let s=boundary_acc_step(p[5],s);
+ let s=boundary_acc_step(p[6],s);
+ let s=boundary_acc_step(p[7],s);
+ let s=boundary_acc_step(p[8],s);
+ let s=boundary_acc_step(p[9],s);
+ let s=boundary_acc_step(p[10],s);
+ let s=boundary_acc_step(p[11],s);
+ let s=boundary_acc_step(p[12],s);
+ let s=boundary_acc_step(p[13],s);
+ let s=boundary_acc_step(p[14],s);
+ let s=boundary_acc_step(p[15],s);
+ let s=boundary_acc_step(p[16],s);
+ let s=boundary_acc_step(p[17],s);
+ let s=boundary_acc_step(p[18],s);
+ let s=boundary_acc_step(p[19],s);
+ let s=boundary_acc_step(p[20],s);
+ let s=boundary_acc_step(p[21],s);
+ let s=boundary_acc_step(p[22],s);
+ let s=boundary_acc_step(p[23],s);
+ let s=boundary_acc_step(p[24],s);
+ let s=boundary_acc_step(p[25],s);
+ let s=boundary_acc_step(p[26],s);
+ let s=boundary_acc_step(p[27],s);
+ QM31{c0:CM31::new(M31::reduce_u64(s.a),M31::reduce_u64(s.b)),c1:CM31::new(M31::reduce_u64(s.c),M31::reduce_u64(s.d))}
+}
+#[cfg(kani)]
+mod flat_boundary_checks {
+ use super::*;
+ #[kani::proof]
+ #[kani::unwind(30)]
+ fn boundary_flat28() {
+ let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];let mut i=0;
+ while i<28 {let x=raw[i];p[i]=QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}};i+=1;}
+ let a=aspis_core::state_only_sumcheck::state_only_boundary_sum(&p);let b=boundary_flat(&p);
+ assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+ }
+}
+
+#[cfg(kani)]
+mod scalar_compression_checks {
+ use super::*;
+ #[kani::proof]
+ #[kani::unwind(3)]
+ fn compression_one_a() {
+ let tag=M31(kani::any());let x=M31(kani::any());let raw:[u32;4]=kani::any();
+ let lambda=QM31{c0:CM31{a:M31(raw[0]),b:M31(raw[1])},c1:CM31{a:M31(raw[2]),b:M31(raw[3])}};
+ let a=aspis_statement::logup::compress_tagged_tuple(tag,&[x],lambda);let b=compress(tag,&[x],lambda);
+ assert_eq!(a.c0.a.0,b.c0.a.0);
+ }
+}
+
+// Raw-input release comparison. The command uses --no-overflow-checks because
+// the pinned native release has overflow-checks=false; unwinding and memory
+// checks remain enabled. Split observable coordinates to keep each SAT goal small.
+#[cfg(kani)]
+mod release_compression_checks {
+ use super::*;
+ fn inputs()->(M31,QM31,[M31;16],usize) {
+ let t=M31(kani::any());let raw:[u32;4]=kani::any();
+ let l=QM31{c0:CM31{a:M31(raw[0]),b:M31(raw[1])},c1:CM31{a:M31(raw[2]),b:M31(raw[3])}};
+ let words:[u32;16]=kani::any();let mut v=[M31(0);16];let mut i=0;while i<16 {v[i]=M31(words[i]);i+=1;}
+ let n:usize=kani::any();kani::assume(n<=16);(t,l,v,n)
+ }
+ #[kani::proof]
+ #[kani::unwind(18)]
+ fn compression_release_a() {
+ let(t,l,v,n)=inputs();let a=aspis_statement::logup::compress_tagged_tuple(t,&v[..n],l);let b=compress(t,&v[..n],l);
+ assert_eq!(a.c0.a.0,b.c0.a.0);
+ }
+ #[kani::proof]
+ #[kani::unwind(18)]
+ fn compression_release_bcd() {
+ let(t,l,v,n)=inputs();let a=aspis_statement::logup::compress_tagged_tuple(t,&v[..n],l);let b=compress(t,&v[..n],l);
+ assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+ }
+}

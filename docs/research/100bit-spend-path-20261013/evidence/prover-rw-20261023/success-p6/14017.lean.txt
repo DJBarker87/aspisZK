@@ -1,0 +1,17 @@
+import R1Z.ProverRwP6BoundaryStep
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwP6BoundaryNoWrap
+open Aeneas Aeneas.Std Result
+-- A 28-coefficient sum uses at most 29 maximal U32 words.
+theorem add_word (s : U64) (x : U32) (bound : s.val ≤ 29 * (2^32-1)) :
+    (U64.wrapping_add s (UScalar.cast .U64 x)).val = s.val + x.val := by
+  have cast : (UScalar.cast .U64 x).val = x.val := by scalar_tac
+  rw [U64.wrapping_add_val_eq, cast]
+  apply Nat.mod_eq_of_lt
+  have hx := x.hSize
+  change s.val + x.val < 18446744073709551616
+  change x.val < 4294967296 at hx
+  omega
+#print axioms add_word
+end R1Z.ProverRwP6BoundaryNoWrap

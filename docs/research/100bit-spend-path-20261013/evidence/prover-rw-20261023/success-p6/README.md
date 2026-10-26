@@ -130,3 +130,30 @@ are adjacent; native receipts are under translation/. New continuation use
 8/65 Lean (6passes,1elaboration failure,1intentional stop),2/7 Kani invocations
 including the already-passing boundary_flat28 run. No root premise removed.
 The supplied source/P6 candidate callbacks are225 and51;37 of39 remain.
+
+## Boundary120 installed and total
+
+The owned-accumulator loop also hits the pinned backend's context-collapse
+Not_found (retained). Its successor is a fixed27-step reference over the28
+actual coefficients, not another unchanged extraction. Native
+`success-p6-boundary-flat-001` passes exact four-limb equality against shipped
+state_only_boundary_sum for arbitrary raw coefficient limbs, with all loop
+checks and no stubs;14.92s,1,273,360KiB,zero swap. The unrolled source extracts.
+`BoundarySource` retains all28 reads,27 owned steps and four current CT reducers.
+`BoundaryInstall.selected` installs op120 while preserving225 and51.
+`BoundaryTotal.total` proves totality with no input/read/output premise.
+`BoundaryStep` and `BoundaryMath` give exact symbolic wrapping-step values and
+propagated accumulator bounds; `BoundaryNoWrap.add_word` proves no overflow
+for the29-maximal-U32-word envelope. No large recurrence or numeral normalized.
+
+14013–14021:8passes,1changed size-opacity elaboration failure14017; standard
+axioms,zero swap. Every new top theorem audited. Continuation use17/65 Lean
+(14pass,2elaboration failures,1intentional stop),4/7 Kani (2pass,1timeout,
+1overflow-check failure). Kani's scalar compression failure is an additional
+raw-input CM31.mul overflow assertion; it is not reported as an output mismatch
+or as native release unsafety. The pinned release has overflow-checks=false.
+A newly split release-wrapping comparison retains memory/unwinding checks.
+Three supplied candidate source/P6 entries225,51,120;36 remain. Full native
+representation/compiler/feature/artifact association, effects, security-model
+body equation, PrefixContract/BodyContract,E1/E2 and real RunJoin remain open.
+Root/headline premises removed0; target not established. No old proof changed.
