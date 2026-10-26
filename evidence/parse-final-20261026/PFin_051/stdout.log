@@ -1,0 +1,110 @@
+PFin_WorldEval.lean:51:83: error: unsolved goals
+F C : Type
+c : Configuration F C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+s : Submission
+H : Bytes → State
+e : Evidence c B s H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+accepted : (eval H (F3T_Installed.source c hashv (input c s))).2 = true
+first :
+  AspisR1CurrentCaller.verifier.candidate.tx1
+      (GExp_FirstCode.installed (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std)
+      (D1 c H) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof 10#usize () none =
+    ok (core.result.Result.Ok e.saved)
+code1 : Code (core.result.Result (alloc.vec.Vec U8) AspisR1CurrentCaller.verifier.Error) :=
+  GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std hashv
+    (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof 10#usize
+code2 : Code (core.result.Result Unit VTop_Stages.verifier.Error) :=
+  GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof e.saved.deref
+firstErased : erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) () code1 = ok (core.result.Result.Ok e.saved)
+secondErased : erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) () code2 = ok (core.result.Result.Ok ())
+one :
+  eval H (SdkC_Oracle.program code1) =
+    (SdkC_Source.readLog (SdkC_Source.run (F3U_Oracle.hashv H) code1 []).2, ok (core.result.Result.Ok e.saved))
+two :
+  eval H (SdkC_Oracle.program code2) =
+    (SdkC_Source.readLog (SdkC_Source.run (F3U_Oracle.hashv H) code2 []).2, ok (core.result.Result.Ok ()))
+oneValue : (SdkC_Source.run (F3U_Oracle.hashv H) code1 []).1 = ok (core.result.Result.Ok e.saved)
+twoValue : (SdkC_Source.run (F3U_Oracle.hashv H) code2 []).1 = ok (core.result.Result.Ok ())
+⊢ ((eval H
+            (SdkC_Oracle.program
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof
+                10#usize))).1 ++
+        (eval H
+            (match
+              (eval H
+                  (SdkC_Oracle.program
+                    (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries
+                      c.std hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof
+                      10#usize))).2 with
+            | ok (core.result.Result.Ok saved) =>
+              AspisV8R19.OracleProgramOps.bind
+                (SdkC_Oracle.program
+                  (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof saved.deref))
+                fun second =>
+                Program.done
+                  (match second with
+                  | ok (core.result.Result.Ok PUnit.unit) => true
+                  | x => false)
+            | x => Program.done false)).1,
+      (eval H
+          (match
+            (eval H
+                (SdkC_Oracle.program
+                  (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries
+                    c.std hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof
+                    10#usize))).2 with
+          | ok (core.result.Result.Ok saved) =>
+            AspisV8R19.OracleProgramOps.bind
+              (SdkC_Oracle.program
+                (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof saved.deref))
+              fun second =>
+              Program.done
+                (match second with
+                | ok (core.result.Result.Ok PUnit.unit) => true
+                | x => false)
+          | x => Program.done false)).2) =
+    (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_FirstCode.code (GExp_FirstPair.base c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+                hashv (currentDigest c) (AspisS6CurrentVerifierCarrier.toPublic e.semantic) e.pub e.proof 10#usize)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExp_SecondCode.code (stage c) c.reserved hashv (digest c) e.pub e.proof e.saved.deref) []).2,
+      true)
+PFin_WorldEval.lean:53:8: warning: This simp argument is unused:
+  one
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind,
+          o̵n̵e̵,̵two, ̲Port1_Driver.verdict, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PFin_WorldEval.lean:53:12: warning: This simp argument is unused:
+  two
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind,
+          one,t̵w̵o̵,̵ ̲Port1_Driver.verdict, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PFin_WorldEval.lean:53:37: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind,
+          one, ̲two, ̲Port1_Driver.verdict,e̵v̵a̵l̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PFin_WorldEval.lean:53:42: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [DrvC_PairProgram.source, ̲GExp_Experiment.first, ̲GExp_Experiment.second, ̲eval_bind,
+          one, ̲two, ̲Port1_Driver.verdict, ̲eval,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PFin_WorldEval.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
