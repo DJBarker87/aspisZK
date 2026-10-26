@@ -23,8 +23,11 @@ theorem source {N : Usize} (r : r1_wire.ValidatedRecord) (offset : Usize)
   have h := canonical j
   simpa only [AspisS1ExtractedRoundChildren.decoderArrayToMain,List.getElem_map,
     AspisS1ExtractedRoundChildren.decoderQMToMain,AspisS1ExtractedRoundChildren.mainToGen,
-    genQToProbe,genCToProbe,AspisR1DecodeKCanonicalArrayInvariant.Canonical,
-    AspisR1DecodeKFullV10.aspis_core.field.P] using h
+    genQToProbe,genCToProbe,CurrentCanonicalQM,
+    AspisR1.ExtractedMaskTowerAdd.CanonicalQM,AspisR1.ExtractedMaskTowerAdd.CanonicalCM,
+    AspisR1.ExtractedMaskTowerAdd.P,AspisR1.ExtractedMaskM31AddSub.P,
+    AspisR1DecodeKCanonicalArrayInvariant.Canonical,
+    AspisR1DecodeKFullV10.aspis_core.field.P, show (2147483647#u32).val=2147483647 from rfl, and_assoc] using h
 
 #print axioms source
 end AspisR1.JFv_DecodeCanonical
