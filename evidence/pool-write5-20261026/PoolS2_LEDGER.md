@@ -23,3 +23,11 @@ Thus no literal numbered row is an ASC8-only premise. L180 is the owner-assigned
 umbrella for the extra ASC8 origin/retention property. Proving P1 does not prove
 upstream master/lane correctness or finish any of L094–L098 by itself. This is a
 priority distinction for the lead, not a proposal to change or lower scope.
+
+L081's literal `p1` is `S2Z_Oracle.P1Realization` (ROM realization), not inventory
+P1/AS8C. It must not be assigned to this Pool writer job by name matching.
+L186/L187/L188 are generic source-to-frozen-ELF, coherent-replay and final
+trust-audit obligations applicable to any adopted proof; they are not ASC8-only
+semantic rows. This worker removes no further numbered row, including rows
+already derived by other workers. The classification above describes dependency,
+not a new status claim for their previously closed L091–L093 work.
