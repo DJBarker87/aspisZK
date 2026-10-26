@@ -1,0 +1,104 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicRecords.lean:71:4: error: Tactic `rfl` failed: The left-hand side
+  { variant := R0P.Variant.privateTransfer, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+    recipient := some rec, change := change✝, withdrawalAmount := none,
+    nextPairIndex := ↑(UScalar.ofNatCore nextPairIndex✝ bound),
+    snapshotFrontier := fun l => digK (↑(arr20 fun l => d32 (snapshotFrontier✝ l)))[↑l]!, nextRoot := nextRoot✝,
+    nextFrontier := fun l => digK (↑(arr20 fun l => d32 (nextFrontier✝ l)))[↑l]! }
+is not definitionally equal to the right-hand side
+  { variant := R0P.Variant.privateTransfer, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+    recipient := some rec, change := change✝, withdrawalAmount := none, nextPairIndex := nextPairIndex✝,
+    snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+
+case privateTransfer.mk
+pool domain destination : Context
+rec : R0P.Digest F
+variant✝ : R0P.Variant
+anchor✝ nullifier✝ : R0P.Digest F
+assetId✝ : F
+recipient✝ : Option (R0P.Digest F)
+change✝ : R0P.Digest F
+withdrawalAmount✝ : Option F
+nextPairIndex✝ : ℕ
+snapshotFrontier✝ : Fin 20 → R0P.Digest F
+nextRoot✝ : R0P.Digest F
+nextFrontier✝ : Fin 20 → R0P.Digest F
+bound :
+  { variant := variant✝, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝, recipient := recipient✝,
+        change := change✝, withdrawalAmount := withdrawalAmount✝, nextPairIndex := nextPairIndex✝,
+        snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }.nextPairIndex <
+    2 ^ 64
+shape :
+  AspisR1.PublicOptionShape.canonical
+    { variant := R0P.Variant.privateTransfer, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := some rec, change := change✝, withdrawalAmount := none, nextPairIndex := nextPairIndex✝,
+      snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+hv : variant✝ = R0P.Variant.privateTransfer
+hr : recipient✝ = some rec
+ha : withdrawalAmount✝ = none
+⊢ { variant := R0P.Variant.privateTransfer, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := some rec, change := change✝, withdrawalAmount := none,
+      nextPairIndex := ↑(UScalar.ofNatCore nextPairIndex✝ bound),
+      snapshotFrontier := fun l => digK (↑(arr20 fun l => d32 (snapshotFrontier✝ l)))[↑l]!, nextRoot := nextRoot✝,
+      nextFrontier := fun l => digK (↑(arr20 fun l => d32 (nextFrontier✝ l)))[↑l]! } =
+    { variant := R0P.Variant.privateTransfer, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := some rec, change := change✝, withdrawalAmount := none, nextPairIndex := nextPairIndex✝,
+      snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicRecords.lean:78:4: error: Tactic `rfl` failed: The left-hand side
+  { variant := R0P.Variant.withdrawal, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+    recipient := none, change := change✝, withdrawalAmount := some amount,
+    nextPairIndex := ↑(UScalar.ofNatCore nextPairIndex✝ bound),
+    snapshotFrontier := fun l => digK (↑(arr20 fun l => d32 (snapshotFrontier✝ l)))[↑l]!, nextRoot := nextRoot✝,
+    nextFrontier := fun l => digK (↑(arr20 fun l => d32 (nextFrontier✝ l)))[↑l]! }
+is not definitionally equal to the right-hand side
+  { variant := R0P.Variant.withdrawal, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+    recipient := none, change := change✝, withdrawalAmount := some amount, nextPairIndex := nextPairIndex✝,
+    snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+
+case withdrawal.mk
+pool domain destination : Context
+amount : F
+left✝ : amount ≠ 0
+variant✝ : R0P.Variant
+anchor✝ nullifier✝ : R0P.Digest F
+assetId✝ : F
+recipient✝ : Option (R0P.Digest F)
+change✝ : R0P.Digest F
+withdrawalAmount✝ : Option F
+nextPairIndex✝ : ℕ
+snapshotFrontier✝ : Fin 20 → R0P.Digest F
+nextRoot✝ : R0P.Digest F
+nextFrontier✝ : Fin 20 → R0P.Digest F
+bound :
+  { variant := variant✝, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝, recipient := recipient✝,
+        change := change✝, withdrawalAmount := withdrawalAmount✝, nextPairIndex := nextPairIndex✝,
+        snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }.nextPairIndex <
+    2 ^ 64
+shape :
+  AspisR1.PublicOptionShape.canonical
+    { variant := R0P.Variant.withdrawal, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := none, change := change✝, withdrawalAmount := some amount, nextPairIndex := nextPairIndex✝,
+      snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+hv : variant✝ = R0P.Variant.withdrawal
+ha : withdrawalAmount✝ = some amount
+hr : recipient✝ = none
+⊢ { variant := R0P.Variant.withdrawal, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := none, change := change✝, withdrawalAmount := some amount,
+      nextPairIndex := ↑(UScalar.ofNatCore nextPairIndex✝ bound),
+      snapshotFrontier := fun l => digK (↑(arr20 fun l => d32 (snapshotFrontier✝ l)))[↑l]!, nextRoot := nextRoot✝,
+      nextFrontier := fun l => digK (↑(arr20 fun l => d32 (nextFrontier✝ l)))[↑l]! } =
+    { variant := R0P.Variant.withdrawal, anchor := anchor✝, nullifier := nullifier✝, assetId := assetId✝,
+      recipient := none, change := change✝, withdrawalAmount := some amount, nextPairIndex := nextPairIndex✝,
+      snapshotFrontier := snapshotFrontier✝, nextRoot := nextRoot✝, nextFrontier := nextFrontier✝ }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_PublicRecords.lean:75:40: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [input, ̲hv, ̲PV_Src_Public.canonicalPublic, ̲withdrawalPublic, ̲withdrawal, ̲transition,
+        self_digest, ̲liftU_w32, ̲self_scalar, ̲hr̵,̵h̵a, ̲Option.getD_some]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_PublicRecords.self_scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PublicRecords.self_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_PublicRecords.public_roundtrip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

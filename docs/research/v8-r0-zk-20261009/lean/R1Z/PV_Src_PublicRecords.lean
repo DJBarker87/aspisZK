@@ -65,17 +65,15 @@ theorem public_roundtrip (pub : R0P.Public F) (bound : pub.nextPairIndex < 2^64)
   | privateTransfer =>
     obtain ⟨rec,hr,ha⟩ := AspisR1.PublicOptionShape.private_transfer_shape pub hv shape
     simp only [input,hv,PV_Src_Public.canonicalPublic,transferPublic,transfer,transition,
-      self_digest,liftU_w32,self_scalar,hr,Option.getD_some]
+      self_digest,liftU_w32,self_scalar,arr20_getF,UScalar.ofNatCore_val_eq,hr,Option.getD_some]
     cases pub
     simp_all only
-    rfl
   | withdrawal =>
     obtain ⟨amount,_,ha,hr⟩ := AspisR1.PublicOptionShape.withdrawal_shape pub hv shape
     simp only [input,hv,PV_Src_Public.canonicalPublic,withdrawalPublic,withdrawal,transition,
-      self_digest,liftU_w32,self_scalar,hr,ha,Option.getD_some]
+      self_digest,liftU_w32,self_scalar,arr20_getF,UScalar.ofNatCore_val_eq,hr,ha,Option.getD_some]
     cases pub
     simp_all only
-    rfl
 
 #print axioms self_scalar
 #print axioms self_digest

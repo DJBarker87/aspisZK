@@ -11,7 +11,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_Src_Canonical
 open Aeneas Aeneas.Std Result R0P R0Z.WriterRefine R1J.SpendWitnessMap
-open PV_Src_Identification
+open PV_Src_Identification BuilderPrimitiveArguments
 variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
 
@@ -31,7 +31,7 @@ theorem encoded_public (i : Instance (K := K)) :
     PV_Src_Public.canonicalPublic (inputs i).publicInput = i.canonical.val.1 :=
   PV_Src_PublicRecords.public_roundtrip _ _ _ _ _ (PV_Src_OptionShape.canonical i.canonical)
 
-def premises : PV_Src_Premises (K := K) inputs PV_Src_Transport.transport where
+def premises : PV_Src_Premises (K := K) (inputs (K := K)) PV_Src_Transport.transport where
   words := by
     intro i
     rw [show wordWitness (inputs i).witnessRecord = BuilderCanonical.rustWitness i.canonical.val.2
@@ -51,7 +51,7 @@ def premises : PV_Src_Premises (K := K) inputs PV_Src_Transport.transport where
   row_call := fun _ => rfl
 
 def identification : BuilderSource.SourceIdentification
-    (prover (K := K) inputs PV_Src_Transport.transport) (toInstance premises) :=
+    (prover (K := K) (inputs (K := K)) PV_Src_Transport.transport) (toInstance premises) :=
   PV_Src_Identification.identification premises
 
 theorem public_eq (i : Instance (K := K)) :
@@ -60,20 +60,30 @@ theorem public_eq (i : Instance (K := K)) :
   rw [PV_Src_Public.public_eq,encoded_public]
   rfl
 
+theorem canonical_instance (i : Instance (K := K)) :
+    toInstance premises i = i.canonical := by
+  apply Subtype.ext
+  change (PV_Src_Public.canonicalPublic (inputs i).publicInput,
+    BuilderRecordCanonical.witness (wordWitness (inputs i).witnessRecord)) = i.canonical.val
+  rw [encoded_public,
+    show wordWitness (inputs i).witnessRecord = BuilderCanonical.rustWitness i.canonical.val.2
+      from PV_Src_Records.witness_roundtrip _,PV_Src_Records.decoded_witness]
+
 theorem build_eq (i : Instance (K := K)) :
     (prover inputs PV_Src_Transport.transport).build i = BuilderSource.prover.build i.canonical := by
-  have h := PV_Src_Identification.build_eq (premises (K := K)) i
-  simpa only [toInstance,encoded_public,inputs,PV_Src_Records.witness_roundtrip,
-    PV_Src_Records.decoded_witness] using h
+  exact ((identification (K := K)).build_eq i).trans
+    (congrArg (fun p : BuilderCanonical.Instance (K := K) =>
+      (BuilderSource.prover (K := K)).build p) (canonical_instance i))
 
 theorem transport_eq :
-    (prover (K := K) inputs PV_Src_Transport.transport).transport = BuilderSource.π :=
+    (prover (K := K) (inputs (K := K)) PV_Src_Transport.transport).transport = BuilderSource.π :=
   PV_Src_Transport.transport_eq
 
 #print axioms encoded_public
 #print axioms premises
 #print axioms identification
 #print axioms public_eq
+#print axioms canonical_instance
 #print axioms build_eq
 #print axioms transport_eq
 end R1Z.PV_Src_Canonical

@@ -119,3 +119,33 @@ validated its dependency paths locally; no compilation or target directory
 was created. If run, expected time is Kani compilation followed by symbolic
 array-copy aggregation/solver, not native finite-field arithmetic. It must use
 its own sole 6G/8G/swap0/TasksMax64 scope after a successful reservation.
+
+## Validated stage progress after capacity returned
+
+22567 PartsTotal passed: 2.83 s, 4,109,796 KiB peak RSS, zero swaps.
+22568 Trace passed; 22569 Public passed; 22570 Transport passed;
+22571 Identification passed; 22572 Records passed. All printed axioms are
+subsets of propext/Classical.choice/Quot.sound. Exact receipts and source
+snapshots are in attempts.jsonl and out/time/sha logs. No full replay ran.
+22573 PublicRecords failed at the frontier-array and scalar-index roundtrip;
+the replacement adds arr20_getF and UScalar.ofNatCore_val_eq to its restricted
+simp set. The failed output is retained and is not accepted as a proof.
+22574 and 22575 reservation preflights were refused. 22575 was an early
+inventory check, 177.6 seconds after 22574 rather than the required 180;
+it ran no compile and is not treated as the scheduled retry. Next launch
+uses fresh ID 22576 no earlier than 13:35:29 UTC. Charged budget 11/100;
+Kani 0/15. No implementation change under crates/ or programs/.
+
+## Direct forest proof port (uncompiled)
+
+The generator forest_proofs.py ports 24 existing symbolic proof modules to
+BuilderForestAdmissionPort, changing import/module/namespace identifiers only.
+It does not emit a broad normalization proof of duplicate source semantics.
+forest-proof-provenance.json records each original/output SHA-256. Separate
+ForestPartsTotal/ForestTrace/ForestIdentification modules apply the new proofs
+to the forest port's actual Parts/banks/columns definitions. ForestRecords
+preserves all raw fields across nominal carriers; ForestCanonical constructs
+the certificate on the same canonical encoding carrier. Fixtures and Consumer
+are now intended to use this direct forest source chain as well. These newer
+modules still need focused validation; none is presently a closure receipt.
+ForestBanks identifies successful CopyRecords.banks.merged with ForestTrace.run.

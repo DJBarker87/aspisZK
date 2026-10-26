@@ -7,7 +7,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_Src_OptionShape
 open R1J.SpendWitnessMap
-variable {K : Type} [Field K] [CharP K 2147483647]
+variable {K : Type} [Field K] [DecidableEq K] [CharP K 2147483647]
 
 theorem reflect (p : R0P.Public F)
     (h : AspisR1.PublicOptionShape.canonical (mapPub (K := K) p)) :
@@ -46,7 +46,7 @@ theorem reflect (p : R0P.Public F)
         simp only [mapPub,hz,Option.map_some,map_zero]
       exact hne (Option.some.inj (ha.symm.trans hz'))
 
-theorem canonical [Fintype K] [DecidableEq K]
+theorem canonical [Fintype K]
     [Algebra (ZMod AspisCircleGroupOrder.P) K]
     (i : BuilderCanonical.Instance (K := K)) :
     AspisR1.PublicOptionShape.canonical i.val.1 :=
