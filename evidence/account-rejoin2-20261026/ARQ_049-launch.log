@@ -1,0 +1,46 @@
+{"attempt": "ARQ_049", "exit_status": 1, "wall_seconds": 11.840098821965512, "peak_rss_kib": "5474060", "swaps": "0", "print_axioms": ["'AspisR1.ARQ_FirstOperandsBytes.lifted_log' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ARQ_FirstOperandsBytes.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ARQ_FirstOperandsBytes.lean:77:90: error: Tactic `decide` failed for proposition
+  Usize.checked_add 688#usize 57607#usize = some 58295#usize
+because its `Decidable` instance
+  (Usize.checked_add 688#usize 57607#usize).instDecidableEq (some 58295#usize)
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, `Nat.decLt`, and `Option.instDecidableEq`, reduction got stuck at the `Decidable` instance
+  match Usize.checked_add 688#usize 57607#usize with
+  | none =>
+    match some 58295#usize with
+    | none => isTrue ⋯
+    | some val => isFalse ⋯
+  | some a =>
+    match some 58295#usize with
+    | none => isFalse ⋯
+    | some b =>
+...
+sabled with `set_option linter.unusedSimpArgs false`
+ARQ_FirstOperandsBytes.lean:73:119: warning: This simp argument is unused:
+  S2W_Outer.first_decoded
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵2̵W̵_̵T̵r̵a̵c̵e̵F̵a̵c̵t̵s̵.̵r̵u̵n̵_̵b̵i̵n̵d̵,̵r̵u̵n̵_̵p̵u̵r̵e̵,̵r̵u̵n̵_̵l̵i̵f̵t̵,̵r̵u̵n̵_̵l̵i̵f̵t̵M̵,̵r̵u̵n̵_̵p̵e̵r̵f̵o̵r̵m̵,̵S̵2̵W̵_̵O̵u̵t̵e̵r̵.̵m̵a̵p̵E̵r̵r̵o̵r̵,̵S̵2̵W̵_̵O̵u̵t̵e̵r̵.̵f̵i̵r̵s̵t̵_̵d̵e̵c̵o̵d̵e̵d̵,̵t̵h̵e̵n̵_̵a̵s̵s̵o̵c̵,̵t̵h̵e̵n̵_̵o̵k̵,̵[̲S̲2̲W̲_̲T̲r̲a̲c̲e̲F̲a̲c̲t̲s̲.̲r̲u̲n̲_̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲_̲p̲u̲r̲e̲,̲ ̲r̲u̲n̲_̲l̲i̲f̲t̲,̲ ̲r̲u̲n̲_̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲u̲n̲_̲p̲e̲r̲f̲o̲r̲m̲,̲ ̲S̲2̲W̲_̲O̲u̲t̲e̲r̲.̲m̲a̲p̲E̲r̲r̲o̲r̲,̲ ̲t̲h̲e̲n̲_̲a̲s̲s̲o̲c̲,̲ ̲t̲h̲e̲n̲_̲o̲k̲,̲ S2W_Trace.bind] at execution
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ARQ_FirstOperandsBytes.lean:78:27: warning: This simp argument is unused:
+  addEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [a̵d̵d̵E̵q̵,̵Result.ok.injEq, ̲core.result.Result.Ok.injEq,
+      core.ops.control_flow.ControlFlow.Continue.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+ARQ_FirstOperandsBytes.lean:78:49: warning: This simp argument is unused:
+  core.result.Result.Ok.injEq
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵a̵d̵d̵E̵q̵,̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵O̵k̵.̵i̵n̵j̵E̵q̵,̵[̲a̲d̲d̲E̲q̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲o̲k̲.̲i̲n̲j̲E̲q̲,̲ core.ops.control_flow.ControlFlow.Continue.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.ARQ_FirstOperandsBytes.lifted_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ARQ_FirstOperandsBytes.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r20153bc28984400ca0c762300c310cfd.scope; invocation ID: 5ab9726733ac4fd48777b9b1682e2fc1
