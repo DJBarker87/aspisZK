@@ -1,0 +1,62 @@
+{"attempt": "JFv_033", "exit_status": 1, "wall_seconds": 5.242129268008284, "peak_rss_kib": "4315628", "swaps": "0", "print_axioms": ["'AspisR1.JFv_Decode.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFv_Decode.lean:23:8: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - f ≥ 1
+  c ≥ 0
+  c ≥ 0
+  c + d ≥ 0
+  32*c - e ≤ 0
+  32*c + 32*f - g ≥ -20
+  0 ≤ b ≤ 20000
+  b - 32*c - 32*d ≥ 5
+  a ≥ 14
+where
+ a := ↑↑self.row
+ b := ↑self.framed.length
+ c := ↑↑offset
+ d := ↑↑N
+ e := ↑↑stop
+ f := ↑↑value
+ g := ↑{ row := self.row, framed := self.framed }.framed.length
+JFv_Decode.lean:29:94: error: unsolved goals
+N : Usize
+self : r1_wire.ValidatedRecord
+offset : Usize
+row : 14 ≤ ↑self.row
+bound : 5 + 32 * (↑offset + ↑N) ≤ self.framed.length
+small : self.framed.length ≤ 20000
+canon : canonical (bytesOf (List.drop 5 ↑self.framed
+...
+Ok v)
+      let cf3 ←
+        match r3 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (out1, pending_return) ←
+            self.decode_k_loop { start := 0#usize, «end» := N } self.row offset byte
+                (Array.repeat N aspis_core.field.QM31.ZERO)
+          match pending_return with
+            | none => ok (core.result.Result.Ok out1)
+            | some r4 => ok r4
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.QM31 N) (core.convert.FromSame r1_wire.Error) residual) ⦃
+    result => result = core.result.Result.Ok out ⦄
+JFv_Decode.lean:31:15: warning: This simp argument is unused:
+  if_neg (by change ¬self.row.val < 14; omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵f̵_̵n̵e̵g̵ ̵(̵b̵y̵ ̵c̵h̵a̵n̵g̵e̵ ̵¬̵ ̵s̵e̵l̵f̵.̵r̵o̵w̵.̵v̵a̵l̵<̵1̵4̵;̵o̵m̵e̵g̵a̵)̵,̵m̵u̵l̵,̵m̵u̵l̵N̵,̵a̵d̵d̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵o̵k̵_̵o̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲m̲u̲l̲,̲ ̲m̲u̲l̲N̲,̲ ̲a̲d̲d̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲o̲k̲_̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_Decode.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3a041cd9b77442c5ae0198ea968de991.scope; invocation ID: a9bba75428c04ce198576f6a50093df2
