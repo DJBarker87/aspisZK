@@ -1,0 +1,6 @@
+import CurrentCompactFirstCompositionV1
+set_option autoImplicit false
+#print AspisR1PublicPreparation.verifier.Phase
+#print AspisR1PublicPreparation.FirstCaller.Phase
+#print axioms AspisR1PublicPreparation.verifier.Phase
+#print axioms AspisR1PublicPreparation.FirstCaller.Phase
