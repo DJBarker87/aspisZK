@@ -1,0 +1,59 @@
+{
+  "attempt": "PoolV_K019",
+  "kind": "kani",
+  "source_revision": "37a2706c740ccb128996ffb4434e65043dce7d9e",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_pure/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolV_plan_sequence",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolV_pure/Cargo.toml",
+    "PoolV_pure/PoolV_lib.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual frozen planner arbitrary full inputs",
+    "replacement": "K002/K014/K016 split to one mask/overflow/sequence/binding/capacity consequence or the exact negated progress class (duplicate); full other fields arbitrary"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check",
+  "exit_status": 1,
+  "wall_seconds": 90.88968723698054,
+  "peak_rss_kib": "4191864",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolV-K019.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6696656896",
+  "source_hashes": {
+    "PoolV_pure/Cargo.toml": "9791f8a5c596cad742eee082f12f8c0365d5ebf7b94589edfd3e63435b346c13",
+    "PoolV_pure/PoolV_lib.rs": "35d226e288c56a4f627fd1ee003776691f639554dd6cf30c817c251a97d74f01"
+  },
+  "print_axioms": "N/A: kani"
+}

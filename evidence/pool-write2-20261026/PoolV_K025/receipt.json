@@ -1,0 +1,62 @@
+{
+  "attempt": "PoolV_K025",
+  "kind": "kani",
+  "source_revision": "37a2706c740ccb128996ffb4434e65043dce7d9e",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_tail/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolV_native_assembly",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolV_tail/Cargo.toml",
+    "PoolV_tail/PoolV_lib.rs",
+    "PoolV_ref/PoolV_lib.rs",
+    "PoolV_SLICE_SOURCE.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Exact native source output assembly and validate_master; original actual full master/checkpoint/plan records"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check",
+  "exit_status": 0,
+  "wall_seconds": 4.796468870015815,
+  "peak_rss_kib": "193424",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolV-K025.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "357957632",
+  "source_hashes": {
+    "PoolV_tail/Cargo.toml": "2f7a26e1c90dcfc56405b1ceebb8de1d37efc37e208f8efd4bba382e45656be6",
+    "PoolV_tail/PoolV_lib.rs": "7c96593a980b07887a69795cfac10cb4269245244e9e12031c5f1dd6c329887c",
+    "PoolV_ref/PoolV_lib.rs": "6afdd88395cc8835fda0791c571ecd2e5d8935ef095372c9fa37249ef442a964",
+    "PoolV_SLICE_SOURCE.json": "0947fd8d51f404f40896cb5f19fa5f92839a4cc013b195229d9abdf7828b2d17"
+  },
+  "print_axioms": "N/A: kani"
+}

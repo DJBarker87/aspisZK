@@ -1,0 +1,65 @@
+PoolV_GuardCases.lean:9:50: error: Ambiguous term
+  Error
+Possible interpretations:
+  PoolW_ZeroGuard.Error : Type
+  
+  Std.Error : Type
+PoolV_GuardCases.lean:19:25: error: Type mismatch
+  h
+has type
+  Hiq_PoolSource.history.require_program_account a id true = ok (core.result.Result.Ok PUnit.unit)
+but is expected to have type
+  ok (core.result.Result.Ok PUnit.unit) = ok (core.result.Result.Ok ())
+PoolV_GuardCases.lean:27:2: error: unsolved goals
+case this
+a : Account
+id : Key
+exact : ℕ
+data : Slice U8
+exempt : Bool
+h : run a id exact (ok (core.result.Result.Ok data)) exempt = ok (core.result.Result.Ok ())
+⊢ ?m.36
+
+case mp
+a : Account
+id : Key
+exact : ℕ
+data : Slice U8
+exempt : Bool
+h : run a id exact (ok (core.result.Result.Ok data)) exempt = ok (core.result.Result.Ok ())
+this : ?m.36
+⊢ (a.owner = id ∧ a.executable = false ∧ a.is_writable = true) ∧
+    (↑data).length = exact ∧ (∀ byte ∈ ↑data, byte = 0#u8) ∧ exempt = true
+PoolV_GuardCases.lean:25:84: error: unsolved goals
+case mpr
+a : Account
+id : Key
+exact : ℕ
+data : Slice U8
+exempt : Bool
+⊢ (a.owner = id ∧ a.executable = false ∧ a.is_writable = true) ∧
+      (↑data).length = exact ∧ (∀ byte ∈ ↑data, byte = 0#u8) ∧ exempt = true →
+    run a id exact (ok (core.result.Result.Ok data)) exempt = ok (core.result.Result.Ok ())
+PoolV_GuardCases.lean:28:13: error: unexpected token ':='; expected 'lemma'
+PoolV_GuardCases.lean:29:69: error: unexpected identifier; expected 'lemma'
+PoolV_GuardCases.lean:30:15: error: unexpected token ','; expected 'lemma'
+PoolV_GuardCases.lean:31:16: error: unexpected token ','; expected 'lemma'
+PoolV_GuardCases.lean:32:69: error: unexpected identifier; expected 'lemma'
+PoolV_GuardCases.lean:43:87: error: Ambiguous term
+  Error
+Possible interpretations:
+  PoolW_ZeroGuard.Error : Type
+  
+  Std.Error : Type
+PoolV_GuardCases.lean:44:57: error: unsolved goals
+a : Account
+id : Key
+exact : ℕ
+exempt : Bool
+e : sorry
+accepted : run a id exact (ok (core.result.Result.Err sorry)) exempt = ok (core.result.Result.Ok ())
+⊢ False
+'AspisR1.PoolV_GuardCases.accepted_metadata' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolV_GuardCases.accepted_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolV_GuardCases.no_occupied_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolV_GuardCases.rejects_read_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

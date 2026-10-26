@@ -1,0 +1,8 @@
+{
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs",
+  "first": 514,
+  "last": 534,
+  "exact_text": "    if master.has_checkpoint {\n        let mut progressed = false;\n        for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {\n            if lane_sequences[lane] < master.last_checkpoint_lane_sequences[lane] {\n                return Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased);\n            }\n            progressed |= lane_sequences[lane] > master.last_checkpoint_lane_sequences[lane];\n        }\n        if !progressed {\n            return Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint);\n        }\n    }\n    let next_sequence = master\n        .next_checkpoint_sequence\n        .checked_add(1)\n        .ok_or(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow)?;\n",
+  "sha256": "e19f7e831afc30d27cd04659c2b8de5014c4eb6dcc73247c1be9c8bb6d6cb517",
+  "projection": "Only master.has_checkpoint,last_checkpoint_lane_sequences,next_checkpoint_sequence are accessed; local source-slice result, not enclosing planner refinement"
+}
