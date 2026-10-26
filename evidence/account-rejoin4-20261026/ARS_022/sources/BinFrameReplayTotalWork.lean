@@ -1,0 +1,241 @@
+import BinFrameLookupWork
+import BinFrameConstructionWork
+
+/-! Complete frame replay comparison and address-construction schedule.
+The fixed-width serialization tariff and cumulative append copies are included.
+Each query is constructed once before its last-write log scan. -/
+set_option autoImplicit false
+namespace AspisR1.BinFrameReplayTotalWork
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8PairedCommitment FS FS2.Duplex
+open RawCommitmentFrameReplay BinFrameLookupWork
+
+ def ask (log : List (Bytes × State)) (a : BinFrameConstructionWork.W) : State × Nat :=
+  let r := oracle log a.1
+  (r.1, r.2+a.2+2)
+
+theorem ask_value (log : List (Bytes × State)) (a : BinFrameConstructionWork.W) :
+    (ask log a).1 = OracleProgramReplay.oracleOf log a.1 := oracle_value log a.1
+
+theorem ask_work (log : List (Bytes × State)) (a : BinFrameConstructionWork.W)
+    (hlen : a.1.length ≤ 131072) (hwork : a.2 ≤ 395264) :
+    (ask log a).2 ≤ 262148*log.length+400000 := by
+  have ho := oracle_work log a.1 hlen
+  change _+_+2 ≤ _
+  omega
+
+theorem ask_absorb (log : List (Bytes × State)) (s : State) (row : Nat)
+    (p : SelectedTranscriptParams.Message) :
+    (ask log (BinFrameConstructionWork.absorb s row p.val)).2 ≤ 262148*log.length+400000 := by
+  apply ask_work
+  · rw [BinFrameConstructionWork.absorb_value]; exact BinFrameSizeBound.absorb_length s row p
+  · exact (BinFrameConstructionWork.absorb_work s row p.val).trans (by omega)
+
+theorem ask_advance (log : List (Bytes × State)) (s : State) :
+    (ask log (BinFrameConstructionWork.advance s)).2 ≤ 262148*log.length+400000 := by
+  apply ask_work
+  · rw [BinFrameConstructionWork.advance_value]; exact (short_lengths s 0).2.1
+  · exact (BinFrameConstructionWork.advance_work s).trans (by omega)
+
+theorem ask_rowZero (log : List (Bytes × State)) (s : State) :
+    (ask log (BinFrameConstructionWork.rowZero s)).2 ≤ 262148*log.length+400000 := by
+  apply ask_work
+  · rw [BinFrameConstructionWork.rowZero_value]; exact (short_lengths s 0).1
+  · exact (BinFrameConstructionWork.rowZero_work s).trans (by omega)
+
+theorem ask_reseed (log : List (Bytes × State)) (tag : Byte) (s : State) :
+    (ask log (BinFrameConstructionWork.reseed tag s)).2 ≤ 262148*log.length+400000 := by
+  apply ask_work
+  · rw [BinFrameConstructionWork.reseed_value]; exact (short_lengths s tag).2.2
+  · exact (BinFrameConstructionWork.reseed_work tag s).trans (by omega)
+
+theorem ask_publicInit (log : List (Bytes × State)) (pub : Public) (s : State) :
+    (ask log (BinFrameConstructionWork.publicInit pub.pubBytes s)).2 ≤ 262148*log.length+400000 := by
+  apply ask_work
+  · rw [BinFrameConstructionWork.publicInit_value]; exact BinFrameSizeBound.publicInit_length pub s
+  · have h := BinFrameConstructionWork.publicInit_work pub.pubBytes s
+    have hp := pub.initFits
+    simp only [SelectedTranscriptParams.L] at hp
+    omega
+
+def payload (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (bytes : Bytes) : State × Nat :=
+  let a := ask log (BinFrameConstructionWork.absorb state row bytes)
+  let b := ask log (BinFrameConstructionWork.advance a.1)
+  if row = 26 then
+    let c := ask log (BinFrameConstructionWork.reseed pub.tag b.1)
+    (c.1, a.2 + b.2 + c.2)
+  else (b.1, a.2 + b.2)
+
+theorem payload_value (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (bytes : Bytes) :
+    (payload log pub state row bytes).1 =
+      payloadSuccessor (OracleProgramReplay.oracleOf log) pub state row bytes := by
+  simp only [payload, payloadSuccessor, ask_value, BinFrameConstructionWork.absorb_value,
+    BinFrameConstructionWork.advance_value, BinFrameConstructionWork.reseed_value]
+  split <;> rfl
+
+theorem payload_work (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (p : SelectedTranscriptParams.Message) :
+    (payload log pub state row p.val).2 ≤ 3 * (262148 * log.length + 400000) := by
+  have ha := ask_absorb log state row p
+  have hb := ask_advance log (ask log (BinFrameConstructionWork.absorb state row p.val)).1
+  have hc := ask_reseed log pub.tag
+    (ask log (BinFrameConstructionWork.advance
+      (ask log (BinFrameConstructionWork.absorb state row p.val)).1)).1
+  unfold payload
+  split <;> dsimp only <;> omega
+
+def successorWork (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (m : Message) : State × Nat :=
+  match row, m with
+  | 0, .initial root _ =>
+    let a := ask log (BinFrameConstructionWork.publicInit pub.pubBytes root)
+    let b := ask log (BinFrameConstructionWork.rowZero a.1)
+    let c := ask log (BinFrameConstructionWork.advance b.1)
+    (c.1, a.2 + b.2 + c.2)
+  | 0, _ => (zeroState, 0)
+  | _ + 1, .initial _ _ => (zeroState, 0)
+  | n + 1, .payload p => payload log pub state (n + 1) p.val
+  | n + 1, .c2 p _ => payload log pub state (n + 1) p.val
+  | n + 1, .second p _ => payload log pub state (n + 1) p.val
+
+theorem successor_value (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (m : Message) :
+    (successorWork log pub state row m).1 =
+      successor (OracleProgramReplay.oracleOf log) pub state row m := by
+  cases row <;> cases m <;>
+    simp only [successorWork, successor, payload_value, ask_value, BinFrameConstructionWork.publicInit_value,
+      BinFrameConstructionWork.rowZero_value, BinFrameConstructionWork.advance_value]
+
+theorem successor_work (log : List (Bytes × State)) (pub : Public)
+    (state : State) (row : Nat) (m : Message) :
+    (successorWork log pub state row m).2 ≤ 3 * (262148 * log.length + 400000) := by
+  cases row with
+  | zero =>
+    cases m with
+    | initial root h =>
+      have ha := ask_publicInit log pub root
+      have hb := ask_rowZero log (ask log (BinFrameConstructionWork.publicInit pub.pubBytes root)).1
+      have hc := ask_advance log (ask log (BinFrameConstructionWork.rowZero
+        (ask log (BinFrameConstructionWork.publicInit pub.pubBytes root)).1)).1
+      change _ + _ + _ ≤ _
+      omega
+    | payload p | c2 p h | second p h => exact Nat.zero_le _
+  | succ row =>
+    cases m with
+    | initial root h => exact Nat.zero_le _
+    | payload p | c2 p h | second p h => exact payload_work log pub state (row + 1) p
+
+def stateWork (log : List (Bytes × State)) (pub : Public) (pf : Proof) :
+    Nat → State × Nat
+  | 0 => (zeroState, 0)
+  | n + 1 =>
+    let prev := stateWork log pub pf n
+    let next := successorWork log pub prev.1 n (pf n)
+    (next.1, prev.2 + next.2)
+
+theorem state_value (log : List (Bytes × State)) (pub : Public) (pf : Proof)
+    (n : Nat) : (stateWork log pub pf n).1 =
+      stateBefore (OracleProgramReplay.oracleOf log) pub pf n := by
+  induction n with
+  | zero => rfl
+  | succ n ih => simp only [stateWork, stateBefore, successor_value, ih]
+
+theorem state_work (log : List (Bytes × State)) (pub : Public) (pf : Proof)
+    (n : Nat) : (stateWork log pub pf n).2 ≤ 3 * n * (262148 * log.length + 400000) := by
+  induction n with
+  | zero => simp [stateWork]
+  | succ n ih =>
+    have hs := successor_work log pub (stateWork log pub pf n).1 n (pf n)
+    change _ + _ ≤ _
+    calc
+      _ ≤ 3 * n * (262148 * log.length + 400000) + 3 * (262148 * log.length + 400000) := Nat.add_le_add ih hs
+      _ = _ := by ring
+
+def frameAtWork (pub : Public) (s : State) (row : Nat) (m : Message) : BinFrameConstructionWork.W :=
+  match row, m with
+  | 0, .initial root _ => BinFrameConstructionWork.publicInit pub.pubBytes root
+  | 0, _ => BinFrameConstructionWork.join (BinFrameConstructionWork.stateBytes zeroState)
+      (BinFrameConstructionWork.literal [1])
+  | _+1, .initial _ _ => BinFrameConstructionWork.join (BinFrameConstructionWork.stateBytes zeroState)
+      (BinFrameConstructionWork.literal [1])
+  | n+1, .payload p => BinFrameConstructionWork.absorb s (n+1) p.val
+  | n+1, .c2 p _ => BinFrameConstructionWork.absorb s (n+1) p.val
+  | n+1, .second p _ => BinFrameConstructionWork.absorb s (n+1) p.val
+
+theorem frameAt_value (pub : Public) (s : State) (row : Nat) (m : Message) :
+    (frameAtWork pub s row m).1 = frameAt pub s row m := by
+  cases row <;> cases m <;>
+    simp only [frameAtWork, frameAt, BinFrameConstructionWork.publicInit_value,
+      BinFrameConstructionWork.absorb_value, BinFrameConstructionWork.join_value,
+      BinFrameConstructionWork.stateBytes, BinFrameConstructionWork.literal]
+
+theorem frameAt_work (pub : Public) (s : State) (row : Nat) (m : Message) :
+    (frameAtWork pub s row m).2 ≤ 400000 := by
+  have hinit (root : State) :
+      (BinFrameConstructionWork.publicInit pub.pubBytes root).2 ≤ 400000 := by
+    have h := BinFrameConstructionWork.publicInit_work pub.pubBytes root
+    have hf := pub.initFits
+    simp only [SelectedTranscriptParams.L] at hf
+    omega
+  have hinvalid : (BinFrameConstructionWork.join
+      (BinFrameConstructionWork.stateBytes zeroState)
+      (BinFrameConstructionWork.literal [1])).2 ≤ 400000 := by
+    simp only [BinFrameConstructionWork.join_work, BinFrameConstructionWork.stateBytes,
+      BinFrameConstructionWork.literal, bytes_length, List.length_cons, List.length_nil]
+    omega
+  cases row with
+  | zero =>
+    cases m with
+    | initial root _ => exact hinit root
+    | payload _ | c2 _ _ | second _ _ => exact hinvalid
+  | succ row =>
+    cases m with
+    | initial _ _ => exact hinvalid
+    | payload p | c2 p _ | second p _ =>
+      exact (BinFrameConstructionWork.absorb_work s (row+1) p.val).trans (by omega)
+
+def frameWork (run : RawCutProverCompiler.RunView) (row : Nat) : Bytes × Nat :=
+  let s := stateWork run.1 run.2.1.1 run.2.1.2 row
+  let f := frameAtWork run.2.1.1 s.1 row (run.2.1.2 row)
+  (f.1, s.2+f.2)
+
+theorem frame_value (run : RawCutProverCompiler.RunView) (row : Nat) :
+    (frameWork run row).1 = frameFromView run row := by
+  simp only [frameWork, frameFromView, frame, frameAt_value, state_value]
+
+theorem frame_work (run : RawCutProverCompiler.RunView) (row : Nat) :
+    (frameWork run row).2 ≤ 3 * row * (262148 * run.1.length + 400000) + 400000 := by
+  have hs := state_work run.1 run.2.1.1 run.2.1.2 row
+  have hf := frameAt_work run.2.1.1
+    (stateWork run.1 run.2.1.1 run.2.1.2 row).1 row (run.2.1.2 row)
+  exact Nat.add_le_add hs hf
+
+theorem three_frames_work (run : RawCutProverCompiler.RunView) :
+    (frameWork run 0).2 + (frameWork run 2).2 + (frameWork run 30).2 ≤
+      96 * (262148 * run.1.length + 400000) + 1200000 := by
+  have h0 := frame_work run 0
+  have h2 := frame_work run 2
+  have h30 := frame_work run 30
+  omega
+
+#print axioms ask_value
+#print axioms ask_work
+#print axioms ask_absorb
+#print axioms ask_advance
+#print axioms ask_rowZero
+#print axioms ask_reseed
+#print axioms ask_publicInit
+#print axioms frameAt_value
+#print axioms frameAt_work
+#print axioms payload_value
+#print axioms payload_work
+#print axioms successor_value
+#print axioms successor_work
+#print axioms state_value
+#print axioms state_work
+#print axioms frame_value
+#print axioms frame_work
+#print axioms three_frames_work
+end AspisR1.BinFrameReplayTotalWork

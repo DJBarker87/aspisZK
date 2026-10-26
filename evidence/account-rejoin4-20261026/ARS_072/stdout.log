@@ -1,0 +1,32 @@
+ARS_CoverageClass.lean:28:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | ok digest => some (flatten q.parts, decodeState digest)
+      | x => none)
+    (run hashv code []).2
+in the target expression
+  (flatten q.parts, decodeState digest) ∈ readLog (run hashv code []).2
+
+case mp
+A : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+covered : ARR_OracleCoverage.Covered H hashv code
+returns : ARR_ReturnCoverage.ReturnsOnly (run hashv code []).2
+q : Query
+member : q ∈ (run hashv code []).2
+digest : Digest
+returned : q.returned = ok digest
+reads : (flatten q.parts, decodeState digest) ∈ readLog (run hashv code []).2
+same :
+  List.filterMap
+      (fun q =>
+        match q.returned with
+        | ok digest => some (flatten q.parts, decodeState digest)
+        | x => none)
+      (run hashv code []).2 =
+    (eval H (SdkC_Oracle.program code)).1
+⊢ decodeState digest = H (flatten q.parts)
+'AspisR1.ARS_CoverageClass.iff_issued' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

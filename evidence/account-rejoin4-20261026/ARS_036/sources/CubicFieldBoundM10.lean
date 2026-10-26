@@ -1,0 +1,17 @@
+import CubicAllocationLiftM10
+
+set_option autoImplicit false
+namespace AspisR1.CubicFieldBoundM10
+open CubicAllocationLiftM10 RawExtractorCostComposedV2
+
+/-- The field-work bound needs no heap hypothesis. -/
+theorem bound (W L C A N : Nat) (hw : W ≤ C*(L+1)) :
+    W ≤ 4*(constant C A N)^3*(L+1)^3 := by
+  have h := total_bound W 0 0 L C A N hw (Nat.zero_le _) (Nat.zero_le _)
+  have hf : W ≤ (resources W 0 0 L N).total := by
+    change W ≤ W+0+(W*(L+N+257)^2+0)
+    omega
+  exact hf.trans h
+
+#print axioms bound
+end AspisR1.CubicFieldBoundM10

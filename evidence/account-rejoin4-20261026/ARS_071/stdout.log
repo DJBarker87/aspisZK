@@ -1,0 +1,16 @@
+ARS_CoverageClass.lean:23:18: error(lean.unknownIdentifier): Unknown identifier `flatten`
+ARS_CoverageClass.lean:23:34: error(lean.unknownIdentifier): Unknown identifier `decodeState`
+ARS_CoverageClass.lean:25:22: error: unsolved goals
+A : Type
+hashv : Parts → Result Digest
+H : Bytes → State
+code : Code A
+covered : ARR_OracleCoverage.Covered H hashv code
+returns : ARR_ReturnCoverage.ReturnsOnly (run hashv code []).2
+q : Query
+member : q ∈ (run hashv code []).2
+digest : Digest
+returned : q.returned = ok digest
+⊢ some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest) =
+    some (sorry, sorry)
+'AspisR1.ARS_CoverageClass.iff_issued' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

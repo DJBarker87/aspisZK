@@ -1,0 +1,73 @@
+ARS_Coverage.lean:82:4: error: Type mismatch: After simplification, term
+  n.game
+ has type
+  CPH_Game.DeployedPairExecution n.p n.t n.u (eval native a.first).2.entry
+    (eval native (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.entry n.saved n.actions native1 native2
+    copy allocator CPH_Program.verifier
+but is expected to have type
+  CPH_Game.DeployedPairExecution n.p n.t n.u (eval native a.first).2.entry
+    (eval H (a.second (eval native a.first).2 n.saved n.post1 n.final1)).2.entry n.saved n.actions native1 native2 copy
+    allocator CPH_Program.verifier
+structure AspisR1.ARS_Coverage.SupportedEntry {W A C Tx : Type} (L : Library W (ℕ → Record))
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (c : DrvC_Installation.Configuration FIo_Install.W C) (err : C) (r : NP6_StdModel.Reservation)
+  (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (a : Adversary A) (H : Bytes → State) : Type
+number of parameters: 15
+fields:
+  AspisR1.ARS_Coverage.SupportedEntry.saved : alloc.vec.Vec U8
+  AspisR1.ARS_Coverage.SupportedEntry.post1 : Heap (ℕ → Record)
+  AspisR1.ARS_Coverage.SupportedEntry.post2 : Heap (ℕ → Record)
+  AspisR1.ARS_Coverage.SupportedEntry.final1 : A
+  AspisR1.ARS_Coverage.SupportedEntry.final2 : A
+  AspisR1.ARS_Coverage.SupportedEntry.w1 : W
+  AspisR1.ARS_Coverage.SupportedEntry.w2 : W
+  AspisR1.ARS_Coverage.SupportedEntry.admission1 : RuntimeEntrypointAdmission L (eval H a.first).2.entry self.w1 3
+  AspisR1.ARS_Coverage.SupportedEntry.admission2 : RuntimeEntrypointAdmission L
+      (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2.entry self.w2 7
+  AspisR1.ARS_Coverage.SupportedEntry.accepted1 : first native1 copy allocator (eval H a.first).2.entry
+        CPH_Program.verifier (eval H a.first).2.data (eval H a.first).2.state =
+      ok (core.result.Result.Ok (self.saved, self.post1, self.final1))
+  AspisR1.ARS_Coverage.SupportedEntry.accepted2 : let j :=
+      (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2;
+    second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+      ok (core.result.Result.Ok (self.post2, self.final2))
+  AspisR1.ARS_Coverage.SupportedEntry.p : CPG_Projection.Observations Tx A
+  AspisR1.ARS_Coverage.SupportedEntry.t : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.u : Tx
+  AspisR1.ARS_Coverage.SupportedEntry.actions : List (CPP_BankState.Action A)
+  AspisR1.ARS_Coverage.SupportedEntry.game : CPH_Game.DeployedPairExecution self.p self.t self.u
+      (eval H a.first).2.entry (eval H (a.second (eval H a.first).2 self.saved self.post1 self.final1)).2.entry
+      self.saved self.actions native1 native2 copy allocator CPH_Program.verifier
+  AspisR1.ARS_Coverage.SupportedEntry.RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
+      (CPG_Projection.adjacent self.p) (CPG_Projection.ordinary self.p (Hist_Nonvacuity.key 0#u8))
+      (CPG_Projection.before self.p) (CPG_Projection.tentative self.p) (CPG_Projection.success self.p)
+      (CPG_Projection.loaded self.p)
+constructor:
+  AspisR1.ARS_Coverage.SupportedEntry.mk {W A C Tx : Type} {L : Library W (ℕ → Record)}
+    {copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)} {allocator : Allocator A}
+    {c : DrvC_Installation.Configuration FIo_Install.W C} {err : C} {r : NP6_StdModel.Reservation}
+    {native1 : S2W_ExtractionBoundary.First} {native2 : S2W_ExtractionBoundary.Second}
+    {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {a : Adversary A} {H : Bytes → State}
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A) (w1 w2 : W)
+    (admission1 : RuntimeEntrypointAdmission L (eval H a.first).2.entry w1 3)
+    (admission2 : RuntimeEntrypointAdmission L (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry w2 7)
+    (accepted1 :
+      first native1 copy allocator (eval H a.first).2.entry CPH_Program.verifier (eval H a.first).2.data
+          (eval H a.first).2.state =
+        ok (core.result.Result.Ok (saved, post1, final1)))
+    (accepted2 :
+      let j := (eval H (a.second (eval H a.first).2 saved post1 final1)).2;
+      second native2 allocator j.entry CPH_Program.verifier j.data j.slot j.state =
+        ok (core.result.Result.Ok (post2, final2)))
+    (p : CPG_Projection.Observations Tx A) (t u : Tx) (actions : List (CPP_BankState.Action A))
+    (game :
+      CPH_Game.DeployedPairExecution p t u (eval H a.first).2.entry
+        (eval H (a.second (eval H a.first).2 saved post1 final1)).2.entry saved actions native1 native2 copy allocator
+        CPH_Program.verifier)
+    (RuntimePersistence :
+      CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p)
+        (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p) (CPG_Projection.tentative p)
+        (CPG_Projection.success p) (CPG_Projection.loaded p)) :
+    SupportedEntry L copy allocator c err r native1 native2 hashv a H
+'AspisR1.ARS_Coverage.deployed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
