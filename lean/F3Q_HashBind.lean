@@ -6,7 +6,7 @@ open Aeneas Aeneas.Std Result
 open AspisR1PublicPreparation.PreparedHashCode
 
 theorem run_ok {A B : Type} (p : Code A) (k : A → Code B) (a : A) (success : erase p=ok a) :
-    run (p >>= k)=((run p).1++(run (k a)).1,(run (k a)).2) := by
+    run (AspisR1PublicPreparation.PreparedHashCode.bind p k)=((run p).1++(run (k a)).1,(run (k a)).2) := by
   change run (AspisR1PublicPreparation.PreparedHashCode.bind p k)=_
   rw [AuS1_Trace.run_bind,run_value,success]
   rfl

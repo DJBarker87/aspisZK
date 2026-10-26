@@ -1,0 +1,389 @@
+F3Q_OpeningSourceLog.lean:43:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run
+    (PreparedHashCode.bind
+      (PreparedScalarEffects.scalar effects B.sampling D spine.c.t3 30#u8 spine.c.second.deref false) ?m.397)
+in the target expression
+  observe
+      ((run (PreparedHashEffects.new effects D hash sem.transcript.state transport.Variant.S2)).1 ++
+        ((run (PreparedScalarEffects.scalar effects B.sampling D spine.c.t0 27#u8 v.y1 true)).1 ++
+          ((run
+                (PreparedScalarEffects.scalar effects B.sampling D spine.c.t1 28#u8 spine.c.inactive.to_slice
+                  false)).1 ++
+            ((run (PreparedScalarEffects.scalar effects B.sampling D spine.c.t2 29#u8 v.round0 false)).1 ++
+              (run
+                  (Code.step
+                    (do
+                      let b ←
+                        transport.Variant.Insts.CoreCmpPartialEqVariant.eq transport.Variant.S2 transport.Variant.S1
+                      if b = true then ok 1#usize else ok 2#usize)
+                    fun i =>
+                    if i = 2#usize then
+                      Code.step (32#usize + 224#usize) fun i1 =>
+                        Code.step (ok spine.root) fun a2 =>
+                          Code.step (ok a2.to_slice) fun s1 =>
+                            Code.step
+                              (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1)
+                                s1)
+                              fun bytes1 =>
+                              Code.step (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1)
+                                fun bytes2 =>
+                                PreparedHashCode.bind
+                                  (PreparedScalarEffects.scalar effects B.sampling D spine.c.t3 30#u8 bytes2.deref
+                                    false)
+                                  fun __x =>
+                                  PreparedHashCode.bind
+                                    (PreparedQueryEffects.queries effects
+                                      (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                        Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                      D __x.2 31#u8 v.final_message)
+                                    fun __x_1 =>
+                                    Code.step (core.result.Result.Insts.CoreOpsTry.branch __x_1.1) fun cf =>
+                                      match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue val =>
+                                        Code.step (31#u8 + 1#u8) fun i2 =>
+                                          Code.step (ok (Std.Array.empty U8).to_slice) fun s3 =>
+                                            PreparedHashCode.bind
+                                              (PreparedScalarEffects.scalar_k effects B.sampling D __x_1.2 i2 s3)
+                                              fun __x_2 =>
+                                              Code.step (B.powers 29#usize spine.c.gamma) fun g1 =>
+                                                Code.step (B.claim D sem v.y1 v.inactive g1 spine.c.kappa) fun r1 =>
+                                                  Code.step (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                                    match cf1 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                            { variant := transport.Variant.S2, roots := sem.roots,
+                                                              gamma := spine.c.gamma, kappa := spine.c.kappa,
+                                                              alpha := Array.make 2#usize [spine.c.alpha0, __x.1] ⋯,
+                                                              rho := __x_2.1, queries := val,
+                                                              semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                                                              state := __x_2.2.state },
+                                                          g1)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      Code.step
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          verifier.Prepared (core.convert.FromSame verifier.Error)
+                                                          residual)
+                                                        fun r2 => pure (r2, g1)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        Code.step
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                          fun r1 => pure (r1, input)
+                    else
+                      Code.step OriginalPreparedNative.zero fun we =>
+                        PreparedHashCode.bind
+                          (PreparedQueryEffects.queries effects
+                            (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                              Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                            D spine.c.t3 30#u8 v.final_message)
+                          fun __x =>
+                          Code.step (core.result.Result.Insts.CoreOpsTry.branch __x.1) fun cf =>
+                            match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              Code.step (30#u8 + 1#u8) fun i1 =>
+                                Code.step (ok (Std.Array.empty U8).to_slice) fun s1 =>
+                                  PreparedHashCode.bind
+                                    (PreparedScalarEffects.scalar_k effects B.sampling D __x.2 i1 s1) fun __x =>
+                                    Code.step (B.powers 29#usize spine.c.gamma) fun g1 =>
+                                      Code.step (B.claim D sem v.y1 v.inactive g1 spine.c.kappa) fun r1 =>
+                                        Code.step (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                          match cf1 with
+                                          | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                            pure
+                                              (core.result.Result.Ok
+                                                  { variant := transport.Variant.S2, roots := sem.roots,
+                                                    gamma := spine.c.gamma, kappa := spine.c.kappa,
+                                                    alpha := Array.make 2#usize [spine.c.alpha0, we] ⋯, rho := __x.1,
+                                                    queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                                    claim := val1, state := __x.2.state },
+                                                g1)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            Code.step
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                              fun r2 => pure (r2, g1)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              Code.step
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                fun r1 => pure (r1, input))).1)))) =
+    observe (run (PreparedHashEffects.new effects D hash sem.transcript.state transport.Variant.S2)).1 ++
+      F3K_OpeningCalls.log spine.c
+
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : PreparedScratchModel.Boundaries
+embed : aspis_core.field.M31 → Result aspis_core.field.WideExact
+sem : r1_semantic.Verified Hash
+v : verifier.View
+hash : Hash
+p : OraclePortCompactDraft.Parsed
+out : verifier.Prepared
+scratch input : Std.Array aspis_core.field.WideExact 29#usize
+spine : F3K_OpeningSpine.Spine D B embed sem v hash p out scratch
+variant : v.variant = transport.Variant.S2
+seed : erase (PreparedHashEffects.new effects D hash sem.transcript.state v.variant) = ok spine.c.t0
+first :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t0 27#u8 v.y1 true) = ok (spine.c.gamma, spine.c.t1)
+second :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t1 28#u8 spine.c.inactive.to_slice false) =
+    ok (spine.c.kappa, spine.c.t2)
+third :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t2 29#u8 v.round0 false) =
+    ok (spine.c.alpha0, spine.c.t3)
+fourth :
+  erase (PreparedScalarEffects.scalar effects B.sampling D spine.c.t3 30#u8 spine.c.second.deref false) =
+    ok (spine.c.alpha1, spine.c.t4)
+query :
+  erase
+      (PreparedQueryEffects.queries effects
+        (Query31ConcreteMaterializedSchedule.concreteBoundaries Query31ConcreteDriverTraceFacts.sourceDefaultState
+          embed)
+        D spine.c.t4 31#u8 v.final_message) =
+    ok (core.result.Result.Ok spine.c.queries, spine.c.t5)
+rho :
+  erase
+      (PreparedScalarEffects.scalar_k effects B.sampling D spine.c.t5 32#u8 PreparedScratchReachability.emptyPayload) =
+    ok (spine.c.rho, spine.c.t6)
+⊢ observe
+      ((run (PreparedHashEffects.new effects D hash sem.transcript.state transport.Variant.S2)).1 ++
+        ((run (PreparedScalarEffects.scalar effects B.sampling D spine.c.t0 27#u8 v.y1 true)).1 ++
+          ((run
+                (PreparedScalarEffects.scalar effects B.sampling D spine.c.t1 28#u8 spine.c.inactive.to_slice
+                  false)).1 ++
+            ((run (PreparedScalarEffects.scalar effects B.sampling D spine.c.t2 29#u8 v.round0 false)).1 ++
+              (run
+                  (Code.step
+                    (do
+                      let b ←
+                        transport.Variant.Insts.CoreCmpPartialEqVariant.eq transport.Variant.S2 transport.Variant.S1
+                      if b = true then ok 1#usize else ok 2#usize)
+                    fun i =>
+                    if i = 2#usize then
+                      Code.step (32#usize + 224#usize) fun i1 =>
+                        Code.step (ok spine.root) fun a2 =>
+                          Code.step (ok a2.to_slice) fun s1 =>
+                            Code.step
+                              (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1)
+                                s1)
+                              fun bytes1 =>
+                              Code.step (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1)
+                                fun bytes2 =>
+                                PreparedHashCode.bind
+                                  (PreparedScalarEffects.scalar effects B.sampling D spine.c.t3 30#u8 bytes2.deref
+                                    false)
+                                  fun __x =>
+                                  PreparedHashCode.bind
+                                    (PreparedQueryEffects.queries effects
+                                      (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                                        Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                                      D __x.2 31#u8 v.final_message)
+                                    fun __x_1 =>
+                                    Code.step (core.result.Result.Insts.CoreOpsTry.branch __x_1.1) fun cf =>
+                                      match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue val =>
+                                        Code.step (31#u8 + 1#u8) fun i2 =>
+                                          Code.step (ok (Std.Array.empty U8).to_slice) fun s3 =>
+                                            PreparedHashCode.bind
+                                              (PreparedScalarEffects.scalar_k effects B.sampling D __x_1.2 i2 s3)
+                                              fun __x_2 =>
+                                              Code.step (B.powers 29#usize spine.c.gamma) fun g1 =>
+                                                Code.step (B.claim D sem v.y1 v.inactive g1 spine.c.kappa) fun r1 =>
+                                                  Code.step (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                                    match cf1 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                            { variant := transport.Variant.S2, roots := sem.roots,
+                                                              gamma := spine.c.gamma, kappa := spine.c.kappa,
+                                                              alpha := Array.make 2#usize [spine.c.alpha0, __x.1] ⋯,
+                                                              rho := __x_2.1, queries := val,
+                                                              semantic_alpha := sem.alpha, z := sem.z, claim := val1,
+                                                              state := __x_2.2.state },
+                                                          g1)
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      Code.step
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          verifier.Prepared (core.convert.FromSame verifier.Error)
+                                                          residual)
+                                                        fun r2 => pure (r2, g1)
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        Code.step
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                          fun r1 => pure (r1, input)
+                    else
+                      Code.step OriginalPreparedNative.zero fun we =>
+                        PreparedHashCode.bind
+                          (PreparedQueryEffects.queries effects
+                            (Query31ConcreteMaterializedSchedule.concreteBoundaries
+                              Query31ConcreteDriverTraceFacts.sourceDefaultState embed)
+                            D spine.c.t3 30#u8 v.final_message)
+                          fun __x =>
+                          Code.step (core.result.Result.Insts.CoreOpsTry.branch __x.1) fun cf =>
+                            match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              Code.step (30#u8 + 1#u8) fun i1 =>
+                                Code.step (ok (Std.Array.empty U8).to_slice) fun s1 =>
+                                  PreparedHashCode.bind
+                                    (PreparedScalarEffects.scalar_k effects B.sampling D __x.2 i1 s1) fun __x =>
+                                    Code.step (B.powers 29#usize spine.c.gamma) fun g1 =>
+                                      Code.step (B.claim D sem v.y1 v.inactive g1 spine.c.kappa) fun r1 =>
+                                        Code.step (core.result.Result.Insts.CoreOpsTry.branch r1) fun cf1 =>
+                                          match cf1 with
+                                          | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                            pure
+                                              (core.result.Result.Ok
+                                                  { variant := transport.Variant.S2, roots := sem.roots,
+                                                    gamma := spine.c.gamma, kappa := spine.c.kappa,
+                                                    alpha := Array.make 2#usize [spine.c.alpha0, we] ⋯, rho := __x.1,
+                                                    queries := val, semantic_alpha := sem.alpha, z := sem.z,
+                                                    claim := val1, state := __x.2.state },
+                                                g1)
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            Code.step
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                              fun r2 => pure (r2, g1)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              Code.step
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                fun r1 => pure (r1, input))).1)))) =
+    observe (run (PreparedHashEffects.new effects D hash sem.transcript.state transport.Variant.S2)).1 ++
+      F3K_OpeningCalls.log spine.c
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (27 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+F3Q_OpeningSourceLog.lean:35:34: warning: This simp argument is unused:
+  liftM
+
+Hint: Omit it from the simp argument list.
+  simp only [spine.c.inactiveCall,l̵i̵f̵t̵ ̲M,̵M̵onadLift.monadLift, ̲MonadLiftT.monadLift,
+      AspisR1PublicPreparation.PreparedHashCode.bind, ̲run, ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:35:40: warning: This simp argument is unused:
+  MonadLift.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [spine.c.inactiveCall, ̲liftM, ̲MonadLift.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T.monadLift,
+      AspisR1PublicPreparation.PreparedHashCode.bind, ̲run, ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:35:60: warning: This simp argument is unused:
+  MonadLiftT.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵p̵i̵n̵e̵.̵c̵.̵i̵n̵a̵c̵t̵i̵v̵e̵C̵a̵l̵l̵,̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵]̵[̲s̲p̲i̲n̲e̲.̲c̲.̲i̲n̲a̲c̲t̲i̲v̲e̲C̲a̲l̲l̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲A̲s̲p̲i̲s̲R̲1̲P̲u̲b̲l̲i̲c̲P̲r̲e̲p̲a̲r̲a̲t̲i̲o̲n̲.̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:36:4: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵p̵i̵n̵e̵.̵c̵.̵i̵n̵a̵c̵t̵i̵v̵e̵C̵a̵l̵l̵,̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵r̵u̵n̵,̵l̵i̵f̵t̵]̵[̲s̲p̲i̲n̲e̲.̲c̲.̲i̲n̲a̲c̲t̲i̲v̲e̲C̲a̲l̲l̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:36:55: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [spine.c.inactiveCall, ̲liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+      AspisR1PublicPreparation.PreparedHashCode.bind, ̲run,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:40:45: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵r̵i̵a̵n̵t̵,̵t̵r̵a̵n̵s̵p̵o̵r̵t̵.̵V̵a̵r̵i̵a̵n̵t̵.̵f̵o̵l̵d̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲v̲a̲r̲i̲a̲n̲t̲,̲ ̲t̲r̲a̲n̲s̲p̲o̲r̲t̲.̲V̲a̲r̲i̲a̲n̲t̲.̲f̲o̲l̲d̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:41:13: warning: This simp argument is unused:
+  liftM
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵M,̵M̵onadLift.monadLift, ̲MonadLiftT.monadLift,
+  ̲ ̲ ̲ ̲ ̲AspisR1PublicPreparation.PreparedHashCode.bind,
+  ̵  ̵ ̵ ̵run, ̲lift, ̲spine.unwrapped, ̲spine.first,
+  ̲ ̲ ̲ ̲ ̲spine.second]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:41:19: warning: This simp argument is unused:
+  MonadLift.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵u̵n̵,̵l̵i̵f̵t̵,̵s̵p̵i̵n̵e̵.̵u̵n̵w̵r̵a̵p̵p̵e̵d̵,̵s̵p̵i̵n̵e̵.̵f̵i̵r̵s̵t̵,̵s̵p̵i̵n̵e̵.̵s̵e̵c̵o̵n̵d̵]̵[̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲P̲u̲b̲l̲i̲c̲P̲r̲e̲p̲a̲r̲a̲t̲i̲o̲n̲.̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲p̲i̲n̲e̲.̲u̲n̲w̲r̲a̲p̲p̲e̲d̲,̲ ̲s̲p̲i̲n̲e̲.̲f̲i̲r̲s̲t̲,̲ ̲s̲p̲i̲n̲e̲.̲s̲e̲c̲o̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:41:39: warning: This simp argument is unused:
+  MonadLiftT.monadLift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵u̵n̵,̵l̵i̵f̵t̵,̵s̵p̵i̵n̵e̵.̵u̵n̵w̵r̵a̵p̵p̵e̵d̵,̵s̵p̵i̵n̵e̵.̵f̵i̵r̵s̵t̵,̵s̵p̵i̵n̵e̵.̵s̵e̵c̵o̵n̵d̵]̵[̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲P̲u̲b̲l̲i̲c̲P̲r̲e̲p̲a̲r̲a̲t̲i̲o̲n̲.̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲b̲i̲n̲d̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲p̲i̲n̲e̲.̲u̲n̲w̲r̲a̲p̲p̲e̲d̲,̲ ̲s̲p̲i̲n̲e̲.̲f̲i̲r̲s̲t̲,̲ ̲s̲p̲i̲n̲e̲.̲s̲e̲c̲o̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:41:60: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵u̵n̵,̵l̵i̵f̵t̵,̵s̵p̵i̵n̵e̵.̵u̵n̵w̵r̵a̵p̵p̵e̵d̵,̵s̵p̵i̵n̵e̵.̵f̵i̵r̵s̵t̵,̵s̵p̵i̵n̵e̵.̵s̵e̵c̵o̵n̵d̵]̵[̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲r̲u̲n̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲p̲i̲n̲e̲.̲u̲n̲w̲r̲a̲p̲p̲e̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲p̲i̲n̲e̲.̲f̲i̲r̲s̲t̲,̲ ̲s̲p̲i̲n̲e̲.̲s̲e̲c̲o̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:42:4: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+  ̲ ̲ ̲ ̲ ̲AspisR1PublicPreparation.PreparedHashCode.bind,
+  ̵  ̵ ̵ ̵r̵u̵n̵,̵lift, ̲spine.unwrapped, ̲spine.first,
+  ̲ ̲ ̲ ̲ ̲spine.second]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:42:8: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+  ̲ ̲ ̲ ̲ ̲AspisR1PublicPreparation.PreparedHashCode.bind,
+  ̵  ̵ ̵ ̵run,l̵i̵f̵t̵,̵ ̲spine.unwrapped, ̲spine.first, ̲spine.second]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:42:29: warning: This simp argument is unused:
+  spine.first
+
+Hint: Omit it from the simp argument list.
+  simp only [liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+  ̲ ̲ ̲ ̲ ̲AspisR1PublicPreparation.PreparedHashCode.bind,
+  ̵  ̵ ̵ ̵run, ̲lift, ̲spine.unwrapped, ̲spine.f̵i̵r̵st̵,̵s̵p̵i̵n̵e.̵s̵e̵cond]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_OpeningSourceLog.lean:42:41: warning: This simp argument is unused:
+  spine.second
+
+Hint: Omit it from the simp argument list.
+  simp only [liftM, ̲MonadLift.monadLift, ̲MonadLiftT.monadLift,
+  ̲ ̲ ̲ ̲ ̲AspisR1PublicPreparation.PreparedHashCode.bind,
+  ̵  ̵ ̵ ̵run, ̲lift, ̲spine.unwrapped, ̲spine.first,̵s̵p̵i̵n̵e̵.̵s̵e̵c̵o̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_OpeningSourceLog.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
