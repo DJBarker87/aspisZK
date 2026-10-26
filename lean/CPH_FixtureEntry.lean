@@ -15,22 +15,15 @@ theorem valid (e : Entry) (separate : ∀ a, (e.handles a).1 ≠ (e.handles a).2
   · intro a live
     exact ⟨separate a,rfl⟩
 
-theorem native_keys (i j : Nat) (hi : i < 256) (hj : j < 256)
+theorem native_keys (i j : Nat) (hi : i < 8) (hj : j < 8)
     (same : (key i).val.map S2W_ReturnedCheckpoint.nativeByte =
-      (key j).val.map S2W_ReturnedCheckpoint.nativeByte) : i = j := by
-  have head := congrArg (fun xs : List UInt8 => xs[0]?) same
-  change some (S2W_ReturnedCheckpoint.nativeByte (byte i)) =
-    some (S2W_ReturnedCheckpoint.nativeByte (byte j)) at head
-  have nums := congrArg UInt8.toNat (Option.some.inj head)
-  change (UInt8.ofNat (byte i).val).toNat = (UInt8.ofNat (byte j).val).toNat at nums
-  rw [CPH_FixtureKeys.byte_value i hi,CPH_FixtureKeys.byte_value j hj,
-    UInt8.toNat_ofNat_of_lt' hi,UInt8.toNat_ofNat_of_lt' hj] at nums
-  exact nums
+      (key j).val.map S2W_ReturnedCheckpoint.nativeByte) : i = j :=
+  CPH_RecordedKeys.native_injective i j hi hj same
 
 /-- Generic constructor only for fixture entry consistency, not extraction. -/
 theorem admitted (e : Entry) (n : Nat)
     (separate : ∀ a, (e.handles a).1 ≠ (e.handles a).2)
-    (bounded : ∀ a, a < n → (e.handles a).1 < 256)
+    (bounded : ∀ a, a < n → (e.handles a).1 < 8)
     (keys : ∀ c, (e.records c).owned.key = key c) :
     S2W_D189Consolidation.RuntimeEntrypointAdmission (model (Nat → Record)) e e.heap n where
   entry := {

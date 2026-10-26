@@ -1,3 +1,4 @@
+import CPH_RecordedKeys
 import CPH_Program
 import CPH_Game
 import CPR_AdmissionGap
@@ -8,7 +9,7 @@ open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
 open CPG_Projection CPP_BankState Hist_RuntimeEntry Hist_Store
 
 def byte (n : Nat) : U8 := U8.ofNat (n % 256) (by change n % 256 ≤ 255; have := Nat.mod_lt n (by decide : 0 < 256); omega)
-def key (n : Nat) : S2W_ExtractionBoundary.Program := Hist_Nonvacuity.key (byte n)
+def key (n : Nat) : S2W_ExtractionBoundary.Program := CPH_RecordedKeys.key n
 def id : S2W_ExtractionBoundary.Program := CPH_Program.verifier
 
 def zeros (n : Nat) (bound : n < 65536) : Slice U8 :=
@@ -27,7 +28,9 @@ def record (n : Nat) : Record :=
   ⟨⟨key n,id,false,decide (n=2),false,.Ok 0#usize,.Ok ⟨[],by simp⟩⟩,1,0⟩
 def readerCell (n : Nat) : Nat := if n = 0 then 0 else if n = 6 then 2 else n+2
 def layout1 : Layout := ⟨fun n => (n,n+100),record,fun n => n*65536,fun n => n⟩
-def layout2 : Layout := ⟨fun n => (readerCell n,readerCell n+100),record,fun n => n*65536,fun n => n⟩
+def readRecord (n : Nat) : Record :=
+  {record n with owned := {(record n).owned with is_writable := false}}
+def layout2 : Layout := ⟨fun n => (readerCell n,readerCell n+100),readRecord,fun n => n*65536,fun n => n⟩
 def initial : Bank := ⟨fun n => ⟨id,buffer n⟩,fun _ => 1⟩
 def saved : alloc.vec.Vec U8 := ⟨Hist_Nonvacuity.checkpoint.val,Hist_Nonvacuity.checkpoint.property⟩
 def allocator : Allocator Unit := ⟨fun _ _ => ok (),fun _ => ok ()⟩

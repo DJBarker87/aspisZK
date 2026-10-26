@@ -21,7 +21,7 @@ theorem admitted1 : S2W_D189Consolidation.RuntimeEntrypointAdmission
     change a ≠ a+100
     omega
   · intro a small
-    change a < 256
+    change a < 8
     omega
   · intro c
     rfl
@@ -33,7 +33,7 @@ theorem admitted2 : S2W_D189Consolidation.RuntimeEntrypointAdmission
     change readerCell a ≠ readerCell a+100
     omega
   · intro a small
-    exact lt_trans (reader_bound a small) (by decide)
+    exact reader_bound a small
   · intro c
     rfl
 
