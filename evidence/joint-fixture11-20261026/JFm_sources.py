@@ -1,17 +1,23 @@
 from pathlib import Path
-import json,sys
+import json,sys,re
+from JFm_input import generate
 P=Path(__file__).resolve().parent;R=P.parents[1]
 rows=json.loads((P/'JFm_WINDOWS.json').read_text())
 files={}
 for r in rows[1:25]:
  i=r['row'];ns=f'JFm_Q{i:02}Source';prev='JFr_SeedBoundary.numeric' if i==0 else ('JFp_Query00Source.ratchet' if i==1 else f'JFm_Q{i-1:02}Source.ratchet');imports=['JFp_Query00Source' if i==1 else f'JFm_Q{i-1:02}Source',f'JFm_Q{i:02}Absorb',f'JFm_Q{i:02}Reads',f'JFw_NativeRow{i:02}','ExtractedDigest32SamplerTransport']
+ if i>=15:imports=['JFm_BlockSplit']+imports
+ if i>=15:imports=[x for x in imports if x not in [f'JFm_Q{i:02}Absorb',f'JFm_Q{i:02}Reads']]+[f'JFm_Q{i:02}Hashes']
  s='\n'.join('import '+x for x in imports)+'\nset_option autoImplicit false\nnamespace AspisR1.'+ns+'\nopen Aeneas Aeneas.Std Result\nopen AspisR1PublicPreparation\nopen AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep AspisV8R19.SqueezeOracleBridge\n'
  frame='['+','.join(f'{x}#u8' for x in r['frame'])+']'
- s+=f'def frame : Slice U8 := ⟨{frame},by scalar_tac⟩\ndef absorbed : State := JFp_SHADigest.output JFm_Q{i:02}Absorb.result\ndef block : State := JFp_SHADigest.output JFm_Q{i:02}Read.result\ndef ratchet : State := JFp_SHADigest.output JFm_Q{i:02}Ratchet.result\ndef record : r1_wire.ValidatedRecord := ⟨{i}#u8,JFw_NativeRow{i:02}.record⟩\n'
+ frame_def=f'def frame : Slice U8 := ⟨{frame},by scalar_tac⟩' if i<15 else f'abbrev frame : Slice U8 := JFw_NativeRow{i:02}.record'
+ s+=f'{frame_def}\ndef absorbed : State := JFp_SHADigest.output JFm_Q{i:02}Absorb.result\ndef block : State := JFp_SHADigest.output JFm_Q{i:02}Read.result\ndef ratchet : State := JFp_SHADigest.output JFm_Q{i:02}Ratchet.result\ndef record : r1_wire.ValidatedRecord := ⟨{i}#u8,JFw_NativeRow{i:02}.record⟩\n'
  s+=f'theorem realFrame : JFw_NativeRow{i:02}.record=frame := by\n  apply Subtype.ext\n  rfl\n#print axioms realFrame\n'
+ if i>=15:s+=generate(i,prev,r)
  for label,part,st in [('absorb',f'TranscriptStep.absorbParts (encodeState {prev}) {160+i}#u8 frame','absorbed'),('read','TranscriptStep.readParts (encodeState absorbed) 1#u8','block'),('ratchet','TranscriptStep.readParts (encodeState absorbed) 2#u8','ratchet')]:
   mod=f'JFm_Q{i:02}'+label.capitalize()
-  s+=f'theorem {label}Input : (flatten ({part})).map Fin.val={mod}.message := by rfl\n#print axioms {label}Input\n'
+  proof='Input.native.trans Input.regroup' if i>=15 and label=='absorb' else 'by rfl'
+  s+=f'theorem {label}Input : (flatten ({part})).map Fin.val={mod}.message := {proof}\n#print axioms {label}Input\n'
   s+=f'theorem {label}Hash : MultiproofConePhysicalTransport.rawOracle JFp_SHADigest.digest ({part})=encodeState {st} := by\n  unfold MultiproofConePhysicalTransport.rawOracle JFp_SHADigest.digest\n  rw [{label}Input,{mod}.checked]\n  rfl\n#print axioms {label}Hash\n'
  s+=f'''theorem source {{Hash : Type}} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash) (hash : Hash) :
     let D0 := AspisR1CurrentCaller.InstalledPreparation.retainedDigest
@@ -61,6 +67,10 @@ end AspisR1.{ns}
 '''
  files[R/'lean'/(ns+'.lean')]=s
 for f,s in files.items():
+ match=re.fullmatch(r'JFm_Q(\d+)(?:Hashes|Source)\.lean',f.name)
+ if match and 16<=int(match[1])<=24:
+  f=P/'JFm_COMPONENTS'/(f.name+'.txt')
+  if '--check' not in sys.argv:f.parent.mkdir(exist_ok=True)
  if '--check' in sys.argv:assert f.read_text()==s,str(f)
  else:f.write_text(s)
 print(len(files))

@@ -16,7 +16,7 @@ def advance(w):return w[1:]+[(s1(w[14])+w[9]+s0(w[1])+w[0])&mask]
 ls=lambda xs:'['+','.join(map(str,xs))+']';reg=lambda xs:'⟨'+','.join(map(str,xs))+'⟩'
 files={};pins=[]
 def cert(name,msg):
- padded=msg+b'\x80'+bytes((55-len(msg))%64)+(8*len(msg)).to_bytes(8,'big');out=['import JFp_SHABlocks','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256',f'def message : List Nat := {ls(msg)}'];h=IV;ns=[]
+ padded=msg+b'\x80'+bytes((55-len(msg))%64)+(8*len(msg)).to_bytes(8,'big');out=['import JFp_SHABlocks','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256',*([f'def message : List Nat := {ls(msg)}'] if len(msg)<256 else [])];h=IV;ns=[]
  for bi,off in enumerate(range(0,len(padded),64)):
   bn=f'B{bi:02}';ns.append(bn);chunk=padded[off:off+64];w=[int.from_bytes(chunk[j:j+4],'big') for j in range(0,64,4)];s=h
   out += [f'namespace {bn}',f'def input : List Nat := {ls(chunk)}',f'def start : Reg := {reg(h)}',f'def w00 : List Nat := {ls(w)}',f'def s00 : Reg := start','theorem parsed : words input=w00 := by rfl','#print axioms parsed']
@@ -27,9 +27,21 @@ def cert(name,msg):
   out += [f'def result : Reg := {reg(h)}','theorem checked : compress start (words input)=result := by','  rw [parsed]','  unfold compress loop','  change add start (constants.foldl transition (w00,s00)).2=result','  unfold constants']
   out += [f'  rw [List.foldl_cons,transition,word{j:02},round{j:02}]' for j in range(64)]
   out += ['  rw [List.foldl_nil]','  rfl','#print axioms checked',f'end {bn}']
- out += ['def chunks : List (List Nat) := ['+','.join(n+'.input' for n in ns)+']','theorem padded : pad message=chunks.flatten := by rfl','#print axioms padded','theorem lengths : ∀ c ∈ chunks,c.length=64 := by','  intro c hc','  simp only [chunks,List.mem_cons,List.not_mem_nil,or_false] at hc','  rcases hc with '+'|'.join('h'+str(i) for i in range(len(ns)))]
+ if len(msg)<256:
+  out += ['def chunks : List (List Nat) := ['+','.join(n+'.input' for n in ns)+']','theorem padded : pad message=chunks.flatten := by rfl','#print axioms padded']
+  padded_length=[f'theorem paddedLength : (pad message).length={len(padded)} := by rfl']
+  length_simp='chunks,List.mem_cons,List.not_mem_nil,or_false'
+  fold_simp='chunks,List.foldl_cons,List.foldl_nil'
+ else:
+  q=len(msg)//64;heads=ns[:q];tails=ns[q:];zeros=(55-len(msg))%64;be=list((8*len(msg)).to_bytes(8,'big'))
+  for n in ns:out += [f'theorem len{n} : {n}.input.length=64 := by rfl',f'#print axioms len{n}']
+  out += ['def head : List (List Nat) := ['+','.join(n+'.input' for n in heads)+']',f'def tail : List Nat := {ls(msg[q*64:])}','def message : List Nat := head.flatten ++ tail','def chunks : List (List Nat) := head ++ ['+','.join(n+'.input' for n in tails)+']',f'theorem tailLength : tail.length={len(msg)%64} := by rfl','#print axioms tailLength',f'theorem headLength : head.flatten.length={64*q} := by','  simp only [head,List.length_flatten,List.map_cons,List.map_nil,List.sum_cons,List.sum_nil,'+','.join('len'+n for n in heads)+']','  omega','#print axioms headLength',f'theorem messageLength : message.length={len(msg)} := by','  simp only [message,List.length_append,headLength,tailLength]','#print axioms messageLength','theorem tailPad : tail ++ [128] ++ List.replicate '+str(zeros)+' 0 ++ '+ls(be)+' = ['+','.join(n+'.input' for n in tails)+'].flatten := by rfl','#print axioms tailPad','theorem padded : pad message=chunks.flatten := by','  rw [pad,messageLength]',f'  change (head.flatten ++ tail) ++ [128] ++ List.replicate {zeros} 0 ++ {ls(be)}=_','  simp only [List.append_assoc,chunks,List.flatten_append]','  exact congrArg (fun t => head.flatten ++ t) (by simpa only [List.append_assoc] using tailPad)','#print axioms padded']
+  padded_length=[f'theorem paddedLength : (pad message).length={len(padded)} := by','  rw [padded]','  simp only [chunks,head,List.flatten_append,List.flatten_cons,List.flatten_nil,List.length_append,List.length_nil,List.length_flatten,List.map_cons,List.map_nil,List.sum_cons,List.sum_nil,'+','.join('len'+n for n in ns)+']']
+  length_simp='chunks,head,List.mem_append,List.mem_cons,List.not_mem_nil,or_false,or_assoc'
+  fold_simp='chunks,head,List.foldl_append,List.foldl_cons,List.foldl_nil'
+ out += ['theorem lengths : ∀ c ∈ chunks,c.length=64 := by','  intro c hc','  simp only ['+length_simp+'] at hc','  rcases hc with '+'|'.join('h'+str(i) for i in range(len(ns)))]
  out += [f'  · subst c; rfl' for _ in ns]
- out += ['#print axioms lengths',f'theorem paddedLength : (pad message).length={len(padded)} := by rfl','#print axioms paddedLength','theorem blockList : blocks ((pad message).length/64) (pad message)=chunks := by','  rw [paddedLength,padded]','  exact blocks_chunks chunks lengths','#print axioms blockList',f'def result : Reg := {ns[-1]}.result','theorem checked : JFp_SHA256.hash message=result := by','  unfold JFp_SHA256.hash','  dsimp only','  rw [blockList]','  simp only [chunks,List.foldl_cons,List.foldl_nil]','  rw [show initial=B00.start from rfl,B00.checked]']
+ out += ['#print axioms lengths',*padded_length,'#print axioms paddedLength','theorem blockList : blocks ((pad message).length/64) (pad message)=chunks := by','  rw [paddedLength,padded]','  exact blocks_chunks chunks lengths','#print axioms blockList',f'def result : Reg := {ns[-1]}.result','theorem checked : JFp_SHA256.hash message=result := by','  unfold JFp_SHA256.hash','  dsimp only','  rw [blockList]','  simp only ['+fold_simp+']','  rw [show initial=B00.start from rfl,B00.checked]']
  for prev,nxt in zip(ns,ns[1:]):out += [f'  rw [show {prev}.result={nxt}.start from rfl,{nxt}.checked]']
  out += ['  rfl','#print axioms checked',f'end AspisR1.{name}'];files[R/'lean'/(name+'.lean')]='\n'.join(out)+'\n'
  digest=b''.join(x.to_bytes(4,'big') for x in h);assert digest==hashlib.sha256(msg).digest();return digest
@@ -56,8 +68,15 @@ for row in range(27):
 for row in range(1,27):
  read=R/f'lean/JFm_Q{row:02}Read.lean';ratchet=R/f'lean/JFm_Q{row:02}Ratchet.lean'
  files[R/f'lean/JFm_Q{row:02}Reads.lean']=files.pop(read)+'\n'+files.pop(ratchet).replace('import JFp_SHABlocks\nset_option autoImplicit false\n','')
+for row in range(15,27):
+ absorb=R/f'lean/JFm_Q{row:02}Absorb.lean';reads=R/f'lean/JFm_Q{row:02}Reads.lean'
+ files[R/f'lean/JFm_Q{row:02}Hashes.lean']=files.pop(absorb)+'\n'+files.pop(reads).replace('import JFp_SHABlocks\nset_option autoImplicit false\n','')
 files[P/'JFm_WINDOWS.json']=json.dumps(pins,indent=2)+'\n'
 for f,s in files.items():
+ match=re.fullmatch(r'JFm_Q(\d+)(?:Hashes|Source)\.lean',f.name)
+ if match and 16<=int(match[1])<=24:
+  f=P/'JFm_COMPONENTS'/(f.name+'.txt')
+  if '--check' not in sys.argv:f.parent.mkdir(exist_ok=True)
  if '--check' in sys.argv:assert f.read_text()==s,str(f)
  else:f.write_text(s)
 print(json.dumps(dict(files=len(files),check='--check' in sys.argv)))
