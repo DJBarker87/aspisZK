@@ -1,0 +1,66 @@
+slot: /tmp/aspis-r0-lean-slot-1.lock
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T09:09:42.391944+00:00", "requested_bytes": 7516192768, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 26172456960, "projected_reserved_bytes": 33688649728}
+fun i t => R1Z.ProverCommitFuelMass22.exhausted (fun x => 0) (t i)
+def R1Z.ProverCommitObserverQueries19.real : {K CommitHandle Aux : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            (W : R1Z.GamesR1.R1Wire K CommitHandle Aux) →
+              R1Z.GamesR1PBin.R1ProverP K CommitHandle Aux F W →
+                (N : ℕ) →
+                  (R0Z.JointView.Challenges K → Prop) →
+                    ((h : R0Z.JointView.HonestProver K) → R0Z.JointView.Challenges K → h.Instance → Prop) →
+                      (h : R0Z.JointView.HonestProver K) →
+                        R0P.PackBasis F →
+                          (R0Z.JointView.Statement K CommitHandle → R0Z.JointView.Challenges K → Aux) →
+                            R1Z.GamesR1.R1Adv K CommitHandle Aux →
+                              R0Z.JointView.Statement K CommitHandle →
+                                h.Instance →
+                                  W.Tab × (Fin N → R1Z.GamesR1PBin.SecP) → List R1Z.ProverCommitSeedEvent19.Entry :=
+fun {K CommitHandle Aux} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} W Pr N P
+    Vp h B outputs adv x w r =>
+  have H := W.look r.1;
+  have out := R1Z.GamesR1PBin.realOut W Pr h B outputs x w H r.2;
+  match R0Z.FsAbort.firstGood (fun o => P o.ch ∧ Vp h o.ch w ∧ o.exh = Bool.false) out with
+  | Option.none => R1Z.GamesR1.runLog (adv.prog W.failView []) H W.qmax
+  | Option.some k => R1Z.GamesR1.runLog (adv.prog (out k).view (out k).log) H W.qmax
+def R1Z.ProverCommitFixedObserver.self_join : {R : Type} →
+  [inst : Fintype R] →
+    [Nonempty R] → (f : R → ℚ) → (bad : Fin 8 → R → Prop) → R1Z.QueryScanHistorySplit.ModelExecutionJoin f f bad :=
+fun {R} [Fintype R] [Nonempty R] f bad => { cp := R1Z.GamesR1.idCoupling R, agreement := ⋯ }
+def R1Z.PrivacyR1AcctModel.base : {CommitHandle Aux : Type} →
+  R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux →
+    ((R1Z.GamesR1PBin.RIdx → R0Z.FsStatement.OracleAnswer) →
+        (Fin 3 → R0Z.FsStatement.OracleAnswer) →
+          R0Z.JointView.View R1Z.PrivacyR1AcctModel.K CommitHandle Aux R1Z.Batched.R1Bat →
+            R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → List (List UInt8 × R0Z.FsStatement.OracleAnswer)) →
+      R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux :=
+fun {CommitHandle Aux} template log =>
+  { Cm := R1Z.GamesR1PBin.RIdx → R0Z.FsStatement.OracleAnswer, finCm := inferInstance,
+    neCm := R1Z.PrivacyR1AcctModel.base._proof_1, Tab := template.Tab, finTab := template.finTab, neTab := ⋯,
+    look := template.look, frame := template.frame, payload := template.payload, final := template.final,
+    pubBytes := template.pubBytes, vtag := template.vtag, dec := template.dec, kstarOf := template.kstarOf,
+    comLog := log, failView := template.failView, qmax := template.qmax }
+def R1Z.PrivacyR1AcctModel.seed : {CommitHandle Aux : Type} →
+  (W : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctModel.K CommitHandle Aux) →
+    ((Fin R1Z.PrivacyR1AcctModel.E₁ → R0Z.FsStatement.OracleAnswer) →
+        (Fin R1Z.PrivacyR1AcctModel.E₂ → R0Z.FsStatement.OracleAnswer) →
+          Option (R0Z.JointView.Tape R1Z.PrivacyR1AcctModel.K R1Z.PrivacyR1AcctModel.F)) →
+      (R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → Fin 3 → Finset R1Z.GamesR1PBin.Fib) →
+        (R0Z.JointView.Challenges R1Z.PrivacyR1AcctModel.K → List (Fin 3 ⊕ R1Z.GamesR1PBin.RIdx)) →
+          R1Z.GamesR1PBin.R1ProverP R1Z.PrivacyR1AcctModel.K CommitHandle Aux R1Z.PrivacyR1AcctModel.F W :=
+fun {CommitHandle Aux} W decode fib opens =>
+  { E₁ := R1Z.PrivacyR1AcctModel.E₁, E₂ := R1Z.PrivacyR1AcctModel.E₂,
+    caddr := fun x x_1 x_2 x_3 x_4 x_5 x_6 x_7 x_8 => [], leafVal := fun x x_1 x_2 x_3 x_4 x_5 x_6 => [],
+    tapeOf := decode, openFib := fib, openList := opens,
+    ord := R1Z.PhaseScheduleBin.ord R1Z.PrivacyR1AcctModel.E₁ R1Z.PrivacyR1AcctModel.E₂ }
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_Ledger_Fields.lean:31:7: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitPublicNonce40.E1`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_Ledger_Fields.lean:32:7: error(lean.unknownIdentifier): Unknown constant `R1Z.ProverCommitLedger36.E2`
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.63
+	Maximum resident set size (kbytes): 4198924
+	Swaps: 0
+	Exit status: 1

@@ -1,0 +1,14 @@
+
+from pathlib import Path
+import json,re,hashlib
+J=Path('/home/dombarker/project-offloads/aspis-joint-20261019')
+queue=['R1Z.PrivacyR1HeadlineDeployedReal','R1Z.ProverCommitPublicNonce40','R1Z.ProverCommitLedger36','R1Z.ProverCommitTrustedStd24'];seen={}
+while queue:
+ m=queue.pop()
+ if m in seen:continue
+ s=J/'sources'/Path(*m.split('.')).with_suffix('.lean');o=J/'objects'/Path(*m.split('.')).with_suffix('.olean')
+ if not s.exists():continue
+ b=s.read_bytes();imports=re.findall(r'^import\s+([\w.]+)',b.decode(),re.M)
+ seen[m]={'source_sha256':hashlib.sha256(b).hexdigest(),'object_sha256':hashlib.sha256(o.read_bytes()).hexdigest() if o.exists() else None,'imports':imports};queue.extend(imports)
+env=Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json')
+print(json.dumps({'scope':'post-run project-source import closure only; cached objects, not coherent release replay','modules':seen,'env_sha256':hashlib.sha256(env.read_bytes()).hexdigest(),'lean_binary_sha256':hashlib.sha256(Path('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean').read_bytes()).hexdigest()},indent=2))

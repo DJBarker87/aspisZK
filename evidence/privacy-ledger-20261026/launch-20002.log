@@ -1,0 +1,66 @@
+slot: /tmp/aspis-r0-lean-slot-1.lock
+{"schema": "ProverRwNativeEntropy-reservation-v1", "utc": "2026-10-26T09:08:29.717699+00:00", "requested_bytes": 7516192768, "safe_limit_bytes": 59055800320, "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2", "print_axioms": "N/A: read-only resource gate", "allowed": true, "bounded_reserved_bytes": 26172456960, "projected_reserved_bytes": 33688649728}
+        (Fin 3 → R0Z.FsStatement.OracleAnswer) →
+          R0Z.JointView.View K CommitHandle Aux R1Z.Batched.R1Bat →
+            R0Z.JointView.Challenges K → List (List UInt8 × R0Z.FsStatement.OracleAnswer))
+    (failView : R0Z.JointView.View K CommitHandle Aux R1Z.Batched.R1Bat) (qmax : ℕ) :
+    R1Z.GamesR1.R1Wire K CommitHandle Aux
+def R1Z.PrivacyR1Headline.BuilderPremises : {CommitHandle : Type} →
+  {F : Subfield AspisWideTower.WideExact} →
+    R0Z.JointView.HonestProver AspisWideTower.WideExact →
+      R0P.PackBasis F → R0Z.JointView.Statement AspisWideTower.WideExact CommitHandle → Prop :=
+fun {CommitHandle} {F} h B x =>
+  ∀ (w : h.Instance), h.public w = x.1 → R0P.PublicBase F x.1 ∧ R0Z.HonestValidity.BuilderSoundOn h B x
+def R0Z.HonestValidity.BuilderSoundOn : {K CommitHandle : Type} →
+  [inst : Field K] →
+    {F : Subfield K} → R0Z.D12.HonestProver K → R0P.PackBasis F → R0Z.D12.Statement K CommitHandle → Prop :=
+fun {K CommitHandle} [Field K] {F} h B x =>
+  ∀ (w : h.Instance), h.public w = x.1 → R0Z.HonestValidity.HonestBuilderSound F x.1 B (h.build w)
+structure R0Z.HonestValidity.HonestBuilderSound {K : Type} [Field K] (F : Subfield K) (pub : R0P.Public K)
+  (B : R0P.PackBasis F) (t : R0P.Trace K) : Prop
+number of parameters: 6
+fields:
+  R0Z.HonestValidity.HonestBuilderSound.baseTyped : R0P.BaseTyped F t
+  R0Z.HonestValidity.HonestBuilderSound.lanes : ∀ (lam chi : K) (i : Fin 29) (b : Fin 10 → Bool),
+      ↑i < 28 → R0P.laneOf t pub lam chi B i b = 0
+  R0Z.HonestValidity.HonestBuilderSound.helperSum : ∀ (lam chi : K), ∑ r, R0Z.HonestView.helper pub t lam chi r = 0
+  R0Z.HonestValidity.HonestBuilderSound.helperInactive : ∀ (lam chi : K),
+      ∑ r ∈ R0P.copyInactiveRows, R0Z.HonestView.helper pub t lam chi r = 0
+constructor:
+  R0Z.HonestValidity.HonestBuilderSound.mk {K : Type} [Field K] {F : Subfield K} {pub : R0P.Public K}
+    {B : R0P.PackBasis F} {t : R0P.Trace K} (baseTyped : R0P.BaseTyped F t)
+    (lanes : ∀ (lam chi : K) (i : Fin 29) (b : Fin 10 → Bool), ↑i < 28 → R0P.laneOf t pub lam chi B i b = 0)
+    (helperSum : ∀ (lam chi : K), ∑ r, R0Z.HonestView.helper pub t lam chi r = 0)
+    (helperInactive : ∀ (lam chi : K), ∑ r ∈ R0P.copyInactiveRows, R0Z.HonestView.helper pub t lam chi r = 0) :
+    R0Z.HonestValidity.HonestBuilderSound F pub B t
+structure R1Z.ProverCommitCallerInstance.CallerLaw {K CommitHandle Aux : Type} [Field K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {W : R1Z.GamesR1.R1Wire K CommitHandle Aux}
+  (Pr : R1Z.GamesR1PBin.R1ProverP K CommitHandle Aux R1Z.ProverCommitWordCarrier.sourceBase W) : Prop
+number of parameters: 7
+fields:
+  R1Z.ProverCommitCallerInstance.CallerLaw.blocks₁ : Pr.E₁ = R1Z.ProverCommitSourceDecoder.E₁
+  R1Z.ProverCommitCallerInstance.CallerLaw.blocks₂ : Pr.E₂ = R1Z.ProverCommitSourceDecoder.E₂
+  R1Z.ProverCommitCallerInstance.CallerLaw.quotient : ∃ coordinates,
+      ∀ (e : (Fin Pr.E₁ → R0Z.FsStatement.OracleAnswer) × (Fin Pr.E₂ → R0Z.FsStatement.OracleAnswer)),
+        R1Z.ProverCommitTapeCompletion.quotientDecode (fun e => Pr.tapeOf e.1 e.2) e =
+          Option.map (⇑coordinates)
+            (R1Z.ProverCommitSourceDecoder.quotientDecoder ((R1Z.ProverCommitCallerInstance.inputsTransport Pr ⋯ ⋯) e))
+constructor:
+  R1Z.ProverCommitCallerInstance.CallerLaw.mk {K CommitHandle Aux : Type} [Field K]
+    [Algebra (ZMod AspisCircleGroupOrder.P) K] {W : R1Z.GamesR1.R1Wire K CommitHandle Aux}
+    {Pr : R1Z.GamesR1PBin.R1ProverP K CommitHandle Aux R1Z.ProverCommitWordCarrier.sourceBase W}
+    (blocks₁ : Pr.E₁ = R1Z.ProverCommitSourceDecoder.E₁) (blocks₂ : Pr.E₂ = R1Z.ProverCommitSourceDecoder.E₂)
+    (quotient :
+      ∃ coordinates,
+        ∀ (e : (Fin Pr.E₁ → R0Z.FsStatement.OracleAnswer) × (Fin Pr.E₂ → R0Z.FsStatement.OracleAnswer)),
+          R1Z.ProverCommitTapeCompletion.quotientDecode (fun e => Pr.tapeOf e.1 e.2) e =
+            Option.map (⇑coordinates)
+              (R1Z.ProverCommitSourceDecoder.quotientDecoder
+                ((R1Z.ProverCommitCallerInstance.inputsTransport Pr blocks₁ blocks₂) e))) :
+    R1Z.ProverCommitCallerInstance.CallerLaw Pr
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.92
+	Maximum resident set size (kbytes): 4211488
+	Swaps: 0
+	Exit status: 0
