@@ -1,0 +1,42 @@
+{
+  "attempt": "FIn_K002",
+  "kind": "kani",
+  "source_revision": "9b99d226f72099017fb448bc475d4020c2816188",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo",
+    "kani",
+    "--manifest-path",
+    "FIn_kit/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "FIn_schedule::FIn_polynomial_schedule",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "FIn_kit/Cargo.toml",
+    "FIn_kit/src/lib.rs",
+    "FIn_kit/src/FIn_reference.rs",
+    "FIn_kit/src/FIn_native.rs",
+    "FIn_kit/src/FIn_proofs.rs",
+    "FIn_kit/src/FIn_schedule.rs"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/FIn_target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_RELEASE_OPT_LEVEL": "3",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "source_binding": "FIn_source-pins.json",
+    "core_snapshot": "unchanged op4-install aspis-core; compare exact field source before adoption"
+  },
+  "expected_time": "Optimized compilation then exact Range<usize>::rev().fold index/control schedule, separated from field multiplication formula"
+}

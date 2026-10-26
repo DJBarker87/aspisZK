@@ -21,7 +21,7 @@ theorem laws {W : Type} (seed : FinishOps W) (bytes : Slice U8)
   · intro m claim rhs hq hm
     exact SAG_StageScale.quarter seed m claim rhs hq hm
   · intro alpha value run
-    exact FIn_Polynomial.value bytes alpha value f encoded run
+    exact FIn_BodyArithmetic.value bytes alpha value f encoded run
 
 #print axioms laws
 end AspisR1.FIn_Round

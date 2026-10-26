@@ -1,4 +1,4 @@
-import FIn_Polynomial
+import FIn_BodyArithmetic
 import Rc5_Install
 set_option autoImplicit false
 noncomputable section
@@ -11,7 +11,7 @@ def finishOps {W : Type} (seed : FinishOps W) : FinishOps W :=
   {SAG_StageScale.install seed with
     field := FIn_Primitives.field
     add := FIn_Primitives.add
-    polynomial := FIn_Polynomial.polynomial
+    polynomial := FIn_ExtractInstall.polynomial
     dot := SAG_DotClosed.source}
 
 def select {W C : Type} (c : DrvC_Installation.Configuration W C) :=
@@ -23,7 +23,7 @@ def configuration {W C : Type} (err : C) (c : DrvC_Installation.Configuration W 
 theorem slots {W : Type} (seed : FinishOps W) :
     (finishOps seed).field = FIn_Primitives.field ∧
     (finishOps seed).add = FIn_Primitives.add ∧
-    (finishOps seed).polynomial = FIn_Polynomial.polynomial ∧
+    (finishOps seed).polynomial = FIn_ExtractInstall.polynomial ∧
     (finishOps seed).dot = SAG_DotClosed.source ∧
     (finishOps seed).newWeights = seed.newWeights ∧
     (finishOps seed).pair = seed.pair := ⟨rfl,rfl,rfl,rfl,rfl,rfl⟩
