@@ -181,3 +181,11 @@ callback is total and every returned lane canonical for arbitrary16 raw words.
 FrozenFixtures constructs both canonical fixture carriers and proves record,
 WitnessOk and optional banks stages inhabited. Full compiler-success fibres
 remain open rather than inferred from primitive non-vacuity.
+
+25389–25400: withdrawal unused-recipient erasure preserves every RspendPlus
+conjunct; reference private records equal the recipient-erased canonical
+witness. Zero-digest identity is symbolic over lanes. CanonicalDecode proves
+complete witness recovery (the M31 embedding into itself is identity).
+RecordAdmission.selected derives the unchanged exact RspendPlus interface
+from private-record equality and public association with an existing canonical
+instance. These selected-input joins remain explicit, not globally assumed.
