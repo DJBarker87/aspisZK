@@ -1,0 +1,31 @@
+PoolL_CloseSource.lean:7:78: error: unexpected token '/--'; expected 'lemma'
+PoolL_CloseSource.lean:60:12: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:57:16: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:53:18: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:45:14: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:35:10: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:30:8: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+PoolL_CloseSource.lean:25:6: error(lean.unknownIdentifier): Unknown constant `AspisR1.PoolM_NativeCancelSource.solana_program_error.ProgramError.InvalidAccountData`
+def AspisR1.PoolL_CloseSource.closePrefix : (solana_account_info.AccountInfo → Result Usize) →
+  solana_account_info.AccountInfo →
+    solana_account_info.AccountInfo →
+      solana_pubkey.Pubkey → Usize → Result (core.result.Result Unit solana_program_error.ProgramError) :=
+fun readLength account refund_authority expected_owner expected_data_len => do
+  let b ←
+    core.cmp.impls.PartialEqShared.ne solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey account.owner expected_owner
+  if b = true then ok (core.result.Result.Err sorry)
+    else
+      if account.executable = true then ok (core.result.Result.Err sorry)
+      else
+        if account.is_signer = true then ok (core.result.Result.Err sorry)
+        else
+          if account.is_writable = true then do
+            let b1 ← solana_pubkey.Pubkey.Insts.CoreCmpPartialEqPubkey.eq refund_authority.key account.key
+            if b1 = true then ok (core.result.Result.Err sorry)
+              else
+                if refund_authority.is_writable = true then do
+                  let i ← readLength account
+                  if (i != expected_data_len) = true then ok (core.result.Result.Err sorry)
+                    else ok (core.result.Result.Ok ())
+                else ok (core.result.Result.Err sorry)
+          else ok (core.result.Result.Err sorry)

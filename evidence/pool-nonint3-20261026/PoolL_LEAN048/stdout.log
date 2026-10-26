@@ -1,0 +1,27 @@
+PoolL_CanonicalRoleAccepted.lean:9:80: error: Ambiguous term
+  Error
+Possible interpretations:
+  PoolL_CanonicalRoleControl.Error : Type
+  
+  Std.Error : Type
+PoolL_CanonicalRoleAccepted.lean:13:6: error: Ambiguous term
+  control
+Possible interpretations:
+  _root_.control : (({β : Type ?u.29} → ?m.25 β → ?m.24 (stM ?m.24 ?m.25 β)) → ?m.24 (stM ?m.24 ?m.25 ?m.28)) →
+    ?m.25 ?m.28
+  
+  PoolL_CanonicalRoleControl.control : ∀ (a : Account) (id : Key)
+    (data : core.result.Result (Slice U8) PoolL_CanonicalRoleControl.Error),
+    PoolL_canonical_role a id data =
+      PoolM_NativeCancelGuard.thenResult (PoolL_CanonicalSource.PoolL_canonical_header a id)
+        (PoolL_BorrowSource.PoolL_borrow_length data 1000#usize)
+PoolL_CanonicalRoleAccepted.lean:12:61: error: unsolved goals
+a : Account
+id : Key
+data : core.result.Result (Slice U8) sorry
+⊢ PoolL_canonical_role a id sorry = ok (core.result.Result.Ok ()) ↔
+    a.owner = id ∧
+      a.executable = false ∧
+        a.is_writable = true ∧
+          a.is_signer = false ∧ ∃ bytes, data = core.result.Result.Ok bytes ∧ (↑bytes).length = 1000
+'AspisR1.PoolL_CanonicalRoleAccepted.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
