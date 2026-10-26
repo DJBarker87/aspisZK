@@ -84,3 +84,47 @@ the inherited reference with indexed mutable loops, it uses named straight-line
 word/pass/carry stages. This has no borrowed output and is a genuinely changed
 P6 extraction graph. Its full native correspondence remains OPEN: inherited
 whole-sampler Kani timed out and will not be rerun unchanged.
+
+## Staged sampler reference and blockers
+
+The full by-value staged reference passed Charon and Aeneas (retry1 after an
+uncharged vanished-cgroup barrier failure). Generated source templates expose
+only P and WideExact::new cuts. These are bound to the actual literal and the
+closed named extracted canonical constructor subset; no axiom template is
+imported. Generated shift count32#i32 is normalized to32#u32 for the restored
+library's wrapping_shl signature. PV_CB3_StagedMachineStep.shift_literal checks
+the equal numeric values. All other generated function bodies are unchanged.
+
+35620 proved PV_CB3_StagedGammaTotal.gamma_total over every32-byte input.
+35630 proved PV_CB3_StagedPass.compose/spec against the exact long-division
+recurrence, retaining complete Result. These are owned-reference/source-helper
+results; they do not discharge V256 because whole shipped/reference native
+association remains open. Original full-sampler timeouts are not rerun.
+
+Kani queue STOPPED after its first configuration failure as instructed:
+kani-iterator-frame-indexed-001 used unwind17; builtin memcmp needs more.
+One unwinding check failed;309checks undetermined. This is NOT an equality
+counterexample.2/15fresh Kani runs charged,13unspent under the queue-stop rule.
+No Kani run is scheduled after this failure. The earlier copy-based Kani/native
+discrepancy remains retained, without a claimed fix or checked source counterexample.
+
+Op253 current-crate built-MIR graph: Charon passed; current retained Aeneas
+refused structured Drop without destructor semantics. No guard bypass.
+Op34 allocator-hiding graph: Charon passed; Aeneas still reported the Vec type
+error at alloc/src/vec/mod.rs:438 (new graph, no unchanged failure replay).
+V260 and V185 remain OPEN. Local extraction-wrapper NameError was fixed before
+any compiler launch; it consumed no Lean/Kani run.
+
+A dependent module35615 was prematurely attempted after35614's scalar proof
+failure and failed on the missing prerequisite object. It is charged and
+retained, not credited. The prerequisite was repaired/checked35616 before its
+dependent successful35617. Later dependent queues check prerequisite receipts.
+
+|op|row|latest resumed status|accepted law / residual|receipt|
+|---:|---|---|---|---|
+|51|V195|ROW-DISCHARGED(candidate)|PV_CB3_Op51Arbitrary.op51_source; arbitrary carrier P6|35603.json; kani-wide-arbitrary-001|
+|249|V256|OPEN|full owned reference extracted/total; native shipped=reference gate absent|35620.json;35630.json;resume-staged-provenance.json|
+|253|V260|OPEN|current-crate graph still refused structured Drop|aeneas-source-op253-built-resume|
+|223|V240|OPEN|escaping-reference loan-validation guard|aeneas-source-op223-built-resume|
+|34|V185|OPEN|native Vec layout incompatible; opaque carrier cannot be expanded|aeneas-source-op34-hide-allocator-resume;aeneas-source-op34-method-resume|
+|35|V186|OPEN|constructor-only extraction prepared; admission currently refused|op35-sibling-check-resume-default.json|

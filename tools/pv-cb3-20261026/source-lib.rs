@@ -73,3 +73,17 @@ pub fn compress_tagged_tuple(tag:aspis_core::field::M31,values:&[aspis_core::fie
 #[cfg(kani)]
 #[path = "../kani-proof/reference_split.rs"]
 pub mod staged_reference;
+
+#[cfg(kani)]
+pub use aspis_r1_cost_probe::{transport,verifier,fast_pairing,trace};
+#[cfg(kani)]
+#[path = "../source/crates/aspis-r1-cost-probe/src/weights.rs"]
+pub mod current_weights;
+#[cfg(kani)]
+pub fn current_raw(w:&current_weights::Weights,kind:usize,j:usize)->aspis_core::field::QM31 {
+    w.raw(kind,j)
+}
+#[cfg(kani)]
+pub fn vec_empty<T>(v:&alloc::vec::Vec<T>)->bool {v.is_empty()}
+#[cfg(kani)]
+pub fn vec_default<T>()->alloc::vec::Vec<T> {alloc::vec::Vec::default()}

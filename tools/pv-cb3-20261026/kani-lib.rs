@@ -162,4 +162,26 @@ mod checks {
         assert_eq!(read,expected.0);assert_eq!(actual,expected.1);
     }
 
+    // The earlier frame gate used copy_from_slice and produced a Kani/native
+    // discrepancy. This checks the same iterator frame with indexed writes,
+    // matching the sampler's scalar mutation instead of introducing memcpy.
+    #[kani::proof]
+    #[kani::unwind(17)]
+    fn iterator_back_frame_indexed() {
+        let data:[u32;8]=kani::any(); let updates:[u32;8]=kani::any();
+        let remaining:usize=kani::any(); kani::assume(remaining<=8);
+        let last:u32=kani::any(); let mut actual=data; let read;
+        {
+            let mut iter=actual[..remaining].iter_mut();
+            read=iter.next_back().map(|word| {let old=*word; *word=last; old});
+            let rest=iter.into_slice();
+            let n=if remaining==0 {0}else{remaining-1};
+            assert_eq!(rest.len(),n);
+            let mut i=0;
+            while i<n { rest[i]=updates[i]; i+=1; }
+        }
+        let expected=super::reference_split::back_frame(&data,remaining,&updates,last);
+        assert_eq!(read,expected.0); assert_eq!(actual,expected.1);
+    }
+
 }
