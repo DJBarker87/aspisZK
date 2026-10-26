@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18FieldBytes.lean:14:93: error: unsolved goals
+x : Raw
+⊢ ↑(core.num.U32.to_le_bytes
+          (ProverRwDictionaryTower.fromC (ProverCommitRelease47.convQ (ProverCommitPrimitive47.fromQ x)).c0).a) ++
+      (↑(core.num.U32.to_le_bytes
+            (ProverRwDictionaryTower.fromC (ProverCommitRelease47.convQ (ProverCommitPrimitive47.fromQ x)).c0).b) ++
+        (↑(core.num.U32.to_le_bytes
+              (ProverRwDictionaryTower.fromC (ProverCommitRelease47.convQ (ProverCommitPrimitive47.fromQ x)).c1).a) ++
+          ↑(core.num.U32.to_le_bytes
+              (ProverRwDictionaryTower.fromC (ProverCommitRelease47.convQ (ProverCommitPrimitive47.fromQ x)).c1).b))) =
+    ↑(core.num.U32.to_le_bytes (![x.c0.a, x.c0.b, x.c1.a, x.c1.b] 0)) ++
+      (↑(core.num.U32.to_le_bytes (![x.c0.a, x.c0.b, x.c1.a, x.c1.b] (Fin.succ 0))) ++
+        (↑(core.num.U32.to_le_bytes (![x.c0.a, x.c0.b, x.c1.a, x.c1.b] (Fin.succ 0).succ)) ++
+          ↑(core.num.U32.to_le_bytes (![x.c0.a, x.c0.b, x.c1.a, x.c1.b] (Fin.succ 0).succ.succ))))
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18FieldBytes.lean:27:2: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  List.ofFn
+      (List.map ProverCommitWordBytes47.rawByte ∘ fun i =>
+        ↑(core.num.U32.to_le_bytes (ProverCommitLimbBytes47.sourceLimb x i))) =
+    List.ofFn fun i => List.ofFn (encodeM31LE (ProverCommitLimbBytes47.limbs x hx i))
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.17} {β : α → Sort ?u.16} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+x : Raw
+hx : Canonical x
+⊢ List.ofFn
+      (List.map ProverCommitWordBytes47.rawByte ∘ fun i =>
+        ↑(core.num.U32.to_le_bytes (ProverCommitLimbBytes47.sourceLimb x i))) =
+    List.ofFn fun i => List.ofFn (encodeM31LE (ProverCommitLimbBytes47.limbs x hx i))
+'R1Z.ProverRw18FieldBytes.words' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw18FieldBytes.encoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       77.77 real         1.91 user         8.45 sys
+          1631322112  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              434891  page reclaims
+              341098  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               20159  voluntary context switches
+              469111  involuntary context switches
+           416775472  instructions retired
+           215620134  cycles elapsed
+            12059488  peak memory footprint
+
+25961 1 77.77 1631322112

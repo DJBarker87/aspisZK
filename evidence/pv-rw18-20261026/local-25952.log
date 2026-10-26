@@ -1,0 +1,53 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18ComplexWrite.lean:15:68: error: unsolved goals
+x : C
+out : Slice U8
+⊢ (do
+      let (s, index_mut_back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+            { start := 0#usize, «end» := 4#usize }
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U32.to_le_bytes x.a).to_slice
+      let (s3, index_mut_back1) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back s2)
+            { start := 4#usize, «end» := 8#usize }
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 (core.num.U32.to_le_bytes x.b).to_slice
+      ok (index_mut_back1 s5)) =
+    do
+    let x_1 ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+          { start := 0#usize, «end» := 4#usize }
+    let x_2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x_1.1 (core.num.U32.to_le_bytes x.a).to_slice
+    let (segment, back) ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (x_1.2 x_2)
+          { start := 4#usize, «end» := 8#usize }
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 segment (core.num.U32.to_le_bytes x.b).to_slice
+    ok (back copied)
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18ComplexWrite.lean:30:65: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val`
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18ComplexWrite.lean:30:6: error: Type mismatch: After simplification, term
+  bound
+ has type
+  @LE.le ℕ instLENat 8 (↑out).length
+but is expected to have type
+  @LE.le ℕ instLENat (↑8#usize) (↑out).length
+'R1Z.ProverRw18ComplexWrite.context' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRw18ComplexWrite.word_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRw18ComplexWrite.exact_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+        7.01 real         0.99 user         1.62 sys
+          2007629824  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              170693  page reclaims
+               28230  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+                6587  voluntary context switches
+               53608  involuntary context switches
+           327052223  instructions retired
+           118770776  cycles elapsed
+            11109072  peak memory footprint
+
+25952 1 7.01 2007629824

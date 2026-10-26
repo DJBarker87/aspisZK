@@ -210,3 +210,29 @@ No recursion/heartbeat cap was raised.25945--25949 are green with standard
 axioms only. Exact snapshots, statuses, wall/RSS/swap/revision and axiom lines
 are in their receipts. Sibling op223 remains OPEN on the stage5 read-only
 branch inspection.
+
+## Stage 4: exact compression bytes and resumable components
+
+Before: the new component theorems related returned QM31 values to the
+mathematical compression polynomial. After: `QuarticWrite.exact_write` and
+`QuarticBytes.output_value` prove the retained extracted QM31 writer writes
+all16 bytes in limb order and preserves the suffix of any sufficiently large
+output slice. `CanonicalBytes.field_image` identifies these bytes with the
+existing retained field codec; `CompressionWrite.bytes` consumes the closed
+compression theorem through that writer. None asserts that the whole prover
+proof-byte vector or its audit equals a concrete security-model output.
+The live callback source identities remain separate, including op223.
+
+`ArrayValues` adapts the source arity16 array without a caller-supplied
+representation equation. `FoldAppend` preserves full Result fail/div behavior
+when joining prefixes and suffixes. `PolynomialAppend` supplies the matching
+field recurrence identity. `LambdaEdges` proves the zero/unit-lambda cases
+symbolically for arbitrary lists. These checks do not use the out-of-cadence
+Kani012 whole-loop diagnostic as a proof certificate.
+
+Attempt25957 failed dependency preflight before invoking Lean because
+`ComplexBytes` was still being checked; it is zero charged, and no two Lean
+processes from this job overlapped.25958 used a fresh ID after the predecessor
+finished. Together with25901, this explains why the ID range has two more
+entries than the charged compile count. No cap or shared infrastructure was
+changed.

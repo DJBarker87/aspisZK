@@ -1,0 +1,21 @@
+import Aeneas
+set_option autoImplicit false
+namespace R1Z.ProverRw18Overlay
+
+theorem zero {A : Type} (dest src : List A) (bound : src.length≤dest.length) :
+    dest.setSlice! 0 src=src++dest.drop src.length := by
+  simp [List.setSlice!,List.take_of_length_le bound]
+
+theorem adjacent {A : Type} (dest left right : List A)
+    (bound : left.length+right.length≤dest.length) :
+    (dest.setSlice! 0 left).setSlice! left.length right=
+      (left++right)++dest.drop (left.length+right.length) := by
+  have hl : left.length≤dest.length := by omega
+  rw [zero dest left hl]
+  simp [List.setSlice!,List.take_append,List.drop_append,List.drop_drop,
+    List.take_of_length_le (by omega : right.length≤dest.length-left.length),List.append_assoc]
+
+#print List.setSlice!
+#print axioms zero
+#print axioms adjacent
+end R1Z.ProverRw18Overlay

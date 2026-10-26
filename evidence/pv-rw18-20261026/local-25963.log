@@ -1,0 +1,38 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/ProverRw18CodecGroups.lean:10:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => List.ofFn (encodeQM31LE limbs) = (List.ofFn fun i => List.ofFn (encodeM31LE (limbs i))).flatten
+Error: Application type mismatch: The argument
+  encodeQM31LE limbs
+has type
+  QM31Bytes
+but is expected to have type
+  Fin _a → AspisR1.RetainedFieldByteCodec.Byte
+in the application
+  List.ofFn (encodeQM31LE limbs)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+limbs : QM31Limbs
+⊢ List.ofFn (encodeQM31LE limbs) = (List.ofFn fun i => List.ofFn (encodeM31LE (limbs i))).flatten
+'R1Z.ProverRw18CodecGroups.grouped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       26.01 real         1.40 user         4.00 sys
+          2347237376  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              314763  page reclaims
+              142597  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               10432  voluntary context switches
+              172300  involuntary context switches
+           409134808  instructions retired
+           194611513  cycles elapsed
+            11535080  peak memory footprint
+
+25963 1 26.01 2347237376

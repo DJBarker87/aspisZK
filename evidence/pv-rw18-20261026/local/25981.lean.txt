@@ -1,0 +1,29 @@
+import R1Z.ProverRw18CanonicalBytes
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18CodecDecode
+open Aeneas Aeneas.Std ProverRw18FieldMeaning
+open AspisR1.RetainedFieldByteCodec
+
+theorem fixed (n : Nat) (bytes : Fin n → Byte) : fixedBytes? n (List.ofFn bytes)=some bytes := by
+  simp [fixedBytes?]
+
+theorem canonical (x : Raw) (hx : Canonical x) :
+    decodeQM31Bytes ((ProverRw18QuarticBytes.bytes (full x)).map ProverCommitWordBytes47.rawByte)=
+      some (ProverCommitLimbBytes47.limbs x hx) := by
+  rw [ProverRw18CanonicalBytes.image x hx]
+  unfold decodeQM31Bytes
+  rw [fixed]
+  exact decodeQM31LE_encodeQM31LE _
+
+theorem field (x : K) :
+    (decodeQM31Bytes ((ProverRw18QuarticBytes.bytes (full (ProverRw18FieldEncode.encode x))).map
+      ProverCommitWordBytes47.rawByte)).map
+        AspisR1.RetainedExactLimbCodec.qm31ExactLimbEquiv=some x := by
+  rw [canonical _ (ProverRw18FieldEncode.canonical x)]
+  simp only [Option.map_some,ProverCommitLimbBytes47.limbs_decode,ProverRw18FieldEncode.decoded]
+
+#print axioms fixed
+#print axioms canonical
+#print axioms field
+end R1Z.ProverRw18CodecDecode

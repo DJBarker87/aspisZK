@@ -1,0 +1,32 @@
+import R1Z.ProverRw18QuarticBytes
+import R1Z.ProverRw18FieldEncode
+import R1Z.ProverCommitLimbBytes47
+import Mathlib.Data.List.OfFn
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRw18FieldBytes
+open Aeneas Aeneas.Std ProverRw18FieldMeaning
+open AspisR1.RetainedFieldByteCodec
+
+theorem words (x : Raw) :
+    ProverRw18QuarticBytes.bytes (full x)=
+      (List.ofFn (fun i : Fin 4 =>
+        (core.num.U32.to_le_bytes (ProverCommitLimbBytes47.sourceLimb x i)).val)).flatten := by
+  simp only [ProverRw18QuarticBytes.bytes,ProverRw18ComplexBytes.bytes,
+    ProverRw18ComplexWrite.word,full,ProverRwDictionaryTower.fromQ,
+    ProverCommitNativeQ48.source,Array.to_slice,ProverCommitLimbBytes47.sourceLimb,
+    List.ofFn_succ,List.ofFn_zero,List.flatten_cons,List.flatten_nil,List.append_nil,
+    List.append_assoc]
+
+theorem encoded (x : Raw) (hx : Canonical x) :
+    (ProverRw18QuarticBytes.bytes (full x)).map ProverCommitWordBytes47.rawByte=
+      (List.ofFn (fun i : Fin 4 =>
+        List.ofFn (encodeM31LE (ProverCommitLimbBytes47.limbs x hx i)))).flatten := by
+  rw [words,List.map_flatten,List.map_ofFn]
+  congr 1
+  funext i
+  exact ProverCommitLimbBytes47.limb_bytes x hx i
+
+#print axioms words
+#print axioms encoded
+end R1Z.ProverRw18FieldBytes

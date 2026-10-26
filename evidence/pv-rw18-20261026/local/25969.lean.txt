@@ -1,0 +1,22 @@
+import R1Z.ProverRw18CopyReference
+set_option autoImplicit false
+namespace R1Z.ProverRw18ArrayValues
+open Aeneas Aeneas.Std
+
+def elements (values : Array U32 16#usize) (i : Fin 16) : U32 :=
+  values.val[i.val]'(by have h := values.property;change values.val.length=16 at h;omega)
+
+theorem ofFn (values : Array U32 16#usize) : List.ofFn (elements values)=values.val := by
+  apply List.ext_getElem
+  · simpa only [List.length_ofFn] using values.property.symm
+  · intro i hi hj
+    simp only [List.getElem_ofFn,elements]
+
+theorem input (values : Array U32 16#usize) :
+    ProverRw18CopyReference.input (elements values)=Array.to_slice values := by
+  apply Subtype.ext
+  exact ofFn values
+
+#print axioms ofFn
+#print axioms input
+end R1Z.ProverRw18ArrayValues
