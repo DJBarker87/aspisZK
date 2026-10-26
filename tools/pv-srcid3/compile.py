@@ -3,12 +3,17 @@
 import hashlib,json,pathlib,re,subprocess,sys,datetime
 root=pathlib.Path(__file__).resolve().parents[2]
 a=int(sys.argv[1]); m=sys.argv[2]
-assert 25300 <= a <= 25599 and m.startswith('PV_Src_')
+assert 27400 <= a <= 27699 and m.startswith('PV_Src_')
 host='dombarker@100.108.41.90'
 job='/home/dombarker/project-offloads/codex-pv-srcid-20261026'
 joint='/home/dombarker/project-offloads/aspis-joint-20261019'
 t='/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 e=root/'evidence/pv-srcid3-20261026';e.mkdir(exist_ok=True)
+flag=pathlib.Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag')
+if not flag.is_file():
+ print('HOST REBUILD GATE CLOSED: no host access or compile; zero charge')
+ sys.exit(78)
+print('Host restoration instructions: '+flag.read_text(),flush=True)
 # Fixed user hold applies even if the shared reservation marker disappears.
 now=datetime.datetime.now(datetime.timezone.utc)
 quiet_until=datetime.datetime(2026,10,26,18,15,tzinfo=datetime.timezone.utc)

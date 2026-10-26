@@ -4,6 +4,11 @@ import datetime,json,pathlib,shlex,subprocess,sys,time
 root=pathlib.Path(__file__).resolve().parents[2];e=root/'evidence/pv-srcid3-20261026'
 host='dombarker@100.108.41.90';job='/home/dombarker/project-offloads/codex-pv-srcid-20261026'
 name,harness,seconds=sys.argv[1:4];metadata=harness=='metadata'
+flag=pathlib.Path('/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag')
+if not flag.is_file():
+ print('HOST REBUILD GATE CLOSED: no host access or Kani; zero charge')
+ sys.exit(78)
+print('Host restoration instructions: '+flag.read_text(),flush=True)
 now=datetime.datetime.now(datetime.timezone.utc)
 assert not (datetime.datetime(2026,10,26,17,45,tzinfo=datetime.timezone.utc)<=now<datetime.datetime(2026,10,26,18,15,tzinfo=datetime.timezone.utc))
 def ssh(cmd):return subprocess.run(['ssh',host,cmd],capture_output=True,text=True)
@@ -21,7 +26,7 @@ cmd=['systemd-run','--user','--scope','--quiet','--unit=pv-'+name,'-p','MemoryHi
 if metadata:cmd+=['--only-codegen','--harness','pv_srcid3']
 else:cmd+=['-j','4','--exact','--harness',harness,'--output-format','terse','--cbmc-args','--unwinding-assertions','--slice-formula']
 f=e/'kani-invocations.jsonl';number=len(f.read_text().splitlines())+1
-assert number<=12
+assert number<=20
 record=dict(number=number,name=name,harness=harness,command=cmd,source_revision=rev)
 with f.open('a') as out:out.write(json.dumps(record)+'\n')
 print('CHARGED '+json.dumps(record),flush=True)
