@@ -1,0 +1,109 @@
+'R0P.SemBadSets.univariate_bad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.coordinate_bad_card' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R0P.SemBadSets.round_bad_union_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.sumcheck_rounds_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.zerocheck_bad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.rootProduct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.rootProduct_coeff_degree' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R0P.SemBadSets.product_difference_coeff' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R0P.SemBadSets.univariate_bad_card : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] (p : Polynomial K),
+  p ≠ 0 → ∀ (d : ℕ), p.natDegree ≤ d → {x | Polynomial.eval x p = 0}.card ≤ d
+@R0P.SemBadSets.round_bad_union_card : ∀ {K : Type} [inst : Fintype K] {n d : ℕ} (bad : Fin n → Finset K),
+  (∀ (i : Fin n), (bad i).card ≤ d) → Fintype.card { α // ∃ i, α i ∈ bad i } ≤ n * d * Fintype.card K ^ (n - 1)
+@R0P.SemBadSets.sumcheck_rounds_bad : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] {n d : ℕ}
+  (p : Fin n → Polynomial K),
+  (∀ (i : Fin n), p i ≠ 0) →
+    (∀ (i : Fin n), (p i).natDegree ≤ d) →
+      Fintype.card { α // ∃ i, Polynomial.eval (α i) (p i) = 0 } ≤ n * d * Fintype.card K ^ (n - 1)
+@R0P.SemBadSets.zerocheck_bad : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] {n : ℕ} (p : MvPolynomial (Fin n) K),
+  p ≠ 0 →
+    (∀ (i : Fin n), MvPolynomial.degreeOf i p ≤ 1) →
+      Fintype.card { z // (MvPolynomial.eval z) p = 0 } ≤ n * Fintype.card K ^ (n - 1)
+@R0P.SemBadSets.product_difference_coeff : ∀ {K : Type} [inst : Field K] (S T : Multiset (Polynomial K)),
+  S ≠ T →
+    (∀ q ∈ S, q.natDegree ≤ 16) →
+      (∀ q ∈ T, q.natDegree ≤ 16) →
+        (Multiset.map (fun q => Polynomial.X - Polynomial.C q) S).prod ≠
+            (Multiset.map (fun q => Polynomial.X - Polynomial.C q) T).prod ∧
+          ∃ j,
+            ((Multiset.map (fun q => Polynomial.X - Polynomial.C q) S).prod -
+                      (Multiset.map (fun q => Polynomial.X - Polynomial.C q) T).prod).coeff
+                  j ≠
+                0 ∧
+              (((Multiset.map (fun q => Polynomial.X - Polynomial.C q) S).prod -
+                        (Multiset.map (fun q => Polynomial.X - Polynomial.C q) T).prod).coeff
+                    j).natDegree ≤
+                16 * max S.card T.card
+'R0P.SemBadSets.MLDeg' depends on axioms: [propext, Quot.sound]
+'R0P.SemBadSets.mlDeg_const' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_mono' depends on axioms: [propext, Quot.sound]
+'R0P.SemBadSets.mlDeg_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.bsum_polynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_indDeg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.indDeg_of_multilinear_product' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.affine_polynomial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_eqwB' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.mlDeg_mle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.filter_card_fin_cons' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.muRootPoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.badMu_card_of_nonzero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R0P.SemBadSets.badMu_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.thetaRootPoly' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.badTheta_card_of_nonzero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R0P.SemBadSets.badTheta_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.affine_zero_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.mle_bad_card_of_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R0P.SemBadSets.mle_bad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.badZc_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.strategyPrefix' does not depend on any axioms
+'R0P.SemBadSets.strategyPolys' depends on axioms: [propext, Quot.sound]
+'R0P.SemBadSets.strategyAccept' depends on axioms: [propext, Quot.sound]
+'R0P.SemBadSets.badAlphaStrategy' depends on axioms: [propext, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.strategyPrefix_cons_succ' depends on axioms: [propext, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.strategyPolys_tail' depends on axioms: [propext, Quot.sound]
+'_private.R0P.SemBadSets.0.R0P.SemBadSets.strategyAccept_cons_iff' depends on axioms: [propext, Quot.sound]
+'R0P.SemBadSets.adaptive_strategy_bad_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0P.SemBadSets.badAlpha_strategy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R0P.SemBadSets.badMu_card : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [DecidableEq K] (a s1 s2 : K),
+  {μ | R0P.Sumcheck.BadMu a s1 s2 μ}.card ≤ 2
+@R0P.SemBadSets.badTheta_card : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [DecidableEq K]
+  (lanes : Fin 29 → (Fin 10 → Bool) → K), {θ | R0P.Sumcheck.BadTheta lanes θ}.card ≤ 28
+@R0P.SemBadSets.mle_bad_card : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [inst_2 : DecidableEq K] (n : ℕ)
+  (f : (Fin n → Bool) → K), f ≠ 0 → {z | R0P.Sumcheck.mle n f z = 0}.card ≤ n * Fintype.card K ^ (n - 1)
+@R0P.SemBadSets.badZc_card : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] [DecidableEq K]
+  (f : (Fin 10 → Bool) → K), {z | R0P.Sumcheck.BadZc f z}.card ≤ 10 * Fintype.card K ^ 9
+@R0P.SemBadSets.badAlpha_strategy : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K] (G : (Fin 10 → K) → K)
+  (strat : (i : Fin 10) → (Fin ↑i → K) → Polynomial K),
+  R0P.Sumcheck.IndDeg 27 10 G →
+    {α |
+          R0P.Sumcheck.accept 27 10 G 0 (fun i => strat i fun j => α (Fin.castLE ⋯ j)) α ∧
+            R0P.Sumcheck.bsum 10 G ≠ 0}.card ≤
+      10 * 27 * Fintype.card K ^ 9
+@R0P.SemBadSets.MLDeg : {K : Type} → [Field K] → ℕ → (n : ℕ) → ((Fin n → K) → K) → Prop
+@R0P.SemBadSets.mlDeg_indDeg : ∀ {K : Type} [inst : Field K] {d n : ℕ} {G : (Fin n → K) → K},
+  R0P.SemBadSets.MLDeg d n G → R0P.Sumcheck.IndDeg d n G
+@R0P.SemBadSets.indDeg_of_multilinear_product : ∀ {K : Type} [inst : Field K] {d e n : ℕ} {G H : (Fin n → K) → K},
+  R0P.SemBadSets.MLDeg d n G → R0P.SemBadSets.MLDeg e n H → R0P.Sumcheck.IndDeg (d + e) n fun v => G v * H v
+@R0P.SemBadSets.mlDeg_add : ∀ {K : Type} [inst : Field K] {d e n : ℕ} {G H : (Fin n → K) → K},
+  R0P.SemBadSets.MLDeg d n G → R0P.SemBadSets.MLDeg e n H → R0P.SemBadSets.MLDeg (max d e) n fun v => G v + H v
+@R0P.SemBadSets.mlDeg_mul : ∀ {K : Type} [inst : Field K] {d e n : ℕ} {G H : (Fin n → K) → K},
+  R0P.SemBadSets.MLDeg d n G → R0P.SemBadSets.MLDeg e n H → R0P.SemBadSets.MLDeg (d + e) n fun v => G v * H v
+@R0P.SemBadSets.mlDeg_smul : ∀ {K : Type} [inst : Field K] {d n : ℕ} {G : (Fin n → K) → K} (c : K),
+  R0P.SemBadSets.MLDeg d n G → R0P.SemBadSets.MLDeg d n fun v => c * G v
+@R0P.SemBadSets.mlDeg_eqwB : ∀ {K : Type} [inst : Field K] (n : ℕ) (b : Fin n → Bool),
+  R0P.SemBadSets.MLDeg 1 n fun z => R0P.Sumcheck.eqwB n z b
+@R0P.SemBadSets.mlDeg_mle : ∀ {K : Type} [inst : Field K] (n : ℕ) (f : (Fin n → Bool) → K),
+  R0P.SemBadSets.MLDeg 1 n (R0P.Sumcheck.mle n f)
