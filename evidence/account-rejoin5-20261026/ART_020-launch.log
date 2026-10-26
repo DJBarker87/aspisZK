@@ -1,0 +1,55 @@
+{"attempt": "ART_020", "exit_status": 1, "wall_seconds": 2.3229385250015184, "peak_rss_kib": "5371036", "swaps": "0", "print_axioms": ["'AspisR1.ART_Cost.represented' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.ART_Cost.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ART_Cost.lean:16:53: error: unsolved goals
+case h_1
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+native H : Bytes → State
+reply✝ : Result (core.result.Result (alloc.vec.Vec U8 × Heap (ℕ → Record) × A) AdapterRw.Cuts.PE)
+saved✝ : alloc.vec.Vec U8
+post✝ : Heap (ℕ → Record)
+final✝ : A
+heq✝ :
+  (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 =
+    ok (core.result.Result.Ok (saved✝, post✝, final✝))
+⊢ (eval native a.first).1.length +
+      (L
+...
+
+native H : Bytes → State
+reply✝ : Result (core.result.Result (alloc.vec.Vec U8 × Heap (ℕ → Record) × A) AdapterRw.Cuts.PE)
+saved✝ : alloc.vec.Vec U8
+post✝ : Heap (ℕ → Record)
+final✝ : A
+heq✝ :
+  (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 =
+    ok (core.result.Result.Ok (saved✝, post✝, final✝))
+⊢ (eval native a.first).1.length +
+      (List.length (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 +
+        ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).1.length +
+          List.length
+            (SdkC_Source.run hashv
+                (secondSyntax c hashv allocator id
+                  (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+                []).2)) =
+    match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+    | ok (core.result.Result.Ok (saved, post, final)) =>
+      (eval native a.first).1.length +
+        (List.length (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 +
+          ((eval native (a.second (eval native a.first).2 saved post final)).1.length +
+            List.length
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved post final)).2)
+                  []).2))
+    | x =>
+      (eval native a.first).1.length +
+        List.length (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2
+'AspisR1.ART_Cost.represented' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ART_Cost.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4d136512cb69425093b199c3da25a01f.scope; invocation ID: c6737b90534f467e8cd6d6fd8b22496d
