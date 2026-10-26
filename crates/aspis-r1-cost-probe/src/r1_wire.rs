@@ -1028,3 +1028,135 @@ mod pdict_ordering_contracts {
         assert_eq!(U512::default().is_less_or_equal(U256::default()),B0);
     }
 }
+
+#[cfg(kani)]
+mod pdict_representation_contracts {
+    #[kani::proof]
+    fn f64_raw_bit_roundtrip() {
+        let bits:u64=kani::any();
+        assert_eq!(f64::from_bits(bits).to_bits(),bits);
+    }
+    #[kani::proof]
+    fn uint_default_clone_all_scalar_fields() {
+        use core::sync::atomic::{AtomicU8,Ordering};
+        use sha2::digest::typenum::UInt;
+        static STEP:AtomicU8=AtomicU8::new(0);
+        #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Upper(u64);
+        #[derive(Clone,Copy,Debug,PartialEq,Eq)] struct Lower(u8);
+        impl Default for Upper { fn default()->Self {
+            assert_eq!(STEP.fetch_add(1,Ordering::Relaxed),0); Self(kani::any())
+        }}
+        impl Default for Lower { fn default()->Self {
+            assert_eq!(STEP.fetch_add(1,Ordering::Relaxed),1); Self(kani::any())
+        }}
+        STEP.store(0,Ordering::Relaxed);
+        let native=UInt::<Upper,Lower>::default();
+        assert_eq!(STEP.load(Ordering::Relaxed),2);
+        assert_eq!(native.clone(),native);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_error_value_contracts {
+    #[kani::proof]
+    fn complete_getrandom_error_value_codec() {
+        let raw=core::num::NonZeroI32::new(kani::any())
+            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());
+        assert_eq!(core::mem::size_of::<getrandom::Error>(),4);
+        assert_eq!(core::mem::align_of::<getrandom::Error>(),4);
+        // Every nonzero code is a valid value of the sole NonZeroI32 field.
+        // No OS function, entropy provider or destructor is stubbed or called.
+        let error:getrandom::Error=unsafe { core::mem::transmute(raw) };
+        let cloned=error.clone(); assert_eq!(error,cloned);
+        let copied=error;
+        let encoded:core::num::NonZeroI32=unsafe { core::mem::transmute(copied) };
+        assert_eq!(encoded,raw);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_options_contracts {
+    use std::fs::OpenOptions;
+    use std::os::unix::fs::OpenOptionsExt;
+    #[derive(Clone,Copy,Debug,PartialEq,Eq)]
+    struct State {
+        read:bool, write:bool, append:bool, truncate:bool, create:bool,
+        create_new:bool, custom_flags:i32, mode:u32,
+    }
+    // Complete primitive-field view of the pinned Unix OpenOptions schema.
+    // Reading a bool at an incorrect offset is checked by Kani's validity rules.
+    fn view(options:&OpenOptions)->State {
+        assert_eq!(core::mem::size_of::<OpenOptions>(),core::mem::size_of::<State>());
+        assert_eq!(core::mem::align_of::<OpenOptions>(),core::mem::align_of::<State>());
+        assert!(!core::mem::needs_drop::<OpenOptions>());
+        unsafe { core::mem::transmute_copy(options) }
+    }
+    fn arbitrary()->(OpenOptions,State) {
+        let state=State{read:kani::any(),write:kani::any(),append:kani::any(),
+            truncate:kani::any(),create:kani::any(),create_new:kani::any(),
+            custom_flags:kani::any(),mode:kani::any()};
+        let mut options=OpenOptions::new();
+        options.read(state.read).write(state.write).append(state.append)
+            .truncate(state.truncate).create(state.create).create_new(state.create_new)
+            .custom_flags(state.custom_flags).mode(state.mode);
+        assert_eq!(view(&options),state);
+        (options,state)
+    }
+    #[kani::proof]
+    fn complete_options_state_and_new() {
+        let options=OpenOptions::new();
+        assert_eq!(view(&options),State{read:false,write:false,append:false,
+            truncate:false,create:false,create_new:false,custom_flags:0,mode:0o666});
+        let _=arbitrary();
+    }
+    #[kani::proof]
+    fn write_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let flag:bool=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.write(flag) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.write=flag; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    fn create_new_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let flag:bool=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.create_new(flag) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.create_new=flag; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    fn mode_loan_and_frame() {
+        let (mut options,mut expected)=arbitrary();
+        let mode:u32=kani::any();
+        let receiver=&mut options as *mut OpenOptions;
+        let returned=options.mode(mode) as *mut OpenOptions;
+        assert_eq!(receiver,returned);
+        expected.mode=mode; assert_eq!(view(&options),expected);
+    }
+    #[kani::proof]
+    #[kani::unwind(6)]
+    fn path_short_bytes_and_shared_view() {
+        use std::os::unix::ffi::OsStringExt;
+        use std::path::{Path,PathBuf};
+        let bytes:[u8;4]=kani::any(); let len:usize=kani::any(); kani::assume(len<=4);
+        let owned=std::ffi::OsString::from_vec(bytes[..len].to_vec());
+        let buf=PathBuf::from(owned);
+        let a=buf.as_path(); let b:&Path=buf.as_ref(); let c:&Path=&*buf;
+        assert!(core::ptr::eq(a,b)); assert!(core::ptr::eq(a,c));
+        assert!(core::ptr::eq(a,a.as_ref()));
+        assert_eq!(a.as_os_str().as_encoded_bytes(),&bytes[..len]);
+    }
+    #[kani::proof]
+    fn native_layout_fields_and_alignment() {
+        let shift:u32=kani::any(); kani::assume(shift<64);
+        let size:usize=kani::any(); let align=1usize<<shift;
+        if let Ok(layout)=std::alloc::Layout::from_size_align(size,align) {
+            assert_eq!(layout.size(),size); assert_eq!(layout.align(),align);
+        }
+        let empty=std::alloc::Layout::from_size_align(0,align).unwrap();
+        assert_eq!(empty.size(),0); assert_eq!(empty.align(),align);
+    }
+}

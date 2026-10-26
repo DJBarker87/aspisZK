@@ -19,7 +19,14 @@ for p in sorted(e.glob('*-input.json')):
    if 'depends on axioms:' in report:
     names=report.split('depends on axioms: [')[1].split(']')[0].replace('\n','').split(',')
     assert set(n.strip() for n in names)<= {'propext','Classical.choice','Quot.sound'}
- command=f"sh {x['launcher']} {a} {x['module']} J 7000 7 {x['deps_fingerprint']}"
+ ledger=[line.split() for line in (e/'launcher-sent.txt').read_text().splitlines() if line.split()[2]==str(a)] if (e/'launcher-sent.txt').exists() else []
+ sent_fp=ledger[-1][-1] if ledger else x['deps_fingerprint']
+ if ledger:assert ledger[-1][0]==x['source_sha256'] and ledger[-1][3]==x['module']
+ x['launcher_deps_fingerprint']=sent_fp
+ x['fingerprint_label_matches_inputs']=sent_fp==x['deps_fingerprint']
+ if sent_fp!=x['deps_fingerprint']:
+  x['fingerprint_label_error']='12032 was launched once with an incorrect deduplication label. It was not a refusal workaround. The independent source/dependency snapshot and final object-hash verification are authoritative; no shared ledger was edited and no unchanged compile rerun.'
+ command=f"sh {x['launcher']} {a} {x['module']} J 7000 7 {sent_fp}"
  x.update(exit_status=status,command=command,time_log=time,print_axioms=axioms,errors=[l for l in log.splitlines() if 'error:' in l],disposition='Accepted focused source proof, not formal release evidence' if status==0 else 'Rejected; preserved changed successor/split required')
  if a==11601:x['disposition']='Reservation refused before Lean; changed/split successor11602; no time/RSS/axioms exist'
  (e/f'{a}-receipt.json').write_text(json.dumps(x,indent=2)+'\n')
