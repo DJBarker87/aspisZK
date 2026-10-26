@@ -61,3 +61,34 @@ statements, omits only words, and obtains words from the proved canonical
 encoding under the dynamic reference dictionary. No RspendPlus, trace
 equality or successful compiler call is smuggled into a data definition.
 Actual mapper P6 and installed input association remain separate obligations.
+
+## Compiled reference-side results (18:21 UTC checkpoint)
+
+CheckedEncoding, CheckedValidation, CheckedVariants, CheckedFixtures,
+CanonicalRequest, RecordDynamic, CheckedCanonical, SelectedFour and
+SelectedConsumer are green. The four-field remainder genuinely omits words
+and the unchanged BuilderPremises consumer accepts it, but its dictionary
+is the explicit dynamic owned reference and selected inputs are canonical
+encodings. This is **5 → 4 for that reference-side selected family**, not a
+claim that the deployed native endpoint's five fields have become four.
+Unstubbed P6 and installed selection still require their evidence.
+
+ReturnedSnapshot, RecordDynamicResult, PublicHeader and PublicParts are green.
+On successful compilation the constructor/returned-public association supplies
+variant, asset, next and frontier. Remaining pure publicCorr inputs are exactly:
+
+```
+∀ l : Fin 20, Canon8 i.snapshot.frontier.val[l.val]!
+∀ roots, pair_empty_roots = ok roots → ∀ l : Fin 20,
+  DigestLift roots.val[l.val]! (emptyRootK l)
+∀ roots, pair_empty_roots = ok roots → ∀ l : Fin 20,
+  Canon8 roots.val[l.val]!
+```
+
+These are pure source obligations, not effects. BanksTotal/CheckedPipeline
+prove successful record construction, WitnessOk and successful optional bank
+return for both canonical fixture carriers, for every supplied root table.
+They do not yet prove a successful dynamic root call or full forest compiler.
+
+25326 was refused by aggregate reservation at 18:21:00 UTC, charged zero.
+Earliest retry is 18:24:00 UTC with the next unused ID, 25327.
