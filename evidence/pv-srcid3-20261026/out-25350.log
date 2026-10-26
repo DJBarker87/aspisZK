@@ -1,0 +1,162 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:35:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne ?x ?x
+in the target expression
+  (if false = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+    else
+      if false = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+      else
+        if (binding.anchor_sequence != binding.anchor_sequence) = true then
+          ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+        else do
+          let b2 ← ok false
+          if b2 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+            else do
+              let b3 ←
+                core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 binding.asset_id
+                    binding.asset_id
+              if b3 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+                else do
+                  let b4 ←
+                    core.slice.Slice.contains
+                        (Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+                        ⟨[], fresh._proof_2⟩ nullifier
+                  if b4 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.NullifierAlreadySpent)
+                    else do
+                      let b5 ← digest_canonical input.nullifier_key
+                      if b5 = true then do
+                          let b6 ← digest_canonical input.salt
+                          if b6 = true then do
+                              let s ← lift input.membership.siblings.to_slice
+                              let i ← core.slice.Slice.iter s
+                              let __x ←
+                                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                    validate_common.closure.Insts.CoreOpsFunctionFnMutTupleSharedArrayM318Bool i ()
+                              if __x.1 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                                else
+                                  if input.value = 0#u32 then
+                                    ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                  else do
+                                    let i1 ← spend.VALUE_LIMIT
+                                    if input.value ≥ i1 then
+                                        ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                      else do
+                                        let i2 ← lift (U32.wrapping_shl 1#u32 20#u32)
+                                        if input.membership.index ≥ i2 then
+                                            ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                          else do
+                                            let r ← input.pair_leaf.require_selected_spendable input.selected_second
+                                            core.result.Result.map_err
+                                                (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  PoolV1PairTraceErrorV1)
+                                                r PoolV1PairTraceErrorV1.PairLeafCtor
+                            else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                        else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)) =
+    ok (core.result.Result.Ok ())
+
+binding : Binding
+nullifier : Std.Array U32 8#usize
+input : PoolV1PairInputNoteWitnessV1
+key : Canon8 input.nullifier_key
+salt : Canon8 input.salt
+membership : ∀ l < 20, Canon8 (↑input.membership.siblings)[l]!
+positive : input.value ≠ 0#u32
+value : ↑input.value < 2 ^ 30
+index : ↑input.membership.index < 2 ^ 20
+pair : input.pair_leaf.require_selected_spendable input.selected_second = ok (core.result.Result.Ok ())
+b : Bool
+after : core.slice.iter.Iter (Std.Array aspis_core.field.M31 8#usize)
+hscan :
+  core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+      validate_common.closure.Insts.CoreOpsFunctionFnMutTupleSharedArrayM318Bool
+      { slice := input.membership.siblings.to_slice, i := 0 } () =
+    ok (false, after)
+hs : b = false ↔ ∀ l < 20, Canon8 (↑input.membership.siblings)[l]!
+hb : b = false
+⊢ (if false = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+    else
+      if false = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+      else
+        if (binding.anchor_sequence != binding.anchor_sequence) = true then
+          ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+        else do
+          let b2 ← ok false
+          if b2 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+            else do
+              let b3 ←
+                core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 binding.asset_id
+                    binding.asset_id
+              if b3 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.RuntimeBinding)
+                else do
+                  let b4 ←
+                    core.slice.Slice.contains
+                        (Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+                        ⟨[], fresh._proof_2⟩ nullifier
+                  if b4 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.NullifierAlreadySpent)
+                    else do
+                      let b5 ← digest_canonical input.nullifier_key
+                      if b5 = true then do
+                          let b6 ← digest_canonical input.salt
+                          if b6 = true then do
+                              let s ← lift input.membership.siblings.to_slice
+                              let i ← core.slice.Slice.iter s
+                              let __x ←
+                                core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                    validate_common.closure.Insts.CoreOpsFunctionFnMutTupleSharedArrayM318Bool i ()
+                              if __x.1 = true then ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                                else
+                                  if input.value = 0#u32 then
+                                    ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                  else do
+                                    let i1 ← spend.VALUE_LIMIT
+                                    if input.value ≥ i1 then
+                                        ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                      else do
+                                        let i2 ← lift (U32.wrapping_shl 1#u32 20#u32)
+                                        if input.membership.index ≥ i2 then
+                                            ok (core.result.Result.Err PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                          else do
+                                            let r ← input.pair_leaf.require_selected_spendable input.selected_second
+                                            core.result.Result.map_err
+                                                (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+                                                  PoolV1PairTraceErrorV1)
+                                                r PoolV1PairTraceErrorV1.PairLeafCtor
+                            else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)
+                        else ok (core.result.Result.Err PoolV1PairTraceErrorV1.WitnessDigest)) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    instDecidableEqBool ((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) true
+  has type
+    Decidable (((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) = true)
+  but is expected to have type
+    Decidable ((binding.anchor_sequence != binding.anchor_sequence) = true)
+  in the application
+    @ite (Result (core.result.Result Unit PoolV1PairTraceErrorV1))
+      ((binding.anchor_sequence != binding.anchor_sequence) = true)
+      (instDecidableEqBool ((fresh binding).runtime_binding.anchor_sequence != binding.anchor_sequence) true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:32:24: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵f̵r̵e̵s̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲r̲e̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:32:35: warning: This simp argument is unused:
+  fresh
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵f̵r̵e̵s̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Src_AdmissionCommonSuccess.lean:34:24: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Src_AdmissionCommonSuccess.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

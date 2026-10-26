@@ -131,3 +131,20 @@ P6/extraction trust, not full compiler success or a native RunJoin installation.
 reference, timeout 480s, cgroup peak 3857346560 bytes, zero swap, no verdict.
 It is not source-equivalence evidence. No cap was raised and its inactive scope
 was checked before starting another scope. Decomposition remains necessary.
+
+## Additional selected client literal check
+
+The current operational plan makes the output range even more explicit than
+the generic wrappers: `tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:98–105`
+constructs input value 1000, recipient value 600, withdrawal amount 250,
+and change value 400 (transfer) / 750 (withdrawal). It then propagates forest
+compiler rejection before the proof-account adapter at line 116. Thus an
+output value 2^30 cannot be selected by that source route. The generic entry
+wrappers independently enforce the strict bound. This source inspection is
+not presented as an extraction of the complete planner or installed RunJoin.
+
+Fixture source-validation stage (25361): `PV_Src_FixtureCheckedSource.transfer`
+and `.withdrawal` now derive Checked from successful extracted validate_common
+calls plus actual public-wrapper value guards/conservation. The named pair/value
+identities avoid evaluating fixture hashes. Both standard-axiom proofs compile;
+this does not assert successful full forest compilation or installed transport.
