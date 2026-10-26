@@ -1,6 +1,6 @@
 # Source equation resume
 
-Before: 0/73 discharged; current: 14/73. No endpoint removal claimed.
+Before: 0/73 discharged; current: 18/73. No endpoint removal claimed.
 
 |op|row|status|theorem|receipt / obstruction|
 |---:|---|---|---|---|
@@ -26,3 +26,7 @@ Before: 0/73 discharged; current: 14/73. No endpoint removal claimed.
 |105|V211|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op105Source.op105_source|24013.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
 |107|V212|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op107Source.op107_source|24014.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
 |109|V213|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op109Source.op109_source|24015.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|110|V214|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op110Source.op110_source|24017.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|111|V215|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op111Source.op111_source|24019.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|114|V216|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op114Source.op114_source|24020.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|
+|118|V218|ROW-DISCHARGED(candidate)|R1Z.PV_CB_Op118Source.op118_source|24021.json; Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.|

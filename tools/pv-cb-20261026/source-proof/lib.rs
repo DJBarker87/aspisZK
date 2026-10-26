@@ -49,3 +49,11 @@ pub fn point_clone<E:Clone>(p:&aspis_core::r0::domain::Point<E>)->aspis_core::r0
 
 #[cfg(kani)]
 pub fn c1_tag()->u8 {aspis_core::r0::merkle::C1_TAG}
+
+#[cfg(kani)]
+pub fn from_m31(x:aspis_core::field::M31)->aspis_core::field::WideExact {
+ <aspis_core::field::WideExact as aspis_core::r0::CodeField>::from_m31(x)
+}
+
+#[cfg(kani)]
+pub fn context_eq(a:&aspis_core::state_only_hiding::StateOnlyHidingContext,b:&aspis_core::state_only_hiding::StateOnlyHidingContext)->bool {a==b}

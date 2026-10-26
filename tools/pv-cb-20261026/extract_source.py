@@ -9,7 +9,7 @@ charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-targ
 aeneas='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static'
 def ssh(cmd):return subprocess.run(['ssh','dombarker@100.108.41.90',cmd],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
 for stage in ['charon','aeneas']:
- name=f'{stage}-source-op{op}-001';dest=f'{base}/{name}';local=root/'evidence/pv-cb-20261026'/name
+ name=f'{stage}-source-op{op}-{sys.argv[4] if len(sys.argv)>4 else "001"}';dest=f'{base}/{name}';local=root/'evidence/pv-cb-20261026'/name
  local.mkdir(exist_ok=True)
  assert not (local/'target.json').exists()
  out=ssh(f'mkdir -p {dest}; python3 {scanner} {dest}/admission-before.json > {dest}/reservation.log 2>&1')
@@ -27,7 +27,7 @@ for stage in ['charon','aeneas']:
  cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',f'{dest}/time.log',*args]
  out=ssh(f'{shlex.join(cmd)} > {dest}/output.log 2>&1')
  (local/'transport.log').write_text(out.stdout)
- subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean'],check=True)
+ subprocess.run([sys.executable,str(root/'tools/pv-cb-20261026/collect_native.py'),name,f'PV_CB_ShippedOp{op}.llbc',f'shipped-op{op}-generated/Funs.lean',f'shipped-op{op}-generated/Types.lean',f'shipped-op{op}-generated/translation.json','source-proof/lib.rs','source-proof/Cargo.toml','source-proof/Cargo.lock'],check=True)
  receipt=json.loads((local/'collected-receipt.json').read_text());receipt.update(target)
  (local/'collected-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
  print(name,'exit',receipt['exit'])
