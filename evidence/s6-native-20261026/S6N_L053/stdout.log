@@ -1,0 +1,129 @@
+@[reducible] def AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_12.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 : Aeneas.Std.core.ops.function.FnOnce
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_12
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError
+  AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+{
+  call_once :=
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_12.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once }
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_12.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1' does not depend on any axioms
+def AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common : Aeneas.Std.Array Aeneas.Std.U8 216#usize →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result AspisR1TerminalDecoder.pool_v1.payment_relation.CommonPublicV1
+      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) :=
+fun bytes => do
+  let s ←
+    Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+        bytes
+        { start := AspisR1TerminalDecoder.pool_v1.payment_relation.ASSET_ID_OFFSET,
+          «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }
+  let r ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 4#usize Aeneas.Std.core.marker.CopyU8 s
+  let a ←
+    AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+        (Aeneas.Std.Array.Insts.CoreMarkerCopy 4#usize Aeneas.Std.core.marker.CopyU8) r
+  let asset ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.from_le_bytes a)
+  if asset ≥ AspisR1TerminalDecoder.aspis_core.field.P then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+    else do
+      let s1 ←
+        Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            bytes
+            { start := AspisR1TerminalDecoder.pool_v1.payment_relation.POOL_OFFSET,
+              «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }
+      let r1 ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 s1
+      let a1 ←
+        AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+            (Aeneas.Std.Array.Insts.CoreMarkerCopy 32#usize Aeneas.Std.core.marker.CopyU8) r1
+      let s2 ←
+        Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            bytes
+            { start := AspisR1TerminalDecoder.pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET,
+              «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET }
+      let r2 ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 s2
+      let a2 ←
+        AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+            (Aeneas.Std.Array.Insts.CoreMarkerCopy 32#usize Aeneas.Std.core.marker.CopyU8) r2
+      let s3 ←
+        Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            bytes
+            { start := AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET,
+              «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_ROOT_OFFSET }
+      let r3 ← Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 8#usize Aeneas.Std.core.marker.CopyU8 s3
+      let a3 ←
+        AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+            (Aeneas.Std.Array.Insts.CoreMarkerCopy 8#usize Aeneas.Std.core.marker.CopyU8) r3
+      let i ← Aeneas.Std.lift (Aeneas.Std.core.num.U64.from_le_bytes a3)
+      let s4 ←
+        Aeneas.Std.core.array.Array.index
+            (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            bytes
+            { start := AspisR1TerminalDecoder.pool_v1.payment_relation.ANCHOR_ROOT_OFFSET,
+              «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.NULLIFIER_OFFSET }
+      let r4 ← Aeneas.Std.core.array.TryFromSharedArraySlice.try_from 32#usize s4
+      let a4 ←
+        AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+            (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) r4
+      let r5 ← AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical a4
+      let r6 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+            r5 ()
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val => do
+          let s5 ←
+            Aeneas.Std.core.array.Array.index
+                (Aeneas.Std.core.ops.index.IndexSlice
+                  (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+                bytes
+                { start := AspisR1TerminalDecoder.pool_v1.payment_relation.NULLIFIER_OFFSET,
+                  «end» := AspisR1TerminalDecoder.pool_v1.payment_relation.ASSET_ID_OFFSET }
+          let r7 ← Aeneas.Std.core.array.TryFromSharedArraySlice.try_from 32#usize s5
+          let a5 ←
+            AspisR1TerminalDecoder.atomic_statement.unwrap_fixed_slice
+                (AspisR1TerminalDecoder.Shared0T.Insts.CoreMarkerCopy (Aeneas.Std.Array Aeneas.Std.U8 32#usize)) r7
+          let r8 ← AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical a5
+          let r9 ←
+            AspisR1TerminalDecoder.core.result.Result.map_err
+                AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+                r8 ()
+          let cf1 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9
+          match cf1 with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r10 ←
+                AspisR1TerminalDecoder.pool_v1.payment_relation.validate_common
+                    { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val, nullifier := val1,
+                      asset_id := asset }
+              let cf2 ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r10
+              match cf2 with
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val,
+                        nullifier := val1, asset_id := asset })
+                | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                  Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1TerminalDecoder.pool_v1.payment_relation.CommonPublicV1
+                    (Aeneas.Std.core.convert.FromSame
+                      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError)
+                    residual
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+              Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                AspisR1TerminalDecoder.pool_v1.payment_relation.CommonPublicV1
+                (Aeneas.Std.core.convert.FromSame
+                  AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError)
+                residual
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            AspisR1TerminalDecoder.pool_v1.payment_relation.CommonPublicV1
+            (Aeneas.Std.core.convert.FromSame
+              AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError)
+            residual
+'AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

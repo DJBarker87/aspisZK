@@ -1,0 +1,51 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_11.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once : AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_11 →
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError →
+    Aeneas.Std.Result AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+fun c tupled_args =>
+  Aeneas.Std.Result.ok
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_11.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once' does not depend on any axioms
+def AspisR1TerminalDecoder.pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1 : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result Unit
+      AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) :=
+fun snapshot =>
+  have a := Aeneas.Std.Array.repeat 32#usize 0#u8;
+  do
+  let b ← Aeneas.Std.core.array.equality.PartialEqArray.eq Aeneas.Std.core.cmp.PartialEqU8 snapshot.pool a
+  if b = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+    else
+      have a1 := Aeneas.Std.Array.repeat 32#usize 0#u8;
+      do
+      let b1 ←
+        Aeneas.Std.core.array.equality.PartialEqArray.eq Aeneas.Std.core.cmp.PartialEqU8 snapshot.deployment_domain a1
+      if b1 = true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+        else
+          if (snapshot.sequence != snapshot.next_pair_index) = true then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch)
+          else do
+            let i ← AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY
+            if snapshot.next_pair_index ≥ i then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.TreeFull)
+              else do
+                let b2 ← AspisR1TerminalDecoder.pool_v1.pair_tree_profile.digest_is_canonical snapshot.current_root
+                if b2 = true then
+                    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop
+                      snapshot.frontier 0#usize
+                  else
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err
+                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+'AspisR1TerminalDecoder.pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

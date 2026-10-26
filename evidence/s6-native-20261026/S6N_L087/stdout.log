@@ -1,0 +1,63 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 : AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+      AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :=
+fun afterstate => do
+  let r ← AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate afterstate
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a =>
+      have output := Aeneas.Std.Array.repeat 688#usize 0#u8;
+      do
+      let (s, index_mut_back) ←
+        Aeneas.Std.core.array.Array.index_mut
+            (Aeneas.Std.core.ops.index.IndexMutSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8))
+            output { «end» := 4#usize }
+      let s1 ←
+        Aeneas.Std.lift AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC.to_slice
+      let s2 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s s1
+      have output1 : Aeneas.Std.Array Aeneas.Std.U8 688#usize := index_mut_back s2
+      let output2 ←
+        output1.update 4#usize AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION
+      let output3 ←
+        output2.update 5#usize AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION
+      let output4 ← output3.update 6#usize AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+      let output5 ← output4.update 7#usize 1#u8
+      let (s3, index_mut_back1) ←
+        Aeneas.Std.core.array.Array.index_mut
+            (Aeneas.Std.core.ops.index.IndexMutSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            output5 { start := 8#usize, «end» := 16#usize }
+      let a ← Aeneas.Std.lift (Aeneas.Std.core.num.U64.to_le_bytes afterstate.next_pair_index)
+      let s4 ← Aeneas.Std.lift a.to_slice
+      let s5 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s3 s4
+      have output6 : Aeneas.Std.Array Aeneas.Std.U8 688#usize := index_mut_back1 s5
+      let (s6, index_mut_back2) ←
+        Aeneas.Std.core.array.Array.index_mut
+            (Aeneas.Std.core.ops.index.IndexMutSlice
+              (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+            output6 { start := 16#usize, «end» := 48#usize }
+      let a1 ← AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical afterstate.next_root
+      let s7 ← Aeneas.Std.lift a1.to_slice
+      let s8 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s6 s7
+      let s9 ← Aeneas.Std.lift afterstate.next_frontier.to_slice
+      let i ← Aeneas.Std.core.slice.Slice.iter s9
+      let iter ←
+        Aeneas.Std.core.iter.traits.iterator.Iterator.enumerate.trait_default
+            (Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter
+              (Aeneas.Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize))
+            i
+      have output7 : Aeneas.Std.Array Aeneas.Std.U8 688#usize := index_mut_back2 s8
+      let output8 ←
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop iter output7
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok output8)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Aeneas.Std.Array Aeneas.Std.U8 688#usize)
+        (Aeneas.Std.core.convert.FromSame
+          AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+        residual
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

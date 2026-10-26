@@ -1,0 +1,59 @@
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_3.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once : AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_3 →
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError →
+    Aeneas.Std.Result AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 :=
+fun c tupled_args =>
+  Aeneas.Std.Result.ok
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+'AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_3.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1.call_once' does not depend on any axioms
+def AspisR1TerminalDecoder.pool_v1.payment_relation.require_header : Aeneas.Std.Array Aeneas.Std.U8 216#usize →
+  Aeneas.Std.Array Aeneas.Std.U8 4#usize →
+    AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result Unit
+          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) :=
+fun bytes magic kind => do
+  let s ←
+    Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8))
+        bytes { «end» := 4#usize }
+  let s1 ←
+    Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8))
+        magic { start := 0#usize, «end» := 4#usize }
+  let b ←
+    Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+        (AspisR1TerminalDecoder.Slice.Insts.CoreCmpPartialEqSlice Aeneas.Std.core.cmp.PartialEqU8) s s1
+  if b = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongMagic)
+    else do
+      let i ← bytes.index_usize 4#usize
+      if (i != AspisR1TerminalDecoder.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION) = true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongVersion)
+        else do
+          let i1 ← bytes.index_usize 5#usize
+          have kind1 : Aeneas.Std.U8 := Aeneas.Std.read_discriminant kind
+          let i2 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U8 kind1)
+          if (i1 != i2) = true then
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err
+                  AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongTransitionKind)
+            else do
+              let i3 ← bytes.index_usize 6#usize
+              if (i3 != AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION) = true then
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err
+                      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongDigestEncoding)
+                else do
+                  let i4 ← bytes.index_usize 7#usize
+                  if (i4 != 0#u8) = true then
+                      Aeneas.Std.Result.ok
+                        (Aeneas.Std.core.result.Result.Err
+                          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonZeroReserved)
+                    else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1TerminalDecoder.pool_v1.payment_relation.require_header' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
