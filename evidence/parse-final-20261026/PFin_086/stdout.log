@@ -1,0 +1,126 @@
+PFin_RunLevelBound.lean:21:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if
+      (match rest with
+        | (j, snd) :: tail => decide (paired i j)
+        | [] => false) =
+        true then
+    ?m.102
+  else ?m.103
+in the target expression
+  Bounded
+    (if
+        (match rest with
+          | (j, snd) :: tail => decide (paired i j)
+          | [] => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value rest.head!.2)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+            else OracleDecisionMultiTree.children sibling value))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+
+case pos
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+rest : List (ℕ × State)
+i : ℕ
+value : State
+choice :
+  (match rest with
+    | (j, snd) :: tail => decide (paired i j)
+    | [] => false) =
+    true
+⊢ Bounded
+    (if
+        (match rest with
+          | (j, snd) :: tail => decide (paired i j)
+          | [] => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value rest.head!.2)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+            else OracleDecisionMultiTree.children sibling value))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+PFin_RunLevelBound.lean:25:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if
+      (match rest with
+        | (j, snd) :: tail => decide (paired i j)
+        | [] => false) =
+        true then
+    ?m.107
+  else ?m.108
+in the target expression
+  Bounded
+    (if
+        (match rest with
+          | (j, snd) :: tail => decide (paired i j)
+          | [] => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value rest.head!.2)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+            else OracleDecisionMultiTree.children sibling value))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+
+case neg
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+rest : List (ℕ × State)
+i : ℕ
+value : State
+choice :
+  ¬(match rest with
+      | (j, snd) :: tail => decide (paired i j)
+      | [] => false) =
+      true
+⊢ Bounded
+    (if
+        (match rest with
+          | (j, snd) :: tail => decide (paired i j)
+          | [] => false) =
+          true then
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children value rest.head!.2)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel (List.drop 1 rest) nodes) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out)
+    else
+      match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+      | none => Program.done none
+      | some sibling =>
+        Program.ask
+          (BinMerkle32Path.nodeInput
+            (if i % 2 = 0 then OracleDecisionMultiTree.children value sibling
+            else OracleDecisionMultiTree.children sibling value))
+          fun d =>
+          AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+            Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+'AspisR1.PFin_RunLevelBound.level' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PFin_RunLevelBound.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

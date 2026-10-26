@@ -1,0 +1,40 @@
+PFin_WorldSecond.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase (SdkC_Source.dictionary ((D2 c H).digest ())) () (GExq_RetainedReader.code ?m.291 ?ck ?proof ?pub ?v)
+in the target expression
+  erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) ()
+      (GExq_RetainedReader.code c.reserved e.saved.deref e.proof e.pub AspisR1Stage2.transport.Variant.S2) =
+    ok (core.result.Result.Ok (p, a))
+
+F C : Type
+c : Configuration F C
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+s : Submission
+H : Bytes → State
+e : Evidence c B s H
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+p : AspisR1Stage2.verifier.Prepared
+a : AspisR1Stage2.verifier.Accumulator
+root : Std.Array U8 32#usize
+view : Slice U8
+read :
+  AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops c.reserved) (VTop_Checkpoint.digest (D2 c H))
+      e.saved.deref e.proof e.pub AspisR1Stage2.transport.Variant.S2 () =
+    ok (core.result.Result.Ok (p, a))
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) e.proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok view
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root)
+batch : Op5T_Install.stageBatch Port4B_Install.leaves (D2 c H) e.proof p root 1#usize () = ok (core.result.Result.Ok ())
+⊢ erase (SdkC_Source.dictionary (F3U_Oracle.hashv H)) ()
+      (GExq_RetainedReader.code c.reserved e.saved.deref e.proof e.pub AspisR1Stage2.transport.Variant.S2) =
+    ok (core.result.Result.Ok (p, a))
+PFin_WorldSecond.lean:40:4: error: Application type mismatch: The argument
+  fun x x_1 => rfl
+has type
+  ∀ (x : Slice (Slice U8)) (x_1 : ?m.314 x), ?m.316 x x_1 = ?m.316 x x_1
+but is expected to have type
+  ∀ (parts : Slice (Slice U8)), (D2 c H).digest () parts = F3U_Oracle.hashv H parts
+in the application
+  GExq_SecondSource.source (stage c) c.reserved (F3U_Oracle.hashv H) (D2 c H) () fun x x_1 => rfl
+'AspisR1.PFin_WorldSecond.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

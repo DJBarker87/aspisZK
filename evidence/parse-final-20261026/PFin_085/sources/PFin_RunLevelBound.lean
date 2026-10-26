@@ -1,0 +1,44 @@
+import PFin_HashLeavesBound
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.PFin_RunLevelBound
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open OraclePortFrozenOrder PFin_AddressBound
+
+theorem level (fuel : Nat) (live : Live) (nodes : Bytes) : Bounded (runLevel fuel live nodes) := by
+  induction fuel generalizing live nodes with
+  | zero => exact done _
+  | succ fuel ih =>
+    cases live with
+    | nil => exact done _
+    | cons head rest =>
+      obtain ⟨i,value⟩ := head
+      unfold runLevel
+      dsimp only
+      by_cases choice : (match rest with | (j,_)::_ => decide (paired i j) | [] => false)=true
+      · rw [if_pos choice]
+        apply ask _ _ (by rw [BinMerkle32Path.nodeInput_length];decide)
+        intro digest
+        exact PFin_AddressBound.bind _ _ (ih _ _) (fun _=>done _)
+      · rw [if_neg choice]
+        split
+        · exact done _
+        · apply ask _ _ (by rw [BinMerkle32Path.nodeInput_length];decide)
+          intro digest
+          exact PFin_AddressBound.bind _ _ (ih _ _) (fun _=>done _)
+
+theorem levels (height : Nat) (live : Live) (nodes : Bytes) : Bounded (runLevels height live nodes) := by
+  induction height generalizing live nodes with
+  | zero => exact done _
+  | succ height ih =>
+    apply PFin_AddressBound.bind _ _ (level _ _ _)
+    intro result
+    cases result with
+    | none => exact done _
+    | some pair => exact ih _ _
+
+#print axioms level
+#print axioms levels
+end AspisR1.PFin_RunLevelBound
+end
