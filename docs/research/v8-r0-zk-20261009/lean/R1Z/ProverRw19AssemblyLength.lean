@@ -25,7 +25,7 @@ theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
         · cases success
         · have same : final = result := Except.ok.inj success
           subst result
-          assumption
+          omega
 
 theorem reference (fields : ProverCommitFront46.Fields) (ps : List QueryParts)
     (ss : List Slot) (result : Bytes)
