@@ -1,0 +1,81 @@
+{
+  "target": [
+    "timeout",
+    "120",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+    "RUSTFLAGS=--cfg pv_cb_extract",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/charon-target",
+    "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--rustc-arg=--cfg=kani",
+    "--rustc-arg=--cfg=pv_cb_extract",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "pv_cb3_source::all_slots_clear",
+    "--include",
+    "pv_cb3_source::ct_pole::*",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/PV_CB3_ShippedOp258.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.toml",
+    "--release",
+    "--offline",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "source_revision": "c8eb93fdd2560b2225abc8b4a9eb3f773c6c136c",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Frozen shipped code unchanged from821157fbdd",
+  "exit": "0",
+  "wall": "0:35.41",
+  "peak_rss_kib": "580928",
+  "swap": "0",
+  "print_axioms": "N/A extraction; corresponding Lean proof receipt required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/PV_CB3_ShippedOp258.llbc": {
+      "sha256": "a7cfdfbef68b0f0a2b71c48a56367e73da2a969b1365355ca1e902bc981d5564",
+      "size": 377130
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/lib.rs": {
+      "sha256": "f2be8bfa5c40a1495ebd9e625b00df9920bc97eea71e83f5eaf93dc5be3def30",
+      "size": 1935
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.toml": {
+      "sha256": "d8bf3472434ed90e806dcb41eed57b7ee8bd9c094536db152301aa39351ae6a6",
+      "size": 436
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source-proof/Cargo.lock": {
+      "sha256": "2a68664463167295345d39ea2172e74270502f14789f4900da055ea059ba1567",
+      "size": 7071
+    }
+  },
+  "dependency_fingerprint": "34203ab077afac61c382e981c4f674b515f6eac73c7f2d9e72f26cf1a4b56bdd",
+  "admissions": {
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-26T17:08:32.313626+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 34762391552,
+      "projected_reserved_bytes": 43352326144
+    }
+  }
+}

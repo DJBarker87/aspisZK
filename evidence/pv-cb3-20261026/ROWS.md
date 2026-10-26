@@ -1,22 +1,22 @@
 # Callback source-law worklist
 
-Baseline: 110 OPEN / 51 independent OPEN / 40 CLOSED-ON-CANDIDATE.
+Baseline/current: 110 OPEN / 51 independent OPEN / 40 CLOSED-ON-CANDIDATE.
 This worker: 0 ROW-DISCHARGED(candidate); endpoint premises removed 0.
 
 |op|row|status|theorem|receipt|
 |---:|---|---|---|---|
-|258|V264|PREPARED|—|op258-sibling-check.json|
-|253|V260|PREPARED|—|op253-sibling-check.json|
-|252|V259|PREPARED|—|op252-sibling-check.json|
-|251|V258|PREPARED|—|op251-sibling-check.json|
-|249|V256|PREPARED|—|op249-sibling-check.json|
-|246|V254|PREPARED|—|op246-sibling-check.json|
-|230|V247|PREPARED|—|op230-sibling-check.json|
-|229|V246|PREPARED|—|op229-sibling-check.json|
-|228|V245|PREPARED|—|op228-sibling-check.json|
-|227|V244|PREPARED|—|op227-sibling-check.json|
-|226|V243|PREPARED|—|op226-sibling-check.json|
-|225|V242|PREPARED|—|op225-sibling-check.json|
+|258|V264|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op258-005/collected-receipt.json|
+|253|V260|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op253-002/collected-receipt.json|
+|252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
+|251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
+|249|V256|OPEN|—|—|
+|246|V254|OPEN|—|—|
+|230|V247|OPEN|—|—|
+|229|V246|OPEN|—|—|
+|228|V245|OPEN|—|—|
+|227|V244|OPEN|—|—|
+|226|V243|OPEN|—|—|
+|225|V242|OPEN|—|—|
 |224|V241|OPEN|—|—|
 |223|V240|OPEN|—|—|
 |222|V239|OPEN|—|—|
