@@ -1,0 +1,52 @@
+JFw_Record.lean:50:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+JFw_Record.lean:49:36: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+JFw_Record.lean:48:34: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+JFw_Record.lean:47:30: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+JFw_Record.lean:50:35: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+JFw_Record.lean:23:57: error: unsolved goals
+row tag a b c d : U8
+size : Usize
+frame payload : Slice U8
+shape : r1_wire.row_shape row = ok (some (tag, size))
+small : ↑size ≤ 3712
+length : payload.length = ↑size
+bytes : ↑frame = tag :: a :: b :: c :: d :: ↑payload
+header : UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [a, b, c, d] ⋯)) = size
+fields : 14 ≤ ↑row → r1_wire.validate_record_fields row payload = ok (core.result.Result.Ok ())
+total : UScalar UScalarTy.Usize
+add : 5#usize + size = ok total
+value : ↑total = ↑5#usize + ↑size
+flen : frame.len = total
+r0 : frame.index_usize 0#usize = ok tag
+r1 : frame.index_usize 1#usize = ok a
+r2 : frame.index_usize 2#usize = ok b
+r3 : frame.index_usize 3#usize = ok c
+r4 : frame.index_usize 4#usize = ok d
+readPayload :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) frame { start := 5#usize } =
+    ok payload
+⊢ r1_wire.parse_record row frame = ok (core.result.Result.Ok payload)
+JFw_Record.lean:44:16: warning: This simp argument is unused:
+  List.slice
+
+Hint: Omit it from the simp argument list.
+  simp [bytes,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Record.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Record.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

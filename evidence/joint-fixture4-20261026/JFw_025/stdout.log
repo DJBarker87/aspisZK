@@ -1,0 +1,33 @@
+JFw_Blocks.lean:21:4: error: Type mismatch
+  congrArg (fun tail => List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ tail) (ih (List.drop 16 b))
+has type
+  List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ bytesOf (blocks n (List.drop 16 b)).flatten =
+    List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ expand n (bytesOf (List.drop 16 b))
+but is expected to have type
+  List.map AspisV8R19.SqueezeOracleBridge.decodeByte
+      (List.take 16 b ++ List.replicate 16 0#u8 ++ (blocks n (List.drop 16 b)).flatten) =
+    List.map AspisV8R19.SqueezeOracleBridge.decodeByte (List.take 16 b) ++ List.replicate 16 0 ++
+      expand n (List.map AspisV8R19.SqueezeOracleBridge.decodeByte (List.drop 16 b))
+JFw_Blocks.lean:19:40: warning: This simp argument is unused:
+  bytes_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵l̵o̵c̵k̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵c̵o̵n̵s̵,̵b̵y̵t̵e̵s̵_̵a̵p̵p̵e̵n̵d̵,̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵,̵[̲b̲l̲o̲c̲k̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲t̲e̲n̲_̲c̲o̲n̲s̲,̲ ̲b̲y̲t̲e̲s̲O̲f̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲r̲e̲p̲l̲i̲c̲a̲t̲e̲,̲ ← L̵i̵s̵t̵.̵m̵a̵p̵_̵t̵a̵k̵e̵,̵←̵L̲i̲s̲t̲.̲m̲a̲p̲_̲t̲a̲k̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲←̲ List.map_drop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Blocks.lean:19:61: warning: This simp argument is unused:
+  List.map_replicate
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵l̵o̵c̵k̵s̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵t̵e̵n̵_̵c̵o̵n̵s̵,̵b̵y̵t̵e̵s̵_̵a̵p̵p̵e̵n̵d̵,̵b̵y̵t̵e̵s̵O̵f̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵r̵e̵p̵l̵i̵c̵a̵t̵e̵,̵[̲b̲l̲o̲c̲k̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲t̲e̲n̲_̲c̲o̲n̲s̲,̲ ̲b̲y̲t̲e̲s̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲b̲y̲t̲e̲s̲O̲f̲,̲ ← L̵i̵s̵t̵.̵m̵a̵p̵_̵t̵a̵k̵e̵,̵←̵L̲i̲s̲t̲.̲m̲a̲p̲_̲t̲a̲k̲e̲,̲ ̲←̲ List.map_drop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFw_Blocks.lean:42:29: error: Type mismatch: After simplification, term
+  PSem_Canonical.canonical_zeros 16 (of_decide_eq_true (id (Eq.refl true)))
+ has type
+  canonical (List.replicate 16 0)
+but is expected to have type
+  canonical (List.replicate 16 (AspisV8R19.SqueezeOracleBridge.decodeByte 0#u8))
+'AspisR1.JFw_Blocks.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_Blocks.valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

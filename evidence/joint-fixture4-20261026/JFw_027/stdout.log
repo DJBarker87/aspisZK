@@ -1,0 +1,20 @@
+JFw_Blocks.lean:22:4: error: Type mismatch
+  congrArg (fun tail => List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ tail) (ih (List.drop 16 b))
+has type
+  List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ bytesOf (blocks n (List.drop 16 b)).flatten =
+    List.take 16 (bytesOf b) ++ List.replicate 16 0 ++ expand n (bytesOf (List.drop 16 b))
+but is expected to have type
+  List.map AspisV8R19.SqueezeOracleBridge.decodeByte (List.take 16 b) ++ List.replicate 16 0 ++
+      List.map AspisV8R19.SqueezeOracleBridge.decodeByte (blocks n (List.drop 16 b)).flatten =
+    List.map AspisV8R19.SqueezeOracleBridge.decodeByte (List.take 16 b) ++ List.replicate 16 0 ++
+      expand n (List.map AspisV8R19.SqueezeOracleBridge.decodeByte (List.drop 16 b))
+JFw_Blocks.lean:20:40: warning: This simp argument is unused:
+  bytes_append
+
+Hint: Omit it from the simp argument list.
+  simp only [blocks, ̲List.flatten_cons, ̲bytes_̵a̵p̵p̵e̵n̵d̵,̵b̵y̵t̵e̵s̵Of, ̲List.map_append, ̲List.map_replicate, ̲zeroByte,
+        ← List.map_take, ̲← List.map_drop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Blocks.bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_Blocks.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
