@@ -509,7 +509,7 @@ mod owned_error_checks {
         39=>ErrorKind::InProgress,
         40=>ErrorKind::Other,
         _=>ErrorKind::Uncategorized,
-    }
+    }}
     use std::io::{Error,ErrorKind};
     fn check(error: Error) {
         let reference=OwnedError {kind:error.kind()};
@@ -549,5 +549,200 @@ mod owned_error_checks {
     #[kani::proof]
     fn owned_error_static_payload_observe() {
         check(Error::new(ErrorKind::NotADirectory,"mask nonce ledger path is not a directory"));
+    }
+}
+
+#[cfg(kani)]
+mod owned_dynamic_drop {
+    use super::owned_error::*;
+    use std::io::{Error,ErrorKind};
+    use std::sync::atomic::{AtomicUsize,AtomicU64,Ordering};
+    static DROPS:AtomicUsize=AtomicUsize::new(0);
+    static PAYLOAD:AtomicU64=AtomicU64::new(0);
+    #[derive(Debug)]
+    struct Payload(u64);
+    impl std::fmt::Display for Payload {
+        fn fmt(&self,_:&mut std::fmt::Formatter<'_>)->std::fmt::Result {
+            panic!("the reserve continuation does not consume payload messages")
+        }
+    }
+    impl std::error::Error for Payload {}
+    impl Drop for Payload {
+        fn drop(&mut self) {
+            DROPS.fetch_add(1,Ordering::SeqCst);
+            PAYLOAD.store(self.0,Ordering::SeqCst);
+        }
+    }
+    #[kani::proof]
+    fn owned_custom_retry_observation_and_exact_drop() {
+        let bits:u64=kani::any();
+        let collision:bool=kani::any();
+        let kind=if collision {ErrorKind::AlreadyExists} else {ErrorKind::Other};
+        DROPS.store(0,Ordering::SeqCst);PAYLOAD.store(0,Ordering::SeqCst);
+        let error=Error::new(kind,Payload(bits));
+        let reference=OwnedError{kind};
+        assert!(native_observe(native_open_error(error)) == owned_observe(owned_open_error(reference)));
+        assert!(DROPS.load(Ordering::SeqCst)==1);
+        assert!(PAYLOAD.load(Ordering::SeqCst)==bits);
+    }
+}
+
+#[cfg(kani)]
+mod file_sync_world {
+    use std::sync::atomic::{AtomicI32,AtomicUsize,AtomicBool,Ordering};
+    use std::os::fd::{FromRawFd,AsRawFd};
+    use std::mem::ManuallyDrop;
+    static CALLS:AtomicUsize=AtomicUsize::new(0);
+    static FD:AtomicI32=AtomicI32::new(-1);
+    static REPLY:AtomicI32=AtomicI32::new(0);
+    static INTERRUPT_ONCE:AtomicBool=AtomicBool::new(false);
+    static mut ERRNO:i32=0;
+    #[unsafe(no_mangle)]
+    #[inline(never)]
+    pub unsafe extern "C" fn __errno_location()->*mut i32 { &raw mut ERRNO }
+    #[unsafe(no_mangle)]
+    #[inline(never)]
+    pub unsafe extern "C" fn fsync(fd:i32)->i32 {
+        let call=CALLS.fetch_add(1,Ordering::SeqCst);
+        FD.store(fd,Ordering::SeqCst);
+        if INTERRUPT_ONCE.load(Ordering::SeqCst) && call==0 {return -1;}
+        REPLY.load(Ordering::SeqCst)
+    }
+    fn root() {
+        INTERRUPT_ONCE.store(false,Ordering::SeqCst);
+        REPLY.store(0,Ordering::SeqCst);
+        let _=unsafe{fsync(-9)};
+        unsafe{*__errno_location()=0};
+        assert!(CALLS.load(Ordering::SeqCst)>0);
+        CALLS.store(0,Ordering::SeqCst);FD.store(-1,Ordering::SeqCst);
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn sync_all_interrupted_then_success_world() {
+        root();
+        INTERRUPT_ONCE.store(true,Ordering::SeqCst);
+        unsafe{*__errno_location()=4};
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        assert!(file.sync_all().is_ok());
+        assert!(CALLS.load(Ordering::SeqCst)==2);
+        assert!(FD.load(Ordering::SeqCst)==fd && file.as_raw_fd()==fd);
+    }
+    #[kani::proof]
+    fn sync_all_success_world_and_owner() {
+        root();
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        let result=file.sync_all();
+        assert!(result.is_ok());
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==fd);
+        assert!(file.as_raw_fd()==fd);
+    }
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn sync_all_terminal_error_world_and_raw_code() {
+        root();
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let code:i32=kani::any();kani::assume(code!=4);
+        unsafe{*__errno_location()=code};
+        REPLY.store(-1,Ordering::SeqCst);
+        let file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        let error=file.sync_all().unwrap_err();
+        assert!(error.raw_os_error()==Some(code));
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==fd);
+        assert!(file.as_raw_fd()==fd);
+    }
+}
+
+#[cfg(kani)]
+mod file_write_world {
+    use std::sync::atomic::{AtomicI32,AtomicUsize,AtomicU8,Ordering};
+    use std::os::fd::{FromRawFd,AsRawFd};
+    use std::mem::ManuallyDrop;
+    use std::io::{Write,ErrorKind};
+    static CALLS:AtomicUsize=AtomicUsize::new(0);
+    static FD:AtomicI32=AtomicI32::new(-1);
+    static ACCEPTED:AtomicUsize=AtomicUsize::new(0);
+    static POS:AtomicUsize=AtomicUsize::new(0);
+    static BYTE:AtomicU8=AtomicU8::new(0);
+    static MODE:AtomicUsize=AtomicUsize::new(0);
+    static CUT:AtomicUsize=AtomicUsize::new(1);
+    #[unsafe(no_mangle)]
+    #[inline(never)]
+    pub unsafe extern "C" fn write(fd:i32,buf:*const u8,count:usize)->isize {
+        let call=CALLS.fetch_add(1,Ordering::SeqCst);
+        FD.store(fd,Ordering::SeqCst);
+        let mode=MODE.load(Ordering::SeqCst);
+        if mode==1 {return 0;}
+        if mode==2 {return -1;}
+        if mode==3 && call==0 {return -1;}
+        let amount=if mode==4 && call==0 {CUT.load(Ordering::SeqCst)} else {count};
+        assert!(amount<=count);
+        let accepted=ACCEPTED.load(Ordering::SeqCst);
+        let position=POS.load(Ordering::SeqCst);
+        if position>=accepted && position-accepted<amount {
+            BYTE.store(unsafe{*buf.add(position-accepted)},Ordering::SeqCst);
+        }
+        ACCEPTED.store(accepted+amount,Ordering::SeqCst);
+        amount as isize
+    }
+    fn root(mode:usize,errno:i32) {
+        MODE.store(0,Ordering::SeqCst);CALLS.store(0,Ordering::SeqCst);
+        ACCEPTED.store(0,Ordering::SeqCst);POS.store(0,Ordering::SeqCst);
+        let result=unsafe{write(-9,std::ptr::null(),0)};
+        assert!(result==0 && CALLS.load(Ordering::SeqCst)==1);
+        unsafe{*super::file_sync_world::__errno_location()=errno};
+        CALLS.store(0,Ordering::SeqCst);ACCEPTED.store(0,Ordering::SeqCst);
+        MODE.store(mode,Ordering::SeqCst);
+    }
+    fn check_success(mode:usize) {
+        root(mode,4);
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let data:[u8;32]=kani::any();
+        let pos:usize=kani::any();kani::assume(pos<32);POS.store(pos,Ordering::SeqCst);
+        let cut:usize=kani::any();kani::assume(cut>0 && cut<32);CUT.store(cut,Ordering::SeqCst);
+        let mut file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        file.write_all(&data).unwrap();
+        assert!(ACCEPTED.load(Ordering::SeqCst)==32);
+        assert!(BYTE.load(Ordering::SeqCst)==data[pos]);
+        assert!(FD.load(Ordering::SeqCst)==fd && file.as_raw_fd()==fd);
+        assert!(CALLS.load(Ordering::SeqCst)==if mode==0 {1} else {2});
+    }
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn write_all_full_one_event() {check_success(0);}
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn write_all_interrupted_then_full() {check_success(3);}
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn write_all_partial_then_full() {check_success(4);}
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn write_all_terminal_error_code_and_owner() {
+        let code:i32=kani::any();kani::assume(code!=4);
+        root(2,code);
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let data:[u8;32]=kani::any();
+        let mut file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        let error=file.write_all(&data).unwrap_err();
+        assert!(error.raw_os_error()==Some(code));
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==fd);
+        assert!(ACCEPTED.load(Ordering::SeqCst)==0 && file.as_raw_fd()==fd);
+    }
+    #[kani::proof]
+    #[kani::unwind(3)]
+    fn write_all_zero_error_preserves_owner() {
+        root(1,0);
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        let data:[u8;32]=kani::any();
+        let mut file=ManuallyDrop::new(unsafe{std::fs::File::from_raw_fd(fd)});
+        let error=file.write_all(&data).unwrap_err();
+        assert!(error.kind()==ErrorKind::WriteZero);
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(ACCEPTED.load(Ordering::SeqCst)==0 && file.as_raw_fd()==fd);
     }
 }

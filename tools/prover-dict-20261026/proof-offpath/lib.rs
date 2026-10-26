@@ -70,3 +70,15 @@ pub fn option_eq(left:Option<u64>,right:Option<u64>)->bool { left==right }
 pub fn option_try(value:Option<u64>)->Option<u64> { Some(value?) }
 #[cfg(kani)]
 pub fn result_map(value:Result<u64,u32>,f:impl FnOnce(u64)->u64)->Result<u64,u32> { value.map(f) }
+
+#[cfg(kani)]
+#[path="../proof-std-native/owned_error.rs"]
+pub mod owned_error;
+#[cfg(kani)]
+pub fn owned_error_observe(r:Result<bool,owned_error::OwnedError>)->owned_error::Observation {
+    owned_error::owned_observe(r)
+}
+#[cfg(kani)]
+pub fn owned_error_open(e:owned_error::OwnedError)->Result<bool,owned_error::OwnedError> {
+    owned_error::owned_open_error(e)
+}

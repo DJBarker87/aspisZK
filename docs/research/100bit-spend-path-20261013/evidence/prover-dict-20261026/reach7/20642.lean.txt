@@ -1,0 +1,50 @@
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_OwnedErrorObservation
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+abbrev Store := aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+abbrev Kind := core.io.error.ErrorKind
+/-- The reserve caller's complete value observation; native world effects are
+separate and are not discarded by a claim about this projection. -/
+def observe (r : core.result.Result Bool Kind) : Bool × Option Kind :=
+  match r with
+  | .Ok b => (b, none)
+  | .Err k => (false, some k)
+def owned (kind : std.io.error.Error → Kind)
+    (r : core.result.Result Bool std.io.error.Error) : core.result.Result Bool Kind :=
+  match r with
+  | .Ok b => .Ok b
+  | .Err e => .Err (kind e)
+
+theorem success (b : Bool) : observe (.Ok b) = (b, none) := rfl
+theorem failure (k : Kind) : observe (.Err k) = (false, some k) := rfl
+
+/-- Actual extracted reserve continuation, conditional only on the named
+fallible run and native kind dictionary equations. Covers every error value. -/
+theorem reserve_error (ops : ExternalFuns) (s s' : Store)
+    (sd nonce : Array U8 32#usize) (e : std.io.error.Error) (k : Kind)
+    (hr : @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible _ ops s sd nonce = .ok (.Err e, s'))
+    (hk : @std.io.error.Error.kind _ ops e = .ok k) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve _ ops s sd nonce =
+      .ok (false, { s' with last_error := some k }) := by
+  unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+  rw [hr]
+  simp only [bind, Result.bind]
+  rw [hk]
+  rfl
+
+theorem reserve_success (ops : ExternalFuns) (s s' : Store)
+    (sd nonce : Array U8 32#usize) (b : Bool)
+    (hr : @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible _ ops s sd nonce = .ok (.Ok b, s')) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve _ ops s sd nonce = .ok (b, s') := by
+  unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+  rw [hr]
+  rfl
+
+#print axioms success
+#print axioms failure
+#print axioms reserve_error
+#print axioms reserve_success
+end R1Z.PDict_OwnedErrorObservation
