@@ -165,6 +165,10 @@ mod checks {
 
 #[cfg(kani)]
 pub mod shipped {
+ pub fn vec_pop<T>(x:&mut Vec<T>)->Option<T> {x.pop()}
+ pub fn vec_empty<T>(x:&Vec<T>)->bool {x.is_empty()}
+ pub fn vec_default<T>()->Vec<T> {Default::default()}
+ pub fn vec_array<T,const N:usize>(x:Vec<T>)->Result<[T;N],Vec<T>> {x.try_into()}
  pub fn path_deref(x:&std::path::PathBuf)->&std::path::Path {std::ops::Deref::deref(x)}
  pub fn take<T:Default>(x: &mut T)->T {std::mem::take(x)}
 }
