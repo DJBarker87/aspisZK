@@ -1,4 +1,4 @@
-import R1Z.ProverCommitFront46
+import R1Z.ProverCommitPublish43
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.ProverRw19AssemblyLength
@@ -29,12 +29,5 @@ theorem assemble (front : Except Error Bytes) (ps : List QueryParts)
           subst result
           omega
 
-theorem reference (fields : ProverCommitFront46.Fields) (ps : List QueryParts)
-    (ss : List Slot) (result : Bytes)
-    (success : ProverCommitFront46.referenceProof fields ps ss = .ok result) :
-    result.length = 57607 :=
-  assemble (ProverCommitFront46.referenceFront fields) ps ss 28359 57607 result success
-
 #print axioms assemble
-#print axioms reference
 end R1Z.ProverRw19AssemblyLength
