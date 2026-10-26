@@ -1,0 +1,35 @@
+import CPH_FixtureBank
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.CPH_FixtureRead
+open Aeneas Aeneas.Std Result S2Trust S2W_D189Entry S2W_D189Wrappers
+open CPG_Projection CPP_BankState Hist_RuntimeEntry Hist_Store CPH_FixtureData
+open S2W_ReturnedCheckpoint S2W_EntryWriteHistory S2W_CommittedCheckpoint CPH_FixtureBank
+
+theorem loaded : CPG_Projection.loaded observations true 2 = some (MultiproofConeCanonical.bytesOf saved.val) := by
+  change CPR_DataPersistence.visible (CPR_DataPersistence.snapshot final 2) = _
+  unfold CPR_DataPersistence.visible CPR_DataPersistence.snapshot
+  rw [final_balance,final_data]
+  rfl
+
+theorem reader_checkpoint : (e2.buffers 2).val = saved.val := by
+  change ((cached final).cells 2).data.val = saved.val
+  unfold cached
+  rw [final_balance]
+  exact congrArg (fun d : Slice U8 => d.val) final_data
+
+theorem written_checkpoint :
+    payloadBytes encode (CPH_FixtureWrappers.post1.payload (e1.heap.accounts 2).1) 1768 =
+      MultiproofConeCanonical.bytesOf saved.val := by
+  unfold CPH_FixtureWrappers.post1
+  rw [S2W_EntryWriteHistory.written_bytes encode e1.heap 2 0 0 (source (nativeBytes saved))
+    rfl rfl (by exact CPH_FixtureShape.size_before)]
+  have size : (nativeBytes saved).length = 1768 := by
+    rw [nativeBytes,List.length_map,CPH_FixtureShape.size_saved]
+  rw [← size,source_bytes,vector_representation]
+
+#print axioms loaded
+#print axioms reader_checkpoint
+#print axioms written_checkpoint
+end AspisR1.CPH_FixtureRead
+end

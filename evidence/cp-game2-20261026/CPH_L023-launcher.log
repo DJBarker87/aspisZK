@@ -1,0 +1,53 @@
+{"attempt": "CPH_L023", "exit_status": 1, "wall_seconds": 1.9840468170004897, "peak_rss_kib": "5284184", "swaps": "0", "print_axioms": ["'AspisR1.CPH_FixtureEntry.valid' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.CPH_FixtureEntry.native_keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.CPH_FixtureEntry.admitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+CPH_FixtureEntry.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (UInt8.ofNat (byte i).bv.toNat).toNat
+in the target expression
+  (UInt8.ofNat ↑(byte i)).toNat = (UInt8.ofNat ↑(byte j)).toNat
+
+i j : ℕ
+hi : i < 256
+hj : j < 256
+same : List.map S2W_ReturnedCheckpoint.nativeByte ↑(key i) = List.map S2W_ReturnedCheckpoint.nativeByte ↑(key j)
+head : some (S2W_ReturnedCheckpoint.nativeByte (byte i)) = some (S2W_ReturnedCheckpoint.nativeByte (byte j))
+nums : (UInt8.ofNat ↑(byte i)).toNat = (UInt8.ofNat ↑(byte j)).toNat
+⊢ i = j
+CPH_FixtureEntry.lean:47:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (e.heap.accounts a).1
+in the t
+...
+e (S2W_ReturnedCheckpoint.nativeByte (byte i)) = some (S2W_ReturnedCheckpoint.nativeByte (byte j))
+nums : (UInt8.ofNat ↑(byte i)).toNat = (UInt8.ofNat ↑(byte j)).toNat
+⊢ i = j
+CPH_FixtureEntry.lean:47:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (e.heap.accounts a).1
+in the target expression
+  List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key =
+    List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles b).1).owned.key
+
+e : Entry
+n : ℕ
+separate : ∀ (a : ℕ), (e.handles a).1 ≠ (e.handles a).2
+bounded : ∀ a < n, (e.handles a).1 < 256
+keys : ∀ (c : ℕ), (e.records c).owned.key = key c
+a b : ℕ
+ha : a < n
+hb : b < n
+same : (e.heap.accounts a).1 = (e.heap.accounts b).1
+⊢ List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles a).1).owned.key =
+    List.map S2W_ReturnedCheckpoint.nativeByte ↑(e.records (e.handles b).1).owned.key
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (e.records (e.handles a).1).owned.key
+  has type
+    AdapterRw.solana_pubkey.Pubkey
+  but is expected to have type
+    { l // l.length = ↑32#usize }
+  in the application
+    ↑(e.records (e.handles a).1).owned.key
+'AspisR1.CPH_FixtureEntry.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPH_FixtureEntry.native_keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CPH_FixtureEntry.admitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: CPH-L023.scope; invocation ID: a136c816a9ea4eb983658df0900a2162
