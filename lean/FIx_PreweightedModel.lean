@@ -23,7 +23,9 @@ theorem value {N : Usize} (a : Array NQ N) (start n group : Nat)
       rw [he]
     · rw [if_neg he]
       have h : (group+1≤j.val ∧ j.val<group+1+n) ↔ (group≤j.val ∧ j.val<group+(n+1)) := by omega
-      rw [h]
+      by_cases hi : group≤j.val ∧ j.val<group+(n+1)
+      · rw [if_pos hi,if_pos (h.mpr hi)]
+      · rw [if_neg hi,if_neg (fun hh=>hi (h.mp hh))]
 
 #print axioms value
 end AspisR1.FIx_PreweightedModel
