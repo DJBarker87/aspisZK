@@ -1,0 +1,36 @@
+{"attempt": "SCK_025", "exit_status": 0, "wall_seconds": 2.36802492296556, "peak_rss_kib": "5365868", "swaps": "0", "print_axioms": ["'AspisR1.SCF_Recovery.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCF_Recovery.extract' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCF_Recovery.agreement (left right : AspisR1.RawCutProverCompiler.RunView) (pub : left.2.1.1 = right.2.1.1)
+  (frames :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+          AspisR1.RawCommitmentFrameReplay.frameFromView right row)
+  (cuts :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+          AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) :
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right
+'AspisR1.SCF_Recovery.agreemen
+...
+AspisR1.SCF_Recovery.agreement (left right : AspisR1.RawCutProverCompiler.RunView) (pub : left.2.1.1 = right.2.1.1)
+  (frames :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+          AspisR1.RawCommitmentFrameReplay.frameFromView right row)
+  (cuts :
+    ∀ (row : ℕ),
+      row = 0 ∨ row = 2 ∨ row = 30 →
+        AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+          AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) :
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right
+'AspisR1.SCF_Recovery.agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SCF_Recovery.extract (left right : AspisR1.RawCutProverCompiler.RunView)
+  (agree : AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right)
+  (coins : AspisR1.GSConcreteByteDecoderBank.RawCoins) :
+  AspisR1.RawRecordedPublicSpendExtractorBin.extract left coins =
+    AspisR1.RawRecordedPublicSpendExtractorBin.extract right coins
+'AspisR1.SCF_Recovery.extract' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r38c218098fda4943b99d1317689b67b6.scope; invocation ID: eb26a33e012148d0b7061e9237e72ca1

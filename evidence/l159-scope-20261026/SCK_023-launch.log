@@ -1,0 +1,25 @@
+{"attempt": "SCK_023", "exit_status": 0, "wall_seconds": 2.5296878759982064, "peak_rss_kib": "5477272", "swaps": "0", "print_axioms": ["'AspisR1.SCJ_Projection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCJ_Projection.event_implies {X Y : Type} (iv : AspisV8R19.SourceDuplexStep.State) (Q : ℕ)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (small : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (full : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Y)
+  (smallCons : ∀ q ∈ small.1, q.2 = H q.1) (fullCons : ∀ q ∈ full.1, q.2 = H q.1)
+  (reads : ∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read small.1 a → FS2.Duplex.Read full.1 a)
+  (order :
+    ∀ (b a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read small.1 a → FS2.Duplex.Before small.1
+...
+AspisR1.SCJ_Projection.event_implies {X Y : Type} (iv : AspisV8R19.SourceDuplexStep.State) (Q : ℕ)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (small : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State X)
+  (full : AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Y)
+  (smallCons : ∀ q ∈ small.1, q.2 = H q.1) (fullCons : ∀ q ∈ full.1, q.2 = H q.1)
+  (reads : ∀ (a : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read small.1 a → FS2.Duplex.Read full.1 a)
+  (order :
+    ∀ (b a : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read small.1 a → FS2.Duplex.Before small.1 b a → FS2.Duplex.Before full.1 b a)
+  (budget : FS.firstReads FS.emptyTable full.1 ≤ Q) :
+  AspisR1.BinRawByteCollisionTargets.event iv Q small → AspisR1.BinRawByteCollisionTargets.event iv Q full
+'AspisR1.SCJ_Projection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9688bb5820547a6849a730bbd10ccfe.scope; invocation ID: a3a7bbaac119450e883c60d8728d3b85

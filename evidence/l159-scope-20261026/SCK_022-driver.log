@@ -1,0 +1,39 @@
+{"attempt": "SCK_022", "exit_status": 0, "wall_seconds": 2.4099530240055174, "peak_rss_kib": "5476824", "swaps": "0", "print_axioms": ["'AspisR1.SCJ_AccountProjection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SCJ_AccountProjection.event_implies {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ)
+  (prefixBound :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H a.first).1.length ≤ Q0)
+  (choiceBoun
+...
+AccountExperiment.FirstInputs A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+      (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A)
+      (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H (a.second i saved post final)).1.length ≤ Q1)
+  (project : AspisR1.GExq_AccountExperiment.Outcome A → AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+  (select :
+    AspisR1.GExq_AccountExperiment.Outcome A →
+      AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs)
+  (sourceSelect :
+    AspisR1.F3X_Projection.Output → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) :
+  have small :=
+    AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.Hiq_RecordedJoint.program (AspisR1.F3X_Account.program c hashv (AspisR1.SCE_Experiment.submission a))
+        AspisR1.F3X_Projection.project sourceSelect);
+  have full :=
+    AspisV8R19.MemoizedProgramLaw.eval H
+      (AspisR1.Hiq_RecordedJoint.program (AspisR1.SCE_Experiment.account c hashv copy allocator id a) project select);
+  (∀ (addr : AspisV8R19.DuplexFrames.Bytes), FS2.Duplex.Read small.1 addr → FS2.Duplex.Read full.1 addr) →
+    (∀ (b addr : AspisV8R19.DuplexFrames.Bytes),
+        FS2.Duplex.Read small.1 addr → FS2.Duplex.Before small.1 b addr → FS2.Duplex.Before full.1 b addr) →
+      AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965) small →
+        AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965) full
+'AspisR1.SCJ_AccountProjection.event_implies' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r717b4f8e44764532b85229c633a9c4ac.scope; invocation ID: f7cdd7884ee84dd983b380a187f1a8f7

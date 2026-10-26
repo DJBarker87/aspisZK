@@ -1,0 +1,40 @@
+import SCK_Residuals
+import SCK_Countermodels
+import SCK_Inventory06
+import SCK_Inventory07
+import SCK_Inventory08
+import SCK_Inventory09
+import SCK_Inventory10
+import SCK_Inventory11
+import SCK_Inventory12
+import SCK_Inventory13
+import SCK_Inventory14
+import SCK_Inventory15
+import SCK_Inventory16
+import SCK_Inventory17
+import SCK_Inventory18
+import SCK_Inventory19
+import SCK_Inventory20
+import SCK_Inventory21
+import SCK_Inventory22
+import SCK_Inventory23
+import SCK_Inventory24
+import SCK_Inventory25
+import SCK_Inventory26
+import SCK_Inventory27
+import SCK_Inventory28
+import SCK_Inventory29
+import SCF_RequiredTransport
+set_option pp.deepTerms true
+set_option pp.proofs false
+#print AspisR1.SCK_Residuals.R1
+#print AspisR1.SCK_Residuals.R2
+#print AspisR1.F3T_Runtime.StoredCarrierBinding
+#print AspisR1.SCF_RequiredTransport.CleanAccountTransport
+#print axioms AspisR1.SCK_Countermodels.fixed_game_not_world_factory
+#print axioms AspisR1.SCK_Countermodels.same_entry_is_material
+#print axioms AspisR1.SCJ_Projection.event_implies_refuted
+#print axioms AspisR1.SCJ_OrderObstruction.sublist_not_first_order
+#print axioms AspisR1.SCI_SameWorld.game_does_not_select_second
+#print axioms AspisR1.SCG_Nonvacuity.joint
+#print axioms AspisR1.Rc8_Top.deployed

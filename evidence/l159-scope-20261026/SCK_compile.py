@@ -1,13 +1,13 @@
 """SCK task orchestration; invokes unchanged host admission and Lean launcher."""
 from pathlib import Path
-import json,subprocess,sys,time,shlex
+import json,subprocess,sys,time,shlex,os
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=30 and mod.startswith('SCK_')
 a=f'SCK_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/finish-global-20261026/FGl_019.json').read_text())
-cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused SCK decision statement/countermodel or distinct dependency inventory; no arithmetic aggregation')
+cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'],env={**os.environ,'GIT_OPTIONAL_LOCKS':'0'})),expected_time='Focused SCK decision statement/countermodel or distinct dependency inventory; no arithmetic aggregation')
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
