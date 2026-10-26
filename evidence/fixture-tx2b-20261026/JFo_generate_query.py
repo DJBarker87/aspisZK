@@ -12,7 +12,7 @@ for k in range(15):
  parts.append(data)
  cells.append([int(n) for n,_ in cs])
 raw=sum(parts,[]);assert len(raw)==57607
-base='List.drop_append,List.take_append,List.length_append,Nat.reduceAdd,Nat.reduceSub,Nat.reduceLeDiff,List.length_drop,List.drop_eq_nil_of_le,List.take_of_length_le,List.drop_zero,List.take_zero,List.nil_append,List.append_nil'
+base='List.drop_append,List.take_append,List.length_append,Nat.reduceAdd,Nat.reduceMul,Nat.reduceSub,Nat.reduceLeDiff,List.length_drop,List.drop_eq_nil_of_le,List.take_of_length_le,List.drop_zero,List.take_zero,List.nil_append,List.append_nil'
 manifest=[]
 for i in range(10,22):
  for j in range(4):
@@ -33,7 +33,7 @@ open Aeneas Aeneas.Std Result
 open ExtractedRecordByteCanonicality ExtractedRecordLimbCanonicality
 
 def bytes : List U8 := [{lit}]
-def arr : Array U8 32#usize := ⟨bytes,by simp only [bytes,List.length_cons,List.length_nil]⟩
+def arr : Array U8 32#usize := ⟨bytes,by simp only [bytes,List.length_cons,List.length_nil];rfl⟩
 def value : AspisR1RecordParser.field.wide_exact.WideExact := packed {" ".join(f"{w}#u32" for w in words)}
 
 theorem selected : ((JFo_Opening.value ⟨{i},by decide⟩).val.drop {32*j}).take 32=arr.val := by
@@ -44,7 +44,9 @@ theorem selected : ((JFo_Opening.value ⟨{i},by decide⟩).val.drop {32*j}).tak
 
 '''
   for a,w in enumerate(words):s+=f'theorem word{a} : wordLE arr {a}={w}#u32 := rfl\n#print axioms word{a}\n'
-  s+='\ntheorem decode : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes (Array.to_slice arr)=ok (some value) := by\n  apply (fixed_success_iff arr value).mpr\n  constructor\n  · intro n\n    fin_cases n <;> simp only ['+','.join(f'word{a}' for a in range(8))+'] <;> scalar_tac\n  · simp only ['+','.join(f'word{a}' for a in range(8))+']\n    rfl\n'
+  s+='\ntheorem decode : AspisR1RecordParser.field.wide_exact.WideExact.from_le_bytes (Array.to_slice arr)=ok (some value) := by\n  apply (fixed_success_iff arr value).mpr\n  constructor\n  · intro n\n    fin_cases n\n'
+  for a,w in enumerate(words):s+=f'    · change (wordLE arr {a}).val<2147483647\n      rw [word{a}]\n      change {w}<2147483647\n      omega\n'
+  s+='  · simp only ['+','.join(f'word{a}' for a in range(8))+']\n    rfl\n'
   if j==0:
    query=[93499,147529,216823,245899,209371,192317,65593,183859,193093,159813,132355,218094,178080,149624,166165,42158,179622,21248,63860,55377,185637,14297][i]
    s+=f'\ntheorem query : Array.index_usize JFo_Prepared.value.queries {i}#usize=ok {query}#u32 :=\n  JFo_QueryIndex.source _ _ (by decide) {query}#u32 rfl\n#print axioms query\n'
