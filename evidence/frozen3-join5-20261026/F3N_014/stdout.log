@@ -1,0 +1,126 @@
+F3N_PreparedCoordinates.lean:20:94: error: unsolved goals
+out : verifier.Prepared
+point0 point1 : aspis_core.circle.SecureCirclePoint
+block0 block1 : Std.Array U8 32#usize
+points : out.z = Array.make 2#usize [point0, point1] ⋯
+circle0 : F3M_CircleSource.source block0 FinishModel.CircleRow.First = ok point0
+circle1 : F3M_CircleSource.source block1 FinishModel.CircleRow.Second = ok point1
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+v : LiteralOpeningView.View
+read : LiteralOpeningView.read rs = some v
+challenge0 : v.challenge25 = SelectedTranscriptParams.params.σ 25 (decodeState block0)
+challenge1 : v.challenge26 = SelectedTranscriptParams.params.σ 26 (decodeState block1)
+shape :
+  v.circlePoints = fun j =>
+    if ↑j = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf v.challenge25)
+    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf v.challenge26)
+first :
+  F3M_CircleMeaning.coordinates point0 =
+    ↑(R0P.SemSource.circleSampleParameter0
+        (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0))))
+second :
+  F3M_CircleMeaning.coordinates point1 =
+    ↑(R0P.SemSource.circleSampleParameter1
+        (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))
+firstPair :
+  F3L_RhoMeaning.decode point0.x =
+      SelectedChallengeMap.rhoOf
+        (↑(R0P.SemSource.circleSampleParameter0
+              (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0))))).1 ∧
+    F3L_RhoMeaning.decode point0.y =
+      SelectedChallengeMap.rhoOf
+        (↑(R0P.SemSource.circleSampleParameter0
+              (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0))))).2
+secondPair :
+  F3L_RhoMeaning.decode point1.x =
+      SelectedChallengeMap.rhoOf
+        (↑(R0P.SemSource.circleSampleParameter1
+              (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).1 ∧
+    F3L_RhoMeaning.decode point1.y =
+      SelectedChallengeMap.rhoOf
+        (↑(R0P.SemSource.circleSampleParameter1
+              (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).2
+⊢ (fun j =>
+      if ↑j = 0 then
+        SelectedChallengeMap.rhoOf
+          (↑(R0P.SemSource.circleSampleParameter0
+                (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0))))).1
+      else
+        if ↑j = 1 then
+          SelectedChallengeMap.rhoOf
+            (↑(R0P.SemSource.circleSampleParameter0
+                  (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0))))).2
+        else
+          if ↑j = 2 then
+            SelectedChallengeMap.rhoOf
+              (↑(R0P.SemSource.circleSampleParameter1
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).1
+          else
+            SelectedChallengeMap.rhoOf
+              (↑(R0P.SemSource.circleSampleParameter1
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).2) =
+    fun j =>
+    if ↑j = 0 then
+      SelectedChallengeMap.rhoOf
+        (↑(if ↑0 = 0 then
+              R0P.SemSource.circleSampleParameter0
+                (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0)))
+            else
+              R0P.SemSource.circleSampleParameter1
+                (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).1
+    else
+      if ↑j = 1 then
+        SelectedChallengeMap.rhoOf
+          (↑(if ↑0 = 0 then
+                R0P.SemSource.circleSampleParameter0
+                  (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0)))
+              else
+                R0P.SemSource.circleSampleParameter1
+                  (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).2
+      else
+        if ↑j = 2 then
+          SelectedChallengeMap.rhoOf
+            (↑(if ↑1 = 0 then
+                  R0P.SemSource.circleSampleParameter0
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0)))
+                else
+                  R0P.SemSource.circleSampleParameter1
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).1
+        else
+          SelectedChallengeMap.rhoOf
+            (↑(if ↑1 = 0 then
+                  R0P.SemSource.circleSampleParameter0
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 25 (decodeState block0)))
+                else
+                  R0P.SemSource.circleSampleParameter1
+                    (SelectedChallengeMap.rhoOf (SelectedTranscriptParams.params.σ 26 (decodeState block1))))).2
+F3N_PreparedCoordinates.lean:11:8: error: (kernel) excessive memory consumption detected
+F3N_PreparedCoordinates.lean:29:13: warning: This simp argument is unused:
+  show (0 : Nat) = 0 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [show (̵0̵ ̵:̵ ̵N̵a̵t̵)̵=̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵s̵h̵o̵w̵ ̵(1 : N̵a̵t̵)̵≠̵0̵N̲a̲t̲)̲ ̲≠̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3N_PreparedCoordinates.lean:29:39: warning: This simp argument is unused:
+  show (1 : Nat) ≠ 0 by decide
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0 : N̵a̵t̵)̵=̵0̵N̲a̲t̲)̲ ̲=̲ ̲0̲ from r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵1̵ ̵:̵ ̵N̵a̵t̵)̵≠̵0̵ ̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵r̲f̲l̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3N_PreparedCoordinates.lean:29:66: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0 : Nat) ̲= ̲0 from rfl, ̲show (1 : Nat) ̲≠ ̲0 by decide, ̲if_t̵r̵u̵e̵,̵i̵f_̵f̵alse]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3N_PreparedCoordinates.lean:29:74: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (0 : Nat) ̲= ̲0 from rfl, ̲show (1 : Nat) ̲≠ ̲0 by decide, ̲if_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3N_PreparedCoordinates.coordinates' depends on axioms: [propext, Classical.choice, Quot.sound, coordinates]

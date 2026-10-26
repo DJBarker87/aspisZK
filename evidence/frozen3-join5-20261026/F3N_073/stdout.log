@@ -1,0 +1,26 @@
+F3N_SourceWriterLog.lean:24:2: error(lean.unknownIdentifier): Unknown identifier `obtain`
+
+Note: It is not possible to treat `obtain` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+F3N_SourceWriterLog.lean:14:50: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+F3N_SourceWriterLog.lean:20:18: error: unsolved goals
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+p : Prepared
+a : Accumulator
+proof public1 ck : Slice U8
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (CheckpointBytesBody.fields p a size qb)
+next : ↑a.next = 10
+success : (SdkC_Source.run hashv (writer p a proof public1) []).1 = ok ck
+pm : OraclePortCheckpointAbiC5.Prepared :=
+  CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields p a size qb) canonical
+am : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E :=
+  CheckpointBytesBlocks.accumulator (CheckpointBytesBody.fields p a size qb) canonical
+⊢ ?m.44
+F3N_SourceWriterLog.lean:25:2: error: unexpected token 'have'; expected command
+'AspisR1.CheckpointBytes5Writer.writer_effects' depends on axioms: [propext, Classical.choice, Quot.sound]

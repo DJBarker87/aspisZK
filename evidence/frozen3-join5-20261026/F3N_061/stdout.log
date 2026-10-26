@@ -1,0 +1,110 @@
+F3N_PhysicalCode.lean:30:15: error: unsolved goals
+case step.ok
+A B : Type
+next : A → SdkC_Source.Code B
+B✝ : Type
+k : B✝ → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : B✝),
+    lower (k a >>= next) =
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+v✝ : B✝
+⊢ lower (CheckpointBytes5Effect.Code.step (ok v✝) k >>= next) =
+    AspisV8R19.OracleProgramOps.bind (lower (k v✝)) fun r =>
+      match r with
+      | ok a => lower (next a)
+      | fail e => Program.done (fail e)
+      | div => Program.done div
+
+case step.fail
+A B : Type
+next : A → SdkC_Source.Code B
+B✝ : Type
+k : B✝ → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : B✝),
+    lower (k a >>= next) =
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+e✝ : Error
+⊢ lower (CheckpointBytes5Effect.Code.step (fail e✝) k >>= next) = Program.done (fail e✝)
+
+case step.div
+A B : Type
+next : A → SdkC_Source.Code B
+B✝ : Type
+k : B✝ → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : B✝),
+    lower (k a >>= next) =
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+⊢ lower (CheckpointBytes5Effect.Code.step div k >>= next) = Program.done div
+F3N_PhysicalCode.lean:34:4: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  lower (CheckpointBytes5Effect.Code.read parts k >>= next) =
+    Program.ask parts fun a =>
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.29} {β : α → Sort ?u.28} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case read
+A B : Type
+next : A → SdkC_Source.Code B
+parts : CheckpointBytes5Effect.Parts
+k : CheckpointBytes5Effect.Digest → CheckpointBytes5Effect.Code A
+ih :
+  ∀ (a : CheckpointBytes5Effect.Digest),
+    lower (k a >>= next) =
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+⊢ lower (CheckpointBytes5Effect.Code.read parts k >>= next) =
+    Program.ask parts fun a =>
+      AspisV8R19.OracleProgramOps.bind (lower (k a)) fun r =>
+        match r with
+        | ok a => lower (next a)
+        | fail e => Program.done (fail e)
+        | div => Program.done div
+F3N_PhysicalCode.lean:30:40: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵l̵o̵w̵e̵r̵,̵c̵h̵e̵c̵k̵e̵d̵,̵i̵h̵,̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵O̵r̵a̵c̵l̵e̵P̵r̵o̵g̵r̵a̵m̵O̵p̵s̵.̵b̵i̵n̵d̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲i̲h̲,̲ ̲A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲O̲r̲a̲c̲l̲e̲P̲r̲o̲g̲r̲a̲m̲O̲p̲s̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3N_PhysicalCode.lean:30:82: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [CheckpointBytes5Effect.bind, ̲lower, ̲checked,i̵h̵,̵
+  ̲ ̲ ̲ ̲ ̲AspisV8R19.OracleProgramOps.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3N_PhysicalCode.lean:32:15: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵l̵o̵w̵e̵r̵,̵A̵s̵p̵i̵s̵V̵8̵R̵1̵9̵.̵O̵r̵a̵c̵l̵e̵P̵r̵o̵g̵r̵a̵m̵O̵p̵s̵.̵b̵i̵n̵d̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲A̲s̲p̲i̲s̲V̲8̲R̲1̲9̲.̲O̲r̲a̲c̲l̲e̲P̲r̲o̲g̲r̲a̲m̲O̲p̲s̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3N_PhysicalCode.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3N_PhysicalCode.bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
