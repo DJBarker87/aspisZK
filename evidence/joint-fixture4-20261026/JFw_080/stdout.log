@@ -1,0 +1,18 @@
+JFw_RootRead.lean:18:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 31
+  e ≥ 32
+where
+ e := ↑bytes.length
+ f := ↑(↑bytes).length
+JFw_RootRead.lean:21:2: error: unsolved goals
+case refine_1
+bytes : Slice U8
+bound : 32 ≤ bytes.length
+s : Slice U8 := ⟨List.take 32 ↑bytes, ⋯⟩
+length : (↑s).length = 32
+root : Std.Array U8 32#usize := ⟨↑s, length⟩
+fits : ↑32#usize ≤ bytes.length
+⊢ List.take (↑32#usize - 0) ↑bytes = List.take 32 ↑bytes
+JFw_RootRead.lean:33:4: error: No goals to be solved
+'AspisR1.JFw_RootRead.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
