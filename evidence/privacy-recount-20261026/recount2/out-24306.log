@@ -1,0 +1,25 @@
+@R1Z.PV_CB_Op82Source.op82_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst),
+  @Eq (Aeneas.Std.Result Aeneas.Std.U8) (@ProverRwFull.ExternalFuns.op82 inst (@R1Z.PV_CB_Merkle.selected inst ops))
+    (@Aeneas.Std.Result.ok Aeneas.Std.U8 PV_CB_ShippedOp82.aspis_core.r0.merkle.C1_TAG)
+'R1Z.PV_CB_Op82Source.op82_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB_Op83Source.op83_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst),
+  @Eq (Aeneas.Std.Result Aeneas.Std.U8) (@ProverRwFull.ExternalFuns.op83 inst (@R1Z.PV_CB_Merkle.selected inst ops))
+    (@Aeneas.Std.Result.ok Aeneas.Std.U8 PV_CB_ShippedOp83.aspis_core.r0.merkle.C2_TAG)
+'R1Z.PV_CB_Op83Source.op83_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@R1Z.PV_CB_Op84Source.op84_source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : @ProverRwFull.ExternalFuns inst)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) →
+      Aeneas.Std.Result
+        (Aeneas.Std.Array Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+  (tag : Aeneas.Std.U8) (values : Aeneas.Std.Slice Aeneas.Std.U8),
+  @Eq
+    (Aeneas.Std.Result
+      (Aeneas.Std.Array Aeneas.Std.U8
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯)))
+    (@ProverRwFull.ExternalFuns.op84 inst (@R1Z.PV_CB_Merkle.selected inst ops) hash tag values)
+    (@PV_CB_ShippedOp84.aspis_core.r0.merkle.leaf_with_digest PV_CB_ShippedOp84.aspis_core.digest.LegacyHashFn
+      PV_CB_ShippedOp84.aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash tag values)
+'R1Z.PV_CB_Op84Source.op84_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
