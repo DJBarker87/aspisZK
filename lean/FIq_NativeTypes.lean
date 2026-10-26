@@ -63,7 +63,6 @@ def field.qm31_pack_base4.closure := Unit
 /-- [aspis_r1_mask_extraction_probe::state_only_prefix::r0::Error]
     Source: 'src/state_only_prefix.rs', lines 1630:4-1642:5
     Visibility: public -/
-@[discriminant isize]
 inductive state_only_prefix.r0.Error where
 | Allocation : state_only_prefix.r0.Error
 | RowOrder : Std.U8 → Std.U8 → state_only_prefix.r0.Error
@@ -76,6 +75,22 @@ inductive state_only_prefix.r0.Error where
 | EqualCirclePoints : state_only_prefix.r0.Error
 | TrailingBytes : state_only_prefix.r0.Error
 | Public : state_only_prefix.r0.Error
+
+def state_only_prefix.r0.Error.read_discriminant (x : state_only_prefix.r0.Error) : Isize :=
+  match x with
+  | .Allocation => 0#isize
+  | .RowOrder _ _ => 1#isize
+  | .InvalidRow => 2#isize
+  | .Tag _ => 3#isize
+  | .Length _ => 4#isize
+  | .NonCanonical _ _ => 5#isize
+  | .Boundary _ => 6#isize
+  | .Terminal => 7#isize
+  | .EqualCirclePoints => 8#isize
+  | .TrailingBytes => 9#isize
+  | .Public => 10#isize
+instance _root_.FIq_Native.state_only_prefix.r0.Error.instDiscriminant : Discriminant state_only_prefix.r0.Error Isize where
+  read_discriminant := state_only_prefix.r0.Error.read_discriminant
 
 /-- [aspis_r1_mask_extraction_probe::state_only_prefix::r0::Challenges]
     Source: 'src/state_only_prefix.rs', lines 1841:4-1848:5
@@ -97,13 +112,19 @@ Unit
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::PoolV1PairForestSemanticTerminalErrorV1]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 75:0-78:1
     Visibility: public -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
   where
 | InvalidPublicAmount :
   pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
 | InvalidAppendTransition :
   pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1
+
+def pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.read_discriminant (x : pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1) : Isize :=
+  match x with
+  | .InvalidPublicAmount => 0#isize
+  | .InvalidAppendTransition => 1#isize
+instance _root_.FIq_Native.pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.instDiscriminant : Discriminant pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1 Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.read_discriminant
 
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::{aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public<'a>}::terminal_qm31::closure#1]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 2097:17-2097:32 -/
@@ -173,7 +194,6 @@ structure pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 where
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::r0::Public]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 1994:4-2003:5
     Visibility: public -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
 | Transfer :
   pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
@@ -184,12 +204,25 @@ inductive pool_v1.pair_forest_semantic_terminal.r0.Public where
   pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 →
   pool_v1.pair_forest_semantic_terminal.r0.Public
 
+def pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant (x : pool_v1.pair_forest_semantic_terminal.r0.Public) : Isize :=
+  match x with
+  | .Transfer _ _ => 0#isize
+  | .Withdrawal _ _ => 1#isize
+instance _root_.FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.instDiscriminant : Discriminant pool_v1.pair_forest_semantic_terminal.r0.Public Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.r0.Public.read_discriminant
+
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::CompiledVariant]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 81:0-84:1 -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_semantic_terminal.CompiledVariant where
 | PrivateTransfer : pool_v1.pair_forest_semantic_terminal.CompiledVariant
 | Withdrawal : pool_v1.pair_forest_semantic_terminal.CompiledVariant
+
+def pool_v1.pair_forest_semantic_terminal.CompiledVariant.read_discriminant (x : pool_v1.pair_forest_semantic_terminal.CompiledVariant) : Isize :=
+  match x with
+  | .PrivateTransfer => 0#isize
+  | .Withdrawal => 1#isize
+instance _root_.FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.instDiscriminant : Discriminant pool_v1.pair_forest_semantic_terminal.CompiledVariant Isize where
+  read_discriminant := pool_v1.pair_forest_semantic_terminal.CompiledVariant.read_discriminant
 
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_semantic_terminal::SemanticPublic]
     Source: 'src/statement/pool_v1/pair_forest_semantic_terminal.rs', lines 87:0-98:1 -/
@@ -337,13 +370,19 @@ def pool_v1.pair_forest_semantic_terminal.composition_parts.closure :=
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_copy_terminal::PoolV1PairForestCompiledVariantV1]
     Source: 'src/statement/pool_v1/pair_forest_copy_terminal.rs', lines 68:0-71:1
     Visibility: public -/
-@[discriminant isize]
 inductive pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
   where
 | PrivateTransfer :
   pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
 | Withdrawal :
   pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1
+
+def pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.read_discriminant (x : pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1) : Isize :=
+  match x with
+  | .PrivateTransfer => 0#isize
+  | .Withdrawal => 1#isize
+instance _root_.FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.instDiscriminant : Discriminant pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1 Isize where
+  read_discriminant := pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.read_discriminant
 
 /-- [aspis_r1_mask_extraction_probe::pool_v1::pair_forest_copy_terminal::Selectors]
     Source: 'src/statement/pool_v1/pair_forest_copy_terminal.rs', lines 138:0-141:1 -/

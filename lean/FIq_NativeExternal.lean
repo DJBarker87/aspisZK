@@ -8,9 +8,9 @@ namespace FIq_Native
     Visibility: public -/
 @[rust_fun
   "core::array::iter::{core::iter::traits::collect::IntoIterator<[@T; @N], @T, core::array::iter::IntoIter<@T, @N>>}::into_iter"]
-axiom Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
-  {T : Type} {N : Std.Usize} :
-  Array T N → Result (core.array.iter.IntoIter T N)
+def Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
+  {T : Type} {N : Std.Usize} (a : Array T N) : Result (core.array.iter.IntoIter T N) :=
+  .ok a.1
 
 
 /-- [core::array::iter::{impl core::iter::traits::iterator::Iterator<T> for core::array::iter::IntoIter<T, N>}::fold]:
@@ -19,11 +19,15 @@ axiom Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter
     Visibility: public -/
 @[rust_fun
   "core::array::iter::{core::iter::traits::iterator::Iterator<core::array::iter::IntoIter<@T, @N>, @T>}::fold"]
-axiom core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+def core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
   {T : Type} {Acc : Type} {Fold : Type} {N : Std.Usize}
-  (opsfunctionFnMutFoldPairAccInst : core.ops.function.FnMut Fold (Acc × T)
-  Acc) :
+  (fn : core.ops.function.FnMut Fold (Acc × T) Acc) :
   core.array.iter.IntoIter T N → Acc → Fold → Result Acc
+  | [], acc, _ => .ok acc
+  | x :: rest, acc, f => do
+      let (acc', f') ← fn.call_mut f (acc, x)
+      core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+        (N := N) fn rest acc' f'
 
 
 /-- [core::array::iter::{impl core::iter::traits::iterator::Iterator<T> for core::array::iter::IntoIter<T, N>}::next]:
@@ -32,10 +36,12 @@ axiom core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
     Visibility: public -/
 @[rust_fun
   "core::array::iter::{core::iter::traits::iterator::Iterator<core::array::iter::IntoIter<@T, @N>, @T>}::next"]
-axiom core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next
-  {T : Type} {N : Std.Usize} :
-  core.array.iter.IntoIter T N → Result ((Option T) ×
-    (core.array.iter.IntoIter T N))
+def core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next
+  {T : Type} {N : Std.Usize} (xs : core.array.iter.IntoIter T N) :
+  Result ((Option T) × (core.array.iter.IntoIter T N)) :=
+  match xs with
+  | [] => .ok (none, [])
+  | x :: rest => .ok (some x, rest)
 
 
 /-- [core::array::iter::{impl core::iter::traits::double_ended::DoubleEndedIterator<T> for core::array::iter::IntoIter<T, N>}::next_back]:
@@ -43,12 +49,13 @@ axiom core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.next
     Name pattern: [core::array::iter::{core::iter::traits::double_ended::DoubleEndedIterator<core::array::iter::IntoIter<@T, @N>, @T>}::next_back]
     Visibility: public -/
 @[rust_fun
-  "core::array::iter::{core::iter::traits::double_ended::DoubleEndedIterator<core::array::iter::IntoIter<@T, @N>, @T>}::next_back"]
-axiom
-  core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator.next_back
-  {T : Type} {N : Std.Usize} :
-  core.array.iter.IntoIter T N → Result ((Option T) ×
-    (core.array.iter.IntoIter T N))
+  "core::array::iter::{core::iter::traits::double_ended::DoubleEndedIterator<core::array::iter.IntoIter<@T, @N>, @T>}::next_back"]
+def core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator.next_back
+  {T : Type} {N : Std.Usize} (xs : core.array.iter.IntoIter T N) :
+  Result ((Option T) × (core.array.iter.IntoIter T N)) :=
+  match xs.reverse with
+  | [] => .ok (none, [])
+  | x :: rest => .ok (some x, rest.reverse)
 
 
 def core.num.U16.count_ones_aux (n : Nat) : Nat → Nat
