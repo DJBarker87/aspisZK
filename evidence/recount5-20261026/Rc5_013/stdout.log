@@ -1,0 +1,206 @@
+Rc5_Close.lean:147:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (sdkOps
+        (Tx2I_Install.install (Rc5_Install.configuration indexError input reservation).adapter
+          (Op5T_Concrete.stage
+            (Tx2N_Execution.control
+              (AuS1_Install.base (Rc5_Install.configuration indexError input reservation).stageBase)
+              (Rc5_Install.configuration indexError input reservation).reserved
+              (Rc5_Install.configuration indexError input reservation).query
+              (Rc5_Install.configuration indexError input reservation).geometry))
+          (Rc5_Install.configuration indexError input reservation).finish)
+        (Uni_Install.current (Rc5_Install.configuration indexError input reservation).currentBase
+          (Rc5_Install.configuration indexError input reservation).reserved
+          (Rc5_Install.configuration indexError input reservation).query
+          (Rc5_Install.configuration indexError input reservation).geometry)
+        (Rc5_Install.configuration indexError input reservation).boundaries
+        (Rc5_Install.configuration indexError input reservation).std).op43
+    ?self ?parts
+in the target expression
+  (DrvC_Installation.sdk (Rc5_Install.configuration indexError input reservation)).op43 () parts = ok digest
+
+W A F CoreError Tx : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e1 e2 : Entry
+w1 w2 : W
+admission1 : RuntimeEntrypointAdmission L e1 w1 3
+admission2 : RuntimeEntrypointAdmission L e2 w2 7
+input : DrvC_Installation.Configuration F CoreError
+indexError : CoreError
+reservation : NP6_StdModel.Reservation
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest
+extraction :
+  S2W_DigestExtraction.AeneasExtraction
+    (sdkOps
+      (Tx2I_Install.install (Rc5_Install.configuration indexError input reservation).adapter
+        (Op5T_Concrete.stage
+          (Tx2N_Execution.control (AuS1_Install.base (Rc5_Install.configuration indexError input reservation).stageBase)
+            (Rc5_Install.configuration indexError input reservation).reserved
+            (Rc5_Install.configuration indexError input reservation).query
+            (Rc5_Install.configuration indexError input reservation).geometry))
+        (Rc5_Install.configuration indexError input reservation).finish)
+      (Uni_Install.current (Rc5_Install.configuration indexError input reservation).currentBase
+        (Rc5_Install.configuration indexError input reservation).reserved
+        (Rc5_Install.configuration indexError input reservation).query
+        (Rc5_Install.configuration indexError input reservation).geometry)
+      (Rc5_Install.configuration indexError input reservation).boundaries
+      (Rc5_Install.configuration indexError input reservation).std)
+    native1 native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+program : S2W_ExtractionBoundary.Program
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state1 state2 final1 final2 : A
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+accepted1 : first native1 copy allocator e1 program data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+accepted2 : second native2 allocator e2 program data2 slot state2 = ok (core.result.Result.Ok (post2, final2))
+root : Std.Array U8 32#usize
+length : U32
+prior : Program Bytes State Unit
+p : CPG_Projection.Observations Tx A
+t u : Tx
+actions : List (CPP_BankState.Action A)
+game : CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program
+system : S2W_ExtractionBoundary.Program
+programNotSystem : program ≠ system
+RuntimePersistence :
+  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system)
+    (CPG_Projection.before p) (CPG_Projection.tentative p) (CPG_Projection.success p) (CPG_Projection.loaded p)
+c : DrvC_Installation.Configuration F CoreError := Rc5_Install.seed indexError input
+keyLaw : (DrvC_Installation.sdk (Rc5_Install.configuration indexError input reservation)).op36 = Hist_Authority.keyEq
+oldGame : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program
+f : FirstCut
+s : SecondCut
+outer : S2W_Trace.Log
+pre middle : List (S2W_SiteSchedule.Event (Option Unit))
+fs : S2W_SiteSchedule.FirstSegments (Option Unit)
+ss : S2W_SiteSchedule.SecondSegments (Option Unit)
+run :
+  Tx1Q_Execution.Run
+    (Tx1Q_Execution.actual (Op5T_Concrete.current (Rc5_Install.configuration indexError input reservation).currentBase)
+      (Rc5_Install.configuration indexError input reservation).reserved
+      (Rc5_Install.configuration indexError input reservation).query
+      (Rc5_Install.configuration indexError input reservation).geometry (F3M_CircleSource.install input.boundaries)
+      (NP6_StdModel.calls reservation))
+    (Rc5_Install.configuration indexError input reservation).reserved
+    (Rc5_Install.configuration indexError input reservation).query
+    (Rc5_Install.configuration indexError input reservation).geometry
+    (SdkD_PairBatches.current (Rc5_Install.configuration indexError input reservation).adapter
+      (Rc5_Install.configuration indexError input reservation).currentBase
+      (Rc5_Install.configuration indexError input reservation).stageBase
+      (Rc5_Install.configuration indexError input reservation).finish
+      (Rc5_Install.configuration indexError input reservation).reserved
+      (Rc5_Install.configuration indexError input reservation).query
+      (Rc5_Install.configuration indexError input reservation).geometry (F3M_CircleSource.install input.boundaries)
+      (NP6_StdModel.calls reservation))
+    () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved
+tx2 : Cons_Native.Witness
+calls :
+  Cons_Native.Calls (AuS1_Install.base (Rc5_Install.configuration indexError input reservation).stageBase)
+    (Rc5_Install.configuration indexError input reservation).finish
+    (Rc5_Install.configuration indexError input reservation).reserved
+    (Rc5_Install.configuration indexError input reservation).query
+    (Rc5_Install.configuration indexError input reservation).geometry
+    (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+      (sdkOps
+        (Tx2I_Install.install (Rc5_Install.configuration indexError input reservation).adapter
+          (Op5T_Concrete.stage
+            (Tx2N_Execution.control
+              (AuS1_Install.base (Rc5_Install.configuration indexError input reservation).stageBase)
+              (Rc5_Install.configuration indexError input reservation).reserved
+              (Rc5_Install.configuration indexError input reservation).query
+              (Rc5_Install.configuration indexError input reservation).geometry))
+          (Rc5_Install.configuration indexError input reservation).finish)
+        (Uni_Install.current (Rc5_Install.configuration indexError input reservation).currentBase
+          (Rc5_Install.configuration indexError input reservation).reserved
+          (Rc5_Install.configuration indexError input reservation).query
+          (Rc5_Install.configuration indexError input reservation).geometry)
+        (F3M_CircleSource.install input.boundaries) (NP6_StdModel.calls reservation)))
+    () s.pub s.proof s.checkpoint tx2
+base :
+  Rc2_Base.Outcome L e1 e2 w1 w2 (Rc5_Install.configuration indexError input reservation).adapter
+    (Rc5_Install.configuration indexError input reservation).currentBase
+    (Rc5_Install.configuration indexError input reservation).reserved
+    (Rc5_Install.configuration indexError input reservation).query
+    (Rc5_Install.configuration indexError input reservation).geometry
+    (Rc5_Install.configuration indexError input reservation).stageBase
+    (Rc5_Install.configuration indexError input reservation).finish (F3M_CircleSource.install input.boundaries)
+    reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run
+initial : NP6_Constructors.Contents run.initial run.pending
+selected :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+      f.statement =
+    ok f.semantic
+publicFacts : T2R_Public.Facts f.pub f.proof
+sourceFacts : T2R_Parser.Facts f.proof
+acceptance :
+  T2R_Acceptance.Facts (DrvC_Implementation.driver (Rc5_Install.configuration indexError input reservation)) H f.pub
+    f.proof s.pub s.proof s.checkpoint (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+nonvacuity :
+  Rc3_Nonvacuity.Facts (DrvC_Implementation.driver (Rc5_Install.configuration indexError input reservation)) H f.pub
+    f.proof s.pub s.proof s.checkpoint (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+caller :
+  SAF_C_SAF_PreparedCaller.Outcome L e1 e2 w1 w2 (Rc5_Install.configuration indexError input reservation).adapter
+    (Rc5_Install.configuration indexError input reservation).currentBase
+    (Rc5_Install.configuration indexError input reservation).reserved
+    (Rc5_Install.configuration indexError input reservation).query
+    (Rc5_Install.configuration indexError input reservation).geometry
+    (Rc5_Install.configuration indexError input reservation).stageBase
+    (Rc5_Install.configuration indexError input reservation).finish input.boundaries (NP6_StdModel.calls reservation)
+    program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
+cuts :
+  SourceCuts
+    (sdkOps
+      (Tx2I_Install.install (Rc5_Install.configuration indexError input reservation).adapter
+        (Op5T_Concrete.stage
+          (Tx2N_Execution.control (AuS1_Install.base (Rc5_Install.configuration indexError input reservation).stageBase)
+            (Rc5_Install.configuration indexError input reservation).reserved
+            (Rc5_Install.configuration indexError input reservation).query
+            (Rc5_Install.configuration indexError input reservation).geometry))
+        (Rc5_Install.configuration indexError input reservation).finish)
+      (Uni_Install.current (Rc5_Install.configuration indexError input reservation).currentBase
+        (Rc5_Install.configuration indexError input reservation).reserved
+        (Rc5_Install.configuration indexError input reservation).query
+        (Rc5_Install.configuration indexError input reservation).geometry)
+      (F3M_CircleSource.install input.boundaries) (NP6_StdModel.calls reservation))
+    e1.first (e2.second secondSizes) saved f s
+version : S2X.CheckpointVersionBinding (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+  (bytesOf ↑s.checkpoint) :=
+  CPG_History.on_cuts p t u e1 e2 saved actions (Rc5_Install.configuration indexError input reservation) keyLaw native1
+    native2 hashv extraction copy std allocator program system programNotSystem oldGame data1 data2 slot state1 state2
+    final1 final2 post1 post2 accepted1 accepted2 RuntimePersistence f s cuts
+writerKey : version.key = (e1.handles 2).1
+readerKey : version.key = (e2.handles 6).1
+events : version.events = p.physicalEvents t
+owner :
+  WAdm_Domain.SessionAPrepare
+    (Tx1Q_Execution.actual (Op5T_Concrete.current (Rc5_Install.configuration indexError input reservation).currentBase)
+      (Rc5_Install.configuration indexError input reservation).reserved
+      (Rc5_Install.configuration indexError input reservation).query
+      (Rc5_Install.configuration indexError input reservation).geometry (F3M_CircleSource.install input.boundaries)
+      (NP6_StdModel.calls reservation))
+ports : Port5Q1_QueryPorts.SessionAPrimitives (SAQ_Decoder.install input.query)
+parts : Slice (Slice U8)
+digest : Std.Array U8 32#usize
+returned : (DrvC_Installation.sdk (Rc5_Install.configuration indexError input reservation)).op43 () parts = ok digest
+⊢ CheckpointBytesDigest.stateOf digest = H (AspisR1DigestLogCarrier.flatten parts)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.Rc5_Close.from_saf' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
