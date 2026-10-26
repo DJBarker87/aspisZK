@@ -1,0 +1,315 @@
+F3R_RoundStep.lean:49:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  B.decode 28#usize c.record 0#usize
+in the target expression
+  observe
+      (run
+          (match core.ops.control_flow.ControlFlow.Continue c.record with
+          | core.ops.control_flow.ControlFlow.Continue vr => do
+            let r1 ← liftM (B.decode 28#usize vr 0#usize)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let boundary ← liftM (B.boundary val)
+                let b ←
+                  liftM
+                      (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary
+                        running)
+                if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+                  else do
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok c.record))
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                        let __x ← S1SemanticCode.semanticValidated D c.before vr1
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let alpha1 ← liftM (alpha.update round val1)
+                            let value ← liftM (B.value val alpha1 round)
+                            pure (core.result.Result.Ok (value, alpha1, __x.2))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (aspis_core.field.QM31 ×
+                                  Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                                (core.convert.FromSame r1_wire.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (aspis_core.field.QM31 ×
+                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                            (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame r1_wire.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                (core.convert.FromSame r1_wire.Error) residual))).1 =
+    callLog c
+
+case Ok.false
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+B : RoundModel.Boundaries
+c : SourceFull25.Call D pre
+below : ↑c.row < 25
+alpha : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+row : 15#u8 + UScalar.cast UScalarTy.U8 round = ok c.row
+out : aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash
+ret : erase (S1SemanticCode.semanticValidated D c.before c.record) = ok (core.result.Result.Ok c.q, c.after)
+success :
+  (do
+      let value ← B.decode 28#usize c.record 0#usize
+      let value ←
+        match value with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      erase
+          (match value with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let boundary ← liftM (B.boundary val)
+            let b ←
+              liftM
+                  (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary
+                    running)
+            if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+              else do
+                let cf2 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue c.record))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                    let __x ← S1SemanticCode.semanticValidated D c.before vr1
+                    let cf3 ←
+                      liftM
+                          (match __x.1 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                        let alpha1 ← liftM (alpha.update round val1)
+                        let value ← liftM (B.value val alpha1 round)
+                        pure (core.result.Result.Ok (value, alpha1, __x.2))
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (aspis_core.field.QM31 ×
+                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                            (core.convert.FromSame r1_wire.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                        (core.convert.FromSame r1_wire.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                (core.convert.FromSame r1_wire.Error) residual))) =
+    ok (core.result.Result.Ok out)
+poly : Std.Array aspis_core.field.QM31 28#usize
+decoded : B.decode 28#usize c.record 0#usize = ok (core.result.Result.Ok poly)
+s1 :
+  (do
+      let value ← B.boundary poly
+      let value ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 value running
+      erase
+          (if value = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+          else do
+            let cf2 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue c.record))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                let __x ← S1SemanticCode.semanticValidated D c.before vr1
+                let cf3 ←
+                  liftM
+                      (match __x.1 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let alpha1 ← liftM (alpha.update round val1)
+                    let value ← liftM (B.value poly alpha1 round)
+                    pure (core.result.Result.Ok (value, alpha1, __x.2))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                        (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame r1_wire.Error) residual))) =
+    ok (core.result.Result.Ok out)
+boundary : aspis_core.field.QM31
+hb : B.boundary poly = ok boundary
+s2 :
+  (do
+      let value ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running
+      erase
+          (if value = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+          else do
+            let cf2 ← liftM (ok (core.ops.control_flow.ControlFlow.Continue c.record))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                let __x ← S1SemanticCode.semanticValidated D c.before vr1
+                let cf3 ←
+                  liftM
+                      (match __x.1 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                match cf3 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let alpha1 ← liftM (alpha.update round val1)
+                    let value ← liftM (B.value poly alpha1 round)
+                    pure (core.result.Result.Ok (value, alpha1, __x.2))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                        (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame r1_wire.Error) residual))) =
+    ok (core.result.Result.Ok out)
+hbad : core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running = ok false
+s3 :
+  (do
+      let value ← alpha.update round c.q
+      let value_1 ← B.value poly value round
+      erase (pure (core.result.Result.Ok (value_1, value, c.after)))) =
+    ok (core.result.Result.Ok out)
+updated : Std.Array aspis_core.field.QM31 10#usize
+update : alpha.update round c.q = ok updated
+s4 :
+  (do
+      let value ← B.value poly updated round
+      erase (pure (core.result.Result.Ok (value, updated, c.after)))) =
+    ok (core.result.Result.Ok out)
+value : aspis_core.field.QM31
+hvalue : B.value poly updated round = ok value
+s5 : erase (pure (core.result.Result.Ok (value, updated, c.after))) = ok (core.result.Result.Ok out)
+⊢ observe
+      (run
+          (match core.ops.control_flow.ControlFlow.Continue c.record with
+          | core.ops.control_flow.ControlFlow.Continue vr => do
+            let r1 ← liftM (B.decode 28#usize vr 0#usize)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let boundary ← liftM (B.boundary val)
+                let b ←
+                  liftM
+                      (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary
+                        running)
+                if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+                  else do
+                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok c.record))
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                        let __x ← S1SemanticCode.semanticValidated D c.before vr1
+                        let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf3 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let alpha1 ← liftM (alpha.update round val1)
+                            let value ← liftM (B.value val alpha1 round)
+                            pure (core.result.Result.Ok (value, alpha1, __x.2))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (aspis_core.field.QM31 ×
+                                  Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                                (core.convert.FromSame r1_wire.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (aspis_core.field.QM31 ×
+                              Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                            (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                    (core.convert.FromSame r1_wire.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript Hash)
+                (core.convert.FromSame r1_wire.Error) residual))).1 =
+    callLog c
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+F3R_RoundStep.lean:25:15: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [erase_b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵lift, ̲erase_pure, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at s1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_RoundStep.lean:25:37: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [erase_bind, ̲erase_lift,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵ ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at s1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_RoundStep.lean:26:6: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame.from] at s1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_RoundStep.lean:31:48: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at s1
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_RoundStep.lean:38:8: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at s3
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3R_RoundStep.lean:40:50: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲]̲ at s3
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3R_RoundStep.log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
