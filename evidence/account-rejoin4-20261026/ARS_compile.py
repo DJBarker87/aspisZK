@@ -4,7 +4,7 @@ import json,subprocess,sys,time,shlex,os
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
-n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('ARS_') or len(sys.argv)==4)
+n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=101 and (mod.startswith('ARS_') or len(sys.argv)==4)
 a=f'ARS_{n:03}'; assert not (P/a).exists()
 assert len(list(P.glob('ARS_*/receipt.json'))) < 100, 'Lean budget exhausted'
 cfg=json.loads((R/'evidence/account-rejoin2-20261026/ARQ_095.json').read_text())
