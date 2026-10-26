@@ -11,7 +11,9 @@ theorem ASC8_shape (sdk : AdapterRw.Cuts.Account) (id : Key) :
       prepared a id 10000 = .error .InvalidAccountData ∧
       prepared a id 8504 = .error .InvalidAccountData := by
   let a : Account := ⟨sdk,65#u8 :: List.replicate 191 65#u8⟩
-  have len : a.data.length = 192 := by simp [a]
+  have len : a.data.length = 192 := by
+    change (List.replicate 191 (65#u8)).length + 1 = 192
+    rw [List.length_replicate]
   exact ⟨a,len,rfl,
     prepared_rejects a id 10000 (Or.inl len) (Or.inl rfl),
     prepared_rejects a id 8504 (Or.inl len) (Or.inr rfl)⟩
@@ -22,7 +24,9 @@ theorem CP_shape (sdk : AdapterRw.Cuts.Account) (id : Key) :
       prepared a id 10000 = .error .InvalidAccountData ∧
       prepared a id 8504 = .error .InvalidAccountData := by
   let a : Account := ⟨sdk,82#u8 :: List.replicate 1767 82#u8⟩
-  have len : a.data.length = 1768 := by simp [a]
+  have len : a.data.length = 1768 := by
+    change (List.replicate 1767 (82#u8)).length + 1 = 1768
+    rw [List.length_replicate]
   exact ⟨a,len,rfl,
     prepared_rejects a id 10000 (Or.inr len) (Or.inl rfl),
     prepared_rejects a id 8504 (Or.inr len) (Or.inr rfl)⟩

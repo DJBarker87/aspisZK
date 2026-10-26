@@ -1,7 +1,7 @@
 {
   "attempt": "PoolN_KANI040",
   "kind": "kani",
-  "source_revision": "670e4822526975c345f8122b3cd970f7f1133973",
+  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
   "source_tree_dirty": true,
   "command": [
     "/home/dombarker/.cargo/bin/cargo-kani",
@@ -19,7 +19,7 @@
     "--harness-timeout",
     "60s",
     "--harness",
-    "PoolN_lane_codec_1768",
+    "PoolN_alias_any_two_of_fourteen",
     "--output-format",
     "terse"
   ],
@@ -27,7 +27,19 @@
     "PoolN_processor_harness.rs",
     "PoolN_forest_harness.rs",
     "PoolN_misc_harness.rs",
-    "PoolN_source-pins.json"
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs",
+    "PoolN_processor_splits.rs",
+    "PoolN_pair_forest_splits.rs",
+    "PoolN_cpi_harness.rs",
+    "PoolN_stack_harness.rs",
+    "PoolN_stack-pin.json",
+    "PoolN_dispatch_harness.rs",
+    "PoolN_dispatch-pin.json",
+    "PoolN_final_splits.rs"
   ],
   "timeout": 300,
   "env": {
@@ -39,7 +51,7 @@
     "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
   },
   "deps_fingerprint": {
-    "scope": "assert!(aspis_statement::pool_v1::decode_pool_v1_pair_forest_lane_state_v1(&account.try_borrow_data().unwrap(),&crate::pair_empty_roots::POOL_V1_PAIR_EMPTY_ROOTS).is_err());"
+    "scope": "Actual native PoolN_alias_any_two_of_fourteen; postcreate split fixes expected384 and separates preparation branches after KANI008 timeout; alias test selects every distinct pair among14 physical AccountInfo positions. First-byte/balance frame only, no full dispatch claim."
   },
-  "expected_time": "Optimized native guard/handler verification, no intended arithmetic/CPI. PoolN_lane_codec_1768"
+  "expected_time": "Optimized small native guard proof generation/SAT only; no arithmetic/CPI expected; unchanged caps and timeout."
 }

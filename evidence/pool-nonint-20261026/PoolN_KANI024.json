@@ -30,7 +30,8 @@
     "PoolN_source-pins.json",
     "PoolN_processor_prefixes.rs",
     "PoolN_pair_forest_prefixes.rs",
-    "PoolN_prefix-manifest.json"
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs"
   ],
   "timeout": 300,
   "env": {
@@ -42,7 +43,7 @@
     "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
   },
   "deps_fingerprint": {
-    "scope": "Literal contiguous actual-source prefix, stop immediately after rejecting primary-role guard; arbitrary exact-length instruction and checkpoint bytes, symbolic signer/writable; source offsets/hashes in prefix manifest; first-byte and balance frames; cover checks guard reachability."
+    "scope": "Literal contiguous actual-source prefix on canonical instruction fixture, arbitrary checkpoint bytes and signer/writable flags; first-byte and balance frames plus reachability covers. This is a primary-role fixture class, not arbitrary instruction or all-role closure."
   },
-  "expected_time": "Optimized prefix ASPT; no intended arithmetic, CPI or suffix execution;192/1768 pairs."
+  "expected_time": "Optimized prefix ASPT; no intended arithmetic, CPI or suffix execution;192/1768 pairs. Canonical fixture eliminates symbolic parser search, after KANI023 timeout; no cap/timeout increase."
 }

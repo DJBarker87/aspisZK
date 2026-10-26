@@ -1,7 +1,7 @@
 {
   "attempt": "PoolN_KANI036",
   "kind": "kani",
-  "source_revision": "670e4822526975c345f8122b3cd970f7f1133973",
+  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
   "source_tree_dirty": true,
   "command": [
     "/home/dombarker/.cargo/bin/cargo-kani",
@@ -19,7 +19,7 @@
     "--harness-timeout",
     "60s",
     "--harness",
-    "PoolN_marker_1768",
+    "PoolN_dispatch_projection",
     "--output-format",
     "terse"
   ],
@@ -27,7 +27,18 @@
     "PoolN_processor_harness.rs",
     "PoolN_forest_harness.rs",
     "PoolN_misc_harness.rs",
-    "PoolN_source-pins.json"
+    "PoolN_source-pins.json",
+    "PoolN_processor_prefixes.rs",
+    "PoolN_pair_forest_prefixes.rs",
+    "PoolN_prefix-manifest.json",
+    "PoolN_fixture.rs",
+    "PoolN_processor_splits.rs",
+    "PoolN_pair_forest_splits.rs",
+    "PoolN_cpi_harness.rs",
+    "PoolN_stack_harness.rs",
+    "PoolN_stack-pin.json",
+    "PoolN_dispatch_harness.rs",
+    "PoolN_dispatch-pin.json"
   ],
   "timeout": 300,
   "env": {
@@ -39,7 +50,7 @@
     "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
   },
   "deps_fingerprint": {
-    "scope": "assert_eq!(crate::nullifier::recheck_pair_forest_nullifier_marker_v1(&id,&account),Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into()));"
+    "scope": "PoolN_dispatch_projection actual native gate/builder or pinned control projection. See source and specific assertions; no whole-dispatch/handler-frame implication."
   },
-  "expected_time": "Optimized native guard/handler verification, no intended arithmetic/CPI. PoolN_marker_1768"
+  "expected_time": "Optimized PoolN_dispatch_projection only; no heavy arithmetic or successful CPI callee expected."
 }
