@@ -1,0 +1,42 @@
+F3Q_TreeLog.lean:90:4: error: Type mismatch: After simplification, term
+  together
+ has type
+  @Eq (List (Bytes × State))
+    (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof queries root batch kind initial.idx
+            initial.val))).1
+    ((List.map
+          (fun pos =>
+            (OraclePortSelectedDraft.leaf parsed (↑kind) pos, H (OraclePortSelectedDraft.leaf parsed (↑kind) pos)))
+          (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind)).append
+      (eval H
+          (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+            physical afterLeaf)).1)
+but is expected to have type
+  @Eq (List (Bytes × State))
+    (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves D hash proof queries root batch kind initial.idx
+            initial.val))).1
+    (List.map
+        (fun p => (OraclePortSelectedDraft.leaf parsed (↑kind) p, H (OraclePortSelectedDraft.leaf parsed (↑kind) p)))
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑kind) ++
+      (eval H
+          (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch) (↑kind)
+            physical afterLeaf)).1)
+F3Q_TreeLog.lean:81:67: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeP6Batch.batch_tree, ̲eval_bind, ̲observed,e̵v̵a̵l̵,̵ ̲List.append_nil, ̲tailValue]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3Q_TreeLog.lean:81:72: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵6̵B̵a̵t̵c̵h̵.̵b̵a̵t̵c̵h̵_̵t̵r̵e̵e̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵t̵a̵i̵l̵V̵a̵l̵u̵e̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲P̲6̲B̲a̲t̲c̲h̲.̲b̲a̲t̲c̲h̲_̲t̲r̲e̲e̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲e̲v̲a̲l̲,̲ ̲t̲a̲i̲l̲V̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3Q_TreeLog.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

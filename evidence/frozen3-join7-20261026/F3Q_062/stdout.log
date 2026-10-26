@@ -1,0 +1,232 @@
+F3Q_BatchLog.lean:69:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H
+      (SdkC_Oracle.program
+        (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+          (Port3_BatchStage.root0 p) batch 0#usize Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val))).1
+in the target expression
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p folded batch))).1 =
+    (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+                (Port3_BatchStage.root0 p) batch 0#usize (Array.repeat 16#usize 0#u32)
+                (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))))).1 ++
+        (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+                (Port3_BatchStage.root1 p) batch 1#usize idx1 val1))).1 ++
+      (eval H
+          (SdkC_Oracle.program
+            (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries folded batch
+              2#usize idx2 val2))).1
+
+X : Type
+D : VTop_Stages.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+binary occupied sibling : MultiproofConeP6Callbacks.Parent
+leaf : MultiproofConeP6Batch.Leaf
+p6 :
+  MultiproofConeP6Frozen2Stage.P6Boundary (Port4B_VerifyInstall.digest (VTop_Checkpoint.digest D)) hash H binary
+    occupied sibling leaf
+proof : Slice U8
+len : (↑proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = bytesOf ↑proof
+p : VTop_Stages.verifier.Prepared
+folded : Std.Array U8 32#usize
+q : Fin 22 → Fin 262144
+batch : Usize
+hb : ↑batch < 2
+nodes : ℕ → ℕ → Slice U8
+views :
+  ∀ (b k : ℕ),
+    b < 2 →
+      k < 3 →
+        bytesOf ↑(nodes b k) =
+          OraclePortCompactDraft.slice parsed.wire (OraclePortSelectedDraft.slotStart (3 * b + k))
+            (32 * OraclePortSelectedDraft.capacity (3 * b + k))
+keys : ∀ (k : Fin 3), Port4B_TreeJoin.PackedKeys Port4B_Install.leaves p.queries q batch (↑k)#usize
+root0 : Port3_BatchStage.root0 p = encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+root1 : Port3_BatchStage.root1 p = encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+root2 : folded = encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+run :
+  Port3_BatchStage.batch (Port4B_VerifyInstall.install Port4B_Install.leaves) D proof p folded batch hash =
+    ok (core.result.Result.Ok ())
+idx1 idx2 idx3 : Port3_NativeBatchCalls.Indices
+val1 val2 val3 : Port3_NativeBatchCalls.Values
+c0 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install Port4B_Install.leaves)) (VTop_Checkpoint.digest D) proof
+      p.queries (Port3_BatchStage.root0 p) batch 0#usize (Array.repeat 16#usize 0#u32)
+      (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash =
+    ok (core.result.Result.Ok (), idx1, val1)
+c1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install Port4B_Install.leaves)) (VTop_Checkpoint.digest D) proof
+      p.queries (Port3_BatchStage.root1 p) batch 1#usize idx1 val1 hash =
+    ok (core.result.Result.Ok (), idx2, val2)
+c2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install Port4B_Install.leaves)) (VTop_Checkpoint.digest D) proof
+      p.queries folded batch 2#usize idx2 val2 hash =
+    ok (core.result.Result.Ok (), idx3, val3)
+a0 s0 : reference.Scratch
+h0 :
+  eval H
+      (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+        (↑0#usize) (nodes (↑batch) 0) Port4B_BatchJoin.initial) =
+    (List.map
+          (fun p =>
+            (OraclePortSelectedDraft.leaf parsed (↑0#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑0#usize) p)))
+          (OraclePortFrozenOrder.sortedPositions q ↑batch ↑0#usize) ++
+        (eval H
+            (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+              (↑0#usize) (nodes (↑batch) 0) a0)).1,
+      true, s0)
+i0 : s0.idx = idx1
+v0 : s0.val = val1
+log0 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+            (Port3_BatchStage.root0 p) batch 0#usize Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val))).1 =
+    (eval H
+        (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+          (↑0#usize) (nodes (↑batch) 0) Port4B_BatchJoin.initial)).1
+call1 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install Port4B_Install.leaves)) (VTop_Checkpoint.digest D) proof
+      p.queries (Port3_BatchStage.root1 p) batch 1#usize s0.idx s0.val hash =
+    ok (core.result.Result.Ok (), idx2, val2)
+a1 s1 : reference.Scratch
+h1 :
+  eval H
+      (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+        (↑1#usize) (nodes (↑batch) 1) s0) =
+    (List.map
+          (fun p =>
+            (OraclePortSelectedDraft.leaf parsed (↑1#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑1#usize) p)))
+          (OraclePortFrozenOrder.sortedPositions q ↑batch ↑1#usize) ++
+        (eval H
+            (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+              (↑1#usize) (nodes (↑batch) 1) a1)).1,
+      true, s1)
+i1 : s1.idx = idx2
+v1 : s1.val = val2
+log1 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+            (Port3_BatchStage.root1 p) batch 1#usize s0.idx s0.val))).1 =
+    (eval H
+        (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+          (↑1#usize) (nodes (↑batch) 1) s0)).1
+call2 :
+  Port3_NativeBatchBody.verifier.candidate.batch_tree
+      (Port3_BatchStd.install (Port4B_VerifyInstall.install Port4B_Install.leaves)) (VTop_Checkpoint.digest D) proof
+      p.queries folded batch 2#usize s1.idx s1.val hash =
+    ok (core.result.Result.Ok (), idx3, val3)
+a2 s2 : reference.Scratch
+h2 :
+  eval H
+      (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+        (↑2#usize) (nodes (↑batch) 2) s1) =
+    (List.map
+          (fun p =>
+            (OraclePortSelectedDraft.leaf parsed (↑2#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑2#usize) p)))
+          (OraclePortFrozenOrder.sortedPositions q ↑batch ↑2#usize) ++
+        (eval H
+            (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+              (↑2#usize) (nodes (↑batch) 2) a2)).1,
+      true, s2)
+i2 : s2.idx = idx3
+v2 : s2.val = val3
+log2 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries folded batch
+            2#usize s1.idx s1.val))).1 =
+    (eval H
+        (MultiproofConeP6Batch.batch_tree (MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf parsed q (↑batch)
+          (↑2#usize) (nodes (↑batch) 2) s1)).1
+ordered :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p folded batch))).1 =
+    (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+                (Port3_BatchStage.root0 p) batch 0#usize (Array.repeat 16#usize 0#u32)
+                (Array.repeat 16#usize (Array.repeat 32#usize 0#u8))))).1 ++
+        (eval H
+            (SdkC_Oracle.program
+              (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+                (Port3_BatchStage.root1 p) batch 1#usize idx1 val1))).1 ++
+      (eval H
+          (SdkC_Oracle.program
+            (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries folded batch
+              2#usize idx2 val2))).1
+step0 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+            (Port3_BatchStage.root0 p) batch 0#usize Port4B_BatchJoin.initial.idx Port4B_BatchJoin.initial.val))).1 =
+    (List.map
+            (fun p =>
+              (OraclePortSelectedDraft.leaf parsed (↑0#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑0#usize) p)))
+            (OraclePortFrozenOrder.sortedPositions q ↑batch ↑0#usize) ++
+          (eval H
+              (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+                (↑0#usize) (nodes (↑batch) 0) a0)).1,
+        true, s0).1
+step1 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries
+            (Port3_BatchStage.root1 p) batch 1#usize idx1 val1))).1 =
+    List.map
+        (fun p =>
+          (OraclePortSelectedDraft.leaf parsed (↑1#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑1#usize) p)))
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑1#usize) ++
+      (eval H
+          (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+            (↑1#usize) (nodes (↑batch) 1) a1)).1
+step2 :
+  (eval H
+        (SdkC_Oracle.program
+          (Port9OR_BatchTree.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p.queries folded batch
+            2#usize idx2 val2))).1 =
+    List.map
+        (fun p =>
+          (OraclePortSelectedDraft.leaf parsed (↑2#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑2#usize) p)))
+        (OraclePortFrozenOrder.sortedPositions q ↑batch ↑2#usize) ++
+      (eval H
+          (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+            (↑2#usize) (nodes (↑batch) 2) a2)).1
+⊢ (eval H
+        (SdkC_Oracle.program
+          (Port9OR_Batch.code Port4B_Install.leaves (VTop_Checkpoint.digest D) hash proof p folded batch))).1 =
+    List.map
+            (fun p =>
+              (OraclePortSelectedDraft.leaf parsed (↑0#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑0#usize) p)))
+            (OraclePortFrozenOrder.sortedPositions q ↑batch ↑0#usize) ++
+          (eval H
+              (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+                (↑0#usize) (nodes (↑batch) 0) a0)).1 ++
+        (List.map
+            (fun p =>
+              (OraclePortSelectedDraft.leaf parsed (↑1#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑1#usize) p)))
+            (OraclePortFrozenOrder.sortedPositions q ↑batch ↑1#usize) ++
+          (eval H
+              (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+                (↑1#usize) (nodes (↑batch) 1) a1)).1) ++
+      (List.map
+          (fun p =>
+            (OraclePortSelectedDraft.leaf parsed (↑2#usize) p, H (OraclePortSelectedDraft.leaf parsed (↑2#usize) p)))
+          (OraclePortFrozenOrder.sortedPositions q ↑batch ↑2#usize) ++
+        (eval H
+            (MultiproofConeP6Batch.tailState (MultiproofConeP6Callbacks.nodeWith occupied sibling) parsed (↑batch)
+              (↑2#usize) (nodes (↑batch) 2) a2)).1)
+'AspisR1.F3Q_BatchLog.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
