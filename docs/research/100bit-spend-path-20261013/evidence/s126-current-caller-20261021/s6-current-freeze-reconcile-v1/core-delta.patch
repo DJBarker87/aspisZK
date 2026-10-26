@@ -1,0 +1,16 @@
+diff --git a/crates/aspis-core/src/state_only_prefix.rs b/crates/aspis-core/src/state_only_prefix.rs
+index 66bc820832..37155eba2b 100644
+--- a/crates/aspis-core/src/state_only_prefix.rs
++++ b/crates/aspis-core/src/state_only_prefix.rs
+@@ -607,9 +607,8 @@ fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {
+         carry = bit_and_carry;
+     }
+     let mut absorption = *z;
+-    for coordinate in [7usize, 6] {
+-        absorption[coordinate] = QM31::ONE.sub(absorption[coordinate]);
+-    }
++    absorption[7] = QM31::ONE.sub(absorption[7]);
++    absorption[6] = QM31::ONE.sub(absorption[6]);
+     [*z, successor, absorption]
+ }
+ 
