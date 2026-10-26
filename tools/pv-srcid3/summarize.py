@@ -6,7 +6,8 @@ a=[json.loads(s) for s in (e/'attempts.jsonl').read_text().splitlines()]
 k=[json.loads(s) for s in (e/'kani-invocations.jsonl').read_text().splitlines()]
 lines=['# Recorded receipts','','Exact source hashes, dependency objects and complete #print axioms are in attempts.jsonl.','This table is a rendering of existing evidence, not a final kernel replay.','','## Lean','','| ID | Target | Exit | Wall | Peak RSS KiB | Swap | Revision | Axioms |','| --- | --- | --- | --- | --- | --- | --- | --- |']
 for r in a:
- ax='standard only' if r['axioms'] and all('sorryAx' not in x for x in r['axioms']) and r['exit']==0 else ('FAILED — not accepted' if r['exit'] else 'see log')
+ reported={n.strip() for line in r['axioms'] for group in re.findall(r'depends on axioms: \[([^\]]*)\]',line) for n in group.split(',') if n.strip()}
+ ax='standard only' if r['axioms'] and reported<={'propext','Classical.choice','Quot.sound'} and r['exit']==0 and r.get('axiom_reports_complete',True) else ('FAILED — not accepted' if r['exit'] else 'REVIEW AXIOMS')
  lines.append(f"| {r['attempt']} | {r['module']} | {r['exit']} | {r['wall']} | {r['peak_rss_kib']} | {r['swaps']} | {r['source_revision'][:10]} | {ax} |")
 lines+=['','## Kani','','All commands optimized via explicit MIR/Rust flags, 6G/8G/swap0/tasks64; exact commands and source hashes in each receipt.','#print axioms: N/A for Rust/Kani. Cgroup peak is aggregate; timed-out parent `/usr/bin/time` RSS may omit killed descendants.','','| # | Target | Exit | Wall sec | RSS KiB | Aggregate peak bytes | Swap | Revision | Checks failed/total |','| --- | --- | --- | --- | --- | --- | --- | --- | --- |']
 results=[]
