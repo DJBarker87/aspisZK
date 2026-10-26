@@ -21,6 +21,10 @@ for r in receipts:
   m=re.search(r'\[([^\]]*)\]',line)
   if m:assert set(x.strip() for x in m[1].split(','))<= {'propext','Classical.choice','Quot.sound'}
  assert (P/r['evidence']).exists()
+ if r['compiler_invoked']:
+  expected=[line for line in (P/r['evidence']).read_text().splitlines() if re.search(r': error(?:\(|:)',line)]
+  assert r['errors']==expected
+  if r['exit_status']=='0':assert not expected
 assert any('privacy_headline_deployed' in line for r in receipts if r['attempt']==20005 for line in r['print_axioms'])
 assert sum(r['status']=='overlap' for r in rows)==57
 assert sum(r['group']=='O' for r in rows)==99
