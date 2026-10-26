@@ -1,0 +1,26 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+[Kani] Running: `CARGO_ENCODED_RUSTFLAGS="-Coverflow-checks=on-Zunstable-options-Ztrim-diagnostic-paths=no-Zhuman_readable_cgu_names-Zalways-encode-mir--cfg=kani-Zcrate-attr=feature(register_tool)-Zcrate-attr=register_tool(kanitool)--sysroot/home/dombarker/.kani/kani-0.67.0-L/home/dombarker/.kani/kani-0.67.0/lib--externkani--externnoprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib-Copt-level=3-Zmir-opt-level=0-Coverflow-checks=yes-Clink-arg=-Wl,--threads=1-Cpanic=abort-Csymbol-mangling-version=v0-Zpanic_abort_tests=yes-Zmir-enable-passes=-RemoveStorageMarkers--check-cfg=cfg(kani)-Clinker=echo--kani-compiler-Cllvm-args=--check-version=0.67.0" CARGO_TERM_PROGRESS_WHEN="never" RUSTC="/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler" RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/s126-real-sdk-20261021/bump-step-20261026-v1/harness/Cargo.toml --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=["--cfg=kani_host"] --target-dir /home/dombarker/project-offloads/s126-real-sdk-20261021/bump-step-20261026-v1/target/kani --message-format json-diagnostic-rendered-ansi -v -p path+file:///home/dombarker/project-offloads/s126-real-sdk-20261021/bump-step-20261026-v1/harness#s6-bump-step@0.1.0 --lib -- "-Cllvm-args=--reachability=harnesses --log-level=info --enable-stubbing --harness proofs::bump_step_matches_owned --exact -Z unstable-options -Z stubbing"`
+error[E0412]: cannot find type `Layout` in this scope
+  --> src/shipped.rs:57:36
+   |
+57 |     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+   |                                    ^^^^^^ not found in this scope
+   |
+help: consider importing this struct
+   |
+ 1 + use std::alloc::Layout;
+   |
+
+error[E0412]: cannot find type `Layout` in this scope
+  --> src/shipped.rs:73:45
+   |
+73 |     unsafe fn dealloc(&self, _: *mut u8, _: Layout) {
+   |                                             ^^^^^^ not found in this scope
+   |
+help: consider importing this struct
+   |
+ 1 + use std::alloc::Layout;
+   |
+
+For more information about this error, try `rustc --explain E0412`.
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
