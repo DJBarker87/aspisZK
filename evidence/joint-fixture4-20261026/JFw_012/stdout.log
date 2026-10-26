@@ -1,0 +1,163 @@
+JFw_Row.lean:79:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+i : Usize
+_✝¹⁹ : [> let i ← dst + 5#usize <]
+x✝² : Slice U8 × (Slice U8 → Slice U8)
+_✝¹⁸ : [> let x✝² ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+i1 : Usize
+_✝¹⁷ : [> let i1 ← src + 5#usize <]
+s1 : Slice U8
+_✝¹⁶ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s2 : Slice U8
+_✝¹⁵ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝².1 s1 <]
+half : Usize
+_✝¹⁴ : [> let half ← size / 2#usize <]
+sourceEnd : Usize
+_✝¹³ : [> let sourceEnd ← i1 + half <]
+payload : Slice U8
+_✝¹² : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+destEnd : Usize
+_✝¹¹ : [> let destEnd ← i + size <]
+x✝¹ : Slice U8 × (Slice U8 → Slice U8)
+_✝¹⁰ : [> let x✝¹ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝².2 s2) <]
+x✝ : core.result.Result Unit AspisR1CurrentCaller.compact.CodecError × Slice U8
+_✝⁹ : [> let x✝ ← expandValues payload x✝¹.1 <]
+cf :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible AspisR1CurrentCaller.compact.CodecError)
+    Unit
+_✝⁸ : [> let cf ← core.result.Result.Insts.CoreOpsTry.branch x✝.1 <]
+a✝ : Unit
+sourceNext : Usize
+_ : [> let sourceNext ← i1 + half <]
+inputBound : ↑src + 5 + ↑size / 2 ≤ (↑input).length
+outBound : ↑dst + 5 + ↑size ≤ (↑out).length
+smallInput : (↑input).length ≤ 20000
+smallOut : (↑out).length ≤ 20000
+i_post : ↑i = ↑dst + 5
+_✝⁷ : ↑x✝².1 = List.slice (↑dst) (↑dst + 5) ↑out
+_✝⁶ : 5 ≤ (↑out).length - ↑dst
+i1_post : ↑i1 = ↑src + 5
+s1_post1 : ↑s1 = List.slice (↑src) (↑src + 5) ↑input
+s1_post2 : 5 ≤ (↑input).length - ↑src
+s2_post : s2 = s1
+half_post : ↑half = ↑size / 2
+sourceEnd_post : ↑sourceEnd = ↑src + 5 + ↑size / 2
+payload_post1 : ↑payload = List.slice (↑src + 5) (↑src + 5 + ↑size / 2) ↑input
+payload_post2 : ↑size / 2 ≤ (↑input).length - (↑src + 5)
+destEnd_post : ↑destEnd = ↑dst + 5 + ↑size
+_✝⁵ : ↑x✝¹.1 = List.slice (↑dst + 5) (↑dst + 5 + ↑size) ↑(x✝².2 s1)
+_✝⁴ : ↑size ≤ (↑(x✝².2 s1)).length - (↑dst + 5)
+_✝³ : x✝.1 = core.result.Result.Ok ()
+_✝² : (↑x✝.2).length = ↑size
+h✝¹ : cf = core.ops.control_flow.ControlFlow.Continue a✝
+sourceNext_post : ↑sourceNext = ↑src + 5 + ↑size / 2
+_✝¹ : ∀ _, __✝
+h✝ : 14 ≤ ↑row
+_✝ : ∀ _, __✝
+_h.1 : ↑src ≤ Usize.max
+_h.2 : ↑src + 5 + ↑size / 2 ≤ Usize.max
+_h.3 : (↑input).length ≤ Usize.max
+_h.4 : 5 ≤ Usize.max
+_h.5 : ↑dst + 5 ≤ Usize.max
+_h.6 : ↑row ≤ 255
+_h.7 : ↑row ≤ 254
+_h✝⁸⁻⁰ : ↑size ≤ Usize.max
+_h.9 : (↑(x✝².2 s1)).length ≤ Usize.max
+_h.10 : ↑dst + 5 + ↑size ≤ Usize.max
+_h.12 : ↑dst ≤ Usize.max
+_h.14 : ↑src + 5 ≤ Usize.max
+_h.16 : (↑out).length ≤ Usize.max
+_h.17 : ↑size / 2 ≤ Usize.max
+_h.8 : 4294967295 ≤ Usize.max ∧ Usize.max + 1 = 2 ^ System.Platform.numBits
+⊢ (↑(x✝¹.2 x✝.2)).length = (↑out).length
+JFw_Row.lean:79:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ (↑input).length
+outBound : ↑dst + 5 + ↑size ≤ (↑out).length
+smallInput : (↑input).length ≤ 20000
+smallOut : (↑out).length ≤ 20000
+i : Usize
+_✝¹⁴ : [> let i ← dst + 5#usize <]
+i_post : ↑i = ↑dst + 5
+x✝¹ : Slice U8 × (Slice U8 → Slice U8)
+_✝¹³ : [> let x✝¹ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out <]
+i1 : Usize
+_✝¹² : [> let i1 ← src + 5#usize <]
+s1 : Slice U8
+_✝¹¹ : [> let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input <]
+s2 : Slice U8
+_✝¹⁰ : [> let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝¹.1 s1 <]
+destEnd : Usize
+_✝⁹ : [> let destEnd ← i + size <]
+x✝ : Slice U8 × (Slice U8 → Slice U8)
+_✝⁸ : [> let x✝ ← core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := destEnd } (x✝¹.2 s2) <]
+sourceEnd : Usize
+_✝⁷ : [> let sourceEnd ← i1 + size <]
+payload : Slice U8
+_✝⁶ : [> let payload ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := sourceEnd } input <]
+updated : Slice U8
+_ : [> let updated ← core.slice.Slice.copy_from_slice core.marker.CopyU8 x✝.1 payload <]
+_✝⁵ : ↑x✝¹.1 = List.slice (↑dst) (↑dst + 5) ↑out
+_✝⁴ : 5 ≤ (↑out).length - ↑dst
+i1_post : ↑i1 = ↑src + 5
+s1_post1 : ↑s1 = List.slice (↑src) (↑src + 5) ↑input
+s1_post2 : 5 ≤ (↑input).length - ↑src
+s2_post : s2 = s1
+destEnd_post : ↑destEnd = ↑dst + 5 + ↑size
+_✝³ : ↑x✝.1 = List.slice (↑dst + 5) (↑dst + 5 + ↑size) ↑(x✝¹.2 s1)
+_✝² : ↑size ≤ (↑(x✝¹.2 s1)).length - (↑dst + 5)
+sourceEnd_post : ↑sourceEnd = ↑src + 5 + ↑size
+payload_post1 : ↑payload = List.slice (↑src + 5) (↑src + 5 + ↑size) ↑input
+payload_post2 : ↑size ≤ (↑input).length - (↑src + 5)
+updated_post : updated = payload
+_✝¹ : ∀ _, __✝
+h✝ : ↑row < 14
+_✝ : ∀ _, __✝
+_h.0 : ↑src ≤ Usize.max
+_h.1 : (↑input).length ≤ Usize.max
+_h.3 : 5 ≤ Usize.max
+_h.5 : ↑src + 5 + ↑size ≤ Usize.max
+_h.6 : ↑dst + 5 ≤ Usize.max
+_h.7 : ↑row ≤ 255
+_h.8 : ↑row ≤ 254
+_h✝⁹⁻⁰ : ↑size ≤ Usize.max
+_h.10 : (↑(x✝¹.2 s1)).length ≤ Usize.max
+_h.11 : ↑dst ≤ Usize.max
+_h.12 : ↑dst + 5 + ↑size ≤ Usize.max
+_h.13 : ↑src + 5 ≤ Usize.max
+_h.15 : (↑out).length ≤ Usize.max
+_h.9 : 4294967295 ≤ Usize.max ∧ Usize.max + 1 = 2 ^ System.Platform.numBits
+⊢ (↑(x✝.2 payload)).length = (↑out).length
+JFw_Row.lean:78:65: warning: This simp argument is unused:
+  Slice.setSlice!_length
+
+Hint: Omit it from the simp argument list.
+  simp_all [core.result.Result.Insts.CoreOpsTry.branch,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵_̵l̵e̵n̵g̵t̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Row.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFw_Row.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

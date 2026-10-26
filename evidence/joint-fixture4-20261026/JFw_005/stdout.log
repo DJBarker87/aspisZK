@@ -1,0 +1,86 @@
+JFw_Row.lean:25:12: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+input out : Slice U8
+row nextRow tag : U8
+size src dst : Usize
+bound : ↑row < 27
+next : ↑nextRow = ↑row + 1
+shape : r1_wire.row_shape row = ok (some (tag, size))
+sizeBound : ↑size ≤ 3712
+aligned : ↑size % 32 = 0
+inputBound : (↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ≤ input.length
+outBound : ↑dst + 5 + ↑size ≤ out.length
+smallInput : input.length ≤ 20000
+smallOut : out.length ≤ 20000
+⊢ (do
+      let o1 ← r1_wire.row_shape row
+      let cf ←
+        match
+            match o1 with
+            | some x => core.result.Result.Ok x
+            | none => core.result.Result.Err AspisR1CurrentCaller.compact.CodecError.Length with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (_, size) := val
+          do
+          let i ← dst + 5#usize
+          let (s, index_mut_back) ←
+            core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := dst, «end» := i } out
+          let i1 ← src + 5#usize
+          let s1 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := src, «end» := i1 } input
+          let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+          let b ← compact.compact_row row
+          if b = true then do
+              let i2 ← size / 2#usize
+              let i3 ← i1 + i2
+              let s3 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := i3 } input
+              let i4 ← i + size
+              let (s4, index_mut_back1) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := i4 } (index_mut_back s2)
+              let (r1, s5) ← nativeValues.expandValues s3 s4
+              let cf1 ←
+                match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  let src1 ← i1 + i2
+                  ok (cont (iter nextRow, index_mut_back1 s5, src1, i4))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame compact.CodecError) residual
+                  ok (done (r2, index_mut_back1 s5))
+            else do
+              let i2 ← i + size
+              let (s3, index_mut_back1) ←
+                core.slice.index.SliceIndexRangeUsizeSlice.index_mut { start := i, «end» := i2 } (index_mut_back s2)
+              let i3 ← i1 + size
+              let s4 ← core.slice.index.SliceIndexRangeUsizeSlice.index { start := i1, «end» := i3 } input
+              let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+              ok (cont (iter nextRow, index_mut_back1 s5, i3, i2))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame compact.CodecError) residual
+          ok (done (r1, out))) ⦃
+    result =>
+    ∃ updated nextSrc nextDst,
+      result = cont (iter nextRow, updated, nextSrc, nextDst) ∧
+        updated.length = out.length ∧
+          (↑nextSrc = ↑src + 5 + if 14 ≤ ↑row then ↑size / 2 else ↑size) ∧ ↑nextDst = ↑dst + 5 + ↑size ⦄
+JFw_Row.lean:24:15: warning: This simp argument is unused:
+  shape
+
+Hint: Omit it from the simp argument list.
+  simp (config := {̵z̵e̵t̵a̵{̲ ̲z̲e̲t̲a̲ := t̵r̵u̵e̵}̵)̵t̲r̲u̲e̲ ̲}̲)̲ only [next_row row nextRow bound next, b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̵h̵a̵p̵e̵,̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵o̵k̵_̵o̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲o̲k̲_̲o̲r̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFw_Row.spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
