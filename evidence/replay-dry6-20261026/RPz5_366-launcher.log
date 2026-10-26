@@ -1,0 +1,26 @@
+{"attempt": "RPz5_366", "exit_status": 0, "wall_seconds": 2.1984377449844033, "peak_rss_kib": "4374704", "swaps": "0", "print_axioms": ["'AspisR1.EndP_Endpoint.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.EndP_Endpoint.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.EndP_Endpoint.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.EndP_Endpoint.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.EndP_Endpoint.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.EndP_Endpoint.final_soundness : ∀ (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q) →
+    ∀ (adapter : AdapterRw.Ops) (impl : VTop_OracleCode.Implementation) {Hash : Type}
+      (digest : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash 
+...
+'AspisR1.EndP_Endpoint.two_pass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.final_soundness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.failure_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.EndP_Endpoint.zero_queries' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.EndP_Endpoint.final_soundness : ∀ (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q : ℕ),
+  (∀ (H : Bytes → State), (eval H P).1.length ≤ Q) →
+    ∀ (adapter : AdapterRw.Ops) (impl : VTop_OracleCode.Implementation) {Hash : Type}
+      (digest : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash) (runtime : Runtime),
+      Port1_CanonicalJoin.AcceptedVerifierJoin D (Port1_Driver.rust adapter (fun {A} => impl) digest hash) →
+        StoredCarrierBinding D (Port1_Driver.rust adapter (fun {A} => impl) digest hash) (lift P) runtime →
+          Claims D (lift P) Q runtime :=
+fun D P Q hqueries adapter impl {Hash} digest hash runtime raw binding =>
+  Uni_CanonicalPerAttempt.final_soundness D P Q hqueries (Port1_Driver.rust adapter (fun {A} => impl) digest hash)
+    runtime (driver_physical adapter (fun {A} => impl) digest hash) raw binding
+
+Running as unit: run-re4a3941fae88482297b1a3d1216af1fe.scope; invocation ID: 25a7a6b9923747488d338314b258c887
