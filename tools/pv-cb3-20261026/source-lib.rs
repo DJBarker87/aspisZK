@@ -56,3 +56,8 @@ pub fn public_bytes(public:aspis_statement::pool_v1::pair_forest_semantic_termin
 pub fn terminal(public:aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public<'_>,claims:&[[aspis_core::field::QM31;29];3],alpha:&[aspis_core::field::QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<aspis_core::field::QM31,aspis_core::state_only_prefix::r0::Error> {
     public.terminal_qm31(claims,alpha,c)
 }
+
+#[cfg(kani)]
+pub fn evaluate_polynomial(p:&[aspis_core::field::QM31;28],challenge:aspis_core::field::QM31)->aspis_core::field::QM31 {
+ aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(p,challenge)
+}

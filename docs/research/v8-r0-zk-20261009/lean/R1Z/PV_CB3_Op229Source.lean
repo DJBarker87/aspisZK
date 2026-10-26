@@ -1,6 +1,6 @@
 -- Generated function bodies retained from aeneas-source-op229-002.
 import R1Z.PV_CB3_Afterstate
-import R1Z.ProverRwSuccessHashes
+import R1Z.ProverRwFullExternalFuns
 open Aeneas Aeneas.Std Result ControlFlow Error
 noncomputable section
 namespace PV_CB3_ShippedOp229
