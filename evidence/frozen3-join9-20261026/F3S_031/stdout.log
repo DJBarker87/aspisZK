@@ -1,0 +1,328 @@
+F3S_FirstTailLogs.lean:32:87: error: unsolved goals
+Hash : Type
+base : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+publicBytes proof : Slice U8
+k : Usize
+hash : Hash
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+a out : verifier.Accumulator
+geo : verifier.QueryGeometry
+pending after : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+root : Std.Array U8 32#usize
+view : Slice U8
+initial : (GExp_FirstCode.installed base B std).op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+start : compact.OFF_FOLDED_ROOT (GExp_FirstCode.installed base B std) = ok 7751#usize
+finish : compact.OFF_ROUND1 (GExp_FirstCode.installed base B std) = ok 7783#usize
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok view
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root)
+batch :
+  erase (SdkC_Source.dictionary hashv) () (GExq_BatchSource.current D hash proof p root) = ok (core.result.Result.Ok ())
+geometry : (GExp_FirstCode.installed base B std).op19 p.queries 0#usize k = ok (core.result.Result.Ok geo)
+newPending : (GExp_FirstCode.installed base B std).op18 a.weights.deref = ok (core.result.Result.Ok pending)
+query :
+  (GExp_FirstCode.installed base B std).op7 proof p a scratch none geo pending k =
+    ok (core.result.Result.Ok (out, after))
+flush : (GExp_FirstCode.installed base B std).op17 after out.weights.deref = ok flushed
+⊢ SdkC_Source.readLog
+      (SdkC_Source.run hashv
+          (do
+            let r3 ← Code.step (ok (core.result.Result.Ok a)) Code.done
+            let cf3 ←
+              Code.step
+                  (match r3 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  Code.done
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                Code.step (ok ()) Code.done
+                let i ← Code.step (ok 7751#usize) Code.done
+                let i1 ← Code.step (ok 7783#usize) Code.done
+                let s ←
+                  Code.step
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i, «end» := i1 })
+                      Code.done
+                let r4 ← Code.step (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s) Code.done
+                let folded_root ←
+                  Code.step
+                      (match r4 with
+                      | core.result.Result.Ok x => ok x
+                      | core.result.Result.Err a => fail Error.panic)
+                      Code.done
+                let r5 ← GExq_BatchSource.current D hash proof p folded_root
+                let cf4 ←
+                  Code.step
+                      (match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      Code.done
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    Code.step (ok ()) Code.done
+                    let r6 ← Code.step ((GExp_FirstCode.installed base B std).op19 p.queries 0#usize k) Code.done
+                    let cf5 ←
+                      Code.step
+                          (match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                          Code.done
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let r7 ← Code.step ((GExp_FirstCode.installed base B std).op18 val1.weights.deref) Code.done
+                        let cf6 ←
+                          Code.step
+                              (match r7 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                              Code.done
+                        match cf6 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let r8 ←
+                              Code.step
+                                  ((GExp_FirstCode.installed base B std).op7 proof p val1 scratch none val2 val3 k)
+                                  Code.done
+                            let cf7 ←
+                              Code.step
+                                  (match r8 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                  Code.done
+                            match cf7 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let __x ← Code.step (lift val4.1.weights.deref_mut) Code.done
+                                let s3 ← Code.step ((GExp_FirstCode.installed base B std).op17 val4.2 __x.1) Code.done
+                                let bytes ←
+                                  GExp_FirstCode.writerCode p
+                                      { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power,
+                                        next := val4.1.next }
+                                      proof publicBytes
+                                Code.step (ok ()) Code.done
+                                pure (core.result.Result.Ok bytes)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Code.step
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                  Code.done
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            Code.step
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                              Code.done
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        Code.step
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          Code.done
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    Code.step
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      Code.done
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                Code.step
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual)
+                  Code.done)
+          []).2 =
+    SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.writerCode p
+              { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+            []).2
+Hash : Type
+base : Ops
+B : AspisR1PublicPreparation.FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+D : aspis_core.digest.Digest32 Hash
+publicBytes proof : Slice U8
+k : Usize
+hash : Hash
+p : verifier.Prepared
+scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+a out : verifier.Accumulator
+geo : verifier.QueryGeometry
+pending after : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+root : Std.Array U8 32#usize
+view : Slice U8
+initial : (GExp_FirstCode.installed base B std).op20 transport.Variant.S2 = ok (core.result.Result.Ok a)
+start : compact.OFF_FOLDED_ROOT (GExp_FirstCode.installed base B std) = ok 7751#usize
+finish : compact.OFF_ROUND1 (GExp_FirstCode.installed base B std) = ok 7783#usize
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok view
+copy : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 view = ok (core.result.Result.Ok root)
+batch :
+  erase (SdkC_Source.dictionary hashv) () (GExq_BatchSource.current D hash proof p root) = ok (core.result.Result.Ok ())
+geometry : (GExp_FirstCode.installed base B std).op19 p.queries 0#usize k = ok (core.result.Result.Ok geo)
+newPending : (GExp_FirstCode.installed base B std).op18 a.weights.deref = ok (core.result.Result.Ok pending)
+query :
+  (GExp_FirstCode.installed base B std).op7 proof p a scratch none geo pending k =
+    ok (core.result.Result.Ok (out, after))
+flush : (GExp_FirstCode.installed base B std).op17 after out.weights.deref = ok flushed
+⊢ SdkC_Source.readLog
+      (SdkC_Source.run hashv
+          (do
+            let r3 ← Code.step (ok (core.result.Result.Ok a)) Code.done
+            let cf3 ←
+              Code.step
+                  (match r3 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  Code.done
+            match cf3 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                Code.step (ok ()) Code.done
+                let i ← Code.step (ok 7751#usize) Code.done
+                let i1 ← Code.step (ok 7783#usize) Code.done
+                let s ←
+                  Code.step
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i, «end» := i1 })
+                      Code.done
+                let r4 ← Code.step (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s) Code.done
+                let folded_root ←
+                  Code.step
+                      (match r4 with
+                      | core.result.Result.Ok x => ok x
+                      | core.result.Result.Err a => fail Error.panic)
+                      Code.done
+                let r5 ← GExq_BatchSource.current D hash proof p folded_root
+                let cf4 ←
+                  Code.step
+                      (match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      Code.done
+                match cf4 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    Code.step (ok ()) Code.done
+                    let r6 ← Code.step ((GExp_FirstCode.installed base B std).op19 p.queries 0#usize k) Code.done
+                    let cf5 ←
+                      Code.step
+                          (match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                          Code.done
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let r7 ← Code.step ((GExp_FirstCode.installed base B std).op18 val1.weights.deref) Code.done
+                        let cf6 ←
+                          Code.step
+                              (match r7 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                              Code.done
+                        match cf6 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let r8 ←
+                              Code.step
+                                  ((GExp_FirstCode.installed base B std).op7 proof p val1 scratch none val2 val3 k)
+                                  Code.done
+                            let cf7 ←
+                              Code.step
+                                  (match r8 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                                  Code.done
+                            match cf7 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                let __x ← Code.step (lift val4.1.weights.deref_mut) Code.done
+                                let s3 ← Code.step ((GExp_FirstCode.installed base B std).op17 val4.2 __x.1) Code.done
+                                let bytes ←
+                                  GExp_FirstCode.writerCode p
+                                      { weights := __x.2 s3, rhs := val4.1.rhs, power := val4.1.power,
+                                        next := val4.1.next }
+                                      proof publicBytes
+                                Code.step (ok ()) Code.done
+                                pure (core.result.Result.Ok bytes)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                Code.step
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                                  Code.done
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            Code.step
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                              Code.done
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        Code.step
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          Code.done
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    Code.step
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                      Code.done
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                Code.step
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual)
+                  Code.done)
+          []).2 =
+    SdkC_Source.readLog (SdkC_Source.run hashv (GExq_BatchSource.current D hash proof p root) []).2 ++
+      SdkC_Source.readLog
+        (SdkC_Source.run hashv
+            (GExp_FirstCode.writerCode p
+              { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } proof publicBytes)
+            []).2
+F3S_FirstTailLogs.lean:33:57: warning: This simp argument is unused:
+  range
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵i̵r̵s̵t̵T̵a̵i̵l̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵i̵n̵i̵t̵i̵a̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵r̵a̵n̵g̵e̵,̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲F̲3̲S̲_̲F̲i̲r̲s̲t̲T̲a̲i̲l̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲c̲o̲p̲y̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:33:63: warning: This simp argument is unused:
+  copy
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵i̵r̵s̵t̵T̵a̵i̵l̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵i̵n̵i̵t̵i̵a̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵r̵a̵n̵g̵e̵,̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲F̲3̲S̲_̲F̲i̲r̲s̲t̲T̲a̲i̲l̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲r̲a̲n̲g̲e̲,̲ ̲l̲i̲f̲t̲M̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3S_FirstTailLogs.lean:35:4: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵3̵S̵_̵F̵i̵r̵s̵t̵T̵a̵i̵l̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵i̵n̵i̵t̵i̵a̵l̵,̵s̵t̵a̵r̵t̵,̵f̵i̵n̵i̵s̵h̵,̵r̵a̵n̵g̵e̵,̵c̵o̵p̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵M̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵M̵o̵n̵a̵d̵L̵i̵f̵t̵T̵.̵m̵o̵n̵a̵d̵L̵i̵f̵t̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵l̵i̵f̵t̵R̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵e̵r̵i̵f̵i̵e̵r̵.̵m̵a̵r̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵u̵n̵w̵r̵a̵p̵]̵[̲F̲3̲S̲_̲F̲i̲r̲s̲t̲T̲a̲i̲l̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲ ̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲s̲t̲a̲r̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲,̲ ̲r̲a̲n̲g̲e̲,̲ ̲c̲o̲p̲y̲,̲ ̲l̲i̲f̲t̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲M̲o̲n̲a̲d̲L̲i̲f̲t̲T̲.̲m̲o̲n̲a̲d̲L̲i̲f̲t̲,̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲l̲i̲f̲t̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲v̲e̲r̲i̲f̲i̲e̲r̲.̲m̲a̲r̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲u̲n̲w̲r̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3S_FirstTailLogs.on_calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
