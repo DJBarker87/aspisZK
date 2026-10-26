@@ -256,3 +256,49 @@ mod release_compression_checks {
  assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
  }
 }
+
+pub fn copy_sum_owned(p:&[QM31])->Option<QM31> {
+ if p.len()!=1024 {return None;}
+ let mut out=QM31::ZERO;let mut i=0usize;
+ while i<1024 {out=out.add(p[i]);i+=1;}
+ Some(out)
+}
+#[cfg(kani)]
+mod copy_sum_checks {
+ use super::*;
+ fn q()->QM31 {let x:[u32;4]=kani::any();QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+ #[kani::proof]
+ #[kani::unwind(1026)]
+ fn copy_sum1024() {
+ let mut p=[QM31::ZERO;1024];let mut i=0;while i<1024 {p[i]=q();i+=1;}
+ let a=aspis_statement::state_only_semantic::state_only_copy_helper_sum(&p).unwrap();let b=copy_sum_owned(&p).unwrap();
+ assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+ }
+}
+
+#[cfg(kani)]
+mod pole_full_checks {
+ use super::*;
+ fn q()->QM31 {let x:[u32;4]=kani::any();QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+ #[kani::proof]
+ #[kani::unwind(1026)]
+ fn pole1024() {
+ let mut p=[[[QM31::ZERO;2];2];1024];let mut i=0;
+ while i<1024 {p[i]=[[q(),q()],[q(),q()]];i+=1;}
+ let masks:[u16;64]=kani::any();let chi=q();let len:usize=kani::any();kani::assume(len<=1024);
+ assert_eq!(shipped_pole::all_slots_clear(&p[..len],&masks,chi),all_slots_clear(&p[..len],&masks,chi));
+ }
+}
+
+#[cfg(kani)]
+mod fixed_release_checks {
+ use super::*;
+ #[kani::proof]
+ #[kani::unwind(3)]
+ fn compression_fixed_one_release() {
+ let tag=M31(kani::any());let x=M31(kani::any());let raw:[u32;4]=kani::any();
+ let lambda=QM31{c0:CM31{a:M31(raw[0]),b:M31(raw[1])},c1:CM31{a:M31(raw[2]),b:M31(raw[3])}};
+ let a=aspis_statement::logup::compress_tagged_tuple(tag,&[x],lambda);let b=compress(tag,&[x],lambda);
+ assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+ }
+}

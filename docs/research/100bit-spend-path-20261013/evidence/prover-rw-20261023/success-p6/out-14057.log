@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersNativeBridge.lean:21:52: error: Tactic `assumption` failed
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+N : Usize
+x : W
+this : ExternalFuns := dict ops
+out : Std.Array W N
+p : W
+i : Usize
+left : U8
+bound : ↑i + 0 = ↑N
+hl : ↑left = 0
+⊢ 0 = ↑0#u8
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersNativeBridge.lean:39:55: error: Tactic `assumption` failed
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+N : Usize
+x : W
+this : ExternalFuns := dict ops
+out : Std.Array W N
+p : W
+i : Usize
+left : U8
+hi : ↑i < ↑N
+test : i < N
+hn : left ≠ 0#u8
+v : ProverRwP6PowersNativeStep.W
+hr : out.index_mut_usize i = ok (v, out.set i)
+hrn : (nativeArray out).index_mut_usize i = ok (toW v, (nativeArray out).set i)
+add : ↑(i.wrapping_add 1#usize) = ↑i + 1
+ih :
+  ∀ (out : Std.Array W N) (p : W) (i : Usize) (left : U8),
+    ↑i + 0 = ↑N →
+      ↑left = 0 →
+        ProverRwP6ResultMap.map (fun r => nativeArray (finish r)) (finite x 0 out p i) =
+          AspisR1ProducerRelease47.power_fill (nativeArray out) (toW x) (toW p) i left
+bound : ↑i + (0 + 1) = ↑N
+hl : ↑left = 0 + 1
+⊢ 0 + 1 = ↑1#u8
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersNativeBridge.lean:60:6: error: Type mismatch: After simplification, term
+  recur
+ has type
+  @Eq (Result (Std.Array NW N))
+    (ProverRwP6ResultMap.map (fun r => nativeArray (finish r))
+      (finite x fuel (out.set i p) (fromW q) (i.wrapping_add 1#usize)))
+    (AspisR1ProducerRelease47.power_fill ((nativeArray out).set i (toW p)) (toW x) q (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8))
+but is expected to have type
+  @Eq (Result (Std.Array NW N))
+    (ProverRwP6ResultMap.map (fun r => nativeArray (finish r))
+      (let (_, back) := (v, out.set i)
+      finite x fuel (back p) (fromW q) (i.wrapping_add 1#usize)))
+    (let (_, index_mut_back) := (toW v, (nativeArray out).set i)
+    AspisR1ProducerRelease47.power_fill (index_mut_back (toW p)) (toW x) q (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersNativeBridge.lean:42:21: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵n̵e̵,̵h̵n̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵r̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵i̵n̵i̵t̵e̵,̵d̵i̵s̵p̵a̵t̵c̵h̵,̵t̵e̵s̵t̵,̵h̵r̵,̵s̵t̵o̵p̵,̵P̵r̵o̵v̵e̵r̵R̵w̵P̵6̵R̵e̵s̵u̵l̵t̵M̵a̵p̵.̵m̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵R̵w̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵T̵o̵w̵e̵r̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵f̵i̵n̵i̵s̵h̵]̵[̲o̲n̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲r̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲n̲i̲t̲e̲,̲ ̲d̲i̲s̲p̲a̲t̲c̲h̲,̲ ̲t̲e̲s̲t̲,̲ ̲h̲r̲,̲ ̲s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲P̲6̲R̲e̲s̲u̲l̲t̲M̲a̲p̲.̲m̲a̲p̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲T̲o̲w̲e̲r̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersNativeBridge.lean:42:24: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵n̵e̵,̵h̵n̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵r̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵f̵i̵n̵i̵t̵e̵,̵d̵i̵s̵p̵a̵t̵c̵h̵,̵t̵e̵s̵t̵,̵h̵r̵,̵s̵t̵o̵p̵,̵P̵r̵o̵v̵e̵r̵R̵w̵P̵6̵R̵e̵s̵u̵l̵t̵M̵a̵p̵.̵m̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵R̵w̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵T̵o̵w̵e̵r̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵f̵i̵n̵i̵s̵h̵]̵[̲o̲n̲e̲,̲ ̲h̲n̲,̲ ̲h̲r̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲f̲i̲n̲i̲t̲e̲,̲ ̲d̲i̲s̲p̲a̲t̲c̲h̲,̲ ̲t̲e̲s̲t̲,̲ ̲h̲r̲,̲ ̲s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲P̲6̲R̲e̲s̲u̲l̲t̲M̲a̲p̲.̲m̲a̲p̲,̲ ̲P̲r̲o̲v̲e̲r̲R̲w̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲T̲o̲w̲e̲r̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwP6PowersNativeBridge.transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
