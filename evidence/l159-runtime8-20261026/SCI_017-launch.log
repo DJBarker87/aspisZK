@@ -1,0 +1,48 @@
+{"attempt": "SCI_017", "exit_status": 0, "wall_seconds": 2.940423185005784, "peak_rss_kib": "5532816", "swaps": "0", "print_axioms": ["'AspisR1.SCI_FinalAudit.real_byte_fixture' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_SameWorld.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_SameWorld.arbitrary_second' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_SameWorld.game_does_not_select_second' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.recorder_log' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.final_audit' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.selected_audit_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.prior_event' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.different_audits' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.nonempty' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.child_none' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.empty_pred' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.address_pred' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.reordered_event' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.deleting_uncached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.deleting_uncached_charged' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.SCI_Recovery.ObserverBoundary.not_zero_query_conclusion' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.SCI_Recovery.ObserverBoundary.extract_none' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.ObserverBoundary.failure_one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.ObserverBoundary.unrestricted_runtime' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.ObserverBoundary.not_all_runtime_bounds' depends on axioms: [propext,\n Classical.choice,\n Quot.sound]", "'AspisR1.SCI_Recovery.account_of_join' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.model_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.account_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Recovery.account_extract' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCG_Nonvacuity.joint' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Rc7_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.SCI_FinalAudit.real_byte_fixture' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.arbitrary_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_SameWorld.game_does_not_select_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.recorder_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.final_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.selected_audit_obstruction' depends on axioms: [propext, Classical.choice, Quot.s
+...
+     true →
+        run.1 =
+            (eval H
+                (F3T_Experiment.original D
+                  (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))).1 →
+          OraclePortRefineJoin.RecoveredInputAgreement (F3T_Experiment.view run)
+            (eval H
+              (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))) :=
+fun {A F C} c D hashv copy allocator id a H run observed success modelSuccess ordered =>
+  have same :=
+    Prod.ext ordered
+      (Prod.ext
+        (Eq.mpr
+          (_root_.id
+            (congrArg
+              (fun _a =>
+                _a =
+                  (eval H
+                        (F3T_Experiment.original D
+                          (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))).2.1)
+              (SCE_Projection.input_projection c hashv copy allocator id a H run observed)))
+          (Eq.mpr
+            (_root_.id
+              (congrArg
+                (fun _a => (eval H (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))).2 = _a.2.1)
+                (F3T_Experiment.original_eval D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))
+                  H)))
+            (Eq.refl (eval H (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)))).2)))
+        (Eq.trans success (Eq.symm modelSuccess)));
+  Eq.mpr
+    (_root_.id
+      (congrArg
+        (fun _a =>
+          OraclePortRefineJoin.RecoveredInputAgreement (F3T_Experiment.view _a)
+            (eval H (F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift c (SCE_Experiment.submission a))))))
+        same))
+    (SCI_Recovery.model_agreement D (F3T_ByteCarrier.lift c (SCE_Experiment.submission a)) H modelSuccess)
+
+Running as unit: run-rbada15d4102548378c97d1dd157feb69.scope; invocation ID: ba460c89618b42729264d5af7b30e526

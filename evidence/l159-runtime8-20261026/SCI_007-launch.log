@@ -1,0 +1,47 @@
+{"attempt": "SCI_007", "exit_status": 1, "wall_seconds": 2.8610383180202916, "peak_rss_kib": "5484684", "swaps": "0", "print_axioms": ["'AspisR1.SCI_Projection.OrderWitness.nonempty' depends on axioms: [propext, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.child_none' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.empty_pred' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.address_pred' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.SCI_Projection.OrderWitness.reordered_event' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.SCI_Projection.recorder_log' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.final_audit' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.selected_audit_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.prior_event' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SCI_Projection.different_audits' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+SCI_Projection.lean:120:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ e ≤ 63
+where
+ e := ↑(BinMerkle32Path.nodeBytes (BinMerkleNodeCodec.readChildren input)).length
+SCI_Projection.lean:119:58: warning: This simp argument is unused:
+  List.length_ofFn
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵i̵n̵M̵e̵r̵k̵l̵e̵3̵2̵P̵a̵t̵h̵.̵n̵o̵d̵e̵I̵n̵p̵u̵t̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵o̵f̵F̵n̵]̵[̲B̲i̲n̲M̲e̲r̲k̲l̲e̲3̲2̲P̲a̲t̲h̲.̲n̲o̲d̲e̲I̲n̲p̲u̲t̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲]̲ at length
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+SCI_Projection.lean:132:60: error
+...
+ection.lean:141:68: error: unexpected token ','; expected ':'
+SCI_Projection.lean:154:31: error: unsolved goals
+case this
+H : Bytes → State := fun a => if a = [] then one else two
+h : one = zero
+⊢ ?m.77
+
+H : Bytes → State := fun a => if a = [] then one else two
+h : one = zero
+this : ?m.77
+⊢ False
+SCI_Projection.lean:152:82: error: unsolved goals
+H : Bytes → State := fun a => if a = [] then one else two
+oneZero : one ≠ zero
+⊢ ∃ H,
+    (∀ q ∈ [(address, two), ([], one)], q.2 = H q.1) ∧
+      (∀ q ∈ [([], one), (address, two)], q.2 = H q.1) ∧
+        BinRawByteCollisionTargets.event zero 2 ([(address, two), ([], one)], ()) ∧
+          ¬BinRawByteCollisionTargets.event zero 2 ([([], one), (address, two)], ())
+SCI_Projection.lean:154:48: error: unexpected token 'at'; expected command
+'AspisR1.SCI_Projection.OrderWitness.nonempty' depends on axioms: [propext, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.child_none' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.empty_pred' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.address_pred' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SCI_Projection.OrderWitness.reordered_event' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.SCI_Projection.recorder_log' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.final_audit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.selected_audit_obstruction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.prior_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.SCI_Projection.different_audits' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r733385c1a6724a35b49644f698f13189.scope; invocation ID: 18ade59153534d44813f6a3391830ea7
