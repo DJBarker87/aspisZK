@@ -1281,3 +1281,61 @@ New allocation use10/100Lean (8pass,2changed failures),0/15Kani. Existing strict
 5G/7G/swap0/Tasks64/-M7000 unchanged. No resource failure, native release rebuild,
 full manifest, adoption or privacy claim. Generic WideExact source extraction
 is in progress; its initial module-only empty translation is rejected.
+
+## Current wide source control and CT normalization (12810–12827)
+
+New proof-only Rust entrypoints call the unchanged native WideExact CodeField
+neg/try_inv methods. Their extraction supplies the actual generic norm/inverse,
+accessors, constructor, CT reducer and normalization. The initial external-trait
+root did not emit the outer wide bodies; that output was not accepted as the
+wide certificate. Local entrypoints resolve that scope issue without modifying
+any extractor/backend code. No production Rust or feature implementation changed.
+
+`ProverRwSuccessNativeInverseTransport` proves the newly emitted scalar/complex/
+quartic inverse bodies equal the retained interpretations. `wide_neg` and
+`ProverRwSuccessNativeWideTransport.inverse` prove exact Result equality of both
+current wide bodies with the two previous logical ports for arbitrary raw inputs,
+including failure/divergence/None. These are under the SAME explicit retained
+primitive field/pow/option bindings. They do not establish those primitives'
+physical native execution or the overall ABI/feature/compiler association.
+No inverse-success, canonicality, output equality or new field-law premise is
+supplied to these source equations.
+
+The current constructor uses CT reduce64 rather than the old `%P` normalizer.
+`ProverRwSuccessCtSubtract.subtract`, `ProverRwSuccessCtReduce.reduce`,
+`ProverRwSuccessNativeNormalizeWord.word` and `ProverRwSuccessNativeNormalize.construct`
+prove that correspondence, retaining the CT bit-mask body and both integer folds.
+The old full-width reducer theorem is reused; no large numeral, inverse exponent
+or concrete recurrence is normalized. A small scalar proof was split at mask
+and wrapping-sub-zero facts after failed tactics; no limit was raised.12810
+rejects the inherited emitter's signed literal shift counts against the existing
+Aeneas U32 count API; the generator explicitly maps the two identical count31
+literals to that carrier. Both raw and adapted hashes and the exact rewrite are
+retained. This is not a backend repair or a claim about arbitrary signed shifts.
+
+`ProverRwSuccessNativeWideInstall.dictionary_preserved` proves installing both
+current bodies preserves the WHOLE previously selected candidate dictionary.
+Thus all existing caller/store facts remain applicable; the real proof/audit
+model equation remains unproved. Retained-source interpretation coverage107/262,
+logical candidate111/262,39 source references remain,35 candidate-unselected;
+partial255 excluded. Four Vec ports retain their source/library adequacy gaps.
+The two wide source-control equations are closed; whole native adequacy and
+root/headline premises are NOT discharged. Target not yet established.
+
+Focused source modules only, standard accepted axioms, zero swaps and no OOM.
+Existing5G/7G/Tasks64/-M7000 unchanged. No full replay, release artifact, timing,
+Kani or security gate was repeated. The vector source preflight independently
+exposed RawVec layout and pointer-transmute limitations; those attempts are
+retained and supply no adequacy certificate. Work on its smaller wrappers
+continues against the existing builtin Vec carrier/new/len models.
+
+`ProverRwBodyNativeWideInstall.body`(12828) consumes the two wide source
+transports in the exact complete per-attempt caller, preserving its full Result,
+not only a successful payload. It compares against the prior candidate, not
+against the still-open security model. The Vec default path reaches an unsupported
+Alignment→NonNull pointer transmute even with the existing builtin constructor
+opaque; isolated Vec.is_empty rejects expanding the opaque Vec type. These exact
+backend errors are retained. Neither a library override nor new source association
+is counted for those four ports. No backend/infrastructure change is made.
+Native-independent remaining source helpers are being investigated separately.
+Current allocation use29/100Lean,0/15Kani; no exhaustion is claimed.

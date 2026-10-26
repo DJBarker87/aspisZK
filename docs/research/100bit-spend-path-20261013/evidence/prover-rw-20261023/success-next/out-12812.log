@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessNativeInverseTransport.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b ← ProverRwSuccessNativePorts.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq x 0#u32
+    if b = true then ok none
+      else do
+        let i1 ← lift (AspisR1ProducerRelease47.field.P.wrapping_sub 2#u32)
+        let i2 ← lift (core.convert.num.FromU64U32.from i1)
+        let m1 ← ProverRwSuccessNativePorts.aspis_core.field.M31.pow x i2
+        ok (some m1)
+is not definitionally equal to the right-hand side
+  do
+    let b ←
+      ProverRwSuccessInverseSource.field.M31.Insts.CoreCmpPartialEqM31.eq x ProverRwSuccessInverseSource.field.M31.ZERO
+    if b = true then ok none
+      else do
+        let i ← lift (ProverRwSuccessInverseSource.field.P.wrapping_sub 2#u32)
+        let i1 ← lift (core.convert.num.FromU64U32.from i)
+        let m ← ProverRwSuccessInverseSource.field.M31.pow x i1
+        ok (some m)
+
+x : U32
+⊢ (do
+      let b ← ProverRwSuccessNativePorts.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq x 0#u32
+      if b = true then ok none
+        else do
+          let i1 ← lift (AspisR1ProducerRelease47.field.P.wrapping_sub 2#u32)
+          let i2 ← lift (core.convert.num.FromU64U32.from i1)
+          let m1 ← ProverRwSuccessNativePorts.aspis_core.field.M31.pow x i2
+          ok (some m1)) =
+    do
+    let b ←
+      ProverRwSuccessInverseSource.field.M31.Insts.CoreCmpPartialEqM31.eq x ProverRwSuccessInverseSource.field.M31.ZERO
+    if b = true then ok none
+      else do
+        let i ← lift (ProverRwSuccessInverseSource.field.P.wrapping_sub 2#u32)
+        let i1 ← lift (core.convert.num.FromU64U32.from i)
+        let m ← ProverRwSuccessInverseSource.field.M31.pow x i1
+        ok (some m)
+'R1Z.ProverRwSuccessNativeInverseTransport.m_inverse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwSuccessNativeInverseTransport.c_inverse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwSuccessNativeInverseTransport.q_inverse' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'R1Z.ProverRwSuccessNativeInverseTransport.wide_neg' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-2.lock env=J launcher=run-joint.sh
