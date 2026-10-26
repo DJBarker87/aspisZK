@@ -10087,3 +10087,26 @@ in the same worktree (IDs 24000-24299, 100 Lean/20 Kani): stage 1 converts the 3
 to proved source equations against the extracted definitions, stage 2 the 25 open pure laws, stage 3
 op117 by per-step P6 with Lean induction. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2,
 cb2. Rows removed outright: 0. Privacy target not yet established.
+
+## D209 (Stream B, 2026-10-26 16:40): rebase2 passes ELF, fixture and differential gates; timing blocked on a quiet host; recount 2 launched
+
+pv-rebase2 (`codex/pv-rebase-20261026`, head dacdb225ff = candidate with research merged; Lean 0,
+Kani 0; no binaries committed): all three ELFs rebuilt from the merged candidate hash exactly to the
+release pins, with research rebuilt in the same session as control (default/devnet 1,563,728 B, Pool
+605,704 B); the four shared-core differences (host-only `ct-host-prover` guards) are therefore
+ADMITTED for adoption on the byte-identity ruling (D197). Transfer and withdrawal fixture proofs are
+byte-identical to research (57,607 B each). The existing differential harness passed 1,000/1,000
+pairs (600 proofs, 100 rejected-prefix pairs), after an earlier oversubscribed cohort was invalidated
+and replaced by a capacity-checked one. Quiet-host timing never qualified: ten boundary checks found
+one opening, and another capped job started during the first research sample, which invalidates it
+(raw research calls 38.2/40.1 s under contention, not medians; candidate never timed). The timing gate
+(candidate median < 15 s and <= 1.10 x research, D168/D169) therefore remains OPEN; the prepared
+command is NEXT-TIMING-COMMAND.txt in the branch's evidence dir and needs a continuous quiet window,
+which does not occur while both streams run six capped scopes. Lead action: ask Stream A to agree a
+scheduled quiet window for timing and the pv-l3 collector (owner may rule). The branch stays unmerged
+(candidate adoption rule). No premise removed. Slot refilled with pv-recount2 (`codex/pv-recount2-
+20261026` from research, IDs 24300-24349, 15 Lean/0 Kani): recount of all 400 rows against the
+evidence on research and the unmerged branches, with the ruling that dictionary installs and bounded
+Kani gates are not closures, a new row for the OS-entropy failure (D206), and an explicit check of
+the lead's D196-D208 claims against the evidence. Six jobs running: rw17, dict9, runjoin5, srcid,
+cb2, recount2. Rows removed outright: 0. Privacy target not yet established.
