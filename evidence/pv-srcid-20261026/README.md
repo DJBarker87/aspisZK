@@ -226,3 +226,22 @@ standard axioms. NativeConsumer22677 passes original and phased BuilderPremises
 contracts without editing their consumers. Five named primitive premise
 families remain explicit, including successful native execution; this is a
 REDUCTION of V152–V154, not native premise removal or deployed installation.
+
+## Final Lean closure audit
+
+Attempt22689 is the100th charged Lean attempt and passed in2.17s,
+peak RSS4,223,404KiB, swaps0, caps6G/8G/swap0. It imports the focused final
+native certificate/consumer and both fixture fibres, prints original and
+nested premise types including ExternalLinear/Records, and prints standard
+axioms for the final theorem closure. This is one final focused closure audit,
+not a full frozen release manifest replay or binary-association proof. No
+further Lean attempts are authorized under this budget. NativeDirections22687
+passes after explicit nominal adapter unfolding and reflexivity in each
+branch, replacing the22684 heartbeat timeout without raised options/caps.
+
+Kani3 will target the full M31 carrier wrapper (smaller symbolic payload than
+the timed-out QM31 gate); Kani4–15 split twelve actual QM31 fixed cells at
+base-four digit boundaries0,1,2,3,4,15,16,63,64,255,256,1023. These local gates
+retain all arbitrary raw cell words, no stubs, and unwind1025. The fixed-cell
+checks do not constitute a universal QM31 wrapper theorem. Expected heavy
+step is CBMC symbolic array-copy checking, not native field arithmetic.

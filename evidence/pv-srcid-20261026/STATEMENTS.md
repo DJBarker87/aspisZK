@@ -1,4 +1,4 @@
-# Statement comparison (proof validation pending)
+# Statement comparison and retained native obligations
 
 No endpoint or existing theorem is edited. No ledger row is yet removed.
 Target not yet established.
@@ -84,3 +84,46 @@ remain: WitnessOk retains values/bits/siblings; PubCorr retains its seven fields
 RspendPlus retains the original spend relation plus sentinel. These definitions
 will be printed in the final audit so their conjunction leaves remain visible.
 No native V152–V154 deployment row has yet been removed from the ledger.
+
+## Authoritative native result after attempts22675–22687
+
+For all three rows the before and after conclusions are **identical**:
+
+| Row | Native theorem (namespace `R1Z.PV_Src_NativeIdentification`) | Status |
+|---|---|---|
+| V152 | `public_eq p i : (prover inputs transport).public i = BuilderSource.prover.public (toInstance p i)` | REDUCED to the five named families and existing source-port parameters |
+| V153 | `build_eq p i : (prover inputs transport).build i = BuilderSource.prover.build (toInstance p i)` | REDUCED; actual returned compiler columns, not a substituted model trace |
+| V154 | `transport_eq p : (prover inputs transport).transport = BuilderSource.π` | REDUCED; native transport association remains `row_call` |
+
+`identification` constructs the original three-field structure. Receipt22676
+prints standard axioms for every declaration. The successful-run premise retains
+both Result layers, every original compiler check, and the same returned payload.
+`ForestCompilation.returned_bank`22675 discharges the internal record-to-returned-
+bank association. It does not assume this equality as a new premise.
+
+`NativeConsumer.builder_premises` and `phased_builder_premises`22677 accept the
+constructed instance with the unchanged original consumer type. The fixed
+`PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises` remains its existing
+model theorem. No source, observer, simulator, failure event or deployed endpoint
+is edited. No native ledger row is removed.
+
+The five `PV_Src_Premises` families printed above are retained, not discharged or
+renamed as cryptographic assumptions. `WitnessOk` has three fields (values is a
+triple conjunction); `PubCorr` has seven. `RspendPlus` contains the original
+`Rspend` and transfer change-sentinel obligation. The existing `ExternalLinear`
+and `Records` source-port dictionaries are also explicit parameters. Their
+concrete native association is not proved by the standard-axiom audit.
+
+Both release canonical fibres are inhabited (`Fixtures.fibres`,22662), with
+actual extracted bank/column stage success and equal public fields. The generic
+canonical encoded certificate is constructed (`ForestCanonical.identification`,
+22632). **Full native fixture non-vacuity remains OPEN**: no witness for the five
+native premise families for either release fixture has been constructed, nor has
+V047 native fixture-byte association. Thus these inhabitance results do not
+establish native `compile_call` satisfiability.
+
+Additional local native helpers: `NativeValueBits.helper/cells/bit_boolean`22682,
+`NativeValueReconstruction.reconstruct`22683 and
+`NativeDirections.closure_result/run_eq/booleans`22687. These prove actual local
+source behavior without a compiler-success premise. They do not discharge all
+`WitnessOk`/`PubCorr` or opaque record-callee associations.

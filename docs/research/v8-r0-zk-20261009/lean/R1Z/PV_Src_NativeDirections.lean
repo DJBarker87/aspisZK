@@ -31,13 +31,15 @@ theorem closure_result (input : Input) (i : Usize) (hi : i.val < 24) :
     closure.call_mut (input.pair,input) i =
       ok ((BuilderRecordsPath.bits (reference input)).val[i.val]!, (input.pair,input)) := by
   rw [BuilderRecordsPath.bits_get _ i hi]
-  change pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut _ _ = _
+  dsimp only [closure, pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31]
   rw [pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut]
   by_cases h0 : i = 0#usize
   · simp only [h0,if_true,lift,bind_tc_ok,reference]
+    rfl
   · simp only [if_neg h0]
     by_cases h20 : i ≤ 20#usize
     · simp only [if_pos h20,lift,bind_tc_ok,reference]
+      rfl
     · simp only [if_neg h20,lift,bind_tc_ok,reference]
       have h21 : 21 ≤ i.val := by
         have h := h20
@@ -47,6 +49,7 @@ theorem closure_result (input : Input) (i : Usize) (hi : i.val < 24) :
         BuilderRecordsPath.sub_val i 21#usize (by simpa using h21)
       rw [index_ok_gen _ _ (by rw [hv]; simp; omega)]
       simp only [bind_tc_ok,lift,hv]
+      rfl
 
 def run (input : Input) : Result (Array U32 24#usize) :=
   BuilderForestStdPort.core.array.from_fn 24#usize closure (input.pair,input)
@@ -57,9 +60,6 @@ theorem run_eq (input : Input) : run input = ok (BuilderRecordsPath.bits (refere
     (fun n => (BuilderRecordsPath.bits (reference input)).val[n]!)
     (fun i hi => closure_result input i (by simpa using hi))]
   congr 1
-  apply BuilderRecordCanonical.array_ext
-  intro n hn
-  rw [BuilderRecordsArray.tabulate_get _ _ n hn]
 
 theorem booleans (input : Input) : ∃ out, run input = ok out ∧
     ∀ n, n < 24 → (out.val[n]!).val = 0 ∨ (out.val[n]!).val = 1 :=

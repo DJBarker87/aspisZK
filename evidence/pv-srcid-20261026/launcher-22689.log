@@ -1,0 +1,65 @@
+reservation: populated 24 GiB + 8 GiB; window=0 (London 1636); env=J
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.publicCorr : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.admission : ∀ (i : I)
+      (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+      R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+        R1Z.BuilderSpendRelation.RspendPlus
+          (R1J.SpendWitnessMap.mapPub
+            (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+          (R1Z.BuilderCanonical.liftWitness
+            (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w)))
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j
+constructor:
+  R1Z.PV_Src_NativeIdentification.PV_Src_Premises.mk {K : Type} [Field K] [CharP K 2147483647]
+    [R1Z.BuilderForestAdmissionPort.ExternalLinear] [R1Z.BuilderForestAdmissionPort.Records] {I : Type}
+    {inputs : I → R1Z.PV_Src_NativeInput.Input} {transport : Fin 1024 ≃ Fin 1024}
+    (compile_call :
+      ∀ (i : I),
+        R1Z.PV_Src_NativeInput.run (inputs i) =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (inputs i).compiled))
+    (words :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.WitnessOk (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))
+    (publicCorr :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R0Z.WriterRefine.PubCorr (R1Z.PV_Src_Forest_PrimitiveArguments.wordPublic records.p)
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i)))))
+    (admission :
+      ∀ (i : I) (records : R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords),
+        R1Z.PV_Src_NativeInput.newRecords (inputs i) = Aeneas.Std.Result.ok records →
+          R1Z.BuilderSpendRelation.RspendPlus
+            (R1J.SpendWitnessMap.mapPub
+              (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput (inputs i))))
+            (R1Z.BuilderCanonical.liftWitness
+              (R1Z.BuilderRecordCanonical.witness (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness records.w))))
+    (row_call : ∀ (j : Fin 1024), transport j = R1Z.PV_Src_Transport.row j) :
+    R1Z.PV_Src_NativeIdentification.PV_Src_Premises inputs transport
+'R1Z.PV_Src_ForestCompilation.returned_bank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeIdentification.identification' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeConsumer.phased_builder_premises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_LowBits.sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeValueBits.helper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeValueReconstruction.reconstruct' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.closure_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.run_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Src_NativeDirections.booleans' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.17
+	Maximum resident set size (kbytes): 4223404
+	Swaps: 0
+	Exit status: 0

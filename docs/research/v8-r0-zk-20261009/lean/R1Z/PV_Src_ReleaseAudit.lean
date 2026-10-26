@@ -1,5 +1,8 @@
 import R1Z.PV_Src_Consumer
 import R1Z.PV_Src_Fixtures
+import R1Z.PV_Src_NativeConsumer
+import R1Z.PV_Src_NativeValueReconstruction
+import R1Z.PV_Src_NativeDirections
 
 /-! Final focused dependency-closure and axioms audit. Run once after the
 individual changed modules and both fixture fibres compile. This is not a
@@ -36,3 +39,26 @@ shipped-execution or binary-association certificate. -/
 #print axioms R1Z.PV_Src_ForestCanonical.build_eq
 #print axioms R1Z.PV_Src_ForestCanonical.transport_eq
 #print axioms R1Z.PV_Src_Consumer.forest_stages
+
+#print R0Z.WriterRefine.WitnessOk
+#print R0Z.WriterRefine.PubCorr
+#print R1Z.BuilderSpendRelation.RspendPlus
+#print AspisR1.SpendRelation.Rspend
+#print R1Z.BuilderForestAdmissionPort.ExternalLinear
+#print R1Z.BuilderForestAdmissionPort.Records
+
+#print R1Z.PV_Src_NativeIdentification.PV_Src_Premises
+#print axioms R1Z.PV_Src_ForestCompilation.returned_bank
+#print axioms R1Z.PV_Src_NativeIdentification.public_eq
+#print axioms R1Z.PV_Src_NativeIdentification.build_eq
+#print axioms R1Z.PV_Src_NativeIdentification.transport_eq
+#print axioms R1Z.PV_Src_NativeIdentification.identification
+#print axioms R1Z.PV_Src_NativeConsumer.builder_premises
+#print axioms R1Z.PV_Src_NativeConsumer.phased_builder_premises
+#print axioms R1Z.PV_Src_LowBits.sum
+#print axioms R1Z.PV_Src_NativeValueBits.helper
+#print axioms R1Z.PV_Src_NativeValueReconstruction.reconstruct
+
+#print axioms R1Z.PV_Src_NativeDirections.closure_result
+#print axioms R1Z.PV_Src_NativeDirections.run_eq
+#print axioms R1Z.PV_Src_NativeDirections.booleans
