@@ -10576,3 +10576,28 @@ into the job's own objects dir, run the full audit, validate the bridge, then co
 callees, publicCorr's deployed association and `words` by the variant-decomposed unstubbed mapper. Six
 slots: cb4, runjoin8, join2, rw20, cb5, srcid5. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D229 (Stream B) 2026-10-26 23:50 UTC: join2 exhausted (bridges checked, inventory 30 → 30), join3 launched; rebuild2 merged with HEAD-match gate
+
+pv-join2 (`codex/pv-join-20261026`, head ce8e0224ab; 100/100 host Lean = 89 passed / 11 failed, peak RSS
+4.46 GB, swap 0, no Kani, no local compiles, no crates/programs change, no forbidden tokens). Checked on
+the restored host: bridges for current ops 71/100/101/110 and CB3 ops 51/120, the op81 dictionary
+compatibility (PV_CB_Borrow.selected vs ProverRwSuccessBodyInterpretation.selected on the entries read),
+the native op20 carrier bridge, the P6-selected ledger `BodySourceLaw`, the successful-audit guard, and the
+headline import chain rebuilt with receipts; the actual transfer/withdrawal fixture source boundaries are
+pinned (ed1c1cef71). Inventory 30 → 30; entries still without a source law: 4, 32-36, 79, 117, 121-123,
+132-134, 222-224, 226-228, 230, 232, 249-253, 257-259. Still OPEN on both fixtures: the proof-byte
+equations, the complete audit/status equations, the whole V163 equality and native non-vacuity. The
+combined final audit did not run (one-attempt miscount); the original headline checked separately.
+Endpoint premises removed: 0. Launched pv-join3 (same branch, IDs 36500-36799, 100 Lean, last 5 reserved
+for the combined audit): baseline audit first, then per fixture the proof-byte and audit/status equations
+from the installed laws with explicit reachability of inventory entries, V163 per fixture, native
+non-vacuity, then source laws for entries both fixtures reach (consuming cb4/cb5 proofs). Also recorded:
+Stream A's envj-rebuild2 is merged (7ccb01e1a6) with a HEAD-match gate (754/774 compiled sources equal
+research HEAD byte-for-byte, 20 have no HEAD file: 17 unmerged PDict_* plus three EJS audit modules, 0
+stale picks); smoke 31075 imports PrivacyR1HeadlineDeployedReal with propext only; CertOwnFill and both
+Formatter consumers pass only under recorded historical profiles. The three shared sources its integrity
+pass found changed were Stream B launcher recompiles of HEAD sources (join2 attempt 35312; srcid5
+36300/36301) and byte-match HEAD. 669 + 501 source entries remain unattempted; no third round unless the
+pv-adopt replay plan names a missing set. Six slots: cb4, runjoin8, rw20, cb5, srcid5, join3. Rows removed
+outright: 0. Privacy target not yet established.
