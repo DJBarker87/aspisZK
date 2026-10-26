@@ -13,7 +13,7 @@ def collect(name):
 plan=json.loads((E/'RPz5_source-plan.json').read_text());rows=[]
 for m in plan['order']:
  x=plan['modules'][m];rows.append(dict(module=m,imports=x['imports'],repository_source=x['source'],source='RPz5_sources/'+m.replace('.','/')+'.lean',object='RPz5_objects/'+m.replace('.','/')+'.olean'))
-focus={'AspisR1PublicPreparation.Types','AspisR1PublicPreparation.Funs','ExtractedPreparedModel','ExtractedOpeningQueriesModel','S1SemanticPrefixModelV1','CurrentPreparedScratchModel','CurrentPreparedScratchReachability','S1SemanticFinishModelV1','Query31SourceCalls'}
+focus={'ExtractedTx1Model','AspisR1PublicPreparation.Types','AspisR1PublicPreparation.Funs','ExtractedPreparedModel','ExtractedOpeningQueriesModel','S1SemanticPrefixModelV1','CurrentPreparedScratchModel','CurrentPreparedScratchReachability','S1SemanticFinishModelV1','Query31SourceCalls'}
 focus_closure=set()
 def focus_visit(m):
  if m in focus_closure:return
