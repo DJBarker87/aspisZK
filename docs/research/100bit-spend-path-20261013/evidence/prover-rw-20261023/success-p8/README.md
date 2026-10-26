@@ -69,3 +69,58 @@ adaptations;success-p8/source-map.json checks namespace renaming and unchanged
 source bodies plus new standalone proofs. No proved old module or shipped Rust
 is modified. Only the private launcher's accepted ID range was extended; the
 one-line diff and complete before/after snapshots are retained.
+
+Planned compression successor isolates one raw element with an owned state-step
+helper and word-level solver. Prior one-coordinate SAT timeouts are preserved;
+the successor changes source factoring/solver, does not raise the240s timeout,
+and cannot by itself justify the16-element caller or arbitrary-slice op223.
+
+## Pole full-domain native check
+
+`success-p8-pole-full-001` is an actual Kani invocation,timeout240s,exit124;
+no harness result. Optimized compile took24.60s; the remaining time was symbolic
+execution/verification of the variable-length1024-row loop. Cgroup peak is
+2290708480bytes,swap peak0; GNU-time RSS16184KiB undercounts descendants and
+is not substituted for the cgroup peak. Own cgroup is confirmed inactive.
+No unchanged rerun or raised cap/timeout. A planned fixed1024-row successor
+removes the symbolic slice length and redundant full raw array copy; even a
+pass would cover only that domain until its caller shape is proved.
+
+21306 complex bridge was refused before Lean at10:29:27UTC:48.375GiB reserved,
+projected55.375GiB>55GiB. Continue compile-free work; retry after180s with new
+ID. Its successor also proves the current complex double source equation,
+which is needed by the current quartic square owner; no failed Lean is rerun.
+
+## Current field transports and failed control/solver attempts
+
+21307 current complex add/sub/mul/double and21308 current quartic add/mul/
+mul_by_r pass,2.05/2.01s,4305512/4305612KiB,zero swaps,seven standard axioms
+reports. Equations compare exact Results for all raw words to the retained
+release arithmetic via explicit nominal carrier maps. No inverse-success,
+canonical-input or output-equality premise is added. These supply primitive
+source transports needed by downstream references; they do not remove a root
+premise or instantiate the complete body/model equation.
+
+`success-p8-poly-control-charon-001` emits the narrowed current polynomial
+control. `success-p8-poly-control-aeneas-001` still fails with Not_found in
+InterpReduceCollapse.collapse_ctx_following_sequence. This isolates the failure
+to that control even with field operations opaque; no callback is accepted.
+No backend or monitoring code is changed.
+
+`success-p8-compress-wordlevel-001` is Kani invocation2,exit101 in0.60s. The
+installed Kani bundle contains only Kissat, and no Bitwuzla executable is in
+PATH or the checked system locations. The driver panics while parsing the
+solver ERROR; no harness result is inferred. No tool installation/repair is
+attempted. Future source verification uses available solver capabilities.
+
+The fixed1024 pole successor also times out240s,exit124; no verified result.
+It changes input construction and domain rather than repeating the variable
+slice job. Its scope is confirmed inactive before the next Lean launch. Native
+invocations charged3/12 (two timeouts and one solver/driver failure). No gate
+is claimed passed from these failures; pole258 remains unsupplied.
+
+For later receipts, dependency lists are stored once per SHA256 fingerprint
+in `*-dependencies.json`; individual immutable inputs/receipts reference that
+manifest. The fingerprint is still computed over the complete original object
+list; no dependency is omitted and no replay fingerprint is varied artificially.
+This is evidence deduplication only, not launcher/build infrastructure work.

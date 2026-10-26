@@ -1,0 +1,36 @@
+//! Safe reference and native comparison only; no production source edits.
+use aspis_core::field::{M31,CM31,QM31};
+#[path = "../../../../crates/aspis-r1-cost-probe/src/ct_pole.rs"]
+mod shipped_pole;
+pub fn all_slots_clear(values: &[[[QM31;2];2]], masks: &[u16;64], chi: QM31) -> bool {
+    let mut clear = true;
+    let mut row = 0usize;
+    while row < values.len() {
+        let active = masks[row >> 4] & (1u16 << (row & 15)) != 0;
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][0][0]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][0][1]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][1][0]));
+        clear = clear & !(active & shipped_pole::equal(chi, values[row][1][1]));
+        row += 1;
+    }
+    clear
+}
+
+#[cfg(kani)]
+mod checks {
+ use super::*;
+ fn q(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+ #[kani::proof]
+ #[kani::unwind(1026)]
+ fn pole_full_domain() {
+  let raw:[[[[u32;4];2];2];1024]=kani::any();
+  let mut values=[[[QM31::ZERO;2];2];1024];
+  let mut i=0usize;
+  while i<1024 {values[i]=[[q(raw[i][0][0]),q(raw[i][0][1])],[q(raw[i][1][0]),q(raw[i][1][1])]];i+=1;}
+  let masks:[u16;64]=kani::any();let chi=q(kani::any());
+  let len:usize=kani::any();kani::assume(len<=1024);
+  let actual=shipped_pole::all_slots_clear(&values[..len],&masks,chi);
+  let reference=all_slots_clear(&values[..len],&masks,chi);
+  assert_eq!(actual,reference);
+ }
+}

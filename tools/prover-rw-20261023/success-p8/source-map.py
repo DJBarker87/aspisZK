@@ -15,6 +15,8 @@ for n in names:
   assert current.split(end)[0]==renamed.split('end R1Z.PV_ProverRwP7CoefficientsSource')[0]
  elif n.endswith('CoefficientsInstall'):
   assert current.split('theorem fibre_preserved')[0]==renamed.split('#print axioms source')[0]
+ elif n.endswith('CurrentComplexBridge'):
+  assert current.split('theorem double')[0]==renamed.split('#print axioms add')[0]
  else:assert current==renamed
  rows.append(dict(module='PV_'+n,pending_sha256=hashlib.sha256(old.encode()).hexdigest(),current_sha256=hashlib.sha256(current.encode()).hexdigest(),change='Namespace/import PV_ rename; new standalone proof declarations only'))
 (e/'success-p8/source-map.json').write_text(json.dumps(rows,indent=2)+'\n')

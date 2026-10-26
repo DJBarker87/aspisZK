@@ -36,6 +36,10 @@ def visit(name):
 src=j/'sources'/(module+'.lean');s=src.read_text()
 for name in imports(s):visit(name)
 fp=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest()
+manifest=h/f'{fp}-dependencies.json'
+payload=json.dumps(deps,sort_keys=True)
+if manifest.exists():assert manifest.read_text()==payload
+else:manifest.write_text(payload)
 (h/f'{a}.lean.txt').write_text(s)
-(h/f'{a}-input.json').write_text(json.dumps(dict(module=module,attempt=a,source_revision=revision,source_sha256=hashlib.sha256(s.encode()).hexdigest(),source_path=str(src),dependencies=deps,deps_fingerprint=fp,launcher='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/'+'native-drop'+'/run-joint.sh',limits=dict(lean_memory_mb=7000,memory_high='5G',memory_max='7G',swap_max=0,tasks_max=64)),indent=2)+'\n')
+(h/f'{a}-input.json').write_text(json.dumps(dict(module=module,attempt=a,source_revision=revision,source_sha256=hashlib.sha256(s.encode()).hexdigest(),source_path=str(src),dependencies_manifest=manifest.name,deps_fingerprint=fp,launcher='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/'+'native-drop'+'/run-joint.sh',limits=dict(lean_memory_mb=7000,memory_high='5G',memory_max='7G',swap_max=0,tasks_max=64)),indent=2)+'\n')
 print(fp)
