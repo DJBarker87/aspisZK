@@ -1,0 +1,31 @@
+F3L_PreparedModel.lean:198:6: error: Type mismatch
+  port
+has type
+  Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared (currentPrepared retained)) sourceInput.data q
+    (SelectedChallengeMap.rhoOf sourceInput.rho)
+but is expected to have type
+  Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared (currentPrepared retained)) sourceInput.data q
+      (SelectedChallengeMap.rhoOf sourceInput.rho) ∧
+    ∃ sourcePrepared,
+      currentPrepared sourcePrepared = currentPrepared retained ∧
+        F3L_PreparedModelSix.Fields sourcePrepared sourceInput q ∧
+          (F3L_SourcePrepared.numeric sourcePrepared).roots = fun j =>
+            OraclePortBatchDraft.committedRoot
+              { wire := bytesOf ↑f.proof, semantic := List.map (fun s => bytesOf ↑s) ↑pre.records } ↑j
+F3L_PreparedModel.lean:209:50: error: Application type mismatch: The argument
+  portRun
+has type
+  Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared run.p) sourceInput.data q
+      (SelectedChallengeMap.rhoOf sourceInput.rho) ∧
+    ∃ sourcePrepared,
+      currentPrepared sourcePrepared = run.p ∧
+        F3L_PreparedModelSix.Fields sourcePrepared sourceInput q ∧
+          (F3L_SourcePrepared.numeric sourcePrepared).roots = fun j =>
+            OraclePortBatchDraft.committedRoot
+              { wire := bytesOf ↑f.proof, semantic := List.map (fun s => bytesOf ↑s) ↑pre.records } ↑j
+but is expected to have type
+  Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared run.p) sourceInput.data q
+    (SelectedChallengeMap.rhoOf sourceInput.rho)
+in the application
+  And.intro portRun
+'AspisR1.F3L_PreparedModel.from_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

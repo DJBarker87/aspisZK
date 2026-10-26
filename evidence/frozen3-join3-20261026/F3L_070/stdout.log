@@ -1,0 +1,21 @@
+F3L_WriterAlpha.lean:20:42: error: don't know how to synthesize placeholder for argument `h`
+context:
+out : verifier.Prepared
+a : CheckpointBytes5Writer.Accumulator
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑(writerPrepared out).queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (CheckpointBytesBody.fields (writerPrepared out) a size qb)
+j : Fin 2
+index : (↑(writerPrepared out).alpha)[↑j] = F3L_WriterSourceScalar.rawE (F3L_SourcePrepared.alpha out j)
+⊢ OraclePortCkptAbi4Decode.CanonicalWide ((CheckpointBytesBody.fields (writerPrepared out) a size qb).alpha j)
+F3L_WriterAlpha.lean:13:48: error: unsolved goals
+out : verifier.Prepared
+a : CheckpointBytes5Writer.Accumulator
+size : (↑a.weights).length = 64
+qb : ∀ (j : Fin 22), ↑(↑(writerPrepared out).queries)[↑j] < 262144
+canonical : CheckpointBytesBlocks.CanonicalFields (CheckpointBytesBody.fields (writerPrepared out) a size qb)
+j : Fin 2
+index : (↑(writerPrepared out).alpha)[↑j] = F3L_WriterSourceScalar.rawE (F3L_SourcePrepared.alpha out j)
+⊢ (CheckpointBytesBlocks.prepared (CheckpointBytesBody.fields (writerPrepared out) a size qb) canonical).alpha j =
+    (F3L_SourcePrepared.numeric out).alpha j
+'AspisR1.F3L_WriterAlpha.alpha' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
