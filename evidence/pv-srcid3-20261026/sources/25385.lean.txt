@@ -1,0 +1,23 @@
+import R1Z.PV_Src_ReduceModulo
+
+/-! The owned source matrix callee equals the extracted modulo copy exactly,
+not only at the level of field values. All four input words are arbitrary. -/
+set_option autoImplicit false
+namespace R1Z.PV_Src_ExternalMat4Copy
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open AspisBuilderPoseidonReference
+
+theorem equals_copy (x : Array U32 4#usize) :
+    poseidon2.builder_reference.mat4_owned x =
+      R0PoseidonCopy.mat4 x.val[0]! x.val[1]! x.val[2]! x.val[3]! := by
+  rw [poseidon2.builder_reference.mat4_owned,index_ok x 0#usize (by decide)]
+  simp only [lift,bind_tc_ok]
+  rw [index_ok x 1#usize (by decide)]
+  simp only [lift,bind_tc_ok]
+  rw [index_ok x 2#usize (by decide)]
+  simp only [lift,bind_tc_ok]
+  rw [index_ok x 3#usize (by decide)]
+  simp only [lift,bind_tc_ok,PV_Src_ReduceModulo.reference,R0PoseidonCopy.mat4,bind_assoc_eq]
+
+#print axioms equals_copy
+end R1Z.PV_Src_ExternalMat4Copy

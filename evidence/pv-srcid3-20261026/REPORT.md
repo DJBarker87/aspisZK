@@ -91,3 +91,9 @@ Next deliverable: finish the frozen-reference public correspondence and
 unchanged consumer; verify decomposed unstubbed mapper obligations; attach
 installed selection/RspendPlus/transport from pv-runjoin at the exact interfaces.
 Final budget totals and accepted-module audit are pending.
+
+Read-only RunJoin cross-check: runjoin-read-only.json pins the other branch
+revision and SourceBoundary/SourceEndpoint blobs. SourceEndpoint explicitly
+retains an `inputs` family and world/observer data, rather than installing a
+PV_Src_NativeInput.Input selection. No foreign-worktree file was edited or
+copied into the proof dependency cone.

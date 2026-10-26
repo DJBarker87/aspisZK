@@ -172,3 +172,12 @@ and the complete24-row reference bit array now match canonical encoding for
 the packed membership index. No concrete index enumeration or hash recurrence
 normalization. This strengthens the selected-encoding direction and does not
 supply installed input equality or admission for arbitrary raw payloads.
+
+25380–25388: canonical selected sibling reflected through injective field
+embedding; all24 siblings and all private transfer record fields now equal the
+original canonical witness (packed membership index). Reducer=modulo for every
+U64 and owned matrix=retained modulo copy for every4-word array. External
+callback is total and every returned lane canonical for arbitrary16 raw words.
+FrozenFixtures constructs both canonical fixture carriers and proves record,
+WitnessOk and optional banks stages inhabited. Full compiler-success fibres
+remain open rather than inferred from primitive non-vacuity.
