@@ -61,3 +61,24 @@ headline premise was discharged. New Codecs composition is not yet checked.
 Kani1/20: checks::take_u64 and checks::take_nonzero both pass, no stubs;
 see kani-take-001/receipt.json. Generic reference extraction next. This gate
 does not establish arbitrary Default/Drop native behavior. Lean6/100,4 green.
+
+## Relaunch 1, checked vector and codec checkpoint
+
+Prior budget: Lean6/100 (four green), Kani1/20. Focused attempts22806–22811
+are green; all printed axioms are standard. Initial direct execution of the
+non-executable shared launcher returned126 before any Lean attempt; invoking
+it with `sh` used the existing launcher unchanged. No reservation was bypassed.
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|33|V184|INSTALLED (value; native gate pending)|PV_CB_Pop.op33_installed, op33_empty;22806.json|
+|34|V185|INSTALLED (value; native gate pending)|PV_CB_IsEmpty.op34_installed;22807.json|
+|35|V186|INSTALLED (value; native gate pending)|PV_CB_VecDefault.op35_installed;22808.json|
+|36|V187|INSTALLED (value; native gate pending)|PV_CB_VecArray.op36_accept/op36_reject;22809.json|
+|71|V203|INSTALLED (emitted source)|PV_CB_Codecs.op71_installed;22810.json|
+|72|V204|INSTALLED (emitted source)|PV_CB_Codecs.op72_installed;22810.json|
+|77|V205|INSTALLED (callback order)|PV_CB_PointClone.op77_installed;22811.json|
+
+Row numbers in this checkpoint are provisional until checked against the recount.
+No endpoint premise or ledger row removed (before0/after0 removals). Native
+allocator/Drop/side-channel obligations remain separate from value equations.
