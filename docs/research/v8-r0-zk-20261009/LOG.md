@@ -10418,3 +10418,41 @@ then V163's concrete model instance and both equations). Six slots: cb3, join, r
 rw19. Next free Stream B range 28000 is the replay reserve (pv-adopt), so new jobs start at 30000 only
 after agreeing with Stream A, whose verification attempts use 30000+. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D222 (Stream B) 2026-10-26 21:45 UTC: runjoin7 exhausted: three-field trust list proposed, conditional headline proved from T plus named P obligations
+
+pv-runjoin7 (`codex/pv-runjoin-20261026`, head 3478e00a58; 100/100 Lean = 91 accepted / 9 elaboration
+failures retained, 11 Kani = 10 value cuts passed, native factory rejected at `dlsym`; headline axioms
+propext/Classical.choice/Quot.sound; no crates/programs change; no forbidden tokens). Result against
+ruling D220: `R1Z.PV_RunJoin_TrustItems d` (PV_RunJoin_TrustItems.lean) has exactly three fields, all
+OS/kernel-contract class: `entropy_law : ProverCommitPublicNonce40.E1 d.law` (64 successful getrandom
+bytes uniform given the complete prior context), `entropy_kernel : ∀ c, d.nativeWeight c =
+PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c` (joint density of the 128 draws, not only
+marginals), `observation : ∀ c, d.nativeObservation c = d.extractedObservation c` (native
+getrandom/file/time/worker outcomes, filesystem state and the complete D159 observer payload equal the
+extracted execution; explicitly NOT an equality with the security experiment). The old eight-leaf
+Identity structure is proved equivalent to one outcome family plus time/workers (TrustOutcomes); the
+separate filesystem and complete-view equalities are derivable by `observation_projection` and were
+deleted from T. Exact statements, carriers, shipped locations (state_only_entropy.rs
+`generate_for_mask_nonce` / getrandom::fill; RealR1_client.rs `prove_for_proof_accounts`) and the
+consequence of each field failing are in `evidence/pv-runjoin6-20261026/trust-items.md`: this is the
+owner escalation the target requires (new trust items), with my recommendation below.
+`PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate` has the exact endpoint conclusion (same
+bound: modelError + 16/2^486 + freshBudget + 2·budget(2^64) + 2·charge, ≤ 1/2^109 + 1/2^137 + 1/2^454 +
+… , < 1/2^100) but is proved from T PLUS a `ProofObligations` record P: source_V045, fill (V336),
+ledger (V337), byte_blind (V338), selection/admission/runtime/observer installation, causal frames,
+extracted-trace refinement (F3/F5/F6), release identity. So the record stays runtime/boundary 2 → 2,
+fields 8 → 8, residuals 6 → 6; the worker correctly refused to report 2 → 0. Generic fixture T-models
+exist; deployed-fixture (P ∧ T) non-vacuity is OPEN. Options A (OsAvailable premise) and B (public
+error signal fed to both sides) remain unadopted and absent from the statement.
+Recommendation to the owner: accept the three fields as the candidate privacy trust list (class T, OS
+kernel contract; comparable to the getrandom trust already implicit in E1), reject any further T growth,
+and treat every P obligation as proof work; decide A vs B (I recommend B, D215) before the final replay.
+Relaunched pv-runjoin8 on the same branch (compile-free until the flag; its IDs come from the flag
+file since 27100-27999 are allocated and Stream A keeps 30000+ until the rebuild hands it back; pv-adopt's
+28000-29999 reserve untouched): shrink P, not T: selection/admission/runtime installation from PV_Src_*
+and the published RunJoin interfaces, deployed-fixture non-vacuity with T hypothetical, then
+initial-ledger independence and extracted-trace refinement. Stream A confirms the rebuild still fails on
+missing extracted objects (R1CertBuild) and will revisit SimCostOuterRetry6/EventsR1P2 once the objects
+are coherent; the SimCost module falls to Stream B if its final audit still flags it. Six slots: cb3,
+join, cb4, srcid4, rw19, runjoin8. Rows removed outright: 0. Privacy target not yet established.
