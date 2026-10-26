@@ -1,0 +1,45 @@
+{"attempt": "SCH_043", "exit_status": 1, "wall_seconds": 2.2741218179580756, "peak_rss_kib": "5349492", "swaps": "0", "print_axioms": []}
+def FS.hitsBad : {I A : Type} →
+  [DecidableEq I] →
+    (I → AspisV8PairedCommitment.Table I A → A → Prop) → AspisV8PairedCommitment.Table I A → List (I × A) → Prop :=
+fun {I A} [DecidableEq I] bad x x_1 =>
+  List.brecOn (motive := fun x => AspisV8PairedCommitment.Table I A → Prop) x_1 (FS.hitsBad._f bad) x
+SCH_CollisionInventory.lean:4:7: error(lean.unknownIdentifier): Unknown constant `FS.replay`
+SCH_CollisionInventory.lean:5:7: error(lean.unknownIdentifier): Unknown constant `FS.put`
+theorem FS2.Duplex.tableBefore_eq : ∀ {I A : Type} [inst : DecidableEq I] (H : I → A) (tr : List (I × A))
+  (t : AspisV8PairedCommitment.Table I A) (a b : I),
+  (∀ q ∈ tr, q.2 = H q.1) → FS.tableBefore t tr a
+...
+inset.filter_congr fun x a => Iff.of_eq (eq_self none))
+                            (Finset.filter_true (List.map Prod.fst tr).toFinset)))
+                        b)
+                      List.mem_toFinset._simp_1)
+                    (Eq.trans List.mem_map._simp_1
+                      (Eq.trans Prod.exists._simp_1
+                        (Eq.trans (congrArg Exists (funext fun a => exists_and_right._simp_1))
+                          exists_eq_right._simp_1)))))
+                (Eq.trans List.mem_toFinset._simp_1
+                  (Eq.trans List.mem_map._simp_1
+                    (Eq.trans Prod.exists._simp_1
+                      (Eq.trans (congrArg Exists (funext fun a => exists_and_right._simp_1))
+                        exists_eq_right._simp_1)))))
+              (iff_self (∃ x, (b, x) ∈ tr)))));
+  Exists.intro s
+    ⟨Decidable.byContradiction fun a_1 =>
+        AspisR1.AllAddressCollisionTrace.small_before_read._proof_1 tr a Q hQ
+          (Eq.mp (congrArg (fun _a => _a ≤ (List.map Prod.fst tr).toFinset.card) (Finset.card_insert_of_notMem hnot))
+            hcard)
+          hcount a_1,
+      fun b hb =>
+      have hbefore :=
+        Decidable.byContradiction fun h =>
+          Eq.mp (congrArg (fun _a => _a ≠ none) (FS2.Duplex.tableBefore_eq H tr FS.emptyTable a b hcons)) hb
+            (of_eq_true
+              (Eq.trans (congrFun' (congrArg Eq (ite_cond_eq_false (some (H b)) (FS.emptyTable b) (eq_false h))) none)
+                (eq_self none)));
+      Finset.mem_filter.mpr ⟨List.mem_toFinset.mpr hbefore.left, hbefore⟩⟩
+AspisR1.TraceAppend.hitsBad_of_prefix {I A : Type} [DecidableEq I]
+  (bad : I → AspisV8PairedCommitment.Table I A → A → Prop) (t : AspisV8PairedCommitment.Table I A)
+  (tr tail : List (I × A)) : FS.hitsBad bad t tr → FS.hitsBad bad t (tr ++ tail)
+
+Running as unit: run-ra222c380d7c140c492c63c079a2f14d6.scope; invocation ID: d279c33d999940d8afb80fa2af3c720c

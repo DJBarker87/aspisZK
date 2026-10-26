@@ -1,0 +1,217 @@
+def FS.hitsBad : {I A : Type} →
+  [DecidableEq I] →
+    (I → AspisV8PairedCommitment.Table I A → A → Prop) → AspisV8PairedCommitment.Table I A → List (I × A) → Prop :=
+fun {I A} [DecidableEq I] bad x x_1 =>
+  List.brecOn (motive := fun x => AspisV8PairedCommitment.Table I A → Prop) x_1 (FS.hitsBad._f bad) x
+SCH_CollisionInventory.lean:4:7: error(lean.unknownIdentifier): Unknown constant `FS.replay`
+SCH_CollisionInventory.lean:5:7: error(lean.unknownIdentifier): Unknown constant `FS.put`
+theorem FS2.Duplex.tableBefore_eq : ∀ {I A : Type} [inst : DecidableEq I] (H : I → A) (tr : List (I × A))
+  (t : AspisV8PairedCommitment.Table I A) (a b : I),
+  (∀ q ∈ tr, q.2 = H q.1) → FS.tableBefore t tr a b = if FS2.Duplex.Before tr b a then some (H b) else t b :=
+fun {I A} [DecidableEq I] H tr =>
+  List.rec (motive := fun tr =>
+    ∀ (t : AspisV8PairedCommitment.Table I A) (a b : I),
+      (∀ q ∈ tr, q.2 = H q.1) → FS.tableBefore t tr a b = if FS2.Duplex.Before tr b a then some (H b) else t b)
+    (fun t a b a_1 =>
+      of_eq_true
+        (Eq.trans
+          (congrArg (Eq (t b))
+            (ite_cond_eq_false (some (H b)) (t b)
+              (Eq.trans
+                (congrFun' (congrArg And List.not_mem_nil._simp_1)
+                  (FS2.Duplex.firstIdx b [] < FS2.Duplex.firstIdx a []))
+                (false_and (FS2.Duplex.firstIdx b [] < FS2.Duplex.firstIdx a [])))))
+          (eq_self (t b))))
+    (fun q rest ih t a b hcons =>
+      let ⟨i, v, hcons⟩ := q
+      have hv := hcons (i, v) List.mem_cons_self;
+      have hrest := fun q hq => hcons q (List.mem_cons_of_mem (i, v) hq);
+      id
+        (if hia : i = a then
+          hia ▸
+            Eq.mpr
+              (id
+                (congrArg (fun _a => _a b = if FS2.Duplex.Before ((i, v) :: rest) b i then some (H b) else t b)
+                  (if_pos rfl)))
+              (have this := fun a =>
+                let ⟨left✝, hlt⟩ := a
+                False.elim
+                  (Eq.mp
+                    (Eq.trans
+                      (congrArg (LT.lt (if i = b then 0 else FS2.Duplex.firstIdx b rest + 1))
+                        (ite_cond_eq_true 0 (FS2.Duplex.firstIdx i rest + 1) (eq_self i)))
+                      not_lt_zero._simp_1)
+                    hlt);
+              Eq.mpr (id (congrArg (fun _a => t b = _a) (if_neg this))) (Eq.refl (t b)))
+        else
+          Eq.mpr
+            (id
+              (congrArg (fun _a => _a b = if FS2.Duplex.Before ((i, v) :: rest) b a then some (H b) else t b)
+                (if_neg hia)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = if FS2.Duplex.Before ((i, v) :: rest) b a then some (H b) else t b)
+                  (ih (AspisV8PairedCommitment.put t i v) a b hrest)))
+              (if hib : i = b then
+                hib ▸
+                  have hB :=
+                    ⟨of_eq_true
+                        (Eq.trans List.mem_cons._simp_1
+                          (Eq.trans
+                            (congr (congrArg Or (eq_self i))
+                              (Eq.trans List.mem_map._simp_1
+                                (Eq.trans Prod.exists._simp_1
+                                  (Eq.trans (congrArg Exists (funext fun a => exists_and_right._simp_1))
+                                    exists_eq_right._simp_1))))
+                            (true_or (∃ x, (i, x) ∈ rest)))),
+                      of_eq_true
+                        (Eq.trans
+                          (Eq.trans
+                            (congr (congrArg LT.lt (ite_cond_eq_true 0 (FS2.Duplex.firstIdx i rest + 1) (eq_self i)))
+                              (ite_cond_eq_false 0 (FS2.Duplex.firstIdx a rest + 1) (eq_false hia)))
+                            (lt_add_iff_pos_left._simp_1 0))
+                          (Eq.trans Order.lt_add_one_iff._simp_1 zero_le._simp_1))⟩;
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (if FS2.Duplex.Before rest i a then some (H i) else AspisV8PairedCommitment.put t i v i) = _a)
+                        (if_pos hB)))
+                    (Decidable.casesOn (FS2.Duplex.instDecidableBefore rest i a)
+                      (fun h =>
+                        Eq.mpr (id (congrFun' (congrArg Eq (if_neg h)) (some (H i))))
+                          (of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans (ite_cond_eq_true (some v) (t i) (eq_self i)) (congrArg some hv)))
+                                (some (H i)))
+                              (eq_self (some (H i))))))
+                      fun h => Eq.mpr (id (congrFun' (congrArg Eq (if_pos h)) (some (H i)))) (Eq.refl (some (H i))))
+              else
+                have hiff :=
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (Iff (b ∈ List.map Prod.fst rest ∧ FS2.Duplex.firstIdx b rest < FS2.Duplex.firstIdx a rest))
+                        (congr (congrArg And FS2.Duplex.firstIdx_lt_length._simp_5)
+                          (congr
+                            (congrArg LT.lt
+                              (Eq.trans
+                                (ite_congr (eq_false hib) (fun a => Eq.refl 0) fun a =>
+                                  Eq.refl (FS2.Duplex.firstIdx b rest + 1))
+                                (if_false 0 (FS2.Duplex.firstIdx b rest + 1))))
+                            (Eq.trans
+                              (ite_congr (eq_false hia) (fun a => Eq.refl 0) fun a_1 =>
+                                Eq.refl (FS2.Duplex.firstIdx a rest + 1))
+                              (if_false 0 (FS2.Duplex.firstIdx a rest + 1)))))))
+                    {
+                      mp := fun a_1 =>
+                        let ⟨hr, hlt⟩ := a_1
+                        ⟨Or.inr hr,
+                          Decidable.byContradiction fun a_2 => FS2.Duplex.tableBefore_eq._proof_3 rest a b hlt a_2⟩,
+                      mpr := fun a_1 =>
+                        let ⟨hr, hlt⟩ := a_1
+                        ⟨Or.resolve_left hr (Ne.symm hib),
+                          Decidable.byContradiction fun a_2 => FS2.Duplex.tableBefore_eq._proof_4 rest a b hlt a_2⟩ };
+                if hB : FS2.Duplex.Before rest b a then
+                  Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = if FS2.Duplex.Before ((i, v) :: rest) b a then some (H b) else t b)
+                        (if_pos hB)))
+                    (Eq.mpr (id (congrArg (fun _a => some (H b) = _a) (if_pos (hiff.mp hB)))) (Eq.refl (some (H b))))
+                else
+                  Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = if FS2.Duplex.Before ((i, v) :: rest) b a then some (H b) else t b)
+                        (if_neg hB)))
+                    (Eq.mpr
+                      (id
+                        (congrArg (fun _a => AspisV8PairedCommitment.put t i v b = _a)
+                          (if_neg fun h => hB (hiff.mpr h))))
+                      (of_eq_true
+                        (Eq.trans
+                          (congrFun' (congrArg Eq (ite_cond_eq_false (some v) (t b) (eq_false (Ne.symm hib)))) (t b))
+                          (eq_self (t b)))))))))
+    tr
+def AspisR1.BinRawByteCollisionTargets.event : {O : Type} →
+  AspisV8R19.SourceDuplexStep.State →
+    ℕ → AspisV8R19.MemoizedProgramLaw.View AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State O → Prop :=
+fun {O} iv Q v =>
+  FS.hitsBad (AspisR1.AllAddressCollision.bad iv AspisR1.BinRawByteCollisionTargets.pred Q) FS.emptyTable v.1
+def AspisR1.AllAddressCollision.bad : {I A : Type} →
+  {B : ℕ} → A → (Fin B → I → Option A) → ℕ → I → AspisV8PairedCommitment.Table I A → A → Prop :=
+fun {I A} {B} iv pred Q a T f =>
+  AspisR1.AllAddressCollision.Small T Q ∧
+    (f = iv ∨ (∃ b, T b = some f) ∨ ∃ j b, (b = a ∨ T b ≠ none) ∧ pred j b = some f)
+theorem AspisR1.AllAddressCollisionTrace.small_before_read : ∀ {I A : Type} [inst : DecidableEq I] [Fintype A]
+  [Inhabited A] (H : I → A) (tr : List (I × A)) (a : I),
+  (∀ q ∈ tr, q.2 = H q.1) →
+    FS2.Duplex.Read tr a →
+      ∀ (Q : ℕ),
+        FS.firstReads FS.emptyTable tr ≤ Q → AspisR1.AllAddressCollision.Small (FS.tableBefore FS.emptyTable tr a) Q :=
+fun {I A} [DecidableEq I] [Fintype A] [Inhabited A] H tr a hcons ha Q hQ =>
+  let s := {b ∈ (List.map Prod.fst tr).toFinset | FS2.Duplex.Before tr b a};
+  have hnot :=
+    Eq.mpr (id (congrArg Not AspisR1.AllAddressCollisionTrace.firstReads_eq_card_finiteSupport._simp_1)) fun h =>
+      FS2.Duplex.before_irrefl tr a h.right;
+  have hcard :=
+    Finset.card_le_card fun ⦃b⦄ hb =>
+      Or.casesOn (Finset.mem_insert.mp hb)
+        (fun h =>
+          Eq.ndrec (motive := fun a =>
+            FS2.Duplex.Read tr a →
+              let s := {b ∈ (List.map Prod.fst tr).toFinset | FS2.Duplex.Before tr b a};
+              a ∉ s → b ∈ insert a s → b ∈ (List.map Prod.fst tr).toFinset)
+            (fun ha =>
+              let s := {b_1 ∈ (List.map Prod.fst tr).toFinset | FS2.Duplex.Before tr b_1 b};
+              fun hnot hb => List.mem_toFinset.mpr ha)
+            h ha hnot hb)
+        fun hb => (Finset.mem_filter.mp hb).left;
+  have hcount :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = (List.map Prod.fst tr).toFinset.card)
+          (AspisR1.AllAddressCollisionTrace.firstReads_eq_card_finiteSupport tr FS.emptyTable)))
+      ((fun {α} s s_1 e_s => e_s ▸ Eq.refl s.card) ({a ∈ (List.map Prod.fst tr).toFinset | FS.emptyTable a = none})
+        (List.map Prod.fst tr).toFinset
+        (Finset.ext fun b =>
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Iff
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Membership.mem
+                          (Eq.trans (Finset.filter_congr fun x a => Iff.of_eq (eq_self none))
+                            (Finset.filter_true (List.map Prod.fst tr).toFinset)))
+                        b)
+                      List.mem_toFinset._simp_1)
+                    (Eq.trans List.mem_map._simp_1
+                      (Eq.trans Prod.exists._simp_1
+                        (Eq.trans (congrArg Exists (funext fun a => exists_and_right._simp_1))
+                          exists_eq_right._simp_1)))))
+                (Eq.trans List.mem_toFinset._simp_1
+                  (Eq.trans List.mem_map._simp_1
+                    (Eq.trans Prod.exists._simp_1
+                      (Eq.trans (congrArg Exists (funext fun a => exists_and_right._simp_1))
+                        exists_eq_right._simp_1)))))
+              (iff_self (∃ x, (b, x) ∈ tr)))));
+  Exists.intro s
+    ⟨Decidable.byContradiction fun a_1 =>
+        AspisR1.AllAddressCollisionTrace.small_before_read._proof_1 tr a Q hQ
+          (Eq.mp (congrArg (fun _a => _a ≤ (List.map Prod.fst tr).toFinset.card) (Finset.card_insert_of_notMem hnot))
+            hcard)
+          hcount a_1,
+      fun b hb =>
+      have hbefore :=
+        Decidable.byContradiction fun h =>
+          Eq.mp (congrArg (fun _a => _a ≠ none) (FS2.Duplex.tableBefore_eq H tr FS.emptyTable a b hcons)) hb
+            (of_eq_true
+              (Eq.trans (congrFun' (congrArg Eq (ite_cond_eq_false (some (H b)) (FS.emptyTable b) (eq_false h))) none)
+                (eq_self none)));
+      Finset.mem_filter.mpr ⟨List.mem_toFinset.mpr hbefore.left, hbefore⟩⟩
+AspisR1.TraceAppend.hitsBad_of_prefix {I A : Type} [DecidableEq I]
+  (bad : I → AspisV8PairedCommitment.Table I A → A → Prop) (t : AspisV8PairedCommitment.Table I A)
+  (tr tail : List (I × A)) : FS.hitsBad bad t tr → FS.hitsBad bad t (tr ++ tail)
