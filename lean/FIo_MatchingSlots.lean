@@ -14,7 +14,8 @@ theorem retained {C : Type} (err : C) (c : Configuration FIo_Install.W C)
 theorem q1_retained {C : Type} (err : C) (c : Configuration FIo_Install.W C)
     (r : NP6_StdModel.Reservation) :
     (Tx1Q_QueryBridge.leaves (FIo_Install.configuration err c r).query).op17=c.query.op17 ∧
-    (Tx1Q_QueryBridge.leaves (FIo_Install.configuration err c r).query).op20=c.query.op20 := ⟨rfl,rfl⟩
+    (Tx1Q_QueryBridge.leaves (FIo_Install.configuration err c r).query).op20=c.query.op20 ∧
+    (Tx1Q_QueryBridge.leaves (FIo_Install.configuration err c r).query).widePartialEq=c.query.widePartialEq := ⟨rfl,rfl,rfl⟩
 
 /-- The exact same remaining configuration can select ANY successful
 first-fold result. Installing FinishOps adds no constraint on this source call. -/

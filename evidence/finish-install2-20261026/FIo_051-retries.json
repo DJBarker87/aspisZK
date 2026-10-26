@@ -1,0 +1,7 @@
+[
+  {
+    "retry": 0,
+    "wait_seconds": 30,
+    "reason": "Traceback (most recent call last):\n  File \"/home/dombarker/project-offloads/codex-cx-s2c-20261023/reservation.py\", line 8, in <module>\n    rows.append(dict(scope=str(p),memory_max=int(limit) if limit!='max' else None,processes=[subprocess.run(['ps','-p',pid,'-o','args='],text=True,capture_output=True).stdout.strip() for pid in (p/'cgroup.procs').read_text().split()],memory_high=(p/'memory.high').read_text().strip(),memory_swap_max=(p/'memory.swap.max').read_text().strip(),memory_current=int((p/'memory.current').read_text())))\n                                                                                                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1029, in read_text\n    with self.open(mode='r', encoding=encoding, errors=errors) as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r53e213eb2d554795a9ce44167d20d605.scope/memory.high'\n"
+  }
+]
