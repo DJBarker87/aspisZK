@@ -8,7 +8,7 @@ n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and mod.startswith('JFp_')
 a=f'JFp_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount10-20261026/Rc10_001/receipt.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused JFp composition or atomic kernel inventory; no arithmetic aggregation')
-cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects:/home/dombarker/project-offloads/codex-cx-prover-commit55-20261023/objects'
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
