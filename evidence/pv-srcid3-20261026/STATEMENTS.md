@@ -31,3 +31,33 @@ remains the explicitly named pv-runjoin5 interface.
 Budget: 96 new Lean attempts (4 predecessor attempts retained), 12 Kani runs.
 Env-J 25300–25599. Quiet hold: 2026-10-26 17:45–18:15 UTC; no capped launch
 during the hold. No frozen source modifications are authorized.
+
+## Exact operational call chain
+
+`tools/r1-cost-probe/src/bin/devnet_spend/plan.rs:105` selects the transfer or
+withdrawal forest compiler, propagates its error, and only then invokes
+`RealR1_client::prove_for_proof_accounts` at line 116. The adapter itself
+accepts compiled data. The source domain condition is established by those
+entry checks, rather than by the adapter name or a raw-mapper postcondition.
+The predecessor mathematical fixture constants and the live planner's
+account-derived witness are distinct carriers; native association remains
+explicit, and a mathematical fixture theorem is not a byte/installation claim.
+
+## Draft obligations prepared during the hold
+
+Thirty new module drafts are dependency-ordered in `draft-order.json`. They
+cover successful common-validation inversion, canonical request amount,
+forward fixture pair/common validation, scalar reduction, pure callback
+totality, successful snapshot preservation, public projection subfields,
+primitive-stage fixture non-vacuity and the unchanged four-field consumer.
+Only CheckedEncoding has compiled at this point (receipt 25301); every other
+draft remains unverified. The process exception is recorded in QUIET-WINDOW.md.
+
+The proposed four-field remainder is parameterized by a selected family
+`I → CheckedCanonical.Data`, not by every arbitrary supplied compilation.
+This matters: requiring all possible supplied compiled payloads to succeed
+would make the remainder inconsistent. It retains the original four field
+statements, omits only words, and obtains words from the proved canonical
+encoding under the dynamic reference dictionary. No RspendPlus, trace
+equality or successful compiler call is smuggled into a data definition.
+Actual mapper P6 and installed input association remain separate obligations.

@@ -1,6 +1,6 @@
 # Unstubbed harness inventory to request
 
-All six names are source-declared in cfg(kani) harness modules. They must be
+The first six names are source-declared in cfg(kani) harness modules. They must be
 confirmed from successful Kani codegen metadata before charging verification:
 
 - records_proofs::pv_srcid3::pv_srcid3_full_mapper — all twenty record fields;
@@ -19,3 +19,10 @@ One own scope at a time; fixed quiet hold until 18:15; fresh host reservation.
 Stop the verification queue on the first configuration failure. A failed
 full-mapper job must be decomposed, not retried unchanged with more resources.
 Inventory invocations also count conservatively against the 12 Kani budget.
+
+Additional source validator leaves (to list in metadata before verification):
+`pv_srcid3_common_values`, `pv_srcid3_common_sibling`, and
+`pv_srcid3_common_pair_words`. These call the shipped validate_common with
+matching context/fresh spent set, arbitrary raw pair inputs, and unwind 21.
+Success implies the exact primitive range/canonicality facts. They do not
+claim a full forest run, output-bound check, or mapper equivalence.

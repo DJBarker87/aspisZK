@@ -70,3 +70,48 @@ fn pv_srcid3_mapper_public() {
     assert_eq!(p.frontier[level][lane],q.frontier[level][lane]);
     assert_eq!(p.empty[level][lane],q.empty[level][lane]);
 }
+
+fn checked_common() -> (PoolV1PairForestInputNoteWitnessV1, bool) {
+    use crate::pool_v1::{PoolV1PaymentRelationContextV1, PoolV1PaymentRuntimeBindingV1};
+    let (input, _, _, _, snapshot, asset) = arbitrary_inputs();
+    let nullifier = any_digest();
+    let binding = PoolV1PaymentRuntimeBindingV1 {
+        pool: snapshot.pool, deployment_domain: snapshot.deployment_domain,
+        anchor_sequence: snapshot.sequence, anchor_root: snapshot.current_root, asset_id: asset,
+    };
+    let context = PoolV1PaymentRelationContextV1 { runtime_binding: binding, spent_nullifiers: &[] };
+    let success = crate::pool_v1::pair_trace::validate_common(
+        snapshot.pool, snapshot.deployment_domain, snapshot.sequence, snapshot.current_root,
+        nullifier, asset, &input.pair, context).is_ok();
+    (input, success)
+}
+
+#[kani::proof]
+#[kani::unwind(21)]
+fn pv_srcid3_common_values() {
+    let (input, success) = checked_common();
+    if success {
+        assert!(input.pair.value > 0 && input.pair.value < (1 << 30));
+        assert!(input.pair.membership.index < (1 << 20));
+    }
+}
+
+#[kani::proof]
+#[kani::unwind(21)]
+fn pv_srcid3_common_sibling() {
+    let (input, success) = checked_common();
+    let level: usize = kani::any(); let lane: usize = kani::any();
+    kani::assume(level < 20 && lane < 8);
+    if success { assert!(input.pair.membership.siblings[level][lane].0 < P); }
+}
+
+#[kani::proof]
+#[kani::unwind(21)]
+fn pv_srcid3_common_pair_words() {
+    let (input, success) = checked_common();
+    let lane: usize = kani::any(); kani::assume(lane < 8);
+    if success {
+        assert!(input.pair.pair_leaf.first_commitment[lane].0 < P);
+        assert!(input.pair.pair_leaf.second_commitment[lane].0 < P);
+    }
+}
