@@ -1,0 +1,28 @@
+F3T_HeadCanonical.lean:24:2: error: Tactic `apply` failed: could not unify the conclusion of `F3T_PrefixCongr.verifier_congr D i (input c s) sem physical
+  stored`
+  F3_Model.verifier D i = F3_Model.verifier D (input c s)
+with the goal
+  F3_Model.verifier D (F3T_AcceptedReplacement.replace i) = F3_Model.verifier D (input c s)
+
+Note: The full type of `F3T_PrefixCongr.verifier_congr D i (input c s) sem physical stored` is
+  (∀ row < 33, LiteralTranscript.erase (i.proof row) = LiteralTranscript.erase ((input c s).proof row)) →
+    F3_Model.verifier D i = F3_Model.verifier D (input c s)
+
+F C : Type
+c : DrvC_Installation.Configuration F C
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+i : F3_Model.Input
+s : Submission
+accepted : (eval H (F3_Model.verifier D i)).2 = true
+physical : i.physical = (input c s).physical
+stored : i.stored = s.stored
+root : State
+head :
+  (eval H (F3_Model.verifier D i)).1.head? =
+    some
+      (PublicInitFrame.frame (input c s).semantic.value.pubBytes root,
+        H (PublicInitFrame.frame (input c s).semantic.value.pubBytes root))
+sem : i.semantic = (input c s).semantic
+⊢ F3_Model.verifier D (F3T_AcceptedReplacement.replace i) = F3_Model.verifier D (input c s)
+'AspisR1.F3T_HeadCanonical.program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

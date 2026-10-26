@@ -1,0 +1,31 @@
+F3T_AcceptedParser.lean:32:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol ?D).transcript ?H ?pub ?pf ?n)).statement.tag
+in the target expression
+  OraclePortAdmission.Guard
+    (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33))
+
+D : LiteralByteProtocol.Decoder
+H : Bytes → State
+i : F3_Model.Input
+accepted :
+  (have final :=
+        eval H
+          (OracleDecisionFeasibilityCore.onBytes (F3_Model.decision i.physical i.stored)
+            ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33) (i.proof 33));
+      ((List.map (fun j => (eval H ((LiteralByteProtocol.protocol D).chain H i.semantic.value i.proof j).toProgram).1)
+              (List.range 33)).flatten ++
+          final.1,
+        final.2)).2 =
+    true
+terminal :
+  (eval H
+        (F3_Model.decision i.physical i.stored
+          (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33))
+          (LiteralTranscript.erase (i.proof 33)))).2 =
+    true
+guard :
+  OraclePortAdmission.Guard
+    (LiteralTranscript.erasePrefix ((LiteralByteProtocol.protocol D).transcript H i.semantic.value i.proof 33))
+⊢ i.semantic.value.tag = 2
+'AspisR1.F3T_AcceptedParser.tag' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3T_AcceptedParser.parsed' depends on axioms: [propext, Classical.choice, Quot.sound]
