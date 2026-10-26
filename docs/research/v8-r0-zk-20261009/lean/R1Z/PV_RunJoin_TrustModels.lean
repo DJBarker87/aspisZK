@@ -28,13 +28,11 @@ theorem replayIdentity (laws : Laws E File Reply Time Worker) :
   time := fun _ _ _ _ => Iff.rfl
   worker := fun _ _ _ _ => Iff.rfl
 
-def model (laws : Laws E File Reply Time Worker)
+def model
     (frame : Fin 128 → (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest → Context)
     (coordinates : Coins ≃ (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest)
-    (observation : Coins → Observation) :
+    (observation : Coins → PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Observation) :
     Data E File Reply Time Worker Context Coins Rest Observation where
-  native := replayNative laws
-  laws := laws
   law := fun _ _ => 1 / (Fintype.card ProverCommitPublicNonce40.Raw : ℚ)
   frame := frame
   coordinates := coordinates
@@ -44,14 +42,13 @@ def model (laws : Laws E File Reply Time Worker)
   nativeObservation := observation
   extractedObservation := observation
 
-theorem model_satisfies (laws : Laws E File Reply Time Worker)
+theorem model_satisfies
     (frame : Fin 128 → (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest → Context)
     (coordinates : Coins ≃ (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest)
-    (observation : Coins → Observation) :
-    PV_RunJoin_TrustItems (model laws frame coordinates observation) where
+    (observation : Coins → PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Observation) :
+    PV_RunJoin_TrustItems (model frame coordinates observation) where
   entropy_law := fun _ _ => rfl
   entropy_kernel := fun _ => rfl
-  outcomes := outcomes_of_identity _ _ (replayIdentity laws)
   observation := fun _ => rfl
 
 /-- Complete native/extracted observation equality entails every projection,
@@ -59,7 +56,7 @@ including the filesystem/E2 decoder and BOTH V038 view projections. Keeping
 separate trust fields for these same projections would duplicate this fact. -/
 theorem observation_projection
     (d : Data E File Reply Time Worker Context Coins Rest Observation)
-    (T : PV_RunJoin_TrustItems d) {A : Type} (project : Observation → A) (c : Coins) :
+    (T : PV_RunJoin_TrustItems d) {A : Type} (project : PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Observation → A) (c : Coins) :
     project (d.nativeObservation c) = project (d.extractedObservation c) :=
   congrArg project (T.observation c)
 

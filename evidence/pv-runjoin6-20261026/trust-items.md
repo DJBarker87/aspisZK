@@ -1,18 +1,17 @@
 # Proposed trust contract and P separation
 
-`R1Z.PV_RunJoin_TrustItems d` has four field groups. The parameter `d`
+`R1Z.PV_RunJoin_TrustItems d` has three field groups. The parameter `d`
 remains explicit; no actual deployed native interpretation is claimed.
 All carriers and quantifiers are in `PV_RunJoin_TrustItems.lean`, printed in
-out-26801.log. This is an escalation for the owner, not adoption.
+out-26811.log. This is an escalation for the owner, not adoption.
 
 | Field | Exact statement | Carrier | Shipped location | Class | If false |
 |---|---|---|---|---|---|
 | entropy_law | `∀ context raw, d.law context raw = 1 / (Fintype.card Raw : ℚ)` | `Raw = Fin 2 → OracleAnswer`, 64 successful bytes; complete prior context | `crates/aspis-prover/src/state_only_entropy.rs:StateOnlyAttemptSecrets::generate_for_mask_nonce` / `getrandom::fill` | OS/kernel contract | biased/correlated masks can expose witness information; the claimed uniform conditional law no longer transports |
 | entropy_kernel | `∀ c, d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c` | SAME joint completion coins and residual world; 128 64-byte draws | same factory, reached from `crates/aspis-r1-cost-probe/src/RealR1_client.rs:prove_for_proof_accounts` | OS/kernel contract | correlations with prior draws, oracle, failures or schedules can defeat joint privacy even with uniform marginals |
-| outcomes | `∀ w call, nativeCall d.native w call ↔ sourceCall d.laws w call` | complete `World E File Reply Time Worker`; tagged entropy/file/time/worker calls with exact replies and next worlds | factory; `state_only_entropy.rs:DurableStateOnlyMaskNonceStore::{open,reserve_fallible}`, `sync_directory`; `crates/aspis-r1-cost-probe/src/prover.rs:public_check / take_check_times` timing/TLS path and reached native worker operations | OS/kernel contract | filesystem replay/partial writes/failures or timing/scheduling differ from the interpreter; duplicated nonce use or distinguishable errors/traces become possible |
-| observation | `∀ c, d.nativeObservation c = d.extractedObservation c` | complete execution observation; deployment must instantiate with filesystem/E2 state plus complete D159 bytes/L1/L2/L3 observation | `RealR1_client.rs:prove_for_proof_accounts`, entire reached prover/callback/FS call graph, selected compiled x86_64 Linux binary | OS/kernel contract + toolchain + hardware | native effects or compiled/hardware observations reveal information absent from extracted execution; source privacy does not transfer |
+| observation | `∀ c, d.nativeObservation c = d.extractedObservation c` | typed joint Observation: initial/final worlds, ordered (pre-world, tagged call) list, filesystem State, complete D159 observer payload | `RealR1_client.rs:prove_for_proof_accounts`, entire reached prover/callback/FS call graph, selected compiled x86_64 Linux binary | OS/kernel contract + toolchain + hardware | native effects or compiled/hardware observations reveal information absent from extracted execution; source privacy does not transfer |
 
-The fourth field is native-to-extraction only. It contains no equality with
+The third field is native-to-extraction only. It contains no equality with
 the privacy experiment, simulator, RunJoin, or privacy inequality. The P trace
 obligation supplies extraction-to-security-model agreement. F3/F5/F6 source
 trace simulation cannot be replaced by this trust item.
@@ -20,13 +19,17 @@ trace simulation cannot be replaced by this trust item.
 Five filesystem constructor clauses are one outcome family; time/workers
 remain distinct constructors on the SAME world. `TrustOutcomes` proves exact
 equivalence with the old eight-leaf Identity structure, with no availability
-condition. It does not prove the actual native Identity instance.
+condition. That all-world primitive contract is NOT a field of T: only
+execution observations are required at the endpoint. It does not prove the
+actual native Identity instance.
 
 Separate filesystem and complete-view projection equalities are derivable by
-`observation_projection` WHEN the interpretation retains those components.
+`observation_projection` from the typed joint observation record. Ordered call-trace projections retain
+getrandom/open64/read/write/sync/close/time/worker outcomes, preventing
+separate duplicate native trust hypotheses for those same observations.
 They are deleted from T. Successful-byte uniformity does not imply joint
-factorization. Call outcome correspondence does not imply any probability law.
-No claim of globally smallest axiomatic presentation is made: these are four
+factorization. Joint observation equality does not by itself assert a probability law.
+No claim of globally smallest axiomatic presentation is made: these are three
 semantically distinct contracts, not a trick counting conjunctions as one.
 
 ## Options, both UNADOPTED
@@ -34,7 +37,7 @@ semantically distinct contracts, not a trick counting conjunctions as one.
 A (native availability) would add a separate premise that every reached
 factory/kernel operation succeeds (and excludes the first-error branch), or
 would restrict the theorem to that availability event. It does not follow
-from `entropy_law`, `entropy_kernel`, or `outcomes`. It is absent from T.
+from `entropy_law`, `entropy_kernel`, or the observation correspondence. It is absent from T.
 B would change the experiment/conclusion to feed the SAME public error signal
 and full error observation to real and ideal, as in PublicFailureEndpoint.
 It belongs in the statement, not in a hidden observation equality. It is absent.

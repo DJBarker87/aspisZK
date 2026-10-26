@@ -31,18 +31,25 @@ def sourceCall (l : Laws E File Reply Time Worker)
   | .time outcome next => TimeAllowed l w outcome next
   | .worker outcome next => WorkerAllowed l w outcome next
 
+/-- Joint observation keeps the ordered outcome trace, filesystem/E2 state,
+and the COMPLETE D159 observer as one carrier. Nothing is projected away. -/
+structure Observation (E File Reply Time Worker Payload : Type) where
+  initial : World E File Reply Time Worker
+  calls : List (World E File Reply Time Worker × Call E File Reply Time Worker)
+  final : World E File Reply Time Worker
+  filesystem : ProverCommitLedger36.State
+  payload : Payload
+
 /-- Data still requiring the actual deployment interpretation. Observation
 must retain BOTH the filesystem state/effects and the complete D159 observer;
 no simulator or security-experiment agreement occurs in this signature. -/
 structure Data (E File Reply Time Worker Context Coins Rest Observation : Type) where
-  native : Native E File Reply Time Worker
-  laws : Laws E File Reply Time Worker
   law : Context → ProverCommitPublicNonce40.Raw → ℚ
   frame : Fin 128 → (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest → Context
   coordinates : Coins ≃ (Fin 128 → ProverCommitPublicNonce40.Raw) × Rest
   nativeWeight : Coins → ℚ
-  nativeObservation : Coins → Observation
-  extractedObservation : Coins → Observation
+  nativeObservation : Coins → PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Observation
+  extractedObservation : Coins → PV_RunJoin_TrustBoundary.Observation E File Reply Time Worker Observation
 
 end R1Z.PV_RunJoin_TrustBoundary
 namespace R1Z
@@ -61,10 +68,7 @@ structure PV_RunJoin_TrustItems
   /-- OS/kernel contract: actual joint density, not just uniform marginals. -/
   entropy_kernel : ∀ c, d.nativeWeight c =
     PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c
-  /-- OS/kernel contract: getrandom, open64/read/write/sync/close, time,
-  and workers on the same world. No availability assertion. -/
-  outcomes : ∀ w call, nativeCall d.native w call ↔ sourceCall d.laws w call
-  /-- OS/kernel + toolchain + hardware: native filesystem/E2 and complete
+  /-- OS/kernel + toolchain + hardware: native getrandom/file/time/worker outcomes, filesystem/E2 and complete
   observation match extracted execution, including error and side channels.
   This does NOT assert extracted-execution/security-experiment agreement. -/
   observation : ∀ c, d.nativeObservation c = d.extractedObservation c
