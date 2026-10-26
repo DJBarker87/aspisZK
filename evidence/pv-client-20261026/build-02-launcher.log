@@ -1,0 +1,63 @@
+Running as unit: run-r1ab8b0356f7c4fb7be8c21f015883ca3.scope; invocation ID: c7ed532b5d824290b10392ba143fa229
+{"attempt": "build-02", "exit_status": 0, "wall_seconds": 1.506608262017835, "peak_rss_kib": "342992", "swaps": "0", "print_axioms": "N/A: optimized Rust client gate"}
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-pv-client-20261026/src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang
+...
+)]`) on by default
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> src/bin/pv_client_gate.rs:23:5
+   |
+23 |     bpf_loader_upgradeable::{self, UpgradeableLoaderState},
+   |     ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated module `solana_program::system_instruction`: Use `solana_system_interface` crate instead
+  --> src/bin/pv_client_gate.rs:26:5
+   |
+26 |     system_instruction,
+   |     ^^^^^^^^^^^^^^^^^^
+
+warning: field `name` is never read
+  --> src/bin/pv_client_gate.rs:93:5
+   |
+92 | struct Image {
+   |        ----- field in this struct
+93 |     name: &'static str,
+   |     ^^^^
+   |
+   = note: `Image` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `legacy_instruction` is never used
+   --> src/bin/pv_client_gate.rs:330:4
+    |
+330 | fn legacy_instruction(ix: solana_program::instruction::Instruction) -> Instruction {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `account_json` is never used
+   --> src/bin/pv_client_gate.rs:380:4
+    |
+380 | fn account_json(key: Address, a: &Account) -> Value {
+    |    ^^^^^^^^^^^^
+
+warning: fields `total` and `verifier` are never read
+   --> src/bin/pv_client_gate.rs:393:5
+    |
+392 | struct Measurement {
+    |        ----------- fields in this struct
+393 |     total: u64,
+    |     ^^^^^
+394 |     verifier: Option<u64>,
+    |     ^^^^^^^^
+
+warning: `aspis-r1-cu-probe` (bin "pv_client_gate") generated 7 warnings (run `cargo fix --bin "pv_client_gate" -p aspis-r1-cu-probe` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1.47s
+

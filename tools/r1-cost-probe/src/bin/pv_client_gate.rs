@@ -104,6 +104,8 @@ fn image(name: &'static str, key: Pubkey, owner: Pubkey, data: Vec<u8>) -> Image
     }
 }
 fn images(
+    pool: Pubkey,
+    registry_program: Pubkey,
     program: Pubkey,
     proof: &[u8],
     public: &[u8],
@@ -130,8 +132,6 @@ fn images(
         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p) => p.asset_id,
         PoolV1PairForestTerminalPaymentV1::Withdrawal(p) => p.asset_id,
     };
-    let pool = Pubkey::new_from_array(POOL);
-    let registry_program = Pubkey::new_from_array(REGISTRY);
     let mint = Pubkey::new_from_array([0x42; 32]);
     let (master_key, master_bump) = pool_v1_pair_forest_master_address(&pool, &mint);
     let (lane_key, lane_bump) = checked(pool_v1_pair_forest_lane_address(
@@ -159,7 +159,7 @@ fn images(
         verifier_policy: VerifierPolicyV1 {
             flags: POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY
                 | POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,
-            registry_program: REGISTRY,
+            registry_program: registry_program.to_bytes(),
             registry_authority: [0; 32],
             policy_binding: [7; 32],
         },
@@ -206,7 +206,7 @@ fn images(
         policy_binding: [7; 32],
         generation: 1,
         minimum_activation_delay_slots: 1,
-        registry_program: REGISTRY,
+        registry_program: registry_program.to_bytes(),
         loader_program: loader.to_bytes(),
         programdata_address: registry_pd.to_bytes(),
         executable_hash: [0xa5; 32],
@@ -231,7 +231,7 @@ fn images(
     let request = PoolV1PairForestTerminalRequestV1 {
         verifier_profile: PROFILE,
         verifier_release: RELEASE,
-        pool_program: POOL,
+        pool_program: pool.to_bytes(),
         public: payment,
     };
     // Reconstruct exactly what the adapter reads from the image carriers.
@@ -654,10 +654,11 @@ fn main() -> Result<()> {
         "RUNNER DEFAULT.so DEVNET.so POOL.so OUTPUT"
     );
     let out = Path::new(&args[5]);
-    fs::create_dir(out)?;
+    {
+        use std::os::unix::fs::DirBuilderExt;
+        fs::DirBuilder::new().mode(0o700).create(out)?;
+    }
     let payer = fresh_key(&out.join("payer.key"))?;
-    let pool = Pubkey::new_from_array(POOL);
-    let program = Pubkey::from_str(PROGRAM)?;
     let mint = Pubkey::new_from_array([0x42; 32]);
     let pins = [
         "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
@@ -672,188 +673,213 @@ fn main() -> Result<()> {
         ensure!(sha(b) == p, "ELF pin mismatch");
     }
     let mut receipts = vec![];
-    for n in 0..2 {
-        let op = if n == 0 { "transfer" } else { "withdrawal" };
-        let dir = out.join(op);
-        fs::create_dir(&dir)?;
-        let pubkey = fresh_key(&dir.join("public.key"))?;
-        let cpkey = fresh_key(&dir.join("checkpoint.key"))?;
-        let accounts: Vec<_> = (0..8)
-            .map(|i| fresh_key(&dir.join(format!("attempt-{i}.key"))))
-            .collect::<Result<_>>()?;
-        let (lane, cp, lb, cb, history) = fixture(pool, mint, n)?;
-        let destination = Pubkey::new_from_array([0x49; 32]);
-        let q = json!({"action":"prove","pool":pool.to_string(),"mint":mint.to_string(),"payer":payer.pubkey().to_string(),"registry":Pubkey::new_from_array(REGISTRY).to_string(),"verifier":program.to_string(),"note":n,"withdrawal":n==1,"destination":destination.to_string(),"checkpoint":cp.to_string(),"lane_bytes":hex(&lb),"checkpoint_bytes":hex(&cb),"proof_dir":dir.join("proof").to_str().unwrap(),"proof_accounts":accounts.iter().map(|a|a.pubkey().to_string()).collect::<Vec<_>>(),"public_account":pubkey.pubkey().to_string(),"verifier_checkpoint":cpkey.pubkey().to_string()});
-        write_json(&dir.join("request.json"), &q)?;
-        let plan = invoke(&args[1], &q)?;
-        write_json(&dir.join("plan.json"), &plan)?;
-        let index = plan["attempt_index"].as_u64().unwrap() as usize;
-        let selected = key(accounts[index].pubkey());
-        ensure!(plan["proof_account"] == selected.to_string());
-        let proof = fs::read(dir.join("proof/proof.bin"))?;
-        let public = fs::read(dir.join("proof/statement.bin"))?;
-        // Reopen the actual runner's ledger, then the exact adapter: duplicate is fatal
-        // before the body, leaves every durable record unchanged, and publishes nothing.
-        let ledger_path = dir.join("proof/mask-nonce-ledger");
-        let ledger_snapshot = || -> Result<Vec<(String, Vec<u8>)>> {
-            let mut x = fs::read_dir(&ledger_path)?
-                .map(|e| {
-                    let e = e?;
-                    Ok((
-                        e.file_name().to_string_lossy().to_string(),
-                        fs::read(e.path())?,
-                    ))
-                })
-                .collect::<Result<Vec<_>>>()?;
-            x.sort();
-            Ok(x)
+    for v in 0..2 {
+        // The devnet verifier's two deployment-ID slots differ from default.
+        // Each proof must bind the pool/registry used by that exact ELF.
+        let label = if v == 0 { "default" } else { "devnet" };
+        let pool = if v == 0 {
+            Pubkey::new_from_array(POOL)
+        } else {
+            Pubkey::from_str("BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs")?
         };
-        let before = ledger_snapshot()?;
-        ensure!(before.len() == index + 1);
-        for (i, (_, b)) in before.iter().enumerate() {
-            ensure!(
-                b.len() == 80 && &b[..16] == b"ASPIS-MASK-V1\0\0\0",
-                "bad ledger record {i}"
-            );
-        }
-        ensure!(before.iter().any(|(_, b)| b[48..80] == selected.to_bytes()));
-        let mut ledger =
-            aspis_prover::state_only_entropy::DurableStateOnlyMaskNonceStore::open(&ledger_path)?;
-        let f = aspis_prover::r0_fixture::prepare(n == 1);
-        let duplicate = aspis_r1_cost_probe::RealR1_client::prove_for_proof_accounts(
-            f.public(),
-            &f.compiled,
-            aspis_prover::HOST_HASH,
-            &mut ledger,
-            |_| selected.to_bytes(),
-        );
-        ensure!(
-            matches!(
-                duplicate,
-                Err(aspis_r1_cost_probe::verifier::Error::Semantic)
-            ),
-            "duplicate did not fail closed"
-        );
-        ensure!(
-            ledger_snapshot()? == before,
-            "duplicate changed durable ledger"
-        );
-        let (mut inputs, request, expected) = images(
-            program,
-            &proof[688..],
-            &public,
-            selected,
-            key(pubkey.pubkey()),
-        )?;
-        ensure!(inputs[0].data == proof);
-        // Use exact live snapshots supplied to the operational planner.
-        inputs[3].data = cb.clone();
-        inputs[4].data = lb.clone();
-        for v in 0..2 {
-            let label = if v == 0 { "default" } else { "devnet" };
-            let runout = dir.join(label);
-            fs::create_dir(&runout)?;
-            let mut svm = LiteSVM::new();
-            svm.warp_to_slot(SLOT);
-            checked(svm.add_program(addr(program), &elfs[v]))?;
-            checked(svm.add_program(addr(pool), &elfs[2]))?;
-            write_json(
-                &runout.join("loaded-verifier.json"),
-                &loaded_program(&svm, program, &elfs[v])?,
-            )?;
-            write_json(
-                &runout.join("loaded-pool.json"),
-                &loaded_program(&svm, pool, &elfs[2])?,
-            )?;
-            checked(svm.airdrop(&payer.pubkey(), 1_000_000_000))?;
-            for i in &inputs {
-                put(&mut svm, i.key, i.owner, i.data.clone())?;
+        let registry_program = if v == 0 {
+            Pubkey::new_from_array(REGISTRY)
+        } else {
+            Pubkey::from_str("9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q")?
+        };
+        let program = Pubkey::from_str(if v == 0 {
+            PROGRAM
+        } else {
+            "Gk16spfMwbZ1wK1B8Y8upLd7y2DDJQz73iZKU5GEVyBA"
+        })?;
+        let mode_out = out.join(label);
+        fs::create_dir(&mode_out)?;
+        for n in 0..2 {
+            let op = if n == 0 { "transfer" } else { "withdrawal" };
+            let dir = mode_out.join(op);
+            fs::create_dir(&dir)?;
+            let pubkey = fresh_key(&dir.join("public.key"))?;
+            let cpkey = fresh_key(&dir.join("checkpoint.key"))?;
+            let accounts: Vec<_> = (0..8)
+                .map(|i| fresh_key(&dir.join(format!("attempt-{i}.key"))))
+                .collect::<Result<_>>()?;
+            let (lane, cp, lb, cb, history) = fixture(pool, mint, n)?;
+            let destination = Pubkey::new_from_array([0x49; 32]);
+            let q = json!({"action":"prove","pool":pool.to_string(),"mint":mint.to_string(),"payer":payer.pubkey().to_string(),"registry":registry_program.to_string(),"verifier":program.to_string(),"note":n,"withdrawal":n==1,"destination":destination.to_string(),"checkpoint":cp.to_string(),"lane_bytes":hex(&lb),"checkpoint_bytes":hex(&cb),"proof_dir":dir.join("proof").to_str().unwrap(),"proof_accounts":accounts.iter().map(|a|a.pubkey().to_string()).collect::<Vec<_>>(),"public_account":pubkey.pubkey().to_string(),"verifier_checkpoint":cpkey.pubkey().to_string()});
+            write_json(&dir.join("request.json"), &q)?;
+            let plan = invoke(&args[1], &q)?;
+            write_json(&dir.join("plan.json"), &plan)?;
+            let index = plan["attempt_index"].as_u64().unwrap() as usize;
+            let selected = key(accounts[index].pubkey());
+            ensure!(plan["proof_account"] == selected.to_string());
+            let proof = fs::read(dir.join("proof/proof.bin"))?;
+            let public = fs::read(dir.join("proof/statement.bin"))?;
+            // Reopen the actual runner's ledger, then the exact adapter: duplicate is fatal
+            // before the body, leaves every durable record unchanged, and publishes nothing.
+            let ledger_path = dir.join("proof/mask-nonce-ledger");
+            let ledger_snapshot = || -> Result<Vec<(String, Vec<u8>)>> {
+                let mut x = fs::read_dir(&ledger_path)?
+                    .map(|e| {
+                        let e = e?;
+                        Ok((
+                            e.file_name().to_string_lossy().to_string(),
+                            fs::read(e.path())?,
+                        ))
+                    })
+                    .collect::<Result<Vec<_>>>()?;
+                x.sort();
+                Ok(x)
+            };
+            let before = ledger_snapshot()?;
+            ensure!(before.len() == index + 1);
+            for (i, (_, b)) in before.iter().enumerate() {
+                ensure!(
+                    b.len() == 80 && &b[..16] == b"ASPIS-MASK-V1\0\0\0",
+                    "bad ledger record {i}"
+                );
             }
-            put(
-                &mut svm,
-                key(cpkey.pubkey()),
+            ensure!(before.iter().any(|(_, b)| b[48..80] == selected.to_bytes()));
+            let mut ledger =
+                aspis_prover::state_only_entropy::DurableStateOnlyMaskNonceStore::open(
+                    &ledger_path,
+                )?;
+            let f = aspis_prover::r0_fixture::prepare(n == 1);
+            let duplicate = aspis_r1_cost_probe::RealR1_client::prove_for_proof_accounts(
+                f.public(),
+                &f.compiled,
+                aspis_prover::HOST_HASH,
+                &mut ledger,
+                |_| selected.to_bytes(),
+            );
+            ensure!(
+                matches!(
+                    duplicate,
+                    Err(aspis_r1_cost_probe::verifier::Error::Semantic)
+                ),
+                "duplicate did not fail closed"
+            );
+            ensure!(
+                ledger_snapshot()? == before,
+                "duplicate changed durable ledger"
+            );
+            let (mut inputs, request, expected) = images(
+                pool,
+                registry_program,
                 program,
-                vec![0; CHECKPOINT_BYTES],
+                &proof[688..],
+                &public,
+                selected,
+                key(pubkey.pubkey()),
             )?;
-            let protected: Vec<_> = inputs.iter().map(|i| addr(i.key)).collect();
-            let initial = snapshot(&svm, &protected)?;
-            send(
-                &mut svm,
-                &payer,
-                None,
-                instruction(&plan["stage1"])?,
-                &runout,
-                "stage1",
-            )?;
-            ensure!(
-                snapshot(&svm, &protected)? == initial,
-                "stage1 modified readonly inputs"
-            );
-            let stage2keys = [
-                inputs[0].key,
-                inputs[2].key,
-                inputs[3].key,
-                inputs[4].key,
-                inputs[5].key,
-                inputs[6].key,
-                key(cpkey.pubkey()),
-            ];
-            let result = send(
-                &mut svm,
-                &payer,
-                None,
-                Instruction {
-                    program_id: addr(program),
-                    accounts: stage2keys
-                        .iter()
-                        .map(|k| AccountMeta::new_readonly(addr(*k), false))
-                        .collect(),
-                    data: request.clone(),
-                },
-                &runout,
-                "stage2",
-            )?;
-            ensure!(
-                result.return_program == addr(program) && result.return_data == expected,
-                "verifier ASR8 mismatch"
-            );
-            ensure!(
-                snapshot(&svm, &protected)? == initial,
-                "stage2 modified inputs"
-            );
-            let page = Pubkey::from_str(plan["page"].as_str().unwrap())?;
-            let mut pagebytes = vec![0; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
-            checked(initialize_root_history_page_bytes_v1(
-                &mut pagebytes,
-                lane.to_bytes(),
-                0,
-                &history,
-            ))?;
-            put(&mut svm, page, pool, pagebytes)?;
-            if n == 1 {
-                install_tokens(&mut svm, pool, mint, destination)?;
+            ensure!(inputs[0].data == proof);
+            // Use exact live snapshots supplied to the operational planner.
+            inputs[3].data = cb.clone();
+            inputs[4].data = lb.clone();
+            {
+                let runout = dir.join("execution");
+                fs::create_dir(&runout)?;
+                let mut svm = LiteSVM::new();
+                svm.warp_to_slot(SLOT);
+                checked(svm.add_program(addr(program), &elfs[v]))?;
+                checked(svm.add_program(addr(pool), &elfs[2]))?;
+                write_json(
+                    &runout.join("loaded-verifier.json"),
+                    &loaded_program(&svm, program, &elfs[v])?,
+                )?;
+                write_json(
+                    &runout.join("loaded-pool.json"),
+                    &loaded_program(&svm, pool, &elfs[2])?,
+                )?;
+                checked(svm.airdrop(&payer.pubkey(), 1_000_000_000))?;
+                for i in &inputs {
+                    put(&mut svm, i.key, i.owner, i.data.clone())?;
+                }
+                put(
+                    &mut svm,
+                    key(cpkey.pubkey()),
+                    program,
+                    vec![0; CHECKPOINT_BYTES],
+                )?;
+                let protected: Vec<_> = inputs.iter().map(|i| addr(i.key)).collect();
+                let initial = snapshot(&svm, &protected)?;
+                send(
+                    &mut svm,
+                    &payer,
+                    None,
+                    instruction(&plan["stage1"])?,
+                    &runout,
+                    "stage1",
+                )?;
+                ensure!(
+                    snapshot(&svm, &protected)? == initial,
+                    "stage1 modified readonly inputs"
+                );
+                let stage2keys = [
+                    inputs[0].key,
+                    inputs[2].key,
+                    inputs[3].key,
+                    inputs[4].key,
+                    inputs[5].key,
+                    inputs[6].key,
+                    key(cpkey.pubkey()),
+                ];
+                let result = send(
+                    &mut svm,
+                    &payer,
+                    None,
+                    Instruction {
+                        program_id: addr(program),
+                        accounts: stage2keys
+                            .iter()
+                            .map(|k| AccountMeta::new_readonly(addr(*k), false))
+                            .collect(),
+                        data: request.clone(),
+                    },
+                    &runout,
+                    "stage2",
+                )?;
+                ensure!(
+                    result.return_program == addr(program) && result.return_data == expected,
+                    "verifier ASR8 mismatch"
+                );
+                ensure!(
+                    snapshot(&svm, &protected)? == initial,
+                    "stage2 modified inputs"
+                );
+                let page = Pubkey::from_str(plan["page"].as_str().unwrap())?;
+                let mut pagebytes = vec![0; POOL_V1_ROOT_HISTORY_PAGE_ACCOUNT_BYTES];
+                checked(initialize_root_history_page_bytes_v1(
+                    &mut pagebytes,
+                    lane.to_bytes(),
+                    0,
+                    &history,
+                ))?;
+                put(&mut svm, page, pool, pagebytes)?;
+                if n == 1 {
+                    install_tokens(&mut svm, pool, mint, destination)?;
+                }
+                let settled = send(
+                    &mut svm,
+                    &payer,
+                    None,
+                    instruction(&plan["settle"])?,
+                    &runout,
+                    "pool-settle",
+                )?;
+                ensure!(
+                    settled.return_program == addr(pool) && settled.return_data == expected,
+                    "Pool ASR8 mismatch"
+                );
+                let laneafter = svm.get_account(&addr(lane)).unwrap();
+                let marker = svm
+                    .get_account(&Address::from_str(plan["marker"].as_str().unwrap())?)
+                    .unwrap();
+                let validation = invoke(
+                    &args[1],
+                    &json!({"action":"validate_settlement","pool":pool.to_string(),"mint":mint.to_string(),"payer":payer.pubkey().to_string(),"registry":registry_program.to_string(),"verifier":program.to_string(),"note":n,"lane_bytes":hex(&laneafter.data),"marker_bytes":hex(&marker.data),"candidate_bytes":hex(&proof[..688])}),
+                )?;
+                receipts.push(json!({"operation":op,"verifier":label,"elf_sha256":sha(&elfs[v]),"pool_elf_sha256":sha(&elfs[2]),"accepted":true,"attempts":index+1,"proof_account":selected.to_string(),"proof_sha256":sha(&proof),"statement_sha256":sha(&public),"duplicate_error":"Semantic","duplicate_ledger_unchanged":true,"settlement":validation}));
             }
-            let settled = send(
-                &mut svm,
-                &payer,
-                None,
-                instruction(&plan["settle"])?,
-                &runout,
-                "pool-settle",
-            )?;
-            ensure!(
-                settled.return_program == addr(pool) && settled.return_data == expected,
-                "Pool ASR8 mismatch"
-            );
-            let laneafter = svm.get_account(&addr(lane)).unwrap();
-            let marker = svm
-                .get_account(&Address::from_str(plan["marker"].as_str().unwrap())?)
-                .unwrap();
-            let validation = invoke(
-                &args[1],
-                &json!({"action":"validate_settlement","pool":pool.to_string(),"mint":mint.to_string(),"payer":payer.pubkey().to_string(),"registry":Pubkey::new_from_array(REGISTRY).to_string(),"verifier":program.to_string(),"note":n,"lane_bytes":hex(&laneafter.data),"marker_bytes":hex(&marker.data),"candidate_bytes":hex(&proof[..688])}),
-            )?;
-            receipts.push(json!({"operation":op,"verifier":label,"elf_sha256":sha(&elfs[v]),"pool_elf_sha256":sha(&elfs[2]),"accepted":true,"attempts":index+1,"proof_account":selected.to_string(),"proof_sha256":sha(&proof),"statement_sha256":sha(&public),"duplicate_error":"Semantic","duplicate_ledger_unchanged":true,"settlement":validation}));
         }
     }
     write_json(
