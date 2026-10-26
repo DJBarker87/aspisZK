@@ -43,3 +43,21 @@ opN-sibling-check.json. No sibling installation found. No row removed.
 First native gate remains unstarted: initial admission and two retries denied
 on aggregate reservation. Three-minute intervals respected; caps not bypassed.
 The owned reference is cfg(kani)-only and no shipped crate was changed.
+
+## Third checkpoint
+
+| op | row | disposition at checkpoint | theorem / receipt |
+|---:|---|---|---|
+|34|V185|source statement prepared, NOT CHECKED|PV_CB_IsEmpty.op34_installed|
+|35|V186|source statement prepared, NOT CHECKED|PV_CB_VecDefault.op35_installed|
+|36|V187|source statements prepared, NOT CHECKED|PV_CB_VecArray.op36_accept/op36_reject|
+|51|V195|SKIPPED(sibling source installation), reuse being composed|ProverRwP6FlatInstall.source; sibling14008/14009, success-p6/final-state.json|
+
+op51 remains OPEN in the dictionary table, but the read-only prover sibling's
+source installation is already checked at14009 and its source at14008. This
+is recorded as source-level reuse, not a claim that native composition or the
+headline premise was discharged. New Codecs composition is not yet checked.
+
+Kani1/20: checks::take_u64 and checks::take_nonzero both pass, no stubs;
+see kani-take-001/receipt.json. Generic reference extraction next. This gate
+does not establish arbitrary Default/Drop native behavior. Lean6/100,4 green.
