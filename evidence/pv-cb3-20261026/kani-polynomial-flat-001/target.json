@@ -1,0 +1,40 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::polynomial_flat28",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "b38dc3f39a41cfa939a00a748dba94d16a295b2b",
+  "expected_phase": "Complete arbitrary28-by4-u32 coefficients and arbitrary4-u32 challenge, shipped radix-four polynomial evaluation equals owned safe loop-free reference. No stubs or assumptions; optimized cached compilation then bitvector equivalence solver for one named polynomial step; safety/unwinding65 retained.",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required"
+}
