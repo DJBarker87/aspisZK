@@ -1,0 +1,106 @@
+PoolM_NativePlanGuard.lean:25:60: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (x ≠ y)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PoolM_NativePlanGuard.lean:25:79: error: unsolved goals
+x y : Key
+⊢ decide (x = y) = !sorry ()
+PoolM_NativePlanGuard.lean:31:64: error: unsolved goals
+a : Account
+id : Key
+size : Usize
+readLength : Result Usize
+h : a.owner ≠ id
+⊢ sorry () = false →
+    a.executable = false →
+      a.is_signer = false →
+        a.is_writable = true →
+          (do
+              let actual ← readLength
+              if ↑actual = ↑size then ok (core.result.Result.Ok ())
+                else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+PoolM_NativePlanGuard.lean:32:19: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [run, ̲key_ne,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativePlanGuard.lean:35:8: warning: declaration uses `sorry`
+PoolM_NativePlanGuard.lean:50:2: error: unsolved goals
+case pos.false.false.true
+a : Account
+id : Key
+size actual : Usize
+wrong : actual ≠ size
+owner : a.owner = id
+he : a.executable = false
+hs : a.is_signer = false
+hw : a.is_writable = true
+⊢ sorry () = false → ¬↑actual = ↑size
+PoolM_NativePlanGuard.lean:51:38: warning: This simp argument is unused:
+  wrong
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵u̵n̵,̵k̵e̵y̵_̵n̵e̵,̵o̵w̵n̵e̵r̵,̵h̵e̵,̵h̵s̵,̵h̵w̵,̵w̵r̵o̵n̵g̵]̵[̲r̲u̲n̲,̲ ̲k̲e̲y̲_̲n̲e̲,̲ ̲o̲w̲n̲e̲r̲,̲ ̲h̲e̲,̲ ̲h̲s̲,̲ ̲h̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolM_NativePlanGuard.lean:62:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Account
+id : Key
+size : Usize
+owner : a.owner = id
+he : a.executable = false
+hs : a.is_signer = false
+hw : a.is_writable = true
+v✝ : Usize
+⊢ (if sorry () = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if ↑v✝ = ↑size then ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+      ok (core.result.Result.Ok ()) ↔
+    v✝ = size
+PoolM_NativePlanGuard.lean:62:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Account
+id : Key
+size : Usize
+owner : a.owner = id
+he : a.executable = false
+hs : a.is_signer = false
+hw : a.is_writable = true
+e✝ : Std.Error
+⊢ ¬(if sorry () = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else fail e✝) =
+      ok (core.result.Result.Ok ())
+PoolM_NativePlanGuard.lean:62:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Account
+id : Key
+size : Usize
+owner : a.owner = id
+he : a.executable = false
+hs : a.is_signer = false
+hw : a.is_writable = true
+⊢ ¬(if sorry () = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else div) =
+      ok (core.result.Result.Ok ())
+'AspisR1.PoolM_NativePlanGuard.key_ne' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolM_NativePlanGuard.owner_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolM_NativePlanGuard.metadata_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolM_NativePlanGuard.size_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolM_NativePlanGuard.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

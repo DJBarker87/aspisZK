@@ -71,3 +71,19 @@ pub fn PoolM_cancel_prefix(program_id:&Pubkey,accounts:&[AccountInfo<'_>],instru
 
     Ok(())
 }
+
+// Split source cut after parser/count/unique and account role selection.
+pub fn PoolM_cancel_roles_native(program_id:&Pubkey,plan_authority:&AccountInfo<'_>,core_plan:&AccountInfo<'_>,shard:&AccountInfo<'_>,has_shard:bool)->ProgramResult {
+    if !plan_authority.is_signer
+        || !plan_authority.is_writable
+        || plan_authority.executable
+        || plan_authority.owner != &system_program::id()
+    {
+        return Err(PoolV1ProgramError::InvalidPayer.into());
+    }
+    require_prepared_plan_account_v1(core_plan,program_id,POOL_V1_PREPARED_SETTLEMENT_CORE_ACCOUNT_BYTES)?;
+    if has_shard {
+        require_prepared_plan_account_v1(shard,program_id,POOL_V1_PREPARED_SETTLEMENT_ROLLOVER_ACCOUNT_BYTES)?;
+    }
+    Ok(())
+}

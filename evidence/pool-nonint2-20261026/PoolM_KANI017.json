@@ -1,0 +1,45 @@
+{
+  "attempt": "PoolM_KANI017",
+  "kind": "kani",
+  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_leaf/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolM_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolM_postfresh_192",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolM_leaf/Cargo.toml",
+    "PoolM_leaf/Cargo.lock",
+    "PoolM_leaf/PoolM_lib.rs",
+    "PoolM_owned/PoolM_lib.rs",
+    "PoolM_slice/error.rs",
+    "PoolM_slice/cancel_prepared_settlement_instruction.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Small native leaf PoolM_postfresh_192; exact source snapshot domain. KANI011/012 split KANI010 by removing Vec/iterator construction and enumerating 2/3-key equality partitions. No broad prefix/full CPI builder."
+  },
+  "expected_time": "Optimized compilation then tiny loop-free metadata equivalence SAT; no whole-prefix Kani"
+}
