@@ -36,6 +36,14 @@ no credit crosses those domains. Exact per-row table and every retained row:
 FGm_LEDGER.md and FGm_premises.json. No inherited FIn removal is counted twice
 against its own successor; this delta is against the actual Rc7 root.
 
+Additional source helper results are checked: arbitrary native powers,
+all four final kappa aggregation loops, native mask-selected grouped
+contraction value, unrestricted QM/wide scalar-product values, low-array
+canonicality, exact S2/2048-byte grouped dispatch, and their source composition.
+These expose actual helper execution/value facts and are not a proof of full
+constructor FunctionalWeights, seven-component Pair meaning or literal joins.
+No additional root removal is claimed for them.
+
 Five global families remain: Pair L142, matching L143, semantic endpoints
 L144–146. `FGm_OBSTRUCTIONS.md` identifies their source slots/value joins.
 The full requested twelve-family closure is NOT delivered. Generalising
@@ -86,3 +94,38 @@ Retained: RuntimePersistence,SDK/std/runtime/extraction trust,actual native
 acceptance game fields,L159 stored runtime binding,remaining native finish
 families and all deployment obligations,including source-to-ELF/final coherent
 replay. No protocol,security contract,adversary or metric change is proposed.
+
+## Final budget and stopping point
+
+**100/100 Lean compiler starts;83 pass,17 excluded intermediate failures;
+0/0 Kani. Budget exhausted; no further compiler launch.** Every one of the83
+current FGm_ source modules has an exact matching successful source hash.
+Final focused audit100 prints all40 new theorems with only subsets of
+propext,Classical.choice,Quot.sound. All41 fresh inherited structure inventories
+are byte-identical to Rc7. Total compiler wall311.953003563s;maximum RSS
+5,723,960KiB;swap0. No process timeout,memory kill or cap increase. The two Lean
+heartbeat failures and every technical error/replacement are retained in
+FGm_FAILURES.json and authoritative per-attempt logs. Failed sorryAx output is
+excluded evidence and is never imported by a delivered source.
+
+Audit100: exit0,wall3.091516542s,RSS5,482,716KiB,swap0. Its receipt pins the
+source revision,exact final audit source and every selected direct object.
+99 retains the complete accepted-source-without-owner-laws statement and the
+partial value/slot-obstruction signatures;FGm_ACCEPTED_SOURCE.lean.txt extracts
+the first one and checks absence of the owner contract. This is a focused
+cached audit, not a package or frozen-manifest replay.
+
+`FGm_validate.py --final` and `FGm_recount.py` pass. Source/receipt whitespace
+checks pass; two authoritative failed compiler logs087/088 retain Lean's
+native trailing spaces after `Goal:`. Convenience orchestration summaries have
+trailing whitespace normalised; authoritative compiler logs remain exact.
+Three unlaunched redundant inventory drafts were removed and recorded in
+FGm_rc7-inventory-plan.json; no successful inventory credit is claimed for them.
+
+Next substantive deliverables are full constructor/FunctionalWeights and
+seven-part Pair model-value/literal-input refinement at this exact dictionary,
+plus concrete matching and semantic operation bindings with SAME parsed-view
+joins. Consume FGm_Headline.deployed for the Rc7 successor and compose FIp_
+accepted-run work by new prefixes; do not edit other workers' files. Retain
+all deployment/trust boundaries and complete the final coherent frozen release
+replay/source-to-ELF association before any unconditional release claim.

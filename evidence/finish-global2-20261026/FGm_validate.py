@@ -27,6 +27,11 @@ for p in sorted((R/'lean').glob('FGm_*.lean')):
  text=p.read_text()
  assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b',text),p
  assert not re.search(r'set_option\s+(maxHeartbeats|maxRecDepth)',text),p
+if (E/'FGm_100/receipt.json').exists():
+ final=json.loads((E/'FGm_100/receipt.json').read_text())
+ expected=set(json.loads((E/'FGm_theorem-plan.json').read_text())['theorems'])
+ actual={re.match(r"'([^']+)'",line)[1] for line in final['print_axioms']}
+ assert final['exit_status']==0 and actual==expected,('final theorem audit',expected-actual,actual-expected)
 # Build a fresh field inventory attached to this new root.
 catalog={}
 for r in receipts:
