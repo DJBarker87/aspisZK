@@ -9689,3 +9689,36 @@ The proof-friendly prover candidate (codex/cx-prover-rw-20261023, UNMERGED) now 
 ## D192 (lead, 2026-10-26): host barrier cap correction for the prover candidate
 
 The prover-candidate host barrier (/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py) asserted exactly MemoryHigh=5G / MemoryMax=7G. That rejected every launch at the policy caps 6G/8G (run-joint.sh MX=8), which are required for Lean -M7000. Lead edit (one line; backup barrier.py.bak-lead-20261026): the assert accepts exactly the pairs {(5G,7G),(6G,8G)}, with swap 0 and pids 64. Nothing above policy is accepted, and the reservation scanner is unchanged. Separately, workers follow local-lean.txt rule 6: one scope at a time per job, and wait/retry at the aggregate reservation barrier.
+
+## D193 (Stream B, 2026-10-26 09:20): privacy stream opened; six jobs; dict5 reviewed
+
+Numbering note: D193–D248 above were written during the Codex-manager period (2026-10-24/25)
+and Stream A then appended a second D190–D192. Stream B (the privacy lead, a separate Claude
+session) continues from D193 with the suffix "(Stream B)"; the earlier D193–D248 are not superseded.
+
+Owner instruction at session start: Stream B may run up to six Codex jobs (the handoff said three).
+Six 8 GiB scopes plus Stream A's three exceed the 55 GiB host reservation, so Stream B mixes
+host-heavy proof jobs with source-only audits and lets the reservation barrier serialise compiles;
+no cap is raised. Env-J IDs for privacy start at 20000.
+
+Jobs running (outputs `codex-pv-*.out`, prompts `prompt-pv-*.txt`): prover-rw14 (inherited, main
+path of the candidate), pv-dict6 (dictionary branch, see below), pv-ledger (the mechanical privacy
+premise ledger `design/PRIVACY-LEDGER-20261026.md`, same method as the soundness ledger, audit
+only), pv-l2-sim (F3/F5/F6 simulatable-trace proofs per D166 on research's R1Z tree, prefix
+PV_L2_), pv-rebase (candidate merged onto research in its own branch `codex/pv-rebase-20261026`,
+three-ELF identity and the <15 s / +10% timing gates; a verifier-byte difference is a stop and an
+owner escalation), pv-client (proof-account route audit per D162 and integration receipt).
+
+prover-dict5 finished (head 8f80a91331, unmerged, unpushed): 163/262 operations selected, 26/28
+type representations; Formatter erased from the retry execution and the proof-account caller
+(`PDict_FormatterIndependent`, `PDict_ClientFormatterIndependent`); native Debug sink contract
+checked for 17 variants; audit J14440 exit 0, 1.92 s, 4,294,736 KiB RSS, swap 0, 176 standard-axiom
+reports. Open: std.io.error.Error (dynamic trait payload; extraction rejects it), type 27, File
+ownership/world transport, 99 operations. Root conjunct-1 premises removed: 0. Lead review:
+no sorry/admit/axiom tokens; the 483 added lines under crates/ are cfg(kani)-only harness modules
+(verified by inspection of every added module head), so no shipped bytes changed; the candidate's
+default/devnet ELF mismatch (D191) stands and is pv-rebase's job. The worker stopped with 62 Lean
+attempts unused, against the completion rule. pv-dict6 relaunches on the same branch with a
+changed task: prove by reachability over the extracted erased caller which of the 99 operations
+and 2 types the refinement actually requires, then take the reachable error-carrier/IO entries by
+the P6 owned-reference route. Privacy target not yet established.
