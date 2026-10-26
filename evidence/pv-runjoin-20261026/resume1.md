@@ -36,3 +36,36 @@ Their source generators are r0_fixture::prepare and the underlying
 v7_pair_forest_fixture::prepare_v7_pair_forest_transfer_fixture_v1. These supply
 concrete public fixture witnesses in Rust but no proved RspendPlus association.
 No secret wallets or keys were read,changed or removed.
+
+
+Totality stage (before/after)
+
+Before: finite_owner and Owners required .ok extraction executions; arbitrary
+finite tapes might have been unavailable or arithmetic/slice operations might
+have failed. After: EntropyTotal.scan_total/nonzero_total handle arbitrary32
+byte arrays by a symbolic loop invariant. EntropyStep.afterFill_total handles
+both status tags and all64-byte contents using checked library range/copy laws.
+EntropyCapacity.owner_total proves an extracted owner always returns a status
+when sixteen replies remain; nonce rejection and OS errors remain statuses.
+WorldTotal.policy_total composes arbitrary state-adaptive nonce policies, and
+cap8_total constructs an eight-call replay for EVERY RawTape, retaining the
+one advancing cursor, global ordered reply log and final suffix. No .ok,
+nonzero-input, no-error, successful-proof or output-equality premise remains
+in cap8_total. The replay is an entropy CAPACITY COMPLETION; the real native
+prover may stop earlier, and its error/early-stop/body/store/adversary mapping
+is still unproved. No native full-caller equation is assumed or inferred.
+
+Reused exact theorems: D193 universal_cap16 (same-event owner equality and
+replays), replay_inventory/replay_events, body_state/body_progress, fill_at;
+Aeneas checked array/range/copy/add specifications. Existing coupling work
+continues to reuse completionEquiv and mp_equiv/mp_fst. None supplies the
+native entropy probability law or L1 attempt-record interpretation. No attempt
+is made to replace that missing law by uniform sampling of prototype error tags.
+
+New source stage field count3→3. No V036–V038,V045,V047 row is closed. Existing
+V046 carrier inhabitance fact remains conditional on choosing R1Adv. Original
+bad event, complete observer, simulator and public-equality guard are unchanged.
+Attempts20917,20920,20922,20923 pass, all standard axioms, peakRSS<4GiB,swap0.
+20918/20919/20921 reject changed proof-script inputs; their sorryAx diagnostics
+are rejected. All snapshots and per-run receipts retained.24/100 Lean used
+through20923,0/10 Kani;next unused20924 before the focused final audit.
