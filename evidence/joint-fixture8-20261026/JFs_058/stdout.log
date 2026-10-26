@@ -1,0 +1,19 @@
+JFs_PublicComparisons.lean:26:2: error: Tactic `decide` failed for proposition
+  ¬core.convert.num.FromUsizeU8.from JFs_PublicValue.common.output_lane ≥ 8#usize
+because its `Decidable` instance
+  instDecidableNot
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableNot`, `Bool.decEq`, `Nat.decLe`, `UScalarDecidableLE`, and `UScalar.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑8#usize).ble ↑(core.convert.num.FromUsizeU8.from JFs_PublicValue.common.output_lane), true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'AspisR1.JFs_PublicComparisons.pool' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.snapshot_pool' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.anchor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.lane_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_PublicComparisons.lane' depends on axioms: [propext, Classical.choice, Quot.sound]
