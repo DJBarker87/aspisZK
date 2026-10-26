@@ -848,3 +848,74 @@ pub mod fields29 {
         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
     }
 }
+
+#[cfg(kani)]
+pub(crate) mod pdict_error_contracts {
+    use super::Error;
+    pub(crate) fn arbitrary_error() -> Error {
+        let tag: u8 = kani::any();
+        kani::assume(tag < 12);
+        match tag {
+            0 => Error::Allocation,
+            1 => Error::RowOrder { expected: kani::any(), actual: kani::any() },
+            2 => Error::InvalidRow,
+            3 => Error::Tag { row: kani::any() },
+            4 => Error::Length { row: kani::any() },
+            5 => Error::NonCanonical { row: kani::any(), value: kani::any() },
+            6 => Error::Boundary { round: kani::any() },
+            7 => Error::Terminal,
+            8 => Error::EqualCirclePoints,
+            9 => Error::TrailingBytes,
+            10 => Error::Public,
+            _ => Error::ActivePole,
+        }
+    }
+    #[kani::proof]
+    fn complete_wire_error_equality() {
+        let a = arbitrary_error();
+        let b = arbitrary_error();
+        let expected = match (a,b) {
+            (Error::Allocation,Error::Allocation) => true,
+            (Error::RowOrder { expected:a,actual:b },Error::RowOrder { expected:c,actual:d }) => a==c && b==d,
+            (Error::InvalidRow,Error::InvalidRow) => true,
+            (Error::Tag { row:a },Error::Tag { row:b }) => a==b,
+            (Error::Length { row:a },Error::Length { row:b }) => a==b,
+            (Error::NonCanonical { row:a,value:b },Error::NonCanonical { row:c,value:d }) => a==c && b==d,
+            (Error::Boundary { round:a },Error::Boundary { round:b }) => a==b,
+            (Error::Terminal,Error::Terminal) => true,
+            (Error::EqualCirclePoints,Error::EqualCirclePoints) => true,
+            (Error::TrailingBytes,Error::TrailingBytes) => true,
+            (Error::Public,Error::Public) => true,
+            (Error::ActivePole,Error::ActivePole) => true,
+            _ => false,
+        };
+        assert_eq!(a==b,expected);
+    }
+}
+
+#[cfg(kani)]
+mod pdict_typenum_contracts {
+    use sha2::digest::typenum::{UTerm,B0,B1,Equal,Greater,Unsigned,Bit};
+    #[kani::proof]
+    fn terminal_numeric_entries() {
+        assert_eq!(UTerm::to_isize(),0); assert_eq!(UTerm::ISIZE,0);
+        assert_eq!(UTerm::to_i64(),0); assert_eq!(UTerm::I64,0);
+        assert_eq!(UTerm::to_i32(),0); assert_eq!(UTerm::I32,0);
+        assert_eq!(UTerm::to_i16(),0); assert_eq!(UTerm::I16,0);
+        assert_eq!(UTerm::to_i8(),0); assert_eq!(UTerm::I8,0);
+        assert_eq!(UTerm::to_usize(),0); assert_eq!(UTerm::USIZE,0);
+        assert_eq!(UTerm::to_u64(),0); assert_eq!(UTerm::U64,0);
+        assert_eq!(UTerm::to_u32(),0); assert_eq!(UTerm::U32,0);
+        assert_eq!(UTerm::to_u16(),0); assert_eq!(UTerm::U16,0);
+        assert_eq!(UTerm::to_u8(),0); assert_eq!(UTerm::U8,0);
+        let t=UTerm::default(); assert_eq!(t.clone(),t);
+        assert!(B1::to_bool()); assert!(B1::BOOL);
+        assert_eq!(B1::to_u8(),1); assert_eq!(B1::U8,1);
+        let b1=B1::new(); assert_eq!(b1,B1::default()); assert_eq!(b1.clone(),b1);
+        assert!(!B0::to_bool()); assert!(!B0::BOOL);
+        assert_eq!(B0::to_u8(),0); assert_eq!(B0::U8,0);
+        let b0=B0::new(); assert_eq!(b0,B0::default()); assert_eq!(b0.clone(),b0);
+        assert_eq!(<Equal as sha2::digest::typenum::Ord>::to_ordering(),core::cmp::Ordering::Equal);
+        assert_eq!(<Greater as sha2::digest::typenum::Ord>::to_ordering(),core::cmp::Ordering::Greater);
+    }
+}
