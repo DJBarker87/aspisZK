@@ -1,0 +1,13 @@
+def Aeneas.Std.UScalar.add : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y => Aeneas.Std.UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.mul : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y => Aeneas.Std.UScalar.tryMk ty (↑x * ↑y)
+F3P_TraceDefs.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.checked_mul`
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+Aeneas.Std.UScalar.add_spec {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty}
+  (hmax : ↑x + ↑y ≤ Aeneas.Std.UScalar.max ty) : Aeneas.Std.WP.spec (x + y) fun z => ↑z = ↑x + ↑y
+Aeneas.Std.UScalar.mul_spec {ty : Aeneas.Std.UScalarTy} {x y : Aeneas.Std.UScalar ty}
+  (hmax : ↑x * ↑y ≤ Aeneas.Std.UScalar.max ty) : Aeneas.Std.WP.spec (x * y) fun z => ↑z = ↑x * ↑y
