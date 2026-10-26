@@ -1248,3 +1248,36 @@ retained. An initial missing upload directory caused a pre-extraction Python
 failure; the corrected successor had the script present, then extracted once.
 The derived-error extraction is being narrowed separately. Empty translations
 are explicitly rejected as closure evidence. No root premise is discharged.
+
+## Current wire error source and installed body continuation (12805–12809)
+
+`ProverRwSuccessErrorSource` copies the newly emitted actual derived Error.eq,
+including ActivePole. The enum constructor list is checked identical to Full.
+`ProverRwSuccessErrorInstall.exact` proves exact Boolean equality for every
+constructor and payload; no success/value premise is supplied. The five scalar
+payload branches are symbolic; the twelve-constructor control is finite.
+12807 omitted lift simplification and failed; changed12808 passes. No failed
+source+dependency input was repeated. `error-next.py --check` pins the copy.
+
+`ProverRwBodyHeapData` and `ProverRwBodyErrorData` install heap81 and error256
+through the real per-attempt caller with checked reservation/returned store.
+The remaining proof/audit data equation is explicit and UNPROVED. Interpretation
+coverage is105/262 retained-source entries,111 including the six logical ports;
+41 source references remain (35 unselected by the logical candidate). Partial255
+stays excluded. Root/headline premises removed0; target not yet established.
+
+Fresh Error extraction required both the resolver's leading trait-impl root
+and the declaration-ordering namespace root, plus transparent module subitems.
+All unsuccessful scopes are retained: path resolution failures, three empty
+translations and one external-callback-only translation are not accepted.
+No extractor/backend code or infrastructure was modified. The inherited prover
+backend was used for accepted source; the cleanup backend's earlier guard was
+not bypassed. The initial12806 generator preflight compared against an absent
+explicit discriminant definition in freshly attributed Types; corrected to the
+actual constructor block before the single12806 Lean launch. This was not a
+proof rerun. Evidence is in `success-next`; templates are unaccepted text only.
+
+New allocation use10/100Lean (8pass,2changed failures),0/15Kani. Existing stricter
+5G/7G/swap0/Tasks64/-M7000 unchanged. No resource failure, native release rebuild,
+full manifest, adoption or privacy claim. Generic WideExact source extraction
+is in progress; its initial module-only empty translation is rejected.
