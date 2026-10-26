@@ -15,8 +15,8 @@ theorem op33_empty (ops : ExternalFuns) {T : Type} (A : Type) (v : alloc.vec.Vec
     ∃ tail, (selected ops).op33 A v = .ok (none,tail) ∧ tail.val = [] := by
   obtain ⟨tail, reply, value⟩ := op33_installed ops A v
   refine ⟨tail, ?_, ?_⟩
-  · simpa only [h,List.getLast?_nil] using reply
-  · simpa only [h,List.dropLast_nil] using value
+  · simpa [h] using reply
+  · simpa [h] using value
 #print axioms op33_installed
 #print axioms op33_empty
 end R1Z.PV_CB_Pop
