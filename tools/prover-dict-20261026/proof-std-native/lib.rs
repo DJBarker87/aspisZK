@@ -1,4 +1,4 @@
-#![cfg_attr(kani,feature(formatting_options))]
+#![cfg_attr(kani,feature(formatting_options,io_error_more,io_error_inprogress,io_error_uncategorized))]
 #[cfg(kani)]
 #[kani::proof]
 fn formatter_direct_sink_error_and_frame() {
@@ -112,26 +112,119 @@ fn file_descriptor_owner_codec_roundtrip() {
 }
 
 #[cfg(kani)]
-mod file_drop_transport {
+mod file_close_link_transport {
     use std::sync::atomic::{AtomicI32,AtomicUsize,Ordering};
     use std::os::fd::FromRawFd;
     static CALLS:AtomicUsize=AtomicUsize::new(0);
     static FD:AtomicI32=AtomicI32::new(-1);
-    unsafe extern "C" { #[link_name="close"] fn close_symbol(fd:i32)->i32; }
-    unsafe extern "C" fn observed_close(fd:i32)->i32 {
+    // Bind the actual C ABI close symbol. The destructor itself is untouched;
+    // only the OS primitive has nondeterministic replies and an observed call.
+    #[unsafe(no_mangle)]
+    #[inline(never)]
+    pub unsafe extern "C" fn close(fd:i32)->i32 {
         FD.store(fd,Ordering::SeqCst);
         CALLS.fetch_add(1,Ordering::SeqCst);
-        0
+        kani::any()
     }
     #[kani::proof]
-    #[kani::stub(close_symbol,observed_close)]
-    fn file_drop_one_close() {
+    fn file_drop_one_close_cffi_rooted() {
         let fd:i32=kani::any();kani::assume(fd>=0);
+        // Root the exported primitive body in MIR reachability before using
+        // the foreign ABI name; reset and check its trace before real Drop.
+        CALLS.store(0,Ordering::SeqCst);
+        let _=unsafe {close(-9)};
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==-9);
         CALLS.store(0,Ordering::SeqCst);
         FD.store(-1,Ordering::SeqCst);
         let file=unsafe {std::fs::File::from_raw_fd(fd)};
+        let before:u64=kani::any();
+        let after:u64=kani::any();
+        let frame=(before,after);
         drop(file);
+        assert!(frame==(before,after));
         assert!(CALLS.load(Ordering::SeqCst)==1);
         assert!(FD.load(Ordering::SeqCst)==fd);
+    }
+    #[kani::proof]
+    fn file_codec_flush_and_drop_complete_lifetime() {
+        use std::io::Write;
+        use std::os::fd::{AsRawFd,IntoRawFd};
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        CALLS.store(0,Ordering::SeqCst);
+        let _=unsafe {close(-9)};
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        CALLS.store(0,Ordering::SeqCst);
+        FD.store(-1,Ordering::SeqCst);
+        let original=unsafe {std::fs::File::from_raw_fd(fd)};
+        assert!(original.as_raw_fd()==fd);
+        assert!(CALLS.load(Ordering::SeqCst)==0);
+        let encoded=original.into_raw_fd();
+        assert!(encoded==fd);
+        assert!(CALLS.load(Ordering::SeqCst)==0);
+        let mut decoded=unsafe {std::fs::File::from_raw_fd(encoded)};
+        assert!(Write::flush(&mut decoded).is_ok());
+        assert!(decoded.as_raw_fd()==fd);
+        assert!(CALLS.load(Ordering::SeqCst)==0);
+        drop(decoded);
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==fd);
+    }
+
+}
+
+#[cfg(kani)]
+mod io_os_kind_scalar {
+    use std::io::{Error,ErrorKind};
+    fn expected(code:i32)->ErrorKind {
+        match code {
+            7=>ErrorKind::ArgumentListTooLong,
+            98=>ErrorKind::AddrInUse,
+            99=>ErrorKind::AddrNotAvailable,
+            16=>ErrorKind::ResourceBusy,
+            103=>ErrorKind::ConnectionAborted,
+            111=>ErrorKind::ConnectionRefused,
+            104=>ErrorKind::ConnectionReset,
+            35=>ErrorKind::Deadlock,
+            122=>ErrorKind::QuotaExceeded,
+            17=>ErrorKind::AlreadyExists,
+            27=>ErrorKind::FileTooLarge,
+            113=>ErrorKind::HostUnreachable,
+            4=>ErrorKind::Interrupted,
+            22=>ErrorKind::InvalidInput,
+            21=>ErrorKind::IsADirectory,
+            40=>ErrorKind::FilesystemLoop,
+            2=>ErrorKind::NotFound,
+            12=>ErrorKind::OutOfMemory,
+            28=>ErrorKind::StorageFull,
+            38=>ErrorKind::Unsupported,
+            31=>ErrorKind::TooManyLinks,
+            36=>ErrorKind::InvalidFilename,
+            100=>ErrorKind::NetworkDown,
+            101=>ErrorKind::NetworkUnreachable,
+            107=>ErrorKind::NotConnected,
+            20=>ErrorKind::NotADirectory,
+            39=>ErrorKind::DirectoryNotEmpty,
+            32=>ErrorKind::BrokenPipe,
+            30=>ErrorKind::ReadOnlyFilesystem,
+            29=>ErrorKind::NotSeekable,
+            116=>ErrorKind::StaleNetworkFileHandle,
+            110=>ErrorKind::TimedOut,
+            26=>ErrorKind::ExecutableFileBusy,
+            18=>ErrorKind::CrossesDevices,
+            115=>ErrorKind::InProgress,
+            95=>ErrorKind::Unsupported,
+            13 | 1=>ErrorKind::PermissionDenied,
+            11=>ErrorKind::WouldBlock,
+            _=>ErrorKind::Uncategorized,
+        }
+    }
+    #[kani::proof]
+    fn every_os_error_code_kind_and_payload() {
+        let code:i32=kani::any();
+        let error=Error::from_raw_os_error(code);
+        assert!(error.raw_os_error()==Some(code));
+        assert!(error.kind()==expected(code));
+        assert!(error.get_ref().is_none());
     }
 }
