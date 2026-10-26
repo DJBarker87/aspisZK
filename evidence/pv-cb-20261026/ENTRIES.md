@@ -171,3 +171,14 @@ Neither failed audit is accepted. All final printed axioms are standard.
 22826 was refused by the unchanged-source guard (exit67), before Lean ran.
 The intended edit had failed locally with a Python syntax error; corrected
 source is sent as22827. No guard or launcher changed; refusal counts zero Lean.
+
+## Composed codec/clone laws
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|51|V195|SKIPPED(sibling source); preserved in union|PV_CB_CodecComposition.wide;22828|
+|71|V197|INSTALLED source preserved in union|PV_CB_CodecComposition.parse;22828|
+|72|V198|INSTALLED source preserved in union|PV_CB_CodecComposition.write;22828|
+|77|V199|INSTALLED ordered clone; first failure preserved|PV_CB_CodecComposition.clone/clone_fail_first;22828|
+
+All audits standard; full ledger rows/endpoint removed remains0.
