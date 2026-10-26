@@ -2462,3 +2462,148 @@ Tags identify covering jobs only; none imports closure from a concurrent branch.
 **Release gates:** L187 remains `UNCOVERED`: coherent frozen dependency replay. L188 remains `UNCOVERED`: final release-wide trust/axiom audit. The focused Rc6 standard-axiom check discharges neither release gate. L186 source lowering to the frozen default/devnet/Pool artifacts also remains.
 
 Validation: 100/100 Lean compile attempts (8 proof modules and 92 focused inventories), 0/10 Kani, no package replay. Per-attempt exact target, command, exit, wall time, peak RSS, swap, source revision/hash, dependency fingerprints and axioms are retained under `evidence/recount6-20261026/`. All new top theorems have `#print axioms` using only `propext`, `Classical.choice`, `Quot.sound`. One 6G/8G/Swap0/Tasks64 scope at a time, Lean `-M7000`; no cap increases or timeout/memory-kill reruns. The cache inventory pins 1,726 selected modules; two inherited comment-only source variants are recorded separately. This is focused cache composition, not a fresh frozen-release replay. No shipped file or cfg(kani) harness changed, so the ELF rebuild trigger did not fire.
+
+## Recount on Rc7_Top.deployed — 2026-10-26
+
+**S2 OPEN; target not yet established.** This section supersedes the Rc6 running totals. Exact kernel statements, expanded-field inventories, row diff, resource/axiom receipts and cache pins: `evidence/recount7-20261026/`. Earlier sections above are byte-identical.
+
+`AspisR1.Rc7_Top.deployed` composes the Rc6 accepted pair with the P2P exact native-origin binding alternative and the canonicality-free FGl frozen3 headline on one dictionary. The source factory supplies one f/s, one TX1 run and TX2 witness, one saved checkpoint, one physical history, and their parser/P6/caller continuation. The F3X account recorder selector is fixed to P2P_NativeSelection on these native entries before H. P2Prime and the global raw join share the literal Q+2965 recorded event already charged once by FGl_Bound. No extra account summand or source/account equality premise is introduced.
+
+**Statement changes:** Rc6 raw canonicalJoin.verifier, independent account prefixBound/choiceBound and P2Prime guards are absent; the source cost and exact log/result conclusions become collision-aware. Twelve global finish families are retained in FGl_PreparedAt.Owners, distinct from the twelve native-local families. The frozen3 runtime binding, native acceptances and named runtime trust are unchanged. Complete checked before/after statements are Rc7_BEFORE.lean.txt and Rc7_AFTER.lean.txt. Rc7_Install.headline/native prove dictionary compatibility; Rc7_Reverse.same_witnesses recovers the Rc6 native result in clean worlds without changing existential witnesses. An unconditional implication to the old raw/exact-cost headline is not claimed.
+
+### Mechanical totals
+
+The eleven game clauses Rc5_G001–011 and native acceptance observations L083/L084 are **class G**, owner-approved experiment definitions, not implementation proofs. Citation: [Security Contract, Owner-approved amendment 2026-10-26](../docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26), two-transaction game (a)–(d), and binding owner recount instruction 2026-10-26. RuntimePersistence remains T. Reclassification removes no logical hypothesis.
+
+| Scope | T | P | G | C |
+|---|---:|---:|---:|---:|
+| actual antecedent | 83 | 26 | 13 | 0 |
+| deployment only | 6 | 5 | 0 | 0 |
+| deployment alias | 0 | 1 | 0 | 0 |
+| all retained audit rows | 89 | 32 | 13 | 0 |
+| deduplicated actual plus non-alias deployment | 89 | 31 | 13 | 0 |
+
+| Scope / owner | T | P | G | C |
+|---|---:|---:|---:|---:|
+| actual antecedent / lead | 0 | 1 | 13 | 0 |
+| actual antecedent / session A | 0 | 24 | 0 | 0 |
+| actual antecedent / external | 83 | 1 | 0 | 0 |
+| deployment only / lead | 0 | 4 | 0 | 0 |
+| deployment only / session A | 0 | 1 | 0 | 0 |
+| deployment only / external | 6 | 0 | 0 | 0 |
+| deployment alias / lead | 0 | 1 | 0 | 0 |
+| deployment alias / session A | 0 | 0 | 0 | 0 |
+| deployment alias / external | 0 | 0 | 0 | 0 |
+| deduplicated actual plus non-alias deployment / lead | 0 | 5 | 13 | 0 |
+| deduplicated actual plus non-alias deployment / session A | 0 | 25 | 0 | 0 |
+| deduplicated actual plus non-alias deployment / external | 89 | 1 | 0 | 0 |
+
+On the same G classification, Rc6 actual 83T/19P/13G becomes **83T/26P/13G** (+7P): five old families removed, twelve global families added. Deduplicated Rc6 89T/27P/13G becomes **89T/31P/13G** (+4P): the actual +7P plus three deployment retirements. Historical Rc6 totals counted all thirteen G rows as P (83T/32P actual; 89T/40P deduplicated). No T/C row, trust item or security constant is added. Counts are obligations, not security percentages.
+
+### Exact row diff against Rc6
+
+| ID | Change | Evidence / reason |
+|---|---|---|
+| L083 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| L084 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| L097 | removed | P2P_Release.remove on the same F3X account/selector; byte proof binding OR single charged event |
+| L098 | removed | P2P_Release.remove on the same F3X account/selector; byte public binding OR same event |
+| L157 | removed | FGl_Join.accepted_raw_join_or_collision / FGl_Bound.bound; supplied raw canonicality replaced by charged complete log/result equality |
+| N117 | removed | Independent account adversary eliminated: F3X_Account is constructed from the headline byte prover; F3Y_AccountMass.budget derives its reads |
+| N118 | removed | Independent chooseSecond eliminated with arbitrary account adversary; no unproved source/account coupling guard added |
+| L165 | removed | Derived packet on the SAME native cuts supplies physical/stored bytes, full parseReached, Aligned, query/data decoding and SessionAPrepare. Header-only to full parser/semantic-transcript source association is closed. Global finish arithmetic remains separately counted. |
+| L179 | removed | Native P6 concrete std/source/Result/frame/ownership/cleanup certificate for NP6_StdModel.calls, already the selected Rc5/Rc6/Rc7 dictionary. Retained extraction/runtime/SDK/Allocator hypotheses are unchanged. |
+| L182 | removed | Alias of removed raw L157; retired with zero additional deduplicated credit |
+| L186 | removed | lowering2 reproduces all three frozen ELFs and validates exact source/order correspondence; retained P7, no widened trust. |
+| Rc5_G001 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G002 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G003 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G004 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G005 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G006 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G007 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G008 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G009 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G010 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| Rc5_G011 | P to G | docs/research/100bit-spend-path-20261013/design/SECURITY-CONTRACT-20261021.md#owner-approved-amendment-2026-10-26 (items 1–3; especially two-transaction game a–d), owner instruction 2026-10-26: eleven game clauses and L083/L084 are class G |
+| F3Y_G_L133 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L134 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L135 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L136 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L137 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L138 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L142 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L143 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L144 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L145 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L146 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+| F3Y_G_L147 | added global family | FGl global world/submission/Evidence quantifiers differ from native-local continuation. No bundling/dedup discount. |
+
+Global canonicality F3Y_G_L148 is absent, already discharged by FGl_FinishProof.strengthen/SAF_AcceptedValue.value; zero duplicate credit. L099/L195–199 were already closed by Rc6. L129–132/N108–114 were already absent before Rc6; zero duplicate credit. L174/L177 were already absent; only L179 is newly retired here from NP6 concrete source/Result/frame/ownership evidence. L186 is an artifact evidence gate, not a newly proved Lean implementation theorem. Its retained P7 qualification is explicit. L165 is closed by PFin_Packet.from_cut as composed by P2P_R6Result.strengthen.
+
+L181 remains for complete rejected-prefix/source/runtime experiment transport. FGl_Join.accepted_raw_join_or_collision supplies complete accepted-source ordered log/result equality OR the charged event, not arbitrary rejected native/runtime prefix association. L176 remains S6 native decoded/public transport. L187 final coherent frozen replay and L188 release-wide trust/axiom audit remain open. The old raw L182 alias retires with L157 and gives no additional deduplicated credit; L185 still aliases L159.
+
+### Every remaining P row and covering job
+
+Covering-job tags are assignments, not closure evidence from concurrent branches. FIn_ covers both native-local and global finish domains. SCE_ covers L159; BEf_ L166; JFw_ the joint fixture. No concurrent branch/worktree was modified or imported as a proved discharge.
+
+| ID | Owner | Scope | Covering job | Family |
+|---|---|---|---|---|
+| L133 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round0.boundary |
+| L134 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round0.quarter |
+| L135 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round0.eval |
+| L136 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round1.boundary |
+| L137 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round1.quarter |
+| L138 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.round1.eval |
+| L142 | session A | actual antecedent | FIn_ | pairing_S3_S5_S9.pair |
+| L143 | session A | actual antecedent | FIn_ | matches_S4_S7 |
+| L144 | session A | actual antecedent | FIn_ | semantic_S3_S9.EquationEndpoint.initial |
+| L145 | session A | actual antecedent | FIn_ | semantic_S3_S9.EquationEndpoint.chain |
+| L146 | session A | actual antecedent | FIn_ | semantic_S3_S9.EquationEndpoint.terminal |
+| L147 | session A | actual antecedent | FIn_ | dot_S5 |
+| L154 | external | actual antecedent | UNCOVERED | hqueries |
+| L159 | lead | actual antecedent | SCE_ | frozen3 StoredCarrierBinding |
+| L166 | lead | deployment only | BEf_ | batch source Result/effects |
+| L176 | session A | deployment only | UNCOVERED | S6 native decoded/public transport |
+| L181 | lead | deployment only | UNCOVERED | oracle model order |
+| L185 | lead | deployment alias | SCE_ | deployed stored experiment |
+| L187 | lead | deployment only | UNCOVERED | coherent frozen replay |
+| L188 | lead | deployment only | UNCOVERED | final axioms/trust audit |
+| F3Y_G_L133 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round0.boundary |
+| F3Y_G_L134 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round0.quarter |
+| F3Y_G_L135 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round0.eval |
+| F3Y_G_L136 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round1.boundary |
+| F3Y_G_L137 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round1.quarter |
+| F3Y_G_L138 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.round1.eval |
+| F3Y_G_L142 | session A | actual antecedent | FIn_ | finishOwners.source_global.pairing_S3_S5_S9.pair |
+| F3Y_G_L143 | session A | actual antecedent | FIn_ | finishOwners.source_global.matches_S4_S7 |
+| F3Y_G_L144 | session A | actual antecedent | FIn_ | finishOwners.source_global.semantic_S3_S9.EquationEndpoint.initial |
+| F3Y_G_L145 | session A | actual antecedent | FIn_ | finishOwners.source_global.semantic_S3_S9.EquationEndpoint.chain |
+| F3Y_G_L146 | session A | actual antecedent | FIn_ | finishOwners.source_global.semantic_S3_S9.EquationEndpoint.terminal |
+| F3Y_G_L147 | session A | actual antecedent | FIn_ | finishOwners.source_global.dot_S5 |
+
+### Class G experiment definitions, separately listed
+
+| ID | Clause | Fixture job |
+|---|---|---|
+| L083 | accepted1 | JFw_ |
+| L084 | accepted2 | JFw_ |
+| Rc5_G001 | game.a.consecutive | JFw_ |
+| Rc5_G002 | game.a.entry1 | JFw_ |
+| Rc5_G003 | game.a.entry2 | JFw_ |
+| Rc5_G004 | game.b.bankKey | JFw_ |
+| Rc5_G005 | game.b.publicKey | JFw_ |
+| Rc5_G006 | game.b.noOtherTransaction | JFw_ |
+| Rc5_G007 | game.c.parent | JFw_ |
+| Rc5_G008 | game.d.copy | JFw_ |
+| Rc5_G009 | game.d.actions | JFw_ |
+| Rc5_G010 | game.d.writerTrace | JFw_ |
+| Rc5_G011 | game.d.readerTrace | JFw_ |
+
+### Non-vacuity, validation and release scope
+
+Rc7_Nonvacuity.composed applies the actual top with a constant byte prover and a constructed runtime whose StoredCarrierBinding is proved. On the same native cuts and retained snapshot identities it yields source/runtime acceptance and the strict zero-query margin. Rc7_Clean.exists_world proves the collision alternative is not universal; Rc7_AcceptedInput.accepted_input excludes an always-rejecting driver in the clean branch. These are conditional non-vacuity results; joint inhabitation of all release premises remains JFw_.
+
+Budget exhausted: **60/60 Lean attempts, 0/0 Kani**; eight proof modules plus 52 fresh focused kernel inventories; no package replay. All attempts exit0, all new top theorem audits use subsets of [propext, Classical.choice, Quot.sound]. One capped scope at a time, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64, Lean -j1 -M7000 -DElab.async=false. No raised cap, timeout/memory kill or unchanged replay. Exact command/target/source revision/hash/dependencies/exit/wall/RSS/swap/cgroup/axioms appear in every receipt. Total measured Lean wall 200.146541s; peak RSS 5489328KiB; swap0. Focused cached composition is not a final frozen dependency replay.
+
+No shipped file or cfg(kani) harness changed, so no new ELF rebuild was triggered. Lowering2 evidence reproduces default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4, devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299 and Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. Rc7 rechecks evidence, not builds. The NP6 historical checker hits its old ledger hash; Rc7 independently compares all other source pins,18 theorem source snapshots and61 receipts. The mismatch and scope correction for two regenerated Low2 JSONs are recorded in Rc7_inherited_evidence.json; original foreign bytes restored. Stage commits local only; no push.
