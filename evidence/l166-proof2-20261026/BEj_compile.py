@@ -1,10 +1,14 @@
 """BEj task orchestration; invokes unchanged host admission and Lean launcher."""
 from pathlib import Path
-import json,subprocess,sys,time,shlex
+import json,subprocess,sys,time,shlex,hashlib
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
-n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and mod.startswith('BEj_')
+n=int(sys.argv[1]); mod=sys.argv[2]; dependency='--dependency' in sys.argv[3:]
+assert 1<=n<=150 and (mod.startswith('BEj_') or dependency)
+source=R/'lean'/(mod+'.lean')
+if not source.exists():source=R/'docs/research/100bit-spend-path-20261013/lean'/(mod+'.lean')
+assert source.exists()
 a=f'BEj_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/l166-scope-20261026/BEh_001.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused BEj operational proof; no arithmetic aggregation')
@@ -24,7 +28,15 @@ for retry in range(11):
  if (not exists or 'FileNotFoundError' in sshout.stdout) and retry==0:
   retries.append(dict(wait_seconds=30,reason='transient missing receipt/vanished cgroup'));time.sleep(30);continue
  print(sshout.stdout+sshout.stderr);sys.exit(r.returncode or 1)
-subprocess.run(['scp','-q',str(R/'lean'/(mod+'.lean')),str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
+if dependency:
+ check=ssh(f'test ! -f {B}/{mod}.lean || sha256sum {B}/{mod}.lean',capture_output=True,text=True)
+ if check.stdout.strip():
+  assert check.stdout.split()[0]==hashlib.sha256(source.read_bytes()).hexdigest(), 'Dependency host source differs; refusing overwrite'
+  subprocess.run(['scp','-q',str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
+ else:
+  subprocess.run(['scp','-q',str(source),str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
+else:
+ subprocess.run(['scp','-q',str(source),str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json',capture_output=True,text=True)
 (P/(a+'-launch.log')).write_text(r.stdout+r.stderr); print(r.stdout+r.stderr)
 subprocess.run(['scp','-qr',HOST+':'+B+'/'+a,str(P)],check=True)

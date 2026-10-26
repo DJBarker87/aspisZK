@@ -1,0 +1,236 @@
+import PublicPrimitiveDecoderWork
+
+/-! Complete public parser work schedule. Option failure preserves the work
+of the executed prefix. Every cursor primitive has a bound on arbitrary
+input; trailing garbage is rejected by a single constructor test. -/
+set_option autoImplicit false
+namespace AspisR1.PublicParserWork
+open PublicPrimitiveDecoderWork
+open SemanticPublicWire (Common Wire Digest M31)
+abbrev Result (A : Type) := Option A × Nat
+
+def pure {A : Type} (a : A) : Result A := (some a, 1)
+def bind {A B : Type} (x : Result A) (f : A → Result B) : Result B :=
+  match x.1 with
+  | none => (none, x.2 + 1)
+  | some a => let y := f a; (y.1, x.2 + y.2 + 1)
+
+theorem bind_value {A B : Type} (x : Result A) (f : A → Result B) :
+    (bind x f).1 = x.1.bind (fun a => (f a).1) := by
+  cases x with | mk o n => cases o <;> rfl
+
+theorem bind_work {A B : Type} (x : Result A) (f : A → Result B)
+    (a b : Nat) (hx : x.2 ≤ a) (hf : ∀ v, (f v).2 ≤ b) :
+    (bind x f).2 ≤ a+b+1 := by
+  cases h : x.1 with
+  | none => simp only [bind, h]; omega
+  | some v => have hv := hf v; simp only [bind, h]; omega
+
+def expect (tag : Byte) (xs : List Byte) : Result (List Byte) :=
+  (SemanticPublicWire.expect tag xs, 2)
+
+def readDigest := PublicPrimitiveDecoderWork.read 32 digest
+ def readField := PublicPrimitiveDecoderWork.read 4 field
+ def readIndex := PublicPrimitiveDecoderWork.read 8 index
+ def readFrontier := PublicPrimitiveDecoderWork.read 640 frontier
+
+theorem readDigest_value (xs : List Byte) :
+    (readDigest xs).1 = SemanticPublicWire.readDigest xs := by
+  simp only [readDigest, read_value, digest_value, SemanticPublicWire.readDigest]
+theorem readField_value (xs : List Byte) :
+    (readField xs).1 = SemanticPublicWire.readField xs := by
+  simp only [readField, read_value, field_value, SemanticPublicWire.readField]
+
+theorem readIndex_value (xs : List Byte) :
+    (readIndex xs).1 = SemanticPublicWire.readIndex xs := by
+  simp only [readIndex, read_value, index_value, SemanticPublicWire.readIndex]
+theorem readFrontier_value (xs : List Byte) :
+    (readFrontier xs).1 = SemanticPublicWire.readFrontier xs := by
+  simp only [readFrontier, read_value, frontier_value, SemanticPublicWire.readFrontier]
+
+theorem readDigest_work (xs : List Byte) : (readDigest xs).2 ≤ 2325 :=
+  read_work 32 2225 digest (fun bs _ => digest_work bs) xs
+theorem readField_work (xs : List Byte) : (readField xs).2 ≤ 277 :=
+  read_work 4 261 field field_work xs
+theorem readIndex_work (xs : List Byte) : (readIndex xs).2 ≤ 1061 :=
+  read_work 8 1033 index index_work xs
+theorem readFrontier_work (xs : List Byte) : (readFrontier xs).2 ≤ 48445 :=
+  read_work 640 46521 frontier (fun bs _ => frontier_work bs) xs
+
+def decodeAfter (anchor nullifier : Digest) (asset : M31) (change : Digest)
+    (xs : List Byte) : Result Common :=
+  bind (readIndex xs) fun (index, rest) =>
+  bind (readFrontier rest) fun (snapshot, rest) =>
+  bind (readDigest rest) fun (root, rest) =>
+  bind (readFrontier rest) fun (nextFrontier, rest) =>
+  (if rest.isEmpty then some ⟨anchor, nullifier, asset, change, index, snapshot, root, nextFrontier⟩
+    else none, 2)
+
+theorem decodeAfter_value (a n : Digest) (asset : M31) (c : Digest) (xs : List Byte) :
+    (decodeAfter a n asset c xs).1 = SemanticPublicWire.decodeAfter a n asset c xs := by
+  simp only [decodeAfter, bind_value, readIndex_value, readFrontier_value,
+    readDigest_value, SemanticPublicWire.decodeAfter]
+  rfl
+
+theorem decodeAfter_work (a n : Digest) (asset : M31) (c : Digest) (xs : List Byte) :
+    (decodeAfter a n asset c xs).2 ≤ 100282 := by
+  apply bind_work _ _ 1061 99220 (readIndex_work xs)
+  intro ⟨idx, rest⟩
+  apply bind_work _ _ 48445 50774 (readFrontier_work rest)
+  intro ⟨snap, rest⟩
+  apply bind_work _ _ 2325 48448 (readDigest_work rest)
+  intro ⟨root, rest⟩
+  apply bind_work _ _ 48445 2 (readFrontier_work rest)
+  intro ⟨fr, rest⟩
+  exact Nat.le_refl _
+
+ def decodeTransfer (xs : List Byte) : Result Wire :=
+  bind (readDigest xs) fun (anchor, rest) =>
+  bind (readDigest rest) fun (nullifier, rest) =>
+  bind (readField rest) fun (asset, rest) =>
+  bind (expect 1 rest) fun rest =>
+  bind (readDigest rest) fun (recipient, rest) =>
+  bind (readDigest rest) fun (change, rest) =>
+  bind (expect 0 rest) fun rest =>
+  bind (decodeAfter anchor nullifier asset change rest) fun c => pure (.transfer c recipient)
+
+ def decodeWithdrawal (xs : List Byte) : Result Wire :=
+  bind (readDigest xs) fun (anchor, rest) =>
+  bind (readDigest rest) fun (nullifier, rest) =>
+  bind (readField rest) fun (asset, rest) =>
+  bind (expect 0 rest) fun rest =>
+  bind (readDigest rest) fun (change, rest) =>
+  bind (expect 1 rest) fun rest =>
+  bind (readField rest) fun (amount, rest) =>
+  bind (decodeAfter anchor nullifier asset change rest) fun c => pure (.withdrawal c amount)
+
+theorem decodeTransfer_value (xs : List Byte) :
+    (decodeTransfer xs).1 = SemanticPublicWire.decodeTransfer xs := by
+  simp only [decodeTransfer, bind_value, readDigest_value, readField_value,
+    expect, decodeAfter_value, pure, SemanticPublicWire.decodeTransfer]
+  rfl
+
+theorem decodeWithdrawal_value (xs : List Byte) :
+    (decodeWithdrawal xs).1 = SemanticPublicWire.decodeWithdrawal xs := by
+  simp only [decodeWithdrawal, bind_value, readDigest_value, readField_value,
+    expect, decodeAfter_value, pure, SemanticPublicWire.decodeWithdrawal]
+  rfl
+
+theorem decodeTransfer_work (xs : List Byte) : (decodeTransfer xs).2 ≤ 110000 := by
+  calc
+    _ ≤ 2325+(2325+(277+(2+(2325+(2325+(2+(100282+(1)+1)+1)+1)+1)+1)+1)+1)+1 := by
+      apply bind_work _ _ 2325 107546 (readDigest_work xs)
+      intro ⟨anchor, rest⟩
+      dsimp only
+      apply bind_work _ _ 2325 105220 (readDigest_work rest)
+      intro ⟨nullifier, rest⟩
+      dsimp only
+      apply bind_work _ _ 277 104942 (readField_work rest)
+      intro ⟨asset, rest⟩
+      dsimp only
+      apply bind_work _ _ 2 104939 (Nat.le_refl _)
+      intro rest
+      apply bind_work _ _ 2325 102613 (readDigest_work rest)
+      intro ⟨recipient, rest⟩
+      dsimp only
+      apply bind_work _ _ 2325 100287 (readDigest_work rest)
+      intro ⟨change, rest⟩
+      dsimp only
+      apply bind_work _ _ 2 100284 (Nat.le_refl _)
+      intro rest
+      apply bind_work _ _ 100282 1 (decodeAfter_work _ _ _ _ _)
+      intro c
+      exact Nat.le_refl _
+    _ ≤ _ := by omega
+
+theorem decodeWithdrawal_work (xs : List Byte) : (decodeWithdrawal xs).2 ≤ 110000 := by
+  calc
+    _ ≤ 2325+(2325+(277+(2+(2325+(2+(277+(100282+(1)+1)+1)+1)+1)+1)+1)+1)+1 := by
+      apply bind_work _ _ 2325 105498 (readDigest_work xs)
+      intro ⟨anchor, rest⟩
+      dsimp only
+      apply bind_work _ _ 2325 103172 (readDigest_work rest)
+      intro ⟨nullifier, rest⟩
+      dsimp only
+      apply bind_work _ _ 277 102894 (readField_work rest)
+      intro ⟨asset, rest⟩
+      dsimp only
+      apply bind_work _ _ 2 102891 (Nat.le_refl _)
+      intro rest
+      apply bind_work _ _ 2325 100565 (readDigest_work rest)
+      intro ⟨change, rest⟩
+      dsimp only
+      apply bind_work _ _ 2 100562 (Nat.le_refl _)
+      intro rest
+      apply bind_work _ _ 277 100284 (readField_work rest)
+      intro ⟨amount, rest⟩
+      dsimp only
+      apply bind_work _ _ 100282 1 (decodeAfter_work _ _ _ _ _)
+      intro c
+      exact Nat.le_refl _
+    _ ≤ _ := by omega
+
+def decode : List Byte → Result Wire
+  | [] => (none, 1)
+  | tag :: rest =>
+    if tag = 0 then let r := decodeTransfer rest; (r.1, r.2+2)
+    else if tag = 1 then let r := decodeWithdrawal rest; (r.1, r.2+3)
+    else (none, 3)
+
+theorem decode_value (xs : List Byte) : (decode xs).1 = SemanticPublicWire.decode xs := by
+  cases xs with
+  | nil => rfl
+  | cons tag rest =>
+    simp only [decode, SemanticPublicWire.decode]
+    split
+    · exact decodeTransfer_value rest
+    · split
+      · exact decodeWithdrawal_value rest
+      · rfl
+
+theorem decode_work (xs : List Byte) : (decode xs).2 ≤ 110003 := by
+  cases xs with
+  | nil => change 1 ≤ 110003; omega
+  | cons tag rest =>
+    have ht := decodeTransfer_work rest
+    have hw := decodeWithdrawal_work rest
+    simp only [decode]
+    split
+    · dsimp only; omega
+    · split <;> dsimp only <;> omega
+
+def parsePublic (xs : List Byte) : Result (R0P.Public M31) :=
+  bind (decode xs) fun wire =>
+    let pub := SemanticPublicWire.toPublic wire
+    (if PublicOptionShape.check pub then some pub else none, 256)
+
+theorem parsePublic_value (xs : List Byte) :
+    (parsePublic xs).1 = SemanticPublicWire.parsePublic xs := by
+  simp only [parsePublic, bind_value, decode_value, SemanticPublicWire.parsePublic]
+  rfl
+
+theorem parsePublic_work (xs : List Byte) : (parsePublic xs).2 ≤ 110260 := by
+  exact bind_work _ _ 110003 256 (decode_work xs) (fun _ => Nat.le_refl _)
+
+#print axioms decodeTransfer_work
+#print axioms decodeWithdrawal_work
+#print axioms decode_work
+#print axioms parsePublic_value
+#print axioms parsePublic_work
+
+#print axioms bind_value
+#print axioms bind_work
+#print axioms readDigest_value
+#print axioms readField_value
+#print axioms readIndex_value
+#print axioms readFrontier_value
+#print axioms readDigest_work
+#print axioms readField_work
+#print axioms readIndex_work
+#print axioms readFrontier_work
+#print axioms decodeAfter_value
+#print axioms decodeAfter_work
+#print axioms decodeTransfer_value
+#print axioms decodeWithdrawal_value
+#print axioms decode_value
+end AspisR1.PublicParserWork
