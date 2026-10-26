@@ -1,0 +1,36 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling poolw-cpi v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_cpi)
+error[E0432]: unresolved import `solana_program::native_loader`
+ --> PoolW_lib.rs:3:77
+  |
+3 |  entrypoint::ProgramResult, rent::Rent, system_program, system_instruction, native_loader, instruction::Instruction};
+  |                                                                             ^^^^^^^^^^^^^
+  |                                                                             |
+  |                                                                             no `native_loader` in the root
+  |                                                                             help: a similar name exists in the module: `native_token`
+
+warning: type `PoolW_Runtime` should have an upper camel case name
+ --> PoolW_harness.rs:1:8
+  |
+1 | struct PoolW_Runtime<'a> {
+  |        ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `PoolWRuntime`
+  |
+  = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> PoolW_lib.rs:3:41
+  |
+3 |  entrypoint::ProgramResult, rent::Rent, system_program, system_instruction, native_loader, instruction::Instruction};
+  |                                         ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: use of deprecated module `solana_program::system_instruction`: Use `solana_system_interface` crate instead
+ --> PoolW_lib.rs:3:57
+  |
+3 |  entrypoint::ProgramResult, rent::Rent, system_program, system_instruction, native_loader, instruction::Instruction};
+  |                                                         ^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `poolw-cpi` (lib) due to 1 previous error; 3 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.

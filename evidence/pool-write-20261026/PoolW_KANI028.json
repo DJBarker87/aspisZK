@@ -1,0 +1,45 @@
+{
+  "attempt": "PoolW_KANI028",
+  "kind": "kani",
+  "source_revision": "383ecab4cf9e34fc23789c0d29765c3c2ae62e0b",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_guard/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/Hir_kani_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolW_fresh_program_wrong_size",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolW_guard/Cargo.toml",
+    "PoolW_guard/PoolW_lib.rs",
+    "PoolW_guard/error.rs",
+    "PoolW_guard/PoolW_harness.rs",
+    "PoolW_SLICES.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual isolated native source; PoolW_fresh_program_wrong_size",
+    "replacement": "Split metadata/size/owner guards; tiny data-only borrow context replaces timed-out held192/384-byte relational frame, no large-frame claim"
+  },
+  "expected_time": "Optimized Kani compile then one bounded exact native/reference guard equivalence and frame check"
+}

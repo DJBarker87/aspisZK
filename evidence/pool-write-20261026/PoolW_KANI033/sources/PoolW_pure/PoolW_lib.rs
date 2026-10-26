@@ -1,0 +1,153 @@
+//! Native pure-source gates. No shipped-source modifications or stubs.
+#[cfg(kani)]
+mod PoolW_checks {
+    use aspis_statement::pool_v1::*;
+    use aspis_core::field::M31;
+    fn checkpoint() -> PoolV1PairForestCheckpointV1 {
+        PoolV1PairForestCheckpointV1 { bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),
+            checkpoint_sequence:kani::any(),global_root:core::array::from_fn(|_|M31(kani::any())),lane_sequences:kani::any() }
+    }
+    #[kani::proof]
+    #[kani::unwind(195)]
+    fn PoolW_encode_exact_bindings() {
+        let cp=checkpoint();
+        if let Ok(image)=encode_pool_v1_pair_forest_checkpoint_v1(&cp) {
+            assert!(image.len()==192);
+            assert!(image[0..4]==*b"ASC8");assert!(image[4]==2 && image[5]==8 && image[6]==1);
+            assert!(image[7]==cp.bump);
+            assert!(image[8..40]==cp.master);assert!(image[40..72]==cp.deployment_domain);
+            assert!(image[72..80]==cp.checkpoint_sequence.to_le_bytes());
+            assert!(image[176..192]==[0u8;16]);
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(195)]
+    fn PoolW_encode_decode_roundtrip() {
+        let cp=checkpoint();
+        if let Ok(image)=encode_pool_v1_pair_forest_checkpoint_v1(&cp) {
+            assert!(decode_pool_v1_pair_forest_checkpoint_v1(&image)==Ok(cp));
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(195)]
+    fn PoolW_decode_encode_canonical() {
+        let image:[u8;192]=kani::any();
+        if let Ok(cp)=decode_pool_v1_pair_forest_checkpoint_v1(&image) {
+            assert!(encode_pool_v1_pair_forest_checkpoint_v1(&cp)==Ok(image));
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(195)]
+    fn PoolW_encode_selected_sequence() {
+        let cp=checkpoint();let lane:usize=kani::any();kani::assume(lane<8);
+        if let Ok(image)=encode_pool_v1_pair_forest_checkpoint_v1(&cp) {
+            let start=112+8*lane;
+            assert!(image[start..start+8]==cp.lane_sequences[lane].to_le_bytes());
+        }
+    }
+
+    fn arbitrary_master() -> PoolV1PairForestMasterV1 {
+        PoolV1PairForestMasterV1 {
+            bump:kani::any(),identity:PoolIdentityV1 {pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:M31(kani::any()),deployment_domain:kani::any()},
+            verifier_policy:VerifierPolicyV1 {flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},
+            initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
+        }
+    }
+    fn arbitrary_lanes() -> [PoolV1PairForestLaneStateV1;8] {
+        core::array::from_fn(|_|PoolV1PairForestLaneStateV1 {
+            bump:kani::any(),master:kani::any(),lane_id:kani::any(),tree:IncrementalMerkleTreeV1 {
+                next_leaf_index:kani::any(),root:core::array::from_fn(|_|M31(kani::any())),
+                frontier:core::array::from_fn(|_|core::array::from_fn(|_|M31(kani::any())))
+            }
+        })
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_exact_output() {
+        let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
+        if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
+            assert!(plan.checkpoint.bump==bump && plan.checkpoint.master==m.identity.pool);
+            assert!(plan.checkpoint.deployment_domain==m.identity.deployment_domain);
+            assert!(plan.checkpoint.checkpoint_sequence==m.next_checkpoint_sequence && plan.checkpoint.global_root==root);
+            assert!(m.next_checkpoint_sequence<u64::MAX);
+            assert!(plan.next_master.next_checkpoint_sequence==m.next_checkpoint_sequence+1);
+            assert!(plan.next_master.has_checkpoint);
+            assert!(plan.next_master.identity==m.identity && plan.next_master.verifier_policy==m.verifier_policy);
+            assert!(plan.next_master.bump==m.bump && plan.next_master.initialized_lane_mask==m.initialized_lane_mask);
+            for i in 0..8 {
+                assert!(lanes[i].master==m.identity.pool && lanes[i].lane_id as usize==i);
+                assert!(plan.checkpoint.lane_sequences[i]==lanes[i].tree.next_leaf_index);
+                assert!(plan.next_master.last_checkpoint_lane_sequences[i]==lanes[i].tree.next_leaf_index);
+            }
+        }
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_chronology() {
+        let m=arbitrary_master();let lanes=arbitrary_lanes();let root=core::array::from_fn(|_|M31(kani::any()));let bump=kani::any();
+        if let Ok(plan)=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump) {
+            assert!(m.initialized_lane_mask==255);
+            let mut progressed=false;
+            for i in 0..8 {
+                assert!(plan.checkpoint.lane_sequences[i]<=POOL_V1_PAIR_CAPACITY);
+                if m.has_checkpoint {
+                    assert!(plan.checkpoint.lane_sequences[i]>=m.last_checkpoint_lane_sequences[i]);
+                    progressed|=plan.checkpoint.lane_sequences[i]>m.last_checkpoint_lane_sequences[i];
+                }
+            }
+            assert!(!m.has_checkpoint || progressed);
+        }
+    }
+
+    fn coherent() -> (PoolV1PairForestMasterV1,[PoolV1PairForestLaneStateV1;8],[M31;8],u8) {
+        let m=PoolV1PairForestMasterV1 {
+            bump:kani::any(),identity:PoolIdentityV1 {pool:[1;32],asset_mint:[2;32],token_program:[3;32],asset_id:M31(4),deployment_domain:[5;32]},
+            verifier_policy:VerifierPolicyV1 {flags:1,registry_program:[6;32],registry_authority:[0;32],policy_binding:[7;32]},
+            initialized_lane_mask:255,has_checkpoint:false,next_checkpoint_sequence:0,last_checkpoint_lane_sequences:[0;8]
+        };
+        let lanes=core::array::from_fn(|i| {
+            let next:u64=kani::any();kani::assume(next<=POOL_V1_PAIR_CAPACITY);
+            PoolV1PairForestLaneStateV1 {bump:kani::any(),master:m.identity.pool,lane_id:i as u8,
+                tree:IncrementalMerkleTreeV1 {next_leaf_index:next,root:[M31(0);8],frontier:[[M31(0);8];20]}}
+        });
+        let root=core::array::from_fn(|_|{let word:u32=kani::any();kani::assume(word<aspis_core::field::P);M31(word)});
+        (m,lanes,root,kani::any())
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_first_constructor() {
+        let (m,lanes,root,bump)=coherent();
+        let plan=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump).unwrap();
+        assert!(plan.checkpoint.master==m.identity.pool && plan.checkpoint.deployment_domain==m.identity.deployment_domain);
+        assert!(plan.checkpoint.bump==bump && plan.checkpoint.checkpoint_sequence==0 && plan.checkpoint.global_root==root);
+        assert!(plan.next_master.has_checkpoint && plan.next_master.next_checkpoint_sequence==1);
+        for i in 0..8 {assert!(plan.checkpoint.lane_sequences[i]==lanes[i].tree.next_leaf_index);assert!(plan.next_master.last_checkpoint_lane_sequences[i]==lanes[i].tree.next_leaf_index);}
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_repeat_chronology() {
+        let (mut m,lanes,root,bump)=coherent();m.has_checkpoint=true;m.next_checkpoint_sequence=kani::any();kani::assume(m.next_checkpoint_sequence>0);
+        m.last_checkpoint_lane_sequences=kani::any();
+        let mut decreased=false;let mut progressed=false;
+        for i in 0..8 {kani::assume(m.last_checkpoint_lane_sequences[i]<=POOL_V1_PAIR_CAPACITY);decreased|=lanes[i].tree.next_leaf_index<m.last_checkpoint_lane_sequences[i];progressed|=lanes[i].tree.next_leaf_index>m.last_checkpoint_lane_sequences[i];}
+        let result=plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump);
+        if decreased {assert!(result==Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased));}
+        else if !progressed {assert!(result==Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint));}
+        else if m.next_checkpoint_sequence==u64::MAX {assert!(result==Err(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow));}
+        else {let plan=result.unwrap();assert!(plan.checkpoint.checkpoint_sequence==m.next_checkpoint_sequence);assert!(plan.next_master.next_checkpoint_sequence==m.next_checkpoint_sequence+1);}
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_lane_guard() {
+        let (m,mut lanes,root,bump)=coherent();let selected:usize=kani::any();kani::assume(selected<8);let wrong_master:bool=kani::any();
+        if wrong_master {lanes[selected].master=[99;32];} else {lanes[selected].lane_id=8;}
+        let expected=if wrong_master {PoolV1PairForestAccountErrorV1::LaneMasterMismatch} else {PoolV1PairForestAccountErrorV1::LaneOrderMismatch};
+        assert!(plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump)==Err(expected));
+    }
+    #[kani::proof]
+    #[kani::unwind(80)]
+    fn PoolW_plan_mask_guard() {
+        let (mut m,lanes,root,bump)=coherent();m.initialized_lane_mask=kani::any();kani::assume(m.initialized_lane_mask!=255);
+        assert!(plan_pool_v1_pair_forest_checkpoint_v1(&m,&lanes,root,bump)==Err(PoolV1PairForestAccountErrorV1::InvalidMasterState));
+    }
+}

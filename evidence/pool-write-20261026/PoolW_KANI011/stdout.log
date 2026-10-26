@@ -1,0 +1,86 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling poolw-guard v0.1.0 (/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolW_guard)
+warning: use of deprecated module `solana_program::system_program`: Use `solana_sdk_ids::system_program` instead
+ --> PoolW_lib.rs:3:44
+  |
+3 |     entrypoint::ProgramResult, rent::Rent, system_program};
+  |                                            ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(deprecated)]` on by default
+
+warning: enum `FreshPdaPreparationV1` is never used
+ --> PoolW_lib.rs:7:17
+  |
+7 | pub(crate) enum FreshPdaPreparationV1 { CreateOrAllocateSystemOwned, ProgramOwnedZeroed }
+  |                 ^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `plan_fresh_program_pda` is never used
+  --> PoolW_lib.rs:41:15
+   |
+41 | pub(crate) fn plan_fresh_program_pda(
+   |               ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `PoolW_zero_reference` should have a snake case name
+ --> PoolW_harness.rs:1:4
+  |
+1 | fn PoolW_zero_reference(
+  |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_reference`
+  |
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `PoolW_zero_pair` should have a snake case name
+  --> PoolW_harness.rs:19:4
+   |
+19 | fn PoolW_zero_pair() {
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_pair`
+
+warning: function `PoolW_zero_borrow_conflict` should have a snake case name
+  --> PoolW_harness.rs:41:4
+   |
+41 | fn PoolW_zero_borrow_conflict() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_borrow_conflict`
+
+warning: function `PoolW_zero_metadata_precedes_borrow` should have a snake case name
+  --> PoolW_harness.rs:55:4
+   |
+55 | fn PoolW_zero_metadata_precedes_borrow() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_metadata_precedes_borrow`
+
+warning: function `PoolW_zero_wrong_size` should have a snake case name
+  --> PoolW_harness.rs:70:4
+   |
+70 | fn PoolW_zero_wrong_size() {
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_wrong_size`
+
+warning: function `PoolW_zero_all_zero_rent` should have a snake case name
+  --> PoolW_harness.rs:82:4
+   |
+82 | fn PoolW_zero_all_zero_rent() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_all_zero_rent`
+
+warning: function `PoolW_zero_occupied_marker` should have a snake case name
+  --> PoolW_harness.rs:95:4
+   |
+95 | fn PoolW_zero_occupied_marker() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `pool_w_zero_occupied_marker`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.35s
+Thread 1: Checking harness PoolW_zero_occupied_marker...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 595 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 24.290306s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
