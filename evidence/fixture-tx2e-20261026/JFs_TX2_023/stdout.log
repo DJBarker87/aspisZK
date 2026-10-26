@@ -1,0 +1,47 @@
+JFs_TX2_Iterator.lean:19:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑iter.iter.start < ↑iter.iter.end then ?m.94 else ?m.95
+in the target expression
+  WP.uncurry'
+    (fun opt it' =>
+      (if ↑iter.iter.start < ↑iter.iter.end then
+          opt = some iter.iter.start ∧ ↑it'.iter.start = min (↑iter.iter.start + ↑iter.step_by) ↑iter.iter.end
+        else opt = none ∧ it'.iter.start = iter.iter.start) ∧
+        it'.iter.end = iter.iter.end ∧ it'.step_by = iter.step_by)
+    (o, next)
+
+iter : Iter
+hstep : ↑iter.step_by = 4
+active : ↑iter.iter.start < ↑iter.iter.end
+o : Option (UScalar UScalarTy.Usize)
+next : core.iter.adapters.step_by.StepBy (core.ops.range.Range (UScalar UScalarTy.Usize))
+run :
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      iter =
+    ok (o, next)
+post :
+  WP.uncurry'
+    (fun opt it' =>
+      (if ↑iter.iter.start < ↑iter.iter.end then
+          opt = some iter.iter.start ∧ ↑it'.iter.start = min (↑iter.iter.start + ↑iter.step_by) ↑iter.iter.end
+        else opt = none ∧ it'.iter.start = iter.iter.start) ∧
+        it'.iter.end = iter.iter.end ∧ it'.step_by = iter.step_by)
+    (o, next)
+⊢ ∃ next,
+    core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          iter =
+        ok (some iter.iter.start, next) ∧
+      ↑next.iter.start = min (↑iter.iter.start + 4) ↑iter.iter.end ∧ next.iter.end = iter.iter.end ∧ ↑next.step_by = 4
+JFs_TX2_Iterator.lean:24:38: error: Application type mismatch: The argument
+  ↑iter.iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.4
+of sort `Type (?u.4 + 1)` in the application
+  @InitialSeg ↑iter.iter.end
+JFs_TX2_Iterator.lean:24:57: error(lean.unknownIdentifier): Unknown identifier `ter.iter.start.val`
+'AspisR1.JFs_TX2_Iterator.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Iterator.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Iterator.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Iterator.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Iterator.start' depends on axioms: [propext, Classical.choice, Quot.sound]

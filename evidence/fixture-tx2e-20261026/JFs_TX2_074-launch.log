@@ -1,0 +1,66 @@
+{"attempt": "JFs_TX2_074", "exit_status": 1, "wall_seconds": 2.6909350480418652, "peak_rss_kib": "5487964", "swaps": "0", "print_axioms": ["'AspisR1.JFs_TX2_PointCall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFs_TX2_PointCall.lean:18:57: error: unsolved goals
+u lo hi : Usize
+a b : U32 × U32
+mask : u &&& 511#usize = lo
+shift : u >>> 9#i32 = ok hi
+ra : fast_domain.TABLE_A.index_usize lo = ok a
+rb : fast_domain.TABLE_B.index_usize hi = ok b
+ca : ↑a.1 < 2147483647 ∧ ↑a.2 < 2147483647
+cb : ↑b.1 < 2147483647 ∧ ↑b.2 < 2147483647
+z : ExtractedCurrentCM31Mul.CM
+hm : { a := a.1, b := a.2 }.mul { a := b.1, b := b.2 } = ok z
+canon : ExtractedCurrentTowerAdd.CanonicalCM z
+vx :
+  ↑z.a =
+    ExtractedCurrentCM31Mul.realWord ↑{ a := a.1, b := a.2 }.a ↑{ a := a.1, b := a.2 }.b ↑{ a := b.1, b := b.2 }.a
+      ↑{ a := b.1, b := b.2 }.b
+vy :
+  ↑z.b =
+    ExtractedCurrentCM31Mul.imagWord ↑{ a := a.1, b := a.2 }.a ↑{
+...
+JFs_TX2_PointCall.lean:18:57: error: unsolved goals
+u lo hi : Usize
+a b : U32 × U32
+mask : u &&& 511#usize = lo
+shift : u >>> 9#i32 = ok hi
+ra : fast_domain.TABLE_A.index_usize lo = ok a
+rb : fast_domain.TABLE_B.index_usize hi = ok b
+ca : ↑a.1 < 2147483647 ∧ ↑a.2 < 2147483647
+cb : ↑b.1 < 2147483647 ∧ ↑b.2 < 2147483647
+z : ExtractedCurrentCM31Mul.CM
+hm : { a := a.1, b := a.2 }.mul { a := b.1, b := b.2 } = ok z
+canon : ExtractedCurrentTowerAdd.CanonicalCM z
+vx :
+  ↑z.a =
+    ExtractedCurrentCM31Mul.realWord ↑{ a := a.1, b := a.2 }.a ↑{ a := a.1, b := a.2 }.b ↑{ a := b.1, b := b.2 }.a
+      ↑{ a := b.1, b := b.2 }.b
+vy :
+  ↑z.b =
+    ExtractedCurrentCM31Mul.imagWord ↑{ a := a.1, b := a.2 }.a ↑{ a := a.1, b := a.2 }.b ↑{ a := b.1, b := b.2 }.a
+      ↑{ a := b.1, b := b.2 }.b
+⊢ (do
+      let left ←
+        let (i, i1) := a
+          ok { a := i, b := i1 }
+      let right ←
+        let (i, i1) := b
+          ok { a := i, b := i1 }
+      let point ←
+        do
+          let z ← { a := left.a, b := left.b }.mul { a := right.a, b := right.b }
+          ok { a := z.a, b := z.b }
+      ok { x := point.a, y := point.b }) =
+    ok { x := z.a, y := z.b }
+JFs_TX2_PointCall.lean:25:80: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [fast_domain.fibre_point, ̲domain.FibreIndex.get, ̲lift, ̲bind_tc_ok, ̲mask, ̲shift, ̲ra, ̲rb,
+      fast_domain.table_value, ̲R17CurrentCM31Semantics.operations,
+      R17CurrentCM31Semantics.toArithmetic, ̲R17CurrentCM31Semantics.fromArithmetic,̵h̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFs_TX2_PointCall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r11e7572c9f04463a9025e3784b963a03.scope; invocation ID: 330efc8e28ba46b1ae4023d1b1ca1866

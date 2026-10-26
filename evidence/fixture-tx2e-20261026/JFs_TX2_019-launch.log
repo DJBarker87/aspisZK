@@ -1,0 +1,50 @@
+{"attempt": "JFs_TX2_019", "exit_status": 1, "wall_seconds": 2.871099082985893, "peak_rss_kib": "5453740", "swaps": "0", "print_axioms": ["'AspisR1.JFs_TX2_FoldLane.shift' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_TX2_FoldLane.fold_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JFs_TX2_FoldLane.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFs_TX2_FoldLane.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑(U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)) ≤ R
+
+x : U64
+⊢ ↑(U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)) ≤ R
+JFs_TX2_FoldLane.lean:37:4: error: linarith failed to find a contradiction
+sums limbs : Std.Array U64 8#usize
+j : Usize
+x before : U64
+n : ℕ
+hn : n < 7
+hj : ↑j < 8
+hx : sums.index_usize j = ok x
+hb : limbs.index_usize j = ok before
+bound : ↑before ≤ n * 10737418238
+small : ↑(FIo_ReduceBounds.fold x) ≤ 10737418238
+a✝ : U64.max < ↑before + ↑(FIo_ReduceBounds.fold x)
+⊢ False
+failed
+'Asp
+...
+JFs_TX2_FoldLane.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(UScalar.wrapping_add ?x ?y)
+in the target expression
+  ↑(U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)) ≤ R
+
+x : U64
+⊢ ↑(U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)) ≤ R
+JFs_TX2_FoldLane.lean:37:4: error: linarith failed to find a contradiction
+sums limbs : Std.Array U64 8#usize
+j : Usize
+x before : U64
+n : ℕ
+hn : n < 7
+hj : ↑j < 8
+hx : sums.index_usize j = ok x
+hb : limbs.index_usize j = ok before
+bound : ↑before ≤ n * 10737418238
+small : ↑(FIo_ReduceBounds.fold x) ≤ 10737418238
+a✝ : U64.max < ↑before + ↑(FIo_ReduceBounds.fold x)
+⊢ False
+failed
+'AspisR1.JFs_TX2_FoldLane.shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_FoldLane.fold_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_FoldLane.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra331d7428b3547de975f16390a5274b5.scope; invocation ID: 075283a3d9bb4616a77e884cf73305f0

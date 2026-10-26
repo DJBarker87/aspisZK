@@ -1,0 +1,23 @@
+JFs_TX2_EbyKPush.lean:29:4: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+s : FIo_Native.fast_pairing.EbyKDot
+v : FIo_Install.NE
+q : FIo_Native.aspis_core.field.QM31
+hq : FIo_QMValues.Canon q
+count : ↑s.count < 4096
+a : Std.Array FIo_Native.aspis_core.field.M31 4#usize := pack v.c0.c0.a v.c0.c0.b v.c0.c1.a v.c0.c1.b
+b : Std.Array FIo_Native.aspis_core.field.M31 4#usize := pack v.c1.c0.a v.c1.c0.b v.c1.c1.a v.c1.c1.b
+hw : FIo_Native.fast_pairing.canonical.Q.from_wide v = ok (Array.make 2#usize [a, b] ⋯)
+r0 : (Array.make 2#usize [a, b] ⋯).index_usize 0#usize = ok a
+r1 : (Array.make 2#usize [a, b] ⋯).index_usize 1#usize = ok b
+full : ¬s.count ≥ FIo_Native.fast_pairing.MAX_TERMS
+d0 : FIo_Native.fast_pairing.canonical.Dot
+h0 : s.c0.push a (JFs_TX2_CheckedQ.value q) = ok d0
+d1 : FIo_Native.fast_pairing.canonical.Dot
+h1 : s.c1.push b (JFs_TX2_CheckedQ.value q) = ok d1
+⊢ (↑s.count + ↑1#usize) % UScalar.size UScalarTy.Usize = ↑s.count + 1
+'AspisR1.JFs_TX2_EbyKPush.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,23 @@
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+JFs_TX2_ArrayInterfaces.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.getElem?_usize`
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length) : Aeneas.Std.WP.spec (v.index_usize i) fun x => x = (↑v)[↑i]
+Aeneas.Std.loop.spec.{u, v, w} {α : Type u} {β : Type v} {γ : Type w} (measure : α → γ) [wf : WellFoundedRelation γ]
+  (inv : α → Prop) (post : β → Prop) (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α)
+  (hBody :
+    ∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ WellFoundedRelation.rel (measure x') (measure x))
+  (hInv : inv x) : Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+JFs_TX2_ArrayInterfaces.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.loop.unfold`
+JFs_TX2_ArrayInterfaces.lean:8:7: error(lean.unknownIdentifier): Unknown identifier `Aeneas.Std.loop_eq`
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }

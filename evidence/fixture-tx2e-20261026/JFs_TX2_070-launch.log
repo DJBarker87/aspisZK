@@ -1,0 +1,41 @@
+{"attempt": "JFs_TX2_070", "exit_status": 0, "wall_seconds": 2.885386783978902, "peak_rss_kib": "5638120", "swaps": "0", "print_axioms": ["'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_TX2_Partial.calls' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFs_TX2_Partial.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.Rc10_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Partial.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Partial.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFs_TX2_Partial.on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : Bytes → State) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes H →
+        ∀ (seed : Port3_NativeQueryBody.Ops),
+          Port4A_ReaderInstall.r
+...
+ [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Partial.on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFs_TX2_Partial.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFs_TX2_Partial.on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : Bytes → State) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes H →
+        ∀ (seed : Port3_NativeQueryBody.Ops),
+          Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩ JFx_NativeBytes.proof
+                JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+              ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+            Tx2N_Powers.powers 29#usize JFo_Prepared.value.gamma = ok JFr_TX2_Powers.value ∧
+              Port3_NativePendingInstall.source true JFo_Prepared.accumulator.weights.deref =
+                  ok (core.result.Result.Ok JFo_Pending.value) ∧
+                (∀ (i : Fin 12),
+                    (JFr_TX2_DotsBinding.ops seed).op0 4#usize
+                        (Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                          (JFr_TX2_DotsBinding.ops seed))
+                        (JFo_Opening.value (JFn_Values.position i)) =
+                      ok (JFn_Values.value i)) ∧
+                  Calls seed :=
+fun saved same {Hash} H D hash realizes seed =>
+  let ⟨reader, right✝⟩ := JFr_TX2_Partial.on_saved saved same H D hash realizes seed
+  let ⟨powers, right✝¹⟩ := right✝
+  let ⟨pending, right✝²⟩ := right✝¹
+  let ⟨arrays, right✝³⟩ := right✝²
+  ⟨reader, ⟨powers, ⟨pending, ⟨arrays, calls seed⟩⟩⟩⟩
+
+Running as unit: run-r6eaae5b452ab4aef8c0377941f60c80b.scope; invocation ID: 27c13997e2fe4f3a957841ecf7e330d8
