@@ -1,0 +1,53 @@
+{"attempt": "F3W_009", "exit_status": 1, "wall_seconds": 2.406006957986392, "peak_rss_kib": "5354704", "swaps": "0", "print_axioms": ["'AspisR1.F3W_LogJoin.joined' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+F3W_LogJoin.lean:82:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 31
+where
+ f := ↑(↑e.saved).length
+F3W_LogJoin.lean:98:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | ok digest =>
+        some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => none)
+    (SdkC_Source.run (F3U_Oracle.hashv H)
+        (SdkD_PrepareLower.lower
+          (SdkD_PrepareSource.code (Uni_Install.current c.currentBase c.reserved c.query c.geometry) c.boundaries c.std
+            (D1 c H) (AspisS6Curre
+...
+ashv H)
+                (GExp_FirstCode.writerCode e.run.p
+                  (have __src := e.run.out;
+                  { weights := ⟨↑e.run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next })
+                  e.proof e.pub)
+                []).2) ++
+      (SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H)
+              (GExq_RetainedReader.code c.reserved e.saved.deref e.proof e.pub AspisR1Stage2.transport.Variant.S2)
+              []).2 ++
+        SdkC_Source.readLog
+          (SdkC_Source.run (F3U_Oracle.hashv H) (SdkC_BatchSource.stageCode (F3U_Oracle.hashv H) e.proof p2 root2)
+              []).2) =
+    (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).1 ++
+      ((eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch0)).1 ++
+        ((eval H
+              (F3_Model.checkpoint i.physical i.stored p q
+                (LiteralTranscript.erasePrefix
+                  (eval H (F3J_SamplerRun.program i.proof 0 33 (FS.emptyPrefix i.semantic.value))).2)
+                data v)).1 ++
+          (eval H (OraclePortFrozen2.batch p q OraclePortFrozen2.batch1)).1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.F3W_LogJoin.joined' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3e2d5d6ca3ca4dd7b8198048b861067d.scope; invocation ID: 90ebca8bd5e24945891609bf619db61b
