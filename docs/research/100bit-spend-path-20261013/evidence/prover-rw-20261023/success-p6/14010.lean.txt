@@ -1,0 +1,21 @@
+import R1Z.ProverRwP6FlatInstall
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwP6FlatTotal
+open Aeneas Aeneas.Std Result ProverRwFull
+-- The extracted flat serializer reads fixed-size arrays only. This does not
+-- assume successful reads or a serializer output equality.
+theorem total (x : aspis_core.field.wide_exact.WideExact) :
+    ∃ bytes, ProverRwP6FlatSource.wide_bytes_flat x = ok bytes := by
+  unfold ProverRwP6FlatSource.wide_bytes_flat
+    ProverRwP6FlatSource.aspis_core.field.wide_exact.WideExact.to_limbs
+    ProverRwDictionaryBytes.Src.limbs
+    ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.to_limbs
+  simp only [Array.index_usize, Array.getElem?_Usize_eq, Array.make, List.getElem?_cons,
+    List.getElem?_zero, UScalar.ofNat_val, lift, bind_tc_ok]
+  simp only [core.num.U32.to_le_bytes, BitVec.toLEBytes, List.getElem?_map,
+    List.getElem?_cons, List.getElem?_zero, List.getElem?_nil, Option.map_some,
+    Option.map_none, UScalar.ofNat_val, lift, bind_tc_ok]
+  exact ⟨_, rfl⟩
+#print axioms total
+end R1Z.ProverRwP6FlatTotal

@@ -109,3 +109,24 @@ inputs, dependencies and logs are retained. No caps raised or unchanged retry.
 No old proved module/object changed. New continuation use3/65 Lean,0/7 Kani.
 One of39 source callbacks now supplied;38 remain. Root/headline premises
 removed0; target not established. No shipped Rust, frozen artifact or key changed.
+
+## Flat serializer P6 reference
+
+`ProverRwP6FlatSource` retains all40 emitted array reads and native U32 byte
+conversions, with the existing exact to_limbs source binding.14008 compiles it;
+14009 installs the P6 reference as op51 while preserving transition225. Native
+`success-p6-flat-pole-002` checks shipped serialization against this reference
+for every WideExact::new of arbitrary raw QM31 inputs, plus the shipped pole
+check against its one-row reference. Both harnesses pass, unwinding assertions
+on, no stubs, optimized. This establishes the stated constructor domain only;
+full native carrier/ABI/compiler association is still open. Pole258 is not
+installed from a one-row check. No native entropy/ROM/TLS effect is involved.
+
+14010 rejects unknown simp names and byte expansion reaches recursion depth;
+replacement14011 proves symbolic fixed-array read totality, and14012 uses it
+for all40 reads without expanding bytes. `FlatTotal.total` has no success or
+output premise. Both new theorem audits use standard axioms. Exact receipts
+are adjacent; native receipts are under translation/. New continuation use
+8/65 Lean (6passes,1elaboration failure,1intentional stop),2/7 Kani invocations
+including the already-passing boundary_flat28 run. No root premise removed.
+The supplied source/P6 candidate callbacks are225 and51;37 of39 remain.
