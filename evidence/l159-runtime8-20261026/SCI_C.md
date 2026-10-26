@@ -30,3 +30,24 @@ no additional clean recovery contract is needed. A/B are still unproved.
 SCI_011 passed with all four Recovery theorems on standard axioms, exit0,
 wall2.914862354984507s, peakRSS5503892KiB, swap0. Its final source snapshot
 includes account_of_join; its imported Projection object is SCI_010.
+
+## Runtime carrier obstruction
+
+ObserverBoundary defines a PURE, fabricated accepting Runtime whose semantic
+public bytes are empty. The ACTUAL maintained extractor returns none for
+every private tape; its failureMass and deployedFailure are exactly1.
+not_zero_query_conclusion proves this runtime violates the literal Rc7
+failureModel <= F3T_Numeric.total0 numerical conjunct, using the unchanged
+zero-query bound and symbolic nonnegativity of scan failure. It never
+enumerates the huge finite scan space. This is not an admissible account
+runtime, not a cryptographic forgery and not a joint instance of all remaining
+Rc7 premises. It checks why an unrestricted Runtime quantifier cannot be
+retained while merely deleting its only source/observer correspondence.
+The actual concrete SCE association must replace that arbitrary-observer
+boundary by proof; no new premise is installed in a deployed theorem.
+
+SCI_013 passed the unchanged Recovery source after Projection dependencies
+changed. SCI_014 is an excluded development failure (unknown indicator_true);
+SCI_015 fixed it, and SCI_016 proves the exact numerical obstruction.
+SCI_016: exit0,wall3.6972742209909484s,peakRSS5492000KiB,swap0; all9 Recovery
+theorems print standard axioms only. Exact sources/dependencies retained.

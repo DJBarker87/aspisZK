@@ -3,6 +3,8 @@ import SCF_Recovery
 import SCE_ModelReadFrames
 import SCE_ReplayExtractTransport
 import SCE_Physical
+import F3T_RuntimeBound
+import F3T_Numeric
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.SCI_Recovery
@@ -135,6 +137,64 @@ theorem account_of_join {A F C : Type} (c : DrvC_Installation.Configuration F C)
   refine ⟨?_,account_agreement c D hashv copy allocator id a H run observed success modelSuccess logs⟩
   rw [F3T_Charged.projected_eval,recorded_eval]
   exact modelSuccess
+
+namespace ObserverBoundary
+open AspisV8R19.OracleResampling AspisV8R19.CausalFirstHitUnionBound
+attribute [local instance] Classical.propDecidable
+
+/-- The Runtime carrier alone permits invented acceptance. It does not
+encode the approved bank game or source-to-observer correspondence. -/
+def emptyPublic : LiteralTranscript.Public := ⟨[],by decide,2⟩
+def input : F3_Model.Input :=
+  ⟨⟨emptyPublic⟩,⟨[]⟩,Port1_StoredCarrier.proof [],[]⟩
+def run : RunView := ([],(input,true))
+def runtime : F3T_Runtime.Runtime := .done (some run)
+
+theorem extract_none (coins : GSConcreteByteDecoderBank.RawCoins) :
+    RawRecordedPublicSpendExtractorBin.extract (view run) coins = none := rfl
+
+theorem failure_one : RawRecordedOracleExtractionMassBin.failureMass (view run) = 1 := by
+  unfold RawRecordedOracleExtractionMassBin.failureMass
+  simp only [extract_none,show (view run).2.2 = true from rfl, true_and,
+    indicator,if_pos True.intro,mean_const]
+
+/-- A checked limit on deleting L159 while retaining an UNRESTRICTED Runtime
+quantifier. This is a fabricated observer, not an admissible deployed account
+or a protocol forgery, and does not assert joint satisfiability of every
+other Rc7 hypothesis. The concrete SCE correspondence must be proved. -/
+theorem unrestricted_runtime : F3T_Runtime.deployedFailure runtime = 1 := by
+  change RawRecordedOracleExtractionMassBin.failureMass (view run) = 1
+  exact failure_one
+
+theorem not_all_runtime_bounds (bound : Rat) (small : bound < 1) :
+    ¬ ∀ r : F3T_Runtime.Runtime, F3T_Runtime.deployedFailure r ≤ bound := by
+  intro all
+  have bad := all runtime
+  rw [unrestricted_runtime] at bad
+  exact (not_le_of_gt small) bad
+
+/-- The literal zero-query numerical conjunct of Rc7 cannot hold for an
+unrestricted observer. Other release hypotheses are not instantiated here;
+this isolates the carrier issue without claiming a deployed attack. -/
+theorem not_zero_query_conclusion :
+    ¬ F3T_RuntimeBound.failureModel runtime ≤ F3T_Numeric.total 0 := by
+  have scan : 0 ≤ QueryScanModelFailure.failureProbability (2^18) := by
+    unfold QueryScanModelFailure.failureProbability
+    positivity
+  have lower : 1 ≤ F3T_RuntimeBound.failureModel runtime := by
+    unfold F3T_RuntimeBound.failureModel
+    rw [unrestricted_runtime]
+    linarith
+  have bound : F3T_Numeric.total 0 < 1 :=
+    F3T_Numeric.zero_queries.trans (by norm_num)
+  exact not_le_of_gt (bound.trans_le lower)
+
+#print axioms not_zero_query_conclusion
+#print axioms extract_none
+#print axioms failure_one
+#print axioms unrestricted_runtime
+#print axioms not_all_runtime_bounds
+end ObserverBoundary
 
 #print axioms account_of_join
 #print axioms model_agreement
