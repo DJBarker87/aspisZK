@@ -90,10 +90,55 @@ No nonexistent JFm/JFn complete-pair theorem name is invented.
 
 ## Validation and frozen artifacts
 
-Final receipt/axiom audit, exact metrics and budget results are appended after
-ART_099 / ART_100. This is a focused cached closure, not a full frozen release
+Final receipt/axiom audit, exact metrics and budget results are recorded below. This is a focused cached closure, not a full frozen release
 rebuild. No package replay, Rust, Kani or SBF build; no shipped/cfg(kani) change
 and no ELF rebuild trigger. Inherited pins, NOT freshly rebuilt/hashed:
 default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+## Final validation receipt
+
+Budget EXHAUSTED: **100/100 actual Lean invocations,0/0 Kani**;80 pass,20
+excluded development failures;0 missing dependency builds. ART_021 had one
+own-dependency prelaunch failure (0 invocations), then compiled after its own
+ART_Cost proof was corrected; no host infrastructure was repaired or bypassed.
+ART_003 hit the default heartbeat limit in a draft union-bound statement: it
+was split into ART_StartCharge and ART_StartMass with corrected namespaces;
+no unchanged timeout or memory-killed job was rerun, and no cap increased.
+
+Final combined target ART_FinalAudit.lean (ART_099): exit0,
+wall2.312253582989797s,peakRSS5537104KiB,swap0,
+source revision43ae0cdc66fbc23e7c833b6980574e1d52df24f9; exact source SHA256
+3a979f3f9489b235bf4264b71ac8afb3d9758b0c1aec9598b62f89b26e86322e. It imports every new proof module
+and prints axioms for all74 new theorems plus Rc10 and the SCJ consumer.
+Every accepted axiom set is a subset of propext/Classical.choice/Quot.sound.
+Failed compiler-generated sorryAx outputs are preserved and excluded.
+
+Final root target ART_AfterRoot.lean (ART_100): exit0,
+wall2.3460485879913904s,peakRSS5499792KiB,swap0,
+source revision43ae0cdc66fbc23e7c833b6980574e1d52df24f9; source SHA256
+d90adf0c0c4c19d56d9eb79343d4aae8f7b135ea0563d652098856ae35774b3e. The COMPLETE fresh before/after
+kernel statements from072/100 are byte-identical, without elisions; root
+axioms are propext/Classical.choice/Quot.sound. Root source is unchanged too.
+ART_BEFORE_KERNEL.lean.txt / ART_AFTER_KERNEL.lean.txt retain the exact output.
+
+Total Lean wall244.62253993592458s;maximumRSS5558720KiB;swap0.
+One own scope at a time; ordinary admission barrier;MemoryHigh6G,MemoryMax8G,
+MemorySwapMax0,TasksMax64;lake env lean-j1-M7000-DElab.async=false. All resource
+receipts and source/dependency fingerprints are retained per attempt.
+No memory-killed compile, cap increase, package replay or unchanged full
+regression. Distinct dependency statement inventories are evidence only.
+
+ART_validate.py PASS: budgets,caps,source/snapshot hashes,standard axioms,all
+new theorem audits,unchanged root,atomic ledger,fixture pins and source-only
+scope. ART_VALIDATION.json / ART_attempts.jsonl contain the exact results.
+ART_HOST_MANIFEST.json freshly pins all80 current ART host source/object pairs;
+compiled objects stay in the shared coherent SInt2 cache for lead reuse, not
+as a second workspace or committed binaries. No cargo/solver scratch created.
+No release-wide replay or source-to-ELF completion is claimed.
+
+No foreign prefix,session A worktree,candidate,shipped code,key,wallet,authority
+or funds touched. No binary,object,ELF or archive committed. The implementation
+100-bit target remains not established. No further Lean invocation is allowed
+under this exhausted job budget.
