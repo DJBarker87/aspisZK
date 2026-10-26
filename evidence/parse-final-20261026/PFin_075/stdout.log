@@ -1,0 +1,66 @@
+PFin_TraceInsertion.lean:22:6: error: Type mismatch: After simplification, term
+  old
+ has type
+  firstIdx a left < firstIdx b left
+but is expected to have type
+  (if Read (left ++ middle) a then firstIdx a left else (left ++ middle).length + firstIdx a right) <
+    if Read (left ++ middle) b then firstIdx b left else (left ++ middle).length + firstIdx b right
+PFin_TraceInsertion.lean:27:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e - f ≥ 1
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 1
+where
+ c := ↑(firstIdx b (left ++ right))
+ d := ↑(firstIdx a (left ++ right))
+ e := ↑left.length
+ f := ↑(firstIdx a left)
+ g := ↑(if Read (left ++ middle) a then firstIdx a left else left.length + middle.length + firstIdx a right)
+ h := ↑(if Read (left ++ middle) b then left.length + firstIdx b middle
+  else left.length + middle.length + firstIdx b right)
+PFin_TraceInsertion.lean:38:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 1
+  c ≥ 0
+where
+ c := ↑left.length
+ d := ↑(firstIdx b right)
+ e := ↑(firstIdx a right)
+ f := ↑(if Read (left ++ middle) a then left.length + firstIdx a middle
+  else left.length + middle.length + firstIdx a right)
+ g := ↑(if Read (left ++ middle) b then left.length + firstIdx b middle
+  else left.length + middle.length + firstIdx b right)
+PFin_TraceInsertion.lean:26:50: warning: This simp argument is unused:
+  if_neg bM
+
+Hint: Omit it from the simp argument list.
+  simp only [index_append, ̲if_pos aL, ̲if_neg bL,i̵f̵_̵n̵e̵g̵ b̵M̵,̵List.length_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PFin_TraceInsertion.lean:37:50: warning: This simp argument is unused:
+  if_neg aM
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵d̵e̵x̵_̵a̵p̵p̵e̵n̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵L̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵L̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵M̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵M̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵]̵[̲i̲n̲d̲e̲x̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲L̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲L̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲M̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PFin_TraceInsertion.lean:37:60: warning: This simp argument is unused:
+  if_neg bM
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵d̵e̵x̵_̵a̵p̵p̵e̵n̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵L̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵L̵,̵i̵f̵_̵n̵e̵g̵ ̵a̵M̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵M̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵]̵[̲i̲n̲d̲e̲x̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲L̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲b̲L̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲a̲M̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PFin_TraceInsertion.read' depends on axioms: [propext]
+'AspisR1.PFin_TraceInsertion.before' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

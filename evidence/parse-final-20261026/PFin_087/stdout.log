@@ -1,0 +1,23 @@
+PFin_RunLevelBound.lean:16:21: error: unsolved goals
+case neg
+fuel : ℕ
+ih : ∀ (live : Live) (nodes : Bytes), Bounded (runLevel fuel live nodes)
+nodes : Bytes
+rest : List (ℕ × State)
+i : ℕ
+value : State
+choice :
+  ¬(match rest with
+      | (j, snd) :: tail => decide (paired i j)
+      | [] => false) =
+      true
+h✝ : ¬i % 2 = 0
+⊢ Bounded
+    (match SemanticRecordCodec.decodeState (List.take 32 nodes) with
+    | none => Program.done none
+    | some sibling =>
+      Program.ask (BinMerkle32Path.nodeInput (OracleDecisionMultiTree.children sibling value)) fun d =>
+        AspisV8R19.OracleProgramOps.bind (runLevel fuel rest (List.drop 32 nodes)) fun out =>
+          Program.done (Option.map (fun x => ((i / 2, d) :: x.1, x.2)) out))
+'AspisR1.PFin_RunLevelBound.level' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PFin_RunLevelBound.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
