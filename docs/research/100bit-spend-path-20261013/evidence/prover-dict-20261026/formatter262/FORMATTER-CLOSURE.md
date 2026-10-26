@@ -40,7 +40,7 @@ Before: both OPEN under recount 2; D203 did not justify native type27 reduction.
 
 ## Route and existing symbolic obligations
 
-Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mechanical axiom target. The preferred avoidance route already exists in the pinned candidate: `PDict_FmtPublicationFrame.publication_frame` (namespace `R1Z.PDict_FmtErase`) factors publication before `erase_420`; `PDict_FmtRetryComplete.erase_425` uses `fixed_equal`. Those files exist on the candidate branch but are not imported by the selected dictionary closure; no audit credit is claimed for those unimported files. The stale failed `PDict_FmtErase26` source is not imported; its split successors are. No large-term reduction was attempted.
+Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mechanical axiom target. Candidate source contains the split avoidance proofs: `PDict_FmtPublicationFrame.publication_frame` (namespace `R1Z.PDict_FmtErase`) factors publication before `erase_420`; `PDict_FmtRetryComplete.erase_425` uses `fixed_equal`. Those files exist on the candidate branch but are not imported by the selected dictionary closure; no audit credit is claimed for those unimported files. The stale failed `PDict_FmtErase26` source and these split successors are not imported by the selected closure. No large-term reduction was attempted.
 
 ## Receipts and budget
 
@@ -49,7 +49,7 @@ Stage 0 clean-closure branch. No Stage 1 modification is necessary for the mecha
 | J26200 `R1Z/PDict_FormatterClosure262` | 130 | 2:02.20 | 4359800 | 0 | af96787aa3 | no completed output; manually interrupted to replace repeated environment scans with one scan |
 | J26201 `R1Z/PDict_FormatterClosure262` | 0 | 0:51.34 | 4407372 | 0 | af96787aa3 | 12920 standard-only candidate reports; one deliberate backend diagnostic |
 
-J26200 is charged. J26201 changed the audit algorithm, not proof declarations. Caps: Lean -M7000, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax128 through the unchanged shared launcher. One scope at a time. Raw stdout, GNU time, SHA, dependency fingerprint and full axiom reports are retained per attempt. Admission logs are retained separately. No Kani invocation yet.
+J26200 is charged. J26201 changed the audit algorithm, not proof declarations. Caps: Lean -M7000, MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax128 through the unchanged shared launcher. One scope at a time. Raw stdout, GNU time, SHA, dependency fingerprint and full axiom reports are retained per attempt. Admission logs are retained separately. No Kani invocation had run at Stage 0 completion; Stage 2 is recorded separately in `STAGE2.md`.
 
 J26203 completes the focused explicit endpoint check: all nine reports are standard-only or empty, including `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`. J26202 was rejected solely for four unimported older symbolic-route names; those names were removed, no proof changed. All 321 family source hashes match this worktree (213) or the pinned read-only sibling git revisions (108), with zero mismatches; see `worktree-source-binding.json`. Target not yet established.
 

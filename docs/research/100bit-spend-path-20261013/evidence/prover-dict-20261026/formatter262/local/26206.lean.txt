@@ -1,0 +1,33 @@
+import R1Z.PDict_OwnedCell262
+set_option autoImplicit false
+namespace R1Z.PDict_OwnedPrefix262
+open Aeneas Aeneas.Std
+
+def at {T : Type} (out : Array T 1024#usize) (k : Usize) (bound : k.val < 1024) : T :=
+  out[k]'(by scalar_tac)
+
+def Prefix {T : Type} (out target : Array T 1024#usize) (index : Usize) : Prop :=
+  ∀ (k : Usize) (bound : k.val < 1024), k.val < index.val → at out k bound = at target k bound
+
+/-- A single source update extends the correct prefix by one coordinate. -/
+theorem extend {T : Type} (out target : Array T 1024#usize)
+    (index : Usize) (small : index.val < 1024) (value : T)
+    (correct : value = at target index small) (prefix : Prefix out target index) :
+    Prefix (out.set index value) target (Usize.wrapping_add index 1#usize) := by
+  intro k bound before
+  rw [PDict_Advance244.value index small] at before
+  by_cases eq : index = k
+  · subst k
+    dsimp only [at]
+    rw [Array.getElem_set_eq]
+    exact correct
+  · have valNe : index.val ≠ k.val := fun h => eq (UScalar.eq_of_val_eq h)
+    have earlier : k.val < index.val := by omega
+    dsimp only [at]
+    rw [Array.getElem_set_neq _ _ _ _ _ eq]
+    exact prefix k bound earlier
+
+#print axioms at
+#print axioms Prefix
+#print axioms extend
+end R1Z.PDict_OwnedPrefix262
