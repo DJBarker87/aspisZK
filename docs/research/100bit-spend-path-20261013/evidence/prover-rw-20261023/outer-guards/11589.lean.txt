@@ -1,0 +1,58 @@
+import R1Z.ProverRwOuterMapErr
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwOuterReservationFailure
+open Aeneas Aeneas.Std Result ProverRwFull
+variable [ExternalTypes]
+
+section
+variable [ExternalFuns]
+theorem rejected {S : Type}
+    (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
+    (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (binding : Array U8 32#usize) (c : ProverRwOuterContext.Context) (s after : S)
+    (failure : store.«reserve» s c.statement_digest c.mask_nonce = .ok (false,after)) :
+    ProverRwOuterAfterChecks.afterChecks store attempt hash binding c s =
+      .ok (.Err .ReusedMaskNonce,after) := by
+  unfold ProverRwOuterAfterChecks.afterChecks
+  rw [failure]
+  rfl
+
+end
+
+theorem semantic : prover.mask_error .ReusedMaskNonce = .ok .Semantic := by
+  simp [prover.mask_error,
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Insts.CoreCmpPartialEqStateOnlyMaskBuildError.eq,
+    read_discriminant,aspis_prover.state_only_hiding.StateOnlyMaskBuildError.instDiscriminant,
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError.read_discriminant]
+
+/-- A failed reservation returns Semantic with the exact advanced store.
+No mask/material/proof result, TLS state or hash success is assumed. -/
+theorem body_failure (ops : ExternalFuns) {S : Type}
+    (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (v : transport.Variant) (hash : Slice (Slice U8) → Result (Array U8 32#usize))
+    (c : ProverRwOuterContext.Context) (binding : Array U8 32#usize)
+    (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (s after : S)
+    (failure : @aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
+      _ (ProverRwOuterMapErr.selected ops) S store attempt hash binding c s = .ok (.Err .ReusedMaskNonce,after)) :
+    letI : ExternalFuns := ProverRwOuterMapErr.selected ops
+    prover.prove_masked_with_attempt store pub compiled v hash c binding attempt s =
+      .ok (.Err .Semantic,after) := by
+  letI : ExternalFuns := ProverRwOuterMapErr.selected ops
+  unfold prover.prove_masked_with_attempt
+  rw [failure]
+  simp only [bind_tc_ok]
+  dsimp only [Aeneas.Std.uncurry,ProverRwOuterMapErr.selected]
+  simp only [bind_tc_ok,ProverRwOuterMapErr.installed,ProverRwOuterMapErr.map_err,BuiltinFnOnce,semantic,
+    core.result.Result.Insts.CoreOpsTry.branch,
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+    core.convert.FromSame]
+  rfl
+
+#print axioms rejected
+#print axioms semantic
+#print axioms body_failure
+end R1Z.ProverRwOuterReservationFailure

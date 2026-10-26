@@ -533,3 +533,42 @@ the input and rejection receipt are retained. No cap, launcher, lock or monitor
 was changed. The read-only metadata collector accepts unused11576–99 via the
 existing native-drop launcher;11563–75 were already used and untouched.
 Budget76/100 Lean,0/20Kani. No Rust or native artifact changes, no full replay.
+
+## Actual layout guards and rejected reservation (11582–11590)
+
+`ProverRwOuterGuardLeaves` installs the two literal retained native-source
+fingerprints(op112/113). `OuterGuardBridge.checked` removes all three layout
+premises for the actual constructed caller context, keeping the entire
+remaining `reserve_and_build` continuation byte-for-byte. The checked generator
+`outer-guards.py --check` pins that exact source split. The same actual public
+caller theorem remains installed with these two source constants.
+
+`OuterMapErr.source` identifies the generic error-map operation with its
+retained actual source body and installs op12. `OuterRejected.body_failure`
+then proves directly that a rejected store reservation returns verifier.Semantic
+and the exact advanced store from `prove_masked_with_attempt`. No assumed
+material/body-result equality or separate layout premise remains in that
+branch. The remaining store result premise is explicit and still needs native
+filesystem/ledger association. The successful-reservation proof path remains
+open. No `PrefixContract` or `BodyContract` instance is claimed by this branch.
+
+The selected source dictionary now has eight installed function entries:
+12,112,113,115,116,233,234,248;254 other entries and all28 external type native
+representations remain to associate. These counts describe this exact selected
+source instance, not whole-experiment refinement progress. Root conjunct1 and
+both original caller contracts are still open; no top premise removed.
+
+`ProverRwEntropyRepeated64` supplies the promised correlation regression: a
+uniform Raw carrier reused at every fill has uniform fixed-coordinate
+marginals, but sixteen rejected candidates have exactly the single-candidate
+bad-event mass. Its actual64-byte model run retains the incremented cursor and
+RNG history. This carrier does not supply E1 after failure-dependent histories.
+No independence or availability trust is silently inferred.
+
+Evidence: `evidence/prover-rw-20261023/outer-guards`;9 focused invocations,
+7pass,2 changed elaboration failures; standard axioms on every accepted new
+theorem. 11590 exit0,1.72s,4,278,132KiB RSS,swap0. Earlier 11581's reservation
+rejection was followed by changed source11585 adding the all-sixteen lemma;
+no failed/killed unchanged compile was retried. Existing host reservations had
+fallen before the next launch. No build infrastructure or caps changed.
+Budget85/100 Lean,0/20Kani. No Rust/native/ELF/timing/full replay job.
