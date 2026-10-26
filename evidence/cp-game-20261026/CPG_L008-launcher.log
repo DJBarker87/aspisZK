@@ -1,0 +1,57 @@
+{"attempt": "CPG_L008", "exit_status": 1, "wall_seconds": 1.930255141982343, "peak_rss_kib": "5297900", "swaps": "0", "print_axioms": []}
+CPG_Pair.lean:84:4: error(lean.unknownIdentifier): Unknown identifier `CPR_PhysicalResult.Outcome`
+CPG_Pair.lean:91:78: error: unsolved goals
+W A F CoreError Tx : Type
+L : Library W (ℕ → Record)
+sdk : S2TrustedSdkBorrow L
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+std : TrustedStd copy
+allocator : Allocator A
+e1 e2 : Entry
+w1 w2 : W
+admission1 : RuntimeEntrypointAdmission L e1 w1 3
+admission2 : RuntimeEntrypointAdmission L e2 w2 7
+c : DrvC_Installation.Configuration F CoreError
+native1 : S2W_ExtractionBoundary.First
+native2 : S2W_ExtractionBoundary.Second
+prepareOwner :
+  WAdm_Domain.SessionAPrepare
+    (Tx1Q_Execution.actual (Op5T_Concrete.current (DrvC_FirstConstants.con
+...
+).geometry))
+        (DrvC_FirstConstants.configuration c).finish)
+      (Uni_Install.current (DrvC_FirstConstants.configuration c).currentBase
+        (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
+        (DrvC_FirstConstants.configuration c).geometry)
+      (DrvC_FirstConstants.configuration c).boundaries (DrvC_FirstConstants.configuration c).std)
+    native1 native2 hashv
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+program : S2W_ExtractionBoundary.Program
+data1 data2 : Slice U8
+slot : S2W_ExtractionBoundary.Slot
+state1 state2 final1 final2 : A
+saved : alloc.vec.Vec U8
+post1 post2 : Heap (ℕ → Record)
+accepted1 : first native1 copy allocator e1 program data1 state1 = ok (core.result.Result.Ok (saved, post1, final1))
+accepted2 : second native2 allocator e2 program data2 slot state2 = ok (core.result.Result.Ok (post2, final2))
+root : Std.Array U8 32#usize
+length : U32
+prior : Program Bytes State Unit
+p : CPG_Projection.Observations Tx A
+t u : Tx
+actions : List (CPP_BankState.Action A)
+game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions
+system : S2W_ExtractionBoundary.Program
+programNotSystem : program ≠ system
+keyLaw : (DrvC_Installation.sdk (DrvC_FirstConstants.configuration c)).op36 = Hist_Authority.keyEq
+RuntimePersistence :
+  CPR_DataPersistence.TwoTransactionLaw (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system)
+    (CPG_Projection.before p) (CPG_Projection.tentative p native1 native2 copy allocator program)
+    (CPG_Projection.success p) (CPG_Projection.loaded p)
+⊢ sorry
+CPG_Pair.lean:92:0: error: unexpected identifier; expected command
+CPG_Pair.lean:123:14: error(lean.unknownIdentifier): Unknown constant `accepted`
+
+Running as unit: CPG-L008.scope; invocation ID: 55685156eacf4d3fbdce6c6d71670b56

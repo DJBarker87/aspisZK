@@ -1,0 +1,41 @@
+CPG_Nonvacuity.lean:39:16: error: Type mismatch
+  false
+has type
+  Bool
+but is expected to have type
+  Observations Bool A
+CPG_Nonvacuity.lean:39:25: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  linked
+has type `Bool` which is not a one-constructor inductive type.
+CPG_Nonvacuity.lean:40:24: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  linked
+has type `Bool` which is not a one-constructor inductive type.
+CPG_Nonvacuity.lean:43:2: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+A : Type
+n1 : S2W_ExtractionBoundary.First
+n2 : S2W_ExtractionBoundary.Second
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+initial : Bank
+record : Record
+saved : alloc.vec.Vec U8
+actions : List (Action A)
+system : S2W_ExtractionBoundary.Program
+linked : Bool
+eligible : ℕ
+ht : sorry
+key : adjacent (canonical n1 n2 copy allocator id initial record saved actions) true linked
+⊢ ordinary (canonical n1 n2 copy allocator id initial record saved actions) system true eligible →
+    loaded (canonical n1 n2 copy allocator id initial record saved actions) linked eligible =
+      CPR_DataPersistence.visible
+        (if success (canonical n1 n2 copy allocator id initial record saved actions) true = true then
+          tentative (canonical n1 n2 copy allocator id initial record saved actions) n1 n2 copy allocator id true
+            eligible
+        else before (canonical n1 n2 copy allocator id initial record saved actions) true eligible)
+'AspisR1.CPG_Nonvacuity.game' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.CPG_Nonvacuity.RuntimePersistence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.CPG_Nonvacuity.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
