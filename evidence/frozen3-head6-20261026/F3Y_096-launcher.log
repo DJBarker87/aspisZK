@@ -1,0 +1,42 @@
+{"attempt": "F3Y_096", "exit_status": 0, "wall_seconds": 2.5204004740226083, "peak_rss_kib": "5402768", "swaps": "0", "print_axioms": []}
+def AspisR1.F3T_CanonicalJoin.AcceptedVerifierJoin : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.LiteralByteProtocol.Decoder → AspisR1.F3T_TwoPass.Verifier → Prop :=
+fun {F C} c D rust =>
+  ∀ (s : AspisR1.F3T_ByteCarrier.Submission) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.F3T_ByteCarrier.input c s))).2 = Bool.true →
+      AspisV8R19.MemoizedProgramLaw.eval H (rust (AspisR1.F3T_ByteCarrier.input c s)) =
+        AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D (AspisR1.F3T_ByteCarrier.input c s))
+def AspisR1.F3T_Runtime.StoredCarrierBinding : {F C : Type} →
+
+...
+T_ByteCarrier.ByteProver → AspisR1.F3T_Runtime.Runtime → Prop :=
+fun {F C} c D rust P runtime =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (run : AspisR1.F3T_Experiment.RunView),
+    (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 = Option.some run →
+      run.2.2 = Bool.true →
+        run =
+          AspisV8R19.MemoizedProgramLaw.eval H
+            (AspisR1.F3T_TwoPass.annotatedWith D rust (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c P)))
+def AspisR1.F3T_ByteCarrier.input : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C → AspisR1.F3T_ByteCarrier.Submission → AspisR1.F3_Model.Input :=
+fun {F C} c s =>
+  { semantic := { value := AspisR1.F3T_ByteCarrier.semantic c s }, physical := { bytes := s.publicBytes },
+    proof := AspisR1.Port1_StoredCarrier.proof s.stored, stored := s.stored }
+def AspisR1.F3T_ByteCarrier.semantic : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C → AspisR1.F3T_ByteCarrier.Submission → AspisR1.LiteralTranscript.Public :=
+fun {F C} c s =>
+  match AspisR1.Port1_Driver.asSlice s.publicBytes with
+  | Option.none => AspisR1.F3T_ByteCarrier.publicOf []
+  | Option.some pub =>
+    match AspisR1.Port1_Driver.decodeSemantic (AspisR1.DrvC_Installation.sdk c) pub with
+    | Aeneas.Std.Result.ok (Option.some v) =>
+      match
+        AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+          (AspisR1CurrentCaller.FirstComposition.toRetainedPublic (AspisS6CurrentVerifierCarrier.toPublic v)) with
+      | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok encoded) =>
+        AspisR1.F3T_ByteCarrier.publicOf (AspisR1.MultiproofConeCanonical.bytesOf ↑encoded)
+      | x => AspisR1.F3T_ByteCarrier.publicOf []
+    | x => AspisR1.F3T_ByteCarrier.publicOf []
+
+Running as unit: run-rb1093c193e5b48a0bc2a0abedd1d8c53.scope; invocation ID: bc91235ff7b5477091016755befe1413

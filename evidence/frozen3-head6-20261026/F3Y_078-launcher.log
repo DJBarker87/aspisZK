@@ -1,0 +1,41 @@
+{"attempt": "F3Y_078", "exit_status": 0, "wall_seconds": 3.726301065995358, "peak_rss_kib": "5410340", "swaps": "0", "print_axioms": []}
+structure AspisR1.CPH_Game.DeployedPairExecution {Tx A : Type} (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (sourceActions : List (AspisR1.CPP_BankState.Action A)) (n1 : AspisR1.S2W_ExtractionBoundary.First)
+  (n2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program) : Prop
+number of parameters: 14
+fields:
+  AspisR1.CPH_Game.Deployed
+...
+me (ℕ → AspisR1.S2W_D189Entry.Record)) →
+        AspisR1.S2W_D189Wrappers.Allocator A →
+          AspisR1.S2W_ExtractionBoundary.Program →
+            AspisR1.CPP_BankState.Bank →
+              List (AspisR1.CPP_BankState.Action A) → AspisR1.CPP_BankState.Bank → List AspisR1.S2X.AccountEvent → Prop
+number of parameters: 6
+constructors:
+AspisR1.CPG_RuntimeTrace.Executes.nil : ∀ {A : Type} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  (bank : AspisR1.CPP_BankState.Bank), AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id bank [] bank []
+AspisR1.CPG_RuntimeTrace.Executes.cons : ∀ {A : Type} {n1 : AspisR1.S2W_ExtractionBoundary.First}
+  {n2 : AspisR1.S2W_ExtractionBoundary.Second}
+  {copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)}
+  {allocator : AspisR1.S2W_D189Wrappers.Allocator A} {id : AspisR1.S2W_ExtractionBoundary.Program}
+  {initial middle final : AspisR1.CPP_BankState.Bank} {action : AspisR1.CPP_BankState.Action A}
+  {rest : List (AspisR1.CPP_BankState.Action A)} {event : AspisR1.S2X.AccountEvent}
+  {events : List AspisR1.S2X.AccountEvent},
+  AspisR1.CPG_RuntimeTrace.Step n1 n2 copy allocator id initial action middle event →
+    AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id middle rest final events →
+      AspisR1.CPG_RuntimeTrace.Executes n1 n2 copy allocator id initial (action :: rest) final (event :: events)
+
+Running as unit: run-ree5f8d16f488449988add2b60499a3c8.scope; invocation ID: 7047e4dc2f044941ae99ded6a0387230
