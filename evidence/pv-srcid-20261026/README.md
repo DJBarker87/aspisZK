@@ -247,3 +247,20 @@ checks do not constitute a universal QM31 wrapper theorem. Expected heavy
 step is CBMC symbolic array-copy checking, not native field arithmetic.
 
 Kani3 fullM31 wrapper timed out124 after600.0017629069625s, peak cgroup6445043712bytes, swap0. No proof/counterexample. Kani4 fixed-cell split waits for fresh reservation after refusal. This changes the quantified index scope, never substitutes a stub or raises limits.
+
+16:59UTC: quiet window was cleared by host before next reservation; fresh
+kani4-launch-1 allowed at16:53:21, so cell0 launched normally. Original queue
+parent23334 was stopped after checking its cwd=this worktree and SSH child
+35074=this job's kani4 scope. Active host runner continues to its original600s
+cap. Do not stage new source until its receipt hashes are captured.
+
+Resource-shape review: both old full gates had an extra1024-element from_fn
+just to construct nondeterministic carrier values. New direct harness generates
+arbitrary u32 arrays with kani::any and transmutes into actual M31/QM31 arrays.
+All fields recursively are u32; every bit pattern is valid, no layout-order
+assumption is needed, equal sizes are compiler-checked. This removes only test
+input construction. Actual shipped coefficients and all1024 array cells remain.
+No stubs, no canonical-word restriction. New intended gates5/6 fullQM31/M31,
+then7–15 nine fixedQM31 cells; all are changed harness inputs after old timeouts.
+Kani nondeterminism API reviewed against installed0.67.0 source and upstream
+https://model-checking.github.io/kani/tutorial-nondeterministic-variables.html .
