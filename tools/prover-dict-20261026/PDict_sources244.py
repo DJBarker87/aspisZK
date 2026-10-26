@@ -1,0 +1,51 @@
+"""Retain complete baseline reference bodies, with imports/limits normalized.
+
+Does not modify Aeneas, Charon, existing proved files, or shipped sources.
+"""
+from pathlib import Path
+import hashlib, json, sys, re
+
+root=Path(__file__).resolve().parents[2]
+e=root/'docs/research/100bit-spend-path-20261013/evidence/prover-dict-20261026/world244'
+dest=root/'docs/research/v8-r0-zk-20261009/lean/R1Z'
+for tag,namespace,module,names in [
+    ('copy','PDict_CopySource244','PDict_CopySource244',
+     ['coefficients.copy_owned_loop.body','coefficients.copy_owned_loop','coefficients.copy_owned']),
+    ('owned','PDict_OwnedSource244','PDict_OwnedSource244',
+     ['row.ORDER','row.row','coefficients.owned_loop.body','coefficients.owned_loop',
+      'coefficients.owned','coefficients.copy_owned_loop.body','coefficients.copy_owned_loop',
+      'coefficients.copy_owned','world.Reply.Insts.CoreCloneClone.clone',
+      'world.Tape.Insts.CoreCloneClone.clone','world.next','world.retry_collision']),
+    ('world','PDict_TapeSource244','PDict_TapeSource244',
+     ['world.Reply.Insts.CoreCloneClone.clone','world.Tape.Insts.CoreCloneClone.clone',
+      'world.next','world.retry_collision']),
+]:
+    folder=e/f'emission-{tag}'
+    texts=[(folder/n).read_text() for n in ['Types.lean.txt','Funs.lean.txt']]
+    bodies=[s.split('namespace '+namespace+'\n',1)[1].split('\nend '+namespace)[0]
+            for s in texts]
+    assert all('axiom ' not in s and 'sorry' not in s and 'set_option max' not in s for s in bodies)
+    extra_import=''
+    if tag=='owned':
+        pattern=r'def row.ORDER : Array Std.U16 1024#usize :=[\s\S]*?(?=\n/--)'
+        assert len(re.findall(pattern,bodies[1]))==1
+        raw=re.search(pattern,bodies[1])[0]
+        assert list(map(int,re.findall(r'(\d+)#u16',raw)))==list(map(int,(e/'frozen-order244.txt').read_text().split()))
+        bodies[1]=re.sub(pattern,'def row.ORDER : Array Std.U16 1024#usize := R1Z.PDict_RowTable244.table\n',bodies[1])
+        extra_import='import R1Z.PDict_RowTable244\n'
+    source='import Aeneas\n'+extra_import+'set_option autoImplicit false\nnamespace '+namespace+'\n'
+    source+='open Aeneas Aeneas.Std Result ControlFlow Error\n'+ '\n'.join(bodies)
+    source+='\n'+ '\n'.join('#print axioms '+n for n in names)+'\nend '+namespace+'\n'
+    target=dest/(module+'.lean')
+    if '--check' in sys.argv:
+        assert target.read_text()==source
+    else:
+        if not target.exists() or target.read_text()!=source: target.write_text(source)
+        (folder/'source-cut.json').write_text(json.dumps(dict(
+            module=module,source_sha256=hashlib.sha256(source.encode()).hexdigest(),
+            emission_sha256={n:hashlib.sha256((folder/n).read_bytes()).hexdigest()
+                for n in ['Types.lean.txt','Funs.lean.txt','translation.json']},
+            normalization=('Owned: literal row.ORDER replaced with checked chunk concatenation of exactly the same1024U16cells. ' if tag=='owned' else '')+'Concatenated namespace bodies, including attributes and comments; '
+                'only imports/open commands, generated resource/linter settings, and audit commands differ.',
+            selected_external_templates=[],
+            qualification='Baseline extraction of an owned proof reference; no native syscall or whole-prover correspondence follows.'),indent=2)+'\n')

@@ -104,3 +104,54 @@ its branch signature was inspected read-only. See sibling-binding.json.
 
 Next: owned-array and tag-tape extraction, pure Kani contracts, then their
 source/reference proofs. No syscall replacement or backend patch will be used.
+
+## Owned references and resource holds
+
+AtJ24459:59/81charged Lean invocations,22remain; host16/local43.
+J24429was QUIET WINDOW HOLD (zero charge). No capped launch during the second
+hold, observed17:46UTC with until18:15UTC. Local focused checks reused the
+matching4.32/Mathlib81a5d257cache and copied retained backend objects; no cold
+build. They remained below2.6GB RSS,swap0. The local-environment snapshot
+before the missingAeneasMeta import was reconstructed and hash-matchesJ24430.
+No other worktree or root cache was edited. One CLI/import setup failure is
+conservatively charged. Raw rejected sources/errors are retained, not accepted.
+
+Accepted local source facts: CopyCorrect244.owned_value proves the extracted
+owned copy loop returns the input, for allT/allarrays, by symbolic remaining-
+count induction. TapeCorrect244.reference_next proves complete extracted
+owned tag-tape/model equality, including exhaustion, mismatch, arbitrary values
+and error codes, with advanced state retained. Its tag is NOT a complete native
+syscall request: that source/world identity is still open. No File::open stub.
+
+The initial combined Aeneas input crashedNot_found. Splitting copy and tape
+roots succeeded. The owned row reference avoids the runtime const-constructor
+reduction using the exported actual Rust table. The exporter had one missing-
+input/no-bin failure004; corrected005passes optimized. Reference shift literals
+were explicitly typedu32 after baseline emission'si32/U32 mismatch006;007emits
+correctly with no backend patch. The flat1024-cell length proof and128-way
+case proof hit default recursion depth; the permanent generator now emits eight
+chunks, each with eight16-cell named certificates, and a symbolic append lemma.
+All eight chunks and the aggregate length/bounds/index theorem check. No limits
+were raised. OwnedSource244 imports this identical ordered literal table;
+all remaining namespace bodies are retained exactly from baseline007emission.
+No external templates/axioms selected. See emission-*,row-chunks244.json and
+row-reference244.json. The rejected006emission is preserved separately.
+
+10/10new Kani runs used:5pass/5timeouts, no assertion counterexample. Passed:
+OSraw-code/kind/retry, complete reserve-branch projection, one/two Formatter
+write delegation for ASCII≤4bytes with options/failure/frame, M31from_fn.
+Timed out:QM31/WideExactfrom_fn and ALLTHREE actual coefficient/reference
+contracts. ThusV262/native shipped=reference is NOT removed. No timeout was
+rerun unchanged or with a larger cap. GNUtimeout's RSS can undercount stopped
+descendants; raw cgroup cumulative peaks/counters are retained separately.
+The inner admission refused007before any Kani at18:22:14UTC,56.4GiB>55GiB.
+Retry1used a fresh label after18:26:04UTC, well past180seconds. That refusal
+is zeroKani charge. Its owned cgroup was verified gone; no other job was killed.
+
+Source fields175/80/255, historical179/83/262,native26/28,root removals0:
+UNCHANGED. Error/Formatter reference carriers are installed, but dynamic/native
+association and Fileworld/source adequacy are retained. The reference255selector
+is prepared but not yet checked; its identity obligation stays explicit.
+A further outer final-Lean reservation refused18:37:39UTC (48.4+8>55GiB).
+No launcher bypass, cap increase, backend/source/observer/key/pin change.
+Continue after the required wait; target not yet established.

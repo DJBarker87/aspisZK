@@ -1,0 +1,19 @@
+import R1Z.PDict_OwnedSource244
+set_option autoImplicit false
+namespace R1Z.PDict_RowShape244
+open Aeneas Aeneas.Std Result
+abbrev Variant := PDict_OwnedSource244.aspis_r1_cost_probe.transport.Variant
+
+def srow (j : Usize) : Usize :=
+  Usize.wrapping_shl (j &&& 3#usize) 6#u32 |||
+  Usize.wrapping_shl (Usize.wrapping_shr j 2#u32 &&& 3#usize) 8#u32 |||
+  Usize.wrapping_shl (Usize.wrapping_shr j 4#u32 &&& 3#usize) 4#u32 |||
+  (Usize.wrapping_shr j 6#u32 &&& 3#usize) |||
+  Usize.wrapping_shl (Usize.wrapping_shr j 8#u32 &&& 3#usize) 2#u32
+
+theorem s1 (j : Usize) : PDict_OwnedSource244.row.row Variant.S1 j = .ok (srow j) := rfl
+theorem s2 (j : Usize) : PDict_OwnedSource244.row.row Variant.S2 j = .ok (srow j) := rfl
+
+#print axioms s1
+#print axioms s2
+end R1Z.PDict_RowShape244

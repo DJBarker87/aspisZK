@@ -20,7 +20,11 @@ out.parent.mkdir(parents=True, exist_ok=True)
 raw = source.read_bytes()
 (evidence/f'{attempt}.lean.txt').write_bytes(raw)
 cmd = ['lake', 'env', 'lean', '-M7000', '-R', str(source.parent.parent), '-o', str(out), str(source)]
-environment = dict(os.environ, LEAN_PATH=str(objects))
+configuration=root/'docs/research/100bit-spend-path-20261013/evidence/prover-dict-20261026/world244/local-environment.json'
+extra=[]
+if '--aeneas-cache' in sys.argv:
+    extra=json.loads(configuration.read_text())['read_only_roots']
+environment = dict(os.environ, LEAN_PATH=':'.join([str(objects),*extra]))
 start = time.monotonic()
 result = subprocess.run(['/usr/bin/time','-l',*cmd], cwd=workspace,
                         env=environment, text=True, capture_output=True)
@@ -28,7 +32,7 @@ wall = time.monotonic()-start
 (evidence/f'out-{attempt}.log').write_text(result.stdout)
 (evidence/f'time-{attempt}.log').write_text(result.stderr)
 metric = lambda name: int(re.search(r'(\d+)\s+'+re.escape(name), result.stderr)[1])
-record = dict(attempt=attempt, target=cmd, module=module,
+record = dict(attempt=attempt, target=cmd, module=module, read_only_extra_roots=extra, local_environment_sha256=hashlib.sha256(configuration.read_bytes()).hexdigest() if extra else None,
     source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
     source_sha256=hashlib.sha256(raw).hexdigest(), exit_status=result.returncode,
     wall_seconds=wall, peak_rss_bytes=metric('maximum resident set size'),
@@ -37,7 +41,7 @@ record = dict(attempt=attempt, target=cmd, module=module,
     object_sha256=hashlib.sha256(out.read_bytes()).hexdigest() if result.returncode==0 else None,
     dependencies={str(p.relative_to(objects)):hashlib.sha256(p.read_bytes()).hexdigest()
         for p in objects.rglob('*.olean') if p != out},
-    qualification='Small local Std-only proof; no dependency build or capped host scope. '
+    qualification='Small focused local proof using cached objects; no dependency build or capped host scope. '
         'macOS time -l RSS is in bytes. Full stdout includes rejected declarations, '
         'whose sorryAx reports are never accepted.')
 (evidence/f'{attempt}-receipt.json').write_text(json.dumps(record,indent=2)+'\n')

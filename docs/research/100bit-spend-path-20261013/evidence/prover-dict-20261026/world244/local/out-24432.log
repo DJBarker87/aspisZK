@@ -1,0 +1,22 @@
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_CopyCell244.lean:11:4: error: Type mismatch: After simplification, term
+  small
+ has type
+  @LT.lt ℕ instLTNat (↑index) 1024
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑index ↑1024#usize
+/Users/dominic/ZK/.worktrees/cx-prover-dict/docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_CopyCell244.lean:9:61: error: unsolved goals
+T : Type
+rows : Std.Array T 1024#usize
+index : Usize
+small : ↑index < 1024
+bound : ↑index < rows.length
+value : T
+read : rows.index_usize index = ok value
+atIndex : value = (↑rows)[↑index]
+same : rows.set index value = rows
+update : rows.update index value = ok (rows.set index value)
+outEq : rows.set index value = rows
+guard : index < 1024#usize
+⊢ ok (cont (rows.set index value, index.wrapping_add 1#usize)) = ok (cont (rows, index.wrapping_add 1#usize))
+'R1Z.PDict_CopyCell244.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PDict_CopyCell244.done_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
