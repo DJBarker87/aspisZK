@@ -1,0 +1,121 @@
+'AspisR1.P2P_AccountBinding.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.P2P_AccountBinding.accepted : ∀ {A F C : Type} (adapter : AdapterRw.Ops)
+  (current : AspisR1CurrentCaller.Ops) (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (reserved : Bool) (query : Port3_NativeQueryBody.Ops) (geo : Port3_NativeGeometryBody.Ops C)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : ClaimsUnrolledFinish.StdCalls)
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)) (allocator : Allocator A)
+  (id : S2W_ExtractionBoundary.Program) (adversary : Program Bytes State (FirstInputs A))
+  (chooseSecond : FirstInputs A → alloc.vec.Vec U8 → Heap (ℕ → Record) → A → Program Bytes State (SecondInputs A))
+  (Q0 Q1 : ℕ),
+  (∀ (H : Bytes → State), (eval H adversary).1.length ≤ Q0) →
+    (∀ (input : FirstInputs A) (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A) (H : Bytes → State),
+        (eval H (chooseSecond input saved post final)).1.length ≤ Q1) →
+      S2W_TrustedStd.TrustedStd copy →
+        ∀ (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second),
+          S2W_DigestExtraction.AeneasExtraction (GExq_Caller.sdk adapter current stage finish reserved query geo B std)
+              native1 native2 hashv →
+            ∀ (sha256 H : Bytes → State),
+              S2W_ExtractionBoundary.P1 sha256 H →
+                S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                  ∀ (saved : alloc.vec.Vec U8) (post1 post2 : Heap (ℕ → Record)) (final1 final2 : A),
+                    (have input := (eval H adversary).2;
+                      first native1 copy allocator input.entry id input.data input.state =
+                        ok (core.result.Result.Ok (saved, post1, final1))) →
+                      (have input := (eval H adversary).2;
+                        have next := (eval H (chooseSecond input saved post1 final1)).2;
+                        second native2 allocator next.entry id next.data next.slot next.state =
+                          ok (core.result.Result.Ok (post2, final2))) →
+                        ∀ (project : Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)),
+                          have input := (eval H adversary).2;
+                          have next := (eval H (chooseSecond input saved post1 final1)).2;
+                          have installed := GExq_Caller.sdk adapter current stage finish reserved query geo B std;
+                          have source :=
+                            program adapter current stage finish reserved query geo B std hashv copy allocator id
+                              adversary chooseSecond;
+                          ∃ f s v,
+                            SourceCuts installed input.entry.first (next.entry.second secondSizes) saved f s ∧
+                              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                                    f.statement =
+                                  ok f.semantic ∧
+                                AdapterRw.r1_pool_adapter.owned.validate_asq8 installed id
+                                      (next.entry.second secondSizes) next.data next.slot =
+                                    ok (core.result.Result.Ok v) ∧
+                                  installed.op22 v.statement = ok (core.result.Result.Ok s.encoded) ∧
+                                    Hiq_ByteSelection.select installed id (eval H source).2 =
+                                        Hist_PairExperiment.select { first := f, second := s } ∧
+                                      (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv
+                                          (Q0 + Q1 + 2965)
+                                          (eval H
+                                            (Hiq_RecordedJoint.program source project
+                                              (Hiq_ByteSelection.select installed id))) ∨
+                                        S2W_AuthenticatedInputs.P2Prime H f.proof f.pub s.proof s.pub) :=
+fun {A F C} adapter current stage finish reserved query geo B std hashv copy allocator id adversary chooseSecond Q0 Q1
+    prefixBound choiceBound trustedCopy native1 native2 extraction sha256 H p1 syscall saved post1 post2 final1 final2
+    accepted1 accepted2 project =>
+  let input := (eval H adversary).2;
+  let next := (eval H (chooseSecond input saved post1 final1)).2;
+  have n1 :=
+    (first_accepted native1 copy trustedCopy allocator input.entry id input.data input.state final1 saved post1
+        accepted1).left;
+  have n2 :=
+    (second_accepted native2 allocator next.entry id next.data next.slot next.state final2 post2 accepted2).left;
+  have src1 := Eq.trans (Eq.symm (extraction.stage1 id input.entry.first input.data)) n1;
+  have src2 := Eq.trans (Eq.symm (extraction.stage2 id (next.entry.second secondSizes) next.data next.slot)) n2;
+  have ran :=
+    GExq_AccountAccepted.accepted adapter current stage finish reserved query geo B std hashv copy allocator id
+      adversary chooseSecond native1 native2 extraction sha256 H p1 syscall saved post1 post2 final1 final2 accepted1
+      accepted2;
+  let ⟨f, h✝⟩ :=
+    Hiq_Association.source (GExq_Caller.sdk adapter current stage finish reserved query geo B std) id input next
+      (ok (core.result.Result.Ok (saved, post1, final1))) (ok (core.result.Result.Ok (post2, final2))) saved src1 src2
+  let ⟨s, h✝¹⟩ := h✝
+  let ⟨v, h✝²⟩ := h✝¹
+  let ⟨cuts, right✝⟩ := h✝²
+  let ⟨get, right✝¹⟩ := right✝
+  let ⟨validate, right✝²⟩ := right✝¹
+  let ⟨encode, selected⟩ := right✝²
+  have association :=
+    Eq.mpr
+      (_root_.id
+        (congrArg
+          (fun _a =>
+            Hiq_ByteSelection.select (GExq_Caller.sdk adapter current stage finish reserved query geo B std) id _a.2 =
+              Hist_PairExperiment.select { first := f, second := s })
+          ran))
+      selected;
+  Exists.intro f
+    (Exists.intro s
+      (Exists.intro v
+        ⟨cuts,
+          ⟨get,
+            ⟨validate,
+              ⟨encode,
+                ⟨association,
+                  have bound :=
+                    RawJ_CollisionBudget.first_reads adapter current stage finish reserved query geo B std hashv copy
+                      allocator id adversary chooseSecond Q0 Q1 prefixBound choiceBound;
+                  have binding :=
+                    P2P_Charge.binding_or_collision
+                      (program adapter current stage finish reserved query geo B std hashv copy allocator id adversary
+                        chooseSecond)
+                      project
+                      (Hiq_ByteSelection.select (GExq_Caller.sdk adapter current stage finish reserved query geo B std)
+                        id)
+                      (Q0 + Q1) bound H;
+                  Or.casesOn
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                              (eval H
+                                (Hiq_RecordedJoint.program
+                                  (program adapter current stage finish reserved query geo B std hashv copy allocator id
+                                    adversary chooseSecond)
+                                  project
+                                  (Hiq_ByteSelection.select
+                                    (GExq_Caller.sdk adapter current stage finish reserved query geo B std) id))) ∨
+                            R9PoolRuntimeBinding.P2Prime H _a.1 _a.2)
+                        association)
+                      binding)
+                    (fun bad => Or.inl bad) fun good => Or.inr { binding := good }⟩⟩⟩⟩⟩))
