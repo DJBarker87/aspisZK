@@ -1,11 +1,13 @@
 //! Import the exact shipped module by path, without editing or copying its body.
 #![allow(dead_code)]
-pub use aspis_statement::pool_v1::{pair_forest_trace, pair_trace, pair_tree_profile, payment_relation};
+pub use aspis_statement::pool_v1::*;
+#[path = "../../../../crates/aspis-statement/src/pool_v1/pair_trace.rs"]
+mod pair_trace;
 #[path = "../../../../crates/aspis-statement/src/pool_v1/pair_forest_copy_builder.rs"]
 mod shipped;
 use aspis_core::field::M31;
 use pair_forest_trace::PoolV1PairForestInputNoteWitnessV1;
-use pair_trace::PoolV1PairInputNoteWitnessV1;
+use aspis_statement::pool_v1::pair_trace::PoolV1PairInputNoteWitnessV1;
 use pair_tree_profile::{PoolV1PairLeafWitnessV1, PoolV1PairLiveSnapshotV1};
 use payment_relation::{PoolV1MembershipWitnessV1, PoolV1OutputNoteWitnessV1};
 

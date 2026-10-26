@@ -68,7 +68,7 @@ def call (empty : BuilderRecordsReference.Roots)
     (snapshot s) asset empty
   ok (witness w, publicRecord p)
 
-def withRoots (empty : BuilderRecordsReference.Roots) : Records := ⟨call empty⟩
+abbrev withRoots (empty : BuilderRecordsReference.Roots) : Records := ⟨call empty⟩
 
 def returned (empty : BuilderRecordsReference.Roots) (i : PV_Src_NativeInput.Input) :
     pair_forest_copy_builder.CopyRecords :=
@@ -81,8 +81,12 @@ def returned (empty : BuilderRecordsReference.Roots) (i : PV_Src_NativeInput.Inp
 
 theorem newRecords_eq (empty : BuilderRecordsReference.Roots) (i : PV_Src_NativeInput.Input) :
     @PV_Src_NativeInput.newRecords (withRoots empty) i = ok (returned empty i) := by
-  unfold PV_Src_NativeInput.newRecords pair_forest_copy_builder.CopyRecords.new
-    pair_forest_copy_builder.records withRoots call
+  change (do
+    let (w,p) ← call empty i.witness (PV_Src_NativeInput.outputValue i.request)
+      (PV_Src_NativeInput.recipient i.request) i.change i.snapshot
+      (PV_Src_NativeInput.forestPublic i.request).asset
+    ok (pair_forest_copy_builder.CopyRecords.mk w p)) = _
+  unfold call
   rw [BuilderRecordsReference.records]
   rfl
 
