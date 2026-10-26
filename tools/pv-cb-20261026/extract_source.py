@@ -17,7 +17,10 @@ for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']
  (local/'reservation-transport.log').write_text(out.stdout)
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon' and project in ['proof','source-proof','step-proof']:
-  subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/project/'lib.rs'),'dombarker@100.108.41.90:'+base+'/'+project+'/lib.rs'],check=True)
+  inputs=[project+'/lib.rs']
+  if project=='step-proof':inputs.append('step-proof/owned_points.rs')
+  for relative in inputs:
+   subprocess.run(['scp',str(root/'tools/pv-cb-20261026'/relative),'dombarker@100.108.41.90:'+base+'/'+relative],check=True)
  if stage=='charon':
   args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof','step-proof'] else []),'--sysroot','default','--start-from',entry]
   if include:

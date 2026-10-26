@@ -16,7 +16,7 @@ for word in sys.argv[1:]:
  for line in r['axioms']:
   match=re.search(r'axioms: \[(.*?)\]',line)
   if match:
-   assert set(filter(None,match[1].split(', ')))<={'propext','Classical.choice','Quot.sound'}, 'nonstandard axioms'
+   assert set(re.findall(r'[\w.]+',match[1]))<={'propext','Classical.choice','Quot.sound'}, 'nonstandard axioms'
  x=dict(op=n,row=rowmap[n],status='ROW-DISCHARGED(candidate)',theorem=theorem,receipt=f'{attempt}.json',note='Exact extracted source function equation, all Result cases retained. D188 extraction trust. No V165/V167 native composition obligation charged to this pure row.')
  a=[y for y in a if y['op']!=n]+[x]
 a.sort(key=lambda x:x['op']);count=sum(x['status']=='ROW-DISCHARGED(candidate)' for x in a)

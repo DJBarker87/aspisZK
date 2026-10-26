@@ -64,7 +64,7 @@ audit+='\n-- Audit both the published row laws and their joint projections.\n'
 audit+=''.join(f'#print axioms {theorem}\n' for _,_,_,_,theorem in items)
 audit+=''.join(f'#print axioms R1Z.PV_CB_CandidateDictionary.op{n}\n' for n,_,_,_,_ in items)
 outputs[lean/'PV_CB_CandidateAudit.lean']=audit
-report=dict(status='PREPARED, not compiled; no extra row discharge',selected_ops=[r['op'] for r in rows],modules=['PV_CB_CandidateDictionary']+['PV_CB_Candidate'+g[0] for g in groups],purpose='Check that all independently discharged source/value selections coexist in one ExternalFuns record, preserving the common native carrier and all remaining callbacks.')
+report=dict(status='PREPARED, not compiled; no extra row discharge',selected_ops=[r['op'] for r in rows],modules=['PV_CB_CandidateDictionary']+['PV_CB_Candidate'+g[0] for g in groups]+['PV_CB_CandidateAudit'],purpose='Check that all independently discharged source/value selections coexist in one ExternalFuns record, preserving the common native carrier and all remaining callbacks.')
 outputs[root/'evidence/pv-cb-20261026/candidate-dictionary-prepared.json']=json.dumps(report,indent=2)+'\n'
 if sys.argv[1:]==['--check']:
  mismatches=[str(p.relative_to(root)) for p,s in outputs.items() if not p.exists() or p.read_text()!=s]
