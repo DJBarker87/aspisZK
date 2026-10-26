@@ -1,0 +1,44 @@
+{"attempt": "F3X_047", "exit_status": 0, "wall_seconds": 2.4318170640035532, "peak_rss_kib": "5365328", "swaps": "0", "print_axioms": ["'AspisR1.F3X_Headline.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3X_Join.accepted_raw_join_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3X_Margin.exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.F3X_Margin.positive' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.F3X_Headline.deployed : ∀ {W A F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ 
+...
+
+                              Option.some (AspisR1.MultiproofConeCanonical.bytesOf ↑(e2.buffers (e2.handles 6).1)) →
+                            ∃ version,
+                              version.events =
+                                  (AspisV8R19.MemoizedProgramLaw.eval H
+                                        (AspisR1.CPS_BankRecorder.program c hashv n1 n2 copy allocator id
+                                          (AspisR1.CPR_SourceBank.afterCopy initial (layout1.handles 2).1 saved)
+                                          actions)).2.2 ∧
+                                AspisR1.MultiproofConeCanonical.bytesOf ↑s.checkpoint =
+                                  AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                                    (post1.payload (e1.heap.accounts 2).1) 1768
+def AspisR1.CPR_DataPersistence.TwoTransactionLaw : {Tx Key : Type} →
+  (Tx → Tx → Prop) →
+    (Tx → Key → Prop) →
+      (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+        (Tx → Key → AspisR1.CPR_DataPersistence.Image) →
+          (Tx → Bool) → (Tx → Key → Option AspisV8R19.DuplexFrames.Bytes) → Prop :=
+fun {Tx Key} next ordinary before tentative success loaded =>
+  ∀ (t u : Tx),
+    next t u →
+      ∀ (key : Key),
+        ordinary t key →
+          loaded u key =
+            AspisR1.CPR_DataPersistence.visible (if success t = Bool.true then tentative t key else before t key)
+'AspisR1.F3X_Headline.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3X_Join.accepted_raw_join_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3X_Margin.exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3X_Margin.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra046153d17a14b6f9419e971141b1bcd.scope; invocation ID: cb652a5015064f99b61b7307bbe9749c
