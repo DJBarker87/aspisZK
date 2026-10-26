@@ -1,0 +1,4 @@
+@AspisR1.AdapterRw.RuntimeEntrypointAdmission.sharedCellsOnlyEqualKeys : ∀ {F : Type} {s : AspisR1.S2Trust.Heap F}
+  {keys : ℕ → List UInt8} {accountCount : ℕ},
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission s keys accountCount →
+    ∀ (a b : ℕ), a < accountCount → b < accountCount → (s.accounts a).1 = (s.accounts b).1 → keys a = keys b

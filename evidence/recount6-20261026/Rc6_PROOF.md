@@ -1,0 +1,13 @@
+# Rc6 proof stage
+
+`AspisR1.Rc6_Top.deployed` composes the Rc5 frozen3 two-transaction top with the PFin parser packet and the P6C accepted-run refinement. Its explicit input binders are byte-identical to Rc5's; the full statements are retained alongside this report. Its nested caller drops FirstEntry; it retains Rc5's reduced continuation, rather than importing the older Rc2 continuation. The seven SessionAPrepare leaves were already removed by Rc5 and receive no additional credit.
+
+`Rc6_Result.strengthen` destructures precisely the Rc5 result's existing f/s/outer/pre/middle/fs/ss/run/tx2 and reuses them for every new fact. PFin_Packet.from_cut and Rc6_Caller.from_cut apply on that run and the same selected semantic statement. P6C_OnCuts.same_cuts and P6C_FullBoundary.same_cuts consume the same SourceCuts and exact extraction dictionary. No second existential accepted execution is selected.
+
+`Rc6_Install.parser_base`, `p6_base`, and `reconstruct` prove the exact dictionary equalities, including the installed circle and std reservation. `Rc6_Statements.reverse` proves reverse transport of the entire new conclusion to the old Rc5 conclusion, on identical inputs. `Rc6_Forget.forget` preserves all original existential witnesses, checkpoint version, physical events, encoding, acceptance and continuation. `Rc6_Equivalent.same_domain` proves equivalence of the result domains under the already retained extraction/oracle premises; the new facts cannot introduce additional vacuity.
+
+`Rc6_Nonvacuity.accepted_input` retains an input with the same physical 1880-byte public carrier and stored proof, accepted under the existing P2Prime condition, excluding an always-rejecting driver. This is relative non-vacuity and does not supply the outstanding joint fixture of all top inputs. JFx_ remains responsible for that fixture. No crypto assumption, security metric, carrier, probability bound or game clause was changed.
+
+Focused host attempts Rc6_001–008 use the inherited coherent SInt2 workspace and unchanged launchers. The PFin object path supplements that cache; direct object fingerprints are recorded per attempt. Each scope has MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64 and Lean -j1 -M7000. Exact command/source revision/hash, dependency hashes, exit, wall time, RSS, swap and full axioms are in each receipt. All new theorems use only propext, Classical.choice, Quot.sound. No Kani/Rust/SBF job or package replay; no shipped source changed and no ELF rebuild trigger.
+
+S2 and the 100-bit release target remain not established. A fresh recount and final release-wide coherent replay/trust audit remain distinct obligations.

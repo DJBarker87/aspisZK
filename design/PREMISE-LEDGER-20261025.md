@@ -2243,3 +2243,222 @@ Coverage tags name running-job scope, never imported closure. PFin_ covers parse
 `Rc5_Nonrejecting.accepted_input` exports accepted input and non-all-reject under the retained P2Prime on the SAME source result, with history constructed. `Rc5_RuntimeFixture.joint_runtime` reuses the checked joint model witness for ALL NEW game/runtime conditions, both runtime admissions, SDK/std consistency, both successful wrappers and nonempty physical events. Its native functions are local successful stubs; it is not extraction to the installed cryptographic source. `Rc5_DictionaryNonvacuity` checks dictionary contracts and model/data surjectivity. **Joint inhabitation of every retained source/crypto/frozen3 hypothesis remains OPEN (JFx_)**; inherited exact-default-ELF success is separate evidence, not that joint kernel witness.
 Budget exhausted:60/60 Lean invocations,54 successful,6 excluded development failures,0/0 Kani. Final root017 and reverse019 pass; final19 theorem axiom lines in audit054 are standard-only (propext,Classical.choice,Quot.sound). Each receipt records exact target/argv,source revision/hash,dependency/tool hashes,exit,wall,RSS,swap and enforced cgroup. One own scope at a time,6G/8G/swap0/tasks64,-j1,-M7000. No cap/depth/heartbeat increase,timeout,memory kill,unchanged failed rerun,package replay or infrastructure change. Fresh field audits are required missing evidence artifacts, not repeated full regressions.
 Coherent SInt2 and inherited package/core caches are reused and re-pinned; this is focused composition, not a full frozen-release rebuild. No shipped/cfg(kani) source changed: no ELF rebuild trigger. Inherited pins remain default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No wallet/key/account cleanup. **S2 OPEN; 100-bit deployed target not yet established.**
+
+## Recount on Rc6_Top (2026-10-26)
+
+**S2 OPEN; target not yet established.** Actual theorem: `AspisR1.Rc6_Top.deployed`. Base: `AspisR1.Rc5_Top.deployed`. This is a new section; all preceding bytes were checked unchanged against `evidence/recount6-20261026/Rc6_ledger_prefix.json`.
+
+Method: fresh kernel `#check @...` / `#print` inventories of the root, nested result/caller/continuation/finish, trust structures, game and runtime dictionary; quantified atomic families, shared witnesses/guards and non-alias dictionary deduplication follow the original ledger. Classification and row-to-field correspondence are reviewed; counts are mechanical. The machine-readable rows, diff and source/log hashes are in `evidence/recount6-20261026/Rc6_premises.json`; expanded structure fields are in `Rc6_field_catalog.json`.
+
+| Scope | Before T/P/C | After T/P/C | Lead T/P/C | Session A T/P/C | External T/P/C |
+|---|---:|---:|---:|---:|---:|
+| actual antecedent | 83/33/0 | 83/32/0 | 0/17/0 | 0/12/0 | 83/3/0 |
+| deployment only | 6/13/0 | 6/8/0 | 0/7/0 | 0/1/0 | 6/0/0 |
+| deployment alias | 0/2/0 | 0/2/0 | 0/2/0 | 0/0/0 | 0/0/0 |
+| all retained audit rows | 89/48/0 | 89/42/0 | 0/26/0 | 0/13/0 | 89/3/0 |
+| deduplicated actual plus non-alias deployment | 89/46/0 | 89/40/0 | 0/24/0 | 0/13/0 | 89/3/0 |
+| actual excluding approved game domain | 83/22/0 | 83/21/0 | 0/6/0 | 0/12/0 | 83/3/0 |
+| deduplicated excluding approved game domain | 89/35/0 | 89/29/0 | 0/13/0 | 0/13/0 | 89/3/0 |
+
+The actual antecedent delta is **0T, −1P, 0C** (L099); the additional deployment delta is **0T, −5P, 0C** (L195–L199). Deduplicated total: **89T+46P → 89T+40P**, with eleven approved game-domain clauses retained. Excluding those clauses explicitly gives **89T+35P → 89T+29P**. No new premise or trust item is added. The seven SessionAPrepare leaves N108–N114 and parser rows L129–L132 were already absent on Rc5 and receive no duplicate removal credit.
+
+Before: the nested Rc5 caller requires `P2Prime → FirstEntryVerifierConeJoin → ∃ parsed, facts ∧ sites ∧ Rc5_Cont.Outcome`. After: Rc6 requires `P2Prime → ∃ parsed, facts ∧ sites ∧ Rc5_Cont.Outcome`; the same result witnesses additionally carry `PFin_Packet.Facts`, `P6C_OnCuts.SafeBatches` and `P6C_FullBoundary.Facts`. The explicit root binders, frozen3 carrier/game/failure events, query budgets and numerical bounds are unchanged. Full before/after statements are retained in `Rc6_before-statement.lean.txt` and `Rc6_after-statement.lean.txt`.
+
+`Rc6_Result.strengthen` uses the existing Rc5 f/s/run/tx2 and checkpoint version for every addition. `Rc6_Install.parser_base`, `p6_base`, `reconstruct` prove dictionary compatibility; `Rc6_Statements.reverse` transports the entire conclusion back to Rc5 on the same inputs. `Rc6_Equivalent.same_domain` proves relative result-domain equivalence under the retained extraction/oracle premises. `Rc6_Nonvacuity.accepted_input` preserves the conditional accepted input and excludes an always-rejecting driver; it does not instantiate all top premises jointly. JFx_ retains that joint fixture obligation.
+
+P6 removal is accepted-run refinement on the original issued ordered logs plus the defined ideal extension; it is not a universal totality claim about an unissued native syscall. `P6C_CarrierGap.independent` explains why mathematical P6 closure does not remove L166. Frozen3/global source and runtime carrier association remain.
+
+### Row diff against Rc5
+
+| ID | Class | Owner | Scope | Change | Evidence |
+|---|---|---|---|---|---|
+| L001 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L002 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L003 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L004 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L005 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L006 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L007 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L008 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L009 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L010 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L011 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L012 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L013 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L014 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L015 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L016 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L017 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L018 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L019 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L020 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L021 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L022 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L023 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L024 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L025 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L026 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L027 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L028 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L029 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L030 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L031 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L032 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L033 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L034 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L035 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L036 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L037 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L038 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L039 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L040 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L041 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L042 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L043 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L044 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L045 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L046 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L047 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L048 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L049 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L050 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L051 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L052 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L053 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L054 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L055 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L056 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L057 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L058 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L059 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L060 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L061 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L062 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L063 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L064 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L065 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L066 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L067 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L068 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L069 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L070 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L071 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L072 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L073 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L074 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L075 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L076 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L077 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L078 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L079 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L080 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L081 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L082 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L083 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L084 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L097 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L098 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L099 | P | lead | actual antecedent | removed | Rc6_Caller.from_cut |
+| L133 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L134 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L135 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L136 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L137 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L138 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L142 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L143 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L144 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L145 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L146 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L147 | P | session A | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L154 | P | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L157 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L159 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| N117 | P | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| N118 | P | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| L165 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L166 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L176 | P | session A | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L179 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L181 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L182 | P | lead | deployment alias | retained | unchanged atomic family; fresh Rc6 inventories |
+| L185 | P | lead | deployment alias | retained | unchanged atomic family; fresh Rc6 inventories |
+| L186 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L187 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L188 | P | lead | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L189 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L190 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L191 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L192 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L193 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L194 | T | external | deployment only | retained | unchanged atomic family; fresh Rc6 inventories |
+| L195 | P | lead | deployment only | removed | Rc6_Result.strengthen / P6C_FullBoundary.same_cuts / P6C_Extension.boundary |
+| L196 | P | lead | deployment only | removed | Rc6_Result.strengthen / P6C_FullBoundary.same_cuts / P6C_Extension.boundary |
+| L197 | P | lead | deployment only | removed | Rc6_Result.strengthen / P6C_FullBoundary.same_cuts / P6C_Extension.boundary |
+| L198 | P | lead | deployment only | removed | Rc6_Result.strengthen / P6C_FullBoundary.same_cuts / P6C_Extension.boundary |
+| L199 | P | lead | deployment only | removed | Rc6_Result.strengthen / P6C_FullBoundary.same_cuts / P6C_Extension.boundary |
+| Rc5_T001 | T | external | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G001 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G002 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G003 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G004 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G005 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G006 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G007 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G008 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G009 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G010 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+| Rc5_G011 | P | lead | actual antecedent | retained | unchanged atomic family; fresh Rc6 inventories |
+
+### Remaining P coverage
+
+Tags identify covering jobs only; none imports closure from a concurrent branch. JFx_ covers fixture instantiation, not universal discharge of accepted-event/P2Prime/game clauses. `UNCOVERED` means no listed job is credited for that row.
+
+| ID | Owner | Scope | Covering job | Remaining family |
+|---|---|---|---|---|
+| L083 | lead | actual antecedent | JFx_ | accepted1 |
+| L084 | lead | actual antecedent | JFx_ | accepted2 |
+| L097 | lead | actual antecedent | JFx_ | p2prime.binding.proof |
+| L098 | lead | actual antecedent | JFx_ | p2prime.binding.pub |
+| L133 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round0.boundary |
+| L134 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round0.quarter |
+| L135 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round0.eval |
+| L136 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round1.boundary |
+| L137 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round1.quarter |
+| L138 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.round1.eval |
+| L142 | session A | actual antecedent | SAG_ | pairing_S3_S5_S9.pair |
+| L143 | session A | actual antecedent | SAG_ | matches_S4_S7 |
+| L144 | session A | actual antecedent | SAG_ | semantic_S3_S9.EquationEndpoint.initial |
+| L145 | session A | actual antecedent | SAG_ | semantic_S3_S9.EquationEndpoint.chain |
+| L146 | session A | actual antecedent | SAG_ | semantic_S3_S9.EquationEndpoint.terminal |
+| L147 | session A | actual antecedent | SAG_ | dot_S5 |
+| L154 | external | actual antecedent | UNCOVERED | hqueries |
+| L157 | lead | actual antecedent | F3X_ | frozen3 canonicalJoin.verifier |
+| L159 | lead | actual antecedent | SCC_ | frozen3 StoredCarrierBinding |
+| N117 | external | actual antecedent | UNCOVERED | prefixBound |
+| N118 | external | actual antecedent | UNCOVERED | choiceBound |
+| L165 | lead | deployment only | UNCOVERED | shape full semantic/transcript join |
+| L166 | lead | deployment only | BEf_ | batch source Result/effects |
+| L176 | session A | deployment only | UNCOVERED | S6 native decoded/public transport |
+| L179 | lead | deployment only | UNCOVERED | library/native frame |
+| L181 | lead | deployment only | UNCOVERED | oracle model order |
+| L182 | lead | deployment alias | UNCOVERED | raw canonical join |
+| L185 | lead | deployment alias | UNCOVERED | deployed stored experiment |
+| L186 | lead | deployment only | UNCOVERED | source lowering to frozen ELFs |
+| L187 | lead | deployment only | UNCOVERED | coherent frozen replay |
+| L188 | lead | deployment only | UNCOVERED | final axioms/trust audit |
+| Rc5_G001 | lead | actual antecedent | JFx_ | game.a.consecutive |
+| Rc5_G002 | lead | actual antecedent | JFx_ | game.a.entry1 |
+| Rc5_G003 | lead | actual antecedent | JFx_ | game.a.entry2 |
+| Rc5_G004 | lead | actual antecedent | JFx_ | game.b.bankKey |
+| Rc5_G005 | lead | actual antecedent | JFx_ | game.b.publicKey |
+| Rc5_G006 | lead | actual antecedent | JFx_ | game.b.noOtherTransaction |
+| Rc5_G007 | lead | actual antecedent | JFx_ | game.c.parent |
+| Rc5_G008 | lead | actual antecedent | JFx_ | game.d.copy |
+| Rc5_G009 | lead | actual antecedent | JFx_ | game.d.actions |
+| Rc5_G010 | lead | actual antecedent | JFx_ | game.d.writerTrace |
+| Rc5_G011 | lead | actual antecedent | JFx_ | game.d.readerTrace |
+
+**Release gates:** L187 remains `UNCOVERED`: coherent frozen dependency replay. L188 remains `UNCOVERED`: final release-wide trust/axiom audit. The focused Rc6 standard-axiom check discharges neither release gate. L186 source lowering to the frozen default/devnet/Pool artifacts also remains.
+
+Validation: 100/100 Lean compile attempts (8 proof modules and 92 focused inventories), 0/10 Kani, no package replay. Per-attempt exact target, command, exit, wall time, peak RSS, swap, source revision/hash, dependency fingerprints and axioms are retained under `evidence/recount6-20261026/`. All new top theorems have `#print axioms` using only `propext`, `Classical.choice`, `Quot.sound`. One 6G/8G/Swap0/Tasks64 scope at a time, Lean `-M7000`; no cap increases or timeout/memory-kill reruns. The cache inventory pins 1,726 selected modules; two inherited comment-only source variants are recorded separately. This is focused cache composition, not a fresh frozen-release replay. No shipped file or cfg(kani) harness changed, so the ELF rebuild trigger did not fire.
