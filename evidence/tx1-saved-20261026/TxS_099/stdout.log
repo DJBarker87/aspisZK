@@ -1,0 +1,16 @@
+AspisR1.TxS_Transfer.prepare : ∀ (source target : AspisR1Stage2.verifier.Prepared)
+  (old fresh : AspisR1Stage2.verifier.Accumulator) (size : (↑old.weights).length = 64)
+  (qb : ∀ (j : Fin 22), ↑(↑source.queries)[↑j] < 262144)
+  (canonical :
+    AspisR1.CheckpointBytesBlocks.CanonicalFields (AspisR1.Port3_DecodeCoherence.inventory source old size qb))
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E),
+  AspisR1.CheckpointBytes4SavedFields.BodyMatches target fresh
+      (AspisR1.CheckpointBytesBlocks.prepared (AspisR1.Port3_DecodeCoherence.inventory source old size qb) canonical)
+      am →
+    ∀ (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+      (rho : AspisR1.OraclePortCheckpointAbiC5.K) (q : Fin 22 → Fin 262144),
+      AspisR1.Port5Q1_QueryPorts.SessionAPrepare source data q rho →
+        AspisR1.Port5Q1_QueryPorts.SessionAPrepare target data q rho ∧
+          (↑fresh.weights).length = 64 ∧
+            AspisR1.Port3_FlushInstall.Canonical fresh.power ∧ AspisR1.Port4C_QueryArithmetic.CanonE fresh.rhs
+'AspisR1.TxS_Transfer.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]

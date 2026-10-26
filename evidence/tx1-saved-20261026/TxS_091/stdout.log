@@ -1,0 +1,9 @@
+@AspisR1.TxS_RawFinish.to_typed : ∀ {W : Type} (finish : AspisR1Stage2.Stage2Finish.FinishOps W)
+  (v : AspisR1Stage2.verifier.View) (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (stored pub : AspisV8R19.DuplexFrames.Bytes)
+  (tx1p : AspisR1CurrentCaller.verifier.Prepared) (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  AspisR1.TxS_RawFinish.Outcome finish v p a proof saved H stored pub tx1p parsed trace →
+    AspisR1.TxS_Finish.Outcome finish v p a proof saved H stored pub tx1p parsed trace
+'AspisR1.TxS_RawFinish.to_typed' depends on axioms: [propext, Classical.choice, Quot.sound]

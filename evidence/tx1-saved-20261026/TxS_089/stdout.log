@@ -1,0 +1,45 @@
+AspisR1.TxS_Query.twelve : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives ops →
+    ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+      (saved returned : AspisR1Stage2.verifier.Accumulator)
+      (g : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 29#usize)
+      (geometry : AspisR1Stage2.verifier.QueryGeometry) (pending after : AspisR1Stage2.verifier.BatchedWeights)
+      (flushed : Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31)
+      (back :
+        Aeneas.Std.Slice AspisR1Stage2.aspis_core.field.QM31 →
+          Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31)
+      (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+      (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+      (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+      (rho : AspisR1.OraclePortCheckpointAbiC5.K),
+      AspisR1.Port5Q1_QueryPorts.SessionAPrepare p data q rho →
+        (↑saved.weights).length = 64 →
+          AspisR1.Port3_FlushInstall.Canonical saved.power →
+            AspisR1.Port4C_QueryArithmetic.CanonE saved.rhs →
+              saved.next = 10#usize →
+                AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                    Option.some data →
+                  parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                    (↑proof).length = 57607 →
+                      ∀ (recovered : ℕ → Option AspisV8R19.DuplexFrames.Bytes),
+                        (∀ pos < 22,
+                            recovered (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                              Option.some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                          AspisR1.Port5Q1_GeometryBinding.Binding p.queries 10#usize 22#usize geometry →
+                            ∀ (reserved : Bool),
+                              AspisR1.Port3_NativePendingInstall.source reserved saved.weights.deref =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) →
+                                AspisR1.Port3_QueryStage.query
+                                      (AspisR1.Port4C_RowStd.install (AspisR1.Port5Q1_QueryPorts.install ops)) proof p
+                                      saved g Option.none geometry pending 22#usize =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (returned, after)) →
+                                  returned.weights.deref_mut = (returned.weights.deref, back) →
+                                    AspisR1.Port3_FlushInstall.flush after returned.weights.deref =
+                                        Aeneas.Std.Result.ok flushed →
+                                      AspisR1.CheckpointBytes5Output.accumulator
+                                          { weights := back flushed, rhs := returned.rhs, power := returned.power,
+                                            next := returned.next } =
+                                        AspisR1.OraclePortCheckpointStateC3.advance
+                                          (AspisR1.OraclePortCheckpointResumeC5.model data rho q) 12
+                                          (AspisR1.CheckpointBytes5Output.accumulator saved)
+'AspisR1.TxS_Query.twelve' depends on axioms: [propext, Classical.choice, Quot.sound]

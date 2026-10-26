@@ -1,0 +1,7 @@
+# Stage 1: physical encoding and query transport
+
+TxS_Writer.saved derives the complete actual saved Vec encoding with the source numeric Prepared and source numeric accumulator. TxS_Prepared.fields identifies all fields consumed by SessionAPrepare. TxS_Transfer.prepare transports the same source query preparation through the concrete saved body. TxS_Query.twelve proves the twelve-step recurrence directly from that transported preparation, without requiring the unrelated model Context/gamma/kappa. TxS_Reader.saved composes original writer success, actual retained bytes and actual reader success, deriving full BodyMatches and accumulator identity.
+
+8 Lean invocations, 5 passes and 3 excluded diagnostics (001 type/rewrite,003 missing avoidable transitive import,004 unsolved index proof). All current sources match passing snapshots 002,005,006,007,008. Each receipt records exact command/target/source hash/dependency hashes/revision/caps/exit/wall/RSS/swaps/axioms. All passing new theorems use only propext/Classical.choice/Quot.sound. Peak 5,203,348 KiB; swaps0; no time/memory kill. Existing SInt2 cache reused, no dependency build or package replay. 0 Kani.
+
+No top premise credit yet. Next: compose this physical path with the original same-run ten-state and authentication continuations, remove N115 from the actual endpoint, preserve all Rc2 conclusions and audit the remaining intrinsic model-carrier rows. No shipped source, release pin, protocol/feature/wire format, key or wallet changes.

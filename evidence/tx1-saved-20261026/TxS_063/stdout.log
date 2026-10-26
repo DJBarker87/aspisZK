@@ -1,0 +1,80 @@
+TxS_LegacyResult.lean:67:51: error: Application type mismatch: The argument
+  encoded
+has type
+  TxS_Encoding.Facts run H
+but is expected to have type
+  Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1
+    data2 slot saved post1 post2 H f s outer pre middle fs ss run
+in the application
+  And.intro encoded
+TxS_LegacyResult.lean:67:59: error: Application type mismatch: The argument
+  base
+has type
+  Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1
+    data2 slot saved post1 post2 H f s outer pre middle fs ss run
+but is expected to have type
+  NP6_Constructors.Contents run.initial run.pending
+in the application
+  And.intro base
+TxS_LegacyResult.lean:67:64: error: Application type mismatch: The argument
+  initial
+has type
+  NP6_Constructors.Contents run.initial run.pending
+but is expected to have type
+  T2R_Public.Facts f.pub f.proof
+in the application
+  And.intro initial
+TxS_LegacyResult.lean:68:4: error: Application type mismatch: The argument
+  TxS_RawPublic.to_typed f.pub f.proof publicFacts
+has type
+  T2R_Public.Facts f.pub f.proof
+but is expected to have type
+  T2R_Parser.Facts f.proof
+in the application
+  And.intro (TxS_RawPublic.to_typed f.pub f.proof publicFacts)
+TxS_LegacyResult.lean:68:53: error: Application type mismatch: The argument
+  parser
+has type
+  T2R_Parser.Facts f.proof
+but is expected to have type
+  T2R_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+    (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+in the application
+  And.intro parser
+TxS_LegacyResult.lean:67:9: error: Invalid `⟨...⟩` notation: The expected type
+  ∀
+    (a :
+      S2X.CheckpointVersionBinding (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768)
+        (bytesOf ↑s.checkpoint)),
+    P2Prime H f.proof f.pub s.proof s.pub →
+      S2W_ChildJoins.FirstEntryVerifierConeJoin f.proof →
+        ∃ parsed,
+          S2W_LeadInterface.S2CallerFacts
+              (observation f s saved (CPhy_Ranges.nodes f.proof s.proof) (CPhy_Ranges.y1 f.proof) pre middle fs ss
+                (before e1 e2) (after e1 e2 post1))
+              (S2Z.Oracle.leadDigest
+                (sdkOps
+                  (Tx2I_Install.install adapterOps
+                    (Op5T_Concrete.stage
+                      (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+                    finishOps)
+                  (Uni_Install.current ops reserved queryOps geoOps) B (NP6_StdModel.calls reservation)))
+              () H (bytesOf ↑f.proof) (bytesOf ↑f.pub) (bytesOf ↑saved) parsed ∧
+            (∀ (site : Site),
+                (observation f s saved (CPhy_Ranges.nodes f.proof s.proof) (CPhy_Ranges.y1 f.proof) pre middle fs ss
+                        (before e1 e2) (after e1 e2 post1)).reached
+                    site ↔
+                  S2W_SiteSchedule.Event.site site ∈
+                    projected
+                      (SdkD_Child.port adapterOps (Uni_Install.current ops reserved queryOps geoOps)
+                        (Op5T_Concrete.stage
+                          (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps))
+                        finishOps B (NP6_StdModel.calls reservation))
+                      outer) ∧
+              T2R_ContSource.Outcome adapterOps ops stageBase finishOps reserved queryOps geoOps B
+                (NP6_StdModel.calls reservation) prior H f s saved run tx2
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+TxS_LegacyResult.lean:69:8: error: No goals to be solved
+'AspisR1.TxS_LegacyResult.forget' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
