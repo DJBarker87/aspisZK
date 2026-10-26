@@ -56,3 +56,17 @@ pub fn wrapper_finalize(state:sha2::Sha256,out:&mut sha2::digest::Output<sha2::S
     use sha2::digest::FixedOutput;
     state.finalize_into(out);
 }
+#[cfg(kani)]
+pub fn io_kind(error:&std::io::Error)->std::io::ErrorKind { error.kind() }
+#[cfg(kani)]
+pub fn option_some_and(value:Option<u64>,f:impl FnOnce(u64)->bool)->bool { value.is_some_and(f) }
+#[cfg(kani)]
+pub fn option_ref(value:&Option<u64>)->Option<&u64> { value.as_ref() }
+#[cfg(kani)]
+pub fn option_or(value:Option<u64>,error:u32)->Result<u64,u32> { value.ok_or(error) }
+#[cfg(kani)]
+pub fn option_eq(left:Option<u64>,right:Option<u64>)->bool { left==right }
+#[cfg(kani)]
+pub fn option_try(value:Option<u64>)->Option<u64> { Some(value?) }
+#[cfg(kani)]
+pub fn result_map(value:Result<u64,u32>,f:impl FnOnce(u64)->u64)->Result<u64,u32> { value.map(f) }

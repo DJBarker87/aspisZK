@@ -2,7 +2,7 @@
 
 Target not yet established. Zero root refinement premises removed. These tables describe the final simultaneous partial source/value dictionary.
 
-New source entries:94; inherited:62; selected:156/262. Remaining:106, including19 outer-reachable entries outside the proof-body reachability overapproximation. Type interpretations:25/28; remaining0,3,27.
+New source entries:101; inherited:62; selected:163/262. Remaining:99, including19 outer-reachable entries outside the proof-body reachability overapproximation. Type value interpretations:26/28; remaining3,27. File ownership/world remains separate.
 
 ## Newly installed entries
 
@@ -11,6 +11,13 @@ New source entries:94; inherited:62; selected:156/262. Remaining:106, including1
 |0|`Shared0T.Insts.CoreConvertAsRef.as_ref`|`R1Z.PDict_ResumeDictionary.op0_installed`|
 |1|`Slice.Insts.CoreConvertAsRefSlice.as_ref`|`R1Z.PDict_ResumeDictionary.op1_installed`|
 |2|`core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq`|`R1Z.PDict_ResumeDictionary.op2_installed`|
+|5|`core.option.Option.is_some_and`|`R1Z.PDict_RejectionStd.op5_installed`|
+|6|`core.option.Option.as_ref`|`R1Z.PDict_RejectionStd.op6_installed`|
+|7|`core.option.Option.ok_or`|`R1Z.PDict_RejectionStd.op7_installed`|
+|8|`core.option.Option.Insts.CoreCmpPartialEqOption.eq`|`R1Z.PDict_RejectionStd.op8_installed`|
+|9|`core.option.Option.Insts.CoreOpsTry_traitTry.branch`|`R1Z.PDict_RejectionStd.op9_installed`|
+|10|`core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual`|`R1Z.PDict_RejectionStd.op10_installed`|
+|11|`core.result.Result.map`|`R1Z.PDict_RejectionStd.op11_installed`|
 |13|`core.sync.atomic.compiler_fence`|`R1Z.PDict_ResumeDictionary.op13_installed`|
 |17|`std.fs.File.Insts.StdIoWrite.flush`|`R1Z.PDict_FileFlush.op17_installed`|
 |19|`std.fs.OpenOptions.new`|`R1Z.PDict_ResumeDictionary.op19_installed`|
@@ -107,7 +114,7 @@ New source entries:94; inherited:62; selected:156/262. Remaining:106, including1
 
 | ID | Name | Status and theorem |
 |---:|---|---|
-|0|`std.fs.File`|OPEN; `no theorem`|
+|0|`std.fs.File`|installed value/source representation; `R1Z.PDict_FileCarrier.type0_installed`|
 |1|`std.fs.OpenOptions`|installed value/source representation; `R1Z.PDict_FinalTypes.type1_installed`|
 |2|`std.path.Path`|installed value/source representation; `R1Z.PDict_FinalTypes.type2_installed`|
 |3|`std.io.error.Error`|OPEN; `no theorem`|
@@ -144,13 +151,6 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |---:|---|---|
 |3|`core.mem.take`|True|
 |4|`core.mem.drop`|True|
-|5|`core.option.Option.is_some_and`|True|
-|6|`core.option.Option.as_ref`|True|
-|7|`core.option.Option.ok_or`|True|
-|8|`core.option.Option.Insts.CoreCmpPartialEqOption.eq`|True|
-|9|`core.option.Option.Insts.CoreOpsTry_traitTry.branch`|True|
-|10|`core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual`|True|
-|11|`core.result.Result.map`|True|
 |14|`std.fs.File.open`|False|
 |15|`std.fs.File.sync_all`|False|
 |16|`std.io.Write.write_all.default`|False|
@@ -249,4 +249,4 @@ Body-reachable entries remain with the sibling except the closed semantic-error 
 |260|`r1_wire.DOMAIN`|True|
 |261|`std.fs.File.Insts.StdIoWrite.write_all`|False|
 
-All E1/E2, carrier, adversary, witness, bad-event, seed and observer requirements remain unchanged. File ownership and dynamic IO-error/formatter representations are open. No complete native dictionary, root RunJoin, privacy,100-bit or adoption claim is made.
+All E1/E2, carrier, adversary, witness, bad-event, seed and observer requirements remain unchanged. File ownership/world transport and dynamic IO-error/formatter representations are open. Earlier field equations lift to the final selector by PDict_SelectorCoherence retention theorems, at the base whose File field is PDict_FileCarrier.File. No complete native dictionary, root RunJoin, privacy,100-bit or adoption claim is made.

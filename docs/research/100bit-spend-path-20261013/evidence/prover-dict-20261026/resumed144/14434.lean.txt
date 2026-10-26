@@ -1,0 +1,25 @@
+import R1Z.PDict_RejectionStd
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PDict_RejectTree
+open Aeneas Aeneas.Std Result ProverRwFull
+/-- Empty publication indices reject before any count loop or hashing. -/
+theorem empty_node_count (base : ExternalTypes)
+    (ops : @ExternalFuns (PDict_RejectionStd.native base))
+    (indices : Slice U32) (empty : indices.length = 0) :
+    @host_tree.node_count (PDict_RejectionStd.native base)
+      (PDict_RejectionStd.selected base ops) indices = .ok none := by
+  have check : @host_tree.check_indices (PDict_RejectionStd.native base)
+      (PDict_RejectionStd.selected base ops) indices = .ok none := by
+    simp only [host_tree.check_indices,core.slice.Slice.is_empty,empty]
+    rfl
+  unfold host_tree.node_count
+  rw [check]
+  simp [core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+    core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+    PDict_RejectionStd.selected,
+    PDict_RejectionStdSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+    PDict_RejectionStdSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+    PDict_RejectionStdSource.optionTag]
+#print axioms empty_node_count
+end R1Z.PDict_RejectTree

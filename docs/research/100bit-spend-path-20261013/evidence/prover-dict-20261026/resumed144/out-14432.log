@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_RejectTree.lean:7:0: error: This instance has 1 argument that cannot be inferred using typeclass synthesis. Specifically
+
+  argument 1: `(base : ExternalTypes)`
+
+These arguments are not instance-implicit and appear neither in another instance-implicit argument nor the return type, so they cannot be inferred using typeclass synthesis.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_RejectTree.lean:9:66: error: Application type mismatch: The argument
+  ops
+has type
+  @ExternalFuns base
+but is expected to have type
+  @ExternalFuns (PDict_RejectionStd.native base)
+in the application
+  PDict_RejectionStd.selected base ops
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_RejectTree.lean:12:47: error: unsolved goals
+base : ExternalTypes
+ops : ExternalFuns
+indices : Slice U32
+empty : indices.len = 0#usize
+⊢ (do
+      let o ←
+        do
+          let b ← ok (decide (indices.length = 0))
+          if b = true then ok none
+            else do
+              let i1 ← multiproof.MAX_BATCH
+              if 0#usize > i1 then ok none
+                else do
+                  let pending_return ← host_tree.check_indices_loop indices 0#usize
+                  match pending_return with
+                    | none => ok none
+                    | some o => ok o
+      let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (s, index_mut_back) ←
+            core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                (Array.repeat 16#usize 0#u32) { «end» := 0#usize }
+          let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+          let i2 ← multiproof.LEAF_BITS
+          let i3 ← host_tree.count_levels (index_mut_back s1) 0#usize 0#u32 0#usize i2
+          ok (some i3)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual Usize residual) =
+    ok none
+'R1Z.PDict_RejectTree.empty_node_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
