@@ -182,3 +182,29 @@ source is sent as22827. No guard or launcher changed; refusal counts zero Lean.
 |77|V199|INSTALLED ordered clone; first failure preserved|PV_CB_CodecComposition.clone/clone_fail_first;22828|
 
 All audits standard; full ledger rows/endpoint removed remains0.
+
+## Current wrapping arithmetic for op117 (helper stage)
+
+PV_CB_CurrentComplex (22830) checks add/sub/mul against the retained release
+carriers. PV_CB_CurrentComplexMore (22833) adds square/scale/double.
+PV_CB_CurrentNeg (22835) proves branchless native negation = retained release
+negation for every u32, using symbolic all-ones/zero masking.
+PV_CB_CurrentQuartic (22836) checks add/mul/square/scale and the tower-r map.
+All final axioms are standard.22831/22832/22834 failures are retained; no cap
+or recursion setting was raised. The square recursion-depth failure was
+replaced with explicit rewrites of both field constants, not a larger limit.
+
+PV_CB_MaskSource (22829) is a PREPARED control rebind, not an installed
+op117 source law. mask-rebind.json pins every retained control body; only
+field method/type references are rebound. A fresh current-source extraction
+comparison is still required. No closure is inferred from it compiling.
+
+Native admission: the encoder Rust extraction passed after the proof manifest
+removed its unused statement dependency (the first compile lacked a cfg(kani)
+statement test support file). Translation remains unstarted after reservation
+denials, including six retries. Some outer admission scans were earlier than
+three minutes; they were denied and launched no work. A timestamp guard is now
+used before retries. The only successful translation launch after a wait was
+the earlier take translation. No reservation or launcher guard was bypassed.
+Current Kani use remains2/20. Source snapshot is isolated in the assigned host
+directory; shipped crates/programs and all sibling worktrees remain unchanged.

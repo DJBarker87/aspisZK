@@ -10,5 +10,5 @@ for branch,table in zip(branches,tables):
  s=git('show',f'{branch}:{table}')
  lines=[l for l in s.splitlines() if l.startswith(f'|{n}|') or f'op{n} ' in l or f'op{n}`' in l]
  r['branches'][branch]=dict(revision=git('rev-parse',branch).strip(),table=table,matches=lines)
-p=root/'evidence/pv-cb-20261026'/f'op{n}-sibling-check.json'
+p=root/'evidence/pv-cb-20261026'/f'op{n}-sibling-check{("-"+sys.argv[2]) if len(sys.argv)>2 else ""}.json'
 assert not p.exists();p.write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r))
