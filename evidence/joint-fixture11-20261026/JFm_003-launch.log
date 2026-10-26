@@ -1,0 +1,54 @@
+{"attempt": "JFm_003", "exit_status": 1, "wall_seconds": 2.4992508930154145, "peak_rss_kib": "5729376", "swaps": "0", "print_axioms": ["'AspisR1.JFm_Query00Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFm_Query00Semantic.lean:19:54: error: unsolved goals
+Hash : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash
+hash : Hash
+q : aspis_core.field.QM31
+call : AspisR1PublicPreparation.sampler.qm31_sample (encodeState JFp_Query00Source.block) = ok q
+coords :
+  ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) = [399501241, 284689285, 1852519329, 449773828]
+⊢ (let (r, self1) :=
+      (core.result.Result.Ok (encodeState JFp_Query00Source.block),
+        { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        |
+...
+_Query00Semantic.lean:19:54: error: unsolved goals
+Hash : Type
+D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash
+hash : Hash
+q : aspis_core.field.QM31
+call : AspisR1PublicPreparation.sampler.qm31_sample (encodeState JFp_Query00Source.block) = ok q
+coords :
+  ExtractedQM31SamplerCorrect.coordinates (SamplerTransport.toOld q) = [399501241, 284689285, 1852519329, 449773828]
+⊢ (let (r, self1) :=
+      (core.result.Result.Ok (encodeState JFp_Query00Source.block),
+        { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)) =
+    ok (core.result.Result.Ok q, { state := encodeState JFp_Query00Source.ratchet, hash := hash, next_row := 1#u8 })
+JFm_Query00Semantic.lean:25:92: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [JFp_Query00Source.source, ̲bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,̵c̵a̵l̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFm_Query00Semantic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4da400059cb54334b127a052b8126717.scope; invocation ID: 314b250082534399818991909b77b421
