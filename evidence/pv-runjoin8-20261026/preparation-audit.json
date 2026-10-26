@@ -98,9 +98,16 @@
     },
     {
       "path": "evidence/pv-runjoin8-20261026/pending-proof-sources/PV_RunJoin_InstallationFinalAudit.lean.txt",
-      "sha256": "e719b41b4fe988dc11669af015a5542e610300c481e747f35c8ad5e80e1f8fe3",
+      "sha256": "f2832e8ed837a643de526606b41acb09023f07632ab6fcc622bbe6c2bd0d8f39",
       "declarations": [],
       "axioms_requests": [
+        "R1Z",
+        "R1Z",
+        "R1Z",
+        "R1Z",
+        "R1Z",
+        "R1Z",
+        "R1Z",
         "R1Z",
         "R1Z",
         "R1Z",
@@ -129,6 +136,8 @@
         "R1Z.PV_RunJoin_CallbackInstallation",
         "R1Z.PV_RunJoin_InstalledTrustLedger",
         "R1Z.PV_RunJoin_CausalTrustLedger",
+        "R1Z.PV_RunJoin_RootLoop",
+        "R1Z.PV_RunJoin_RootCanonical",
         "R1Z.PV_RunJoin_TrustFinalAudit"
       ]
     },
@@ -148,6 +157,48 @@
       "imports": [
         "R1Z.PV_RunJoin_TrustLedger",
         "R1Z.PV_RunJoin_SourceSelectionContract"
+      ]
+    },
+    {
+      "path": "evidence/pv-runjoin8-20261026/pending-proof-sources/PV_RunJoin_RootCanonical.lean.txt",
+      "sha256": "ae58de17bb0d000effbb19ca5336b6f126d7105f6512f0fca57977632c2bb068",
+      "declarations": [
+        "canonical_injective",
+        "table_model",
+        "zero_model",
+        "ParentRefinement",
+        "source_roots"
+      ],
+      "axioms_requests": [
+        "canonical_injective",
+        "table_model",
+        "zero_model",
+        "source_roots"
+      ],
+      "status": "DRAFT_NOT_COMPILED",
+      "imports": [
+        "R1Z.PV_RunJoin_RootLoop",
+        "R1FrozenEmptyRoots"
+      ]
+    },
+    {
+      "path": "evidence/pv-runjoin8-20261026/pending-proof-sources/PV_RunJoin_RootLoop.lean.txt",
+      "sha256": "31f2b2715cc68d5bd004545d071b6e5ef5d9e587959c79358207a397f2c85817",
+      "declarations": [
+        "step",
+        "loop",
+        "roots"
+      ],
+      "axioms_requests": [
+        "step",
+        "loop",
+        "roots"
+      ],
+      "status": "DRAFT_NOT_COMPILED",
+      "imports": [
+        "R1Z.PV_Src_CanonicalRoots",
+        "R1Z.PV_Src_Forest_BankRange",
+        "R1Z.BuilderRecordsArray"
       ]
     },
     {

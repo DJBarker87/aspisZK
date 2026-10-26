@@ -130,3 +130,24 @@ do not prove this conjunction.
 
 T has exactly its original three fields. No A/B availability or public-failure
 repair is adopted; no failure is silently deleted from the observer or bad event.
+
+## Additional symbolic source-root preparation
+
+The root-table join is still OPEN. RootLoop prepares the actual extracted
+loop's termination/index/write proof from an initial-parent equality and a
+uniform successor-parent equality. RootCanonical then prepares those
+instances from the already proved FIELD table recurrence plus this exact
+SOURCE obligation (not a new trust assumption):
+
+```lean
+ParentRefinement : Prop :=
+  ∀ a b : Digest, Canon8 a → Canon8 b →
+    ∃ out, format.pool_v1_tree_parent a b = ok out ∧ Canon8 out ∧
+      model out = R0P.nodeCompress (model a) (model b)
+```
+
+Here Digest is the actual forest extraction's Array U32 8, model casts its
+eight raw words into ZMod 2147483647, and the ExternalLinear dictionary is
+kept explicit. Source totality/canonical output/refinement must be proved for
+the SAME selected dictionary. The fixed field-table certificates alone prove
+none of those source properties. All these new statements are still drafts.

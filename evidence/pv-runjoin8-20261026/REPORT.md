@@ -77,3 +77,13 @@ hash inventory, not a successful preparation check. The scanner now ignores
 comments and detects actual axiom declarations; the seven-draft inventory was
 regenerated and --check passes. This was not a Lean attempt, source theorem
 failure, or a changed accepted proof. No failed kernel result was concealed.
+
+## Symbolic root-helper preparation
+
+RootLoop isolates the actual extracted twenty-level recurrence with a prefix
+invariant; RootCanonical uses the existing round-split field certificates to
+reduce the concrete helper equation to the named ParentRefinement source
+law. No large recurrence is normalized, no failed Kani aggregate is rerun,
+and no field-model certificate is relabelled as source equivalence. These two
+additional drafts have not compiled. ParentRefinement remains open P work,
+fully stated in P-obligations.md; it is not a field of T or the headline.
