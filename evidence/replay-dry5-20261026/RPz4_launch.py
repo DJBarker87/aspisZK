@@ -60,13 +60,13 @@ for row in rows:
  if r.returncode:raise SystemExit('STOP source transfer: '+r.stderr)
  r=ssh('mkdir -p '+B+'/'+str(__import__('pathlib').Path(row['object']).parent))
  if r.returncode:raise SystemExit('STOP object directory: '+r.stderr)
- cfg=dict(kind='lean',module=m,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz4_objects:'+B+'/RPz_objects:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',row['source'].split('/')[0],'-o',row['object'],row['source']],sources=[row['source']],attempt=a,source_revision=plan['revision'],source_tree_dirty=False,deps_fingerprint={'scope':'fresh repository closure; release-pinned toolchain/library objects only','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one committed repository module elaboration and kernel checking; no generated arithmetic probe',repository_source=row['repository_source'],reservation_retries=retry)
+ cfg=dict(kind='lean',module=m,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz4_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',row['source'].split('/')[0],'-o',row['object'],row['source']],sources=[row['source']],attempt=a,source_revision=plan['revision'],source_tree_dirty=False,deps_fingerprint={'scope':'fresh repository closure; release-pinned toolchain/library objects only','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one committed repository module elaboration and kernel checking; no generated arithmetic probe',repository_source=row['repository_source'],reservation_retries=retry)
  # Pin actual direct predecessors before calling the existing runner.
  payload="""import json,hashlib
 from pathlib import Path
 B=Path(%r);T=Path(%r);row=json.loads(%r);cfg=json.loads(%r);objs={}
 for n in row['imports']:
- ps=[T/'lib/lean'/(n.replace('.','/')+'.olean'),B/'RPz4_objects'/(n.replace('.','/')+'.olean'),B/'RPz_objects'/(n.replace('.','/')+'.olean'),B/'RPz4_trusted'/(n.replace('.','/')+'.olean'),B/'RPz_trusted'/(n.replace('.','/')+'.olean')]
+ ps=[T/'lib/lean'/(n.replace('.','/')+'.olean'),B/'RPz4_overlay'/(n.replace('.','/')+'.olean'),B/'RPz4_trusted'/(n.replace('.','/')+'.olean'),B/'RPz_trusted'/(n.replace('.','/')+'.olean')]
  p=next((p for p in ps if p.is_file()),None);assert p is not None,(n,ps)
  objs[n]={'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'bytes':p.stat().st_size}
 cfg['deps_fingerprint']['selected_objects']=objs
@@ -79,6 +79,29 @@ cfg['deps_fingerprint']['selected_objects']=objs
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
  for f in ['receipt.json','stdout.log','time.log']:collect(a+'/'+f)
  receipt=json.loads((E/a/'receipt.json').read_text());state[m]='passed' if receipt['exit_status']==0 else 'failed'
+ if receipt['exit_status']==0:
+  # A complete job-owned namespace view avoids Lean prefix-directory shadowing.
+  # Output stays a regular RPz4_objects file; never write through a baseline link.
+  payload="""from pathlib import Path
+import json,hashlib
+B=Path(%r);rel=%r;out={}
+p=B/rel
+assert p.is_file() and not p.is_symlink(),p
+for ext in ['', '.server','.private','IR']:
+ src=p.with_suffix('.ir') if ext=='IR' else Path(str(p)+ext)
+ if not src.is_file():continue
+ key=(rel.removeprefix('RPz4_objects/')[:-6]+'.ir') if ext=='IR' else rel.removeprefix('RPz4_objects/')+ext
+ dst=B/'RPz4_overlay'/key;dst.parent.mkdir(parents=True,exist_ok=True)
+ if dst.exists() or dst.is_symlink():
+  assert dst.is_symlink(),dst
+  if dst.resolve()!=src.resolve():dst.unlink();dst.symlink_to(src)
+ else:dst.symlink_to(src)
+ out[str(dst)]={'target':str(src),'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),'bytes':src.stat().st_size}
+print(json.dumps(out))
+"""%(B,row['object'])
+  r=subprocess.run(['ssh',*SSH,H,'python3 -'],input=payload,text=True,capture_output=True)
+  if r.returncode:raise SystemExit('STOP job namespace view: '+r.stderr)
+  with (E/'RPz4_overlay-additions.jsonl').open('a') as out:out.write(json.dumps({'attempt':a,'module':m,'artifacts':json.loads(r.stdout)})+'\n')
  (E/'RPz4_state.json').write_text(json.dumps(dict(attempts=attempt,state=state,blocked=blocked),indent=2)+'\n')
  print(a,m,'exit',receipt['exit_status'],'wall',round(receipt['wall_seconds'],2),'rss',receipt['peak_rss_kib'],flush=True)
 (E/'RPz4_state.json').write_text(json.dumps(dict(attempts=attempt,state=state,blocked=blocked),indent=2)+'\n')
