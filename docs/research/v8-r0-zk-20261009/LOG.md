@@ -10068,3 +10068,22 @@ no unchanged reruns; V164 by the P6 route decomposed per step (owned reference, 
 proved-sufficient bound, Lean induction over steps, the route that worked for parts 47-48), then V163,
 then callbacks outside pv-cb's list. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2, cb.
 Privacy target not yet established.
+
+## D208 (Stream B, 2026-10-26 16:05): cb done, 30 value interpretations but 0 rows discharged; cb2 converts them to source equations
+
+pv-cb (`codex/pv-cb-20261026`, head c0e2f7af57, branched from the unmerged candidate; 100/100 Lean,
+20/20 Kani: 13 passes, 5 timeouts, 2 unwinding failures; final audit receipt 22900.json exit 0,
+peak RSS 4.3 GiB, standard axioms): 30 callback ops received a checked "selected dictionary equation"
+(PV_CB_* value interpretations), 7 reused sibling installations, 5 ops deferred to the effect-aware
+route (zeroize volatile writes/fences ops 122/123, Instant timing op 232, worker pool op 257), 31 ops
+open; symbolic owned encoder/mask totality and the exponent-table widening proved for op117. No
+shipped crate or program file changed. Lead review: a dictionary equation is organisation, not the
+row's law; rows V169-V267 require the entry to equal the shipped function's source semantics
+(extraction, D188, or the P6 reference), so 73 rows before → 73 after, 0 removed, and the review's
+"native correspondence remains open" notes are irrelevant to pure ops (that composition is V165/V167,
+owned by RunJoin). The branch is a sibling of the candidate and will be merged into
+`codex/cx-prover-rw-20261023` when rw17 releases that worktree (not into research). pv-cb2 relaunched
+in the same worktree (IDs 24000-24299, 100 Lean/20 Kani): stage 1 converts the 30 installed pure ops
+to proved source equations against the extracted definitions, stage 2 the 25 open pure laws, stage 3
+op117 by per-step P6 with Lean induction. Six jobs running: rw17, dict9, runjoin5, srcid, rebase2,
+cb2. Rows removed outright: 0. Privacy target not yet established.
