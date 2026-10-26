@@ -1,5 +1,5 @@
 import R1Z.PV_RunJoin_SelectedAdmission
-import R1Z.PV_Src_FrozenPublic
+import R1Z.PV_RunJoin_SelectedSourceCore
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_SelectedSourceReduction
@@ -35,16 +35,8 @@ theorem words_and_public
         PubCorr (wordPublic records.p)
           (mapPub (K := K) (PV_Src_Public.canonicalPublic
             (publicInput (PV_RunJoin_SourceSelectionContract.selectedRecord d x w))))) := by
-  cases external_eq
-  cases records_eq
-  constructor
-  · intro w records hr
-    rw [selected_eq w] at hr
-    exact PV_Src_FrozenInput.words (canonical w) records hr
-  · intro w records hr
-    have hc := compile_call w
-    rw [selected_eq w] at hc hr ⊢
-    exact PV_Src_FrozenPublic.correspondence (canonical w) hc records hr
+  exact PV_RunJoin_SelectedSourceCore.words_and_public actualExternal actualRecords external_eq records_eq
+    (PV_RunJoin_SourceSelectionContract.selectedRecord d x) canonical selected_eq compile_call
 
 /-- Fill the ORIGINAL admission interface; row_call remains a published source
 fact. This is a source reduction conditional on exact installation equalities,

@@ -18,7 +18,7 @@ for path in sorted((root / 'pending-proof-sources').glob('*.lean.txt')):
     source = path.read_text()
     declarations = re.findall(r'^(?:theorem|def)\s+(\w+)', source, re.M)
     theorems = re.findall(r'^theorem\s+(\w+)', source, re.M)
-    printed = re.findall(r'^#print axioms\s+(\w+)', source, re.M)
+    printed = re.findall(r'^#print axioms\s+([\w.]+)', source, re.M)
     missing = sorted(set(theorems) - set(printed))
     code = re.sub(r'/\-[\s\S]*?\-/|--[^\n]*', '', source)
     forbidden = re.findall(r'\b(?:sorry|admit|native_decide|implemented_by)\b|^\s*axiom\s+', code, re.M)
@@ -35,7 +35,7 @@ entry = subprocess.check_output(['git', 'show', '3478e00a58:' + trust], cwd=repo
 assert entry == (repo / trust).read_bytes(), 'T changed'
 record = dict(kind='compile-free-preparation-check', kernel_validation=False,
     entry_revision='3478e00a58', trust_unchanged=True, drafts=rows,
-    lean_attempts=sum(r.get("exit") is not None for r in receipts), kani_runs=0, endpoint_premises_removed=0,
+    lean_attempts=sum(r.get("exit") is not None for r in receipts), kani_runs=len((root / "kani-invocations.jsonl").read_text().splitlines()), endpoint_premises_removed=0,
     endpoint_counts=dict(runtime_boundary=[2, 2], fields=[8, 8], native_residuals=[6, 6]))
 output = root / 'preparation-audit.json'
 if args.check:
