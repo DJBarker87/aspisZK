@@ -1,0 +1,193 @@
+'R1Z.PDict_ReachErase.erase_272' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:21:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:21:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_273' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_274' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_275' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[irreducible] def ProverRwFull.host_commitment.EncodingDomain.evaluate : [inst : ExternalTypes] →
+  [ExternalFuns] →
+    {T : Type} →
+      aspis_core.r0.scalar.CodeField T →
+        host_commitment.EncodingDomain →
+          Slice T → Usize → Result (core.result.Result (alloc.vec.Vec T) aspis_core.r0.Error) :=
+fun [ExternalTypes] [ExternalFuns] {T} aspis_corer0scalarCodeFieldInst self =>
+  Lean.Order.fix
+    (fun f coefficients depth => do
+      let v ←
+        alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice (alloc.vec.Vec aspis_core.field.M31)) self.levels
+            depth
+      let count : Usize := v.len
+      let i : Usize := coefficients.len
+      if i = 1#usize then do
+          let t ← coefficients.index_usize 0#usize
+          aspis_core.r0.heap.filled aspis_corer0scalarCodeFieldInst.coremarkerCopyInst count t
+        else do
+          let r ← host_commitment.split_coefficients aspis_corer0scalarCodeFieldInst coefficients
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              let (even, odd) := val
+              let s := even.deref;
+              do
+              let i1 ← lift (depth.wrapping_add 1#usize)
+              let r1 ← f s i1
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  let s1 := odd.deref;
+                  do
+                  let i2 ← lift (depth.wrapping_add 1#usize)
+                  let r2 ← f s1 i2
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                      let s2 := v.deref;
+                      let s3 := val1.deref;
+                      let s4 := val2.deref;
+                      host_commitment.merge_evaluations aspis_corer0scalarCodeFieldInst s2 s3 s4
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec T) (core.convert.FromSame aspis_core.r0.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                    (core.convert.FromSame aspis_core.r0.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec T)
+                (core.convert.FromSame aspis_core.r0.Error) residual)
+    ⋯
+'R1Z.PDict_ReachErase.erase_276' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:55:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:55:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_277' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_278' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:70:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:70:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_279' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:78:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:78:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_280' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_281' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_282' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:101:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:101:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_283' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_284' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_285' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:124:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:124:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_286' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_287' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_288' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:147:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:147:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_289' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:155:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:155:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_290' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:163:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:163:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_291' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:171:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:171:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_292' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:179:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:179:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_293' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:187:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:187:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_294' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_295' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:202:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:202:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_296' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_297' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:217:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:217:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_298' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:225:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:225:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_299' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:233:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:233:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_300' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:241:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:241:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_301' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:249:2: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PDict_ReachErase17B.lean:249:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PDict_ReachErase.erase_302' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PDict_ReachErase.erase_303' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
