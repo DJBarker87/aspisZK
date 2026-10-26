@@ -1,0 +1,94 @@
+//! Proof-only caller-observable references; no shipped source or ABI overrides.
+#![cfg(kani)]
+#![feature(formatting_options, io_error_more, io_error_uncategorized)]
+use std::io::{Error, ErrorKind};
+use std::fmt::{self, Write, Display};
+/// The native error is observed, then consumed. The byte stream remains part
+/// of this reference even when the reserve continuation requests no message.
+#[derive(Clone, Copy)]
+pub struct ErrorProjection {
+    pub kind: ErrorKind,
+    pub message: &'static str,
+}
+pub fn retry(reference: ErrorProjection) -> bool {
+    reference.kind == ErrorKind::AlreadyExists
+}
+struct ByteObserver { message: &'static str, position: usize, calls: usize, fail: bool }
+impl Write for ByteObserver {
+    fn write_str(&mut self, bytes: &str) -> fmt::Result {
+        assert!(bytes.len() == self.message.len());
+        assert!(bytes.as_bytes()[self.position] == self.message.as_bytes()[self.position]);
+        self.calls += 1;
+        if self.fail { Err(fmt::Error) } else { Ok(()) }
+    }
+}
+fn custom(message: &'static str, kind: ErrorKind) {
+    let reference=ErrorProjection {kind,message};
+    let error=Error::new(kind,message);
+    assert!(error.kind() == reference.kind);
+    assert!((error.kind() == ErrorKind::AlreadyExists) == retry(reference));
+    let position:usize=kani::any();kani::assume(position<message.len());
+    let fail:bool=kani::any();
+    let mut observer=ByteObserver {message,position,calls:0,fail};
+    let outcome=Display::fmt(&error,&mut fmt::Formatter::new(&mut observer,fmt::FormattingOptions::new()));
+    assert!(outcome.is_err()==fail);
+    assert!(observer.calls==1);
+}
+#[kani::proof]
+pub fn error_static_message_bytes_kind_retry() {
+    custom("mask nonce ledger path is not a directory",ErrorKind::NotADirectory);
+}
+#[kani::proof]
+pub fn error_collision_message_bytes_kind_retry() {
+    custom("collision",ErrorKind::AlreadyExists);
+}
+#[kani::proof]
+pub fn error_noncollision_message_bytes_kind_retry() {
+    custom("write failure",ErrorKind::Other);
+}
+#[kani::proof]
+pub fn file_flush_live_owner() {
+    use std::os::fd::{FromRawFd,AsRawFd};
+    let fd:i32=kani::any();kani::assume(fd>=0);
+    // Existing-owner value test; ManuallyDrop avoids forging an OS close.
+    let mut file=std::mem::ManuallyDrop::new(unsafe {std::fs::File::from_raw_fd(fd)});
+    assert!(std::io::Write::flush(&mut *file).is_ok());
+    assert!(file.as_raw_fd()==fd);
+}
+#[kani::proof]
+pub fn file_open_nul_path_no_world_stub() {
+    let result=std::fs::File::open("\0");
+    match result { Err(error)=>assert!(error.kind()==ErrorKind::InvalidInput),
+        Ok(file)=>{std::mem::forget(file);panic!("NUL opened")} }
+}
+
+#[kani::proof]
+pub fn error_static_kind_retry_without_message_consumer() {
+    let kind=ErrorKind::NotADirectory;
+    let reference=ErrorProjection {kind,message:"mask nonce ledger path is not a directory"};
+    let error=Error::new(kind,reference.message);
+    assert!(error.kind()==reference.kind);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==retry(reference));
+}
+#[kani::proof]
+pub fn error_simple_retry_projection() {
+    let collision:bool=kani::any();
+    let kind=if collision {ErrorKind::AlreadyExists} else {ErrorKind::Other};
+    let reference=ErrorProjection {kind,message:""};
+    let error=Error::from(kind);
+    assert!(error.kind()==reference.kind);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==retry(reference));
+}
+#[kani::proof]
+pub fn error_os_retry_projection() {
+    let code:i32=kani::any();
+    let error=Error::from_raw_os_error(code);
+    assert!((error.kind()==ErrorKind::AlreadyExists)==(code==17));
+}
+#[kani::proof]
+pub fn file_open_nonempty_no_world_stub() {
+    // This is a diagnostic for the real OS boundary, deliberately without
+    // a replacement open/open64 implementation or a Kani stub.
+    let result=std::fs::File::open("pdict-world-probe");
+    if let Ok(file)=result {std::mem::forget(file);}
+}
