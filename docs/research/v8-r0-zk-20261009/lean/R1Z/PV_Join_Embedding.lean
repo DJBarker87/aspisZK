@@ -1,4 +1,4 @@
-import R1Z.ProverRwP6BodyData
+import R1Z.ProverRwP6BodyStore
 import R1Z.PV_Join_EmbeddingWord
 set_option autoImplicit false
 noncomputable section

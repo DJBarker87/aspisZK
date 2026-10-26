@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2237); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+                let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+                match r1 with
+                  | core.result.Result.Ok value1 => do
+                    let o1 ← ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value1
+                    let cf1 ←
+                      match o1 with
+                        | none => ok (core.ops.control_flow.ControlFlow.Break none)
+                        | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        massert (read_discriminant residual = 0#isize)
+                        ok none
+                  | core.result.Result.Err a => ok none
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                massert (read_discriminant residual = 0#isize)
+                ok none
+          | core.result.Result.Err a => ok none
+      ok (Option.map decodeC value)) =
+    do
+    let s ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+          { start := 0#usize, «end» := 4#usize }
+    let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+    match r with
+      | core.result.Result.Ok value => do
+        let o ← ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value
+        let cf ←
+          match o with
+            | none => ok (core.ops.control_flow.ControlFlow.Break none)
+            | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let s1 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := 4#usize, «end» := 8#usize }
+            let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+            match r1 with
+              | core.result.Result.Ok value1 => do
+                let o1 ← ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value1
+                let cf1 ←
+                  match o1 with
+                    | none => ok (core.ops.control_flow.ControlFlow.Break none)
+                    | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    massert (read_discriminant residual = 0#isize)
+                    ok none
+              | core.result.Result.Err a => ok none
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            massert (read_discriminant residual = 0#isize)
+            ok none
+      | core.result.Result.Err a => ok none
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_ParserTransport.lean:47:48: error: unexpected token '('; expected ')'
+'R1Z.PV_Join_ParserTransport.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.complex' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.quartic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.17
+	Maximum resident set size (kbytes): 2628828
+	Swaps: 0
+	Exit status: 1

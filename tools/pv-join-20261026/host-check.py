@@ -27,7 +27,13 @@ else:
  catalog=json.loads((e/'source-preflight.json').read_text())['modules'];entry=catalog[m.replace('/','.')];o=entry['origin'];content=subprocess.check_output(['git','show',o['revision']+':'+o['path']],cwd=root);origin=o
 sha=hashlib.sha256(content).hexdigest();snapshot=e/f'{a}.lean.txt';snapshot.write_bytes(content)
 remote=f'{own}/target.lean';subprocess.run(['scp',str(snapshot),host+':'+remote],check=True,capture_output=True)
-rev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+taskrev=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip()
+if isinstance(origin,str):
+ old=subprocess.run(['git','show',taskrev+':'+origin],cwd=root,capture_output=True)
+ committed=old.returncode==0 and old.stdout==content
+ rev=taskrev+('' if committed else '+uncommitted')
+else:
+ committed=True;rev=origin['revision']
 code=f'''from pathlib import Path
 import json,hashlib,shutil
 J=Path({J!r});H=Path({H!r});O=Path({own!r});m={m!r};a={a};expected={sha!r}
@@ -53,7 +59,7 @@ x=dict(attempt=a,module=m,source_sha256=expected,source_revision={rev!r},source_
 p=py(code)
 if p.returncode:
  (e/f'{a}-guard.json').write_text(json.dumps(dict(target=m,exit=p.returncode,stdout=p.stdout,stderr=p.stderr,compiler_invoked=False),indent=2)+'\n');print(a,m,'GUARD',p.stdout,p.stderr,flush=True);raise SystemExit(p.returncode)
-x=json.loads(p.stdout);(e/f'{a}-input.json').write_text(json.dumps(x,indent=2)+'\n')
+x=json.loads(p.stdout);x.update(task_revision=taskrev,source_was_uncommitted=not committed,runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest());(e/f'{a}-input.json').write_text(json.dumps(x,indent=2)+'\n')
 fp=x['deps_fingerprint'];cmd=f'{H}/tools/run-joint.sh {a} {m} J 7000 8 {fp} > {own}/receipts/{a}-launch.log 2>&1; code=$?; cat {own}/receipts/{a}-launch.log; exit $code'
 print(a,m,'START',flush=True);start=time.monotonic();run=ssh(cmd);(e/f'{a}-launch.log').write_text(run.stdout+run.stderr)
 raw=ssh(f'cat {T}/out-{a}.log').stdout;tim=ssh(f'cat {T}/time-{a}.log').stdout

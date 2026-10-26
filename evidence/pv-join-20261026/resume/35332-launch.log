@@ -1,0 +1,66 @@
+reservation: populated 24 GiB + 8 GiB; window=1 (London 2243); env=J
+slot: /tmp/aspis-r0-lean-slot-1.lock
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                massert (read_discriminant residual = 0#isize)
+                ok none
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            massert (read_discriminant residual = 0#isize)
+            ok none
+      ok
+          (match value with
+          | some x => some { c0 := decodeC x.c0, c1 := decodeC x.c1 }
+          | none => none)) =
+    do
+    let x ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes value✝
+    let cf ←
+      match
+          match x with
+          | some x => some (decodeC x)
+          | none => none with
+        | none => ok (core.ops.control_flow.ControlFlow.Break none)
+        | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let s1 ←
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+              { start := 8#usize, «end» := 16#usize }
+        let x ← PV_CB_ShippedOp71.aspis_core.field.CM31.from_le_bytes s1
+        let cf1 ←
+          match
+              match x with
+              | some x => some (decodeC x)
+              | none => none with
+            | none => ok (core.ops.control_flow.ControlFlow.Break none)
+            | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            massert (read_discriminant residual = 0#isize)
+            ok none
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        massert (read_discriminant residual = 0#isize)
+        ok none
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_ParserTransport.lean:79:43: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵,̵d̵e̵c̵o̵d̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲,̲ ̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_Join_ParserTransport.lean:79:57: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵,̵d̵e̵c̵o̵d̵e̵]̵[̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲,̲ ̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_Join_ParserTransport.bind_congr' does not depend on any axioms
+'R1Z.PV_Join_ParserTransport.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.complex' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_Join_ParserTransport.quartic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.26
+	Maximum resident set size (kbytes): 2627208
+	Swaps: 0
+	Exit status: 1
