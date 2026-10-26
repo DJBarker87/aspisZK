@@ -1,0 +1,35 @@
+{"attempt": "FIs_096", "exit_status": 0, "wall_seconds": 2.3668180339736864, "peak_rss_kib": "5497060", "swaps": "0", "print_axioms": ["'AspisR1.FIn_WeightLength.twelve' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Tx2N_Reader.saved_ten : ∀ (base : VTop_Stages.Ops) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (checkpoint proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (a : AspisR1Stage2.verifier.Accumulator)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (stored publicBytes : AspisV8R19.DuplexFrames.Bytes) (c : AspisR1.OraclePortCheckpointResumeC5.Context)
+  (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E) (rho : AspisR1.OraclePortCheckpointAbiC5.K)
+  (q : Fin 
+...
+tesOf ↑saved →
+    saved =
+        AspisR1.Tx2N_Reader.writer H stored publicBytes (AspisR1.OraclePortCheckpointResumeC5.prepared c data rho q)
+          (AspisR1.OraclePortCheckpointStateC3.write
+              (AspisR1.OraclePortCheckpointResumeC5.model data rho q)).accumulator →
+      (AspisR1.Tx2N_Install.inner base reserved query).op18 D checkpoint proof pub AspisR1Stage2.transport.Variant.S2
+            hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+        AspisR1.CheckpointBytes4SavedFields.BodyMatches p a (AspisR1.OraclePortCheckpointResumeC5.prepared c data rho q)
+            (AspisR1.OraclePortCheckpointStateC3.write
+                (AspisR1.OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+          AspisR1.CheckpointBytes5Output.accumulator a =
+              (AspisR1.OraclePortCheckpointStateC3.write
+                  (AspisR1.OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+            AspisR1.OraclePortCheckpointResumeC5.decodeAccumulator (AspisR1.MultiproofConeCanonical.bytesOf ↑saved) =
+                Option.some (AspisR1.CheckpointBytes5Output.accumulator a) ∧
+              ↑a.next = 10 ∧ reserved = Bool.true
+@AspisR1.FIn_WeightLength.twelve : ∀ {C Hash : Type} (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.Cons_NativeBuild.Aux reserved query geo D hash pub proof checkpoint t →
+    (↑t.saved2.weights).length = 64 → (↑(t.back2 t.flushed2)).length = 64 ∧ ↑t.returned2.next = 22
+'AspisR1.FIn_WeightLength.twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r034e25ff0a774b65a9ab2e1cf17275e5.scope; invocation ID: 7e42b9e5db3e4e698da18f212ff09cb7

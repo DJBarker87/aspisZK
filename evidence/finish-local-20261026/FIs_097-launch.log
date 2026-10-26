@@ -1,0 +1,36 @@
+{"attempt": "FIs_097", "exit_status": 0, "wall_seconds": 2.410176514007617, "peak_rss_kib": "5497176", "swaps": "0", "print_axioms": ["'AspisR1.FIn_FromRead.rounds' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.FIn_FromRead.rounds : ∀ {W : Type} (seed : AspisR1Stage2.Stage2Finish.FinishOps W) (ops : VTop_Stages.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.SAG_NativeFull.Shape ops proof t →
+    ops.op22 = Aeneas.Std.Result.ok 7527#usize →
+      ops.op15 = Aeneas.Std.Result.ok 7751#usize →
+        ops.op14 = Aeneas.Std.Result.ok 7783#usize →
+          ops.op21 = Aeneas.Std.Result.ok 8007#usize →
+            ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+              (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+              (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+              AspisR1.Oracl
+...
+@AspisR1.FIn_FromRead.rounds : ∀ {W : Type} (seed : AspisR1Stage2.Stage2Finish.FinishOps W) (ops : VTop_Stages.Ops)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.SAG_NativeFull.Shape ops proof t →
+    ops.op22 = Aeneas.Std.Result.ok 7527#usize →
+      ops.op15 = Aeneas.Std.Result.ok 7751#usize →
+        ops.op14 = Aeneas.Std.Result.ok 7783#usize →
+          ops.op21 = Aeneas.Std.Result.ok 8007#usize →
+            ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+              (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+              (d : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+              AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+                  Option.some parsed →
+                AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                    Option.some d →
+                  AspisR1.Port4D_Pairing.RoundLaws
+                      (AspisR1.Port3_FinishStage.release (AspisR1.FIn_Install.finishOps seed))
+                      AspisR1.CheckpointBytes5Output.ofE t.v2.round0 d.p0 ∧
+                    AspisR1.Port4D_Pairing.RoundLaws
+                      (AspisR1.Port3_FinishStage.release (AspisR1.FIn_Install.finishOps seed))
+                      AspisR1.CheckpointBytes5Output.ofE t.v2.round1 d.p1
+'AspisR1.FIn_FromRead.rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf51c610eb9184601932ee9525f2fdfd7.scope; invocation ID: fb0efc6fd70b4ae7949fede2f1ec4d05

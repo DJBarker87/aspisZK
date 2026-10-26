@@ -1,0 +1,26 @@
+@AspisR1.SAG_ShapeDot.value : ∀ {F C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  (geo : AspisR1.Port3_NativeGeometryBody.Ops C) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (t : AspisR1.Cons_Native.Witness),
+  AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t →
+    ∀ (shapeOps : VTop_Stages.Ops),
+      AspisR1.SAG_NativeFull.Shape shapeOps proof t →
+        shapeOps.op21 = Aeneas.Std.Result.ok 8007#usize →
+          shapeOps.op20 = Aeneas.Std.Result.ok 10055#usize →
+            finish.dot = AspisR1.SAG_DotClosed.source →
+              (↑(t.back2 t.flushed2)).length = 64 →
+                ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+                  (tr : AspisR1.RawCutTranscriptRun.ErasedPrefix)
+                  (data : AspisR1.MatchingSupport.Data AspisWideTower.WideExact),
+                  AspisR1.OraclePortStoredParserC4.parseReached (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) tr =
+                      Option.some parsed →
+                    AspisR1.LiteralMatchingData.read (AspisR1.OraclePortStoredDecisionDraftC4.typedRows parsed q tr) =
+                        Option.some data →
+                      have a :=
+                        have __src := t.returned2;
+                        { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power, next := __src.next };
+                      AspisR1.CheckpointBytes5Output.ofE a.rhs =
+                        ∑ l,
+                          data.f l *
+                            AspisR1.LiteralOpeningView.eK ((AspisR1.CheckpointBytes5Output.accumulator a).weights l)
+'AspisR1.SAG_ShapeDot.value' depends on axioms: [propext, Classical.choice, Quot.sound]
