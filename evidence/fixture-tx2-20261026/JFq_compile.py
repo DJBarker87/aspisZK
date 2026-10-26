@@ -8,6 +8,7 @@ n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and mod.startswith('JFq_')
 a=f'JFq_{n:03}'; assert not (P/a).exists()
 cfg=json.loads((R/'evidence/recount8-20261026/Rc8_002/receipt.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused JFq composition or atomic kernel inventory; no arithmetic aggregation')
+cfg['deps_fingerprint']['scope']='Pinned coherent SInt2 closure; JFq per-stage source snapshots and inherited unchanged object pins'
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
