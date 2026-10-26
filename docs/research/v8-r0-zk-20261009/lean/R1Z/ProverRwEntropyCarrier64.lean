@@ -1,0 +1,43 @@
+import R1Z.ProverRwEntropyKernelLaw64
+import R1Z.ProverCommitPublicBinding40
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyCarrier64
+open ProverCommitPublicNonce40
+
+/-- Both existing private carriers retain exactly the same two nonzero
+32-byte blocks. No nonce coordinate or entropy-source contract is added. -/
+def privateEquiv : Private ≃ ProverCommitPublicBinding40.Private where
+  toFun := fun raw i => ⟨raw.val i,raw.property i⟩
+  invFun := fun seeds => ⟨fun i => (seeds i).val,fun i => (seeds i).property⟩
+  left_inv := fun _ => rfl
+  right_inv := fun _ => rfl
+
+theorem cardinality : Fintype.card Private = Fintype.card ProverCommitPublicBinding40.Private :=
+  Fintype.card_congr privateEquiv
+
+theorem transported_mass (mass : ℚ) :
+    mass / (Fintype.card Private : ℚ) =
+      mass / (Fintype.card ProverCommitPublicBinding40.Private : ℚ) := by
+  rw [cardinality]
+
+theorem sixteen_power : ProverRwEntropyAbort64.zeroBudget^16 = 1 / (2 : ℚ)^4080 := by
+  have single : ProverRwEntropyAbort64.zeroBudget = 1 / (2 : ℚ)^255 := by
+    unfold ProverRwEntropyAbort64.zeroBudget
+    rw [show 256 = 255+1 from rfl,pow_succ]
+    field_simp
+  rw [single,div_pow,← pow_mul]
+  norm_num only [one_pow,Nat.reduceMul]
+
+theorem eight_power : 8 * ProverRwEntropyAbort64.zeroBudget^16 = 1 / (2 : ℚ)^4077 := by
+  rw [sixteen_power,show 4080 = 4077+3 from rfl,pow_add]
+  rw [show (2 : ℚ)^3 = 8 by norm_num]
+  field_simp
+  <;> ring
+
+#print axioms privateEquiv
+#print axioms cardinality
+#print axioms transported_mass
+#print axioms sixteen_power
+#print axioms eight_power
+end R1Z.ProverRwEntropyCarrier64

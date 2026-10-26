@@ -1,0 +1,54 @@
+import R1Z.ProverRwEntropyExhaust64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyRepeated64
+open R0Z.FsStatement R0Z.FsAbort ProverCommitPublicNonce40 ProverCommitLedger36
+attribute [local instance] Classical.propDecidable
+
+def available : Schedule := fun _ _ _ => ⟨none,[]⟩
+def tape (raw : Raw) (_index : Nat) : Raw := raw
+
+theorem next_repeated (raw : Raw) (s : State) :
+    next available (tape raw) s =
+      (.ok raw,{s with cursor := s.cursor+1,history := s.history ++ [(.rng,.ok ())]}) := by
+  simp only [next,ask,available,inject,faultResult,record,List.append_nil,tape]
+
+theorem run_bad (raw : Raw) (bad : decode raw = none) (fuel : Nat) (s : State) :
+    (run available (tape raw) fuel s).1 = .error .repeatedZero := by
+  induction fuel generalizing s with
+  | zero => rfl
+  | succ fuel ih =>
+    simp only [run,next_repeated,bad]
+    exact ih _
+
+theorem repeated_exhaustion (raw : Raw) (s : State) (fuel : Nat) :
+    (run available (tape raw) (fuel+1) s).1 = .error .repeatedZero ↔ decode raw = none := by
+  constructor
+  · exact ProverRwEntropyExhaust64.exhaustion_first available (tape raw) s fuel
+  · intro bad
+    exact run_bad raw bad (fuel+1) s
+
+/-- Every fixed index is the identity projection of uniform Raw, but the
+sixteen exhaustion event is one bad-candidate event, not sixteen independent
+events. This carrier supplies no E1 law conditional on earlier failures. -/
+theorem repeated_mass (nonce : Path) (nonzero : nonce ≠ 0) (s : State) :
+    eventMass (fun raw : Raw => (generate nonce available (tape raw) s).1 = .error .repeatedZero) =
+      eventMass (fun raw : Raw => decode raw = none) := by
+  have events : (fun raw : Raw => (generate nonce available (tape raw) s).1 = .error .repeatedZero) =
+      (fun raw : Raw => decode raw = none) := by
+    funext raw
+    apply propext
+    unfold generate
+    rw [if_neg nonzero]
+    exact repeated_exhaustion raw s 15
+  rw [events]
+
+theorem fixed_coordinate (index : Nat) (p : Raw → Prop) :
+    eventMass (fun raw : Raw => p (tape raw index)) = eventMass p := rfl
+
+#print axioms next_repeated
+#print axioms run_bad
+#print axioms repeated_exhaustion
+#print axioms repeated_mass
+#print axioms fixed_coordinate
+end R1Z.ProverRwEntropyRepeated64

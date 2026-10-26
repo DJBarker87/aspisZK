@@ -483,3 +483,53 @@ Nine compiles:4pass,5changed elaboration failures; no resource failures.
 Evidence: `evidence/prover-rw-20261023/outer-prefix-model`. New budget52/100
 Lean,0/20Kani. Existing unchanged scopes and launchers reused; no Rust,
 Kani, performance, artifact, native or frozen-manifest job.
+
+## Stateful entropy laws and their uninstalled source association (11480–11581)
+
+`ProverRwEntropyKernel64` retains a byte-dependent joint post-context. Its
+success marginal is uniform under the existing named E1 law on the **exact
+stated conditioning context** and normalized next-context transitions.
+`ProverRwEntropyPartition64` and `Termination64` prove the accepted/retry/terminal
+partition and mass conservation symbolically, without enumerating Raw or Private.
+`ProverRwEntropyKernelLaw64.sixteen_law` gives success mass exactly
+`(1 - stopMass - zeroMass) / card Private`; the terminal classes retain OS,
+extraction failure and divergence, and can have mass one. `KernelRate64` bounds
+sixteen-fill exhaustion by `(2/2^256)^16`. `KernelLaw64.eight_exhaustion` charges
+at most eight such hazards under an explicit substochastic outer retry kernel.
+`EntropyCarrier64` transports the existing two-private-block carriers and
+symbolically identifies those bounds as 2^-4080 and 2^-4077.
+
+These are conditional **model** results, not native probability estimates.
+No source-to-kernel context/transition association has been supplied. E1 on
+unconditional fixed-index bytes does not establish E1 after a failure-dependent
+history, and a concrete hidden provider state cannot silently be included in
+its context. Success/post-context independence is NOT asserted. The callback
+op129 obstruction remains: a fixed pure dictionary cannot represent distinct
+returns on identical zero-buffer arguments. No new environmental trust item,
+OS availability law, decoder premise, observer restriction or bad event was
+introduced into the headline. Conjunct1 still has zero top premises removed.
+
+`EntropyNonceGuard64` removes the assumed Boolean nonce test from the existing
+world interpreter, using the proved actual source nonzero test. Zero nonce
+retains the world and performs no fills; the nonzero branch enters its exact
+17-step (16 draws plus cap test) interpreter. Native effect adequacy is still
+not proved. The previously closed arbitrary-byte source continuation remains
+available independently of these probability results.
+
+Evidence: `evidence/prover-rw-20261023/entropy-kernel64`. 24 Lean invocations:
+10 pass,14 changed elaboration failures (none resource failures); every accepted
+new report uses only standard axioms, or none. Failed outputs with sorryAx are
+retained and rejected. 11497:2.14s,4,263,992KiB;11499:2.06s,4,261,744KiB;
+11578:1.94s,4,263,424KiB;11579:1.90s,4,267,080KiB; all exit0,swap0.
+Exact targets, source snapshots, dependency fingerprints, revisions, commands,
+wall/RSS/swap and axiom/error reports are in individual receipts. 11480–82 input
+revision labels predate base5b5ff8df24; exact hashes are authoritative. 11577 was
+prepared but not launched after inspection rejected a broad power rewrite.
+
+11581 was rejected **before Lean** by the unchanged existing reservation gate:
+51,942,260,736 reserved bytes +7,516,192,768 requested would exceed its
+59,055,800,320-byte safe limit. No timing/RSS/axiom output exists for that job;
+the input and rejection receipt are retained. No cap, launcher, lock or monitor
+was changed. The read-only metadata collector accepts unused11576–99 via the
+existing native-drop launcher;11563–75 were already used and untouched.
+Budget76/100 Lean,0/20Kani. No Rust or native artifact changes, no full replay.

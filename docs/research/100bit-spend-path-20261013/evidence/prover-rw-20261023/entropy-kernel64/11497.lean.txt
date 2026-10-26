@@ -1,0 +1,85 @@
+import R1Z.ProverRwEntropyKernelBounds64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyKernelRate64
+open ProverCommitPublicNonce40 ProverRwEntropyKernel64 ProverRwEntropyTermination64
+open ProverRwEntropyKernelBounds64
+open scoped BigOperators
+attribute [local instance] Classical.propDecidable
+
+/-- The decision procedure is an explicit parameter, so specializing a large
+carrier does not normalize a classical/computable-decider conversion. -/
+theorem uniform_event {X : Type} [Fintype X] (p : X → Prop) [DecidablePred p] (a : ℚ) :
+    (∑ x : X, if p x then a * (1 / (Fintype.card X : ℚ)) else 0) =
+      a * R0Z.FsAbort.eventMass p := by
+  unfold R0Z.FsAbort.eventMass R0Z.mean
+  simp only [div_eq_mul_inv]
+  conv_rhs => rw [← mul_assoc,Finset.mul_sum,Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro x _
+  by_cases h : p x <;> simp only [h,ite_true,ite_false,mul_one,mul_zero,zero_mul,one_mul]
+
+theorem retry_total {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (entropy_law : E1 law) (transition : ∀ c raw, ∑ after : C, next c raw after = 1)
+    (c : C) : (∑ after : C, retry available law next c after) =
+      available c * R0Z.FsAbort.eventMass (fun raw : Raw => decode raw = none) := by
+  unfold retry
+  rw [Finset.sum_comm]
+  calc
+    _ = ∑ raw : Raw, if decode raw = none then available c * (1 / (Fintype.card Raw : ℚ)) else 0 := by
+      apply Finset.sum_congr rfl
+      intro raw _
+      by_cases bad : decode raw = none
+      · simp only [if_pos bad]
+        rw [← Finset.mul_sum,transition,mul_one,entropy_law]
+      · simp only [if_neg bad,Finset.sum_const_zero]
+    _ = _ := uniform_event _ _
+
+theorem retry_nonnegative {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (entropy_law : E1 law) (available_nonnegative : ∀ c, 0 ≤ available c)
+    (transition_nonnegative : ∀ c raw after, 0 ≤ next c raw after) (c after : C) :
+    0 ≤ retry available law next c after := by
+  unfold retry
+  apply Finset.sum_nonneg
+  intro raw _
+  by_cases bad : decode raw = none
+  · rw [if_pos bad,entropy_law]
+    exact mul_nonneg (mul_nonneg (available_nonnegative c)
+      (div_nonneg (by norm_num) (Nat.cast_nonneg _))) (transition_nonnegative c raw after)
+  · rw [if_neg bad]
+
+theorem retry_bound {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (entropy_law : E1 law) (transition : ∀ c raw, ∑ after : C, next c raw after = 1)
+    (available_le_one : ∀ c, available c ≤ 1) (c : C) :
+    (∑ after : C, retry available law next c after) ≤ ProverRwEntropyAbort64.zeroBudget := by
+  rw [retry_total available law next entropy_law transition]
+  have positive : 0 ≤ R0Z.FsAbort.eventMass (fun raw : Raw => decode raw = none) :=
+    R0Z.FsAbortBounds.mass_nonneg _
+  exact (mul_le_mul_of_nonneg_right (available_le_one c) positive).trans
+    (by simpa only [one_mul] using ProverRwEntropyAbort64.candidate_bad_mass)
+
+/-- Conditional E1 is needed on this exact conditioning frame. Merely
+uniform unconditional tape coordinates do not supply this hypothesis; nor
+may C silently be strengthened to a concrete hidden provider state. Native
+context association is not supplied by this model theorem. -/
+theorem sixteen_zero_bound {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (entropy_law : E1 law) (transition : ∀ c raw, ∑ after : C, next c raw after = 1)
+    (available_nonnegative : ∀ c, 0 ≤ available c) (available_le_one : ∀ c, available c ≤ 1)
+    (transition_nonnegative : ∀ c raw after, 0 ≤ next c raw after) (c : C) :
+    zeroMass (retry available law next) 16 c ≤ ProverRwEntropyAbort64.zeroBudget^16 := by
+  apply zero_bound
+  · unfold ProverRwEntropyAbort64.zeroBudget
+    positivity
+  · exact retry_nonnegative available law next entropy_law available_nonnegative transition_nonnegative
+  · exact retry_bound available law next entropy_law transition available_le_one
+
+#print axioms uniform_event
+#print axioms retry_total
+#print axioms retry_nonnegative
+#print axioms retry_bound
+#print axioms sixteen_zero_bound
+end R1Z.ProverRwEntropyKernelRate64

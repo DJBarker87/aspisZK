@@ -1,0 +1,115 @@
+import R1Z.ProverRwEntropyTermination64
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.ProverRwEntropyPartition64
+open ProverCommitPublicNonce40 ProverRwEntropyKernel64 ProverRwEntropyTermination64
+open scoped BigOperators
+attribute [local instance] Classical.propDecidable
+
+theorem subtype_partition {X : Type} [Fintype X] (good : X → Prop)
+    [Fintype {x // good x}] (weight : X → ℚ) :
+    (∑ x : {x // good x}, weight x.val) + (∑ x : X, if good x then 0 else weight x) =
+      ∑ x : X, weight x := by
+  rw [← Finset.sum_subtype (Finset.univ.filter good) (by simp) weight]
+  simp only [Finset.sum_filter]
+  rw [← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro x _
+  by_cases h : good x <;> simp only [h,if_true,if_false,zero_add,add_zero]
+
+theorem decode_none_iff (raw : Raw) : (decode raw = none) ↔ ¬ (∀ i, raw i ≠ 0) := by
+  by_cases good : ∀ i, raw i ≠ 0
+  · simp only [decode,dif_pos good,Option.some_ne_none,false_iff,not_not]
+    exact good
+  · simp only [decode,dif_neg good,true_iff]
+    exact good
+
+theorem decoder_partition {X : Type} [Fintype X]
+    (good bad : X → Prop) [Fintype {x // good x}] [DecidablePred bad]
+    (complement : ∀ x, bad x ↔ ¬ good x) (weight : X → ℚ) :
+    (∑ x : {x // good x}, weight x.val) + (∑ x : X, if bad x then weight x else 0) =
+      ∑ x : X, weight x := by
+  have equal : (∑ x : X, if bad x then weight x else 0) =
+      ∑ x : X, if good x then 0 else weight x := by
+    apply Finset.sum_congr rfl
+    intro x _
+    by_cases hg : good x
+    · have hb : ¬ bad x := fun h => (complement x).mp h hg
+      rw [if_neg hb,if_pos hg]
+    · have hb := (complement x).mpr hg
+      rw [if_pos hb,if_neg hg]
+  rw [equal]
+  exact subtype_partition good weight
+
+theorem raw_partition [rawEnum : Fintype Raw] [privateEnum : Fintype Private]
+    (weight : Raw → ℚ) :
+    (∑ x : Private, weight x.val) + (∑ raw : Raw, if decode raw = none then weight raw else 0) =
+      ∑ raw : Raw, weight raw := by
+  exact @decoder_partition Raw rawEnum (fun raw : Raw => ∀ i, raw i ≠ 0)
+    (fun raw => decode raw = none) privateEnum
+    (fun raw => (decode raw).decidableEqNone) decode_none_iff weight
+
+theorem uniform_sum {X : Type} [Fintype X] [Nonempty X] :
+    (∑ _x : X, (1 / (Fintype.card X : ℚ))) = 1 := by
+  have card : (Fintype.card X : ℚ) ≠ 0 := by exact_mod_cast Fintype.card_ne_zero
+  simp only [Finset.sum_const,Finset.card_univ,nsmul_eq_mul,one_div]
+  exact mul_inv_cancel₀ card
+
+theorem law_normalized {C : Type} (law : C → Raw → ℚ) (entropy_law : E1 law) (c : C) :
+    (∑ raw : Raw, law c raw) = 1 := by
+  calc
+    (∑ raw : Raw, law c raw) = ∑ _raw : Raw, 1 / (Fintype.card Raw : ℚ) :=
+      Finset.sum_congr rfl (fun raw _ => entropy_law c raw)
+    _ = 1 := uniform_sum
+
+/-- The decoder partitions a successful return into accepted/private and
+retry outcomes. Byte-dependent post-context transitions are retained. -/
+theorem step_mass {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (transition : ∀ c raw, ∑ after : C, next c raw after = 1) (c : C) :
+    doneHead (arrival available law next) c + (∑ after : C, retry available law next c after) =
+      available c * ∑ raw : Raw, law c raw := by
+  have accepted : doneHead (arrival available law next) c =
+      ∑ secret : Private, available c * law c secret.val := by
+    unfold doneHead
+    apply Finset.sum_congr rfl
+    intro secret _
+    unfold arrival
+    rw [← Finset.mul_sum,transition,mul_one]
+  have rejected : (∑ after : C, retry available law next c after) =
+      ∑ raw : Raw, if decode raw = none then available c * law c raw else 0 := by
+    unfold retry
+    rw [Finset.sum_comm]
+    apply Finset.sum_congr rfl
+    intro raw _
+    by_cases bad : decode raw = none
+    · simp only [bad,if_true]
+      rw [← Finset.mul_sum,transition,mul_one]
+    · simp only [bad,if_false,Finset.sum_const_zero]
+  rw [accepted,rejected]
+  exact (@raw_partition (inferInstance : Fintype Raw) (inferInstance : Fintype Private)
+    (fun raw => available c * law c raw)).trans (Finset.mul_sum _ _ _).symm
+
+/-- Availability is not assumed to be one. The three terminal classes carry
+its exact complement, rather than being discarded or charged to realBad. -/
+theorem e1_step_conservation {C : Type} [Fintype C]
+    (available : C → ℚ) (law : C → Raw → ℚ) (next : C → Raw → C → ℚ)
+    (stop : Stop → C → C → ℚ) (entropy_law : E1 law)
+    (transition : ∀ c raw, ∑ after : C, next c raw after = 1)
+    (complement : ∀ c, stopHead stop c = 1 - available c) (c : C) :
+    doneHead (arrival available law next) c + stopHead stop c +
+      (∑ after : C, retry available law next c after) = 1 := by
+  have h := step_mass available law next transition c
+  rw [law_normalized law entropy_law,mul_one] at h
+  rw [complement]
+  linarith only [h]
+
+#print axioms subtype_partition
+#print axioms decode_none_iff
+#print axioms decoder_partition
+#print axioms raw_partition
+#print axioms uniform_sum
+#print axioms law_normalized
+#print axioms step_mass
+#print axioms e1_step_conservation
+end R1Z.ProverRwEntropyPartition64
