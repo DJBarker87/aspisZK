@@ -1,0 +1,11 @@
+# Stage 2: concrete rows and constructor control primitives
+
+All twelve JFv_TX2_Row10–21 modules have exact-current-hash accepted receipts. Each exports the three installed point/endpoint line calls, the computed native node arithmetic and explicit canonical nonzero row words. These import JFs_ point leaves and stage 1 endpoint lines. No table or buffer recurrence is re-proved.
+
+JFv_TX2_ZeroTest.source (023) derives the complete native anyDefault false result from false per-cell calls. JFv_TX2_GatherStep.source (043) executes one native gather body, including actual casts, checked division, source domain/point/field children, raw zero-test, clone/extend and push, preserving the two output Vec contents. Its primitive call hypotheses are explicit. JFv_TX2_DecodeNonzero.source (028) converts canonical raw nonzero to nonzero field semantics. JFv_TX2_Terminal.source (027) constructs the actual terminal body return, running the installed prefix/inverse/reverse/collect pipeline from a nonzero flat Vec. It retains terminal-index/size/nonzero preconditions; it is not an instantiated fixture constructor.
+
+JFv_TX2_GeometryOps.fields (017) binds the constructor installation to the actual point, line, index, multiply and inverse source calls. JFv_TX2_NodeCall.source (015) exposes native node arithmetic and its exact modular value symbolically. All these theorem audits contain only propext, Classical.choice, Quot.sound or subsets. Exact targets, exit status, wall time, RSS, swap, revision/dirty flag, source hashes and dependency object hashes are in the per-attempt receipts.
+
+Rejected elaborations are retained, excluded from validation credit. 042 was a dependent launch incorrectly scheduled after its own prerequisite Rows failed in 041; the launcher rejected the missing own prerequisite before starting Lean. It is conservatively charged to the budget and recorded separately. No infrastructure repair was attempted.
+
+044 exposed a different inherited-circle-cache failure before elaboration; local-lean rule 5 stops the proof campaign. Rows, GatherShape, GatherActive, GatherLoop and Geometry remain UNCHECKED text, outside lean/. No full constructor, inverse-array instance, equality, accepted query, batch1, finish or accepted2 is claimed. Final evidence review and handoff follow separately.

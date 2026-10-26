@@ -1,0 +1,50 @@
+JFv_TX2_ZeroTest.lean:44:4: error: Type mismatch
+  tail
+has type
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorSliceIter T) pred { slice := it.slice, i := it.i + 1 }
+      () =
+    ok
+      (false,
+        { slice := { slice := it.slice, i := it.i + 1 }.slice,
+          i := (↑{ slice := it.slice, i := it.i + 1 }.slice).length })
+but is expected to have type
+  (match
+      let (next, s) := (some (↑it.slice)[it.i], { slice := it.slice, i := it.i + 1 })
+      match next with
+      | none => ok (ControlFlow.done (false, s))
+      | some value => do
+        let (stop, f) ← pred.call_mut () value
+        if stop = true then ok (ControlFlow.done (true, s)) else ok (ControlFlow.cont (s, f)) with
+    | ok r =>
+      match r with
+      | ControlFlow.cont x => loop (Port3_BatchStd.anyBody { next := core.slice.iter.IteratorSliceIter.next } pred) x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (false, { slice := it.slice, i := (↑it.slice).length })
+JFv_TX2_ZeroTest.lean:43:22: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_BatchStd.anyBody, ̲core.iter.traits.iterator.IteratorSliceIter, ̲n̲e̲x̲t̲,̲
+        n̵e̵x̵t̵,̵bind_tc_ok,s̵t̵e̵p̵,̵ ̲Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_TX2_ZeroTest.lean:43:27: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵o̵r̵t̵3̵_̵B̵a̵t̵c̵h̵S̵t̵d̵.̵a̵n̵y̵B̵o̵d̵y̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵S̵l̵i̵c̵e̵I̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̵t̵e̵p̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲P̲o̲r̲t̲3̲_̲B̲a̲t̲c̲h̲S̲t̲d̲.̲a̲n̲y̲B̲o̲d̲y̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲t̲r̲a̲i̲t̲s̲.̲i̲t̲e̲r̲a̲t̲o̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲S̲l̲i̲c̲e̲I̲t̲e̲r̲,̲ ̲n̲e̲x̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲s̲t̲e̲p̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFv_TX2_ZeroTest.lean:43:46: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [Port3_BatchStd.anyBody, ̲core.iter.traits.iterator.IteratorSliceIter, ̲n̲e̲x̲t̲,̲
+        n̵e̵x̵t̵,̵bind_tc_ok, ̲step, ̲Bool.false_eq_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFv_TX2_ZeroTest.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
