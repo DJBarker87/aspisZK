@@ -1,0 +1,1 @@
+TX2 continuation on real JFx bytes. New JFo modules only. Budget 100 Lean / 10 Kani; one capped scope at a time. No shipped files or other worktrees changed. Entry revision recorded by per-attempt receipts. Target accepted2 remains open. Latest present top Rc10_Top.deployed; inherited ledger unchanged.
