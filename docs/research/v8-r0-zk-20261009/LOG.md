@@ -9802,3 +9802,43 @@ New job pv-l3 (`codex/pv-l3-20261026`, branched from the merged candidate, prefi
 sites, V374 dudect-style two-class measurement with pre-registered criteria, and the exact statements
 of the V370/V371 trust items for owner acceptance. All labelled measurement, never proof. Six jobs
 running. Privacy target not yet established.
+
+## D197 (Stream B, 2026-10-26 12:30): rebase gates passing; L3 partial audit with two escalations; rw15 and L1 jobs
+
+pv-rebase2 (branch `codex/pv-rebase-20261026`, unmerged candidate + research): all three ELFs built
+from the merged revision 3f9177b647 hash exactly to the release pins (default f8c0ec72…, 1,563,728 B;
+devnet 63ad3e9c…, 1,563,728 B; Pool 121f3e29…, 605,704 B), and a research control build in the same
+session reproduces the same three. Fixed-coin transfer and withdrawal proofs are byte-identical to
+research (proof 57,607 B, public 1,455 B; equal status/callbacks/attempts/audit). Lead ruling: the
+host-only `ct-host-prover` feature guards in aspis-core are admitted for adoption, since verifier bytes
+are unchanged. The D191 ELF divergence came from the missing research adoptions, not the CT kernels.
+Ledger rows V341–V343 now have passing evidence (not yet recounted). The 1000-pair differential and
+the quiet-host timing gate are still running. No binaries committed.
+
+pv-l3 (branch `codex/pv-l3-20261026`, from the merged candidate; report design/PV-L3-20261026.md):
+V372 platform pins recorded (optimized native prover executable, rustc/LLVM/flags, Intel Core Ultra 7
+155H, microcode, kernel). V373 disassembly audit PARTIAL over 52 kernel entries: M31/CM31/QM31/
+WideExact CT leaves compile to CMOV/SETcc/SSE masks with no secret branch or index; two STOPs retained:
+(a) the pole-verdict caller branches on the scan verdict (`je` at 0xa739d) to select ActivePole; this
+is the already-modelled L1 retry boundary (P_R1 rejection), not a new arithmetic leak; (b) the
+inversion-validity branches (`try_inv` on M31/QM31/WideExact) test for zero, so constant time is
+certified only on the nonzero domain. V374 timing: zero samples, the host load was about 20 with
+three other scopes; a guarded collector waits for a quiet host and will commit evidence locally on
+that branch. Read-only MSR snapshot: CPU0 supports DOITM (data-operand-independent timing mode) but it
+is DISABLED (IA32_UARCH_MISC_CTL = 0). All L3 results are measurement/trust, not proof.
+
+**Escalations to the owner (recommendation in each):**
+1. V371 CPU-latency trust item. With DOITM disabled, branchless code alone does not give
+   data-independent latency on this CPU. Recommendation: enable DOITM on the pinned build/prover host
+   (kernel/MSR setting, recorded as a platform pin) before the L3 measurement run, and accept V371
+   only for the DOITM-enabled mode; otherwise V371 stays a substantive trust item.
+2. Inversion zero-boundary. Recommendation: have the L2 job prove that every `try_inv` operand on a
+   witness-bearing path is nonzero except on an already-charged bad event (so the branch is
+   simulatable); if a witness-dependent zero is reachable, that is a protocol-level leak for decision.
+
+prover-rw14 stopped on the same launcher ID quirk as dict6 (barrier refusal then "attempt 14835
+already used"); it had supplied two callbacks (33 remain), 35/100 Lean and 3/15 Kani used.
+Relaunched as pv-rw15 (IDs 21300–21599, remaining budget) on the proof/audit data equality,
+compression correspondence and callbacks. New job pv-l1 (`codex/pv-l1-20261026`, from the merged
+candidate, prefix PV_L1_, IDs 21600–21899): V347–V351 native L1 event producer and joint law, plus
+V366 on the same coupling. Six jobs running. Privacy target not yet established; rows removed: 0.
