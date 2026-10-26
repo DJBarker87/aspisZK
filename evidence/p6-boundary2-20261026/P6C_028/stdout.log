@@ -1,0 +1,478 @@
+'AspisR1.P6C_Accepted.issued_calls_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Accepted.actual_calls_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Accepted.extension_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Batches.current' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Batches.stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Batches.stage_native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Callbacks.digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Callbacks.parent_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Callbacks.parent_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Callbacks.leaf_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Callbacks.leaf_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_CarrierGap.independent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_EventTransport.inclusion' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_EventTransport.mass' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.realization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.source_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Forget.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_FullBoundary.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Irrelevance.issued_only' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Irrelevance.conclusions' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Issued.derive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Issued.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Issued.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.values_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_NativeEffects.no_lost_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Nonvacuity.partial_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Nonvacuity.rejected_differs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_OnCuts.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Pair.safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Pair.accepted_pair_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Result.strengthen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Top.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Whole.same_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.P6C_Extension.total : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    AspisR1.SdkC_Source.Parts → AspisR1.SdkC_Source.Digest :=
+fun hashv H parts =>
+  match hashv parts with
+  | Aeneas.Std.Result.ok digest => digest
+  | x => AspisR1.MultiproofConePhysicalTransport.rawOracle H parts
+def AspisR1.P6C_Extension.dictionary : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+    MultiproofConeRef.aspis_core.digest.Digest32 Unit :=
+fun hashv H =>
+  { coremarkerCopyInst := { cloneInst := { clone := fun x => Aeneas.Std.Result.ok x } },
+    digest := fun x parts => Aeneas.Std.Result.ok (AspisR1.P6C_Extension.total hashv H parts) }
+def AspisR1.P6C_Pair.Safe : {A : Type} →
+  (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+    (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.SdkC_Source.Code A → A → Prop :=
+fun {A} hashv H code value =>
+  AspisR1.SdkC_BatchPair.Returning hashv H code value ∧
+    (∀ q ∈ (AspisR1.SdkC_Source.run hashv code []).2,
+        ∃ digest, q.returned = Aeneas.Std.Result.ok digest ∧ hashv q.parts = Aeneas.Std.Result.ok digest) ∧
+      AspisR1.SdkC_Source.run (fun parts => Aeneas.Std.Result.ok (AspisR1.P6C_Extension.total hashv H parts)) code [] =
+        AspisR1.SdkC_Source.run hashv code []
+def AspisR1.P6C_OnCuts.SafeBatches : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H f s =>
+  ∃ p0 root0 p2 root2,
+    AspisR1.P6C_Pair.Safe hashv H (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0)
+        (Aeneas.Std.core.result.Result.Ok ()) ∧
+      AspisR1.P6C_Pair.Safe hashv H (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2)
+          (Aeneas.Std.core.result.Result.Ok ()) ∧
+        AspisR1.SdkC_Source.run (AspisR1.P6C_Batches.extended hashv H)
+              (AspisR1.SdkC_BatchSource.currentCode (AspisR1.P6C_Batches.extended hashv H) f.proof p0 root0) [] =
+            AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.currentCode hashv f.proof p0 root0) [] ∧
+          AspisR1.SdkC_Source.run (AspisR1.P6C_Batches.extended hashv H)
+              (AspisR1.SdkC_BatchSource.stageCode (AspisR1.P6C_Batches.extended hashv H) s.proof p2 root2) [] =
+            AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_BatchSource.stageCode hashv s.proof p2 root2) []
+def AspisR1.P6C_FullBoundary.Facts : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+        Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+          AspisR1.S2W_NativeConsolidation.FirstCut → AspisR1.S2W_NativeConsolidation.SecondCut → Prop :=
+fun {F C} c hashv H saved f s =>
+  AspisR1.P6C_Whole.SafePair c hashv H saved f s ∧
+    AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.firstLog c hashv f) ∧
+      AspisR1.P6C_Issued.Boundary hashv H (AspisR1.P6C_FullBoundary.secondLog c hashv s) ∧
+        ∀ q ∈ AspisR1.P6C_FullBoundary.firstLog c hashv f ++ AspisR1.P6C_FullBoundary.secondLog c hashv s,
+          ∀ (self : AdapterRw.SolanaDigest),
+            (AspisR1.DrvC_Installation.sdk c).op43 self q.parts =
+              Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts)
+def AspisR1.P6C_Issued.Boundary : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.SdkC_Source.Log → Prop :=
+fun hashv H log =>
+  ∀ q ∈ log,
+    q.returned = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+      hashv q.parts = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+        AspisR1.S2W_DigestExtraction.digest hashv () q.parts =
+            Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+          AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode q.parts) [] =
+            (Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts),
+              [{ parts := q.parts,
+                  returned := Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) }])
+def AspisR1.P6C_Result.Outcome : {W F CoreError : Type} →
+  AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record) →
+    AspisR1.S2W_D189Entry.Entry →
+      AspisR1.S2W_D189Entry.Entry →
+        W →
+          W →
+            AdapterRw.Ops →
+              AspisR1CurrentCaller.Ops →
+                Bool →
+                  AspisR1.Port3_NativeQueryBody.Ops →
+                    AspisR1.Port3_NativeGeometryBody.Ops CoreError →
+                      VTop_Stages.Ops →
+                        AspisR1Stage2.Stage2Finish.FinishOps F →
+                          AspisR1PublicPreparation.FinishModel.Boundaries →
+                            AspisR1.NP6_StdModel.Reservation →
+                              AspisR1.S2W_ExtractionBoundary.Program →
+                                Aeneas.Std.Slice Aeneas.Std.U8 →
+                                  Aeneas.Std.Slice Aeneas.Std.U8 →
+                                    AspisR1.S2W_ExtractionBoundary.Slot →
+                                      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                                        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+                                          AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+                                            (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) →
+                                              (AspisR1.OraclePortStoredExperimentC4.Input →
+                                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                    AspisV8R19.SourceDuplexStep.State Bool) →
+                                                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                    AspisV8R19.SourceDuplexStep.State Unit →
+                                                  (AspisR1.SdkC_Source.Parts →
+                                                      Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+                                                    Prop :=
+fun {W F CoreError} L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program
+    data1 data2 slot saved post1 post2 H driver prior hashv =>
+  have port :=
+    AspisR1.SdkD_Child.port adapterOps (AspisR1.Uni_Install.current ops reserved queryOps geoOps)
+      (AspisR1.Op5T_Concrete.stage
+        (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stageBase) reserved queryOps geoOps))
+      finishOps (AspisR1.F3M_CircleSource.install B) (AspisR1.NP6_StdModel.calls reservation);
+  ∃ f s outer pre middle fs ss run tx2,
+    AspisR1.Cons_Native.Calls (AspisR1.AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
+        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32
+          (AspisR1.ClaimsUnrolledSdk.sdkOps
+            (AspisR1.Tx2I_Install.install adapterOps
+              (AspisR1.Op5T_Concrete.stage
+                (AspisR1.Tx2N_Execution.control (AspisR1.AuS1_Install.base stageBase) reserved queryOps geoOps))
+              finishOps)
+            (AspisR1.Uni_Install.current ops reserved queryOps geoOps) (AspisR1.F3M_CircleSource.install B)
+            (AspisR1.NP6_StdModel.calls reservation)))
+        () s.pub s.proof s.checkpoint tx2 ∧
+      AspisR1.Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps
+          (AspisR1.F3M_CircleSource.install B) reservation program data1 data2 slot saved post1 post2 H f s outer pre
+          middle fs ss run ∧
+        AspisR1.P6C_OnCuts.SafeBatches
+            { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps,
+              reserved := reserved, query := queryOps, geometry := geoOps,
+              boundaries := AspisR1.F3M_CircleSource.install B, std := AspisR1.NP6_StdModel.calls reservation }
+            hashv H f s ∧
+          AspisR1.P6C_FullBoundary.Facts
+              { adapter := adapterOps, currentBase := ops, stageBase := stageBase, finish := finishOps,
+                reserved := reserved, query := queryOps, geometry := geoOps,
+                boundaries := AspisR1.F3M_CircleSource.install B, std := AspisR1.NP6_StdModel.calls reservation }
+              hashv H saved f s ∧
+            AspisR1.NP6_Constructors.Contents run.initial run.pending ∧
+              AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+                    f.statement =
+                  Aeneas.Std.Result.ok f.semantic ∧
+                AspisR1.T2R_Public.Facts f.pub f.proof ∧
+                  AspisR1.T2R_Parser.Facts f.proof ∧
+                    AspisR1.T2R_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+                        (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                          (post1.payload (e1.heap.accounts 2).1) 1768) ∧
+                      AspisR1.Rc3_Nonvacuity.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+                          (AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                            (post1.payload (e1.heap.accounts 2).1) 1768) ∧
+                        AspisR1.SAP_LiteralCaller.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps
+                          stageBase finishOps B (AspisR1.NP6_StdModel.calls reservation) program data1 data2 slot saved
+                          post1 post2 H f s outer pre middle fs ss run prior tx2
+@AspisR1.Rc3_Top.deployed : ∀ {W A F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration F CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+                AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.Rc3_Install.configuration c reservation).query →
+                  ∀ (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                    AspisR1.S2W_DigestExtraction.AeneasExtraction
+                        (AspisR1.ClaimsUnrolledSdk.sdkOps
+                          (AspisR1.Tx2I_Install.install (AspisR1.Rc3_Install.configuration c reservation).adapter
+                            (AspisR1.Op5T_Concrete.stage
+                              (AspisR1.Tx2N_Execution.control
+                                (AspisR1.AuS1_Install.base (AspisR1.Rc3_Install.configuration c reservation).stageBase)
+                                (AspisR1.Rc3_Install.configuration c reservation).reserved
+                                (AspisR1.Rc3_Install.configuration c reservation).query
+                                (AspisR1.Rc3_Install.configuration c reservation).geometry))
+                            (AspisR1.Rc3_Install.configuration c reservation).finish)
+                          (AspisR1.Uni_Install.current (AspisR1.Rc3_Install.configuration c reservation).currentBase
+                            (AspisR1.Rc3_Install.configuration c reservation).reserved
+                            (AspisR1.Rc3_Install.configuration c reservation).query
+                            (AspisR1.Rc3_Install.configuration c reservation).geometry)
+                          (AspisR1.Rc3_Install.configuration c reservation).boundaries
+                          (AspisR1.Rc3_Install.configuration c reservation).std)
+                        native1 native2 hashv →
+                      ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                        AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                          AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                            ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+                              (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+                              (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                              (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                              (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                              AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                                AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                                  ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                    (prior :
+                                      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                        AspisV8R19.SourceDuplexStep.State Unit)
+                                    (D : AspisR1.LiteralByteProtocol.Decoder)
+                                    (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                        (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                      ∀ (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+                                        AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D
+                                            (AspisR1.DrvC_SourceEntry.source
+                                              (AspisR1.Rc3_Install.configuration c reservation) hashv) →
+                                          AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D
+                                              (AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.Rc3_Install.configuration c reservation) hashv)
+                                              (AspisR1.Port1_StoredCarrier.lift P) runtime →
+                                            ∀
+                                              (adversary :
+                                                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                  AspisV8R19.SourceDuplexStep.State AspisR1.GExp_Experiment.FirstInputs)
+                                              (chooseSecond :
+                                                AspisR1.GExp_Experiment.FirstInputs →
+                                                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                                                    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                      AspisV8R19.SourceDuplexStep.State
+                                                      AspisR1.GExp_Experiment.SecondInputs),
+                                              (∀
+                                                  (H :
+                                                    AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+                                                (∀ (input : AspisR1.GExp_Experiment.FirstInputs)
+                                                    (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                                                    (H :
+                                                      AspisV8R19.DuplexFrames.Bytes →
+                                                        AspisV8R19.SourceDuplexStep.State),
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (chooseSecond input saved)).1.length ≤
+                                                      Q1) →
+                                                  ∀
+                                                    (project :
+                                                      AspisR1.GExp_Experiment.Outcome →
+                                                        AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+                                                    (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+                                                    AspisR1.DrvC_Implementation.driver
+                                                          (AspisR1.Rc3_Install.configuration c reservation) =
+                                                        AspisR1.DrvC_SourceEntry.source
+                                                          (AspisR1.Rc3_Install.configuration c reservation) hashv ∧
+                                                      AspisR1.DrvC_Installation.sdk
+                                                            (AspisR1.Rc3_Install.configuration c reservation) =
+                                                          AspisR1.SdkD_PairBatches.dictionary
+                                                            (AspisR1.Rc3_Install.configuration c reservation).adapter
+                                                            (AspisR1.Rc3_Install.configuration c
+                                                                reservation).currentBase
+                                                            (AspisR1.Rc3_Install.configuration c reservation).stageBase
+                                                            (AspisR1.Rc3_Install.configuration c reservation).finish
+                                                            (AspisR1.Rc3_Install.configuration c reservation).reserved
+                                                            (AspisR1.Rc3_Install.configuration c reservation).query
+                                                            (AspisR1.Rc3_Install.configuration c reservation).geometry
+                                                            (AspisR1.Rc3_Install.configuration c reservation).boundaries
+                                                            (AspisR1.Rc3_Install.configuration c reservation).std ∧
+                                                        (have r := AspisR1.Rc3_Install.configuration c reservation;
+                                                          have source :=
+                                                            AspisR1.GExp_Experiment.program
+                                                              (AspisR1.GExp_FirstPair.base r.currentBase r.reserved
+                                                                r.query r.geometry)
+                                                              (AspisR1.DrvC_Installation.stage r) r.reserved
+                                                              r.boundaries r.std hashv
+                                                              (AspisR1.DrvC_Installation.currentDigest r)
+                                                              (AspisR1.DrvC_Installation.digest r) adversary
+                                                              chooseSecond;
+                                                          AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D
+                                                              (AspisR1.Port1_StoredCarrier.lift P) (Q0 + Q1) runtime ∧
+                                                            ⋯ ∧
+                                                              (Q0 + Q1 = 0 →
+                                                                AspisR1.OraclePortHeadlineFrozen2PerAttempt.failureModel
+                                                                      runtime +
+                                                                    AspisR1.EndP_AuthMass.mass source project ≤
+                                                                  1 / 2 ^ 100)) ∧
+                                                          AspisR1.Rc3_Result.Outcome L e1 e2 w1 w2
+                                                              (AspisR1.Rc3_Install.configuration c reservation).adapter
+                                                              (AspisR1.Rc3_Install.configuration c
+                                                                  reservation).currentBase
+                                                              (AspisR1.Rc3_Install.configuration c reservation).reserved
+                                                              (AspisR1.Rc3_Install.configuration c reservation).query
+                                                              (AspisR1.Rc3_Install.configuration c reservation).geometry
+                                                              (AspisR1.Rc3_Install.configuration c
+                                                                  reservation).stageBase
+                                                              (AspisR1.Rc3_Install.configuration c reservation).finish
+                                                              c.boundaries reservation program data1 data2 slot saved
+                                                              post1 post2 H
+                                                              (AspisR1.DrvC_Implementation.driver
+                                                                (AspisR1.Rc3_Install.configuration c reservation))
+                                                              prior ∧
+                                                            (native1 program e1.first data1 =
+                                                                  Aeneas.Std.Result.ok
+                                                                    (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                                (↑saved).length = 1768 ∧ ⋯) ∧
+                                                              AspisR1.Rc2_Events.Facts
+                                                                  (AspisR1.Rc3_Install.configuration c reservation)
+                                                                  hashv native1 native2 copy allocator program H saved ∧
+                                                                AspisR1.Rc2_Protection.Facts
+                                                                  (AspisR1.Rc3_Install.configuration c reservation)
+                                                                  native1 native2 copy allocator program
+@AspisR1.P6C_Top.deployed : ∀ {W A F CoreError : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (c : AspisR1.DrvC_Installation.Configuration F CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+                AspisR1.Port5Q1_QueryPorts.SessionAPrimitives (AspisR1.Rc3_Install.configuration c reservation).query →
+                  ∀ (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                    AspisR1.S2W_DigestExtraction.AeneasExtraction
+                        (AspisR1.ClaimsUnrolledSdk.sdkOps
+                          (AspisR1.Tx2I_Install.install (AspisR1.Rc3_Install.configuration c reservation).adapter
+                            (AspisR1.Op5T_Concrete.stage
+                              (AspisR1.Tx2N_Execution.control
+                                (AspisR1.AuS1_Install.base (AspisR1.Rc3_Install.configuration c reservation).stageBase)
+                                (AspisR1.Rc3_Install.configuration c reservation).reserved
+                                (AspisR1.Rc3_Install.configuration c reservation).query
+                                (AspisR1.Rc3_Install.configuration c reservation).geometry))
+                            (AspisR1.Rc3_Install.configuration c reservation).finish)
+                          (AspisR1.Uni_Install.current (AspisR1.Rc3_Install.configuration c reservation).currentBase
+                            (AspisR1.Rc3_Install.configuration c reservation).reserved
+                            (AspisR1.Rc3_Install.configuration c reservation).query
+                            (AspisR1.Rc3_Install.configuration c reservation).geometry)
+                          (AspisR1.Rc3_Install.configuration c reservation).boundaries
+                          (AspisR1.Rc3_Install.configuration c reservation).std)
+                        native1 native2 hashv →
+                      ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                        AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                          AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                            ∀ (program : AspisR1.S2W_ExtractionBoundary.Program)
+                              (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+                              (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+                              (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                              (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                              AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+                                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                                AspisR1.S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+                                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                                  ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                    (prior :
+                                      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                        AspisV8R19.SourceDuplexStep.State Unit)
+                                    (D : AspisR1.LiteralByteProtocol.Decoder)
+                                    (P : AspisR1.Port1_StoredCarrier.ByteProver) (Q0 Q1 : ℕ),
+                                    (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                        (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q0 + Q1) →
+                                      ∀ (runtime : AspisR1.OraclePortRuntimeBindingC7.Runtime),
+                                        AspisR1.Port1_CanonicalJoin.AcceptedVerifierJoin D
+                                            (AspisR1.DrvC_SourceEntry.source
+                                              (AspisR1.Rc3_Install.configuration c reservation) hashv) →
+                                          AspisR1.OraclePortRuntimeBindingC7.StoredCarrierBinding D
+                                              (AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.Rc3_Install.configuration c reservation) hashv)
+                                              (AspisR1.Port1_StoredCarrier.lift P) runtime →
+                                            ∀
+                                              (adversary :
+                                                AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                  AspisV8R19.SourceDuplexStep.State AspisR1.GExp_Experiment.FirstInputs)
+                                              (chooseSecond :
+                                                AspisR1.GExp_Experiment.FirstInputs →
+                                                  Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+                                                    AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                                      AspisV8R19.SourceDuplexStep.State
+                                                      AspisR1.GExp_Experiment.SecondInputs),
+                                              (∀
+                                                  (H :
+                                                    AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                                  (AspisV8R19.MemoizedProgramLaw.eval H adversary).1.length ≤ Q0) →
+                                                (∀ (input : AspisR1.GExp_Experiment.FirstInputs)
+                                                    (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                                                    (H :
+                                                      AspisV8R19.DuplexFrames.Bytes →
+                                                        AspisV8R19.SourceDuplexStep.State),
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                            (chooseSecond input saved)).1.length ≤
+                                                      Q1) →
+                                                  ∀
+                                                    (project :
+                                                      AspisR1.GExp_Experiment.Outcome →
+                                                        AspisR1.OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
+                                                    (words : AspisR1.CanonicalCutEnrichedTranscript.Words),
+                                                    AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                                        (AspisR1.P6C_Extension.dictionary hashv H) () H
+                                                        AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                                        AspisR1.Op5T_P6.parent
+                                                        AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                                      AspisR1.DrvC_Implementation.driver
+                                                            (AspisR1.Rc3_Install.configuration c reservation) =
+                                                          AspisR1.DrvC_SourceEntry.source
+                                                            (AspisR1.Rc3_Install.configuration c reservation) hashv ∧
+                                                        AspisR1.DrvC_Installation.sdk
+                                                              (AspisR1.Rc3_Install.configuration c reservation) =
+                                                            AspisR1.SdkD_PairBatches.dictionary
+                                                              (AspisR1.Rc3_Install.configuration c reservation).adapter
+                                                              (AspisR1.Rc3_Install.configuration c
+                                                                  reservation).currentBase
+                                                              (AspisR1.Rc3_Install.configuration c
+                                                                  reservation).stageBase
+                                                              (AspisR1.Rc3_Install.configuration c reservation).finish
+                                                              (AspisR1.Rc3_Install.configuration c reservation).reserved
+                                                              (AspisR1.Rc3_Install.configuration c reservation).query
+                                                              (AspisR1.Rc3_Install.configuration c reservation).geometry
+                                                              (AspisR1.Rc3_Install.configuration c
+                                                                  reservation).boundaries
+                                                              (AspisR1.Rc3_Install.configuration c reservation).std ∧
+                                                          (have r := AspisR1.Rc3_Install.configuration c reservation;
+                                                            have source :=
+                                                              AspisR1.GExp_Experiment.program
+                                                                (AspisR1.GExp_FirstPair.base r.currentBase r.reserved
+                                                                  r.query r.geometry)
+                                                                (AspisR1.DrvC_Installation.stage r) r.reserved
+                                                                r.boundaries r.std hashv
+                                                                (AspisR1.DrvC_Installation.currentDigest r)
+                                                                (AspisR1.DrvC_Installation.digest r) adversary
+                                                                chooseSecond;
+                                                            AspisR1.OraclePortHeadlineFrozen2PerAttempt.Claims D
+                                                                (AspisR1.Port1_StoredCarrier.lift P) (Q0 + Q1) runtime ∧
+                                                              ⋯) ∧
+                                                            AspisR1.P6C_Result.Outcome L e1 e2 w1 w2
+                                                                (AspisR1.Rc3_Install.configuration c
+                                                                    reservation).adapter
+                                                                (AspisR1.Rc3_Install.configuration c
+                                                                    reservation).currentBase
+                                                                (AspisR1.Rc3_Install.configuration c
+                                                                    reservation).reserved
+                                                                (AspisR1.Rc3_Install.configuration c reservation).query
+                                                                (AspisR1.Rc3_Install.configuration c
+                                                                    reservation).geometry
+                                                                (AspisR1.Rc3_Install.configuration c
+                                                                    reservation).stageBase
+                                                                (AspisR1.Rc3_Install.configuration c reservation).finish
+                                                                c.boundaries reservation program data1 data2 slot saved
+                                                                post1 post2 H
+                                                                (AspisR1.DrvC_Implementation.driver
+                                                                  (AspisR1.Rc3_Install.configuration c reservation))
+                                                                prior hashv ∧
+                                                              (native1 program e1.first data1 =
+                                                                    Aeneas.Std.Result.ok
+                                                                      (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                                  ⋯) ∧
+                                                                ⋯ ∧
+                                                                  AspisR1.Rc2_Protection.Facts
+                                                                    (AspisR1.Rc3_Install.configuration c reservation)
+                                                                    native1 native2 copy allocator program

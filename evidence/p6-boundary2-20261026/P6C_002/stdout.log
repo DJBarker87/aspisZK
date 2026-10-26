@@ -1,0 +1,37 @@
+P6C_Extension.lean:27:14: error: Tactic `rfl` failed: The left-hand side
+  total hashv H parts
+is not definitionally equal to the right-hand side
+  rawOracle H parts
+
+case fail
+hashv : Parts → Result Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+parts : Parts
+e : Error
+returned : hashv parts = fail e
+⊢ total hashv H parts = rawOracle H parts
+P6C_Extension.lean:28:11: error: Tactic `rfl` failed: The left-hand side
+  total hashv H parts
+is not definitionally equal to the right-hand side
+  rawOracle H parts
+
+case div
+hashv : Parts → Result Digest
+sha256 H : Bytes → State
+p1 : S2W_ExtractionBoundary.P1 sha256 H
+syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+parts : Parts
+returned : hashv parts = div
+⊢ total hashv H parts = rawOracle H parts
+P6C_Extension.lean:31:4: error: 'change' tactic failed, pattern
+  digest = encodeState (H (flatten parts))
+is not definitionally equal to target
+  total hashv H parts = rawOracle H parts
+P6C_Extension.lean:36:4: error(lean.unknownIdentifier): Unknown identifier `aspis_core.digest.Digest32`
+P6C_Extension.lean:43:8: warning: declaration uses `sorry`
+'AspisR1.P6C_Extension.agrees' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.realization' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.boundary' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.P6C_Extension.source_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
