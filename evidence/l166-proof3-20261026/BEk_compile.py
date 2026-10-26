@@ -10,8 +10,9 @@ source=R/'lean'/(mod+'.lean')
 if not source.exists():source=R/'docs/research/100bit-spend-path-20261013/lean'/(mod+'.lean')
 assert source.exists()
 a=f'BEk_{n:03}'; assert not (P/a).exists()
-cfg=json.loads((R/'evidence/l166-scope-20261026/BEh_001.json').read_text())
+cfg=json.loads((R/'evidence/account-rejoin6-20261026/ARU_100.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused BEk operational proof; no arithmetic aggregation')
+paths=cfg['env']['LEAN_PATH'].split(':'); extra=paths.pop(); assert extra.endswith('/r4-cache'); paths.insert(1,extra); cfg['env']['LEAN_PATH']=':'.join(paths)
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 retries=[]
