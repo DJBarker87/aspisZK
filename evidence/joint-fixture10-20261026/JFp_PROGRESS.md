@@ -31,3 +31,13 @@ overwritten. Archive and per-object hashes are retained. The other39 modules
 are rebuilt from byte-identical tracked sources, in dependency order, one scope
 at a time. This is cache reuse and focused dependency repair, not release replay.
 The launcher/admission/monitoring code is unchanged.
+
+Stage3:043–081 rebuilt all39 missing unchanged source modules successfully,
+one module per attempt. The source-closure inventory identified prerequisites
+before those launches. All source files were compared byte-for-byte with tracked
+HEAD before copying; no existing proved source was edited.154 archive objects
+were selected from the retained port17release archive (exact SHA and member pins
+in JFp_RESTORED_CACHE.json), not rebuilt or attributed to this source revision.
+The restored dependency cache is explicitly a focused reuse selection, not a
+coherent fresh frozen-release replay.082 now audits the actual Rc10 root against
+this selection before new native fixture bridges are compiled.
