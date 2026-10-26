@@ -1,0 +1,45 @@
+RPx_WrapperBudget.lean:23:6: error: Type mismatch
+  lift_count ?m.96 ?m.97
+has type
+  GExp_CountLaws.count ?m.96 (liftResult ?m.97)
+but is expected to have type
+  GExp_CountLaws.count (n - n) (pure (core.result.Result.Err error✝))
+RPx_WrapperBudget.lean:24:6: error: Tactic `apply` failed: could not unify the conclusion of `@lift_bind_count`
+  GExp_CountLaws.count ?n (CheckpointBytes5Effect.bind (liftResult ?r) ?k)
+with the goal
+  GExp_CountLaws.count (n - n)
+    (match
+      copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+        (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved✝)) with
+    | Outcome.panic => liftResult (fail Error.assertionFailure)
+    | Outcome.returned written => do
+      let cleaned ← liftM (allocator.cleanup allocated)
+      pure (core.result.Result.Ok (saved✝, release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned)))
+
+Note: The full type of `@lift_bind_count` is
+  ∀ {A B : Type} (r : Result A) (k : A → Code B) (n : ℕ),
+    (∀ (a : A), GExp_CountLaws.count n (k a)) → GExp_CountLaws.count n (CheckpointBytes5Effect.bind (liftResult r) k)
+
+case h_2
+A : Type
+body : Code S2W_Observation.Answer
+n : ℕ
+bounded : GExp_CountLaws.count n body
+copy : Heap (ℕ → Record) → ℕ → Payload → Outcome (ℕ → Record)
+allocator : Allocator A
+e : Entry
+state allocated : A
+saved : alloc.vec.Vec U8
+result✝ : S2W_Observation.Answer
+saved✝ : alloc.vec.Vec U8
+heq✝ : core.result.Result.Ok saved = core.result.Result.Ok saved✝
+⊢ GExp_CountLaws.count (n - n)
+    (match
+      copy (acquire e.heap (e.heap.accounts 2).1 0 0 Kind.exclusive) (e.heap.accounts 2).1
+        (S2W_CommittedCheckpoint.source (S2W_ReturnedCheckpoint.nativeBytes saved✝)) with
+    | Outcome.panic => liftResult (fail Error.assertionFailure)
+    | Outcome.returned written => do
+      let cleaned ← liftM (allocator.cleanup allocated)
+      pure (core.result.Result.Ok (saved✝, release written (S2W_WrapperLaws.exclusiveGuard e.heap 2 0 0), cleaned)))
+'AspisR1.RPx_WrapperBudget.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.RPx_WrapperBudget.second' depends on axioms: [propext, Classical.choice, Quot.sound]
