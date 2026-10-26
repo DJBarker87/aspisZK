@@ -9749,3 +9749,31 @@ range only: run-joint.sh line 20 now also accepts `2[0-9][0-9][0-9][0-9]`; backu
 probe 20100 passes the range check, 30000 is refused. The launcher's TasksMax=128 is its standing
 setting and is accepted for run-joint.sh compiles (memory caps unchanged). pv-l2-sim2 relaunched
 with its full budget. Six jobs running. Privacy target not yet established; no premise removed.
+
+## D195 (Stream B, 2026-10-26 10:40): privacy premise ledger merged; baseline counts; RunJoin job
+
+Merged `codex/pv-ledger-20261026` (b59fa7293a): `design/PRIVACY-LEDGER-20261026.md` with evidence
+under `evidence/privacy-ledger-20261026/` (mechanical #check/#print captures J20002/20004/20005,
+explicit-binder source block, non-vacuity audit, pins). Audit only; no theorem added; 5 of 15 Lean
+invocations used. This is the baseline against which Stream B progress is measured.
+
+| Scope | T | P | C |
+|---|---:|---:|---:|
+| All syntactic rows (399) | 26 | 369 | 4 |
+| Remaining obligation/trust/vacuity families | 26 | 161 | 4 |
+
+The difference between the two lines is data/guard fields (42), already-proved internal families (87),
+carried honest-domain guards (22) and explicit native-cut overlaps (57), listed separately so they are
+not counted as open gates. Owners: stream B 373, external 26. The `Admitted` namespace in the proof
+is not a Lean admission; its hidden model facts are inventoried. Highest-fan-out blocker: V038, the
+concrete deployed `RunJoin.agreement` (complete view and observer decision equal to the model outside
+the fixed bad event), with its two marginal laws V036/V037 on the same coupling. C rows: V045 the
+deployed `rust` instance is a free parameter with no deployed-prover certificate; V046 adversary
+inhabitance; V047 matching witness/public fibre for arbitrary x; V270 the Formatter axiom route
+(forbidden, unselected). The ledger notes the LOG numbering collision without editing the LOG.
+
+New job pv-runjoin (`codex/pv-runjoin-20261026`, branched from the candidate, prefix PV_RunJoin_,
+IDs 20900-21199): define the deployed FSExperiments instance from the candidate's extracted
+proof-account prover with an explicit entropy world as RealRand, prove non-vacuity for the two release
+fixtures, build the coupling with both marginals, and reduce `agreement` to a named premise structure
+with one field per ledger row. Six jobs running. Privacy target not yet established; rows removed: 0.
