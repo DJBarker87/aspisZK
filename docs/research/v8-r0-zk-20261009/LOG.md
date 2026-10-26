@@ -10210,3 +10210,28 @@ for both fixtures and the canonical instance, then words by unstubbed P6 equalit
 pure sub-obligations and compile_call's pure callees. No endpoint premise removed. Six jobs running:
 rw17, dict10, runjoin5, srcid3, cb2, cb3. Quiet window 2 (17:45-18:15 UTC) in progress. Privacy
 target not yet established.
+
+## D215 (Stream B, 2026-10-26 17:55): runjoin5 done: OS-failure theorem and both repairs stated, endpoint record unchanged; runjoin6 on the residual fields and the concrete instance
+
+pv-runjoin5 (`codex/pv-runjoin-20261026`, head 4148e0e59c, a sibling of the unmerged candidate so it
+stays unmerged into research; 89/89 Lean, final audit exit 0, 33.6 s, peak RSS 2.8 GiB, standard
+axioms; 3/15 Kani: one pass, two unsupported `dlsym`; frozen implementation and original endpoint
+unchanged): `PV_RunJoin_OsFailure` proves that with a successful first account callback, a nonzero
+nonce and a first entropy draw returning Err, execution stops with Entropy independently of the
+witness; absent the parser, seed-guess and fuel events this world lies outside the unchanged `bad`,
+and with an empty decoded error log against a successful model firstGood branch the complete views
+differ (hypotheses explicit; no concrete native outside-bad world constructed). Option A
+(`privacy_headline_from_premises_available`, named OsAvailable: every in-capacity draw succeeds) keeps
+the exact conclusion and all eight premises; option B (both experiments receive the same public
+failure signal) keeps the bound, including under a common finite public-signal distribution, and
+changes the model statement. Both remain unadopted pending the owner (recommendation B, D206).
+Endpoint accounting: native parameters 2 → 2, fields 8 → 8, rows removed 0; the partial source
+constructor has seven data inputs and six residual proof fields. Two procedural violations recorded by
+the worker (an attempt launched after an admission refusal; one evidence transfer without a fresh
+receipt); the final archive transfer was refused by the quiet window and is retained locally.
+pv-runjoin6 relaunched in the same worktree (IDs 25600-25899, 100 Lean, 12 Kani): discharge the pure
+residual fields and name the native ones as world fields aligned with dict10, instantiate the concrete
+Runtime/Boundary for the proof-account caller, then publish the installed inputs/transport interface
+for srcid3 and say which paused L1/L2 rows become dischargeable. Six jobs running: rw17, dict10,
+runjoin6, srcid3, cb2, cb3. Quiet window 2 in progress (driver started 17:45:00 with the host quiet).
+Privacy target not yet established.
