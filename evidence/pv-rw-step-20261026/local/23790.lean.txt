@@ -1,0 +1,43 @@
+import R1Z.PV_RW_IteratorStateSource
+import R1Z.PV_RW_CompressNativeTotal
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RW_IteratorStateFacts
+open Aeneas Aeneas.Std Result ProverRwFull
+abbrev Q := aspis_core.field.QM31
+abbrev Iter := core.slice.iter.Iter U32
+variable [ExternalTypes]
+
+theorem stopped (ops : ExternalFuns) (values : Slice U32) (i : Nat)
+    (stop : values.val.length ≤ i) (out power lambda : Q) :
+    @PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step _
+      (PV_CurrentScaleInstall.selected ops) (⟨values,i⟩ : Iter) out power lambda=
+      ok (false,(⟨values,i⟩ : Iter),out,power) := by
+  unfold PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step
+  rw [PV_RW_SliceIterator.next_none values i stop]
+  rfl
+
+theorem active (ops : ExternalFuns) (values : Slice U32) (i : Nat)
+    (live : i<values.val.length) (out power lambda : Q) :
+    @PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step _
+      (PV_CurrentScaleInstall.selected ops) (⟨values,i⟩ : Iter) out power lambda=(do
+      let next ← @PV_RW_CompressEmission.generated.shipped_step _
+        (PV_CurrentScaleInstall.selected ops) out power values.val[i] lambda
+      ok (true,(⟨values,i+1⟩ : Iter),next.1,next.2)) := by
+  unfold PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step
+  rw [PV_RW_SliceIterator.next_some values i live]
+  simp [PV_RW_CompressEmission.generated.shipped_step]
+
+theorem total (ops : ExternalFuns) (iterator : Iter) (out power lambda : Q) :
+    ∃ final, @PV_RW_IteratorStateSource.iterator_state_step.iterator_state_step _
+      (PV_CurrentScaleInstall.selected ops) iterator out power lambda=ok final := by
+  rcases iterator with ⟨values,i⟩
+  by_cases live : i<values.val.length
+  · rw [active ops values i live]
+    obtain ⟨next,hs⟩ := PV_RW_CompressConcreteBinding.total ops out power values.val[i] lambda
+    exact ⟨(true,(⟨values,i+1⟩ : Iter),next.1,next.2),by rw [hs]; rfl⟩
+  · exact ⟨(false,(⟨values,i⟩ : Iter),out,power),stopped ops values i (by omega) out power lambda⟩
+#print axioms stopped
+#print axioms active
+#print axioms total
+end R1Z.PV_RW_IteratorStateFacts

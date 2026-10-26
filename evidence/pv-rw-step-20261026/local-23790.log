@@ -1,0 +1,96 @@
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_IteratorStateFacts.lean:17:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RW_SliceIterator.next { slice := values, i := i }
+in the target expression
+  (do
+      let (o, iterator1) ← core.slice.iter.IteratorSliceIter.next { slice := values, i := i }
+      match o with
+        | none => ok (false, iterator1, out, power)
+        | some value => do
+          let q ← aspis_core.field.QM31.mul_m31 power value
+          let compressed1 ← aspis_core.field.QM31.add out q
+          let power1 ← aspis_core.field.QM31.mul power lambda
+          ok (true, iterator1, compressed1, power1)) =
+    ok (false, { slice := values, i := i }, out, power)
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice U32
+i : ℕ
+stop : (↑values).length ≤ i
+out power lambda : Q
+⊢ (do
+      let (o, iterator1) ← core.slice.iter.IteratorSliceIter.next { slice := values, i := i }
+      match o with
+        | none => ok (false, iterator1, out, power)
+        | some value => do
+          let q ← aspis_core.field.QM31.mul_m31 power value
+          let compressed1 ← aspis_core.field.QM31.add out q
+          let power1 ← aspis_core.field.QM31.mul power lambda
+          ok (true, iterator1, compressed1, power1)) =
+    ok (false, { slice := values, i := i }, out, power)
+/Users/dominic/ZK/.worktrees/cx-prover-rw/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RW_IteratorStateFacts.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RW_SliceIterator.next { slice := values, i := i }
+in the target expression
+  (do
+      let (o, iterator1) ← core.slice.iter.IteratorSliceIter.next { slice := values, i := i }
+      match o with
+        | none => ok (false, iterator1, out, power)
+        | some value => do
+          let q ← aspis_core.field.QM31.mul_m31 power value
+          let compressed1 ← aspis_core.field.QM31.add out q
+          let power1 ← aspis_core.field.QM31.mul power lambda
+          ok (true, iterator1, compressed1, power1)) =
+    do
+    let next ← PV_RW_CompressEmission.generated.shipped_step out power (↑values)[i] lambda
+    ok (true, { slice := values, i := i + 1 }, next.1, next.2)
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice U32
+i : ℕ
+live : i < (↑values).length
+out power lambda : Q
+⊢ (do
+      let (o, iterator1) ← core.slice.iter.IteratorSliceIter.next { slice := values, i := i }
+      match o with
+        | none => ok (false, iterator1, out, power)
+        | some value => do
+          let q ← aspis_core.field.QM31.mul_m31 power value
+          let compressed1 ← aspis_core.field.QM31.add out q
+          let power1 ← aspis_core.field.QM31.mul power lambda
+          ok (true, iterator1, compressed1, power1)) =
+    do
+    let next ← PV_RW_CompressEmission.generated.shipped_step out power (↑values)[i] lambda
+    ok (true, { slice := values, i := i + 1 }, next.1, next.2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    values
+  has type
+    Slice U32
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑values
+'R1Z.PV_RW_IteratorStateFacts.stopped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_IteratorStateFacts.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RW_IteratorStateFacts.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+       42.10 real         1.56 user         5.62 sys
+          2156478464  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              304262  page reclaims
+              277287  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               26948  voluntary context switches
+              300355  involuntary context switches
+           317160501  instructions retired
+           113091961  cycles elapsed
+            10994360  peak memory footprint

@@ -263,3 +263,38 @@ translator did not run. Its next retry must be after 17:40:00.159227 UTC.
 aggregate reservation (60,532,195,328 projected bytes). It counts zero Lean
 attempts. Next host attempt must have a fresh ID and begin no earlier than
 17:45:41.210373 UTC. No source was sent or compiler launched for this ID.
+
+## Local cached J checks during the second quiet window
+
+23780 was refused by the shared launcher quiet guard before Lean; marker until
+1793038500 (18:15 UTC). No host scope has been started since this was learned.
+Local preflight IDs23781–23784 did not invoke Lean or write compile inputs;
+they count zero. One lacked the local Std path. Later preflight source walks
+followed repository baseline imports that differ from the pinned J objects.
+The correct check pins existing J objects as objects and traverses newly added
+PV_RW sources; it does not claim the baseline source files were recompiled.
+The earlier description of missing cache objects was too broad: the1171-entry
+23780 J object closure was already present and matched, requiring no refresh.
+
+A read-only copy of the earlier pv-runjoin cached J backend/shared objects was
+made under /private/tmp/pv-rw-step-native-local-20261026. Its Aeneas root SHA256
+matches the live J backend, d3bfce818c2409992274bc1852aa00280cb7a8139465ef0bab674498e4cdc69d.
+Existing local mathlib source commit81a5d257c8e410db227a6665ed08f64fea08e997,
+Lean kernel8c9756b28d64dab099da31a4c09229a9e6a2ef35; no dependency builds or
+Linux native libraries. Each focused local attempt records its own source,
+existing imported object hashes, compiler/Std/project pins, Result and axioms.
+23785 passes the emitted combined transition control proof (40.36s,
+2,848,800,768 RSS bytes,0swap).23786 fails on a namespace typo; corrected23788
+passes the loop correspondence (43.34s,2,590,097,408 bytes,0swap).
+23787 passes the full V163 component criterion (25.10s,2,952,921,088 bytes,0swap).
+These are cached focused checks, not a frozen release/dependency source replay.
+
+Final sibling read-only refresh: `codex/pv-cb-20261026` head
+`575f9d5b9b014074c95f14bc06afdb9e541ee26b`; op223/V240 OPEN,
+op250/V257 still SKIPPED (source policy only). No live installation here.
+
+The LLBC basename resolver retains all six exact translator inputs and checks
+shortened source filenames against the original receipt's full-path content
+hashes. `llbc-source-resolution.json` resolves every recorded source binding;
+it supplements, and does not modify, the conservative original receipt fields.
+The fission translator failure remains a failure, with no accepted whole output.
