@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:11:8: error: unsolved goals
+case nil.nil
+⊢ pure true = ok true
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:20:6: error: unsolved goals
+case neg
+a : U8
+xs : List U8
+ih :
+  ∀ (ys : List U8),
+    xs.length = ys.length →
+      List.allM (fun xy => ok (decide ¬core.cmp.impls.PartialEqU8.ne xy.1 xy.2 = true)) (xs.zip ys) =
+        ok (decide (xs = ys))
+b : U8
+ys : List U8
+lengths : (a :: xs).length = (b :: ys).length
+lens : xs.length = ys.length
+h : ¬a = b
+⊢ (if ↑a = ↑b then List.allM (fun xy => ok (decide (↑xy.1 = ↑xy.2))) (xs.zip ys) else pure false) = ok false
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:20:33: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp [̵L̵i̵s̵t̵.̵z̵i̵p̵_̵c̵o̵n̵s̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵i̵m̵p̵l̵s̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵U̵8̵.̵n̵e̵,̵h̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲_̲c̲o̲n̲s̲_̲c̲o̲n̲s̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲i̲m̲p̲l̲s̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲U̲8̲.̲n̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:28:2: error: Type mismatch
+  propext Subtype.val_inj
+has type
+  (↑?m.33 = ↑?m.34) = (?m.33 = ?m.34)
+but is expected to have type
+  (if a.length = b.length then
+      List.allM
+        (fun x => do
+          let b ← liftFun2 core.cmp.impls.PartialEqU8.ne x.1 x.2
+          ok (decide ¬b = true))
+        ((↑a).zip ↑b)
+    else ok false) =
+    ok (decide (a = b))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:26:13: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [i̵t̵e̵_̵t̵r̵u̵e̵,̵list_compare _ _ lengths]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessByteEquality.lean:26:22: warning: This simp argument is unused:
+  list_compare _ _ lengths
+
+Hint: Omit it from the simp argument list.
+  simp only [ite_true,̵l̵i̵s̵t̵_̵c̵o̵m̵p̵a̵r̵e̵ ̵_̵ ̵_̵ ̵l̵e̵n̵g̵t̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwSuccessByteEquality.list_compare' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.ProverRwSuccessByteEquality.array_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

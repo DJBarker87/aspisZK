@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPowerTotal.lean:28:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ProverRwFull.ExternalTypes
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPowerTotal.lean:26:41: error: unsolved goals
+exp : U64
+base acc : U32
+⊢ loop
+      (fun x =>
+        match x with
+        | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+      (exp, base, acc) =
+    do
+    let cf ← S.body exp base acc
+    match cf with
+      | done x => ok x
+      | cont (e, b, a) =>
+        loop
+          (fun x =>
+            match x with
+            | (exp1, base1, acc1) => ProverRwSuccessInverseSource.field.M31.pow_loop.body exp1 base1 acc1)
+          (e, b, a)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwSuccessPowerTotal.lean:44:37: error: Type mismatch: After simplification, term
+  hz
+ has type
+  @LT.lt ℕ instLTNat ↑0#u64 ↑exp
+but is expected to have type
+  @LT.lt ℕ instLTNat 0 ↑exp
+'R1Z.ProverRwSuccessPowerTotal.mul_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.pow_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwSuccessPowerTotal.pow_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

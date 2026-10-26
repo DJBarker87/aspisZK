@@ -901,3 +901,66 @@ Eight focused compiles:7pass,1retained selector-layout/parser failure fixed by
 splitting the record field layout. Standard axioms only in accepted reports.
 Section6 receipts and immutable inputs are in success-install; caps unchanged.
 This continuation has used11/100 Lean compiles; Kani is still in progress.
+
+## Native split stage and mandatory host stop (12411–12415)
+
+Final accepted selector remains `ProverRwSuccessBorrow.selected`:96/262,
+22 additional ON-body source interpretations,50/145 successful-body references
+still unselected. No OFF-path installation or type association was attempted.
+`success-install/final-state.json` checks every current new Lean source against
+its accepted immutable snapshot and confirms the original root byte-unchanged.
+Generic scalar inversion source is newly prepared and compiles(12412); it is
+not installed or counted. Its source uses the actual generic norm/multiply
+control, not the different inherent square/addition-chain inverse owners.
+The proposed total-power and byte-equality proofs remain unaccepted text in
+`tools/prover-rw-20261023/success-install/pending`; no failed theorem is imported.
+
+Nine scoped Kani invocations:3pass,5timeouts,1argument rejection(no verifier
+started: --jobs requires --output-format=terse). Native factory control now
+passes at terminal positions2,3,4, complementing inherited0/1. Prefix replies
+have an arbitrary surviving half and either zero half, and the public nonce
+is arbitrary nonzero. These proofs establish return-success/call count only;
+payload equality, full sixteen-position coverage, physical Drop/extractor
+composition and E1 conditioning/probability association remain open. Failed
+payload/error cases were split to control-only cases. Later predicate/control
+cuts and fixed-final-position public-frame checks timed out. No timeout was
+rerun unchanged or with larger caps. In particular, abstract guard schedules
+are NOT asserted to equal native provider histories or counted as association.
+All nine exact harness snapshots were reconstructed and hash-checked against
+original per-invocation receipts; complete logs/commands/cgroup peaks/errors
+are in success-install/native. Ordinary production entropy bytes are an exact
+retained prefix; the only Rust addition is under cfg(kani). No ELF rebuild,
+pin change, normal runtime regression or performance gate was run.
+
+Attempt12414 was refused BEFORE Lean by the existing reservation barrier:
+`FileNotFoundError: [Errno 2] No such file or directory:
+'/sys/fs/cgroup/system.slice/hausklar-camera-firewall.service'`.
+Its scope was5G/7G,swap0,Tasks64,-M7000; no compiler time/RSS/axioms exist.
+The error was observed after12415 and native12408 had already been submitted;
+those were collected, and no further launch or infrastructure repair occurred.
+This obeys local-lean.txt rule5's explicit stop/report instruction. Exact raw
+admission/error receipts are retained. The lead must clear the existing launcher
+before proof compiles continue; the source change refused at12414 needs a fresh
+ID, not a reused sent record. Next unassigned env-J ID12416.
+
+This continuation used15/100 actual Lean compiles(11pass,4changed failures),
+plus1pre-Lean refusal,9/20 scoped Kani invocations.85Lean and11Kani allowances
+remain unused because of the mandatory infrastructure stop, not exhaustion.
+Accepted theorem axiom reports use only propext/Classical.choice/Quot.sound.
+A final combined audit/replay was not launched after the host error. Section6
+receipts pin each accepted/rejected source, dependency fingerprint, command,
+revision base, status, wall/RSS/swap and complete printed axioms. Native raw
+revision labels are inherited/stale; exact snapshots plus production base
+3ef50d6634 and live-prefix hashes identify the inputs and supersede those labels.
+
+**Target not yet established; zero root/headline premises removed.** Source
+selector facts do not establish native effects. Concrete PrefixContract,
+successful BodyContract, ordered ROM/TLS/query history, full native entropy/
+callback/Drop and history-conditioned E1/E2, the joint-observer real RunJoin
+with both exact marginals, and adoption-time artifact connection remain open.
+No original carrier, realBad, observer, conclusion or trust boundary changed.
+Next after host repair: finish the symbolic power proof and install the exact
+generic inverses, then continue remaining successful-body entries and source
+composition; retain the native effect obstruction throughout. All work is
+local to this assigned worktree and its owned host source area; no push/merge,
+other-worktree mutation or key cleanup was performed.

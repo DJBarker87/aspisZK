@@ -2012,3 +2012,8 @@ mod prover_rw_entropy_native_contracts {
         assert_eq!(unsafe { CALLS }, index + 1);
     }
 }
+
+// Split native support contracts; absent from all production builds.
+#[cfg(kani)]
+#[path="state_only_entropy_prover_rw_stream_kani.rs"]
+mod prover_rw_stream_kani;
