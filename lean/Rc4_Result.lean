@@ -1,3 +1,5 @@
+import Rc4_Encoding
+import SAP_PrepareOwner
 import Rc3_Result
 import Rc4_Caller
 import TxS_RawPublic
@@ -62,6 +64,7 @@ def Outcome {W F CoreError : Type}
     ∃ tx2 : Cons_Native.Witness,
       Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
         (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) (F3M_CircleSource.install B) (NP6_StdModel.calls reservation))) () s.pub s.proof s.checkpoint tx2 ∧
+      TxS_Encoding.Facts run H ∧
       Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps (F3M_CircleSource.install B) reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
       NP6_Constructors.Contents run.initial run.pending ∧
       AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
@@ -88,10 +91,22 @@ theorem strengthen {W F CoreError : Type}
     (geoBase : Port3_NativeGeometryBody.Ops CoreError)
     (querySource : queryOps=SAQ_Decoder.install queryBase)
     (geoSource : geoOps=SAQ_Constructor.install indexError geoBase)
+    (oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest (Tx1Q_Install.digest
+      (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps
+        (F3M_CircleSource.install B) (NP6_StdModel.calls reservation)))) () H)
     (old : Rc3_Result.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H driver prior) :
     Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H driver prior := by
   obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,initial,selected,publicFacts,parser,acceptance,nonvacuity,caller⟩ := old
-  exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,initial,selected,
+  have owner : WAdm_Domain.SessionAPrepare
+      (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps
+        (F3M_CircleSource.install B) (NP6_StdModel.calls reservation)) :=
+    SAP_PrepareOwner.installed
+      (Op3I_Install.install (Op4P_Install.install (Tx1Q_Execution.base
+        (Op5T_Concrete.current ops) reserved queryOps geoOps))) B (NP6_StdModel.calls reservation)
+  have ports : Port5Q1_QueryPorts.SessionAPrimitives queryOps := by
+    rw [querySource]; exact SAQ_Decoder.primitives queryBase
+  have encoding := Rc4_Encoding.derive _ _ _ _ _ () _ _ _ _ _ run owner ports H oracle
+  exact ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,encoding,base,initial,selected,
     TxS_RawPublic.of_typed f.pub f.proof publicFacts,parser,acceptance,nonvacuity,
     Rc4_Caller.strengthen L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps
       B (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle

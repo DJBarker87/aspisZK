@@ -104,6 +104,16 @@ theorem deployed {W A F CoreError : Type}
     ports hashv extraction sha256 H p1 syscall program data1 data2 slot
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
     D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound choiceBound project words
+  have oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest (Tx1Q_Install.digest
+      (SdkD_PairBatches.current (Rc3_Install.configuration c reservation).adapter
+        (Rc3_Install.configuration c reservation).currentBase (Rc3_Install.configuration c reservation).stageBase
+        (Rc3_Install.configuration c reservation).finish (Rc3_Install.configuration c reservation).reserved
+        (Rc3_Install.configuration c reservation).query (Rc3_Install.configuration c reservation).geometry
+        (F3M_CircleSource.install c.boundaries) (NP6_StdModel.calls reservation)))) () H := by
+    intro parts digest returned
+    change (DrvC_Installation.sdk (Rc3_Install.configuration c reservation)).op43 () parts=ok digest at returned
+    rw [extraction.digestSource,S2W_DigestExtraction.digest_eq_hashv] at returned
+    exact (syscall.returningValue parts digest returned).trans (p1.realization _)
   refine ⟨driverEq,sdkEq,headline,?_,write,events,protection⟩
   exact Rc4_Result.strengthen L e1 e2 w1 w2
     (Rc3_Install.configuration c reservation).adapter
@@ -114,7 +124,7 @@ theorem deployed {W A F CoreError : Type}
     (Rc3_Install.configuration c reservation).stageBase
     (Rc3_Install.configuration c reservation).finish c.boundaries reservation program data1 data2 slot
     saved post1 post2 H (DrvC_Implementation.driver (Rc3_Install.configuration c reservation)) prior
-    indexError queryBase geoBase querySource geoSource result
+    indexError queryBase geoBase querySource geoSource oracle result
 
 #print axioms deployed
 end AspisR1.Rc4_Assemble
