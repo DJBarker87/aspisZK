@@ -4,6 +4,7 @@ import hashlib,json,re,subprocess,sys
 root=Path(__file__).resolve().parents[2];p=root/'evidence/pv-cb3-20261026'
 a,module,code=sys.argv[1:4]
 out=(p/f'out-{a}-local.log').read_text();time=(p/f'time-{a}-local.log').read_text()
+assert int(code) != 0 or 'error:' not in out, 'Cannot record exit 0 for an error-bearing local log'
 source=root/'docs/research/v8-r0-zk-20261009/lean'/f'{module}.lean'
 stdlib=Path('/Users/dominic/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean/Std.olean')
 imports={'Std':hashlib.sha256(stdlib.read_bytes()).hexdigest()}
