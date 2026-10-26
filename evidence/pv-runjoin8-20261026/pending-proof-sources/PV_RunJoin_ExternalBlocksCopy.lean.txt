@@ -82,6 +82,19 @@ theorem entry (state : State) :
       R0PoseidonCopy.ext_groups_loop state state 0#usize :=
   loop state state 0#usize (by simp) (fun _ _ _ => rfl)
 
+/-- Full field content of all four source matrix blocks follows from the
+checked copy induction, without any input canonicality or execution premise. -/
+theorem field_entry {K : Type} [Field K] [CharP K 2147483647] (state : State) :
+    ∃ out,
+      AspisBuilderPoseidonReference.poseidon2.builder_reference.external_owned_loop0 state 0#usize = ok out ∧
+      ∀ g c : Fin 4, liftU (K := K) out.val[4*g.val+c.val]! = PM state g c := by
+  obtain ⟨out,run,meaning,_⟩ := R0Z.PoseidonRefine.groups_loop (K := K)
+    state 4 0#usize state (by simp)
+  refine ⟨out,(entry state).trans run,?_⟩
+  intro g c
+  exact meaning g.val c.val g.isLt c.isLt (by simp)
+
 #print axioms loop
 #print axioms entry
+#print axioms field_entry
 end R1Z.PV_RunJoin_ExternalBlocksCopy
