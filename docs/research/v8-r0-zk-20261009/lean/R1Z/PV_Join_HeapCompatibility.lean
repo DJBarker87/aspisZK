@@ -1,4 +1,5 @@
-import R1Z.PV_Join_Heap
+import R1Z.ProverRwP6BodyStore
+import R1Z.PV_CB_Borrow
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_Join_HeapCompatibility
@@ -13,7 +14,7 @@ theorem filled_congr (left right : ExternalFuns)
     @ProverRwSuccessHeapSource.aspis_core.r0.heap.filled _ left T copy n value =
     @ProverRwSuccessHeapSource.aspis_core.r0.heap.filled _ right T copy n value := by
   unfold ProverRwSuccessHeapSource.aspis_core.r0.heap.filled
-  rw [reserve,mapError]
+  simp only [alloc.vec.Vec.try_reserve_exact,core.result.Result.map_err,reserve,mapError]
 
 /-- Specialize the CB dictionary to the installed caller: raw op12 is arbitrary. -/
 theorem reserve (ops : ExternalFuns) :

@@ -17,6 +17,8 @@ theorem quartic (x : U32) :
     PV_CB_ShippedOp110.aspis_core.field.QM31.from_cm31,
     PV_CB_ShippedOp110.aspis_core.field.M31.ZERO,
     AspisR1ProducerRelease47.field.CM31.from_m31,AspisR1ProducerRelease47.field.QM31.from_cm31,
+    PV_CB_ShippedOp110.aspis_core.field.CM31.ZERO,
+    AspisR1ProducerRelease47.field.CM31.ZERO,
     AspisR1ProducerRelease47.field.M31.ZERO,mapResult_bind,bind_assoc_eq,bind_tc_ok,fromQ,fromC]
 
 theorem body (x : U32) :
