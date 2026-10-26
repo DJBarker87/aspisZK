@@ -33,18 +33,9 @@ theorem nonzero (i : Fin 12) : ∀ a∈(value i).words,S7JoinBasisMachine.decode
   obtain ⟨hc,hn⟩ := regular i a ha
   exact JFv_TX2_DecodeNonzero.source a hc hn
 
-theorem addresses (i : Fin 12) :
-    lift (UScalar.cast .Usize (query i))=ok (input i 0) ∧
-    input i 0/4#usize=ok (parent i) ∧
-    Usize.wrapping_mul (parent i) 4#usize=input i 1 ∧
-    Usize.wrapping_add (input i 1) 3#usize=input i 2 := by
-  fin_cases i <;> refine ⟨rfl,rfl,rfl,?_⟩
-  all_goals
-    apply UScalar.eq_of_val_eq
-    rw [Usize.wrapping_add_val_eq]
-    exact Nat.mod_eq_of_lt (by scalar_tac)
-
-theorem fibres {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C)
+'''
+s+=(Path(__file__).resolve().parent/'JFv_TX2_addresses.txt').read_text()
+s+='''theorem fibres {C : Type} (err : C) (seed : Port3_NativeGeometryBody.Ops C)
     (i : Fin 12) (k : Fin 3) :
     (JFv_TX2_GeometryOps.install err seed).op12 (input i k)=ok (.Ok (input i k)) := by
   change SAQ_Constructor.fibre err (input i k)=_
