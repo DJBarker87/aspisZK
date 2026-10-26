@@ -1,0 +1,59 @@
+AspisR1.Port3_BatchStage.parent_success : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1.Port3_BatchStage.Prepared) (folded : AspisR1.Port3_BatchStage.Digest) (which : Aeneas.Std.Usize)
+  (hash : H),
+  AspisR1.Port3_BatchStage.batch leaves D proof p folded which hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install leaves)
+        (AspisR1.VTop_Checkpoint.digest D) proof p.queries (AspisR1.Port3_BatchStage.roots p folded) which hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port3_BatchStage.parent_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port3_BatchStage.accepted_slot_calls : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1.Port3_BatchStage.Prepared) (folded : AspisR1.Port3_BatchStage.Digest) (which : Aeneas.Std.Usize)
+  (hash : H),
+  AspisR1.Port3_BatchStage.batch leaves D proof p folded which hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ idx1 idx2 idx3 val1 val2 val3,
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+            (AspisR1.VTop_Checkpoint.digest D) proof p.queries (AspisR1.Port3_BatchStage.root0 p) which 0#usize
+            (Aeneas.Std.Array.repeat 16#usize 0#u32)
+            (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx1, val1) ∧
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+              (AspisR1.VTop_Checkpoint.digest D) proof p.queries (AspisR1.Port3_BatchStage.root1 p) which 1#usize idx1
+              val1 hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx2, val2) ∧
+          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+              (AspisR1.VTop_Checkpoint.digest D) proof p.queries folded which 2#usize idx2 val2 hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx3, val3)
+'AspisR1.Port3_BatchStage.accepted_slot_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port3_BatchStage.root0 : AspisR1.Port3_BatchStage.Prepared → AspisR1.Port3_BatchStage.Digest :=
+fun p => (↑p.roots)[0]
+def AspisR1.Port3_BatchStage.root1 : AspisR1.Port3_BatchStage.Prepared → AspisR1.Port3_BatchStage.Digest :=
+fun p => (↑p.roots)[1]
+def AspisR1.Port3_BatchStage.roots : AspisR1.Port3_BatchStage.Prepared →
+  AspisR1.Port3_BatchStage.Digest → Aeneas.Std.Array AspisR1.Port3_BatchStage.Digest 3#usize :=
+fun p folded =>
+  Aeneas.Std.Array.make 3#usize [AspisR1.Port3_BatchStage.root0 p, AspisR1.Port3_BatchStage.root1 p, folded] ⋯
+def AspisR1.Port3_BatchStage.batch : AspisR1.Port3_NativeBatchBody.Ops →
+  {H : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1.Port3_BatchStage.Prepared →
+          AspisR1.Port3_BatchStage.Digest →
+            Aeneas.Std.Usize → H → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error) :=
+fun leaves {H} D proof p folded which hash =>
+  AspisR1.Port3_QueryInstall.result
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (AspisR1.Port3_BatchStd.install leaves)
+      (AspisR1.VTop_Checkpoint.digest D) proof p folded which hash)
+def AspisR1.Port3_BatchStage.installed : VTop_Stages.Ops →
+  Bool → AspisR1Stage2.AccumulateOps → AspisR1Stage2.QueryOps → AspisR1.Port3_NativeBatchBody.Ops → VTop_Stages.Ops :=
+fun base reserved aops qops leaves =>
+  have __src := AspisR1.Port3_NativePendingInstall.installed base reserved aops qops;
+  { op0 := @VTop_Stages.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3, op4 := __src.op4,
+    op5 := fun {H} => AspisR1.Port3_BatchStage.batch leaves, op6 := __src.op6, op7 := @VTop_Stages.Ops.op7 __src,
+    op8 := @VTop_Stages.Ops.op8 __src, op9 := __src.op9, op10 := __src.op10, op11 := __src.op11, op12 := __src.op12,
+    op13 := __src.op13, op14 := __src.op14, op15 := __src.op15, op16 := __src.op16, op17 := __src.op17,
+    op18 := @VTop_Stages.Ops.op18 __src, op19 := __src.op19, op20 := __src.op20, op21 := __src.op21, op22 := __src.op22,
+    op23 := __src.op23, unwrap32 := __src.unwrap32 }

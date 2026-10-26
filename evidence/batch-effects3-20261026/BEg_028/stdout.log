@@ -1,0 +1,70 @@
+AspisR1.Port4B_FoldedCut.tx1 : ∀ (base : VTop_Stages.Ops) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx1 (AspisR1.Port4B_FoldedCut.install base) D semantic pub proof split hash none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ p root view,
+      Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+            proof { start := 7751#usize, «end» := 7783#usize } =
+          Aeneas.Std.Result.ok view ∧
+        Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 view =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+          AspisR1.Port4B_Install.batch D proof p root 0#usize hash =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_FoldedCut.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_FoldedCut.tx2 : ∀ (base : VTop_Stages.Ops) {X : Type} (D : VTop_Stages.aspis_core.digest.Digest32 X)
+  (hash : X) (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx2_authenticated (AspisR1.Port4B_FoldedCut.install base) D pub proof checkpoint hash
+        none =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ p a root view,
+      base.op18 D checkpoint proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+              proof { start := 7751#usize, «end» := 7783#usize } =
+            Aeneas.Std.Result.ok view ∧
+          Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 view =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+            AspisR1.Port4B_Install.batch D proof p root 1#usize hash =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_FoldedCut.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_FoldedCut.bytes : ∀ (proof view : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (↑proof).length = 57607 →
+    Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+          { start := 7751#usize, «end» := 7783#usize } =
+        Aeneas.Std.Result.ok view →
+      Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 view =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) →
+        AspisR1.MultiproofConeCanonical.bytesOf ↑root =
+          AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) 7751 32
+'AspisR1.Port4B_FoldedCut.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_FoldedCut.model : ∀ (proof view : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+              proof { start := 7751#usize, «end» := 7783#usize } =
+            Aeneas.Std.Result.ok view →
+          Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 view =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) →
+            AspisR1.MultiproofConeCanonical.bytesOf ↑root =
+              AspisV8R19.SourceDuplexStep.bytes (AspisR1.OraclePortBatchDraft.committedRoot parsed 2)
+'AspisR1.Port4B_FoldedCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_FoldedCut.unwrap32 : Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+    Aeneas.Std.core.array.TryFromSliceError →
+  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) :=
+fun r =>
+  match r with
+  | Aeneas.Std.core.result.Result.Ok a => Aeneas.Std.Result.ok a
+  | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def AspisR1.Port4B_FoldedCut.install : VTop_Stages.Ops → VTop_Stages.Ops :=
+fun base =>
+  { op0 := @VTop_Stages.Ops.op0 base, op1 := base.op1, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+    op5 := fun {H} => AspisR1.Port4B_Install.batch, op6 := base.op6, op7 := @VTop_Stages.Ops.op7 base,
+    op8 := @VTop_Stages.Ops.op8 base, op9 := base.op9, op10 := base.op10, op11 := base.op11, op12 := base.op12,
+    op13 := base.op13, op14 := Aeneas.Std.Result.ok 7783#usize, op15 := Aeneas.Std.Result.ok 7751#usize,
+    op16 := base.op16, op17 := base.op17, op18 := @VTop_Stages.Ops.op18 base, op19 := base.op19, op20 := base.op20,
+    op21 := base.op21, op22 := base.op22, op23 := base.op23, unwrap32 := AspisR1.Port4B_FoldedCut.unwrap32 }

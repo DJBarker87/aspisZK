@@ -6,7 +6,7 @@ B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombark
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
 n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and mod.startswith('BEg_')
 a=f'BEg_{n:03}'; assert not (P/a).exists()
-cfg=json.loads((R/'evidence/batch-effects-20261026/BEf_025.json').read_text())
+cfg=json.loads((R/'evidence/finish-global-20261026/FGl_019.json').read_text())
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=bool(subprocess.check_output(['git','status','--porcelain'])),expected_time='Focused BEg composition or atomic kernel inventory; no arithmetic aggregation')
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']
 (P/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')

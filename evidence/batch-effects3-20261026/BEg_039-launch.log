@@ -1,0 +1,45 @@
+{"attempt": "BEg_039", "exit_status": 0, "wall_seconds": 1.8060857529635541, "peak_rss_kib": "4365020", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_Opening.opening_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_Opening.selected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_Opening.opening_exact : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (i : Aeneas.Std.Usize),
+      ↑i < 22 →
+        ∃ view,
+          AspisR1.Port4B_Opening.opening proof i = Aeneas.Std.Result.ok view ∧
+            (↑view).length = 832 ∧
+              AspisR1.MultiproofConeCanonical.bytesOf ↑view =
+                AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832)
+                  832
+'AspisR1.Port4B_Opening.opening_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Opening.selected : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+
+...
+g.opening proof i = Aeneas.Std.Result.ok view ∧
+            (↑view).length = 832 ∧
+              AspisR1.MultiproofConeCanonical.bytesOf ↑view =
+                AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832)
+                  832
+'AspisR1.Port4B_Opening.opening_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Opening.selected : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch kind pos : ℕ),
+          pos ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind →
+            ∀ (i : Aeneas.Std.Usize),
+              ↑i = (if batch = 0 then 0 else 10) + ↑(AspisR1.MultiproofConeSortOrder.packed q batch kind pos) % 256 →
+                ∃ view,
+                  AspisR1.Port4B_Opening.opening proof i = Aeneas.Std.Result.ok view ∧
+                    (↑view).length = 832 ∧
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑view = AspisR1.OraclePortSelectedDraft.opening parsed pos
+'AspisR1.Port4B_Opening.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_Opening.opening : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice Aeneas.Std.U8) :=
+fun proof i => do
+  let offset ← Aeneas.Std.lift (i.wrapping_mul 832#usize)
+  let start ← Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_add 10055#usize offset)
+  let finish ← Aeneas.Std.lift (start.wrapping_add 832#usize)
+  Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) proof
+      { start := start, «end» := finish }
+
+Running as unit: run-rdb91394d2ec84a32ae78891b07557822.scope; invocation ID: 21683cb6c8a54570928f9eb1710ba0f7

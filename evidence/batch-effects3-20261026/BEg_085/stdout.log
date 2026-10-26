@@ -1,0 +1,18 @@
+@AspisR1.GExp_PartialCount.attempts : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (before : AspisR1.SdkC_Source.Log),
+        List.length (AspisR1.SdkC_Source.run hashv code before).2 ≤
+          List.length before + (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program code)).1.length
+'AspisR1.GExp_PartialCount.attempts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.GExp_PartialCount.from_count : ∀ {A : Type} (code : AspisR1.CheckpointBytes5Effect.Code A) (n : ℕ),
+  AspisR1.GExp_CountLaws.count n code →
+    ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+      (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+        AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+          ∀ (before : AspisR1.SdkC_Source.Log),
+            List.length (AspisR1.SdkC_Source.run hashv code before).2 ≤ List.length before + n
+'AspisR1.GExp_PartialCount.from_count' depends on axioms: [propext, Classical.choice, Quot.sound]

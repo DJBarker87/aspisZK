@@ -1,0 +1,33 @@
+{"attempt": "BEg_027", "exit_status": 0, "wall_seconds": 1.9532420940231532, "peak_rss_kib": "4386488", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_Cuts.tx1_batch' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_Cuts.tx2_batch' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_Cuts.tx1_batch : ∀ (ops : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx1 ops D semantic pub proof split hash obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ p root, ops.op5 D proof p root 0#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_
+...
+AspisR1.Port4B_Cuts.tx1_batch : ∀ (ops : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx1 ops D semantic pub proof split hash obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+    ∃ p root, ops.op5 D proof p root 0#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_Cuts.tx1_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Cuts.tx2_batch : ∀ (ops : VTop_Stages.Ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8)
+  (obs : Option (VTop_Stages.verifier.Phase → Aeneas.Std.Result Unit)),
+  VTop_Stages.verifier.candidate.tx2_authenticated ops D pub proof checkpoint hash obs =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    ∃ p a root,
+      ops.op18 D checkpoint proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        ops.op5 D proof p root 1#usize hash = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Port4B_Cuts.tx2_batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9494a7da850c4743b1126c27fca7f126.scope; invocation ID: f2b669a7f56442b7bd1e42c5c6d33f71

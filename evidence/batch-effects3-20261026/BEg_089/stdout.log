@@ -1,0 +1,24 @@
+@AspisR1.RPx_Obstruction.arbitrary : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (rust : AspisR1.F3T_TwoPass.Verifier)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (runtime : AspisR1.F3T_Runtime.Runtime),
+  AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P runtime →
+    ∀ (n : ℕ),
+      ∃ extended,
+        AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P extended ∧
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H extended).2 = (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 ∧
+              (AspisV8R19.MemoizedProgramLaw.eval H extended).1.length =
+                  n + (AspisV8R19.MemoizedProgramLaw.eval H runtime).1.length ∧
+                n ≤ FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H extended).1
+'AspisR1.RPx_Obstruction.arbitrary' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Obstruction.exceeds : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (rust : AspisR1.F3T_TwoPass.Verifier)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (runtime : AspisR1.F3T_Runtime.Runtime),
+  AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P runtime →
+    ∀ (Q : ℕ),
+      ∃ extended,
+        AspisR1.F3T_Runtime.StoredCarrierBinding c D rust P extended ∧
+          ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+            (AspisV8R19.MemoizedProgramLaw.eval H extended).2 = (AspisV8R19.MemoizedProgramLaw.eval H runtime).2 ∧
+              Q + 2965 < FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H extended).1
+'AspisR1.RPx_Obstruction.exceeds' depends on axioms: [propext, Classical.choice, Quot.sound]

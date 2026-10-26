@@ -1,0 +1,54 @@
+@AspisR1.SdkC_NativeNode.erase_writer : ∀ {Hash : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (left right : AspisR1.MultiproofConePhysicalProgram.Digest)
+  (ni cursor : Aeneas.Std.Usize) (index : Aeneas.Std.U32) (w : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash
+      (AspisR1.SdkC_NativeNode.reify (AspisR1.MultiproofConePhysicalProgram.writer s left right ni cursor index w)) =
+    MultiproofConeRef.reference.write_parent D hash s left right ni cursor index w
+'AspisR1.SdkC_NativeNode.erase_writer' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_NativeNode.erase_checked : ∀ {Hash A B : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (r : Aeneas.Std.Result A) (next : A → AspisR1.MultiproofConePhysicalProgram.Run B),
+  AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash
+      (AspisR1.SdkC_NativeNode.reify (AspisR1.MultiproofConePhysicalProgram.checked r next)) =
+    do
+    let a ← r
+    AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash
+        (AspisR1.SdkC_NativeNode.reify (next a))
+'AspisR1.SdkC_NativeNode.erase_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_NativeNode.erase_conditional : ∀ {Hash A : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (p : Prop) [inst : Decidable p] (yes no : AspisR1.MultiproofConePhysicalProgram.Run A),
+  AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash
+      (AspisR1.SdkC_NativeNode.reify (if p then yes else no)) =
+    if p then
+      AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash (AspisR1.SdkC_NativeNode.reify yes)
+    else AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash (AspisR1.SdkC_NativeNode.reify no)
+'AspisR1.SdkC_NativeNode.erase_conditional' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SdkC_NativeNode.erase_node : ∀ {Hash : Type} (D : MultiproofConeRef.aspis_core.digest.Digest32 Hash)
+  (hash : Hash) (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i w : Aeneas.Std.Usize),
+  AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_NativeNode.digest D) hash
+      (AspisR1.SdkC_NativeNode.reify (AspisR1.MultiproofConePhysicalProgram.node s physical i w)) =
+    MultiproofConeRef.reference.binary_step D hash s physical i w
+'AspisR1.SdkC_NativeNode.erase_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_NativeNode.source_node : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (s : MultiproofConeRef.reference.Scratch) (physical : Aeneas.Std.Slice Aeneas.Std.U8) (i w : Aeneas.Std.Usize)
+  (before : AspisR1.SdkC_Source.Log),
+  (AspisR1.SdkC_Source.run hashv
+        (AspisR1.SdkC_NativeNode.reify (AspisR1.MultiproofConePhysicalProgram.node s physical i w)) before).1 =
+    MultiproofConeRef.reference.binary_step
+      { coremarkerCopyInst := (AspisR1.SdkC_Source.dictionary hashv).coremarkerCopyInst,
+        digest := (AspisR1.SdkC_Source.dictionary hashv).digest }
+      () s physical i w
+'AspisR1.SdkC_NativeNode.source_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_NativeNode.source_leaf : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (kind : Aeneas.Std.Usize)
+  (opening : Aeneas.Std.Slice Aeneas.Std.U8) (before : AspisR1.SdkC_Source.Log),
+  (AspisR1.SdkC_Source.run hashv (AspisR1.Port4B_LeafCode.code kind opening) before).1 =
+    AspisR1.Port4B_Install.leaves.op6 (AspisR1.SdkC_Source.dictionary hashv) () kind opening
+'AspisR1.SdkC_NativeNode.source_leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.SdkC_NativeNode.reify : {A : Type} →
+  AspisR1.MultiproofConePhysicalProgram.Run A → AspisR1.SdkC_Source.Code A :=
+fun {A} x => AspisV8R19.MemoizedProgramLaw.Program.brecOn x AspisR1.SdkC_NativeNode.reify._f
+def AspisR1.SdkC_NativeNode.digest : {Hash : Type} →
+  MultiproofConeRef.aspis_core.digest.Digest32 Hash → AspisR1Stage2.aspis_core.digest.Digest32 Hash :=
+fun {Hash} D => { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest }

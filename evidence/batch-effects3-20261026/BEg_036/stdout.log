@@ -1,0 +1,55 @@
+AspisR1.Port4B_LeafStep.predecessor : ∀ (n : Aeneas.Std.Usize), 0 < ↑n → ↑(n.wrapping_sub 1#usize) = ↑n - 1
+'AspisR1.Port4B_LeafStep.predecessor' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_LeafStep.post_exact : ∀ (s : MultiproofConeRef.reference.Scratch) (index : Aeneas.Std.U32)
+  (leaf : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (pos : Aeneas.Std.Usize) (room : ↑s.n < 16),
+  AspisR1.Port4B_LeafStep.post s.idx s.val s.n index leaf pos =
+    Aeneas.Std.Result.ok
+      (AspisR1.Port4B_LeafStep.project s pos (AspisR1.MultiproofConeLeafContent.next s index leaf room))
+'AspisR1.Port4B_LeafStep.post_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_LeafStep.reference_post : ∀ (s : MultiproofConeRef.reference.Scratch) (index : Aeneas.Std.U32)
+  (leaf : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (pos : Aeneas.Std.Usize),
+  ↑s.n < 16 →
+    AspisR1.Port4B_LeafStep.post s.idx s.val s.n index leaf pos = do
+      let out ← MultiproofConeRef.reference.leaf_step s index leaf
+      Aeneas.Std.Result.ok (AspisR1.Port4B_LeafStep.project s pos out)
+'AspisR1.Port4B_LeafStep.reference_post' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_LeafStep.post : AspisR1.Port3_NativeBatchCalls.Indices →
+  AspisR1.Port3_NativeBatchCalls.Values →
+    Aeneas.Std.Usize →
+      Aeneas.Std.U32 →
+        Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.ControlFlow AspisR1.Port4B_LeafStep.LoopState AspisR1.Port4B_LeafStep.LoopOut) :=
+fun idx val d index leaf pos =>
+  if d > 0#usize then do
+    let prev ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+    let same ← AspisR1.Port3_BatchStd.sameIndex idx prev index
+    if same = true then do
+        let prev ← Aeneas.Std.lift (d.wrapping_sub 1#usize)
+        let equal ← AspisR1.Port3_BatchStd.sameLeaf val prev leaf
+        if equal = true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx, val, d, pos))
+          else
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.ControlFlow.done
+                (idx, val, some (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle)))
+      else do
+        let idx1 ← Aeneas.Std.Array.update idx d index
+        let val1 ← Aeneas.Std.Array.update val d leaf
+        let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, pos))
+  else do
+    let idx1 ← Aeneas.Std.Array.update idx d index
+    let val1 ← Aeneas.Std.Array.update val d leaf
+    let d1 ← Aeneas.Std.lift (d.wrapping_add 1#usize)
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (idx1, val1, d1, pos))
+def AspisR1.Port4B_LeafStep.project : MultiproofConeRef.reference.Scratch →
+  Aeneas.Std.Usize →
+    Option MultiproofConeRef.reference.Scratch →
+      Aeneas.Std.ControlFlow AspisR1.Port4B_LeafStep.LoopState AspisR1.Port4B_LeafStep.LoopOut :=
+fun s pos x =>
+  match x with
+  | none =>
+    Aeneas.Std.ControlFlow.done
+      (s.idx, s.val, some (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle))
+  | some t => Aeneas.Std.ControlFlow.cont (t.idx, t.val, t.n, pos)

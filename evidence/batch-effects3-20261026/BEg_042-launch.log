@@ -1,0 +1,37 @@
+{"attempt": "BEg_042", "exit_status": 0, "wall_seconds": 2.009180983004626, "peak_rss_kib": "4399828", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_PhysicalCalls.tx1_slots' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_PhysicalCalls.tx2_slots' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Port4B_PhysicalCalls.tx1_slots : ∀ {CoreError W : Type} (base : VTop_Stages.Ops) (reserved : Bool)
+  (leaves : AspisR1.Port3_NativeBatchBody.Ops) (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps W) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  VTop_Stages.verifier.candidate.tx1 (AspisR1.Port3_Parents.installed base reserved leaves g
+...
+uery finish).op18 D checkpoint proof pub
+            AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        AspisR1.Port4B_PhysicalCalls.Slots leaves D hash proof p root 1#usize
+'AspisR1.Port4B_PhysicalCalls.tx2_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_PhysicalCalls.Slots : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 Hash →
+      Hash →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          VTop_Stages.verifier.Prepared → Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Usize → Prop :=
+fun leaves {Hash} D hash proof p folded batch =>
+  ∃ idx1 idx2 idx3 val1 val2 val3,
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+          (AspisR1.VTop_Checkpoint.digest D) proof p.queries (AspisR1.Port3_BatchStage.root0 p) batch 0#usize
+          (Aeneas.Std.Array.repeat 16#usize 0#u32)
+          (Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8)) hash =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx1, val1) ∧
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+            (AspisR1.VTop_Checkpoint.digest D) proof p.queries (AspisR1.Port3_BatchStage.root1 p) batch 1#usize idx1
+            val1 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx2, val2) ∧
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves)
+            (AspisR1.VTop_Checkpoint.digest D) proof p.queries folded batch 2#usize idx2 val2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx3, val3)
+
+Running as unit: run-r28cc74862cec46f18b49d63126b08f2c.scope; invocation ID: 166d836735f148dbaa2f1cae94db8e58

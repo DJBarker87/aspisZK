@@ -1,0 +1,52 @@
+@AspisR1.P6C_Issued.derive : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (code : AspisR1.SdkC_Source.Code A) (value : A),
+        (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+          AspisR1.P6C_Issued.Boundary hashv H (AspisR1.SdkC_Source.run hashv code []).2
+'AspisR1.P6C_Issued.derive' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.P6C_Issued.installed : ∀ (ops : AdapterRw.Ops) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) (log : AspisR1.SdkC_Source.Log),
+      AspisR1.P6C_Issued.Boundary hashv H log →
+        ∀ q ∈ log,
+          ∀ (self : AdapterRw.SolanaDigest),
+            ops.op43 self q.parts = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts)
+'AspisR1.P6C_Issued.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.P6C_Issued.parent : ∀ {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      ∀ (code : AspisR1.SdkC_Source.Code A) (value : A),
+        (AspisR1.SdkC_Source.run hashv code []).1 = Aeneas.Std.Result.ok value →
+          ∀ (left right : AspisR1.SdkC_Source.Digest),
+            ∀ query ∈ (AspisR1.SdkC_Source.run hashv code []).2,
+              query.parts = AspisR1.MultiproofConePhysicalDigest.parts left right →
+                AspisR1.SdkC_Source.run hashv
+                    (AspisR1.SdkC_Source.digestCode (AspisR1.MultiproofConePhysicalDigest.parts left right)) [] =
+                  (Aeneas.Std.Result.ok
+                      (AspisR1.MultiproofConePhysicalTransport.rawOracle H
+                        (AspisR1.MultiproofConePhysicalDigest.parts left right)),
+                    [{ parts := AspisR1.MultiproofConePhysicalDigest.parts left right,
+                        returned :=
+                          Aeneas.Std.Result.ok
+                            (AspisR1.MultiproofConePhysicalTransport.rawOracle H
+                              (AspisR1.MultiproofConePhysicalDigest.parts left right)) }])
+'AspisR1.P6C_Issued.parent' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.P6C_Issued.Boundary : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  (AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) → AspisR1.SdkC_Source.Log → Prop :=
+fun hashv H log =>
+  ∀ q ∈ log,
+    q.returned = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+      hashv q.parts = Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+        AspisR1.S2W_DigestExtraction.digest hashv () q.parts =
+            Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) ∧
+          AspisR1.SdkC_Source.run hashv (AspisR1.SdkC_Source.digestCode q.parts) [] =
+            (Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts),
+              [{ parts := q.parts,
+                  returned := Aeneas.Std.Result.ok (AspisR1.MultiproofConePhysicalTransport.rawOracle H q.parts) }])

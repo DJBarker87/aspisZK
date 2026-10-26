@@ -1,0 +1,46 @@
+{"attempt": "BEg_066", "exit_status": 0, "wall_seconds": 2.027528371021617, "peak_rss_kib": "4384996", "swaps": "0", "print_axioms": ["'AspisR1.SdkC_Source.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.prefix_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.associated' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.consistent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.digest_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.digest_trace' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.SdkC_Source.installed_digest' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.SdkC_Source.erasure : ∀ (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  {A : Type} (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+  (AspisR1.SdkC_Source.run hashv code before).1 =
+    AspisR1.CheckpointBytes5Effect.erase (AspisR1.SdkC_Source.dictionary hashv) () code
+'AspisR1.SdkC_Source.erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.SdkC_Source.prefix_preserved : ∀
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) {A : Type}
+  (code : AspisR1.SdkC_Source.Code A) (before : AspisR1.SdkC_Source.Log),
+  ∃ suffix, (AspisR1.SdkC_Source.run hashv code before).2 = be
+...
+Log →
+  List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State) :=
+fun log =>
+  List.filterMap
+    (fun q =>
+      match q.returned with
+      | Aeneas.Std.Result.ok digest =>
+        some (AspisV8R19.SqueezeOracleBridge.flatten q.parts, AspisV8R19.SqueezeOracleBridge.decodeState digest)
+      | x => none)
+    log
+def AspisR1.SdkC_Source.run : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  {A : Type} → AspisR1.SdkC_Source.Code A → AspisR1.SdkC_Source.Log → Aeneas.Std.Result A × AspisR1.SdkC_Source.Log :=
+fun hashv {A} x x_1 =>
+  AspisR1.CheckpointBytes5Effect.Code.brecOn (motive := fun x =>
+    AspisR1.SdkC_Source.Log → Aeneas.Std.Result A × AspisR1.SdkC_Source.Log) x (AspisR1.SdkC_Source.run._f hashv) x_1
+def AspisR1.SdkC_Source.dictionary : (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+  AspisR1Stage2.aspis_core.digest.Digest32 Unit :=
+fun hashv =>
+  { coremarkerCopyInst := { cloneInst := { clone := fun q => Aeneas.Std.Result.ok q } },
+    digest := fun x parts => hashv parts }
+def AspisR1.SdkC_Source.digestCode : AspisR1.SdkC_Source.Parts → AspisR1.SdkC_Source.Code AspisR1.SdkC_Source.Digest :=
+fun parts =>
+  AspisR1.CheckpointBytes5Effect.Code.read parts fun digest =>
+    AspisR1.CheckpointBytes5Effect.Code.step (AspisR1.S2W_DigestExtraction.toBytes digest)
+      AspisR1.CheckpointBytes5Effect.Code.done
+structure AspisR1.SdkC_Source.Query : Type
+number of parameters: 0
+fields:
+  AspisR1.SdkC_Source.Query.parts : AspisR1.SdkC_Source.Parts
+  AspisR1.SdkC_Source.Query.returned : Aeneas.Std.Result AspisR1.SdkC_Source.Digest
+constructor:
+  AspisR1.SdkC_Source.Query.mk (parts : AspisR1.SdkC_Source.Parts)
+    (returned : Aeneas.Std.Result AspisR1.SdkC_Source.Digest) : AspisR1.SdkC_Source.Query
+
+Running as unit: run-r97e0a6a3f9684c02bd61b85d4a2a7838.scope; invocation ID: f982153c3fd3401fb8c1577de14d41ff

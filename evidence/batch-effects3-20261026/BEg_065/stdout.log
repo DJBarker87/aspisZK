@@ -1,0 +1,42 @@
+@AspisR1.Op5T_NativeSchedule.accepted_run : ∀ {E : Type} (ops : AdapterRw.Ops)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction ops native1 native2 hashv →
+    ∀ (program : AspisR1.S2W_ExtractionBoundary.Program) (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts)
+      (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+      (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+      native1 program accounts1 data1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+        native2 program accounts2 data2 slot = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+          ∀ (port : AspisR1.S2W_ExpandedChildren.ChildConeJoin E ops),
+            AspisR1.Op5T_Marks.FirstMarks port →
+              AspisR1.Op5T_Marks.SecondMarks port →
+                ∃ outer pre middle fs ss,
+                  AspisR1.S2W_Trace.run ops
+                        (AspisR1.S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved, outer) ∧
+                    AspisR1.S2W_ExpandedTrace.runExpanded ops (AspisR1.S2W_ExpandedChildren.children port)
+                          (AspisR1.S2W_Observation.two ops program accounts1 data1 accounts2 data2 slot) [] =
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok saved,
+                            AspisR1.S2W_ExpandedTrace.full (AspisR1.S2W_ExpandedChildren.children port) outer) ∧
+                      AspisR1.S2W_OuterOccurrences.tags outer = [false, true] ∧
+                        AspisR1.S2W_TraceSplice.projected port outer =
+                            AspisR1.S2W_SiteSchedule.timeline pre middle fs ss ∧
+                          (∀ (a b : AspisR1.S2LeadInterface.Site),
+                              a.rank < b.rank →
+                                AspisR1.S2W_SiteSchedule.Event.site b ∈ AspisR1.S2W_TraceSplice.projected port outer →
+                                  AspisR1.S2W_SiteSchedule.Event.site a ∈
+                                    AspisR1.S2W_TraceSplice.projected port outer) ∧
+                            (∀ (a b : AspisR1.S2LeadInterface.Site),
+                                a.rank < b.rank →
+                                  AspisR1.S2W_SiteSchedule.Event.site a ∈ AspisR1.S2W_TraceSplice.projected port outer →
+                                    AspisR1.S2W_SiteSchedule.Event.site b ∈
+                                        AspisR1.S2W_TraceSplice.projected port outer →
+                                      AspisR1.S2W_SiteSchedule.clock pre middle fs ss a <
+                                        AspisR1.S2W_SiteSchedule.clock pre middle fs ss b) ∧
+                              ∀ (a : AspisR1.S2LeadInterface.Site),
+                                AspisR1.S2W_TraceSplice.projected port outer =
+                                  AspisR1.S2W_SiteSchedule.before pre middle fs ss a ++
+                                      [AspisR1.S2W_SiteSchedule.Event.site a] ++
+                                    AspisR1.S2W_SiteSchedule.after middle fs ss a
+'AspisR1.Op5T_NativeSchedule.accepted_run' depends on axioms: [propext, Classical.choice, Quot.sound]

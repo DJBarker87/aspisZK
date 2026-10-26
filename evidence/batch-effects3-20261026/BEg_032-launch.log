@@ -1,0 +1,42 @@
+{"attempt": "BEg_032", "exit_status": 0, "wall_seconds": 2.3023645500070415, "peak_rss_kib": "4363356", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_LeafCode.code_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_LeafCode.address' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_LeafCode.native_and_reads' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Port4B_LeafCode.code_exact : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (kind : Aeneas.Std.Usize) (o : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑o).length = 832 →
+    ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+      AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind o) =
+          D.digest hash (AspisR1.Port4B_LeafCode.input kind o) ∧
+        AspisR1.CheckpointBytes5Effect.run D hash (AspisR1.Port4B_LeafCode.code kind o) before = do
+          let d ← D.digest hash (AspisR1.Port4B_LeafCode.input kind o)
+          Aeneas.Std.Result.ok (d, before ++ [(AspisR1.Port4B_LeafCode.input kind o, d)])
+'AspisR1.Port4B_LeafCode.code_ex
+...
+B_LeafCode.readRange o ss se) fun salt =>
+    AspisR1.CheckpointBytes5Effect.Code.step (AspisR1.Port4B_LeafCode.readRange o vs ve) fun value =>
+      AspisR1.CheckpointBytes5Effect.Code.read (AspisR1.Port4B_LeafCode.parts tag value salt)
+        AspisR1.CheckpointBytes5Effect.Code.done
+def AspisR1.Port4B_LeafCode.code : Aeneas.Std.Usize →
+  Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1.CheckpointBytes5Effect.Code AspisR1.CheckpointBytes5Effect.Digest :=
+fun kind o =>
+  if kind = 0#usize then AspisR1.Port4B_LeafCode.codeFor o 113#u8 0#usize 480#usize 608#usize 640#usize
+  else
+    if kind = 1#usize then AspisR1.Port4B_LeafCode.codeFor o 241#u8 480#usize 608#usize 640#usize 672#usize
+    else AspisR1.Port4B_LeafCode.codeFor o 114#u8 672#usize 800#usize 800#usize 832#usize
+def AspisR1.Port4B_LeafCode.native : {X : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 X →
+    X → Aeneas.Std.Usize → Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result AspisR1.CheckpointBytes5Effect.Digest :=
+fun {X} D hash kind o => AspisR1.CheckpointBytes5Effect.erase D hash (AspisR1.Port4B_LeafCode.code kind o)
+def AspisR1.Port4B_LeafCode.input : Aeneas.Std.Usize →
+  Aeneas.Std.Slice Aeneas.Std.U8 → AspisR1.CheckpointBytes5Effect.Parts :=
+fun kind o =>
+  if kind = 0#usize then
+    AspisR1.Port4B_LeafCode.parts 113#u8 (AspisR1.MultiproofConeSlices.sub o 0#usize 480#usize)
+      (AspisR1.MultiproofConeSlices.sub o 608#usize 640#usize)
+  else
+    if kind = 1#usize then
+      AspisR1.Port4B_LeafCode.parts 241#u8 (AspisR1.MultiproofConeSlices.sub o 480#usize 608#usize)
+        (AspisR1.MultiproofConeSlices.sub o 640#usize 672#usize)
+    else
+      AspisR1.Port4B_LeafCode.parts 114#u8 (AspisR1.MultiproofConeSlices.sub o 672#usize 800#usize)
+        (AspisR1.MultiproofConeSlices.sub o 800#usize 832#usize)
+
+Running as unit: run-ra33aaaf1c8eb48e1b563d7b671ab5f55.scope; invocation ID: 96ccb59adcd3498e81a7fe7e302ed994

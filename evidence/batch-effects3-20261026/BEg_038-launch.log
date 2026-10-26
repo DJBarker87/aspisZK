@@ -1,0 +1,37 @@
+{"attempt": "BEg_038", "exit_status": 0, "wall_seconds": 1.8619057159521617, "peak_rss_kib": "4398736", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_NativeReject.missing_count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_NativeReject.nonzero_padding' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_NativeReject.exit_loop' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_NativeReject.missing_count : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n s d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values) (prefixIdx : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        idx { «end» := d } =
+      Aeneas.Std.Result.ok pre
+...
+ChunksExact Aeneas.Std.U8)
+                          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                            (AspisR1.Port3_BatchStd.install leaves) D)
+                          ce () =
+                        Aeneas.Std.Result.ok (true, after)) →
+                  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body
+                      (AspisR1.Port3_BatchStd.install leaves) D proof root tree hash lo n s keys idx val d n =
+                    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none))
+'AspisR1.Port4B_NativeReject.nonzero_padding' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_NativeReject.exit_loop : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n s d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values)
+  (out :
+    AspisR1.Port3_NativeBatchCalls.Indices ×
+      AspisR1.Port3_NativeBatchCalls.Values × Option (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val d
+        pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out) →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n s keys d
+        pos =
+      Aeneas.Std.Result.ok out
+'AspisR1.Port4B_NativeReject.exit_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8d160af38f044c39afa54220452cbc4d.scope; invocation ID: 5543ec678f054a11abcbe9e567852a51

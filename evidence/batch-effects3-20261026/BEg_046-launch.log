@@ -1,0 +1,35 @@
+{"attempt": "BEg_046", "exit_status": 0, "wall_seconds": 2.075226551038213, "peak_rss_kib": "4404488", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_SliceReads.indices' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_SliceReads.live_indices' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_SliceReads.scaled' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_SliceReads.indices : ∀ (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize) (n : Aeneas.Std.Usize)
+  (front : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        idx { «end» := n } =
+      Aeneas.Std.Result.ok front →
+    ↑front = List.take ↑n ↑idx ∧ ↑n ≤ 16
+'AspisR1.Port4B_SliceReads.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_SliceReads.live_indices : ∀ (s : MultiproofConeRef.reference.Scratch)
+  (front : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.cor
+...
+AspisR1.Port4B_SliceReads.indices : ∀ (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize) (n : Aeneas.Std.Usize)
+  (front : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        idx { «end» := n } =
+      Aeneas.Std.Result.ok front →
+    ↑front = List.take ↑n ↑idx ∧ ↑n ≤ 16
+'AspisR1.Port4B_SliceReads.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_SliceReads.live_indices : ∀ (s : MultiproofConeRef.reference.Scratch)
+  (front : Aeneas.Std.Slice Aeneas.Std.U32),
+  Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        s.idx { «end» := s.n } =
+      Aeneas.Std.Result.ok front →
+    List.map Aeneas.Std.UScalar.val ↑front = List.map Prod.fst (AspisR1.MultiproofConePhysicalViews.live s 0 ↑s.n)
+'AspisR1.Port4B_SliceReads.live_indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_SliceReads.scaled : ∀ (count : Aeneas.Std.Usize),
+  ↑count ≤ 288 → ↑(Aeneas.Std.Usize.wrapping_mul 32#usize count) = 32 * ↑count
+'AspisR1.Port4B_SliceReads.scaled' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r06da739064ef44a5ad4e9b2cba18162a.scope; invocation ID: fc19346b2b5e4659b0a3aeb2f444f2e8

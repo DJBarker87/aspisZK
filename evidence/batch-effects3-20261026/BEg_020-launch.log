@@ -1,0 +1,36 @@
+{"attempt": "BEg_020", "exit_status": 0, "wall_seconds": 1.9948700160020962, "peak_rss_kib": "4405808", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_BatchJoin.compose' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_BatchJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_BatchJoin.compose : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (occupied sibling : AspisR1.MultiproofConeP6Callbacks.Parent) (leaf : AspisR1.MultiproofConeP6Batch.Leaf)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (nodes : ℕ → ℕ → Aeneas.Std.Slice Aeneas.Std.U8) (batch : ℕ) (s0 s1 s2 : MultiproofConeRef.reference.Scratch)
+  (l0 l1 l2 : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+  AspisV8R19.MemoizedProgramLaw.eval H
+        (AspisR1.MultiproofConeP6Batch.batch_tree (AspisR1.MultiproofConeP6Callbacks.nodeWith occupied sibling) leaf
+          parsed q batch 0 (nodes batch 0) AspisR
+...
+lotStart (3 * b + k))
+                              (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * b + k))) →
+                    (∀ (k : Fin 3), AspisR1.Port4B_TreeJoin.PackedKeys base p.queries q batch (↑k)#usize) →
+                      AspisR1.Port3_BatchStage.root0 p =
+                          AspisV8R19.SqueezeOracleBridge.encodeState
+                            (AspisR1.OraclePortBatchDraft.committedRoot parsed 0) →
+                        AspisR1.Port3_BatchStage.root1 p =
+                            AspisV8R19.SqueezeOracleBridge.encodeState
+                              (AspisR1.OraclePortBatchDraft.committedRoot parsed 1) →
+                          folded =
+                              AspisV8R19.SqueezeOracleBridge.encodeState
+                                (AspisR1.OraclePortBatchDraft.committedRoot parsed 2) →
+                            AspisR1.Port3_BatchStage.batch (AspisR1.Port4B_VerifyInstall.install base) D proof p folded
+                                  batch hash =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                              ∃ log,
+                                AspisV8R19.MemoizedProgramLaw.eval H
+                                    (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed q
+                                      nodes (↑batch) AspisR1.Port4B_BatchJoin.initial) =
+                                  (log, true)
+'AspisR1.Port4B_BatchJoin.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_BatchJoin.initial : MultiproofConeRef.reference.Scratch :=
+{ idx := Aeneas.Std.Array.repeat 16#usize 0#u32,
+  val := Aeneas.Std.Array.repeat 16#usize (Aeneas.Std.Array.repeat 32#usize 0#u8), n := 0#usize, «at» := 0#usize }
+
+Running as unit: run-r5318624406bd469c9585f55fbb891846.scope; invocation ID: 0cb83037b64d4cb2a5957ae2fa822932

@@ -1,0 +1,48 @@
+AspisR1.Port4B_TreeCuts.keys : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (batch kind : Aeneas.Std.Usize) (idx outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val outVal : AspisR1.Port3_NativeBatchCalls.Values),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install leaves) D proof queries
+        root batch kind idx val hash =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), outIdx, outVal) →
+    ∃ raw sorted,
+      leaves.op4 queries (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch) kind =
+          Aeneas.Std.Result.ok raw ∧
+        leaves.op5 raw (AspisR1.Port4B_TreeCuts.count batch) = Aeneas.Std.Result.ok sorted ∧
+          AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port3_BatchStd.install leaves) D
+              proof root kind idx val hash (AspisR1.Port4B_TreeCuts.lo batch) (AspisR1.Port4B_TreeCuts.count batch)
+              (AspisR1.Port4B_TreeCuts.slot batch kind) sorted 0#usize 0#usize =
+            Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))
+'AspisR1.Port4B_TreeCuts.keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_TreeCuts.terminal_shape : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (kind lo n slot d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val : AspisR1.Port3_NativeBatchCalls.Values)
+  (out : Aeneas.Std.ControlFlow AspisR1.Port4B_LeafStep.LoopState AspisR1.Port4B_LeafStep.LoopOut),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D proof
+        root kind hash lo n slot keys idx val d n =
+      Aeneas.Std.Result.ok out →
+    ∃ returned, out = Aeneas.Std.ControlFlow.done returned
+'AspisR1.Port4B_TreeCuts.terminal_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_TreeCuts.terminal : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (kind lo n slot d : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val outVal : AspisR1.Port3_NativeBatchCalls.Values),
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop (AspisR1.Port3_BatchStd.install leaves) D proof root
+        kind idx val hash lo n slot keys d n =
+      Aeneas.Std.Result.ok (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())) →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D
+        proof root kind hash lo n slot keys idx val d n =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ())))
+'AspisR1.Port4B_TreeCuts.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_TreeCuts.lo : Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun batch => if batch = 0#usize then 0#usize else 10#usize
+def AspisR1.Port4B_TreeCuts.hi : Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun batch => if batch = 0#usize then 10#usize else 22#usize
+def AspisR1.Port4B_TreeCuts.count : Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun batch => (AspisR1.Port4B_TreeCuts.hi batch).wrapping_sub (AspisR1.Port4B_TreeCuts.lo batch)
+def AspisR1.Port4B_TreeCuts.slot : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize :=
+fun batch kind => (Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add kind

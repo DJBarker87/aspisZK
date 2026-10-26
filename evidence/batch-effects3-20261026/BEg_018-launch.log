@@ -1,0 +1,42 @@
+{"attempt": "BEg_018", "exit_status": 0, "wall_seconds": 1.9519631679868326, "peak_rss_kib": "4398172", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_AcceptedTail.verify_call' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.Port4B_AcceptedTail.verify_call : ∀ (leaves : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot d pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx outIdx : AspisR1.Port3_NativeBatchCalls.Indices)
+  (val outVal : AspisR1.Port3_NativeBatchCalls.Values),
+  ¬pos < n →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D
+          proof root tree hash lo n slot keys idx val d pos =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.
+...
+.Port3_NativeBatchCalls.Values),
+  ¬pos < n →
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install leaves) D
+          proof root tree hash lo n slot keys idx val d pos =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.ControlFlow.done (outIdx, outVal, some (Aeneas.Std.core.result.Result.Ok ()))) →
+      ∃ front count cap nodes supplied,
+        Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+              idx { «end» := d } =
+            Aeneas.Std.Result.ok front ∧
+          leaves.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two front = Aeneas.Std.Result.ok (some count) ∧
+            leaves.op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+              (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                        ⋯).index_usize
+                    slot =
+                  Aeneas.Std.Result.ok cap ∧
+                ¬count > cap ∧
+                  (∃ scaled,
+                      Aeneas.Std.lift (Aeneas.Std.Usize.wrapping_mul 32#usize count) = Aeneas.Std.Result.ok scaled ∧
+                        Aeneas.Std.core.slice.index.Slice.index
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8) nodes
+                            { «end» := scaled } =
+                          Aeneas.Std.Result.ok supplied) ∧
+                    leaves.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d supplied =
+                      Aeneas.Std.Result.ok (true, outIdx, outVal)
+'AspisR1.Port4B_AcceptedTail.verify_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9330a567e6ad4aecb8a01957cea9d8df.scope; invocation ID: 1ab359c9cf714fc289375dd062ecf734

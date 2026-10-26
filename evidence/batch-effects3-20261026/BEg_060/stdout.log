@@ -1,0 +1,124 @@
+@AspisR1.Op5T_Install.map_success_iff : ∀ {Err : Type} (map : AspisR1Stage2.verifier.Error → Err)
+  (r : Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error)),
+  AspisR1.Op5T_Install.mapResult map r = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ↔
+    r = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+'AspisR1.Op5T_Install.map_success_iff' depends on axioms: [propext]
+AspisR1.Op5T_Install.other_current : ∀ (base : AspisR1CurrentCaller.Ops) (leaves : AspisR1.Port3_NativeBatchBody.Ops),
+  (have __src := AspisR1.Op5T_Install.current base leaves;
+    { op0 := __src.op0, op1 := @AspisR1CurrentCaller.Ops.op1 __src, op2 := __src.op2, op3 := __src.op3,
+      op4 := __src.op4, op5 := __src.op5, op6 := fun {H} => base.op6, op7 := __src.op7,
+      op8 := @AspisR1CurrentCaller.Ops.op8 __src, op9 := @AspisR1CurrentCaller.Ops.op9 __src, op10 := __src.op10,
+      op11 := __src.op11, op12 := __src.op12, op13 := __src.op13, op14 := __src.op14, op15 := __src.op15,
+      op16 := @AspisR1CurrentCaller.Ops.op16 __src, op17 := __src.op17, op18 := __src.op18, op19 := __src.op19,
+      op20 := __src.op20, op21 := __src.op21 }) =
+    base
+'AspisR1.Op5T_Install.other_current' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Op5T_Install.other_stage : ∀ (base : VTop_Stages.Ops) (leaves : AspisR1.Port3_NativeBatchBody.Ops),
+  (have __src := AspisR1.Op5T_Install.stage base leaves;
+    { op0 := @VTop_Stages.Ops.op0 __src, op1 := __src.op1, op2 := __src.op2, op3 := __src.op3, op4 := __src.op4,
+      op5 := fun {H} => base.op5, op6 := __src.op6, op7 := @VTop_Stages.Ops.op7 __src,
+      op8 := @VTop_Stages.Ops.op8 __src, op9 := __src.op9, op10 := __src.op10, op11 := __src.op11, op12 := __src.op12,
+      op13 := __src.op13, op14 := __src.op14, op15 := __src.op15, op16 := __src.op16, op17 := __src.op17,
+      op18 := @VTop_Stages.Ops.op18 __src, op19 := __src.op19, op20 := __src.op20, op21 := __src.op21,
+      op22 := __src.op22, op23 := __src.op23, unwrap32 := __src.unwrap32 }) =
+    base
+'AspisR1.Op5T_Install.other_stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Op5T_Install.tx1_slot : ∀ (adapter : AdapterRw.Ops) (base : AspisR1CurrentCaller.Ops)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (leaves : AspisR1.Port3_NativeBatchBody.Ops),
+  @AspisR1CurrentCaller.Ops.op6
+      (AspisR1.RowShape_InstalledSlots.verifierOps
+        (AspisR1.Op3I_Install.install (AspisR1.Op5T_Install.current base leaves)) B std) =
+    @AspisR1.Op5T_Install.currentBatch leaves
+'AspisR1.Op5T_Install.tx1_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.Op5T_Install.tx2_slot : ∀ {F : Type} (base : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F)
+  (leaves : AspisR1.Port3_NativeBatchBody.Ops),
+  @VTop_Stages.Ops.op5 (AspisR1.Tx2I_Install.stage (AspisR1.Op5T_Install.stage base leaves) finish) =
+    @AspisR1.Op5T_Install.stageBatch leaves
+'AspisR1.Op5T_Install.tx2_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Op5T_Install.body : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    AspisR1Stage2.aspis_core.digest.Digest32 Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Array Aeneas.Std.U32 22#usize →
+          Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 2#usize →
+            Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+              Aeneas.Std.Usize →
+                Hash → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) :=
+fun leaves {Hash} D proof queries roots folded batch hash => do
+  let root0 ← roots.index_usize 0#usize
+  let root1 ← roots.index_usize 1#usize
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install leaves) D proof
+      queries (Aeneas.Std.Array.make 3#usize [root0, root1, folded] ⋯) batch hash
+def AspisR1.Op5T_Install.currentError : AspisR1Stage2.verifier.Error → AspisR1CurrentCaller.verifier.Error :=
+fun x =>
+  match x with
+  | AspisR1Stage2.verifier.Error.Parse => AspisR1CurrentCaller.verifier.Error.Parse
+  | AspisR1Stage2.verifier.Error.Semantic => AspisR1CurrentCaller.verifier.Error.Semantic
+  | AspisR1Stage2.verifier.Error.Transcript => AspisR1CurrentCaller.verifier.Error.Transcript
+  | AspisR1Stage2.verifier.Error.Relation => AspisR1CurrentCaller.verifier.Error.Relation
+  | AspisR1Stage2.verifier.Error.Merkle => AspisR1CurrentCaller.verifier.Error.Merkle
+  | AspisR1Stage2.verifier.Error.Query => AspisR1CurrentCaller.verifier.Error.Query
+  | AspisR1Stage2.verifier.Error.Checkpoint => AspisR1CurrentCaller.verifier.Error.Checkpoint
+  | AspisR1Stage2.verifier.Error.Allocation => AspisR1CurrentCaller.verifier.Error.Allocation
+def AspisR1.Op5T_Install.stageError : AspisR1Stage2.verifier.Error → VTop_Stages.verifier.Error :=
+fun x =>
+  match x with
+  | AspisR1Stage2.verifier.Error.Parse => AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+  | AspisR1Stage2.verifier.Error.Semantic => AdapterRw.aspis_r1_cost_probe.verifier.Error.Semantic
+  | AspisR1Stage2.verifier.Error.Transcript => AdapterRw.aspis_r1_cost_probe.verifier.Error.Transcript
+  | AspisR1Stage2.verifier.Error.Relation => AdapterRw.aspis_r1_cost_probe.verifier.Error.Relation
+  | AspisR1Stage2.verifier.Error.Merkle => AdapterRw.aspis_r1_cost_probe.verifier.Error.Merkle
+  | AspisR1Stage2.verifier.Error.Query => AdapterRw.aspis_r1_cost_probe.verifier.Error.Query
+  | AspisR1Stage2.verifier.Error.Checkpoint => AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint
+  | AspisR1Stage2.verifier.Error.Allocation => AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation
+def AspisR1.Op5T_Install.mapResult : {Err : Type} →
+  (AspisR1Stage2.verifier.Error → Err) →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1Stage2.verifier.Error) →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Err) :=
+fun {Err} map r => do
+  let value ← r
+  match value with
+    | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok x)
+    | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (map e))
+def AspisR1.Op5T_Install.currentBatch : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1CurrentCaller.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              Hash → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit AspisR1CurrentCaller.verifier.Error) :=
+fun leaves {Hash} D proof p folded batch hash =>
+  AspisR1.Op5T_Install.mapResult AspisR1.Op5T_Install.currentError
+    (AspisR1.Op5T_Install.body leaves { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } proof p.queries
+      p.roots folded batch hash)
+def AspisR1.Op5T_Install.stageBatch : AspisR1.Port3_NativeBatchBody.Ops →
+  {Hash : Type} →
+    VTop_Stages.aspis_core.digest.Digest32 Hash →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        VTop_Stages.verifier.Prepared →
+          Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+            Aeneas.Std.Usize →
+              Hash → Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit VTop_Stages.verifier.Error) :=
+fun leaves {Hash} D proof p folded batch hash =>
+  AspisR1.Op5T_Install.mapResult AspisR1.Op5T_Install.stageError
+    (AspisR1.Op5T_Install.body leaves { coremarkerCopyInst := D.coremarkerCopyInst, digest := D.digest } proof p.queries
+      p.roots folded batch hash)
+def AspisR1.Op5T_Install.current : AspisR1CurrentCaller.Ops →
+  AspisR1.Port3_NativeBatchBody.Ops → AspisR1CurrentCaller.Ops :=
+fun base leaves =>
+  { op0 := base.op0, op1 := @AspisR1CurrentCaller.Ops.op1 base, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+    op5 := base.op5, op6 := fun {H} => AspisR1.Op5T_Install.currentBatch leaves, op7 := base.op7,
+    op8 := @AspisR1CurrentCaller.Ops.op8 base, op9 := @AspisR1CurrentCaller.Ops.op9 base, op10 := base.op10,
+    op11 := base.op11, op12 := base.op12, op13 := base.op13, op14 := base.op14, op15 := base.op15,
+    op16 := @AspisR1CurrentCaller.Ops.op16 base, op17 := base.op17, op18 := base.op18, op19 := base.op19,
+    op20 := base.op20, op21 := base.op21 }
+def AspisR1.Op5T_Install.stage : VTop_Stages.Ops → AspisR1.Port3_NativeBatchBody.Ops → VTop_Stages.Ops :=
+fun base leaves =>
+  { op0 := @VTop_Stages.Ops.op0 base, op1 := base.op1, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+    op5 := fun {H} => AspisR1.Op5T_Install.stageBatch leaves, op6 := base.op6, op7 := @VTop_Stages.Ops.op7 base,
+    op8 := @VTop_Stages.Ops.op8 base, op9 := base.op9, op10 := base.op10, op11 := base.op11, op12 := base.op12,
+    op13 := base.op13, op14 := base.op14, op15 := base.op15, op16 := base.op16, op17 := base.op17,
+    op18 := @VTop_Stages.Ops.op18 base, op19 := base.op19, op20 := base.op20, op21 := base.op21, op22 := base.op22,
+    op23 := base.op23, unwrap32 := base.unwrap32 }

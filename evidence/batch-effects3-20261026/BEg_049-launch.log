@@ -1,0 +1,38 @@
+{"attempt": "BEg_049", "exit_status": 0, "wall_seconds": 2.1271419569966383, "peak_rss_kib": "4405468", "swaps": "0", "print_axioms": ["'AspisR1.Port4B_StageRows.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.Port4B_StageRows.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.Port4B_StageRows.tx1 : ∀ {Observer X : Type} (c : AspisR1.S2LeadInterface.Inputs Observer)
+  (base : VTop_Stages.Ops) (D : VTop_Stages.aspis_core.digest.Digest32 X) (hash : X)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pubInput : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (stored pub ck : AspisV8R19.DuplexFrames.Bytes)
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.S2LeadInterface.S2CallerFacts c (AspisR1.VTop_Checkpoint.digest D) hash H stored pub ck parsed →
+    parsed.wire = s
+...
+            (∀ (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator),
+                base.op18 D checkpoint (c.proof AspisR1.S2LeadInterface.Site.batch1) pubInput
+                      AspisR1Stage2.transport.Variant.S2 hash =
+                    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) →
+                  AspisR1.Port4B_StageRows.PreparedBinding p parsed) →
+              VTop_Stages.verifier.candidate.tx2_authenticated (AspisR1.Port4B_FoldedCut.install base) D pubInput
+                    (c.proof AspisR1.S2LeadInterface.Site.batch1) checkpoint hash none =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+                ∃ pm log,
+                  AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 1 AspisR1.Port4B_BatchJoin.initial) =
+                      (log, true) ∧
+                    AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.MultiproofConeP6Frozen2Stage.sourceBatch occupied sibling leaf parsed pm.queries
+                          c.nodes 1 AspisR1.Port4B_BatchJoin.initial) =
+                      AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.OraclePortFrozen2.batch parsed pm.queries AspisR1.OraclePortFrozen2.batch1)
+'AspisR1.Port4B_StageRows.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.Port4B_StageRows.PreparedBinding : VTop_Stages.verifier.Prepared →
+  AspisR1.OraclePortCompactDraft.Parsed → Prop :=
+fun p parsed =>
+  ∃ a pm am,
+    AspisR1.CheckpointBytes4SavedFields.BodyMatches p a pm am ∧
+      ∀ (j : Fin 2), pm.roots j = AspisR1.OraclePortBatchDraft.committedRoot parsed ↑j
+
+Running as unit: run-rf8329c37d1a847a0af51208387447420.scope; invocation ID: 283f0037427447d386d77789a85b1c34
