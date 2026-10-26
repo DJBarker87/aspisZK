@@ -6,3 +6,4 @@ extern crate alloc;
 #[path="FIn_verifier.rs"] pub mod verifier;
 #[path="FIn_trace.rs"] pub mod trace;
 pub mod FIo_reference;
+#[cfg(kani)] mod FIo_proofs;
