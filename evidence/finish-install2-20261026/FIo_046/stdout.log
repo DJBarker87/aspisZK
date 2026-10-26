@@ -1,0 +1,28 @@
+FIo_ReduceBridge.lean:20:2: error: unsolved goals
+case isTrue
+x : U64
+cast_mask : UScalar.cast UScalarTy.U64 2147483647#u32 = 2147483647#u64
+h :
+  UScalar.cast UScalarTy.U32
+      (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+        ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)) ≥
+    2147483647#u32
+⊢ ok
+      (U32.wrapping_sub
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+        2147483647#u32) =
+    ok
+      ((UScalar.cast UScalarTy.U32
+            (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+              ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32))).wrapping_sub
+        2147483647#u32)
+FIo_ReduceBridge.lean:16:24: warning: This simp argument is unused:
+  FIo_ReduceFacts.shr31
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵F̵a̵c̵t̵s̵.̵s̵h̵r̵3̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIo_ReduceBridge.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

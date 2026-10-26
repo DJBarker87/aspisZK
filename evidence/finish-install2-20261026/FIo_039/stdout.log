@@ -1,0 +1,26 @@
+def FIo_Native.aspis_core.field.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun x => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 FIo_Native.aspis_core.field.P)
+  let i1 ← Aeneas.Std.lift (x &&& i)
+  let i2 ← Aeneas.Std.lift (x.wrapping_shr 31#u32)
+  let x1 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_add i1 i2)
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 FIo_Native.aspis_core.field.P)
+  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+  let i5 ← Aeneas.Std.lift (x1.wrapping_shr 31#u32)
+  let x2 ← Aeneas.Std.lift (Aeneas.Std.U64.wrapping_add i4 i5)
+  let x3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 x2)
+  if x3 ≥ FIo_Native.aspis_core.field.P then
+      Aeneas.Std.Result.ok (Aeneas.Std.U32.wrapping_sub x3 FIo_Native.aspis_core.field.P)
+    else Aeneas.Std.Result.ok x3
+def AspisR1CurrentWide.field.reduce_u64 : Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U32 :=
+fun x => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1CurrentWide.field.P)
+  let i1 ← Aeneas.Std.lift (x &&& i)
+  let i2 ← x >>> 31#u32
+  let x1 ← i1 + i2
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 AspisR1CurrentWide.field.P)
+  let i4 ← Aeneas.Std.lift (x1 &&& i3)
+  let i5 ← x1 >>> 31#u32
+  let x2 ← i4 + i5
+  let x3 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 x2)
+  if x3 ≥ AspisR1CurrentWide.field.P then x3 - AspisR1CurrentWide.field.P else Aeneas.Std.Result.ok x3
