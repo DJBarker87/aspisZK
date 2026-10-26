@@ -135,3 +135,26 @@ A read-only Kani-evidence scp after run03 was made without a fresh pre-transfer
 reservation receipt; no capped computation followed that transfer. This also
 fell short of the lead's literal pre-scp receipt rule. Subsequent archive
 transfers require an explicit fresh receipt.
+
+## Final focused audit and retention
+
+`PV_RunJoin_StoreContinuationResidual.mask_error_closure_transport` is checked
+with standard axioms under the explicit MapErrParametric field. The full
+continuation/header projection is still open; its last failure is receipt23505.
+
+The final audit23507 imports all 39 accepted new proof modules and repeats their
+axiom queries. This is a focused cached import audit, not the frozen dependency
+manifest or a release result. No implementation/release artifact changed.
+
+A fresh read-only archive admission at approximately17:46 UTC was refused by a
+new cross-stream quiet window ending18:15 UTC. No scp or capped host job followed.
+All accepted local objects remain in tools/pv-runjoin-20261026/local-proof; no
+cache or key cleanup was performed. Earlier host archives remain intact. Source
+and evidence are committed; the local source/object hashes are retained in the
+final cache inventory. Native test retained-ledger is not deleted.
+
+Next deliverable: install/prove the actual map_err dictionary law and full
+source/header projection, thread native filesystem outcomes into LedgerWorld,
+and prove one public reservation function and L1/L2/L3 decoder association.
+Then close the native fields in the original endpoint, resolve the owner model
+choice, and perform the pinned dependency-closure replay/axioms audit.
