@@ -52,7 +52,10 @@ Premises removed/added/changed: 0/0/0; ledger delta T0/P0/G0/C0. No quantifier,
 carrier, failure event, conclusion, security metric, trust item or game change.
 No fresh joint inhabitant of all top premises is constructed. Historical
 conditional non-vacuity is retained without strengthening. No source-refinement
-gap is recast as a cryptographic assumption.
+gap is recast as a cryptographic assumption. The unchanged statement text does
+not certify semantic identity with every historical object cohort. Source
+selections are explicit replay inputs, not a new source-adoption or
+source-to-ELF equivalence result.
 
 ## Formatter audit
 

@@ -97,3 +97,5 @@ theorem deployed {W A F CoreError Tx : Type}
     CPH_Recorder.Facts (Rc5_Install.configuration indexError c reservation) hashv native1 native2 copy allocator
       CPH_Program.verifier H p t u saved
 ```
+
+Source-selection qualification: identical before/after statement text is not a proof of semantic identity with every historical object cohort. The committed source selections and distinct variants are explicit in RPz3_source-plan.json. This job makes no source-adoption, historical source-to-object equivalence or source-to-ELF correspondence claim. No security-contract definition was edited.
