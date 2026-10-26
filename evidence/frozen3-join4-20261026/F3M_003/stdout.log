@@ -1,0 +1,109 @@
+F3M_OpeningReader.lean:20:15: error: too many variable names provided
+F3M_OpeningReader.lean:22:18: error: `simp` made no progress
+F3M_OpeningReader.lean:24:10: error: `simp` made no progress
+F3M_OpeningReader.lean:18:13: error: unsolved goals
+case some
+rs : List (Message × Challenge)
+v : LiteralOpeningView.View
+c1v : (List.take 25 rs).length = 25
+c1 : c1At rs = none
+val✝ : C2Word
+c2 : c2At rs = some val✝
+read :
+  (do
+      let c1 ← none
+      let c2 ← some val✝
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          pure
+              { c1 := c1, c2 := c2,
+                word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                circlePoints := fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                functionals :=
+                  SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                baseFunctional :=
+                  SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    some v
+⊢ LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some v.semantic ∧
+    LiteralChallengeRead.ordinaryAt rs 25 = some v.challenge25 ∧
+      LiteralChallengeRead.ordinaryAt rs 26 = some v.challenge26 ∧
+        v.circlePoints = fun j =>
+          if ↑j = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf v.challenge25)
+          else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf v.challenge26)
+F3M_OpeningReader.lean:17:2: error: unsolved goals
+case isTrue.some
+rs : List (Message × Challenge)
+v : LiteralOpeningView.View
+h✝ : (List.take 25 rs).length = 25
+val✝ : C1Word
+c1 : c1At rs = some val✝
+read :
+  (do
+      let c1 ← some val✝
+      let c2 ← c2At rs
+      match hsem : LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) with
+        | none => none
+        | some semantic => do
+          let z0 ← LiteralChallengeRead.ordinaryAt rs 25
+          let z1 ← LiteralChallengeRead.ordinaryAt rs 26
+          pure
+              { c1 := c1, c2 := c2,
+                word := LiteralTypedWords.word ExactBaseProjection.embed LiteralOpeningView.eK c1 c2,
+                semantic := semantic, semantic_length := ⋯, challenge25 := z0, challenge26 := z1,
+                circlePoints := fun i =>
+                  if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                  else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                functionals :=
+                  SelectedOpeningFunctionals.functionals (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1),
+                baseFunctional :=
+                  SelectedOpeningFunctionals.rawBase (List.map Prod.snd semantic) fun i =>
+                    if ↑i = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf z0)
+                    else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf z1) }) =
+    some v
+⊢ LiteralSemanticPrefix.read LiteralOpeningView.eK 0 (List.take 25 rs) = some v.semantic ∧
+    LiteralChallengeRead.ordinaryAt rs 25 = some v.challenge25 ∧
+      LiteralChallengeRead.ordinaryAt rs 26 = some v.challenge26 ∧
+        v.circlePoints = fun j =>
+          if ↑j = 0 then R0P.SemSource.circleSampleParameter0 (SelectedChallengeMap.rhoOf v.challenge25)
+          else R0P.SemSource.circleSampleParameter1 (SelectedChallengeMap.rhoOf v.challenge26)
+F3M_OpeningReader.lean:17:41: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵1̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲c̲1̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_OpeningReader.lean:17:58: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵1̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲c̲1̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_OpeningReader.lean:19:43: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵2̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲c̲2̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_OpeningReader.lean:19:60: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵2̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲c̲2̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲n̲o̲n̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3M_OpeningReader.components' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,90 @@
+F3M_CircleEntries.lean:28:79: error(lean.unknownIdentifier): Unknown identifier `tail`
+
+Note: It is not possible to treat `tail` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+F3M_CircleEntries.lean:34:53: error(lean.unknownIdentifier): Unknown identifier `tail`
+F3M_CircleEntries.lean:35:6: error(lean.unknownIdentifier): Unknown identifier `length`
+F3M_CircleEntries.lean:31:111: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : FinishModel.Boundaries
+pre : r1_wire.Prefix
+record : r1_wire.ValidatedRecord
+before after : r1_wire.SemanticTranscript Hash
+point : aspis_core.circle.SecureCirclePoint
+read : pre.validated_record 25#u8 = ok (core.result.Result.Ok record)
+success : FinishModel.circle_validated B D before record = ok (core.result.Result.Ok point, after)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+block : Std.Array U8 32#usize
+call : B.circle block FinishModel.CircleRow.First = ok point
+value :
+  (eval H (LiteralByteSampler.samp 25 P (F3J_InputRows.proof p root w bound 25)).toProgram).2.1 =
+    TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 25 (decodeState block))
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+entry :
+  (eval H (F3J_SamplerRun.program pf 25 (sorry + 1) P)).2.rounds[P.rounds.length]? =
+    some (pf 25, (eval H (LiteralByteSampler.samp 25 P (pf 25)).toProgram).2)
+⊢ let pf := F3J_InputRows.proof p root w bound;
+  ∃ block,
+    B.circle block FinishModel.CircleRow.First = ok point ∧
+      (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) 25 (sorry + 1) P)).2.rounds[25]? =
+        some
+          (F3J_InputRows.proof p root w bound 25,
+            TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 25 (decodeState block)),
+            (eval H (LiteralByteSampler.samp 25 P (F3J_InputRows.proof p root w bound 25)).toProgram).2.2)
+F3M_CircleEntries.lean:56:79: error(lean.unknownIdentifier): Unknown identifier `tail`
+
+Note: It is not possible to treat `tail` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+F3M_CircleEntries.lean:62:53: error(lean.unknownIdentifier): Unknown identifier `tail`
+F3M_CircleEntries.lean:63:6: error(lean.unknownIdentifier): Unknown identifier `length`
+F3M_CircleEntries.lean:59:111: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : FinishModel.Boundaries
+pre : r1_wire.Prefix
+record : r1_wire.ValidatedRecord
+before after : r1_wire.SemanticTranscript Hash
+point : aspis_core.circle.SecureCirclePoint
+read : pre.validated_record 26#u8 = ok (core.result.Result.Ok record)
+success : FinishModel.circle_validated B D before record = ok (core.result.Result.Ok point, after)
+hash : Hash
+out : transcript.Transcript Hash
+reseed : transcript.Transcript.new D hash after.state transport.Variant.S2 = ok out
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+tag : P.statement.tag = 2
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState before.state
+block : Std.Array U8 32#usize
+call : B.circle block FinishModel.CircleRow.Second = ok point
+value :
+  (eval H (LiteralByteSampler.samp 26 P (F3J_InputRows.proof p root w bound 26)).toProgram).2.1 =
+    TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 26 (decodeState block))
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+entry :
+  (eval H (F3J_SamplerRun.program pf 26 (sorry + 1) P)).2.rounds[P.rounds.length]? =
+    some (pf 26, (eval H (LiteralByteSampler.samp 26 P (pf 26)).toProgram).2)
+⊢ let pf := F3J_InputRows.proof p root w bound;
+  ∃ block,
+    B.circle block FinishModel.CircleRow.Second = ok point ∧
+      (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) 26 (sorry + 1) P)).2.rounds[26]? =
+        some
+          (F3J_InputRows.proof p root w bound 26,
+            TranscriptView.Value.ordinary (SelectedTranscriptParams.params.σ 26 (decodeState block)),
+            (eval H (LiteralByteSampler.samp 26 P (F3J_InputRows.proof p root w bound 26)).toProgram).2.2)
+'AspisR1.F3M_CircleEntries.first' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.F3M_CircleEntries.second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

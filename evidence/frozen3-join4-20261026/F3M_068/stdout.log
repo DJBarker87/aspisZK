@@ -1,0 +1,45 @@
+F3M_CirclePrefixReader.lean:35:17: error(lean.unknownIdentifier): Unknown identifier `F3J_CircleJoin.first`
+F3M_CirclePrefixReader.lean:32:77: error: unsolved goals
+Hash : Type
+D : aspis_core.Digest32 Hash
+B : FinishModel.Boundaries
+pre : r1_wire.Prefix
+r25 r26 : r1_wire.ValidatedRecord
+t25 t26 t27 : r1_wire.SemanticTranscript Hash
+z0 z1 : aspis_core.circle.SecureCirclePoint
+read25 : pre.validated_record 25#u8 = ok (core.result.Result.Ok r25)
+circle25 : FinishModel.circle_validated B D t25 r25 = ok (core.result.Result.Ok z0, t26)
+read26 : pre.validated_record 26#u8 = ok (core.result.Result.Ok r26)
+circle26 : FinishModel.circle_validated B D t26 r26 = ok (core.result.Result.Ok z1, t27)
+hash : Hash
+out : transcript.Transcript Hash
+reseed : transcript.Transcript.new D hash t27.state transport.Variant.S2 = ok out
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+P : LiteralTranscript.Prefix
+length : P.rounds.length = 25
+tag : P.statement.tag = 2
+state : UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState t25.state
+tail : ℕ
+q : Fin 22 → Fin 262144
+v : LiteralOpeningView.View
+opening :
+  LiteralOpeningView.read
+      (OraclePortStoredDecisionDraftC4.typedRows p q
+        (LiteralTranscript.erasePrefix
+          (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) 25 (tail + 2) P)).2)) =
+    some v
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+P26 : FS.Prefix LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge :=
+  FS.Prefix.ext P (pf 25) (eval H (LiteralByteSampler.samp 25 P (pf 25)).toProgram).2
+⊢ ∃ b0 b1,
+    B.circle b0 FinishModel.CircleRow.First = ok z0 ∧
+      B.circle b1 FinishModel.CircleRow.Second = ok z1 ∧
+        v.challenge25 = SelectedTranscriptParams.params.σ 25 (decodeState b0) ∧
+          v.challenge26 = SelectedTranscriptParams.params.σ 26 (decodeState b1)
+'AspisR1.F3M_CirclePrefixReader.parameters' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

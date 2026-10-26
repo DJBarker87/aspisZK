@@ -1,0 +1,68 @@
+F3M_SemanticChallenges.lean:30:29: error: unsolved goals
+case cons
+Hash : Type
+D : aspis_core.Digest32 Hash
+pre : r1_wire.Prefix
+before after✝ : r1_wire.SemanticTranscript Hash
+cs✝ : List (SourceFull25.Call D pre)
+H : Bytes → State
+backend : Tx1DigestLog.ByteOracleBackend D H
+p : Parsed
+records : p.semantic = List.map (fun s => MultiproofConeCanonical.bytesOf ↑s) ↑pre.records
+root : State
+w : CanonicalCutEnrichedTranscript.Words
+bound : ∀ (row : ℕ), List.length (rowBytes p row) ≤ SelectedTranscriptParams.D
+after : r1_wire.SemanticTranscript Hash
+cs : List (SourceFull25.Call D pre)
+c : SourceFull25.Call D pre
+tail : SourceFull25.Trace D pre c.after after cs
+ih :
+  ∀ (row : ℕ) (P : LiteralTranscript.Prefix),
+    row ≠ 0 →
+      row + cs.length ≤ 25 →
+        ↑c.after.next_row = row →
+          UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) =
+              decodeState c.after.state →
+            F3M_ReaderChallenges.ordinaryValues
+                (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) row cs.length P)).2.rounds =
+              F3M_ReaderChallenges.ordinaryValues P.rounds ++ List.map SourceLiteralTraceLift.sourceChallenge cs
+row : ℕ
+P : LiteralTranscript.Prefix
+positive : row ≠ 0
+count : row + (c :: cs).length ≤ 25
+number : ↑c.before.next_row = row
+state :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix P) = decodeState c.before.state
+rowC : ↑c.row = row
+nextC : ↑c.after.next_row = row + 1
+pf : RawCutProverCompiler.Proof := F3J_InputRows.proof p root w bound
+erased : LiteralTranscript.erase (pf row) = TranscriptView.Message.payload ⟨rowBytes p row, ⋯⟩
+bytesEq : rowBytes p row = rawBytes c.record.framed
+step :
+  eval H (LiteralByteSampler.samp row P (F3J_InputRows.proof p root w bound row)).toProgram =
+    (callLog c, TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+next : Prefix LiteralTranscript.Public LiteralTranscript.Message LiteralTranscript.Challenge :=
+  Prefix.ext P (pf row)
+    (TranscriptView.Value.ordinary (SourceLiteralTraceLift.sourceChallenge c), decodeState c.after.state)
+nextState :
+  UnifiedSampler.stateOf SelectedTranscriptParams.params (LiteralTranscript.erasePrefix next) =
+    decodeState c.after.state
+result :
+  F3M_ReaderChallenges.ordinaryValues
+      (eval H (F3J_SamplerRun.program (F3J_InputRows.proof p root w bound) (row + 1) cs.length next)).2.rounds =
+    F3M_ReaderChallenges.ordinaryValues next.rounds ++ List.map SourceLiteralTraceLift.sourceChallenge cs
+⊢ List.map
+        (fun mc =>
+          match mc.2.1 with
+          | TranscriptView.Value.ordinary x => x
+          | TranscriptView.Value.queries result => 0)
+        P.rounds ++
+      ([SourceLiteralTraceLift.sourceChallenge c] ++ List.map SourceLiteralTraceLift.sourceChallenge cs) =
+    List.map
+        (fun mc =>
+          match mc.2.1 with
+          | TranscriptView.Value.ordinary x => x
+          | TranscriptView.Value.queries result => 0)
+        P.rounds ++
+      SourceLiteralTraceLift.sourceChallenge c :: List.map SourceLiteralTraceLift.sourceChallenge cs
+'AspisR1.F3M_SemanticChallenges.positive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

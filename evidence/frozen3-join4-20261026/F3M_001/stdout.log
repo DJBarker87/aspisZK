@@ -1,0 +1,88 @@
+F3M_ReaderChallenges.lean:25:18: error: `simp` made no progress
+F3M_ReaderChallenges.lean:28:86: error: Tactic `contradiction` failed
+
+case cons.isTrue.ordinary.some.none
+rest : List (Message × Challenge)
+ih :
+  ∀ (offset : ℕ) (out : List (R0P.Mask.SemMsgZ E × E)),
+    LiteralSemanticPrefix.read LiteralOpeningView.eK offset rest = some out →
+      List.map Prod.snd out = ordinaryValues rest
+offset : ℕ
+out : List (R0P.Mask.SemMsgZ E × E)
+m : Message
+c : Challenge
+h✝ : offset < 25
+x : E
+ch : c.1 = TranscriptView.Value.ordinary x
+read✝ :
+  ((LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ⟨offset, h✝⟩ m).bind fun parsed =>
+      Option.map (fun out => (parsed, x) :: out) (LiteralSemanticPrefix.read LiteralOpeningView.eK (offset + 1) rest)) =
+    some out
+msg : R0P.Mask.SemMsgZ LiteralSemanticPrefix.E
+parsed : LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ?m.121 m = some msg
+tail : LiteralSemanticPrefix.read LiteralOpeningView.eK (offset + 1) rest = none
+read : ((LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ⟨offset, h✝⟩ m).bind fun a => none) = some out
+⊢ List.map Prod.snd out = ordinaryValues ((m, c) :: rest)
+F3M_ReaderChallenges.lean:31:12: error: Tactic `subst` failed: did not find equation for eliminating 'out'
+
+case cons.isTrue.ordinary.some.some
+rest : List (Message × Challenge)
+ih :
+  ∀ (offset : ℕ) (out : List (R0P.Mask.SemMsgZ E × E)),
+    LiteralSemanticPrefix.read LiteralOpeningView.eK offset rest = some out →
+      List.map Prod.snd out = ordinaryValues rest
+offset : ℕ
+out : List (R0P.Mask.SemMsgZ E × E)
+m : Message
+c : Challenge
+h✝ : offset < 25
+x : E
+ch : c.1 = TranscriptView.Value.ordinary x
+read✝ :
+  ((LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ⟨offset, h✝⟩ m).bind fun parsed =>
+      Option.map (fun out => (parsed, x) :: out) (LiteralSemanticPrefix.read LiteralOpeningView.eK (offset + 1) rest)) =
+    some out
+msg : R0P.Mask.SemMsgZ LiteralSemanticPrefix.E
+parsed : LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ?m.121 m = some msg
+xs : List (R0P.Mask.SemMsgZ LiteralSemanticPrefix.E × LiteralSemanticPrefix.E)
+tail : LiteralSemanticPrefix.read LiteralOpeningView.eK (offset + 1) rest = some xs
+read :
+  ((LiteralSemanticPrefix.parseMessage LiteralOpeningView.eK ⟨offset, h✝⟩ m).bind fun a => some ((a, x) :: xs)) =
+    some out
+⊢ List.map Prod.snd out = ordinaryValues ((m, c) :: rest)
+F3M_ReaderChallenges.lean:28:31: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵r̵s̵e̵d̵,̵Option.bind_some, ̲tail, ̲Option.map_none] at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_ReaderChallenges.lean:28:38: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵r̵s̵e̵d̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵a̵i̵l̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵n̵o̵n̵e̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲t̲a̲i̲l̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲n̲o̲n̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_ReaderChallenges.lean:30:23: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵r̵s̵e̵d̵,̵Option.bind_some, ̲tail, ̲Option.map_some, ̲Option.some.injEq] at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_ReaderChallenges.lean:30:30: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵r̵s̵e̵d̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵a̵i̵l̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲t̲a̲i̲l̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_ReaderChallenges.lean:30:68: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵a̵r̵s̵e̵d̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵t̵a̵i̵l̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲t̲a̲i̲l̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲s̲o̲m̲e̲]̲ at read
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3M_ReaderChallenges.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
