@@ -4,11 +4,12 @@ import json,subprocess,sys,time,shlex,os
 P=Path(__file__).resolve().parent; R=P.parents[1]
 B='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'; HOST='dombarker@100.108.41.90'
 def ssh(cmd,**kw):return subprocess.run(['ssh',HOST,cmd],**kw)
-n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=100 and (mod.startswith('ARV_') or len(sys.argv)==4)
+n=int(sys.argv[1]); mod=sys.argv[2]; assert 1<=n<=102 and (mod.startswith('ARV_') or len(sys.argv)==4)
 a=f'ARV_{n:03}'; assert not (P/a).exists()
 assert len(list(P.glob('ARV_*/receipt.json'))) < 100, 'Lean budget exhausted'
 cfg=json.loads((R/'evidence/account-rejoin2-20261026/ARQ_095.json').read_text())
-cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache'
+cfg['env']['LEAN_PATH'] += ':/home/dombarker/project-offloads/codex-cx-prover-commit22-20261021/r4-cache:/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects'
+cfg['env']['LEAN_PATH'] = '/home/dombarker/project-offloads/d18-circle-model-repin-v5-20261019/attempt/objects:' + cfg['env']['LEAN_PATH']
 cfg.update(attempt=a,sources=[mod+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time=('Compilation of one missing unchanged SCE/ARQ/Rc10 dependency; no generation or elimination' if len(sys.argv)==4 else 'Compilation of one focused ARV proof; no generation or elimination'))
 cfg['deps_fingerprint']={'scope':'ARV focused account interface / same-run composition on coherent SInt2 cached closure'}
 cfg['command'][-3:]=['-o',mod+'.olean',mod+'.lean']

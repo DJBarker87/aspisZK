@@ -1,0 +1,23 @@
+{"attempt": "ARV_099", "exit_status": 0, "wall_seconds": 2.1709447719622403, "peak_rss_kib": "5536044", "swaps": "0", "print_axioms": ["'AspisR1.ARV_PoisonNative.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@AspisR1.ARV_PoisonNative.accepted : ∀ {A : Type} (native : AspisR1.S2W_ExtractionBoundary.Second)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state final : A)
+  (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_D189Wrappers.second native allocator e id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post, final)) →
+    AspisR1.S2W_D189Wrappers.second native allocator (AspisR1.ARV_Poison.entry e) id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std
+...
+@AspisR1.ARV_PoisonNative.accepted : ∀ {A : Type} (native : AspisR1.S2W_ExtractionBoundary.Second)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e : AspisR1.S2W_D189Entry.Entry)
+  (id : AspisR1.S2W_ExtractionBoundary.Program) (data : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state final : A)
+  (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2W_D189Wrappers.second native allocator e id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post, final)) →
+    AspisR1.S2W_D189Wrappers.second native allocator (AspisR1.ARV_Poison.entry e) id data slot state =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ((AspisR1.ARV_Poison.entry e).heap, final))
+'AspisR1.ARV_PoisonNative.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r15a100d4ded743939ffa2d178cbf1d51.scope; invocation ID: 7dfd716a223d47bc98cea36e490c0fa2

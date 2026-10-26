@@ -35,3 +35,11 @@ retain repaired errors and exact cap/revision/source/dependency/time/RSS/swap da
 Actual Rc10 before/after and the atomic-row ledger remain identical: actual
 83T/12P/13G; distinct deployment-inclusive89T/16P/13G. Removed/added/changed0.
 The root proposal and exploratory filter are not actual premise removals.
+
+The accepted-observer consumers are now also checked:
+ARV_FilterJoin.accepted (048), FilterPhysical.observed (047),
+FilterPerCoin.extract (049), and FilterTop.proposed (050). They import and
+compose the ARU/SCI/SCJ recovery consumers; no recovery proof is rederived.
+FilterTop.proposed states the bound and charges on the explicitly altered
+noncomputable observer. It is deliberately NOT named deployed and receives
+zero deployed-root removal credit.
