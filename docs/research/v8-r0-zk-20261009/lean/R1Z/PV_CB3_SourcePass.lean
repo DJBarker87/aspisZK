@@ -31,7 +31,9 @@ theorem total (words : List U32) :
     obtain ⟨q,r,hs,hqv,hrv⟩ := PV_CB3_WordArithmetic.total w prior bound
     refine ⟨q :: high,r,?_,?_,?_⟩
     · simp only [pass,hp,bind_tc_ok]
-      dsimp only
+      change (do
+        let (q',r') ← PV_CB3_ShippedOp249word.reference_split.word_step w prior
+        ok (q' :: high,r')) = ok (q :: high,r)
       rw [hs]
       rfl
     · change q.val :: values high =
