@@ -19,3 +19,4 @@ set_option format.width 120
 #print AspisR1.FGl_FinishLeaves.PairingRemaining
 #print AspisR1.Port4D_Pairing.RoundLaws
 #print AspisR1.R3SemanticRemainingJoins.EquationEndpoint
+#print AspisR1.R3SemanticEquationCore.Equations

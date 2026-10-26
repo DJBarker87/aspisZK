@@ -1,0 +1,41 @@
+{"attempt": "Rc7_030", "exit_status": 0, "wall_seconds": 3.130968155048322, "peak_rss_kib": "5418728", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2X.CheckpointVersionBinding (saved loaded : AspisV8R19.DuplexFrames.Bytes) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2X.CheckpointVersionBinding.key : ℕ
+  AspisR1.S2X.CheckpointVersionBinding.ledger : ℕ → AspisV8R19.DuplexFrames.Bytes
+  AspisR1.S2X.CheckpointVersionBinding.events : List AspisR1.S2X.AccountEvent
+  AspisR1.S2X.CheckpointVersionBinding.savedAtCommit : self.ledger self.key = saved
+  AspisR1.S2X.CheckpointVersionBinding.loadedAtEntry : loaded = AspisR1.S2X.history self.ledger self.events self.key
+  AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite : ∀ event ∈ self.events, AspisR1.S2X.Preserves self.key event
+constructor:
+  AspisR1.S2X.CheckpointVe
+...
+sionBinding.loadedAtEntry : loaded = AspisR1.S2X.history self.ledger self.events self.key
+  AspisR1.S2X.CheckpointVersionBinding.noInterveningWrite : ∀ event ∈ self.events, AspisR1.S2X.Preserves self.key event
+constructor:
+  AspisR1.S2X.CheckpointVersionBinding.mk {saved loaded : AspisV8R19.DuplexFrames.Bytes} (key : ℕ)
+    (ledger : ℕ → AspisV8R19.DuplexFrames.Bytes) (events : List AspisR1.S2X.AccountEvent)
+    (savedAtCommit : ledger key = saved) (loadedAtEntry : loaded = AspisR1.S2X.history ledger events key)
+    (noInterveningWrite : ∀ event ∈ events, AspisR1.S2X.Preserves key event) :
+    AspisR1.S2X.CheckpointVersionBinding saved loaded
+structure AspisR1.S2W_AuthenticatedInputs.P2Prime
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof1 pub1 proof2 pub2 : Aeneas.Std.Slice Aeneas.Std.U8) : Prop
+number of parameters: 5
+fields:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.binding : AspisR1.R9PoolRuntimeBinding.P2Prime H
+      { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof1, pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub1 }
+      { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof2, pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub2 }
+constructor:
+  AspisR1.S2W_AuthenticatedInputs.P2Prime.mk {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {proof1 pub1 proof2 pub2 : Aeneas.Std.Slice Aeneas.Std.U8}
+    (binding :
+      AspisR1.R9PoolRuntimeBinding.P2Prime H
+        { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof1,
+          pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub1 }
+        { proof := AspisR1.MultiproofConeCanonical.bytesOf ↑proof2,
+          pub := AspisR1.MultiproofConeCanonical.bytesOf ↑pub2 }) :
+    AspisR1.S2W_AuthenticatedInputs.P2Prime H proof1 pub1 proof2 pub2
+
+Running as unit: run-r6fa29834c1b44670b04dc1fabf0fee01.scope; invocation ID: 1fffbad0a1a04d66803bf502298afb25
