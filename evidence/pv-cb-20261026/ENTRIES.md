@@ -270,3 +270,26 @@ Native collectors record post-run object/input snapshots. For changed proof
 inputs, use the explicit retained per-run source snapshot; do not attribute
 a current file hash to an earlier execution. No coherent release replay or
 artifact equality is claimed by the focused checks.
+
+## Symbolic encoder and mask totality checkpoint
+
+Lean79/100 actual attempts through22879, excluding refused22826; Kani10/20.
+MaskFillBody/Loop/Total, ForwardTotal, MaskHorner/Total and MaskTotal pass
+22865–22872 (22871 failure retained). These establish PREPARED control totality,
+not current mask extraction equality. EncoderRound/Basis/FoldBounds/Fold/FoldTotal/
+EncoderTotal pass22873–22879 (22876 redundant simp failure retained, fixed22877).
+Encoder totality retains explicit generic ZERO/ONE/mul/add/sub total premises.
+All successful audits use standard axioms; no concrete512 recurrence is reduced.
+
+|op|row|bounded native evidence; full status remains OPEN|receipt|
+|---:|---|---|---|
+|28|V179|ASCII0–8 and single Unicode scalar path value laws pass|kani-ascii-005; kani-scalar-006|
+|30|V181|capacity0–16 empty/capacity lower bound passes|kani-capacity-007|
+|31|V182|ASCII prefix/suffix0–8 push timed out180s; no unchanged rerun|kani-push-008|
+|32|V183|usizeMAX byte reservation error and small0–16 content preservation pass|kani-reserve-overflow-009; kani-reserve-small-010|
+
+Native gates use optimized proof profile, no stubs, capped6G/8G/swap0/Tasks64.
+The original arbitrary UTF8 gate timeout remains. Row26's initial blanket
+allocator deferral is superseded: bounded path_join8 passed; full generic law
+remains OPEN. No ledger or endpoint premise removed: assigned73 before/73 after.
+Fresh sibling checks79/117 at rwbbcc13a0 anddict1f5f2545 found no installation.

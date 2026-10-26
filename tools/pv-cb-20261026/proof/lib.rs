@@ -99,8 +99,10 @@ mod checks {
         let a:[u8;8]=kani::any();let b:[u8;8]=kani::any();
         let n:usize=kani::any();let m:usize=kani::any();kani::assume(n<=8 && m<=8);
         for i in 0..8 {kani::assume(a[i]<128 && b[i]<128);}
-        let mut actual=std::str::from_utf8(&a[..n]).unwrap().to_string();
-        actual.push_str(std::str::from_utf8(&b[..m]).unwrap());
+        let mut actual=String::with_capacity(n);let mut suffix=String::with_capacity(m);
+        for i in 0..n {actual.push(a[i] as char);}
+        for i in 0..m {suffix.push(b[i] as char);}
+        actual.push_str(&suffix);
         let mut expected=a[..n].to_vec();expected.extend_from_slice(&b[..m]);
         assert_eq!(actual.as_bytes(),expected.as_slice());
     }
@@ -124,7 +126,9 @@ mod checks {
     fn string_scalar() {
         let scalar:u32=kani::any();
         if let Some(c)=char::from_u32(scalar) {
-            let owned=c.to_string(); let path:&std::path::Path=owned.as_ref();
+            let mut encoded=[0u8;4];
+            let owned=c.encode_utf8(&mut encoded).to_owned();
+            let path:&std::path::Path=owned.as_ref();
             assert_eq!(path.as_os_str().as_bytes(),reference::borrow_bytes(owned.as_bytes()));
         }
     }

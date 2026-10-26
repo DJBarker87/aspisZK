@@ -38,27 +38,43 @@ fn tower(value:QM31,coordinate:usize)->QM31 {
         _=>panic!("invalid tower coordinate"),
     }
 }
+fn linears_fold(point:&[QM31;10],variable:usize,suffix:QM31,weighted:QM31)->(QM31,QM31) {
+    if variable>0 {
+        let variable=variable-1;let suffix=suffix.add(point[variable]);
+        let weighted=if variable!=0 {weighted.add(suffix)} else {weighted};
+        linears_fold(point,variable,suffix,weighted)
+    } else {(suffix,weighted)}
+}
 fn linears(point:[QM31;10])->(QM31,QM31) {
-    let mut suffix=QM31::ZERO;let mut weighted=QM31::ZERO;let mut variable=10usize;
-    while variable>0 {
-        variable-=1;suffix=suffix.add(point[variable]);
-        if variable!=0 {weighted=weighted.add(suffix);}
-    }
+    let (suffix,weighted)=linears_fold(&point,10,QM31::ZERO,QM31::ZERO);
     (suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),
      suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))))
 }
 fn cell(mut out:[QM31;27],index:usize,value:QM31)->[QM31;27] {out[index]=value;out}
+fn fill_c1(c1:&[QM31;16],coefficients:[QM31;27],column:usize)->[QM31;27] {
+    let exponents:[usize;16]=[0,2,4,6,8,10,12,14,16,18,20,22,24,26,13,25];
+    if column<16 {
+        fill_c1(c1,cell(coefficients,exponents[column],tower(c1[column],column&3)),column+1)
+    } else {coefficients}
+}
+fn fill_mask(mask:&[QM31;10],coefficients:[QM31;27],column:usize)->[QM31;27] {
+    let exponents:[usize;10]=[1,3,5,7,9,11,15,17,19,21];
+    if column<10 {
+        fill_mask(mask,cell(coefficients,exponents[column],tower(mask[column],column&3)),column+1)
+    } else {coefficients}
+}
+fn horner(coefficients:&[QM31;27],prepared:PreparedQm31Multiplier,exponent:usize,shared:QM31)->QM31 {
+    if exponent>0 {
+        let exponent=exponent-1;
+        horner(coefficients,prepared,exponent,prepared.mul(shared).add(coefficients[exponent]))
+    } else {shared}
+}
 pub fn mask(c1:[QM31;16],mask_only:[QM31;10],g:QM31,point:[QM31;10])->QM31 {
     let (linear,explicit_linear)=linears(point);
-    let mut coefficients=[QM31::ZERO;27];let mut column=0usize;
-    let exponents:[usize;16]=[0,2,4,6,8,10,12,14,16,18,20,22,24,26,13,25];
-    let mask_exponents:[usize;10]=[1,3,5,7,9,11,15,17,19,21];
-    while column<16 {coefficients=cell(coefficients,exponents[column],tower(c1[column],column&3));column+=1;}
-    column=0;
-    while column<10 {coefficients=cell(coefficients,mask_exponents[column],tower(mask_only[column],column&3));column+=1;}
+    let coefficients=fill_c1(&c1,[QM31::ZERO;27],0);
+    let coefficients=fill_mask(&mask_only,coefficients,0);
     let prepared=PreparedQm31Multiplier::new(linear);
-    let mut shared=coefficients[26];let mut exponent=26usize;
-    while exponent>0 {exponent-=1;shared=prepared.mul(shared).add(coefficients[exponent]);}
+    let shared=horner(&coefficients,prepared,26,coefficients[26]);
     let x2=explicit_linear.square();let x4=x2.square();let x8=x4.square();let x16=x8.square();
     shared.add(QM31::ONE.add(x16.mul(x8).mul(x2)).mul(g))
 }

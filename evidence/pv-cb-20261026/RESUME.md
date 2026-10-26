@@ -1,12 +1,17 @@
+# Latest checkpoint (supersedes counts below)
+Lean79/100; next22880. Kani10/20, Kani11 zst running. Own scope only.
+EncoderTotal22879 passed. Native small reserve010 passed. No endpoint rows removed.
+Latest per-run inputs frozen in native job directories. Continue whole budget.
+
 # Active work handoff, relaunch1
 
 Read pv-common.txt first and its LEAD RULINGS. Task remains active; target not
 established; endpoint/full ledger removals0. Never touch sibling worktrees or
 ProverRw* sources; owned modules PV_CB_ only; no shipped crates/programs edits.
 
-Budget at this handoff: Lean63/100 (IDs22800–22863 excluding22826 guard refusal),
-Kani4/20. Latest63 MaskFillBody is pending/check its log;59 EncoderFill passed. Every actual compile has numbered receipts.
-Next unused Lean ID22864. ID22826 was refused67 before Lean (local edit failure);
+Budget at this handoff: Lean69/100 (IDs22800–22869 excluding22826 guard refusal),
+Kani8/20. Latest69 MaskHorner passed;65 MaskFillBody passed,66 MaskFillLoop passed,67 ForwardTotal passed,68 MaskFillTotal passed. Every actual compile has numbered receipts.
+Next unused Lean ID22870. ID22826 was refused67 before Lean (local edit failure);
 never reuse it. No memory caps/settings were raised. A few early outer native
 reservation scans were denied before3minutes; no launch bypassed a refusal.
 A session timestamp guard now enforces the full wait. Latest native denial:
@@ -91,3 +96,9 @@ must not be attributed to changed current files. Native runs not actual Lean
 have #print axioms N/A. Final report under500words with complete table linked,
 before/after counts, receipts, git log/base and next deliverable. Use whole budget;
 no stop on Kani exhaustion, Aeneas failure, or temporary reservation contention.
+
+Kani5 ASCII8 passes;6 single Unicode scalar passes;7 capacity16 passes. Kani8
+push_ascii8 is RUNNING (session43422), after one pre-barrier refusal. No other
+capped scope may run until it completes. Check host kani-push-008/output-retry1.log.
+New owned.rs mask is recursive (not yet uploaded/extracted); previous loop mask
+version is frozen in commit55975ee0c6. New MaskHornerTotal is prepared, not checked.
