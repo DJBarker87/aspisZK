@@ -127,3 +127,24 @@ into a source data definition or relabelled as a pure theorem.
 
 Stop this family at the owned native interface. Both original fixture fibres
 remain available without changing their relation, public fields or handles.
+
+## row_call
+
+Before = after: `∀ j, transport j = PV_Src_Transport.row j`.
+
+Classification: native association of the transport actually installed by the
+caller. The exact pv-runjoin5 interface is pointwise equality of that selected
+`Fin 1024 ≃ Fin 1024` to the row returned by the arithmetic S2 reference, with
+all 1024 positions quantified. The already-proved
+`PV_Src_Transport.row_eq` supplies `row j = AspisR1.row j` and the existing
+unstubbed S2 P6 callee receipt is independently pinned in the predecessor's
+`transport-reuse.json`. Neither chooses the caller's `transport` parameter.
+Choosing the reference equivalence as the source definition and calling the
+field reflexive would not establish which transport the deployed caller uses.
+
+| Family | Before fields | After fields | Status |
+|---|---:|---:|---|
+| row_call | 5 | 5 | REDUCED to exact installed-transport pointwise interface above; unchanged obligation |
+
+Stop this family at this interface. No new Kani row check is needed for the
+unchanged callee, and no historical timeout is rerun.
