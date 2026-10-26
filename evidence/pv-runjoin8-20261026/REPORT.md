@@ -123,3 +123,15 @@ inherited-receipts.json rechecks all nine current accepted trust-module source
 hashes against the historical green receipts and retains their exact metrics,
 revisions and axiom lines. This is source/evidence consistency only, not a
 fresh kernel audit or dependency closure replay.
+
+ExternalSums and ExternalLanes prepare exact source prefix/suffix inductions
+for the raw U64 sums and final wrapping-reducer writes. ExternalRefinement
+composes these with ExternalBlocksCopy into the complete owned external-layer
+statement: totality, canonical raw output and field-model agreement on every
+raw U32 input. No new hypotheses appear in that statement. The actual selected
+ExternalLinear dictionary is included by an exact call equation. These remain
+DRAFTS, not established source results, until smallest-first compilation.
+The native source/owned association remains the sibling's separate retained
+Kani evidence; no Kani result is injected as a Lean axiom. The source parent,
+full compiler, full trace and deployed fixture instances are still open.
+Fourteen draft modules are now inventoried; 0 Lean / 0 Kani charged.
