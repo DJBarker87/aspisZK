@@ -10,7 +10,7 @@ def fetch(src,dest,required=True):
 for arg in sys.argv[1:]:
  if arg.isdigit():
   a=int(arg);assert 23700<=a<=23999
-  for src in [f'{b}/pv-rw-step/{a}-input.json',f'{b}/pv-rw-step/{a}.lean.txt',f'{t}/out-{a}.log',f'{t}/time-{a}.log',f'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/{a}-admission-before.json',f'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/{a}-admission-barrier.json']:
+  for src in [f'{b}/pv-rw-step/{a}-input.json',f'{b}/pv-rw-step/{a}.lean.txt',f'{b}/pv-rw-step/{a}-admission.json',f'{b}/pv-rw-step/{a}-admission.log',f'{t}/out-{a}.log',f'{t}/time-{a}.log',f'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/{a}-admission-before.json',f'/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/evidence/{a}-admission-barrier.json']:
    fetch(src,e,required='-input.json' in src or '.lean.txt' in src or '/out-' in src)
   x=json.loads((e/f'{a}-input.json').read_text());fetch(f"{b}/pv-rw-step/"+x['dependencies_manifest'],e)
   s=(e/f'out-{a}.log').read_text();tp=e/f'time-{a}.log';ts=tp.read_text() if tp.exists() else ''
