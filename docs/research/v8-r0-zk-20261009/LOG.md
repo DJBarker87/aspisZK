@@ -9681,3 +9681,7 @@ infrastructure; on launcher trouble they stop and report). The manager's running
 `cx-port36-transport` was stopped, with a WIP snapshot kept. Proof results the manager merged are kept
 (e.g. the concrete Claims parent and S1 finish connection, and Q1/Q2 port modules). Infrastructure
 changes are left in place but no longer required by worker rules.
+
+## D191 (lead, 2026-10-26): prover candidate status and its ELF divergence
+
+The proof-friendly prover candidate (codex/cx-prover-rw-20261023, UNMERGED) now has query refinement, entropy/retry modelling (exhaustion 2^-4080 per call and 2^-4077 over eight attempts, as CONDITIONAL model results) and 74 of 262 operation-dictionary interpretations. Conjunct 1 of RustProverRefinement remains a premise. A second worker (codex/cx-prover-dict-20261026) covers the off-path entries. The default ELF built from the CANDIDATE branch's source hashes to d7d42f77..., not the release pin f8c0ec72.... Production is unaffected: lowering2 reproduced all three release pins from research. The candidate branched before the adapter/H5 adoptions and edits shared aspis-core files. Before any adoption it must be rebased onto research, and its effect on the verifier ELF measured; any verifier-byte change needs owner approval. Privacy target not yet established.
