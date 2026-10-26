@@ -1,0 +1,55 @@
+[
+  {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/options.rs",
+    "sha256": "d68ea7c83465b3ce6ba9bea7d398c97ed03e0ff9abeee179f77ea04baabd7b04",
+    "excerpts": [
+      {
+        "start": 120,
+        "end": 155,
+        "text": "    /// Whitelist of items to translate. These use the name-matcher syntax.\n    #[clap(\n        long,\n        help = indoc!(\"\n            Whitelist of items to translate. These use the name-matcher syntax (note: this differs\n            a bit from the ocaml NameMatcher).\n\n            Note: This is very rough at the moment. E.g. this parses `u64` as a path instead of the\n            built-in type. It is also not possible to filter a trait impl (this will only filter\n            its methods). Please report bugs or missing features.\n\n            Examples:\n              - `crate::module1::module2::item`: refers to this item and all its subitems (e.g.\n                  submodules or trait methods);\n              - `crate::module1::module2::item::_`: refers only to the subitems of this item;\n              - `core::convert::{impl core::convert::Into<_> for _}`: retrieve the body of this\n                  very useful impl;\n\n            When multiple patterns in the `--include` and `--opaque` options match the same item,\n            the most precise pattern wins. E.g.: `charon --opaque crate::module --include\n            crate::module::_` makes the `module` opaque (we won't explore its contents), but the\n            items in it transparent (we will translate them if we encounter them.)\n    \"))]\n    #[serde(default)]\n    #[cfg_attr(feature = \"charon_on_charon\", charon::rename(\"included\"))]\n    pub include: Vec<String>,\n    /// Blacklist of items to keep opaque. Works just like `--include`, see the doc there.\n    #[clap(long)]\n    #[serde(default)]\n    pub opaque: Vec<String>,\n    /// Blacklist of items to not translate at all. Works just like `--include`, see the doc there.\n    #[clap(long)]\n    #[serde(default)]\n    pub exclude: Vec<String>,\n    /// Usually we skip the bodies of foreign methods and structs with private fields. When this\n    /// flag is on, we don't."
+      },
+      {
+        "start": 755,
+        "end": 790,
+        "text": "                opacities.push((\n                    \"alloc::boxed::box_assume_init_into_vec_unsafe\".to_string(),\n                    Transparent,\n                ));\n            }\n\n            // We always include the items from the crate.\n            opacities.push((\"crate\".to_owned(), Transparent));\n\n            for pat in options.include.iter() {\n                opacities.push((pat.to_string(), Transparent));\n            }\n            for pat in options.opaque.iter() {\n                opacities.push((pat.to_string(), Opaque));\n            }\n            for pat in options.exclude.iter() {\n                opacities.push((pat.to_string(), Invisible));\n            }\n\n            for trait_name in &hide_traits {\n                opacities.push((trait_name.to_string(), Invisible));\n            }\n\n            // Hide trait impls and defs for the excluded traits.\n            let hide_traits = hide_traits\n                .iter()\n                .cloned()\n                .flat_map(|pat| [pat.clone(), NamePattern::impl_for(pat)])\n                .map(|pat| (pat, Invisible));\n            opacities\n                .into_iter()\n                .filter_map(|(s, opacity)| parse_pattern(&s).ok().map(|pat| (pat, opacity)))\n                .chain(hide_traits)\n                .collect()\n        };\n"
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/name_matcher/mod.rs",
+    "sha256": "c9ac2cb3b5c868da191f77a185868c635ff574ab3e02bd97fac95b12e7796da6",
+    "excerpts": [
+      {
+        "start": 43,
+        "end": 52,
+        "text": "        use std::str::FromStr;\n        Self::from_str(i)\n    }\n    /// Construct a pattern that matches all the impls for that trait.\n    pub fn impl_for(trait_pat: Self) -> Self {\n        Pattern {\n            elems: vec![PatElem::Impl(Box::new(trait_pat))],\n        }\n    }\n"
+      },
+      {
+        "start": 105,
+        "end": 127,
+        "text": "                }\n            };\n            scrutinee_elems = prefix;\n        };\n        let args = args.as_ref();\n        // Patterns that start with an impl block match that impl block anywhere. In such a case we\n        // truncate the scrutinee name to start with the rightmost impl in its name. This isn't\n        // fully precise in case of impls within impls, but we'll ignore that.\n        if let Some(PatElem::Impl(_)) = self.elems.first()\n            && let Some((i, _)) = scrutinee_elems\n                .iter()\n                .enumerate()\n                .rfind(|(_, elem)| elem.is_impl())\n        {\n            scrutinee_elems = &scrutinee_elems[i..];\n        }\n\n        let zipped = self.elems.iter().zip_longest(scrutinee_elems).collect_vec();\n        let zipped_len = zipped.len();\n        for (i, x) in zipped.into_iter().enumerate() {\n            let is_last = i + 1 == zipped_len;\n            match x {\n                EitherOrBoth::Both(pat, elem) => {"
+      },
+      {
+        "start": 265,
+        "end": 292,
+        "text": "                    pat_ident == ident || (pat_ident == \"crate\" && ident == &ctx.crate_name);\n                same_ident && PatTy::matches_generics(ctx, generics, args)\n            }\n            (PatElem::Impl(_pat), PathElem::Impl(ImplElem::Ty(..))) => {\n                // TODO\n                false\n            }\n            (PatElem::Impl(pat), PathElem::Impl(ImplElem::Trait(impl_id))) => {\n                let Some(timpl) = ctx.trait_impls.get(*impl_id) else {\n                    return false;\n                };\n                let trait_name = ctx.item_name(timpl.impl_trait.id);\n                pat.matches_with_generics(ctx, trait_name, Some(&timpl.impl_trait.generics))\n            }\n            _ => false,\n        }\n    }\n}\n\nimpl PatTy {\n    pub fn matches_generics(\n        ctx: &TranslatedCrate,\n        pats: &[Self],\n        generics: Option<&GenericArgs>,\n    ) -> bool {\n        let Some(generics) = generics else {\n            // If we'r ematching on a plain name without generics info, we ignore pattern generics.\n            return true;"
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon/charon/src/name_matcher/parser.rs",
+    "sha256": "ecdd722411bd718c1ba22773475f4ca8f2f353cc336c4671f048d8f5e733ef84",
+    "excerpts": [
+      {
+        "start": 123,
+        "end": 139,
+        "text": "                .ok_or_else(|| anyhow::anyhow!(\"trait path must be nonempty\"))?;\n            let PatElem::Ident {\n                generics, is_trait, ..\n            } = last_elem\n            else {\n                return Err(anyhow::anyhow!(\"trait path must end in an ident\"));\n            };\n            // Set the type as the first generic arg.\n            generics.insert(0, for_ty);\n            *is_trait = true;\n        }\n        Ok(PatElem::Impl(pat.into()))\n    })\n    .parse(i)\n}\n\nimpl fmt::Display for PatElem {"
+      },
+      {
+        "start": 202,
+        "end": 218,
+        "text": "        \"a::b::Type\",\n        \"a::b::Type<_, _>\",\n        \"Clone\",\n        \"usize\",\n        \"foo::{impl Clone for usize}::clone\",\n        \"foo::{impl Clone for &&usize}\",\n        \"foo::{impl PartialEq<_> for Type<_, _>}\",\n        \"foo::{impl PartialEq<usize> for Box<u8>}\",\n        \"foo::{impl foo::Trait<core::option::Option<_>> for alloc::boxed::Box<_>}::method\",\n    ];\n    let other_test_strings = [\n        (\"blah::*\", \"blah::_\"),\n        (\"crate  ::  foo  ::bar \", \"crate::foo::bar\"),\n        (\"a::b::Type < _  ,  _ >\", \"a::b::Type<_, _>\"),\n        (\"{ impl  Clone  for  usize }\", \"{impl Clone for usize}\"),\n        (\"{Clone for usize}\", \"{impl Clone for usize}\"),\n    ];"
+      }
+    ]
+  }
+]

@@ -1,0 +1,36 @@
+[
+  {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/aeneas/backends/lean/Aeneas/Std/Core/Fmt.lean",
+    "sha256": "26ac770dbf97ae2947a968818c307044262756bd67275101ac0c34fb817a81ce",
+    "qualification": "Retained pinned-tool source inspected read-only; exact selected object hashes are separately recorded in attempt dependency receipts",
+    "excerpts": [
+      {
+        "start": 1,
+        "end": 22,
+        "text": "import Aeneas.Std.Core.Core\nimport Aeneas.Std.Core.Result\nimport Aeneas.Std.Array.Array\nimport Aeneas.Std.StringDef\n\nnamespace Aeneas.Std\n\n@[reducible, rust_type \"core::fmt::Error\"]\ndef core.fmt.Error := Unit\n\n/- TODO: -/\n@[rust_type \"core::fmt::Formatter\"]\naxiom core.fmt.Formatter : Type\n\n@[rust_trait \"core::fmt::Debug\"]\nstructure core.fmt.Debug (T : Type u) where\n  fmt : T \u2192 core.fmt.Formatter \u2192 Result (core.result.Result Unit core.fmt.Error \u00d7 core.fmt.Formatter)\n\n-- TODO: move?\n@[rust_fun \"core::result::{core::result::Result<@T, @E>}::unwrap\"]\ndef core.result.Result.unwrap {T E : Type}\n  (_ : core.fmt.Debug E) (e : core.result.Result T E) : Std.Result T :="
+      },
+      {
+        "start": 75,
+        "end": 100,
+        "text": "\n@[rust_fun \"core::fmt::rt::{core::fmt::rt::Argument<'0>}::new_lower_hex\"]\ndef core.fmt.rt.Argument.new_lower_hex\n  {T : Type} (_LowerHexInst : core.fmt.LowerHex T) (_ : T) :\n  Result core.fmt.rt.Argument :=\n  -- TODO\n  .ok ()\n\n@[rust_fun \"core::fmt::{core::fmt::Formatter<'a>}::write_str\"]\ndef core.fmt.Formatter.write_str (fmt : core.fmt.Formatter) (_ : Str) :\n  Result (core.result.Result Unit core.fmt.Error \u00d7 core.fmt.Formatter) :=\n  -- TODO: this is a simplistic model\n  .ok (.Ok (), fmt)\n\n@[rust_fun \"core::fmt::{core::fmt::Formatter<'a>}::write_fmt\"]\ndef core.fmt.Formatter.write_fmt\n  (fmt : core.fmt.Formatter) (_ : core.fmt.Arguments) :\n  Result (core.result.Result Unit core.fmt.Error \u00d7 core.fmt.Formatter) :=\n  -- TODO: we should update something in the formatter, once we have a model for it\n  .ok (.Ok (), fmt)\n\n@[rust_fun \"core::fmt::{core::fmt::Debug<&'0 @T>}::fmt\"]\ndef core.fmt.DebugShared.fmt {T : Type} (DebugInst : core.fmt.Debug T) (x : T)\n  (fmt : core.fmt.Formatter) :\n  Result (core.result.Result Unit core.fmt.Error \u00d7 core.fmt.Formatter) :=\n  DebugInst.fmt x fmt"
+      },
+      {
+        "start": 117,
+        "end": 138,
+        "text": "  match r with\n  | .Ok x => .ok x\n  | .Err _ =>\n    /- TODO: this is a simplistic model -/\n    .fail .panic\n\n@[rust_fun \"core::fmt::{core::fmt::Formatter<'a>}::debug_struct_field1_finish\", simp]\ndef core.fmt.Formatter.debug_struct_field1_finish\n  (fmt : core.fmt.Formatter) (_ : Str) (_ : Str) (_ : Dyn (fun dyn => core.fmt.Debug dyn)) :\n  Result ((core.result.Result Unit core.fmt.Error) \u00d7 core.fmt.Formatter) :=\n  -- TODO: more precise model that actually uses the `Debug` instance\n  .ok (.Ok (), fmt)\n\n@[rust_fun \"core::fmt::{core::fmt::Formatter<'a>}::debug_struct_field2_finish\", simp]\ndef core.fmt.Formatter.debug_struct_field2_finish (fmt : core.fmt.Formatter) (_ : Str)\n  (_ : Str) (_ : Dyn (fun dyn => core.fmt.Debug dyn))\n  (_ : Str) (_ : Dyn (fun dyn => core.fmt.Debug dyn)) :\n  Result ((core.result.Result Unit core.fmt.Error) \u00d7 core.fmt.Formatter) :=\n  -- TODO: more precise model that actually uses the `Debug` instance\n  .ok (.Ok (), fmt)\n\n@[rust_fun \"core::fmt::{core::fmt::Formatter<'a>}::debug_struct_field3_finish\", simp]"
+      }
+    ]
+  },
+  {
+    "path": "/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/aeneas/backends/lean/Aeneas/Std/String.lean",
+    "sha256": "01fea00bf172d9f0eab4c003d0ad74e1612c1538d974496a5c6695398e70c9c4",
+    "qualification": "Retained pinned-tool source inspected read-only; exact selected object hashes are separately recorded in attempt dependency receipts",
+    "excerpts": [
+      {
+        "start": 15,
+        "end": 35,
+        "text": "    intro i r hi\n    fun_induction ByteArray.toList.loop bs i r with\n    | case1 i r h ih =>\n      have hi' : i + 1 \u2264 bs.size := by scalar_tac\n      rw [ih hi']\n      simp; scalar_tac\n    | case2 i r h =>\n      simp; scalar_tac\n  unfold ByteArray.toList\n  rw [loop_length 0 [] (Nat.zero_le _)]\n  simp\n\n/-- TODO: we shouldn't use `decide +native` but it seems we can't reduce it otherwise. -/\ndef toStr (s : String) (h : s.toByteArray.size \u2264 U32.max := by decide +native) : Str :=\n  \u27e8 s.toByteArray.toList.map\n    (fun x => \u27e8 x.toNat, by cases x; simp only [UInt8.toNat_ofBitVec, UScalarTy.U8_numBits_eq, Nat.reducePow]; omega  \u27e9),\n    by\n      simp only [UScalarTy.U8_numBits_eq, Nat.reducePow, Fin.mk_uInt8ToNat, BitVec.ofFin_uInt8ToFin,\n        List.length_map]\n      rw [ByteArray.length_toList]\n      exact h.trans (by scalar_tac) \u27e9"
+      }
+    ]
+  }
+]
