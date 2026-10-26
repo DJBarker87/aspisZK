@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_World.lean:118:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ?m.178 ?m.179 ++ List.map ?m.178 ?m.180
+in the target expression
+  List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+        (List.range' (↑p.used) (drawCount states)) ++
+      List.flatMap events rest =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states + count rest))
+
+case cons.refine_3
+inst✝ : ErasureFns
+p✝ final✝ : Tape
+calls : List (List State)
+p next final : Tape
+states : List State
+rest : List (List State)
+nonce : Std.Array U8 32#usize
+status : ProverRwRngControl.Status
+run : owner nonce p = ok (next, status)
+trace : OwnerReplay (newBody nonce) id nonce p states (next, status)
+tail : Owners next rest final
+same : next.replies = p.replies
+cursor : ↑next.used = ↑p.used + drawCount states
+bound : drawCount states ≤ 16
+ordered :
+  events states =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states))
+sameTail : final.replies = next.replies
+cursorTail : ↑final.used = ↑next.used + count rest
+boundTail : count rest ≤ 16 * rest.length
+orderedTail :
+  log rest =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑next.replies)[index]?))
+      (List.range' (↑next.used) (count rest))
+counts : count (states :: rest) = drawCount states + count rest
+⊢ List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+        (List.range' (↑p.used) (drawCount states)) ++
+      List.flatMap events rest =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states + count rest))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_World.lean:117:47: warning: This simp argument is unused:
+  orderedTail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵g̵,̵L̵i̵s̵t̵.̵f̵l̵a̵t̵M̵a̵p̵_̵c̵o̵n̵s̵,̵o̵r̵d̵e̵r̵e̵d̵,̵o̵r̵d̵e̵r̵e̵d̵T̵a̵i̵l̵,̵s̵a̵m̵e̵,̵c̵u̵r̵s̵o̵r̵,̵c̵o̵u̵n̵t̵s̵]̵[̲l̲o̲g̲,̲ ̲L̲i̲s̲t̲.̲f̲l̲a̲t̲M̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲o̲r̲d̲e̲r̲e̲d̲,̲ ̲s̲a̲m̲e̲,̲ ̲c̲u̲r̲s̲o̲r̲,̲ ̲c̲o̲u̲n̲t̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_World.lean:117:59: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp only [log, ̲List.flatMap_cons, ̲ordered, ̲orderedTail,s̵a̵m̵e̵,̵ ̲cursor, ̲counts]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_World.lean:117:64: warning: This simp argument is unused:
+  cursor
+
+Hint: Omit it from the simp argument list.
+  simp only [log, ̲List.flatMap_cons, ̲ordered, ̲orderedTail, ̲same, ̲cu̵r̵s̵or̵,̵c̵o̵unts]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_World.byte' depends on axioms: [propext]
+'R1Z.PV_RunJoin_World.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.replies_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.provider' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.raw_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.raw_nonempty' depends on axioms: [propext, Classical.choice]
+'R1Z.PV_RunJoin_World.reply_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.finite_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.owner_inventory' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.owners_inventory' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.cap8_inventory' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_World.lean:117:4: error: unsolved goals
+case cons.refine_3
+inst✝ : ErasureFns
+p✝ final✝ : Tape
+calls : List (List State)
+p next final : Tape
+states : List State
+rest : List (List State)
+nonce : Std.Array U8 32#usize
+status : ProverRwRngControl.Status
+run : owner nonce p = ok (next, status)
+trace : OwnerReplay (newBody nonce) id nonce p states (next, status)
+tail : Owners next rest final
+same : next.replies = p.replies
+cursor : ↑next.used = ↑p.used + drawCount states
+bound : drawCount states ≤ 16
+ordered :
+  events states =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states))
+sameTail : final.replies = next.replies
+cursorTail : ↑final.used = ↑next.used + count rest
+boundTail : count rest ≤ 16 * rest.length
+orderedTail :
+  log rest =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑next.replies)[index]?))
+      (List.range' (↑next.used) (count rest))
+counts : count (states :: rest) = drawCount states + count rest
+⊢ List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states) ++ List.range' (↑p.used + drawCount states) (count rest)) =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states) ++ List.range' (↑p.used + 1 * drawCount states) (count rest))
+'R1Z.PV_RunJoin_World.byte' depends on axioms: [propext]
+'R1Z.PV_RunJoin_World.reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.replies_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.provider' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.raw_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.raw_nonempty' depends on axioms: [propext, Classical.choice]
+'R1Z.PV_RunJoin_World.reply_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.finite_owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.owner_inventory' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.owners_inventory' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_World.cap8_inventory' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

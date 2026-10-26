@@ -8,8 +8,8 @@ REMOTE = '/home/dombarker/project-offloads/aspis-joint-20261019'
 T = '/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence'
 for attempt, module, revision in zip(sys.argv[1::3], sys.argv[2::3], sys.argv[3::3]):
     local = ROOT / 'docs/research/v8-r0-zk-20261009/lean' / (module + '.lean')
-    source = local.read_bytes()
     snap = DEST / f'{attempt}-{module.split("/")[-1]}.lean.txt'
+    source = snap.read_bytes() if snap.exists() else local.read_bytes()
     snap.write_bytes(source)
     logs = {}
     for kind, remote in [('out',f'{T}/out-{attempt}.log'), ('time',f'{T}/time-{attempt}.log'),
@@ -23,8 +23,13 @@ for attempt, module, revision in zip(sys.argv[1::3], sys.argv[2::3], sys.argv[3:
     dep_hashes = {}
     for dep in imports:
         path = dep.replace('.','/')
+        if dep.startswith('Mathlib.'):
+            package = '/home/dombarker/project-offloads/ZK-v7-one-tx-formal-consolidation-20260828/AspisFormal/.lake/packages/mathlib'
+            objects, sources = package + '/.lake/build/lib/lean', package
+        else:
+            objects, sources = REMOTE + '/objects', REMOTE + '/sources'
         dep_hashes[dep] = subprocess.check_output(['ssh',HOST,'sha256sum',
-            f'{REMOTE}/objects/{path}.olean',f'{REMOTE}/sources/{path}.lean']).decode().splitlines()
+            f'{objects}/{path}.olean',f'{sources}/{path}.lean']).decode().splitlines()
     fingerprint = hashlib.sha256(json.dumps(dep_hashes,sort_keys=True).encode()).hexdigest()
     axioms = re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", logs['out'])
     receipt = dict(attempt=int(attempt),target=module,source_revision=revision,
