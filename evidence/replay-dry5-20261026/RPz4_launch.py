@@ -13,7 +13,7 @@ def collect(name):
 plan=json.loads((E/'RPz4_source-plan.json').read_text());rows=[]
 for m in plan['order']:
  x=plan['modules'][m];rows.append(dict(module=m,imports=x['imports'],repository_source=x['source'],source='RPz4_sources/'+m.replace('.','/')+'.lean',object='RPz4_objects/'+m.replace('.','/')+'.olean'))
-rows.sort(key=lambda r:(r['module'] not in ['ImportUnionNamedDiscriminant','R1NaturalProjection','SemanticCallExtraction.Types'], -plan['distance_to_top'].get(r['module'],0)))
+rows.sort(key=lambda r:(r['module'] not in ['ImportUnionNamedDiscriminant','R1NaturalProjection','AspisR1SemanticCallExtraction.Types','R1LiteralTranscript'], -plan['distance_to_top'].get(r['module'],0)))
 state=json.loads((E/'RPz4_reuse.json').read_text())['state'];state={m:v for m,v in state.items() if v in ['passed','failed']};attempt=0;blocked=[]
 if (E/'RPz4_state.json').exists():
  prior=json.loads((E/'RPz4_state.json').read_text());state.update({m:v for m,v in prior['state'].items() if v in ['passed','failed']});attempt=max(prior['attempts'],max([int(f.parent.name.split('_')[1]) for f in E.glob('RPz4_*/receipt.json')],default=0))
