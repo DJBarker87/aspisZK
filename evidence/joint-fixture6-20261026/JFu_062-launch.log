@@ -1,0 +1,55 @@
+{"attempt": "JFu_062", "exit_status": 1, "wall_seconds": 6.899736857973039, "peak_rss_kib": "5370712", "swaps": "0", "print_axioms": ["'AspisR1.JFu_DigestCanonical.word' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFu_DigestCanonical.option' depends on axioms: [propext, Quot.sound]", "'AspisR1.JFu_DigestCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFu_DigestCanonical.lean:17:2: warning: 'all_goals scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+JFu_DigestCanonical.lean:17:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+JFu_DigestCanonical.lean:35:14: error: Tactic `generalize` failed: result is not type correct
+  ∀ x < 8, ↑(↑(Array.make 8#usize [val, val1, val2, val3, val4, val5, val6, val7] ⋯))[x] < 2147483647
+
+case refl
+arr : Std.Array U8 32#usize
+out : Std.Array U32 8#usize
+accepted : atomic_statement.decode_digest_canonical arr = ok (core.result.Result.Ok out)
+i : U8
+_✝⁵⁴ : [> let i ← arr.in
+...
+ow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_✝⁶ : [> let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6 <]
+cf6_post : core.result.Result.Insts.CoreOpsTry.branch r6 = ok cf6
+val6 : aspis_core.field.M31
+h✝¹ : cf6 = core.ops.control_flow.ControlFlow.Continue val6
+i28 : U8
+_✝⁵ : [> let i28 ← arr.index_usize 28#usize <]
+i28_post : i28 = (↑arr)[28]
+i29 : U8
+_✝⁴ : [> let i29 ← arr.index_usize 29#usize <]
+i29_post : i29 = (↑arr)[29]
+i30 : U8
+_✝³ : [> let i30 ← arr.index_usize 30#usize <]
+i30_post : i30 = (↑arr)[30]
+i31 : U8
+_✝² : [> let i31 ← arr.index_usize 31#usize <]
+i31_post : i31 = (↑arr)[31]
+o7 : Option U32
+_✝¹ : [> let o7 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i28, i29, i30, i31] ⋯) <]
+o7_post : ∀ (v : U32), o7 = some v → ↑v < 2147483647
+r7 : core.result.Result U32 atomic_statement.AtomicStatementError
+_✝ : [> let r7 ← core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest <]
+r7_post : ∀ (v : U32), r7 = core.result.Result.Ok v → o7 = some v
+cf7 :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible atomic_statement.AtomicStatementError)
+    U32
+_ : [> let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7 <]
+cf7_post : core.result.Result.Insts.CoreOpsTry.branch r7 = ok cf7
+val7 : aspis_core.field.M31
+h✝ : cf7 = core.ops.control_flow.ControlFlow.Continue val7
+j : Fin 8
+⊢ ↑j < 8 → ↑(↑(Array.make 8#usize [val, val1, val2, val3, val4, val5, val6, val7] ⋯))[↑j] < 2147483647
+'AspisR1.JFu_DigestCanonical.word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFu_DigestCanonical.option' depends on axioms: [propext, Quot.sound]
+'AspisR1.JFu_DigestCanonical.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r870acec5fda546c0bacb4f99b837206c.scope; invocation ID: 392b35759a27442bb4e1d6a2932b12ae
