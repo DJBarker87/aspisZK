@@ -1,9 +1,9 @@
 # Callback source-law worklist
 
-Recount-2 baseline → baseline plus this worker: OPEN 110 → 107;
-independent OPEN 51 → 48; CLOSED-ON-CANDIDATE 40 → 43.
+Recount-2 baseline → baseline plus this worker: OPEN 110 → 105;
+independent OPEN 51 → 46; CLOSED-ON-CANDIDATE 40 → 45.
 Other live sibling changes are not folded into these arithmetic counts.
-This worker: 3 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
+This worker: 5 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
 No implementation or release pin changed. Target not yet established.
 
 |op|row|status|theorem|receipt|
@@ -23,8 +23,8 @@ No implementation or release pin changed. Target not yet established.
 |224|V241|OPEN: sibling extraction failure reused; P6 pending|—|op224-reused-obstruction.json|
 |223|V240|OPEN: sibling extraction failure reused; P6 pending|—|op223-reused-obstruction.json|
 |222|V239|OPEN: sibling extraction failure reused; P6 pending|—|op222-reused-obstruction.json|
-|219|V238|OPEN|—|—|
-|217|V237|OPEN|—|—|
+|219|V238|OPEN: pinned extraction executable unavailable|—|charon-source-op219-001/collected-receipt.json|
+|217|V237|OPEN: extracted skeleton retains generic-array default cut|—|—|
 |216|V236|OPEN|—|—|
 |215|V235|OPEN|—|—|
 |212|V234|OPEN|—|—|
@@ -34,10 +34,10 @@ No implementation or release pin changed. Target not yet established.
 |134|V230|OPEN|—|—|
 |133|V229|OPEN|—|—|
 |132|V228|OPEN|—|—|
-|121|V220|OPEN|—|—|
-|120|V219|OPEN|—|—|
+|121|V220|OPEN: owned loop-free P6 reference under native check|—|kani-polynomial-flat-001/target.json|
+|120|V219|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op120Source.op120_source|24754.json|
 |79|V201|OPEN|—|—|
-|51|V195|OPEN|—|—|
+|51|V195|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op51Source.op51_source|24753.json|
 |36|V187|OPEN|—|—|
 |35|V186|OPEN|—|—|
 |34|V185|OPEN|—|—|

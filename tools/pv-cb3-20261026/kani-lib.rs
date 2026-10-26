@@ -11,11 +11,53 @@ mod reference;
 mod reference_split;
 #[cfg(kani)]
 mod source_fragments;
+#[cfg(kani)]
+mod reference_p6;
+#[cfg(kani)]
+mod reference_polynomial;
 #[cfg(all(kani,not(pv_cb_extract)))]
 mod checks {
     use aspis_core::field::{QM31, CM31, M31};
     fn q(w:[u32;4])->QM31 {
         QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn wide_flat() {
+        let raw:[u32;8]=kani::any();
+        let x=aspis_core::field::WideExact::new(q([raw[0],raw[1],raw[2],raw[3]]),q([raw[4],raw[5],raw[6],raw[7]]));
+        assert_eq!(x.to_le_bytes(),super::reference_p6::wide_bytes_flat(x));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn boundary_flat28() {
+        let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];
+        for i in 0..28 {p[i]=q(raw[i]);}
+        let a=aspis_core::state_only_sumcheck::state_only_boundary_sum(&p);
+        let b=super::reference_p6::boundary_flat(&p);
+        assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn polynomial_flat28() {
+        let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];
+        for i in 0..28 {p[i]=q(raw[i]);}
+        let challenge=q(kani::any());
+        let a=aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(&p,challenge);
+        let b=super::reference_polynomial::evaluate(&p,challenge);
+        assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn sum_products3_flat() {
+        let a:[[u32;4];3]=kani::any();let b:[[u32;4];3]=kani::any();
+        let left=[q(a[0]),q(a[1]),q(a[2])];let right=[q(b[0]),q(b[1]),q(b[2])];
+        let x=aspis_core::field::qm31_sum_products3(left,right);
+        let y=super::reference_polynomial::sum_products3(left,right);
+        assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+        assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
     }
     #[kani::proof]
     fn pole_equal() {
@@ -45,6 +87,12 @@ mod checks {
     fn gamma() {
         let block:[u8;32]=kani::any();
         assert_eq!(super::sampler::gamma_sample(&block),super::reference::gamma(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_complete_split() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
     }
     #[kani::proof]
     #[kani::unwind(65)]
