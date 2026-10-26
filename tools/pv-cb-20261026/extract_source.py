@@ -8,7 +8,7 @@ scanner='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/
 charon='/home/dombarker/project-offloads/aspis-r1-r18-tools-20261016/charon-target/release/charon'
 aeneas='/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static'
 def ssh(cmd):return subprocess.run(['ssh','dombarker@100.108.41.90',cmd],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
-for stage in ['charon','aeneas']:
+for stage in (sys.argv[5].split(',') if len(sys.argv)>5 else ['charon','aeneas']):
  name=f'{stage}-source-op{op}-{sys.argv[4] if len(sys.argv)>4 else "001"}';dest=f'{base}/{name}';local=root/'evidence/pv-cb-20261026'/name
  local.mkdir(exist_ok=True)
  assert not (local/'target.json').exists()
@@ -17,7 +17,8 @@ for stage in ['charon','aeneas']:
  if out.returncode:print(name,'reservation refused',out.returncode);sys.exit(out.returncode)
  if stage=='charon':
   args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry]
-  if include:args+=['--include',include]
+  if include:
+   for pattern in include.split('+'):args+=['--include',pattern]
   args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{"source-proof" if int(op)>=71 else "proof"}/Cargo.toml','--release','--offline','--lib','--jobs','4']
  else:
   assert ssh(f'mkdir -p {base}/shipped-op{op}-generated').returncode==0
