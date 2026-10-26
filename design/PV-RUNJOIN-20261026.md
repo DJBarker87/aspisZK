@@ -127,3 +127,42 @@ replay of the whole dependency source closure or a frozen-manifest release.
 `validate.py` checks source snapshots, accepted axioms, the3field inventory and
 literal conclusion equality. All four current modules match accepted snapshots.
 No keys,accounts,funds,source implementation or frozen artifacts were changed.
+
+## Capacity resume 1: finite prototype and canonical mathematical fixtures
+
+The initial14/100attempts are counted. The resume adds a finite128-reply
+prototype carrier, total cap16 execution, and an eight-call completion for
+arbitrary state-adaptive nonce policies. It proves exact ordered consumption
+and suffix retention, including error statuses. It neither samples native
+errors uniformly nor installs the native full-client world interpreter.
+See `evidence/pv-runjoin-20261026/resume1.md` for exact before/after statements.
+
+`PV_RunJoin_CanonicalFixtures.transfer` and `withdrawal` now exhibit actual
+canonical mathematical instances at the headline field, using the literal
+public deterministic fixture witness constants. Both satisfy RspendPlus.
+The transfer change-sentinel hypothesis is discharged by a checked three-
+permutation certificate: its limb7 is351017421. The certificate uses isolated
+single-round predecessor states and named composition, not monolithic reduction.
+
+The intermediate fixture premise record has3fields; the consuming Association
+record has2, because the sentinel is proved. The two remaining fields are
+`transfer_public_V047` and `withdrawal_public_V047`: equality of each chosen
+native public statement with the constructed mathematical record. They remain
+unproved, including the append-root/frontier and native byte/projection mapping.
+Thus mathematical fixture validity/non-vacuity is settled; actual release V047
+association is not. This is not a generic constructor supplied the whole relation.
+Full details and receipts: `evidence/pv-runjoin-20261026/fixtures-stage.md`.
+
+The original endpoint record remains3fields (uniform_V037,disclosed_V038,
+observerOracle_V038). Together with the final2fixture associations,5residual
+fields are exposed across these TWO records. This is NOT the requested complete
+PV_RunJoin_Premises for a deployed rust: V045 runtime data/effect association
+and concrete common sampling map are still absent. Zero whole targeted deployed
+ledger rows are claimed removed. V036/V037/V038 and release/source adoption
+remain unestablished. Observer,simulator,bad and public guard are unchanged.
+
+Next consuming deliverable: the native full proof-account/world-to-ROMView
+association, with actual callback/body/error/store/ordered-ROM/TLS semantics;
+then the concrete shared sampling map and its law. The proven finite-capacity
+completion is available for that task. The two named native fixture public
+associations must also be supplied. No model theorem is relabelled deployment.

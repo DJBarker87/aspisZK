@@ -1,0 +1,44 @@
+{
+  "target": "optimized numeric certificate generation (not native prover, Kani or release gate)",
+  "source_revision": "66a43b2e1c plus WIP source identified by sha256",
+  "inputs": {
+    "constants_source": "docs/research/v8-r0-sem-proof-20261008/lean/R0P/PoseidonConstants.lean",
+    "constants_sha256": "c87e94b63a575b96cecff98eea6a84385945d5481054a688d24ba162452340b0",
+    "generator_sha256": "1b5814fff4c763e45d648375515a84695fddf0ca59ea491e646238a504c9b2b2",
+    "expected_work": "optimized tiny Rust compilation, then numeric generation of exactly 3 Poseidon permutations (72 retained states); no native prover, elimination or Kani"
+  },
+  "source_sha256": "1b5814fff4c763e45d648375515a84695fddf0ca59ea491e646238a504c9b2b2",
+  "numeric_states_sha256": "8dad4c95adfd2c4a2c481e298f670e9f9099ad4738534bddc098f2d202607963",
+  "toolchain": "rustc1.94.1 e408947bfd200af42db322daf0fadfe7e26d3bd1 LLVM21.1.8 x86_64-unknown-linux-gnu",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "command": "rustc -O sentinel.rs -o sentinel-bin; ./sentinel-bin (sequential in one systemd scope; fresh before/go admission snapshots retained)",
+  "metrics": {
+    "compile": {
+      "exit": 0,
+      "wall": "0:00.71",
+      "peak_rss_kib": 110000,
+      "swap": 0
+    },
+    "generate": {
+      "exit": 0,
+      "wall": "0:00.00",
+      "peak_rss_kib": 1936,
+      "swap": 0
+    }
+  },
+  "print_axioms": "N/A: numeric generation; every accepted Lean cell is separately kernel checked and audited",
+  "binary": {
+    "sha256": "13b544d340050f77bda88d7e62f296a057f1ab703a098ab2bb208ec633466182",
+    "size": 3965920,
+    "retained_only_on_host": true
+  },
+  "reservation_before": "sentinel-before.json",
+  "reservation_go": "sentinel-go.json",
+  "existing_admission_script_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+  "kani_runs": 0
+}

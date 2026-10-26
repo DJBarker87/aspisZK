@@ -12,6 +12,8 @@ for r in receipts:
     if r['exit']==['exit=0']:
         assert r['axioms']
         for line in r['axioms']:
+            if 'does not depend on any axioms' in line:
+                continue
             names=set(re.findall(r'\[([\s\S]*?)\]',line)[0].replace('\n','').replace(' ','').split(','))
             assert names<=allowed,(r['attempt'],names)
 for p in lean.glob('PV_RunJoin_*.lean'):

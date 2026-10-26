@@ -28,8 +28,9 @@ for attempt, module, revision in zip(sys.argv[1::3], sys.argv[2::3], sys.argv[3:
             objects, sources = package + '/.lake/build/lib/lean', package
         else:
             objects, sources = REMOTE + '/objects', REMOTE + '/sources'
-        dep_hashes[dep] = subprocess.check_output(['ssh',HOST,'sha256sum',
-            f'{objects}/{path}.olean',f'{sources}/{path}.lean']).decode().splitlines()
+        object_pin = subprocess.check_output(['ssh',HOST,'sha256sum',f'{objects}/{path}.olean']).decode().strip()
+        source_pin = subprocess.run(['ssh',HOST,'sha256sum',f'{sources}/{path}.lean'],capture_output=True,text=True)
+        dep_hashes[dep] = [object_pin,source_pin.stdout.strip() if source_pin.returncode == 0 else 'SOURCE NOT PRESENT IN SHARED SOURCE ROOT: ' + f'{sources}/{path}.lean']
     fingerprint = hashlib.sha256(json.dumps(dep_hashes,sort_keys=True).encode()).hexdigest()
     axioms = re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)", logs['out'])
     receipt = dict(attempt=int(attempt),target=module,source_revision=revision,
