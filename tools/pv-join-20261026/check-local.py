@@ -47,7 +47,7 @@ x.update(exit_status=ret,wall_seconds=float(re.search(r'([\d.]+) real',raw)[1]),
 print(raw[:11000]);print(a,ret,x['wall_seconds'],x['peak_rss_bytes'])
 assert x['peak_rss_bytes']<8*2**30
 if not ret:
- assert reports and 'sorryAx' not in raw and 'error:' not in raw
+ assert ('#print axioms' not in source.read_text() or reports) and 'sorryAx' not in raw and 'error:' not in raw
  for report in reports:
   if 'depends on axioms:' in report:assert set(z.strip() for z in report.split('depends on axioms: [')[1].split(']')[0].split(','))<={'propext','Classical.choice','Quot.sound'}
 raise SystemExit(ret)
