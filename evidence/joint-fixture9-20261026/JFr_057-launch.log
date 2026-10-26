@@ -1,0 +1,71 @@
+{"attempt": "JFr_057", "exit_status": 1, "wall_seconds": 2.479685614001937, "peak_rss_kib": "5367076", "swaps": "0", "print_axioms": ["'AspisR1.JFr_BlockWindow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_BlockWindow.lean:26:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (List.take 16 raw ++ List.replicate 16 0#u8).length
+in the target expression
+  (List.take 16 raw).length ≤ 32 * (i + 1)
+
+n : ℕ
+ih :
+  ∀ (raw : List U8),
+    raw.length = 16 * n →
+      ∀ i < n,
+        List.take 16 (List.drop (32 * i) (JFw_Blocks.blocks n raw).flatten) = List.take 16 (List.drop (16 * i) raw)
+raw : List U8
+length : raw.length = 16 * (n + 1)
+enough : 16 ≤ raw.length
+headLength : (List.take 16 raw ++ List.replicate 16 0#u8).length = 32
+i : ℕ
+bound : i + 1 < n + 1
+skip : 32 ≤ 32 * (i + 1)
+⊢ (List.take 16 raw).length ≤ 32 * (i + 1)
+JFr_BlockWindow.lean:28:16: error: Tactic `rew
+...
+not find an occurrence of the pattern
+  (List.take 16 raw ++ List.replicate 16 0#u8).length
+in the target expression
+  (List.take 16 raw).length ≤ 32 * (i + 1)
+
+n : ℕ
+ih :
+  ∀ (raw : List U8),
+    raw.length = 16 * n →
+      ∀ i < n,
+        List.take 16 (List.drop (32 * i) (JFw_Blocks.blocks n raw).flatten) = List.take 16 (List.drop (16 * i) raw)
+raw : List U8
+length : raw.length = 16 * (n + 1)
+enough : 16 ≤ raw.length
+headLength : (List.take 16 raw ++ List.replicate 16 0#u8).length = 32
+i : ℕ
+bound : i + 1 < n + 1
+skip : 32 ≤ 32 * (i + 1)
+⊢ (List.take 16 raw).length ≤ 32 * (i + 1)
+JFr_BlockWindow.lean:28:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.take 16 (List.drop (32 * i) (JFw_Blocks.blocks n (List.drop 16 raw)).flatten)
+in the target expression
+  List.take 16
+      (List.drop (32 * (i + 1) - (List.take 16 raw).length) (List.replicate 16 0#u8) ++
+        List.drop (32 * i) (JFw_Blocks.blocks n (List.drop 16 raw)).flatten) =
+    List.take 16 (List.drop (16 * (i + 1)) raw)
+
+case succ.succ
+n : ℕ
+ih :
+  ∀ (raw : List U8),
+    raw.length = 16 * n →
+      ∀ i < n,
+        List.take 16 (List.drop (32 * i) (JFw_Blocks.blocks n raw).flatten) = List.take 16 (List.drop (16 * i) raw)
+raw : List U8
+length : raw.length = 16 * (n + 1)
+enough : 16 ≤ raw.length
+headLength : (List.take 16 raw ++ List.replicate 16 0#u8).length = 32
+i : ℕ
+bound : i + 1 < n + 1
+skip : 32 ≤ 32 * (i + 1)
+delta : 32 * (i + 1) - 32 = 32 * i
+⊢ List.take 16
+      (List.drop (32 * (i + 1) - (List.take 16 raw).length) (List.replicate 16 0#u8) ++
+        List.drop (32 * i) (JFw_Blocks.blocks n (List.drop 16 raw)).flatten) =
+    List.take 16 (List.drop (16 * (i + 1)) raw)
+'AspisR1.JFr_BlockWindow.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra0640866ccf64eb6b57f258ddddbcbb1.scope; invocation ID: 8b949b4617ed4734bc7ad0cd1b88fd4e

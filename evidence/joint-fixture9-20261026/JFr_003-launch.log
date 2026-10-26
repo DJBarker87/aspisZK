@@ -1,0 +1,50 @@
+{"attempt": "JFr_003", "exit_status": 1, "wall_seconds": 1.2593436620081775, "peak_rss_kib": "3010008", "swaps": "0", "print_axioms": ["'AspisR1.JFr_ArithmeticCell.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_ArithmeticCell.lean:10:75: error: Tactic `rfl` failed: The left-hand side
+  AspisR1SemanticCallExtraction.aspis_core.field.QM31.add (q 73778079#u32 1547969474#u32 1813495781#u32 1947321224#u32)
+    (q 1043776513#u32 1161764315#u32 2088723454#u32 1016233752#u32)
+is not definitionally equal to the right-hand side
+  ok (q 1117554592#u32 562250142#u32 1754735588#u32 816071329#u32)
+
+⊢ AspisR1SemanticCallExtraction.aspis_core.field.QM31.add (q 73778079#u32 1547969474#u32 1813495781#u32 1947321224#u32)
+      (q 1043776513#u32 1161764315#u32 2088723454#u32 1016233752#u32) =
+    ok (q 1117554592#u32 562250142#u32 1754735588#u32 816071329#u32)
+'AspisR1.JFr_ArithmeticCell.add' depends on axioms: [p
+...
+ AspisR1SemanticCallExtraction.aspis_core.field.QM31.add (q 73778079#u32 1547969474#u32 1813495781#u32 1947321224#u32)
+      (q 1043776513#u32 1161764315#u32 2088723454#u32 1016233752#u32) =
+    ok (q 1117554592#u32 562250142#u32 1754735588#u32 816071329#u32)
+'AspisR1.JFr_ArithmeticCell.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body : Std.Array
+    AspisR1SemanticCallExtraction.aspis_core.field.QM31 28#usize →
+  AspisR1SemanticCallExtraction.aspis_core.field.QM31 →
+    Usize →
+      Result
+        (ControlFlow (AspisR1SemanticCallExtraction.aspis_core.field.QM31 × Usize)
+          AspisR1SemanticCallExtraction.aspis_core.field.QM31) :=
+fun polynomial boundary index =>
+  if index < 28#usize then do
+    let q ← polynomial.index_usize index
+    let boundary1 ← boundary.add q
+    let index1 ← index + 1#usize
+    ok (ControlFlow.cont (boundary1, index1))
+  else ok (ControlFlow.done boundary)
+def AspisR1SemanticCallExtraction.r1_semantic.semantic_value_loop.body : Std.Array
+    AspisR1SemanticCallExtraction.aspis_core.field.QM31 28#usize →
+  Std.Array AspisR1SemanticCallExtraction.aspis_core.field.QM31 10#usize →
+    Usize →
+      Usize →
+        AspisR1SemanticCallExtraction.aspis_core.field.QM31 →
+          Result
+            (ControlFlow (Usize × AspisR1SemanticCallExtraction.aspis_core.field.QM31)
+              AspisR1SemanticCallExtraction.aspis_core.field.QM31) :=
+fun polynomial alpha round index value =>
+  if index > 0#usize then do
+    let index1 ← index - 1#usize
+    let q ← alpha.index_usize round
+    let q1 ← value.mul q
+    let q2 ← polynomial.index_usize index1
+    let value1 ← q1.add q2
+    ok (ControlFlow.cont (index1, value1))
+  else ok (ControlFlow.done value)
+
+Running as unit: run-r4a1a877e8ab649b89b320b85175b2b2a.scope; invocation ID: cd3408b33b3f4e43ae2e56ec92904bfb
