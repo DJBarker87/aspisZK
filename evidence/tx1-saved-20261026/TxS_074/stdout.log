@@ -1,0 +1,83 @@
+@AspisR1.TxS_FinishProof.strengthen : ∀ {F C Hash : Type} (base : VTop_Stages.Ops)
+  (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops),
+  AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query →
+    ∀ (geo : AspisR1.Port3_NativeGeometryBody.Ops C),
+      AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+        AspisR1.Port5Q1_Domain.SessionADomain geo →
+          geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+            geo.op7 = Aeneas.Std.Result.ok 1#u32 →
+              geo.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                ∀ (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+                  (pub proof checkpoint : Aeneas.Std.Slice Aeneas.Std.U8)
+                  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+                  (stored publicBytes : AspisV8R19.DuplexFrames.Bytes) {CurrentHash : Type}
+                  (installed : AspisR1CurrentCaller.Ops)
+                  (currentD : AspisR1CurrentCaller.aspis_core.digest.Digest32 CurrentHash) (currentHash : CurrentHash)
+                  (semanticPublic :
+                    AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+                  (pub1 proof1 : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+                  (run :
+                    AspisR1.Tx1Q_Execution.Run installed reserved query geo currentD currentHash semanticPublic pub1
+                      proof1 split saved)
+                  (sourceSize :
+                    (↑(AspisR1.Tx1Q_Carriers.accumulator
+                              (have __src := run.out;
+                              { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                next := __src.next })).weights).length =
+                      64)
+                  (qb : ∀ (j : Fin 22), ↑(↑(AspisR1.Tx1Q_Carriers.prepared run.p).queries)[↑j] < 262144)
+                  (canonicalBody :
+                    AspisR1.CheckpointBytesBlocks.CanonicalFields
+                      (AspisR1.Port3_DecodeCoherence.inventory (AspisR1.Tx1Q_Carriers.prepared run.p)
+                        (AspisR1.Tx1Q_Carriers.accumulator
+                          (have __src := run.out;
+                          { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power, next := __src.next }))
+                        sourceSize qb))
+                  (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+                  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+                  (frame : AspisV8R19.DuplexFrames.Bytes),
+                  parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                    AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint =
+                        AspisR1.MultiproofConeCanonical.bytesOf ↑saved →
+                      (↑proof).length = 57607 →
+                        ∀ (t : AspisR1.Cons_Native.Witness),
+                          AspisR1.Cons_Native.Calls base finish reserved query geo D hash pub proof checkpoint t →
+                            AspisR1.Cons_NativeBuild.Aux reserved query geo D hash pub proof checkpoint t →
+                              AspisR1.CheckpointBytes4SavedFields.BodyMatches t.p2 t.saved2
+                                  (AspisR1.CheckpointBytesBlocks.prepared
+                                    (AspisR1.Port3_DecodeCoherence.inventory (AspisR1.Tx1Q_Carriers.prepared run.p)
+                                      (AspisR1.Tx1Q_Carriers.accumulator
+                                        (have __src := run.out;
+                                        { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                          next := __src.next }))
+                                      sourceSize qb)
+                                    canonicalBody)
+                                  (AspisR1.CheckpointBytes5Output.accumulator
+                                    (AspisR1.Tx1Q_Carriers.accumulator
+                                      (have __src := run.out;
+                                      { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                        next := __src.next }))) →
+                                AspisR1.CheckpointBytes5Output.accumulator t.saved2 =
+                                    AspisR1.CheckpointBytes5Output.accumulator
+                                      (AspisR1.Tx1Q_Carriers.accumulator
+                                        (have __src := run.out;
+                                        { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs, power := __src.power,
+                                          next := __src.next })) →
+                                  AspisR1.MultiproofConeCanonical.bytesOf ↑proof1 =
+                                      AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+                                    (∀ (data : AspisR1.MatchingSupport.Data AspisR1.OraclePortCheckpointAbiC5.E)
+                                        (rho : AspisR1.OraclePortCheckpointAbiC5.K) (q : Fin 22 → Fin 262144),
+                                        AspisR1.Port5Q1_QueryPorts.SessionAPrepare
+                                            (AspisR1.Tx1Q_Carriers.prepared run.p) data q rho →
+                                          AspisR1.AuS1_Finish.Collision H trace parsed q ∨
+                                            ∀ pos < 22,
+                                              AspisR1.OraclePortAllSelectedRecoveryC6.recovered trace frame parsed 2
+                                                  (AspisR1.OraclePortSelectedDraft.index q 2 pos) =
+                                                Option.some (AspisR1.OraclePortPackedChoiceC4.payload parsed 2 pos)) →
+                                      AspisR1.TxS_Finish.Outcome finish t.v2 t.p2
+                                        (have __src := t.returned2;
+                                        { weights := t.back2 t.flushed2, rhs := __src.rhs, power := __src.power,
+                                          next := __src.next })
+                                        proof saved H stored publicBytes run.p parsed trace
+'AspisR1.TxS_FinishProof.strengthen' depends on axioms: [propext, Classical.choice, Quot.sound]

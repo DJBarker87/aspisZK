@@ -1,0 +1,23 @@
+AspisR1.TxS_Reader.saved : ∀ (base : VTop_Stages.Ops) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+  {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (checkpoint proof pub : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (source target : AspisR1Stage2.verifier.Prepared) (old fresh : AspisR1Stage2.verifier.Accumulator)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle (AspisR1.VTop_Checkpoint.digest D) hash H →
+    ∀ (originalProof originalPub : Aeneas.Std.Slice Aeneas.Std.U8) (size : (↑old.weights).length = 64)
+      (qb : ∀ (j : Fin 22), ↑(↑source.queries)[↑j] < 262144)
+      (canonical :
+        AspisR1.CheckpointBytesBlocks.CanonicalFields (AspisR1.Port3_DecodeCoherence.inventory source old size qb)),
+      ↑old.next = 10 →
+        AspisR1.Port3_CheckpointInstall.writer D source old originalProof originalPub hash =
+            Aeneas.Std.Result.ok saved →
+          AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint = AspisR1.MultiproofConeCanonical.bytesOf ↑saved →
+            (AspisR1.Tx2N_Install.inner base reserved query).op18 D checkpoint proof pub
+                  AspisR1Stage2.transport.Variant.S2 hash =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (target, fresh)) →
+              AspisR1.CheckpointBytes4SavedFields.BodyMatches target fresh
+                  (AspisR1.CheckpointBytesBlocks.prepared (AspisR1.Port3_DecodeCoherence.inventory source old size qb)
+                    canonical)
+                  (AspisR1.CheckpointBytes5Output.accumulator old) ∧
+                AspisR1.CheckpointBytes5Output.accumulator fresh = AspisR1.CheckpointBytes5Output.accumulator old
+'AspisR1.TxS_Reader.saved' depends on axioms: [propext, Classical.choice, Quot.sound]

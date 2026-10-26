@@ -1,0 +1,530 @@
+-- Actual delivered AspisR1.TxS_Top.deployed
+theorem deployed {W A F CoreError : Type}
+    (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
+    (copy : Heap (Nat → Record) → Nat → Payload → Outcome (Nat → Record))
+    (std : TrustedStd copy) (allocator : Allocator A)
+    (e1 e2 : Entry) (w1 w2 : W)
+    (admission1 : RuntimeEntrypointAdmission L e1 w1 3)
+    (admission2 : RuntimeEntrypointAdmission L e2 w2 7)
+    (c : DrvC_Installation.Configuration F CoreError)
+    (reservation : NP6_StdModel.Reservation)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (prepareOwner : WAdm_Domain.SessionAPrepare
+      (Tx1Q_Execution.actual (Op5T_Concrete.current (Rc2_Install.configuration c reservation).currentBase) (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry (Rc2_Install.configuration c reservation).boundaries (Rc2_Install.configuration c reservation).std))
+    (primitiveOwner : Port5Q1_QueryPorts.SessionAPrimitives (Rc2_Install.configuration c reservation).query)
+    (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+    (extraction : S2W_DigestExtraction.AeneasExtraction (sdkOps (Tx2I_Install.install (Rc2_Install.configuration c reservation).adapter (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base (Rc2_Install.configuration c reservation).stageBase) (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry)) (Rc2_Install.configuration c reservation).finish) (Uni_Install.current (Rc2_Install.configuration c reservation).currentBase (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry) (Rc2_Install.configuration c reservation).boundaries (Rc2_Install.configuration c reservation).std) native1 native2 hashv)
+    (sha256 H : Bytes → State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)
+    (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)
+    (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8)
+    (slot : S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record))
+    (accepted1 : S2W_D189Wrappers.first native1 copy allocator e1 program data1 state1 =
+      ok (.Ok (saved,post1,final1)))
+    (accepted2 : S2W_D189Wrappers.second native2 allocator e2 program data2 slot state2 =
+      ok (.Ok (post2,final2)))
+    (root : Array U8 32#usize) (length : U32)
+
+    (prior : Program Bytes State Unit)
+    (D : LiteralByteProtocol.Decoder) (P : ByteProver) (Q0 Q1 : Nat)
+    (hqueries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
+    (runtime : Runtime)
+    (raw : Port1_CanonicalJoin.AcceptedVerifierJoin D (DrvC_SourceEntry.source (Rc2_Install.configuration c reservation) hashv))
+    (binding : StoredCarrierBinding D (DrvC_SourceEntry.source (Rc2_Install.configuration c reservation) hashv) (lift P) runtime)
+    (adversary : Program Bytes State GExp_Experiment.FirstInputs)
+    (chooseSecond : GExp_Experiment.FirstInputs → alloc.vec.Vec U8 →
+      Program Bytes State GExp_Experiment.SecondInputs)
+    (prefixBound : ∀ H, (eval H adversary).1.length ≤ Q0)
+    (choiceBound : ∀ input saved H, (eval H (chooseSecond input saved)).1.length ≤ Q1)
+    (project : GExp_Experiment.Outcome → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144)) :
+    DrvC_Implementation.driver (Rc2_Install.configuration c reservation) =
+      DrvC_SourceEntry.source (Rc2_Install.configuration c reservation) hashv ∧
+    DrvC_Installation.sdk (Rc2_Install.configuration c reservation) =
+      SdkD_PairBatches.dictionary (Rc2_Install.configuration c reservation).adapter
+        (Rc2_Install.configuration c reservation).currentBase (Rc2_Install.configuration c reservation).stageBase
+        (Rc2_Install.configuration c reservation).finish (Rc2_Install.configuration c reservation).reserved
+        (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry
+        (Rc2_Install.configuration c reservation).boundaries (Rc2_Install.configuration c reservation).std ∧
+    (let r := Rc2_Install.configuration c reservation
+    let source := GExp_Experiment.program
+      (GExp_FirstPair.base r.currentBase r.reserved r.query r.geometry)
+      (DrvC_Installation.stage r) r.reserved r.boundaries r.std hashv
+      (DrvC_Installation.currentDigest r) (DrvC_Installation.digest r) adversary chooseSecond
+    Claims D (lift P) (Q0+Q1) runtime ∧
+    (failureModel runtime + EndP_AuthMass.mass source project ≤
+      ((Q0+Q1+34 : Nat) : Rat)*PerAttemptEnvelope.B +
+      (6*((Q0+Q1+1161 : Nat) : Rat)^2/(2:Rat)^256 +
+       6*((Q0+Q1+23625 : Nat) : Rat)^2/(2:Rat)^256) +
+      1/(2:Rat)^126 + 1/(2:Rat)^454) ∧
+    (Q0+Q1 = 0 → failureModel runtime + EndP_AuthMass.mass source project ≤ 1/(2:Rat)^100)) ∧
+    (TxS_Result.Outcome L e1 e2 w1 w2 (Rc2_Install.configuration c reservation).adapter (Rc2_Install.configuration c reservation).currentBase (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry (Rc2_Install.configuration c reservation).stageBase (Rc2_Install.configuration c reservation).finish (Rc2_Install.configuration c reservation).boundaries reservation program data1 data2 slot saved post1 post2 H (DrvC_Implementation.driver (Rc2_Install.configuration c reservation)) prior (Rc2_Install.configuration c reservation) hashv native1 native2 copy allocator) ∧
+    (native1 program e1.first data1 = ok (.Ok saved) ∧
+      saved.val.length = 1768 ∧
+      payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768 = bytesOf saved.val ∧
+      post1.ambient = e1.heap.ambient ∧ post1.accounts = e1.heap.accounts ∧
+      post1.counter = e1.heap.counter ∧
+      (∀ cell, cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell)) ∧
+    Rc2_Events.Facts (Rc2_Install.configuration c reservation) hashv native1 native2 copy allocator program H saved ∧
+    Rc2_Protection.Facts (Rc2_Install.configuration c reservation) native1 native2 copy allocator program
+
+-- Factored result
+import TxS_Encoding
+import TxS_RawTen
+import TxS_RawFinish
+import TxS_RawPublic
+import Rc2_Base
+import T2R_Parser
+import T2R_Acceptance
+import T2Nat_NativePair
+import AuS1_Accepted
+import DrvC_SourceHeadline
+import T2R_Ten
+import TxS_Finish
+import Cons_Native
+import TxS_ContSource
+import Cons_Base
+import TxS_CallerSource
+import T2R_PublicDecode
+import T2Nat_ReaderEffects
+import CPhy_Physical
+import T2Nat_FinishResult
+import CPhy_Header
+import CPhy_Ranges
+import CPhy_Accepted
+import WAdm_NativeEndpoint
+import SdkD_Accepted
+import SdkD_Inner
+import SdkD_Uni
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.TxS_Result
+open scoped BigOperators
+attribute [local instance] Classical.propDecidable
+open ClaimsUnrolledSdk
+open AspisR1CurrentCaller InstalledPreparation BorrowedClaimPrepared
+open AspisR1ClaimPreparedBridge AspisR1ClaimPreparedBridge.InstalledMeaning
+open AspisR1CurrentPreparedClaim.Concrete OriginalSerializerInstallation
+open AspisS1ValuesOwnedInstallation AspisS1NativeBufferClaimTrace
+open S2Trust S2LeadInterface S2W_D189Entry S2W_D189Wrappers S2W_TrustedStd
+open S2W_WrapperLaws S2W_ReturnedCheckpoint S2W_EntryWriteHistory S2W_CommittedCheckpoint
+open S2W_D189Consolidation S2W_NativeConsolidation S2W_AuthenticatedInputs S2W_InputSchedule
+open S2W_ExpandedChildren S2W_TraceSplice MultiproofConeCanonical
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+def Outcome {W A F CoreError : Type}
+    (L : Library W (Nat → Record)) (e1 e2 : Entry) (w1 w2 : W)
+    (adapterOps : AdapterRw.Ops) (ops : Ops) (reserved : Bool)
+    (queryOps : Port3_NativeQueryBody.Ops) (geoOps : Port3_NativeGeometryBody.Ops CoreError)
+    (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (reservation : NP6_StdModel.Reservation)
+    (program : S2W_ExtractionBoundary.Program) (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+    (saved : alloc.vec.Vec U8) (post1 post2 : Heap (Nat → Record))
+    (H : Bytes → State)
+    (driver : OraclePortStoredExperimentC4.Input → Program Bytes State Bool)
+    (prior : Program Bytes State Unit)
+    (configuration : DrvC_Installation.Configuration F CoreError)
+    (hashv : S2Z.Oracle.Parts → Result S2Z.Oracle.Digest)
+    (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)
+    (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
+    (allocator : Allocator A) : Prop :=
+    let port := SdkD_Child.port adapterOps (Uni_Install.current ops reserved queryOps geoOps) (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps B (NP6_StdModel.calls reservation)
+    ∃ (f : FirstCut) (s : SecondCut), ∃ outer pre middle fs ss,
+      ∃ run : Tx1Q_Execution.Run (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B (NP6_StdModel.calls reservation))
+        reserved queryOps geoOps (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B (NP6_StdModel.calls reservation)) ()
+        (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved,
+    ∃ tx2 : Cons_Native.Witness,
+      Cons_Native.Calls (AuS1_Install.base stageBase) finishOps reserved queryOps geoOps
+        (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 (sdkOps (Tx2I_Install.install adapterOps (Op5T_Concrete.stage (Tx2N_Execution.control (AuS1_Install.base stageBase) reserved queryOps geoOps)) finishOps) (Uni_Install.current ops reserved queryOps geoOps) B (NP6_StdModel.calls reservation))) () s.pub s.proof s.checkpoint tx2 ∧
+      TxS_Encoding.Facts run H ∧
+      Rc2_Base.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run ∧
+      NP6_Constructors.Contents run.initial run.pending ∧
+      TxS_RawPublic.Facts f.pub f.proof ∧
+      T2R_Parser.Facts f.proof ∧
+      T2R_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
+        (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) ∧
+      TxS_CallerSource.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
+end AspisR1.TxS_Result
+end
+
+-- Changed continuation/encoding/carriers
+import TxS_Encoding
+import TxS_RawTen
+import TxS_RawFinish
+import TxS_RawPublic
+import T2R_Ten
+import TxS_Finish
+import Cons_Native
+import AuS1_Install
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.TxS_ContSource
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+open S2W_NativeConsolidation MultiproofConeCanonical
+
+def Outcome {F C : Type} (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+    (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
+    (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops) (geoOps : Port3_NativeGeometryBody.Ops C)
+    (B : AspisR1PublicPreparation.FinishModel.Boundaries) (claimsStd : ClaimsUnrolledFinish.StdCalls)
+    (prior : Program Bytes State Unit) (H : Bytes → State) (f : FirstCut) (s : SecondCut)
+    (saved : alloc.vec.Vec U8)
+    (run : Tx1Q_Execution.Run (Tx1Q_Execution.actual (Op5T_Concrete.current ops) reserved queryOps geoOps B claimsStd)
+      reserved queryOps geoOps (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd) ()
+      (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+    (tx2 : Cons_Native.Witness) : Prop :=
+        ∀ (queryLeaves : Port5Q1_QueryPorts.SessionAPrimitives queryOps)
+          (geoLeaves : Port5Q1_GeometryCanonical.SessionAPrimitives geoOps)
+          (domain : Port5Q1_Domain.SessionADomain geoOps)
+          (multiply : geoOps.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul)
+          (one : geoOps.op7 = ok 1#u32) (inverse : geoOps.op11 = Port4C_InverseExecution.inverse_owned),
+        ∃ authParsed frame,
+          OraclePortCompactDraft.parse (bytesOf f.proof.val) = some authParsed ∧
+          FS2.Duplex.Read ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
+            (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
+            (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) frame ∧
+          BinRawByteCollisionTargets.pred 3 frame = some (OraclePortBatchDraft.committedRoot authParsed 2) ∧
+          TxS_RawTen.Outcome run H ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
+              (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
+              (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) authParsed ∧
+          TxS_Encoding.Model run H ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
+              (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
+              (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) authParsed ∧
+          TxS_RawFinish.Outcome finishOps tx2.v2 tx2.p2 {tx2.returned2 with weights := tx2.back2 tx2.flushed2}
+            s.proof saved H (bytesOf f.proof.val) (bytesOf f.pub.val) run.p authParsed
+            ((eval H prior).1 ++ AuS1_Recovery.log (Uni_Install.current ops reserved queryOps geoOps) B claimsStd
+              (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
+              (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero))
+end AspisR1.TxS_ContSource
+end
+import TxS_Finish
+import TxS_Carriers
+import Cons_Finish
+import T2R_Reader
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.TxS_RawFinish
+open Aeneas Aeneas.Std Result AspisR1Stage2 AspisR1Stage2.Stage2Finish
+open scoped BigOperators
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical OraclePortCompactDraft OraclePortSelectedDraft OraclePortBatchDraft
+open OraclePortStoredDecisionDraftC4 OraclePortCheckpointResumeC5
+open RecordedBinaryExperimentBin (SourceInputs)
+open RowFinish_Control
+attribute [local instance] Classical.propDecidable
+open AuS1_Finish
+/-- Strong finish continuation indexed by the SAME source TX2 witnesses. -/
+def Outcome {W : Type} (finish : FinishOps W)
+    (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (proof : Slice U8) (savedVec : alloc.vec.Vec U8)
+    (H : Bytes → State) (stored publicBytes : Bytes)
+    (tx1p : AspisR1CurrentCaller.verifier.Prepared) (parsed : Parsed)
+    (trace : List (Bytes × State)) : Prop :=
+    p.variant = .S2 ∧ ∃ (alpha0 alpha1 : E) (alphas : Slice E),
+    Array.index_usize p.alpha 0#usize = ok alpha0 ∧
+    Array.index_usize p.alpha 1#usize = ok alpha1 ∧
+    core.array.Array.index (core.ops.index.IndexSlice
+      (core.slice.index.SliceIndexRangeToUsizeSlice E)) p.alpha { «end» := 2#usize } = ok alphas ∧
+    ∀     (r0 : RoundValues finish v.round0 alpha0 p.claim)
+    (r1 : RoundValues finish v.round1 alpha1 r0.value)
+    (weights : W) (pair dot : E)
+    (hw : finish.newWeights p.variant p.semantic_alpha p.z = ok (.Ok weights))
+    (hp : finish.pair weights alphas v.final_message p.kappa = ok (.Ok pair))
+    (hd : finish.dot v.final_message a.weights.deref = ok (.Ok dot))
+    (semantic : List Bytes) (q : Fin 22 → Fin 262144)
+    (raw : TxS_Carriers.Prefix) (metadata : TxS_Carriers.Metadata),
+    let tr := TxS_Carriers.toTyped raw
+    let i := TxS_Carriers.source metadata (typedRows (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr)
+    ∀     (hi : input (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr = some i) (hq : queries tr = some q)
+    (read : LiteralMatchingData.read (typedRows (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr) = some i.data)
+    (decoded : LiteralQueryRead.decode i.queryBytes = some q)
+    (pairing_S3_S5_S9 : Port4D_Pairing.PairingLaws (Port3_FinishStage.release finish)
+      CheckpointBytes5Output.ofE v p i.data)
+    (matches_S4_S7 : ∀ j, MatchingSupport.match0 i.data (q j))
+    (semantic_S3_S9 : R3SemanticRemainingJoins.EquationEndpoint i.decoded
+      (typedRows (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr) i.data)
+    (dot_S5 : CheckpointBytes5Output.ofE dot = ∑ l : Fin 64, i.data.f l *
+      LiteralOpeningView.eK ((CheckpointBytes5Output.accumulator a).weights l))
+    (canonical_S3_S4_S5_S9 : ∀ x ∈ [r0.lhs,r0.rhs,r1.lhs,r1.rhs,pair,r1.value,dot,a.rhs],
+      CheckpointBytes4ReaderFields.sourceE (CheckpointBytes5Output.ofE x) = x)
+    (prepare_S1 : Port5Q1_QueryPorts.SessionAPrepare (Tx1Q_Carriers.prepared tx1p)
+      i.data q (SelectedChallengeMap.rhoOf i.rho)),
+    Collision H trace parsed q ∨
+    (decide (Port3_NativeFinishBody.verifier.finish_relation (Port4D_Round.native finish) v p a none =
+      ok (.Ok ())) = OraclePortFrozen2.finish (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr i (CheckpointBytes5Output.accumulator a) ∧
+    decide (Port4D_FinishInstall.finish finish v p a none = ok (.Ok ())) =
+      D0TypedChecks.verify (typedRows (⟨bytesOf proof.val,semantic⟩ : Parsed) q tr) i ∧
+    D0TypedChecks.verify (typedRows ⟨bytesOf proof.val,semantic⟩ q tr) i = true)
+
+
+theorem of_typed {W : Type} (finish : FinishOps W)
+    (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (proof : Slice U8) (saved : alloc.vec.Vec U8) (H : Bytes → State)
+    (stored pub : Bytes) (tx1p : AspisR1CurrentCaller.verifier.Prepared) (parsed : Parsed)
+    (trace : List (Bytes × State))
+    (old : TxS_Finish.Outcome finish v p a proof saved H stored pub tx1p parsed trace) :
+    Outcome finish v p a proof saved H stored pub tx1p parsed trace := by
+  obtain ⟨s2,alpha0,alpha1,alphas,ha0,ha1,has,old⟩ := old
+  refine ⟨s2,alpha0,alpha1,alphas,ha0,ha1,has,?_⟩
+  intro r0 r1 weights pair dot hw hp hd semantic q raw metadata
+  dsimp only
+  exact old r0 r1 weights pair dot hw hp hd semantic q _ _
+
+theorem to_typed {W : Type} (finish : FinishOps W)
+    (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (proof : Slice U8) (saved : alloc.vec.Vec U8) (H : Bytes → State)
+    (stored pub : Bytes) (tx1p : AspisR1CurrentCaller.verifier.Prepared) (parsed : Parsed)
+    (trace : List (Bytes × State))
+    (new : Outcome finish v p a proof saved H stored pub tx1p parsed trace) :
+    TxS_Finish.Outcome finish v p a proof saved H stored pub tx1p parsed trace := by
+  obtain ⟨s2,alpha0,alpha1,alphas,ha0,ha1,has,new⟩ := new
+  refine ⟨s2,alpha0,alpha1,alphas,ha0,ha1,has,?_⟩
+  intro r0 r1 weights pair dot hw hp hd semantic q tr i hi hq read decoded pairing matchesLaw equation dotLaw canonical prepare
+  have transported := new r0 r1 weights pair dot hw hp hd semantic q (TxS_Carriers.erase tr) (TxS_Carriers.eraseInput i)
+  dsimp only at transported
+  rw [TxS_Carriers.prefix_erase,TxS_Carriers.source_of_read _ i read] at transported
+  exact transported hi hq read decoded pairing matchesLaw equation dotLaw canonical prepare
+
+#print axioms to_typed
+#print axioms of_typed
+end AspisR1.TxS_RawFinish
+end
+import T2R_Ten
+import TxS_Carriers
+import AuS1_Finish
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.TxS_RawTen
+open Tx1Q_Carriers AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical OraclePortCompactDraft OraclePortSelectedDraft OraclePortStoredDecisionDraftC4
+def Outcome {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed) : Prop :=
+  ∀ (ports : Port5Q1_QueryPorts.SessionAPrimitives query)
+    (q : Fin 22 → Fin 262144) (raw : TxS_Carriers.Prefix) (rho : OraclePortCheckpointAbiC5.K),
+    let tr := TxS_Carriers.toTyped raw
+    let data := TxS_Carriers.data (typedRows parsed q tr)
+
+    ∀ _ : Port5Q1_QueryPorts.SessionAPrepare (prepared run.p) data q rho,
+    LiteralMatchingData.read (typedRows parsed q tr) = some data →
+    Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+    Port5Q1_Domain.SessionADomain geo →
+    geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+    geo.op7 = ok (1#u32) → geo.op11 = Port4C_InverseExecution.inverse_owned →
+    let state := accumulator {run.out with weights := ⟨run.flushed.val,run.flushed.property⟩}
+    AuS1_Finish.Collision H trace parsed q ∨
+    (CheckpointBytes5Output.accumulator state =
+      (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model data rho q)).accumulator ∧
+    Port3_CheckpointInstall.writer (Tx1Q_Install.digest D) (prepared run.p) state proof pub hash = ok saved ∧
+    run.flushed.val.length = 64 ∧ run.out.next.val = 10 )
+
+theorem of_typed {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed)
+    (old : T2R_Ten.Outcome run H trace parsed) : Outcome run H trace parsed := by
+  intro ports q raw rho
+  dsimp only
+  exact old ports q _ _ rho
+
+theorem to_typed {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed)
+    (new : Outcome run H trace parsed) : T2R_Ten.Outcome run H trace parsed := by
+  intro ports q tr d rho prepare read geoLeaves domain multiply one inverse
+  have transported := new ports q (TxS_Carriers.erase tr) rho
+  dsimp only at transported
+  rw [TxS_Carriers.prefix_erase,TxS_Carriers.data_of_read _ d read] at transported
+  exact transported prepare read geoLeaves domain multiply one inverse
+
+#print axioms of_typed
+#print axioms to_typed
+end AspisR1.TxS_RawTen
+end
+import TxS_Carriers
+import T2R_Public
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.TxS_RawPublic
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames
+open MultiproofConeCanonical
+
+def Facts (pub proof : Slice U8) : Prop :=
+  ∃ i : OraclePortStoredExperimentC4.Input,
+    i.statement.pubBytes=bytesOf pub.val ∧ i.stored=bytesOf proof.val ∧
+    i.statement.tag=2 ∧ i.statement.pubBytes.length=1880 ∧
+    75+i.statement.pubBytes.length≤SelectedTranscriptParams.L ∧
+    ∀ raw : TxS_Carriers.Prefix, raw.publicBytes=bytesOf pub.val →
+      75+raw.publicBytes.length≤SelectedTranscriptParams.L
+
+theorem of_typed (pub proof : Slice U8) (old : T2R_Public.Facts pub proof) : Facts pub proof := by
+  obtain ⟨i,pubEq,stored,tag,length,fit,rest⟩ := old
+  refine ⟨i,pubEq,stored,tag,length,fit,?_⟩
+  intro raw same
+  rw [same,← pubEq]
+  exact fit
+
+theorem to_typed (pub proof : Slice U8) (new : Facts pub proof) : T2R_Public.Facts pub proof := by
+  obtain ⟨i,pubEq,stored,tag,length,fit,rest⟩ := new
+  refine ⟨i,pubEq,stored,tag,length,fit,?_⟩
+  intro tr same
+  exact rest (TxS_Carriers.erase tr) same
+
+#print axioms of_typed
+#print axioms to_typed
+end AspisR1.TxS_RawPublic
+end
+import TxS_Writer
+import TxS_RawTen
+set_option autoImplicit false
+noncomputable section
+open Aeneas Aeneas.Std Result
+namespace AspisR1.TxS_Encoding
+open Tx1Q_Carriers AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+open MultiproofConeCanonical OraclePortCompactDraft OraclePortSelectedDraft OraclePortStoredDecisionDraftC4
+def Facts {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) : Prop :=
+  ∃ pm : OraclePortCheckpointAbiC5.Prepared,
+    saved=Tx2N_Reader.writer H (bytesOf proof.val) (bytesOf pub.val) pm
+      (CheckpointBytes5Output.accumulator (accumulator {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩}))
+
+def Model {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed) : Prop :=
+  ∃ pm : OraclePortCheckpointAbiC5.Prepared,
+    saved=Tx2N_Reader.writer H (bytesOf proof.val) (bytesOf pub.val) pm
+      (CheckpointBytes5Output.accumulator (accumulator {run.out with weights:=⟨run.flushed.val,run.flushed.property⟩})) ∧
+  ∀ (ports : Port5Q1_QueryPorts.SessionAPrimitives query)
+    (q : Fin 22 → Fin 262144) (raw : TxS_Carriers.Prefix) (rho : OraclePortCheckpointAbiC5.K),
+    let tr := TxS_Carriers.toTyped raw
+    let data := TxS_Carriers.data (typedRows parsed q tr)
+    Port5Q1_QueryPorts.SessionAPrepare (prepared run.p) data q rho →
+    LiteralMatchingData.read (typedRows parsed q tr)=some data →
+    Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+    Port5Q1_Domain.SessionADomain geo →
+    geo.op9=AspisR1Qm31ArithmeticProbe.field.M31.mul →
+    geo.op7=ok (1#u32) → geo.op11=Port4C_InverseExecution.inverse_owned →
+    AuS1_Finish.Collision H trace parsed q ∨
+      saved=Tx2N_Reader.writer H (bytesOf proof.val) (bytesOf pub.val) pm
+        (OraclePortCheckpointStateC3.write (OraclePortCheckpointResumeC5.model data rho q)).accumulator
+
+theorem model {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+    {query : Port3_NativeQueryBody.Ops} {geo : Port3_NativeGeometryBody.Ops CoreError}
+    {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+    {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+    {pub proof : Slice U8} {split : Usize} {saved : alloc.vec.Vec U8}
+    (run : Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+    (H : Bytes → State) (trace : List (Bytes × State)) (parsed : Parsed)
+    (physical : Facts run H) (ten : TxS_RawTen.Outcome run H trace parsed) :
+    Model run H trace parsed := by
+  obtain ⟨pm,encoded⟩ := physical
+  refine ⟨pm,encoded,?_⟩
+  intro ports q raw rho
+  dsimp only
+  intro prepare read geoLeaves domain multiply one inverse
+  rcases ten ports q raw rho prepare read geoLeaves domain multiply one inverse with collision | checked
+  · exact Or.inl collision
+  · right
+    rw [encoded,checked.1]
+
+#print axioms model
+end AspisR1.TxS_Encoding
+end
+import T2R_Finish
+import Par_Parameters
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.TxS_Carriers
+open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+
+/-- Raw public bytes and rounds contain no address-bound proof. -/
+structure Prefix where
+  publicBytes : Bytes
+  tag : AspisV8R19.DuplexFrames.Byte
+  rounds : List (RawCutTranscriptRun.ErasedMessage × LiteralTranscript.Challenge)
+
+/-- Huge raw public carriers are mapped to the rejecting empty public encoding.
+Every original typed prefix is preserved exactly (prefix_erase). -/
+def toTyped (p : Prefix) : RawCutTranscriptRun.ErasedPrefix :=
+  if h : 75+p.publicBytes.length≤SelectedTranscriptParams.L then
+    ⟨⟨p.publicBytes,h,p.tag⟩,p.rounds⟩
+  else ⟨⟨[],by norm_num [SelectedTranscriptParams.L],p.tag⟩,p.rounds⟩
+
+def erase (p : RawCutTranscriptRun.ErasedPrefix) : Prefix :=
+  ⟨p.statement.pubBytes,p.statement.tag,p.rounds⟩
+
+theorem prefix_erase (p : RawCutTranscriptRun.ErasedPrefix) : toTyped (erase p)=p := by
+  simp only [toTyped,erase,dif_pos p.statement.initFits]
+
+def zeroData : MatchingSupport.Data LiteralTranscript.E :=
+  ⟨0,0,0,0,0,0,0,0,0,0,0,0,0⟩
+
+/-- Matching data is computed by the literal decoder, with a fixed rejected-case fallback. -/
+def data (rs : LiteralAcceptanceTerminal.TranscriptRounds) : MatchingSupport.Data LiteralTranscript.E :=
+  (LiteralMatchingData.read rs).getD zeroData
+
+theorem data_of_read (rs : LiteralAcceptanceTerminal.TranscriptRounds)
+    (d : MatchingSupport.Data LiteralTranscript.E) (read : LiteralMatchingData.read rs=some d) :
+    data rs=d := by rw [data,read];rfl
+
+/-- The input's matching data is no longer supplied by a model carrier. -/
+structure Metadata where
+  decoded : R0P.Public SemanticPublicWire.M31
+  m31 : LiteralTranscript.Message
+  queryBytes : List Nat
+  state31 : State
+  m32 : LiteralTranscript.Message
+  rho : LiteralTranscript.E
+  state32 : State
+
+def source (m : Metadata) (rs : LiteralAcceptanceTerminal.TranscriptRounds) : R1FinalSoundness.SourceInputs :=
+  ⟨m.decoded,data rs,m.m31,m.queryBytes,m.state31,m.m32,m.rho,m.state32⟩
+
+def eraseInput (i : R1FinalSoundness.SourceInputs) : Metadata :=
+  ⟨i.decoded,i.m31,i.queryBytes,i.state31,i.m32,i.rho,i.state32⟩
+
+theorem source_of_read (rs : LiteralAcceptanceTerminal.TranscriptRounds)
+    (i : R1FinalSoundness.SourceInputs) (read : LiteralMatchingData.read rs=some i.data) :
+    source (eraseInput i) rs=i := by
+  rw [source,data_of_read rs i.data read]
+  rfl
+
+/-- L151/L152 at the decoder-produced instance, never a law-bearing input. -/
+theorem functional (m : Metadata) (rs : LiteralAcceptanceTerminal.TranscriptRounds)
+    (x y : Fin 1024 → LiteralTranscript.E) (a : LiteralTranscript.E) :
+    ((∀ j : Fin 6,(source m rs).data.F j (x+y)=(source m rs).data.F j x+(source m rs).data.F j y) ∧
+      (source m rs).data.F0 (x+y)=(source m rs).data.F0 x+(source m rs).data.F0 y) ∧
+    ((∀ j : Fin 6,(source m rs).data.F j (a • x)=a • (source m rs).data.F j x) ∧
+      (source m rs).data.F0 (a • x)=a • (source m rs).data.F0 x) :=
+  ⟨Par_Parameters.input_map_add _ x y,Par_Parameters.input_map_smul _ a x⟩
+
+#print axioms prefix_erase
+#print axioms data_of_read
+#print axioms source_of_read
+#print axioms functional
+end AspisR1.TxS_Carriers
+end

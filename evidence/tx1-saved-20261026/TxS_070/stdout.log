@@ -1,0 +1,18 @@
+AspisR1.TxS_Carriers.functional : ∀ (m : AspisR1.TxS_Carriers.Metadata)
+  (rs : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds) (x y : Fin 1024 → AspisR1.LiteralTranscript.E)
+  (a : AspisR1.LiteralTranscript.E),
+  ((∀ (j : Fin 6),
+        ((AspisR1.TxS_Carriers.source m rs).data.F j) (x + y) =
+          ((AspisR1.TxS_Carriers.source m rs).data.F j) x + ((AspisR1.TxS_Carriers.source m rs).data.F j) y) ∧
+      (AspisR1.TxS_Carriers.source m rs).data.F0 (x + y) =
+        (AspisR1.TxS_Carriers.source m rs).data.F0 x + (AspisR1.TxS_Carriers.source m rs).data.F0 y) ∧
+    (∀ (j : Fin 6),
+        ((AspisR1.TxS_Carriers.source m rs).data.F j) (a • x) = a • ((AspisR1.TxS_Carriers.source m rs).data.F j) x) ∧
+      (AspisR1.TxS_Carriers.source m rs).data.F0 (a • x) = a • (AspisR1.TxS_Carriers.source m rs).data.F0 x
+'AspisR1.TxS_Carriers.functional' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.TxS_Carriers.data : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds →
+  AspisR1.MatchingSupport.Data AspisR1.LiteralTranscript.E :=
+fun rs => (AspisR1.LiteralMatchingData.read rs).getD AspisR1.TxS_Carriers.zeroData
+def AspisR1.TxS_Carriers.zeroData : AspisR1.MatchingSupport.Data AspisR1.LiteralTranscript.E :=
+{ W := 0, V := 0, F := 0, F0 := 0, Y := 0, c0 := 0, gamma := 0, kappa := 0, alpha0 := 0, alpha1 := 0, p0 := 0, p1 := 0,
+  f := 0 }

@@ -1,0 +1,87 @@
+@AspisR1.TxS_Selected.same_run : ∀ {F C : Type} (a : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
+  (stage : VTop_Stages.Ops) (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool)
+  (query : AspisR1.Port3_NativeQueryBody.Ops) (geo : AspisR1.Port3_NativeGeometryBody.Ops C)
+  (B0 : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls)
+  (accounts1 accounts2 : AspisR1.S2W_ExtractionBoundary.Accounts) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (f : AspisR1.S2W_NativeConsolidation.FirstCut) (s : AspisR1.S2W_NativeConsolidation.SecondCut),
+  AspisR1.S2W_NativeConsolidation.SourceCuts
+      (AspisR1.SdkD_PairBatches.dictionary a ops stage finish reserved query geo (AspisR1.F3M_CircleSource.install B0)
+        std)
+      accounts1 accounts2 saved f s →
+    AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public
+          f.statement =
+        Aeneas.Std.Result.ok f.semantic →
+      ∀
+        (run :
+          AspisR1.Tx1Q_Execution.Run
+            (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+              (AspisR1.F3M_CircleSource.install B0) std)
+            reserved query geo
+            (AspisR1.SdkD_PairBatches.current a ops stage finish reserved query geo
+              (AspisR1.F3M_CircleSource.install B0) std)
+            () (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.pub f.proof f.split saved)
+        (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+        AspisR1PublicPreparation.Tx1DigestLog.ByteOracleBackend
+            (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+              (AspisR1.SdkD_PairBatches.current a ops stage finish reserved query geo
+                (AspisR1.F3M_CircleSource.install B0) std))
+            H →
+          ∀ (w : AspisR1.CanonicalCutEnrichedTranscript.Words),
+            AspisR1.WAdm_Domain.SessionAPrepare
+                (AspisR1.Tx1Q_Execution.actual (AspisR1.Op5T_Concrete.current ops) reserved query geo
+                  (AspisR1.F3M_CircleSource.install B0) std) →
+              AspisR1.Port5Q1_QueryPorts.SessionAPrimitives query →
+                AspisR1.Port5Q1_GeometryCanonical.SessionAPrimitives geo →
+                  AspisR1.Port5Q1_Domain.SessionADomain geo →
+                    geo.op9 = AspisR1Qm31ArithmeticProbe.field.M31.mul →
+                      geo.op7 = Aeneas.Std.Result.ok 1#u32 →
+                        geo.op11 = AspisR1.Port4C_InverseExecution.inverse_owned →
+                          AspisR1.CheckpointBytes5Inputs.Oracle
+                              (AspisR1.VTop_Checkpoint.digest
+                                (AspisR1.Tx1Q_Install.digest
+                                  (AspisR1.SdkD_PairBatches.current a ops stage finish reserved query geo
+                                    (AspisR1.F3M_CircleSource.install B0) std)))
+                              () H →
+                            ∀ (authParsed : AspisR1.OraclePortCompactDraft.Parsed),
+                              AspisR1.OraclePortCompactDraft.parse (AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof) =
+                                  Option.some authParsed →
+                                ∀ (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State)),
+                                  AspisR1.TxS_RawTen.Outcome run H trace authParsed →
+                                    ∃ i p q input out v,
+                                      i.physical.bytes = AspisR1.MultiproofConeCanonical.bytesOf ↑f.pub ∧
+                                        i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑f.proof ∧
+                                          AspisR1CurrentCaller.InstalledPreparation.currentPrepared out = run.p ∧
+                                            AspisR1.F3L_SourcePrepared.numeric out =
+                                                AspisR1.OraclePortCheckpointResumeC5.prepared
+                                                  (AspisR1.OraclePortAcceptedContextC6.context p input v) input.data
+                                                  (AspisR1.SelectedChallengeMap.rhoOf input.rho) q ∧
+                                              (AspisR1.AuS1_Finish.Collision H trace p q ∨
+                                                saved =
+                                                    AspisR1.Tx2N_Reader.writer H i.stored i.physical.bytes
+                                                      (AspisR1.OraclePortCheckpointResumeC5.prepared
+                                                        (AspisR1.OraclePortAcceptedContextC6.context p input v)
+                                                        input.data (AspisR1.SelectedChallengeMap.rhoOf input.rho) q)
+                                                      (AspisR1.OraclePortCheckpointStateC3.write
+                                                          (AspisR1.OraclePortCheckpointResumeC5.model input.data
+                                                            (AspisR1.SelectedChallengeMap.rhoOf input.rho)
+                                                            q)).accumulator ∧
+                                                  ∀ (hp hu : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+                                                    AspisR1.CheckpointBytesDecodeC5.sourceBody
+                                                        (AspisR1.F3K_CheckpointPreparedFields.writerPrepared out)
+                                                        (AspisR1.CheckpointBytes3Namespaces.toAccumulator
+                                                          (AspisR1.Tx1Q_Carriers.accumulator
+                                                            (have __src := run.out;
+                                                            { weights := ⟨↑run.flushed, ⋯⟩, rhs := __src.rhs,
+                                                              power := __src.power, next := __src.next })))
+                                                        hp hu =
+                                                      AspisR1.OraclePortCheckpointAbiC5.body
+                                                        (AspisR1.OraclePortCheckpointResumeC5.prepared
+                                                          (AspisR1.OraclePortAcceptedContextC6.context p input v)
+                                                          input.data (AspisR1.SelectedChallengeMap.rhoOf input.rho) q)
+                                                        (AspisR1.OraclePortCheckpointStateC3.write
+                                                            (AspisR1.OraclePortCheckpointResumeC5.model input.data
+                                                              (AspisR1.SelectedChallengeMap.rhoOf input.rho)
+                                                              q)).accumulator
+                                                        (AspisR1.CheckpointBytesDigest.stateOf hp)
+                                                        (AspisR1.CheckpointBytesDigest.stateOf hu))
+'AspisR1.TxS_Selected.same_run' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,12 @@
+@AspisR1.TxS_RawTen.to_typed : ∀ {CoreError H : Type} {installed : AspisR1CurrentCaller.Ops} {reserved : Bool}
+  {query : AspisR1.Port3_NativeQueryBody.Ops} {geo : AspisR1.Port3_NativeGeometryBody.Ops CoreError}
+  {D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H} {hash : H}
+  {semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public}
+  {pub proof : Aeneas.Std.Slice Aeneas.Std.U8} {split : Aeneas.Std.Usize}
+  {saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8}
+  (run : AspisR1.Tx1Q_Execution.Run installed reserved query geo D hash semantic pub proof split saved)
+  (H_1 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (trace : List (AspisV8R19.DuplexFrames.Bytes × AspisV8R19.SourceDuplexStep.State))
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+  AspisR1.TxS_RawTen.Outcome run H_1 trace parsed → AspisR1.T2R_Ten.Outcome run H_1 trace parsed
+'AspisR1.TxS_RawTen.to_typed' depends on axioms: [propext, Classical.choice, Quot.sound]

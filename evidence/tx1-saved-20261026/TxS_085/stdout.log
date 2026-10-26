@@ -1,0 +1,18 @@
+AspisR1.TxS_Nonvacuity.accepted_source_input : ∀
+  (driver :
+    AspisR1.OraclePortStoredExperimentC4.Input →
+      AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Bool)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (pub proof pub2 proof2 checkpoint : Aeneas.Std.Slice Aeneas.Std.U8) (written : AspisV8R19.DuplexFrames.Bytes),
+  AspisR1.T2R_Acceptance.Facts driver H pub proof pub2 proof2 checkpoint written →
+    ∀ (history : AspisR1.S2X.CheckpointVersionBinding written (AspisR1.MultiproofConeCanonical.bytesOf ↑checkpoint)),
+      AspisR1.S2W_AuthenticatedInputs.P2Prime H proof pub proof2 pub2 →
+        ∃ i,
+          i.statement.pubBytes = AspisR1.MultiproofConeCanonical.bytesOf ↑pub ∧
+            i.stored = AspisR1.MultiproofConeCanonical.bytesOf ↑proof ∧
+              i.statement.tag = 2 ∧
+                List.length i.statement.pubBytes = 1880 ∧
+                  (AspisV8R19.MemoizedProgramLaw.eval H (driver i)).2 = Bool.true ∧
+                    ¬∀ (j : AspisR1.OraclePortStoredExperimentC4.Input),
+                        (AspisV8R19.MemoizedProgramLaw.eval H (driver j)).2 = Bool.false
+'AspisR1.TxS_Nonvacuity.accepted_source_input' depends on axioms: [propext, Classical.choice, Quot.sound]

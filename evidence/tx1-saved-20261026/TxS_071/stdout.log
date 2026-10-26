@@ -1,0 +1,9 @@
+AspisR1.TxS_Decoder.functional_origin : ∀ (rs : AspisR1.LiteralAcceptanceTerminal.TranscriptRounds),
+  (∃ common,
+      AspisR1.LiteralOpeningView.read rs = Option.some common ∧
+        (AspisR1.TxS_Carriers.data rs).F =
+            AspisR1.SelectedOpeningFunctionals.functionals (List.map Prod.snd common.semantic) common.circlePoints ∧
+          (AspisR1.TxS_Carriers.data rs).F0 =
+            AspisR1.SelectedOpeningFunctionals.rawBase (List.map Prod.snd common.semantic) common.circlePoints) ∨
+    (AspisR1.TxS_Carriers.data rs).F = 0 ∧ (AspisR1.TxS_Carriers.data rs).F0 = 0
+'AspisR1.TxS_Decoder.functional_origin' depends on axioms: [propext, Classical.choice, Quot.sound]

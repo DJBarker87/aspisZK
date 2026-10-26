@@ -1,0 +1,23 @@
+AspisR1.TxS_Carriers.prefix_erase : ∀ (p : AspisR1.RawCutTranscriptRun.ErasedPrefix),
+  AspisR1.TxS_Carriers.toTyped (AspisR1.TxS_Carriers.erase p) = p
+'AspisR1.TxS_Carriers.prefix_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.TxS_Carriers.Prefix : Type
+number of parameters: 0
+fields:
+  AspisR1.TxS_Carriers.Prefix.publicBytes : AspisV8R19.DuplexFrames.Bytes
+  AspisR1.TxS_Carriers.Prefix.tag : AspisV8R19.DuplexFrames.Byte
+  AspisR1.TxS_Carriers.Prefix.rounds : List
+      (AspisR1.RawCutTranscriptRun.ErasedMessage × AspisR1.LiteralTranscript.Challenge)
+constructor:
+  AspisR1.TxS_Carriers.Prefix.mk (publicBytes : AspisV8R19.DuplexFrames.Bytes) (tag : AspisV8R19.DuplexFrames.Byte)
+    (rounds : List (AspisR1.RawCutTranscriptRun.ErasedMessage × AspisR1.LiteralTranscript.Challenge)) :
+    AspisR1.TxS_Carriers.Prefix
+def AspisR1.TxS_Carriers.toTyped : AspisR1.TxS_Carriers.Prefix → AspisR1.RawCutTranscriptRun.ErasedPrefix :=
+fun p =>
+  if h : 75 + List.length p.publicBytes ≤ AspisR1.SelectedTranscriptParams.L then
+    { statement := { pubBytes := p.publicBytes, initFits := h, tag := p.tag }, rounds := p.rounds }
+  else
+    { statement := { pubBytes := [], initFits := AspisR1.TxS_Carriers.toTyped._proof_1, tag := p.tag },
+      rounds := p.rounds }
+def AspisR1.TxS_Carriers.erase : AspisR1.RawCutTranscriptRun.ErasedPrefix → AspisR1.TxS_Carriers.Prefix :=
+fun p => { publicBytes := p.statement.pubBytes, tag := p.statement.tag, rounds := p.rounds }
