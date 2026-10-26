@@ -51,3 +51,13 @@ Queue51418 remains active, retries183s, up to10. Do not bypass quiet window.
 No Kani4 has launched. Remaining12runs; budget100Lean/3Kani used.
 Proof/report commit19716063e9, proof audit1ab2e984e7. Current REPORT.md has
 full proof-stage log and clear native fixture/callee/deployment gaps.
+
+## FINAL — 17:06 UTC
+
+BOTH BUDGETS EXHAUSTED100Lean/15Kani. No further compile or Kani invocation.
+Old queue51418 and replacement85222 have been stopped; no own host scope active.
+Kani4 timed out.5–15 were failed exact-name filters, NO verification. The
+orchestration error and incorrect crate prefix are fully recorded in REPORT.
+No extra free retry. Native rows remain REDUCED, native fixture inhabitance
+OPEN; endpoint target NOT established. All current Lean sources verified.
+Finish only report/receipt commits and git diff/status checks; final under500words.

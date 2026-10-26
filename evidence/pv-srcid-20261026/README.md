@@ -264,3 +264,19 @@ No stubs, no canonical-word restriction. New intended gates5/6 fullQM31/M31,
 then7–15 nine fixedQM31 cells; all are changed harness inputs after old timeouts.
 Kani nondeterminism API reviewed against installed0.67.0 source and upstream
 https://model-checking.github.io/kani/tutorial-nondeterministic-variables.html .
+
+## FINAL — budgets exhausted (17:06 UTC)
+
+100Lean/15Kani charged. Final Lean audit22689 passes standard axioms and all
+current Lean source hashes match successful attempts. All three native ledger
+rows remain REDUCED. No deployed premise removed. Full native fixture
+non-vacuity/record-callee associations/RunJoin remain OPEN.
+
+Kani4 timed out600.173s/6,690,361,344bytes/swap0. Revised direct-input gates5–15
+all failed before verification due incorrect exact harness-name prefix; the
+queue erroneously continued after its first name-match failure. No proof,
+no counterexample, no measured optimization. All15 invocations count against
+the budget; no additional retry. The correction for a future authorized run
+is to use metadata's pretty_name (root function only, no crate prefix) and
+stop scheduling on ANY nonzero outcome. The direct-input harness is unverified.
+See REPORT.md, STATEMENTS.md, attempts.jsonl and kani-attempts.json.

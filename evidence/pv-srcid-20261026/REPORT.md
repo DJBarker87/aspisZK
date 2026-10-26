@@ -26,7 +26,8 @@ trace-equality premise is hidden in the source definition. Callback native
 association remains open; a standard-axiom proof does not discharge it.
 
 The generic canonical encoding certificate (`ForestCanonical.identification`,
-22632) is constructed. Both canonical release fibres are inhabited and have
+22632) is constructed subject to the explicit U64 nextPairIndex bound; the
+mathematical RspendPlus relation itself does not imply that representation bound. Both canonical release fibres are inhabited and have
 actual extracted bank/column stage success (`Fixtures.fibres/fixture_run`,22662).
 Full native release-fixture non-vacuity, successful native compile_call and
 V047 byte association remain **OPEN**; stage fixtures alone do not meet them.
@@ -47,7 +48,7 @@ and admission obligations. Failed reduction approaches/receipts are retained;
 no unchanged killed job was rerun at a larger cap. Shared own-source/object
 snapshots are hashed before API replacements; required own consumers rebuilt.
 
-Kani gates are still running; final results will be recorded below. Historical
+Kani budget is exhausted15/15. No new coefficient-wrapper gate passed. Historical
 unstubbed row evidence is reused only for byte-identical selected functions,
 as documented in transport-reuse.json. New gates are source validation under
 Kani/CBMC trust, not Lean kernel proofs or release-binary association.
@@ -60,6 +61,9 @@ actual deployed RunJoin/headline path and replay the frozen closure.
 Proof-stage commits (before this report commit):
 
 ```text
+6c5f7e9fba Remove auxiliary input construction from actual carrier copy gates
+74dce6ccf8 Retain full M31 timeout and honor cross-stream verification window
+19716063e9 Record exact native obligations and exhausted Lean verification budget
 1ab2e984e7 Audit native source certificate and prove extracted bit helper behavior
 19d452f549 Prove source identification for successful extracted forest compiler returns
 3aa0be181c Validate both source stage fixture fibres and isolate compiler control flow
@@ -77,3 +81,36 @@ verification compilation. There is no long native Rust elimination, field
 arithmetic, or proof generation running in a debug executable; the heavy step
 is the installed optimized CBMC symbolic checker. Its binary/tool hashes are
 recorded per run. No function replacement or verification stub is enabled.
+
+## Final Kani disposition and stopping reason
+
+All15 Kani CLI invocations are conservatively charged, including failures
+before verification ([kani-attempts.json](kani-attempts.json)).
+
+| Attempts | Outcome | Evidence |
+|---|---|---|
+| 1 | Missing frozen include dependency; compilation failure | kani1-receipt/out/time |
+| 2 | Full QM31 wrapper timeout600.856s, peak6,745,079,808bytes, swap0 | kani2-receipt/out/time |
+| 3 | Full M31 wrapper timeout600.002s, peak6,445,043,712bytes, swap0 | kani3-receipt/out/time |
+| 4 | Fixed QM31 cell0 timeout600.173s, peak6,690,361,344bytes, swap0 | kani4-receipt/out/time |
+| 5–15 | Incorrect exact harness-name filters; exit1 before verification | kani5–15-receipt/out/time |
+
+The final11 invocations were an avoidable orchestration error: the supplied
+`pv_src_transport_kani::` prefix was absent from Kani's `pretty_name`, and the
+queue did not stop on the first unmatched-target failure. They establish no
+claim and are not free retries. No extra invocation was made after exhaustion.
+Installed cached metadata confirms root harness names omit the crate prefix;
+future exact filters must use the actual metadata name. The revised direct
+raw-word input construction is **unverified**. It may reduce the auxiliary
+input-building loop but no speedup, validity gate, or wrapper proof is claimed.
+
+Both budgets are exhausted100Lean/15Kani. No own capped scope remains active.
+Reservation refusals and the temporary cross-stream quiet window were obeyed,
+with fresh allowed receipts before staging/launch. There is no new native
+coefficient-array certificate or checked counterexample. Historical native
+row arithmetic evidence remains separately pinned/reused as described above.
+
+The next concrete verification deliverable also includes correcting the exact
+filter from metadata and running ONE scoped direct-input wrapper gate with
+fail-fast scheduling under a newly authorized budget. This does not replace
+the native callee/fixture/RunJoin obligations listed above.
