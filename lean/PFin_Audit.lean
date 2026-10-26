@@ -1,3 +1,4 @@
+import PFin_AllWorld
 import PFin_Attach
 import PFin_BoundCaller
 import PFin_Caller
@@ -53,3 +54,7 @@ set_option format.width 160
 #print axioms AspisR1.PFin_SelectedPair.accepted
 #print axioms AspisR1.PFin_Ten.consume
 #print axioms AspisR1.PFin_Top.deployed
+
+#print AspisR1.PFin_Final.accepted
+#print AspisR1.PFin_AllWorld.accepted
+#print axioms AspisR1.PFin_AllWorld.accepted
