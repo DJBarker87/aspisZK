@@ -1,0 +1,146 @@
+PoolL_RoleReach.lean:13:59: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PoolL_RoleReach.lean:20:8: warning: Possibly looping simp theorem: `zeroState.eq_1`
+
+Note: Possibly caused by: `List.reduceReplicate`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+PoolL_RoleReach.lean:20:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+PoolL_RoleReach.lean:20:8: warning: declaration uses `sorry`
+PoolL_RoleReach.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PoolL_FreshSource.PoolL_fresh_header
+    { key := ?expected, owner := AdapterRw.r1_pool_adapter.owned.OwnedAccount.owner ?a, is_signer := false,
+      is_writable := true, executable := false, length := AdapterRw.r1_pool_adapter.owned.OwnedAccount.length ?a,
+      bytes := AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes ?a }
+    ?expected
+in the target expression
+  PoolM_NativeCancelGuard.thenResult
+      (PoolL_FreshSource.PoolL_fresh_header
+        { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+          length := a.length, bytes := a.bytes }
+        expected)
+      (if
+          { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+                length := a.length, bytes := a.bytes }.owner =
+            id then
+        match core.result.Result.Err err with
+        | core.result.Result.Ok bytes => PoolL_FreshLengthSource.PoolL_fresh_length bytes size
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+      else
+        if
+            { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+                    length := a.length, bytes := a.bytes }.owner =
+                system ∧
+              true = true then
+          ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966773#u32))) =
+    ok (core.result.Result.Ok ())
+
+a : Account
+id expected system : Key
+different : system ≠ id
+err : AdapterRw.solana_program_error.ProgramError
+size : Usize
+⊢ PoolM_NativeCancelGuard.thenResult
+      (PoolL_FreshSource.PoolL_fresh_header
+        { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+          length := a.length, bytes := a.bytes }
+        expected)
+      (if
+          { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+                length := a.length, bytes := a.bytes }.owner =
+            id then
+        match core.result.Result.Err err with
+        | core.result.Result.Ok bytes => PoolL_FreshLengthSource.PoolL_fresh_length bytes size
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+      else
+        if
+            { key := expected, owner := system, is_signer := false, is_writable := true, executable := false,
+                    length := a.length, bytes := a.bytes }.owner =
+                system ∧
+              true = true then
+          ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966773#u32))) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1095966773 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    _root_.id (Eq.refl true)
+PoolL_RoleReach.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PoolL_MarkerSource.PoolL_marker_header
+    { key := AdapterRw.r1_pool_adapter.owned.OwnedAccount.key ?a,
+      owner := AdapterRw.r1_pool_adapter.owned.OwnedAccount.owner ?a, is_signer := false, is_writable := true,
+      executable := false, length := AdapterRw.r1_pool_adapter.owned.OwnedAccount.length ?a,
+      bytes := AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes ?a }
+in the target expression
+  PoolM_NativeCancelGuard.thenResult
+      (PoolL_MarkerSource.PoolL_marker_header
+        { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+          length := a.length, bytes := a.bytes })
+      (if
+          { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+                length := a.length, bytes := a.bytes }.owner =
+            id then
+        match core.result.Result.Err err with
+        | core.result.Result.Ok bytes => PoolL_MarkerLengthSource.PoolL_marker_length bytes
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+      else
+        if
+            { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+                    length := a.length, bytes := a.bytes }.owner =
+                system ∧
+              true = true then
+          ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966757#u32))) =
+    ok (core.result.Result.Ok ())
+
+a : Account
+id system : Key
+different : system ≠ id
+err : AdapterRw.solana_program_error.ProgramError
+⊢ PoolM_NativeCancelGuard.thenResult
+      (PoolL_MarkerSource.PoolL_marker_header
+        { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+          length := a.length, bytes := a.bytes })
+      (if
+          { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+                length := a.length, bytes := a.bytes }.owner =
+            id then
+        match core.result.Result.Err err with
+        | core.result.Result.Ok bytes => PoolL_MarkerLengthSource.PoolL_marker_length bytes
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+      else
+        if
+            { key := a.key, owner := system, is_signer := false, is_writable := true, executable := false,
+                    length := a.length, bytes := a.bytes }.owner =
+                system ∧
+              true = true then
+          ok (core.result.Result.Ok ())
+        else ok (core.result.Result.Err (AdapterRw.solana_program_error.ProgramError.Custom 1095966757#u32))) =
+    ok (core.result.Result.Ok ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1095966757 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    _root_.id (Eq.refl true)
+'AspisR1.PoolL_RoleReach.canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolL_RoleReach.fresh' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolL_RoleReach.marker' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

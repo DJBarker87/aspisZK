@@ -156,3 +156,30 @@ pub fn PoolL_marker_length(data: &[u8]) -> ProgramResult {
     }
     Ok(())
 }
+
+// Role-control cuts stop before zero scan / decoder. The input data Result
+// is the actual SDK borrow cut; System emptiness remains an explicit input.
+pub fn PoolL_fresh_role(account: &AccountInfo<'_>, program_id: &Pubkey,
+    expected: &Pubkey, system: &Pubkey, empty: bool,
+    data: Result<&[u8], ProgramError>, size: usize) -> ProgramResult {
+    PoolL_fresh_header(account, expected)?;
+    if account.owner == program_id {
+        PoolL_fresh_length(data?, size)
+    } else if account.owner == system && empty {
+        Ok(())
+    } else {
+        Err(PoolV1ProgramError::InvalidFreshAccount.into())
+    }
+}
+pub fn PoolL_marker_role(account: &AccountInfo<'_>, program_id: &Pubkey,
+    system: &Pubkey, empty: bool,
+    data: Result<&[u8], ProgramError>) -> ProgramResult {
+    PoolL_marker_header(account)?;
+    if account.owner == program_id {
+        PoolL_marker_length(data?)
+    } else if account.owner == system && empty {
+        Ok(())
+    } else {
+        Err(PoolV1ProgramError::InvalidNullifierMarkerAccount.into())
+    }
+}
