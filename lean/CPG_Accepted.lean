@@ -8,7 +8,6 @@ open CPG_Projection CPG_Game CPP_BankState Hist_RuntimeEntry MultiproofConeCanon
 
 variable {Tx A F C : Type} (p : Observations Tx A) (t u : Tx)
     (e1 e2 : Entry) (saved : alloc.vec.Vec U8) (actions : List (Action A))
-    (game : DeployedPairExecution p t u e1 e2 saved actions)
     (c : DrvC_Installation.Configuration F C)
     (keyLaw : (DrvC_Installation.sdk c).op36 = Hist_Authority.keyEq)
     (n1 : S2W_ExtractionBoundary.First) (n2 : S2W_ExtractionBoundary.Second)
@@ -17,6 +16,7 @@ variable {Tx A F C : Type} (p : Observations Tx A) (t u : Tx)
     (copy : Heap (Nat → Record) → Nat → Payload → S2W_TrustedStd.Outcome (Nat → Record))
     (std : S2W_TrustedStd.TrustedStd copy) (allocator : Allocator A)
     (id system : S2W_ExtractionBoundary.Program) (notSystem : id ≠ system)
+    (game : DeployedPairExecution p t u e1 e2 saved actions n1 n2 copy allocator id)
     (data1 data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
     (state1 state2 final1 final2 : A) (post1 post2 : Heap (Nat → Record))
 

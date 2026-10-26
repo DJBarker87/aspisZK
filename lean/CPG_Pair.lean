@@ -1,5 +1,6 @@
 import CPG_History
 import CPR_PhysicalResult
+import CPG_Result
 import T2Nat_NativePair
 import AuS1_Accepted
 import DrvC_SourceHeadline
@@ -75,21 +76,21 @@ theorem accepted {W A F CoreError Tx : Type}
     (prior : Program Bytes State Unit)
     (p : CPG_Projection.Observations Tx A) (t u : Tx)
     (actions : List (CPP_BankState.Action A))
-    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions)
+    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program)
     (system : S2W_ExtractionBoundary.Program) (programNotSystem : program ≠ system)
     (keyLaw : (DrvC_Installation.sdk (DrvC_FirstConstants.configuration c)).op36 = Hist_Authority.keyEq)
     (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
       (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system) (CPG_Projection.before p)
-      (CPG_Projection.tentative p native1 native2 copy allocator program)
+      (CPG_Projection.tentative p)
       (CPG_Projection.success p) (CPG_Projection.loaded p)) :
-    CPR_PhysicalResult.Outcome L e1 e2 w1 w2
+    CPG_Result.Outcome L e1 e2 w1 w2
       (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase
       (DrvC_FirstConstants.configuration c).reserved (DrvC_FirstConstants.configuration c).query
       (DrvC_FirstConstants.configuration c).geometry (DrvC_FirstConstants.configuration c).stageBase
       (DrvC_FirstConstants.configuration c).finish (DrvC_FirstConstants.configuration c).boundaries
       (DrvC_FirstConstants.configuration c).std program data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (DrvC_FirstConstants.configuration c)) prior
-      (CPG_Projection.result p native1 native2 copy allocator program t).2 := by
+      (p.physicalEvents t) := by
   obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,caller⟩ :=
     T2R_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
     (DrvC_FirstConstants.configuration c).adapter (DrvC_FirstConstants.configuration c).currentBase
@@ -106,17 +107,24 @@ theorem accepted {W A F CoreError Tx : Type}
     c native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
     program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
     f s cuts writer reader
-  let version := CPG_History.on_cuts p t u e1 e2 saved actions game
-    (DrvC_FirstConstants.configuration c) keyLaw native1 native2 hashv extraction copy std allocator
-    program system programNotSystem data1 data2 slot state1 state2 final1 final2 post1 post2
-    accepted1 accepted2 RuntimePersistence f s cuts
-  have events : version.events = (CPG_Projection.result p native1 native2 copy allocator program t).2 := by
+  let version := CPG_History.on_cuts (game := game)
+    (c := DrvC_FirstConstants.configuration c) (keyLaw := keyLaw) (extraction := extraction)
+    (std := std) (notSystem := programNotSystem) (accepted1 := accepted1) (accepted2 := accepted2)
+    (RuntimePersistence := RuntimePersistence) (f := f) (s := s) (cuts := cuts)
+  have writerKey : version.key = (e1.handles 2).1 := by
+    change ((p.layout t).handles 2).1 = _
+    rw [game.consecutive.2.1]
+    rfl
+  have readerKey : version.key = (e2.handles 6).1 := by
+    change ((p.layout t).handles 2).1 = _
+    rw [game.consecutive.2.2]
+    exact game.checkpoint.1
+  have events : version.events = p.physicalEvents t := by
     change (CPP_BankHistory.run native1 native2 copy allocator program
       (CPR_SourceBank.afterCopy (CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved) actions).2 = _
-    unfold CPG_Projection.result
-    rw [game.recorded.1,game.recorded.2]
+    exact congrArg Prod.snd (CPG_RuntimeTrace.result game.recorded.2.2)
   refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,base,publicFacts,sourceFacts,
-    version,events,S2X.checkpoint_persistence _ _ version,?_,?_⟩
+    version,writerKey,readerKey,events,S2X.checkpoint_persistence _ _ version,?_,?_⟩
   · obtain ⟨i,pub,proof,tag,size,fit,yes⟩ := acceptance
     exact ⟨i,pub,proof,tag,size,fit,fun p2prime => yes version p2prime⟩
   · exact caller version

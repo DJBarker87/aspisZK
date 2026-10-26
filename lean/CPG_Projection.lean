@@ -25,6 +25,8 @@ structure Observations (Tx A : Type) where
   parentReply : Tx → CPP_Atomic.Reply Unit
   copied : Tx → alloc.vec.Vec U8
   actions : Tx → List (Action A)
+  parentTentative : Tx → Bank
+  physicalEvents : Tx → List S2X.AccountEvent
 
 /-- At a transaction boundary a zero-funded account has no loaded bytes.
 Normalize only this data projection, preserving owner and balance. -/
@@ -69,8 +71,10 @@ def result (t : Tx) : Bank × List S2X.AccountEvent :=
     (CPR_SourceBank.afterCopy (cached (p.bank t)) ((p.layout t).handles 2).1 (p.copied t))
     (p.actions t)
 
+/-- Independent observed parent-final image. Source correspondence must be
+PROVED from the recorded runtime action trace; it is not part of the law. -/
 def tentative (t : Tx) (key : Nat) : CPR_DataPersistence.Image :=
-  CPR_DataPersistence.snapshot (result p n1 n2 copy allocator id t).1 key
+  CPR_DataPersistence.snapshot (p.parentTentative t) key
 
 theorem dead (t : Tx) (key : Nat) (zero : (p.bank t).lamports key = 0) :
     ((entry p t).buffers key).val = [] := by

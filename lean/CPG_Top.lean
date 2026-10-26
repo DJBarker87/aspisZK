@@ -88,11 +88,11 @@ theorem deployed {W A F CoreError Tx : Type}
     (prior : Program Bytes State Unit)
     (p : CPG_Projection.Observations Tx A) (t u : Tx)
     (actions : List (CPP_BankState.Action A))
-    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions)
+    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program)
     (programNotSystem : program ≠ Hist_Nonvacuity.key 0#u8)
     (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
       (CPG_Projection.adjacent p) (CPG_Projection.ordinary p (Hist_Nonvacuity.key 0#u8)) (CPG_Projection.before p)
-      (CPG_Projection.tentative p native1 native2 copy allocator program)
+      (CPG_Projection.tentative p)
       (CPG_Projection.success p) (CPG_Projection.loaded p))
     (D : LiteralByteProtocol.Decoder) (P : F3T_ByteCarrier.ByteProver) (Q0 Q1 : Nat)
     (queries : ∀ H : Bytes → State, (eval H P).1.length ≤ Q0+Q1)
@@ -110,14 +110,19 @@ theorem deployed {W A F CoreError Tx : Type}
     (choiceBound : ∀ input saved post final H, (eval H (chooseSecond input saved post final)).1.length ≤ Q1)
     (project : GExq_AccountExperiment.Outcome A → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
     (select : GExq_AccountExperiment.Outcome A → R9PoolRuntimeBinding.Inputs × R9PoolRuntimeBinding.Inputs) :
-    (CPR_PhysicalResult.Outcome L e1 e2 w1 w2
+    DrvC_Implementation.driver (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) = DrvC_SourceEntry.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv ∧
+    DrvC_Installation.sdk (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) =
+      SdkD_PairBatches.dictionary (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).adapter (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).currentBase (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).stageBase
+        (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).finish (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).reserved (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).query (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).geometry
+        (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).boundaries (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).std ∧
+    (CPG_Result.Outcome L e1 e2 w1 w2
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).adapter (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).currentBase
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).reserved (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).query
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).geometry (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).stageBase
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).finish (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).boundaries
       (DrvC_FirstConstants.configuration (CPP_Install.configuration c)).std program data1 data2 slot saved post1 post2 H
       (DrvC_Implementation.driver (DrvC_FirstConstants.configuration (CPP_Install.configuration c))) prior
-      (CPG_Projection.result p native1 native2 copy allocator program t).2) ∧
+      (p.physicalEvents t)) ∧
     ((∀ H : Bytes → State,(eval H (annotatedWith D (F3T_Installed.source (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) hashv)
         (F3T_Canon.canon (lift (DrvC_FirstConstants.configuration (CPP_Install.configuration c)) P)))).2.2=true →
       mean (fun coins : Coins=>((ActualCostedExtractorM10.extractor.eval
@@ -136,7 +141,9 @@ theorem deployed {W A F CoreError Tx : Type}
       Q0+Q1 = 0 → F3T_RuntimeBound.failureModel runtime +
         F3T_AccountCharge.mass (CPG_Account.source r hashv copy allocator program adversary chooseSecond)
           project select (Q0+Q1) < 1/(2:Rat)^100) := by
-  refine ⟨?_,?_,?_,?_⟩
+  refine ⟨DrvC_SourceEntry.same_program (CPP_Install.configuration c) hashv,
+    DrvC_Installation.aus1_dictionary (DrvC_FirstConstants.configuration (CPP_Install.configuration c)),
+    ?_,?_,?_,?_⟩
   · exact CPG_Pair.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
       (CPP_Install.configuration c) native1 native2 prepareOwner primitiveOwner hashv extraction
       sha256 H p1 syscall program data1 data2 slot state1 state2 final1 final2 saved post1 post2

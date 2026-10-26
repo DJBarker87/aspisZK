@@ -1,4 +1,6 @@
 import CPG_Top
+import CPG_Forget
+import CPG_Nonrejecting
 import CPG_CPS
 import CPG_Nonvacuity
 import CPP_Endpoint
@@ -16,8 +18,11 @@ set_option pp.fullNames true
 #print AspisR1.CPG_Projection.loaded
 #print AspisR1.CPG_Projection.ordinary
 #print AspisR1.CPG_Projection.tentative
+#print AspisR1.CPG_RuntimeTrace.Step
+#print AspisR1.CPG_RuntimeTrace.Executes
 #print AspisR1.CPR_DataPersistence.TwoTransactionLaw
 #print AspisR1.CPR_PhysicalResult.Outcome
+#print AspisR1.CPG_Result.Outcome
 #print AspisR1.CPP_Acceptance.Facts
 #print AspisR1.CPP_CallerSource.Outcome
 #check @AspisR1.CPP_Endpoint.deployed
@@ -28,6 +33,7 @@ set_option pp.fullNames true
 #print axioms AspisR1.CPG_Accepted.writer_ordinary
 #print axioms AspisR1.CPG_Accepted.reader_positive
 #print axioms AspisR1.CPG_History.tentative_view
+#print axioms AspisR1.CPG_History.physical_result
 #print axioms AspisR1.CPG_History.entry2_view
 #print axioms AspisR1.CPG_History.on_cuts
 #print axioms AspisR1.CPG_Pair.accepted
@@ -38,3 +44,13 @@ set_option pp.fullNames true
 #print axioms AspisR1.CPG_Account.zero
 #print axioms AspisR1.CPG_Top.deployed
 #print axioms AspisR1.CPG_CPS.correlated
+
+#print axioms AspisR1.CPG_RuntimeTrace.step_effect
+#print axioms AspisR1.CPG_RuntimeTrace.result
+#print axioms AspisR1.CPG_RuntimeTrace.step_exists
+#print axioms AspisR1.CPG_RuntimeTrace.executes
+
+#check @AspisR1.CPG_Forget.physical
+#check @AspisR1.CPG_Nonrejecting.nonrejecting
+#print axioms AspisR1.CPG_Forget.physical
+#print axioms AspisR1.CPG_Nonrejecting.nonrejecting

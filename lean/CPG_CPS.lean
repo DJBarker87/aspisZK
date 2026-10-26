@@ -93,12 +93,12 @@ theorem correlated {W A F CoreError Tx : Type}
     (project : GExp_Experiment.Outcome → OraclePortCompactDraft.Parsed × (Fin 22 → Fin 262144))
     (p : CPG_Projection.Observations Tx A) (t u : Tx)
     (actions : List (CPP_BankState.Action A))
-    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions)
+    (game : CPG_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator program)
     (system : S2W_ExtractionBoundary.Program) (programNotSystem : program ≠ system)
     (keyLaw : (DrvC_Installation.sdk (DrvC_FirstConstants.configuration c)).op36 = Hist_Authority.keyEq)
     (RuntimePersistence : CPR_DataPersistence.TwoTransactionLaw
       (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system) (CPG_Projection.before p)
-      (CPG_Projection.tentative p native1 native2 copy allocator program)
+      (CPG_Projection.tentative p)
       (CPG_Projection.success p) (CPG_Projection.loaded p)) :
     DrvC_Implementation.driver (DrvC_FirstConstants.configuration c) =
       DrvC_SourceEntry.source (DrvC_FirstConstants.configuration c) hashv ∧
@@ -132,13 +132,13 @@ theorem correlated {W A F CoreError Tx : Type}
     root length prior D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound choiceBound project
     keyLaw (CPG_Projection.cached (p.bank t)) (p.layout t) game.consecutive.2.1 actions positive
     (CPG_Projection.adjacent p) (CPG_Projection.ordinary p system) (CPG_Projection.before p)
-    (CPG_Projection.tentative p native1 native2 copy allocator program)
+    (CPG_Projection.tentative p)
     (CPG_Projection.success p) (CPG_Projection.loaded p) RuntimePersistence t u ((p.layout t).handles 2).1
     (CPG_Game.next game) eligible
-    (CPG_History.tentative_view p t u e1 e2 saved actions game native1 native2 copy allocator program)
+    (CPG_History.tentative_view (game := game))
     game.parent
-    (CPG_History.entry2_view p t u e1 e2 saved actions game
-      (DrvC_FirstConstants.configuration c) native1 native2 hashv extraction allocator program data2 slot state2 final2 post2 accepted2)
+    (CPG_History.entry2_view (game := game) (c := DrvC_FirstConstants.configuration c)
+      (extraction := extraction) (accepted2 := accepted2))
 
 #print axioms correlated
 end AspisR1.CPG_CPS

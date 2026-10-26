@@ -24,17 +24,28 @@ def canonical : Observations Bool A where
   parentReply := fun _ => .ok (.Ok ())
   copied := fun _ => saved
   actions := fun _ => actions
+  parentTentative := fun t =>
+    let bank := if t then (CPP_BankHistory.run n1 n2 copy allocator id
+      (CPR_SourceBank.afterCopy (cached initial) 0 saved) actions).1 else initial
+    (CPP_BankHistory.run n1 n2 copy allocator id
+      (CPR_SourceBank.afterCopy (cached bank) 0 saved) actions).1
+  physicalEvents := fun t =>
+    let bank := if t then (CPP_BankHistory.run n1 n2 copy allocator id
+      (CPR_SourceBank.afterCopy (cached initial) 0 saved) actions).1 else initial
+    (CPP_BankHistory.run n1 n2 copy allocator id
+      (CPR_SourceBank.afterCopy (cached bank) 0 saved) actions).2
 
 theorem game :
     let p := canonical n1 n2 copy allocator id initial record saved actions
-    DeployedPairExecution p false true (entry p false) (entry p true) saved actions := by
-  refine ⟨⟨⟨rfl,rfl⟩,rfl,rfl⟩,⟨rfl,rfl,?_⟩,rfl,⟨rfl,rfl⟩⟩
-  exact List.not_mem_nil
+    DeployedPairExecution p false true (entry p false) (entry p true) saved actions n1 n2 copy allocator id := by
+  refine ⟨⟨⟨rfl,rfl⟩,rfl,rfl⟩,⟨rfl,rfl,List.not_mem_nil⟩,rfl,⟨rfl,rfl,?_⟩⟩
+  exact CPG_RuntimeTrace.executes n1 n2 copy allocator id
+    (CPR_SourceBank.afterCopy (cached initial) 0 saved) actions
 
 theorem RuntimePersistence (system : S2W_ExtractionBoundary.Program) :
     let p := canonical n1 n2 copy allocator id initial record saved actions
     CPR_DataPersistence.TwoTransactionLaw (adjacent p) (ordinary p system) (before p)
-      (tentative p n1 n2 copy allocator id) (success p) (loaded p) := by
+      (tentative p) (success p) (loaded p) := by
   dsimp only
   intro t u linked key eligible
   have ht : t = false := linked.1.1
