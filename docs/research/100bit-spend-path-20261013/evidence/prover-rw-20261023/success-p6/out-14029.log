@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:36:14: error: Tactic `rfl` failed: The left-hand side
+  do
+    let cf ←
+      let (_, index_mut_back) := (old, back)
+        do
+        let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+        ok (cont (index_mut_back p, p1, i.wrapping_add 1#usize))
+    match cf with
+      | cont next =>
+        loop
+          (fun x_1 =>
+            if x_1.2.2 < N then do
+              let (_, index_mut_back) ← x_1.1.index_mut_usize x_1.2.2
+              if x_1.2.2.wrapping_add 1#usize = N then ok (done (index_mut_back x_1.2.1, some (index_mut_back x_1.2.1)))
+                else do
+                  let p1 ← x_1.2.1.mul x
+                  ok (cont (index_mut_back x_1.2.1, p1, x_1.2.2.wrapping_add 1#usize))
+            else ok (done (x_1.1, none)))
+          next
+      | done out => ok out
+is not definitionally equal to the right-hand side
+  let (_, back) := (old, back)
+  do
+  let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+  loop
+      (fun x_1 =>
+        if x_1.2.2 < N then do
+          let (_, index_mut_back) ← x_1.1.index_mut_usize x_1.2.2
+          if x_1.2.2.wrapping_add 1#usize = N then ok (done (index_mut_back x_1.2.1, some (index_mut_back x_1.2.1)))
+            else do
+              let p1 ← x_1.2.1.mul x
+              ok (cont (index_mut_back x_1.2.1, p1, x_1.2.2.wrapping_add 1#usize))
+        else ok (done (x_1.1, none)))
+      (back p, p1, i.wrapping_add 1#usize)
+
+case pos.isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Usize
+x : W
+out : Std.Array W N
+p : W
+i : Usize
+h : i < N
+old : aspis_core.field.wide_exact.WideExact
+back : aspis_core.field.wide_exact.WideExact → Std.Array aspis_core.field.wide_exact.WideExact N
+ha : out.index_mut_usize i = ok (old, back)
+h✝ : ¬i.wrapping_add 1#usize = N
+⊢ (do
+      let cf ←
+        let (_, index_mut_back) := (old, back)
+          do
+          let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+          ok (cont (index_mut_back p, p1, i.wrapping_add 1#usize))
+      match cf with
+        | cont next =>
+          loop
+            (fun x_1 =>
+              if x_1.2.2 < N then do
+                let (_, index_mut_back) ← x_1.1.index_mut_usize x_1.2.2
+                if x_1.2.2.wrapping_add 1#usize = N then
+                    ok (done (index_mut_back x_1.2.1, some (index_mut_back x_1.2.1)))
+                  else do
+                    let p1 ← x_1.2.1.mul x
+                    ok (cont (index_mut_back x_1.2.1, p1, x_1.2.2.wrapping_add 1#usize))
+              else ok (done (x_1.1, none)))
+            next
+        | done out => ok out) =
+    let (_, back) := (old, back)
+    do
+    let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+    loop
+        (fun x_1 =>
+          if x_1.2.2 < N then do
+            let (_, index_mut_back) ← x_1.1.index_mut_usize x_1.2.2
+            if x_1.2.2.wrapping_add 1#usize = N then ok (done (index_mut_back x_1.2.1, some (index_mut_back x_1.2.1)))
+              else do
+                let p1 ← x_1.2.1.mul x
+                ok (cont (index_mut_back x_1.2.1, p1, x_1.2.2.wrapping_add 1#usize))
+          else ok (done (x_1.1, none)))
+        (back p, p1, i.wrapping_add 1#usize)
+'R1Z.ProverRwP6PowersControl.source_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP6PowersControl.dispatch_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:9:14: error: don't know how to synthesize implicit argument `N`
+  @ProverRwP6PowersSource.weights.powers_loop inst✝¹ inst✝ ?m.7
+context:
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+⊢ Usize
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:9:7: error(lean.inferDefTypeFailed): Failed to infer type of definition `Src`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:25:4: error(lean.unknownIdentifier): Unknown identifier `Src`
+
+Note: It is not possible to treat `Src` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:25:30: error(lean.unknownIdentifier): Unknown identifier `Src`
+
+Note: It is not possible to treat `Src` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:26:9: error(lean.unknownIdentifier): Unknown identifier `Src`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/ProverRwP6PowersControl.lean:46:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+N : Usize
+x : W
+out : Std.Array W N
+p : W
+i : Usize
+left right : Std.Array W N → W → Usize → Result (Ret N)
+same : ∀ (a : Std.Array W N) (b : W), left a b (i.wrapping_add 1#usize) = right a b (i.wrapping_add 1#usize)
+h✝ : i < N
+a : W × (W → Std.Array W N)
+ha : out.index_mut_usize i = ok a
+⊢ (let (_, back) := a
+    have i1 := i.wrapping_add 1#usize;
+    if i1 = N then
+      have out1 := back p;
+      ok (out1, some out1)
+    else do
+      let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+      left (back p) p1 i1) =
+    let (_, back) := a
+    have i1 := i.wrapping_add 1#usize;
+    if i1 = N then
+      have out1 := back p;
+      ok (out1, some out1)
+    else do
+      let p1 ← aspis_core.field.wide_exact.WideExact.mul p x
+      right (back p) p1 i1
+'R1Z.ProverRwP6PowersControl.source_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.ProverRwP6PowersControl.dispatch_congr' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

@@ -157,3 +157,50 @@ Three supplied candidate source/P6 entries225,51,120;36 remain. Full native
 representation/compiler/feature/artifact association, effects, security-model
 body equation, PrefixContract/BodyContract,E1/E2 and real RunJoin remain open.
 Root/headline premises removed0; target not established. No old proof changed.
+
+## Current powers254 source, finite control and installation
+
+`PowersSource` retains current weights.rs7–18, including the terminal write
+and early return before an unnecessary multiplication. Extraction001 lacked
+the Option language item required by the pinned backend; extraction002 adds
+that explicit type root and succeeds without any backend change. Source14023
+fails on Full's absent direct ONE name;14024 binds it to the existing selected
+CodeField.ONE entry. Source constants/multiplication remain explicit primitive
+bindings; no native field/ABI/compiler adequacy is inferred.
+
+`PowersControl` and `PowersFinite` prove finite control for every Usize capacity,
+arbitrary arrays/primitive failures/divergence, and i.val+fuel=N.val. The new
+congruence theorem proves dependence on exactly ZERO,ONE,mul. `PowersInstall`
+installs254 and proves invariance to the old254 callback. Both installation
+proof inputs pass:14043 takes91.81s; the explicit theorem application14045
+also takes92.71s,4,347,280KiB,zero swap. A requested TERM for14043 found no
+process because it had just completed; its exit is0, not a stopped attempt.
+No unchanged retry or limit change. All intermediate elaboration failures
+are retained and rejected; none establishes a false-statement claim.
+
+`BaseTotal`,`ComplexTotal`,`QuarticTotal`,`WideTotal` compose symbolic retained
+release arithmetic totality without canonicality/input-success assumptions.
+The first complex proof times out in elaborator unification at14028; its
+successor names each scalar predecessor rather than exploring alternatives.
+`PowersRunTotal`,`PowersSelectedTotal`,`PowersTotal.total` remove the primitive
+success and loop-termination premises for the installed owner. `BodyStore`
+consumes it in the complete actual caller and retains reservation writeback.
+Full proof/audit model equality remains open. Every accepted top theorem has
+standard axioms, no swaps/OOM/cap increase. No existing pre-session module
+or object was modified.
+
+Continuation45/65 Lean used through14049;7/7 Kani used. Native runs: flat/pole1
+and boundary28 pass; three compression invocations timeout (one-element,
+variable-length release, fixed-one release), scalar compression fails an extra
+raw-input overflow assertion, and the final pole1024/copy_sum1024 scope times
+out without a completed harness result. These are not closure evidence.
+Release comparisons explicitly suppress Kani's extra overflow assertions to
+match overflow-checks=false, retain memory/unwinding checks and use no stubs.
+The uninstalled compression/pole/copy references remain pending.
+
+Four source/P6 candidate entries supplied225,51,120,254;35 of39 remain. This
+is not four complete native adequacy certificates: serializer Kani covers
+WideExact::new values, boundary Kani covers all raw28-coefficient arrays,
+transition is payload-independent, powers is actual extracted source under
+retained primitives. Native representations/features/effects/artifacts and
+conjunct1 are not established. Root/headline premises removed0.
