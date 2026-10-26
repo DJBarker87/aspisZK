@@ -1,0 +1,45 @@
+{
+  "attempt": "PoolN_KANI032",
+  "kind": "kani",
+  "source_revision": "670e4822526975c345f8122b3cd970f7f1133973",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolN_kani_target",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,no-entrypoint",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "60s",
+    "--harness",
+    "PoolN_zero_owned_1768",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolN_processor_harness.rs",
+    "PoolN_forest_harness.rs",
+    "PoolN_misc_harness.rs",
+    "PoolN_source-pins.json"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "assert_eq!(require_program_owned_zeroed(&account,&id,768,&Rent::default()),Err(ProgramError::IncorrectProgramId));"
+  },
+  "expected_time": "Optimized native guard/handler verification, no intended arithmetic/CPI. PoolN_zero_owned_1768"
+}
