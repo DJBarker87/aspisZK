@@ -1,0 +1,26 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_CurrentSquare.lean:9:70: error: unsolved goals
+a : C
+⊢ (do
+      let m ←
+        AspisR1ProducerRelease47.field.M31.reduce_u64
+            (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+              (((core.convert.num.FromU64U32.from a.a).wrapping_add
+                    (core.convert.num.FromU64U32.from ProverRwP7CurrentFieldSource.aspis_core.field.P)).wrapping_sub
+                (core.convert.num.FromU64U32.from a.b)))
+      let m1 ← AspisR1ProducerRelease47.field.M31.mul a.a a.b
+      let m2 ← AspisR1ProducerRelease47.field.M31.double m1
+      ok { a := m, b := m2 }) =
+    do
+    let m ←
+      AspisR1ProducerRelease47.field.reduce_u64
+          (((core.convert.num.FromU64U32.from a.a).wrapping_add (core.convert.num.FromU64U32.from a.b)).wrapping_mul
+            (((core.convert.num.FromU64U32.from a.a).wrapping_add
+                  (core.convert.num.FromU64U32.from 2147483647#u32)).wrapping_sub
+              (core.convert.num.FromU64U32.from a.b)))
+    let m1 ← ProverRwP7FibreSource.aspis_core.field.M31.mul a.a a.b
+    let m2 ← ProverRwP7FibreSource.aspis_core.field.M31.double m1
+    ok { a := m, b := m2 }
+'R1Z.PV_CurrentSquare.complex' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_CurrentSquare.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

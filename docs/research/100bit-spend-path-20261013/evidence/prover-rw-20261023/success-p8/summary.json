@@ -329,9 +329,188 @@
         "0"
       ],
       "axiom_reports": 2
+    },
+    {
+      "attempt": 21325,
+      "module": "R1Z/PV_CurrentScale",
+      "exit": 0,
+      "wall": [
+        "0:02.43"
+      ],
+      "peak_rss_kib": [
+        "4306216"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 21326,
+      "module": "R1Z/PV_CurrentSquare",
+      "exit": 1,
+      "wall": [
+        "0:02.42"
+      ],
+      "peak_rss_kib": [
+        "4284868"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 21327,
+      "module": "R1Z/PV_CurrentSquare",
+      "exit": 1,
+      "wall": [
+        "0:02.84"
+      ],
+      "peak_rss_kib": [
+        "4284296"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 21328,
+      "module": "R1Z/PV_CurrentSquare",
+      "exit": 0,
+      "wall": [
+        "0:03.44"
+      ],
+      "peak_rss_kib": [
+        "4305964"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 21329,
+      "module": "R1Z/PV_CurrentQuarticTotal",
+      "exit": 0,
+      "wall": [
+        "0:03.40"
+      ],
+      "peak_rss_kib": [
+        "4303784"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 4
+    },
+    {
+      "attempt": 21330,
+      "module": "R1Z/PV_ScaleUpdate",
+      "exit": 0,
+      "wall": [
+        "0:01.88"
+      ],
+      "peak_rss_kib": [
+        "2636116"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 1
+    },
+    {
+      "attempt": 21331,
+      "module": "R1Z/PV_CurrentScaleInstall",
+      "exit": 0,
+      "wall": [
+        "0:02.44"
+      ],
+      "peak_rss_kib": [
+        "4308676"
+      ],
+      "swaps": [
+        "0"
+      ],
+      "axiom_reports": 2
+    },
+    {
+      "attempt": 21332,
+      "module": "R1Z/PV_WordZero",
+      "exit": null,
+      "wall": [],
+      "peak_rss_kib": [],
+      "swaps": [],
+      "axiom_reports": 0
     }
   ],
   "native": [
+    {
+      "attempt": "success-p8-compress-components-003",
+      "kind": "Kani",
+      "command": [
+        "timeout",
+        "240",
+        "/home/dombarker/.cargo/bin/cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-rw-20261023/success-p8/proof/Cargo.toml",
+        "--lib",
+        "--harness",
+        "compression_one_wordlevel",
+        "--no-overflow-checks",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "exit": 124,
+      "wall": 240.00410514505347,
+      "peak_rss_kib": 16184,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 201269248,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
+      "attempt": "success-p8-compress-kissat-002",
+      "kind": "Kani",
+      "command": [
+        "timeout",
+        "240",
+        "/home/dombarker/.cargo/bin/cargo",
+        "kani",
+        "--manifest-path",
+        "tools/prover-rw-20261023/success-p8/proof/Cargo.toml",
+        "--lib",
+        "--harness",
+        "compression_one_wordlevel",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "exit": 1,
+      "wall": null,
+      "peak_rss_kib": 533896,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": null,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
     {
       "attempt": "success-p8-compress-wordlevel-001",
       "kind": "Kani",
@@ -430,6 +609,65 @@
       "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
     },
     {
+      "attempt": "success-p8-pole-full-charon-002",
+      "kind": "extraction",
+      "command": [
+        "python3",
+        "tools/prover-rw-20261023/success-p8/extract-pole.py",
+        "all_slots_clear"
+      ],
+      "exit": 0,
+      "wall": 53.80690379097359,
+      "peak_rss_kib": 582384,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 1143218176,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
+      "attempt": "success-p8-pole-leaf-aeneas-001",
+      "kind": "extraction",
+      "command": [
+        "/home/dombarker/project-offloads/v7-tag73-challenge-qm31-source-20260825-work/toolchain/output/aeneas-b59d5188-lean432-extended-static",
+        "-sequential",
+        "-no-progress-bar",
+        "-abort-on-error",
+        "-strict-joins",
+        "-backend",
+        "lean",
+        "-namespace",
+        "PV_PoleLeaf",
+        "-dest",
+        "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/stage3-p8/pole-leaf-generated",
+        "-split-files",
+        "-emit-json",
+        "PV_Pole_keep_clear.llbc"
+      ],
+      "exit": 0,
+      "wall": 0.3054136830032803,
+      "peak_rss_kib": 55792,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 44355584,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
+      "attempt": "success-p8-pole-leaf-charon-001",
+      "kind": "extraction",
+      "command": [
+        "python3",
+        "tools/prover-rw-20261023/success-p8/extract-pole.py",
+        "keep_clear"
+      ],
+      "exit": 0,
+      "wall": 57.64731004496571,
+      "peak_rss_kib": 596736,
+      "swaps": 0,
+      "cgroup_memory_peak_bytes": 1396641792,
+      "source_revision_label": "aeec7331d8+native-entropy-drop-probe",
+      "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
+    },
+    {
       "attempt": "success-p8-poly-control-aeneas-001",
       "kind": "extraction",
       "command": [
@@ -514,9 +752,9 @@
       "scope": "Exact source hashes pin inputs; historical host revision label is not this branch revision"
     }
   ],
-  "lean_compiles": 19,
-  "lean_passes": 16,
-  "kani_runs": 3,
+  "lean_compiles": 26,
+  "lean_passes": 21,
+  "kani_runs": 5,
   "lean_budget": 65,
   "kani_budget": 12,
   "root_premises_removed": 0,

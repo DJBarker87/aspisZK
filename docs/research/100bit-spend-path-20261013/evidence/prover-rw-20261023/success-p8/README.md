@@ -160,9 +160,40 @@ source arithmetic and preserve the complete caller by exact dictionary equality.
 Before: selected op247 remained a callback. After: `PV_TraceValueInstall.selected`
 selects the literal current `trace.value` emitted under optimized-terminal and
 ct-host-prover; `PV_TraceValueBody.caller` consumes it in the complete caller,
-with reservation, failures and divergence preserved. LedgerV254/op247 source
+with reservation, failures and divergence preserved. LedgerV255/op247 source
 subobligation supplied,32→31 successful-body source callbacks remain. Actual
 cfg/artifact association and the complete observable side-channel laws remain
 separate obligations. This no-op source theorem supplies no TLS/observer law.
 V163/V164,V036–V038,V161–V168 remain open; root premises removed0,added0,
 weakened0. Target not yet established. No shipped Rust/proved old module change.
+
+## Current compression primitives and pole leaf preparation
+
+21325 current complex/quartic scale passes;21326/21327 reject reducer-constant
+and bind-normalization joins. Changed21328 proves current complex square equals
+the earlier source square, and totality;21329 proves current quartic square
+is total for every raw input, reusing explicit primitive-source transports.
+21330/21331 prove the generic scale update and exact selector preservation.
+These close primitive-source substeps; V164 shipped compression and V163 whole
+data equality remain open, with no root premise removed or hidden.
+
+Native invocation4 (`compress-kissat-002`) fails on enabled overflow checks and
+memcmp unwind3, which are harness mismatches to release wrapping arithmetic,
+not a shipped-source counterexample. The wrapper then omits its final receipt
+because rustc was absent from the invocation's PATH; raw GNU logs/preflight and
+a marked supplemental receipt retain this, with unavailable cgroup peak null.
+The successor fixes PATH in the invocation, uses --no-overflow-checks matching
+release, replaces array memcmp with four scalar assertions, and times out240s.
+Kani use5/12. No verification claim follows. No infrastructure code was changed.
+
+The actual current ct_pole equality/keep_clear leaves extract and translate
+successfully. Current full iterator extraction also succeeds; its translation
+and the owned-reference bridge are next. Exact source bodies are retained with
+a nominal QM31 alias only. No observer or side-channel transport is implied.
+
+21332 is refused before Lean at12:15:45UTC:56.375GiB reserved, projected63.375GiB,
+55GiB safe limit. No time/Lean result. ID consumed, zero compiles. Next unused
+21333 after at least180s. During the wait, the proposed word lemmas are genuinely
+generalized from U32 to all unsigned scalar widths, including U16 mask words.
+Source/FP markers are not removed or bypassed. Arithmetic stage current actual
+Lean count26/65, Kani5/12; 39Lean/7Kani remain. Source-callback remainder31.
