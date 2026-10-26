@@ -31,15 +31,18 @@ steps=re.findall(r'theorem step.*?#print axioms step\d+\n',text,re.S)
 # non-greedy first match starts exact theorem
 for st in steps:text=text.replace(st,'')
 text+=''.join(steps)
+text=text.replace('=n00 := by rfl','=n00 := by\n  simp only [r1_wire.DOMAIN,Array.make]\n  rfl')
+text=text.replace("=n02 := by rfl","=n02 := by\n  simp [core.num.U32.to_le_bytes,BitVec.toLEBytes,n02] <;> (repeat' constructor) <;> scalar_tac")
 text+='theorem last : rest23=JFp_SeedHash.tail := by\n  simp only [rest23,'+','.join(f'n{i:02}' for i in range(len(segs)-3,len(segs)))+']\n  rfl\n#print axioms last\n'
 text+='theorem regroup : numeric=JFp_SeedHash.raw := by\n  change rest00=JFp_SeedHash.raw\n  rw ['+','.join(f'step{i:02}' for i in range(23))+',last]\n  simp only [JFp_SeedHash.raw,JFp_SeedHash.head,List.flatten_cons,List.flatten_nil,List.append_nil,List.append_assoc]\n#print axioms regroup\n'
 text+='''theorem native :
     (flatten (TranscriptStep.initParts (alloc.vec.Vec.deref JFs_ExactSerialization.encoded) root 1455#u32)).map Fin.val = numeric := by
   simp only [flatten,TranscriptStep.initParts,Array.to_slice,Array.make,List.flatMap_cons,List.flatMap_nil,
-    List.map_append,List.append_nil,alloc.vec.Vec.deref,JFs_ExactSerialization.encoded,
-    JFs_SerializedBytes.bytes,JFs_SerializedBytes.chunks,List.map_cons,List.map_nil,
+    List.map_append,List.append_nil,List.append_assoc,alloc.vec.Vec.deref,JFs_ExactSerialization.encoded,
+    JFs_SerializedBytes.bytes,JFs_SerializedBytes.chunks,id_eq,
     List.map_map,Function.comp_def,decodeByte,
 '''+','.join(f'    cast{i:02}' for i in range(len(segs)))+''',numeric]
+  simp only [n01,n03,n10]
 #print axioms native
 end AspisR1.JFp_InitBytes
 '''

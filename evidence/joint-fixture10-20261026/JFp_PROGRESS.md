@@ -41,3 +41,10 @@ in JFp_RESTORED_CACHE.json), not rebuilt or attributed to this source revision.
 The restored dependency cache is explicitly a focused reuse selection, not a
 coherent fresh frozen-release replay.082 now audits the actual Rc10 root against
 this selection before new native fixture bridges are compiled.
+
+Workflow exception:085 accidentally repeated rejected084 unchanged after a
+Python quoting error. It completed before the attempted TERM (the PID was
+already absent), rejected again, is charged, and gets no validation credit.
+This violated the unchanged-source rule. No timed-out or memory-killed source
+was repeated unchanged. Generation and launch are now separate tool operations.
+083/084/085 diagnostic sorryAx prints remain rejected evidence only.
