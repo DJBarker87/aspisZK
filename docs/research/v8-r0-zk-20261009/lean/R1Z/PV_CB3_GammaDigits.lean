@@ -11,13 +11,13 @@ def finish (base : Nat) (digits : List Nat) (high : Nat) : List Nat :=
 
 theorem finish_length (base : Nat) (digits : List Nat) (high : Nat) :
     (finish base digits high).length = digits.length := by
-  unfold finish
+  dsimp only [finish]
   split <;> simp only [length_preserved]
 
 theorem finish_canonical (base : Nat) (positive : 0 < base)
     (digits : List Nat) (high : Nat) :
     ∀ d, d ∈ finish base digits high → d < base := by
-  unfold finish
+  dsimp only [finish]
   split
   · exact digits_canonical base positive digits (high + 1)
   · exact digits_canonical base positive _ 1
@@ -35,7 +35,7 @@ theorem finish_value (base : Nat) (positive : 0 < base)
   have first_rem := digits_remainder base positive digits (high + 1)
   have first_carry := carry_quotient base positive digits (high + 1)
   have power_pos := Nat.pow_pos positive (n := digits.length)
-  unfold finish
+  dsimp only [finish]
   rw [← first_carry]
   by_cases small : value base digits + high + 1 < base ^ digits.length
   · have hz : (value base digits + (high + 1)) / base ^ digits.length = 0 :=
