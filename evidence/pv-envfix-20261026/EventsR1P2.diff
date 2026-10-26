@@ -1,0 +1,46 @@
+--- rebuilt/R1Z/EventsR1P2.lean
++++ research/R1Z/EventsR1P2.lean
+@@ -1,4 +1,7 @@
+ import R1Z.EventsR1P
++import Mathlib.Data.Fintype.Card
++import Mathlib.Data.Fintype.Option
++import Mathlib.Logic.Equiv.Option
+ 
+ /-! Events and freshness, part 2 (DESIGN-R1-REAL §5): positions, addresses,
+ charging, adversary reads; the update lemmas for every designated-field lens. -/
+@@ -13,14 +16,21 @@
+ variable {K CommitHandle Aux : Type} [Field K] [Fintype K] [DecidableEq K]
+   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
+ 
+-theorem card_NZ : 2 ^ 255 ≤ Fintype.card NZ := by
+-  have h1 : Fintype.card NZ = Fintype.card OracleAnswer - Fintype.card {v : OracleAnswer // v = 0} :=
+-    Fintype.card_subtype_compl (fun v : OracleAnswer => v = 0)
+-  have h2 : Fintype.card {v : OracleAnswer // v = 0} = 1 :=
+-    Fintype.card_eq_one_iff.mpr ⟨⟨0, rfl⟩, fun y => Subtype.ext y.2⟩
+-  rw [h1, h2, card_ans]
++/-- `card_NZ` for any `Fintype NZ` instance (LOG D68.3): counted through
++`Option NZ ≃ OracleAnswer` (`Equiv.optionSubtypeNe 0`) and `card_ans`.  The only
++cross-module instance (the one `card_ans` was elaborated with) enters through
++`Subsingleton (Fintype _)`, so no two instances are compared by reduction. -/
++theorem card_NZ_of (i : Fintype NZ) : 2 ^ 255 ≤ @Fintype.card NZ i := by
++  have hA : ∀ j : Fintype OracleAnswer, @Fintype.card OracleAnswer j = 2 ^ 256 := fun j =>
++    (congrArg (@Fintype.card OracleAnswer) (Subsingleton.elim j _)).trans card_ans
++  have e : Option NZ ≃ OracleAnswer := Equiv.optionSubtypeNe (0 : OracleAnswer)
++  have h2 : Fintype.card NZ + 1 = 2 ^ 256 := by
++    rw [← Fintype.card_option, Fintype.card_congr e]
++    exact hA _
+   have : (2 : ℕ) ^ 255 < 2 ^ 256 := Nat.pow_lt_pow_right (by norm_num) (by norm_num)
+   omega
++
++theorem card_NZ : 2 ^ 255 ≤ Fintype.card NZ := card_NZ_of _
+ 
+ def nzOf (a : OracleAnswer) : NZ := if hz : a ≠ 0 then ⟨a, hz⟩ else Classical.arbitrary NZ
+ 
+@@ -202,6 +212,7 @@
+ 
+ end Ev
+ 
++#print axioms card_NZ_of
+ #print axioms card_NZ
+ #print axioms nzOf_val
+ #print axioms dS_tame
