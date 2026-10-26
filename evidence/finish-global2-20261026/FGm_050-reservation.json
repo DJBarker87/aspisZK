@@ -1,0 +1,54 @@
+{
+  "requested_bytes": 8589934592,
+  "allowed": true,
+  "utc": 1793033279.9884338,
+  "populated_scopes": [
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/pv-srcid-kani3.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 -c import os,pathlib,subprocess,time,json,hashlib,signal job='/home/dombarker/project-offloads/codex-pv-srcid-20261026'; n=3; target='s2_m31_coefficients_cell'; rev='1ab2e984e76bfd86f8b0c003fa69bc8e37953c2b' p=pathlib.Path(job)/('kani'+str(n));p.mkdir(exist_ok=True) repo=pathlib.Path(job)/'repo' cmd=['/home/dombarker/.cargo/bin/cargo','kani','--manifest-path','tools/pv-srcid/transport-kani/Cargo.toml','-j','4','--output-format','terse','--harness',target] env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_TARGET_DIR=job+'/kani-target') t=time.monotonic() with (p/'out.log').open('w') as out:  q=subprocess.Popen(['/usr/bin/time','-v','-o',str(p/'time.log')]+cmd,cwd=repo,env=env,stdout=out,stderr=subprocess.STDOUT,start_new_session=True)  try:rc=q.wait(timeout=600)  except subprocess.TimeoutExpired:   os.killpg(q.pid,signal.SIGTERM)   try:q.wait(timeout=5)   except subprocess.TimeoutExpired:os.killpg(q.pid,signal.SIGKILL);q.wait()   rc=124 cg=pathlib.Path('/sys/fs/cgroup')/pathlib.Path('/proc/self/cgroup').read_text().strip().split('::')[1].lstrip('/') files=['tools/pv-srcid/transport-kani/src/lib.rs','tools/pv-srcid/transport-kani/Cargo.toml','tools/r1-builder-reference/src/lib.rs','crates/aspis-r1-cost-probe/src/transport.rs','crates/aspis-core/src/field.rs','Cargo.toml','Cargo.lock','docs/research/v8-r0-zk-20261009/refine/diffharness/tests/glue_gen.rs','tools/pv-srcid/transport-kani/Cargo.lock'] tools=['/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler','/home/dombarker/.kani/kani-0.67.0/bin/cbmc','/home/dombarker/.kani/kani-0.67.0/bin/kissat'] def sha(path):return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest() r=dict(source_revision=rev,command=cmd,target=target,exit=rc,wall_seconds=time.monotonic()-t,cgroup=str(cg),caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),axioms='N/A: Kani/CBMC validation; no Lean axiom',source_sha256={f:sha(repo/f) for f in files},tool_sha256={f:sha(f) for f in tools}) for f in ['memory.peak','memory.swap.current','memory.swap.peak']:r[f]=(cg/f).read_text().strip() (p/'receipt.json').write_text(json.dumps(r,indent=2)+'\\n') raise SystemExit(rc)",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-srcid-20261026/kani3/time.log /home/dombarker/.cargo/bin/cargo kani --manifest-path tools/pv-srcid/transport-kani/Cargo.toml -j 4 --output-format terse --harness s2_m31_coefficients_cell",
+        "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path tools/pv-srcid/transport-kani/Cargo.toml -j 4 --output-format terse --harness s2_m31_coefficients_cell",
+        "cargo-kani kani --manifest-path tools/pv-srcid/transport-kani/Cargo.toml -j 4 --output-format terse --harness s2_m31_coefficients_cell",
+        "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 1025 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-pv-srcid-20261026/kani-target/kani/x86_64-unknown-linux-gnu/debug/deps/pv_src_transport_kani-4d38543582cb41b9__RNvCsddF9iuyqggi_21pv_src_transport_kani24s2_m31_coefficients_cell.out --verbosity 9 --json-ui"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 6442962944
+    },
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r833c87bd4f12454e8960815c4353ee92.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 S2W_lean_host.py JFu_074.json",
+        "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-sound-int2-20261025/S2W_run_host.py JFu_074.json",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-sound-int2-20261025/JFu_074/time.log timeout 180 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -o JFu_SnapshotValidator.olean JFu_SnapshotValidator.lean",
+        "timeout 180 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -o JFu_SnapshotValidator.olean JFu_SnapshotValidator.lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -o JFu_SnapshotValidator.olean JFu_SnapshotValidator.lean",
+        "lean -j1 -M7000 -DElab.async=false -o JFu_SnapshotValidator.olean JFu_SnapshotValidator.lean"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 162250752
+    },
+    {
+      "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r79a26481b6b34ec1ae2e877004b9334f.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        "/usr/bin/python3 S2W_run_host.py RPz2_240.json",
+        "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-replay-dry-20261026/RPz2_240/time.log timeout 540 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -R RPz_sources -o RPz_objects/PublicSerializerFrontier431.olean RPz_sources/PublicSerializerFrontier431.lean",
+        "timeout 540 /home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -R RPz_sources -o RPz_objects/PublicSerializerFrontier431.olean RPz_sources/PublicSerializerFrontier431.lean",
+        "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake env lean -j1 -M7000 -DElab.async=false -R RPz_sources -o RPz_objects/PublicSerializerFrontier431.olean RPz_sources/PublicSerializerFrontier431.lean",
+        "lean -j1 -M7000 -DElab.async=false -R RPz_sources -o RPz_objects/PublicSerializerFrontier431.olean RPz_sources/PublicSerializerFrontier431.lean"
+      ],
+      "memory_high": "6442450944",
+      "memory_swap_max": "0",
+      "memory_current": 296554496
+    }
+  ],
+  "bounded_reserved_bytes": 25769803776,
+  "all_populated_scopes_bounded": true,
+  "safe_limit_bytes": 59055800320,
+  "print_axioms": "N/A: read-only resource preflight"
+}
