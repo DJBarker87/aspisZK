@@ -10558,3 +10558,21 @@ historical hash over research HEAD, which bears on the remaining 1,007 entries. 
 arbitrary-carrier correspondence first, op223 early for rw20's source_law, then the remaining top-down
 ops). Six slots: cb4, srcid4, runjoin8, join2, rw20, cb5. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D228 (Stream B) 2026-10-26 23:00 UTC: srcid4 exhausted; full audit blocked by 92 missing objects; srcid5 launched
+
+pv-srcid4 (`codex/pv-srcid3-20261026`, head 34995987c0; 37/37 resumed Lean, 8/8 Kani = 2 metadata passes /
+6 verification timeouts, no counterexample; no crates/programs change; no forbidden tokens; the edited
+tools/r1-builder-reference files are reference/harness code and are checked for cfg(kani)-only status by
+srcid5). Accepted on the host after the gate opened: canonical normalisation, the canonical transfer and
+withdrawal record identities, the generalised PackedSelection; focused audit 153 standard-axiom checks.
+The FULL dependency-closure audit is incomplete: the inventory lists 92 imported objects missing from the
+partial rebuild, so the branch stays unmerged (merge gate = full audit with every object present and
+byte-matched to research HEAD). Families: words, publicCorr, admission, row_call REDUCED (unchanged
+interfaces), compile_call OPEN; PV_Src_Premises deployed 5 → 5, reference 3 (D219). The corrected combined
+bridge is an unaccepted draft. One reservation retry started 28 s early; recorded and guarded. Launched
+pv-srcid5 (same branch, IDs 36200-36499, 100 Lean / 6 Kani): compile the 92 missing research-HEAD objects
+into the job's own objects dir, run the full audit, validate the bridge, then compile_call's pure Records
+callees, publicCorr's deployed association and `words` by the variant-decomposed unstubbed mapper. Six
+slots: cb4, runjoin8, join2, rw20, cb5, srcid5. Rows removed outright: 0. Privacy target not yet
+established.
