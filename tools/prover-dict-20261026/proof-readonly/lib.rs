@@ -24,3 +24,8 @@ pub fn digest_finalize(state: sha2::Sha256) -> [u8; 32] {
     use sha2::Digest;
     state.finalize().into()
 }
+#[cfg(kani)]
+pub fn file_flush(file: &mut std::fs::File) -> std::io::Result<()> {
+    use std::io::Write;
+    file.flush()
+}

@@ -21,3 +21,22 @@ fn formatter_direct_sink_error_and_frame() {
     assert!(result.is_err()==fail);
     assert!(sink.before==before);
 }
+
+#[cfg(kani)]
+#[kani::proof]
+fn compiler_fence_valid_order_frame() {
+    use core::sync::atomic::{compiler_fence,Ordering};
+    let choice:u8=kani::any();kani::assume(choice<4);
+    let order=match choice {0=>Ordering::Acquire,1=>Ordering::Release,2=>Ordering::AcqRel,_=>Ordering::SeqCst};
+    let before:[u8;32]=kani::any();let after=before;
+    compiler_fence(order);
+    assert!(before==after);
+}
+
+#[cfg(kani)]
+#[kani::proof]
+#[kani::should_panic]
+#[allow(invalid_atomic_ordering)]
+fn compiler_fence_relaxed_has_panic() {
+    core::sync::atomic::compiler_fence(core::sync::atomic::Ordering::Relaxed);
+}
