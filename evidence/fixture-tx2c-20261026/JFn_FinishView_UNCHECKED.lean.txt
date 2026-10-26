@@ -1,0 +1,36 @@
+import JFn_FinishSlices
+import Port1_Library
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JFn_FinishView
+open Aeneas Aeneas.Std Result VTop_Stages
+
+def empty : Slice U8 := Array.to_slice (Std.Array.empty U8)
+def view (inactive : aspis_core.field.wide_exact.WideExact) : verifier.View where
+  variant := .S2
+  semantic := empty
+  y1 := empty
+  inactive := inactive
+  round0 := JFn_FinishSlices.round0
+  folded_root := none
+  round1 := JFn_FinishSlices.round1
+  final_message := JFn_FinishSlices.message
+  query_bytes := empty
+
+/-- Exact tail factoring on the real proof: the native continuation consumes
+these same physical finish slices after the actual mutable writeback. No
+finish success, query result or returned-buffer equation is a premise. -/
+theorem source (base : Ops) (p : verifier.Prepared) (a : verifier.Accumulator)
+    (b : verifier.BatchedWeights) (inactive : aspis_core.field.wide_exact.WideExact) :
+    Tx2I_Cuts.tail (Port1_Library.install base) JFx_NativeBytes.proof p none inactive
+      7527#usize 7751#usize 7783#usize (a,b)=
+    (do let (old,back) ← lift (alloc.vec.Vec.deref_mut a.weights)
+        let flushed ← base.op9 b old
+        base.op19 (view inactive) p {a with weights:=back flushed} none) := by
+  simp only [Tx2I_Cuts.tail,Port1_Library.install,lift,bind_tc_ok,
+    JFn_FinishSlices.first,JFn_FinishSlices.second,JFn_FinishSlices.finalMessage]
+  rfl
+
+#print axioms source
+end AspisR1.JFn_FinishView
+end
