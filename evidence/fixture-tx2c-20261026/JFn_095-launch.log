@@ -1,0 +1,38 @@
+{"attempt": "JFn_095", "exit_status": 1, "wall_seconds": 2.3273225390003063, "peak_rss_kib": "5305328", "swaps": "0", "print_axioms": ["'AspisR1.JFn_Nonvacuity.line_accumulation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+JFn_Nonvacuity.lean:13:7: error: unexpected token 'partial'; expected identifier
+JFn_Nonvacuity.lean:46:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+JFn_Nonvacuity.lean:46:21: error: unexpected token '#print'; expected 'lemma'
+'AspisR1.JFn_Nonvacuity.line_accumulation' depends on axioms: [propext, Classical.choice, Quot.sound]
+JFn_Nonvacuity.lean:48:6: error: unexpected token 'partial'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+JFn_Nonvacuity.lean:48:14: error: unexpected token '#print'; expected 'lemma'
+theorem AspisR1.JFn_Nonvacuity.line_accumulation : ∀ (seed : Port3_NativeQueryBody.Ops) (i : Fin 12)
+  (inverse : Std.Ar
+...
+JFn_Nonvacuity.lean:13:7: error: unexpected token 'partial'; expected identifier
+JFn_Nonvacuity.lean:46:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+JFn_Nonvacuity.lean:46:21: error: unexpected token '#print'; expected 'lemma'
+'AspisR1.JFn_Nonvacuity.line_accumulation' depends on axioms: [propext, Classical.choice, Quot.sound]
+JFn_Nonvacuity.lean:48:6: error: unexpected token 'partial'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+JFn_Nonvacuity.lean:48:14: error: unexpected token '#print'; expected 'lemma'
+theorem AspisR1.JFn_Nonvacuity.line_accumulation : ∀ (seed : Port3_NativeQueryBody.Ops) (i : Fin 12)
+  (inverse : Std.Array U32 5#usize) (node : U32),
+  ∃ value out after flushed,
+    SAQ_LineQuery.line JFq_Alpha1.scalar (JFn_Values.value i) inverse = ok value ∧
+      Port3_NativeQueryBody.verifier.accumulate_batched_with_node (JFn_ArrayBuilder.ops seed) JFo_Prepared.value
+            JFo_Prepared.accumulator node value JFo_Pending.value =
+          ok (out, after) ∧
+        out.next = 11#usize ∧ Port3_FlushInstall.flush after out.weights.deref = ok flushed ∧ (↑flushed).length = 64 :=
+fun seed i inverse node =>
+  let ⟨value, h✝⟩ := JFn_Lines.source i inverse
+  let ⟨line, canonical⟩ := h✝
+  let ⟨out, h✝¹⟩ := JFn_AccumulationFlush.source seed node value canonical
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨flushed, h✝³⟩ := h✝²
+  let ⟨run, right✝⟩ := h✝³
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨next, right✝²⟩ := right✝¹
+  let ⟨flush, right✝³⟩ := right✝²
+  let ⟨size, right✝⁴⟩ := right✝³
+  Exists.intro value (Exists.intro out (Exists.intro after (Exists.intro flushed ⟨line, ⟨run, ⟨next, ⟨flush, size⟩⟩⟩⟩)))
+
+Running as unit: run-r7770ecc008324dc391ff49264e8e6b00.scope; invocation ID: 84b76d8130d54044a230e82a174dca4a
