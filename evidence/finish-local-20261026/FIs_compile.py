@@ -26,7 +26,7 @@ for retry in range(11):
  print(sshout.stdout+sshout.stderr);sys.exit(r.returncode or 1)
 subprocess.run(['scp','-q',str(R/'lean'/(mod+'.lean')),str(P/(a+'.json')),HOST+':'+B+'/'],check=True)
 r=ssh(f'cd {B} && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py {a}.json',capture_output=True,text=True)
-(P/(a+'-launch.log')).write_text(r.stdout+r.stderr); print(r.stdout+r.stderr)
+(P/(a+'-launch.log')).write_text(r.stdout+r.stderr); print(r.stdout.splitlines()[0] if r.stdout.splitlines() else r.stderr)
 subprocess.run(['scp','-qr',HOST+':'+B+'/'+a,str(P)],check=True)
 subprocess.run(['scp','-q',HOST+':'+B+'/'+a+'-reservation.json',str(P)],check=True)
 (P/(a+'-retries.json')).write_text(json.dumps(retries,indent=2)+'\n')
