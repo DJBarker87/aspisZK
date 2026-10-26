@@ -1,0 +1,71 @@
+FIr_NativeQM.lean:15:4: error(lean.unknownIdentifier): Unknown constant `AspisR1SelectedMaskProbe.field.QM31.sub`
+FIr_NativeQM.lean:16:39: error(lean.unknownIdentifier): Unknown constant `AspisR1SelectedMaskProbe.field.QM31.sub`
+FIr_NativeQM.lean:17:23: error: Ambiguous term
+  bind_map
+Possible interpretations:
+  FIr_NativeArithmetic.bind_map : ∀ (f : ?m.6 → ?m.7) (m : Result ?m.6) (k : ?m.7 → Result ?m.8),
+    (do
+        let x ← map f m
+        k x) =
+      do
+      let x ← m
+      k (f x)
+  
+  LawfulMonad.bind_map : ∀ (f : ?m.6 (?m.9 → ?m.10)) (x : ?m.6 ?m.9),
+    (do
+        let x_1 ← f
+        x_1 <$> x) =
+      f <*> x
+FIr_NativeQM.lean:17:32: error: Ambiguous term
+  map_bind
+Possible interpretations:
+  _root_.map_bind : ∀ (f : ?m.7 → ?m.8) (x : ?m.6 ?m.9) (g : ?m.9 → ?m.6 ?m.7),
+    f <$> (x >>= g) = do
+      let a ← x
+      f <$> g a
+  
+  FIo_FieldBridge.map_bind : ∀ (f : ?m.7 → ?m.8) (x : Result ?m.6) (k : ?m.6 → Result ?m.7),
+    (map f do
+        let v ← x
+        k v) =
+      do
+      let v ← x
+      map f (k v)
+FIr_NativeQM.lean:15:61: error: unsolved goals
+x y : NQ
+⊢ (map qm do
+      let c ← x.c0.sub y.c0
+      let c1 ← x.c1.sub y.c1
+      ok { c0 := c, c1 := c1 }) =
+    sorry
+FIr_NativeQM.lean:16:79: warning: This simp argument is unused:
+  qm
+
+Hint: Omit it from the simp argument list.
+  simp only [FIq_Native.field.QM31.sub, ̲AspisR1SelectedMaskProbe.field.QM31.sub,q̵m̵,̵
+  ̵  ̵ ̵ ̵← FIr_NativeCM.sub,
+  ̲ ̲ ̲ ̲ ̲bind_map, ̲map_bind, ̲map_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIr_NativeQM.lean:17:4: warning: This simp argument is unused:
+  ← FIr_NativeCM.sub
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵I̵q̵_̵N̵a̵t̵i̵v̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵s̵u̵b̵,̵A̵s̵p̵i̵s̵R̵1̵S̵e̵l̵e̵c̵t̵e̵d̵M̵a̵s̵k̵P̵r̵o̵b̵e̵.̵f̵i̵e̵l̵d̵.̵Q̵M̵3̵1̵.̵s̵u̵b̵,̵q̵m̵,̵
+  ̵ ̵ ̵ ̵ ̵←̵ ̵F̵I̵r̵_̵N̵a̵t̵i̵v̵e̵C̵M̵.̵s̵u̵b̵,̵b̵i̵n̵d̵_̵m̵a̵p̵,̵m̵a̵p̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵o̵k̵]̵[̲F̲I̲q̲_̲N̲a̲t̲i̲v̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲s̲u̲b̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲S̲e̲l̲e̲c̲t̲e̲d̲M̲a̲s̲k̲P̲r̲o̲b̲e̲.̲f̲i̲e̲l̲d̲.̲Q̲M̲3̲1̲.̲s̲u̲b̲,̲ ̲q̲m̲,̲ ̲b̲i̲n̲d̲_̲m̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲o̲k̲]̲
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIr_NativeQM.lean:17:41: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIq_Native.field.QM31.sub, ̲AspisR1SelectedMaskProbe.field.QM31.sub, ̲qm,
+      ← FIr_NativeCM.sub, ̲bind_map, ̲map_bind,̵m̵a̵p̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIr_NativeQM.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIr_NativeQM.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIr_NativeQM.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
