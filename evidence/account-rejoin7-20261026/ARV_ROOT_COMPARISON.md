@@ -147,3 +147,22 @@ proof, not a rename of the filtered probability law as deployed.
 Actual result: no ARV_Root.deployed and no ART_Top.deployed are claimed.
 L159/L185 and L181 remain in Rc10. The lead may use this packet to choose a
 proper bank-generated root and cost interface; no contract adoption is inferred.
+
+## Supported native cost counterexample (checked040)
+
+`ARV_NativeCostGap.obstruction` strengthens the first-only coverage diagnosis.
+Given a supported native tuple for a, retained extraction, and the SAME original
+`∀ H, (eval H (submission a)).1.length ≤ Q`, it constructs b with:
+
+- exactly the same submission program and original first-only bound;
+- a supported native bank/game/admission/persistence tuple and accepted partial
+  account at the original native world;
+- full reached adversary work strictly greater than Q, hence failure of the
+  `ART_AdversaryWork.Bound ... b Q` consumed by the account mass theorem.
+
+The construction inserts Q+1 ignored-response queries before the second choice.
+Inputs, native successes and the original physical game are unchanged; every
+inserted query remains charged. This class IS allowed by the approved adaptive
+game. It is not an attack or a counterexample to the numerical security bound;
+it is a checked failure of deriving the needed full-work interface from the
+unchanged first-only query binder. No stronger bound may be silently assumed.
