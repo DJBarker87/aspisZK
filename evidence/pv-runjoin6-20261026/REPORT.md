@@ -66,3 +66,18 @@ promoted to an OS/toolchain/hardware assumption. TrustProjection (26818) proves
 that all the separate event/filesystem/payload projection equalities follow
 from the joint observation trust field; the discarded all-world primitive
 outcome hypothesis is not needed by this generic endpoint.
+
+## Stage 4: source/control specialization
+
+TrustLedger.candidate_proofs derives source_V045, native_fill_V336,
+native_ledger_V337 and the fault-schedule conjunct from the checked candidate
+lemmas. The remaining P fields are exactly initial-ledger independence,
+causal frames and complete extracted trace refinement, plus the explicit
+source-dictionary/common-public-input conditions and actual data installation.
+TrustLedger.privacy_headline_deployed_candidate composes that result with T
+and preserves the exact original conclusion. It is NOT T-only. No assumption
+has been deleted from the deployed endpoint by this candidate specialization.
+TrustSeparation formally exhibits a model of T whose extracted payload differs
+from a specified model payload, proving that source trace refinement cannot be
+inferred merely from native/extracted observation equality. This is an
+interface countermodel, not a counterexample against shipped privacy.

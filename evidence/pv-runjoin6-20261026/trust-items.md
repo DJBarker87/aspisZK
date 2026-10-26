@@ -60,3 +60,12 @@ bad event, extracted COMPLETE observation equals the security source experiment.
 Includes joint L1/L2 F3/F5/F6; OS errors must be treated without silently adopting A/B.
 P-release: coherent dependency closure replay, release byte/source identity,
 compiler/flags and CPU pin, complete observer-carrier binding.
+
+The concrete carrier binding is itself uninstalled P data: File must be
+`PDict_FileCarrier.File`, Reply must be `PDict_World244.Reply`, with
+constructor-preserving request/reply mapping, the same entropy positions and
+file cursor, and the chosen native error/time/worker carriers. A generic `E`,
+`File`, `Reply`, `Time`, `Worker` is NOT evidence that these equalities hold.
+The ordered trace also needs its actual extracted producer/validity proof;
+an arbitrary list of Call values is not an extracted execution. These are
+P-runtime/P-trace, not additional trust items or claims of instance closure.
