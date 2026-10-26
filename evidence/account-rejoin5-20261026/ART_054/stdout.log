@@ -1,0 +1,30 @@
+ART_AccountChronology.lean:34:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+reject :
+  ∀ (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A),
+    (eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).2 ≠
+      ok (core.result.Result.Ok (saved, post, final))
+⊢ ((eval H a.first).1 ++
+        ((eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).1 ++
+          (eval H
+              (Program.done
+                ((eval H a.first).2,
+                  (eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).2, none))).1),
+      (eval H
+          (Program.done
+            ((eval H a.first).2, (eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).2,
+              none))).2) =
+    ((eval H a.first).1 ++ (eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).1,
+      (eval H a.first).2, (eval H (wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).2, none)
+'AspisR1.ART_AccountChronology.first_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ART_AccountChronology.first_reject' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

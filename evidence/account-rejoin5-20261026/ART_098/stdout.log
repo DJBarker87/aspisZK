@@ -1,0 +1,374 @@
+AspisR1.SCI_Recovery.model_agreement : ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (P : AspisR1.F3T_Experiment.Prover)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))).2.2 =
+      Bool.true →
+    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement
+      (AspisR1.F3T_Experiment.view
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))))
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P)))
+theorem AspisR1.SCI_Recovery.model_agreement : ∀ (D : AspisR1.LiteralByteProtocol.Decoder)
+  (P : AspisR1.F3T_Experiment.Prover) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))).2.2 =
+      Bool.true →
+    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement
+      (AspisR1.F3T_Experiment.view
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D (AspisR1.F3T_Canon.canon P))))
+      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Charged.projected D (AspisR1.F3T_Canon.canon P))) :=
+fun D P H success =>
+  let CP := AspisR1.F3T_Canon.canon P;
+  let v := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D CP);
+  let suffix := (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D v.2.1)).1;
+  let w := AspisR1.F3T_Charged.build D (AspisR1.F3T_Experiment.view v);
+  have shape :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = AspisR1.SCE_ReplayFrames.annotated (AspisR1.F3T_Experiment.view v) suffix w)
+          (AspisR1.F3T_Charged.projected_eval D CP H)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.F3T_Experiment.view _a =
+                AspisR1.SCE_ReplayFrames.annotated (AspisR1.F3T_Experiment.view v) suffix w)
+            (AspisR1.F3T_Experiment.recorded_eval D (AspisR1.F3T_Charged.build D) CP H)))
+        (Eq.refl
+          (AspisR1.F3T_Experiment.view
+            (have v := AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3T_Experiment.original D CP);
+            (v.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D v.2.1)).1,
+              AspisR1.F3T_Experiment.enrich (AspisR1.F3T_Charged.build D (AspisR1.F3T_Experiment.view v)) v.2.1,
+              v.2.2)))));
+  have consistent := fun q member =>
+    Or.casesOn (List.mem_append.mp member)
+      (fun first => FS.eval_consistent H (AspisR1.F3T_Experiment.original D CP) q first) fun second =>
+      FS.eval_consistent H (AspisR1.F3_Model.verifier D v.2.1) q second;
+  have known :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ∀ a ∈ List.map Prod.fst (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D _a.2.1)).1,
+                a ∈ List.map Prod.fst _a.1)
+            (AspisR1.F3T_Experiment.original_eval D CP H)))
+        (id fun a member =>
+          Eq.mpr (id (congrArg (fun _a => a ∈ _a) List.map_append))
+            (Eq.mpr (id (congrArg (fun _a => _a) (propext List.mem_append))) (Or.inr member))));
+  have frames := AspisR1.SCE_ModelReadFrames.frames D P H success;
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view v) _a)
+          shape))
+      (AspisR1.SCF_Recovery.agreement (AspisR1.F3T_Experiment.view v)
+        (AspisR1.SCE_ReplayFrames.annotated (AspisR1.F3T_Experiment.view v) suffix w)
+        (Eq.refl (AspisR1.F3T_Experiment.view v).2.1.1)
+        (fun row a =>
+          Eq.symm (AspisR1.SCE_ReplayFrames.frame_same (AspisR1.F3T_Experiment.view v) suffix w H consistent known row))
+        fun row selected =>
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1.BinRawByteCutRecovery.cut (AspisR1.F3T_Experiment.view v).1 _a =
+                  AspisR1.BinRawByteCutRecovery.cut
+                    (AspisR1.SCE_ReplayFrames.annotated (AspisR1.F3T_Experiment.view v) suffix w).1 _a)
+              (AspisR1.SCE_ReplayFrames.frame_same (AspisR1.F3T_Experiment.view v) suffix w H consistent known row)))
+          (id
+            (Eq.symm
+              (AspisR1.SCE_ReplayTable.cut_append (AspisR1.F3T_Experiment.view v).1 suffix
+                (AspisR1.RawCommitmentFrameReplay.frameFromView (AspisR1.F3T_Experiment.view v) row)
+                (Or.casesOn selected (fun h => Eq.symm h ▸ frames.left) fun h =>
+                  Or.casesOn h (fun h => Eq.symm h ▸ frames.right.left) fun h => Eq.symm h ▸ frames.right.right))))))
+'AspisR1.SCI_Recovery.model_agreement' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.SCI_Recovery.account_of_join : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a)).2 =
+      Option.some run →
+    run.2.2 = Bool.true →
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3T_Installed.source c hashv
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).2 =
+          Bool.true →
+        AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3T_Installed.source c hashv
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3_Model.verifier D
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) →
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+              (AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.F3T_Installed.source c hashv
+                      (AspisR1.F3T_ByteCarrier.input c
+                        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).1 →
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3T_Charged.projected D
+                        (AspisR1.F3T_Canon.canon
+                          (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).2.2 =
+                Bool.true ∧
+              AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view run)
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Charged.projected D
+                    (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)))))
+theorem AspisR1.SCI_Recovery.account_of_join : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (D : AspisR1.LiteralByteProtocol.Decoder)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (run : AspisR1.F3T_Experiment.RunView),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.runtime c hashv copy allocator id a)).2 =
+      Option.some run →
+    run.2.2 = Bool.true →
+      (AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3T_Installed.source c hashv
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).2 =
+          Bool.true →
+        AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3T_Installed.source c hashv
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) =
+            AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.F3_Model.verifier D
+                (AspisR1.F3T_ByteCarrier.input c
+                  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2)) →
+          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+              (AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.F3T_Installed.source c hashv
+                      (AspisR1.F3T_ByteCarrier.input c
+                        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2))).1 →
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3T_Charged.projected D
+                        (AspisR1.F3T_Canon.canon
+                          (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).2.2 =
+                Bool.true ∧
+              AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (AspisR1.F3T_Experiment.view run)
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Charged.projected D
+                    (AspisR1.F3T_Canon.canon
+                      (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))) :=
+fun {A F C} c D hashv copy allocator id a H run observed success sourceSuccess raw ordered =>
+  have modelSuccess :=
+    Eq.mpr
+      (_root_.id
+        (congrArg (fun _a => _a.2.2 = Bool.true)
+          (AspisR1.F3T_Experiment.original_eval D
+            (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))) H)))
+      (Eq.mpr
+        (_root_.id
+          (congrArg
+            (fun _a =>
+              (_a.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D _a.2)).1, _a.2,
+                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D _a.2)).2).2.2 =
+                Bool.true)
+            (AspisR1.F3T_Canon.canon_eval (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)) H)))
+        (Eq.mpr
+          (_root_.id
+            (congrArg
+              (fun _a =>
+                ((_a.1, AspisR1.F3T_Canon.canonInput _a.2).1 ++
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.F3_Model.verifier D (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2)).1,
+                        (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2,
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.F3_Model.verifier D (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2)).2).2.2 =
+                  Bool.true)
+              (AspisR1.F3T_ByteCarrier.lift_eval c (AspisR1.SCE_Experiment.submission a) H)))
+          (Eq.mpr
+            (_root_.id
+              (congrArg
+                (fun _a =>
+                  ((((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                                AspisR1.F3T_Canon.canonInput
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).2).1 ++
+                            (AspisV8R19.MemoizedProgramLaw.eval H _a).1,
+                          (((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                  AspisR1.F3T_ByteCarrier.input c
+                                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                              AspisR1.F3T_Canon.canonInput
+                                ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.SCE_Experiment.submission a)).2).2).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval H _a).2).2.2 =
+                    Bool.true)
+                (AspisR1.F3T_Canon.verifier_canon D
+                  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                      AspisR1.F3T_ByteCarrier.input c
+                        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).2)))
+            (Eq.mpr
+              (_root_.id
+                (congrArg
+                  (fun _a =>
+                    ((((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).1,
+                                  AspisR1.F3T_Canon.canonInput
+                                    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                        AspisR1.F3T_ByteCarrier.input c
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.SCE_Experiment.submission a)).2).2).1 ++
+                              _a.1,
+                            (((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                                AspisR1.F3T_Canon.canonInput
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).2).2,
+                            _a.2).2.2 =
+                      Bool.true)
+                  (Eq.symm raw)))
+              sourceSuccess))));
+  have logs :=
+    Eq.mpr
+      (_root_.id
+        (congrArg
+          (fun _a =>
+            _a =
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Experiment.original D
+                    (AspisR1.F3T_Canon.canon
+                      (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))))).1)
+          (AspisR1.SCE_Projection.chronological c hashv copy allocator id a H run observed)))
+      (Eq.mpr
+        (_root_.id
+          (congrArg
+            (fun _a =>
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+                _a.1)
+            (AspisR1.F3T_Experiment.original_eval D
+              (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))) H)))
+        (Eq.mpr
+          (_root_.id
+            (congrArg
+              (fun _a =>
+                (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+                  (_a.1 ++ (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D _a.2)).1, _a.2,
+                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3_Model.verifier D _a.2)).2).1)
+              (AspisR1.F3T_Canon.canon_eval (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a)) H)))
+          (Eq.mpr
+            (_root_.id
+              (congrArg
+                (fun _a =>
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                        (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+                    ((_a.1, AspisR1.F3T_Canon.canonInput _a.2).1 ++
+                          (AspisV8R19.MemoizedProgramLaw.eval H
+                              (AspisR1.F3_Model.verifier D (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2)).1,
+                        (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2,
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.F3_Model.verifier D (_a.1, AspisR1.F3T_Canon.canonInput _a.2).2)).2).1)
+                (AspisR1.F3T_ByteCarrier.lift_eval c (AspisR1.SCE_Experiment.submission a) H)))
+            (Eq.mpr
+              (_root_.id
+                (congrArg
+                  (fun _a =>
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                          (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+                      ((((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                                AspisR1.F3T_Canon.canonInput
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).2).1 ++
+                            (AspisV8R19.MemoizedProgramLaw.eval H _a).1,
+                          (((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                  AspisR1.F3T_ByteCarrier.input c
+                                    (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                              AspisR1.F3T_Canon.canonInput
+                                ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H
+                                          (AspisR1.SCE_Experiment.submission a)).2).2).2,
+                          (AspisV8R19.MemoizedProgramLaw.eval H _a).2).1)
+                  (AspisR1.F3T_Canon.verifier_canon D
+                    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                        AspisR1.F3T_ByteCarrier.input c
+                          (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).2)))
+              (Eq.mpr
+                (_root_.id
+                  (congrArg
+                    (fun _a =>
+                      (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1 =
+                        ((((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).1,
+                                  AspisR1.F3T_Canon.canonInput
+                                    ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                        AspisR1.F3T_ByteCarrier.input c
+                                          (AspisV8R19.MemoizedProgramLaw.eval H
+                                              (AspisR1.SCE_Experiment.submission a)).2).2).1 ++
+                              _a.1,
+                            (((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                    AspisR1.F3T_ByteCarrier.input c
+                                      (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).2).1,
+                                AspisR1.F3T_Canon.canonInput
+                                  ((AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.submission a)).1,
+                                      AspisR1.F3T_ByteCarrier.input c
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (AspisR1.SCE_Experiment.submission a)).2).2).2,
+                            _a.2).1)
+                    (Eq.symm raw)))
+                (Eq.mpr
+                  (_root_.id
+                    (congrArg
+                      (Eq
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1)
+                      (congr (congrArg HAppend.hAppend (congrArg Prod.fst (AspisR1.SCE_Experiment.submission_eval a H)))
+                        (congrArg Prod.fst
+                          (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                            (congrArg (AspisR1.F3T_Installed.source c hashv)
+                              (congrArg (AspisR1.F3T_ByteCarrier.input c)
+                                (congrArg Prod.snd (AspisR1.SCE_Experiment.submission_eval a H)))))))))
+                  (Eq.mp
+                    (congrArg
+                      (Eq
+                        (AspisV8R19.MemoizedProgramLaw.eval H
+                            (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1)
+                      (congrArg (HAppend.hAppend (AspisV8R19.MemoizedProgramLaw.eval H a.first).1)
+                        (congrArg Prod.fst
+                          (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+                            (congrArg (AspisR1.F3T_Installed.source c hashv)
+                              (congrArg (AspisR1.F3T_ByteCarrier.input c)
+                                (congrArg Prod.snd (AspisR1.SCE_Experiment.submission_eval a H))))))))
+                    ordered)))))));
+  ⟨Eq.mpr
+      (_root_.id
+        (congrArg (fun _a => _a.2.2 = Bool.true)
+          (AspisR1.F3T_Charged.projected_eval D
+            (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))) H)))
+      (Eq.mpr
+        (_root_.id
+          (congrArg (fun _a => (AspisR1.F3T_Experiment.view _a).2.2 = Bool.true)
+            (AspisR1.F3T_Experiment.recorded_eval D (AspisR1.F3T_Charged.build D)
+              (AspisR1.F3T_Canon.canon (AspisR1.F3T_ByteCarrier.lift c (AspisR1.SCE_Experiment.submission a))) H)))
+        modelSuccess),
+    AspisR1.SCI_Recovery.account_agreement c D hashv copy allocator id a H run observed success modelSuccess logs⟩
+'AspisR1.SCI_Recovery.account_of_join' depends on axioms: [propext, Classical.choice, Quot.sound]

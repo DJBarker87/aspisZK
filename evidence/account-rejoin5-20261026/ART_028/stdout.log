@@ -1,0 +1,93 @@
+ART_AccountAccepted.lean:53:73: error: Application type mismatch: The argument
+  value
+has type
+  Heap (ℕ → Record) × A
+but is expected to have type
+  core.result.Result (Heap (ℕ → Record) × A) AdapterRw.Cuts.PE
+in the application
+  ART_WrapperAccepted.exact hashv H
+    (secondSyntax c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2) value
+ART_AccountAccepted.lean:50:19: error: unsolved goals
+case ok.Ok.ok.Ok
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+H : Bytes → State
+accepted : SCE_Experiment.accepted (eval H (ART_PartialAccount.account c hashv copy allocator id a)).2 = true
+saved : alloc.vec.Vec U8
+post : Heap (ℕ → Record)
+final : A
+firstReply :
+  (eval H (ART_PartialAccount.wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).2 =
+    ok (core.result.Result.Ok (saved, post, final))
+firstSame :
+  eval H (ART_PartialAccount.wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2)) =
+    eval H (firstCode c hashv copy allocator id (eval H a.first).2)
+expanded :
+  SCE_Experiment.accepted
+      (eval H
+          (Program.done
+            ((eval H a.first).2, ok (core.result.Result.Ok (saved, post, final)),
+              some
+                ((eval H (a.second (eval H a.first).2 saved post final)).2,
+                  (eval H
+                      (ART_PartialAccount.wrapper hashv
+                        (secondSyntax c hashv allocator id
+                          (eval H (a.second (eval H a.first).2 saved post final)).2))).2)))).2 =
+    true
+value : Heap (ℕ → Record) × A
+secondReply :
+  (eval H
+        (ART_PartialAccount.wrapper hashv
+          (secondSyntax c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2))).2 =
+    ok (core.result.Result.Ok value)
+secondSame :
+  eval H
+      (ART_PartialAccount.wrapper hashv
+        (secondSyntax c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2)) =
+    eval H (secondCode c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2)
+⊢ ((eval H a.first).1 ++
+        ((eval H (ART_PartialAccount.wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).1 ++
+          ((eval H (a.second (eval H a.first).2 saved post final)).1 ++
+            ((eval H
+                  (ART_PartialAccount.wrapper hashv
+                    (secondSyntax c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2))).1 ++
+              (eval H
+                  (Program.done
+                    ((eval H a.first).2, ok (core.result.Result.Ok (saved, post, final)),
+                      some
+                        ((eval H (a.second (eval H a.first).2 saved post final)).2,
+                          ok (core.result.Result.Ok value))))).1))),
+      (eval H
+          (Program.done
+            ((eval H a.first).2, ok (core.result.Result.Ok (saved, post, final)),
+              some ((eval H (a.second (eval H a.first).2 saved post final)).2, ok (core.result.Result.Ok value))))).2) =
+    ((eval H a.first).1 ++
+        ((eval H (ART_PartialAccount.wrapper hashv (firstSyntax c hashv copy allocator id (eval H a.first).2))).1 ++
+          ((eval H (a.second (eval H a.first).2 saved post final)).1 ++
+            ((eval H
+                  (ART_PartialAccount.wrapper hashv
+                    (secondSyntax c hashv allocator id (eval H (a.second (eval H a.first).2 saved post final)).2))).1 ++
+              (eval H
+                  (Program.done
+                    ((eval H a.first).2, ok (core.result.Result.Ok (saved, post, final)),
+                      some
+                        ((eval H (a.second (eval H a.first).2 saved post final)).2,
+                          (eval H
+                              (ART_PartialAccount.wrapper hashv
+                                (secondSyntax c hashv allocator id
+                                  (eval H (a.second (eval H a.first).2 saved post final)).2))).2)))).1))),
+      (eval H
+          (Program.done
+            ((eval H a.first).2, ok (core.result.Result.Ok (saved, post, final)),
+              some
+                ((eval H (a.second (eval H a.first).2 saved post final)).2,
+                  (eval H
+                      (ART_PartialAccount.wrapper hashv
+                        (secondSyntax c hashv allocator id
+                          (eval H (a.second (eval H a.first).2 saved post final)).2))).2)))).2)
+'AspisR1.ART_AccountAccepted.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

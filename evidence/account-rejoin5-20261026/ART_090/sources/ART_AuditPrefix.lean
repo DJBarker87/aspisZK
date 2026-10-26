@@ -1,0 +1,11 @@
+import Frozen2StartChargePrefix
+set_option autoImplicit false
+set_option pp.deepTerms true
+set_option pp.fullNames true
+set_option format.width 140
+#check @AspisR1.Frozen2StartChargePrefix.first_start_before_terminal
+#print AspisR1.Frozen2StartChargePrefix.first_start_before_terminal
+#print axioms AspisR1.Frozen2StartChargePrefix.first_start_before_terminal
+#check @AspisR1.Frozen2StartChargePrefix.starts
+#print AspisR1.Frozen2StartChargePrefix.starts
+#print axioms AspisR1.Frozen2StartChargePrefix.starts

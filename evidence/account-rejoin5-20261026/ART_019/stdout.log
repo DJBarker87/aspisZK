@@ -1,0 +1,181 @@
+ART_Outcome.lean:19:12: error: Tactic `rfl` failed: The left-hand side
+  ((eval native a.first).1 ++
+        (ART_PartialProgram.attempted H
+            (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+          ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).1 ++
+            ART_PartialProgram.attempted H
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+                  []).2)),
+      (eval native a.first).2,
+      (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+      some
+        ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2,
+          (SdkC_Source.run hashv
+              (secondSyntax c hashv allocator id (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+              []).1)).2
+is not definitionally equal to the right-hand side
+  (match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+    | ok (core.result.Result.Ok (saved, post, final)) =>
+      ((eval native a.first).1 ++
+          (SdkC_Source.readLog
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+            ((eval native (a.second (eval native a.first).2 saved post final)).1 ++
+              SdkC_Source.readLog
+                (SdkC_Source.run hashv
+                    (secondSyntax c hashv allocator id
+                      (eval native (a.second (eval native a.first).2 saved post final)).2)
+                    []).2)),
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+        some
+          ((eval native (a.second (eval native a.first).2 saved post final)).2,
+            (SdkC_Source.run hashv
+                (secondSyntax c hashv allocator id (eval native (a.second (eval native a.first).2 saved post final)).2)
+                []).1))
+    | x =>
+      ((eval native a.first).1 ++
+          SdkC_Source.readLog
+            (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none)).2
+
+case h_1
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+native H : Bytes → State
+reply✝ : Result (core.result.Result (alloc.vec.Vec U8 × Heap (ℕ → Record) × A) AdapterRw.Cuts.PE)
+saved✝ : alloc.vec.Vec U8
+post✝ : Heap (ℕ → Record)
+final✝ : A
+heq✝ :
+  (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 =
+    ok (core.result.Result.Ok (saved✝, post✝, final✝))
+⊢ ((eval native a.first).1 ++
+          (ART_PartialProgram.attempted H
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+            ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).1 ++
+              ART_PartialProgram.attempted H
+                (SdkC_Source.run hashv
+                    (secondSyntax c hashv allocator id
+                      (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+                    []).2)),
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+        some
+          ((eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2,
+            (SdkC_Source.run hashv
+                (secondSyntax c hashv allocator id
+                  (eval native (a.second (eval native a.first).2 saved✝ post✝ final✝)).2)
+                []).1)).2 =
+    (match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        ((eval native a.first).1 ++
+            (SdkC_Source.readLog
+                (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+              ((eval native (a.second (eval native a.first).2 saved post final)).1 ++
+                SdkC_Source.readLog
+                  (SdkC_Source.run hashv
+                      (secondSyntax c hashv allocator id
+                        (eval native (a.second (eval native a.first).2 saved post final)).2)
+                      []).2)),
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+          some
+            ((eval native (a.second (eval native a.first).2 saved post final)).2,
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved post final)).2)
+                  []).1))
+      | x =>
+        ((eval native a.first).1 ++
+            SdkC_Source.readLog
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none)).2
+ART_Outcome.lean:19:12: error: Tactic `rfl` failed: The left-hand side
+  ((eval native a.first).1 ++
+        ART_PartialProgram.attempted H
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+      (eval native a.first).2,
+      (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none).2
+is not definitionally equal to the right-hand side
+  (match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+    | ok (core.result.Result.Ok (saved, post, final)) =>
+      ((eval native a.first).1 ++
+          (SdkC_Source.readLog
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+            ((eval native (a.second (eval native a.first).2 saved post final)).1 ++
+              SdkC_Source.readLog
+                (SdkC_Source.run hashv
+                    (secondSyntax c hashv allocator id
+                      (eval native (a.second (eval native a.first).2 saved post final)).2)
+                    []).2)),
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+        some
+          ((eval native (a.second (eval native a.first).2 saved post final)).2,
+            (SdkC_Source.run hashv
+                (secondSyntax c hashv allocator id (eval native (a.second (eval native a.first).2 saved post final)).2)
+                []).1))
+    | x =>
+      ((eval native a.first).1 ++
+          SdkC_Source.readLog
+            (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none)).2
+
+case h_2
+A F C : Type
+c : DrvC_Installation.Configuration F C
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+copy : Heap (ℕ → Record) → ℕ → Payload → S2W_TrustedStd.Outcome (ℕ → Record)
+allocator : Allocator A
+id : S2W_ExtractionBoundary.Program
+a : Adversary A
+native H : Bytes → State
+reply✝ : Result (core.result.Result (alloc.vec.Vec U8 × Heap (ℕ → Record) × A) AdapterRw.Cuts.PE)
+x✝ :
+  ∀ (saved : alloc.vec.Vec U8) (post : Heap (ℕ → Record)) (final : A),
+    (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 =
+        ok (core.result.Result.Ok (saved, post, final)) →
+      False
+⊢ ((eval native a.first).1 ++
+          ART_PartialProgram.attempted H
+            (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+        (eval native a.first).2,
+        (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none).2 =
+    (match (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1 with
+      | ok (core.result.Result.Ok (saved, post, final)) =>
+        ((eval native a.first).1 ++
+            (SdkC_Source.readLog
+                (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2 ++
+              ((eval native (a.second (eval native a.first).2 saved post final)).1 ++
+                SdkC_Source.readLog
+                  (SdkC_Source.run hashv
+                      (secondSyntax c hashv allocator id
+                        (eval native (a.second (eval native a.first).2 saved post final)).2)
+                      []).2)),
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1,
+          some
+            ((eval native (a.second (eval native a.first).2 saved post final)).2,
+              (SdkC_Source.run hashv
+                  (secondSyntax c hashv allocator id
+                    (eval native (a.second (eval native a.first).2 saved post final)).2)
+                  []).1))
+      | x =>
+        ((eval native a.first).1 ++
+            SdkC_Source.readLog
+              (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).2,
+          (eval native a.first).2,
+          (SdkC_Source.run hashv (firstSyntax c hashv copy allocator id (eval native a.first).2) []).1, none)).2
+'AspisR1.ART_Outcome.represented' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ART_Outcome.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.ART_Outcome.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
