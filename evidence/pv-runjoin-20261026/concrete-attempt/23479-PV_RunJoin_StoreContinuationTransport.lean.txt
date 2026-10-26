@@ -1,0 +1,39 @@
+import R1Z.ProverRwRetryModel
+import R1Z.ProverRwBodyStore
+import R1Z.PV_RunJoin_ResultTransport
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_StoreContinuationTransport
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverCommitSemanticTransport26
+variable [ExternalTypes] [ExternalFuns]
+
+/-- Parametric source continuation after the ONE native reservation. This
+changes only the retained store carrier and preserves the complete proof/error
+status. The callback's native effect law is not a premise hidden here. -/
+theorem after_reserve {S T : Type} (project : S → T)
+    (left : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (right : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T)
+    (pub : ProverRwRetryModel.Pub) (compiled : ProverRwRetryModel.Compiled)
+    (variant : transport.Variant) (hash : ProverRwRetryModel.Hash)
+    (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
+    (binding : Array U8 32#usize) (attempt : ProverRwRetryModel.Secret)
+    (status : core.result.Result
+      (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+        aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+      aspis_prover.state_only_hiding.StateOnlyMaskBuildError) (s : S) :
+    mapR (fun out => (out.1,project out.2))
+      (ProverRwBodyStoreSource.afterReserve left pub compiled variant hash context binding attempt status s) =
+    ProverRwBodyStoreSource.afterReserve right pub compiled variant hash context binding attempt status (project s) := by
+  unfold ProverRwBodyStoreSource.afterReserve
+  simp only [map_bind,map_if,map_ok]
+  repeat' first
+    | rfl
+    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+      intro value called
+      try (change (_ × _) at value; rcases value with ⟨value1,value2⟩)
+      simp only [Aeneas.Std.uncurry,map_bind,map_if,map_ok]
+    | split <;> simp only [Aeneas.Std.uncurry,map_bind,map_if,map_ok]
+
+#print axioms after_reserve
+end R1Z.PV_RunJoin_StoreContinuationTransport

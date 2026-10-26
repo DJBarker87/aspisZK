@@ -1,0 +1,20 @@
+[package]
+name = "pv-runjoin-full-client-fault"
+version = "0.0.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+aspis-core = { path = "../frozen/crates/aspis-core", features = ["r0"] }
+aspis-prover = { path = "../frozen/crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
+aspis-r1-cost-probe = { path = "../frozen/crates/aspis-r1-cost-probe", features = ["r1p-check"] }
+libc = "=0.2.186"
+
+[profile.release]
+opt-level = 3
+debug = false
+
+[[bin]]
+name = "pv-runjoin-full-client-fault"
+path = "main.rs"

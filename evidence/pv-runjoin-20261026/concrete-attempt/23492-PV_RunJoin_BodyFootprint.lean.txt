@@ -1,0 +1,62 @@
+import R1Z.PV_RunJoin_ReservationFootprint
+import R1Z.PV_RunJoin_GenericSourceCaller
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_BodyFootprint
+open Aeneas Aeneas.Std Result ProverRwFull ProverRwRetryModel
+open PV_RunJoin_ResultPost
+variable [ExternalTypes] [ExternalFuns]
+
+theorem with_attempt {S : Type} (P : S → Prop)
+    (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (pub : Pub) (compiled : Compiled) (variant : transport.Variant) (hash : Hash)
+    (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
+    (binding : Array U8 32#usize) (secret : Secret) (s : S) (initial : P s)
+    (callback : ∀ statement nonce accepted after,
+      store.«reserve» s statement nonce = .ok (accepted,after) → P after) :
+    Post (fun out => P out.2)
+      (prover.prove_masked_with_attempt store pub compiled variant hash context binding secret s) := by
+  rw [ProverRwBodyStore.factor]
+  intro out run
+  obtain ⟨⟨material,after⟩,reserved,run⟩ := bind_eq_ok run
+  dsimp only at run
+  have reserved_property := PV_RunJoin_ReservationFootprint.reserve_build P store secret hash binding context s
+    initial (callback context.statement_digest context.mask_nonce)
+  have property := reserved_property (material,after) reserved
+  have kept := ProverRwBodyStore.continuation store pub compiled variant hash context binding secret material after
+  rw [run] at kept
+  change out.2 = after at kept
+  rw [kept]
+  exact property
+
+/-- Source control for the full public-prefix -> actual emitted body path.
+Every returned state is either the initial state or the one reservation's
+writeback. Errors before reservation leave the state predicate unchanged. -/
+theorem caller {S : Type} (P : S → Prop)
+    (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore S)
+    (pub : Pub) (compiled : Compiled) (variant : transport.Variant) (hash : Hash)
+    (secret : Secret) (s : S) (initial : P s)
+    (callback : ∀ statement nonce accepted after,
+      store.«reserve» s statement nonce = .ok (accepted,after) → P after) :
+    Post (fun out => P out.2)
+      (PV_RunJoin_GenericSourceCaller.caller store pub compiled variant hash secret s) := by
+  unfold PV_RunJoin_GenericSourceCaller.caller
+  apply bind_right
+  intro raw
+  apply bind_right
+  intro mapped
+  cases mapped with
+  | Err error =>
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    apply bind_right
+    intro returned
+    exact PV_RunJoin_ResultPost.ok _ _ initial
+  | Ok bytes =>
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    apply bind_right
+    rintro ⟨context,binding⟩
+    exact with_attempt P store pub compiled variant hash context binding secret s initial callback
+
+#print axioms with_attempt
+#print axioms caller
+end R1Z.PV_RunJoin_BodyFootprint

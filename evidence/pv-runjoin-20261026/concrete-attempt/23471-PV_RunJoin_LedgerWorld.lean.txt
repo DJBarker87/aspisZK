@@ -1,0 +1,55 @@
+import R1Z.ProverRwFullFuns
+import R1Z.ProverCommitLedger36
+import R1Z.ProverCommitSemanticTransport26
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_LedgerWorld
+open Aeneas Aeneas.Std Result ProverRwFull
+open ProverCommitSemanticTransport26
+variable [ExternalTypes]
+
+/-- Explicit ledger effect carrier. Its `model` and `entered` fields must
+still be associated with native IO/E2; equality of source handles is not that
+association. No claim that this is an installed native world is made. -/
+structure World where
+  header : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+  model : ProverCommitLedger36.State
+  entered : Option ProverCommitLedger36.Path
+
+abbrev Address := Array U8 32#usize → ProverCommitLedger36.Path
+
+def reserve (ops : ExternalFuns) (schedule : ProverCommitLedger36.Schedule)
+    (unix : Bool) (address : Address) (s : World)
+    (statement nonce : Array U8 32#usize) : Result (Bool × World) := do
+  letI : ExternalFuns := ops
+  let (accepted,header) ←
+    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+      s.header statement nonce
+  .ok (accepted,⟨header,
+    (ProverCommitLedger36.reserve schedule unix (address nonce) s.model).2,
+    some (address nonce)⟩)
+
+def dictionary (ops : ExternalFuns) (schedule : ProverCommitLedger36.Schedule)
+    (unix : Bool) (address : Address) :
+    aspis_prover.state_only_hiding.StateOnlyMaskNonceStore World :=
+  ⟨reserve ops schedule unix address⟩
+
+/-- The source projection is EXACT at the full emitted reservation call.
+The extra world state is erased only for this source equality; it remains
+available to the ledger/observer interpretation. Native effect adequacy of
+the modeled state update is a separate obligation, not proved by this map. -/
+theorem source_projection (ops : ExternalFuns) (schedule : ProverCommitLedger36.Schedule)
+    (unix : Bool) (address : Address) (s : World) (statement nonce : Array U8 32#usize) :
+    mapR (fun out => (out.1,out.2.header))
+      (reserve ops schedule unix address s statement nonce) =
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+      _ ops s.header statement nonce := by
+  unfold reserve
+  cases @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+    _ ops s.header statement nonce with
+  | fail e => rfl
+  | div => rfl
+  | ok out => cases out; rfl
+
+#print axioms source_projection
+end R1Z.PV_RunJoin_LedgerWorld

@@ -1,0 +1,67 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerHistory.lean:22:4: error: Type mismatch: After simplification, term
+  record_length Kind.create (Except.error ProverCommitEnvironment35.IOError.alreadyExists) (inject action s)
+ has type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.error ProverCommitEnvironment35.IOError.alreadyExists) (inject action s)).2.history)
+    (List.length (inject action s).history + 1)
+but is expected to have type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.error ProverCommitEnvironment35.IOError.alreadyExists) (inject action s)).2.history)
+    (List.length s.history + 1)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerHistory.lean:26:6: error: Type mismatch: After simplification, term
+  record_length Kind.create (Except.ok ())
+    (let __src := inject action s;
+    { history := __src.history, cursor := __src.cursor, ledger := path :: (inject action s).ledger })
+ has type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.ok ())
+            { history := (inject action s).history, cursor := (inject action s).cursor,
+              ledger := path :: (inject action s).ledger }).2.history)
+    (List.length (inject action s).history + 1)
+but is expected to have type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.ok ())
+            { history := (inject action s).history, cursor := (inject action s).cursor,
+              ledger := path :: (inject action s).ledger }).2.history)
+    (List.length s.history + 1)
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerHistory.lean:30:6: error: Type mismatch: After simplification, term
+  record_length Kind.create (Except.error (ProverCommitEnvironment35.IOError.other e)) (inject action s)
+ has type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.error (ProverCommitEnvironment35.IOError.other e)) (inject action s)).2.history)
+    (List.length (inject action s).history + 1)
+but is expected to have type
+  @Eq ℕ
+    (List.length
+      (record Kind.create (Except.error (ProverCommitEnvironment35.IOError.other e)) (inject action s)).2.history)
+    (List.length s.history + 1)
+'R1Z.PV_RunJoin_LedgerHistory.create_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LedgerHistory.chain_length_ge' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_LedgerHistory.record_length' depends on axioms: [propext]
+'R1Z.PV_RunJoin_LedgerHistory.inject_length' does not depend on any axioms
+'R1Z.PV_RunJoin_LedgerHistory.ask_length' depends on axioms: [propext]
+       25.02 real         1.42 user         3.35 sys
+          3357458432  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              128806  page reclaims
+              174119  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               47107  voluntary context switches
+              176325  involuntary context switches
+           613909709  instructions retired
+           339219474  cycles elapsed
+            12157720  peak memory footprint
+
+exit=1

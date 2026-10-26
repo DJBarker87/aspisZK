@@ -1,0 +1,226 @@
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:100:95: error: don't know how to synthesize implicit argument `β`
+  @Prod.mk (Fin 128 → ProverCommitPublicNonce40.Raw)
+    (?m.1281 template outputs x world policy inputs disclosed oracle ideal boundaryData E1_V329 native_ledger_V337 t u)
+    u rest
+context:
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝¹ : ProverRwFull.ExternalTypes
+N Client Context Rest : Type
+inst✝ : Fintype Rest
+world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N ProverRwRetryModel.Store Client
+policy : ProverRwEffectCallback.Account N
+inputs :
+  (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_PureSourceLift.Inputs N Client
+disclosed :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → View K CommitHandle Aux R1Bat
+oracle :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → List (Bytes × OracleAnswer)
+ideal :
+  (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+    R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat
+boundaryData :
+  PV_RunJoin_Boundary.Data (PV_RunJoin_SourceConstructor.runtime sorry sorry sorry sorry sorry sorry) Context Rest
+E1_V329 :
+  ProverCommitPublicNonce40.E1 (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).law
+native_ledger_V337 :
+  ∀ (w : h.Instance),
+    h.public w = x.1 →
+      ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+        (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+        runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) →
+          (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger next =
+            match
+              (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).reservation secret
+                s with
+            | none => (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger s
+            | some path =>
+              (ProverCommitLedger36.reserve
+                  (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).schedule
+                  (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).unix path
+                  ((PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger s)).2
+t u : Fin 128 → ProverCommitPublicNonce40.Raw
+rest : ?m.1281 template outputs x world policy inputs disclosed oracle ideal boundaryData E1_V329 native_ledger_V337 t u
+⊢ Type
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:99:106: error: don't know how to synthesize implicit argument `β`
+  @Prod.mk (Fin 128 → ProverCommitPublicNonce40.Raw)
+    (?m.1281 template outputs x world policy inputs disclosed oracle ideal boundaryData E1_V329 native_ledger_V337 t u)
+    t rest
+context:
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝¹ : ProverRwFull.ExternalTypes
+N Client Context Rest : Type
+inst✝ : Fintype Rest
+world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N ProverRwRetryModel.Store Client
+policy : ProverRwEffectCallback.Account N
+inputs :
+  (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_PureSourceLift.Inputs N Client
+disclosed :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → View K CommitHandle Aux R1Bat
+oracle :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → List (Bytes × OracleAnswer)
+ideal :
+  (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+    R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat
+boundaryData :
+  PV_RunJoin_Boundary.Data (PV_RunJoin_SourceConstructor.runtime sorry sorry sorry sorry sorry sorry) Context Rest
+E1_V329 :
+  ProverCommitPublicNonce40.E1 (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).law
+native_ledger_V337 :
+  ∀ (w : h.Instance),
+    h.public w = x.1 →
+      ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+        (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+        runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) →
+          (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger next =
+            match
+              (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).reservation secret
+                s with
+            | none => (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger s
+            | some path =>
+              (ProverCommitLedger36.reserve
+                  (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).schedule
+                  (PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).unix path
+                  ((PV_RunJoin_SourceBoundary.boundary world policy inputs disclosed oracle ideal sorry).ledger s)).2
+t u : Fin 128 → ProverCommitPublicNonce40.Raw
+rest : ?m.1281 template outputs x world policy inputs disclosed oracle ideal boundaryData E1_V329 native_ledger_V337 t u
+⊢ Type
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:99:11: error(lean.inferBinderTypeFailed): Failed to infer type of binder `rest`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:115:32: error(lean.unknownIdentifier): Unknown identifier `Residual`
+
+Note: It is not possible to treat `Residual` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:117:98: error(lean.unknownIdentifier): Unknown identifier `boundaryData`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:118:108: error(lean.unknownIdentifier): Unknown identifier `boundaryData`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:127:17: error(lean.unknownIdentifier): Unknown identifier `Residual`
+
+Note: It is not possible to treat `Residual` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:136:86: error: unknown free variable `_fvar.154516`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:137:5: error(lean.unknownIdentifier): Unknown identifier `toPremises`
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:135:632: error: unsolved goals
+CommitHandle Aux : Type
+template : R1Wire K CommitHandle Aux
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+inst✝ : ProverRwFull.ExternalTypes
+N Client : Type
+world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N ProverRwRetryModel.Store Client
+policy : ProverRwEffectCallback.Account N
+inputs :
+  (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_PureSourceLift.Inputs N Client
+disclosed :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → View K CommitHandle Aux R1Bat
+oracle :
+  R1Adv K CommitHandle Aux →
+    Statement K CommitHandle →
+      Aeneas.Std.Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store Client) → List (Bytes × OracleAnswer)
+ideal :
+  (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+    R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat
+remaining : sorry
+⊢ (∀ (adv : rust.Adversary) (w : h.Instance),
+      h.public w = x.1 →
+        |mean (realTest h B outputs rust adv x w) -
+              mean
+                (idealTestS
+                  (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode)
+                  (RomObserverBin.observerMap rust observer_program adv) x (simE h.transport B outputs x))| ≤
+          modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    L₁ L₂ +
+                  16 / 2 ^ 486 +
+                QueryScanFreshUnion.freshBudget
+                  (8 *
+                      n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                        (prover base (base.pubBytes x).length h B outputs x
+                            (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode
+                              fib opens)).toProver +
+                    1) +
+              2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * ProverCommitFuelMass22.charge) ∧
+    modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  L₁ L₂ +
+                16 / 2 ^ 486 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge ≤
+        1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge ∧
+      modelError (wire base (base.pubBytes x).length h B outputs x).toWire
+                  (prover base (base.pubBytes x).length h B outputs x
+                      (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                        opens)).toProver
+                  L₁ L₂ +
+                16 / 2 ^ 486 +
+              QueryScanFreshUnion.freshBudget
+                (8 *
+                    n1 (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver +
+                  1) +
+            2 * ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * ProverCommitFuelMass22.charge <
+        1 / 2 ^ 100
+/Users/dominic/ZK/.worktrees/pv-runjoin/docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceEndpoint.lean:139:14: error(lean.unknownIdentifier): Unknown constant `toPremises`
+'R1Z.PV_RunJoin_SourceEndpoint.privacy_headline_from_source_inputs' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+       40.56 real        10.48 user         4.19 sys
+          2953658368  maximum resident set size
+                   0  average shared memory size
+                   0  average unshared data size
+                   0  average unshared stack size
+              152657  page reclaims
+              277592  page faults
+                   0  swaps
+                   0  block input operations
+                   0  block output operations
+                   0  messages sent
+                   0  messages received
+                   0  signals received
+               33296  voluntary context switches
+              270435  involuntary context switches
+           603463628  instructions retired
+           306132837  cycles elapsed
+            11715304  peak memory footprint
+
+exit=1

@@ -1,0 +1,55 @@
+use aspis_prover::{r0_fixture, HOST_HASH};
+use aspis_prover::state_only_entropy::DurableStateOnlyMaskNonceStore;
+use aspis_r1_cost_probe::{RealR1_client, verifier::Error};
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+static HASH_CALLS: AtomicUsize = AtomicUsize::new(0);
+fn logged_hash(parts: &[&[u8]]) -> [u8; 32] {
+    HASH_CALLS.fetch_add(1, Ordering::Relaxed);
+    HOST_HASH(parts)
+}
+
+fn main() {
+    // All allocations and fixture preparation precede the process-only fault.
+    // These are public fixture inputs and public account addresses, not keys.
+    let transfer = r0_fixture::prepare(false);
+    let withdrawal = r0_fixture::prepare(true);
+    let root = std::path::PathBuf::from(std::env::args().nth(1).expect("retained ledger destination"));
+    std::fs::create_dir_all(&root).unwrap();
+    let mut ledger = DurableStateOnlyMaskNonceStore::open(&root).unwrap();
+    assert_eq!(std::fs::read_dir(&root).unwrap().count(), 0);
+
+    let mut filter = [
+        libc::sock_filter { code: 0x20, jt: 0, jf: 0, k: 0 },
+        libc::sock_filter { code: 0x15, jt: 0, jf: 1, k: libc::SYS_getrandom as u32 },
+        libc::sock_filter { code: 0x06, jt: 0, jf: 0, k: 0x00050000 | libc::EIO as u32 },
+        libc::sock_filter { code: 0x06, jt: 0, jf: 0, k: 0x7fff0000 },
+    ];
+    let program = libc::sock_fprog { len: filter.len() as u16, filter: filter.as_mut_ptr() };
+    assert_eq!(unsafe { libc::prctl(libc::PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) }, 0);
+    assert_eq!(unsafe { libc::prctl(libc::PR_SET_SECCOMP, libc::SECCOMP_MODE_FILTER, &program) }, 0);
+
+    for (label, fixture) in [("transfer", &transfer), ("withdrawal", &withdrawal)] {
+        let mut callbacks = 0;
+        let result = RealR1_client::prove_for_proof_accounts(
+            fixture.public(), &fixture.compiled, logged_hash, &mut ledger,
+            |index| { assert_eq!(index, 0); callbacks += 1; [1; 32] },
+        );
+        assert!(matches!(result, Err(Error::Entropy)));
+        assert_eq!(callbacks, 1);
+        assert_eq!(HASH_CALLS.load(Ordering::Relaxed), 0);
+        assert_eq!(std::fs::read_dir(&root).unwrap().count(), 0);
+        println!("{label}: full frozen client -> Entropy; callbacks=1 hash_calls=0 ledger_records=0");
+    }
+    // The source record exposes the same directory and last_error=None on
+    // both successful IO returns, while the native backing filesystem changes.
+    assert_eq!(ledger.last_error(), None);
+    assert_eq!(ledger.reserve_fallible([2; 32], [1; 32]).unwrap(), true);
+    assert_eq!(ledger.last_error(), None);
+    assert_eq!(std::fs::read_dir(&root).unwrap().count(), 1);
+    assert_eq!(ledger.reserve_fallible([2; 32], [1; 32]).unwrap(), false);
+    assert_eq!(ledger.last_error(), None);
+    assert_eq!(std::fs::read_dir(&root).unwrap().count(), 1);
+    println!("native reserve: fresh=true duplicate=false last_error=None records=1; retained");
+    println!("retained ledger directory: {}", root.display());
+}

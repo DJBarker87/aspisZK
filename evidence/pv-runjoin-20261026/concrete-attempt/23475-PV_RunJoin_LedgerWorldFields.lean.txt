@@ -1,0 +1,37 @@
+import R1Z.PV_RunJoin_LedgerWorld
+import R1Z.PV_RunJoin_ResultPost
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_LedgerWorldFields
+open Aeneas Aeneas.Std Result ProverRwFull
+open PV_RunJoin_LedgerWorld PV_RunJoin_ResultPost
+variable [ExternalTypes]
+
+theorem writeback (ops : ExternalFuns) (schedule : ProverCommitLedger36.Schedule)
+    (unix : Bool) (address : Address) (s after : World)
+    (statement nonce : Array U8 32#usize) (accepted : Bool)
+    (run : reserve ops schedule unix address s statement nonce = .ok (accepted,after)) :
+    after.model = (ProverCommitLedger36.reserve schedule unix (address nonce) s.model).2 ∧
+      after.entered = some (address nonce) := by
+  unfold reserve at run
+  obtain ⟨⟨flag,header⟩,native_run,run⟩ := bind_eq_ok run
+  dsimp only at run
+  have state := congrArg Prod.snd (Result.ok.inj run)
+  exact ⟨congrArg (fun world => world.model) state.symm,
+    congrArg (fun world => world.entered) state.symm⟩
+
+/-- Every returned world retains the exact native source result projection.
+No modeled fault outcome is substituted for the returned source boolean. -/
+theorem native_return (ops : ExternalFuns) (schedule : ProverCommitLedger36.Schedule)
+    (unix : Bool) (address : Address) (s after : World)
+    (statement nonce : Array U8 32#usize) (accepted : Bool)
+    (run : reserve ops schedule unix address s statement nonce = .ok (accepted,after)) :
+    @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+      _ ops s.header statement nonce = .ok (accepted,after.header) := by
+  have projected := source_projection ops schedule unix address s statement nonce
+  rw [run] at projected
+  exact projected.symm
+
+#print axioms writeback
+#print axioms native_return
+end R1Z.PV_RunJoin_LedgerWorldFields
