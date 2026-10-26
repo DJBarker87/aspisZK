@@ -150,3 +150,24 @@ the retained earlier barrier denial. Generic Default/Drop effects and unbounded
 native carrier transport remain OPEN. Source/value installations do not remove
 root premises. Budget now Lean21/100 (18 green), Kani2/20 (both green);
 kani-string-003 was refused at its in-scope barrier, so has not charged a run.
+
+## Vector composition and symbolic behavior
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|3|V169|INSTALLED value callback is independent of original field|PV_CB_Independent.take;22827|
+|33|V184|INSTALLED with symbolic pop length/empty laws|PV_CB_VectorLaws.pop_length/pop_none;22824; PV_CB_Independent.pop;22827|
+|34|V185|INSTALLED with symbolic nonempty law|PV_CB_VectorLaws.nonempty;22824; PV_CB_Independent.empty;22827|
+|35|V186|INSTALLED default/empty composition|PV_CB_VectorLaws.default_empty;22824; PV_CB_Independent.default_vec;22827|
+|36|V187|INSTALLED; original field eliminated from selected result|PV_CB_Independent.array;22827|
+
+Composition selector is PV_CB_Composition.selected, checked22821. It only
+composes source/value entries; whole-source caller and endpoint still open.
+22823 failed on an explicit argument to an implicit List lemma;22824 fixes it.
+22825 failed because polymorphic function equalities lacked type arguments;
+22827 states pointwise equations, avoiding whole-dictionary elaboration.
+Neither failed audit is accepted. All final printed axioms are standard.
+
+22826 was refused by the unchanged-source guard (exit67), before Lean ran.
+The intended edit had failed locally with a Python syntax error; corrected
+source is sent as22827. No guard or launcher changed; refusal counts zero Lean.
