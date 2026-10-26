@@ -1,0 +1,77 @@
+{"attempt": "JFr_006", "exit_status": 1, "wall_seconds": 1.3937266219872981, "peak_rss_kib": "3012936", "swaps": "0", "print_axioms": ["'AspisR1.JFr_BoundaryTrace.append' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JFr_BoundaryTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JFr_BoundaryTrace.lean:37:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  body p x i
+in the target expression
+  (match AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x i with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x.1 x.2) x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case step
+p : Std.Array Q 28#usize
+i✝ stop✝ : Usize
+x✝ out✝ : Q
+i j stop : Usize
+x c y out : Q
+active : i < 28#usize
+read : p.index_usize i = ok c
+add : AspisR1SemanticCallExtraction.aspis_core.field.QM31.add x c = ok y
+inc : i + 
+...
+ of the pattern
+  body p x i
+in the target expression
+  (match AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x i with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x.1 x.2) x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+
+case step
+p : Std.Array Q 28#usize
+i✝ stop✝ : Usize
+x✝ out✝ : Q
+i j stop : Usize
+x c y out : Q
+active : i < 28#usize
+read : p.index_usize i = ok c
+add : AspisR1SemanticCallExtraction.aspis_core.field.QM31.add x c = ok y
+inc : i + 1#usize = ok j
+tail : Segment p j y stop out
+ih :
+  ¬stop < 28#usize →
+    loop
+        (fun x =>
+          match x with
+          | (boundary1, index1) =>
+            AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p boundary1 index1)
+        (y, j) =
+      ok out
+done : ¬stop < 28#usize
+bodyCall : body p x i = ok (cont (y, j))
+⊢ (match AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x i with
+    | ok r =>
+      match r with
+      | cont x => loop (fun x => AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body p x.1 x.2) x
+      | ControlFlow.done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok out
+JFr_BoundaryTrace.lean:29:15: warning: This simp argument is unused:
+  body
+
+Hint: Omit it from the simp argument list.
+  simp only [b̵o̵d̵y̵,̵AspisR1SemanticCallExtraction.r1_semantic.semantic_boundary_loop.body, ̲if_neg done]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFr_BoundaryTrace.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JFr_BoundaryTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd5232664a7e04378beb2ad16f3779efd.scope; invocation ID: 46606093e14940579514f051d5d36278
