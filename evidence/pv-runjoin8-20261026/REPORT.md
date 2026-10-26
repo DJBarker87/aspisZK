@@ -33,3 +33,22 @@ observation equality. No privacy bound or source refinement is added to T.
 Transfer deployed P-and-T fixture: OPEN. Withdrawal deployed P-and-T fixture:
 OPEN. Historical mathematical trust models on both canonical fibres are
 retained, and do not instantiate either deployed P conjunction.
+
+## Stage 1 further preparation
+
+EndpointSelection prepares an extension from the fixed proof-account endpoint
+to the published all-honest-prover Selection interface. It retains the SAME
+endpoint record, and requires public binding only for that fixed endpoint;
+it does not assume every arbitrary HonestProver has a canonical witness.
+
+CallbackInstallation prepares source equations for op51/op120/op246 on the
+SAME dictionary consumed by NativeSelectedInputs, using the read-only CB3
+source laws. Whole proof/audit equality and the complete trace remain open.
+The joined sibling also retains its whole-data equality; none of its source
+laws is misreported as that equality.
+
+fixture-obstructions.md records why both deployed fixture conjunctions stay
+open, including the unadopted failure-repair boundary. No new shipped-row
+counterexample is claimed. The compile-free audit checks draft hashes,
+forbidden mechanisms, theorem axiom-print requests and unchanged T; it invokes
+no compiler and is not a kernel/closure audit.

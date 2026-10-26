@@ -74,7 +74,7 @@ def world {Coins Rest N C : Type}
     (coordinates : Coins ≃ Tape × Rest)
     (replies : Coins → Fin 128 →
       (Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
-        core.result.Result Unit getrandom.error.Error))
+        Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error))
     (policy : Rest → N) (ledger : Rest → PV_RunJoin_LedgerWorld.World)
     (body : Rest → C) :
     PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C where
@@ -87,7 +87,7 @@ theorem initial_ledger {Coins Rest N C : Type}
     (coordinates : Coins ≃ Tape × Rest)
     (replies : Coins → Fin 128 →
       (Aeneas.Std.Array Aeneas.Std.U8 64#usize ×
-        core.result.Result Unit getrandom.error.Error))
+        Aeneas.Std.core.result.Result Unit ProverRwRngCaller.getrandom.error.Error))
     (policy : Rest → N) (ledger : Rest → PV_RunJoin_LedgerWorld.World)
     (body : Rest → C) (t u : Tape) (rest : Rest) :
     (world coordinates replies policy ledger body).ledger (coordinates.symm (t,rest)) =
