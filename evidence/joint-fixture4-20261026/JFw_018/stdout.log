@@ -1,0 +1,33 @@
+JFw_Entry.lean:13:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  compact.expand_semantic_loop nativeValues (iter 0#u8) input out 32#usize 32#usize
+in the target expression
+  compact.expand_semantic_loop nativeValues { start := 0#u8, «end» := compact.SEMANTIC_ROWS } input out 32#usize
+      32#usize ⦃
+    result => result.1 = core.result.Result.Ok () ⦄
+
+input out : Slice U8
+hi : input.length = 7015
+ho : out.length = 13831
+updated : Slice U8
+call :
+  compact.expand_semantic_loop nativeValues (iter 0#u8) input out 32#usize 32#usize =
+    ok (core.result.Result.Ok (), updated)
+⊢ compact.expand_semantic_loop nativeValues { start := 0#u8, «end» := compact.SEMANTIC_ROWS } input out 32#usize
+      32#usize ⦃
+    result => result.1 = core.result.Result.Ok () ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+JFw_Entry.lean:22:10: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+'AspisR1.JFw_Entry.loop_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JFw_Entry.success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
