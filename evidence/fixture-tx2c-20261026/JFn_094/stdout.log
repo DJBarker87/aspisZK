@@ -1,0 +1,31 @@
+'AspisR1.JFn_TX2.partial_on_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JFn_TX2.partial_on_saved : ∀ (saved : alloc.vec.Vec U8),
+  ↑saved = ↑JFx_NativeBytes.checkpoint →
+    ∀ {Hash : Type} (H : Bytes → State) (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash),
+      JFn_HashBoundary.Realizes H →
+        ∀ (seed : Port3_NativeQueryBody.Ops),
+          Port4A_ReaderInstall.reader true (JFn_HashBoundary.dictionary H D) ⟨↑saved, ⋯⟩ JFx_NativeBytes.proof
+                JFx_NativeBytes.publicInput AspisR1Stage2.transport.Variant.S2 hash =
+              ok (core.result.Result.Ok (JFo_Prepared.value, JFo_Prepared.accumulator)) ∧
+            OraclePortCheckpointResumeC5.decodeAccumulator
+                  (MultiproofConeCanonical.bytesOf ↑JFx_NativeBytes.checkpoint) =
+                some (CheckpointBytes5Output.accumulator JFo_Prepared.accumulator) ∧
+              (∃ g, Tx2N_Powers.powers 29#usize JFo_Prepared.value.gamma = ok g) ∧
+                Port3_NativePendingInstall.source true JFo_Prepared.accumulator.weights.deref =
+                    ok (core.result.Result.Ok JFo_Pending.value) ∧
+                  ∀ (i : Fin 12),
+                    (JFn_ArrayBuilder.ops seed).op0 4#usize
+                          (Port3_NativeQueryBody.verifier.candidate.query_values.closure.Insts.CoreOpsFunctionFnMutTupleUsizeWideExact
+                            (JFn_ArrayBuilder.ops seed))
+                          (JFo_Opening.value (JFn_Values.position i)) =
+                        ok (JFn_Values.value i) ∧
+                      ∀ (inverse : Std.Array U32 5#usize),
+                        ∃ out,
+                          SAQ_LineQuery.line JFq_Alpha1.scalar (JFn_Values.value i) inverse = ok out ∧
+                            Port4C_QueryArithmetic.CanonE out :=
+fun saved same {Hash} H D hash realizes seed =>
+  let ⟨g, h✝⟩ := JFo_Powers.source
+  let ⟨run, right✝⟩ := h✝
+  ⟨JFn_Resume.on_saved saved same H D hash realizes,
+    ⟨JFo_DecodedAccumulator.source,
+      ⟨Exists.intro g run, ⟨JFo_Pending.source, fun i => ⟨JFn_Values.source seed i, JFn_Lines.source i⟩⟩⟩⟩⟩
