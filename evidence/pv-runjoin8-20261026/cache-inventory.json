@@ -1,0 +1,16 @@
+{
+  "command": [
+    "ssh",
+    "-o",
+    "BatchMode=yes",
+    "-o",
+    "ConnectTimeout=10",
+    "dombarker@100.108.41.90",
+    "python3 -c 'import pathlib,json,resource,time,datetime,tarfile\nstarted=time.monotonic()\nroot=pathlib.Path('\"'\"'/home/dombarker/project-offloads/codex-pv-runjoin-20261026'\"'\"')\nnames=['\"'\"'PV_RunJoin_TrustItems'\"'\"','\"'\"'PV_RunJoin_TrustLedger'\"'\"','\"'\"'PV_RunJoin_SourceSelectionContract'\"'\"','\"'\"'PV_Src_FrozenPublic'\"'\"','\"'\"'PV_CB3_Op51Source'\"'\"','\"'\"'PV_CB3_Op120Source'\"'\"','\"'\"'PV_CB3_Op246Source'\"'\"']\nobjects={}\nfor folder in ['\"'\"'objects-final-9297a12175'\"'\"','\"'\"'objects-fault-audit-5c5b9846ff'\"'\"']:\n objects[folder]={name:(root/folder/'\"'\"'R1Z'\"'\"'/(name+'\"'\"'.olean'\"'\"')).exists() for name in names}\narchives={}\nfor name in ['\"'\"'pv5-cache-01.tar.gz'\"'\"','\"'\"'pv5-cache-final.tar.gz'\"'\"']:\n p=root/name\n with tarfile.open(p) as f:\n  members=f.getnames()\n archives[name]={'\"'\"'size'\"'\"':p.stat().st_size,'\"'\"'member_count'\"'\"':len(members),'\"'\"'wanted'\"'\"':{name:any(x.endswith('\"'\"'/'\"'\"'+name+'\"'\"'.olean'\"'\"') for x in members) for name in names}}\nr=resource.getrusage(resource.RUSAGE_SELF)\nprint(json.dumps({'\"'\"'kind'\"'\"':'\"'\"'compile-free read-only cache metadata'\"'\"','\"'\"'utc'\"'\"':datetime.datetime.now(datetime.timezone.utc).isoformat(),'\"'\"'objects'\"'\"':objects,'\"'\"'archives'\"'\"':archives,'\"'\"'wall_seconds'\"'\"':time.monotonic()-started,'\"'\"'peak_rss_bytes'\"'\"':r.ru_maxrss*1024,'\"'\"'swaps'\"'\"':r.ru_nswap,'\"'\"'scope_started'\"'\"':False,'\"'\"'compiler_started'\"'\"':False}))\n'"
+  ],
+  "exit": 0,
+  "stdout": "{\"kind\": \"compile-free read-only cache metadata\", \"utc\": \"2026-10-26T21:34:41.464537+00:00\", \"objects\": {\"objects-final-9297a12175\": {\"PV_RunJoin_TrustItems\": false, \"PV_RunJoin_TrustLedger\": false, \"PV_RunJoin_SourceSelectionContract\": false, \"PV_Src_FrozenPublic\": false, \"PV_CB3_Op51Source\": false, \"PV_CB3_Op120Source\": false, \"PV_CB3_Op246Source\": false}, \"objects-fault-audit-5c5b9846ff\": {\"PV_RunJoin_TrustItems\": false, \"PV_RunJoin_TrustLedger\": false, \"PV_RunJoin_SourceSelectionContract\": false, \"PV_Src_FrozenPublic\": false, \"PV_CB3_Op51Source\": false, \"PV_CB3_Op120Source\": false, \"PV_CB3_Op246Source\": false}}, \"archives\": {\"pv5-cache-01.tar.gz\": {\"size\": 6062708, \"member_count\": 100, \"wanted\": {\"PV_RunJoin_TrustItems\": false, \"PV_RunJoin_TrustLedger\": false, \"PV_RunJoin_SourceSelectionContract\": false, \"PV_Src_FrozenPublic\": false, \"PV_CB3_Op51Source\": false, \"PV_CB3_Op120Source\": false, \"PV_CB3_Op246Source\": false}}, \"pv5-cache-final.tar.gz\": {\"size\": 11337575, \"member_count\": 153, \"wanted\": {\"PV_RunJoin_TrustItems\": false, \"PV_RunJoin_TrustLedger\": false, \"PV_RunJoin_SourceSelectionContract\": true, \"PV_Src_FrozenPublic\": false, \"PV_CB3_Op51Source\": false, \"PV_CB3_Op120Source\": false, \"PV_CB3_Op246Source\": false}}}, \"wall_seconds\": 0.18132033298024908, \"peak_rss_bytes\": 13877248, \"swaps\": 0, \"scope_started\": false, \"compiler_started\": false}\n",
+  "stderr": "",
+  "source_revision": "3d1afd2bce22ac9a3b316fa05ae3fd83b3883a4e",
+  "axioms": "not applicable: metadata only; no Lean invocation"
+}

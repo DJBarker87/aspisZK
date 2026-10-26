@@ -52,3 +52,20 @@ open, including the unadopted failure-repair boundary. No new shipped-row
 counterexample is claimed. The compile-free audit checks draft hashes,
 forbidden mechanisms, theorem axiom-print requests and unchanged T; it invokes
 no compiler and is not a kernel/closure audit.
+
+## Retained cache metadata
+
+cache-inventory.json records a read-only metadata inspection of the assigned
+host workspace (exit 0, 0.181320333 s, peak 13,877,248 bytes, swap 0,
+revision 3d1afd2bce; axioms N/A for metadata). No systemd scope, compiler,
+Kani invocation, extraction, reservation request or shared-tree write occurred.
+The directory survived. Both older object overlays lack the later trust and
+source/callback modules; pv5-cache-final.tar.gz retains SourceSelectionContract
+but not TrustLedger. Current local accepted cached objects are retained;
+no cold dependency build or infrastructure repair is authorized by this result.
+
+InstallationFinalAudit is prepared, with all new theorem axiom requests and
+the original trust/obligation records. It has not run. Compile smallest-first:
+CausalPrefix, EndpointSelection, then the source and callback joins after their
+read-only sibling prerequisites are restored; InstalledTrustLedger before
+CausalTrustLedger; the final audit last. No new release result exists yet.
