@@ -1,0 +1,27 @@
+F3N_P6LevelLog.lean:22:48: error(lean.unknownIdentifier): Unknown identifier `MultiproofConeNodeDomain.Domain`
+F3N_P6LevelLog.lean:25:85: error: unsolved goals
+Hash : Type
+D : aspis_core.digest.Digest32 Hash
+hash : Hash
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (rawOracle H input)
+occupied sibling : MultiproofConeP6Callbacks.Parent
+og : MultiproofConeP6Callbacks.ParentGate (rawOracle H) occupied
+sg : MultiproofConeP6Callbacks.ParentGate (rawOracle H) sibling
+height : ℕ
+s : reference.Scratch
+physical : Slice U8
+size : (↑physical).length ≤ 5504
+domain : sorry
+⊢ (List.map (fun e => (flatten e.1, decodeState e.2))
+        (eval (rawOracle H) (MultiproofConePhysicalLevels.levels height s physical)).1,
+      (eval (rawOracle H) (MultiproofConePhysicalLevels.levels height s physical)).2) =
+    (List.map (fun e => (flatten e.1, decodeState e.2))
+        (eval (rawOracle H)
+            (MultiproofConeP6Composition.levels (MultiproofConeP6Callbacks.nodeWith occupied sibling) height s
+              physical)).1,
+      (eval (rawOracle H)
+          (MultiproofConeP6Composition.levels (MultiproofConeP6Callbacks.nodeWith occupied sibling) height s
+            physical)).2)
+'AspisR1.F3N_P6LevelLog.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.F3N_P6LevelLog.callbacks' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

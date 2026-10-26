@@ -1,0 +1,39 @@
+F3N_PhysicalRows.lean:14:87: error: Ambiguous term
+  lift
+Possible interpretations:
+  F3N_PhysicalNode.lift : ∀ (r : Result ?m.14),
+    lower (CheckpointBytes5Effect.liftResult r) = AspisV8R19.MemoizedProgramLaw.Program.done r
+  
+  Std.lift : ?m.14 → Result ?m.14
+F3N_PhysicalRows.lean:20:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lower (CheckpointBytes5Effect.bind ?c ?next)
+in the target expression
+  (lower do
+      let out ← Port9OR_P6Node.node s physical i w
+      match out with
+        | reference.Row.Stop stopped => pure (reference.Level.Stop stopped)
+        | reference.Row.Next next ni nw => Port9OR_P6Rows.rows fuel next physical ni nw) =
+    MultiproofConePhysicalLevels.bindRun (MultiproofConePhysicalProgram.node s physical i w) fun out =>
+      match out with
+      | reference.Row.Stop stopped => AspisV8R19.MemoizedProgramLaw.Program.done (ok (reference.Level.Stop stopped))
+      | reference.Row.Next after ni nw => MultiproofConePhysicalLevels.rows fuel after physical ni nw
+
+case succ.isFalse
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    lower (Port9OR_P6Rows.rows fuel s physical i w) = MultiproofConePhysicalLevels.rows fuel s physical i w
+s : reference.Scratch
+i w : Usize
+h✝ : ¬i ≥ s.n
+⊢ (lower do
+      let out ← Port9OR_P6Node.node s physical i w
+      match out with
+        | reference.Row.Stop stopped => pure (reference.Level.Stop stopped)
+        | reference.Row.Next next ni nw => Port9OR_P6Rows.rows fuel next physical ni nw) =
+    MultiproofConePhysicalLevels.bindRun (MultiproofConePhysicalProgram.node s physical i w) fun out =>
+      match out with
+      | reference.Row.Stop stopped => AspisV8R19.MemoizedProgramLaw.Program.done (ok (reference.Level.Stop stopped))
+      | reference.Row.Next after ni nw => MultiproofConePhysicalLevels.rows fuel after physical ni nw
+'AspisR1.F3N_PhysicalRows.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
