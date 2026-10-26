@@ -1,0 +1,106 @@
+JFs_PaymentCommon.lean:34:77: error: Tactic `decide` failed for proposition
+  (77#u32 ≥ aspis_core.field.P) = (false = true)
+because its `Decidable` instance
+  instDecidableEqOfIff
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableEqOfIff`, `instDecidableIff`, `Bool.decEq`, `Nat.decLe`, `UScalarDecidableLE`, and `UScalar.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑aspis_core.field.P).ble ↑77#u32, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+JFs_PaymentCommon.lean:39:2: error: Tactic `rfl` failed: The left-hand side
+  if 77#u32 ≥ aspis_core.field.P then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+  else
+    ok
+      (core.result.Result.Ok
+        { pool := JFs_Cell04.value, deployment_domain := JFs_Cell05.value,
+          anchor_sequence := core.num.U64.from_le_bytes JFs_Cell06.value, anchor_root := JFt_Digest43.value,
+          nullifier := JFt_Digest44.value, asset_id := 77#u32 })
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok JFs_PaymentValue.common)
+
+validated :
+  validate_common
+      { pool := JFs_Cell04.value, deployment_domain := JFs_Cell05.value,
+        anchor_sequence := core.num.U64.from_le_bytes JFs_Cell06.value, anchor_root := JFt_Digest43.value,
+        nullifier := JFt_Digest44.value, asset_id := 77#u32 } =
+    ok (core.result.Result.Ok ())
+⊢ (if 77#u32 ≥ aspis_core.field.P then ok (core.result.Result.Err PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+    else
+      ok
+        (core.result.Result.Ok
+          { pool := JFs_Cell04.value, deployment_domain := JFs_Cell05.value,
+            anchor_sequence := core.num.U64.from_le_bytes JFs_Cell06.value, anchor_root := JFt_Digest43.value,
+            nullifier := JFt_Digest44.value, asset_id := 77#u32 })) =
+    ok (core.result.Result.Ok JFs_PaymentValue.common)
+JFs_PaymentCommon.lean:35:4: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [
+  ̵ ̵ ̵ ̵ ̵JFs_PaymentArray.range 144#usize 148#usize (by decide) (by decide),
+      JFs_PaymentArray.range 8#usize 40#usize (by decide) (by decide),
+      JFs_PaymentArray.range 40#usize 72#usize (by decide) (by decide),
+      JFs_PaymentArray.range 72#usize 80#usize (by decide) (by decide),
+      JFs_PaymentArray.range 80#usize 112#usize (by decide) (by decide),
+      JFs_PaymentArray.range 112#usize 144#usize (by decide) (by decide),
+      show (8#usize).val ̲= ̲8 from rfl,
+  ̵  ̵ ̵ ̵show (40#usize).val ̲= ̲40 from rfl,
+      show (72#usize).val ̲= ̲72 from rfl,
+  ̵  ̵ ̵ ̵show (80#usize).val ̲= ̲80 from rfl,
+      show (112#usize).val ̲= ̲112 from rfl,
+  ̵  ̵ ̵ ̵show (144#usize).val ̲= ̲144 from rfl,
+      show (148#usize).val ̲= ̲148 from rfl,
+  ̵  ̵ ̵ ̵Nat.reduceAdd, ̲Nat.reduceSub,
+  ̵  ̵ ̵ ̵JFs_PaymentReads.cast4,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentReads.cast5, ̲JFs_PaymentReads.cast6, ̲JFs_PaymentReads.cast7,
+      JFs_PaymentDigests.shared43, ̲JFs_PaymentDigests.shared44,
+  ̵  ̵ ̵ ̵JFs_PaymentDigests.decode43,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentDigests.decode44,
+  ̵  ̵ ̵ ̵atomic_statement.unwrap_fixed_slice, ̲lift, ̲bind_tc_ok,
+      JFs_PaymentValue.asset, ̲show (77#u32 >̵=̵≥̲ aspis_core.field.P) ̲= ̲false from by decide,
+  ̵  ̵ ̵ ̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓reduceIte,
+      core.result.Result.map_err, ̲core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PaymentCommon.lean:35:23: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [
+  ̵ ̵ ̵ ̵ ̵JFs_PaymentArray.range 144#usize 148#usize (by decide) (by decide),
+      JFs_PaymentArray.range 8#usize 40#usize (by decide) (by decide),
+      JFs_PaymentArray.range 40#usize 72#usize (by decide) (by decide),
+      JFs_PaymentArray.range 72#usize 80#usize (by decide) (by decide),
+      JFs_PaymentArray.range 80#usize 112#usize (by decide) (by decide),
+      JFs_PaymentArray.range 112#usize 144#usize (by decide) (by decide),
+      show (8#usize).val ̲= ̲8 from rfl,
+  ̵  ̵ ̵ ̵show (40#usize).val ̲= ̲40 from rfl,
+      show (72#usize).val ̲= ̲72 from rfl,
+  ̵  ̵ ̵ ̵show (80#usize).val ̲= ̲80 from rfl,
+      show (112#usize).val ̲= ̲112 from rfl,
+  ̵  ̵ ̵ ̵show (144#usize).val ̲= ̲144 from rfl,
+      show (148#usize).val ̲= ̲148 from rfl,
+  ̵  ̵ ̵ ̵Nat.reduceAdd, ̲Nat.reduceSub,
+  ̵  ̵ ̵ ̵JFs_PaymentReads.cast4,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentReads.cast5, ̲JFs_PaymentReads.cast6, ̲JFs_PaymentReads.cast7,
+      JFs_PaymentDigests.shared43, ̲JFs_PaymentDigests.shared44,
+  ̵  ̵ ̵ ̵JFs_PaymentDigests.decode43,
+  ̲ ̲ ̲ ̲ ̲JFs_PaymentDigests.decode44,
+  ̵  ̵ ̵ ̵atomic_statement.unwrap_fixed_slice, ̲lift, ̲bind_tc_ok,
+      JFs_PaymentValue.asset, ̲show (77#u32 >̵=̵≥̲ aspis_core.field.P) ̲= ̲false from by decide,
+      Bool.false_eq_true,↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵  ̵ ̵ ̵core.result.Result.map_err, ̲core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JFs_PaymentCommon.lean:38:4: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵i̵d̵a̵t̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲v̲a̲l̲i̲d̲a̲t̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JFs_PaymentCommon.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
