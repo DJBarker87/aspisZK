@@ -72,3 +72,66 @@ fn native_r0_debug_sink_trace() {
     };
     assert!(sink.calls==1);assert!(sink.frame==frame);assert!(result.is_err()==fail);
 }
+
+#[cfg(kani)]
+#[kani::proof]
+fn file_flush_borrowed_descriptor_value_and_frame() {
+    use std::io::Write;
+    use std::mem::ManuallyDrop;
+    use std::os::fd::{AsRawFd, FromRawFd};
+    // Valid File owners always have a nonnegative Unix descriptor. The
+    // harness supplies only its scalar representation: OS ownership remains
+    // a caller invariant, and no close/Drop contract is claimed here.
+    let fd:i32=kani::any(); kani::assume(fd>=0);
+    let frame_before:u64=kani::any();
+    let frame_after:u64=kani::any();
+    let mut file=ManuallyDrop::new(unsafe { std::fs::File::from_raw_fd(fd) });
+    let before=(frame_before,frame_after);
+    let result=Write::flush(&mut *file);
+    assert!(result.is_ok());
+    assert!(file.as_raw_fd()==fd);
+    assert!(before==(frame_before,frame_after));
+}
+
+#[cfg(kani)]
+#[kani::proof]
+fn file_descriptor_owner_codec_roundtrip() {
+    use std::mem::ManuallyDrop;
+    use std::os::fd::{AsRawFd, FromRawFd, IntoRawFd};
+    // The native caller supplies an owned open fd. Quantifying over every
+    // nonnegative scalar covers its value representation without exercising
+    // any OS operation or invalidating its retained external authority.
+    let fd:i32=kani::any(); kani::assume(fd>=0);
+    let file=unsafe { std::fs::File::from_raw_fd(fd) };
+    assert!(file.as_raw_fd()==fd);
+    let encoded=file.into_raw_fd();
+    assert!(encoded==fd);
+    let decoded=ManuallyDrop::new(unsafe { std::fs::File::from_raw_fd(encoded) });
+    assert!(decoded.as_raw_fd()==fd);
+    assert!(std::mem::size_of::<std::fs::File>()==std::mem::size_of::<i32>());
+}
+
+#[cfg(kani)]
+mod file_drop_transport {
+    use std::sync::atomic::{AtomicI32,AtomicUsize,Ordering};
+    use std::os::fd::FromRawFd;
+    static CALLS:AtomicUsize=AtomicUsize::new(0);
+    static FD:AtomicI32=AtomicI32::new(-1);
+    unsafe extern "C" { #[link_name="close"] fn close_symbol(fd:i32)->i32; }
+    unsafe extern "C" fn observed_close(fd:i32)->i32 {
+        FD.store(fd,Ordering::SeqCst);
+        CALLS.fetch_add(1,Ordering::SeqCst);
+        0
+    }
+    #[kani::proof]
+    #[kani::stub(close_symbol,observed_close)]
+    fn file_drop_one_close() {
+        let fd:i32=kani::any();kani::assume(fd>=0);
+        CALLS.store(0,Ordering::SeqCst);
+        FD.store(-1,Ordering::SeqCst);
+        let file=unsafe {std::fs::File::from_raw_fd(fd)};
+        drop(file);
+        assert!(CALLS.load(Ordering::SeqCst)==1);
+        assert!(FD.load(Ordering::SeqCst)==fd);
+    }
+}
