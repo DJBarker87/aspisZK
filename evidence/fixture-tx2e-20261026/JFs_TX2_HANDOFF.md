@@ -84,3 +84,35 @@ No shipped-source change triggers ELF rebuild. INHERITED pins only:
 - Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548
 
 Final budget, audit metrics and accepted-source manifest follow after100.
+
+## Final budget and audit stop
+
+**100/100 Lean processes:60 pass,40 reject;0/10 Kani. Budget exhausted.**
+No101st compile is permitted under this job. All59 delivered current Lean
+modules have exact-current-hash passing receipts, with individual new-theorem
+axioms checked by JFs_TX2_validate.py. Only propext,Classical.choice,Quot.sound
+or subsets occur. Final audit100 PASSES, including the actual deployed top,
+complete installed dots, both composed saved-checkpoint roots and local model
+non-vacuity. Exact target JFs_TX2_FinalAudit.lean; exit0;wall3.4367473600432277s;
+peakRSS5615272KiB;swap0;revision
+dcf84e9d59221bee0c8deb9ffa288cc8a9d052ce;dirty-source flag and exact hash are in100/receipt.json.
+Total Lean wall290.7842701889458s;maximumRSS5687844KiB;
+swap0;reservation retries0. Every launched scope is terminal.
+
+099 GeometryPoints.source computes all36 native fibre-point returns with
+explicit coordinates; input_binding binds their indices to the actual real
+Prepared queries and quarter endpoints; regular proves canonicality and raw
+nonzero coordinates. GeometryPoints.on_saved composes them with reader/dots/
+circle calls and explicit Realizes H. GeometryPoints.inhabited proves only
+local consistency with the inherited finite model oracle. LineCall remains
+UNCHECKED text, unused and not credited. No complete geometry-return, inverse,
+line_z/node, equality gate or accepted2 theorem is delivered.
+
+JFs_TX2_VALIDATION.json maps all59 delivered modules to their accepted receipts.
+RECORDS_MANIFEST and SUMMARY retain every attempted source, error, metric and
+audit. The source-table generator --check and complete source/receipt/theorem-
+axiom/scope audit pass. Checkout, BEFORE/AFTER source and coherent-host Rc10
+source share SHA256 c5c85966b83fbaf24626724fe9becdef92214389fb4286d6ba0d304f486e1527.
+The actual-top counts remain83T/12P/13G/0C;distinct combined89T/16P/13G/0C,
+zero removed,added,changed. Complete real-SHA256/native-pair/top non-vacuity
+and the100-bit target are not established.
