@@ -1,0 +1,5 @@
+# Library search-path component correction
+
+Before the final audit, inspection found that the copied job recipe retained an unused nonexistent `RPz5_trusted` path component. The actual complete pinned AeneasMeta base remains `RPz4_trusted`, as in the predecessor. Source attempts had passed without loading a direct dependency from the nonexistent directory; their raw environments are retained unchanged, and their actual direct object pins use the existing view and trusted bases. The imported, freshly replayed ImportUnionNamedDiscriminant object is retained from RPz4; its original compile-time AeneasMeta pins remain unchanged.
+
+The final audit recipe and the future source-resume recipe name `RPz4_trusted` explicitly. This corrects this job's search-path configuration only; it does not change a library object, metaprogram, source, compiler, shared launcher or host infrastructure. No source compile is repeated for this unused-path correction. Final hash validation checks all actually consumed objects, the pinned AeneasMeta additions and the full base. No missing module or failed import is concealed.

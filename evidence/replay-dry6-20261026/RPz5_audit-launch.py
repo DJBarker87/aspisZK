@@ -35,7 +35,7 @@ for i,(ms,bucket,buckets) in enumerate(groups,1):
  else:raise SystemExit('STOP audit admission retries exhausted')
  r=subprocess.run(['scp','-q',*SSH,str(E/rel),H+':'+B+'/'+rel],capture_output=True,text=True)
  if r.returncode:raise SystemExit(r.stderr)
- cfg=dict(attempt=a,kind='lean',module=name,audit_modules=ms,audit_bucket=bucket,audit_buckets=buckets,sources=[rel],source_revision=audit_revision,source_tree_dirty=True,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz5_overlay:'+B+'/RPz5_trusted:'+B+'/RPz_trusted'},command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',name+'.olean',rel],timeout=540,deps_fingerprint={'scope':'Fresh-object #print axioms via standard Lean API for a disjoint declaration partition'},expected_time='Precomputed exported axiom queries; no source replay or arithmetic generation',reservation_retries=retry)
+ cfg=dict(attempt=a,kind='lean',module=name,audit_modules=ms,audit_bucket=bucket,audit_buckets=buckets,sources=[rel],source_revision=audit_revision,source_tree_dirty=True,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz5_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',name+'.olean',rel],timeout=540,deps_fingerprint={'scope':'Fresh-object #print axioms via standard Lean API for a disjoint declaration partition'},expected_time='Precomputed exported axiom queries; no source replay or arithmetic generation',reservation_retries=retry)
  payload="""import json,hashlib
 from pathlib import Path
 B=Path(%r);T=Path(%r);ms=json.loads(%r);cfg=json.loads(%r);objs={}

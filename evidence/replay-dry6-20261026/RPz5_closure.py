@@ -74,13 +74,15 @@ def visit(m):
  for n in imports:visit(n)
  active.remove(m);mods[m]={'kind':'repository','source':p,'sha256':h(data),'bytes':len(data),'imports':imports,'selection':why,'changed_from_predecessor':prior.get('sha256')!=h(data)};order.append(m)
 visit('Rc10_Top')
+visit('Rc7_Top')
 D={}
 def dist(m,d):
  if D.get(m,-1)>=d:return
  D[m]=d
  for n in mods[m].get('imports',[]):dist(n,d+1)
 dist('Rc10_Top',0)
-out={'revision':rev,'target':'AspisR1.Rc10_Top.deployed','root':'lean/Rc10_Top.lean','modules':mods,'order':order,'distance_to_top':D,'unresolved':sorted(m for m,x in mods.items() if x['kind']=='unresolved'),'selections':selections,'predecessor_unresolved_resolution':{m:mods.get(m,{'kind':'out-of-scope'}) for m in old['unresolved']}}
+dist('Rc7_Top',0)
+out={'revision':rev,'target':'AspisR1.Rc10_Top.deployed','root':'lean/Rc10_Top.lean','additional_requested_root':'Rc7_Top','modules':mods,'order':order,'distance_to_top':D,'unresolved':sorted(m for m,x in mods.items() if x['kind']=='unresolved'),'selections':selections,'predecessor_unresolved_resolution':{m:mods.get(m,{'kind':'out-of-scope'}) for m in old['unresolved']}}
 (E/'RPz5_source-plan.json').write_text(json.dumps(out,indent=2)+'\n')
 print('REPOSITORY CLOSURE',len(order),'TRUSTED DIRECT IMPORTS',sum(x['kind']=='trusted-library' for x in mods.values()),'UNRESOLVED',len(out['unresolved']))
 print('changed',[(m,mods[m]['selection']) for m in order if mods[m]['changed_from_predecessor']]);print('unresolved',out['unresolved'])

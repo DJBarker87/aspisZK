@@ -62,7 +62,7 @@ for row in rows:
  if r.returncode:raise SystemExit('STOP source transfer: '+r.stderr)
  r=ssh('mkdir -p '+B+'/'+str(__import__('pathlib').Path(row['object']).parent))
  if r.returncode:raise SystemExit('STOP object directory: '+r.stderr)
- cfg=dict(kind='lean',module=m,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz5_overlay:'+B+'/RPz5_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',row['source'].split('/')[0],'-o',row['object'],row['source']],sources=[row['source']],attempt=a,source_revision=plan['revision'],source_tree_dirty=False,deps_fingerprint={'scope':'fresh repository closure; release-pinned toolchain/library objects only','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one committed repository module elaboration and kernel checking; no generated arithmetic probe',repository_source=row['repository_source'],reservation_retries=retry)
+ cfg=dict(kind='lean',module=m,env={'LEAN_PATH':T+'/lib/lean:'+B+'/RPz5_overlay:'+B+'/RPz4_trusted:'+B+'/RPz_trusted'},timeout=540,command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',row['source'].split('/')[0],'-o',row['object'],row['source']],sources=[row['source']],attempt=a,source_revision=plan['revision'],source_tree_dirty=False,deps_fingerprint={'scope':'fresh repository closure; release-pinned toolchain/library objects only','toolchain':'leanprover/lean4:v4.32.0'},expected_time='one committed repository module elaboration and kernel checking; no generated arithmetic probe',repository_source=row['repository_source'],reservation_retries=retry)
  # Pin actual direct predecessors before calling the existing runner.
  payload="""import json,hashlib
 from pathlib import Path

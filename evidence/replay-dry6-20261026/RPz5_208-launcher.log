@@ -1,0 +1,53 @@
+{"attempt": "RPz5_208", "exit_status": 0, "wall_seconds": 1.7042675399570726, "peak_rss_kib": "3863556", "swaps": "0", "print_axioms": ["'AspisR1.ClaimsUnrolledFinish.decode_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ClaimsUnrolledFinish.getter_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ClaimsUnrolledFinish.claims_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.ClaimsUnrolledFinish.finish_claims' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.ClaimsUnrolledFinish.decode_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ClaimsUnrolledFinish.getter_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ClaimsUnrolledFinish.claims_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.ClaimsUnrolledFinish.finish_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.ClaimsUnrolledFinish.StdCalls : Type 1
+number of parameters: 0
+fields:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.reserve : {T : Type} →
+      Type →
+        alloc.vec.Vec T →
+          Usize →
+            Result
+              (core.result.Result Unit AspisR1ClaimsUnrolle
+...
+= B.unwrapRoot, claims := claims std }
+def AspisR1.ClaimsUnrolledFinish.external : StdCalls → AspisR1ClaimsUnrolledParent.External :=
+fun std =>
+  { reserve := fun {T} => std.reserve, intoBox := fun {T} => std.intoBox, validated := sourceRecord,
+    decode := sourceDecode }
+theorem AspisR1.ClaimsUnrolledFinish.finish_claims : ∀ (std : StdCalls)
+  (R : AspisR1PublicPreparation.RoundModel.Boundaries) (B : AspisR1PublicPreparation.FinishModel.Boundaries) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : MainPrefix)
+  (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+  (obs : Option (AspisR1PublicPreparation.verifier.Phase → Result Unit))
+  (out : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisR1PublicPreparation.FinishModel.finish R (install std B) D pub pre before challenges obs =
+      ok (core.result.Result.Ok out) →
+    reference std pre = ok (core.result.Result.Ok out.claims) :=
+fun std R B {H} D pub pre before challenges obs out accepted =>
+  let ⟨running, h✝⟩ :=
+    AspisR1PublicPreparation.S1SemanticFinishBounds.finish_success R (install std B) D pub pre before challenges obs out
+      accepted
+  let ⟨t25, h✝¹⟩ := h✝
+  let ⟨record25, h✝²⟩ := h✝¹
+  let ⟨record26, h✝³⟩ := h✝²
+  let ⟨z0, h✝⁴⟩ := h✝³
+  let ⟨t26, h✝⁵⟩ := h✝⁴
+  let ⟨z1, h✝⁶⟩ := h✝⁵
+  let ⟨t27, h✝⁷⟩ := h✝⁶
+  let ⟨rounds, right✝⟩ := h✝⁷
+  let ⟨challenge, right✝¹⟩ := right✝
+  let ⟨state, right✝²⟩ := right✝¹
+  let ⟨transcript, right✝³⟩ := right✝²
+  let ⟨called, rest⟩ := right✝³
+  id
+    (fun called =>
+      Eq.mp (congrArg (fun _a => _a = ok (core.result.Result.Ok out.claims)) (claims_value std pre)) called)
+    called
+
+Running as unit: run-rc2fbad35b9dd45bbb16f9801d2f68a24.scope; invocation ID: 5ee2d01e45674c59b521443ef0003565
