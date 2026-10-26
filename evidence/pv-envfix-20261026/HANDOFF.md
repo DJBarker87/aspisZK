@@ -1,7 +1,7 @@
 # Private env-J repair handoff
 
 Branch: codex/pv-envfix-20261026. Research sources pinned at `3dbbe11f663278482e9382c451226c2c3fbc3ec8`;
-worktree base `388253b6a8b94b31a6cd9b79faafffac01c2f5cc`. No proof source changes. Zero premises removed,
+worktree base `388253b6a8b94b31a6cd9b79faafffac01c2f5cc`. No existing proof source changes. Zero premises removed,
 retained all existing endpoint/deployment obligations. Target not yet established.
 
 ## Measured diagnosis
@@ -69,10 +69,38 @@ environment change, not an unchanged retry. No memory failure was retried.
 Research EventsR1P2's already symbolic proof succeeds, so fallback bisection
 or a new cardinality proof is neither required nor justified.
 
-A separate PV_Env_Axioms module is prepared to audit every theorem, including
-pubC_tame (omitted from the original module's print list). It adds no theorem.
+The separate PV_Env_Axioms module compiled successfully at attempt 35903:
+exit 0, GNU wall 0:01.30, peak RSS 3566324 KiB, swaps 0, source revision
+7c34917e57d463cd3fb379096a793df2aef5ba34. It audits all **19** theorems,
+including pubC_tame (omitted from the original module's print list).
+Every axiom set is a subset of [propext, Classical.choice, Quot.sound].
+It adds no theorem and changes no statement. Full receipt and all 19 exact
+#print axioms results: receipts/receipt-35903.json and out-35903.log.
+The audit imports the newly compiled private objects by their recorded hashes.
 
-Lean compile attempts: 3 / 60 so far. Kani: 0. No local Lean invoked.
+Lean compile attempts: **4 / 60**, including the missing-import failure; 3 successful. Kani: 0. No local Lean invoked.
 No full manifest replay: this is a focused source-selection repair.
+Final read-only integrity check: final-integrity.json, all_pass=true. All
+51 shared chain sources, every previously present shared chain object, shared
+launcher and J.json still match their pre-repair pins; private targets match
+research bytes. No cap raised, no reservation refused, no concurrent job scope
+started by this job, no unchanged memory failure retried.
+
 The two private objects are retained for the lead's integration; shared
 sources, objects, env and launcher remain unchanged by this job.
+
+
+## Stop and next deliverable
+
+The assigned environment diagnosis and repair is complete. Both failures are
+repaired by selecting the existing research target variants; neither requires
+a research proof change. No failing research-HEAD proof remains to justify
+fallback edits or bisection. The unused budget is not spent on unchanged
+regressions. This job does not adopt or overwrite shared objects.
+
+Next concrete deliverable for the integrating lead: promote/select the two
+research source hashes and private object receipts in the coherent environment
+manifest, then replay the seven named consumers with standard-axiom checks.
+The privacy target and all actual refinement/deployment premises remain open
+until the lead establishes them; this repair removes zero endpoint premises.
+No crates/, programs/, soundness files, session A candidates or key files changed.
