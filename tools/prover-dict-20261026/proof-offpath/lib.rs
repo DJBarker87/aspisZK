@@ -44,3 +44,15 @@ fn zeroizing_mutable_adapters_full_frame() {
 }
 #[cfg(kani)]
 pub fn ct_default()->sha2::digest::core_api::CtVariableCoreWrapper<sha2::Sha256VarCore,sha2::digest::typenum::U32> { Default::default() }
+#[cfg(kani)]
+pub fn wrapper_default()->sha2::Sha256 { Default::default() }
+#[cfg(kani)]
+pub fn wrapper_update(state:&mut sha2::Sha256,data:&[u8]) {
+    use sha2::digest::Update;
+    Update::update(state,data);
+}
+#[cfg(kani)]
+pub fn wrapper_finalize(state:sha2::Sha256,out:&mut sha2::digest::Output<sha2::Sha256>) {
+    use sha2::digest::FixedOutput;
+    state.finalize_into(out);
+}
