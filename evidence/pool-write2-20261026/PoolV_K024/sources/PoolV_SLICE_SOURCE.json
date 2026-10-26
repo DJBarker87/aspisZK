@@ -1,0 +1,34 @@
+{
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs",
+  "slices": [
+    {
+      "label": "chronology",
+      "first": 514,
+      "last": 530,
+      "sha256": "e19f7e831afc30d27cd04659c2b8de5014c4eb6dcc73247c1be9c8bb6d6cb517",
+      "exact_text": "    if master.has_checkpoint {\n        let mut progressed = false;\n        for lane in 0..POOL_V1_PAIR_FOREST_LANE_COUNT {\n            if lane_sequences[lane] < master.last_checkpoint_lane_sequences[lane] {\n                return Err(PoolV1PairForestAccountErrorV1::LaneSequenceDecreased);\n            }\n            progressed |= lane_sequences[lane] > master.last_checkpoint_lane_sequences[lane];\n        }\n        if !progressed {\n            return Err(PoolV1PairForestAccountErrorV1::DuplicateCheckpoint);\n        }\n    }\n    let next_sequence = master\n        .next_checkpoint_sequence\n        .checked_add(1)\n        .ok_or(PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow)?;\n"
+    },
+    {
+      "label": "lanes",
+      "first": 501,
+      "last": 514,
+      "sha256": "3147d10fadd0338260369b31514e8cc3960fee1ac7a849d14eacb165091de049",
+      "exact_text": "    let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];\n    for (expected_lane, lane) in lanes.iter().enumerate() {\n        if lane.master != master.identity.pool {\n            return Err(PoolV1PairForestAccountErrorV1::LaneMasterMismatch);\n        }\n        if usize::from(lane.lane_id) != expected_lane {\n            return Err(PoolV1PairForestAccountErrorV1::LaneOrderMismatch);\n        }\n        if lane.tree.next_leaf_index > POOL_V1_PAIR_CAPACITY {\n            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);\n        }\n        lane_sequences[expected_lane] = lane.tree.next_leaf_index;\n    }\n"
+    },
+    {
+      "label": "assembly",
+      "first": 530,
+      "last": 548,
+      "sha256": "a9f35289c2ba19a704c60a4c2115acc2e840ab0510e82442ff986b3a1ef83f4d",
+      "exact_text": "    let checkpoint = PoolV1PairForestCheckpointV1 {\n        bump: checkpoint_bump,\n        master: master.identity.pool,\n        deployment_domain: master.identity.deployment_domain,\n        checkpoint_sequence: master.next_checkpoint_sequence,\n        global_root,\n        lane_sequences,\n    };\n    let next_master = PoolV1PairForestMasterV1 {\n        has_checkpoint: true,\n        next_checkpoint_sequence: next_sequence,\n        last_checkpoint_lane_sequences: lane_sequences,\n        ..*master\n    };\n    validate_master(&next_master)?;\n    Ok(PoolV1PairForestCheckpointPlanV1 {\n        next_master,\n        checkpoint,\n    })"
+    },
+    {
+      "label": "validate_master",
+      "first": 204,
+      "last": 232,
+      "sha256": "2b722ee67a4e1f01910341c5c8d5a2cf48bb66f6f787416e07dc1394615d67e0",
+      "exact_text": "fn validate_master(\n    master: &PoolV1PairForestMasterV1,\n) -> Result<(), PoolV1PairForestAccountErrorV1> {\n    if master.identity.pool == [0u8; 32]\n        || master.identity.asset_mint == [0u8; 32]\n        || master.identity.token_program == [0u8; 32]\n        || master.identity.deployment_domain == [0u8; 32]\n    {\n        return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);\n    }\n    validate_verifier_policy_v1(&master.verifier_policy)\n        .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;\n    if master\n        .last_checkpoint_lane_sequences\n        .iter()\n        .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)\n    {\n        return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);\n    }\n    if (!master.has_checkpoint\n        && (master.next_checkpoint_sequence != 0\n            || master.last_checkpoint_lane_sequences != [0u64; 8]))\n        || (master.has_checkpoint && master.next_checkpoint_sequence == 0)\n    {\n        return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);\n    }\n    Ok(())\n}\n"
+    }
+  ],
+  "scope": "Native byte-identical source slices with accessed-field projection; enclosing actual struct/caller refinement still separate"
+}

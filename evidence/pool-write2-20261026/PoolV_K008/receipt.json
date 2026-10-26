@@ -1,0 +1,62 @@
+{
+  "attempt": "PoolV_K008",
+  "kind": "kani",
+  "source_revision": "c3dd218a3f905024f0dc4c1400d4c7b78cc5beb3",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_cpi/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolV_cpi_funded_assign_fail",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolV_cpi/Cargo.toml",
+    "PoolV_cpi/PoolV_harness.rs",
+    "PoolV_cpi/PoolV_lib.rs",
+    "PoolV_cpi/error.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual CPI construction at one fixed funding branch and failure position; recording runtime only"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check",
+  "exit_status": 0,
+  "wall_seconds": 51.40078613796504,
+  "peak_rss_kib": "1365900",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolV-K008.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2251886592",
+  "source_hashes": {
+    "PoolV_cpi/Cargo.toml": "5f680bbf68bd5eef6b1936f4ccb496d829eaf0035a29e97a2bfb7f263b0522ef",
+    "PoolV_cpi/PoolV_harness.rs": "53ad690218c0ea4e4a6b108d6b833a70672b1209e12e421bd7ba59955c88a189",
+    "PoolV_cpi/PoolV_lib.rs": "6bda8b7b38f98eaec82c7be807f3941d511295f24a091745362bbbff2b531ae4",
+    "PoolV_cpi/error.rs": "7a70c51c3a2f8e9ca09370f530704089ce2c85c658c1e6d7131fd984ebd17d2e"
+  },
+  "print_axioms": "N/A: kani"
+}

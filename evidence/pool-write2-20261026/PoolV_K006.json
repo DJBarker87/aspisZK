@@ -1,0 +1,43 @@
+{
+  "attempt": "PoolV_K006",
+  "kind": "kani",
+  "source_revision": "c3dd218a3f905024f0dc4c1400d4c7b78cc5beb3",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_cpi/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolV_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolV_cpi_topup_assign_fail",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolV_cpi/Cargo.toml",
+    "PoolV_cpi/PoolV_harness.rs",
+    "PoolV_cpi/PoolV_lib.rs",
+    "PoolV_cpi/error.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual CPI construction at one fixed funding branch and failure position; recording runtime only"
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}
