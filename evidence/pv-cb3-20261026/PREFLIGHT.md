@@ -16,3 +16,11 @@ for the full function, and is never credited as a row closure.
 Local Lean is installed, but this worktree has no local Mathlib/Aeneas cache.
 Do not start a cold dependency build to work around host contention. The standard
 Env-J launcher can compile the generic `Std`-only helper independently.
+
+The pending op225 proof reuses the candidate's existing read-only extracted
+`ProverRwP6TransitionSource` and its selected callback. Its previous installation
+theorem quantifies over a raw input and forward payload adapters, hence covers
+only a mapped image. The new statement quantifies over every original callback
+input and arbitrary reverse adapters. Both payloads are ignored by the extracted
+transition projection, so no bijection, surjectivity or output premise is added.
+Adapter independence is stated separately. This is pending focused compilation.

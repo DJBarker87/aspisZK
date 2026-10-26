@@ -3,8 +3,11 @@
 Branch `codex/pv-cb3-20261026`, independent callback rows of recount 2.
 Prefix `PV_CB3_`; Env J 24700–24999; budgets 100 Lean / 20 Kani.
 
-No row is discharged at this preparation stage. Recount 2 baseline: OPEN 110,
-independent OPEN 51, CLOSED-ON-CANDIDATE 40. Endpoint premises removed: 0.
+The current checked row table is `ROWS.md`; op246/V254 and op229/V246 are
+discharged on this candidate by their `PV_CB3_Op*Source.op*_source` theorems,
+receipts 24701 and 24705. Recount 2 baseline:
+OPEN 110, independent OPEN 51, CLOSED-ON-CANDIDATE 40; adding this worker gives
+108 / 49 / 42. Endpoint premises removed: 0.
 Target not yet established.
 
 The first four targets, descending: op258/V264, op253/V260,
@@ -23,3 +26,7 @@ No capped scope launched, no Lean/Kani attempt charged. Receipt:
 `charon-source-op258-001/reservation-transport.log`. Retry after the required three-minute wait with a new extraction receipt
 suffix; host launchers and reservation gates
 remain authoritative. No shared infrastructure edited.
+
+Collector metadata correction: the copied collector originally carried a legacy
+821157fbdd source-identity phrase. It is replaced with this worker's verified
+09df2340 base and the 782-file hash inventory; raw command/output evidence is unchanged.

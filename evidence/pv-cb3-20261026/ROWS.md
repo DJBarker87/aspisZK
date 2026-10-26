@@ -1,7 +1,10 @@
 # Callback source-law worklist
 
-Baseline/current: 110 OPEN / 51 independent OPEN / 40 CLOSED-ON-CANDIDATE.
-This worker: 0 ROW-DISCHARGED(candidate); endpoint premises removed 0.
+Recount-2 baseline → baseline plus this worker: OPEN 110 → 108;
+independent OPEN 51 → 49; CLOSED-ON-CANDIDATE 40 → 42.
+Other live sibling changes are not folded into these arithmetic counts.
+This worker: 2 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
+No implementation or release pin changed. Target not yet established.
 
 |op|row|status|theorem|receipt|
 |---:|---|---|---|---|
@@ -9,10 +12,10 @@ This worker: 0 ROW-DISCHARGED(candidate); endpoint premises removed 0.
 |253|V260|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op253-002/collected-receipt.json|
 |252|V259|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op252-001/collected-receipt.json|
 |251|V258|OPEN: direct extraction obstructed; P6 pending|—|aeneas-source-op251-001/collected-receipt.json|
-|249|V256|OPEN|—|—|
-|246|V254|OPEN|—|—|
-|230|V247|OPEN|—|—|
-|229|V246|OPEN|—|—|
+|249|V256|OPEN: extracted skeleton has unresolved library cuts|—|aeneas-source-op249-002/collected-receipt.json|
+|246|V254|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op246Source.op246_source|24701.json|
+|230|V247|OPEN: direct iterator closure obstructed; narrowing/P6 pending|—|aeneas-source-op230-001/collected-receipt.json|
+|229|V246|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op229Source.op229_source|24705.json|
 |228|V245|OPEN|—|—|
 |227|V244|OPEN|—|—|
 |226|V243|OPEN|—|—|
