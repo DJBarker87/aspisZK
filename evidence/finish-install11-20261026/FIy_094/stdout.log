@@ -1,0 +1,40 @@
+FIy_ValueRangeShape.lean:44:50: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑j < 30 then ?m.289 else ?m.290
+in the target expression
+  FIx_ValueBitPrefix.model o (fun x => 0) j =
+    if ↑j < 10 then FIx_ValueBitModel.bit o.z ↑j
+    else if ↑j < 20 then FIx_ValueBitModel.bit o.succ_z (↑j - 10) else FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+
+case neg
+o : Openings
+j : Fin ↑33#usize
+bound : ↑j < 33
+h32 : ¬↑j = 32
+ne32 : j ≠ ⟨32, ⋯⟩
+h31 : ¬↑j = 31
+ne31 : j ≠ ⟨31, ⋯⟩
+h30 : ¬↑j = 30
+ne30 : j ≠ ⟨30, ⋯⟩
+⊢ FIx_ValueBitPrefix.model o (fun x => 0) j =
+    if ↑j < 10 then FIx_ValueBitModel.bit o.z ↑j
+    else if ↑j < 20 then FIx_ValueBitModel.bit o.succ_z (↑j - 10) else FIx_ValueBitModel.bit o.xor12_z (↑j - 20)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (33 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FIy_ValueRangeShape.lean:26:44: warning: This simp argument is unused:
+  FIx_ValueBitPrefix.model
+
+Hint: Omit it from the simp argument list.
+  simp only [̵u̵n̵w̵e̵i̵g̵h̵t̵e̵d̵,̵F̵I̵y̵_̵V̵a̵l̵u̵e̵T̵a̵i̵l̵.̵m̵o̵d̵e̵l̵,̵F̵I̵x̵_̵V̵a̵l̵u̵e̵B̵i̵t̵P̵r̵e̵f̵i̵x̵.̵m̵o̵d̵e̵l̵]̵[̲u̲n̲w̲e̲i̲g̲h̲t̲e̲d̲,̲ ̲F̲I̲y̲_̲V̲a̲l̲u̲e̲T̲a̲i̲l̲.̲m̲o̲d̲e̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIy_ValueRangeShape.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.FIy_ValueRangeShape.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

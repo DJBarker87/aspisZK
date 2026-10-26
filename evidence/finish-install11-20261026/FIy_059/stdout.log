@@ -1,0 +1,36 @@
+FIy_EmptyRootMap.lean:12:16: error: unsolved goals
+case cons
+x : U32
+xs : List U32
+ih :
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut U32 U32).call_mut xs field.M31_constructor =
+    ok (xs, field.M31_constructor)
+⊢ (do
+      let __x ←
+        AspisV8R19.TraversalRuntime.mapState
+            (fun f x =>
+              match f x with
+              | ok y => ok (y, f)
+              | fail e => fail e
+              | div => div)
+            xs field.M31_constructor
+      ok (x :: __x.1, __x.2)) =
+    ok (x :: xs, field.M31_constructor)
+FIy_EmptyRootMap.lean:13:98: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisV8R19.TraversalRuntime.mapState, ̲BuiltinFnMut, ̲field.M31_constructor,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIy_EmptyRootMap.lean:16:4: error: Ambiguous term
+  core.array.Array.map
+Possible interpretations:
+  FIq_Native.core.array.Array.map (BuiltinFnMut U32 U32) a field.M31_constructor : Result (Std.Array U32 N)
+  
+  Std.core.array.Array.map (BuiltinFnMut U32 U32) a field.M31_constructor : Result (Std.Array U32 N)
+FIy_EmptyRootMap.lean:17:9: error: ambiguous term, use fully qualified name, possible interpretations [@FIq_Native.core.array.Array.map,
+ @Std.core.array.Array.map]
+'AspisR1.FIy_EmptyRootMap.list_value' depends on axioms: [sorryAx]
+'AspisR1.FIy_EmptyRootMap.value' depends on axioms: [sorryAx]

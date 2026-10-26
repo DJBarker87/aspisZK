@@ -1,0 +1,45 @@
+FIy_ValueSelector.lean:28:46: error(lean.unknownIdentifier): Unknown identifier `out`
+FIy_ValueSelector.lean:18:87: error: unsolved goals
+s : Selectors
+index : Usize
+hh : canonical s.high
+hl : canonical s.low
+base : UScalar UScalarTy.Usize
+hbase : 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK = ok base
+row : UScalar UScalarTy.Usize
+hrow : base + index = ok row
+v✝ : field.QM31
+hv : pool_v1.pair_forest_copy_terminal.Selectors.row s row = ok v✝
+success✝² :
+  (do
+      let i ← 16#usize * pool_v1.pair_forest_semantic_terminal.VALUE_AUXILIARY_BLOCK
+      let i1 ← i + index
+      let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      ok (q, s)) =
+    ok (v✝, s)
+success✝¹ :
+  (do
+      let i1 ← base + index
+      let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      ok (q, s)) =
+    ok (v✝, s)
+success✝ :
+  (do
+      let q ← pool_v1.pair_forest_copy_terminal.Selectors.row s row
+      ok (q, s)) =
+    ok (v✝, s)
+success : ok (v✝, s) = ok (v✝, s)
+bv : ↑base = 1008
+rv : ↑row = ↑base + ↑index
+v : Canon sorry ∧ decode sorry = FIv_NativeArray.value s.high (↑row / 16) * FIv_NativeArray.value s.low (↑row % 16)
+⊢ decode v✝ = FIy_FrontierMeaning.rowValue s (1008 + ↑index)
+FIy_ValueSelector.lean:44:2: error: Type mismatch: After simplification, term
+  v.right
+ has type
+  @Eq (List K) (List.map decode ↑out)
+    (List.map (fun i => FIy_FrontierMeaning.rowValue s (1008 + ↑i)) ↑(Array.make 3#usize [0#usize, 2#usize, 4#usize] ⋯))
+but is expected to have type
+  @Eq (List K) (List.map decode ↑out)
+    (Fin.foldr 3 (fun i x2 => FIy_FrontierMeaning.rowValue s (1008 + 2 * ↑i) :: x2) [])
+'AspisR1.FIy_ValueSelector.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIy_ValueSelector.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

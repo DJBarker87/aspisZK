@@ -1,0 +1,175 @@
+FIy_PublicDigestSuffix.lean:64:9: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+initial out : Std.Array NQ 8#usize
+src : Snapshot
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+hi : canonical initial
+hn : ∀ x ∈ ↑p.transition.candidate_afterstate.next_root, ↑x < FIw_ScalarArithmetic.P
+hf : ∀ row ∈ ↑p.transition.candidate_afterstate.next_frontier, ∀ x ∈ ↑row, ↑x < FIw_ScalarArithmetic.P
+success✝⁹ :
+  (do
+      let i6 ← 53#usize * 16#usize
+      let i7 ← i6 + 11#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding initial q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding digests6 q4 o.z 0#usize a false
+        else ok digests6) =
+    ok out
+i6 : UScalar UScalarTy.Usize
+h_i6 : 53#usize * 16#usize = ok i6
+success✝⁸ :
+  (do
+      let i7 ← i6 + 11#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding initial q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding digests6 q4 o.z 0#usize a false
+        else ok digests6) =
+    ok out
+i7 : UScalar UScalarTy.Usize
+h_i7 : i6 + 11#usize = ok i7
+success✝⁷ :
+  (do
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding initial q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding digests6 q4 o.z 0#usize a false
+        else ok digests6) =
+    ok out
+q3 : field.QM31
+h_q3 : pool_v1.pair_forest_copy_terminal.Selectors.row s i7 = ok q3
+success✝⁶ :
+  (do
+      let digests6 ←
+        pool_v1.pair_forest_semantic_terminal.add_digest_binding initial q3 o.z 0#usize
+            p.transition.candidate_afterstate.next_root false
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding digests6 q4 o.z 0#usize a false
+        else ok digests6) =
+    ok out
+d6 : Std.Array field.QM31 8#usize
+h_d6 :
+  pool_v1.pair_forest_semantic_terminal.add_digest_binding initial q3 o.z 0#usize
+      p.transition.candidate_afterstate.next_root false =
+    ok d6
+success✝⁵ :
+  (do
+      let carry ← pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index
+      if carry < 20#usize then do
+          let i8 ← 33#usize + carry
+          let i9 ← i8 * 16#usize
+          let i10 ← i9 + 11#usize
+          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+          let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+          pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 q4 o.z 0#usize a false
+        else ok d6) =
+    ok out
+carry : Usize
+h_carry : pool_v1.pair_forest_semantic_terminal.bounded_append_carry src.next_pair_index = ok carry
+rv : ↑i7 = 859
+first :
+  canonical d6 ∧
+    decoded d6 = FIy_PublicDigestStep.model s o.z (↑i7) p.transition.candidate_afterstate.next_root (decoded initial)
+cv : ↑carry = R0P.digestCarry ↑src.next_pair_index ∧ ↑carry ≤ 20
+hc : carry < 20#usize
+success✝⁴ :
+  (do
+      let i8 ← 33#usize + carry
+      let i9 ← i8 * 16#usize
+      let i10 ← i9 + 11#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+      let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+      pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 q4 o.z 0#usize a false) =
+    ok out
+block : UScalar UScalarTy.Usize
+hblock : 33#usize + carry = ok block
+success✝³ :
+  (do
+      let i9 ← block * 16#usize
+      let i10 ← i9 + 11#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+      let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+      pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 q4 o.z 0#usize a false) =
+    ok out
+base : UScalar UScalarTy.Usize
+hbase : block * 16#usize = ok base
+success✝² :
+  (do
+      let i10 ← base + 11#usize
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i10
+      let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+      pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 q4 o.z 0#usize a false) =
+    ok out
+row : UScalar UScalarTy.Usize
+hrow : base + 11#usize = ok row
+success✝¹ :
+  (do
+      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s row
+      let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+      pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 q4 o.z 0#usize a false) =
+    ok out
+selector : field.QM31
+hselector : pool_v1.pair_forest_copy_terminal.Selectors.row s row = ok selector
+success✝ :
+  (do
+      let a ← p.transition.candidate_afterstate.next_frontier.index_usize carry
+      pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 selector o.z 0#usize a false) =
+    ok out
+expected : Std.Array field.M31 8#usize
+hexpected : p.transition.candidate_afterstate.next_frontier.index_usize carry = ok expected
+success : pool_v1.pair_forest_semantic_terminal.add_digest_binding d6 selector o.z 0#usize expected false = ok out
+bv : ↑block = 33 + ↑carry
+finalRow : ↑row = ↑block * 16 + ↑11#usize
+slot : (↑p.transition.candidate_afterstate.next_frontier)[↑carry]? = some expected
+same : next p ↑carry = expected
+last : canonical out ∧ decoded out = FIy_PublicDigestStep.model s o.z (↑row) expected (decoded d6)
+h : R0P.digestCarry ↑src.next_pair_index < 20
+⊢ FIy_PublicDigestStep.model s o.z ((33 + ↑carry) * 16 + 11) (next p ↑carry)
+      (FIy_PublicDigestStep.model s o.z 859 p.transition.candidate_afterstate.next_root (decoded initial)) =
+    if ↑carry < 20 then
+      FIy_PublicDigestStep.model s o.z ((33 + ↑carry) * 16 + 11) (next p ↑carry)
+        (FIy_PublicDigestStep.model s o.z 859 p.transition.candidate_afterstate.next_root (decoded initial))
+    else FIy_PublicDigestStep.model s o.z 859 p.transition.candidate_afterstate.next_root (decoded initial)
+FIy_PublicDigestSuffix.lean:80:21: warning: This simp argument is unused:
+  if_pos h
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵o̵d̵e̵l̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵,̵←̵c̵v̵.̵1̵,̵←̵s̵a̵m̵e̵,̵s̵h̵o̵w̵ ̵(̵1̵1̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵1̵1̵[̲m̲o̲d̲e̲l̲,̲ ̲←̲ ̲c̲v̲.̲1̲,̲ ̲←̲ ̲s̲a̲m̲e̲,̲ ̲s̲h̲o̲w̲ ̲(̲1̲1̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲1̲1̲ from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIy_PublicDigestSuffix.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

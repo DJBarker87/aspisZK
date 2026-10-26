@@ -1,0 +1,45 @@
+FIy_Scaling.lean:42:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => _a[↑j] = v ↑j
+Error: Application type mismatch: The argument
+  out.property
+has type
+  (↑out).length = ↑33#usize
+but is expected to have type
+  _a.length = ↑33#usize
+in the application
+  congrArg (fun _a => ↑j < _a) out.property
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+range : Std.Array QM 33#usize
+selector : QM
+hc : canonical range
+hs : Canon selector
+iter : IterMut := { slice := range.to_slice }
+v : ℕ → QM
+hv : ∀ (j : ℕ) (hj : j < 33), Canon (v j) ∧ decode (v j) = decode selector * decode (↑iter.slice)[j]
+final : core.slice.iter.IterMut field.QM31
+back : core.slice.iter.IterMut field.QM31 → core.slice.iter.IterMut field.QM31
+hr : Loop3 iter (fun x => x) selector = ok (final, back)
+hsl : final.slice = iter.slice
+hi : final.i = 33
+hback : ∀ (im : core.slice.iter.IterMut field.QM31), back im = deferredWrites v 0 33 im
+out : Std.Array QM 33#usize := ⟨List.mapIdx (fun i old => (↑(back final).slice)[i]?.getD old) ↑range, ⋯⟩
+outVal : ↑out = List.ofFn fun i => v ↑i
+j : Fin ↑33#usize
+⊢ (↑out)[↑j] = v ↑j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (33 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.FIy_Scaling.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIy_Scaling.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

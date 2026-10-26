@@ -1,0 +1,40 @@
+FIy_EmptyRootMap.lean:22:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h : _a with
+      | ok (ys, _last) => ok ⟨ys, ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok a
+Error: Application type mismatch: The argument
+  h
+has type
+  _a = ok (ys, _last)
+but is expected to have type
+  AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut U32 U32).call_mut (↑a) field.M31_constructor = ok (ys, _last)
+in the application
+  core.array.Array.map._proof_1 (BuiltinFnMut U32 U32) a field.M31_constructor ys _last h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+N : Usize
+a : Std.Array U32 N
+⊢ (match h : AspisV8R19.TraversalRuntime.mapState (BuiltinFnMut U32 U32).call_mut (↑a) field.M31_constructor with
+    | ok (ys, _last) => ok ⟨ys, ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array U32 N
+  but is expected to have type
+    { l // l.length = ↑N }
+  in the application
+    ↑a
+'AspisR1.FIy_EmptyRootMap.list_value' depends on axioms: [propext]
+'AspisR1.FIy_EmptyRootMap.value' depends on axioms: [propext, sorryAx]
