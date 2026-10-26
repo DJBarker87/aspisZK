@@ -98,7 +98,6 @@ theorem accepted {W A F CoreError : Type}
       (Rc2_Install.select c reservation) native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall
       program data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1 accepted2
       f s cuts writer reader
-  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,strong,initial,publicFacts,sourceFacts,accepted,?_⟩
   have pairCuts : SourceCuts (SdkD_PairBatches.dictionary r.adapter r.currentBase r.stageBase r.finish r.reserved r.query r.geometry r.boundaries r.std)
       e1.first (e2.second secondSizes) saved f s := by
     rw [AuS1_Install.dictionary]; exact cuts
@@ -106,9 +105,14 @@ theorem accepted {W A F CoreError : Type}
       (SdkD_PairBatches.dictionary r.adapter r.currentBase r.stageBase r.finish r.reserved r.query r.geometry r.boundaries r.std)
       native1 native2 hashv := by
     rw [AuS1_Install.dictionary]; exact extraction
-  exact PFin_BoundCaller.from_cut L e1 e2 w1 w2 r.adapter r.currentBase r.reserved r.query r.geometry
-    r.stageBase r.finish r.boundaries r.std program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
-    pairCuts selected header1.2.2.1 scanned.2.2 native1 native2 hashv pairExtraction sha256 p1 syscall caller
+  refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,calls,strong,initial,publicFacts,sourceFacts,accepted,?_,?_⟩
+  · let words := CanonicalCutEnrichedTranscript.wordsFromMaps (fun _=>none) (fun _=>none) (fun _=>none)
+    exact PFin_Packet.from_cut r.adapter r.currentBase r.reserved r.query r.geometry r.stageBase r.finish
+      r.boundaries r.std e1.first (e2.second secondSizes) saved f s pairCuts selected run header1.2.2.1 H
+      native1 native2 hashv pairExtraction sha256 p1 syscall words scanned.2.2
+  · exact PFin_BoundCaller.from_cut L e1 e2 w1 w2 r.adapter r.currentBase r.reserved r.query r.geometry
+      r.stageBase r.finish r.boundaries r.std program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
+      pairCuts selected header1.2.2.1 scanned.2.2 native1 native2 hashv pairExtraction sha256 p1 syscall caller
 
 #print axioms accepted
 end AspisR1.PFin_Final

@@ -57,6 +57,14 @@ def Outcome {F C : Type} (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCalle
               (SdkD_PairBatches.current adapterOps ops stageBase finishOps reserved queryOps geoOps B claimsStd)
               (AspisS6CurrentVerifierCarrier.toPublic f.semantic) f.proof () (Array.repeat 29#usize run.zero)) authParsed.semantic q tr i
 
+theorem same_parsed (stored : Bytes) (tr : RawCutTranscriptRun.ErasedPrefix)
+    (p p' : OraclePortCompactDraft.Parsed)
+    (reached : OraclePortStoredParserC4.parseReached stored tr = some p)
+    (parsed : OraclePortCompactDraft.parse stored = some p') : p=p' :=
+  Option.some.inj ((OraclePortStoredParserC4.parsed _ _ _ reached).1.symm.trans parsed)
+
+#print axioms same_parsed
+
 theorem from_cut {F C : Type} (adapterOps : AdapterRw.Ops) (ops : AspisR1CurrentCaller.Ops)
     (stageBase : VTop_Stages.Ops) (finishOps : AspisR1Stage2.Stage2Finish.FinishOps F)
     (reserved : Bool) (queryOps : Port3_NativeQueryBody.Ops) (geoOps : Port3_NativeGeometryBody.Ops C)
@@ -89,8 +97,7 @@ theorem from_cut {F C : Type} (adapterOps : AdapterRw.Ops) (ops : AspisR1Current
       accounts1 accounts2 saved f s cuts selected run header H native1 native2 hashv extraction sha256 p1 syscall words canonical
   intro queryLeaves geoLeaves domain multiply one inverse
   obtain ⟨authParsed,frame,parser,frameRead,target,ten,finish⟩ := old queryLeaves geoLeaves domain multiply one inverse
-  have parser' := (OraclePortStoredParserC4.parsed _ _ _ reached).1
-  have peq : p=authParsed := Option.some.inj (parser'.symm.trans parser)
+  have peq : p=authParsed := same_parsed _ _ p authParsed reached parser
   subst authParsed
   refine ⟨p,frame,parser,frameRead,target,modelInput,q,i,physical,stored,reached,aligned,queries,found,read,decoded,prepare,?_,?_⟩
   · exact PFin_Ten.consume run H _ p q i.data (SelectedChallengeMap.rhoOf i.rho) _ ten prepare read

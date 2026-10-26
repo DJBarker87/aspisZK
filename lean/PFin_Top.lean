@@ -1,3 +1,4 @@
+import PFin_Final
 import Rc2_Top
 import PFin_Result
 import Rc2_Install
@@ -110,7 +111,7 @@ theorem deployed {W A F CoreError : Type}
        6*((Q0+Q1+23625 : Nat) : Rat)^2/(2:Rat)^256) +
       1/(2:Rat)^126 + 1/(2:Rat)^454) ∧
     (Q0+Q1 = 0 → failureModel runtime + EndP_AuthMass.mass source project ≤ 1/(2:Rat)^100)) ∧
-    (PFin_Result.Outcome L e1 e2 w1 w2 (Rc2_Install.configuration c reservation).adapter (Rc2_Install.configuration c reservation).currentBase (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry (Rc2_Install.configuration c reservation).stageBase (Rc2_Install.configuration c reservation).finish (Rc2_Install.configuration c reservation).boundaries reservation program data1 data2 slot saved post1 post2 H (DrvC_Implementation.driver (Rc2_Install.configuration c reservation)) prior (Rc2_Install.configuration c reservation) hashv native1 native2 copy allocator) ∧
+    (PFin_FinalResult.Outcome L e1 e2 w1 w2 (Rc2_Install.configuration c reservation).adapter (Rc2_Install.configuration c reservation).currentBase (Rc2_Install.configuration c reservation).reserved (Rc2_Install.configuration c reservation).query (Rc2_Install.configuration c reservation).geometry (Rc2_Install.configuration c reservation).stageBase (Rc2_Install.configuration c reservation).finish (Rc2_Install.configuration c reservation).boundaries reservation program data1 data2 slot saved post1 post2 H (DrvC_Implementation.driver (Rc2_Install.configuration c reservation)) prior (Rc2_Install.configuration c reservation) hashv native1 native2 copy allocator) ∧
     (native1 program e1.first data1 = ok (.Ok saved) ∧
       saved.val.length = 1768 ∧
       payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768 = bytesOf saved.val ∧
@@ -125,9 +126,9 @@ theorem deployed {W A F CoreError : Type}
     state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
     D P Q0 Q1 hqueries runtime raw binding adversary chooseSecond prefixBound choiceBound project
   refine ⟨driverEq,sdkEq,headline,?_,copyFacts,events,protection⟩
-  exact PFin_Result.strengthen L e1 e2 w1 w2 _ _ _ _ _ _ _ _ reservation program
-    data1 data2 slot saved post1 post2 H _ prior _ hashv native1 native2 copy allocator
-    extraction sha256 p1 syscall original
+  exact PFin_Final.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 c reservation
+    native1 native2 prepareOwner primitiveOwner hashv extraction sha256 H p1 syscall program data1 data2 slot
+    state1 state2 final1 final2 saved post1 post2 accepted1 accepted2 root length prior
 
 #print axioms deployed
 end AspisR1.PFin_Top

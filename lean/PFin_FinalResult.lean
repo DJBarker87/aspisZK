@@ -11,6 +11,7 @@ import T2R_ContSource
 import Cons_Base
 import T2R_CallerSource
 import PFin_BoundCaller
+import PFin_Packet
 import T2R_PublicDecode
 import T2Nat_ReaderEffects
 import CPhy_Physical
@@ -70,6 +71,7 @@ def Outcome {W A F CoreError : Type}
       T2R_Parser.Facts f.proof ∧
       T2R_Acceptance.Facts driver H f.pub f.proof s.pub s.proof s.checkpoint
         (payloadBytes encode (post1.payload (e1.heap.accounts 2).1) 1768) ∧
+      PFin_Packet.Facts (bytesOf f.pub.val) (bytesOf f.proof.val) (Tx1Q_Carriers.prepared run.p) H ∧
       PFin_BoundCaller.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B (NP6_StdModel.calls reservation) program data1 data2 slot saved post1 post2 H f s outer pre middle fs ss run prior tx2
 end AspisR1.PFin_FinalResult
 end
