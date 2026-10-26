@@ -1,9 +1,9 @@
 # Callback source-law worklist
 
-Recount-2 baseline → baseline plus this worker: OPEN 110 → 108;
-independent OPEN 51 → 49; CLOSED-ON-CANDIDATE 40 → 42.
+Recount-2 baseline → baseline plus this worker: OPEN 110 → 107;
+independent OPEN 51 → 48; CLOSED-ON-CANDIDATE 40 → 43.
 Other live sibling changes are not folded into these arithmetic counts.
-This worker: 2 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
+This worker: 3 ROW-DISCHARGED(candidate). Endpoint premises removed: 0.
 No implementation or release pin changed. Target not yet established.
 
 |op|row|status|theorem|receipt|
@@ -19,7 +19,7 @@ No implementation or release pin changed. Target not yet established.
 |228|V245|OPEN: borrow-processing failure; P6 pending|—|aeneas-source-op228-001/collected-receipt.json|
 |227|V244|OPEN: builtin-copy extraction failure; P6 pending|—|aeneas-source-op227-001/collected-receipt.json|
 |226|V243|OPEN: branch-context extraction failure; P6 pending|—|aeneas-source-op226-004/collected-receipt.json|
-|225|V242|OPEN|—|—|
+|225|V242|ROW-DISCHARGED(candidate)|R1Z.PV_CB3_Op225Source.op225_source|24711.json|
 |224|V241|OPEN|—|—|
 |223|V240|OPEN|—|—|
 |222|V239|OPEN|—|—|

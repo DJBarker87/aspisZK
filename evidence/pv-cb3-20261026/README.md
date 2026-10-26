@@ -3,11 +3,11 @@
 Branch `codex/pv-cb3-20261026`, independent callback rows of recount 2.
 Prefix `PV_CB3_`; Env J 24700–24999; budgets 100 Lean / 20 Kani.
 
-The current checked row table is `ROWS.md`; op246/V254 and op229/V246 are
+The current checked row table is `ROWS.md`; op246/V254, op229/V246 and op225/V242 are
 discharged on this candidate by their `PV_CB3_Op*Source.op*_source` theorems,
-receipts 24701 and 24705. Recount 2 baseline:
+receipts 24701, 24705 and 24711. Recount 2 baseline:
 OPEN 110, independent OPEN 51, CLOSED-ON-CANDIDATE 40; adding this worker gives
-108 / 49 / 42. Endpoint premises removed: 0.
+107 / 48 / 43. Endpoint premises removed: 0.
 Target not yet established.
 
 The first four targets, descending: op258/V264, op253/V260,

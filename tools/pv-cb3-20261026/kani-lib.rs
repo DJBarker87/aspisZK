@@ -7,7 +7,7 @@ mod ct_pole;
 mod sampler;
 #[cfg(kani)]
 mod reference;
-#[cfg(kani)]
+#[cfg(all(kani,not(pv_cb_extract)))]
 mod checks {
     use aspis_core::field::{QM31, CM31, M31};
     fn q(w:[u32;4])->QM31 {
