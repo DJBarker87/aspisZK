@@ -991,3 +991,29 @@ objects were captured before the changed successor. The receipt states that
 actual invocation; no proof was rerun unchanged. No reservation error occurred.
 No shipped Rust, frozen artifact, trust boundary, model carrier or observer
 changed. Native entropy continuation is in progress independently.
+
+## Total generic inverse arithmetic and domain split (12424–12431)
+
+`ProverRwSuccessArithmeticTotal` proves every retained base/complex arithmetic
+operation needed by the generic inverse total for arbitrary raw inputs.
+`ProverRwSuccessInverseTotal` composes those facts and symbolic power totality
+through both generic CM31/QM31 inverses, including the actual Option residual
+branch. Neither successful arithmetic nor successful inverse is a premise.
+`ProverRwSuccessPowerExact.exact_result` additionally establishes the exact
+field power and canonical returned word for every U64 exponent, arbitrary raw
+base and canonical initial accumulator. No concrete exponent is unrolled.
+These are local source/model facts, not a native extraction/callback theorem.
+
+The old retained wire-error equality lacks the current `ActivePole` constructor:
+12424 rejects it; that item is stopped, not installed or patched silently.
+The domain-only split compiles separately and installs the literal retained
+38-byte private-leaf-salts domain. `wire.py --check` pins that copy; this is a
+profile-specific source interpretation, not a feature-agnostic association.
+Selector `ProverRwSuccessWireInstall.selected`:102/262;44 successful-body refs
+remain unselected. Native ABI/feature association, concrete body/prefix,
+ordered ROM/TLS, E1/E2 and real RunJoin remain open. Root premises removed0.
+
+Eight focused compiles:5pass,3changed failures. Receipts/snapshots are in
+`success-resume`, all accepted axiom reports standard, no resource failure,
+no launcher edit or unchanged regression. Total resumed Lean use16/85; native
+work remains in progress. The frozen artifacts and root definitions are unchanged.
