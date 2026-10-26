@@ -31,7 +31,11 @@ def visit(name):
  src=root/(name.replace('.','/')+'.lean')
  if name.startswith("R1Z.PV_Join_") and src.is_file():
   for child in imports(src.read_text()):visit(child)
-for dep in imports(source.read_text()):visit(dep)
+try:
+ for dep in imports(source.read_text()):visit(dep)
+except AssertionError as error:
+ (e/f'{a}-guard.json').write_text(json.dumps(dict(attempt_id=a,kind='local dependency preflight refusal',target=m,compiler_invoked=False,charged_lean_attempts=0,error=str(error),source_sha256=sha(source)),indent=2)+'\n')
+ raise
 cmd=['/usr/bin/time','-l','lake','env','lean','-M7000','--root='+str(root),'-o',str(cache/'R1Z'/(m+'.olean')),str(source)]
 revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()
 committed=subprocess.run(['git','show',revision+':'+str(source.relative_to(r))],cwd=r,capture_output=True)
