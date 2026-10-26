@@ -1,0 +1,58 @@
+import Lean
+import ExtractedPrefixTrace
+open Lean Elab Command
+abbrev DFm_State := _root_.Std.HashMap Expr Nat × Array Json
+partial def DFm_visit (e : Expr) : StateM DFm_State Nat := do
+  if let some i := (← get).1[e]? then return i
+  let fields ← match e with
+    | .bvar i => pure [("kind", toJson "bvar"), ("index", toJson i)]
+    | .fvar id => pure [("kind", toJson "fvar"), ("name", toJson id.name.toString)]
+    | .mvar id => pure [("kind", toJson "mvar"), ("name", toJson id.name.toString)]
+    | .sort u => pure [("kind", toJson "sort"), ("level", toJson (reprStr u))]
+    | .const n ls => pure [("kind", toJson "const"), ("name", toJson n.toString), ("levels", toJson (reprStr ls))]
+    | .app f a => do
+      let f ← DFm_visit f; let a ← DFm_visit a
+      pure [("kind", toJson "app"), ("children", toJson #[f,a])]
+    | .lam _ t b bi => do
+      let t ← DFm_visit t; let b ← DFm_visit b
+      pure [("kind", toJson "lam"), ("binderInfo", toJson (reprStr bi)), ("children", toJson #[t,b])]
+    | .forallE _ t b bi => do
+      let t ← DFm_visit t; let b ← DFm_visit b
+      pure [("kind", toJson "forallE"), ("binderInfo", toJson (reprStr bi)), ("children", toJson #[t,b])]
+    | .letE _ t v b nondep => do
+      let t ← DFm_visit t; let v ← DFm_visit v; let b ← DFm_visit b
+      pure [("kind", toJson "letE"), ("nondep", toJson nondep), ("children", toJson #[t,v,b])]
+    | .lit l => pure [("kind", toJson "lit"), ("literal", toJson (reprStr l))]
+    | .mdata md b => do
+      let b ← DFm_visit b
+      pure [("kind", toJson "mdata"), ("metadata", toJson (reprStr (Expr.mdata md (.bvar 0)))), ("children", toJson #[b])]
+    | .proj s i b => do
+      let b ← DFm_visit b
+      pure [("kind", toJson "proj"), ("name", toJson s.toString), ("index", toJson i), ("children", toJson #[b])]
+  let (cache,nodes) ← get
+  let i := nodes.size
+  set (cache.insert e i,nodes.push (Json.mkObj fields))
+  return i
+run_cmd do
+  let env ← getEnv
+  let selected : Array Name := #[ `ExtractedPrefixTrace ]
+  let mut state : DFm_State := ({}, #[])
+  let mut rows : Array Json := #[]
+  for (n,c) in env.toKernelEnv.constants.toList do
+    if let some mi := env.getModuleIdxFor? n then
+      let owner := env.header.modules[mi.toNat]!.module
+      if selected.contains owner then
+        let (ty,next) := (DFm_visit c.type).run state
+        state := next
+        let mut value : Option Nat := none
+        if let some v := c.value? true then
+          let (vi,next) := (DFm_visit v).run state
+          value := some vi; state := next
+        let axs ← collectAxioms n
+        rows := rows.push (Json.mkObj [("module", toJson owner.toString), ("name", toJson n.toString),
+          ("type", toJson ty), ("value", toJson value), ("levelParams", toJson (reprStr c.levelParams)),
+          ("hints", toJson (match c.hints with | .opaque => "opaque" | .abbrev => "abbrev" | .regular h => s!"regular {h}")),
+          ("unsafe", toJson c.isUnsafe), ("axiom", toJson c.isAxiom), ("axioms", toJson (axs.map Name.toString))])
+        elabCommand (← `(#print axioms $(mkIdent n)))
+  liftIO <| IO.FS.writeFile "DFm_split-07-before.json" (Json.mkObj [("rows", Json.arr rows), ("nodes", Json.arr state.2)]).compress
+  logInfo m!"DFM_DAG_COMPLETE declarations={rows.size} nodes={state.2.size}"

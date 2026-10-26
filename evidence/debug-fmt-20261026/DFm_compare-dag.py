@@ -10,6 +10,7 @@ for ns in ['AspisR1RecordParser','AspisR1PrefixAggregateParser']:
  p=ns+'.r1_wire.'
  rename[p+'Error.Insts.CoreFmtDebug.fmt.match_1']=p+'Error.Insts.CoreCmpPartialEqError.eq.match_1'
  for s in ['parse_record','validate_record_fields_loop.body']+(['Prefix.parse'] if 'PrefixAggregate' in ns else []):rename[p+s+'.match_3']=p+s+'.match_2'
+if '--refined' in sys.argv:rename.update(json.loads((B/'DFm_importer-renamings.json').read_text()))
 def sha(x):return hashlib.sha256(json.dumps(x,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 def load(p):
  data=json.loads(p.read_text());hs=[]
@@ -22,7 +23,7 @@ def load(p):
   hs.append(sha(n))
  decls={}
  for r in data['rows']:
-  r=dict(r);r['type']=hs[r['type']];r['value']=None if r['value'] is None else hs[r['value']];decls[r['name']]=r
+  r=dict(r);r['type']=hs[r['type']];r['value']=None if r['value'] is None else hs[r['value']];r['name']=rename.get(r['name'],r['name']);decls[r['name']]=r
  return decls,data
 for j,row in enumerate(rows):
  before=B/f'DFm_split-{j:02d}-before.json';after=B/f'DFm_split-{j:02d}-after.json'
@@ -35,4 +36,4 @@ for j,row in enumerate(rows):
  result=dict(module=row['module'],before_declarations=len(a),after_declarations=len(z),before_nodes=len(ar['nodes']),after_nodes=len(zr['nodes']),added=sorted(z.keys()-a.keys()),removed=sorted(a.keys()-z.keys()),changed=changed,all_retained_equal=a.keys()==z.keys() and not changed,retained=same,nonstandard_after=[dict(name=r['name'],axioms=r['axioms']) for r in z.values() if set(r['axioms'])-{'propext','Classical.choice','Quot.sound'}],formatter_references_after=refs,before_snapshot_sha256=hashlib.sha256(before.read_bytes()).hexdigest(),after_snapshot_sha256=hashlib.sha256(after.read_bytes()).hexdigest(),snapshot_sizes=[before.stat().st_size,after.stat().st_size])
  results.append(result);print(row['module'],'equal',result['all_retained_equal'],'declarations',len(z),'changes',changed[:4])
 x=dict(method='Shared-expression DAG serialized by Lean; compare SHA-256 of full recursively canonicalized nodes; binder names omitted, seven explicitly listed matcher names renamed; all other node fields including metadata and reduction hints retained',renaming=rename,all_retained_equal=all(r['all_retained_equal'] for r in results),modules=results)
-(B/'DFm_importers-semantic-comparison.json').write_text(json.dumps(x,indent=2)+'\n')
+(B/('DFm_importers-refined-comparison.json' if '--refined' in sys.argv else 'DFm_importers-semantic-comparison.json')).write_text(json.dumps(x,indent=2)+'\n')

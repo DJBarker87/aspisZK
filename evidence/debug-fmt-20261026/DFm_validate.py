@@ -66,6 +66,7 @@ def audit(i,modules,label,mode):
  run(i,name,src,mode)
  # Large expression snapshots stay on host; hashes/comparison receipts are committed.
 inv=json.loads((E/'DFm_inventory.json').read_text());mods=[x['module'] for x in inv['modules']]
+raise SystemExit('40/40 Lean budget exhausted; historical orchestration only. No further compiler launches authorized.')
 phase=sys.argv[1]
 if phase=='parsers':
  audit(5,mods,'parser-before','before');audit(6,mods,'parser-after','after')
