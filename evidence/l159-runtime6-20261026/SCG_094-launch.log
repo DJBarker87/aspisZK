@@ -1,0 +1,38 @@
+{"attempt": "SCG_094", "exit_status": 0, "wall_seconds": 3.6511016330332495, "peak_rss_kib": "5499664", "swaps": "0", "print_axioms": []}
+@AspisR1.SCE_NativeAccepted.accepted : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (native1 : AspisR1.S2W_ExtractionBoundary.First) (native2 : AspisR1.S2W_ExtractionBoundary.Second),
+  AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.GExq_Caller.sdk c.adapter c.currentBase c.stageBase c.finish c.reserved c.query c.geometry c.boundaries
+        c.std)
+      native1 native2 hashv →
+    ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      Aspi
+...
+    (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)) (final : A),
+            AspisR1.S2W_D189Wrappers.first native1 copy allocator i.entry id i.data i.state =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) →
+              (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Execution.firstCode c hashv copy allocator id i)).2 =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final))
+structure AspisR1.S2W_ExtractionBoundary.RuntimeSyscall
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256
+constructor:
+  AspisR1.S2W_ExtractionBoundary.RuntimeSyscall.mk
+    {hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest}
+    {sha256 : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    (returningValue : AspisR1.S2Z.Oracle.RuntimeSyscall hashv sha256) :
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256
+AspisR1.SCG_PartialOracle.not_reverse : ∀ (parts : AspisR1.SdkC_Source.Parts)
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SdkC_Oracle.program (AspisR1.SCG_PartialOracle.code parts))).2 =
+      Aeneas.Std.Result.ok Bool.true ∧
+    (AspisR1.SdkC_Source.run AspisR1.SCG_PartialOracle.failingOracle (AspisR1.SCG_PartialOracle.code parts) []).1 =
+        Aeneas.Std.Result.fail Aeneas.Std.Error.assertionFailure ∧
+      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall AspisR1.SCG_PartialOracle.failingOracle H
+
+Running as unit: run-r6fb8e0ae19e44de4952b7cdfa9f0f1f3.scope; invocation ID: 4f947bb114fb4c7e85bcf5f6a48184f0

@@ -1,0 +1,78 @@
+structure AspisR1.OraclePortRefineJoin.RecoveredInputAgreement (source model : AspisR1.RawCutProverCompiler.RunView) :
+  Prop
+number of parameters: 2
+fields:
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement.decoded_public : AspisR1.RawCutWordsFromRunPublicValidBin.runDecodedPublic
+        source =
+      AspisR1.RawCutWordsFromRunPublicValidBin.runDecodedPublic model
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement.initial : AspisR1.RawCutWordsFromRunExecutableBin.initialWordsFromRun
+        source =
+      AspisR1.RawCutWordsFromRunExecutableBin.initialWordsFromRun model
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement.final : AspisR1.RawCutWordsFromRunExecutableBin.finalWordFromRun
+        source =
+      AspisR1.RawCutWordsFromRunExecutableBin.finalWordFromRun model
+constructor:
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement.mk {source model : AspisR1.RawCutProverCompiler.RunView}
+    (decoded_public :
+      AspisR1.RawCutWordsFromRunPublicValidBin.runDecodedPublic source =
+        AspisR1.RawCutWordsFromRunPublicValidBin.runDecodedPublic model)
+    (initial :
+      AspisR1.RawCutWordsFromRunExecutableBin.initialWordsFromRun source =
+        AspisR1.RawCutWordsFromRunExecutableBin.initialWordsFromRun model)
+    (final :
+      AspisR1.RawCutWordsFromRunExecutableBin.finalWordFromRun source =
+        AspisR1.RawCutWordsFromRunExecutableBin.finalWordFromRun model) :
+    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement source model
+AspisR1.SCF_Recovery.agreement : ∀ (left right : AspisR1.RawCutProverCompiler.RunView),
+  left.2.1.1 = right.2.1.1 →
+    (∀ (row : ℕ),
+        row = 0 ∨ row = 2 ∨ row = 30 →
+          AspisR1.RawCommitmentFrameReplay.frameFromView left row =
+            AspisR1.RawCommitmentFrameReplay.frameFromView right row) →
+      (∀ (row : ℕ),
+          row = 0 ∨ row = 2 ∨ row = 30 →
+            AspisR1.BinRawByteCutRecovery.cut left.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row) =
+              AspisR1.BinRawByteCutRecovery.cut right.1 (AspisR1.RawCommitmentFrameReplay.frameFromView right row)) →
+        AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right
+AspisR1.SCF_Recovery.extract : ∀ (left right : AspisR1.RawCutProverCompiler.RunView),
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement left right →
+    ∀ (coins : AspisR1.GSConcreteByteDecoderBank.RawCoins),
+      AspisR1.RawRecordedPublicSpendExtractorBin.extract left coins =
+        AspisR1.RawRecordedPublicSpendExtractorBin.extract right coins
+@AspisR1.SCF_AccountCuts.delete_choice : ∀ {A F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (id : AspisR1.S2W_ExtractionBoundary.Program)
+  (a : AspisR1.SCE_Experiment.Adversary A) (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (post : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (final : A),
+  (AspisV8R19.MemoizedProgramLaw.eval H
+          (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+            (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post, final)) →
+    ∀ (frame : AspisV8R19.DuplexFrames.Bytes),
+      FS2.Duplex.Read
+          ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+            (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                  (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1)
+          frame →
+        AspisR1.BinRawByteCutRecovery.cut
+            (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.SCE_Experiment.account c hashv copy allocator id a)).1
+            frame =
+          AspisR1.BinRawByteCutRecovery.cut
+            ((AspisV8R19.MemoizedProgramLaw.eval H a.first).1 ++
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.SCE_Execution.firstCode c hashv copy allocator id
+                      (AspisV8R19.MemoizedProgramLaw.eval H a.first).2)).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.SCE_Execution.secondCode c hashv allocator id
+                    (AspisV8R19.MemoizedProgramLaw.eval H
+                        (a.second (AspisV8R19.MemoizedProgramLaw.eval H a.first).2 saved post final)).2)).1)
+            frame
+AspisR1.SCG_RawRecovery.trans : ∀ (physical source model : AspisR1.RawCutProverCompiler.RunView),
+  AspisR1.OraclePortRefineJoin.RecoveredInputAgreement physical source →
+    AspisR1.OraclePortRefineJoin.RecoveredInputAgreement source model →
+      AspisR1.OraclePortRefineJoin.RecoveredInputAgreement physical model

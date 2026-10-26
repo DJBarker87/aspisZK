@@ -1,7 +1,7 @@
 """Offline audit of task sources, receipts and the unchanged atomic ledger."""
 from pathlib import Path
 from collections import Counter
-import json,hashlib,re,subprocess
+import json,hashlib,re,subprocess,base64
 E=Path(__file__).resolve().parent; R=E.parents[1]
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 load=lambda p:json.loads(p.read_text())
@@ -26,8 +26,25 @@ for p in modules:
  assert p.name in passed,('unchecked current source',p.name)
  assert not re.search(r'\b(sorry|admit|native_decide)\b|^\s*axiom\s|set_option\s+(maxHeartbeats|maxRecDepth)',p.read_text(),re.M),p
 assert len(records)<=100
+assert len(records)==100, 'Final handoff requires the complete budget'
+final=load(E/'SCG_100/receipt.json')
+assert final['exit_status']==0
+manifest=load(E/'SCG_HOST_MANIFEST.json')
+for p in modules:
+ assert manifest['files'][p.name]['sha256']==sha(p)
+ assert p.stem+'.olean' in manifest['files']
+ body=p.read_text();ns=re.search(r'^namespace ([\w.]+)',body,re.M)
+ if ns:
+  for theorem in re.findall(r'^theorem (\w+)',body,re.M):
+   name=ns[1]+'.'+theorem
+   assert any("'"+name+"'" in line for line in final['print_axioms']),name
+for name,entry in load(E/'SCG_raw_display_logs.json').items():
+ raw=base64.b64decode(entry['base64'])
+ assert hashlib.sha256(raw).hexdigest()==entry['sha256'],name
+ assert '\n'.join(line.rstrip() for line in raw.decode().split('\n'))==(E/name).read_text(),name
 root=R/'lean/Rc7_Top.lean'
 assert root.read_bytes()==(E/'SCG_BEFORE.lean.txt').read_bytes()==(E/'SCG_AFTER.lean.txt').read_bytes()
+assert (E/'SCG_BEFORE_KERNEL.lean.txt').read_bytes()==(E/'SCG_AFTER_KERNEL.lean.txt').read_bytes()
 # Expand all inherited structure families freshly, preserving quantified guards.
 catalog={};audits=[]
 for item in load(E/'SCG_audit_plan.json'):
