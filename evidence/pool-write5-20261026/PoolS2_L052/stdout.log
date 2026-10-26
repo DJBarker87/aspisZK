@@ -1,0 +1,42 @@
+PoolS2_PrefixKeys.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(keys accounts))[↑0#usize]
+in the target expression
+  ↑(↑(keys accounts))[0] = ↑(↑(keys accounts))[9]
+
+accounts : Slice Account
+data : Slice U8
+roles : Roles
+h : run accounts data = ok (core.result.Result.Ok roles)
+left✝² : ↑data = PoolS2_Instruction.wire
+left✝¹ : (↑accounts).length = 12
+distinct : PoolS2_UniqueSuffix.allDifferent ↑(keys accounts)
+chosen : select accounts = ok roles
+left✝ : PoolS2_Payer.PayerOK roles.payer
+right✝ : PoolS2_Payer.SystemOK roles.system
+cuts :
+  accounts.index_usize 0#usize = ok roles.master ∧
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Account) accounts
+          { start := 1#usize, «end» := 9#usize } =
+        ok roles.lanes ∧
+      accounts.index_usize 9#usize = ok roles.checkpoint ∧
+        accounts.index_usize 10#usize = ok roles.payer ∧ accounts.index_usize 11#usize = ok roles.system
+hm : ↑0#usize < (↑(keys accounts)).length
+master : (↑(keys accounts))[↑0#usize] = roles.master.key
+hc : ↑9#usize < (↑(keys accounts)).length
+checkpoint : (↑(keys accounts))[↑9#usize] = roles.checkpoint.key
+different : ↑(↑(keys accounts))[0] ≠ ↑(↑(keys accounts))[9]
+same : roles.checkpoint.key = roles.master.key
+⊢ ↑(↑(keys accounts))[0] = ↑(↑(keys accounts))[9]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    keys accounts
+  has type
+    Slice PoolS2_RightStep.Key
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑(keys accounts)
+'AspisR1.PoolS2_PrefixKeys.selected_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_PrefixKeys.master_checkpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

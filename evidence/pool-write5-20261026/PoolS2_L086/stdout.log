@@ -1,0 +1,42 @@
+PoolS2_PlannerFacts.lean:18:58: error: Application type mismatch: The argument
+  pair
+has type
+  U8 × U64
+but is expected to have type
+  U64
+in the application
+  PoolS2_ChronologyCodes.accepted_code ?m.115 ?m.116 ?m.117 pair
+PoolS2_PlannerFacts.lean:15:107: error: unsolved goals
+m : Master
+lanes : Lanes
+root : Root
+bump : U8
+plan : Plan
+h : PoolS2_PlannerModel.run m lanes root bump = ok (core.result.Result.Ok plan)
+valid : PoolS2_MasterValidation.run m = ok (core.result.Result.Ok ())
+mask : m.initialized_lane_mask = 255#u8
+canonical : ∀ limb ∈ ↑root, ↑limb < 2147483647
+checked : check m.identity.pool 0 ↑lanes = core.result.Result.Ok ()
+pair : U8 × U64
+chrono :
+  PoolV_Chronology.chronology (Array.to_slice (sequences lanes)) m.last_checkpoint_lane_sequences.to_slice
+      m.has_checkpoint m.next_checkpoint_sequence =
+    ok pair
+a : pair.1 ≠ 1#u8
+b : pair.1 ≠ 2#u8
+c : pair.1 ≠ 3#u8
+post :
+  PoolS2_MasterValidation.run (PoolS2_PlannerModel.assembled m lanes root bump pair.2).next_master =
+    ok (core.result.Result.Ok ())
+assembled : plan = PoolS2_PlannerModel.assembled m lanes root bump pair.2
+⊢ PoolS2_MasterValidFacts.Valid m ∧
+    m.initialized_lane_mask = 255#u8 ∧
+      (∀ limb ∈ ↑root, ↑limb < 2147483647) ∧
+        PoolS2_LaneFacts.Valid m.identity.pool 0 ↑lanes ∧
+          ∃ next,
+            PoolV_Chronology.chronology (Array.to_slice (sequences lanes)) m.last_checkpoint_lane_sequences.to_slice
+                  m.has_checkpoint m.next_checkpoint_sequence =
+                ok (0#u8, next) ∧
+              PoolS2_MasterValidFacts.Valid (nextMaster m lanes next) ∧
+                plan = PoolS2_PlannerModel.assembled m lanes root bump next
+'AspisR1.PoolS2_PlannerFacts.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

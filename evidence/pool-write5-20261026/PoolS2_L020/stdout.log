@@ -1,0 +1,26 @@
+PoolS2_Count.lean:14:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  Prop
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+Consider using the 'by_cases' tactic, which does true/false reasoning for propositions.
+
+case neg
+accounts : Slice Account
+expected : Usize
+same : ¬accounts.len = expected
+val : (↑accounts).length ≠ ↑expected
+x✝ : Prop
+less : (accounts.len < expected) = x✝
+⊢ (have i := accounts.len;
+      if (i != expected) = true then
+        have i1 := accounts.len;
+        if i1 < expected then
+          ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+        else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)
+      else ok (core.result.Result.Ok ())) =
+      ok (core.result.Result.Ok ()) ↔
+    (↑accounts).length = ↑expected
+'AspisR1.PoolS2_Count.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_Count.short' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_Count.long' depends on axioms: [propext, Classical.choice, Quot.sound]

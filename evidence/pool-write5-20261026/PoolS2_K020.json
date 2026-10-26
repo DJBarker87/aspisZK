@@ -1,0 +1,46 @@
+{
+  "attempt": "PoolS2_K020",
+  "kind": "kani",
+  "source_revision": "bbfde8f8353a09a690d0086a1a2799785c236978",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_prefix/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_prefix-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolS2_payer_system_exact",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolS2_prefix/Cargo.toml",
+    "PoolS2_prefix/PoolS2_lib.rs",
+    "PoolS2_ref/Cargo.toml",
+    "PoolS2_ref/PoolS2_lib.rs",
+    "PoolS2_PREFIX_SOURCE.json",
+    "PoolS2_prefix/Cargo.lock"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Original complete native payer/System metadata guard = exact result/error predicate with concrete SDK ID byte pins; arbitrary keys/owners/flags/funds and ignored one-byte actual account payloads. No stubs.",
+    "replacement": "K019 compile failure: native_loader is not re-exported by solana_program2.3.0. Match ORIGINAL processor.rs import from pinned solana_sdk_ids2.2.1."
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}

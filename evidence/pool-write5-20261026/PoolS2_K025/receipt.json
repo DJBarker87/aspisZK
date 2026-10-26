@@ -1,0 +1,58 @@
+{
+  "attempt": "PoolS2_K025",
+  "kind": "kani",
+  "source_revision": "bbfde8f8353a09a690d0086a1a2799785c236978",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_planner/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolS2_decoded_repeat_lane0",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolS2_planner/Cargo.toml",
+    "PoolS2_planner/PoolS2_lib.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Split K021 structured checkpoint output into ONE lane0 output property in repeat case only, SAME original strict decoded arbitrary384 master; source-bound lane indices<=capacity, all unused original fields arbitrary. Loop40 is above each reachable source comparison/copy32 and lane8 bound; unwinding assertions remain ON. Not full pure planner decomposition or native P1."
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check",
+  "exit_status": 124,
+  "wall_seconds": 300.4308765750029,
+  "peak_rss_kib": "2112",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/PoolS2-K025.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "6741475328",
+  "source_hashes": {
+    "PoolS2_planner/Cargo.toml": "9efc466bdbf3c49f0587f208c2d84291e8129281d49817e37efc75ee7e051045",
+    "PoolS2_planner/PoolS2_lib.rs": "5e1506875bdbe908e27e3bbd9a652bc8328ef0a5d580162e56195a62d8d0d47e"
+  },
+  "print_axioms": "N/A: kani"
+}

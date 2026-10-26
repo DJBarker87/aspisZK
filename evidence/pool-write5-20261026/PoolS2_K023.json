@@ -1,0 +1,42 @@
+{
+  "attempt": "PoolS2_K023",
+  "kind": "kani",
+  "source_revision": "bbfde8f8353a09a690d0086a1a2799785c236978",
+  "source_tree_dirty": true,
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "-Z",
+    "unstable-options",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_snapshot/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/PoolS2_snapshot-target",
+    "-j",
+    "4",
+    "--harness-timeout",
+    "90s",
+    "--harness",
+    "PoolS2_snapshot_frame",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "PoolS2_snapshot/Cargo.toml",
+    "PoolS2_snapshot/Cargo.lock",
+    "PoolS2_snapshot/PoolS2_lib.rs"
+  ],
+  "timeout": 300,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
+  },
+  "deps_fingerprint": {
+    "scope": "Actual shared SDK borrow + strict master decoder + Box source cut only. Original384 bytes/metadata/funds arbitrary; all-result selected-byte frame and real mutable reborrow after decoder guard drop. Native metadata/PDA/whole decoder wrapper and canonical action are NOT proved."
+  },
+  "expected_time": "Optimized compilation, then bounded symbolic native helper check"
+}

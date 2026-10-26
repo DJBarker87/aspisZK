@@ -1,0 +1,29 @@
+PoolS2_RawPrefix.lean:22:53: error: unsolved goals
+case this
+e : Entry
+data : Slice U8
+r : Roles
+h : run (PoolS2_RawSnapshot.accounts e) data = ok (core.result.Result.Ok r)
+different : r.checkpoint.key ≠ r.master.key
+master : r.master = PoolS2_RawSnapshot.snapshot e 0
+checkpoint : r.checkpoint = PoolS2_RawSnapshot.snapshot e 9
+left✝ : r.payer = PoolS2_RawSnapshot.snapshot e 10
+right✝ : r.system = PoolS2_RawSnapshot.snapshot e 11
+same : (e.handles 0).1 = (e.handles 9).1
+⊢ ?m.61
+
+e : Entry
+data : Slice U8
+r : Roles
+h : run (PoolS2_RawSnapshot.accounts e) data = ok (core.result.Result.Ok r)
+different : r.checkpoint.key ≠ r.master.key
+master : r.master = PoolS2_RawSnapshot.snapshot e 0
+checkpoint : r.checkpoint = PoolS2_RawSnapshot.snapshot e 9
+left✝ : r.payer = PoolS2_RawSnapshot.snapshot e 10
+right✝ : r.system = PoolS2_RawSnapshot.snapshot e 11
+same : (e.handles 0).1 = (e.handles 9).1
+this : ?m.61
+⊢ False
+PoolS2_RawPrefix.lean:27:12: error: unexpected token ':='; expected '⟨' or identifier
+'AspisR1.PoolS2_RawPrefix.roles' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_RawPrefix.data_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

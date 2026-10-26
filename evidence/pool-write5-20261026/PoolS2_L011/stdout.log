@@ -1,0 +1,70 @@
+PoolS2_UniqueSuffix.lean:10:12: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (allDifferent (List.drop left ↑keys))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+PoolS2_UniqueSuffix.lean:17:23: error: unsolved goals
+case cons
+root other : Key
+rest : List Key
+ih : (rest.all fun other => decide (↑root ≠ ↑other)) = decide (∀ other ∈ rest, ↑root ≠ ↑other)
+⊢ (!decide (↑root = ↑other) && rest.all fun other => !decide (↑root = ↑other)) =
+    (!decide (↑root = ↑other) && decide (∀ a ∈ rest, ¬↑root = ↑a))
+PoolS2_UniqueSuffix.lean:17:32: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵i̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolS2_UniqueSuffix.lean:26:13: error(lean.unknownIdentifier): Unknown identifier `decide_and`
+PoolS2_UniqueSuffix.lean:23:69: error: unsolved goals
+keys : Slice Key
+left : ℕ
+unique : Bool
+within : left < (↑keys).length
+⊢ (unique && sorry) = (unique && (decide (∀ other ∈ List.drop (left + 1) ↑keys, ↑(↑keys)[left] ≠ ↑other) && sorry))
+PoolS2_UniqueSuffix.lean:24:23: warning: This simp argument is unused:
+  List.drop_eq_getElem_cons within
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵m̵a̵i̵n̵i̵n̵g̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵ ̵w̵i̵t̵h̵i̵n̵,̵a̵l̵l̵D̵i̵f̵f̵e̵r̵e̵n̵t̵,̵L̵i̵s̵t̵.̵p̵a̵i̵r̵w̵i̵s̵e̵_̵c̵o̵n̵s̵]̵[̲r̲e̲m̲a̲i̲n̲i̲n̲g̲,̲ ̲a̲l̲l̲D̲i̲f̲f̲e̲r̲e̲n̲t̲,̲ ̲L̲i̲s̲t̲.̲p̲a̲i̲r̲w̲i̲s̲e̲_̲c̲o̲n̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolS2_UniqueSuffix.lean:24:56: warning: This simp argument is unused:
+  allDifferent
+
+Hint: Omit it from the simp argument list.
+  simp only [remaining, ̲List.drop_eq_getElem_cons within,a̵l̵l̵D̵i̵f̵f̵e̵r̵e̵n̵t̵,̵ ̲List.pairwise_cons]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolS2_UniqueSuffix.lean:24:69: warning: This simp argument is unused:
+  List.pairwise_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵m̵a̵i̵n̵i̵n̵g̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵_̵c̵o̵n̵s̵ ̵w̵i̵t̵h̵i̵n̵,̵a̵l̵l̵D̵i̵f̵f̵e̵r̵e̵n̵t̵,̵L̵i̵s̵t̵.̵p̵a̵i̵r̵w̵i̵s̵e̵_̵c̵o̵n̵s̵]̵[̲r̲e̲m̲a̲i̲n̲i̲n̲g̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲_̲c̲o̲n̲s̲ ̲w̲i̲t̲h̲i̲n̲,̲ ̲a̲l̲l̲D̲i̲f̲f̲e̲r̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolS2_UniqueSuffix.lean:24:13: warning: declaration uses `sorry`
+PoolS2_UniqueSuffix.lean:29:80: error: unsolved goals
+keys : Slice Key
+left : ℕ
+unique : Bool
+outside : (↑keys).length ≤ left
+⊢ unique = true → sorry () = true
+PoolS2_UniqueSuffix.lean:30:18: warning: This simp argument is unused:
+  allDifferent
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵e̵m̵a̵i̵n̵i̵n̵g̵,̵a̵l̵l̵D̵i̵f̵f̵e̵r̵e̵n̵t̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵n̵i̵l̵_̵o̵f̵_̵l̵e̵[̲r̲e̲m̲a̲i̲n̲i̲n̲g̲,̲ ̲L̲i̲s̲t̲.̲d̲r̲o̲p̲_̲e̲q̲_̲n̲i̲l̲_̲o̲f̲_̲l̲e̲ outside]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PoolS2_UniqueSuffix.lean:30:31: warning: This simp argument is unused:
+  List.drop_eq_nil_of_le outside
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵[̵r̵e̵m̵a̵i̵n̵i̵n̵g̵,̵a̵l̵l̵D̵i̵f̵f̵e̵r̵e̵n̵t̵,̵L̵i̵s̵t̵.̵d̵r̵o̵p̵_̵e̵q̵_̵n̵i̵l̵_̵o̵f̵_̵l̵e̵ ̵o̵u̵t̵s̵i̵d̵e̵]̵s̲i̲m̲p̲ ̲[̲r̲e̲m̲a̲i̲n̲i̲n̲g̲,̲ ̲a̲l̲l̲D̲i̲f̲f̲e̲r̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.PoolS2_UniqueSuffix.row_decide' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_UniqueSuffix.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.PoolS2_UniqueSuffix.ended' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
