@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Law.lean:32:28: error: Tactic `rfl` failed: The left-hand side
+  (fun r => if (fun i => Option.map (fun p => ((e p.2) p.1, p.2)) (decode i)) r = none then 1 else 0) i
+is not definitionally equal to the right-hand side
+  (fun r => if decode r = none then 1 else 0) i
+
+case none.e_a.none
+Input A H : Type
+inst✝ : Fintype Input
+decode : Input → Option (A × H)
+fibres : ∀ (h : H) (a b : A), {i | decode i = some (a, h)}.card = {i | decode i = some (b, h)}.card
+e : H → A ≃ A
+i : Input
+hi : i ∈ Finset.univ
+hd : decode i = none
+⊢ (fun r => if (fun i => Option.map (fun p => ((e p.2) p.1, p.2)) (decode i)) r = none then 1 else 0) i =
+    (fun r => if decode r = none then 1 else 0) i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Law.lean:32:28: error: Tactic `rfl` failed: The left-hand side
+  (fun r => if (fun i => Option.map (fun p => ((e p.2) p.1, p.2)) (decode i)) r = none then 1 else 0) i
+is not definitionally equal to the right-hand side
+  (fun r => if decode r = none then 1 else 0) i
+
+case none.e_a.some
+Input A H : Type
+inst✝ : Fintype Input
+decode : Input → Option (A × H)
+fibres : ∀ (h : H) (a b : A), {i | decode i = some (a, h)}.card = {i | decode i = some (b, h)}.card
+e : H → A ≃ A
+i : Input
+hi : i ∈ Finset.univ
+val✝ : A × H
+hd : decode i = some val✝
+⊢ (fun r => if (fun i => Option.map (fun p => ((e p.2) p.1, p.2)) (decode i)) r = none then 1 else 0) i =
+    (fun r => if decode r = none then 1 else 0) i
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Law.lean:49:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  {i | Option.map (fun p => ((e p.2) p.1, p.2)) (decode i) = some (a, h)}
+in the target expression
+  ↑{i | Option.map (fun p => ((e p.2) p.1, p.2)) (decode i) = some (a, h)}.card / ↑(Fintype.card Input) =
+    ↑{i | decode i = some (a, h)}.card / ↑(Fintype.card Input)
+
+case some
+Input A H : Type
+inst✝ : Fintype Input
+decode : Input → Option (A × H)
+fibres : ∀ (h : H) (a b : A), {i | decode i = some (a, h)}.card = {i | decode i = some (b, h)}.card
+e : H → A ≃ A
+a : A
+h : H
+heq : {i | Option.map (fun p => ((e p.2) p.1, p.2)) (decode i) = some (a, h)} = {i | decode i = some ((e h).symm a, h)}
+⊢ ↑{i | Option.map (fun p => ((e p.2) p.1, p.2)) (decode i) = some (a, h)}.card / ↑(Fintype.card Input) =
+    ↑{i | decode i = some (a, h)}.card / ↑(Fintype.card Input)
+'R1Z.PV_L2_F3Law.law_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Law.conditional_relabel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_L2_F3Law.conditional_test' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

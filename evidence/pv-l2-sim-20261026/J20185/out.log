@@ -1,0 +1,157 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Absorption.lean:92:54: error: Application type mismatch: The argument
+  fibres
+has type
+  ∀ (history : History) (a b : SourceTape K sourceBase),
+    {input | observed input = some (a, history)}.card = {input | observed input = some (b, history)}.card
+but is expected to have type
+  ∀ (h : History) (a b : SourceTape K sourceBase),
+    {i | observed i = some (a, h)}.card = {i | observed i = some (b, h)}.card
+in the application
+  conditional_kernel observed fibres
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Absorption.lean:94:27: error: Tactic `apply` failed: could not unify the conclusion of `@QueryScanIdealHistory.mean_fintype_transport`
+  mean ?f = mean ?f
+with the goal
+  (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (a, history) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), h_1))
+
+Note: The full type of `@QueryScanIdealHistory.mean_fintype_transport` is
+  ∀ {A : Type} (fin1 fin2 : Fintype A) (f : A → ℚ), mean f = mean f
+
+case e'_2
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+h : HonestProver K
+basis : PackBasis sourceBase
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+ch : Challenges K
+hB : K4.PackField basis
+hpub : PublicBase sourceBase x.1
+hs : HonestValidity.BuilderSoundOn h basis x
+hP : P_R1 h.transport basis hB ch
+hV : VR1 h ch w
+hw : h.public w = x.1
+test : Option (View K CommitHandle Aux R1Bat × History) → ℚ
+left :
+  (fun input => mean fun spare => test (sourceView h basis outputs x w ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (a, history) =>
+      mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))
+right :
+  (fun input => mean fun spare => test (simView h basis outputs x ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+realKernel : SourceTape K sourceBase → History → ℚ :=
+  fun a history => mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))
+idealKernel : SourceTape K sourceBase → History → ℚ :=
+  fun x_1 history => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+fibres :
+  ∀ (history : History) (a b : SourceTape K sourceBase),
+    {input | observed input = some (a, history)}.card = {input | observed input = some (b, history)}.card
+means : ∀ (history : History), (mean fun a => realKernel a history) = mean fun a => idealKernel a history
+core :
+  (mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), h_1))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, h_1))
+⊢ (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (a, history) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), h_1))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Absorption.lean:94:27: error: Tactic `apply` failed: could not unify the conclusion of `@QueryScanIdealHistory.mean_fintype_transport`
+  mean ?f = mean ?f
+with the goal
+  (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, h_1))
+
+Note: The full type of `@QueryScanIdealHistory.mean_fintype_transport` is
+  ∀ {A : Type} (fin1 fin2 : Fintype A) (f : A → ℚ), mean f = mean f
+
+case e'_3
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+h : HonestProver K
+basis : PackBasis sourceBase
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+ch : Challenges K
+hB : K4.PackField basis
+hpub : PublicBase sourceBase x.1
+hs : HonestValidity.BuilderSoundOn h basis x
+hP : P_R1 h.transport basis hB ch
+hV : VR1 h ch w
+hw : h.public w = x.1
+test : Option (View K CommitHandle Aux R1Bat × History) → ℚ
+left :
+  (fun input => mean fun spare => test (sourceView h basis outputs x w ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (a, history) =>
+      mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))
+right :
+  (fun input => mean fun spare => test (simView h basis outputs x ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+realKernel : SourceTape K sourceBase → History → ℚ :=
+  fun a history => mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))
+idealKernel : SourceTape K sourceBase → History → ℚ :=
+  fun x_1 history => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+fibres :
+  ∀ (history : History) (a b : SourceTape K sourceBase),
+    {input | observed input = some (a, history)}.card = {input | observed input = some (b, history)}.card
+means : ∀ (history : History), (mean fun a => realKernel a history) = mean fun a => idealKernel a history
+core :
+  (mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), h_1))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, h_1))
+⊢ (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))) =
+    mean fun i =>
+      match observed i with
+      | none => test none
+      | some (a, h_1) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, h_1))
+'R1Z.PV_L2_F3Absorption.source_count_absorption' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh

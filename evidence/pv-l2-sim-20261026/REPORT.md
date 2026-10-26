@@ -198,3 +198,22 @@ No timed-out target was rerun unchanged or at a raised cap. Larger scan/count
 scopes moved to the source-shaped Lean references at their stated scope.
 Reservation preflight before k18 saw a vanished cgroup; it was retried after
 30 seconds once and succeeded. No reservation barrier was bypassed.
+
+### Source-count and extracted-checker stage (supersedes earlier open subgoals)
+
+J20188 proves `PV_L2_F3Absorption.source_count_absorption`: actual owned
+quotient plus both scalar draw-count arrays, with common None failure,
+transports through uniform completion and `hvzk_R1S` to unchanged simE.
+J20190/J20191 connect these counts to the concrete source-shaped collector,
+actual domains, empty cache and fixed budgets, then erase to the actual
+owned decoder. J20193 specializes to the endpoint field/honest builder,
+discharging local builder/public premises using existing admitted proofs.
+J20194 retains the entire ideal E1 entropy return/state jointly. This is
+not full L1 Run composition, native trace equality or ROM-history transport.
+
+J20141/20153/20160/20186/20196 prove failure-preserving recorded dot,
+gathered-dot, pivot, image and product-row loops erase to actual extracted
+checker functions. They do not yet prove certificates factor through coupled
+challenges or native std/allocator traces. No complete row closes.
+All successful printed top theorems use only standard axioms. A full
+manifest is not authorized by the incomplete source/coupling cone.

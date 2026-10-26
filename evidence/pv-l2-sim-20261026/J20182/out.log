@@ -1,0 +1,75 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_L2_F3Absorption.lean:66:2: error: Tactic `apply` failed: could not unify the conclusion of `conditional_kernel observed`
+  (mean fun i =>
+      match observed i with
+      | none => ?failure
+      | some (a, h) => ?left a h) =
+    mean fun i =>
+      match observed i with
+      | none => ?failure
+      | some (a, h) => ?right a h
+with the goal
+  (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (a, history) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))) =
+    mean fun input =>
+      match observed input with
+      | none => test none
+      | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+
+Note: The full type of `conditional_kernel observed` is
+  (∀ (h : History) (a b : SourceTape K sourceBase),
+      {i | observed i = some (a, h)}.card = {i | observed i = some (b, h)}.card) →
+    ∀ (left right : SourceTape K sourceBase → History → ℚ) (failure : ℚ),
+      (∀ (h : History), (mean fun a => left a h) = mean fun a => right a h) →
+        (mean fun i =>
+            match observed i with
+            | none => failure
+            | some (a, h) => left a h) =
+          mean fun i =>
+            match observed i with
+            | none => failure
+            | some (a, h) => right a h
+
+K CommitHandle Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+h : HonestProver K
+basis : PackBasis sourceBase
+outputs : Statement K CommitHandle → Challenges K → Aux
+x : Statement K CommitHandle
+w : h.Instance
+ch : Challenges K
+hB : K4.PackField basis
+hpub : PublicBase sourceBase x.1
+hs : HonestValidity.BuilderSoundOn h basis x
+hP : P_R1 h.transport basis hB ch
+hV : VR1 h ch w
+hw : h.public w = x.1
+test : Option (View K CommitHandle Aux R1Bat × History) → ℚ
+left :
+  (fun input => mean fun spare => test (sourceView h basis outputs x w ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (a, history) =>
+      mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))
+right :
+  (fun input => mean fun spare => test (simView h basis outputs x ch input spare)) = fun input =>
+    match observed input with
+    | none => test none
+    | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+⊢ (mean fun input =>
+      match observed input with
+      | none => test none
+      | some (a, history) =>
+        mean fun spare => test (some (view h basis outputs x w ch (complete a (padding spare)), history))) =
+    mean fun input =>
+      match observed input with
+      | none => test none
+      | some (fst, history) => mean fun spare => test (some (simE h.transport basis outputs x ch spare, history))
+'R1Z.PV_L2_F3Absorption.source_count_absorption' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
