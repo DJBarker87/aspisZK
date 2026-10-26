@@ -162,3 +162,9 @@ mod checks {
     }
 
 }
+
+#[cfg(kani)]
+pub mod shipped {
+ pub fn path_deref(x:&std::path::PathBuf)->&std::path::Path {std::ops::Deref::deref(x)}
+ pub fn take<T:Default>(x: &mut T)->T {std::mem::take(x)}
+}

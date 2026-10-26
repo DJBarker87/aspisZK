@@ -1,0 +1,34 @@
+[
+  {
+    "op": 3,
+    "row": "V169",
+    "status": "ROW-DISCHARGED(candidate)",
+    "theorem": "R1Z.PV_CB_TakeSource.op3_source",
+    "receipt": "24000.json",
+    "note": "Direct std::mem::take extraction with --include core::mem::take; no P6 bound used."
+  },
+  {
+    "op": 25,
+    "row": "V177",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-path25-001/collected-receipt.json",
+    "note": "Direct shipped deref extraction rejects &raw const (*_5), std/src/path.rs:2414. Existing P6 borrow16 gate lacks a universal or proved-sufficient reach bound."
+  },
+  {
+    "op": 28,
+    "row": "V179",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "kani-string-003/collected-receipt.json",
+    "note": "String AsRef<Path> reaches Path::new pointer reinterpretation; direct path primitive extraction failure retained. Existing ASCII/scalar gates do not cover arbitrary UTF8 String."
+  },
+  {
+    "op": 29,
+    "row": "V180",
+    "status": "OBSTRUCTED",
+    "theorem": null,
+    "receipt": "aeneas-source-path25-001/collected-receipt.json",
+    "note": "PathBuf AsRef<Path> delegates to deref; same Path::new pointer primitive extraction obstruction, bounded P6 gate insufficient."
+  }
+]
