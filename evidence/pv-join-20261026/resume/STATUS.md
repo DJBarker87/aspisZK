@@ -38,3 +38,21 @@ ProverRwP6BodyData.olean, ProverRw19AuditCaller.olean or
 PV_Join_PublicCaller.olean. The backend path in env/J.json was also absent.
 These are diagnostics only: no infrastructure repair or scope launch occurred.
 The flag was still absent at 21:39:17 UTC.
+
+## Data/world composition drafts
+
+PV_Join_AuditProjection applies the unchanged rw19 guard theorem to the exact
+selected public caller and to the actual native prove_masked_attempt prefix.
+It retains P_proof_bytes in whole_of_bytes: no full audit/status equality or
+whole-data equality has been claimed without it. PV_Join_LedgerSource uses the
+selected caller's concrete op12 implementation to instantiate the sibling
+ledger-world BodySourceLaw. Both drafts are UNCOMPILED and import sibling
+interfaces pinned in sibling-interfaces.json; those source branches have NOT
+been merged. This is no claim of native filesystem/oracle association.
+
+remaining-inventory.json lists the exact 30 signatures still without a joined
+source law in this caller and records the two fixture obligations separately.
+All 30 remain in this allocation. Canonical mathematical fixtures on srcid3
+and runjoin are recorded as such, not as identification of native released
+records. The successful-audit guard is not a replacement for a complete audit
+observation equation, which also preserves errors/failures/divergence.
