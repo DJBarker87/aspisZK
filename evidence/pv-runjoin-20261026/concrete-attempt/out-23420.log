@@ -1,0 +1,210 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:14:38: error: unexpected token 'prefix'; expected '_' or identifier
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:14:46: error: unexpected identifier; expected prec
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:25:67: error: unexpected token ','; expected ':'
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:48:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (r, c1, back) ←
+      let (a, t) := (nonce, next)
+        do
+        let r ← aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce a
+        let r1 ←
+          core.result.Result.map_err
+              (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+                account)
+              r ()
+        ok (r1, t, fun c1 => c1)
+    ok (r, back c1)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Entropy, next)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+account : ProverRwEffectCallback.Account S
+state next : S
+nonce : Std.Array U8 32#usize
+called : account.call_mut state 0#usize = ok (nonce, next)
+err : getrandom.error.Error
+factory :
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce =
+    ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+variant :
+  core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant transport.Variant.S2
+      transport.Variant.S2 =
+    ok false
+pub : Pub
+compiled : Compiled
+hash : Hash
+store : Store
+⊢ (do
+      let (r, c1, back) ←
+        let (a, t) := (nonce, next)
+          do
+          let r ← aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce a
+          let r1 ←
+            core.result.Result.map_err
+                (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError
+                  account)
+                r ()
+          ok (r1, t, fun c1 => c1)
+      ok (r, back c1)) =
+    ok (core.result.Result.Err verifier.Error.Entropy, next)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:55:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (r, nonce_store1) ←
+      do
+        let (r, next_attempt1) ←
+          do
+            let (r, c1, back) ←
+              RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+                  account state 0#usize
+            ok (r, back c1)
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let (r1, nonce_store1) ← prover.prove_masked_attempt pub compiled transport.Variant.S2 hash val store
+            match r1 with
+              | core.result.Result.Ok p =>
+                let (proof, audit) := p
+                do
+                let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+                ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+              | core.result.Result.Err e =>
+                match e with
+                | verifier.Error.Parse => ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+                | verifier.Error.Semantic => ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                | verifier.Error.Transcript => ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+                | verifier.Error.Relation => ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+                | verifier.Error.Merkle => ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+                | verifier.Error.Query => ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+                | verifier.Error.Checkpoint => ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+                | verifier.Error.Allocation => ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+                | verifier.Error.Rejected => do
+                  let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+                  prover.retry_attempt
+                      (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                        account)
+                      pub compiled transport.Variant.S2 hash nonce_store1 next_attempt1 i
+                | verifier.Error.AttemptsExhausted =>
+                  ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+                | verifier.Error.Entropy => ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+                  (core.convert.FromSame verifier.Error) residual
+            ok (r1, store)
+    ok (r, nonce_store1)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Entropy, store)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+S : Type
+account : ProverRwEffectCallback.Account S
+state next : S
+nonce : Std.Array U8 32#usize
+called : account.call_mut state 0#usize = ok (nonce, next)
+err : getrandom.error.Error
+factory :
+  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce =
+    ok (core.result.Result.Err (aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Os err))
+variant :
+  core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant transport.Variant.S2
+      transport.Variant.S2 =
+    ok false
+pub : Pub
+compiled : Compiled
+hash : Hash
+store : Store
+callback :
+  (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+          account).call_mut
+      state 0#usize =
+    ok (core.result.Result.Err verifier.Error.Entropy, next)
+⊢ (do
+      let (r, nonce_store1) ←
+        do
+          let (r, next_attempt1) ←
+            do
+              let (r, c1, back) ←
+                RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut
+                    account state 0#usize
+              ok (r, back c1)
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let (r1, nonce_store1) ← prover.prove_masked_attempt pub compiled transport.Variant.S2 hash val store
+              match r1 with
+                | core.result.Result.Ok p =>
+                  let (proof, audit) := p
+                  do
+                  let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+                  ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+                | core.result.Result.Err e =>
+                  match e with
+                  | verifier.Error.Parse => ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+                  | verifier.Error.Semantic => ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+                  | verifier.Error.Transcript => ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+                  | verifier.Error.Relation => ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+                  | verifier.Error.Merkle => ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+                  | verifier.Error.Query => ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+                  | verifier.Error.Checkpoint => ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+                  | verifier.Error.Allocation => ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+                  | verifier.Error.Rejected => do
+                    let i ← lift (Usize.wrapping_add 0#usize 1#usize)
+                    prover.retry_attempt
+                        (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+                          account)
+                        pub compiled transport.Variant.S2 hash nonce_store1 next_attempt1 i
+                  | verifier.Error.AttemptsExhausted =>
+                    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+                  | verifier.Error.Entropy => ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, store)
+      ok (r, nonce_store1)) =
+    ok (core.result.Result.Err verifier.Error.Entropy, store)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:45:15: warning: This simp argument is unused:
+  RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError
+
+Hint: Omit it from the simp argument list.
+  simp only [̵R̵e̵a̵l̵R̵1̵_̵c̵l̵i̵e̵n̵t̵.̵p̵r̵o̵v̵e̵_̵f̵o̵r̵_̵p̵r̵o̵o̵f̵_̵a̵c̵c̵o̵u̵n̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵R̵e̵s̵u̵l̵t̵S̵t̵a̵t̵e̵O̵n̵l̵y̵A̵t̵t̵e̵m̵p̵t̵S̵e̵c̵r̵e̵t̵s̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵R̵e̵a̵l̵R̵1̵_̵c̵l̵i̵e̵n̵t̵.̵p̵r̵o̵v̵e̵_̵f̵o̵r̵_̵p̵r̵o̵o̵f̵_̵a̵c̵c̵o̵u̵n̵t̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵M̵u̵t̵T̵u̵p̵l̵e̵U̵s̵i̵z̵e̵R̵e̵s̵u̵l̵t̵S̵t̵a̵t̵e̵O̵n̵l̵y̵A̵t̵t̵e̵m̵p̵t̵S̵e̵c̵r̵e̵t̵s̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵a̵l̵l̵e̵d̵,̵f̵a̵c̵t̵o̵r̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲R̲e̲a̲l̲R̲1̲_̲c̲l̲i̲e̲n̲t̲.̲p̲r̲o̲v̲e̲_̲f̲o̲r̲_̲p̲r̲o̲o̲f̲_̲a̲c̲c̲o̲u̲n̲t̲s̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲M̲u̲t̲T̲u̲p̲l̲e̲U̲s̲i̲z̲e̲R̲e̲s̲u̲l̲t̲S̲t̲a̲t̲e̲O̲n̲l̲y̲A̲t̲t̲e̲m̲p̲t̲S̲e̲c̲r̲e̲t̲s̲E̲r̲r̲o̲r̲.̲c̲a̲l̲l̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲l̲l̲e̲d̲,̲ ̲f̲a̲c̲t̲o̲r̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:47:13: warning: This simp argument is unused:
+  factory
+
+Hint: Omit it from the simp argument list.
+  simp only [RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError,
+        RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut,
+        called,f̵a̵c̵t̵o̵r̵y̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:54:13: warning: This simp argument is unused:
+  callback
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵A̵T̵T̵E̵M̵P̵T̵_̵C̵A̵P̵,̵s̵h̵o̵w̵ ̵¬̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵[̲p̲r̲o̲v̲e̲r̲.̲A̲T̲T̲E̲M̲P̲T̲_̲C̲A̲P̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲0̲#̲u̲s̲i̲z̲e̲ : Usize) >̵=̵≥̲ 8#usize from by decide, i̵f̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:54:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵A̵T̵T̵E̵M̵P̵T̵_̵C̵A̵P̵,̵s̵h̵o̵w̵ ̵¬̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵[̲p̲r̲o̲v̲e̲r̲.̲A̲T̲T̲E̲M̲P̲T̲_̲C̲A̲P̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲0̲#̲u̲s̲i̲z̲e̲ : Usize) >̵=̵≥̲ 8#usize from by decide, i̵f̵_̵f̵a̵l̵s̵e̵,̵c̵a̵l̵l̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲a̲l̲l̲b̲a̲c̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RunJoin_SourceOsFailure.lean:57:14: error(lean.unknownIdentifier): Unknown constant `factory_os_error`
+'R1Z.PV_RunJoin_SourceOsFailure.client_on_factory_error' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
