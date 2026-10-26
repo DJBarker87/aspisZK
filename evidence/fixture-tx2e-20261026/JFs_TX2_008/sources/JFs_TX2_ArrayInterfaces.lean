@@ -1,0 +1,9 @@
+import JFr_TX2_DotTerm
+import JFr_TX2_FirstLane
+#print Aeneas.Std.Array.index_usize
+#print Aeneas.Std.Array.getElem?_usize
+#check Aeneas.Std.Array.index_usize_spec
+#check Aeneas.Std.loop.spec
+#check Aeneas.Std.loop.unfold
+#check Aeneas.Std.loop_eq
+#print Aeneas.Std.Array
