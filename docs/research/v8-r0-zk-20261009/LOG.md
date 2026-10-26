@@ -10235,3 +10235,23 @@ Runtime/Boundary for the proof-account caller, then publish the installed inputs
 for srcid3 and say which paused L1/L2 rows become dischargeable. Six jobs running: rw17, dict10,
 runjoin6, srcid3, cb2, cb3. Quiet window 2 in progress (driver started 17:45:00 with the host quiet).
 Privacy target not yet established.
+
+## D216 (Stream B, 2026-10-26 18:00): prover timing gate PASSED in quiet window 2; all four candidate equivalence/performance gates now pass
+
+Quiet window 2 (17:45-18:15 UTC, D213) worked: the host was quiet at 17:45:00, the unchanged driver
+ran research first then candidate, five fresh processes per source with coins 100-104 and a strict
+quiet preflight before and after every sample (all twenty quiet), and finished at 17:53:44 (exit 0,
+524 s, peak RSS 0.65 GiB, swaps 0); the marker was released immediately so Stream A lost under nine
+minutes. Medians: transfer research 38.909 s vs candidate 13.742 s (ratio 0.353); withdrawal research
+38.560 s vs candidate 13.499 s (ratio 0.350); both candidate medians under 15 s and under 1.10 x
+research (D168/D169). Research samples spanned 37.76-39.67 s, candidate 13.04-14.18 s. All ten
+public/proof byte pairs identical (proof 57,607 B). Scope: fixture medians on the pinned host only; no
+universal cost or side-channel theorem. Recorded on `codex/pv-rebase-20261026` (commit b7f1f3c470:
+design/PV-REBASE-20261026.md "Timing gate result", gate-status.json `quiet_timing`, evidence
+quiet-timing-3/ and the invalidated window-1 attempt). Candidate adoption gates now: ELF pins PASSED,
+fixture bytes PASSED, 1,000-pair differential PASSED, timing PASSED, client route merged (D196). Still
+required before adoption, and the reason the candidate stays unmerged: conjunct 1 (real-prover
+refinement / V038 RunJoin), E1/E2, the L2 simulatable-trace rows (paused on the same native
+interpretation) and the L3 receipt. Ledger effect at the next recount: the timing rows move to
+EVIDENCED. Six jobs running: rw17, dict10, runjoin6, srcid3, cb2, cb3. Privacy target not yet
+established.
