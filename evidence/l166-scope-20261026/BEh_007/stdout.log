@@ -1,0 +1,25 @@
+def AspisR1.Port4B_Install.leaves : AspisR1.Port3_NativeBatchBody.Ops :=
+{ op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+  op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := AspisR1.Port4B_Opening.opening,
+  op3 := AspisR1.Port4B_SlotInstall.nodeSlot, op4 := AspisR1.Port4B_KeyInstall.build,
+  op5 := fun keys n => MultiproofSortRef.sort_reference.sort_rows keys 1#usize n,
+  op6 := fun {H} => AspisR1.Port4B_LeafCode.native, op7 := AspisR1.Port3_BatchStd.sameLeaf,
+  op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Aeneas.Std.Array.index_usize,
+  op10 := fun {H} => AspisR1.Port4B_VerifyInstall.verify, op11 := AspisR1.Port4B_CountInstall.nodeCount,
+  op12 :=
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+        AspisR1.Port4B_Install.leaves._proof_8),
+  op13 := Aeneas.Std.Result.ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+AspisR1.Port4B_Install.installation : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops),
+  AspisR1.Port3_BatchStd.install (AspisR1.Port4B_VerifyInstall.install (AspisR1.Port4B_KeyInstall.install base)) =
+    AspisR1.Port4B_Install.leaves
+'AspisR1.Port4B_Install.installation' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.Port4B_Install.parent : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : VTop_Stages.verifier.Prepared) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (which : Aeneas.Std.Usize)
+  (hash : X),
+  AspisR1.Port3_BatchStage.batch (AspisR1.Port4B_VerifyInstall.install (AspisR1.Port4B_KeyInstall.install base)) D proof
+      p root which hash =
+    AspisR1.Port4B_Install.batch D proof p root which hash
+'AspisR1.Port4B_Install.parent' depends on axioms: [propext, Classical.choice, Quot.sound]

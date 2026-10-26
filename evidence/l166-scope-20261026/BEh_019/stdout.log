@@ -1,0 +1,62 @@
+def AspisR1.RPx_Transport.Claims : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    (AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) →
+      AspisR1.F3T_ByteCarrier.ByteProver → ℕ → Prop :=
+fun {F C} c hashv P Q =>
+  ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+    (∃ suffix,
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P)).1 =
+          (AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1 ++
+            suffix) ∧
+      FS.firstReads FS.emptyTable (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P)).1 =
+          FS.firstReads FS.emptyTable
+            ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1) ∧
+        ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                (AspisV8R19.MemoizedProgramLaw.eval H
+                    (AspisR1.F3T_Installed.source c hashv
+                      (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1).length ≤
+            Q + 1921 ∧
+          ((AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.F3T_Installed.source c hashv
+                    (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).2 =
+              false →
+            AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.F3X_Account.program c hashv P) =
+              ((AspisV8R19.MemoizedProgramLaw.eval H P).1 ++
+                  (AspisV8R19.MemoizedProgramLaw.eval H
+                      (AspisR1.F3T_Installed.source c hashv
+                        (AspisR1.F3T_ByteCarrier.input c (AspisV8R19.MemoizedProgramLaw.eval H P).2))).1,
+                (AspisV8R19.MemoizedProgramLaw.eval H P).2, none))
+@AspisR1.RPx_Transport.transport : ∀ {F C : Type} (base : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (w : AspisR1.CanonicalCutEnrichedTranscript.Words)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    AspisR1.RPx_Transport.Claims (AspisR1.F3V_Install.configuration base) hashv P Q
+'AspisR1.RPx_Transport.transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Transport.charged : ∀ {F C : Type} (base : AspisR1.DrvC_Installation.Configuration F C)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (D : AspisR1.LiteralByteProtocol.Decoder) (w : AspisR1.CanonicalCutEnrichedTranscript.Words)
+  (P : AspisR1.F3T_ByteCarrier.ByteProver) (Q : ℕ),
+  (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisV8R19.MemoizedProgramLaw.eval H P).1.length ≤ Q) →
+    ∀
+      (select :
+        AspisR1.F3X_Projection.Output → AspisR1.R9PoolRuntimeBinding.Inputs × AspisR1.R9PoolRuntimeBinding.Inputs),
+      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+          FS.firstReads FS.emptyTable
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (AspisR1.Hiq_RecordedJoint.program
+                    (AspisR1.F3X_Account.program (AspisR1.F3V_Install.configuration base) hashv P)
+                    AspisR1.F3X_Projection.project select)).1 ≤
+            Q + 2965) ∧
+        AspisR1.F3T_AccountCharge.mass (AspisR1.F3X_Account.program (AspisR1.F3V_Install.configuration base) hashv P)
+            AspisR1.F3X_Projection.project select Q ≤
+          AspisR1.F3T_Numeric.accountLoss Q
+'AspisR1.RPx_Transport.charged' depends on axioms: [propext, Classical.choice, Quot.sound]

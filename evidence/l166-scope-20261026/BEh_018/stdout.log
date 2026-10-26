@@ -1,0 +1,24 @@
+AspisR1.SdkD_PrepareTransport.accepted : ∀ (ops : AspisR1CurrentCaller.Ops)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls) {Hash : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 Hash)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (hash : Hash)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (prepared : AspisR1CurrentCaller.verifier.Prepared)
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+    AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+      AspisR1.SdkD_PrepareLower.Associated hashv (AspisR1.SdkD_PrepareSource.code ops B std D pub proof hash input) →
+        AspisR1CurrentCaller.verifier.candidate.prepare (AspisR1.RowShape_InstalledSlots.verifierOps ops B std) D pub
+              proof hash none input =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok prepared, scratch) →
+          AspisV8R19.MemoizedProgramLaw.eval H
+              (AspisR1.SdkC_Oracle.program
+                (AspisR1.SdkD_PrepareLower.lower (AspisR1.SdkD_PrepareSource.code ops B std D pub proof hash input))) =
+            (AspisR1.SdkC_Source.readLog
+                (AspisR1.SdkC_Source.run hashv
+                    (AspisR1.SdkD_PrepareLower.lower (AspisR1.SdkD_PrepareSource.code ops B std D pub proof hash input))
+                    []).2,
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok prepared, scratch))
+'AspisR1.SdkD_PrepareTransport.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
