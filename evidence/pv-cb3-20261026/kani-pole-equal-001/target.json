@@ -1,0 +1,40 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::pole_equal",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "f9397e692e4ec8417f46c5785b3f749c794dd056",
+  "expected_phase": "Optimized arbitrary-component shipped pole equality versus owned conjunction reference; no loop or size assumption.",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required"
+}

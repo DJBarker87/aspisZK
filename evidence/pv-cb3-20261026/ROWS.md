@@ -23,8 +23,8 @@ No implementation or release pin changed. Target not yet established.
 |224|V241|OPEN: sibling extraction failure reused; P6 pending|—|op224-reused-obstruction.json|
 |223|V240|OPEN: sibling extraction failure reused; P6 pending|—|op223-reused-obstruction.json|
 |222|V239|OPEN: sibling extraction failure reused; P6 pending|—|op222-reused-obstruction.json|
-|219|V238|OPEN|—|—|
-|217|V237|OPEN|—|—|
+|219|V238|OPEN: pinned extraction executable unavailable|—|charon-source-op219-001/collected-receipt.json|
+|217|V237|OPEN: extracted skeleton retains generic-array default cut|—|—|
 |216|V236|OPEN|—|—|
 |215|V235|OPEN|—|—|
 |212|V234|OPEN|—|—|

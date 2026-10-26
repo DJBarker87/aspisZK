@@ -1,0 +1,28 @@
+../../../docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB3_GammaRank.lean:48:21: error: Ambiguous term
+  value_conserved
+Possible interpretations:
+  PV_CB3_DigitSequence.value_conserved : ∀ (base radix n : Nat) (words : List Nat),
+    value base (splitDigits base radix n words).fst + base ^ n * value radix (splitDigits base radix n words).snd =
+      value radix words
+  
+  PV_CB3_SamplerCarry.value_conserved : ∀ (base : Nat) (digits : List Nat) (carry : Nat),
+    value base (addCarry base digits carry).fst + base ^ digits.length * (addCarry base digits carry).snd =
+      value base digits + carry
+../../../docs/research/v8-r0-zk-20261009/lean/R1Z/PV_CB3_GammaRank.lean:38:52: error: unsolved goals
+base radix count : Nat
+positive : 0 < base
+words : List Nat
+power_large : 2 ≤ base ^ count
+high_bound : value radix words / base ^ count < base ^ count - 1
+high : value radix words / base ^ count = value radix (splitDigits base radix count words).snd
+bound :
+  value radix (splitDigits base radix count words).snd < base ^ (splitDigits base radix count words).fst.length - 1
+⊢ (value base (splitDigits base radix count words).fst +
+          base ^ count * value radix (splitDigits base radix count words).snd) %
+        (base ^ count - 1) +
+      1 =
+    value radix words % (base ^ count - 1) + 1
+'R1Z.PV_CB3_GammaRank.finish_modulus' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CB3_GammaRank.sample_length' depends on axioms: [propext]
+'R1Z.PV_CB3_GammaRank.sample_canonical' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CB3_GammaRank.sample_value' depends on axioms: [propext, sorryAx, Quot.sound]
