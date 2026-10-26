@@ -1,0 +1,185 @@
+FGm_SubsetStep.lean:82:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ Finset.range (?n + 1), ?f x
+in the target expression
+  ∑ i ∈ Finset.range ↑iter.start, term low group i + value low ↑i = prefixSum low group (↑iter.start + 1)
+
+case some.isTrue
+low : Std.Array NE 16#usize
+group : Usize
+hlow : FIo_ArrayCanon.Holds low
+iter : FIo_RangeNext.Range
+sum : NE
+hend : iter.end = 16#usize
+hbound : ↑iter.start ≤ 16
+hcanon : FIo_WideValues.Canon sum
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1 = ok (some i, iter')
+challenge : FIo_Native.aspis_core.field.wide_exact.WideExact
+hchallenge : low.index_usize i = ok challenge
+mask : U16
+hmask : FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group = ok mask
+shift : UScalar UScalarTy.U16
+hshift : 1#u16 <<< i = ok shift
+progress : i = iter.start ∧ iter'.end = iter.end ∧ ↑iter'.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+decrease : measure (iter', sum) < measure (iter, sum)
+bound : ↑iter'.start ≤ 16
+choice : FGm_SubsetSelection.selected group i = (mask &&& shift != 0#u16)
+termEq : term low group ↑i = if (mask &&& shift != 0#u16) = true then value low ↑i else 0
+active : (mask &&& shift != 0#u16) = true
+next : FIo_Native.aspis_core.field.wide_exact.WideExact
+hnext : FIo_Native.aspis_core.field.wide_exact.WideExact.add sum challenge = ok next
+run✝⁴ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1
+      match o with
+        | none => ok (done (iter, sum).2)
+        | some bit => do
+          let challenge ← low.index_usize bit
+          let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+          let i1 ← 1#u16 <<< bit
+          let i2 ← lift (i &&& i1)
+          if (i2 != 0#u16) = true then do
+              let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+              ok (cont (iter1, weight1))
+            else ok (cont (iter1, (iter, sum).2))) =
+    ok (cont (iter', next))
+run✝³ :
+  (let (o, iter1) := (some i, iter')
+    match o with
+    | none => ok (done (iter, sum).2)
+    | some bit => do
+      let challenge ← low.index_usize bit
+      let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← 1#u16 <<< bit
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, (iter, sum).2))) =
+    ok (cont (iter', next))
+run✝² :
+  (do
+      let i_1 ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← 1#u16 <<< i
+      let i2 ← lift (i_1 &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter', weight1))
+        else ok (cont (iter', (iter, sum).2))) =
+    ok (cont (iter', next))
+run✝¹ :
+  (do
+      let i1 ← 1#u16 <<< i
+      let i2 ← lift (mask &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter', weight1))
+        else ok (cont (iter', (iter, sum).2))) =
+    ok (cont (iter', next))
+run✝ :
+  (do
+      let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add sum challenge
+      ok (cont (iter', weight1))) =
+    ok (cont (iter', next))
+run : ok (cont (iter', next)) = ok (cont (iter', next))
+added :
+  FIo_WideValues.Canon next ∧
+    AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide next) =
+      AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide sum) +
+        AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide challenge)
+read : AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide challenge) = value low ↑i
+hvalue : AspisR1CurrentWide.Proof.decodeWide (FIo_FieldBridge.wide sum) = prefixSum low group ↑iter.start
+⊢ ∑ i ∈ Finset.range ↑iter.start, term low group i + value low ↑i = prefixSum low group (↑iter.start + 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+FGm_SubsetStep.lean:90:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∑ x ∈ Finset.range (?n + 1), ?f x
+in the target expression
+  ∑ i ∈ Finset.range ↑iter.start, term low group i = prefixSum low group (↑iter.start + 1)
+
+case some.isFalse
+low : Std.Array NE 16#usize
+group : Usize
+hlow : FIo_ArrayCanon.Holds low
+iter : FIo_RangeNext.Range
+sum : NE
+hend : iter.end = 16#usize
+hbound : ↑iter.start ≤ 16
+hcanon : FIo_WideValues.Canon sum
+hvalue : decode sum = prefixSum low group ↑iter.start
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+i : UScalar UScalarTy.Usize
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1 = ok (some i, iter')
+challenge : FIo_Native.aspis_core.field.wide_exact.WideExact
+hchallenge : low.index_usize i = ok challenge
+mask : U16
+hmask : FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group = ok mask
+shift : UScalar UScalarTy.U16
+hshift : 1#u16 <<< i = ok shift
+progress : i = iter.start ∧ iter'.end = iter.end ∧ ↑iter'.start = ↑iter.start + 1 ∧ ↑iter.start < ↑iter.end
+decrease : measure (iter', sum) < measure (iter, sum)
+bound : ↑iter'.start ≤ 16
+choice : FGm_SubsetSelection.selected group i = (mask &&& shift != 0#u16)
+termEq : term low group ↑i = if (mask &&& shift != 0#u16) = true then value low ↑i else 0
+inactive : ¬(mask &&& shift != 0#u16) = true
+run✝³ :
+  (do
+      let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepUsize (iter, sum).1
+      match o with
+        | none => ok (done (iter, sum).2)
+        | some bit => do
+          let challenge ← low.index_usize bit
+          let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+          let i1 ← 1#u16 <<< bit
+          let i2 ← lift (i &&& i1)
+          if (i2 != 0#u16) = true then do
+              let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+              ok (cont (iter1, weight1))
+            else ok (cont (iter1, (iter, sum).2))) =
+    ok (cont (iter', sum))
+run✝² :
+  (let (o, iter1) := (some i, iter')
+    match o with
+    | none => ok (done (iter, sum).2)
+    | some bit => do
+      let challenge ← low.index_usize bit
+      let i ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← 1#u16 <<< bit
+      let i2 ← lift (i &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter1, weight1))
+        else ok (cont (iter1, (iter, sum).2))) =
+    ok (cont (iter', sum))
+run✝¹ :
+  (do
+      let i_1 ← FIo_Native.weights.S2_INACTIVE_MASKS.index_usize group
+      let i1 ← 1#u16 <<< i
+      let i2 ← lift (i_1 &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter', weight1))
+        else ok (cont (iter', (iter, sum).2))) =
+    ok (cont (iter', sum))
+run✝ :
+  (do
+      let i1 ← 1#u16 <<< i
+      let i2 ← lift (mask &&& i1)
+      if (i2 != 0#u16) = true then do
+          let weight1 ← FIo_Native.aspis_core.field.wide_exact.WideExact.add (iter, sum).2 challenge
+          ok (cont (iter', weight1))
+        else ok (cont (iter', (iter, sum).2))) =
+    ok (cont (iter', sum))
+run : ok (cont (iter', sum)) = ok (cont (iter', sum))
+⊢ ∑ i ∈ Finset.range ↑iter.start, term low group i = prefixSum low group (↑iter.start + 1)
+'AspisR1.FGm_SubsetStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

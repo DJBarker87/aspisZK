@@ -1,0 +1,45 @@
+{"attempt": "FGm_080", "exit_status": 0, "wall_seconds": 2.2846874269889668, "peak_rss_kib": "5475396", "swaps": "0", "print_axioms": []}
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ)
+      (src : AspisR1.S2Trust.Payload), copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ) (src : AspisR1.S2Trust.Payload),
+        copy s dst src = Aspis
+...
+structure AspisR1.S2W_TrustedStd.TrustedStd {F : Type}
+  (copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F) : Prop
+number of parameters: 2
+fields:
+  AspisR1.S2W_TrustedStd.TrustedStd.slice_copy_from_slice : ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ)
+      (src : AspisR1.S2Trust.Payload), copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src
+constructor:
+  AspisR1.S2W_TrustedStd.TrustedStd.mk {F : Type}
+    {copy : AspisR1.S2Trust.Heap F → ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome F}
+    (slice_copy_from_slice :
+      ∀ (s : AspisR1.S2Trust.Heap F) (dst : ℕ) (src : AspisR1.S2Trust.Payload),
+        copy s dst src = AspisR1.S2W_TrustedStd.specification s dst src) :
+    AspisR1.S2W_TrustedStd.TrustedStd copy
+structure AspisR1.S2Trust.Library (W F : Type) : Type
+number of parameters: 2
+fields:
+  AspisR1.S2Trust.Library.related : W → AspisR1.S2Trust.Heap F → Prop
+  AspisR1.S2Trust.Library.accountData : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.accountLamports : W → ℕ → ℕ
+  AspisR1.S2Trust.Library.cellPayload : W → ℕ → AspisR1.S2Trust.Payload
+  AspisR1.S2Trust.Library.cellCounter : W → ℕ → ℤ
+  AspisR1.S2Trust.Library.liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard
+  AspisR1.S2Trust.Library.allocated : W → ℕ → Bool
+  AspisR1.S2Trust.Library.run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply
+constructor:
+  AspisR1.S2Trust.Library.mk {W F : Type} (related : W → AspisR1.S2Trust.Heap F → Prop)
+    (accountData accountLamports : W → ℕ → ℕ) (cellPayload : W → ℕ → AspisR1.S2Trust.Payload) (cellCounter : W → ℕ → ℤ)
+    (liveGuard : W → ℕ → Option AspisR1.S2Trust.Guard) (allocated : W → ℕ → Bool)
+    (run : W → AspisR1.S2Trust.Op → W × AspisR1.S2Trust.Reply) : AspisR1.S2Trust.Library W F
+
+Running as unit: run-r1291ce0ef1a54b37bffee82d4c171c6b.scope; invocation ID: 2be0ccf4bdae421ba48b6526de4453f8
