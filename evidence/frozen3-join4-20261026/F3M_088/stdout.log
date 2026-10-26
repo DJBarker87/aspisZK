@@ -1,0 +1,19 @@
+def AspisR1.JointFunctionalBinding.claimedValue.{u_1} : {K : Type u_1} →
+  [Field K] → (Fin 6 → Fin 29 → K) → K → K → K → K :=
+fun {K} [Field K] Y c0 gamma kappa => c0 + ∑ j, kappa ^ (↑j + 1) * ∑ l, gamma ^ ↑l * Y j l
+def AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial : AspisR1CurrentPreparedClaim.Concrete.E →
+  Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E 7#usize → AspisWideTower.WideExact :=
+fun kappa parts => ∑ j ∈ Finset.range 7, AspisR1CurrentPreparedClaim.ClaimParts.kappaTerm kappa parts j
+def AspisR1CurrentPreparedClaim.ClaimParts.kappaTerm : AspisR1CurrentPreparedClaim.Concrete.E →
+  Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E 7#usize → ℕ → AspisWideTower.WideExact :=
+fun kappa parts j =>
+  if h : j < 7 then
+    AspisR1CurrentPreparedClaim.Concrete.decode kappa ^ j * AspisR1CurrentPreparedClaim.Concrete.decode (↑parts)[j]
+  else 0
+def AspisR1CurrentPreparedClaim.Concrete.decode : AspisR1CurrentPreparedClaim.Concrete.E → AspisWideTower.WideExact :=
+fun x => AspisR1CurrentWide.Proof.decodeWide (AspisR1CurrentPreparedClaim.Concrete.toFull x)
+def AspisR1CurrentWide.Proof.decodeWide : AspisR1CurrentWide.Proof.E → AspisWideTower.WideExact :=
+fun x => { re := AspisR1CurrentWide.Proof.decodeQM x.c0, im := AspisR1CurrentWide.Proof.decodeQM x.c1 }
+def AspisR1CurrentWide.Proof.decodeQM : AspisR1CurrentWide.field.QM31 → AspisR1CurrentWide.Proof.ExactQM :=
+fun x => AspisR1.ExtractedCurrentQM31Exact.decode (AspisR1CurrentWide.Proof.toQM x)
+F3M_ClaimDefinitions.lean:10:7: error(lean.unknownIdentifier): Unknown constant `AspisR1CurrentWide.Proof.decodeM31`

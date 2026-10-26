@@ -1,0 +1,60 @@
+F3M_MatchingInactive.lean:27:10: error: Tactic `subst` failed: did not find equation for eliminating 'staged'
+
+case some.some.some.some
+rs : List (LiteralTranscript.Message × LiteralTranscript.Challenge)
+d : MatchingSupport.Data LiteralTranscript.E
+success : LiteralMatchingData.read rs = some d
+common : LiteralOpeningView.View
+staged : LiteralOpeningStages.Second
+row31 : OpeningRecordCodec.Payload OpeningRecordCodec.Row.final
+word : LiteralTranscript.VWord
+g k a0 a1 : PAln_MatchingFacts.E
+hc : LiteralOpeningView.read rs = some common
+hr : LiteralOpeningStages.readAt rs 31 (OpeningRecordCodec.decode OpeningRecordCodec.Row.final) = some row31
+hw : LiteralTranscript.vAt rs = some word
+hg : LiteralChallengeRead.ordinaryAt rs 27 = some g
+hk : LiteralChallengeRead.ordinaryAt rs 28 = some k
+ha : LiteralChallengeRead.ordinaryAt rs 29 = some a0
+hb : LiteralChallengeRead.ordinaryAt rs 30 = some a1
+hd :
+  d =
+    SelectedOpeningData.data (PAln_MatchingFacts.payloads staged row31) common.word word common.functionals
+      common.baseFunctional g k a0 a1
+gamma : LiteralOpeningStages.Gamma
+hgamma : LiteralOpeningStages.readGamma rs = some gamma
+value : OpeningRecordCodec.Payload OpeningRecordCodec.Row.kappa
+h28 : LiteralOpeningStages.readAt rs 28 (OpeningRecordCodec.decode OpeningRecordCodec.Row.kappa) = some value
+first : OpeningRecordCodec.Payload OpeningRecordCodec.Row.first
+h29 : LiteralOpeningStages.readAt rs 29 (OpeningRecordCodec.decode OpeningRecordCodec.Row.first) = some first
+second : OpeningRecordCodec.Payload OpeningRecordCodec.Row.second
+h30 : LiteralOpeningStages.readAt rs 30 (OpeningRecordCodec.decode OpeningRecordCodec.Row.second) = some second
+hs :
+  (do
+      let first ←
+        do
+          let kappa ←
+            do
+              let gamma ← some gamma
+              let row28 ← some value
+              pure { toGamma := gamma, row28 := row28 }
+          let row29 ← some first
+          pure { toKappa := kappa, row29 := row29 }
+      let row30 ← some second
+      pure { toFirst := first, row30 := row30 }) =
+    some staged
+⊢ some value = some staged.row28
+F3M_MatchingInactive.lean:26:40: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵g̵a̵m̵m̵a̵,̵h̵2̵8̵,̵h̵2̵9̵,̵h̵3̵0̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲g̲a̲m̲m̲a̲,̲ ̲h̲2̲8̲,̲ ̲h̲2̲9̲,̲ ̲h̲3̲0̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at hs
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+F3M_MatchingInactive.lean:26:57: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵g̵a̵m̵m̵a̵,̵h̵2̵8̵,̵h̵2̵9̵,̵h̵3̵0̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵]̵[̲h̲g̲a̲m̲m̲a̲,̲ ̲h̲2̲8̲,̲ ̲h̲2̲9̲,̲ ̲h̲3̲0̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲]̲ at hs
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.F3M_MatchingInactive.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
