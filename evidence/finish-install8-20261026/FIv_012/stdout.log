@@ -1,0 +1,78 @@
+FIv_PreparedMul.lean:15:2: error: Tactic `rfl` failed: The left-hand side
+  map cm
+    (let (left, right) := (a, x)
+    do
+    let m ← left.index_usize 0#usize
+    let m0 ← AspisR1SelectedMaskProbe.field.M31.mul m right.a
+    let m1 ← left.index_usize 1#usize
+    let m11 ← AspisR1SelectedMaskProbe.field.M31.mul m1 right.b
+    let m2 ← left.index_usize 2#usize
+    let m3 ← AspisR1SelectedMaskProbe.field.M31.add right.a right.b
+    let m21 ← AspisR1SelectedMaskProbe.field.M31.mul m2 m3
+    let m4 ← AspisR1SelectedMaskProbe.field.M31.sub m0 m11
+    let m5 ← AspisR1SelectedMaskProbe.field.M31.sub m21 m0
+    let m6 ← AspisR1SelectedMaskProbe.field.M31.sub m5 m11
+    ok { a := m4, b := m6 })
+is not definitionally equal to the right-hand side
+  do
+    let m ← a.index_usize 0#usize
+    let m0 ← m.mul x.a
+    let m1 ← a.index_usize 1#usize
+    let m11 ← m1.mul x.b
+    let m2 ← a.index_usize 2#usize
+    let m3 ← AspisR1SelectedMaskProbe.field.M31.add x.a x.b
+    let m21 ← m2.mul m3
+    let m4 ← m0.sub m11
+    let m5 ← m21.sub m0
+    let m6 ← m5.sub m11
+    ok { a := m4, b := m6 }
+
+a : Std.Array U32 3#usize
+x : NC
+⊢ map cm
+      (let (left, right) := (a, x)
+      do
+      let m ← left.index_usize 0#usize
+      let m0 ← AspisR1SelectedMaskProbe.field.M31.mul m right.a
+      let m1 ← left.index_usize 1#usize
+      let m11 ← AspisR1SelectedMaskProbe.field.M31.mul m1 right.b
+      let m2 ← left.index_usize 2#usize
+      let m3 ← AspisR1SelectedMaskProbe.field.M31.add right.a right.b
+      let m21 ← AspisR1SelectedMaskProbe.field.M31.mul m2 m3
+      let m4 ← AspisR1SelectedMaskProbe.field.M31.sub m0 m11
+      let m5 ← AspisR1SelectedMaskProbe.field.M31.sub m21 m0
+      let m6 ← AspisR1SelectedMaskProbe.field.M31.sub m5 m11
+      ok { a := m4, b := m6 }) =
+    do
+    let m ← a.index_usize 0#usize
+    let m0 ← m.mul x.a
+    let m1 ← a.index_usize 1#usize
+    let m11 ← m1.mul x.b
+    let m2 ← a.index_usize 2#usize
+    let m3 ← AspisR1SelectedMaskProbe.field.M31.add x.a x.b
+    let m21 ← m2.mul m3
+    let m4 ← m0.sub m11
+    let m5 ← m21.sub m0
+    let m6 ← m5.sub m11
+    ok { a := m4, b := m6 }
+FIv_PreparedMul.lean:14:8: warning: This simp argument is unused:
+  map_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [FIq_Native.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+      AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+      cm, map_b̵i̵n̵d̵,̵ ̵m̵a̵p̵_̵ok, m31_mul, m31_add, m31_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+FIv_PreparedMul.lean:14:18: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIq_Native.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+      AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.mul.closure.Insts.CoreOpsFunctionFnPairArrayM313CM31CM31.call,
+      cm, map_bind, ma̵p̵_̵o̵k̵,̵ ̵m̵31_mul, m31_add, m31_sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.FIv_PreparedMul.component' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedMul.mapped' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.FIv_PreparedMul.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
