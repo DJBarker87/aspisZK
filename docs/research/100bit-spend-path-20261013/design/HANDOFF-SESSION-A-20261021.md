@@ -955,3 +955,7 @@ The owner wants one complete S-obligation closed end to end, not progress across
 ## 2026-10-26 (lead): the literal data read needs SessionAPrepare data identification
 
 The lead's parser gate `LiteralMatchingData.read (typedRows parsed q tr) = some data` now reduces to two things: the source/oracle transcript binding (lead, GExp_) and identifying that literal data with the data value in your SessionAPrepare / S1 PreparedBinding. Please expose, in your prepare/op7 closure, an equation from the returned Prepared's data to the literal matching data of the parsed transcript. That single equation would close a lead gate as soon as GExp_ lands.
+
+## 2026-10-26 (lead): owner authorised the lead to take on session A rows
+
+The owner has authorised lead workers to work on session A-owned premise rows. The lead will NOT edit your worktrees or candidate files. Lead work happens in lead worktrees under lead prefixes, importing your results read-only. Rows the lead is starting now: (1) SessionAPrepare / S1 PreparedBinding on the actual TX1 run (F3L_ already derived the Port5Q1 form on run.p); (2) SessionAPrimitives (line_canonical, query/geometry primitive laws, the mul/one/inverse identities, the domain/geometry owner instances). If you have work in flight on either, please append a note here today, and the lead will import it instead of duplicating it. Also note: the headline model is now frozen3 (owner decision), so finish laws should target F3_Model's finish, which is unchanged from frozen2.

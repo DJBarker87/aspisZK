@@ -99,3 +99,18 @@ metric are unchanged. See [DV-TWOTX-20261021.md](DV-TWOTX-20261021.md) and
 the receipts under `evidence/dv-twotx-20261021/`. This is a conditional model
 endpoint. The deployed security target is **not yet established**: the new
 frozen-source accepted-run join and runtime/carrier binding remain open.
+
+## Owner-approved amendment, 2026-10-26
+
+The owner approved three changes on 2026-10-26. The target, metric, failure event and numerical constants are UNCHANGED: 100-bit per-attempt soundness without grinding credit; zero-query whole-experiment bound at most 2^-100; repeated attempts stated as (Q+34)·B plus collision terms.
+
+1. **Headline model is frozen3.** The model headline moves from `OraclePortHeadlineFrozen2PerAttempt` over `dV_frozen2` to its frozen3 counterpart, over the complete frozen3 verifier (`F3_Model`). frozen3 keeps frozen2's sampler-first schedule and adds a distinct physical public carrier (the 1880-byte ASF8 statement), used by checkpoint write/resume. Reason: the deployed source hashes the physical public bytes at checkpoint, which frozen2 did not model, so frozen2's exact log join (L157) is false for the deployed code (design/LOG-ALIGNMENT-20261026.md). Evidence: `F3S_Join.accepted_log_eq` and the F3T_ bounds (Q+34 starts, Q+1161 distinct reads, Q+2322 issued calls; exact zero-query margin 2^-108 − 6(1161²+2965²)/2^256 − 2^-126 − 2^-454 > 0). The replacement for L157 is "raw canonical join OR the charged collision event"; the collision branch is charged in the bound.
+
+2. **Game statement for the two-transaction spend.** The experiment is the deployed two-transaction spend executed by the Solana runtime:
+   (a) the TX1 and TX2 entries are consecutive executions on one bank lineage;
+   (b) both name the same physical verifier checkpoint (CP) account, and no other transaction touches that account between them;
+   (c) TX1's final parent status is success;
+   (d) the recorded checkpoint actions are the physical runtime actions of these two transactions.
+   This states the game the contract always intended ("checkpoint save and authenticated resume between batch 0 and batch 1"); it is not an assumption about attacker behaviour. The attacker remains adaptive and chooses both submissions.
+
+3. **New named runtime trust item: RuntimePersistence.** `CPR_DataPersistence.TwoTransactionLaw` (design/RUNTIME-PERSISTENCE-ITEM-20261026.md). For the next transaction that loads an ordinary account (not fee payer, not durable nonce) on the same bank lineage, the loaded data bytes are the previous transaction's final bytes if its final parent status was success, and its starting bytes otherwise. Zero lamports means absent. The item covers data bytes only: no owner, balance, privilege, SDK or verifier claim. It reflects documented Solana transaction-pipeline behaviour and the Agave account loader, and joins the existing runtime trust items (RuntimeEntrypointAdmission, RuntimeSyscall, Allocator).
