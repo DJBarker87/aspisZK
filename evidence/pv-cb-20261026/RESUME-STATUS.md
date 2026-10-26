@@ -1,5 +1,11 @@
 # Resume status
 
+**Resume 3 override:** see [RESUME3-PREPARED.md](RESUME3-PREPARED.md).
+Remaining budget is **69 Lean / 10 Kani**. Use IDs **27100–27399**, next
+unused **27100**; the old 24000–24699 range is unsafe and must never be reused.
+Ruling (f)'s restoration flag gates all host scopes and local Lean compiles.
+The historical 24072 recommendation below is superseded.
+
 Branch `codex/pv-cb-20261026`, resume base `c0e2f7af57`. **Target not yet established.** Work is awaiting restoration of the shared build-host workspace, not budget exhaustion.
 
 Before:73 assigned rows,30 value interpretations,0 discharged current-source equations. After:18 source/value rows ROW-DISCHARGED(candidate),55 not discharged;0 ledger rows or privacy-endpoint premises removed. The full op→row→status→theorem→receipt table is [RESUME-SOURCE-ROWS.md](RESUME-SOURCE-ROWS.md). No new axioms, canonicality, or primitive-totality hypotheses were added to these source equations.

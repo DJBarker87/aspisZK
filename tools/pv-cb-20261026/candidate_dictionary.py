@@ -2,11 +2,12 @@
 Generated modules remain PREPARED until separately compiled and audited.
 """
 from pathlib import Path
-import json,re
+import json,re,sys
 root=Path(__file__).resolve().parents[2]
 lean=root/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 rows=[r for r in json.loads((root/'evidence/pv-cb-20261026/RESUME-SOURCE-ROWS.json').read_text()) if r['status']=='ROW-DISCHARGED(candidate)']
 items=[]
+outputs={}
 for row in rows:
  n=row['op'];module=row['theorem'].split('.')[-2]
  s=(lean/(module+'.lean')).read_text()
@@ -31,7 +32,7 @@ source=imports+'\n'+header+'''/-- Prepared joint value/source selection. Open ca
 '''
 source+='\n'.join(f'    op{n} := @ExternalFuns.op{n} _ ({selector})'+(',' if i<len(items)-1 else '') for i,(n,_,_,selector,_) in enumerate(items))+'}\n'
 source+='end R1Z.PV_CB_CandidateDictionary\n'
-(lean/'PV_CB_CandidateDictionary.lean').write_text(source)
+outputs[lean/'PV_CB_CandidateDictionary.lean']=source
 # Families provide useful focused checks before the final combined audit.
 groups=[('Core',[3,77,82,83,86]),('Codecs',[71,72,80]),('Field',[100,101,110,111,114]),('Zeroizing',[127,128,130,131]),('Public',[229])]
 for label,ids in groups:
@@ -56,6 +57,18 @@ for label,ids in groups:
   text+='  exact '+theorem+' '+' '.join(explicit)+'\n'
   text+=f'#print axioms op{n}\n'
  text+='end R1Z.PV_CB_CandidateDictionary\n'
- (lean/f'PV_CB_Candidate{label}.lean').write_text(text)
+ outputs[lean/f'PV_CB_Candidate{label}.lean']=text
+audit=''.join(f'import R1Z.PV_CB_Candidate{label}\n' for label,_ in groups)
+audit+='\n-- Audit both the published row laws and their joint projections.\n'
+audit+=''.join(f'#print axioms {theorem}\n' for _,_,_,_,theorem in items)
+audit+=''.join(f'#print axioms R1Z.PV_CB_CandidateDictionary.op{n}\n' for n,_,_,_,_ in items)
+outputs[lean/'PV_CB_CandidateAudit.lean']=audit
 report=dict(status='PREPARED, not compiled; no extra row discharge',selected_ops=[r['op'] for r in rows],modules=['PV_CB_CandidateDictionary']+['PV_CB_Candidate'+g[0] for g in groups],purpose='Check that all independently discharged source/value selections coexist in one ExternalFuns record, preserving the common native carrier and all remaining callbacks.')
-(root/'evidence/pv-cb-20261026/candidate-dictionary-prepared.json').write_text(json.dumps(report,indent=2)+'\n')
+outputs[root/'evidence/pv-cb-20261026/candidate-dictionary-prepared.json']=json.dumps(report,indent=2)+'\n'
+if sys.argv[1:]==['--check']:
+ mismatches=[str(p.relative_to(root)) for p,s in outputs.items() if not p.exists() or p.read_text()!=s]
+ if mismatches:raise SystemExit('Stale generated files: '+', '.join(mismatches))
+ print(f'PASS: {len(rows)} row selections, five projection groups, published-source and projection axioms audit; no Lean invocation')
+elif not sys.argv[1:]:
+ for p,s in outputs.items():p.write_text(s)
+else:raise SystemExit('usage: candidate_dictionary.py [--check]')
