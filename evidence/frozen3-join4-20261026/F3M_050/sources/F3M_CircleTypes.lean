@@ -1,0 +1,14 @@
+import F3M_PreparedAlpha
+import R4TransportCircleCoordinates
+set_option autoImplicit false
+#check AspisR1PublicPreparation.sampler.circle_sample
+#check AspisR1CircleSampleWrapper.sampler.circle_sample
+#check AspisR1CircleSampleWrapper.R4TransportCircleCoordinates.circle_total_coordinates
+#check AspisR1CircleSampleWrapper.field.QM31
+#check AspisR1CircleSampleWrapper.circle.SecureCirclePoint
+#check AspisR1PublicPreparation.SamplerTransport.toOld
+#check AspisR1.SelectedChallengeMap.sigma
+#check R0P.SemSource.semChal
+#check R0P.SemSource.circleSample0
+#check AspisR1ClaimPreparedBridge.OriginalPayloadClaimMeaning
+#print AspisR1CurrentCaller.BorrowedClaimPrepared.closedHashBoundaries
