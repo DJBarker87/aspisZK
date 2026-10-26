@@ -1,0 +1,16 @@
+PoolW_ZeroGuard.lean:45:84: error: unsolved goals
+a : Account
+id : Key
+exact : ℕ
+data : Slice U8
+exempt : Bool
+admitted : Hiq_PoolSource.history.require_program_account a id true = ok (core.result.Result.Ok ())
+⊢ (if (↑data).length = exact then
+        if (∃ x ∈ ↑data, ¬↑x = 0) ∨ exempt = false then ok (core.result.Result.Err invalidFresh)
+        else ok (core.result.Result.Ok ())
+      else ok (core.result.Result.Err invalidFresh)) =
+      ok (core.result.Result.Ok ()) ↔
+    (↑data).length = exact ∧ (∀ byte ∈ ↑data, byte = 0#u8) ∧ exempt = true
+'AspisR1.PoolW_ZeroGuard.metadata_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolW_ZeroGuard.read_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PoolW_ZeroGuard.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
