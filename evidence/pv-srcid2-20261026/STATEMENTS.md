@@ -148,3 +148,50 @@ field reflexive would not establish which transport the deployed caller uses.
 
 Stop this family at this interface. No new Kani row check is needed for the
 unchanged callee, and no historical timeout is rerun.
+
+## Final words disposition (supersedes the pending entry above)
+
+`PV_Src_RecordReference` preserves every nominal record field and invokes the
+already-extracted owned function. Attempt 25002 proves `newRecords_eq` and
+`words` with standard axioms: for this *reference* dictionary, `Checked i`
+(the five primitive input-validation groups printed in attempt 25003) entails
+WitnessOk for every successful returned record, for either request variant.
+The dictionary is explicitly named `withRoots` and is never globally installed.
+It accepts the root table as data. This does not prove the actual root helper
+or the unstubbed full mapper equality. No native premise is replaced by Checked.
+
+The actual-source Rust diagnostic imports four immutable shipped `.rs` files
+by `#[path]`, including the private root helper's original module and its hash
+implementation. It does not duplicate, edit or stub their function bodies.
+`srcid2-native3` exits 0 in release mode and checks that `CopyRecords::new`
+and `banks()` succeed at out=1073741824, and that merged column 10 row 1010
+contains that exact raw output value. The source writer documents/implements
+that raw-output cell. Source import and dependency hashes match the worktree
+(`source-pins.json`). This is a finite checked source-domain counterexample,
+not a Kani proof, shipped-binary association, successful full entry wrapper,
+or a counterexample on a valid transfer/withdrawal release fixture.
+
+Two unstubbed full-call Kani checks timed out at 240s, including a separately
+identified MIR-optimization diagnostic. Neither establishes this counterexample
+nor supplies P6 equivalence. The first intended verification command failed on
+a jobs/output-format conflict; its queue was stopped immediately. The diagnostic
+was corrected before issuing one fresh command. Every exact harness name was
+read from generated metadata before attempting verification; selected stubs and
+verified_stubs are both empty. Inventory failures are retained, not evidence.
+
+| Family | Before | After | Final status |
+|---|---|---|---|
+| words | exact field above | identical field | OPEN: actual mapper P6 equality and selected-input Checked interface; unconditional raw-callee discharge refuted |
+
+No source-to-model field or native endpoint row was removed. The five native
+families remain `compile_call`, `words`, `publicCorr`, `admission`, `row_call`:
+**5 before, 5 after**. No smaller native instance is claimed. The original
+consumer is rechecked in 25003, along with both canonical fixture fibres;
+full native fixture inhabitance remains OPEN. The fixed consumer theorem
+still selects BuilderSource.prover and accepts no source certificate parameter.
+Changing that fact would require the owner of the deployed RunJoin installation.
+
+The REDUCED labels above describe exact remaining native interfaces already
+present at the base, not new premise-removal progress by this branch. In
+particular publicCorr also has pure mapper/empty-root sub-obligations; those
+stay OPEN and are not dismissed as effects under D188.
