@@ -50,3 +50,22 @@ No Rust/Kani/SBF/ELF or key changes; no ELF rebuild trigger. Inherited ELF pins
 are historical, not newly reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4,
 devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299,
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+## Audit interpretation
+
+The explicit audit enumerates imported repository declarations by their owning
+module and issues both Lean's `collectAxioms` API and `#print axioms`. On pinned
+Lean 4.32 this uses axiom dependencies computed when each fresh object was
+exported; collection includes constants in a declaration's type and body.
+This is declaration dependency evidence, not a source-text grep. Separately,
+actual imported module headers and axiom declarations identify nonstandard
+axioms merely present in each audited module's import closure. Importing Lean
+for the audit itself does not add Lean to the recorded source module's direct
+imports. These two lists must not be conflated.
+
+Because Rc7_Top is blocked before compilation, this audit cannot establish
+which nonstandard axioms are reachable from its proof term. It likewise cannot
+establish a definitive set of FunsExternal axioms reached by that top or map a
+purported empty set to Rust externals. Those two requested results remain
+unknown, not verified empty. Historical cached headline audits do not fill the
+fresh-object gap.
