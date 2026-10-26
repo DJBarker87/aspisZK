@@ -29,7 +29,7 @@ theorem projection (digits : List (BitVec 32)) (high : BitVec 32)
     rw [← hp.2]
     constructor
     · intro h; rw [h]; rfl
-    · intro h; apply BitVec.eq_of_toNat_eq; simpa only [BitVec.toNat_ofNat] using h
+    · intro h; apply BitVec.eq_of_toNat_eq; simpa using h
   dsimp only [finish, PV_CB3_GammaDigits.finish]
   by_cases h : (carry digits (high + 1)).2 = 0
   · rw [if_pos h, if_pos (hz.mp h), hp.1]
