@@ -1,7 +1,7 @@
 {
   "attempt": "PoolN_KANI036",
   "kind": "kani",
-  "source_revision": "c06f3974c3998cf9650524a5264a506cba0a209c",
+  "source_revision": "527685c75bf795db43910770c71b78d66dd0fe0c",
   "source_tree_dirty": true,
   "command": [
     "/home/dombarker/.cargo/bin/cargo-kani",
@@ -19,7 +19,7 @@
     "--harness-timeout",
     "60s",
     "--harness",
-    "PoolN_dispatch_projection",
+    "PoolN_stack_no_inner_invocation",
     "--output-format",
     "terse"
   ],
@@ -38,7 +38,9 @@
     "PoolN_stack_harness.rs",
     "PoolN_stack-pin.json",
     "PoolN_dispatch_harness.rs",
-    "PoolN_dispatch-pin.json"
+    "PoolN_dispatch-pin.json",
+    "PoolN_final_splits.rs",
+    "PoolN_input-pins.json"
   ],
   "timeout": 300,
   "env": {
@@ -50,7 +52,7 @@
     "RUSTFLAGS": "-C link-arg=-Wl,--threads=4"
   },
   "deps_fingerprint": {
-    "scope": "PoolN_dispatch_projection actual native gate/builder or pinned control projection. See source and specific assertions; no whole-dispatch/handler-frame implication."
+    "scope": "Actual copied stack predicate, name-only production-body adaptation. After KANI035 timeout, isolate assertion instrumentation: no Debug formatting and explicit unwind2 for a loop-free predicate. No source/cap/timeout relaxation."
   },
-  "expected_time": "Optimized PoolN_dispatch_projection only; no heavy arithmetic or successful CPI callee expected."
+  "expected_time": "Optimized proof generation for loop-free scalar guard; standard assertion rather than Debug assertion formatting; no SDK account/CPI/arithmetic."
 }

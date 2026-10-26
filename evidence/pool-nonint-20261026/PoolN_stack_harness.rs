@@ -10,10 +10,11 @@ fn PoolN_stack_gate(stack_height: usize) -> ProgramResult {
     Ok(())
 }
 #[kani::proof]
+#[kani::unwind(2)]
 fn PoolN_stack_no_inner_invocation() {
  let height:usize=kani::any();
  let expected=if height==TRANSACTION_LEVEL_STACK_HEIGHT {Ok(())} else {Err(PoolV1ProgramError::CpiInvocationForbidden.into())};
- assert_eq!(PoolN_stack_gate(height),expected);
+ assert!(PoolN_stack_gate(height)==expected);
  kani::cover!(PoolN_stack_gate(TRANSACTION_LEVEL_STACK_HEIGHT).is_ok(),"transaction admitted");
  kani::cover!(PoolN_stack_gate(TRANSACTION_LEVEL_STACK_HEIGHT+1).is_err(),"CPI rejected");
 }
