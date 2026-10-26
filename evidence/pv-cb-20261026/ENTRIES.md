@@ -131,3 +131,22 @@ Standard axioms only; no selected-native-caller or headline premise removed.
 Physical volatile erasure, fences, cleanup/Drop association and side channels
 are not supplied by value equations. Their native effect adequacy is DEFERRED
 to pv-runjoin3; these rows remain OPEN as complete deployment obligations.
+
+## Take extraction and heap checkpoint
+
+|op|row|status|theorem / receipt|
+|---:|---|---|---|
+|3|V169|INSTALLED (generic extracted reference; two native Default instances)|PV_CB_TakeExtraction.reference_eq/installed_reference/fail_preserved/div_preserved;22817–22819; kani-take-001|
+|25|V177|INSTALLED (Unix byte value, length≤16 native gate)|PV_CB_PathBorrow.op25_bytes;22803; kani-pathbuf-002|
+|29|V180|INSTALLED (Unix byte value, length≤16 native gate)|PV_CB_PathAsRef.op29_eq_deref;22805; kani-pathbuf-002|
+|81|V203|INSTALLED (emitted source with allocator retained)|PV_CB_Heap.op81_source/op32_preserved;22820|
+
+Take Types is empty; its import is folded into the generated Funs Aeneas import.
+PV_CB_TakeRef.lean otherwise retains the generated function body and options.
+22818 failed on simp lemma selection;22819 uses explicit reduction after the
+callback equation and passes. The failed audit's sorryAx is not accepted.
+Charon take and Aeneas take both exit0; aeneas translation was admitted after
+the retained earlier barrier denial. Generic Default/Drop effects and unbounded
+native carrier transport remain OPEN. Source/value installations do not remove
+root premises. Budget now Lean21/100 (18 green), Kani2/20 (both green);
+kani-string-003 was refused at its in-scope barrier, so has not charged a run.
